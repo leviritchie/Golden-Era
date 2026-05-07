@@ -2,6 +2,15 @@
 
 The goal of this mod is to integrate HD-2D factions modeled after Heroes of Might and Magic 3 factions. The installer will ask you for a Heroes of Might and Magic 3 install directory, either HoMM3 complete from GoG (recommended) or HoMM3: HD from Steam. Currently, only Stronghold is available as a new faction.
 
+## Features
+
+- Adds Stronghold as a playable faction.
+- Adds a full Stronghold creature lineup.
+- Adds alternate creature upgrades.
+- Adds War Cries as a combat mechanic.
+- Adds a Stronghold town screen and buildings.
+- Adds Stronghold heroes, portraits, map sprites, unit animations, and music.
+
 ## Installation
 
 1. Make sure both Olden Era and Heroes of Might and Magic 3 are installed on your computer
