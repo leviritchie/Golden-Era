@@ -1,0 +1,59 @@
+name: Balance issue
+description: Report units, heroes, buildings, abilities, or economy values that feel too strong or too weak.
+title: "[Balance]: "
+labels: ["balance"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for gameplay tuning feedback rather than technical bugs.
+  - type: input
+    id: version
+    attributes:
+      label: Mod version
+      placeholder: "v0.1.294"
+    validations:
+      required: false
+  - type: dropdown
+    id: area
+    attributes:
+      label: Balance area
+      options:
+        - Unit stats
+        - Unit ability
+        - Hero ability
+        - Town/building
+        - Economy/costs
+        - Auto-battle
+        - AI behavior
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: subject
+    attributes:
+      label: Specific unit, hero, building, or mechanic
+      placeholder: "Example: Wolf Raider, Hall of Valhalla, Tempo Cry"
+    validations:
+      required: true
+  - type: textarea
+    id: concern
+    attributes:
+      label: What feels off?
+      description: Explain what feels too strong, too weak, too expensive, too cheap, or too swingy.
+    validations:
+      required: true
+  - type: textarea
+    id: comparison
+    attributes:
+      label: Useful comparisons
+      description: If possible, compare against a vanilla Olden Era faction/unit or a HoMM3 expectation.
+    validations:
+      required: false
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested adjustment
+      description: Optional. Concrete numbers are useful, but not required.
+    validations:
+      required: false

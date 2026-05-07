@@ -25,7 +25,7 @@ The goal of this mod is to integrate HD-2D factions modeled after Heroes of Migh
 Absolutely yes, especially in early access. Olden Era has a very small download size, so I would recommend keeping this mod installed to a separate copy of your steam game folder to prevent updates from breaking it. There is a chance some updates will be so minor that nothing will break, but even in these situations you will need to reinstall the mod due to how it modifies the game's Core.zip.
 
 ### How do I submit bug reports, balance feedback, and suggestions?
-Use the relevant Issues section in github. This repo is the only place feedback will be monitored.
+Use the Issues tab in github and choose the relevant form: Bug report, Balance issue, or Suggestion. This repo is the only place feedback will be monitored.
 
 ### Why not make a discord server or subreddit for feedback?
 Because I don't want to moderate one.

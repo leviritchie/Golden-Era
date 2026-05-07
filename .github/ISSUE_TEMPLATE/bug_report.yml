@@ -1,0 +1,55 @@
+name: Bug report
+description: Report crashes, installer problems, broken visuals, or behavior that seems unintended.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for things that appear broken. For balance feedback, use the Balance issue form instead.
+  - type: input
+    id: version
+    attributes:
+      label: Mod version
+      description: Use the release version you downloaded, if known.
+      placeholder: "v0.1.294"
+    validations:
+      required: false
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Installer
+        - Launch/BepInEx
+        - Town screen
+        - Adventure map
+        - Battle
+        - UI/text/icons
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the broken behavior and what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: false
+  - type: textarea
+    id: files
+    attributes:
+      label: Logs or screenshots
+      description: Attach screenshots, installer errors, or BepInEx logs if relevant.
+    validations:
+      required: false
