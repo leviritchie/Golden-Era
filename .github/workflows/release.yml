@@ -1,0 +1,87 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Verify release input checksum
+        shell: pwsh
+        run: |
+          $expected = (Get-Content release_inputs/stronghold_release_payload.zip.sha256).Split(" ")[0].Trim().ToLowerInvariant()
+          $actual = (Get-FileHash release_inputs/stronghold_release_payload.zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actual -ne $expected) {
+            throw "release input checksum mismatch: expected $expected actual $actual"
+          }
+
+      - name: Build installer package
+        shell: pwsh
+        run: |
+          if ("${{ github.ref_type }}" -eq "tag") {
+            $version = "${{ github.ref_name }}"
+          } else {
+            $version = "manual-${{ github.run_number }}"
+          }
+          $out = "dist/HoMMOE-Stronghold-Mod-$version"
+          powershell -ExecutionPolicy Bypass -File tools/release_installer/package_from_release_inputs.ps1 -OutputRoot $out -CreateZip
+          "PACKAGE_ZIP=$out.zip" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Build checksums
+        shell: pwsh
+        run: |
+          $zip = $env:PACKAGE_ZIP
+          $installer = Join-Path ([System.IO.Path]::GetDirectoryName($zip)) "StrongholdModInstaller.exe"
+          $sumPath = "$zip.sha256"
+          $zipHash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          $exePath = Join-Path ([System.IO.Path]::GetDirectoryName($zip)) ([System.IO.Path]::GetFileNameWithoutExtension($zip)) "StrongholdModInstaller.exe"
+          $exeHash = (Get-FileHash $exePath -Algorithm SHA256).Hash.ToLowerInvariant()
+          @(
+            "$zipHash  $([System.IO.Path]::GetFileName($zip))",
+            "$exeHash  StrongholdModInstaller.exe"
+          ) | Set-Content -Path $sumPath -Encoding ASCII
+          "PACKAGE_SHA=$sumPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Attest package
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            ${{ env.PACKAGE_ZIP }}
+            ${{ env.PACKAGE_SHA }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: stronghold-installer
+          path: |
+            ${{ env.PACKAGE_ZIP }}
+            ${{ env.PACKAGE_SHA }}
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ env.PACKAGE_ZIP }}
+            ${{ env.PACKAGE_SHA }}
+          generate_release_notes: true
