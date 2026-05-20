@@ -18,6 +18,15 @@ This is an experimental early-access mod. Stronghold is still the most complete 
 
 The current public package includes the expanded custom-faction framework and assets for several factions. Stronghold remains the most complete reference implementation. Tower and Fortress have substantial release integration. Cove and Dungeon are basic-enabled but still have unfinished mechanics and hardening work. Castle, Rampart, Necropolis, Inferno, and Conflux should be treated as experimental or incomplete until their source-backed asset, mechanics, and validation work is finished.
 
+## Major Known Bugs
+
+- This will break every patch, guaranteed. You must freeze or redownload a working patch version to play this mod. You can copy your Steam folder with the mod installed and launch that if you want to keep multiple copies of the game simultaneously - Olden Era has a small file size.
+- Some enemies on the map sneakily turn sideways, making them razor thin and hard to see.
+- Not all factions have had the same hand tuning. Some are almost entirely placeholder effects.
+- Sometimes, maps load with no HUD, requiring you to reload the map.
+- The back arrow doesn't work in town menus. You have to click the relevant button, such as build tree, again.
+- A million other little things.
+
 ## Installation
 
 1. Make sure both Olden Era and Heroes of Might and Magic 3 are installed on your computer
