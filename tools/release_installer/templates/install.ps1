@@ -250,23 +250,37 @@ function Add-ZipPayloadEntry($Zip, $EntryName, $PayloadPath) {
     }
 }
 
-function Test-CoreOverlay($CoreZipPath) {
+function Test-CoreOverlay($CoreZipPath, $ManifestPath) {
+    $manifest = Get-Content -LiteralPath $ManifestPath -Raw | ConvertFrom-Json
+    $requiredMembers = @($manifest.requiredCoreMembers | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+    if ($requiredMembers.Count -eq 0) {
+        $requiredMembers = @("DB/data.json", "DB/fractions/7_homm3_stronghold.json")
+    }
+    $requiredTokens = @($manifest.requiredCoreTokens | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+
     $zip = [System.IO.Compression.ZipFile]::OpenRead($CoreZipPath)
     try {
-        $dataEntry = $zip.GetEntry("DB/data.json")
-        $fractionEntry = $zip.GetEntry("DB/fractions/7_homm3_stronghold.json")
-        if ($null -eq $dataEntry) { throw "Core.zip validation failed: missing DB/data.json." }
-        if ($null -eq $fractionEntry) { throw "Core.zip validation failed: missing Stronghold faction file." }
+        foreach ($member in $requiredMembers) {
+            if ($null -eq $zip.GetEntry($member)) {
+                throw "Core.zip validation failed: missing $member."
+            }
+        }
 
-        $reader = New-Object System.IO.StreamReader($dataEntry.Open(), [System.Text.Encoding]::UTF8)
-        try {
-            $dataJson = $reader.ReadToEnd()
-        }
-        finally {
-            $reader.Dispose()
-        }
-        if ($dataJson -notmatch "homm3_stronghold") {
-            throw "Core.zip validation failed: DB/data.json does not contain homm3_stronghold."
+        if ($requiredTokens.Count -gt 0) {
+            $dataEntry = $zip.GetEntry("DB/data.json")
+            if ($null -eq $dataEntry) { throw "Core.zip validation failed: missing DB/data.json." }
+            $reader = New-Object System.IO.StreamReader($dataEntry.Open(), [System.Text.Encoding]::UTF8)
+            try {
+                $dataJson = $reader.ReadToEnd()
+            }
+            finally {
+                $reader.Dispose()
+            }
+            foreach ($token in $requiredTokens) {
+                if ($dataJson -notmatch [regex]::Escape($token)) {
+                    throw "Core.zip validation failed: DB/data.json does not contain $token."
+                }
+            }
         }
     }
     finally {
@@ -279,7 +293,8 @@ function Apply-CoreOverlay($CoreZipPath, $ManifestPath, $PackageRootPath) {
     Add-Type -AssemblyName System.IO.Compression.FileSystem
 
     $manifest = Get-Content -LiteralPath $ManifestPath -Raw | ConvertFrom-Json
-    if ($manifest.format -ne "hommoe-stronghold-release-overlay-v1") {
+    $supportedFormats = @("hommoe-stronghold-release-overlay-v1", "hommoe-golden-era-release-overlay-v1")
+    if ($supportedFormats -notcontains $manifest.format) {
         throw "Unsupported Core overlay manifest format: $($manifest.format)"
     }
 
@@ -369,7 +384,7 @@ function Apply-CoreOverlay($CoreZipPath, $ManifestPath, $PackageRootPath) {
         }
 
         Move-Item -LiteralPath $tmpZip -Destination $CoreZipPath -Force
-        Test-CoreOverlay $CoreZipPath
+        Test-CoreOverlay $CoreZipPath $ManifestPath
         return $backup
     }
     catch {
@@ -485,7 +500,7 @@ $state = [ordered]@{
 }
 $state | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $InstallState -Encoding UTF8
 
-Write-Host "Installed Stronghold mod successfully."
+Write-Host "Installed Golden Era mod successfully."
 if (-not (Test-Path -LiteralPath (Join-Path $GameRoot "BepInEx\interop\Hex.dll"))) {
     Write-Host "BepInEx was installed, but interop has not been generated yet. Launch the game once; BepInEx will generate it on first start."
 }

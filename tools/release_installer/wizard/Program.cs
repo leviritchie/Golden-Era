@@ -2,7 +2,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace StrongholdModInstaller;
+namespace GoldenEraModInstaller;
 
 internal static class Program
 {
@@ -30,7 +30,7 @@ internal sealed class InstallerForm : Form
     public InstallerForm()
     {
         SuspendLayout();
-        Text = "HoMMOE Stronghold Mod Installer";
+        Text = "Golden Era Mod Installer";
         StartPosition = FormStartPosition.CenterScreen;
         AutoScaleMode = AutoScaleMode.Font;
         Font = new Font("Segoe UI", 9F);
@@ -57,7 +57,7 @@ internal sealed class InstallerForm : Form
 
         var title = new Label
         {
-            Text = "Heroes of Might and Magic Olden Era - Stronghold Mod",
+            Text = "Heroes of Might and Magic Olden Era - Golden Era Mod",
             Font = new Font("Segoe UI", 13, FontStyle.Bold),
             AutoEllipsis = true,
             Dock = DockStyle.Fill,
@@ -135,7 +135,7 @@ internal sealed class InstallerForm : Form
 
         var info = new Label
         {
-            Text = "Installs the bundled BepInEx loader, Stronghold mod files, and Core.zip overlay. Backups are created before files are changed.",
+            Text = "Installs the bundled BepInEx loader, Golden Era mod files, and Core.zip overlay. Backups are created before files are changed.",
             AutoSize = true,
             Dock = DockStyle.Fill,
             Margin = new Padding(0, 0, 0, 22)
@@ -254,7 +254,7 @@ internal sealed class InstallerForm : Form
             AppendLog($"Starting {label.ToLowerInvariant()}...");
             await Task.Run(() => RunBackend(scriptPath, pathBox.Text, homm3PathBox.Text, repair, label != "Uninstall"));
             AppendLog($"{label} complete.");
-            MessageBox.Show(this, $"{label} complete.", "Stronghold Mod Installer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(this, $"{label} complete.", "Golden Era Mod Installer", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {

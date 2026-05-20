@@ -29,8 +29,8 @@ jobs:
       - name: Verify release input checksum
         shell: pwsh
         run: |
-          $expected = (Get-Content release_inputs/stronghold_release_payload.zip.sha256).Split(" ")[0].Trim().ToLowerInvariant()
-          $actual = (Get-FileHash release_inputs/stronghold_release_payload.zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          $expected = (Get-Content release_inputs/golden_era_release_payload.zip.sha256).Split(" ")[0].Trim().ToLowerInvariant()
+          $actual = (Get-FileHash release_inputs/golden_era_release_payload.zip -Algorithm SHA256).Hash.ToLowerInvariant()
           if ($actual -ne $expected) {
             throw "release input checksum mismatch: expected $expected actual $actual"
           }
@@ -43,7 +43,7 @@ jobs:
           } else {
             $version = "manual-${{ github.run_number }}"
           }
-          $out = "dist/HoMMOE-Stronghold-Mod-$version"
+          $out = "dist/Golden-Era-Mod-$version"
           powershell -ExecutionPolicy Bypass -File tools/release_installer/package_from_release_inputs.ps1 -OutputRoot $out -CreateZip
           "PACKAGE_ZIP=$out.zip" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
@@ -51,14 +51,13 @@ jobs:
         shell: pwsh
         run: |
           $zip = $env:PACKAGE_ZIP
-          $installer = Join-Path ([System.IO.Path]::GetDirectoryName($zip)) "StrongholdModInstaller.exe"
           $sumPath = "$zip.sha256"
           $zipHash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()
-          $exePath = Join-Path ([System.IO.Path]::GetDirectoryName($zip)) ([System.IO.Path]::GetFileNameWithoutExtension($zip)) "StrongholdModInstaller.exe"
+          $exePath = Join-Path ([System.IO.Path]::GetDirectoryName($zip)) ([System.IO.Path]::GetFileNameWithoutExtension($zip)) "GoldenEraModInstaller.exe"
           $exeHash = (Get-FileHash $exePath -Algorithm SHA256).Hash.ToLowerInvariant()
           @(
             "$zipHash  $([System.IO.Path]::GetFileName($zip))",
-            "$exeHash  StrongholdModInstaller.exe"
+            "$exeHash  GoldenEraModInstaller.exe"
           ) | Set-Content -Path $sumPath -Encoding ASCII
           "PACKAGE_SHA=$sumPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
@@ -72,7 +71,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: stronghold-installer
+          name: golden-era-installer
           path: |
             ${{ env.PACKAGE_ZIP }}
             ${{ env.PACKAGE_SHA }}

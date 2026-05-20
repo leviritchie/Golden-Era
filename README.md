@@ -1,21 +1,25 @@
 # Golden Era: A mod for Heroes of Might and Magic: Olden Era
 
-The goal of this mod is to integrate HD-2D factions modeled after Heroes of Might and Magic 3 factions. The installer will ask you for a Heroes of Might and Magic 3 install directory, either HoMM3 complete from GoG (recommended) or HoMM3: HD from Steam. Currently, only Stronghold is available as a new faction.
+The goal of this mod is to integrate HD-2D factions modeled after Heroes of Might and Magic 3 factions. The installer will ask you for a Heroes of Might and Magic 3 install directory, either HoMM3 Complete from GOG (recommended) or HoMM3: HD from Steam.
+
+This is an experimental early-access mod. Stronghold is still the most complete reference faction, and newer faction ports are included at different maturity levels while balance, mechanics, UI, and asset coverage continue to evolve.
 
 ## Features
 
-- Adds Stronghold as a playable faction.
-- Adds a full Stronghold creature lineup.
-- Adds alternate creature upgrades.
-- Adds War Cries as a combat mechanic.
-- Adds a Stronghold town screen and buildings.
-- Adds Stronghold heroes, portraits, map sprites, unit animations, and music.
+- Adds multiple HoMM3-inspired custom faction ports to Olden Era.
+- Adds custom creature lineups, alternate creature upgrades, town screens, buildings, heroes, portraits, map sprites, unit animations, and music where available.
+- Adds faction mechanics such as War Cries and other custom-faction rules as they are ported.
+- Bundles the BepInEx IL2CPP loader and a release-derived Core.zip overlay with installer-created backups.
+
+## Current Faction Status
+
+The current public package includes the expanded custom-faction framework and assets for several factions. Stronghold remains the most complete reference implementation. Tower and Fortress have substantial release integration. Cove and Dungeon are basic-enabled but still have unfinished mechanics and hardening work. Castle, Rampart, Necropolis, Inferno, and Conflux should be treated as experimental or incomplete until their source-backed asset, mechanics, and validation work is finished.
 
 ## Installation
 
 1. Make sure both Olden Era and Heroes of Might and Magic 3 are installed on your computer
-2. Download and extract the current zip release from the releases section.
-3. Run the exe installer, which will ask you for the location of both Olden Era and HoMM3 installations.
+2. Download and extract the current zip release from the Releases section.
+3. Run `GoldenEraModInstaller.exe`, which will ask you for the location of both Olden Era and HoMM3 installations.
 4. Wait for the installer to finish - it can take a few minutes
 5. Launch Olden Era from either its folder or directly from Steam. First launch will take several minutes, but future launches will be quicker.
 6. (Optional) Copy your entire Olden Era game folder somewhere safe if you're worried about updates breaking the mod.

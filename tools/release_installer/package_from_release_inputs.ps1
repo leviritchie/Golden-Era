@@ -1,6 +1,6 @@
 param(
-    [string]$ReleaseInputZip = "release_inputs\stronghold_release_payload.zip",
-    [string]$OutputRoot = "dist\HoMMOE-Stronghold-Mod",
+    [string]$ReleaseInputZip = "release_inputs\golden_era_release_payload.zip",
+    [string]$OutputRoot = "dist\Golden-Era-Mod",
     [switch]$CreateZip
 )
 
@@ -54,18 +54,19 @@ $inputHash = (Get-FileHash -LiteralPath $ReleaseInputZipPath -Algorithm SHA256).
 $overlayManifest = Get-Content -LiteralPath (Join-Path $StageFullPath "core_overlay\manifest.json") -Raw | ConvertFrom-Json
 
 $manifest = [ordered]@{
-    name = "HoMMOE Stronghold Mod"
+    name = "Golden Era Mod"
     pluginVersion = $version
     packageCreatedUtc = (Get-Date).ToUniversalTime().ToString("o")
     overlayBasis = "versioned-release-inputs"
-    releaseInputZip = (Resolve-Path -LiteralPath $ReleaseInputZipPath).Path
+    releaseInputZip = $ReleaseInputZip
     releaseInputZipSha256 = $inputHash
     releaseOverlayGenerated = $true
     includesBepInExBootstrap = $true
     overlayOperationCount = $overlayManifest.operationCount
     notes = @(
         "Installer package assembled from repo release_inputs, not a local Steam install.",
-        "Installer targets the Steam release build."
+        "Installer targets the Steam release build.",
+        "Core overlay and plugin payload may contain multiple HoMM3-inspired faction ports."
     )
 }
 $manifest | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $StageFullPath "manifest.json") -Encoding UTF8

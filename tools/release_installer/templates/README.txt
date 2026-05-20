@@ -1,11 +1,13 @@
-HoMMOE Stronghold Mod installer
+Golden Era Mod installer
 
 This installer targets the Steam release build of Heroes of Might and Magic Olden Era.
-It installs the bundled BepInEx IL2CPP loader, the Stronghold plugin payload, and the release-derived Core.zip overlay with a backup.
+It installs the bundled BepInEx IL2CPP loader, the Golden Era plugin payload, and the release-derived Core.zip overlay with a backup.
 Install and repair also validate that a local HoMM3 Complete or HoMM3 HD installation exists.
 
+Stronghold is the most complete reference faction. Newer included factions are experimental and may have unfinished mechanics, balance, UI, or asset coverage.
+
 Install:
-  Double-click StrongholdModInstaller.exe
+  Double-click GoldenEraModInstaller.exe
 
 Command-line install:
   powershell -ExecutionPolicy Bypass -File install.ps1
