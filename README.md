@@ -38,11 +38,15 @@ The current public package includes the expanded custom-faction framework and as
 
 ## Screenshots
 
-![Stronghold adventure map](screenshots/adventure%20map.png)
+![Quick play setup](screenshots/quickplay.gif)
 
-![Stronghold town screen](screenshots/town.png)
+![Adventure map](screenshots/adventuremap.gif)
 
-![Stronghold battle](screenshots/battle.gif)
+![Town buildings](screenshots/buildings.gif)
+
+![Recruitment screen](screenshots/recruitment.gif)
+
+![Avenger interface](screenshots/avenger.gif)
 
 ## FAQ
 
