@@ -1,3 +1,6 @@
+> [!WARNING]
+> This mod is confirmed not working as of Olden Era Patch 5.
+
 # Golden Era: A mod for Heroes of Might and Magic: Olden Era
 
 The goal of this mod is to integrate HD-2D factions modeled after Heroes of Might and Magic 3 factions. The installer will ask you for a Heroes of Might and Magic 3 install directory, either HoMM3 Complete from GOG (recommended) or HoMM3: HD from Steam.
