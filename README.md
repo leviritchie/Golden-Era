@@ -1,5 +1,5 @@
-> [!WARNING]
-> This mod is confirmed not working as of Olden Era Patch 5.
+> [!IMPORTANT]
+> This mod only works on Olden Era Patch 6.
 
 # Golden Era: A mod for Heroes of Might and Magic: Olden Era
 
