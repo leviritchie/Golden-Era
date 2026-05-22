@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> This release is built for the Olden Era Steam build current on May 22, 2026. If Steam updates Olden Era after that, wait for a matching Golden Era release.
+> This release is built for the Olden Era Steam build current on May 22, 2026. If Steam updates Olden Era after that, the copy this mod creates will be behind that patch number.
 >
 > The installer does not patch your Steam install in place. It copies your clean Steam game folder to a separate Golden Era folder and installs the mod into that copy only.
 
@@ -19,11 +19,10 @@ This is an experimental early-access mod. Stronghold is still the most complete 
 
 ## Current Faction Status
 
-The current public package includes the expanded custom-faction framework and assets for Castle, Rampart, Tower, Inferno, Necropolis, Dungeon, Stronghold, Fortress, Conflux, and Cove. Stronghold remains the most complete reference implementation. Tower and Fortress have substantial release integration. Cove and Dungeon are basic-enabled but still have unfinished mechanics and hardening work. Castle, Rampart, Necropolis, Inferno, and Conflux should be treated as experimental or incomplete until their source-backed asset, mechanics, and validation work is finished.
+The current public package includes the expanded custom-faction framework and assets for Castle, Rampart, Tower, Inferno, Necropolis, Dungeon, Stronghold, Fortress, Conflux, and Cove. Stronghold remains the most complete reference implementation. I need your balance suggestions, since I spent the last month making this mod instead of playing Olden Era, so I don't know how to balance it.
 
 ## Major Known Bugs
 
-- This will break when Olden Era updates. The installer keeps Steam vanilla and creates a separate modded copy, but you still need a Golden Era package built for the current Olden Era build.
 - Some enemies on the map sneakily turn sideways, making them razor thin and hard to see.
 - Not all factions have had the same hand tuning. Some are almost entirely placeholder effects.
 - Sometimes, maps load with no HUD, requiring you to reload the map.
@@ -37,7 +36,7 @@ The current public package includes the expanded custom-faction framework and as
 3. Run the installer. It will ask for your clean Steam Olden Era folder, a separate modded copy folder, and your HoMM3 installation.
 4. Do not choose the Steam folder as the modded copy folder. The installer should refuse that, because the modded copy must be separate.
 5. Wait for the installer to copy the game and apply the mod. It can take several minutes and needs enough free disk space for a second Olden Era copy.
-6. Launch the modded copy with `Launch Golden Era.cmd` in the target folder. Launching Olden Era from Steam should still run vanilla.
+6. Launch the modded copy with `Launch Golden Era.cmd` in the target folder, or by launching the mod folder's exe. Launching Olden Era from Steam should still run vanilla.
 
 ## Screenshots
 
