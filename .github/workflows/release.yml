@@ -64,14 +64,19 @@ jobs:
             ${{ env.PACKAGE_EXE }}
             ${{ env.PACKAGE_SHA }}
 
-      - name: Upload artifact
+      - name: Upload installer artifact
         uses: actions/upload-artifact@v7
         with:
-          name: golden-era-installer
+          name: golden-era-installer-exe
           archive: false
-          path: |
-            ${{ env.PACKAGE_EXE }}
-            ${{ env.PACKAGE_SHA }}
+          path: ${{ env.PACKAGE_EXE }}
+
+      - name: Upload checksum artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: golden-era-installer-sha256
+          archive: false
+          path: ${{ env.PACKAGE_SHA }}
 
       - name: Publish GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
