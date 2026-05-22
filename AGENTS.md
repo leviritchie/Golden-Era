@@ -6,6 +6,7 @@
 - The installer must keep Steam vanilla: use the selected Steam folder only as a clean source, create a separate Golden Era target copy, and install Doorstop/BepInEx/plugin files plus the Core overlay only into that target.
 - Treat `tools/release_installer/templates/install.ps1` and `uninstall.ps1` as legacy unpacked-package references unless they are intentionally redesigned. The WinForms EXE owns the supported install/uninstall path.
 - Before replacing `release_inputs/golden_era_release_payload.zip`, sanitize generated manifests so local paths, user names, and old playtest paths are not present in JSON/config/text files.
+- When refreshing release inputs from a locally modded Steam root, pass a verified clean Steam `Core.zip` backup as `-CleanReleaseCore`; check that the chosen baseline has zero `homm3_` entries before exporting the overlay.
 - Do not package Python helper scripts or `__pycache__` files from `reference_pack`; they are build-time scratch helpers and can leak local workspace paths.
 - Do not package backup configs, `.disabled` files, `.flag` diagnostics, `.pdb` files, Unity `.meta` files, or stale bundle backup files from a live Steam plugin folder.
 - If rebuilding `OfflineUnlockMod.dll` for a payload, build with `DebugType=None` and `DebugSymbols=false` or inspect the DLL for embedded PDB paths before publishing.
