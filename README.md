@@ -53,7 +53,9 @@ The current public package includes the expanded custom-faction framework and as
 ## FAQ
 
 ### Will new updates to Olden Era break this mod?
-Absolutely yes, especially in early access. The installer preserves your Steam folder and applies the mod to a separate game copy, but the modded copy still depends on Olden Era's current `Core.zip` layout. If Steam updates Olden Era, wait for a matching Golden Era package and run Repair against the modded copy.
+Yes for install and repair compatibility, but not because the installed copy reads Steam's `Core.zip` at launch. The installer package is built against a specific clean vanilla `Core.zip` layout. During Install or Repair, it validates the selected Steam source, copies that game folder to the Golden Era target folder, and patches only the target copy.
+
+Once installed, Golden Era launches from its own copied game folder with its own patched `Core.zip`. A later Steam update should not modify that existing Golden Era folder. If Steam updates Olden Era and you need to reinstall or repair Golden Era, wait for a matching Golden Era package.
 
 ### Can I still play vanilla Olden Era through Steam?
 Yes. Steam should keep launching your untouched vanilla install. Use `Launch Golden Era.cmd` from the separate target folder when you want to play the mod.
