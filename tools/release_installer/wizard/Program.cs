@@ -1,5 +1,6 @@
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace GoldenEraModInstaller;
@@ -7,25 +8,43 @@ namespace GoldenEraModInstaller;
 internal static class Program
 {
     [STAThread]
-    private static void Main()
+    private static int Main(string[] args)
     {
+        if (args.Any(arg => string.Equals(arg, "--verify-payload", StringComparison.OrdinalIgnoreCase)))
+        {
+            try
+            {
+                InstallerBackend.VerifyEmbeddedPayload(Console.Error.WriteLine);
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+                return 1;
+            }
+        }
+
         ApplicationConfiguration.Initialize();
         Application.Run(new InstallerForm());
+        return 0;
     }
 }
 
 internal sealed class InstallerForm : Form
 {
-    private readonly string packageRoot = AppContext.BaseDirectory;
-    private readonly TextBox pathBox = new();
+    private readonly TextBox sourcePathBox = new();
+    private readonly TextBox targetPathBox = new();
     private readonly TextBox homm3PathBox = new();
     private readonly TextBox logBox = new();
-    private readonly Button browseButton = new();
+    private readonly Button browseSourceButton = new();
+    private readonly Button browseTargetButton = new();
     private readonly Button browseHomm3Button = new();
     private readonly Button installButton = new();
     private readonly Button repairButton = new();
     private readonly Button uninstallButton = new();
     private readonly Button closeButton = new();
+
+    private string lastAutoTarget = "";
 
     public InstallerForm()
     {
@@ -34,24 +53,21 @@ internal sealed class InstallerForm : Form
         StartPosition = FormStartPosition.CenterScreen;
         AutoScaleMode = AutoScaleMode.Font;
         Font = new Font("Segoe UI", 9F);
-        MinimumSize = new Size(760, 620);
-        ClientSize = new Size(900, 680);
+        MinimumSize = new Size(820, 700);
+        ClientSize = new Size(960, 760);
 
         var root = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             ColumnCount = 1,
-            RowCount = 8,
+            RowCount = 10,
             Padding = new Padding(18),
         };
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        for (var i = 0; i < 9; i++)
+        {
+            root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        }
         root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
         Controls.Add(root);
 
@@ -61,107 +77,44 @@ internal sealed class InstallerForm : Form
             Font = new Font("Segoe UI", 13, FontStyle.Bold),
             AutoEllipsis = true,
             Dock = DockStyle.Fill,
-            Margin = new Padding(0, 0, 0, 18),
-            AutoSize = true,
-            MaximumSize = new Size(0, 0)
+            Margin = new Padding(0, 0, 0, 12),
+            AutoSize = true
         };
         root.Controls.Add(title, 0, 0);
 
-        var pathLabel = new Label
-        {
-            Text = "Game folder",
-            AutoSize = true,
-            Margin = new Padding(0, 0, 0, 6)
-        };
-        root.Controls.Add(pathLabel, 0, 1);
-
-        var gameRow = new TableLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            AutoSize = true,
-            ColumnCount = 2,
-            Margin = new Padding(0, 0, 0, 18)
-        };
-        gameRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        gameRow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        root.Controls.Add(gameRow, 0, 2);
-
-        pathBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        pathBox.Dock = DockStyle.Fill;
-        pathBox.Margin = new Padding(0, 0, 10, 0);
-        pathBox.Text = FindFirstValidGameRoot() ?? "";
-        gameRow.Controls.Add(pathBox, 0, 0);
-
-        browseButton.Text = "Browse...";
-        browseButton.AutoSize = true;
-        browseButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        browseButton.Margin = new Padding(0);
-        browseButton.MinimumSize = new Size(104, 0);
-        browseButton.Click += (_, _) => Browse();
-        gameRow.Controls.Add(browseButton, 1, 0);
-
-        var homm3PathLabel = new Label
-        {
-            Text = "HoMM3 Complete or HD folder",
-            AutoSize = true,
-            Margin = new Padding(0, 0, 0, 6)
-        };
-        root.Controls.Add(homm3PathLabel, 0, 3);
-
-        var homm3Row = new TableLayoutPanel
-        {
-            Dock = DockStyle.Fill,
-            AutoSize = true,
-            ColumnCount = 2,
-            Margin = new Padding(0, 0, 0, 18)
-        };
-        homm3Row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        homm3Row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        root.Controls.Add(homm3Row, 0, 4);
-
-        homm3PathBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        homm3PathBox.Dock = DockStyle.Fill;
-        homm3PathBox.Margin = new Padding(0, 0, 10, 0);
-        homm3PathBox.Text = FindFirstValidHomm3Root() ?? "";
-        homm3Row.Controls.Add(homm3PathBox, 0, 0);
-
-        browseHomm3Button.Text = "Browse...";
-        browseHomm3Button.AutoSize = true;
-        browseHomm3Button.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        browseHomm3Button.Margin = new Padding(0);
-        browseHomm3Button.MinimumSize = new Size(104, 0);
-        browseHomm3Button.Click += (_, _) => BrowseHomm3();
-        homm3Row.Controls.Add(browseHomm3Button, 1, 0);
-
         var info = new Label
         {
-            Text = "Installs the bundled BepInEx loader, Golden Era mod files, and Core.zip overlay. Backups are created before files are changed.",
+            Text = "Installs Golden Era into a separate modded copy. Your Steam game folder is used as the clean source and is not modified.",
             AutoSize = true,
             Dock = DockStyle.Fill,
-            Margin = new Padding(0, 0, 0, 22)
+            Margin = new Padding(0, 0, 0, 18)
         };
-        root.Controls.Add(info, 0, 5);
+        root.Controls.Add(info, 0, 1);
+
+        AddPathRow(root, 2, "Steam Olden Era folder", sourcePathBox, browseSourceButton, (_, _) => BrowseSource());
+        AddPathRow(root, 4, "Modded copy folder", targetPathBox, browseTargetButton, (_, _) => BrowseTarget());
+        AddPathRow(root, 6, "HoMM3 Complete or HD folder", homm3PathBox, browseHomm3Button, (_, _) => BrowseHomm3());
 
         var buttonRow = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             AutoSize = true,
             ColumnCount = 5,
-            Margin = new Padding(0, 0, 0, 20)
+            Margin = new Padding(0, 4, 0, 20)
         };
         buttonRow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         buttonRow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         buttonRow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         buttonRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
         buttonRow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        root.Controls.Add(buttonRow, 0, 6);
+        root.Controls.Add(buttonRow, 0, 8);
 
         installButton.Text = "Install";
         installButton.AutoSize = true;
         installButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         installButton.Margin = new Padding(0, 0, 12, 0);
         installButton.MinimumSize = new Size(112, 0);
-        installButton.Click += async (_, _) => await RunOperationAsync("Install", Path.Combine(packageRoot, "install.ps1"), false);
+        installButton.Click += async (_, _) => await RunOperationAsync(InstallerOperation.Install);
         buttonRow.Controls.Add(installButton, 0, 0);
 
         repairButton.Text = "Repair";
@@ -169,7 +122,7 @@ internal sealed class InstallerForm : Form
         repairButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         repairButton.Margin = new Padding(0, 0, 12, 0);
         repairButton.MinimumSize = new Size(112, 0);
-        repairButton.Click += async (_, _) => await RunOperationAsync("Repair", Path.Combine(packageRoot, "install.ps1"), true);
+        repairButton.Click += async (_, _) => await RunOperationAsync(InstallerOperation.Repair);
         buttonRow.Controls.Add(repairButton, 1, 0);
 
         uninstallButton.Text = "Uninstall";
@@ -177,7 +130,7 @@ internal sealed class InstallerForm : Form
         uninstallButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         uninstallButton.Margin = new Padding(0, 0, 12, 0);
         uninstallButton.MinimumSize = new Size(112, 0);
-        uninstallButton.Click += async (_, _) => await RunOperationAsync("Uninstall", Path.Combine(packageRoot, "uninstall.ps1"), false);
+        uninstallButton.Click += async (_, _) => await RunOperationAsync(InstallerOperation.Uninstall);
         buttonRow.Controls.Add(uninstallButton, 2, 0);
 
         closeButton.Text = "Close";
@@ -194,12 +147,19 @@ internal sealed class InstallerForm : Form
         logBox.ScrollBars = ScrollBars.Vertical;
         logBox.ReadOnly = true;
         logBox.Font = new Font("Consolas", 9);
-        root.Controls.Add(logBox, 0, 7);
+        root.Controls.Add(logBox, 0, 9);
 
-        AppendLog("Ready. Confirm the game folder, then click Install.");
-        if (string.IsNullOrWhiteSpace(pathBox.Text))
+        sourcePathBox.Text = FindFirstValidGameRoot() ?? "";
+        lastAutoTarget = InstallerBackend.GetPreferredTargetRoot(sourcePathBox.Text);
+        targetPathBox.Text = lastAutoTarget;
+        homm3PathBox.Text = FindFirstValidHomm3Root() ?? "";
+        sourcePathBox.TextChanged += (_, _) => RefreshAutoTarget();
+
+        AppendLog($"Ready. Installer version: {InstallerBackend.PackageVersion}");
+        AppendLog("Install and Repair copy the selected Steam folder to the modded copy folder, then patch only that copy.");
+        if (string.IsNullOrWhiteSpace(sourcePathBox.Text))
         {
-            AppendLog("Auto-detect did not find the game. Click Browse and choose the folder containing HeroesOldenEra.exe.");
+            AppendLog("Auto-detect did not find Olden Era. Click Browse and choose the folder containing HeroesOldenEra.exe.");
         }
         if (string.IsNullOrWhiteSpace(homm3PathBox.Text))
         {
@@ -212,20 +172,79 @@ internal sealed class InstallerForm : Form
         ResumeLayout(false);
     }
 
-    private void Browse()
+    private static void AddPathRow(
+        TableLayoutPanel root,
+        int labelRow,
+        string labelText,
+        TextBox textBox,
+        Button browseButton,
+        EventHandler browseHandler)
+    {
+        var label = new Label
+        {
+            Text = labelText,
+            AutoSize = true,
+            Margin = new Padding(0, 0, 0, 6)
+        };
+        root.Controls.Add(label, 0, labelRow);
+
+        var row = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            ColumnCount = 2,
+            Margin = new Padding(0, 0, 0, 16)
+        };
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        root.Controls.Add(row, 0, labelRow + 1);
+
+        textBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        textBox.Dock = DockStyle.Fill;
+        textBox.Margin = new Padding(0, 0, 10, 0);
+        row.Controls.Add(textBox, 0, 0);
+
+        browseButton.Text = "Browse...";
+        browseButton.AutoSize = true;
+        browseButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        browseButton.Margin = new Padding(0);
+        browseButton.MinimumSize = new Size(104, 0);
+        browseButton.Click += browseHandler;
+        row.Controls.Add(browseButton, 1, 0);
+    }
+
+    private void BrowseSource()
     {
         using var dialog = new FolderBrowserDialog
         {
-            Description = "Choose the folder containing HeroesOldenEra.exe",
+            Description = "Choose the clean Steam folder containing HeroesOldenEra.exe",
             UseDescriptionForTitle = true
         };
-        if (Directory.Exists(pathBox.Text))
+        if (Directory.Exists(sourcePathBox.Text))
         {
-            dialog.SelectedPath = pathBox.Text;
+            dialog.SelectedPath = sourcePathBox.Text;
         }
         if (dialog.ShowDialog(this) == DialogResult.OK)
         {
-            pathBox.Text = dialog.SelectedPath;
+            sourcePathBox.Text = dialog.SelectedPath;
+            RefreshAutoTarget(force: true);
+        }
+    }
+
+    private void BrowseTarget()
+    {
+        using var dialog = new FolderBrowserDialog
+        {
+            Description = "Choose where the separate Golden Era game copy should be installed",
+            UseDescriptionForTitle = true
+        };
+        if (Directory.Exists(targetPathBox.Text))
+        {
+            dialog.SelectedPath = targetPathBox.Text;
+        }
+        if (dialog.ShowDialog(this) == DialogResult.OK)
+        {
+            targetPathBox.Text = dialog.SelectedPath;
         }
     }
 
@@ -246,20 +265,26 @@ internal sealed class InstallerForm : Form
         }
     }
 
-    private async Task RunOperationAsync(string label, string scriptPath, bool repair)
+    private async Task RunOperationAsync(InstallerOperation operation)
     {
         try
         {
             SetBusy(true);
-            AppendLog($"Starting {label.ToLowerInvariant()}...");
-            await Task.Run(() => RunBackend(scriptPath, pathBox.Text, homm3PathBox.Text, repair, label != "Uninstall"));
-            AppendLog($"{label} complete.");
-            MessageBox.Show(this, $"{label} complete.", "Golden Era Mod Installer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            AppendLog($"Starting {operation.ToString().ToLowerInvariant()}...");
+            var request = new InstallRequest(
+                operation,
+                sourcePathBox.Text,
+                targetPathBox.Text,
+                homm3PathBox.Text,
+                string.Equals(targetPathBox.Text, lastAutoTarget, StringComparison.OrdinalIgnoreCase));
+            await Task.Run(() => InstallerBackend.Run(request, AppendLog));
+            AppendLog($"{operation} complete.");
+            MessageBox.Show(this, $"{operation} complete.", "Golden Era Mod Installer", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
             AppendLog("ERROR: " + ex.Message);
-            MessageBox.Show(this, ex.Message, $"{label} failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, ex.Message, $"{operation} failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
         {
@@ -267,64 +292,16 @@ internal sealed class InstallerForm : Form
         }
     }
 
-    private void RunBackend(string scriptPath, string gameRoot, string homm3Root, bool repair, bool requireHomm3)
+    private void RefreshAutoTarget(bool force = false)
     {
-        if (!File.Exists(scriptPath))
+        var newAutoTarget = InstallerBackend.GetPreferredTargetRoot(sourcePathBox.Text);
+        if (force ||
+            string.IsNullOrWhiteSpace(targetPathBox.Text) ||
+            string.Equals(targetPathBox.Text, lastAutoTarget, StringComparison.OrdinalIgnoreCase))
         {
-            throw new FileNotFoundException("Missing backend script.", scriptPath);
+            targetPathBox.Text = newAutoTarget;
         }
-        if (string.IsNullOrWhiteSpace(gameRoot))
-        {
-            throw new InvalidOperationException("Choose the game folder first.");
-        }
-        if (!File.Exists(Path.Combine(gameRoot, "HeroesOldenEra.exe")))
-        {
-            throw new InvalidOperationException("The selected folder does not contain HeroesOldenEra.exe.");
-        }
-        if (requireHomm3)
-        {
-            if (string.IsNullOrWhiteSpace(homm3Root))
-            {
-                throw new InvalidOperationException("Choose the HoMM3 Complete or HoMM3 HD folder first.");
-            }
-            if (!IsValidHomm3Root(homm3Root))
-            {
-                throw new InvalidOperationException("The selected HoMM3 folder does not look like HoMM3 Complete or HoMM3 HD.");
-            }
-        }
-
-        var args = $"-NoProfile -ExecutionPolicy Bypass -File \"{scriptPath}\" -GameRoot \"{gameRoot}\"";
-        if (requireHomm3)
-        {
-            args += $" -Homm3Root \"{homm3Root}\"";
-        }
-        if (repair)
-        {
-            args += " -Repair";
-        }
-
-        AppendLog("Running backend...");
-        var info = new ProcessStartInfo
-        {
-            FileName = "powershell.exe",
-            Arguments = args,
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            CreateNoWindow = true
-        };
-
-        using var process = new Process { StartInfo = info };
-        process.OutputDataReceived += (_, e) => { if (e.Data is { Length: > 0 }) AppendLog(e.Data); };
-        process.ErrorDataReceived += (_, e) => { if (e.Data is { Length: > 0 }) AppendLog(e.Data); };
-        process.Start();
-        process.BeginOutputReadLine();
-        process.BeginErrorReadLine();
-        process.WaitForExit();
-        if (process.ExitCode != 0)
-        {
-            throw new InvalidOperationException($"Backend exited with code {process.ExitCode}.");
-        }
+        lastAutoTarget = newAutoTarget;
     }
 
     private void SetBusy(bool busy)
@@ -337,7 +314,8 @@ internal sealed class InstallerForm : Form
         installButton.Enabled = !busy;
         repairButton.Enabled = !busy;
         uninstallButton.Enabled = !busy;
-        browseButton.Enabled = !busy;
+        browseSourceButton.Enabled = !busy;
+        browseTargetButton.Enabled = !busy;
         browseHomm3Button.Enabled = !busy;
         closeButton.Enabled = !busy;
         Cursor = busy ? Cursors.WaitCursor : Cursors.Default;
@@ -371,7 +349,7 @@ internal sealed class InstallerForm : Form
     {
         foreach (var candidate in FindHomm3RootCandidates())
         {
-            if (IsValidHomm3Root(candidate))
+            if (InstallerBackend.IsValidHomm3Root(candidate))
             {
                 return candidate;
             }
@@ -434,27 +412,6 @@ internal sealed class InstallerForm : Form
                 AddHomm3SteamLibraries(candidates, libraryPath, visited);
             }
         }
-    }
-
-    private static bool IsValidHomm3Root(string path)
-    {
-        if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path)) return false;
-
-        var hasHeroes3Exe = File.Exists(Path.Combine(path, "Heroes3.exe")) ||
-                            File.Exists(Path.Combine(path, "HD_Launcher.exe")) ||
-                            File.Exists(Path.Combine(path, "Might & Magic Heroes III - HD Edition.exe")) ||
-                            File.Exists(Path.Combine(path, "Heroes of Might & Magic III - HD Edition.exe"));
-        if (!hasHeroes3Exe) return false;
-
-        var data = Path.Combine(path, "Data");
-        var hasCompleteLods = File.Exists(Path.Combine(data, "H3bitmap.lod")) &&
-                              File.Exists(Path.Combine(data, "H3sprite.lod")) &&
-                              File.Exists(Path.Combine(data, "H3ab_bmp.lod")) &&
-                              File.Exists(Path.Combine(data, "H3ab_spr.lod"));
-        var hasHdMarkers = Directory.Exists(Path.Combine(path, "_HD3_Data")) ||
-                           path.Contains("HD Edition", StringComparison.OrdinalIgnoreCase);
-
-        return hasCompleteLods || hasHdMarkers;
     }
 
     private static IEnumerable<string> FindGameRootCandidates()

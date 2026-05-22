@@ -12,7 +12,8 @@ This is an experimental early-access mod. Stronghold is still the most complete 
 - Adds multiple HoMM3-inspired custom faction ports to Olden Era.
 - Adds custom creature lineups, alternate creature upgrades, town screens, buildings, heroes, portraits, map sprites, unit animations, and music where available.
 - Adds faction mechanics such as War Cries and other custom-faction rules as they are ported.
-- Bundles the BepInEx IL2CPP loader and a release-derived Core.zip overlay with installer-created backups.
+- Bundles the BepInEx IL2CPP loader and a release-derived Core.zip overlay in a single installer EXE.
+- Installs into a separate Golden Era game copy so your Steam install can still launch vanilla.
 
 ## Current Faction Status
 
@@ -20,7 +21,7 @@ The current public package includes the expanded custom-faction framework and as
 
 ## Major Known Bugs
 
-- This will break every patch, guaranteed. You must freeze or redownload a working patch version to play this mod. You can copy your Steam folder with the mod installed and launch that if you want to keep multiple copies of the game simultaneously - Olden Era has a small file size.
+- This will break every patch, guaranteed. The installer now keeps Steam vanilla and creates a separate modded copy, but you still need a package matching the current Olden Era patch.
 - Some enemies on the map sneakily turn sideways, making them razor thin and hard to see.
 - Not all factions have had the same hand tuning. Some are almost entirely placeholder effects.
 - Sometimes, maps load with no HUD, requiring you to reload the map.
@@ -29,12 +30,11 @@ The current public package includes the expanded custom-faction framework and as
 
 ## Installation
 
-1. Make sure both Olden Era and Heroes of Might and Magic 3 are installed on your computer
-2. Download and extract the current zip release from the Releases section.
-3. Run `GoldenEraModInstaller.exe`, which will ask you for the location of both Olden Era and HoMM3 installations.
-4. Wait for the installer to finish - it can take a few minutes
-5. Launch Olden Era from either its folder or directly from Steam. First launch will take several minutes, but future launches will be quicker.
-6. (Optional) Copy your entire Olden Era game folder somewhere safe if you're worried about updates breaking the mod.
+1. Make sure both Olden Era and Heroes of Might and Magic 3 are installed on your computer.
+2. Download the current `GoldenEraModInstaller-*.exe` release asset.
+3. Run the installer. It will ask for your clean Steam Olden Era folder, a separate modded copy folder, and your HoMM3 installation.
+4. Wait for the installer to copy the game and apply the mod - it can take several minutes.
+5. Launch the modded copy with `Launch Golden Era.cmd` in the target folder. Launching Olden Era from Steam should still run vanilla.
 
 ## Screenshots
 
@@ -51,7 +51,7 @@ The current public package includes the expanded custom-faction framework and as
 ## FAQ
 
 ### Will new updates to Olden Era break this mod?
-Absolutely yes, especially in early access. Olden Era has a very small download size, so I would recommend keeping this mod installed to a separate copy of your steam game folder to prevent updates from breaking it. There is a chance some updates will be so minor that nothing will break, but even in these situations you will need to reinstall the mod due to how it modifies the game's Core.zip.
+Absolutely yes, especially in early access. The installer preserves your Steam folder and applies the mod to a separate game copy, but the modded copy still depends on Olden Era's current `Core.zip` layout. If Steam updates Olden Era, wait for a matching Golden Era package and run Repair against the modded copy.
 
 ### How do I submit bug reports, balance feedback, and suggestions?
 Use the Issues tab in github and choose the relevant form: Bug report, Balance issue, or Suggestion. This repo is the only place feedback will be monitored.

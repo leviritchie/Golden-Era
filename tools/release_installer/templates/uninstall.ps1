@@ -3,6 +3,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+Write-Warning "uninstall.ps1 is a legacy unpacked-package reference. The supported public installer is the single self-extracting GoldenEraModInstaller EXE, which removes only its side-by-side target copy."
 $script:DetectionCandidates = New-Object "System.Collections.Generic.List[string]"
 
 function Add-GameRootCandidate($Path) {

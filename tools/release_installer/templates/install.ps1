@@ -6,6 +6,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+Write-Warning "install.ps1 is a legacy unpacked-package reference. The supported public installer is the single self-extracting GoldenEraModInstaller EXE, which installs into a side-by-side game copy instead of patching Steam in place."
 $PackageRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $script:DetectionCandidates = New-Object "System.Collections.Generic.List[string]"
 $script:Homm3DetectionCandidates = New-Object "System.Collections.Generic.List[string]"
