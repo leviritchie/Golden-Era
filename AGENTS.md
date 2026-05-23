@@ -13,3 +13,4 @@
 - If rebuilding `OfflineUnlockMod.dll` for a payload, build with `DebugType=None` and `DebugSymbols=false` or inspect the DLL for embedded PDB paths before publishing.
 - Core overlay manifests use the generic `hommoe-golden-era-release-overlay-v1` format. Do not reintroduce Stronghold-only token filtering when exporting release inputs.
 - `actions/upload-artifact@v7` with `archive: false` accepts only one file per upload step. Upload the installer EXE and checksum in separate artifact steps; the GitHub Release step may still attach both files together.
+- `docs/github_wiki/` is a GitHub-wiki-ready Markdown export for current custom faction attributes. It is generated from the private playtest workspace's live Core data and custom faction manifests; do not hand-edit it as source of truth unless the underlying Core/manifest data is also updated.
