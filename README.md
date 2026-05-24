@@ -45,6 +45,10 @@ For an existing Golden Era target folder, use **Update** first. Update does not 
 
 Use **Repair** when Update says the clean baseline is missing or no longer matches the package. Repair rebuilds the target from a clean Steam source folder, so it still needs the Steam install to match the Golden Era package.
 
+## Modding Guide
+
+The `modding_guide/` folder contains [mod_helper.md](modding_guide/mod_helper.md), a practical Olden Era modding reference, and a snapshot of [GameSymbols.cs](modding_guide/GameSymbols.cs), the central symbol registry used by the Golden Era plugin. These files are intended as reference material for modders working against the Steam IL2CPP build, not as a supported public API.
+
 ## Screenshots
 
 ![Quick play setup](screenshots/quickplay.gif)

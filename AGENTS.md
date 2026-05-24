@@ -14,3 +14,5 @@
 - If rebuilding `OfflineUnlockMod.dll` for a payload, build with `DebugType=None` and `DebugSymbols=false` or inspect the DLL for embedded PDB paths before publishing.
 - Core overlay manifests use the generic `hommoe-golden-era-release-overlay-v1` format. Do not reintroduce Stronghold-only token filtering when exporting release inputs.
 - `actions/upload-artifact@v7` with `archive: false` accepts only one file per upload step. Upload the installer EXE and checksum in separate artifact steps; the GitHub Release step may still attach both files together.
+- Keep `modding_guide/mod_helper.md` and `modding_guide/GameSymbols.cs` as release-time public snapshots from the private/source workspace. Refresh them intentionally when publishing a release that includes new modder-facing architecture or symbol-registry changes.
+- Release tags should have a matching `release_notes/<tag>.md` file. The workflow prepends that curated note to GitHub's generated commit notes so user-facing release history reflects gameplay, installer, and documentation changes across the recent private/source work.

@@ -57,6 +57,20 @@ jobs:
           $exeHash = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLowerInvariant()
           "$exeHash  $([System.IO.Path]::GetFileName($exe))" | Set-Content -Path $sumPath -Encoding ASCII
 
+      - name: Prepare release notes
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        run: |
+          $safeVersion = "${{ github.ref_name }}" -replace '[<>:"/\\|?*]', '_'
+          $out = "dist/release-notes-$safeVersion.md"
+          $tagNotes = "release_notes/${{ github.ref_name }}.md"
+          if (Test-Path -LiteralPath $tagNotes) {
+            Copy-Item -LiteralPath $tagNotes -Destination $out -Force
+          } else {
+            "# Golden Era ${{ github.ref_name }}`n`nNo curated release notes were committed for this tag." | Set-Content -Path $out -Encoding UTF8
+          }
+          "RELEASE_BODY=$out" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
       - name: Attest package
         uses: actions/attest-build-provenance@v2
         with:
@@ -85,4 +99,5 @@ jobs:
           files: |
             ${{ env.PACKAGE_EXE }}
             ${{ env.PACKAGE_SHA }}
+          body_path: ${{ env.RELEASE_BODY }}
           generate_release_notes: true
