@@ -40,6 +40,7 @@ internal sealed class InstallerForm : Form
     private readonly Button browseTargetButton = new();
     private readonly Button browseHomm3Button = new();
     private readonly Button installButton = new();
+    private readonly Button updateButton = new();
     private readonly Button repairButton = new();
     private readonly Button uninstallButton = new();
     private readonly Button closeButton = new();
@@ -84,7 +85,7 @@ internal sealed class InstallerForm : Form
 
         var info = new Label
         {
-            Text = "Installs Golden Era into a separate modded copy. Your Steam game folder is used as the clean source and is not modified.",
+            Text = "Installs Golden Era into a separate modded copy. Update refreshes an existing Golden Era copy from its saved clean baseline when possible.",
             AutoSize = true,
             Dock = DockStyle.Fill,
             Margin = new Padding(0, 0, 0, 18)
@@ -99,9 +100,10 @@ internal sealed class InstallerForm : Form
         {
             Dock = DockStyle.Fill,
             AutoSize = true,
-            ColumnCount = 5,
+            ColumnCount = 6,
             Margin = new Padding(0, 4, 0, 20)
         };
+        buttonRow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         buttonRow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         buttonRow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         buttonRow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
@@ -117,13 +119,21 @@ internal sealed class InstallerForm : Form
         installButton.Click += async (_, _) => await RunOperationAsync(InstallerOperation.Install);
         buttonRow.Controls.Add(installButton, 0, 0);
 
+        updateButton.Text = "Update";
+        updateButton.AutoSize = true;
+        updateButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        updateButton.Margin = new Padding(0, 0, 12, 0);
+        updateButton.MinimumSize = new Size(112, 0);
+        updateButton.Click += async (_, _) => await RunOperationAsync(InstallerOperation.Update);
+        buttonRow.Controls.Add(updateButton, 1, 0);
+
         repairButton.Text = "Repair";
         repairButton.AutoSize = true;
         repairButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         repairButton.Margin = new Padding(0, 0, 12, 0);
         repairButton.MinimumSize = new Size(112, 0);
         repairButton.Click += async (_, _) => await RunOperationAsync(InstallerOperation.Repair);
-        buttonRow.Controls.Add(repairButton, 1, 0);
+        buttonRow.Controls.Add(repairButton, 2, 0);
 
         uninstallButton.Text = "Uninstall";
         uninstallButton.AutoSize = true;
@@ -131,7 +141,7 @@ internal sealed class InstallerForm : Form
         uninstallButton.Margin = new Padding(0, 0, 12, 0);
         uninstallButton.MinimumSize = new Size(112, 0);
         uninstallButton.Click += async (_, _) => await RunOperationAsync(InstallerOperation.Uninstall);
-        buttonRow.Controls.Add(uninstallButton, 2, 0);
+        buttonRow.Controls.Add(uninstallButton, 3, 0);
 
         closeButton.Text = "Close";
         closeButton.AutoSize = true;
@@ -139,7 +149,7 @@ internal sealed class InstallerForm : Form
         closeButton.Margin = new Padding(0);
         closeButton.MinimumSize = new Size(104, 0);
         closeButton.Click += (_, _) => Close();
-        buttonRow.Controls.Add(closeButton, 4, 0);
+        buttonRow.Controls.Add(closeButton, 5, 0);
 
         logBox.Dock = DockStyle.Fill;
         logBox.Margin = new Padding(0);
@@ -157,6 +167,7 @@ internal sealed class InstallerForm : Form
 
         AppendLog($"Ready. Installer version: {InstallerBackend.PackageVersion}");
         AppendLog("Install and Repair copy the selected Steam folder to the modded copy folder, then patch only that copy.");
+        AppendLog("Update refreshes the selected modded copy from its saved clean Core.zip baseline without copying Steam again.");
         if (string.IsNullOrWhiteSpace(sourcePathBox.Text))
         {
             AppendLog("Auto-detect did not find Olden Era. Click Browse and choose the folder containing HeroesOldenEra.exe.");
@@ -312,6 +323,7 @@ internal sealed class InstallerForm : Form
             return;
         }
         installButton.Enabled = !busy;
+        updateButton.Enabled = !busy;
         repairButton.Enabled = !busy;
         uninstallButton.Enabled = !busy;
         browseSourceButton.Enabled = !busy;

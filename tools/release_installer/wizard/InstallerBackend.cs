@@ -10,6 +10,7 @@ namespace GoldenEraModInstaller;
 internal enum InstallerOperation
 {
     Install,
+    Update,
     Repair,
     Uninstall
 }
@@ -45,6 +46,9 @@ internal static class InstallerBackend
             case InstallerOperation.Install:
             case InstallerOperation.Repair:
                 InstallOrRepair(request, log);
+                break;
+            case InstallerOperation.Update:
+                UpdateExistingInstall(request, log);
                 break;
             case InstallerOperation.Uninstall:
                 Uninstall(request, log);
@@ -131,15 +135,77 @@ internal static class InstallerBackend
         InstallPayloadIntoTarget(targetRoot, package.ExtractRoot);
 
         log("Applying Core.zip overlay to target copy...");
-        ApplyCoreOverlay(GetCoreZipPath(targetRoot), package.OverlayManifestPath, package.ExtractRoot);
+        var cleanCoreBackup = ApplyCoreOverlay(GetCoreZipPath(targetRoot), package.OverlayManifestPath, package.ExtractRoot);
         ValidatePatchedCoreZip(GetCoreZipPath(targetRoot), overlayManifest);
 
         var launcherPath = WriteLauncher(targetRoot);
-        WriteInstallState(targetRoot, sourceRoot, homm3Root, package, launcherPath);
+        WriteInstallState(
+            targetRoot,
+            sourceRoot,
+            homm3Root,
+            package,
+            launcherPath,
+            cleanCoreBackup,
+            existingState: null,
+            request.Operation == InstallerOperation.Repair ? "repair" : "install");
 
         log("Steam source folder was left unchanged: " + sourceRoot);
         log("Golden Era target copy: " + targetRoot);
         log("Launcher: " + launcherPath);
+    }
+
+    private static void UpdateExistingInstall(InstallRequest request, Action<string> log)
+    {
+        var targetRoot = RequireTargetGameRoot(request.TargetGameRoot, "Golden Era target folder");
+        var state = ReadInstallState(targetRoot);
+        ValidateSideBySideState(targetRoot, state);
+
+        var package = PreparePackageCache(log);
+        var overlayManifest = LoadOverlayManifest(package.OverlayManifestPath);
+        var targetCoreZip = GetCoreZipPath(targetRoot);
+        var cleanCoreBackup = ResolveCleanCoreBackup(targetRoot, state, overlayManifest, log);
+
+        log("Using clean target Core.zip baseline: " + cleanCoreBackup);
+        var timestamp = DateTime.Now.ToString("yyyyMMdd-HHmmss");
+        var previousPatchedCoreBackup = $"{targetCoreZip}.backup-before-update-{timestamp}";
+        File.Copy(targetCoreZip, previousPatchedCoreBackup, overwrite: true);
+
+        string? newCleanCoreBackup = null;
+        try
+        {
+            log("Restoring clean Core.zip baseline into target copy...");
+            File.Copy(cleanCoreBackup, targetCoreZip, overwrite: true);
+
+            log("Applying Core.zip overlay to target copy...");
+            newCleanCoreBackup = ApplyCoreOverlay(targetCoreZip, package.OverlayManifestPath, package.ExtractRoot);
+            ValidatePatchedCoreZip(targetCoreZip, overlayManifest);
+
+            log("Refreshing BepInEx, Doorstop, and Golden Era payload in target copy...");
+            ReplaceModFilesInTarget(targetRoot, package.ExtractRoot);
+
+            var launcherPath = WriteLauncher(targetRoot);
+            WriteInstallState(
+                targetRoot,
+                state.SourceGameRoot ?? request.SourceGameRoot,
+                state.Homm3Root ?? request.Homm3Root,
+                package,
+                launcherPath,
+                newCleanCoreBackup,
+                state,
+                "update");
+
+            log("Updated Golden Era target copy: " + targetRoot);
+            log("Previous patched Core.zip backup: " + previousPatchedCoreBackup);
+            log("Launcher: " + launcherPath);
+        }
+        catch
+        {
+            if (File.Exists(previousPatchedCoreBackup))
+            {
+                File.Copy(previousPatchedCoreBackup, targetCoreZip, overwrite: true);
+            }
+            throw;
+        }
     }
 
     private static void Uninstall(InstallRequest request, Action<string> log)
@@ -161,18 +227,7 @@ internal static class InstallerBackend
 
         var state = JsonSerializer.Deserialize<InstallState>(File.ReadAllText(statePath), JsonOptions)
             ?? throw new InvalidOperationException("Install state is unreadable.");
-        if (!string.Equals(state.InstallMode, "side-by-side", StringComparison.OrdinalIgnoreCase))
-        {
-            throw new InvalidOperationException("Install state is not for a side-by-side Golden Era install.");
-        }
-        if (!SamePath(targetRoot, state.TargetGameRoot))
-        {
-            throw new InvalidOperationException("Selected target folder does not match the install state target.");
-        }
-        if (SamePath(targetRoot, state.SourceGameRoot))
-        {
-            throw new InvalidOperationException("Refusing to uninstall because target and source point to the same folder.");
-        }
+        ValidateSideBySideState(targetRoot, state);
         if (!File.Exists(Path.Combine(targetRoot, "HeroesOldenEra.exe")))
         {
             throw new InvalidOperationException("Selected target folder does not contain HeroesOldenEra.exe.");
@@ -416,6 +471,77 @@ internal static class InstallerBackend
         }
     }
 
+    private static void ReplaceModFilesInTarget(string targetRoot, string packageRoot)
+    {
+        var backupRoot = Path.Combine(targetRoot, ".golden-era-modfiles-backup-" + DateTime.Now.ToString("yyyyMMdd-HHmmss"));
+        Directory.CreateDirectory(backupRoot);
+
+        try
+        {
+            MoveModFilesToBackup(targetRoot, backupRoot);
+            InstallPayloadIntoTarget(targetRoot, packageRoot);
+            Directory.Delete(backupRoot, recursive: true);
+        }
+        catch
+        {
+            if (Directory.Exists(backupRoot) && Directory.EnumerateFileSystemEntries(backupRoot).Any())
+            {
+                CleanTargetModFiles(targetRoot);
+                RestoreModFilesFromBackup(targetRoot, backupRoot);
+            }
+            else if (Directory.Exists(backupRoot))
+            {
+                Directory.Delete(backupRoot, recursive: true);
+            }
+            throw;
+        }
+    }
+
+    private static void MoveModFilesToBackup(string targetRoot, string backupRoot)
+    {
+        foreach (var directoryName in new[] { "BepInEx", "dotnet" })
+        {
+            var source = Path.Combine(targetRoot, directoryName);
+            if (!Directory.Exists(source))
+            {
+                continue;
+            }
+
+            Directory.Move(source, Path.Combine(backupRoot, directoryName));
+        }
+
+        foreach (var fileName in new[] { "winhttp.dll", "doorstop_config.ini", ".doorstop_version" })
+        {
+            var source = Path.Combine(targetRoot, fileName);
+            if (!File.Exists(source))
+            {
+                continue;
+            }
+
+            File.Move(source, Path.Combine(backupRoot, fileName));
+        }
+    }
+
+    private static void RestoreModFilesFromBackup(string targetRoot, string backupRoot)
+    {
+        if (!Directory.Exists(backupRoot))
+        {
+            return;
+        }
+
+        foreach (var source in Directory.EnumerateDirectories(backupRoot))
+        {
+            Directory.Move(source, Path.Combine(targetRoot, Path.GetFileName(source)));
+        }
+
+        foreach (var source in Directory.EnumerateFiles(backupRoot))
+        {
+            File.Move(source, Path.Combine(targetRoot, Path.GetFileName(source)));
+        }
+
+        Directory.Delete(backupRoot, recursive: true);
+    }
+
     private static void InstallPayloadIntoTarget(string targetRoot, string packageRoot)
     {
         var rootPayload = Path.Combine(packageRoot, "payload", "game_root");
@@ -447,7 +573,7 @@ internal static class InstallerBackend
         CopyDirectory(pluginPayload, Path.Combine(targetRoot, PluginRelativePath));
     }
 
-    private static void ApplyCoreOverlay(string coreZipPath, string manifestPath, string packageRoot)
+    private static string ApplyCoreOverlay(string coreZipPath, string manifestPath, string packageRoot)
     {
         var manifest = LoadOverlayManifest(manifestPath);
         var operationsByPath = manifest.Operations.ToDictionary(op => op.Path, StringComparer.OrdinalIgnoreCase);
@@ -518,6 +644,7 @@ internal static class InstallerBackend
             }
 
             File.Move(tmpZip, coreZipPath, overwrite: true);
+            return backup;
         }
         catch
         {
@@ -546,25 +673,118 @@ popd
         return launcherPath;
     }
 
-    private static void WriteInstallState(string targetRoot, string sourceRoot, string homm3Root, PackageCache package, string launcherPath)
+    private static void WriteInstallState(
+        string targetRoot,
+        string? sourceRoot,
+        string? homm3Root,
+        PackageCache package,
+        string launcherPath,
+        string cleanCoreBackup,
+        InstallState? existingState,
+        string operation)
     {
+        var now = DateTimeOffset.UtcNow.ToString("o");
         var state = new InstallState
         {
             InstallMode = "side-by-side",
-            SourceGameRoot = sourceRoot,
+            SourceGameRoot = string.IsNullOrWhiteSpace(sourceRoot) ? existingState?.SourceGameRoot : sourceRoot,
             TargetGameRoot = targetRoot,
-            Homm3Root = homm3Root,
+            Homm3Root = string.IsNullOrWhiteSpace(homm3Root) ? existingState?.Homm3Root : homm3Root,
             PackageVersion = PackageVersion,
+            PreviousPackageVersion = existingState?.PackageVersion,
             PackageCacheRoot = package.CacheRoot,
             ReleaseInputZipSha256 = package.ReleaseInputZipSha256,
             OverlayManifestSha256 = package.OverlayManifestSha256,
-            InstalledAt = DateTimeOffset.UtcNow.ToString("o"),
+            CleanCoreBackup = cleanCoreBackup,
+            InstalledAt = existingState?.InstalledAt ?? now,
+            UpdatedAt = operation == "install" ? null : now,
+            LastOperation = operation,
             Launcher = launcherPath
         };
 
         var statePath = Path.Combine(targetRoot, StateRelativePath);
         Directory.CreateDirectory(Path.GetDirectoryName(statePath)!);
         File.WriteAllText(statePath, JsonSerializer.Serialize(state, JsonOptions), Encoding.UTF8);
+    }
+
+    private static InstallState ReadInstallState(string targetRoot)
+    {
+        var statePath = Path.Combine(targetRoot, StateRelativePath);
+        if (!File.Exists(statePath))
+        {
+            throw new InvalidOperationException("No Golden Era side-by-side install state was found in the selected target folder. Use Install for a new target or Repair with a clean Steam source.");
+        }
+
+        return JsonSerializer.Deserialize<InstallState>(File.ReadAllText(statePath), JsonOptions)
+               ?? throw new InvalidOperationException("Install state is unreadable.");
+    }
+
+    private static void ValidateSideBySideState(string targetRoot, InstallState state)
+    {
+        if (!string.Equals(state.InstallMode, "side-by-side", StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException("Install state is not for a side-by-side Golden Era install.");
+        }
+        if (!SamePath(targetRoot, state.TargetGameRoot))
+        {
+            throw new InvalidOperationException("Selected target folder does not match the install state target.");
+        }
+        if (SamePath(targetRoot, state.SourceGameRoot))
+        {
+            throw new InvalidOperationException("Refusing to modify this install because target and source point to the same folder.");
+        }
+    }
+
+    private static string ResolveCleanCoreBackup(string targetRoot, InstallState state, OverlayManifest manifest, Action<string> log)
+    {
+        var candidates = new List<string>();
+        AddCandidate(candidates, state.CleanCoreBackup);
+
+        var coreZipPath = GetCoreZipPath(targetRoot);
+        var streamingAssets = Path.GetDirectoryName(coreZipPath);
+        if (!string.IsNullOrWhiteSpace(streamingAssets) && Directory.Exists(streamingAssets))
+        {
+            foreach (var file in Directory.EnumerateFiles(streamingAssets, "Core.zip.backup-installer-*")
+                         .OrderByDescending(File.GetLastWriteTimeUtc))
+            {
+                AddCandidate(candidates, file);
+            }
+        }
+
+        foreach (var candidate in candidates)
+        {
+            if (!File.Exists(candidate))
+            {
+                continue;
+            }
+
+            try
+            {
+                ValidateSourceCoreZip(candidate, manifest);
+                return candidate;
+            }
+            catch (Exception ex)
+            {
+                log("Skipping Core.zip baseline candidate: " + candidate);
+                log("  " + ex.Message);
+            }
+        }
+
+        throw new InvalidOperationException("Could not find a clean target Core.zip backup that matches this package. Use Repair with a clean Steam source folder to rebuild the target copy.");
+    }
+
+    private static void AddCandidate(List<string> candidates, string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return;
+        }
+
+        var full = Path.GetFullPath(Environment.ExpandEnvironmentVariables(path));
+        if (!candidates.Any(existing => SamePath(existing, full)))
+        {
+            candidates.Add(full);
+        }
     }
 
     private static string ResolveTargetRoot(string targetRoot, string preferredTarget, bool targetIsAutoDefault)
@@ -633,6 +853,19 @@ popd
         {
             throw new InvalidOperationException("The selected Steam source folder already contains mod loader files. Choose a clean vanilla Steam folder.");
         }
+        return root;
+    }
+
+    private static string RequireTargetGameRoot(string path, string label)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            throw new InvalidOperationException($"Choose the {label} first.");
+        }
+
+        var root = Path.GetFullPath(Environment.ExpandEnvironmentVariables(path));
+        RequireFile(Path.Combine(root, "HeroesOldenEra.exe"), $"The selected {label} does not contain HeroesOldenEra.exe.");
+        RequireFile(GetCoreZipPath(root), $"The selected {label} does not contain Core.zip.");
         return root;
     }
 
@@ -999,10 +1232,14 @@ corlib_dir = dotnet
         public string? TargetGameRoot { get; set; }
         public string? Homm3Root { get; set; }
         public string? PackageVersion { get; set; }
+        public string? PreviousPackageVersion { get; set; }
         public string? PackageCacheRoot { get; set; }
         public string? ReleaseInputZipSha256 { get; set; }
         public string? OverlayManifestSha256 { get; set; }
+        public string? CleanCoreBackup { get; set; }
         public string? InstalledAt { get; set; }
+        public string? UpdatedAt { get; set; }
+        public string? LastOperation { get; set; }
         public string? Launcher { get; set; }
     }
 

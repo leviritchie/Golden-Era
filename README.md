@@ -16,6 +16,7 @@ This is an experimental early-access mod. Stronghold is still the most complete 
 - Adds faction mechanics such as War Cries and other custom-faction rules as they are ported.
 - Bundles the BepInEx IL2CPP loader, Golden Era plugin payload, and release-derived Core.zip overlay in one self-extracting installer EXE.
 - Installs into a separate Golden Era game copy so launching Olden Era from Steam still runs the vanilla game.
+- Updates existing Golden Era copies in place when the target folder still has its installer-created clean `Core.zip` baseline.
 
 ## Current Faction Status
 
@@ -38,6 +39,12 @@ The current public package includes the expanded custom-faction framework and as
 5. Wait for the installer to copy the game and apply the mod. It can take several minutes and needs enough free disk space for a second Olden Era copy.
 6. Launch the modded copy with `Launch Golden Era.cmd` in the target folder, or by launching the mod folder's exe. Launching Olden Era from Steam should still run vanilla.
 
+## Updating
+
+For an existing Golden Era target folder, use **Update** first. Update does not copy the Steam folder again. It validates the target folder's installer-created clean `Core.zip` backup, restores that clean baseline inside the target, applies the new bundled overlay, and refreshes the mod payload.
+
+Use **Repair** when Update says the clean baseline is missing or no longer matches the package. Repair rebuilds the target from a clean Steam source folder, so it still needs the Steam install to match the Golden Era package.
+
 ## Screenshots
 
 ![Quick play setup](screenshots/quickplay.gif)
@@ -53,7 +60,7 @@ The current public package includes the expanded custom-faction framework and as
 ## FAQ
 
 ### Will new updates to Olden Era break this mod?
-Yes for install and repair compatibility, but not because the installed copy reads Steam's `Core.zip` at launch. The installer package is built against a specific clean vanilla `Core.zip` layout. During Install or Repair, it validates the selected Steam source, copies that game folder to the Golden Era target folder, and patches only the target copy.
+Yes for install and repair compatibility, but not because the installed copy reads Steam's `Core.zip` at launch. The installer package is built against a specific clean vanilla `Core.zip` layout. During Install or Repair, it validates the selected Steam source, copies that game folder to the Golden Era target folder, and patches only the target copy. During Update, it validates the clean baseline backup already saved in the Golden Era target folder.
 
 Once installed, Golden Era launches from its own copied game folder with its own patched `Core.zip`. A later Steam update should not modify that existing Golden Era folder. If Steam updates Olden Era and you need to reinstall or repair Golden Era, wait for a matching Golden Era package.
 

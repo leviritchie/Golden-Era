@@ -5,6 +5,7 @@
 - Do not tag, publish, or upload public GitHub release assets for installer changes until a local EXE smoke test has passed and the maintainer explicitly approves the release.
 - The installer must keep Steam vanilla: use the selected Steam folder only as a clean source, create a separate Golden Era target copy, and install Doorstop/BepInEx/plugin files plus the Core overlay only into that target.
 - Be precise in user docs: the clean Steam `Core.zip` is required for Install/Repair validation and copy staging, but an installed Golden Era target launches from its own patched `Core.zip` and does not read Steam's `Core.zip` at runtime.
+- Update mode is target-only. It must restore and validate an installer-created clean `Core.zip.backup-installer-*` from the Golden Era target before applying the new overlay. If no matching clean baseline exists, fail closed and tell the user to use Repair with a clean Steam source.
 - Treat `tools/release_installer/templates/install.ps1` and `uninstall.ps1` as legacy unpacked-package references unless they are intentionally redesigned. The WinForms EXE owns the supported install/uninstall path.
 - Before replacing `release_inputs/golden_era_release_payload.zip`, sanitize generated manifests so local paths, user names, and old playtest paths are not present in JSON/config/text files.
 - When refreshing release inputs from a locally modded Steam root, pass a verified clean Steam `Core.zip` backup as `-CleanReleaseCore`; check that the chosen baseline has zero `homm3_` entries before exporting the overlay.
