@@ -98,6 +98,8 @@ internal static class InstallerBackend
 
         var hasHeroes3Exe = File.Exists(Path.Combine(path, "Heroes3.exe")) ||
                             File.Exists(Path.Combine(path, "HD_Launcher.exe")) ||
+                            File.Exists(Path.Combine(path, "HOMM3 2.0.exe")) ||
+                            File.Exists(Path.Combine(path, "HOMM3Launcher.exe")) ||
                             File.Exists(Path.Combine(path, "Might & Magic Heroes III - HD Edition.exe")) ||
                             File.Exists(Path.Combine(path, "Heroes of Might & Magic III - HD Edition.exe"));
         if (!hasHeroes3Exe) return false;

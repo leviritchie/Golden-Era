@@ -127,6 +127,8 @@ function Test-Homm3Root($Path) {
 
     $hasExe = (Test-Path -LiteralPath (Join-Path $Path "Heroes3.exe")) -or
         (Test-Path -LiteralPath (Join-Path $Path "HD_Launcher.exe")) -or
+        (Test-Path -LiteralPath (Join-Path $Path "HOMM3 2.0.exe")) -or
+        (Test-Path -LiteralPath (Join-Path $Path "HOMM3Launcher.exe")) -or
         (Test-Path -LiteralPath (Join-Path $Path "Might & Magic Heroes III - HD Edition.exe")) -or
         (Test-Path -LiteralPath (Join-Path $Path "Heroes of Might & Magic III - HD Edition.exe"))
     if (-not $hasExe) {

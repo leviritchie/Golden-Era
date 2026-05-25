@@ -24,6 +24,21 @@ internal static class Program
             }
         }
 
+        var verifyHomm3RootIndex = Array.FindIndex(args, arg => string.Equals(arg, "--verify-homm3-root", StringComparison.OrdinalIgnoreCase));
+        if (verifyHomm3RootIndex >= 0)
+        {
+            if (verifyHomm3RootIndex + 1 >= args.Length)
+            {
+                Console.Error.WriteLine("Missing path after --verify-homm3-root.");
+                return 1;
+            }
+
+            var root = args[verifyHomm3RootIndex + 1];
+            var isValid = InstallerBackend.IsValidHomm3Root(root);
+            Console.Error.WriteLine(isValid ? "HoMM3 root is valid." : "HoMM3 root is not valid.");
+            return isValid ? 0 : 1;
+        }
+
         ApplicationConfiguration.Initialize();
         Application.Run(new InstallerForm());
         return 0;
