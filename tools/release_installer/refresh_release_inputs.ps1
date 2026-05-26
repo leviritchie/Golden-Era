@@ -32,6 +32,7 @@ function Test-ExcludedPayloadFile($Path) {
     $extension = [System.IO.Path]::GetExtension($Path).ToLowerInvariant()
 
     if ($lowerPath -match "\\__pycache__\\") { return $true }
+    if ($lowerPath -match "\\histogram_icons\\") { return $true }
     if ($lowerName -match "backup") { return $true }
     if ($lowerName -match "\.disabled") { return $true }
     if ($extension -in @(".log", ".flag", ".pdb", ".py", ".pyc", ".meta", ".tmp")) { return $true }
@@ -93,6 +94,47 @@ function Assert-NoPrivateTextLeaks($Root) {
     if ($bad.Count -gt 0) {
         $sample = ($bad | Select-Object -First 20 | ForEach-Object { "  - $_" }) -join [Environment]::NewLine
         throw "Private/local path text reached the release payload:$([Environment]::NewLine)$sample"
+    }
+}
+
+function Remove-DamageHistogramConfig($PluginRoot) {
+    $configPath = Join-Path $PluginRoot "config.json"
+    if (-not (Test-Path -LiteralPath $configPath)) {
+        return
+    }
+
+    $json = Get-Content -LiteralPath $configPath -Raw | ConvertFrom-Json
+    $removed = 0
+    $properties = @($json.PSObject.Properties | Where-Object {
+        $_.Name -eq "damageHistograms" -or $_.Name.StartsWith("damageHistogram", [System.StringComparison]::OrdinalIgnoreCase)
+    })
+    foreach ($property in $properties) {
+        $json.PSObject.Properties.Remove($property.Name)
+        $removed++
+    }
+
+    if ($removed -gt 0) {
+        $json | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $configPath -Encoding UTF8
+    }
+    Write-Host "Removed $removed damage histogram config key(s) from Golden Era payload config."
+}
+
+function Assert-NoDamageHistogramPayload($Root) {
+    $badPaths = Get-ChildItem -LiteralPath $Root -Recurse -Force | Where-Object {
+        $_.FullName.ToLowerInvariant() -match "\\histogram_icons(\\|$)" -or
+        $_.Name -match "DamageHistogramMod"
+    }
+    if ($badPaths) {
+        $sample = ($badPaths | Select-Object -First 20 | ForEach-Object { "  - $($_.FullName)" }) -join [Environment]::NewLine
+        throw "Damage histogram payload files reached the Golden Era release payload:$([Environment]::NewLine)$sample"
+    }
+
+    $badConfig = Get-ChildItem -LiteralPath $Root -Recurse -File -Filter "config.json" -Force | Where-Object {
+        Select-String -LiteralPath $_.FullName -Pattern "damageHistograms|damageHistogram" -Quiet
+    }
+    if ($badConfig) {
+        $sample = ($badConfig | Select-Object -First 20 | ForEach-Object { "  - $($_.FullName)" }) -join [Environment]::NewLine
+        throw "Damage histogram config keys reached the Golden Era release payload:$([Environment]::NewLine)$sample"
     }
 }
 
@@ -185,6 +227,7 @@ New-Item -ItemType Directory -Path $PayloadRoot -Force | Out-Null
 New-Item -ItemType Directory -Path $OverlayDir -Force | Out-Null
 
 Copy-FilteredDirectory $PluginSource $PayloadPlugin
+Remove-DamageHistogramConfig $PayloadPlugin
 if ($PluginDllOverride) {
     Require-Path $PluginDllOverride "Plugin DLL override was not found: $PluginDllOverride"
     Copy-Item -LiteralPath $PluginDllOverride -Destination (Join-Path $PayloadPlugin "OfflineUnlockMod.dll") -Force
@@ -229,6 +272,7 @@ Require-Path (Join-Path $OverlayDir "manifest.json") "Release payload is missing
 
 Sanitize-JsonTextPayloads $StageRoot
 Assert-NoForbiddenPayloadFiles $StageRoot
+Assert-NoDamageHistogramPayload $StageRoot
 Assert-NoPrivateTextLeaks $StageRoot
 
 if (Test-Path -LiteralPath $OutputZipPath) {

@@ -80,6 +80,9 @@ Because I don't want to moderate one.
 ### Does this support multiplayer?
 Multiplayer is entirely untested at this time.
 
+### Does this include the damage histogram mod?
+No. The damage histogram is now a separate mod/project and is not included in the Golden Era installer.
+
 ### How do I donate to contribute to this project?
 I likely will never accept donations. I have a great job and the goal of this side project was, in large part, to enrich my knowledge of AI coding tools as someone who is software-adjacent and has project management experience, but who is not a senior developer or computer science expert.
 
