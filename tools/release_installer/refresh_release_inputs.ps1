@@ -33,7 +33,9 @@ function Test-ExcludedPayloadFile($Path) {
 
     if ($lowerPath -match "\\__pycache__\\") { return $true }
     if ($lowerPath -match "\\histogram_icons\\") { return $true }
+    if ($lowerPath -match "\\dll_backups\\") { return $true }
     if ($lowerName -match "backup") { return $true }
+    if ($lowerName -match "\.bak$") { return $true }
     if ($lowerName -match "\.disabled") { return $true }
     if ($extension -in @(".log", ".flag", ".pdb", ".py", ".pyc", ".meta", ".tmp")) { return $true }
     return $false

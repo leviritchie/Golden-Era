@@ -44,18 +44,23 @@ jobs:
             $version = "manual-${{ github.run_number }}"
           }
           $out = "dist/Golden-Era-Mod-$version"
-          powershell -ExecutionPolicy Bypass -File tools/release_installer/package_from_release_inputs.ps1 -OutputRoot $out -PackageVersion $version
+          powershell -ExecutionPolicy Bypass -File tools/release_installer/package_from_release_inputs.ps1 -OutputRoot "$out/upscaled-portraits" -PackageVersion $version -InstallerNameSuffix "-upscaled-portraits" -Homm3UseUpscaledHeroPortraits true
+          powershell -ExecutionPolicy Bypass -File tools/release_installer/package_from_release_inputs.ps1 -OutputRoot "$out/standard-portraits" -PackageVersion $version -InstallerNameSuffix "-standard-portraits" -Homm3UseUpscaledHeroPortraits false
           $safeVersion = $version -replace '[<>:"/\\|?*]', '_'
-          "PACKAGE_EXE=$out/GoldenEraModInstaller-$safeVersion.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "PACKAGE_SHA=$out/GoldenEraModInstaller-$safeVersion.exe.sha256" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "PACKAGE_EXE_UPSCALED=$out/upscaled-portraits/GoldenEraModInstaller-$safeVersion-upscaled-portraits.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "PACKAGE_SHA_UPSCALED=$out/upscaled-portraits/GoldenEraModInstaller-$safeVersion-upscaled-portraits.exe.sha256" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "PACKAGE_EXE_STANDARD=$out/standard-portraits/GoldenEraModInstaller-$safeVersion-standard-portraits.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "PACKAGE_SHA_STANDARD=$out/standard-portraits/GoldenEraModInstaller-$safeVersion-standard-portraits.exe.sha256" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Build checksums
         shell: pwsh
         run: |
-          $exe = $env:PACKAGE_EXE
-          $sumPath = $env:PACKAGE_SHA
-          $exeHash = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLowerInvariant()
-          "$exeHash  $([System.IO.Path]::GetFileName($exe))" | Set-Content -Path $sumPath -Encoding ASCII
+          foreach ($name in @("UPSCALED", "STANDARD")) {
+            $exe = [System.Environment]::GetEnvironmentVariable("PACKAGE_EXE_$name")
+            $sumPath = [System.Environment]::GetEnvironmentVariable("PACKAGE_SHA_$name")
+            $exeHash = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLowerInvariant()
+            "$exeHash  $([System.IO.Path]::GetFileName($exe))" | Set-Content -Path $sumPath -Encoding ASCII
+          }
 
       - name: Prepare release notes
         if: startsWith(github.ref, 'refs/tags/')
@@ -75,29 +80,47 @@ jobs:
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
-            ${{ env.PACKAGE_EXE }}
-            ${{ env.PACKAGE_SHA }}
+            ${{ env.PACKAGE_EXE_UPSCALED }}
+            ${{ env.PACKAGE_SHA_UPSCALED }}
+            ${{ env.PACKAGE_EXE_STANDARD }}
+            ${{ env.PACKAGE_SHA_STANDARD }}
 
-      - name: Upload installer artifact
+      - name: Upload upscaled portrait installer artifact
         uses: actions/upload-artifact@v7
         with:
-          name: golden-era-installer-exe
+          name: golden-era-installer-upscaled-portraits-exe
           archive: false
-          path: ${{ env.PACKAGE_EXE }}
+          path: ${{ env.PACKAGE_EXE_UPSCALED }}
 
-      - name: Upload checksum artifact
+      - name: Upload upscaled portrait checksum artifact
         uses: actions/upload-artifact@v7
         with:
-          name: golden-era-installer-sha256
+          name: golden-era-installer-upscaled-portraits-sha256
           archive: false
-          path: ${{ env.PACKAGE_SHA }}
+          path: ${{ env.PACKAGE_SHA_UPSCALED }}
+
+      - name: Upload standard portrait installer artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: golden-era-installer-standard-portraits-exe
+          archive: false
+          path: ${{ env.PACKAGE_EXE_STANDARD }}
+
+      - name: Upload standard portrait checksum artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: golden-era-installer-standard-portraits-sha256
+          archive: false
+          path: ${{ env.PACKAGE_SHA_STANDARD }}
 
       - name: Publish GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            ${{ env.PACKAGE_EXE }}
-            ${{ env.PACKAGE_SHA }}
+            ${{ env.PACKAGE_EXE_UPSCALED }}
+            ${{ env.PACKAGE_SHA_UPSCALED }}
+            ${{ env.PACKAGE_EXE_STANDARD }}
+            ${{ env.PACKAGE_SHA_STANDARD }}
           body_path: ${{ env.RELEASE_BODY }}
           generate_release_notes: true
