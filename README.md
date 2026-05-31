@@ -87,7 +87,7 @@ No. The damage histogram is now a separate mod/project and is not included in th
 I likely will never accept donations. I have a great job and the goal of this side project was, in large part, to enrich my knowledge of AI coding tools as someone who is software-adjacent and has project management experience, but who is not a senior developer or computer science expert.
 
 ### Is this AI slop?
-There are no AI-generated visuals or audio in this game. IDEs with coding LLM support were heavily used when building the mod, and that was, in some sense, the real purpose of me building this mod. See the "About Me" section for more details.
+There are no AI-generated visuals or audio in the standard release of this game. The upscaled portrait release uses AI to increase the detail and resolution of original HoMM3 portraits, though the original art is still being used as ground truth. IDEs with coding LLM support were heavily used when building the mod, and that was, in some sense, the real purpose of me building this mod. See the "About Me" section for more details.
 
 ### My antivirus says this is malware
 It's not, you can inspect the source to prove it. The installer is a large self-extracting EXE because it contains the mod payload, so you may have to click a "Run Anyway" button or something similar.
