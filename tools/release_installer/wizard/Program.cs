@@ -59,8 +59,17 @@ internal sealed class InstallerForm : Form
     private readonly Button repairButton = new();
     private readonly Button uninstallButton = new();
     private readonly Button closeButton = new();
+    private readonly TextBox steamDepotCommandBox = new();
+    private readonly TextBox steamDepotPathBox = new();
+    private readonly Label steamDepotStatusLabel = new();
+    private readonly Button openSteamConsoleButton = new();
+    private readonly Button copyDepotCommandButton = new();
+    private readonly Button detectSteamDepotButton = new();
+    private readonly Button copyDepotPathButton = new();
+    private readonly Button browseSteamDepotButton = new();
 
     private string lastAutoTarget = "";
+    private bool suppressAutoTargetRefresh;
 
     public InstallerForm()
     {
@@ -68,19 +77,20 @@ internal sealed class InstallerForm : Form
         Text = "Golden Era Mod Installer";
         StartPosition = FormStartPosition.CenterScreen;
         AutoScaleMode = AutoScaleMode.Font;
+        AutoScroll = true;
         Font = new Font("Segoe UI", 9F);
         MinimumSize = new Size(820, 700);
-        ClientSize = new Size(960, 760);
+        ClientSize = new Size(980, 820);
 
         var root = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             ColumnCount = 1,
-            RowCount = 10,
+            RowCount = 11,
             Padding = new Padding(18),
         };
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        for (var i = 0; i < 9; i++)
+        for (var i = 0; i < 10; i++)
         {
             root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         }
@@ -103,13 +113,14 @@ internal sealed class InstallerForm : Form
             Text = "Installs Golden Era into a separate modded copy. Update refreshes an existing Golden Era copy from its saved clean baseline when possible.",
             AutoSize = true,
             Dock = DockStyle.Fill,
-            Margin = new Padding(0, 0, 0, 18)
+            Margin = new Padding(0, 0, 0, 12)
         };
         root.Controls.Add(info, 0, 1);
+        root.Controls.Add(CreateSteamDepotPanel(), 0, 2);
 
-        AddPathRow(root, 2, "Steam Olden Era folder", sourcePathBox, browseSourceButton, (_, _) => BrowseSource());
-        AddPathRow(root, 4, "Modded copy folder", targetPathBox, browseTargetButton, (_, _) => BrowseTarget());
-        AddPathRow(root, 6, "HoMM3 Complete or HD folder", homm3PathBox, browseHomm3Button, (_, _) => BrowseHomm3());
+        AddPathRow(root, 3, "Clean Olden Era source folder", sourcePathBox, browseSourceButton, (_, _) => BrowseSource());
+        AddPathRow(root, 5, "Modded copy folder", targetPathBox, browseTargetButton, (_, _) => BrowseTarget());
+        AddPathRow(root, 7, "HoMM3 Complete or HD folder", homm3PathBox, browseHomm3Button, (_, _) => BrowseHomm3());
 
         var buttonRow = new TableLayoutPanel
         {
@@ -124,7 +135,7 @@ internal sealed class InstallerForm : Form
         buttonRow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         buttonRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
         buttonRow.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        root.Controls.Add(buttonRow, 0, 8);
+        root.Controls.Add(buttonRow, 0, 9);
 
         installButton.Text = "Install";
         installButton.AutoSize = true;
@@ -172,7 +183,7 @@ internal sealed class InstallerForm : Form
         logBox.ScrollBars = ScrollBars.Vertical;
         logBox.ReadOnly = true;
         logBox.Font = new Font("Consolas", 9);
-        root.Controls.Add(logBox, 0, 9);
+        root.Controls.Add(logBox, 0, 10);
 
         sourcePathBox.Text = FindFirstValidGameRoot() ?? "";
         lastAutoTarget = InstallerBackend.GetPreferredTargetRoot(sourcePathBox.Text);
@@ -185,7 +196,7 @@ internal sealed class InstallerForm : Form
         AppendLog("Update refreshes the selected modded copy from its saved clean Core.zip baseline without copying Steam again.");
         if (string.IsNullOrWhiteSpace(sourcePathBox.Text))
         {
-            AppendLog("Auto-detect did not find Olden Era. Click Browse and choose the folder containing HeroesOldenEra.exe.");
+            AppendLog("Auto-detect did not find Olden Era. Use Browse, or use the Steam depot helper above to download the compatible build.");
         }
         if (string.IsNullOrWhiteSpace(homm3PathBox.Text))
         {
@@ -196,6 +207,222 @@ internal sealed class InstallerForm : Form
             AppendLog("Found HoMM3 prerequisite: " + homm3PathBox.Text);
         }
         ResumeLayout(false);
+    }
+
+    private Control CreateSteamDepotPanel()
+    {
+        var group = new GroupBox
+        {
+            Text = "Need the compatible Steam build?",
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            Padding = new Padding(12, 10, 12, 12),
+            Margin = new Padding(0, 0, 0, 16)
+        };
+
+        var panel = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            ColumnCount = 1,
+            RowCount = 6,
+            Margin = new Padding(0)
+        };
+        panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        for (var i = 0; i < 6; i++)
+        {
+            panel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        }
+        group.Controls.Add(panel);
+
+        var help = new Label
+        {
+            Text = "If Steam updated your installed game, open Steam's official console, run the depot command, then detect the downloaded folder here. Golden Era will copy from that verified depot into the modded folder; it never asks for your Steam password.",
+            AutoSize = true,
+            Dock = DockStyle.Fill,
+            Margin = new Padding(0, 0, 0, 8)
+        };
+        panel.Controls.Add(help, 0, 0);
+
+        steamDepotCommandBox.Text = InstallerBackend.CompatibleSteamDepotCommand;
+        AddCopyRow(
+            panel,
+            1,
+            "Steam console command",
+            steamDepotCommandBox,
+            ("Open Steam Console", openSteamConsoleButton, OpenSteamConsole),
+            ("Copy Command", copyDepotCommandButton, () => CopyTextToClipboard(steamDepotCommandBox.Text, "Steam depot command")));
+
+        steamDepotPathBox.Text = InstallerBackend.GetExpectedSteamDepotPath() ?? "";
+        AddCopyRow(
+            panel,
+            2,
+            "Expected Steam download folder",
+            steamDepotPathBox,
+            ("Detect Download", detectSteamDepotButton, DetectSteamDepot),
+            ("Copy Path", copyDepotPathButton, () => CopyTextToClipboard(steamDepotPathBox.Text, "Steam depot path")),
+            ("Browse Download", browseSteamDepotButton, BrowseSteamDepot));
+
+        steamDepotStatusLabel.AutoSize = true;
+        steamDepotStatusLabel.Dock = DockStyle.Fill;
+        steamDepotStatusLabel.Margin = new Padding(0, 4, 0, 0);
+        steamDepotStatusLabel.Text = string.IsNullOrWhiteSpace(steamDepotPathBox.Text)
+            ? "Steam install path was not found automatically. You can still browse to Steam's depot download folder after the command finishes."
+            : "After Steam reports the depot download is complete, click Detect Download.";
+        panel.Controls.Add(steamDepotStatusLabel, 0, 5);
+
+        return group;
+    }
+
+    private static void AddCopyRow(
+        TableLayoutPanel root,
+        int rowIndex,
+        string labelText,
+        TextBox textBox,
+        params (string Text, Button Button, Action Handler)[] actions)
+    {
+        var label = new Label
+        {
+            Text = labelText,
+            AutoSize = true,
+            Margin = new Padding(0, rowIndex == 1 ? 0 : 8, 0, 4)
+        };
+        root.Controls.Add(label, 0, rowIndex * 2 - 1);
+
+        var row = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            AutoSize = true,
+            ColumnCount = actions.Length + 1,
+            Margin = new Padding(0, 0, 0, 0)
+        };
+        row.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        foreach (var _ in actions)
+        {
+            row.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        }
+        root.Controls.Add(row, 0, rowIndex * 2);
+
+        textBox.ReadOnly = true;
+        textBox.Dock = DockStyle.Fill;
+        textBox.Margin = new Padding(0, 0, 10, 0);
+        textBox.Font = new Font("Consolas", 9F);
+        row.Controls.Add(textBox, 0, 0);
+
+        for (var i = 0; i < actions.Length; i++)
+        {
+            var action = actions[i];
+            action.Button.Text = action.Text;
+            action.Button.AutoSize = true;
+            action.Button.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            action.Button.Margin = new Padding(0, 0, i == actions.Length - 1 ? 0 : 8, 0);
+            action.Button.MinimumSize = new Size(104, 0);
+            action.Button.Click += (_, _) => action.Handler();
+            row.Controls.Add(action.Button, i + 1, 0);
+        }
+    }
+
+    private void OpenSteamConsole()
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = InstallerBackend.CompatibleSteamConsoleUri,
+                UseShellExecute = true
+            });
+            AppendLog("Opened Steam console. Paste this command there: " + InstallerBackend.CompatibleSteamDepotCommand);
+        }
+        catch (Exception ex)
+        {
+            AppendLog("Could not open Steam console automatically: " + ex.Message);
+            MessageBox.Show(this, "Steam console could not be opened automatically. Copy the command and open Steam manually.", "Steam Console", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+    }
+
+    private void DetectSteamDepot()
+    {
+        try
+        {
+            if (InstallerBackend.TryFindCompatibleSteamDepot(out var depotPath, out var summary))
+            {
+                SelectSteamDepotSource(depotPath);
+                steamDepotStatusLabel.Text = "Compatible depot verified and selected as the clean source folder.";
+                AppendLog(summary);
+                return;
+            }
+
+            steamDepotStatusLabel.Text = summary;
+            AppendLog(summary);
+        }
+        catch (Exception ex)
+        {
+            steamDepotStatusLabel.Text = ex.Message;
+            AppendLog("Depot detection failed: " + ex.Message);
+        }
+    }
+
+    private void BrowseSteamDepot()
+    {
+        using var dialog = new FolderBrowserDialog
+        {
+            Description = "Choose Steam's downloaded depot folder containing HeroesOldenEra.exe",
+            UseDescriptionForTitle = true
+        };
+        if (Directory.Exists(steamDepotPathBox.Text))
+        {
+            dialog.SelectedPath = steamDepotPathBox.Text;
+        }
+        if (dialog.ShowDialog(this) != DialogResult.OK)
+        {
+            return;
+        }
+
+        try
+        {
+            var summary = InstallerBackend.ValidateCompatibleSteamDepot(dialog.SelectedPath);
+            SelectSteamDepotSource(dialog.SelectedPath);
+            steamDepotStatusLabel.Text = "Compatible depot verified and selected as the clean source folder.";
+            AppendLog(summary);
+        }
+        catch (Exception ex)
+        {
+            steamDepotStatusLabel.Text = ex.Message;
+            AppendLog("Depot validation failed: " + ex.Message);
+            MessageBox.Show(this, ex.Message, "Downloaded depot is not compatible", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void SelectSteamDepotSource(string depotPath)
+    {
+        steamDepotPathBox.Text = depotPath;
+        suppressAutoTargetRefresh = true;
+        try
+        {
+            sourcePathBox.Text = depotPath;
+        }
+        finally
+        {
+            suppressAutoTargetRefresh = false;
+        }
+
+        if (string.IsNullOrWhiteSpace(targetPathBox.Text))
+        {
+            lastAutoTarget = InstallerBackend.GetPreferredTargetRoot("");
+            targetPathBox.Text = lastAutoTarget;
+        }
+    }
+
+    private void CopyTextToClipboard(string text, string label)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            MessageBox.Show(this, "There is no " + label + " to copy yet.", "Golden Era Mod Installer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+
+        Clipboard.SetText(text);
+        AppendLog("Copied " + label + " to clipboard.");
     }
 
     private static void AddPathRow(
@@ -243,7 +470,7 @@ internal sealed class InstallerForm : Form
     {
         using var dialog = new FolderBrowserDialog
         {
-            Description = "Choose the clean Steam folder containing HeroesOldenEra.exe",
+            Description = "Choose a clean Steam install or downloaded depot folder containing HeroesOldenEra.exe",
             UseDescriptionForTitle = true
         };
         if (Directory.Exists(sourcePathBox.Text))
@@ -293,18 +520,20 @@ internal sealed class InstallerForm : Form
 
     private async Task RunOperationAsync(InstallerOperation operation)
     {
+        var sourceBeforeRun = sourcePathBox.Text;
         try
         {
             SetBusy(true);
             AppendLog($"Starting {operation.ToString().ToLowerInvariant()}...");
             var request = new InstallRequest(
                 operation,
-                sourcePathBox.Text,
+                sourceBeforeRun,
                 targetPathBox.Text,
                 homm3PathBox.Text,
                 string.Equals(targetPathBox.Text, lastAutoTarget, StringComparison.OrdinalIgnoreCase));
             await Task.Run(() => InstallerBackend.Run(request, AppendLog));
             AppendLog($"{operation} complete.");
+            await OfferSteamDepotCleanupAsync(operation, sourceBeforeRun);
             MessageBox.Show(this, $"{operation} complete.", "Golden Era Mod Installer", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
@@ -318,8 +547,47 @@ internal sealed class InstallerForm : Form
         }
     }
 
+    private async Task OfferSteamDepotCleanupAsync(InstallerOperation operation, string sourceRoot)
+    {
+        if (operation is not (InstallerOperation.Install or InstallerOperation.Repair) ||
+            !InstallerBackend.IsExpectedSteamDepotContentRoot(sourceRoot))
+        {
+            return;
+        }
+
+        var result = MessageBox.Show(
+            this,
+            "Golden Era has copied and verified the modded install. Delete Steam's temporary depot download now?\r\n\r\n" + sourceRoot,
+            "Clean Up Steam Depot Download",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Question,
+            MessageBoxDefaultButton.Button2);
+        if (result != DialogResult.Yes)
+        {
+            AppendLog("Left Steam depot download in place: " + sourceRoot);
+            return;
+        }
+
+        try
+        {
+            AppendLog("Deleting Steam depot download: " + sourceRoot);
+            await Task.Run(() => InstallerBackend.DeleteExpectedSteamDepotContentRoot(sourceRoot));
+            AppendLog("Deleted Steam depot download.");
+        }
+        catch (Exception ex)
+        {
+            AppendLog("Depot cleanup failed: " + ex.Message);
+            MessageBox.Show(this, ex.Message, "Depot cleanup failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+    }
+
     private void RefreshAutoTarget(bool force = false)
     {
+        if (suppressAutoTargetRefresh)
+        {
+            return;
+        }
+
         var newAutoTarget = InstallerBackend.GetPreferredTargetRoot(sourcePathBox.Text);
         if (force ||
             string.IsNullOrWhiteSpace(targetPathBox.Text) ||
@@ -344,6 +612,11 @@ internal sealed class InstallerForm : Form
         browseSourceButton.Enabled = !busy;
         browseTargetButton.Enabled = !busy;
         browseHomm3Button.Enabled = !busy;
+        openSteamConsoleButton.Enabled = !busy;
+        copyDepotCommandButton.Enabled = !busy;
+        detectSteamDepotButton.Enabled = !busy;
+        copyDepotPathButton.Enabled = !busy;
+        browseSteamDepotButton.Enabled = !busy;
         closeButton.Enabled = !busy;
         Cursor = busy ? Cursors.WaitCursor : Cursors.Default;
     }

@@ -1,3 +1,4 @@
+using Microsoft.Win32;
 using System.IO.Compression;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -29,6 +30,12 @@ internal static class InstallerBackend
     private const int PayloadFooterLength = PayloadHashLength + sizeof(long) + 8;
     private const string StateRelativePath = @"BepInEx\plugins\OfflineUnlockMod.install-state.json";
     private const string PluginRelativePath = @"BepInEx\plugins\OfflineUnlockMod";
+    private const ulong CompatibleSteamAppId = 3105440;
+    private const ulong CompatibleSteamDepotId = 3105441;
+    private const ulong CompatibleSteamManifestId = 3222242645517655127;
+    private const string CompatibleGameAssemblySha256 = "fcdf6ec6670166f9c2b5eec8f393538c014b4e39f822c234165fca3a9dce8ea9";
+    private const string CompatibleGlobalMetadataSha256 = "20c6e361e2171cea4035a0e18288872d277336f4e95c3b92606458018e718556";
+    private const string CompatibleCoreZipSha256 = "f78797075567b3080806828b5c7f350931fcbc609372855e491fd7457c7ffb6a";
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -38,6 +45,81 @@ internal static class InstallerBackend
     };
 
     public static string PackageVersion { get; } = GetPackageVersion();
+
+    public static string CompatibleSteamConsoleUri => "steam://open/console";
+
+    public static string CompatibleSteamDepotCommand =>
+        $"download_depot {CompatibleSteamAppId} {CompatibleSteamDepotId} {CompatibleSteamManifestId}";
+
+    public static string? GetExpectedSteamDepotPath()
+    {
+        return FindSteamRoots()
+            .Select(BuildExpectedSteamDepotPath)
+            .FirstOrDefault();
+    }
+
+    public static bool TryFindCompatibleSteamDepot(out string depotPath, out string summary)
+    {
+        string? lastFailure = null;
+        foreach (var candidate in FindSteamRoots().Select(BuildExpectedSteamDepotPath))
+        {
+            if (!Directory.Exists(candidate))
+            {
+                continue;
+            }
+
+            try
+            {
+                summary = ValidateCompatibleSteamDepot(candidate);
+                depotPath = candidate;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                lastFailure = candidate + ": " + ex.Message;
+            }
+        }
+
+        depotPath = "";
+        summary = lastFailure is null
+            ? "Steam depot download was not found yet. In Steam's console, run: " + CompatibleSteamDepotCommand
+            : "Steam depot download was found, but it did not validate. " + lastFailure;
+        return false;
+    }
+
+    public static string ValidateCompatibleSteamDepot(string path)
+    {
+        var root = RequireGameRoot(path, "Steam depot download folder");
+        return ValidateCompatibleGameRoot(root, "Compatible Steam depot verified");
+    }
+
+    public static bool IsExpectedSteamDepotContentRoot(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return false;
+        }
+
+        var full = Path.GetFullPath(Environment.ExpandEnvironmentVariables(path));
+        return FindSteamRoots()
+            .Select(BuildExpectedSteamDepotPath)
+            .Any(candidate => SamePath(full, candidate));
+    }
+
+    public static void DeleteExpectedSteamDepotContentRoot(string path)
+    {
+        if (!IsExpectedSteamDepotContentRoot(path))
+        {
+            throw new InvalidOperationException("Refusing to delete a folder that is not the expected Steam depot content cache path.");
+        }
+
+        var full = Path.GetFullPath(Environment.ExpandEnvironmentVariables(path));
+        ValidateCompatibleSteamDepot(full);
+        if (Directory.Exists(full))
+        {
+            Directory.Delete(full, recursive: true);
+        }
+    }
 
     public static void Run(InstallRequest request, Action<string> log)
     {
@@ -115,6 +197,31 @@ internal static class InstallerBackend
         return hasCompleteLods || hasHdMarkers;
     }
 
+    private static string ValidateCompatibleGameRoot(string root, string successPrefix)
+    {
+        var gameAssembly = Path.Combine(root, "GameAssembly.dll");
+        var metadata = Path.Combine(root, @"HeroesOldenEra_Data\il2cpp_data\Metadata\global-metadata.dat");
+        var coreZip = GetCoreZipPath(root);
+
+        RequireFile(gameAssembly, "Selected source is missing GameAssembly.dll.");
+        RequireFile(metadata, "Selected source is missing global-metadata.dat.");
+        RequireFile(coreZip, "Selected source is missing Core.zip.");
+
+        var gameAssemblyHash = ComputeFileSha256(gameAssembly);
+        var metadataHash = ComputeFileSha256(metadata);
+        var coreZipHash = ComputeFileSha256(coreZip);
+        RequireHash(gameAssemblyHash, CompatibleGameAssemblySha256, "GameAssembly.dll");
+        RequireHash(metadataHash, CompatibleGlobalMetadataSha256, "global-metadata.dat");
+        RequireHash(coreZipHash, CompatibleCoreZipSha256, "Core.zip");
+
+        return string.Join(Environment.NewLine,
+            successPrefix + ": " + root,
+            "  manifest: " + CompatibleSteamManifestId,
+            "  GameAssembly.dll SHA-256: " + gameAssemblyHash,
+            "  global-metadata.dat SHA-256: " + metadataHash,
+            "  Core.zip SHA-256: " + coreZipHash);
+    }
+
     private static void InstallOrRepair(InstallRequest request, Action<string> log)
     {
         var sourceRoot = RequireGameRoot(request.SourceGameRoot, "Steam Olden Era source folder");
@@ -126,6 +233,9 @@ internal static class InstallerBackend
 
         var package = PreparePackageCache(log);
         var overlayManifest = LoadOverlayManifest(package.OverlayManifestPath);
+
+        log("Validating compatible Olden Era source binaries...");
+        log(ValidateCompatibleGameRoot(sourceRoot, "Compatible Olden Era source verified"));
 
         log("Validating clean Steam source Core.zip...");
         ValidateSourceCoreZip(GetCoreZipPath(sourceRoot), overlayManifest);
@@ -992,6 +1102,60 @@ popd
             version = Assembly.GetExecutingAssembly().GetName().Version?.ToString();
         }
         return string.IsNullOrWhiteSpace(version) ? "local" : version;
+    }
+
+    private static IEnumerable<string> FindSteamRoots()
+    {
+        var candidates = new List<string>();
+        foreach (var regPath in new[]
+        {
+            (Registry.CurrentUser, @"Software\Valve\Steam"),
+            (Registry.LocalMachine, @"SOFTWARE\WOW6432Node\Valve\Steam"),
+            (Registry.LocalMachine, @"SOFTWARE\Valve\Steam")
+        })
+        {
+            try
+            {
+                using var key = regPath.Item1.OpenSubKey(regPath.Item2);
+                AddSteamRootCandidate(candidates, key?.GetValue("SteamPath") as string);
+                AddSteamRootCandidate(candidates, key?.GetValue("InstallPath") as string);
+            }
+            catch
+            {
+            }
+        }
+
+        AddSteamRootCandidate(candidates, @"C:\Program Files (x86)\Steam");
+        AddSteamRootCandidate(candidates, @"C:\Program Files\Steam");
+        return candidates;
+    }
+
+    private static void AddSteamRootCandidate(List<string> candidates, string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return;
+        }
+
+        var full = Path.GetFullPath(Environment.ExpandEnvironmentVariables(path.Replace('/', '\\')));
+        if (Directory.Exists(full) &&
+            !candidates.Any(existing => SamePath(existing, full)))
+        {
+            candidates.Add(full);
+        }
+    }
+
+    private static string BuildExpectedSteamDepotPath(string steamRoot)
+    {
+        return Path.Combine(steamRoot, "steamapps", "content", "app_" + CompatibleSteamAppId, "depot_" + CompatibleSteamDepotId);
+    }
+
+    private static void RequireHash(string actual, string expected, string label)
+    {
+        if (!string.Equals(actual, expected, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException($"Downloaded depot {label} hash mismatch. Expected {expected}, actual {actual}.");
+        }
     }
 
     private static string GetLocalAppDataTargetRoot()
