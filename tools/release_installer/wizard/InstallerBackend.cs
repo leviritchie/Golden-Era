@@ -32,10 +32,10 @@ internal static class InstallerBackend
     private const string PluginRelativePath = @"BepInEx\plugins\OfflineUnlockMod";
     private const ulong CompatibleSteamAppId = 3105440;
     private const ulong CompatibleSteamDepotId = 3105441;
-    private const ulong CompatibleSteamManifestId = 3222242645517655127;
-    private const string CompatibleGameAssemblySha256 = "fcdf6ec6670166f9c2b5eec8f393538c014b4e39f822c234165fca3a9dce8ea9";
-    private const string CompatibleGlobalMetadataSha256 = "20c6e361e2171cea4035a0e18288872d277336f4e95c3b92606458018e718556";
-    private const string CompatibleCoreZipSha256 = "f78797075567b3080806828b5c7f350931fcbc609372855e491fd7457c7ffb6a";
+    private const ulong CompatibleSteamManifestId = 5889655938380499086;
+    private const string CompatibleGameAssemblySha256 = "d47706eb0ffedbda0ec07ede47abc778e6022ed820ae1a1fd23522d3acdb8416";
+    private const string CompatibleGlobalMetadataSha256 = "fab9a3f2fac0010433af2cc3b60ad7602b6dd1f508227421df4d7104a77814ae";
+    private const string CompatibleCoreZipSha256 = "b5b1dff2b9cb03447dfc6c31d1070878bcc86f5264497735dc63188c22d9f5ba";
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {

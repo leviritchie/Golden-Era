@@ -40,7 +40,7 @@ internal static class Program
         }
 
         ApplicationConfiguration.Initialize();
-        Application.Run(new InstallerForm());
+        Application.Run(new WizardInstallerForm());
         return 0;
     }
 }
