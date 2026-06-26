@@ -1,6 +1,5 @@
 > [!IMPORTANT]
-> This release is built for the Olden Era Steam build current on May 22, 2026. If Steam updates Olden Era after that, the copy this mod creates will be behind that patch number.
->
+> This release is built for the Olden Era Steam build from June 4th. The installer will walk you through downloading an extra copy of that build from steam to make this as painless as possible.
 > The installer does not patch your Steam install in place. It copies your clean Steam game folder to a separate Golden Era folder and installs the mod into that copy only.
 
 # Golden Era: A mod for Heroes of Might and Magic: Olden Era
