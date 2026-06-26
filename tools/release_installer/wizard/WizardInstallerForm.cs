@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace GoldenEraModInstaller;
 
@@ -20,15 +21,15 @@ internal sealed class WizardInstallerForm : Form
     private readonly TextBox logBox = new()
     {
         Dock = DockStyle.Bottom,
-        Height = 150,
+        Height = 96,
         Multiline = true,
         ReadOnly = true,
         ScrollBars = ScrollBars.Vertical,
-        Font = new Font("Consolas", 9F)
+        Font = new Font("Segoe UI", 9F)
     };
-    private readonly Button backButton = new() { Text = "Back", Width = 96 };
-    private readonly Button nextButton = new() { Text = "Next", Width = 120 };
-    private readonly Button closeButton = new() { Text = "Close", Width = 96 };
+    private readonly Button backButton = new() { Text = "Back", Width = 96, Height = 34 };
+    private readonly Button nextButton = new() { Text = "Next", Width = 120, Height = 34 };
+    private readonly Button closeButton = new() { Text = "Close", Width = 96, Height = 34 };
 
     private readonly RadioButton installRadio = new() { Text = "Install a fresh modded copy", AutoSize = true, Checked = true };
     private readonly RadioButton updateRadio = new() { Text = "Update an existing Golden Era copy", AutoSize = true };
@@ -42,7 +43,8 @@ internal sealed class WizardInstallerForm : Form
     private readonly Label sourceStatusLabel = NewWrapLabel();
     private readonly Label targetStatusLabel = NewWrapLabel();
     private readonly Label homm3StatusLabel = NewWrapLabel();
-    private readonly TextBox reviewBox = NewReadOnlyBox(multiline: true);
+
+    private readonly List<string> technicalLog = [];
 
     private WizardStep currentStep = WizardStep.Operation;
     private string lastAutoTarget = "";
@@ -51,8 +53,8 @@ internal sealed class WizardInstallerForm : Form
     {
         Text = "Golden Era Mod Installer";
         StartPosition = FormStartPosition.CenterScreen;
-        MinimumSize = new Size(760, 600);
-        Size = new Size(940, 720);
+        MinimumSize = new Size(800, 640);
+        Size = new Size(960, 740);
         AutoScaleMode = AutoScaleMode.Font;
 
         var root = new TableLayoutPanel
@@ -64,8 +66,8 @@ internal sealed class WizardInstallerForm : Form
         };
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
-        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 104F));
+        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 68F));
         Controls.Add(root);
 
         var header = new Panel { Dock = DockStyle.Top, AutoSize = true, Padding = new Padding(12, 8, 12, 8) };
@@ -79,8 +81,8 @@ internal sealed class WizardInstallerForm : Form
         {
             Dock = DockStyle.Fill,
             FlowDirection = FlowDirection.RightToLeft,
-            AutoSize = true,
-            Padding = new Padding(0, 10, 0, 0)
+            AutoSize = false,
+            Padding = new Padding(0, 8, 0, 8)
         };
         footer.Controls.Add(closeButton);
         footer.Controls.Add(nextButton);
@@ -99,6 +101,9 @@ internal sealed class WizardInstallerForm : Form
             sourcePathBox.Text = expectedDepotPath;
         }
 
+        homm3StatusLabel.Text = "Heroes III folder will be checked when this step opens.";
+
+        AppendLog("Ready.");
         RenderStep();
     }
 
@@ -110,7 +115,7 @@ internal sealed class WizardInstallerForm : Form
             Multiline = multiline,
             ReadOnly = true,
             ScrollBars = multiline ? ScrollBars.Vertical : ScrollBars.None,
-            Font = new Font("Consolas", 9F)
+            Font = new Font("Segoe UI", 9F)
         };
     }
 
@@ -120,7 +125,7 @@ internal sealed class WizardInstallerForm : Form
         {
             AutoSize = true,
             Dock = DockStyle.Fill,
-            MaximumSize = new Size(820, 0),
+            MaximumSize = new Size(860, 0),
             Margin = new Padding(0, 8, 0, 8)
         };
     }
@@ -241,17 +246,17 @@ internal sealed class WizardInstallerForm : Form
         var panel = NewPagePanel();
         panel.Controls.Add(NewInfoLabel("Select the folder that contains Heroes3.exe, HD_Launcher.exe, or another supported HoMM3 executable."));
         panel.Controls.Add(NewPathRow(homm3PathBox,
+            ("Find", DetectHomm3),
             ("Browse", BrowseHomm3),
-            ("Copy Path", () => CopyText(homm3PathBox.Text, "HoMM3 path"))));
+            ("Copy Path", () => CopyText(homm3PathBox.Text, "Heroes III path"))));
         panel.Controls.Add(homm3StatusLabel);
         return panel;
     }
 
     private Control BuildReviewPage()
     {
-        reviewBox.Text = BuildReviewText();
         var panel = NewPagePanel();
-        panel.Controls.Add(reviewBox);
+        panel.Controls.Add(NewReviewLabel(BuildReviewText()));
         return panel;
     }
 
@@ -290,9 +295,17 @@ internal sealed class WizardInstallerForm : Form
         {
             Text = text,
             AutoSize = true,
-            MaximumSize = new Size(820, 0),
+            MaximumSize = new Size(860, 0),
             Margin = new Padding(0, 4, 0, 8)
         };
+    }
+
+    private static Label NewReviewLabel(string text)
+    {
+        var label = NewInfoLabel(text);
+        label.Font = new Font("Segoe UI", 10F);
+        label.Margin = new Padding(0, 8, 0, 8);
+        return label;
     }
 
     private static Control NewPathRow(TextBox box, params (string Text, Action Handler)[] buttons)
@@ -305,12 +318,12 @@ internal sealed class WizardInstallerForm : Form
             Margin = new Padding(0, 0, 0, 10)
         };
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        box.MinimumSize = new Size(460, 28);
+        box.MinimumSize = new Size(460, 30);
         panel.Controls.Add(box, 0, 0);
 
         for (var i = 0; i < buttons.Length; i++)
         {
-            var button = new Button { Text = buttons[i].Text, AutoSize = true, Margin = new Padding(8, 0, 0, 0) };
+            var button = new Button { Text = buttons[i].Text, AutoSize = true, Height = 32, Margin = new Padding(8, 0, 0, 0) };
             var handler = buttons[i].Handler;
             button.Click += (_, _) => handler();
             panel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
@@ -337,6 +350,10 @@ internal sealed class WizardInstallerForm : Form
             {
                 ValidateTargetStep();
                 currentStep = UsesHomm3Step() ? WizardStep.Homm3 : WizardStep.Review;
+                if (currentStep == WizardStep.Homm3)
+                {
+                    DetectHomm3IfEmpty();
+                }
             }
             else if (currentStep == WizardStep.Homm3)
             {
@@ -377,6 +394,9 @@ internal sealed class WizardInstallerForm : Form
         backButton.Enabled = false;
         nextButton.Enabled = false;
         closeButton.Enabled = false;
+        technicalLog.Clear();
+        logBox.Clear();
+        AppendLog(GetOperationStartMessage());
 
         var request = new InstallRequest(
             GetOperation(),
@@ -387,14 +407,36 @@ internal sealed class WizardInstallerForm : Form
 
         try
         {
-            await Task.Run(() => InstallerBackend.Run(request, AppendLog));
-            AppendLog("Done.");
+            await Task.Run(() => InstallerBackend.Run(request, CaptureTechnicalLog));
+            AppendLog(GetOperationSuccessMessage());
+            if (GetOperation() != InstallerOperation.Uninstall)
+            {
+                AppendLog("Launch the game from the mod folder you chose, not from Steam.");
+                AppendLog("The first mod launch will take longer than normal.");
+                MessageBox.Show(
+                    this,
+                    GetOperationSuccessMessage() + "\n\nLaunch HeroesOldenEra.exe from the mod folder you chose, not from Steam.\n\nThe first mod launch will take longer than normal while caches are prepared.",
+                    "Golden Era Installer",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+
             subtitleLabel.Text = "Complete. You can close the installer.";
             closeButton.Enabled = true;
         }
         catch (Exception ex)
         {
-            AppendLog("ERROR: " + ex.Message);
+            AppendLog("Golden Era could not finish.");
+            AppendLog(ex.Message);
+            if (technicalLog.Count > 0)
+            {
+                AppendLog("Technical details:");
+                foreach (var line in technicalLog)
+                {
+                    AppendLog(line);
+                }
+            }
+
             currentStep = WizardStep.Review;
             RenderStep();
             subtitleLabel.Text = "The operation failed. Review the log below, then adjust the choices and try again.";
@@ -405,7 +447,7 @@ internal sealed class WizardInstallerForm : Form
     {
         var summary = InstallerBackend.ValidateCompatibleSteamDepot(sourcePathBox.Text.Trim());
         sourceStatusLabel.Text = summary;
-        AppendLog(summary);
+        AppendLog("Compatible Olden Era source selected.");
         UseSuggestedTarget();
     }
 
@@ -435,13 +477,13 @@ internal sealed class WizardInstallerForm : Form
         {
             sourcePathBox.Text = path;
             sourceStatusLabel.Text = summary;
-            AppendLog(summary);
+            AppendLog("Compatible Olden Era source found.");
             UseSuggestedTarget();
         }
         else
         {
             sourceStatusLabel.Text = summary;
-            AppendLog(summary);
+            AppendLog("Compatible Olden Era source was not found yet.");
         }
     }
 
@@ -497,6 +539,110 @@ internal sealed class WizardInstallerForm : Form
         }
     }
 
+    private void DetectHomm3()
+    {
+        DetectHomm3IfEmpty(force: true);
+    }
+
+    private void DetectHomm3IfEmpty(bool force = false)
+    {
+        if (!force && !string.IsNullOrWhiteSpace(homm3PathBox.Text))
+        {
+            return;
+        }
+
+        var detected = FindFirstValidHomm3Root();
+        if (string.IsNullOrWhiteSpace(detected))
+        {
+            homm3StatusLabel.Text = "Heroes III folder was not found automatically. Use Browse to select it.";
+            AppendLog("Heroes III folder was not found automatically.");
+            return;
+        }
+
+        homm3PathBox.Text = detected;
+        homm3StatusLabel.Text = "Heroes III folder found: " + detected;
+        AppendLog("Heroes III folder found.");
+    }
+
+    private static string? FindFirstValidHomm3Root()
+    {
+        foreach (var candidate in FindHomm3RootCandidates())
+        {
+            if (InstallerBackend.IsValidHomm3Root(candidate))
+            {
+                return candidate;
+            }
+        }
+
+        return null;
+    }
+
+    private static IEnumerable<string> FindHomm3RootCandidates()
+    {
+        var candidates = new List<string>();
+        AddCandidate(candidates, Path.Combine(AppContext.BaseDirectory, "HoMM 3 Complete"));
+        AddCandidate(candidates, @"C:\GOG Games\HoMM 3 Complete");
+        AddCandidate(candidates, @"C:\GOG Games\Heroes of Might and Magic 3 Complete");
+        AddCandidate(candidates, @"C:\Program Files (x86)\GOG Galaxy\Games\HoMM 3 Complete");
+        AddCandidate(candidates, @"C:\Program Files (x86)\GOG Galaxy\Games\Heroes of Might and Magic 3 Complete");
+        AddCandidate(candidates, @"C:\Program Files (x86)\Steam\steamapps\common\Heroes of Might & Magic III - HD Edition");
+        AddCandidate(candidates, @"C:\Program Files (x86)\Steam\steamapps\common\Heroes of Might and Magic III - HD Edition");
+
+        var pf86 = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+        var pf = Environment.GetEnvironmentVariable("ProgramFiles");
+        if (!string.IsNullOrWhiteSpace(pf86)) AddHomm3SteamLibraries(candidates, Path.Combine(pf86, "Steam"));
+        if (!string.IsNullOrWhiteSpace(pf)) AddHomm3SteamLibraries(candidates, Path.Combine(pf, "Steam"));
+
+        foreach (var drive in DriveInfo.GetDrives().Where(d => d.IsReady))
+        {
+            AddCandidate(candidates, Path.Combine(drive.RootDirectory.FullName, @"GOG Games\HoMM 3 Complete"));
+            AddCandidate(candidates, Path.Combine(drive.RootDirectory.FullName, @"GOG Games\Heroes of Might and Magic 3 Complete"));
+            AddCandidate(candidates, Path.Combine(drive.RootDirectory.FullName, @"SteamLibrary\steamapps\common\Heroes of Might & Magic III - HD Edition"));
+            AddCandidate(candidates, Path.Combine(drive.RootDirectory.FullName, @"SteamLibrary\steamapps\common\Heroes of Might and Magic III - HD Edition"));
+        }
+
+        return candidates;
+    }
+
+    private static void AddHomm3SteamLibraries(List<string> candidates, string steamRoot, HashSet<string>? visited = null)
+    {
+        if (string.IsNullOrWhiteSpace(steamRoot)) return;
+        visited ??= new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var normalizedSteamRoot = Path.GetFullPath(Environment.ExpandEnvironmentVariables(steamRoot));
+        if (!visited.Add(normalizedSteamRoot)) return;
+
+        foreach (var folderName in new[]
+        {
+            "Heroes of Might & Magic III - HD Edition",
+            "Heroes of Might and Magic III - HD Edition"
+        })
+        {
+            AddCandidate(candidates, Path.Combine(normalizedSteamRoot, "steamapps", "common", folderName));
+        }
+
+        var libraryFile = Path.Combine(normalizedSteamRoot, @"steamapps\libraryfolders.vdf");
+        if (!File.Exists(libraryFile)) return;
+
+        foreach (var line in File.ReadLines(libraryFile))
+        {
+            var match = Regex.Match(line, "\"path\"\\s+\"([^\"]+)\"");
+            if (match.Success)
+            {
+                var libraryPath = match.Groups[1].Value.Replace(@"\\", @"\");
+                AddHomm3SteamLibraries(candidates, libraryPath, visited);
+            }
+        }
+    }
+
+    private static void AddCandidate(List<string> candidates, string path)
+    {
+        if (string.IsNullOrWhiteSpace(path)) return;
+        var expanded = Environment.ExpandEnvironmentVariables(path);
+        if (!candidates.Any(c => string.Equals(c, expanded, StringComparison.OrdinalIgnoreCase)))
+        {
+            candidates.Add(expanded);
+        }
+    }
     private static void OpenSteamConsole()
     {
         Process.Start(new ProcessStartInfo(InstallerBackend.CompatibleSteamConsoleUri) { UseShellExecute = true });
@@ -510,7 +656,15 @@ internal sealed class WizardInstallerForm : Form
         }
 
         Clipboard.SetText(text);
-        AppendLog("Copied " + label + " to clipboard.");
+        AppendLog("Copied " + label + ".");
+    }
+
+    private void CaptureTechnicalLog(string message)
+    {
+        lock (technicalLog)
+        {
+            technicalLog.Add(message);
+        }
     }
 
     private void AppendLog(string message)
@@ -524,6 +678,27 @@ internal sealed class WizardInstallerForm : Form
         logBox.AppendText("[" + DateTime.Now.ToString("HH:mm:ss") + "] " + message + Environment.NewLine);
     }
 
+    private string GetOperationStartMessage()
+    {
+        return GetOperation() switch
+        {
+            InstallerOperation.Update => "Updating Golden Era...",
+            InstallerOperation.Repair => "Repairing Golden Era...",
+            InstallerOperation.Uninstall => "Removing Golden Era...",
+            _ => "Installing Golden Era..."
+        };
+    }
+
+    private string GetOperationSuccessMessage()
+    {
+        return GetOperation() switch
+        {
+            InstallerOperation.Update => "Golden Era was updated successfully.",
+            InstallerOperation.Repair => "Golden Era was repaired successfully.",
+            InstallerOperation.Uninstall => "Golden Era was removed successfully.",
+            _ => "Golden Era was installed successfully."
+        };
+    }
     private string BuildReviewText()
     {
         var operation = GetOperation();
