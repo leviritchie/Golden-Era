@@ -35,15 +35,6 @@ The current public package includes the expanded custom-faction framework and as
 1. Make sure both Olden Era and Heroes of Might and Magic 3 are installed on your computer.
 2. Download the current `GoldenEraModInstaller-*.exe` release asset and the matching `.sha256` file if you want to verify the download.
 3. Run the installer. It will ask for your clean Steam Olden Era folder, a separate modded copy folder, and your HoMM3 installation.
-4. Do not choose the Steam folder as the modded copy folder. The installer should refuse that, because the modded copy must be separate.
-5. Wait for the installer to copy the game and apply the mod. It can take several minutes and needs enough free disk space for a second Olden Era copy.
-6. Launch the modded copy with `Launch Golden Era.cmd` in the target folder, or by launching the mod folder's exe. Launching Olden Era from Steam should still run vanilla.
-
-## Updating
-
-For an existing Golden Era target folder, use **Update** first. Update does not copy the Steam folder again. It validates the target folder's installer-created clean `Core.zip` backup, restores that clean baseline inside the target, applies the new bundled overlay, and refreshes the mod payload.
-
-Use **Repair** when Update says the clean baseline is missing or no longer matches the package. Repair rebuilds the target from a clean Steam source folder, so it still needs the Steam install to match the Golden Era package.
 
 ## Modding Guide
 
@@ -64,9 +55,7 @@ The `modding_guide/` folder contains [mod_helper.md](modding_guide/mod_helper.md
 ## FAQ
 
 ### Will new updates to Olden Era break this mod?
-Yes for install and repair compatibility, but not because the installed copy reads Steam's `Core.zip` at launch. The installer package is built against a specific clean vanilla `Core.zip` layout. During Install or Repair, it validates the selected Steam source, copies that game folder to the Golden Era target folder, and patches only the target copy. During Update, it validates the clean baseline backup already saved in the Golden Era target folder.
-
-Once installed, Golden Era launches from its own copied game folder with its own patched `Core.zip`. A later Steam update should not modify that existing Golden Era folder. If Steam updates Olden Era and you need to reinstall or repair Golden Era, wait for a matching Golden Era package.
+No, the mod installs into a separate game folder that does not get automatic steam updates.
 
 ### Can I still play vanilla Olden Era through Steam?
 Yes. Steam should keep launching your untouched vanilla install. Use `Launch Golden Era.cmd` from the separate target folder when you want to play the mod.
@@ -84,10 +73,10 @@ Multiplayer is entirely untested at this time.
 No. The damage histogram is now a separate mod/project and is not included in the Golden Era installer.
 
 ### How do I donate to contribute to this project?
-I likely will never accept donations. I have a great job and the goal of this side project was, in large part, to enrich my knowledge of AI coding tools as someone who is software-adjacent and has project management experience, but who is not a senior developer or computer science expert.
+I do not need money to make this mod. However, if you would like to contribute to my marriage, you may donate to my kofi to make my wife less upset about my cloud compute spending: https://ko-fi.com/levi9753
 
 ### Is this AI slop?
-There are no AI-generated visuals or audio in the standard release of this game. The upscaled portrait release uses AI to increase the detail and resolution of original HoMM3 portraits, though the original art is still being used as ground truth. IDEs with coding LLM support were heavily used when building the mod, and that was, in some sense, the real purpose of me building this mod. See the "About Me" section for more details.
+RIFE 60fps animations are technically AI, but much more similar to DLSS/FSR than what you probably think of as Generative AI. Otherwise, there are no AI-generated visuals or audio in the standard release of this game. The upscaled portrait release uses AI to increase the detail and resolution of original HoMM3 portraits, though the original art is still being used as ground truth. IDEs with coding LLM support were heavily used when building the mod, and that was, in some sense, the real purpose of me building this mod. See the "About Me" section for more details.
 
 ### My antivirus says this is malware
 It's not, you can inspect the source to prove it. The installer is a large self-extracting EXE because it contains the mod payload, so you may have to click a "Run Anyway" button or something similar.
