@@ -23,12 +23,9 @@ The current public package includes the expanded custom-faction framework and as
 
 ## Major Known Bugs
 
-- Some enemies on the map sneakily turn sideways, making them razor thin and hard to see.
-- Not all factions have had the same hand tuning. Some are almost entirely placeholder effects.
-- Sometimes, maps load with no HUD, requiring you to reload the map.
 - The back arrow doesn't work in town menus. You have to click the relevant button, such as build tree, again.
-- A million other little things.
-
+- Buildings in town are not clickable yet.
+- 
 ## Installation
 
 1. Make sure both Olden Era and Heroes of Might and Magic 3 are installed on your computer.
