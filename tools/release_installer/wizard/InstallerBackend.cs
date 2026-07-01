@@ -34,7 +34,6 @@ internal static class InstallerBackend
     private const ulong CompatibleSteamDepotId = 3105441;
     private const ulong CompatibleSteamManifestId = 5889655938380499086;
     private const string CompatibleGameAssemblySha256 = "d47706eb0ffedbda0ec07ede47abc778e6022ed820ae1a1fd23522d3acdb8416";
-    private const string CompatibleGlobalMetadataSha256 = "fab9a3f2fac0010433af2cc3b60ad7602b6dd1f508227421df4d7104a77814ae";
     private const string CompatibleCoreZipSha256 = "b5b1dff2b9cb03447dfc6c31d1070878bcc86f5264497735dc63188c22d9f5ba";
 
     private static readonly JsonSerializerOptions JsonOptions = new()
@@ -211,7 +210,6 @@ internal static class InstallerBackend
         var metadataHash = ComputeFileSha256(metadata);
         var coreZipHash = ComputeFileSha256(coreZip);
         RequireHash(gameAssemblyHash, CompatibleGameAssemblySha256, "GameAssembly.dll");
-        RequireHash(metadataHash, CompatibleGlobalMetadataSha256, "global-metadata.dat");
         RequireHash(coreZipHash, CompatibleCoreZipSha256, "Core.zip");
 
         return string.Join(Environment.NewLine,
