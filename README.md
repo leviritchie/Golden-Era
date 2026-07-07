@@ -40,13 +40,9 @@ The `modding_guide/` folder contains [mod_helper.md](modding_guide/mod_helper.md
 
 ![Quick play setup](screenshots/quickplay.gif)
 
-![Adventure map](screenshots/adventuremap.gif)
-
 ![Town buildings](screenshots/buildings.gif)
 
 ![Recruitment screen](screenshots/recruitment.gif)
-
-![Avenger interface](screenshots/avenger.gif)
 
 ## FAQ
 
