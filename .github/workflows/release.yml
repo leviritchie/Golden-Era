@@ -26,6 +26,11 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
+      - name: Assemble release input from LFS parts
+        shell: pwsh
+        run: |
+          powershell -ExecutionPolicy Bypass -File tools/release_installer/assemble_release_input.ps1
+
       - name: Verify release input checksum
         shell: pwsh
         run: |

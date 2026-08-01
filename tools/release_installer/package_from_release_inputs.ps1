@@ -17,6 +17,7 @@ $WizardProject = Join-Path $RepoRoot "tools\release_installer\wizard\StrongholdM
 $StageRoot = Join-Path $RepoRoot $OutputRoot
 $StageFullPath = [System.IO.Path]::GetFullPath($StageRoot)
 $DistRoot = [System.IO.Path]::GetFullPath((Join-Path $RepoRoot "dist"))
+$AssembleScript = Join-Path $PSScriptRoot "assemble_release_input.ps1"
 
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
@@ -138,6 +139,12 @@ function New-ReleaseInputVariantZip($SourceZipPath, $DestinationZipPath, [bool]$
     }
 }
 
+Require-Path $AssembleScript "Release-input assembler was not found: $AssembleScript"
+& powershell -ExecutionPolicy Bypass -File $AssembleScript `
+    -ReleaseInputsDir (Split-Path -Parent $ReleaseInputZipPath) `
+    -OutputZipName (Split-Path -Leaf $ReleaseInputZipPath)
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
 Require-Path $ReleaseInputZipPath "Release input zip was not found: $ReleaseInputZipPath"
 Require-Path $ReleaseInputShaPath "Release input checksum was not found: $ReleaseInputShaPath"
 Require-Path $WizardProject "Installer wizard project was not found: $WizardProject"
@@ -188,7 +195,22 @@ try {
     Require-ZipEntry $zip "payload/BepInEx/core/BepInEx.Unity.IL2CPP.dll" "Release inputs are missing BepInEx IL2CPP core."
     Require-ZipEntry $zip "payload/game_root/dotnet/coreclr.dll" "Release inputs are missing Doorstop CoreCLR runtime."
     Require-ZipEntry $zip "payload/game_root/winhttp.dll" "Release inputs are missing Doorstop winhttp.dll."
+    Require-ZipEntry $zip "payload/unity_data/resources.assets" "Release inputs are missing unity_data/resources.assets."
+    Require-ZipEntry $zip "payload/unity_data/globalgamemanagers" "Release inputs are missing unity_data/globalgamemanagers."
+    Require-ZipEntry $zip "payload/il2cpp_metadata/global-metadata.dat" "Release inputs are missing il2cpp_metadata/global-metadata.dat."
     Require-ZipEntry $zip "core_overlay/manifest.json" "Release inputs are missing the generated Core overlay manifest."
+    $hasStoryMaps = @($zip.Entries | Where-Object {
+        $_.FullName.Replace("\", "/") -like "payload/streaming_assets/maps/Story_maps/*"
+    }).Count -gt 0
+    if (-not $hasStoryMaps) {
+        throw "Release inputs are missing streaming_assets/maps/Story_maps content."
+    }
+    $hasVideo = @($zip.Entries | Where-Object {
+        $_.FullName.Replace("\", "/") -like "payload/streaming_assets/video/*"
+    }).Count -gt 0
+    if (-not $hasVideo) {
+        throw "Release inputs are missing streaming_assets/video content."
+    }
 }
 finally {
     $zip.Dispose()
