@@ -13,8 +13,7 @@ internal static class Program
         if (args.Any(arg => string.Equals(arg, "--verify-payload", StringComparison.OrdinalIgnoreCase)))
         {
             var logPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "GoldenEraModInstaller",
+                InstallerBackend.GetInstallerCacheRoot(),
                 "verify-payload.log");
             Directory.CreateDirectory(Path.GetDirectoryName(logPath)!);
             using var logWriter = new StreamWriter(logPath, append: false) { AutoFlush = true };

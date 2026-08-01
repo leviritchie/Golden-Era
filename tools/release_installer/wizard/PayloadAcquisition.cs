@@ -226,8 +226,7 @@ internal static class PayloadAcquisition
     private static string DownloadAndAssemble(DownloadManifest manifest, Action<string> log)
     {
         var cacheRoot = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "GoldenEraModInstaller",
+            InstallerBackend.GetInstallerCacheRoot(),
             "DownloadCache",
             Sanitize(manifest.ReleaseTag),
             manifest.ExpectedSha256[..Math.Min(12, manifest.ExpectedSha256.Length)]);
@@ -270,8 +269,7 @@ internal static class PayloadAcquisition
     private static string AssemblePartsToTemp(IReadOnlyList<string> partPaths, DownloadManifest manifest, Action<string> log)
     {
         var cacheRoot = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "GoldenEraModInstaller",
+            InstallerBackend.GetInstallerCacheRoot(),
             "DownloadCache",
             Sanitize(manifest.ReleaseTag),
             manifest.ExpectedSha256[..Math.Min(12, manifest.ExpectedSha256.Length)]);

@@ -1145,15 +1145,7 @@ popd
         }
     }
 
-    private static string GetLocalAppDataTargetRoot()
-    {
-        return Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "GoldenEra",
-            "OldenEra");
-    }
-
-    private static string GetCacheBaseRoot()
+    public static string GetInstallerCacheRoot()
     {
         var overrideRoot = Environment.GetEnvironmentVariable("GOLDEN_ERA_INSTALLER_CACHE_ROOT");
         if (!string.IsNullOrWhiteSpace(overrideRoot))
@@ -1161,10 +1153,54 @@ popd
             return Path.GetFullPath(Environment.ExpandEnvironmentVariables(overrideRoot));
         }
 
+        // Prefer the Games volume so payload download/extract caches do not fill the system drive.
+        foreach (var candidate in new[]
+                 {
+                     @"V:\Games\GoldenEra\InstallerCache",
+                     @"V:\GoldenEra\InstallerCache"
+                 })
+        {
+            try
+            {
+                var root = Path.GetPathRoot(candidate);
+                if (!string.IsNullOrWhiteSpace(root) && Directory.Exists(root))
+                {
+                    return candidate;
+                }
+            }
+            catch
+            {
+            }
+        }
+
         return Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "GoldenEra");
     }
+
+    private static string GetLocalAppDataTargetRoot()
+    {
+        foreach (var parent in new[] { @"V:\Games", @"V:\" })
+        {
+            try
+            {
+                if (Directory.Exists(parent))
+                {
+                    return Path.Combine(parent, "Heroes of Might and Magic Olden Era - Golden Era");
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        return Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "GoldenEra",
+            "OldenEra");
+    }
+
+    private static string GetCacheBaseRoot() => GetInstallerCacheRoot();
 
     private static string GetCoreZipPath(string gameRoot)
     {
