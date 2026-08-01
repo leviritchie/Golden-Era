@@ -56,6 +56,7 @@ jobs:
           "PACKAGE_SHA_UPSCALED=$out/upscaled-portraits/GoldenEraModInstaller-$safeVersion-upscaled-portraits.exe.sha256" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           "PACKAGE_EXE_STANDARD=$out/standard-portraits/GoldenEraModInstaller-$safeVersion-standard-portraits.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           "PACKAGE_SHA_STANDARD=$out/standard-portraits/GoldenEraModInstaller-$safeVersion-standard-portraits.exe.sha256" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "PACKAGE_ROOT=$out" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Build checksums
         shell: pwsh
@@ -65,6 +66,36 @@ jobs:
             $sumPath = [System.Environment]::GetEnvironmentVariable("PACKAGE_SHA_$name")
             $exeHash = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLowerInvariant()
             "$exeHash  $([System.IO.Path]::GetFileName($exe))" | Set-Content -Path $sumPath -Encoding ASCII
+          }
+
+      - name: Split installers for GitHub 2GB asset limit
+        shell: pwsh
+        run: |
+          $stageDir = "dist/release-stage"
+          $assetDir = "dist/release-assets"
+          New-Item -ItemType Directory -Path $stageDir -Force | Out-Null
+          if (Test-Path -LiteralPath $assetDir) {
+            Remove-Item -LiteralPath $assetDir -Recurse -Force
+          }
+          foreach ($name in @("UPSCALED", "STANDARD")) {
+            $exe = [System.Environment]::GetEnvironmentVariable("PACKAGE_EXE_$name")
+            $sha = [System.Environment]::GetEnvironmentVariable("PACKAGE_SHA_$name")
+            Copy-Item -LiteralPath $exe -Destination $stageDir -Force
+            Copy-Item -LiteralPath $sha -Destination $stageDir -Force
+          }
+          powershell -ExecutionPolicy Bypass -File tools/release_installer/split_release_asset.ps1 `
+            -SourceDir $stageDir `
+            -OutDir $assetDir `
+            -MaxPartBytes 1900000000
+
+          $limit = [long]2147483648
+          $oversized = @(Get-ChildItem -LiteralPath $assetDir -File | Where-Object { $_.Length -ge $limit })
+          if ($oversized.Count -gt 0) {
+            $names = ($oversized | ForEach-Object { "{0} ({1})" -f $_.Name, $_.Length }) -join ", "
+            throw "Release assets still exceed GitHub 2GB limit: $names"
+          }
+          Get-ChildItem -LiteralPath $assetDir -File | Sort-Object Name | ForEach-Object {
+            Write-Host ("{0} {1}" -f $_.Name, $_.Length)
           }
 
       - name: Prepare release notes
@@ -122,10 +153,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            ${{ env.PACKAGE_EXE_UPSCALED }}
-            ${{ env.PACKAGE_SHA_UPSCALED }}
-            ${{ env.PACKAGE_EXE_STANDARD }}
-            ${{ env.PACKAGE_SHA_STANDARD }}
+          files: dist/release-assets/*
           body_path: ${{ env.RELEASE_BODY }}
           generate_release_notes: true
+          fail_on_unmatched_files: true

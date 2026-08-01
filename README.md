@@ -29,8 +29,19 @@ The current public package includes the expanded custom-faction framework and as
 ## Installation
 
 1. Make sure both Olden Era and Heroes of Might and Magic 3 are installed on your computer.
-2. Download the current `GoldenEraModInstaller-*.exe` release asset and the matching `.sha256` file if you want to verify the download.
-3. Run the installer. It will ask for your clean Steam Olden Era folder, a separate modded copy folder, and your HoMM3 installation.
+2. Open the latest GitHub Release and download one portrait variant:
+   - all `GoldenEraModInstaller-*-upscaled-portraits.exe.partNN` files plus the matching `.sha256`, or
+   - all `GoldenEraModInstaller-*-standard-portraits.exe.partNN` files plus the matching `.sha256`
+3. Also download `Join-GoldenEraInstaller.ps1` into the same folder as the parts.
+4. Join the parts into a single installer EXE:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\Join-GoldenEraInstaller.ps1
+```
+
+5. Run the reassembled `GoldenEraModInstaller-*.exe`. It will ask for your clean Steam Olden Era folder, a separate modded copy folder, and your HoMM3 installation.
+
+GitHub release assets are capped at 2GB, so the installer is published as split parts. The join script verifies SHA-256 before you run anything.
 
 ## Modding Guide
 
