@@ -5,6 +5,12 @@ param(
     [string]$InstallerNameSuffix = "",
     [ValidateSet("", "true", "false")]
     [string]$Homm3UseUpscaledHeroPortraits = "",
+    [ValidateSet("Embedded", "Download")]
+    [string]$PayloadMode = "Download",
+    [string]$GitHubOwner = "leviritchie",
+    [string]$GitHubRepo = "Golden-Era",
+    [string]$PayloadBaseName = "",
+    [long]$MaxPartBytes = 1900000000,
     [switch]$CreateZip
 )
 
@@ -174,7 +180,8 @@ if (Test-Path -LiteralPath $StageFullPath) {
 New-Item -ItemType Directory -Path $StageFullPath -Force | Out-Null
 
 $EffectiveReleaseInputZipPath = $ReleaseInputZipPath
-if ($Homm3UseUpscaledHeroPortraits -ne "") {
+$payloadShaForFooter = $actual
+if ($PayloadMode -eq "Embedded" -and $Homm3UseUpscaledHeroPortraits -ne "") {
     $variantRoot = Join-Path $DistRoot "_release_input_variants"
     New-Item -ItemType Directory -Path $variantRoot -Force | Out-Null
     $variantSuffix = $InstallerNameSuffix
@@ -186,7 +193,10 @@ if ($Homm3UseUpscaledHeroPortraits -ne "") {
     $EffectiveReleaseInputZipPath = Join-Path $variantRoot $variantName
     $useUpscaled = $Homm3UseUpscaledHeroPortraits -eq "true"
     New-ReleaseInputVariantZip $ReleaseInputZipPath $EffectiveReleaseInputZipPath $useUpscaled
-    $actual = (Get-FileHash -LiteralPath $EffectiveReleaseInputZipPath -Algorithm SHA256).Hash.ToLowerInvariant()
+    $payloadShaForFooter = (Get-FileHash -LiteralPath $EffectiveReleaseInputZipPath -Algorithm SHA256).Hash.ToLowerInvariant()
+}
+elseif ($PayloadMode -eq "Download" -and $Homm3UseUpscaledHeroPortraits -eq "") {
+    throw "Download payload mode requires -Homm3UseUpscaledHeroPortraits true|false so the thin installer can apply the portrait SKU."
 }
 
 $zip = [System.IO.Compression.ZipFile]::OpenRead($EffectiveReleaseInputZipPath)
@@ -239,41 +249,99 @@ $installerName = ($installerName -replace '[<>:"/\\|?*]', '_')
 $installerPath = Join-Path $StageFullPath $installerName
 Move-Item -LiteralPath $rawExePath -Destination $installerPath -Force
 
-$payloadLength = (Get-Item -LiteralPath $EffectiveReleaseInputZipPath).Length
-$installerStream = [System.IO.File]::Open($installerPath, [System.IO.FileMode]::Append, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
-try {
-    $payloadStream = [System.IO.File]::OpenRead($EffectiveReleaseInputZipPath)
+if ($PayloadMode -eq "Embedded") {
+    $payloadLength = (Get-Item -LiteralPath $EffectiveReleaseInputZipPath).Length
+    $installerStream = [System.IO.File]::Open($installerPath, [System.IO.FileMode]::Append, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
     try {
-        $payloadStream.CopyTo($installerStream)
+        $payloadStream = [System.IO.File]::OpenRead($EffectiveReleaseInputZipPath)
+        try {
+            $payloadStream.CopyTo($installerStream)
+        }
+        finally {
+            $payloadStream.Dispose()
+        }
+
+        $hashBytes = [System.Text.Encoding]::ASCII.GetBytes($payloadShaForFooter)
+        if ($hashBytes.Length -ne 64) {
+            throw "Release input SHA-256 footer must be 64 ASCII bytes."
+        }
+        $lengthBytes = [System.BitConverter]::GetBytes([int64]$payloadLength)
+        $magicBytes = [System.Text.Encoding]::ASCII.GetBytes("GERAPKG1")
+        $installerStream.Write($hashBytes, 0, $hashBytes.Length)
+        $installerStream.Write($lengthBytes, 0, $lengthBytes.Length)
+        $installerStream.Write($magicBytes, 0, $magicBytes.Length)
     }
     finally {
-        $payloadStream.Dispose()
+        $installerStream.Dispose()
+    }
+}
+elseif ($PayloadMode -eq "Download") {
+    if ([string]::IsNullOrWhiteSpace($PayloadBaseName)) {
+        $PayloadBaseName = "golden_era_release_payload-$PackageVersion.zip"
+        $PayloadBaseName = ($PayloadBaseName -replace '[<>:"/\\|?*]', '_')
     }
 
-    $hashBytes = [System.Text.Encoding]::ASCII.GetBytes($actual)
-    if ($hashBytes.Length -ne 64) {
-        throw "Release input SHA-256 footer must be 64 ASCII bytes."
+    $payloadLength = [long](Get-Item -LiteralPath $ReleaseInputZipPath).Length
+    $partNames = New-Object System.Collections.Generic.List[string]
+    if ($payloadLength -le $MaxPartBytes) {
+        $partNames.Add($PayloadBaseName) | Out-Null
     }
-    $lengthBytes = [System.BitConverter]::GetBytes([int64]$payloadLength)
-    $magicBytes = [System.Text.Encoding]::ASCII.GetBytes("GERAPKG1")
-    $installerStream.Write($hashBytes, 0, $hashBytes.Length)
-    $installerStream.Write($lengthBytes, 0, $lengthBytes.Length)
-    $installerStream.Write($magicBytes, 0, $magicBytes.Length)
+    else {
+        $partCount = [int][Math]::Ceiling($payloadLength / [double]$MaxPartBytes)
+        for ($i = 1; $i -le $partCount; $i++) {
+            $partNames.Add(("{0}.part{1:D2}" -f $PayloadBaseName, $i)) | Out-Null
+        }
+    }
+
+    $useUpscaled = $Homm3UseUpscaledHeroPortraits -eq "true"
+    $downloadManifest = [ordered]@{
+        schema = "golden_era_payload_download/v1"
+        githubOwner = $GitHubOwner
+        githubRepo = $GitHubRepo
+        releaseTag = $PackageVersion
+        payloadBaseName = $PayloadBaseName
+        expectedSha256 = $actual
+        expectedBytes = $payloadLength
+        parts = @($partNames)
+        homm3UseUpscaledHeroPortraits = $useUpscaled
+    }
+
+    $json = ($downloadManifest | ConvertTo-Json -Depth 8 -Compress)
+    $jsonBytes = [System.Text.Encoding]::UTF8.GetBytes($json)
+    $installerStream = [System.IO.File]::Open($installerPath, [System.IO.FileMode]::Append, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
+    try {
+        $installerStream.Write($jsonBytes, 0, $jsonBytes.Length)
+        $lengthBytes = [System.BitConverter]::GetBytes([int64]$jsonBytes.Length)
+        $magicBytes = [System.Text.Encoding]::ASCII.GetBytes("GERADL01")
+        if ($magicBytes.Length -ne 8) {
+            throw "Download footer magic must be exactly 8 ASCII bytes."
+        }
+        $installerStream.Write($lengthBytes, 0, $lengthBytes.Length)
+        $installerStream.Write($magicBytes, 0, $magicBytes.Length)
+    }
+    finally {
+        $installerStream.Dispose()
+    }
+
+    $manifestOut = Join-Path $StageFullPath ($installerName + ".download-manifest.json")
+    ($downloadManifest | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $manifestOut -Encoding utf8
+    Write-Host "Appended GitHub download manifest ($($jsonBytes.Length) bytes) for $PayloadBaseName"
 }
-finally {
-    $installerStream.Dispose()
+else {
+    throw "Unknown PayloadMode: $PayloadMode"
 }
 
 $exeHash = (Get-FileHash -LiteralPath $installerPath -Algorithm SHA256).Hash.ToLowerInvariant()
 Set-Content -LiteralPath "$installerPath.sha256" -Value "$exeHash  $(Split-Path -Leaf $installerPath)" -Encoding ASCII
 
-Write-Host "Created single-file installer: $installerPath"
+Write-Host "Created installer ($PayloadMode): $installerPath"
 Write-Host "Installer SHA-256: $exeHash"
 Write-Host "Release input SHA-256: $actual"
+Write-Host "Installer size: $((Get-Item -LiteralPath $installerPath).Length) bytes"
 if ($Homm3UseUpscaledHeroPortraits -ne "") {
     Write-Host "homm3UseUpscaledHeroPortraits override: $Homm3UseUpscaledHeroPortraits"
 }
 
 if ($CreateZip) {
-    Write-Warning "-CreateZip is deprecated and ignored. The release package is now the single installer EXE plus its .sha256 file."
+    Write-Warning "-CreateZip is deprecated and ignored."
 }

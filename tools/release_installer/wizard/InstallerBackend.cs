@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
 namespace GoldenEraModInstaller;
@@ -25,9 +26,6 @@ internal sealed record InstallRequest(
 
 internal static class InstallerBackend
 {
-    private const string PayloadFooterMagic = "GERAPKG1";
-    private const int PayloadHashLength = 64;
-    private const int PayloadFooterLength = PayloadHashLength + sizeof(long) + 8;
     private const string StateRelativePath = @"BepInEx\plugins\OfflineUnlockMod.install-state.json";
     private const string PluginRelativePath = @"BepInEx\plugins\OfflineUnlockMod";
     private const ulong CompatibleSteamAppId = 3105440;
@@ -148,7 +146,7 @@ internal static class InstallerBackend
             throw new InvalidOperationException($"Overlay manifest operation count mismatch: declared {manifest.OperationCount}, found {manifest.Operations.Count}.");
         }
 
-        log("Verified bundled payload: " + package.PayloadZipPath);
+        log("Verified release payload: " + package.PayloadZipPath);
         log("Overlay operations: " + manifest.Operations.Count.ToString("N0"));
     }
 
@@ -350,14 +348,20 @@ internal static class InstallerBackend
 
     private static PackageCache PreparePackageCache(Action<string> log)
     {
-        var payloadSource = ResolvePayloadSource();
-        var expectedHash = payloadSource.ExpectedSha256;
+        var payloadSource = PayloadAcquisition.Resolve(log);
+        var expectedHash = payloadSource.ExpectedSha256.ToLowerInvariant();
+        var portraitKey = payloadSource.Homm3UseUpscaledHeroPortraits switch
+        {
+            true => "upscaled",
+            false => "standard",
+            null => "embedded"
+        };
         var shortHash = expectedHash[..Math.Min(12, expectedHash.Length)];
         var cacheRoot = Path.Combine(
             GetCacheBaseRoot(),
             "PackageCache",
             SanitizePathSegment(PackageVersion),
-            shortHash);
+            shortHash + "-" + portraitKey);
         var payloadZipPath = Path.Combine(cacheRoot, "golden_era_release_payload.zip");
         var extractRoot = Path.Combine(cacheRoot, "extracted");
         Directory.CreateDirectory(cacheRoot);
@@ -365,7 +369,7 @@ internal static class InstallerBackend
         if (!File.Exists(payloadZipPath) ||
             !string.Equals(ComputeFileSha256(payloadZipPath), expectedHash, StringComparison.OrdinalIgnoreCase))
         {
-            log("Extracting bundled release payload to package cache...");
+            log("Copying release payload into package cache...");
             var tmpZip = payloadZipPath + ".tmp";
             if (File.Exists(tmpZip)) File.Delete(tmpZip);
             using (var resource = payloadSource.OpenRead())
@@ -378,7 +382,7 @@ internal static class InstallerBackend
             if (!string.Equals(actualHash, expectedHash, StringComparison.OrdinalIgnoreCase))
             {
                 File.Delete(tmpZip);
-                throw new InvalidOperationException($"Embedded release payload hash mismatch: expected {expectedHash}, actual {actualHash}.");
+                throw new InvalidOperationException($"Release payload hash mismatch: expected {expectedHash}, actual {actualHash}.");
             }
 
             if (File.Exists(payloadZipPath)) File.Delete(payloadZipPath);
@@ -390,8 +394,9 @@ internal static class InstallerBackend
         }
 
         var markerPath = Path.Combine(extractRoot, ".golden-era-cache-hash");
+        var markerValue = expectedHash + "|" + portraitKey;
         if (!File.Exists(markerPath) ||
-            !string.Equals(File.ReadAllText(markerPath).Trim(), expectedHash, StringComparison.OrdinalIgnoreCase) ||
+            !string.Equals(File.ReadAllText(markerPath).Trim(), markerValue, StringComparison.OrdinalIgnoreCase) ||
             !File.Exists(Path.Combine(extractRoot, @"core_overlay\manifest.json")) ||
             !File.Exists(Path.Combine(extractRoot, @"payload\BepInEx\plugins\OfflineUnlockMod\OfflineUnlockMod.dll")))
         {
@@ -402,7 +407,12 @@ internal static class InstallerBackend
             Directory.CreateDirectory(extractRoot);
             log("Expanding release payload cache...");
             ZipFile.ExtractToDirectory(payloadZipPath, extractRoot, overwriteFiles: true);
-            File.WriteAllText(markerPath, expectedHash, Encoding.ASCII);
+            File.WriteAllText(markerPath, markerValue, Encoding.ASCII);
+        }
+
+        if (payloadSource.Homm3UseUpscaledHeroPortraits is bool useUpscaled)
+        {
+            ApplyPortraitConfig(extractRoot, useUpscaled, log);
         }
 
         var overlayManifestPath = Path.Combine(extractRoot, @"core_overlay\manifest.json");
@@ -413,6 +423,19 @@ internal static class InstallerBackend
         RequireFile(overlayManifestPath, "Release payload is missing Core overlay manifest.");
 
         return new PackageCache(cacheRoot, extractRoot, payloadZipPath, overlayManifestPath, expectedHash, ComputeFileSha256(overlayManifestPath));
+    }
+
+    private static void ApplyPortraitConfig(string extractRoot, bool useUpscaledHeroPortraits, Action<string> log)
+    {
+        var configPath = Path.Combine(extractRoot, @"payload\BepInEx\plugins\OfflineUnlockMod\config.json");
+        RequireFile(configPath, "Release payload is missing OfflineUnlockMod config.json.");
+        var node = JsonNode.Parse(File.ReadAllText(configPath)) as JsonObject
+            ?? throw new InvalidOperationException("OfflineUnlockMod config.json is not a JSON object.");
+        node["homm3UseUpscaledHeroPortraits"] = useUpscaledHeroPortraits;
+        File.WriteAllText(configPath, node.ToJsonString(new JsonSerializerOptions { WriteIndented = true }), Encoding.UTF8);
+        log(useUpscaledHeroPortraits
+            ? "Configured installer for upscaled HoMM3 hero portraits."
+            : "Configured installer for standard HoMM3 hero portraits.");
     }
 
     private static void ValidateSourceCoreZip(string coreZipPath, OverlayManifest manifest)
@@ -1056,89 +1079,6 @@ popd
         return manifest;
     }
 
-    private static PayloadSource ResolvePayloadSource()
-    {
-        var overridePath = Environment.GetEnvironmentVariable("GOLDEN_ERA_INSTALLER_PACKAGE_PATH");
-        if (!string.IsNullOrWhiteSpace(overridePath) &&
-            File.Exists(overridePath) &&
-            TryResolveAppendedPayload(overridePath, out var overrideSource))
-        {
-            return overrideSource;
-        }
-
-        var processPath = Environment.ProcessPath;
-        if (!string.IsNullOrWhiteSpace(processPath) &&
-            File.Exists(processPath) &&
-            TryResolveAppendedPayload(processPath, out var source))
-        {
-            return source;
-        }
-
-        throw new InvalidOperationException("This installer EXE does not contain an appended Golden Era payload. Rebuild it with tools\\release_installer\\package_from_release_inputs.ps1.");
-    }
-
-    private static bool TryResolveAppendedPayload(string installerPath, out PayloadSource source)
-    {
-        source = default!;
-        var info = new FileInfo(installerPath);
-        if (info.Length < PayloadFooterLength)
-        {
-            return false;
-        }
-
-        using var stream = File.Open(installerPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-        stream.Seek(-PayloadFooterLength, SeekOrigin.End);
-
-        Span<byte> hashBytes = stackalloc byte[PayloadHashLength];
-        if (stream.Read(hashBytes) != PayloadHashLength)
-        {
-            return false;
-        }
-
-        Span<byte> lengthBytes = stackalloc byte[sizeof(long)];
-        if (stream.Read(lengthBytes) != sizeof(long))
-        {
-            return false;
-        }
-
-        Span<byte> magicBytes = stackalloc byte[8];
-        if (stream.Read(magicBytes) != 8)
-        {
-            return false;
-        }
-
-        var magic = Encoding.ASCII.GetString(magicBytes);
-        if (!string.Equals(magic, PayloadFooterMagic, StringComparison.Ordinal))
-        {
-            return false;
-        }
-
-        var payloadLength = BitConverter.ToInt64(lengthBytes);
-        if (payloadLength <= 0 || payloadLength > info.Length - PayloadFooterLength)
-        {
-            return false;
-        }
-
-        var payloadOffset = info.Length - PayloadFooterLength - payloadLength;
-        var expectedHash = Encoding.ASCII.GetString(hashBytes).Trim().ToLowerInvariant();
-        if (expectedHash.Length != PayloadHashLength)
-        {
-            return false;
-        }
-
-        source = new PayloadSource(
-            installerPath,
-            expectedHash,
-            payloadLength,
-            () =>
-            {
-                var payloadStream = File.Open(installerPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                payloadStream.Seek(payloadOffset, SeekOrigin.Begin);
-                return new BoundedReadStream(payloadStream, payloadLength);
-            });
-        return true;
-    }
-
     private static string GetPackageVersion()
     {
         var attribute = Assembly.GetExecutingAssembly()
@@ -1366,77 +1306,6 @@ corlib_dir = dotnet
         string OverlayManifestPath,
         string ReleaseInputZipSha256,
         string OverlayManifestSha256);
-
-    private sealed record PayloadSource(
-        string InstallerPath,
-        string ExpectedSha256,
-        long Length,
-        Func<Stream> OpenRead);
-
-    private sealed class BoundedReadStream : Stream
-    {
-        private readonly Stream inner;
-        private long remaining;
-
-        public BoundedReadStream(Stream inner, long length)
-        {
-            this.inner = inner;
-            remaining = length;
-        }
-
-        public override bool CanRead => true;
-        public override bool CanSeek => false;
-        public override bool CanWrite => false;
-        public override long Length => throw new NotSupportedException();
-        public override long Position
-        {
-            get => throw new NotSupportedException();
-            set => throw new NotSupportedException();
-        }
-
-        public override int Read(byte[] buffer, int offset, int count)
-        {
-            if (remaining <= 0)
-            {
-                return 0;
-            }
-
-            var allowed = (int)Math.Min(count, remaining);
-            var read = inner.Read(buffer, offset, allowed);
-            remaining -= read;
-            return read;
-        }
-
-        public override int Read(Span<byte> buffer)
-        {
-            if (remaining <= 0)
-            {
-                return 0;
-            }
-
-            var allowed = (int)Math.Min(buffer.Length, remaining);
-            var read = inner.Read(buffer[..allowed]);
-            remaining -= read;
-            return read;
-        }
-
-        public override void Flush()
-        {
-        }
-
-        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
-        public override void SetLength(long value) => throw new NotSupportedException();
-        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                inner.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-    }
 
     private sealed class InstallState
     {

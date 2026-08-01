@@ -13,7 +13,7 @@ This is an experimental early-access mod. Stronghold is still the most complete 
 - Adds multiple HoMM3-inspired custom faction ports to Olden Era.
 - Adds custom creature lineups, alternate creature upgrades, town screens, buildings, heroes, portraits, map sprites, unit animations, and music where available.
 - Adds faction mechanics such as War Cries and other custom-faction rules as they are ported.
-- Bundles the BepInEx IL2CPP loader, Golden Era plugin payload, release-derived Core.zip overlay, campaign StreamingAssets, dialog-portrait Unity resources, and Factory city metadata pin in one self-extracting installer EXE.
+- Ships a small installer EXE that downloads the BepInEx IL2CPP loader, Golden Era plugin payload, release-derived Core.zip overlay, campaign StreamingAssets, dialog-portrait Unity resources, and Factory city metadata pin from the matching GitHub Release.
 - Installs into a separate Golden Era game copy so launching Olden Era from Steam still runs the vanilla game.
 - Updates existing Golden Era copies in place when the target folder still has its installer-created clean `Core.zip` baseline.
 
@@ -29,19 +29,13 @@ The current public package includes the expanded custom-faction framework and as
 ## Installation
 
 1. Make sure both Olden Era and Heroes of Might and Magic 3 are installed on your computer.
-2. Open the latest GitHub Release and download one portrait variant:
-   - all `GoldenEraModInstaller-*-upscaled-portraits.exe.partNN` files plus the matching `.sha256`, or
-   - all `GoldenEraModInstaller-*-standard-portraits.exe.partNN` files plus the matching `.sha256`
-3. Also download `Join-GoldenEraInstaller.ps1` into the same folder as the parts.
-4. Join the parts into a single installer EXE:
+2. Open the latest GitHub Release and download one portrait variant EXE:
+   - `GoldenEraModInstaller-*-upscaled-portraits.exe`, or
+   - `GoldenEraModInstaller-*-standard-portraits.exe`
+3. Double-click the EXE. On first run it downloads the mod payload from that same Release (about 4GB) and checks the SHA-256 hash before installing.
+4. The wizard will ask for your clean Steam Olden Era folder, a separate modded copy folder, and your HoMM3 installation.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\Join-GoldenEraInstaller.ps1
-```
-
-5. Run the reassembled `GoldenEraModInstaller-*.exe`. It will ask for your clean Steam Olden Era folder, a separate modded copy folder, and your HoMM3 installation.
-
-GitHub release assets are capped at 2GB, so the installer is published as split parts. The join script verifies SHA-256 before you run anything.
+An internet connection is required for the first payload download. For an offline install, also download every `golden_era_release_payload-*.zip.partNN` file from the Release into the same folder as the EXE before running it.
 
 ## Modding Guide
 

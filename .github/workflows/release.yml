@@ -40,7 +40,7 @@ jobs:
             throw "release input checksum mismatch: expected $expected actual $actual"
           }
 
-      - name: Build installer package
+      - name: Split shared payload for GitHub Release download
         shell: pwsh
         run: |
           if ("${{ github.ref_type }}" -eq "tag") {
@@ -48,45 +48,60 @@ jobs:
           } else {
             $version = "manual-${{ github.run_number }}"
           }
-          $out = "dist/Golden-Era-Mod-$version"
-          powershell -ExecutionPolicy Bypass -File tools/release_installer/package_from_release_inputs.ps1 -OutputRoot "$out/upscaled-portraits" -PackageVersion $version -InstallerNameSuffix "-upscaled-portraits" -Homm3UseUpscaledHeroPortraits true
-          powershell -ExecutionPolicy Bypass -File tools/release_installer/package_from_release_inputs.ps1 -OutputRoot "$out/standard-portraits" -PackageVersion $version -InstallerNameSuffix "-standard-portraits" -Homm3UseUpscaledHeroPortraits false
+          $safeVersion = $version -replace '[<>:"/\\|?*]', '_'
+          $payloadBase = "golden_era_release_payload-$safeVersion.zip"
+          $assetDir = "dist/release-assets"
+          if (Test-Path -LiteralPath $assetDir) {
+            Remove-Item -LiteralPath $assetDir -Recurse -Force
+          }
+          New-Item -ItemType Directory -Path $assetDir -Force | Out-Null
+          powershell -ExecutionPolicy Bypass -File tools/release_installer/split_release_asset.ps1 `
+            -InputFile "release_inputs/golden_era_release_payload.zip" `
+            -OutDir $assetDir `
+            -OutputBaseName $payloadBase `
+            -MaxPartBytes 1900000000
+          "PACKAGE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "PAYLOAD_BASE_NAME=$payloadBase" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "PACKAGE_ROOT=dist/Golden-Era-Mod-$safeVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Build thin installer packages
+        shell: pwsh
+        run: |
+          $version = $env:PACKAGE_VERSION
+          $payloadBase = $env:PAYLOAD_BASE_NAME
+          $out = $env:PACKAGE_ROOT
+          powershell -ExecutionPolicy Bypass -File tools/release_installer/package_from_release_inputs.ps1 `
+            -OutputRoot "$out/upscaled-portraits" `
+            -PackageVersion $version `
+            -InstallerNameSuffix "-upscaled-portraits" `
+            -Homm3UseUpscaledHeroPortraits true `
+            -PayloadMode Download `
+            -PayloadBaseName $payloadBase
+          powershell -ExecutionPolicy Bypass -File tools/release_installer/package_from_release_inputs.ps1 `
+            -OutputRoot "$out/standard-portraits" `
+            -PackageVersion $version `
+            -InstallerNameSuffix "-standard-portraits" `
+            -Homm3UseUpscaledHeroPortraits false `
+            -PayloadMode Download `
+            -PayloadBaseName $payloadBase
           $safeVersion = $version -replace '[<>:"/\\|?*]', '_'
           "PACKAGE_EXE_UPSCALED=$out/upscaled-portraits/GoldenEraModInstaller-$safeVersion-upscaled-portraits.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           "PACKAGE_SHA_UPSCALED=$out/upscaled-portraits/GoldenEraModInstaller-$safeVersion-upscaled-portraits.exe.sha256" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           "PACKAGE_EXE_STANDARD=$out/standard-portraits/GoldenEraModInstaller-$safeVersion-standard-portraits.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           "PACKAGE_SHA_STANDARD=$out/standard-portraits/GoldenEraModInstaller-$safeVersion-standard-portraits.exe.sha256" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "PACKAGE_ROOT=$out" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
-      - name: Build checksums
+      - name: Build checksums and stage release assets
         shell: pwsh
         run: |
+          $assetDir = "dist/release-assets"
           foreach ($name in @("UPSCALED", "STANDARD")) {
             $exe = [System.Environment]::GetEnvironmentVariable("PACKAGE_EXE_$name")
             $sumPath = [System.Environment]::GetEnvironmentVariable("PACKAGE_SHA_$name")
             $exeHash = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLowerInvariant()
             "$exeHash  $([System.IO.Path]::GetFileName($exe))" | Set-Content -Path $sumPath -Encoding ASCII
+            Copy-Item -LiteralPath $exe -Destination $assetDir -Force
+            Copy-Item -LiteralPath $sumPath -Destination $assetDir -Force
           }
-
-      - name: Split installers for GitHub 2GB asset limit
-        shell: pwsh
-        run: |
-          $stageDir = "dist/release-stage"
-          $assetDir = "dist/release-assets"
-          New-Item -ItemType Directory -Path $stageDir -Force | Out-Null
-          if (Test-Path -LiteralPath $assetDir) {
-            Remove-Item -LiteralPath $assetDir -Recurse -Force
-          }
-          foreach ($name in @("UPSCALED", "STANDARD")) {
-            $exe = [System.Environment]::GetEnvironmentVariable("PACKAGE_EXE_$name")
-            $sha = [System.Environment]::GetEnvironmentVariable("PACKAGE_SHA_$name")
-            Copy-Item -LiteralPath $exe -Destination $stageDir -Force
-            Copy-Item -LiteralPath $sha -Destination $stageDir -Force
-          }
-          powershell -ExecutionPolicy Bypass -File tools/release_installer/split_release_asset.ps1 `
-            -SourceDir $stageDir `
-            -OutDir $assetDir `
-            -MaxPartBytes 1900000000
 
           $limit = [long]2147483648
           $oversized = @(Get-ChildItem -LiteralPath $assetDir -File | Where-Object { $_.Length -ge $limit })
@@ -94,6 +109,16 @@ jobs:
             $names = ($oversized | ForEach-Object { "{0} ({1})" -f $_.Name, $_.Length }) -join ", "
             throw "Release assets still exceed GitHub 2GB limit: $names"
           }
+
+          $thinLimit = [long]200MB
+          foreach ($name in @("UPSCALED", "STANDARD")) {
+            $exe = [System.Environment]::GetEnvironmentVariable("PACKAGE_EXE_$name")
+            $len = (Get-Item -LiteralPath $exe).Length
+            if ($len -ge $thinLimit) {
+              throw "Thin installer is unexpectedly large ($len bytes): $exe"
+            }
+          }
+
           Get-ChildItem -LiteralPath $assetDir -File | Sort-Object Name | ForEach-Object {
             Write-Host ("{0} {1}" -f $_.Name, $_.Length)
           }

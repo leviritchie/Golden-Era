@@ -726,6 +726,9 @@ internal sealed class WizardInstallerForm : Form
             lines.Add(InstallerBackend.CompatibleSteamDepotCommand);
         }
 
+        lines.Add("");
+        lines.Add("If this installer does not already contain the mod payload, it will download it from the matching GitHub Release the first time you run this step (about 4 GB). An internet connection is required for that download.");
+
         return string.Join(Environment.NewLine, lines);
     }
 

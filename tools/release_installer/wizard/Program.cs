@@ -12,14 +12,27 @@ internal static class Program
     {
         if (args.Any(arg => string.Equals(arg, "--verify-payload", StringComparison.OrdinalIgnoreCase)))
         {
+            var logPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "GoldenEraModInstaller",
+                "verify-payload.log");
+            Directory.CreateDirectory(Path.GetDirectoryName(logPath)!);
+            using var logWriter = new StreamWriter(logPath, append: false) { AutoFlush = true };
+            void Log(string message)
+            {
+                logWriter.WriteLine(message);
+                try { Console.Error.WriteLine(message); } catch { /* WinExe may have no console */ }
+            }
+
             try
             {
-                InstallerBackend.VerifyEmbeddedPayload(Console.Error.WriteLine);
+                InstallerBackend.VerifyEmbeddedPayload(Log);
+                Log("VERIFY_OK");
                 return 0;
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex.Message);
+                Log("VERIFY_FAILED: " + ex);
                 return 1;
             }
         }
