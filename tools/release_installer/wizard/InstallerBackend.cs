@@ -118,16 +118,16 @@ internal static class InstallerBackend
         }
     }
 
-    public static void Run(InstallRequest request, Action<string> log)
+    public static void Run(InstallRequest request, Action<string> log, Action<InstallerProgress>? progress = null)
     {
         switch (request.Operation)
         {
             case InstallerOperation.Install:
             case InstallerOperation.Repair:
-                InstallOrRepair(request, log);
+                InstallOrRepair(request, log, progress);
                 break;
             case InstallerOperation.Update:
-                UpdateExistingInstall(request, log);
+                UpdateExistingInstall(request, log, progress);
                 break;
             case InstallerOperation.Uninstall:
                 Uninstall(request, log);
@@ -137,9 +137,9 @@ internal static class InstallerBackend
         }
     }
 
-    public static void VerifyEmbeddedPayload(Action<string> log)
+    public static void VerifyEmbeddedPayload(Action<string> log, Action<InstallerProgress>? progress = null)
     {
-        var package = PreparePackageCache(log);
+        var package = PreparePackageCache(log, progress);
         var manifest = LoadOverlayManifest(package.OverlayManifestPath);
         if (manifest.OperationCount != manifest.Operations.Count)
         {
@@ -218,7 +218,7 @@ internal static class InstallerBackend
             "  Core.zip SHA-256: " + coreZipHash);
     }
 
-    private static void InstallOrRepair(InstallRequest request, Action<string> log)
+    private static void InstallOrRepair(InstallRequest request, Action<string> log, Action<InstallerProgress>? progress)
     {
         var sourceRoot = RequireGameRoot(request.SourceGameRoot, "Steam Olden Era source folder");
         var homm3Root = RequireHomm3Root(request.Homm3Root);
@@ -227,7 +227,7 @@ internal static class InstallerBackend
 
         GuardDistinctRoots(sourceRoot, targetRoot);
 
-        var package = PreparePackageCache(log);
+        var package = PreparePackageCache(log, progress);
         var overlayManifest = LoadOverlayManifest(package.OverlayManifestPath);
 
         log("Validating compatible Olden Era source binaries...");
@@ -262,13 +262,13 @@ internal static class InstallerBackend
         log("Launcher: " + launcherPath);
     }
 
-    private static void UpdateExistingInstall(InstallRequest request, Action<string> log)
+    private static void UpdateExistingInstall(InstallRequest request, Action<string> log, Action<InstallerProgress>? progress)
     {
         var targetRoot = RequireTargetGameRoot(request.TargetGameRoot, "Golden Era target folder");
         var state = ReadInstallState(targetRoot);
         ValidateSideBySideState(targetRoot, state);
 
-        var package = PreparePackageCache(log);
+        var package = PreparePackageCache(log, progress);
         var overlayManifest = LoadOverlayManifest(package.OverlayManifestPath);
         var targetCoreZip = GetCoreZipPath(targetRoot);
         var cleanCoreBackup = ResolveCleanCoreBackup(targetRoot, state, overlayManifest, log);
@@ -346,9 +346,10 @@ internal static class InstallerBackend
         log("Steam source folder was left unchanged: " + state.SourceGameRoot);
     }
 
-    private static PackageCache PreparePackageCache(Action<string> log)
+    private static PackageCache PreparePackageCache(Action<string> log, Action<InstallerProgress>? progress = null)
     {
-        var payloadSource = PayloadAcquisition.Resolve(log);
+        progress?.Invoke(InstallerProgress.Indeterminate("Preparing payload", "Resolving Golden Era release payload..."));
+        var payloadSource = PayloadAcquisition.Resolve(log, progress);
         var expectedHash = payloadSource.ExpectedSha256.ToLowerInvariant();
         var portraitKey = payloadSource.Homm3UseUpscaledHeroPortraits switch
         {
@@ -370,6 +371,7 @@ internal static class InstallerBackend
             !string.Equals(ComputeFileSha256(payloadZipPath), expectedHash, StringComparison.OrdinalIgnoreCase))
         {
             log("Copying release payload into package cache...");
+            progress?.Invoke(InstallerProgress.Indeterminate("Caching payload", "Copying release payload into local package cache..."));
             var tmpZip = payloadZipPath + ".tmp";
             if (File.Exists(tmpZip)) File.Delete(tmpZip);
             using (var resource = payloadSource.OpenRead())
@@ -406,6 +408,7 @@ internal static class InstallerBackend
             }
             Directory.CreateDirectory(extractRoot);
             log("Expanding release payload cache...");
+            progress?.Invoke(InstallerProgress.Indeterminate("Extracting payload", "Expanding release payload cache..."));
             ZipFile.ExtractToDirectory(payloadZipPath, extractRoot, overwriteFiles: true);
             File.WriteAllText(markerPath, markerValue, Encoding.ASCII);
         }
@@ -414,6 +417,8 @@ internal static class InstallerBackend
         {
             ApplyPortraitConfig(extractRoot, useUpscaled, log);
         }
+
+        progress?.Invoke(InstallerProgress.OfBytes("Payload ready", "Release payload is ready.", 1, 1));
 
         var overlayManifestPath = Path.Combine(extractRoot, @"core_overlay\manifest.json");
         RequireFile(Path.Combine(extractRoot, @"payload\BepInEx\plugins\OfflineUnlockMod\OfflineUnlockMod.dll"), "Release payload is missing OfflineUnlockMod.dll.");

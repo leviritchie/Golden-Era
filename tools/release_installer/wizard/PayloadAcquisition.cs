@@ -41,7 +41,7 @@ internal static class PayloadAcquisition
         string SourceDescription,
         bool? Homm3UseUpscaledHeroPortraits);
 
-    public static AcquiredPayload Resolve(Action<string> log)
+    public static AcquiredPayload Resolve(Action<string> log, Action<InstallerProgress>? progress = null)
     {
         var overridePath = Environment.GetEnvironmentVariable("GOLDEN_ERA_INSTALLER_PACKAGE_PATH");
         if (!string.IsNullOrWhiteSpace(overridePath))
@@ -93,6 +93,7 @@ internal static class PayloadAcquisition
             if (string.Equals(localHash, manifest.ExpectedSha256, StringComparison.OrdinalIgnoreCase))
             {
                 log("Using local payload zip beside installer: " + localZip);
+                progress?.Invoke(InstallerProgress.OfBytes("Local payload", "Using payload zip beside the installer.", 1, 1));
                 return new AcquiredPayload(
                     manifest.ExpectedSha256,
                     manifest.ExpectedBytes,
@@ -111,12 +112,23 @@ internal static class PayloadAcquisition
         if (localParts.All(File.Exists))
         {
             log("Assembling payload from local part files beside installer...");
-            var assembled = AssemblePartsToTemp(localParts, manifest, log);
+            progress?.Invoke(InstallerProgress.Indeterminate("Assembling local parts", "Joining payload parts found beside the installer..."));
+            var assembled = AssemblePartsToTemp(localParts, manifest, log, progress);
             return OpenTempPayload(assembled, manifest);
         }
 
-        log($"Downloading release payload for {manifest.ReleaseTag} from GitHub Releases...");
-        var downloaded = DownloadAndAssemble(manifest, log);
+        log("============================================================");
+        log("DOWNLOADING Golden Era payload from GitHub Releases");
+        log($"Release: {manifest.GithubOwner}/{manifest.GithubRepo} @ {manifest.ReleaseTag}");
+        log($"Size: {manifest.ExpectedBytes / (1024d * 1024d * 1024d):0.00} GB across {manifest.Parts.Count} part(s)");
+        log("This can take several minutes. Progress updates will appear below.");
+        log("============================================================");
+        progress?.Invoke(InstallerProgress.OfBytes(
+            "Downloading payload",
+            $"Starting download of {manifest.Parts.Count} part(s) from GitHub Releases...",
+            0,
+            manifest.ExpectedBytes));
+        var downloaded = DownloadAndAssemble(manifest, log, progress);
         return OpenTempPayload(downloaded, manifest);
     }
 
@@ -223,7 +235,7 @@ internal static class PayloadAcquisition
             manifest.Homm3UseUpscaledHeroPortraits);
     }
 
-    private static string DownloadAndAssemble(DownloadManifest manifest, Action<string> log)
+    private static string DownloadAndAssemble(DownloadManifest manifest, Action<string> log, Action<InstallerProgress>? progress)
     {
         var cacheRoot = Path.Combine(
             InstallerBackend.GetInstallerCacheRoot(),
@@ -231,6 +243,7 @@ internal static class PayloadAcquisition
             Sanitize(manifest.ReleaseTag),
             manifest.ExpectedSha256[..Math.Min(12, manifest.ExpectedSha256.Length)]);
         Directory.CreateDirectory(cacheRoot);
+        log("Download cache: " + cacheRoot);
 
         var partPaths = new List<string>(manifest.Parts.Count);
         long downloadedTotal = 0;
@@ -241,32 +254,50 @@ internal static class PayloadAcquisition
             partPaths.Add(partPath);
             if (File.Exists(partPath) && new FileInfo(partPath).Length > 0)
             {
-                downloadedTotal += new FileInfo(partPath).Length;
-                log($"Using cached download part {i + 1}/{manifest.Parts.Count}: {partName}");
+                var existing = new FileInfo(partPath).Length;
+                downloadedTotal += existing;
+                log($"DOWNLOAD: Using cached part {i + 1}/{manifest.Parts.Count}: {partName} ({existing / (1024d * 1024d):0.0} MB)");
+                progress?.Invoke(InstallerProgress.OfBytes(
+                    "Downloading payload",
+                    $"Using cached part {i + 1}/{manifest.Parts.Count}: {partName}",
+                    downloadedTotal,
+                    manifest.ExpectedBytes));
                 continue;
             }
 
             var url = BuildReleaseAssetUrl(manifest, partName);
-            log($"Downloading part {i + 1}/{manifest.Parts.Count}: {partName}");
+            log($"DOWNLOAD: Starting part {i + 1}/{manifest.Parts.Count}: {partName}");
+            log($"DOWNLOAD: {url}");
+            progress?.Invoke(InstallerProgress.OfBytes(
+                "Downloading payload",
+                $"Downloading part {i + 1}/{manifest.Parts.Count}: {partName}",
+                downloadedTotal,
+                manifest.ExpectedBytes));
             var tmp = partPath + ".tmp";
             if (File.Exists(tmp))
             {
                 File.Delete(tmp);
             }
 
-            DownloadFile(url, tmp, manifest.ExpectedBytes, ref downloadedTotal, log);
+            DownloadFile(url, tmp, manifest.ExpectedBytes, ref downloadedTotal, log, progress, i + 1, manifest.Parts.Count, partName);
             if (File.Exists(partPath))
             {
                 File.Delete(partPath);
             }
 
             File.Move(tmp, partPath);
+            log($"DOWNLOAD: Finished part {i + 1}/{manifest.Parts.Count}: {partName}");
         }
 
-        return AssemblePartsToTemp(partPaths.ToArray(), manifest, log);
+        log("DOWNLOAD: All parts present. Joining into payload zip...");
+        return AssemblePartsToTemp(partPaths.ToArray(), manifest, log, progress);
     }
 
-    private static string AssemblePartsToTemp(IReadOnlyList<string> partPaths, DownloadManifest manifest, Action<string> log)
+    private static string AssemblePartsToTemp(
+        IReadOnlyList<string> partPaths,
+        DownloadManifest manifest,
+        Action<string> log,
+        Action<InstallerProgress>? progress = null)
     {
         var cacheRoot = Path.Combine(
             InstallerBackend.GetInstallerCacheRoot(),
@@ -282,6 +313,7 @@ internal static class PayloadAcquisition
             string.Equals(ComputeFileSha256(outputPath), manifest.ExpectedSha256, StringComparison.OrdinalIgnoreCase))
         {
             log("Using previously assembled payload: " + outputPath);
+            progress?.Invoke(InstallerProgress.OfBytes("Payload ready", "Using previously assembled payload.", 1, 1));
             return outputPath;
         }
 
@@ -291,6 +323,8 @@ internal static class PayloadAcquisition
         }
 
         log("Joining payload parts...");
+        progress?.Invoke(InstallerProgress.Indeterminate("Assembling payload", "Joining downloaded payload parts..."));
+        long written = 0;
         using (var output = File.Create(tmpPath))
         {
             var buffer = new byte[1024 * 1024];
@@ -301,6 +335,15 @@ internal static class PayloadAcquisition
                 while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
                 {
                     output.Write(buffer, 0, read);
+                    written += read;
+                    if (manifest.ExpectedBytes > 0 && written % (64L * 1024L * 1024L) < buffer.Length)
+                    {
+                        progress?.Invoke(InstallerProgress.OfBytes(
+                            "Assembling payload",
+                            "Joining downloaded payload parts...",
+                            written,
+                            manifest.ExpectedBytes));
+                    }
                 }
             }
         }
@@ -313,6 +356,8 @@ internal static class PayloadAcquisition
                 $"Assembled payload size mismatch: expected {manifest.ExpectedBytes:N0} bytes, actual {actualBytes:N0}.");
         }
 
+        progress?.Invoke(InstallerProgress.Indeterminate("Verifying payload", "Checking SHA-256 of assembled payload..."));
+        log("Verifying assembled payload SHA-256...");
         var actualHash = ComputeFileSha256(tmpPath);
         if (!string.Equals(actualHash, manifest.ExpectedSha256, StringComparison.OrdinalIgnoreCase))
         {
@@ -327,11 +372,21 @@ internal static class PayloadAcquisition
         }
 
         File.Move(tmpPath, outputPath);
-        log("Payload ready: " + outputPath);
+        log("DOWNLOAD COMPLETE: Payload ready at " + outputPath);
+        progress?.Invoke(InstallerProgress.OfBytes("Download complete", "Payload download and verification finished.", 1, 1));
         return outputPath;
     }
 
-    private static void DownloadFile(string url, string destinationPath, long totalExpected, ref long downloadedTotal, Action<string> log)
+    private static void DownloadFile(
+        string url,
+        string destinationPath,
+        long totalExpected,
+        ref long downloadedTotal,
+        Action<string> log,
+        Action<InstallerProgress>? progress,
+        int partNumber,
+        int partCount,
+        string partName)
     {
         using var response = Http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).GetAwaiter().GetResult();
         if (!response.IsSuccessStatusCode)
@@ -346,23 +401,36 @@ internal static class PayloadAcquisition
         var buffer = new byte[1024 * 1024];
         long partDownloaded = 0;
         var lastLogged = 0L;
+        var lastProgress = DateTime.UtcNow;
         int read;
         while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
         {
             output.Write(buffer, 0, read);
             partDownloaded += read;
             downloadedTotal += read;
-            if (partDownloaded - lastLogged >= 64L * 1024L * 1024L)
+            var now = DateTime.UtcNow;
+            var shouldLog = partDownloaded - lastLogged >= 16L * 1024L * 1024L || (now - lastProgress) >= TimeSpan.FromSeconds(2);
+            if (shouldLog)
             {
                 lastLogged = partDownloaded;
+                lastProgress = now;
+                var overallMb = downloadedTotal / (1024d * 1024d);
+                var totalMb = totalExpected / (1024d * 1024d);
+                var pct = totalExpected > 0 ? (100d * downloadedTotal / totalExpected) : 0d;
                 if (contentLength is > 0)
                 {
-                    log($"  ... {partDownloaded / (1024 * 1024):N0} / {contentLength.Value / (1024 * 1024):N0} MB for this part ({downloadedTotal / (1024 * 1024):N0} MB overall toward {totalExpected / (1024 * 1024):N0} MB)");
+                    log($"DOWNLOAD: Part {partNumber}/{partCount} {partDownloaded / (1024d * 1024d):0.0}/{contentLength.Value / (1024d * 1024d):0.0} MB | overall {overallMb:0.0}/{totalMb:0.0} MB ({pct:0.0}%)");
                 }
                 else
                 {
-                    log($"  ... {partDownloaded / (1024 * 1024):N0} MB for this part");
+                    log($"DOWNLOAD: Part {partNumber}/{partCount} {partDownloaded / (1024d * 1024d):0.0} MB | overall {overallMb:0.0}/{totalMb:0.0} MB ({pct:0.0}%)");
                 }
+
+                progress?.Invoke(InstallerProgress.OfBytes(
+                    "Downloading payload",
+                    $"Downloading part {partNumber}/{partCount}: {partName}",
+                    downloadedTotal,
+                    totalExpected));
             }
         }
 
@@ -371,6 +439,12 @@ internal static class PayloadAcquisition
             throw new InvalidOperationException(
                 $"Incomplete download for {url}: expected {contentLength.Value:N0} bytes, received {partDownloaded:N0}.");
         }
+
+        progress?.Invoke(InstallerProgress.OfBytes(
+            "Downloading payload",
+            $"Finished part {partNumber}/{partCount}: {partName}",
+            downloadedTotal,
+            totalExpected));
     }
 
     private static string BuildReleaseAssetUrl(DownloadManifest manifest, string assetName)

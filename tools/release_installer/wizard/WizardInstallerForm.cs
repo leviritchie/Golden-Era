@@ -27,6 +27,16 @@ internal sealed class WizardInstallerForm : Form
         ScrollBars = ScrollBars.Vertical,
         Font = new Font("Segoe UI", 9F)
     };
+    private readonly ProgressBar progressBar = new()
+    {
+        Dock = DockStyle.Top,
+        Height = 28,
+        Minimum = 0,
+        Maximum = 1000,
+        Style = ProgressBarStyle.Continuous,
+        Visible = false
+    };
+    private readonly Label progressStatusLabel = NewWrapLabel();
     private readonly Button backButton = new() { Text = "Back", Width = 96, Height = 34 };
     private readonly Button nextButton = new() { Text = "Next", Width = 120, Height = 34 };
     private readonly Button closeButton = new() { Text = "Close", Width = 96, Height = 34 };
@@ -53,8 +63,8 @@ internal sealed class WizardInstallerForm : Form
     {
         Text = "Golden Era Mod Installer";
         StartPosition = FormStartPosition.CenterScreen;
-        MinimumSize = new Size(800, 640);
-        Size = new Size(960, 740);
+        MinimumSize = new Size(800, 700);
+        Size = new Size(960, 800);
         AutoScaleMode = AutoScaleMode.Font;
 
         var root = new TableLayoutPanel
@@ -66,7 +76,7 @@ internal sealed class WizardInstallerForm : Form
         };
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 104F));
+        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 180F));
         root.RowStyles.Add(new RowStyle(SizeType.Absolute, 68F));
         Controls.Add(root);
 
@@ -75,7 +85,26 @@ internal sealed class WizardInstallerForm : Form
         header.Controls.Add(titleLabel);
         root.Controls.Add(header, 0, 0);
         root.Controls.Add(pageHost, 0, 1);
-        root.Controls.Add(logBox, 0, 2);
+
+        var logPanel = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            ColumnCount = 1,
+            RowCount = 3,
+            Padding = new Padding(0)
+        };
+        logPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        logPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        logPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        progressStatusLabel.Text = "";
+        progressStatusLabel.Margin = new Padding(0, 0, 0, 6);
+        progressBar.Margin = new Padding(0, 0, 0, 6);
+        logBox.Dock = DockStyle.Fill;
+        logBox.Height = 120;
+        logPanel.Controls.Add(progressStatusLabel, 0, 0);
+        logPanel.Controls.Add(progressBar, 0, 1);
+        logPanel.Controls.Add(logBox, 0, 2);
+        root.Controls.Add(logPanel, 0, 2);
 
         var footer = new FlowLayoutPanel
         {
@@ -194,7 +223,7 @@ internal sealed class WizardInstallerForm : Form
                 break;
             case WizardStep.Progress:
                 titleLabel.Text = "Working";
-                subtitleLabel.Text = "Do not close this window until the operation finishes.";
+                subtitleLabel.Text = "If this installer needs the mod payload, it downloads it from GitHub Releases first. Do not close this window until the operation finishes.";
                 nextButton.Text = GetRunButtonText();
                 pageHost.Controls.Add(BuildProgressPage());
                 break;
@@ -262,9 +291,9 @@ internal sealed class WizardInstallerForm : Form
 
     private Control BuildProgressPage()
     {
-        var label = NewInfoLabel("Progress is shown in the log area below.");
         var panel = NewPagePanel();
-        panel.Controls.Add(label);
+        panel.Controls.Add(NewInfoLabel(
+            "Status and download progress appear in the bar and log below. A first-time install may download about 4 GB from GitHub."));
         return panel;
     }
 
@@ -396,7 +425,12 @@ internal sealed class WizardInstallerForm : Form
         closeButton.Enabled = false;
         technicalLog.Clear();
         logBox.Clear();
+        progressBar.Visible = true;
+        progressBar.Style = ProgressBarStyle.Marquee;
+        progressBar.Value = 0;
+        progressStatusLabel.Text = "Starting...";
         AppendLog(GetOperationStartMessage());
+        AppendLog("If the payload is not cached yet, the installer will download it from GitHub Releases now.");
 
         var request = new InstallRequest(
             GetOperation(),
@@ -407,7 +441,8 @@ internal sealed class WizardInstallerForm : Form
 
         try
         {
-            await Task.Run(() => InstallerBackend.Run(request, CaptureTechnicalLog));
+            await Task.Run(() => InstallerBackend.Run(request, CaptureTechnicalLog, ReportProgress));
+            ReportProgress(InstallerProgress.OfBytes("Complete", GetOperationSuccessMessage(), 1, 1));
             AppendLog(GetOperationSuccessMessage());
             if (GetOperation() != InstallerOperation.Uninstall)
             {
@@ -437,9 +472,15 @@ internal sealed class WizardInstallerForm : Form
                 }
             }
 
+            progressStatusLabel.Text = "Failed.";
+            progressBar.Style = ProgressBarStyle.Continuous;
+            progressBar.Value = 0;
             currentStep = WizardStep.Review;
             RenderStep();
             subtitleLabel.Text = "The operation failed. Review the log below, then adjust the choices and try again.";
+            backButton.Enabled = true;
+            nextButton.Enabled = true;
+            closeButton.Enabled = true;
         }
     }
 
@@ -665,6 +706,38 @@ internal sealed class WizardInstallerForm : Form
         {
             technicalLog.Add(message);
         }
+
+        AppendLog(message);
+    }
+
+    private void ReportProgress(InstallerProgress progress)
+    {
+        if (InvokeRequired)
+        {
+            BeginInvoke(new Action<InstallerProgress>(ReportProgress), progress);
+            return;
+        }
+
+        progressBar.Visible = true;
+        if (progress.FractionComplete is double fraction)
+        {
+            progressBar.Style = ProgressBarStyle.Continuous;
+            progressBar.Value = Math.Clamp((int)Math.Round(fraction * progressBar.Maximum), progressBar.Minimum, progressBar.Maximum);
+        }
+        else
+        {
+            progressBar.Style = ProgressBarStyle.Marquee;
+        }
+
+        if (progress.BytesCompleted is long done && progress.BytesTotal is long total && total > 0)
+        {
+            progressStatusLabel.Text =
+                $"{progress.Phase}: {progress.Detail} ({done / (1024d * 1024d):0.0} / {total / (1024d * 1024d):0.0} MB)";
+        }
+        else
+        {
+            progressStatusLabel.Text = $"{progress.Phase}: {progress.Detail}";
+        }
     }
 
     private void AppendLog(string message)
@@ -727,7 +800,7 @@ internal sealed class WizardInstallerForm : Form
         }
 
         lines.Add("");
-        lines.Add("If this installer does not already contain the mod payload, it will download it from the matching GitHub Release the first time you run this step (about 4 GB). An internet connection is required for that download.");
+        lines.Add("When you continue, the installer prepares the mod payload first. If it is not already cached, it downloads about 4 GB from this version's GitHub Release, then installs.");
 
         return string.Join(Environment.NewLine, lines);
     }
