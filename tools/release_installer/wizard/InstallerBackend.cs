@@ -241,7 +241,7 @@ internal static class InstallerBackend
         log("Copying clean Steam source to modded target...");
         CopyCleanGameRoot(sourceRoot, targetRoot, log);
 
-        log("Installing BepInEx, Doorstop, and Golden Era payload into target copy...");
+        log("Installing BepInEx, Doorstop, Golden Era payload, and live-parity binaries into target copy...");
         InstallPayloadIntoTarget(targetRoot, package.ExtractRoot);
 
         log("Applying Core.zip overlay to target copy...");
@@ -290,7 +290,7 @@ internal static class InstallerBackend
             newCleanCoreBackup = ApplyCoreOverlay(targetCoreZip, package.OverlayManifestPath, package.ExtractRoot);
             ValidatePatchedCoreZip(targetCoreZip, overlayManifest);
 
-            log("Refreshing BepInEx, Doorstop, and Golden Era payload in target copy...");
+            log("Refreshing BepInEx, Doorstop, Golden Era payload, and live-parity binaries in target copy...");
             ReplaceModFilesInTarget(targetRoot, package.ExtractRoot);
 
             var launcherPath = WriteLauncher(targetRoot);
@@ -681,6 +681,55 @@ internal static class InstallerBackend
 
         Directory.CreateDirectory(Path.Combine(targetRoot, "BepInEx", "plugins"));
         CopyDirectory(pluginPayload, Path.Combine(targetRoot, PluginRelativePath));
+
+        ApplyLiveParityPayloads(targetRoot, packageRoot);
+    }
+
+    private static void ApplyLiveParityPayloads(string targetRoot, string packageRoot)
+    {
+        var unityPayload = Path.Combine(packageRoot, "payload", "unity_data");
+        var metadataPayload = Path.Combine(packageRoot, "payload", "il2cpp_metadata", "global-metadata.dat");
+        var streamingPayload = Path.Combine(packageRoot, "payload", "streaming_assets");
+
+        RequireDirectory(unityPayload, "Release payload is missing unity_data.");
+        RequireFile(Path.Combine(unityPayload, "resources.assets"), "Release payload is missing unity_data/resources.assets.");
+        RequireFile(Path.Combine(unityPayload, "globalgamemanagers"), "Release payload is missing unity_data/globalgamemanagers.");
+        RequireFile(metadataPayload, "Release payload is missing il2cpp_metadata/global-metadata.dat.");
+        RequireDirectory(streamingPayload, "Release payload is missing streaming_assets.");
+        RequireDirectory(
+            Path.Combine(streamingPayload, "maps", "Story_maps"),
+            "Release payload is missing streaming_assets/maps/Story_maps.");
+        RequireDirectory(
+            Path.Combine(streamingPayload, "video"),
+            "Release payload is missing streaming_assets/video.");
+
+        var dataRoot = Path.Combine(targetRoot, "HeroesOldenEra_Data");
+        RequireDirectory(dataRoot, "Target is missing HeroesOldenEra_Data.");
+
+        CopyFile(
+            Path.Combine(unityPayload, "resources.assets"),
+            Path.Combine(dataRoot, "resources.assets"));
+        CopyFile(
+            Path.Combine(unityPayload, "globalgamemanagers"),
+            Path.Combine(dataRoot, "globalgamemanagers"));
+        CopyFile(
+            metadataPayload,
+            Path.Combine(dataRoot, "il2cpp_data", "Metadata", "global-metadata.dat"));
+
+        // Additive/overwrite curated StreamingAssets trees without deleting unrelated vanilla files.
+        foreach (var file in Directory.EnumerateFiles(streamingPayload, "*", SearchOption.AllDirectories))
+        {
+            var relative = Path.GetRelativePath(streamingPayload, file);
+            CopyFile(file, Path.Combine(dataRoot, "StreamingAssets", relative));
+        }
+    }
+
+    private static void RequireDirectory(string path, string message)
+    {
+        if (!Directory.Exists(path))
+        {
+            throw new InvalidOperationException(message);
+        }
     }
 
     private static string ApplyCoreOverlay(string coreZipPath, string manifestPath, string packageRoot)

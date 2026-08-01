@@ -13,7 +13,7 @@ This is an experimental early-access mod. Stronghold is still the most complete 
 - Adds multiple HoMM3-inspired custom faction ports to Olden Era.
 - Adds custom creature lineups, alternate creature upgrades, town screens, buildings, heroes, portraits, map sprites, unit animations, and music where available.
 - Adds faction mechanics such as War Cries and other custom-faction rules as they are ported.
-- Bundles the BepInEx IL2CPP loader, Golden Era plugin payload, and release-derived Core.zip overlay in one self-extracting installer EXE.
+- Bundles the BepInEx IL2CPP loader, Golden Era plugin payload, release-derived Core.zip overlay, campaign StreamingAssets, dialog-portrait Unity resources, and Factory city metadata pin in one self-extracting installer EXE.
 - Installs into a separate Golden Era game copy so launching Olden Era from Steam still runs the vanilla game.
 - Updates existing Golden Era copies in place when the target folder still has its installer-created clean `Core.zip` baseline.
 
