@@ -40,9 +40,13 @@ The `modding_guide/` folder contains [mod_helper.md](modding_guide/mod_helper.md
 
 ![Quick play setup](screenshots/quickplay.gif)
 
-![Town buildings](screenshots/buildings.gif)
+![Town](screenshots/buildings.png)
 
 ![Recruitment screen](screenshots/recruitment.gif)
+
+![Campaign dialog](screenshots/campaign_dialog.png)
+
+![Water travel](screenshots/water_travel.png)
 
 ## FAQ
 
