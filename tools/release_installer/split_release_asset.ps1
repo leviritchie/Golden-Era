@@ -73,13 +73,18 @@ else {
 
 $shaSource = "$($item.FullName).sha256"
 $expectedSha = $null
+$shaDest = Join-Path $OutDir ($OutputBaseName + '.sha256')
 if (Test-Path -LiteralPath $shaSource) {
   $expectedSha = ((Get-Content -LiteralPath $shaSource -Raw).Trim().Split(' ')[0]).ToLowerInvariant()
-  Copy-Item -LiteralPath $shaSource -Destination (Join-Path $OutDir ($OutputBaseName + '.sha256')) -Force
+  $srcFull = [System.IO.Path]::GetFullPath($shaSource)
+  $dstFull = [System.IO.Path]::GetFullPath($shaDest)
+  if ($srcFull -ne $dstFull) {
+    Copy-Item -LiteralPath $shaSource -Destination $shaDest -Force
+  }
 }
 else {
   $expectedSha = (Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
-  Set-Content -LiteralPath (Join-Path $OutDir ($OutputBaseName + '.sha256')) -Value "$expectedSha  $OutputBaseName" -Encoding ASCII
+  Set-Content -LiteralPath $shaDest -Value "$expectedSha  $OutputBaseName" -Encoding ASCII
 }
 
 $manifest = [ordered]@{

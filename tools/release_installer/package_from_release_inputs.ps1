@@ -221,6 +221,43 @@ try {
     if (-not $hasVideo) {
         throw "Release inputs are missing streaming_assets/video content."
     }
+
+    $forbiddenTokens = @(
+        "layered_atlas",
+        "zone_atlas",
+        "approach_cell",
+        "single_layer",
+        "underground_slice",
+        "handedit",
+        "_poc",
+        "vanilla_stock",
+        "water_example",
+        "proc_exploration_",
+        "proc_objective_chain_",
+        ".procedural_scenarios",
+        "broken"
+    )
+    $forbiddenHits = @()
+    foreach ($entry in $zip.Entries) {
+        if ([string]::IsNullOrWhiteSpace($entry.Name)) { continue }
+        $full = $entry.FullName.Replace("\", "/").ToLowerInvariant()
+        if (-not $full.StartsWith("payload/streaming_assets/")) { continue }
+        foreach ($token in $forbiddenTokens) {
+            if ($full.Contains($token)) {
+                $forbiddenHits += $entry.FullName
+                break
+            }
+        }
+        $leaf = [System.IO.Path]::GetFileName($full)
+        if ($leaf.StartsWith("proc_") -and ($leaf.EndsWith(".map") -or $leaf.EndsWith(".json"))) {
+            $forbiddenHits += $entry.FullName
+        }
+    }
+    if ($forbiddenHits.Count -gt 0) {
+        $sample = ($forbiddenHits | Select-Object -First 20) -join ", "
+        $more = if ($forbiddenHits.Count -gt 20) { " (+$($forbiddenHits.Count - 20) more)" } else { "" }
+        throw "Release inputs contain unfinished/test scenario files that must not ship: $sample$more"
+    }
 }
 finally {
     $zip.Dispose()
