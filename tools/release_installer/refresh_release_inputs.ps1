@@ -19,9 +19,44 @@ $OverlayDir = Join-Path $StageRoot "core_overlay"
 $OutputZipPath = [System.IO.Path]::GetFullPath((Join-Path $RepoRoot $OutputZip))
 $OutputShaPath = "$OutputZipPath.sha256"
 
+# Must match InstallerBackend.cs CompatibleCoreZipSha256 (June 4 depot 5889655938380499086).
+$PinnedInstallerCleanCoreZipSha256 = "b5b1dff2b9cb03447dfc6c31d1070878bcc86f5264497735dc63188c22d9f5ba"
+$PinnedInstallerCleanCoreZipBytes = [int64]11937492
+
 function Require-Path($Path, $Message) {
     if (-not (Test-Path -LiteralPath $Path)) {
         throw $Message
+    }
+}
+
+function Assert-PinnedInstallerCleanCore($CoreZip) {
+    $item = Get-Item -LiteralPath $CoreZip
+    $actualBytes = [int64]$item.Length
+    $actualHash = (Get-FileHash -LiteralPath $CoreZip -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ($actualBytes -ne $PinnedInstallerCleanCoreZipBytes -or
+        -not $actualHash.Equals($PinnedInstallerCleanCoreZipSha256, [System.StringComparison]::OrdinalIgnoreCase)) {
+        throw @"
+CleanReleaseCore does not match the installer-pinned June 4 Steam depot Core.zip.
+  expected SHA-256: $PinnedInstallerCleanCoreZipSha256 ($PinnedInstallerCleanCoreZipBytes bytes)
+  actual   SHA-256: $actualHash ($actualBytes bytes)
+  path: $CoreZip
+Use: download_depot 3105440 3105441 5889655938380499086
+"@
+    }
+}
+
+function Assert-OverlayMatchesPinnedCleanCore($OverlayManifestPath) {
+    Require-Path $OverlayManifestPath "Overlay manifest was not found: $OverlayManifestPath"
+    $manifest = Get-Content -LiteralPath $OverlayManifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    $vanillaHash = [string]$manifest.vanillaCore.sha256
+    $vanillaBytes = [int64]$manifest.vanillaCore.size
+    if (-not $vanillaHash.Equals($PinnedInstallerCleanCoreZipSha256, [System.StringComparison]::OrdinalIgnoreCase) -or
+        $vanillaBytes -ne $PinnedInstallerCleanCoreZipBytes) {
+        throw @"
+Exported core_overlay vanillaCore does not match the installer-pinned depot Core.zip.
+  expected: $PinnedInstallerCleanCoreZipSha256 ($PinnedInstallerCleanCoreZipBytes bytes)
+  actual:   $vanillaHash ($vanillaBytes bytes)
+"@
     }
 }
 
@@ -216,6 +251,7 @@ Require-Path (Join-Path $GameRoot "HeroesOldenEra.exe") "Release game executable
 Require-Path $PluginSource "Deployed plugin folder was not found: $PluginSource"
 Require-Path $ReleaseCore "Modded release Core.zip was not found: $ReleaseCore"
 Require-Path $CleanReleaseCore "Clean release Core.zip was not found: $CleanReleaseCore"
+Assert-PinnedInstallerCleanCore $CleanReleaseCore
 Require-Path (Join-Path $GameRoot "BepInEx\core\BepInEx.Unity.IL2CPP.dll") "BepInEx IL2CPP core was not found under: $GameRoot"
 Require-Path (Join-Path $GameRoot "dotnet\coreclr.dll") "Doorstop CoreCLR runtime was not found under: $GameRoot"
 Require-Path (Join-Path $GameRoot "winhttp.dll") "Doorstop winhttp.dll was not found under: $GameRoot"
@@ -263,6 +299,7 @@ if (Test-Path -LiteralPath (Join-Path $GameRoot ".doorstop_version")) {
     --out-dir $OverlayDir `
     --force
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+Assert-OverlayMatchesPinnedCleanCore (Join-Path $OverlayDir "manifest.json")
 
 Require-Path (Join-Path $PayloadPlugin "OfflineUnlockMod.dll") "Release payload is missing OfflineUnlockMod.dll."
 Require-Path (Join-Path $PayloadPlugin "custom_factions") "Release payload is missing custom_factions manifests."
