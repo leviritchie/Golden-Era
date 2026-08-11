@@ -51,6 +51,13 @@ class RocSemanticEmbedder:
         with self.torch.inference_mode():
             if self._feature_mode == "get_image_features":
                 vectors = self.model.get_image_features(pixel_values=pixels)
+                # Transformers versions differ here: SigLIP2 may return the
+                # pooled vision output wrapper instead of the tensor itself.
+                if not hasattr(vectors, "shape"):
+                    image_embeds = getattr(vectors, "image_embeds", None)
+                    vectors = image_embeds if image_embeds is not None else getattr(vectors, "pooler_output", None)
+                if vectors is None:
+                    raise RuntimeError("SigLIP2 image feature output has no image_embeds or pooler_output tensor")
             else:
                 vectors = self.model(pixel_values=pixels).image_embeds
             vectors = self.torch.nn.functional.normalize(vectors, dim=-1)
