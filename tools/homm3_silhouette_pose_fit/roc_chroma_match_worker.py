@@ -133,7 +133,10 @@ def set_unlit_texture_materials():
             texture = next((n for n in nodes if n.type == "TEX_IMAGE" and n.image), None)
         if texture is None:
             continue
-        texture.image.colorspace_settings.name = "Non-Color"
+        # This is albedo data, not a scalar/depth map. Treating it as Non-Color
+        # makes Standard view transform lift midtones and wash out the RGB
+        # image that the semantic encoder sees.
+        texture.image.colorspace_settings.name = "sRGB"
         alpha = principled.inputs.get("Alpha")
         emission = principled.inputs.get("Emission")
         if color:
