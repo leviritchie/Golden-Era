@@ -56,9 +56,11 @@ original-frame-only target contract.
 
 ## Adaptive optimizer pilot
 
-The notebook also contains the semantic optimizer pilot, enabled by
-`SEMANTIC_OPTIMIZER = True`. It performs bounded coordinate descent one bone and
-axis at a time:
+The notebook also contains an experimental semantic optimizer pilot, but it is
+currently disabled by default (`SEMANTIC_OPTIMIZER = False`) because it did not
+match the established coarse/fine solver reliably. The active solver is again
+the previous coarse/fine search. When explicitly enabled, the experimental
+optimizer performs bounded coordinate descent one bone and axis at a time:
 
 - evaluate the current angle and both signed directions;
 - keep a move only when semantic similarity improves by the configured margin;
