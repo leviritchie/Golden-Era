@@ -22,12 +22,19 @@ class RocSemanticEmbedder:
 
     def __init__(self, model_id: str = "openai/clip-vit-base-patch32"):
         import torch
-        from transformers import AutoProcessor, CLIPVisionModelWithProjection
+        from transformers import AutoModel, AutoProcessor, CLIPVisionModelWithProjection
 
         self.device = require_cuda()
         self.model_id = model_id
         self.processor = AutoProcessor.from_pretrained(model_id)
-        self.model = CLIPVisionModelWithProjection.from_pretrained(model_id).to(self.device).eval()
+        if "siglip" in model_id.lower():
+            # SigLIP2 exposes image features through AutoModel rather than
+            # CLIPVisionModelWithProjection.image_embeds.
+            self.model = AutoModel.from_pretrained(model_id).to(self.device).eval()
+            self._feature_mode = "get_image_features"
+        else:
+            self.model = CLIPVisionModelWithProjection.from_pretrained(model_id).to(self.device).eval()
+            self._feature_mode = "image_embeds"
         self.torch = torch
 
     @staticmethod
@@ -42,7 +49,10 @@ class RocSemanticEmbedder:
         inputs = self.processor(images=images, return_tensors="pt")
         pixels = inputs["pixel_values"].to(self.device)
         with self.torch.inference_mode():
-            vectors = self.model(pixel_values=pixels).image_embeds
+            if self._feature_mode == "get_image_features":
+                vectors = self.model.get_image_features(pixel_values=pixels)
+            else:
+                vectors = self.model(pixel_values=pixels).image_embeds
             vectors = self.torch.nn.functional.normalize(vectors, dim=-1)
         return vectors.detach().float().cpu().numpy()
 

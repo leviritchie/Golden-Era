@@ -12,6 +12,12 @@ The earlier methods remain available as diagnostics and research controls, but
 they are not competing delivery paths and must not be treated as the default
 solver when semantic comparison is enabled.
 
+The current notebook experiment uses `google/siglip2-base-patch16-512` with
+batch size `1` for both the optimizer and report cell. The semantic transfer method is proven; this
+particular encoder replacement is an active benchmark and must not yet be
+treated as equivalent to the previous CLIP baseline without comparing pose
+convergence and final-frame quality.
+
 ## Proven comparison
 
 For each candidate bone pose:

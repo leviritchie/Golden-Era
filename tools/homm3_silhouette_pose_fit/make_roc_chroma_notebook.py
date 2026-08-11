@@ -125,7 +125,7 @@ def main() -> None:
                 semantic_setup = anchor + (
                     "# Slow first-frame semantic pilot toggle. True replaces depth/silhouette as the decision score.\n"
                     "SEMANTIC_ONLY = True\n"
-                    "SEMANTIC_MODEL_ID = 'openai/clip-vit-base-patch32'\n"
+                    "SEMANTIC_MODEL_ID = 'google/siglip2-base-patch16-512'\n"
                     "if SEMANTIC_ONLY:\n"
                     "    from roc_semantic_embedding_match import RocSemanticEmbedder\n"
                     "    semantic_encoder = RocSemanticEmbedder(model_id=SEMANTIC_MODEL_ID)  # asserts CUDA\n"
@@ -231,7 +231,7 @@ def main() -> None:
                 "source": [
                     semantic_marker + "\n",
                     "from roc_semantic_embedding_match import RocSemanticEmbedder\n",
-                    "SEMANTIC_MODEL_ID = 'openai/clip-vit-base-patch32'\n",
+                    "SEMANTIC_MODEL_ID = 'google/siglip2-base-patch16-512'\n",
                     "SEMANTIC_MESH_DIR = PILOT / 'roc_chroma_match_v1'\n",
                     "SEMANTIC_OUT = PILOT / 'roc_chroma_match_v1' / 'semantic_embedding_report.json'\n",
                     "SEMANTIC_OUT.parent.mkdir(parents=True, exist_ok=True)\n",
@@ -241,8 +241,8 @@ def main() -> None:
                     "    if mesh.exists():\n",
                     "        semantic_pairs.append((target, mesh))\n",
                     "semantic_encoder = RocSemanticEmbedder(model_id=SEMANTIC_MODEL_ID)  # asserts CUDA\n",
-                    "semantic_rows = semantic_encoder.compare_pairs(semantic_pairs, batch_size=16)\n",
-                    "semantic_report = {'model': SEMANTIC_MODEL_ID, 'device': str(semantic_encoder.device), 'pairs': semantic_rows, 'meanCosine': float(np.mean([row['cosine'] for row in semantic_rows])), 'proof': 'local GPU CLIP image embeddings; original frames only'}\n",
+                    "semantic_rows = semantic_encoder.compare_pairs(semantic_pairs, batch_size=1)\n",
+                    "semantic_report = {'model': SEMANTIC_MODEL_ID, 'device': str(semantic_encoder.device), 'pairs': semantic_rows, 'meanCosine': float(np.mean([row['cosine'] for row in semantic_rows])), 'proof': 'local GPU SigLIP2 image embeddings; original frames only'}\n",
                     "SEMANTIC_OUT.write_text(json.dumps(semantic_report, indent=2) + '\\n')\n",
                     "print('semantic mean cosine:', semantic_report['meanCosine'], 'pairs:', len(semantic_rows), 'device:', semantic_report['device'])\n",
                 ],
