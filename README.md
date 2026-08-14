@@ -1,4 +1,7 @@
 > [!IMPORTANT]
+> I've run out of github bandwidth for hosting the mod, so the installer will not work until I find another hosting solution, e.g. cloudflare. I'll have that ready with the next update.
+>
+
 > This release is built for the Olden Era Steam build from June 4th. The installer will walk you through downloading an extra copy of that build from steam to make this as painless as possible.
 > The installer does not patch your Steam install in place. It copies your clean Steam game folder to a separate Golden Era folder and installs the mod into that copy only.
 
