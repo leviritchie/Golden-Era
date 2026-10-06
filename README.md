@@ -105,4 +105,4 @@ I am a Senior Data Scientist with a long-time passion for video games. I have be
 
 ## Credits
 
-Special thanks to Aphra for creating the Tears of Ashan VCMI mod and for granting permission to use that mod's sprite recolors. Thanks to the dedicated HoMM3 modding community for decades of documentation on how to pull apart that game and put it back together.
+Special thanks to Aphra for creating the Tears of Ashan VCMI mod and for granting permission to use that mod's sprite recolors. Thanks to bayleDomon for enhancements to the campaign map generation. Thanks to the dedicated HoMM3 modding community for decades of documentation on how to pull apart that game and put it back together.
