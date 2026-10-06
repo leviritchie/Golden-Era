@@ -6,11 +6,24 @@ using System.Text.Json.Serialization;
 
 namespace GoldenEraModInstaller;
 
+// Finds the Golden Era release payload zip without making extra copies of it.
+//
+// v0.1.319+ ships the payload as ordinary GitHub Release assets
+// (<payloadBaseName>.part01 .. .partNN). The installer EXE carries a small "GERADL01"
+// footer naming those parts. Resolution order:
+//   1. GOLDEN_ERA_INSTALLER_PACKAGE_PATH (a payload zip or an EXE with an appended payload)
+//   2. a payload appended to this EXE ("GERAPKG1" footer, legacy embedded builds)
+//   3. the whole payload zip next to this EXE
+//   4. the part files next to this EXE (offline install), topped up from the download
+//      cache and finally from the matching GitHub Release.
+// The parts are never joined on disk: they are read through one seekable stream.
 internal static class PayloadAcquisition
 {
     internal const string DownloadFooterMagic = "GERADL01";
     private const int DownloadFooterTrailerLength = sizeof(long) + 8;
     private const long DefaultMaxPartBytes = 1_900_000_000L;
+    private const long DownloadSpaceMarginBytes = 512L * 1024L * 1024L;
+    private const int DownloadAttempts = 3;
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -32,7 +45,8 @@ internal static class PayloadAcquisition
         string ExpectedSha256,
         long ExpectedBytes,
         IReadOnlyList<string> Parts,
-        bool? Homm3UseUpscaledHeroPortraits);
+        bool? Homm3UseUpscaledHeroPortraits,
+        IReadOnlyList<long>? PartBytes = null);
 
     internal sealed record AcquiredPayload(
         string ExpectedSha256,
@@ -41,27 +55,34 @@ internal static class PayloadAcquisition
         string SourceDescription,
         bool? Homm3UseUpscaledHeroPortraits);
 
+    public static string InstallerDirectory =>
+        Path.GetDirectoryName(Path.GetFullPath(Environment.ProcessPath ?? AppContext.BaseDirectory))
+        ?? AppContext.BaseDirectory;
+
     public static AcquiredPayload Resolve(Action<string> log, Action<InstallerProgress>? progress = null)
     {
         var overridePath = Environment.GetEnvironmentVariable("GOLDEN_ERA_INSTALLER_PACKAGE_PATH");
         if (!string.IsNullOrWhiteSpace(overridePath))
         {
             var full = Path.GetFullPath(Environment.ExpandEnvironmentVariables(overridePath));
-            if (File.Exists(full))
+            if (!File.Exists(full))
             {
-                if (TryResolveAppendedPackage(full, out var appended))
-                {
-                    log("Using GOLDEN_ERA_INSTALLER_PACKAGE_PATH appended payload: " + full);
-                    return appended;
-                }
-
-                if (string.Equals(Path.GetExtension(full), ".zip", StringComparison.OrdinalIgnoreCase))
-                {
-                    var hash = ComputeFileSha256(full);
-                    log("Using GOLDEN_ERA_INSTALLER_PACKAGE_PATH zip: " + full);
-                    return new AcquiredPayload(hash, new FileInfo(full).Length, () => File.OpenRead(full), full, Homm3UseUpscaledHeroPortraits: null);
-                }
+                throw new InvalidOperationException("GOLDEN_ERA_INSTALLER_PACKAGE_PATH points to a file that does not exist: " + full);
             }
+
+            if (TryResolveAppendedPackage(full, out var appended))
+            {
+                log("Using GOLDEN_ERA_INSTALLER_PACKAGE_PATH appended payload: " + full);
+                return appended;
+            }
+
+            log("Using GOLDEN_ERA_INSTALLER_PACKAGE_PATH zip: " + full);
+            return new AcquiredPayload(
+                ComputeFileSha256(full, log, progress),
+                new FileInfo(full).Length,
+                () => File.OpenRead(full),
+                full,
+                Homm3UseUpscaledHeroPortraits: null);
         }
 
         var processPath = Environment.ProcessPath;
@@ -76,60 +97,158 @@ internal static class PayloadAcquisition
             return embedded;
         }
 
-        if (!TryReadDownloadManifest(processPath, out var manifest))
-        {
-            throw new InvalidOperationException(
-                "This installer EXE has neither an embedded payload nor a GitHub download manifest. Rebuild it with tools\\release_installer\\package_from_release_inputs.ps1.");
-        }
-
-        ValidateManifest(manifest);
-        var exeDir = Path.GetDirectoryName(Path.GetFullPath(processPath))
-            ?? throw new InvalidOperationException("Unable to resolve installer directory.");
+        var manifest = ReadRequiredManifest(processPath);
+        var exeDir = InstallerDirectory;
+        log($"Installer payload: {manifest.PayloadBaseName}, {FormatGb(manifest.ExpectedBytes)} in {manifest.Parts.Count} part file(s), release {manifest.ReleaseTag}.");
 
         var localZip = Path.Combine(exeDir, manifest.PayloadBaseName);
         if (File.Exists(localZip) && new FileInfo(localZip).Length == manifest.ExpectedBytes)
         {
-            var localHash = ComputeFileSha256(localZip);
-            if (string.Equals(localHash, manifest.ExpectedSha256, StringComparison.OrdinalIgnoreCase))
+            log("Using payload zip next to the installer: " + localZip);
+            return new AcquiredPayload(
+                manifest.ExpectedSha256,
+                manifest.ExpectedBytes,
+                () => File.OpenRead(localZip),
+                localZip,
+                manifest.Homm3UseUpscaledHeroPortraits);
+        }
+
+        var cacheDir = GetDownloadCacheDir(manifest);
+        var partPaths = new string[manifest.Parts.Count];
+        var missing = new List<int>();
+        for (var i = 0; i < manifest.Parts.Count; i++)
+        {
+            var name = manifest.Parts[i];
+            var besideExe = Path.Combine(exeDir, name);
+            var cached = Path.Combine(cacheDir, name);
+            if (IsUsablePart(besideExe, manifest, i))
             {
-                log("Using local payload zip beside installer: " + localZip);
-                progress?.Invoke(InstallerProgress.OfBytes("Local payload", "Using payload zip beside the installer.", 1, 1));
-                return new AcquiredPayload(
-                    manifest.ExpectedSha256,
-                    manifest.ExpectedBytes,
-                    () => File.OpenRead(localZip),
-                    localZip,
-                    manifest.Homm3UseUpscaledHeroPortraits);
+                partPaths[i] = besideExe;
+                log($"Part {i + 1}/{manifest.Parts.Count}: using {name} next to the installer.");
+            }
+            else if (IsUsablePart(cached, manifest, i))
+            {
+                partPaths[i] = cached;
+                log($"Part {i + 1}/{manifest.Parts.Count}: using cached {cached}.");
+            }
+            else
+            {
+                if (File.Exists(besideExe))
+                {
+                    log($"Part {i + 1}/{manifest.Parts.Count}: {besideExe} has the wrong size ({new FileInfo(besideExe).Length:N0} bytes); it will be downloaded again.");
+                }
+                missing.Add(i);
+            }
+        }
+
+        if (missing.Count > 0)
+        {
+            DownloadMissingParts(manifest, missing, partPaths, exeDir, cacheDir, log, progress);
+        }
+
+        var lengths = partPaths.Select(p => new FileInfo(p).Length).ToArray();
+        var total = lengths.Sum();
+        if (total != manifest.ExpectedBytes)
+        {
+            throw new InvalidOperationException(
+                $"The payload part files add up to {total:N0} bytes, but this installer expects {manifest.ExpectedBytes:N0}. " +
+                "One of the part files is incomplete or from a different release. Delete the part files and download them again from the same GitHub Release as this installer.");
+        }
+
+        var description = missing.Count == 0
+            ? $"{manifest.Parts.Count} payload part file(s) found locally"
+            : $"{manifest.Parts.Count} payload part file(s) ({missing.Count} downloaded)";
+        return new AcquiredPayload(
+            manifest.ExpectedSha256,
+            manifest.ExpectedBytes,
+            () => new ConcatenatedReadStream(partPaths, lengths),
+            description,
+            manifest.Homm3UseUpscaledHeroPortraits);
+    }
+
+    /// <summary>One-paragraph, user-facing description of where the payload will come from.</summary>
+    public static string DescribePlan()
+    {
+        try
+        {
+            var processPath = Environment.ProcessPath;
+            if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("GOLDEN_ERA_INSTALLER_PACKAGE_PATH")))
+            {
+                return "The mod payload comes from GOLDEN_ERA_INSTALLER_PACKAGE_PATH.";
+            }
+            if (string.IsNullOrWhiteSpace(processPath) || !File.Exists(processPath))
+            {
+                return "The installer will prepare the mod payload first.";
+            }
+            if (TryResolveAppendedPackage(processPath, out _))
+            {
+                return "The mod payload is built into this installer, so nothing needs to be downloaded.";
+            }
+            if (!TryReadDownloadManifest(processPath, out var manifest))
+            {
+                return "This installer has no payload information. Download the installer again from the GitHub Release.";
             }
 
-            throw new InvalidOperationException(
-                $"Local payload zip hash mismatch for {localZip}: expected {manifest.ExpectedSha256}, actual {localHash}.");
-        }
+            var exeDir = InstallerDirectory;
+            var cacheDir = GetDownloadCacheDir(manifest);
+            var size = FormatGb(manifest.ExpectedBytes);
+            var firstPart = manifest.Parts[0];
+            var lastPart = manifest.Parts[^1];
+            var found = 0;
+            long missingBytes = 0;
+            for (var i = 0; i < manifest.Parts.Count; i++)
+            {
+                if (IsUsablePart(Path.Combine(exeDir, manifest.Parts[i]), manifest, i) ||
+                    IsUsablePart(Path.Combine(cacheDir, manifest.Parts[i]), manifest, i))
+                {
+                    found++;
+                }
+                else
+                {
+                    missingBytes += ExpectedPartBytes(manifest, i) ?? manifest.ExpectedBytes / manifest.Parts.Count;
+                }
+            }
 
-        var localParts = manifest.Parts
-            .Select(name => Path.Combine(exeDir, name))
-            .ToArray();
-        if (localParts.All(File.Exists))
+            if (File.Exists(Path.Combine(exeDir, manifest.PayloadBaseName)) || found == manifest.Parts.Count)
+            {
+                return $"The mod payload ({size} in {manifest.Parts.Count} part files) was found next to this installer, so nothing needs to be downloaded. Its SHA-256 hash is checked before installing.";
+            }
+
+            var partRange = manifest.Parts.Count == 1 ? firstPart : $"{firstPart} through {lastPart}";
+            var prefix = found == 0
+                ? $"The mod payload is {size} in {manifest.Parts.Count} part files ({partRange})."
+                : $"{found} of {manifest.Parts.Count} payload part files were found next to this installer.";
+            return prefix +
+                   $" The installer will download the missing {FormatGb(missingBytes)} from the {manifest.ReleaseTag} GitHub Release and check the SHA-256 hash before installing." +
+                   " To install offline, put all the part files from that Release in the same folder as this installer.";
+        }
+        catch (Exception ex)
         {
-            log("Assembling payload from local part files beside installer...");
-            progress?.Invoke(InstallerProgress.Indeterminate("Assembling local parts", "Joining payload parts found beside the installer..."));
-            var assembled = AssemblePartsToTemp(localParts, manifest, log, progress);
-            return OpenTempPayload(assembled, manifest);
+            return "The installer will prepare the mod payload first. (" + ex.Message + ")";
+        }
+    }
+
+    public static IReadOnlyList<string> DescribeDownloadUrls()
+    {
+        var processPath = Environment.ProcessPath;
+        if (string.IsNullOrWhiteSpace(processPath) || !TryReadDownloadManifest(processPath, out var manifest))
+        {
+            return [];
         }
 
-        log("============================================================");
-        log("DOWNLOADING Golden Era payload from GitHub Releases");
-        log($"Release: {manifest.GithubOwner}/{manifest.GithubRepo} @ {manifest.ReleaseTag}");
-        log($"Size: {manifest.ExpectedBytes / (1024d * 1024d * 1024d):0.00} GB across {manifest.Parts.Count} part(s)");
-        log("This can take several minutes. Progress updates will appear below.");
-        log("============================================================");
-        progress?.Invoke(InstallerProgress.OfBytes(
-            "Downloading payload",
-            $"Starting download of {manifest.Parts.Count} part(s) from GitHub Releases...",
-            0,
-            manifest.ExpectedBytes));
-        var downloaded = DownloadAndAssemble(manifest, log, progress);
-        return OpenTempPayload(downloaded, manifest);
+        return manifest.Parts.Select(part => BuildReleaseAssetUrl(manifest, part)).ToArray();
+    }
+
+    internal static DownloadManifest ReadRequiredManifest(string installerPath)
+    {
+        if (!TryReadDownloadManifest(installerPath, out var manifest))
+        {
+            throw new InvalidOperationException(
+                "This installer EXE does not contain its payload information (it may be truncated or modified). Download the installer again from the GitHub Release.");
+        }
+
+        ValidateManifest(manifest);
+        return manifest;
     }
 
     public static bool TryReadDownloadManifest(string installerPath, out DownloadManifest manifest)
@@ -163,17 +282,14 @@ internal static class PayloadAcquisition
         }
 
         var jsonLength = BitConverter.ToInt64(lengthBytes);
-        if (jsonLength <= 0 || jsonLength > info.Length - DownloadFooterTrailerLength)
+        if (jsonLength <= 0 || jsonLength > 1024 * 1024 || jsonLength > info.Length - DownloadFooterTrailerLength)
         {
             return false;
         }
 
         stream.Seek(-(DownloadFooterTrailerLength + jsonLength), SeekOrigin.End);
         var jsonBytes = new byte[jsonLength];
-        if (stream.Read(jsonBytes) != jsonLength)
-        {
-            return false;
-        }
+        stream.ReadExactly(jsonBytes);
 
         try
         {
@@ -225,234 +341,224 @@ internal static class PayloadAcquisition
         return parts;
     }
 
-    private static AcquiredPayload OpenTempPayload(string path, DownloadManifest manifest)
-    {
-        return new AcquiredPayload(
-            manifest.ExpectedSha256,
-            manifest.ExpectedBytes,
-            () => File.OpenRead(path),
-            path,
-            manifest.Homm3UseUpscaledHeroPortraits);
-    }
+    internal static string FormatGb(long bytes) => $"{bytes / 1_000_000_000d:0.0} GB";
 
-    private static string DownloadAndAssemble(DownloadManifest manifest, Action<string> log, Action<InstallerProgress>? progress)
-    {
-        var cacheRoot = Path.Combine(
-            InstallerBackend.GetInstallerCacheRoot(),
-            "DownloadCache",
-            Sanitize(manifest.ReleaseTag),
-            manifest.ExpectedSha256[..Math.Min(12, manifest.ExpectedSha256.Length)]);
-        Directory.CreateDirectory(cacheRoot);
-        log("Download cache: " + cacheRoot);
+    private static string GetDownloadCacheDir(DownloadManifest manifest) => Path.Combine(
+        InstallerBackend.GetInstallerCacheRoot(),
+        "DownloadCache",
+        Sanitize(manifest.ReleaseTag),
+        manifest.ExpectedSha256[..Math.Min(12, manifest.ExpectedSha256.Length)]);
 
-        var partPaths = new List<string>(manifest.Parts.Count);
-        long downloadedTotal = 0;
-        for (var i = 0; i < manifest.Parts.Count; i++)
+    private static long? ExpectedPartBytes(DownloadManifest manifest, int index) =>
+        manifest.PartBytes is { } sizes && sizes.Count == manifest.Parts.Count ? sizes[index] : null;
+
+    private static bool IsUsablePart(string path, DownloadManifest manifest, int index)
+    {
+        if (!File.Exists(path))
         {
-            var partName = manifest.Parts[i];
-            var partPath = Path.Combine(cacheRoot, partName);
-            partPaths.Add(partPath);
-            if (File.Exists(partPath) && new FileInfo(partPath).Length > 0)
-            {
-                var existing = new FileInfo(partPath).Length;
-                downloadedTotal += existing;
-                log($"DOWNLOAD: Using cached part {i + 1}/{manifest.Parts.Count}: {partName} ({existing / (1024d * 1024d):0.0} MB)");
-                progress?.Invoke(InstallerProgress.OfBytes(
-                    "Downloading payload",
-                    $"Using cached part {i + 1}/{manifest.Parts.Count}: {partName}",
-                    downloadedTotal,
-                    manifest.ExpectedBytes));
-                continue;
-            }
-
-            var url = BuildReleaseAssetUrl(manifest, partName);
-            log($"DOWNLOAD: Starting part {i + 1}/{manifest.Parts.Count}: {partName}");
-            log($"DOWNLOAD: {url}");
-            progress?.Invoke(InstallerProgress.OfBytes(
-                "Downloading payload",
-                $"Downloading part {i + 1}/{manifest.Parts.Count}: {partName}",
-                downloadedTotal,
-                manifest.ExpectedBytes));
-            var tmp = partPath + ".tmp";
-            if (File.Exists(tmp))
-            {
-                File.Delete(tmp);
-            }
-
-            DownloadFile(url, tmp, manifest.ExpectedBytes, ref downloadedTotal, log, progress, i + 1, manifest.Parts.Count, partName);
-            if (File.Exists(partPath))
-            {
-                File.Delete(partPath);
-            }
-
-            File.Move(tmp, partPath);
-            log($"DOWNLOAD: Finished part {i + 1}/{manifest.Parts.Count}: {partName}");
+            return false;
         }
 
-        log("DOWNLOAD: All parts present. Joining into payload zip...");
-        return AssemblePartsToTemp(partPaths.ToArray(), manifest, log, progress);
+        var length = new FileInfo(path).Length;
+        if (length <= 0)
+        {
+            return false;
+        }
+
+        return ExpectedPartBytes(manifest, index) is not long expected || expected == length;
     }
 
-    private static string AssemblePartsToTemp(
-        IReadOnlyList<string> partPaths,
+    private static void DownloadMissingParts(
         DownloadManifest manifest,
+        IReadOnlyList<int> missing,
+        string[] partPaths,
+        string exeDir,
+        string cacheDir,
         Action<string> log,
-        Action<InstallerProgress>? progress = null)
+        Action<InstallerProgress>? progress)
     {
-        var cacheRoot = Path.Combine(
-            InstallerBackend.GetInstallerCacheRoot(),
-            "DownloadCache",
-            Sanitize(manifest.ReleaseTag),
-            manifest.ExpectedSha256[..Math.Min(12, manifest.ExpectedSha256.Length)]);
-        Directory.CreateDirectory(cacheRoot);
-        var outputPath = Path.Combine(cacheRoot, manifest.PayloadBaseName);
-        var tmpPath = outputPath + ".tmp";
+        long missingBytes = missing.Sum(i => ExpectedPartBytes(manifest, i) ?? DefaultMaxPartBytes);
+        missingBytes = Math.Min(missingBytes, manifest.ExpectedBytes);
+        var downloadDir = ChooseDownloadDir(exeDir, cacheDir, missingBytes + DownloadSpaceMarginBytes, log);
 
-        if (File.Exists(outputPath) &&
-            new FileInfo(outputPath).Length == manifest.ExpectedBytes &&
-            string.Equals(ComputeFileSha256(outputPath), manifest.ExpectedSha256, StringComparison.OrdinalIgnoreCase))
-        {
-            log("Using previously assembled payload: " + outputPath);
-            progress?.Invoke(InstallerProgress.OfBytes("Payload ready", "Using previously assembled payload.", 1, 1));
-            return outputPath;
-        }
+        log("============================================================");
+        log($"Downloading {missing.Count} of {manifest.Parts.Count} payload part file(s) ({FormatGb(missingBytes)}) from the {manifest.ReleaseTag} GitHub Release.");
+        log($"Release: https://github.com/{manifest.GithubOwner}/{manifest.GithubRepo}/releases/tag/{manifest.ReleaseTag}");
+        log("Saving parts to: " + downloadDir);
+        log("This can take a while. If it is interrupted, run the installer again; finished parts are kept.");
+        log("============================================================");
 
-        if (File.Exists(tmpPath))
+        long done = 0;
+        var position = 0;
+        foreach (var index in missing)
         {
-            File.Delete(tmpPath);
-        }
+            position++;
+            var name = manifest.Parts[index];
+            var destination = Path.Combine(downloadDir, name);
+            var url = BuildReleaseAssetUrl(manifest, name);
+            log($"DOWNLOAD: part {index + 1}/{manifest.Parts.Count} ({position} of {missing.Count} to fetch): {url}");
 
-        log("Joining payload parts...");
-        progress?.Invoke(InstallerProgress.Indeterminate("Assembling payload", "Joining downloaded payload parts..."));
-        long written = 0;
-        using (var output = File.Create(tmpPath))
-        {
-            var buffer = new byte[1024 * 1024];
-            foreach (var partPath in partPaths)
+            Exception? lastError = null;
+            for (var attempt = 1; attempt <= DownloadAttempts; attempt++)
             {
-                using var input = File.OpenRead(partPath);
-                int read;
-                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                var tmp = destination + ".tmp";
+                var before = done;
+                try
                 {
-                    output.Write(buffer, 0, read);
-                    written += read;
-                    if (manifest.ExpectedBytes > 0 && written % (64L * 1024L * 1024L) < buffer.Length)
+                    if (File.Exists(tmp))
                     {
-                        progress?.Invoke(InstallerProgress.OfBytes(
-                            "Assembling payload",
-                            "Joining downloaded payload parts...",
-                            written,
-                            manifest.ExpectedBytes));
+                        File.Delete(tmp);
                     }
+
+                    DownloadFile(url, tmp, manifest, index, missingBytes, ref done, log, progress);
+                    File.Move(tmp, destination, overwrite: true);
+                    lastError = null;
+                    break;
+                }
+                catch (ReleaseAssetNotFoundException)
+                {
+                    TryDelete(tmp);
+                    throw;
+                }
+                catch (Exception ex) when (ex is HttpRequestException or IOException or TaskCanceledException && !InstallerBackend.IsDiskFull(ex))
+                {
+                    TryDelete(tmp);
+                    done = before;
+                    lastError = ex;
+                    log($"DOWNLOAD: attempt {attempt}/{DownloadAttempts} for {name} failed: {ex.Message}");
                 }
             }
+
+            if (lastError is not null)
+            {
+                throw new InvalidOperationException(
+                    $"Could not download {name} after {DownloadAttempts} attempts: {lastError.Message}. Check your internet connection and run the installer again, or download the part files from the GitHub Release and put them next to the installer.",
+                    lastError);
+            }
+
+            partPaths[index] = destination;
+            log($"DOWNLOAD: finished {name}.");
         }
 
-        var actualBytes = new FileInfo(tmpPath).Length;
-        if (actualBytes != manifest.ExpectedBytes)
-        {
-            File.Delete(tmpPath);
-            throw new InvalidOperationException(
-                $"Assembled payload size mismatch: expected {manifest.ExpectedBytes:N0} bytes, actual {actualBytes:N0}.");
-        }
-
-        progress?.Invoke(InstallerProgress.Indeterminate("Verifying payload", "Checking SHA-256 of assembled payload..."));
-        log("Verifying assembled payload SHA-256...");
-        var actualHash = ComputeFileSha256(tmpPath);
-        if (!string.Equals(actualHash, manifest.ExpectedSha256, StringComparison.OrdinalIgnoreCase))
-        {
-            File.Delete(tmpPath);
-            throw new InvalidOperationException(
-                $"Assembled payload hash mismatch: expected {manifest.ExpectedSha256}, actual {actualHash}.");
-        }
-
-        if (File.Exists(outputPath))
-        {
-            File.Delete(outputPath);
-        }
-
-        File.Move(tmpPath, outputPath);
-        log("DOWNLOAD COMPLETE: Payload ready at " + outputPath);
-        progress?.Invoke(InstallerProgress.OfBytes("Download complete", "Payload download and verification finished.", 1, 1));
-        return outputPath;
+        progress?.Invoke(InstallerProgress.OfBytes("Download complete", "All payload parts are present.", 1, 1));
     }
+
+    private static string ChooseDownloadDir(string exeDir, string cacheDir, long bytesNeeded, Action<string> log)
+    {
+        // Prefer the installer folder: downloaded parts then sit exactly where an offline install
+        // expects them, and a later Repair can reuse them without downloading again.
+        foreach (var candidate in new[] { exeDir, cacheDir })
+        {
+            try
+            {
+                Directory.CreateDirectory(candidate);
+                var probe = Path.Combine(candidate, ".golden-era-write-test-" + Guid.NewGuid().ToString("N"));
+                File.WriteAllText(probe, "ok");
+                File.Delete(probe);
+                var free = InstallerBackend.GetFreeBytes(candidate);
+                if (free >= bytesNeeded)
+                {
+                    return candidate;
+                }
+
+                log($"Not enough free space for the download in {candidate}: {FormatGb(free)} free, {FormatGb(bytesNeeded)} needed.");
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                log($"Cannot save downloads in {candidate}: {ex.Message}");
+            }
+        }
+
+        throw new InvalidOperationException(
+            $"There is not enough free disk space to download the mod payload ({FormatGb(bytesNeeded)} needed). " +
+            "Free up space, or put the installer and the downloaded part files on a drive with more room and run it from there.");
+    }
+
+    private sealed class ReleaseAssetNotFoundException(string message) : InvalidOperationException(message);
 
     private static void DownloadFile(
         string url,
         string destinationPath,
-        long totalExpected,
+        DownloadManifest manifest,
+        int partIndex,
+        long totalToDownload,
         ref long downloadedTotal,
         Action<string> log,
-        Action<InstallerProgress>? progress,
-        int partNumber,
-        int partCount,
-        string partName)
+        Action<InstallerProgress>? progress)
     {
+        var partName = manifest.Parts[partIndex];
+        var partLabel = $"part {partIndex + 1}/{manifest.Parts.Count}";
         using var response = Http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).GetAwaiter().GetResult();
+        if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            throw new ReleaseAssetNotFoundException(
+                $"GitHub returned 404 Not Found for {url}. The {manifest.ReleaseTag} release may not be published yet, or it does not have this file. " +
+                "Download every payload part file from the release page and put them next to this installer, then run it again.");
+        }
         if (!response.IsSuccessStatusCode)
         {
-            throw new InvalidOperationException(
-                $"Failed to download payload asset from GitHub Releases ({(int)response.StatusCode} {response.ReasonPhrase}): {url}");
+            throw new HttpRequestException(
+                $"GitHub returned {(int)response.StatusCode} {response.ReasonPhrase} for {url}");
         }
 
         var contentLength = response.Content.Headers.ContentLength;
-        using var input = response.Content.ReadAsStream();
-        using var output = File.Create(destinationPath);
-        var buffer = new byte[1024 * 1024];
-        long partDownloaded = 0;
-        var lastLogged = 0L;
-        var lastProgress = DateTime.UtcNow;
-        int read;
-        while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+        if (ExpectedPartBytes(manifest, partIndex) is long expectedPart && contentLength is > 0 && contentLength.Value != expectedPart)
         {
-            output.Write(buffer, 0, read);
-            partDownloaded += read;
-            downloadedTotal += read;
-            var now = DateTime.UtcNow;
-            var shouldLog = partDownloaded - lastLogged >= 16L * 1024L * 1024L || (now - lastProgress) >= TimeSpan.FromSeconds(2);
-            if (shouldLog)
+            throw new InvalidOperationException(
+                $"The release asset {partName} is {contentLength.Value:N0} bytes, but this installer expects {expectedPart:N0}. The release assets do not match this installer.");
+        }
+
+        using var input = response.Content.ReadAsStream();
+        long partDownloaded = 0;
+        using (var output = new FileStream(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None, 1 << 20))
+        {
+            var buffer = new byte[1024 * 1024];
+            var lastReport = DateTime.MinValue;
+            var lastLoggedBytes = 0L;
+            int read;
+            while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
             {
-                lastLogged = partDownloaded;
-                lastProgress = now;
-                var overallMb = downloadedTotal / (1024d * 1024d);
-                var totalMb = totalExpected / (1024d * 1024d);
-                var pct = totalExpected > 0 ? (100d * downloadedTotal / totalExpected) : 0d;
-                if (contentLength is > 0)
+                output.Write(buffer, 0, read);
+                partDownloaded += read;
+                downloadedTotal += read;
+                var now = DateTime.UtcNow;
+                if ((now - lastReport) >= TimeSpan.FromSeconds(1))
                 {
-                    log($"DOWNLOAD: Part {partNumber}/{partCount} {partDownloaded / (1024d * 1024d):0.0}/{contentLength.Value / (1024d * 1024d):0.0} MB | overall {overallMb:0.0}/{totalMb:0.0} MB ({pct:0.0}%)");
-                }
-                else
-                {
-                    log($"DOWNLOAD: Part {partNumber}/{partCount} {partDownloaded / (1024d * 1024d):0.0} MB | overall {overallMb:0.0}/{totalMb:0.0} MB ({pct:0.0}%)");
+                    lastReport = now;
+                    progress?.Invoke(InstallerProgress.OfBytes(
+                        "Downloading payload",
+                        $"Downloading {partLabel}: {partName}",
+                        downloadedTotal,
+                        totalToDownload));
                 }
 
-                progress?.Invoke(InstallerProgress.OfBytes(
-                    "Downloading payload",
-                    $"Downloading part {partNumber}/{partCount}: {partName}",
-                    downloadedTotal,
-                    totalExpected));
+                if (partDownloaded - lastLoggedBytes >= 256L * 1024L * 1024L)
+                {
+                    lastLoggedBytes = partDownloaded;
+                    var partTotal = contentLength is > 0 ? $"/{contentLength.Value / 1e6:0}" : "";
+                    log($"DOWNLOAD: {partLabel} {partDownloaded / 1e6:0}{partTotal} MB | overall {downloadedTotal / 1e6:0}/{totalToDownload / 1e6:0} MB");
+                }
             }
         }
 
         if (contentLength is > 0 && partDownloaded != contentLength.Value)
         {
-            throw new InvalidOperationException(
+            throw new IOException(
                 $"Incomplete download for {url}: expected {contentLength.Value:N0} bytes, received {partDownloaded:N0}.");
         }
-
-        progress?.Invoke(InstallerProgress.OfBytes(
-            "Downloading payload",
-            $"Finished part {partNumber}/{partCount}: {partName}",
-            downloadedTotal,
-            totalExpected));
+        if (ExpectedPartBytes(manifest, partIndex) is long expected && partDownloaded != expected)
+        {
+            throw new IOException(
+                $"Incomplete download for {url}: expected {expected:N0} bytes, received {partDownloaded:N0}.");
+        }
     }
 
-    private static string BuildReleaseAssetUrl(DownloadManifest manifest, string assetName)
+    internal static string BuildReleaseAssetUrl(DownloadManifest manifest, string assetName)
     {
         var overrideBase = Environment.GetEnvironmentVariable("GOLDEN_ERA_INSTALLER_RELEASE_BASE_URL");
         if (!string.IsNullOrWhiteSpace(overrideBase))
         {
-            return overrideBase.TrimEnd('/') + "/" + Uri.EscapeDataString(assetName).Replace("%2F", "/");
+            return overrideBase.TrimEnd('/') + "/" + Uri.EscapeDataString(assetName);
         }
 
         return string.Concat(
@@ -490,12 +596,27 @@ internal static class PayloadAcquisition
         {
             throw new InvalidOperationException("Payload download manifest expectedSha256 is invalid.");
         }
+
+        foreach (var name in manifest.Parts.Append(manifest.PayloadBaseName))
+        {
+            if (string.IsNullOrWhiteSpace(name) ||
+                name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 ||
+                name is "." or "..")
+            {
+                throw new InvalidOperationException("Payload download manifest has an invalid file name: " + name);
+            }
+        }
+
+        if (manifest.PartBytes is { } sizes &&
+            (sizes.Count != manifest.Parts.Count || sizes.Any(s => s <= 0) || sizes.Sum() != manifest.ExpectedBytes))
+        {
+            throw new InvalidOperationException("Payload download manifest partBytes do not add up to expectedBytes.");
+        }
     }
 
     private static bool TryResolveAppendedPackage(string installerPath, out AcquiredPayload payload)
     {
         payload = default!;
-        // Delegated to InstallerBackend footer reader via shared constants — keep GERAPKG1 parsing here duplicated lightly.
         const string magic = "GERAPKG1";
         const int hashLength = 64;
         const int footerLength = hashLength + sizeof(long) + 8;
@@ -547,12 +668,7 @@ internal static class PayloadAcquisition
         payload = new AcquiredPayload(
             expectedHash,
             payloadLength,
-            () =>
-            {
-                var payloadStream = File.Open(installerPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                payloadStream.Seek(payloadOffset, SeekOrigin.Begin);
-                return new BoundedReadStream(payloadStream, payloadLength);
-            },
+            () => new ConcatenatedReadStream([installerPath], [payloadLength], payloadOffset),
             installerPath + "#embedded",
             Homm3UseUpscaledHeroPortraits: null);
         return true;
@@ -564,16 +680,40 @@ internal static class PayloadAcquisition
         {
             Timeout = TimeSpan.FromHours(6)
         };
-        client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("GoldenEraModInstaller", InstallerBackend.PackageVersion));
+        client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("GoldenEraModInstaller", SanitizeProductVersion(InstallerBackend.PackageVersion)));
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
         return client;
     }
 
-    private static string ComputeFileSha256(string path)
+    private static string SanitizeProductVersion(string version)
+    {
+        var builder = new StringBuilder();
+        foreach (var ch in version)
+        {
+            builder.Append(char.IsLetterOrDigit(ch) || ch is '.' or '-' or '_' ? ch : '-');
+        }
+
+        return builder.Length == 0 ? "local" : builder.ToString();
+    }
+
+    private static string ComputeFileSha256(string path, Action<string> log, Action<InstallerProgress>? progress)
     {
         using var stream = File.OpenRead(path);
-        var hash = SHA256.HashData(stream);
-        return Convert.ToHexString(hash).ToLowerInvariant();
+        return InstallerBackend.ComputeStreamSha256WithProgress(stream, stream.Length, "Verifying payload", progress);
+    }
+
+    private static void TryDelete(string path)
+    {
+        try
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+        catch
+        {
+        }
     }
 
     private static string Sanitize(string text)
@@ -588,66 +728,143 @@ internal static class PayloadAcquisition
         return builder.ToString();
     }
 
-    private sealed class BoundedReadStream : Stream
+    /// <summary>
+    /// Read-only, seekable view of several files (or a slice of one file) as one stream, so the
+    /// split payload can be hashed and unzipped in place without joining the parts on disk.
+    /// </summary>
+    internal sealed class ConcatenatedReadStream : Stream
     {
-        private readonly Stream inner;
-        private long remaining;
+        private readonly string[] paths;
+        private readonly long[] lengths;
+        private readonly long[] starts;
+        private readonly long firstOffset;
+        private readonly long totalLength;
+        private FileStream? current;
+        private int currentIndex = -1;
+        private long position;
 
-        public BoundedReadStream(Stream inner, long length)
+        public ConcatenatedReadStream(IReadOnlyList<string> paths, IReadOnlyList<long> lengths, long firstOffset = 0)
         {
-            this.inner = inner;
-            remaining = length;
+            if (paths.Count == 0 || paths.Count != lengths.Count)
+            {
+                throw new ArgumentException("paths and lengths must be non-empty and the same size.");
+            }
+
+            this.paths = paths.ToArray();
+            this.lengths = lengths.ToArray();
+            this.firstOffset = firstOffset;
+            starts = new long[this.paths.Length];
+            long sum = 0;
+            for (var i = 0; i < this.paths.Length; i++)
+            {
+                starts[i] = sum;
+                sum += this.lengths[i];
+            }
+
+            totalLength = sum;
         }
 
         public override bool CanRead => true;
-        public override bool CanSeek => false;
+        public override bool CanSeek => true;
         public override bool CanWrite => false;
-        public override long Length => throw new NotSupportedException();
+        public override long Length => totalLength;
+
         public override long Position
         {
-            get => throw new NotSupportedException();
-            set => throw new NotSupportedException();
+            get => position;
+            set => Seek(value, SeekOrigin.Begin);
         }
 
-        public override int Read(byte[] buffer, int offset, int count)
-        {
-            if (remaining <= 0)
-            {
-                return 0;
-            }
-
-            var allowed = (int)Math.Min(count, remaining);
-            var read = inner.Read(buffer, 0, allowed);
-            remaining -= read;
-            return read;
-        }
+        public override int Read(byte[] buffer, int offset, int count) => Read(buffer.AsSpan(offset, count));
 
         public override int Read(Span<byte> buffer)
         {
-            if (remaining <= 0)
+            if (buffer.Length == 0 || position >= totalLength)
             {
                 return 0;
             }
 
-            var allowed = (int)Math.Min(buffer.Length, remaining);
-            var read = inner.Read(buffer[..allowed]);
-            remaining -= read;
+            var index = FindIndex(position);
+            var stream = OpenPart(index);
+            var withinPart = position - starts[index];
+            var fileOffset = withinPart + (index == 0 ? firstOffset : 0);
+            if (stream.Position != fileOffset)
+            {
+                stream.Position = fileOffset;
+            }
+
+            var allowed = (int)Math.Min(buffer.Length, lengths[index] - withinPart);
+            var read = stream.Read(buffer[..allowed]);
+            if (read <= 0)
+            {
+                throw new EndOfStreamException($"Payload part ended early: {paths[index]}");
+            }
+
+            position += read;
             return read;
+        }
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            var target = origin switch
+            {
+                SeekOrigin.Begin => offset,
+                SeekOrigin.Current => position + offset,
+                SeekOrigin.End => totalLength + offset,
+                _ => throw new ArgumentOutOfRangeException(nameof(origin))
+            };
+            if (target < 0)
+            {
+                throw new IOException("Seek before the start of the payload.");
+            }
+
+            position = target;
+            return position;
         }
 
         public override void Flush()
         {
         }
 
-        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
         public override void SetLength(long value) => throw new NotSupportedException();
         public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+        private int FindIndex(long pos)
+        {
+            var index = Array.BinarySearch(starts, pos);
+            if (index < 0)
+            {
+                index = ~index - 1;
+            }
+
+            // Skip zero-length entries.
+            while (index < lengths.Length - 1 && pos - starts[index] >= lengths[index])
+            {
+                index++;
+            }
+
+            return index;
+        }
+
+        private FileStream OpenPart(int index)
+        {
+            if (currentIndex == index && current is not null)
+            {
+                return current;
+            }
+
+            current?.Dispose();
+            current = new FileStream(paths[index], FileMode.Open, FileAccess.Read, FileShare.Read, 1 << 16, FileOptions.RandomAccess);
+            currentIndex = index;
+            return current;
+        }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                inner.Dispose();
+                current?.Dispose();
+                current = null;
             }
 
             base.Dispose(disposing);

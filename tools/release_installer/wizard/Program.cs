@@ -13,7 +13,7 @@ internal static class Program
         if (args.Any(arg => string.Equals(arg, "--verify-payload", StringComparison.OrdinalIgnoreCase)))
         {
             var logPath = Path.Combine(
-                InstallerBackend.GetInstallerCacheRoot(),
+                InstallerBackend.GetLogDirectory(),
                 "verify-payload.log");
             Directory.CreateDirectory(Path.GetDirectoryName(logPath)!);
             using var logWriter = new StreamWriter(logPath, append: false) { AutoFlush = true };
@@ -51,9 +51,121 @@ internal static class Program
             return isValid ? 0 : 1;
         }
 
+        if (args.Any(arg => string.Equals(arg, "--print-plan", StringComparison.OrdinalIgnoreCase)))
+        {
+            Console.Error.WriteLine(PayloadAcquisition.DescribePlan());
+            foreach (var url in PayloadAcquisition.DescribeDownloadUrls())
+            {
+                Console.Error.WriteLine(url);
+            }
+            return 0;
+        }
+
+        var headlessIndex = Array.FindIndex(args, arg => string.Equals(arg, "--headless", StringComparison.OrdinalIgnoreCase));
+        if (headlessIndex >= 0)
+        {
+            return RunHeadless(args);
+        }
+
         ApplicationConfiguration.Initialize();
         Application.Run(new WizardInstallerForm());
         return 0;
+    }
+
+    // Unattended mode for testing and scripted installs:
+    //   GoldenEraModInstaller.exe --headless --operation install --source <clean Olden Era folder>
+    //       --target <modded copy folder> --homm3 <HoMM3 folder> [--log <file>]
+    private static int RunHeadless(string[] args)
+    {
+        string? Arg(string name)
+        {
+            var index = Array.FindIndex(args, arg => string.Equals(arg, name, StringComparison.OrdinalIgnoreCase));
+            return index >= 0 && index + 1 < args.Length ? args[index + 1] : null;
+        }
+
+        var operationText = Arg("--operation") ?? "install";
+        if (!Enum.TryParse<InstallerOperation>(operationText, ignoreCase: true, out var operation))
+        {
+            Console.Error.WriteLine("Unknown --operation: " + operationText);
+            return 2;
+        }
+
+        using var log = new InstallerLog(Arg("--log"), echoToConsole: true);
+        var lastProgress = DateTime.MinValue;
+        try
+        {
+            log.Write("Log file: " + log.Path);
+            var request = new InstallRequest(operation, Arg("--source") ?? "", Arg("--target") ?? "", Arg("--homm3") ?? "", TargetIsAutoDefault: false);
+            InstallerBackend.Run(request, log.Write, progress =>
+            {
+                var now = DateTime.UtcNow;
+                if ((now - lastProgress) < TimeSpan.FromSeconds(15))
+                {
+                    return;
+                }
+
+                lastProgress = now;
+                var pct = progress.FractionComplete is double f ? $" {f * 100:0}%" : "";
+                log.Write($"[progress] {progress.Phase}: {progress.Detail}{pct}");
+            });
+            log.Write("HEADLESS_OK");
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            log.Write("ERROR: " + ex.Message);
+            log.Write(ex.ToString());
+            log.Write("HEADLESS_FAILED");
+            return 1;
+        }
+    }
+}
+
+/// <summary>Writes installer messages to a timestamped log file (and optionally stderr).</summary>
+internal sealed class InstallerLog : IDisposable
+{
+    private readonly StreamWriter? writer;
+    private readonly bool echoToConsole;
+    private readonly object gate = new();
+
+    public InstallerLog(string? path = null, bool echoToConsole = false)
+    {
+        this.echoToConsole = echoToConsole;
+        try
+        {
+            Path = string.IsNullOrWhiteSpace(path)
+                ? System.IO.Path.Combine(InstallerBackend.GetLogDirectory(), $"installer-{DateTime.Now:yyyyMMdd-HHmmss}.log")
+                : System.IO.Path.GetFullPath(path);
+            Directory.CreateDirectory(System.IO.Path.GetDirectoryName(Path)!);
+            writer = new StreamWriter(Path, append: true) { AutoFlush = true };
+        }
+        catch
+        {
+            Path = "(log file unavailable)";
+        }
+    }
+
+    public string Path { get; }
+
+    public void Write(string message)
+    {
+        var line = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {message}";
+        lock (gate)
+        {
+            try { writer?.WriteLine(line); } catch { /* never let logging break the install */ }
+            if (echoToConsole)
+            {
+                try { Console.Error.WriteLine(line); } catch { /* WinExe may have no console */ }
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        lock (gate)
+        {
+            writer?.Dispose();
+        }
     }
 }
 

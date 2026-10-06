@@ -28,6 +28,8 @@ internal static class InstallerBackend
 {
     private const string StateRelativePath = @"BepInEx\plugins\OfflineUnlockMod.install-state.json";
     private const string PluginRelativePath = @"BepInEx\plugins\OfflineUnlockMod";
+    private const string StagingFolderName = ".golden-era-package";
+    private const long DiskSpaceMarginBytes = 1_000_000_000L;
     private const ulong CompatibleSteamAppId = 3105440;
     private const ulong CompatibleSteamDepotId = 3105441;
     private const ulong CompatibleSteamManifestId = 7750145598966689713;
@@ -120,35 +122,83 @@ internal static class InstallerBackend
 
     public static void Run(InstallRequest request, Action<string> log, Action<InstallerProgress>? progress = null)
     {
-        switch (request.Operation)
+        log($"Golden Era installer {PackageVersion}: {request.Operation.ToString().ToLowerInvariant()}");
+        try
         {
-            case InstallerOperation.Install:
-            case InstallerOperation.Repair:
-                InstallOrRepair(request, log, progress);
-                break;
-            case InstallerOperation.Update:
-                UpdateExistingInstall(request, log, progress);
-                break;
-            case InstallerOperation.Uninstall:
-                Uninstall(request, log);
-                break;
-            default:
-                throw new InvalidOperationException("Unknown installer operation.");
+            switch (request.Operation)
+            {
+                case InstallerOperation.Install:
+                case InstallerOperation.Repair:
+                    InstallOrRepair(request, log, progress);
+                    break;
+                case InstallerOperation.Update:
+                    UpdateExistingInstall(request, log, progress);
+                    break;
+                case InstallerOperation.Uninstall:
+                    Uninstall(request, log);
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown installer operation.");
+            }
+        }
+        catch (Exception ex) when (IsDiskFull(ex))
+        {
+            throw new InvalidOperationException(
+                "The drive ran out of free space during the " + request.Operation.ToString().ToLowerInvariant() +
+                ". Free up space on the modded copy's drive (or choose a modded copy folder on another drive) and run the installer again. " +
+                "Details: " + ex.Message,
+                ex);
         }
     }
 
     public static void VerifyEmbeddedPayload(Action<string> log, Action<InstallerProgress>? progress = null)
     {
-        var package = PreparePackageCache(log, progress);
-        var manifest = LoadOverlayManifest(package.OverlayManifestPath);
+        var payloadSource = PayloadAcquisition.Resolve(log, progress);
+        using var stream = payloadSource.OpenRead();
+        VerifyPayloadHash(stream, payloadSource, log, progress);
+        stream.Position = 0;
+        using var zip = new ZipArchive(stream, ZipArchiveMode.Read, leaveOpen: true);
+        // Entry names may use either separator depending on the tool that built the zip.
+        var entries = new Dictionary<string, ZipArchiveEntry>(StringComparer.OrdinalIgnoreCase);
+        foreach (var entry in zip.Entries)
+        {
+            entries.TryAdd(NormalizeZipPath(entry.FullName), entry);
+        }
+
+        foreach (var required in RequiredPayloadEntries)
+        {
+            if (!entries.ContainsKey(required))
+            {
+                throw new InvalidOperationException("Release payload is missing " + required + ".");
+            }
+        }
+
+        var manifestEntry = entries["core_overlay/manifest.json"];
+        string manifestText;
+        using (var reader = new StreamReader(manifestEntry.Open(), Encoding.UTF8, detectEncodingFromByteOrderMarks: true))
+        {
+            manifestText = reader.ReadToEnd();
+        }
+
+        var manifest = ParseOverlayManifest(manifestText);
         if (manifest.OperationCount != manifest.Operations.Count)
         {
             throw new InvalidOperationException($"Overlay manifest operation count mismatch: declared {manifest.OperationCount}, found {manifest.Operations.Count}.");
         }
 
-        log("Verified release payload: " + package.PayloadZipPath);
+        log("Verified release payload: " + payloadSource.SourceDescription);
+        log("Zip entries: " + zip.Entries.Count.ToString("N0") + ", uncompressed " + PayloadAcquisition.FormatGb(zip.Entries.Sum(e => e.Length)));
         log("Overlay operations: " + manifest.Operations.Count.ToString("N0"));
     }
+
+    private static readonly string[] RequiredPayloadEntries =
+    [
+        "payload/BepInEx/plugins/OfflineUnlockMod/OfflineUnlockMod.dll",
+        "payload/BepInEx/core/BepInEx.Unity.IL2CPP.dll",
+        "payload/game_root/winhttp.dll",
+        "payload/game_root/dotnet/coreclr.dll",
+        "core_overlay/manifest.json"
+    ];
 
     public static string GetPreferredTargetRoot(string sourceRoot)
     {
@@ -160,7 +210,7 @@ internal static class InstallerBackend
                 var parent = Directory.GetParent(fullSource);
                 if (parent is not null)
                 {
-                    return Path.Combine(parent.FullName, "Heroes of Might and Magic Olden Era - Golden Era");
+                    return FirstUsableTargetName(Path.Combine(parent.FullName, "Heroes of Might and Magic Olden Era - Golden Era"));
                 }
             }
             catch
@@ -169,6 +219,24 @@ internal static class InstallerBackend
         }
 
         return GetLocalAppDataTargetRoot();
+    }
+
+    private static string FirstUsableTargetName(string baseTarget)
+    {
+        // Never suggest a folder that already holds files this installer did not create
+        // (for example a hand-made modded copy): Install refuses to touch it anyway.
+        for (var i = 1; i < 100; i++)
+        {
+            var candidate = i == 1 ? baseTarget : $"{baseTarget} {i}";
+            if (!Directory.Exists(candidate) ||
+                !Directory.EnumerateFileSystemEntries(candidate).Any() ||
+                File.Exists(Path.Combine(candidate, StateRelativePath)))
+            {
+                return candidate;
+            }
+        }
+
+        return baseTarget;
     }
 
     public static bool IsValidHomm3Root(string path)
@@ -220,46 +288,89 @@ internal static class InstallerBackend
 
     private static void InstallOrRepair(InstallRequest request, Action<string> log, Action<InstallerProgress>? progress)
     {
-        var sourceRoot = RequireGameRoot(request.SourceGameRoot, "Steam Olden Era source folder");
+        var sourceRoot = RequireGameRoot(request.SourceGameRoot, "clean Olden Era source folder");
         var homm3Root = RequireHomm3Root(request.Homm3Root);
         var preferredTarget = GetPreferredTargetRoot(sourceRoot);
         var targetRoot = ResolveTargetRoot(request.TargetGameRoot, preferredTarget, request.TargetIsAutoDefault);
 
         GuardDistinctRoots(sourceRoot, targetRoot);
+        GuardTargetIsOursOrEmpty(targetRoot);
+        log("Clean source: " + sourceRoot);
+        log("Modded copy: " + targetRoot);
 
-        var package = PreparePackageCache(log, progress);
-        var overlayManifest = LoadOverlayManifest(package.OverlayManifestPath);
-
+        progress?.Invoke(InstallerProgress.Indeterminate("Checking source", "Checking the clean Olden Era folder..."));
         log("Validating compatible Olden Era source binaries...");
         log(ValidateCompatibleGameRoot(sourceRoot, "Compatible Olden Era source verified"));
 
-        log("Validating clean Steam source Core.zip...");
-        ValidateSourceCoreZip(GetCoreZipPath(sourceRoot), overlayManifest);
+        Directory.CreateDirectory(targetRoot);
+        var stagingRoot = Path.Combine(targetRoot, StagingFolderName);
+        try
+        {
+            var sourceBytes = GetDirectorySize(sourceRoot, relative => !ShouldSkipSourceEntry(relative, isDirectory: false));
+            var existingBytes = GetDirectorySize(targetRoot, _ => true);
+            var package = PreparePackageCache(log, progress, stagingRoot, Math.Max(0, sourceBytes - existingBytes));
+            var overlayManifest = LoadOverlayManifest(package.OverlayManifestPath);
 
-        log("Copying clean Steam source to modded target...");
-        CopyCleanGameRoot(sourceRoot, targetRoot, log);
+            log("Validating clean source Core.zip...");
+            ValidateSourceCoreZip(GetCoreZipPath(sourceRoot), overlayManifest);
 
-        log("Installing BepInEx, Doorstop, Golden Era payload, and live-parity binaries into target copy...");
-        InstallPayloadIntoTarget(targetRoot, package.ExtractRoot);
+            log($"Copying clean Olden Era files to the modded copy ({PayloadAcquisition.FormatGb(sourceBytes)})...");
+            progress?.Invoke(InstallerProgress.Indeterminate("Copying game", "Copying the clean Olden Era folder to the modded copy..."));
+            CopyCleanGameRoot(sourceRoot, targetRoot, log, progress, sourceBytes);
 
-        log("Applying Core.zip overlay to target copy...");
-        var cleanCoreBackup = ApplyCoreOverlay(GetCoreZipPath(targetRoot), package.OverlayManifestPath, package.ExtractRoot);
-        ValidatePatchedCoreZip(GetCoreZipPath(targetRoot), overlayManifest);
+            log("Installing BepInEx, Doorstop, Golden Era payload, and live-parity binaries into target copy...");
+            progress?.Invoke(InstallerProgress.Indeterminate("Installing mod", "Installing BepInEx and the Golden Era payload..."));
+            InstallPayloadIntoTarget(targetRoot, package.ExtractRoot);
 
-        var launcherPath = WriteLauncher(targetRoot);
-        WriteInstallState(
-            targetRoot,
-            sourceRoot,
-            homm3Root,
-            package,
-            launcherPath,
-            cleanCoreBackup,
-            existingState: null,
-            request.Operation == InstallerOperation.Repair ? "repair" : "install");
+            log("Applying Core.zip overlay to target copy...");
+            progress?.Invoke(InstallerProgress.Indeterminate("Patching Core.zip", "Applying the Golden Era Core.zip overlay..."));
+            var cleanCoreBackup = ApplyCoreOverlay(GetCoreZipPath(targetRoot), package.OverlayManifestPath, package.ExtractRoot);
+            ValidatePatchedCoreZip(GetCoreZipPath(targetRoot), overlayManifest);
 
-        log("Steam source folder was left unchanged: " + sourceRoot);
-        log("Golden Era target copy: " + targetRoot);
-        log("Launcher: " + launcherPath);
+            var launcherPath = WriteLauncher(targetRoot);
+            WriteInstallState(
+                targetRoot,
+                sourceRoot,
+                homm3Root,
+                package,
+                launcherPath,
+                cleanCoreBackup,
+                existingState: null,
+                request.Operation == InstallerOperation.Repair ? "repair" : "install");
+
+            log("Clean source folder was left unchanged: " + sourceRoot);
+            log("Golden Era target copy: " + targetRoot);
+            log("Launcher: " + launcherPath);
+        }
+        finally
+        {
+            DeleteStaging(stagingRoot, log);
+        }
+    }
+
+    private static void GuardTargetIsOursOrEmpty(string targetRoot)
+    {
+        if (!Directory.Exists(targetRoot) || !Directory.EnumerateFileSystemEntries(targetRoot).Any())
+        {
+            return;
+        }
+
+        if (File.Exists(Path.Combine(targetRoot, StateRelativePath)))
+        {
+            return;
+        }
+
+        var onlyLeftovers = Directory.EnumerateFileSystemEntries(targetRoot)
+            .All(entry => string.Equals(Path.GetFileName(entry), StagingFolderName, StringComparison.OrdinalIgnoreCase));
+        if (onlyLeftovers)
+        {
+            return;
+        }
+
+        throw new InvalidOperationException(
+            "The modded copy folder already contains files that were not installed by this installer: " + targetRoot +
+            ". To protect them, the installer will not overwrite it. Choose a new or empty folder for the Golden Era copy" +
+            " (or delete that folder yourself first if it is a leftover from a failed install).");
     }
 
     private static void UpdateExistingInstall(InstallRequest request, Action<string> log, Action<InstallerProgress>? progress)
@@ -268,7 +379,26 @@ internal static class InstallerBackend
         var state = ReadInstallState(targetRoot);
         ValidateSideBySideState(targetRoot, state);
 
-        var package = PreparePackageCache(log, progress);
+        var stagingRoot = Path.Combine(targetRoot, StagingFolderName);
+        try
+        {
+            UpdateFromStaging(request, targetRoot, state, stagingRoot, log, progress);
+        }
+        finally
+        {
+            DeleteStaging(stagingRoot, log);
+        }
+    }
+
+    private static void UpdateFromStaging(
+        InstallRequest request,
+        string targetRoot,
+        InstallState state,
+        string stagingRoot,
+        Action<string> log,
+        Action<InstallerProgress>? progress)
+    {
+        var package = PreparePackageCache(log, progress, stagingRoot, extraBytesNeeded: 0);
         var overlayManifest = LoadOverlayManifest(package.OverlayManifestPath);
         var targetCoreZip = GetCoreZipPath(targetRoot);
         var cleanCoreBackup = ResolveCleanCoreBackup(targetRoot, state, overlayManifest, log);
@@ -346,88 +476,130 @@ internal static class InstallerBackend
         log("Steam source folder was left unchanged: " + state.SourceGameRoot);
     }
 
-    private static PackageCache PreparePackageCache(Action<string> log, Action<InstallerProgress>? progress = null)
+    private static PackageCache PreparePackageCache(
+        Action<string> log,
+        Action<InstallerProgress>? progress,
+        string stagingRoot,
+        long extraBytesNeeded)
     {
-        progress?.Invoke(InstallerProgress.Indeterminate("Preparing payload", "Resolving Golden Era release payload..."));
+        progress?.Invoke(InstallerProgress.Indeterminate("Preparing payload", "Finding the Golden Era release payload..."));
         var payloadSource = PayloadAcquisition.Resolve(log, progress);
         var expectedHash = payloadSource.ExpectedSha256.ToLowerInvariant();
-        var portraitKey = payloadSource.Homm3UseUpscaledHeroPortraits switch
-        {
-            true => "upscaled",
-            false => "standard",
-            null => "embedded"
-        };
-        var shortHash = expectedHash[..Math.Min(12, expectedHash.Length)];
-        var cacheRoot = Path.Combine(
-            GetCacheBaseRoot(),
-            "PackageCache",
-            SanitizePathSegment(PackageVersion),
-            shortHash + "-" + portraitKey);
-        var payloadZipPath = Path.Combine(cacheRoot, "golden_era_release_payload.zip");
-        var extractRoot = Path.Combine(cacheRoot, "extracted");
-        Directory.CreateDirectory(cacheRoot);
 
-        if (!File.Exists(payloadZipPath) ||
-            !string.Equals(ComputeFileSha256(payloadZipPath), expectedHash, StringComparison.OrdinalIgnoreCase))
+        if (Directory.Exists(stagingRoot))
         {
-            log("Copying release payload into package cache...");
-            progress?.Invoke(InstallerProgress.Indeterminate("Caching payload", "Copying release payload into local package cache..."));
-            var tmpZip = payloadZipPath + ".tmp";
-            if (File.Exists(tmpZip)) File.Delete(tmpZip);
-            using (var resource = payloadSource.OpenRead())
-            using (var output = File.Create(tmpZip))
-            {
-                resource.CopyTo(output);
-            }
-
-            var actualHash = ComputeFileSha256(tmpZip);
-            if (!string.Equals(actualHash, expectedHash, StringComparison.OrdinalIgnoreCase))
-            {
-                File.Delete(tmpZip);
-                throw new InvalidOperationException($"Release payload hash mismatch: expected {expectedHash}, actual {actualHash}.");
-            }
-
-            if (File.Exists(payloadZipPath)) File.Delete(payloadZipPath);
-            File.Move(tmpZip, payloadZipPath);
-        }
-        else
-        {
-            log("Using cached release payload: " + payloadZipPath);
+            Directory.Delete(stagingRoot, recursive: true);
         }
 
-        var markerPath = Path.Combine(extractRoot, ".golden-era-cache-hash");
-        var markerValue = expectedHash + "|" + portraitKey;
-        if (!File.Exists(markerPath) ||
-            !string.Equals(File.ReadAllText(markerPath).Trim(), markerValue, StringComparison.OrdinalIgnoreCase) ||
-            !File.Exists(Path.Combine(extractRoot, @"core_overlay\manifest.json")) ||
-            !File.Exists(Path.Combine(extractRoot, @"payload\BepInEx\plugins\OfflineUnlockMod\OfflineUnlockMod.dll")))
+        using (var stream = payloadSource.OpenRead())
         {
-            if (Directory.Exists(extractRoot))
+            VerifyPayloadHash(stream, payloadSource, log, progress);
+            stream.Position = 0;
+            using var zip = new ZipArchive(stream, ZipArchiveMode.Read, leaveOpen: true);
+            var uncompressed = zip.Entries.Sum(e => e.Length);
+            var needed = uncompressed + extraBytesNeeded + DiskSpaceMarginBytes;
+            var parent = Directory.GetParent(stagingRoot)!.FullName;
+            var free = GetFreeBytes(parent);
+            log($"Disk space on {Path.GetPathRoot(parent)}: {PayloadAcquisition.FormatGb(free)} free, about {PayloadAcquisition.FormatGb(needed)} needed (payload {PayloadAcquisition.FormatGb(uncompressed)} + game files {PayloadAcquisition.FormatGb(extraBytesNeeded)} + margin).");
+            if (free < needed)
             {
-                Directory.Delete(extractRoot, recursive: true);
+                throw new InvalidOperationException(
+                    $"Not enough free disk space for the Golden Era copy: {PayloadAcquisition.FormatGb(free)} free on {Path.GetPathRoot(parent)}, about {PayloadAcquisition.FormatGb(needed)} needed. " +
+                    "Free up space or choose a modded copy folder on a drive with more room.");
             }
-            Directory.CreateDirectory(extractRoot);
-            log("Expanding release payload cache...");
-            progress?.Invoke(InstallerProgress.Indeterminate("Extracting payload", "Expanding release payload cache..."));
-            ZipFile.ExtractToDirectory(payloadZipPath, extractRoot, overwriteFiles: true);
-            File.WriteAllText(markerPath, markerValue, Encoding.ASCII);
+
+            log("Unpacking release payload into the modded copy...");
+            ExtractZip(zip, stagingRoot, uncompressed, progress);
         }
 
+        File.WriteAllText(Path.Combine(stagingRoot, ".golden-era-cache-hash"), expectedHash, Encoding.ASCII);
         if (payloadSource.Homm3UseUpscaledHeroPortraits is bool useUpscaled)
         {
-            ApplyPortraitConfig(extractRoot, useUpscaled, log);
+            ApplyPortraitConfig(stagingRoot, useUpscaled, log);
         }
 
         progress?.Invoke(InstallerProgress.OfBytes("Payload ready", "Release payload is ready.", 1, 1));
 
-        var overlayManifestPath = Path.Combine(extractRoot, @"core_overlay\manifest.json");
-        RequireFile(Path.Combine(extractRoot, @"payload\BepInEx\plugins\OfflineUnlockMod\OfflineUnlockMod.dll"), "Release payload is missing OfflineUnlockMod.dll.");
-        RequireFile(Path.Combine(extractRoot, @"payload\BepInEx\core\BepInEx.Unity.IL2CPP.dll"), "Release payload is missing BepInEx IL2CPP core.");
-        RequireFile(Path.Combine(extractRoot, @"payload\game_root\winhttp.dll"), "Release payload is missing Doorstop winhttp.dll.");
-        RequireFile(Path.Combine(extractRoot, @"payload\game_root\dotnet\coreclr.dll"), "Release payload is missing Doorstop CoreCLR runtime.");
+        var overlayManifestPath = Path.Combine(stagingRoot, @"core_overlay\manifest.json");
+        RequireFile(Path.Combine(stagingRoot, @"payload\BepInEx\plugins\OfflineUnlockMod\OfflineUnlockMod.dll"), "Release payload is missing OfflineUnlockMod.dll.");
+        RequireFile(Path.Combine(stagingRoot, @"payload\BepInEx\core\BepInEx.Unity.IL2CPP.dll"), "Release payload is missing BepInEx IL2CPP core.");
+        RequireFile(Path.Combine(stagingRoot, @"payload\game_root\winhttp.dll"), "Release payload is missing Doorstop winhttp.dll.");
+        RequireFile(Path.Combine(stagingRoot, @"payload\game_root\dotnet\coreclr.dll"), "Release payload is missing Doorstop CoreCLR runtime.");
         RequireFile(overlayManifestPath, "Release payload is missing Core overlay manifest.");
 
-        return new PackageCache(cacheRoot, extractRoot, payloadZipPath, overlayManifestPath, expectedHash, ComputeFileSha256(overlayManifestPath));
+        return new PackageCache(payloadSource.SourceDescription, stagingRoot, payloadSource.SourceDescription, overlayManifestPath, expectedHash, ComputeFileSha256(overlayManifestPath));
+    }
+
+    private static void VerifyPayloadHash(Stream stream, PayloadAcquisition.AcquiredPayload payloadSource, Action<string> log, Action<InstallerProgress>? progress)
+    {
+        log($"Checking SHA-256 of the release payload ({PayloadAcquisition.FormatGb(payloadSource.ExpectedBytes)})...");
+        var actual = ComputeStreamSha256WithProgress(stream, payloadSource.ExpectedBytes, "Verifying payload", progress);
+        if (!string.Equals(actual, payloadSource.ExpectedSha256, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException(
+                $"The release payload failed its SHA-256 check (expected {payloadSource.ExpectedSha256}, got {actual}). " +
+                "A part file is damaged or from a different release. Delete the payload part files, download them again from the same GitHub Release as this installer, and run it again.");
+        }
+
+        log("Payload SHA-256 OK: " + actual);
+    }
+
+    private static void ExtractZip(ZipArchive zip, string destinationRoot, long totalBytes, Action<InstallerProgress>? progress)
+    {
+        var root = EnsureTrailingSeparator(Path.GetFullPath(destinationRoot));
+        Directory.CreateDirectory(root);
+        long done = 0;
+        var lastReport = DateTime.MinValue;
+        var buffer = new byte[1 << 20];
+        foreach (var entry in zip.Entries)
+        {
+            var destination = Path.GetFullPath(Path.Combine(root, entry.FullName.Replace('/', Path.DirectorySeparatorChar)));
+            if (!destination.StartsWith(root, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException("Release payload contains an unsafe path: " + entry.FullName);
+            }
+
+            if (string.IsNullOrEmpty(entry.Name))
+            {
+                Directory.CreateDirectory(destination);
+                continue;
+            }
+
+            Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+            using (var input = entry.Open())
+            using (var output = new FileStream(destination, FileMode.Create, FileAccess.Write, FileShare.None, 1 << 16))
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    output.Write(buffer, 0, read);
+                    done += read;
+                    var now = DateTime.UtcNow;
+                    if ((now - lastReport) >= TimeSpan.FromMilliseconds(500))
+                    {
+                        lastReport = now;
+                        progress?.Invoke(InstallerProgress.OfBytes("Unpacking payload", "Unpacking the Golden Era payload...", done, totalBytes));
+                    }
+                }
+            }
+
+            File.SetLastWriteTime(destination, entry.LastWriteTime.DateTime);
+        }
+    }
+
+    private static void DeleteStaging(string stagingRoot, Action<string> log)
+    {
+        try
+        {
+            if (Directory.Exists(stagingRoot))
+            {
+                Directory.Delete(stagingRoot, recursive: true);
+            }
+        }
+        catch (Exception ex)
+        {
+            log("Could not remove the temporary payload folder " + stagingRoot + ": " + ex.Message + " (it is safe to delete it by hand).");
+        }
     }
 
     private static void ApplyPortraitConfig(string extractRoot, bool useUpscaledHeroPortraits, Action<string> log)
@@ -516,17 +688,30 @@ internal static class InstallerBackend
         }
     }
 
-    private static void CopyCleanGameRoot(string sourceRoot, string targetRoot, Action<string> log)
+    private static void CopyCleanGameRoot(string sourceRoot, string targetRoot, Action<string> log, Action<InstallerProgress>? progress, long totalBytes)
     {
         Directory.CreateDirectory(targetRoot);
         CleanTargetModFiles(targetRoot);
 
         var copiedFiles = 0;
-        CopyDirectoryContents(sourceRoot, targetRoot, sourceRoot, ref copiedFiles);
+        long copiedBytes = 0;
+        var lastReport = DateTime.MinValue;
+        void Report(long bytes)
+        {
+            copiedBytes += bytes;
+            var now = DateTime.UtcNow;
+            if ((now - lastReport) >= TimeSpan.FromMilliseconds(500))
+            {
+                lastReport = now;
+                progress?.Invoke(InstallerProgress.OfBytes("Copying game", "Copying the clean Olden Era folder to the modded copy...", copiedBytes, totalBytes));
+            }
+        }
+
+        CopyDirectoryContents(sourceRoot, targetRoot, sourceRoot, ref copiedFiles, Report);
         log($"Copied or refreshed {copiedFiles:N0} file(s) in target copy.");
     }
 
-    private static void CopyDirectoryContents(string sourceDir, string targetDir, string sourceRoot, ref int copiedFiles)
+    private static void CopyDirectoryContents(string sourceDir, string targetDir, string sourceRoot, ref int copiedFiles, Action<long> report)
     {
         Directory.CreateDirectory(targetDir);
 
@@ -537,7 +722,7 @@ internal static class InstallerBackend
             {
                 continue;
             }
-            CopyDirectoryContents(sourceSubDir, Path.Combine(targetDir, Path.GetFileName(sourceSubDir)), sourceRoot, ref copiedFiles);
+            CopyDirectoryContents(sourceSubDir, Path.Combine(targetDir, Path.GetFileName(sourceSubDir)), sourceRoot, ref copiedFiles, report);
         }
 
         foreach (var sourceFile in Directory.EnumerateFiles(sourceDir))
@@ -552,6 +737,7 @@ internal static class InstallerBackend
             Directory.CreateDirectory(Path.GetDirectoryName(targetFile)!);
             File.Copy(sourceFile, targetFile, overwrite: true);
             copiedFiles++;
+            report(new FileInfo(sourceFile).Length);
         }
     }
 
@@ -560,7 +746,8 @@ internal static class InstallerBackend
         var normalized = relativePath.Replace('/', '\\').TrimStart('\\');
         var firstSegment = normalized.Split('\\', 2)[0];
         if (string.Equals(firstSegment, "BepInEx", StringComparison.OrdinalIgnoreCase) ||
-            string.Equals(firstSegment, "dotnet", StringComparison.OrdinalIgnoreCase))
+            string.Equals(firstSegment, "dotnet", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(firstSegment, StagingFolderName, StringComparison.OrdinalIgnoreCase))
         {
             return true;
         }
@@ -686,19 +873,21 @@ internal static class InstallerBackend
         var bepinexPayload = Path.Combine(packageRoot, "payload", "BepInEx");
         var pluginPayload = Path.Combine(packageRoot, "payload", "BepInEx", "plugins", "OfflineUnlockMod");
 
-        CopyFile(Path.Combine(rootPayload, "winhttp.dll"), Path.Combine(targetRoot, "winhttp.dll"));
-        CopyDirectory(Path.Combine(rootPayload, "dotnet"), Path.Combine(targetRoot, "dotnet"));
+        // The payload is unpacked into a staging folder inside the target, so moving files into
+        // place is instant and needs no extra disk space.
+        MoveFile(Path.Combine(rootPayload, "winhttp.dll"), Path.Combine(targetRoot, "winhttp.dll"));
+        MoveDirectory(Path.Combine(rootPayload, "dotnet"), Path.Combine(targetRoot, "dotnet"));
         if (File.Exists(Path.Combine(rootPayload, ".doorstop_version")))
         {
-            CopyFile(Path.Combine(rootPayload, ".doorstop_version"), Path.Combine(targetRoot, ".doorstop_version"));
+            MoveFile(Path.Combine(rootPayload, ".doorstop_version"), Path.Combine(targetRoot, ".doorstop_version"));
         }
         WriteDoorstopConfig(Path.Combine(targetRoot, "doorstop_config.ini"));
 
         Directory.CreateDirectory(Path.Combine(targetRoot, "BepInEx"));
-        CopyDirectory(Path.Combine(bepinexPayload, "core"), Path.Combine(targetRoot, "BepInEx", "core"));
+        MoveDirectory(Path.Combine(bepinexPayload, "core"), Path.Combine(targetRoot, "BepInEx", "core"));
         if (Directory.Exists(Path.Combine(bepinexPayload, "patchers")))
         {
-            CopyDirectory(Path.Combine(bepinexPayload, "patchers"), Path.Combine(targetRoot, "BepInEx", "patchers"));
+            MoveDirectory(Path.Combine(bepinexPayload, "patchers"), Path.Combine(targetRoot, "BepInEx", "patchers"));
         }
         Directory.CreateDirectory(Path.Combine(targetRoot, "BepInEx", "config"));
         if (File.Exists(Path.Combine(bepinexPayload, "config", "BepInEx.cfg")))
@@ -708,7 +897,7 @@ internal static class InstallerBackend
         }
 
         Directory.CreateDirectory(Path.Combine(targetRoot, "BepInEx", "plugins"));
-        CopyDirectory(pluginPayload, Path.Combine(targetRoot, PluginRelativePath));
+        MoveDirectory(pluginPayload, Path.Combine(targetRoot, PluginRelativePath));
 
         ApplyLiveParityPayloads(targetRoot, packageRoot);
     }
@@ -734,21 +923,21 @@ internal static class InstallerBackend
         var dataRoot = Path.Combine(targetRoot, "HeroesOldenEra_Data");
         RequireDirectory(dataRoot, "Target is missing HeroesOldenEra_Data.");
 
-        CopyFile(
+        MoveFile(
             Path.Combine(unityPayload, "resources.assets"),
             Path.Combine(dataRoot, "resources.assets"));
-        CopyFile(
+        MoveFile(
             Path.Combine(unityPayload, "globalgamemanagers"),
             Path.Combine(dataRoot, "globalgamemanagers"));
-        CopyFile(
+        MoveFile(
             metadataPayload,
             Path.Combine(dataRoot, "il2cpp_data", "Metadata", "global-metadata.dat"));
 
         // Additive/overwrite curated StreamingAssets trees without deleting unrelated vanilla files.
-        foreach (var file in Directory.EnumerateFiles(streamingPayload, "*", SearchOption.AllDirectories))
+        foreach (var file in Directory.EnumerateFiles(streamingPayload, "*", SearchOption.AllDirectories).ToList())
         {
             var relative = Path.GetRelativePath(streamingPayload, file);
-            CopyFile(file, Path.Combine(dataRoot, "StreamingAssets", relative));
+            MoveFile(file, Path.Combine(dataRoot, "StreamingAssets", relative));
         }
     }
 
@@ -1072,9 +1261,11 @@ popd
         return root;
     }
 
-    private static OverlayManifest LoadOverlayManifest(string manifestPath)
+    private static OverlayManifest LoadOverlayManifest(string manifestPath) => ParseOverlayManifest(File.ReadAllText(manifestPath));
+
+    private static OverlayManifest ParseOverlayManifest(string json)
     {
-        var manifest = JsonSerializer.Deserialize<OverlayManifest>(File.ReadAllText(manifestPath), JsonOptions)
+        var manifest = JsonSerializer.Deserialize<OverlayManifest>(json, JsonOptions)
             ?? throw new InvalidOperationException("Core overlay manifest is unreadable.");
         if (manifest.Format != "hommoe-golden-era-release-overlay-v1" &&
             manifest.Format != "hommoe-stronghold-release-overlay-v1")
@@ -1146,7 +1337,9 @@ popd
     {
         if (!string.Equals(actual, expected, StringComparison.OrdinalIgnoreCase))
         {
-            throw new InvalidOperationException($"Downloaded depot {label} hash mismatch. Expected {expected}, actual {actual}.");
+            throw new InvalidOperationException(
+                $"The selected folder's {label} is not from Olden Era build 25672315 (expected SHA-256 {expected}, found {actual}). " +
+                $"Steam may have updated the game. Download the pinned build with the Steam console command \"{CompatibleSteamDepotCommand}\" and select that depot folder.");
         }
     }
 
@@ -1158,51 +1351,105 @@ popd
             return Path.GetFullPath(Environment.ExpandEnvironmentVariables(overrideRoot));
         }
 
-        // Prefer the Games volume so payload download/extract caches do not fill the system drive.
-        foreach (var candidate in new[]
-                 {
-                     @"V:\Games\GoldenEra\InstallerCache",
-                     @"V:\GoldenEra\InstallerCache"
-                 })
-        {
-            try
-            {
-                var root = Path.GetPathRoot(candidate);
-                if (!string.IsNullOrWhiteSpace(root) && Directory.Exists(root))
-                {
-                    return candidate;
-                }
-            }
-            catch
-            {
-            }
-        }
-
-        return Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "GoldenEra");
-    }
-
-    private static string GetLocalAppDataTargetRoot()
-    {
-        foreach (var parent in new[] { @"V:\Games", @"V:\" })
-        {
-            try
-            {
-                if (Directory.Exists(parent))
-                {
-                    return Path.Combine(parent, "Heroes of Might and Magic Olden Era - Golden Era");
-                }
-            }
-            catch
-            {
-            }
-        }
-
         return Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "GoldenEra",
-            "OldenEra");
+            "InstallerCache");
+    }
+
+    public static string GetLogDirectory() => Path.Combine(GetInstallerCacheRoot(), "Logs");
+
+    private static string GetLocalAppDataTargetRoot()
+    {
+        return Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "GoldenEra",
+            "Heroes of Might and Magic Olden Era - Golden Era");
+    }
+
+    public static long GetFreeBytes(string path)
+    {
+        var root = Path.GetPathRoot(Path.GetFullPath(path));
+        if (string.IsNullOrWhiteSpace(root))
+        {
+            return long.MaxValue;
+        }
+
+        try
+        {
+            return new DriveInfo(root).AvailableFreeSpace;
+        }
+        catch
+        {
+            return long.MaxValue;
+        }
+    }
+
+    public static bool IsDiskFull(Exception? ex)
+    {
+        for (var current = ex; current is not null; current = current.InnerException)
+        {
+            if (current is IOException)
+            {
+                var code = current.HResult & 0xFFFF;
+                if (code is 112 or 39)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static long GetDirectorySize(string root, Func<string, bool> includeRelative)
+    {
+        if (!Directory.Exists(root))
+        {
+            return 0;
+        }
+
+        long total = 0;
+        foreach (var file in Directory.EnumerateFiles(root, "*", SearchOption.AllDirectories))
+        {
+            var relative = Path.GetRelativePath(root, file);
+            if (relative.StartsWith(StagingFolderName, StringComparison.OrdinalIgnoreCase) || !includeRelative(relative))
+            {
+                continue;
+            }
+
+            try
+            {
+                total += new FileInfo(file).Length;
+            }
+            catch
+            {
+            }
+        }
+
+        return total;
+    }
+
+    public static string ComputeStreamSha256WithProgress(Stream stream, long totalBytes, string phase, Action<InstallerProgress>? progress)
+    {
+        using var sha = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+        var buffer = new byte[4 << 20];
+        long done = 0;
+        var lastReport = DateTime.MinValue;
+        int read;
+        while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+        {
+            sha.AppendData(buffer, 0, read);
+            done += read;
+            var now = DateTime.UtcNow;
+            if ((now - lastReport) >= TimeSpan.FromMilliseconds(500))
+            {
+                lastReport = now;
+                progress?.Invoke(InstallerProgress.OfBytes(phase, "Checking the SHA-256 hash of the payload...", done, totalBytes));
+            }
+        }
+
+        return Convert.ToHexString(sha.GetHashAndReset()).ToLowerInvariant();
     }
 
     private static string GetCacheBaseRoot() => GetInstallerCacheRoot();
@@ -1264,6 +1511,31 @@ corlib_dir = dotnet
         {
             CopyFile(file, Path.Combine(destination, Path.GetRelativePath(source, file)));
         }
+    }
+
+    private static void MoveDirectory(string source, string destination)
+    {
+        RequireDirectory(source, "Missing payload folder: " + source);
+        if (Directory.Exists(destination))
+        {
+            Directory.Delete(destination, recursive: true);
+        }
+        Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+        if (string.Equals(Path.GetPathRoot(Path.GetFullPath(source)), Path.GetPathRoot(Path.GetFullPath(destination)), StringComparison.OrdinalIgnoreCase))
+        {
+            Directory.Move(source, destination);
+        }
+        else
+        {
+            CopyDirectory(source, destination);
+        }
+    }
+
+    private static void MoveFile(string source, string destination)
+    {
+        RequireFile(source, "Missing payload file: " + source);
+        Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+        File.Move(source, destination, overwrite: true);
     }
 
     private static void CopyFile(string source, string destination)

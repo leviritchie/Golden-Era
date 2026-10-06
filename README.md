@@ -38,6 +38,7 @@ The current public package includes the expanded custom-faction framework and as
    - `GoldenEraModInstaller-*-standard-portraits.exe`
 3. Double-click the EXE. On first run it downloads the mod payload from that same Release (about 10.5 GB, split into 6 part files) and checks the SHA-256 hash before installing.
 4. The wizard will ask for a clean Olden Era build 25672315 folder (your Steam install if it's on that build, otherwise the depot download), a separate modded copy folder, and your HoMM3 installation.
+   The modded copy needs about 20 GB of free space on its drive (the game files plus the unpacked mod), and the download needs another 10.5 GB wherever the installer is saved.
 
 An internet connection is required for the first payload download. For an offline install, also download every payload part file from the Release (`golden_era_release_payload-v0.1.319.zip.part01` through `.part06`) into the same folder as the EXE before running it.
 

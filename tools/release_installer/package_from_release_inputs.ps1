@@ -11,6 +11,7 @@ param(
     [string]$GitHubRepo = "Golden-Era",
     [string]$PayloadBaseName = "",
     [long]$MaxPartBytes = 1900000000,
+    [string]$ReleaseAssetsDir = "",
     [switch]$CreateZip
 )
 
@@ -269,6 +270,7 @@ $assemblyVersion = Convert-VersionForAssembly $PackageVersion
     -r win-x64 `
     --self-contained true `
     -p:PublishSingleFile=true `
+    -p:IncludeNativeLibrariesForSelfExtract=true `
     -p:PublishTrimmed=false `
     -p:DebugType=None `
     -p:DebugSymbols=false `
@@ -320,14 +322,30 @@ elseif ($PayloadMode -eq "Download") {
 
     $payloadLength = [long](Get-Item -LiteralPath $ReleaseInputZipPath).Length
     $partNames = New-Object System.Collections.Generic.List[string]
+    $partBytes = New-Object System.Collections.Generic.List[long]
     if ($payloadLength -le $MaxPartBytes) {
         $partNames.Add($PayloadBaseName) | Out-Null
+        $partBytes.Add($payloadLength) | Out-Null
     }
     else {
         $partCount = [int][Math]::Ceiling($payloadLength / [double]$MaxPartBytes)
         for ($i = 1; $i -le $partCount; $i++) {
             $partNames.Add(("{0}.part{1:D2}" -f $PayloadBaseName, $i)) | Out-Null
+            $partBytes.Add([long][Math]::Min($MaxPartBytes, $payloadLength - (($i - 1) * $MaxPartBytes))) | Out-Null
         }
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($ReleaseAssetsDir)) {
+        $assetsFull = [System.IO.Path]::GetFullPath((Join-Path $RepoRoot $ReleaseAssetsDir))
+        for ($i = 0; $i -lt $partNames.Count; $i++) {
+            $assetPath = Join-Path $assetsFull $partNames[$i]
+            Require-Path $assetPath "Release asset is missing: $assetPath"
+            $assetLength = (Get-Item -LiteralPath $assetPath).Length
+            if ($assetLength -ne $partBytes[$i]) {
+                throw "Release asset $($partNames[$i]) is $assetLength bytes; the installer footer expects $($partBytes[$i])."
+            }
+        }
+        Write-Host "Release assets match the footer: $($partNames.Count) part(s) in $assetsFull"
     }
 
     $useUpscaled = $Homm3UseUpscaledHeroPortraits -eq "true"
@@ -341,6 +359,7 @@ elseif ($PayloadMode -eq "Download") {
         expectedBytes = $payloadLength
         parts = @($partNames)
         homm3UseUpscaledHeroPortraits = $useUpscaled
+        partBytes = @($partBytes)
     }
 
     $json = ($downloadManifest | ConvertTo-Json -Depth 8 -Compress)
@@ -362,7 +381,7 @@ elseif ($PayloadMode -eq "Download") {
 
     $manifestOut = Join-Path $StageFullPath ($installerName + ".download-manifest.json")
     ($downloadManifest | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $manifestOut -Encoding utf8
-    Write-Host "Appended GitHub download manifest ($($jsonBytes.Length) bytes) for $PayloadBaseName"
+    Write-Host "Appended payload download manifest ($($jsonBytes.Length) bytes) for $PayloadBaseName"
 }
 else {
     throw "Unknown PayloadMode: $PayloadMode"

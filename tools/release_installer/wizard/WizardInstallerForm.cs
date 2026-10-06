@@ -25,6 +25,7 @@ internal sealed class WizardInstallerForm : Form
         Multiline = true,
         ReadOnly = true,
         ScrollBars = ScrollBars.Vertical,
+        MaxLength = int.MaxValue,
         Font = new Font("Segoe UI", 9F)
     };
     private readonly ProgressBar progressBar = new()
@@ -55,6 +56,7 @@ internal sealed class WizardInstallerForm : Form
     private readonly Label homm3StatusLabel = NewWrapLabel();
 
     private readonly List<string> technicalLog = [];
+    private InstallerLog? installerLog;
 
     private WizardStep currentStep = WizardStep.Operation;
     private string lastAutoTarget = "";
@@ -76,7 +78,7 @@ internal sealed class WizardInstallerForm : Form
         };
         root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 180F));
+        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 240F));
         root.RowStyles.Add(new RowStyle(SizeType.Absolute, 68F));
         Controls.Add(root);
 
@@ -223,7 +225,7 @@ internal sealed class WizardInstallerForm : Form
                 break;
             case WizardStep.Progress:
                 titleLabel.Text = "Working";
-                subtitleLabel.Text = "If this installer needs the mod payload, it downloads it from GitHub Releases first. Do not close this window until the operation finishes.";
+                subtitleLabel.Text = "Do not close this window until the operation finishes.";
                 nextButton.Text = GetRunButtonText();
                 pageHost.Controls.Add(BuildProgressPage());
                 break;
@@ -293,7 +295,7 @@ internal sealed class WizardInstallerForm : Form
     {
         var panel = NewPagePanel();
         panel.Controls.Add(NewInfoLabel(
-            "Status and download progress appear in the bar and log below. A first-time install downloads about 10.5 GB from GitHub Releases."));
+            "Status and progress appear in the bar and log below. " + PayloadAcquisition.DescribePlan()));
         return panel;
     }
 
@@ -429,8 +431,13 @@ internal sealed class WizardInstallerForm : Form
         progressBar.Style = ProgressBarStyle.Marquee;
         progressBar.Value = 0;
         progressStatusLabel.Text = "Starting...";
+        installerLog?.Dispose();
+        installerLog = new InstallerLog();
         AppendLog(GetOperationStartMessage());
-        AppendLog("If the payload is not cached yet, the installer will download it from GitHub Releases now.");
+        AppendLog("Log file: " + installerLog.Path);
+        installerLog.Write("Source: " + sourcePathBox.Text.Trim());
+        installerLog.Write("Target: " + targetPathBox.Text.Trim());
+        installerLog.Write("HoMM3: " + homm3PathBox.Text.Trim());
 
         var request = new InstallRequest(
             GetOperation(),
@@ -461,18 +468,14 @@ internal sealed class WizardInstallerForm : Form
         }
         catch (Exception ex)
         {
+            // The technical lines are already in the log pane and the log file; end with the
+            // error itself so it is the last thing visible.
+            installerLog?.Write("ERROR: " + ex);
             AppendLog("Golden Era could not finish.");
-            AppendLog(ex.Message);
-            if (technicalLog.Count > 0)
-            {
-                AppendLog("Technical details:");
-                foreach (var line in technicalLog)
-                {
-                    AppendLog(line);
-                }
-            }
+            AppendLog("ERROR: " + ex.Message);
+            AppendLog("Full log: " + installerLog?.Path);
 
-            progressStatusLabel.Text = "Failed.";
+            progressStatusLabel.Text = "Failed: " + ex.Message;
             progressBar.Style = ProgressBarStyle.Continuous;
             progressBar.Value = 0;
             currentStep = WizardStep.Review;
@@ -481,6 +484,12 @@ internal sealed class WizardInstallerForm : Form
             backButton.Enabled = true;
             nextButton.Enabled = true;
             closeButton.Enabled = true;
+            MessageBox.Show(
+                this,
+                ex.Message + Environment.NewLine + Environment.NewLine + "Full log: " + installerLog?.Path,
+                "Golden Era could not finish",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
     }
 
@@ -707,6 +716,8 @@ internal sealed class WizardInstallerForm : Form
             technicalLog.Add(message);
         }
 
+        installerLog?.Write(message);
+
         AppendLog(message);
     }
 
@@ -800,7 +811,11 @@ internal sealed class WizardInstallerForm : Form
         }
 
         lines.Add("");
-        lines.Add("When you continue, the installer prepares the mod payload first. If it is not already cached, it downloads about 4 GB from this version's GitHub Release, then installs.");
+        lines.Add("When you continue, the installer prepares the mod payload first, then installs. " + PayloadAcquisition.DescribePlan());
+        if (UsesSourceStep())
+        {
+            lines.Add("The modded copy needs about 20 GB of free space on its drive (the game files plus the unpacked mod).");
+        }
 
         return string.Join(Environment.NewLine, lines);
     }
