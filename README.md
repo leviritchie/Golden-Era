@@ -1,3 +1,5 @@
+> **Preview build.** v0.1.319 is a preview, not a finished release. It still has a lot of issues: many units have very unfinished animations, and the quick play icons are broken. Expect rough edges, and please report what you find.
+
 > This release is built for Olden Era Steam build 25672315 (depot 3105441, manifest 7750145598966689713), the current Steam build as of October 2026. If your Steam install is on that build, just point the installer at it. If Steam has updated past it, the installer will walk you through downloading an extra copy of that build from Steam to make this as painless as possible.
 > The installer does not patch your Steam install in place. It copies your clean Steam game folder to a separate Golden Era folder and installs the mod into that copy only.
 
@@ -26,6 +28,8 @@ The current public package includes the expanded custom-faction framework and as
 
 ## Major Known Bugs
 
+- Many units still have very unfinished animations.
+- The quick play icons are broken.
 - The recruit panel can glitch in custom-faction towns. I'm investigating it.
 - Some flying creatures (griffins especially) still have rough flight animations.
 - Castle's Elite Strategem abilities (Spread Out, Compress, Ambush) currently do nothing on this game build.
