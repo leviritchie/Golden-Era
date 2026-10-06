@@ -1,8 +1,4 @@
-> [!IMPORTANT]
-> I've run out of github bandwidth for hosting the mod, so the installer will not work until I find another hosting solution, e.g. cloudflare. I'll have that ready with the next update.
->
-
-> This release is built for the Olden Era Steam build from June 4th. The installer will walk you through downloading an extra copy of that build from steam to make this as painless as possible.
+> This release is built for Olden Era Steam build 25672315 (depot 3105441, manifest 7750145598966689713), the current Steam build as of October 2026. If your Steam install is on that build, just point the installer at it. If Steam has updated past it, the installer will walk you through downloading an extra copy of that build from Steam to make this as painless as possible.
 > The installer does not patch your Steam install in place. It copies your clean Steam game folder to a separate Golden Era folder and installs the mod into that copy only.
 
 # Golden Era: A mod for Heroes of Might and Magic: Olden Era
@@ -15,30 +11,35 @@ This is an experimental early-access mod. Stronghold is still the most complete 
 
 - Adds multiple HoMM3-inspired custom faction ports to Olden Era.
 - Adds custom creature lineups, alternate creature upgrades, town screens, buildings, heroes, portraits, map sprites, unit animations, and music where available.
+- Full 3D town scenes for all 12 custom factions, built from the HoMM3 town art.
+- 3D animated creature models for the custom factions and HoMM3 neutrals, animated from the original HoMM3 animations.
+- 3D adventure-map meshes for faction towns and many HoMM3 map buildings, plus 3D artifact models.
+- Vanilla-style visual effects for unit abilities and idle auras.
 - Adds faction mechanics such as War Cries and other custom-faction rules as they are ported.
-- Ships a small installer EXE that downloads the BepInEx IL2CPP loader, Golden Era plugin payload, release-derived Core.zip overlay, campaign StreamingAssets, dialog-portrait Unity resources, and Factory city metadata pin from the matching GitHub Release.
+- Ships a small installer EXE that downloads the BepInEx IL2CPP loader, Golden Era plugin payload, release-derived Core.zip overlay, campaign StreamingAssets, dialog-portrait Unity resources, and Factory city metadata pin from the matching GitHub Release's assets.
 - Installs into a separate Golden Era game copy so launching Olden Era from Steam still runs the vanilla game.
 - Updates existing Golden Era copies in place when the target folder still has its installer-created clean `Core.zip` baseline.
 
 ## Current Faction Status
 
-The current public package includes the expanded custom-faction framework and assets for Castle, Rampart, Tower, Inferno, Necropolis, Dungeon, Stronghold, Fortress, Conflux, and Cove. Stronghold remains the most complete reference implementation. I need your balance suggestions, since I spent the last month making this mod instead of playing Olden Era, so I don't know how to balance it.
+The current public package includes the expanded custom-faction framework and assets for Castle, Rampart, Tower, Inferno, Necropolis, Dungeon, Stronghold, Fortress, Conflux, Cove, Factory, and Bulwark. Stronghold remains the most complete reference implementation. I need your balance suggestions, since I spent the last month making this mod instead of playing Olden Era, so I don't know how to balance it.
 
 ## Major Known Bugs
 
-- The back arrow doesn't work in town menus. You have to click the relevant button, such as build tree, again.
-- Buildings in town are not clickable yet.
-- 
+- The recruit panel can glitch in custom-faction towns. I'm investigating it.
+- Some flying creatures (griffins especially) still have rough flight animations.
+- Castle's Elite Strategem abilities (Spread Out, Compress, Ambush) currently do nothing on this game build.
+
 ## Installation
 
 1. Make sure both Olden Era and Heroes of Might and Magic 3 are installed on your computer.
 2. Open the latest GitHub Release and download one portrait variant EXE:
    - `GoldenEraModInstaller-*-upscaled-portraits.exe`, or
    - `GoldenEraModInstaller-*-standard-portraits.exe`
-3. Double-click the EXE. On first run it downloads the mod payload from that same Release (about 4GB) and checks the SHA-256 hash before installing.
-4. The wizard will ask for your clean Steam Olden Era folder, a separate modded copy folder, and your HoMM3 installation.
+3. Double-click the EXE. On first run it downloads the mod payload from that same Release (about 10.5 GB, split into 6 part files) and checks the SHA-256 hash before installing.
+4. The wizard will ask for a clean Olden Era build 25672315 folder (your Steam install if it's on that build, otherwise the depot download), a separate modded copy folder, and your HoMM3 installation.
 
-An internet connection is required for the first payload download. For an offline install, also download every `golden_era_release_payload-*.zip.partNN` file from the Release into the same folder as the EXE before running it.
+An internet connection is required for the first payload download. For an offline install, also download every payload part file from the Release (`golden_era_release_payload-v0.1.319.zip.part01` through `.part06`) into the same folder as the EXE before running it.
 
 ## Modding Guide
 
@@ -65,7 +66,7 @@ No, the mod installs into a separate game folder that does not get automatic ste
 Yes. Steam should keep launching your untouched vanilla install. Use `Launch Golden Era.cmd` from the separate target folder when you want to play the mod.
 
 ### How do I submit bug reports, balance feedback, and suggestions?
-Use the Issues tab in github and choose the relevant form: Bug report, Balance issue, or Suggestion. This repo is the only place feedback will be monitored.
+Use the Issues tab in github and choose the relevant form: Bug report, Balance issue, or Suggestion. You can also report bugs from the in-game bug report button. A report includes your description, the mod's log files with file paths and usernames scrubbed, a list of installed mod files, and a screenshot only if you tick the box. Reports go to a private folder only I can see and are deleted after 90 days. GitHub Issues and in-game reports are the only places feedback will be monitored.
 
 ### Why not make a discord server or subreddit for feedback?
 Because I don't want to moderate one.
@@ -80,10 +81,10 @@ No. The damage histogram is now a separate mod/project and is not included in th
 I do not need money to make this mod. However, if you would like to contribute to my marriage, you may donate to my kofi to make my wife less upset about my cloud compute spending: https://ko-fi.com/levi9753
 
 ### Is this AI slop?
-RIFE 60fps animations are technically AI, but much more similar to DLSS/FSR than what you probably think of as Generative AI. Otherwise, there are no AI-generated visuals or audio in the standard release of this game. The upscaled portrait release uses AI to increase the detail and resolution of original HoMM3 portraits, though the original art is still being used as ground truth. IDEs with coding LLM support were heavily used when building the mod, and that was, in some sense, the real purpose of me building this mod. See the "About Me" section for more details.
+RIFE 60fps animations are technically AI, but much more similar to DLSS/FSR than what you probably think of as Generative AI. The 3D unit and building models were made with the help of AI 3D-modeling tools, using the original HoMM3 art as the reference, and the units are animated from the original HoMM3 animations. There is no AI-generated audio. The upscaled portrait release uses AI to increase the detail and resolution of original HoMM3 portraits, though the original art is still being used as ground truth. IDEs with coding LLM support were heavily used when building the mod, and that was, in some sense, the real purpose of me building this mod. See the "About Me" section for more details.
 
 ### My antivirus says this is malware
-It's not, you can inspect the source to prove it. The installer is a large self-extracting EXE because it contains the mod payload, so you may have to click a "Run Anyway" button or something similar.
+It's not, you can inspect the source to prove it. The installer is an unsigned EXE that downloads the mod payload from this repo's Releases, so you may have to click a "Run Anyway" button or something similar.
 
 ## About Me
 I am a Senior Data Scientist with a long-time passion for video games. I have been working with and training language models since well before ChatGPT became popular, and for the sake of my career and knowledge, I was overdue on learning the ins and outs of various coding tools that have recently become available. This project began as an experiment to see what Cursor was capable of, and the scope of the project expanded as I explored other tools (Claude Code, Codex, Cline with Deepseek v4 Pro). Eventually, I decided to polish this up and open it to feedback, so I could learn a bit more about handling github issues and messy technical projects like this one.

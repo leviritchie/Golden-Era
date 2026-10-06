@@ -1,13 +1,20 @@
-name: release
+name: rebuild installers
+
+# Releases are assembled locally and uploaded as GitHub Release assets (no Git LFS).
+# This workflow only rebuilds the thin installers for an existing release from that
+# release's own payload assets, and uploads them as workflow artifacts. It never
+# creates, edits or publishes a release, so publishing a draft release does not
+# trigger it.
 
 on:
-  push:
-    tags:
-      - "v*"
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag whose payload assets should be used (for example v0.1.319)"
+        required: true
 
 permissions:
-  contents: write
+  contents: read
   id-token: write
   attestations: write
 
@@ -19,50 +26,39 @@ jobs:
       - name: Check out
         uses: actions/checkout@v4
         with:
-          lfs: true
+          lfs: false
 
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
 
-      - name: Assemble release input from LFS parts
+      - name: Download payload parts from the release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = "${{ inputs.tag }}"
+          $safeVersion = $tag -replace '[<>:"/\\|?*]', '_'
+          $payloadBase = "golden_era_release_payload-$safeVersion.zip"
+          $dl = "dist/release-download"
+          New-Item -ItemType Directory -Path $dl -Force | Out-Null
+          gh release download $tag --repo "${{ github.repository }}" --dir $dl --pattern "$payloadBase.part*" --pattern "$payloadBase.sha256"
+          if ($LASTEXITCODE -ne 0) { throw "gh release download failed" }
+          New-Item -ItemType Directory -Path release_inputs -Force | Out-Null
+          Get-ChildItem -LiteralPath $dl -File -Filter "$payloadBase.part*" | ForEach-Object {
+            Move-Item -LiteralPath $_.FullName -Destination ("release_inputs/golden_era_release_payload.zip" + $_.Name.Substring($payloadBase.Length)) -Force
+          }
+          $sha = (Get-Content -LiteralPath "$dl/$payloadBase.sha256").Split(" ")[0].Trim().ToLowerInvariant()
+          "$sha  golden_era_release_payload.zip" | Set-Content -Path release_inputs/golden_era_release_payload.zip.sha256 -Encoding ASCII
+          "PACKAGE_VERSION=$tag" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "PAYLOAD_BASE_NAME=$payloadBase" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "PACKAGE_ROOT=dist/Golden-Era-Mod-$safeVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Assemble and verify release input
         shell: pwsh
         run: |
           powershell -ExecutionPolicy Bypass -File tools/release_installer/assemble_release_input.ps1
-
-      - name: Verify release input checksum
-        shell: pwsh
-        run: |
-          $expected = (Get-Content release_inputs/golden_era_release_payload.zip.sha256).Split(" ")[0].Trim().ToLowerInvariant()
-          $actual = (Get-FileHash release_inputs/golden_era_release_payload.zip -Algorithm SHA256).Hash.ToLowerInvariant()
-          if ($actual -ne $expected) {
-            throw "release input checksum mismatch: expected $expected actual $actual"
-          }
-
-      - name: Split shared payload for GitHub Release download
-        shell: pwsh
-        run: |
-          if ("${{ github.ref_type }}" -eq "tag") {
-            $version = "${{ github.ref_name }}"
-          } else {
-            $version = "manual-${{ github.run_number }}"
-          }
-          $safeVersion = $version -replace '[<>:"/\\|?*]', '_'
-          $payloadBase = "golden_era_release_payload-$safeVersion.zip"
-          $assetDir = "dist/release-assets"
-          if (Test-Path -LiteralPath $assetDir) {
-            Remove-Item -LiteralPath $assetDir -Recurse -Force
-          }
-          New-Item -ItemType Directory -Path $assetDir -Force | Out-Null
-          powershell -ExecutionPolicy Bypass -File tools/release_installer/split_release_asset.ps1 `
-            -InputFile "release_inputs/golden_era_release_payload.zip" `
-            -OutDir $assetDir `
-            -OutputBaseName $payloadBase `
-            -MaxPartBytes 1900000000
-          "PACKAGE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "PAYLOAD_BASE_NAME=$payloadBase" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "PACKAGE_ROOT=dist/Golden-Era-Mod-$safeVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Build thin installer packages
         shell: pwsh
@@ -70,115 +66,27 @@ jobs:
           $version = $env:PACKAGE_VERSION
           $payloadBase = $env:PAYLOAD_BASE_NAME
           $out = $env:PACKAGE_ROOT
-          powershell -ExecutionPolicy Bypass -File tools/release_installer/package_from_release_inputs.ps1 `
-            -OutputRoot "$out/upscaled-portraits" `
-            -PackageVersion $version `
-            -InstallerNameSuffix "-upscaled-portraits" `
-            -Homm3UseUpscaledHeroPortraits true `
-            -PayloadMode Download `
-            -PayloadBaseName $payloadBase
-          powershell -ExecutionPolicy Bypass -File tools/release_installer/package_from_release_inputs.ps1 `
-            -OutputRoot "$out/standard-portraits" `
-            -PackageVersion $version `
-            -InstallerNameSuffix "-standard-portraits" `
-            -Homm3UseUpscaledHeroPortraits false `
-            -PayloadMode Download `
-            -PayloadBaseName $payloadBase
-          $safeVersion = $version -replace '[<>:"/\\|?*]', '_'
-          "PACKAGE_EXE_UPSCALED=$out/upscaled-portraits/GoldenEraModInstaller-$safeVersion-upscaled-portraits.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "PACKAGE_SHA_UPSCALED=$out/upscaled-portraits/GoldenEraModInstaller-$safeVersion-upscaled-portraits.exe.sha256" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "PACKAGE_EXE_STANDARD=$out/standard-portraits/GoldenEraModInstaller-$safeVersion-standard-portraits.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "PACKAGE_SHA_STANDARD=$out/standard-portraits/GoldenEraModInstaller-$safeVersion-standard-portraits.exe.sha256" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Build checksums and stage release assets
-        shell: pwsh
-        run: |
-          $assetDir = "dist/release-assets"
-          foreach ($name in @("UPSCALED", "STANDARD")) {
-            $exe = [System.Environment]::GetEnvironmentVariable("PACKAGE_EXE_$name")
-            $sumPath = [System.Environment]::GetEnvironmentVariable("PACKAGE_SHA_$name")
-            $exeHash = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLowerInvariant()
-            "$exeHash  $([System.IO.Path]::GetFileName($exe))" | Set-Content -Path $sumPath -Encoding ASCII
-            Copy-Item -LiteralPath $exe -Destination $assetDir -Force
-            Copy-Item -LiteralPath $sumPath -Destination $assetDir -Force
+          foreach ($variant in @(@{ Suffix = "-upscaled-portraits"; Upscaled = "true" }, @{ Suffix = "-standard-portraits"; Upscaled = "false" })) {
+            powershell -ExecutionPolicy Bypass -File tools/release_installer/package_from_release_inputs.ps1 `
+              -OutputRoot "$out/$($variant.Suffix.TrimStart('-'))" `
+              -PackageVersion $version `
+              -InstallerNameSuffix $variant.Suffix `
+              -Homm3UseUpscaledHeroPortraits $variant.Upscaled `
+              -PayloadMode Download `
+              -PayloadBaseName $payloadBase
+            if ($LASTEXITCODE -ne 0) { throw "packaging failed for $($variant.Suffix)" }
           }
 
-          $limit = [long]2147483648
-          $oversized = @(Get-ChildItem -LiteralPath $assetDir -File | Where-Object { $_.Length -ge $limit })
-          if ($oversized.Count -gt 0) {
-            $names = ($oversized | ForEach-Object { "{0} ({1})" -f $_.Name, $_.Length }) -join ", "
-            throw "Release assets still exceed GitHub 2GB limit: $names"
-          }
-
-          $thinLimit = [long]200MB
-          foreach ($name in @("UPSCALED", "STANDARD")) {
-            $exe = [System.Environment]::GetEnvironmentVariable("PACKAGE_EXE_$name")
-            $len = (Get-Item -LiteralPath $exe).Length
-            if ($len -ge $thinLimit) {
-              throw "Thin installer is unexpectedly large ($len bytes): $exe"
-            }
-          }
-
-          Get-ChildItem -LiteralPath $assetDir -File | Sort-Object Name | ForEach-Object {
-            Write-Host ("{0} {1}" -f $_.Name, $_.Length)
-          }
-
-      - name: Prepare release notes
-        if: startsWith(github.ref, 'refs/tags/')
-        shell: pwsh
-        run: |
-          $safeVersion = "${{ github.ref_name }}" -replace '[<>:"/\\|?*]', '_'
-          $out = "dist/release-notes-$safeVersion.md"
-          $tagNotes = "release_notes/${{ github.ref_name }}.md"
-          if (Test-Path -LiteralPath $tagNotes) {
-            Copy-Item -LiteralPath $tagNotes -Destination $out -Force
-          } else {
-            "# Golden Era ${{ github.ref_name }}`n`nNo curated release notes were committed for this tag." | Set-Content -Path $out -Encoding UTF8
-          }
-          "RELEASE_BODY=$out" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Attest package
+      - name: Attest installers
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
-            ${{ env.PACKAGE_EXE_UPSCALED }}
-            ${{ env.PACKAGE_SHA_UPSCALED }}
-            ${{ env.PACKAGE_EXE_STANDARD }}
-            ${{ env.PACKAGE_SHA_STANDARD }}
+            ${{ env.PACKAGE_ROOT }}/*/GoldenEraModInstaller-*.exe
 
-      - name: Upload upscaled portrait installer artifact
-        uses: actions/upload-artifact@v7
+      - name: Upload installers
+        uses: actions/upload-artifact@v4
         with:
-          name: golden-era-installer-upscaled-portraits-exe
-          archive: false
-          path: ${{ env.PACKAGE_EXE_UPSCALED }}
-
-      - name: Upload upscaled portrait checksum artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: golden-era-installer-upscaled-portraits-sha256
-          archive: false
-          path: ${{ env.PACKAGE_SHA_UPSCALED }}
-
-      - name: Upload standard portrait installer artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: golden-era-installer-standard-portraits-exe
-          archive: false
-          path: ${{ env.PACKAGE_EXE_STANDARD }}
-
-      - name: Upload standard portrait checksum artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: golden-era-installer-standard-portraits-sha256
-          archive: false
-          path: ${{ env.PACKAGE_SHA_STANDARD }}
-
-      - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist/release-assets/*
-          body_path: ${{ env.RELEASE_BODY }}
-          generate_release_notes: true
-          fail_on_unmatched_files: true
+          name: golden-era-installers-${{ inputs.tag }}
+          path: |
+            ${{ env.PACKAGE_ROOT }}/*/GoldenEraModInstaller-*.exe
+            ${{ env.PACKAGE_ROOT }}/*/GoldenEraModInstaller-*.exe.sha256
