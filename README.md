@@ -52,15 +52,27 @@ The `modding_guide/` folder contains [mod_helper.md](modding_guide/mod_helper.md
 
 ## Screenshots
 
-![Quick play setup](screenshots/quickplay.gif)
+![Gnolls fighting in a grass battle](media/readme/battle_gnolls.gif)
 
-![Town](screenshots/buildings.png)
+![Lava battle with a fire bolt](media/readme/battle_lava_firebolt.gif)
 
-![Recruitment screen](screenshots/recruitment.gif)
+![Inferno town at sunset, a building going up](media/readme/town_inferno_build.gif)
 
-![Campaign dialog](screenshots/campaign_dialog.png)
+![Tower town in the snow](media/readme/town_tower_snow.gif)
 
-![Water travel](screenshots/water_travel.png)
+![Valley town screen](media/readme/town_valley.gif)
+
+![Recruiting HoMM3 units in an Inferno town](media/readme/recruit_inferno.gif)
+
+![Snowy adventure map with 3D dwellings](media/readme/map_snow_dwellings.gif)
+
+### How it was made
+
+![HoMM3 Conflux town screen next to its depth rebuild](media/readme/hiwm_conflux_original_vs_depth.jpg)
+
+![Pikeman walk: foot slip before and after](media/readme/hiwm_pikeman_walk.gif)
+
+![Fire elemental effects: HoMM3, before, after, and vanilla Olden Era](media/readme/hiwm_fire_elemental_vfx.gif)
 
 ## FAQ
 
@@ -84,9 +96,6 @@ No. The damage histogram is now a separate mod/project and is not included in th
 
 ### How do I donate to contribute to this project?
 I do not need money to make this mod. However, if you would like to contribute to my marriage, you may donate to my kofi to make my wife less upset about my cloud compute spending: https://ko-fi.com/levi9753
-
-### Is this AI slop?
-RIFE 60fps animations are technically AI, but much more similar to DLSS/FSR than what you probably think of as Generative AI. The 3D unit and building models were made with the help of AI 3D-modeling tools, using the original HoMM3 art as the reference, and the units are animated from the original HoMM3 animations. There is no AI-generated audio. The upscaled portrait release uses AI to increase the detail and resolution of original HoMM3 portraits, though the original art is still being used as ground truth. IDEs with coding LLM support were heavily used when building the mod, and that was, in some sense, the real purpose of me building this mod. See the "About Me" section for more details.
 
 ### My antivirus says this is malware
 It's not, you can inspect the source to prove it. The installer is an unsigned EXE that downloads the mod payload from this repo's Releases, so you may have to click a "Run Anyway" button or something similar.
