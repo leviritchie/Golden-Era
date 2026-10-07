@@ -1,6 +1,6 @@
 # Agent Notes
 
-- Release builds are assembled by GitHub Actions from `release_inputs/golden_era_release_payload.zip`; local Steam installs are maintainer-only inputs and must not be required in CI.
+- Release payloads are built locally and published as GitHub Release assets (`golden_era_release_payload-<tag>.zip.partNN` plus `.sha256` and `.download-manifest.json`), never committed. `release_inputs/` is git-ignored local packaging scratch: do not commit payload zips, parts or LFS pointers there again. The `rebuild installers` workflow is `workflow_dispatch`-only and rebuilds installers from an existing release's own assets; it must never trigger on tag pushes or releases. Local Steam installs are maintainer-only inputs and must not be required in CI.
 - Public release output is now a single self-extracting `GoldenEraModInstaller-<version>.exe` plus `.sha256`, not a zip of an installer folder. Do not reintroduce adjacent payload/script assumptions into the installer.
 - Do not tag, publish, or upload public GitHub release assets for installer changes until a local EXE smoke test has passed and the maintainer explicitly approves the release.
 - The installer must keep Steam vanilla: use the selected Steam folder only as a clean source, create a separate Golden Era target copy, and install Doorstop/BepInEx/plugin files plus the Core overlay only into that target.
