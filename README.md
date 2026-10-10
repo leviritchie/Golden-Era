@@ -47,6 +47,10 @@ The current public package includes the expanded custom-faction framework and as
 
 An internet connection is required for the first payload download. For an offline install, also download every payload part file from the Release (every `golden_era_release_payload-v0.1.321.zip.partNN` file) into the same folder as the EXE before running it.
 
+### Linux / Steam Deck (Proton or Wine)
+
+Linux support is experimental. Run the installer in the same Proton/Wine prefix as the game. The installer and `Launch Golden Era.cmd` set the Wine DLL override the mod loader needs (`winhttp=native,builtin`, only for `HeroesOldenEra.exe`). If you start `HeroesOldenEra.exe` some other way and get a black screen, or the game runs without the mod, add this Steam launch option to the modded copy: `WINEDLLOVERRIDES="winhttp=n,b" %command%`.
+
 ## Modding Guide
 
 The `modding_guide/` folder contains [mod_helper.md](modding_guide/mod_helper.md), a practical Olden Era modding reference, and a snapshot of [GameSymbols.cs](modding_guide/GameSymbols.cs), the central symbol registry used by the Golden Era plugin. These files are intended as reference material for modders working against the Steam IL2CPP build, not as a supported public API.

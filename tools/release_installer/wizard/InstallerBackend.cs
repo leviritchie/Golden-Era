@@ -328,6 +328,7 @@ internal static class InstallerBackend
             ValidatePatchedCoreZip(GetCoreZipPath(targetRoot), overlayManifest);
 
             var launcherPath = WriteLauncher(targetRoot);
+            ConfigureWineDllOverride(log);
             WriteInstallState(
                 targetRoot,
                 sourceRoot,
@@ -422,6 +423,7 @@ internal static class InstallerBackend
             ReplaceModFilesInTarget(targetRoot, package.ExtractRoot);
 
             var launcherPath = WriteLauncher(targetRoot);
+            ConfigureWineDllOverride(log);
             WriteInstallState(
                 targetRoot,
                 state.SourceGameRoot ?? request.SourceGameRoot,
@@ -1036,17 +1038,66 @@ internal static class InstallerBackend
         }
     }
 
+    // Under Wine/Proton the builtin winhttp.dll wins over the game folder's copy, so Doorstop (and with
+    // it BepInEx and the plugin) never loads while the patched Core.zip still does. The launcher re-applies
+    // the per-exe override on every start because the game may run in a different prefix than the installer.
     private static string WriteLauncher(string targetRoot)
     {
         var launcherPath = Path.Combine(targetRoot, "Launch Golden Era.cmd");
-        var text = """
+        var text = $"""
 @echo off
 pushd "%~dp0"
+reg query "HKLM\Software\Wine" >nul 2>&1
+if not errorlevel 1 (
+  reg add "HKCU\{WineDllOverridesKey}" /v winhttp /t REG_SZ /d native,builtin /f >nul 2>&1
+  set "WINEDLLOVERRIDES=winhttp=n,b"
+)
 start "" "%~dp0HeroesOldenEra.exe"
 popd
 """;
         File.WriteAllText(launcherPath, text.ReplaceLineEndings("\r\n"), Encoding.ASCII);
         return launcherPath;
+    }
+
+    private const string WineDllOverridesKey = @"Software\Wine\AppDefaults\HeroesOldenEra.exe\DllOverrides";
+
+    [System.Runtime.InteropServices.DllImport("kernel32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+    private static extern IntPtr GetModuleHandleW(string moduleName);
+
+    [System.Runtime.InteropServices.DllImport("kernel32.dll", CharSet = System.Runtime.InteropServices.CharSet.Ansi)]
+    private static extern IntPtr GetProcAddress(IntPtr module, string procName);
+
+    internal static bool IsRunningUnderWine()
+    {
+        try
+        {
+            var ntdll = GetModuleHandleW("ntdll.dll");
+            return ntdll != IntPtr.Zero && GetProcAddress(ntdll, "wine_get_version") != IntPtr.Zero;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    // Per-exe Wine DLL override in the current prefix (no effect on Windows, no other program affected).
+    private static void ConfigureWineDllOverride(Action<string> log)
+    {
+        if (!IsRunningUnderWine())
+        {
+            return;
+        }
+
+        try
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(WineDllOverridesKey);
+            key.SetValue("winhttp", "native,builtin", RegistryValueKind.String);
+            log(@"Wine/Proton detected: set winhttp=native,builtin for HeroesOldenEra.exe in this prefix (HKCU\" + WineDllOverridesKey + ").");
+        }
+        catch (Exception ex)
+        {
+            log("Wine/Proton detected, but the winhttp DLL override could not be written (" + ex.Message + "). Launch with Launch Golden Era.cmd, or set the Steam launch option WINEDLLOVERRIDES=\"winhttp=n,b\" %command%.");
+        }
     }
 
     private static void WriteInstallState(
