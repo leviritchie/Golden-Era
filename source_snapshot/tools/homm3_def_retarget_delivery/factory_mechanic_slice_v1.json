@@ -1,0 +1,33 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "factory_mechanic_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/factory_mechanic_slice_v1",
+  "note": "User-approved re-freeze (coordinator relay '10 freeze together, 11 yes'): h3_mechanic_upg_alt re-frozen with its vanilla-style effects. Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_mechanic_upg_alt 0.4437. | look B (vanilla philosophy finish, finish.py; look.py --stages finish,apply), animation unchanged Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_mechanic_upg_alt 0.4437.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_mechanic_upg_alt",
+      "gameSid": "h3_mechanic_upg_alt",
+      "bundleName": "custom_units_factory_h3_mechanic_upg_alt",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "7c165668967a335c05e79d32eceaa92d2b7b2bba4acd6964b498bbe78e4d2229",
+      "identityReview": "7c165668967a335c05e79d32eceaa92d2b7b2bba4acd6964b498bbe78e4d2229",
+      "vfxAuthority": "vanilla_style",
+      "vanillaStyleSpec": "tools/homm3_vfx/vanilla_style/units/h3_mechanic_upg_alt.json",
+      "frozen": {
+        "lookDeliveredGlbSha256": "4709758bd382c40351a2c00d9aa9046d77edd99b9826c1200b1a4e53cf0282bb",
+        "idleRetimedGlbSha256": "29391a34970ddfdd0871678d2f8b1962c94ff61c4e2cb1e8a47f3bcf3590e15d",
+        "vfxManifestSha256": "e4f92a44782348c82c8b4ce77327db5d549c10de880ac75f751f2de667e4532e",
+        "specSha256": "e5b56a8b2a4341585a765a52b825404d1d3af5263f03b4742a2dad3d2c2c1f2d",
+        "basecolorSha256": "e91cd5ac71e762fe8ab7b50ee947b19cc68a6f8a4be8bf00e1463b1a49ba69c9"
+      }
+    }
+  ]
+}

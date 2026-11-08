@@ -1,0 +1,31 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "neutral_leprechaun_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/neutral_leprechaun_slice_v1",
+  "note": "Neutral leprechaun (CLEPRCHN.DEF, HotA neutral) own model, cleared by its user-approved per-unit gate exception (freeze Unit_ShootFront holds 3; 7565f7e1e6); coordinator-approved own slice. Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_leprechaun 0.1528. | look B (vanilla philosophy finish, finish.py; look.py --stages finish,apply), animation unchanged Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_leprechaun 0.1528.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_leprechaun",
+      "gameSid": "h3_leprechaun",
+      "bundleName": "custom_units_neutral_h3_leprechaun",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "8aa66c9fea3dde17d7dd624f7c106e0183f5e8a9ff17cf111511cdea8ef4cab4",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "1ca28fca95df2f1b9d216eb02bc4cb78dd96c371d3055b15e4bfda3adbeca5a9",
+        "idleRetimedGlbSha256": "145b4813e3fb39d222c4a542d44a48e24a0e782f45147e8dada89d758ee5c149",
+        "vfxManifestSha256": "dfaf76975493898109d77b222ac909c5719016ee4cb3f7faa6f18339c6979cd3",
+        "specSha256": "4fd4012ba12ce05290fa80fe274c6594259faad5e775095916869906bd96de23",
+        "basecolorSha256": "a9a08a30a2cf89b588d792024d7191c3c4b341bead7d8b23d06ab742f7719305"
+      }
+    }
+  ]
+}

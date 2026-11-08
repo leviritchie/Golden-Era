@@ -1,0 +1,402 @@
+{
+ "unit": "h3_battle_mage",
+ "joints": {
+  "Hips": [
+   -0.017,
+   0.017,
+   0.777
+  ],
+  "Spine": [
+   -0.016,
+   0.031,
+   0.824
+  ],
+  "Spine1": [
+   -0.014,
+   0.045,
+   0.872
+  ],
+  "Spine2": [
+   -0.012,
+   0.061,
+   0.924
+  ],
+  "Neck": [
+   -0.01,
+   0.073,
+   0.966
+  ],
+  "Head": [
+   -0.017,
+   0.017,
+   1.21
+  ],
+  "HeadTop_End": [
+   -0.017,
+   -0.052,
+   1.308
+  ],
+  "LeftShoulder": [
+   0.031,
+   0.052,
+   1.106
+  ],
+  "LeftArm": [
+   0.136,
+   0.045,
+   1.106
+  ],
+  "LeftForeArm": [
+   0.22,
+   0.01,
+   0.924
+  ],
+  "LeftHand": [
+   0.206,
+   -0.157,
+   0.931
+  ],
+  "LeftHand_End": [
+   0.199,
+   -0.247,
+   0.935
+  ],
+  "RightShoulder": [
+   -0.066,
+   0.059,
+   1.106
+  ],
+  "RightArm": [
+   -0.178,
+   0.059,
+   1.106
+  ],
+  "RightForeArm": [
+   -0.241,
+   0.087,
+   0.903
+  ],
+  "RightHand": [
+   -0.241,
+   -0.045,
+   0.791
+  ],
+  "RightHand_End": [
+   -0.241,
+   -0.114,
+   0.733
+  ],
+  "LeftUpLeg": [
+   0.101,
+   -0.01,
+   0.735
+  ],
+  "LeftLeg": [
+   0.115,
+   -0.045,
+   0.393
+  ],
+  "LeftFoot": [
+   0.115,
+   -0.045,
+   0.072
+  ],
+  "LeftToeBase": [
+   0.122,
+   -0.108,
+   0.128
+  ],
+  "LeftToe_End": [
+   0.129,
+   -0.171,
+   0.184
+  ],
+  "RightUpLeg": [
+   -0.136,
+   0.017,
+   0.735
+  ],
+  "RightLeg": [
+   -0.136,
+   0.045,
+   0.393
+  ],
+  "RightFoot": [
+   -0.136,
+   0.073,
+   0.072
+  ],
+  "RightToeBase": [
+   -0.136,
+   0.01,
+   0.135
+  ],
+  "RightToe_End": [
+   -0.136,
+   -0.052,
+   0.198
+  ]
+ },
+ "props": [
+  {
+   "name": "staff",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.18,
+      -0.2,
+      0.0
+     ],
+     [
+      0.18,
+      -0.2,
+      1.47
+     ]
+    ]
+   ],
+   "radius": 0.045
+  },
+  {
+   "name": "orb",
+   "bone": "LeftHand",
+   "sphere": [
+    [
+     0.18,
+     -0.2,
+     1.58
+    ],
+    0.12
+   ]
+  }
+ ],
+ "sleeve": {
+  "x": 0.24,
+  "zMin": 0.55,
+  "zMax": 1.12
+ },
+ "bootTop": 0.08,
+ "skirtLegShare": 0.3,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "extensions": [
+  "tower_propfix",
+  "tower_handsep",
+  "stronghold_propbone"
+ ],
+ "propFix": [
+  {
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.18,
+      -0.205,
+      0.08
+     ],
+     [
+      0.18,
+      -0.205,
+      0.85
+     ]
+    ]
+   ],
+   "radius": 0.055,
+   "minCorners": 3
+  }
+ ],
+ "handSep": [
+  {
+   "hand": "RightHand",
+   "center": [
+    -0.191,
+    -0.104,
+    0.745
+   ],
+   "radius": 0.1
+  }
+ ],
+ "armStrip": [
+  {
+   "chain": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "belowZ": 0.55,
+   "armKeep": 0.999
+  },
+  {
+   "chain": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "belowZ": 0.55,
+   "armKeep": 0.999
+  },
+  {
+   "chain": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "center": [
+    -0.12,
+    0.33,
+    0.55
+   ],
+   "radius": 0.22,
+   "armKeep": 0.8
+  }
+ ],
+ "propBones": [
+  {
+   "name": "Staff",
+   "parent": "LeftHand",
+   "head": [
+    0.18,
+    -0.2,
+    0.93
+   ],
+   "tail": [
+    0.18,
+    -0.2,
+    1.47
+   ],
+   "regions": [
+    {
+     "segments": [
+      [
+       [
+        0.18,
+        -0.2,
+        0.0
+       ],
+       [
+        0.18,
+        -0.2,
+        1.47
+       ]
+      ]
+     ],
+     "radius": 0.045
+    },
+    {
+     "box": [
+      [
+       0.188,
+       -0.205,
+       0.06
+      ],
+      [
+       0.232,
+       -0.165,
+       0.18
+      ]
+     ]
+    }
+   ],
+   "hide": [
+    {
+     "clip": "Death",
+     "from": 3
+    }
+   ]
+  },
+  {
+   "name": "Orb",
+   "parent": "LeftHand",
+   "head": [
+    0.18,
+    -0.2,
+    1.58
+   ],
+   "tail": [
+    0.18,
+    -0.2,
+    1.7
+   ],
+   "regions": [
+    {
+     "sphere": [
+      [
+       0.18,
+       -0.2,
+       1.58
+      ],
+      0.12
+     ]
+    },
+    {
+     "box": [
+      [
+       0.155,
+       -0.23,
+       1.685
+      ],
+      [
+       0.195,
+       -0.195,
+       1.71
+      ]
+     ]
+    }
+   ],
+   "hide": [
+    {
+     "clip": "Death",
+     "from": 3
+    }
+   ]
+  }
+ ],
+ "propBonesReason": "authenticity lane-A 2026-10-10: the DEF Death flings the staff away (f1-f2: the orb flies up off it and the shaft falls aside) and both are gone from f3 while the body burns down; staff and orb on their own child bones of LeftHand so the glbPatch can throw them and the build hides them from Death f3. Two boxes add the staff's foot cap and the orb's top finial: 6-vertex islands just outside the segment/sphere that stayed on LeftHand and floated as specks after the hide.",
+ "armStripReason": " | lane-A 2026-10-10: the robe back panel behind the right arm (glTF y 0.35-0.8, z < -0.15) carried 0.2-0.4 RightArm weight, so when the Death crumble swings the arm the cloth was dragged out into thin spikes behind the body (f4-f6); a sphere strip (Blender center (-0.12,0.33,0.55), r 0.22, armKeep 0.8) gives it back to the body, the rigid sleeve keeps its arm.",
+ "glbPatch": {
+  "reason": "authenticity lane-A 2026-10-10 (v2): DEF Death is struck and throws the staff away (f1-f2: the orb flies up off the top and the shaft topples aside; both gone from f3), then the body crumbles straight down into a heap (f3-f7). keyRotations (half offset, applied twice): LeftHand keeps its f0 grip pose at f1-f2 so staff and orb stay upright instead of swinging level with the arm; the Staff bone topples back at f2; Spine slumps forward and Neck drops the head (f2-f7), both arms fall to the sides (f2-f7), LeftHand holds its f6 angle on f7. keyTranslations: the Orb pops 0.22 m up off the staff (f1) and starts to fall (f2), the Staff slides down and out of the hand (f1-f2), Hips sink 0.22 m by f6 over the captured feet. The build hides Staff and Orb from f3 (propBones). Death only. Regenerated on the robe-back armStrip base; stretchRelax on Death strain-limits the hip crease of the sink (the strip lowered the base's worst stretch, so the sink's crease became the worst edge). teardiag PASS 8358 -> 6939.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_battle_mage_throw_rot.json",
+    "sha256": "e3b8d5c1df2196b2f99b38ab544b888bff5302764130076726f5280b5340af54",
+    "regrid": true,
+    "note": "Death throw + crumble (1/2)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_battle_mage_throw_rot.json",
+    "sha256": "e3b8d5c1df2196b2f99b38ab544b888bff5302764130076726f5280b5340af54",
+    "regrid": true,
+    "note": "(2/2)"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_battle_mage_throw_tr.json",
+    "sha256": "82fea091a627bf8011a259251422c0f6efa4cf733f696ef13fd71be1ae732837",
+    "regrid": true,
+    "note": "Orb/Staff throw, Hips sink"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "hip crease of the sink (worst stretch gate after the robe-back strip)"
+   }
+  ]
+ }
+}

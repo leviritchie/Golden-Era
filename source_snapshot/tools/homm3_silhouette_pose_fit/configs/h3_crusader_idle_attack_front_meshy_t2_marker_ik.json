@@ -1,0 +1,188 @@
+{
+  "unitSid": "h3_crusader",
+  "clipId": "idle_g2_attack_front_g12",
+  "fps": 12,
+  "masterGlb": "artifacts/crusader_pose_pipeline/out_meshy_t2_idle_f0/rigged/idle_f0_rigged_meshy6_bridgefix_hand.glb",
+  "outputDir": "artifacts/crusader_pose_pipeline/out_fit/idle_attack_front",
+  "boneRoles": "tools/homm3_silhouette_pose_fit/bone_roles_crusader_meshy_t2.json",
+  "cullDefSoftShadows": true,
+  "camera": {
+    "axis": "iso",
+    "isoAzimuthDeg": 40.0,
+    "isoElevationDeg": 30.0,
+    "distance": 3.0,
+    "orthoScale": 4.2,
+    "rootYawDeg": 0.0
+  },
+  "frames": [
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_00.png"},
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_01.png"},
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_02.png"},
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_03.png"},
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_04.png"},
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_05.png"},
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_06.png"},
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_07.png"},
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_08.png"},
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_09.png"},
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_10.png"},
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_11.png"},
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_12.png"},
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_13.png"},
+    {"path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_idle_attack/frame_14.png"}
+  ],
+  "method_kind": "keypoints",
+  "method": "sprite_visual_match_contract",
+  "poseSource": "sprite_landmarks",
+  "poseSolver": "marker_ik",
+  "markerIk": {
+    "identityFrame0": false,
+    "frame0RootAlign": true,
+    "frame0CameraRegister": false,
+    "lockGrabVertsAfterFrame0": true,
+    "rekeyTipIfErrorPx": 120.0,
+    "rootTranslate": true,
+    "rootTranslateBound": 0.85,
+    "boundRad": 1.45,
+    "armBoundRad": 1.95,
+    "maxSteps": 48,
+    "plateauSteps": 6,
+    "damping": 0.18,
+    "eps": 0.02,
+    "lossFloorPx": 2.0,
+    "joltFrac": 0.22,
+    "joltGrow": 1.12,
+    "joltFracMax": 0.75,
+    "ccdTipIterations": 80,
+    "ccdAngCapHi": 0.85,
+    "ccdAngCapLo": 0.40,
+    "tipWeightBoost": 2.8,
+    "restWeight": 0.04,
+    "motionWeight": 0.10,
+    "skipFullBodyIfTipErrorPx": 70.0,
+    "ccdBodyGuardPx": 160.0,
+    "bodyGuardSlackPx": 40.0,
+    "bodyGuardAbsCeilPx": 160.0,
+    "torsoMinDot": 0.20,
+    "spineBoundRad": 0.70,
+    "bodyLandmarkBoost": 2.2,
+    "tipPickMode": "farthest_from_hand",
+    "groundAnchor": {
+      "mode": "frame0_lateral_lowest_foot"
+    },
+    "maxStepRad": 0,
+    "collisionBias": {
+      "enabled": true,
+      "sampleCount": 320,
+      "geodesicMinHops": 8,
+      "margin": 0.045,
+      "weight": 40.0
+    },
+    "midlineBias": {
+      "enabled": false
+    },
+    "boneEulerAxesSchedule": [
+      {
+        "frameFrom": 0,
+        "frameTo": 7,
+        "path": "tools/homm3_silhouette_pose_fit/bone_dofs_crusader_idle_g2.json"
+      },
+      {
+        "frameFrom": 8,
+        "frameTo": 14,
+        "path": "tools/homm3_silhouette_pose_fit/bone_dofs_crusader_attack_front_g12.json"
+      }
+    ],
+    "armChain": [
+      "RightShoulder",
+      "RightArm",
+      "RightForeArm",
+      "RightHand"
+    ],
+    "minSkinWeight": 0.20,
+    "preferPrevVertSlackPx": 14.0,
+    "skinBoneExtras": {
+      "WeaponTip": ["RightHand", "RightForeArm"],
+      "RWrist": ["RightHand", "RightForeArm"],
+      "LWrist": ["LeftHand", "LeftForeArm", "LeftArm"]
+    },
+    "seed": 11,
+    "optimizeBones": [
+      "Hips",
+      "Spine02",
+      "Spine01",
+      "Spine",
+      "neck",
+      "Head",
+      "RightShoulder",
+      "RightArm",
+      "RightForeArm",
+      "RightHand",
+      "LeftShoulder",
+      "LeftArm",
+      "LeftForeArm",
+      "LeftHand"
+    ],
+    "markers": [
+      "WeaponTip",
+      "RWrist",
+      "RElbow",
+      "RShoulder",
+      "LWrist",
+      "LElbow",
+      "Nose",
+      "Neck",
+      "MidHip"
+    ]
+  },
+  "optimizeBones": [
+    "Hips",
+    "Spine02",
+    "Spine01",
+    "Spine",
+    "neck",
+    "Head",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+  ],
+  "keypointOptimizer": {
+    "boundRad": 1.10,
+    "restWeight": 0.01,
+    "motionWeight": 0.04,
+    "maxStepRad": 0.85,
+    "maxStepRoot": 0.35,
+    "localRestarts": true,
+    "identityFrame0": false,
+    "maxiter": 260,
+    "maxfev": 1100,
+    "restarts": 8,
+    "seed": 7,
+    "relativePoseWeight": 0.0,
+    "absolutePoseWeight": 1.0,
+    "absoluteRootWeight": 0.0,
+    "facingAlignWeight": 0.0,
+    "rootTwistWeight": 0.0,
+    "rootTranslate": true,
+    "rootTranslateBound": 0.85,
+    "cameraPlaneDepthWeight": 0.35,
+    "cameraPlaneDepthSlack": 0.04,
+    "rootDepthWeight": 0.35,
+    "failClosedMaxMeanPixelError": 40.0
+  },
+  "absoluteRefine": {
+    "enabled": false
+  },
+  "absoluteMatch": {
+    "paletteNormalize": true,
+    "alphaThr": 8.0,
+    "failClosedMaxChromaMae": 18.0,
+    "failClosedMaxRgbMae": 45.0
+  },
+  "notes": "First crusader end-to-end: idle g2 + attack front g12. Master = Meshy T2 8k PBR auto-rig + mixamo sword bridgefix. Absolute chroma gate stays fail-closed."
+}

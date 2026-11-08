@@ -1,0 +1,810 @@
+{
+ "unit": "h3_chimera",
+ "joints": {
+  "Hips": [
+   -0.1,
+   0.45,
+   0.7
+  ],
+  "Spine": [
+   -0.08,
+   0.2,
+   0.72
+  ],
+  "Spine1": [
+   -0.06,
+   -0.05,
+   0.75
+  ],
+  "Spine2": [
+   -0.05,
+   -0.35,
+   0.8
+  ],
+  "Neck": [
+   -0.05,
+   -0.55,
+   0.9
+  ],
+  "Head": [
+   -0.05,
+   -0.7,
+   1.0
+  ],
+  "HeadTop_End": [
+   -0.05,
+   -0.95,
+   0.95
+  ],
+  "LeftShoulder": [
+   0.05,
+   -0.4,
+   0.8
+  ],
+  "LeftArm": [
+   0.12,
+   -0.55,
+   0.55
+  ],
+  "LeftForeArm": [
+   0.1,
+   -0.62,
+   0.3
+  ],
+  "LeftHand": [
+   0.07,
+   -0.69,
+   0.08
+  ],
+  "LeftHand_End": [
+   0.07,
+   -0.79,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.15,
+   -0.35,
+   0.8
+  ],
+  "RightArm": [
+   -0.28,
+   -0.4,
+   0.55
+  ],
+  "RightForeArm": [
+   -0.3,
+   -0.37,
+   0.3
+  ],
+  "RightHand": [
+   -0.32,
+   -0.35,
+   0.08
+  ],
+  "RightHand_End": [
+   -0.32,
+   -0.45,
+   0.0
+  ],
+  "LeftUpLeg": [
+   0.12,
+   0.4,
+   0.65
+  ],
+  "LeftLeg": [
+   0.17,
+   0.22,
+   0.38
+  ],
+  "LeftFoot": [
+   0.17,
+   0.36,
+   0.15
+  ],
+  "LeftToeBase": [
+   0.17,
+   0.26,
+   0.04
+  ],
+  "LeftToe_End": [
+   0.17,
+   0.16,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.28,
+   0.42,
+   0.65
+  ],
+  "RightLeg": [
+   -0.36,
+   0.25,
+   0.38
+  ],
+  "RightFoot": [
+   -0.39,
+   0.42,
+   0.15
+  ],
+  "RightToeBase": [
+   -0.39,
+   0.35,
+   0.04
+  ],
+  "RightToe_End": [
+   -0.39,
+   0.25,
+   0.0
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "dungeon_fixweights",
+  "rampart_quadruped",
+  "dungeon_tailstrike",
+  "wing_chain"
+ ],
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "tail": {
+   "points": [
+    [
+     -0.16,
+     0.66,
+     0.65
+    ],
+    [
+     -0.2,
+     0.8,
+     0.9
+    ],
+    [
+     -0.27,
+     0.78,
+     1.1
+    ],
+    [
+     -0.26,
+     0.62,
+     1.25
+    ],
+    [
+     -0.2,
+     0.35,
+     1.33
+    ],
+    [
+     -0.16,
+     0.05,
+     1.45
+    ],
+    [
+     -0.15,
+     -0.3,
+     1.47
+    ]
+   ],
+   "region": {
+    "segments": [
+     [
+      [
+       -0.16,
+       0.66,
+       0.65
+      ],
+      [
+       -0.2,
+       0.8,
+       0.9
+      ]
+     ],
+     [
+      [
+       -0.2,
+       0.8,
+       0.9
+      ],
+      [
+       -0.27,
+       0.78,
+       1.1
+      ]
+     ],
+     [
+      [
+       -0.27,
+       0.78,
+       1.1
+      ],
+      [
+       -0.26,
+       0.62,
+       1.25
+      ]
+     ],
+     [
+      [
+       -0.26,
+       0.62,
+       1.25
+      ],
+      [
+       -0.2,
+       0.35,
+       1.33
+      ]
+     ],
+     [
+      [
+       -0.2,
+       0.35,
+       1.33
+      ],
+      [
+       -0.16,
+       0.05,
+       1.45
+      ]
+     ],
+     [
+      [
+       -0.16,
+       0.05,
+       1.45
+      ],
+      [
+       -0.15,
+       -0.3,
+       1.47
+      ]
+     ]
+    ],
+    "radius": 0.12
+   },
+   "rootBlend": 0.6
+  },
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    -20,
+    60
+   ],
+   "fold": 60,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ],
+   "wing": 150,
+   "sideRampFrames": 2
+  }
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "tailStrike": {
+  "prefix": "QTail",
+  "clip": "AttackFront",
+  "lift": 60,
+  "uncurl": 120,
+  "peak": 0.4
+ },
+ "props": [
+  {
+   "name": "sidehead",
+   "bone": "Spine2",
+   "box": [
+    [
+     -0.85,
+     -0.75,
+     0.55
+    ],
+    [
+     -0.4,
+     -0.15,
+     1.05
+    ]
+   ]
+  }
+ ],
+ "wings": [
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.3,
+    -0.2,
+    1.05
+   ],
+   "tail": [
+    0.6,
+    -0.2,
+    1.4
+   ],
+   "sign": -1,
+   "region": {
+    "box": [
+     [
+      0.33,
+      -0.62,
+      0.95
+     ],
+     [
+      0.9,
+      0.15,
+      1.7
+     ]
+    ]
+   }
+  },
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.33,
+    0.1,
+    1.05
+   ],
+   "tail": [
+    -0.6,
+    0.2,
+    1.3
+   ],
+   "sign": 1,
+   "region": {
+    "box": [
+     [
+      -0.9,
+      -0.55,
+      0.98
+     ],
+     [
+      -0.36,
+      0.7,
+      1.5
+     ]
+    ],
+    "exclude": [
+     {
+      "box": [
+       [
+        -0.9,
+        -0.8,
+        0.5
+       ],
+       [
+        -0.36,
+        -0.1,
+        1.06
+       ]
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "wingMaxDeg": 0,
+ "wingChain": {
+  "wings": [
+   {
+    "bone": "LeftWing",
+    "side": 1
+   },
+   {
+    "bone": "RightWing",
+    "side": -1
+   }
+  ],
+  "anim": {
+   "Idle": {
+    "open": 0,
+    "fold": 10
+   },
+   "MoveStart": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       0.6
+      ],
+      [
+       1,
+       1
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.66,
+       65
+      ],
+      [
+       1,
+       100
+      ]
+     ]
+    }
+   },
+   "Move": {
+    "open": 1,
+    "flap": {
+     "sin": 60,
+     "phase": 90,
+     "offset": 40
+    },
+    "fold": {
+     "sin": 50,
+     "phase": -90,
+     "half": "pos"
+    },
+    "droop": {
+     "sin": 30,
+     "phase": -90,
+     "half": "pos"
+    }
+   },
+   "MoveEnd": {
+    "open": {
+     "keys": [
+      [
+       0,
+       1
+      ],
+      [
+       0.5,
+       0.5
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       100
+      ],
+      [
+       0.5,
+       40
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Mouseover": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       0.15
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       1
+      ],
+      [
+       0.5,
+       0.9
+      ],
+      [
+       0.83,
+       0.2
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       25
+      ],
+      [
+       0.6,
+       15
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Defence": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       0.7
+      ],
+      [
+       0.67,
+       0.7
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       35
+      ],
+      [
+       0.67,
+       35
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       0.8
+      ],
+      [
+       0.6,
+       1
+      ],
+      [
+       0.8,
+       0.7
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       30
+      ],
+      [
+       0.6,
+       10
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Death": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.25,
+       0.9
+      ],
+      [
+       0.5,
+       1
+      ],
+      [
+       0.75,
+       0.3
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.25,
+       30
+      ],
+      [
+       0.6,
+       10
+      ],
+      [
+       1,
+       -15
+      ]
+     ]
+    },
+    "droop": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.6,
+       0
+      ],
+      [
+       1,
+       40
+      ]
+     ]
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "flap",
+    "open",
+    "fold",
+    "droop",
+    "sweep"
+   ],
+   "penalty": 0.0008,
+   "smooth": 0.0008,
+   "offsets": [],
+   "clips": [
+    "Hitted",
+    "Defence",
+    "AttackFront",
+    "Death"
+   ]
+  },
+  "adoptWeights": "nearest"
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: Move - leaping gallop as the DEF (body level, legs reaching fore and aft, gathered at mid-stride), was a trot; Hitted - crouch with the wing panels twisted open flat; Death - the capture's roll onto its back removed, the body sinks belly-down with legs folded and neck forward, a low heap as in the DEF; stretchRelax on the re-posed creases. Deferred: Hitted snake-tail fling (QTail bend tears the skin, needs weight surgery)",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chimera_gallop_flinch_death_tr.json",
+    "regrid": true,
+    "sha256": "0e285b1baba99d5bad3f2653e4aa0ee0b6e263355ede0f602d10b12e6d02af75"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chimera_gallop_flinch_death_rot.json",
+    "regrid": true,
+    "sha256": "9f4af1e9b61b4da59aa4d0adfc524e31de5790e5106e3b7140a2cc6d77d9c9bf"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chimera_gallop_flinch_death_rot.json",
+    "regrid": true,
+    "sha256": "9f4af1e9b61b4da59aa4d0adfc524e31de5790e5106e3b7140a2cc6d77d9c9bf"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_Hitted",
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "crease of the re-posed joints"
+   }
+  ]
+ }
+}

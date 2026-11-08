@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom vision law profiles that require a real fog reveal mutation. This records reveal intent and target semantics only; it does not prove the native fog write, player-side visibility refresh, map object coordinate extraction, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresFogRevealMutationProfiles": true,
+    "uiOnlyRevealForbidden": true,
+    "objectCreationSubstituteForbidden": true,
+    "targetSpecificRevealRequired": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredRuntimeProof": [
+    "native fog visibility mutation proof",
+    "player side visibility ownership proof",
+    "map refresh after reveal proof",
+    "target descriptor to map coordinate proof",
+    "radius or target set boundary proof",
+    "idempotent repeat reveal proof",
+    "law owner to reveal side correlation proof"
+  ],
+  "contracts": {
+    "castle.road-tile-view-radius": {
+      "revealKinds": [
+        "road-terrain-local-radius",
+        "path-adjacent-visibility"
+      ],
+      "companionPredicates": [
+        "RequiresRoadTerrain"
+      ],
+      "forbiddenSubstitutes": [
+        "UI-only highlight",
+        "minimap-only marker",
+        "any terrain tile reveal",
+        "movement bonus instead of fog reveal",
+        "object creation instead of visibility mutation"
+      ],
+      "notes": "Castle road vision requires real fog visibility mutation around road-terrain coordinates and must match the road terrain predicate, not generic terrain or movement behavior."
+    },
+    "conflux.elemental-site-reveal": {
+      "revealKinds": [
+        "elemental-site-object-reveal",
+        "elemental-family-mapped-object-visibility"
+      ],
+      "companionPredicates": [
+        "RequiresElementalFamilyMapping",
+        "RequiresObjectSidOrCategoryAllowlist"
+      ],
+      "forbiddenSubstitutes": [
+        "UI-only highlight",
+        "minimap-only marker",
+        "generic magical site reveal",
+        "elemental family inferred from SID substring",
+        "object creation instead of visibility mutation"
+      ],
+      "notes": "Conflux elemental vision requires real fog visibility mutation for exact elemental-family mapped object allowlists and must match the selected elemental mapping."
+    },
+    "cove.structure-scout-treasure-banks": {
+      "revealKinds": [
+        "owned-structure-radius-reveal",
+        "treasure-bank-or-neutral-threat-visibility"
+      ],
+      "companionPredicates": [
+        "RequiresNeutralThreatData",
+        "RequiresObjectSidOrCategoryAllowlist",
+        "RequiresOwnedStructureRadius"
+      ],
+      "forbiddenSubstitutes": [
+        "UI-only highlight",
+        "minimap-only marker",
+        "all treasure reveal",
+        "water or ocean travel mechanic",
+        "neutral threat guessed from display name",
+        "object creation instead of visibility mutation"
+      ],
+      "notes": "Cove scouting requires real fog visibility mutation from owned structures toward exact treasure-bank or neutral-threat targets and must match both radius and target allowlist predicates."
+    },
+    "fortress.structure-reveal-enemy-heroes": {
+      "revealKinds": [
+        "owned-structure-radius-reveal",
+        "enemy-hero-position-visibility"
+      ],
+      "companionPredicates": [
+        "RequiresEnemyHeroPositions",
+        "RequiresOwnedStructureRadius"
+      ],
+      "forbiddenSubstitutes": [
+        "UI-only highlight",
+        "minimap-only marker",
+        "all hero reveal",
+        "friendly hero reveal",
+        "enemy inferred from display color only",
+        "object creation instead of visibility mutation"
+      ],
+      "notes": "Fortress structure vision requires real fog visibility mutation for enemy hero positions within owned-structure radius and must match enemy ownership."
+    },
+    "inferno.existing-gate-site-reveal": {
+      "revealKinds": [
+        "existing-gate-site-object-reveal",
+        "map-object-class-visibility"
+      ],
+      "companionPredicates": [
+        "RequiresExistingMapObjectClasses",
+        "RequiresObjectSidOrCategoryAllowlist"
+      ],
+      "forbiddenSubstitutes": [
+        "UI-only highlight",
+        "minimap-only marker",
+        "create a gate site",
+        "theoretical gate location reveal",
+        "all Inferno-themed object reveal",
+        "object creation instead of visibility mutation"
+      ],
+      "notes": "Inferno gate-site vision requires real fog visibility mutation for existing map object classes from the exact allowlist and must not synthesize new gate objects."
+    },
+    "necropolis.corpse-site-undead-reveal": {
+      "revealKinds": [
+        "owned-structure-radius-reveal",
+        "corpse-or-battle-site-visibility",
+        "undead-relevant-object-visibility"
+      ],
+      "companionPredicates": [
+        "RequiresCorpseOrBattleSiteData",
+        "RequiresObjectSidOrCategoryAllowlist",
+        "RequiresOwnedStructureRadius"
+      ],
+      "forbiddenSubstitutes": [
+        "UI-only highlight",
+        "minimap-only marker",
+        "all undead-themed object reveal",
+        "corpse site inferred from display name",
+        "battle history inferred without corpse or battle-site data",
+        "object creation instead of visibility mutation"
+      ],
+      "notes": "Necropolis corpse-site vision requires real fog visibility mutation from owned structures toward exact corpse, battle-site, or undead-relevant target data and must match the allowlist."
+    },
+    "rampart.avenger-marked-enemy-trail": {
+      "revealKinds": [
+        "avenger-marked-enemy-trail-visibility",
+        "enemy-hero-position-visibility"
+      ],
+      "companionPredicates": [
+        "RequiresAvengerMark",
+        "RequiresEnemyHeroPositions"
+      ],
+      "forbiddenSubstitutes": [
+        "UI-only highlight",
+        "minimap-only marker",
+        "any enemy hero trail reveal",
+        "target damaged by Rampart inferred as Avenger mark",
+        "parallel custom mark registry",
+        "object creation instead of visibility mutation"
+      ],
+      "notes": "Rampart Avenger trail vision requires real fog visibility mutation tied to native Avenger mark state and enemy position data, not faction or damage inference."
+    },
+    "stronghold.weak-neutral-stack-scouting": {
+      "revealKinds": [
+        "weak-neutral-stack-visibility",
+        "neutral-threat-filtered-object-reveal"
+      ],
+      "companionPredicates": [
+        "RequiresNeutralThreatData",
+        "RequiresObjectSidOrCategoryAllowlist"
+      ],
+      "forbiddenSubstitutes": [
+        "UI-only highlight",
+        "minimap-only marker",
+        "all neutral stack reveal",
+        "weakness guessed from stack display text",
+        "neutral threat guessed from object name",
+        "object creation instead of visibility mutation"
+      ],
+      "notes": "Stronghold scouting requires real fog visibility mutation for exact weak neutral stack targets and must match neutral threat data plus object allowlist predicates."
+    },
+    "tower.structure-artifact-regional-reveal": {
+      "revealKinds": [
+        "owned-structure-radius-reveal",
+        "artifact-regional-visibility"
+      ],
+      "companionPredicates": [
+        "RequiresObjectSidOrCategoryAllowlist",
+        "RequiresOwnedStructureRadius"
+      ],
+      "forbiddenSubstitutes": [
+        "UI-only highlight",
+        "minimap-only marker",
+        "all artifact reveal",
+        "artifact inferred from display name",
+        "global reveal instead of regional reveal",
+        "object creation instead of visibility mutation"
+      ],
+      "notes": "Tower artifact vision requires real fog visibility mutation from owned structures toward exact artifact allowlist targets within a regional boundary."
+    }
+  }
+}

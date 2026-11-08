@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_conflux",
+  "sourceDoc": "docs/custom_faction_recommendations.md and docs/custom_faction_technical_implementation_proposals.md",
+  "mechanics": [
+    {
+      "id": "conflux.magic_university",
+      "surface": "building",
+      "sourceName": "Magic University",
+      "status": "substituted",
+      "reason": "Generated city row uses a proven +1 Spell Power visit bonus until school-purchase UI is traced.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Bank"
+      ],
+      "forbiddenPlayerText": [
+        "school",
+        "Air Magic",
+        "Earth Magic",
+        "Fire Magic",
+        "Water Magic"
+      ]
+    },
+    {
+      "id": "conflux.resource_silo",
+      "surface": "building",
+      "sourceName": "Resource Silo",
+      "status": "substituted",
+      "reason": "Generated row grants fixed mercury income; exact source economy still needs final audit signoff.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot"
+      ],
+      "forbiddenPlayerText": [
+        "random resource",
+        "exact source economy"
+      ]
+    },
+    {
+      "id": "conflux.garden_of_life",
+      "surface": "building",
+      "sourceName": "Garden of Life",
+      "status": "exact",
+      "reason": "Generated city row grants +10 weekly growth to Pixie/Sprite lines.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Mother_Nature"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "conflux.vault_of_ashes",
+      "surface": "building",
+      "sourceName": "Vault of Ashes",
+      "status": "exact",
+      "reason": "Generated city row grants +1 weekly growth to Firebird/Phoenix lines.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot_level_2"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "conflux.elemental_conflux",
+      "surface": "building",
+      "sourceName": "Elemental Conflux",
+      "status": "exact",
+      "reason": "Generated city row grants +1 weekly growth to each elemental base line.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Mycelium_Roots"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "conflux.aurora_borealis",
+      "surface": "building",
+      "sourceName": "Aurora Borealis",
+      "status": "substituted",
+      "reason": "All-spells grail behavior needs a traced spellbook/library route.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "all spells",
+        "every spell",
+        "Aurora Borealis"
+      ],
+      "currentRows": [
+        "Build_Spring_of_Life"
+      ],
+      "playerTextTokens": [
+        "Homm3Conflux_Build_Spring_of_Life_description",
+        "Homm3Conflux_Build_Spring_of_Life_name",
+        "Homm3Conflux_Build_Spring_of_Life_narrativeDescription"
+      ]
+    },
+    {
+      "id": "conflux.elemental_conjury",
+      "surface": "faction_skill",
+      "sourceName": "Elemental Conjury",
+      "status": "substituted",
+      "reason": "Elemental Conjury uses rank-based start Focus and elemental-line Spell Power scaling with Advanced/Expert subskills; Expert Greater Conjury uses Focus ability damage bonus instead of true spell-tier rebake. Subskill SIDs use elemental_conjury (not summon_elementals). Player-facing name matches shipped non-summon behavior.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "skill_faction_homm3_conflux"
+      ],
+      "forbiddenPlayerText": [
+        "Summon Elementals",
+        "summon button",
+        "summons an elemental",
+        "rank-dependent elemental summon"
+      ],
+      "forbiddenSidTokens": [
+        "summon_elementals"
+      ]
+    }
+  ]
+}

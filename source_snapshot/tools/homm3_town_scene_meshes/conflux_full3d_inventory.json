@@ -1,0 +1,1481 @@
+{
+ "schema": "homm3_conflux_full3d_inventory.v1",
+ "fraction": "homm3_conflux",
+ "doc": "docs/homm3_conflux_full_3d_town.md",
+ "sources": {
+  "layers": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_scene_refs/homm3_conflux/layers/<layerId>.png (positions.json, building_layer_map.json nativeLevels)",
+  "backdrop": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_scene_refs/homm3_conflux/mockups/homm3_conflux_background_upscaled_3840x2160.png",
+  "sceneCatalogAtInventory": "scene3d/homm3_conflux/catalog.json (working tree, 23 layers, bundle sha f1501756)"
+ },
+ "representationKeys": {
+  "mesh": "registered Meshy mesh in the scene3d bundle (Mesh_ piece)",
+  "mesh+sprite": "mesh plus painted 2D pixels (Sprite_ skirt or hole grids)",
+  "quad2d": "HotA sprite on a camera-facing quad (compositor art quad or backdrop quad)",
+  "none": "not drawn at runtime (no native level reaches the layer)"
+ },
+ "planKeys": {
+  "reuse": "existing mesh, no spend",
+  "reuse_existing_meshy": "a mesh already paid for (artifacts/meshy_town_scene_meshes) that no catalog uses yet",
+  "meshy": "new Meshy concept (6 cr) + meshy-7 mesh (30 cr)",
+  "procedural": "built by tools/homm3_town_scene_meshes/build_conflux_full3d_scene.py, no spend",
+  "drop": "painted pixels replaced by the 3D terrain / props; the element disappears",
+  "unreachable": "no native level shows it; nothing to build until a nativeLevels entry maps it"
+ },
+ "buildings": [
+  {
+   "slot": "Build_Main",
+   "level": 1,
+   "layer": "tbelhall",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbelhall",
+    "hole_tbelhall"
+   ],
+   "plan": "reuse",
+   "mesh": "tbelhall",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Main",
+   "level": 2,
+   "layer": "tbelhall_2",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbelhall_2",
+    "hole_tbelhall_2"
+   ],
+   "plan": "reuse",
+   "mesh": "tbelhall_2",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Main",
+   "level": 3,
+   "layer": "tbelhall_4",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbelhall_4",
+    "hole_tbelhall_4"
+   ],
+   "plan": "reuse",
+   "mesh": "tbelhall_4",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Wall",
+   "level": 1,
+   "layer": "tbelcstl",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbelcstl",
+    "hole_tbelcstl"
+   ],
+   "plan": "reuse",
+   "mesh": "tbelcstl",
+   "skirts": "drop (painted hillside and river become terrain)",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Wall",
+   "level": 2,
+   "layer": "tbelcstl_2",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbelcstl_2",
+    "hole_tbelcstl_2"
+   ],
+   "plan": "reuse",
+   "mesh": "tbelcstl_2_keep",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Wall",
+   "level": 3,
+   "layer": "tbelcstl_3",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbelcstl_3_keep",
+    "hole_tbelcstl_3_keep"
+   ],
+   "plan": "reuse",
+   "mesh": "tbelcstl_3_keep",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Magic_Guild",
+   "level": 1,
+   "layer": "tbelmage",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbelmage",
+    "hole_tbelmage"
+   ],
+   "plan": "reuse",
+   "mesh": "tbelmage",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Magic_Guild",
+   "level": 2,
+   "layer": "tbelmage_2",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbelmage_2"
+   ],
+   "plan": "reuse",
+   "mesh": "tbelmage_2",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Magic_Guild",
+   "level": 3,
+   "layer": "tbelmage_3",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbelmage_3",
+    "hole_tbelmage_3"
+   ],
+   "plan": "reuse",
+   "mesh": "tbelmage_3",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Magic_Guild",
+   "level": 4,
+   "layer": "tbelmage_4",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbelmage_4",
+    "hole_tbelmage_4"
+   ],
+   "plan": "reuse",
+   "mesh": "tbelmage_4",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Tavern",
+   "level": 1,
+   "layer": "tbeltvrn",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbeltvrn"
+   ],
+   "plan": "reuse",
+   "mesh": "tbeltvrn",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Treasury",
+   "level": 1,
+   "layer": "tbelblak",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbelblak"
+   ],
+   "plan": "reuse",
+   "mesh": "tbelblak",
+   "skirts": "drop",
+   "credits": 0,
+   "effects": "chimney smoke: effects lane (not a 2D element; the mesh has no smoke)",
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Market",
+   "level": 1,
+   "layer": "tbelmark",
+   "now": "mesh",
+   "sprites": [],
+   "plan": "reuse",
+   "mesh": "tbelmark_a + tbelmark_b",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Resource_Depot",
+   "level": 1,
+   "layer": "tbelsilo",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbelsilo"
+   ],
+   "plan": "reuse",
+   "mesh": "tbelsilo",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Bank",
+   "level": 1,
+   "layer": "tbelspec",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbelspec"
+   ],
+   "plan": "reuse",
+   "mesh": "tbelspec",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Artifact_Market",
+   "level": 1,
+   "layer": "tbeldock",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbeldock"
+   ],
+   "plan": "reuse",
+   "mesh": "tbeldock",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Resource_Depot_level_2",
+   "level": 1,
+   "layer": "tbelhrd2",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbelhrd2",
+    "hole_tbelhrd2"
+   ],
+   "plan": "reuse + meshy",
+   "mesh": "tbeldw_0 (lantern, as today) + prop_mushrooms",
+   "skirts": "drop; the painted mushroom garden becomes 3D mushroom props",
+   "credits": 36,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Tier_1",
+   "level": 1,
+   "layer": "tbeldw_0",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbeldw_0",
+    "hole_tbeldw_0"
+   ],
+   "plan": "reuse",
+   "mesh": "tbeldw_0",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Tier_1",
+   "level": 2,
+   "layer": "tbeldw_0_2",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbeldw_0_2",
+    "hole_tbeldw_0_2"
+   ],
+   "plan": "reuse",
+   "mesh": "tbeldw_0 + prop_mushrooms (shared with tbelhrd2)",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Tier_2",
+   "level": 1,
+   "layer": "tbeldw_1",
+   "now": "quad2d",
+   "plan": "meshy",
+   "mesh": "tbeldw_1 air shrine (stone gate on a snowy crag with small spires)",
+   "credits": 36,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Tier_2",
+   "level": 2,
+   "layer": "tbeldw_1_2",
+   "now": "quad2d",
+   "plan": "reuse",
+   "mesh": "tbeldw_1 (the upgrade sprite differs by an animation frame only)",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Tier_3",
+   "level": 1,
+   "layer": "tbeldw_2",
+   "now": "mesh",
+   "sprites": [],
+   "plan": "reuse + procedural",
+   "mesh": "tbeldw_2 (dry basin) + Fx water surface",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Tier_3",
+   "level": 2,
+   "layer": "tbeldw_2_2",
+   "now": "mesh",
+   "sprites": [],
+   "plan": "reuse + procedural",
+   "mesh": "tbeldw_2 + Fx water surface",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Tier_4",
+   "level": 1,
+   "layer": "tbeldw_3",
+   "now": "quad2d",
+   "plan": "reuse_existing_meshy + procedural",
+   "mesh": "tbeldw_3 mesh_a1 (pilot lava plateau with stairs, 36 cr already spent, never shipped) + Fx lava glow",
+   "credits": 0,
+   "status": "3d in candidate bundle (pilot mesh placed by sprite width, tilted 28 deg; not silhouette-fitted)"
+  },
+  {
+   "slot": "Build_Tier_4",
+   "level": 2,
+   "layer": "tbeldw_3_2",
+   "now": "quad2d",
+   "plan": "reuse",
+   "mesh": "tbeldw_3",
+   "credits": 0,
+   "status": "3d in candidate bundle (pilot mesh placed by sprite width, tilted 28 deg; not silhouette-fitted)"
+  },
+  {
+   "slot": "Build_Tier_5",
+   "level": 1,
+   "layer": "tbeldw_4",
+   "now": "quad2d",
+   "plan": "meshy",
+   "mesh": "tbeldw_4 earth ring (circle of jagged dark standing stones)",
+   "credits": 36,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Tier_5",
+   "level": 2,
+   "layer": "tbeldw_4_2",
+   "now": "quad2d",
+   "plan": "reuse",
+   "mesh": "tbeldw_4",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Tier_6",
+   "level": 1,
+   "layer": "tbeldw_5",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbeldw_5_frame"
+   ],
+   "animated": [
+    "PortalDisc (painted-pixel texture)"
+   ],
+   "plan": "reuse + procedural",
+   "mesh": "tbeldw_5_frame + procedural swirl disc texture",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Tier_6",
+   "level": 2,
+   "layer": "tbeldw_5_2",
+   "now": "mesh+sprite",
+   "sprites": [
+    "skirt_tbeldw_5_2"
+   ],
+   "plan": "reuse + procedural",
+   "mesh": "tbeldw_5_frame + swirl disc",
+   "skirts": "drop",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_ bins, sprites dropped)"
+  },
+  {
+   "slot": "Build_Tier_7",
+   "level": 1,
+   "layer": "tbeldw_6",
+   "now": "quad2d",
+   "plan": "procedural",
+   "mesh": "Mesh_ vent crater rock on the peak + Fx fire vortex and cloud (spinning)",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_VentRock + Fx_Vortex + Fx_FireCloud)"
+  },
+  {
+   "slot": "Build_Tier_7",
+   "level": 2,
+   "layer": "tbeldw_6_2",
+   "now": "quad2d",
+   "plan": "procedural",
+   "mesh": "as tbeldw_6",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_VentRock + Fx_Vortex + Fx_FireCloud)"
+  },
+  {
+   "slot": "Build_Golden_Calf",
+   "level": 1,
+   "layer": "tbelholy",
+   "now": "quad2d",
+   "plan": "procedural",
+   "mesh": "Fx aurora ribbon curtains over the far peaks + Mesh_ cairn anchor for the collider",
+   "credits": 0,
+   "status": "3d in candidate bundle (Mesh_Cairn + Fx_Aurora)"
+  }
+ ],
+ "unreachableLayers": {
+  "tbelhall_3": "unusedLayers: OE Main level 3 shows the capitol (product choice 2026-09-26)",
+  "tbelmage_5": "nativeLevels Build_Magic_Guild stops at 4",
+  "tbelext2": "Build_Mother_Nature has no nativeLevels entry",
+  "tbelext4": "extraCapitol, a fully transparent placeholder sprite; no native level",
+  "tbelhrd1": "no native level (Tier_1 horde is tbelhrd2 via Build_Resource_Depot_level_2)",
+  "tbel2hrd2": "no native level",
+  "tbeldw_0_3": "OE dwellings have two levels",
+  "tbeldw_1_3": "OE dwellings have two levels",
+  "tbeldw_2_3": "OE dwellings have two levels",
+  "tbeldw_3_3": "OE dwellings have two levels",
+  "tbeldw_4_3": "OE dwellings have two levels",
+  "tbeldw_5_3": "OE dwellings have two levels",
+  "tbeldw_6_3": "OE dwellings have two levels"
+ },
+ "environment": [
+  {
+   "element": "backdrop quad",
+   "now": "quad2d (4K outpainted plate at camera distance 80; right third and bottom band are outpainted blur)",
+   "plan": "drop (runtime hides it when fullScene3d)",
+   "credits": 0,
+   "status": "hidden by catalog backdrop=hidden (needs runtime support)"
+  },
+  {
+   "element": "black plate quad",
+   "now": "quad2d at 80.5",
+   "plan": "drop (runtime hides it when fullScene3d)",
+   "credits": 0,
+   "status": "hidden (needs runtime support)"
+  },
+  {
+   "element": "terrain: valley floor, hills, cliffs, riverbanks",
+   "now": "painted pixels on the backdrop quad + 16 per-building skirts",
+   "plan": "procedural",
+   "how": "lit mesh from the camera-registered depth surface (smoothed), whole 16:9 frame; albedo synthesised per terrain class (grass, forest floor, rock, snow, dirt) from Meshy tile textures x a de-lit, low-pass macro colour of the painting",
+   "credits": 30,
+   "status": "3d in candidate bundle (environment prefab)"
+  },
+  {
+   "element": "far mountains and snow peaks",
+   "now": "painted pixels on the backdrop quad",
+   "plan": "procedural",
+   "how": "same terrain mesh, far band; rock/snow classes",
+   "credits": 0,
+   "status": "3d in candidate bundle (environment prefab)"
+  },
+  {
+   "element": "rivers, waterfall, pond",
+   "now": "painted pixels on the backdrop quad",
+   "plan": "procedural",
+   "how": "Water_ mesh cut from the terrain by the water class, flattened across the channel",
+   "credits": 0,
+   "status": "3d in candidate bundle (environment prefab)"
+  },
+  {
+   "element": "sky and clouds",
+   "now": "painted pixels on the backdrop quad",
+   "plan": "procedural",
+   "how": "Sky_ dome (camera-centred sphere cap) with a gradient + cloud texture synthesised from the HoMM3 sky",
+   "credits": 0,
+   "status": "3d in candidate bundle (environment prefab)"
+  },
+  {
+   "element": "forest and bushes",
+   "now": "painted pixels on the backdrop quad",
+   "plan": "meshy",
+   "how": "two conifer variants + one broadleaf bush, scattered on the forest class and merged into chunk meshes",
+   "credits": 108,
+   "status": "3d in candidate bundle (environment prefab)"
+  },
+  {
+   "element": "boulders on slopes and banks",
+   "now": "painted pixels",
+   "plan": "meshy",
+   "how": "one boulder cluster, scattered on the rock class near the valley",
+   "credits": 36,
+   "status": "mesh generated; scatter optional and currently 0 instances (the painted-cliff placements floated); used as vent rock / cairn anchors"
+  },
+  {
+   "element": "stone footbridge over the river (painted in the plate)",
+   "now": "painted pixels",
+   "plan": "meshy",
+   "credits": 36,
+   "status": "3d in candidate bundle (environment prefab)"
+  }
+ ],
+ "estimate": {
+  "baseCredits": 354,
+  "retryReserveCredits": 144,
+  "capCredits": 500,
+  "note": "concept 6 + meshy-7 30 per mesh; tile textures are 5 image-to-image calls at 6. Budget ceiling from the coordinator: 8000 (whole balance), stop if the balance would fall below 500."
+ },
+ "candidate": {
+  "root": "F:/homm3_conflux_full3d",
+  "bundle": "F:/homm3_conflux_full3d/bundle/homm3_town_scene3d_conflux",
+  "bundleSha256": "1e8ffd6bb7f0f45b0c55e712e8ac87a2ed369786281399e0f61099a22da53dcf",
+  "catalog": "F:/homm3_conflux_full3d/bundle/catalog.json",
+  "catalogSha256": "095033dc104a38f1bfbdb872933739eeb23ca9c95747f33c7bd8504eb10f646b",
+  "proofTier": "generated artifact (Unity-editor render); not installed, not runtime"
+ },
+ "creditsSpent": 318,
+ "phase2": {
+  "date": "2026-09-27",
+  "status": "candidate, not staged, not installed",
+  "references": [
+   "Conflux-in-background.png (HoMM3 town screen)",
+   "layers/*.png (HoMM3 building art)"
+  ],
+  "bundle": {
+   "path": "F:/homm3_conflux_full3d/bundle/homm3_town_scene3d_conflux",
+   "bytes": 87529444,
+   "sha256": "7327f1876386b5529747e8529c2177c6558de269b7928512110c72184366db7e"
+  },
+  "catalog": {
+   "path": "F:/homm3_conflux_full3d/bundle/catalog.json",
+   "sha256": "5c972aae4530820f9fddaff9aad94d9d1c8d9abb89a3bc6c5975ca4fe6c71537"
+  },
+  "facingChanged": {
+   "tbeldw_1": 177,
+   "tbeldw_1_2": 177
+  },
+  "effects": {
+   "tbeldw_6": "Fx_Pyre particles",
+   "tbeldw_3": "Fx_Lava shader + Fx_FirePit particles",
+   "tbeldw_5": "Fx_Portal shader",
+   "tbelholy": "Fx_Aurora shader",
+   "environment": "Fx_Water flow shader (UV1 downstream)"
+  },
+  "runtimeChangeNeeded": false,
+  "proofTier": "generated artifact + editor render; not seen in game",
+  "creditsSpent": 0
+ },
+ "phase3": {
+  "date": "2026-09-27",
+  "status": "candidate, not staged, not installed",
+  "terrainDetail": {
+   "baked": "Mesh_ terrain + Mesh_Skirt_ albedo (Hex/Lit mainTexture)",
+   "sources": [
+    {
+     "layer": "grass",
+     "texture": "grass1",
+     "file": "resources.assets",
+     "pathId": 5783,
+     "width": 512,
+     "height": 512,
+     "sha256": "44493dc0320a8f5b8cd5bd6cb2a34c3c7bad81b19d109752fa3f8d441ec9d9ad"
+    },
+    {
+     "layer": "dirt",
+     "texture": "dirt_ground3",
+     "file": "resources.assets",
+     "pathId": 5911,
+     "width": 512,
+     "height": 512,
+     "sha256": "517c53ce16d455579eeab4828fd997f093646736b50974e362f8f6bcec716f77"
+    },
+    {
+     "layer": "rock",
+     "texture": "512_6_dirt_rock4_diffuse",
+     "file": "resources.assets",
+     "pathId": 7797,
+     "width": 512,
+     "height": 512,
+     "sha256": "28ddcd71fbc6e3ff5eb0a0d59f685c7f31860cd66ecef44cb1550c13c02c139e"
+    },
+    {
+     "layer": "snow",
+     "texture": "Snow2",
+     "file": "resources.assets",
+     "pathId": 6931,
+     "width": 1024,
+     "height": 1024,
+     "sha256": "6736f5b0bd3c400d0207a3ebf1422b00b8caaf9dd862af5df3338d02ba05933e"
+    }
+   ],
+   "note": "tiling game textures multiplied over the HoMM3 macro colour; no AI upscale, outpaint or Meshy"
+  },
+  "bundle": {
+   "path": "F:/homm3_conflux_full3d/bundle/homm3_town_scene3d_conflux",
+   "bytes": 88489683,
+   "sha256": "052bdfdb416b4cedd7d8158fdfa0da765c83948be3ecb136360a7ccb881d3e30"
+  },
+  "catalog": {
+   "path": "F:/homm3_conflux_full3d/bundle/catalog.json",
+   "sha256": "cd77a0ee418256dd85818c794d66dc124218fc00da3ebaeab7bc734f2b8b0001"
+  },
+  "texelDensity": {
+   "buildingsMedian": 2.06,
+   "terrainBeforeTownRect": 0.56,
+   "terrainBeforeExtension": 0.61,
+   "terrainAfter": 2.0,
+   "note": "texture texels per 1080p px; about 1 visible after GPU mip for both buildings and terrain"
+  },
+  "runtimeChangeNeeded": false,
+  "proofTier": "generated artifact + editor render; not seen in game",
+  "creditsSpent": 0
+ },
+ "phase3b": {
+  "date": "2026-09-27",
+  "status": "candidate, not staged, not installed",
+  "waterLook": {
+   "shader": "Homm3Conflux/FlowWater",
+   "vanillaMaterial": "Mtl_River_Water (Hex/Sea)",
+   "vanillaMaterialPathId": 4170,
+   "sources": [
+    {
+     "texture": "WaterNormal",
+     "file": "resources.assets",
+     "pathId": 6555,
+     "sha256": "51736b713be92f669a1e18c2a0f85d35c2d15a1c32a49b6708860ed92b51cebe"
+    }
+   ],
+   "shore": {
+    "outPx": 6,
+    "rangePx": 32
+   }
+  },
+  "terrainSampler": {
+   "mipBias": -1.0,
+   "aniso": 8,
+   "note": "serialized with the Mesh_ albedo textures; the runtime keeps mainTexture"
+  },
+  "extension": {
+   "EXT_KEEP": 0.4,
+   "EXT_BLOTCH_GAMMA": 0.45,
+   "EXT_DETAIL_GAIN": 1.35
+  },
+  "river": {
+   "meanderAmpRad": 0.75,
+   "meanderLenM": 14.0,
+   "shoreOutPx": 6,
+   "shoreRangePx": 32
+  },
+  "altarFooting": "ledge membrane: snow rim -> lit crag rock with snow streaks -> painted slope; camera-facing shading normal",
+  "pyre": "narrow swirling column + flat cap (orange heart) + violet rim ring",
+  "meadowDressing": {
+   "prop_conifer_a": 9,
+   "prop_conifer_b": 7,
+   "prop_boulders": 5
+  },
+  "hfEnergy": {
+   "buildingsWholeFrame": 15.17,
+   "frame": {
+    "terrainPhase3": 6.67,
+    "terrainNow": 8.33,
+    "buildings": 15.17
+   },
+   "fort": {
+    "terrainPhase3": 7.97,
+    "terrainNow": 9.06,
+    "buildings": 16.02
+   },
+   "altar_of_air": {
+    "terrainPhase3": 5.42,
+    "terrainNow": 6.26,
+    "buildings": 20.35
+   },
+   "foreground": {
+    "terrainPhase3": 5.13,
+    "terrainNow": 7.77,
+    "buildings": null
+   },
+   "meadow": {
+    "terrainPhase3": 5.21,
+    "terrainNow": 8.35,
+    "buildings": null
+   },
+   "right_cliff": {
+    "terrainPhase3": 5.53,
+    "terrainNow": 7.61,
+    "buildings": null
+   }
+  },
+  "bundle": {
+   "path": "F:/homm3_conflux_full3d/bundle/homm3_town_scene3d_conflux",
+   "bytes": 90840852,
+   "sha256": "31ba76bf405664559fb8b0174b234a3bdfdea88d1f7cd12b75e2f434f8cf0f37"
+  },
+  "catalog": {
+   "path": "F:/homm3_conflux_full3d/bundle/catalog.json",
+   "sha256": "af72106bb5e186edd3de0bcf4ee6165f2071a2794959e7f3786543c332a25c3c"
+  },
+  "runtimeChangeNeeded": false,
+  "proofTier": "generated artifact + editor render; not seen in game",
+  "creditsSpent": 0
+ },
+ "phase4": {
+  "date": "2026-09-27",
+  "status": "candidate, not staged, not installed",
+  "defFrameSource": "H3sprite.lod DEF headers; layers/anims/metadata.json for HotA-only layers",
+  "staticLayers": [
+   "tbelhall",
+   "tbelhall_2",
+   "tbelhall_3",
+   "tbelhall_4",
+   "tbelcstl",
+   "tbelcstl_2",
+   "tbelcstl_3",
+   "tbelmage",
+   "tbelmage_2",
+   "tbelmage_3",
+   "tbelmage_4",
+   "tbelmage_5",
+   "tbeltvrn",
+   "tbelmark",
+   "tbelsilo",
+   "tbeldock",
+   "tbelspec",
+   "tbelext2",
+   "tbelext4"
+  ],
+  "animationAudit": {
+   "tbelblak": {
+    "defFrames": 14,
+    "moves": "dark grey smoke billowing up from the forge chimney",
+    "effects": [
+     "Fx_Smoke_tbelblak"
+    ]
+   },
+   "tbeldw_0": {
+    "defFrames": 10,
+    "moves": "the lantern's light flickering in its glass",
+    "effects": [
+     "Fx_Lantern_tbeldw_0"
+    ]
+   },
+   "tbeldw_0_2": {
+    "defFrames": 10,
+    "moves": "the lantern's light flickering in its glass",
+    "effects": [
+     "Fx_Lantern_tbeldw_0_2"
+    ]
+   },
+   "tbeldw_1": {
+    "defFrames": 15,
+    "moves": "six crystals glinting in turn; a white shimmer in the shrine doorway",
+    "effects": [
+     "Fx_AirGlints_tbeldw_1"
+    ]
+   },
+   "tbeldw_1_2": {
+    "defFrames": 15,
+    "moves": "six crystals glinting in turn; a white shimmer in the shrine doorway",
+    "effects": [
+     "Fx_AirGlints_tbeldw_1_2"
+    ]
+   },
+   "tbeldw_2": {
+    "defFrames": 8,
+    "moves": "fountain: white water jets arcing from the central vase into the basin; splash and foam at the basin",
+    "effects": [
+     "Fx_Basin_tbeldw_2",
+     "Fx_FountainJets_tbeldw_2",
+     "Fx_FountainSpray_tbeldw_2"
+    ]
+   },
+   "tbeldw_2_2": {
+    "defFrames": 8,
+    "moves": "fountain: white water jets arcing from the central vase into the basin; splash and foam at the basin",
+    "effects": [
+     "Fx_Basin_tbeldw_2_2",
+     "Fx_FountainJets_tbeldw_2_2",
+     "Fx_FountainSpray_tbeldw_2_2"
+    ]
+   },
+   "tbeldw_3": {
+    "defFrames": 8,
+    "moves": "lava churning in the crater; glowing steps",
+    "effects": [
+     "Fx_Lava_tbeldw_3",
+     "Fx_FirePit_tbeldw_3"
+    ]
+   },
+   "tbeldw_3_2": {
+    "defFrames": 8,
+    "moves": "lava churning in the crater; glowing steps",
+    "effects": [
+     "Fx_Lava_tbeldw_3_2",
+     "Fx_FirePit_tbeldw_3_2"
+    ]
+   },
+   "tbeldw_4": {
+    "defFrames": 8,
+    "moves": "glittering bright points over the stone ring",
+    "effects": [
+     "Fx_EarthGlints_tbeldw_4"
+    ]
+   },
+   "tbeldw_4_2": {
+    "defFrames": 8,
+    "moves": "glittering bright points over the stone ring and its spires",
+    "effects": [
+     "Fx_EarthGlints_tbeldw_4_2"
+    ]
+   },
+   "tbeldw_5": {
+    "defFrames": 20,
+    "moves": "the orb swirling inside the portal ring",
+    "effects": [
+     "Fx_Portal_tbeldw_5"
+    ]
+   },
+   "tbeldw_5_2": {
+    "defFrames": 21,
+    "moves": "the orb swirling inside the portal ring",
+    "effects": [
+     "Fx_Portal_tbeldw_5_2"
+    ]
+   },
+   "tbeldw_6": {
+    "defFrames": 19,
+    "moves": "the fire column rising into a swirling fire cloud",
+    "effects": [
+     "Fx_Pyre_tbeldw_6"
+    ]
+   },
+   "tbeldw_6_2": {
+    "defFrames": 19,
+    "moves": "the fire column rising into a swirling fire cloud",
+    "effects": [
+     "Fx_Pyre_tbeldw_6_2"
+    ]
+   },
+   "tbelholy": {
+    "defFrames": 15,
+    "moves": "aurora curtains rippling across the sky",
+    "effects": [
+     "Fx_Aurora"
+    ]
+   },
+   "tbelhrd2": {
+    "defFrames": 10,
+    "moves": "the same lantern flicker (the horde art repeats the upgraded dwelling's lantern)",
+    "sharedWith": "tbeldw_0_2",
+    "effects": [
+     "Fx_Lantern_tbeldw_0_2"
+    ]
+   }
+  },
+  "motionPx": {
+   "tbelblak": 3941,
+   "tbeldw_0": 519,
+   "tbeldw_0_2": 662,
+   "tbeldw_1": 520,
+   "tbeldw_1_2": 520,
+   "tbeldw_2": 1543,
+   "tbeldw_2_2": 1539,
+   "tbeldw_3": 1307,
+   "tbeldw_3_2": 1481,
+   "tbeldw_4": 115,
+   "tbeldw_4_2": 107,
+   "tbeldw_5": 1118,
+   "tbeldw_5_2": 1118,
+   "tbeldw_6": 4907,
+   "tbeldw_6_2": 5099,
+   "tbelholy": 2830,
+   "tbelhrd2": 662
+  },
+  "notInCatalog": {
+   "tbelhrd1": 10,
+   "tbel2hrd2": 10,
+   "tbeldw_0_3": 10,
+   "tbeldw_1_3": 15,
+   "tbeldw_2_3": 8,
+   "tbeldw_3_3": 8,
+   "tbeldw_4_3": 8,
+   "tbeldw_5_3": 21,
+   "tbeldw_6_3": 19
+  },
+  "renderTimes": [
+   0.0,
+   1.0
+  ],
+  "meshySpend": 318
+ },
+ "phase5": {
+  "date": "2026-09-27",
+  "status": "candidate, not staged, not installed",
+  "module": "tools/homm3_town_scene_meshes/conflux_full3d_nearfield.py",
+  "nearField": {
+   "extensionAlbedo": {
+    "sources": [
+     {
+      "texture": "grass1",
+      "file": "resources.assets",
+      "pathId": 5783,
+      "sha256": "44493dc0320a8f5b8cd5bd6cb2a34c3c7bad81b19d109752fa3f8d441ec9d9ad",
+      "tileM": 2.4,
+      "contrast": 1.9
+     },
+     {
+      "texture": "dirt_ground3",
+      "file": "resources.assets",
+      "pathId": 5911,
+      "sha256": "517c53ce16d455579eeab4828fd997f093646736b50974e362f8f6bcec716f77",
+      "tileM": 2.4,
+      "contrast": 1.4
+     },
+     {
+      "texture": "512_6_dirt_rock4_diffuse",
+      "file": "resources.assets",
+      "pathId": 7797,
+      "sha256": "28ddcd71fbc6e3ff5eb0a0d59f685c7f31860cd66ecef44cb1550c13c02c139e",
+      "tileM": 3.2,
+      "contrast": 1.2
+     },
+     {
+      "texture": "Snow2",
+      "file": "resources.assets",
+      "pathId": 6931,
+      "sha256": "6736f5b0bd3c400d0207a3ebf1422b00b8caaf9dd862af5df3338d02ba05933e",
+      "tileM": 5.0,
+      "contrast": 0.8
+     }
+    ],
+    "paintingRole": "low-frequency colour only: the painting albedo blurred (Gaussian sigma 10.0 px) inside the rect; outside it, per-class colours pulled toward the rect's edge colour (e-folding 5.0 m)",
+    "paintedCrops": false
+   },
+   "seamBlend": {
+    "space": "world",
+    "bandM": 3.5,
+    "noiseM": 1.6,
+    "minBandPx1080p": 200,
+    "toneM": 5.0,
+    "minTonePx1080p": 260,
+    "note": "the synthesised albedo ramps in over a world-distance band from the rect edge, broken by value noise; not along the frame rectangle"
+   },
+   "texturePieces": [
+    {
+     "name": "Mesh_Terrain",
+     "texelsPerPx": 2.0,
+     "frameBox": [
+      0,
+      0,
+      1920,
+      1080
+     ],
+     "tris": 138525
+    },
+    {
+     "name": "Mesh_TerrainNear_0",
+     "texelsPerPx": 4.0,
+     "frameBox": [
+      0,
+      523,
+      483,
+      1080
+     ],
+     "tris": 56744
+    },
+    {
+     "name": "Mesh_TerrainNear_1",
+     "texelsPerPx": 4.0,
+     "frameBox": [
+      478,
+      523,
+      963,
+      1080
+     ],
+     "tris": 56587
+    },
+    {
+     "name": "Mesh_TerrainNear_2",
+     "texelsPerPx": 4.0,
+     "frameBox": [
+      958,
+      523,
+      1443,
+      1080
+     ],
+     "tris": 55662
+    },
+    {
+     "name": "Mesh_TerrainNear_3",
+     "texelsPerPx": 4.0,
+     "frameBox": [
+      1438,
+      526,
+      1920,
+      1080
+     ],
+     "tris": 56593
+    },
+    {
+     "name": "Mesh_TerrainRight",
+     "texelsPerPx": 3.0,
+     "frameBox": [
+      1291,
+      187,
+      1920,
+      597
+     ],
+     "tris": 50662
+    }
+   ],
+   "buildingsTexelsPerPx": 2.06,
+   "relief": {
+    "ampM": 0.09,
+    "bumpM": 0.03,
+    "moundM": 0.1,
+    "fadeZ": [
+     22.0,
+     32.0
+    ],
+    "along": "camera ray (screen registration unchanged)"
+   },
+   "dressing": {
+    "Mesh_NearGrass": {
+     "tris": 180285,
+     "verts": 252399,
+     "tufts": 3175
+    },
+    "Mesh_NearFlowers": {
+     "tris": 2795,
+     "verts": 3440,
+     "clumps": 50
+    },
+    "Mesh_NearPebbles": {
+     "tris": 36080,
+     "verts": 18942,
+     "pebbles": 451
+    },
+    "Mesh_NearRocks": {
+     "tris": 3840,
+     "verts": 1926,
+     "rocks": 3
+    },
+    "Mesh_NearRoots": {
+     "tris": 3720,
+     "verts": 2232,
+     "conifers": 16
+    }
+   },
+   "sitesByDepth": {
+    "tufts": {
+     "0-12m": 777,
+     "12-18m": 1265,
+     "18-26m": 655,
+     "26-60m": 478
+    },
+    "flowers": {
+     "0-12m": 17,
+     "12-18m": 12,
+     "18-26m": 21,
+     "26-60m": 0
+    },
+    "pebbles": {
+     "0-12m": 84,
+     "12-18m": 241,
+     "18-26m": 126,
+     "26-60m": 0
+    },
+    "rocks": {
+     "0-12m": 1,
+     "12-18m": 2,
+     "18-26m": 0,
+     "26-60m": 0
+    }
+   },
+   "hudBottomPx": 64,
+   "assumptions": [
+    "HUD covers the bottom HUD_BOTTOM_PX of the 1080p frame (layout not measured)",
+    "no fly-path data exists; tall pieces keep off the plots' screen corridor toward the camera",
+    "game cull mode of the Hex/Lit donor unknown; dressing is wound like the terrain"
+   ],
+   "meshyCredits": 0
+  },
+  "creditsSpent": 0,
+  "sharpness": {
+   "hf1080p": {
+    "buildings": {
+     "before": 15.13,
+     "after": 15.22,
+     "px": 185194
+    },
+    "far (z >= 45 m)": {
+     "before": 7.62,
+     "after": 8.11,
+     "px": 438554
+    },
+    "mid (22-45 m)": {
+     "before": 10.86,
+     "after": 9.37,
+     "px": 216035
+    },
+    "near (12-22 m)": {
+     "before": 8.48,
+     "after": 6.97,
+     "px": 416406
+    },
+    "nearest (< 12 m)": {
+     "before": 7.45,
+     "after": 4.91,
+     "px": 311420
+    },
+    "right edge (x >= 1600)": {
+     "before": 7.8,
+     "after": 7.25,
+     "px": 298889
+    },
+    "window frame": {
+     "before": 8.35,
+     "after": 7.24,
+     "px": 1382415
+    },
+    "window fort": {
+     "before": 8.88,
+     "after": 9.04,
+     "px": 89552
+    },
+    "window altar_of_air": {
+     "before": 6.26,
+     "after": 6.27,
+     "px": 52812
+    },
+    "window foreground": {
+     "before": 7.77,
+     "after": 6.21,
+     "px": 145079
+    },
+    "window meadow": {
+     "before": 8.35,
+     "after": 7.36,
+     "px": 157651
+    },
+    "window right_cliff": {
+     "before": 7.61,
+     "after": 6.6,
+     "px": 168000
+    },
+    "window near_field": {
+     "before": 7.68,
+     "after": 5.65,
+     "px": 412095
+    },
+    "window right_edge": {
+     "before": 7.82,
+     "after": 7.02,
+     "px": 147200
+    }
+   },
+   "hf4k": {
+    "buildings": {
+     "before": 11.23,
+     "after": 11.13,
+     "px": 740776
+    },
+    "far (z >= 45 m)": {
+     "before": 4.3,
+     "after": 4.84,
+     "px": 1754216
+    },
+    "mid (22-45 m)": {
+     "before": 8.28,
+     "after": 7.21,
+     "px": 864140
+    },
+    "near (12-22 m)": {
+     "before": 5.62,
+     "after": 5.77,
+     "px": 1665624
+    },
+    "nearest (< 12 m)": {
+     "before": 4.45,
+     "after": 3.89,
+     "px": 1245680
+    },
+    "right edge (x >= 1600)": {
+     "before": 5.75,
+     "after": 5.85,
+     "px": 1195556
+    },
+    "window frame": {
+     "before": 5.35,
+     "after": 5.28,
+     "px": 5529660
+    },
+    "window fort": {
+     "before": 4.89,
+     "after": 4.93,
+     "px": 358208
+    },
+    "window altar_of_air": {
+     "before": 2.93,
+     "after": 3.4,
+     "px": 211248
+    },
+    "window foreground": {
+     "before": 4.73,
+     "after": 4.9,
+     "px": 580316
+    },
+    "window meadow": {
+     "before": 5.96,
+     "after": 6.04,
+     "px": 630604
+    },
+    "window right_cliff": {
+     "before": 5.59,
+     "after": 5.57,
+     "px": 672000
+    },
+    "window near_field": {
+     "before": 4.68,
+     "after": 4.53,
+     "px": 1648380
+    },
+    "window right_edge": {
+     "before": 6.11,
+     "after": 5.99,
+     "px": 588800
+    }
+   }
+  },
+  "seam": {
+   "before1080p": {
+    "right seam x=1440": {
+     "segments": 22,
+     "stepOverStd": 0.685,
+     "hfOutsideOverInside": 1.16
+    },
+    "bottom seam y=673": {
+     "segments": 40,
+     "stepOverStd": 0.362,
+     "hfOutsideOverInside": 0.845
+    },
+    "control x=1340": {
+     "segments": 20,
+     "stepOverStd": 0.497,
+     "hfOutsideOverInside": 0.875
+    },
+    "control y=573": {
+     "segments": 24,
+     "stepOverStd": 0.404,
+     "hfOutsideOverInside": 1.002
+    }
+   },
+   "after1080p": {
+    "right seam x=1440": {
+     "segments": 22,
+     "stepOverStd": 0.483,
+     "hfOutsideOverInside": 1.13
+    },
+    "bottom seam y=673": {
+     "segments": 40,
+     "stepOverStd": 0.488,
+     "hfOutsideOverInside": 0.806
+    },
+    "control x=1340": {
+     "segments": 20,
+     "stepOverStd": 0.431,
+     "hfOutsideOverInside": 1.007
+    },
+    "control y=573": {
+     "segments": 24,
+     "stepOverStd": 0.325,
+     "hfOutsideOverInside": 0.972
+    }
+   },
+   "before4k": {
+    "right seam x=1440": {
+     "segments": 22,
+     "stepOverStd": 0.685,
+     "hfOutsideOverInside": 1.165
+    },
+    "bottom seam y=673": {
+     "segments": 40,
+     "stepOverStd": 0.36,
+     "hfOutsideOverInside": 0.838
+    },
+    "control x=1340": {
+     "segments": 20,
+     "stepOverStd": 0.483,
+     "hfOutsideOverInside": 0.881
+    },
+    "control y=573": {
+     "segments": 24,
+     "stepOverStd": 0.41,
+     "hfOutsideOverInside": 1.008
+    }
+   },
+   "after4k": {
+    "right seam x=1440": {
+     "segments": 22,
+     "stepOverStd": 0.493,
+     "hfOutsideOverInside": 1.238
+    },
+    "bottom seam y=673": {
+     "segments": 40,
+     "stepOverStd": 0.415,
+     "hfOutsideOverInside": 0.849
+    },
+    "control x=1340": {
+     "segments": 20,
+     "stepOverStd": 0.432,
+     "hfOutsideOverInside": 1.1
+    },
+    "control y=573": {
+     "segments": 24,
+     "stepOverStd": 0.282,
+     "hfOutsideOverInside": 1.065
+    }
+   }
+  },
+  "bundleSha256": "6005e85e7f045c47b3eb112413d7c53a72b03dcd00b9138577eab65cbbe8d115",
+  "bundleBytes": 114574117
+ },
+ "phase6": {
+  "request": "Extend the full-3D world beyond the camera pan's left/right terrain limits, using vanilla town scenes for visual comparison",
+  "source": "installed cityHuman2/level67 and resources.assets; camera JSON re-extracted by the v2 validator",
+  "stageRoot": "artifacts/homm3_conflux_full3d_phase6",
+  "status": "bundle built and editor-rendered (generated artifact + editor render); not installed, runtime unproven",
+  "catalogSchema": "homm3_town_scene3d_catalog.v2",
+  "catalogSha256StageOnly": "45f2cb23cbf6910dd4ae2f83d76a4f5c4ef68a92dd68f0b6fca62bd2e000ce9c",
+  "coverageSha256": "7a33f7721beef691550918af7cc80dad18c177818c6ab46b495e3267331bc3d7",
+  "outerTerrainPieces": 8,
+  "outerTerrainTriangles": 82712,
+  "outerWaterTriangles": 1601,
+  "outerRivers": 2,
+  "outerScatterBins": 11,
+  "coniferSitesOutsideFrame": 326,
+  "boulderSitesOutsideFrame": 44,
+  "verticesMovedBehindFrame": 1290,
+  "vertexIntrusions": 0,
+  "meshyCredits": 0,
+  "panValidation": {
+   "sampledRays": 990000,
+   "proxyVoids": 0,
+   "canonicalNegativeVoidShare": 0.013,
+   "elapsedSeconds": 31,
+   "limits": "0.5 m triangle-height samples and vertex intrusion are not exact pixel proof; native spline basis and fly-to paths unresolved"
+  },
+  "bundle": {
+   "path": "artifacts/homm3_conflux_full3d_phase6/bundle_phase6/homm3_town_scene3d_conflux",
+   "bytes": 157151152,
+   "sha256": "df2b1517d8c39fdf289104d253b36aac4c8a1355260c1fb22506bf223690871b"
+  },
+  "catalogSha256Final": "d4d50d8d1ae94ccd8eb96ebad0f837ffd14523ad7eeaeaab5d80e9e1515677dc",
+  "editorRenders": {
+   "phase6": "artifacts/homm3_conflux_full3d_phase6/renders_phase6/pan_*.png",
+   "phase5SameSpec": "artifacts/homm3_conflux_full3d_phase6/renders_phase5_pan/pan_*.png",
+   "vanillaApprox": "artifacts/homm3_conflux_full3d_phase6/work6/vanilla_pan/*.png",
+   "sheet": "artifacts/homm3_conflux_full3d_phase6/work6/pan_sheet_vanilla_p5_p6.png",
+   "magentaShareP5toP6": {
+    "sweep_left": [
+     0.0646,
+     0
+    ],
+    "sweep_right": [
+     0.0204,
+     0
+    ],
+    "sweep_high": [
+     0.0576,
+     0
+    ],
+    "sweep_left_4096x2160": [
+     0.057,
+     0
+    ],
+    "sweep_right_4096x2160": [
+     0.0142,
+     0
+    ],
+    "sweep_left_21x9": [
+     0.0323,
+     0
+    ],
+    "sweep_right_21x9": [
+     0.0004,
+     0
+    ],
+    "default": [
+     0,
+     0
+    ]
+   },
+   "defaultMeanAbsDiffP5vsP6": 0.0096,
+   "vanillaCaveat": "moderngl approximation of Hex/Lit shading, flat terrain/sea colour, scene fog; 4096x2160 at half size"
+  },
+  "curtainStreak": {
+   "status": "diagnosed, not fixed",
+   "cause": "screen-space terrain grid bridges depth discontinuities at ridge silhouettes",
+   "trianglesDepthRatioOver": {
+    "1.25": 1713,
+    "1.5": 702,
+    "2": 51
+   },
+   "proposedFix": "cut bridging triangles; back-layer surface continuing the far side under the near ridge"
+  },
+  "supersededBy": "phase6b (install 6b, not 6)"
+ },
+ "phase6b": {
+  "request": "Cut the ridge curtains (rest forward-depth ratio > 1.25) and continue the far surface under the ridge",
+  "module": "tools/homm3_town_scene_meshes/conflux_full3d_curtain.py",
+  "status": "bundle built and editor-rendered (generated artifact + editor render); not installed, runtime unproven",
+  "ratioCap": 1.25,
+  "cutTris": 1713,
+  "maxRatioBefore": 2.228,
+  "backTris": 45409,
+  "extensionTris": 43296,
+  "flattenedTiles": 400,
+  "cutCellPatches": 1713,
+  "extCells": 40,
+  "backPieces": {
+   "Mesh_Back_Terrain": 44339,
+   "Mesh_Back_TerrainRight": 1070
+  },
+  "bundle": {
+   "path": "artifacts/homm3_conflux_full3d_phase6/bundle/homm3_town_scene3d_conflux",
+   "bytes": 158012008,
+   "sha256": "8f638512dd0a8f39d31c592640fb3617bab99a62a209a97ed9fa3b84f05997bc"
+  },
+  "catalogSha256": "e53565218d9aece08efdd44f21f91b8582fc175a890e6864e36c8194d560c0ac",
+  "panCoverageSha256": "7a33f7721beef691550918af7cc80dad18c177818c6ab46b495e3267331bc3d7",
+  "terrainStreakSha256": "fb79a490bb66872f15dcaf5d5edefa9b0f7897e8be1efdd9193c0e7013b647de",
+  "validator": "panRays=990000 panVoid=0 panNeg16x9=0.013 streakMax=1.250 streakNeg=1713",
+  "tests": {
+   "test_phase6b_streak_contract.py": 7,
+   "test_phase6_pan_contract.py": 6
+  },
+  "defaultMeanAbsDiffVsPhase6": {
+   "pan_default": 0.0081,
+   "pan_default_4096x2160": 0.0079,
+   "pan_default_21x9": 0.0079,
+   "full3d_full": 0.0081
+  },
+  "magentaAnyPose": 0,
+  "sheet": "artifacts/homm3_conflux_full3d_phase6/work6b/streak_sheet_phase6_vs_6b.png",
+  "residuals": [
+   "mirrored far-side texture reads as a coarse smear where exposed",
+   "thin cracks between unshared patch/tile copies show sky dome or outer terrain",
+   "tall peak's receding right face (depth-map fin under the 1.25 ratio) streaks in 5, 6 and 6b alike"
+  ],
+  "meshyCredits": 0
+ }
+}

@@ -1,0 +1,1475 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_cove",
+  "heroOverrides": {
+    "homm3_cove_hero_1": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Captain",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Corkes",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_1",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_1_source_offence_specialist",
+        "nameText": "Offense",
+        "descriptionText": "Increases basic attack damage for the hero's army.",
+        "iconKey": "skill_assault",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "basic_attack",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:offence"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_2": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Captain",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Jeremy",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_2",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_2_source_artillery_specialist",
+        "nameText": "Artillery",
+        "descriptionText": "Improves ranged and shooting attack damage for the hero's army.",
+        "iconKey": "skill_siege",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "range_attack",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          },
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "shoot_attack",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:artillery"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_3": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Captain",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_stormbird",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_protection",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Illor",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_3",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_3_source_h3_stormbird_specialist",
+        "nameText": "Stormbird Specialist",
+        "descriptionText": "Stormbird creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_stormbird",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_stormbird",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_stormbird",
+              "h3_stormbird_upg",
+              "h3_stormbird_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_stormbird",
+              "h3_stormbird_upg",
+              "h3_stormbird_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_stormbird",
+              "h3_stormbird_upg",
+              "h3_stormbird_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_stormbird",
+              "h3_stormbird_upg",
+              "h3_stormbird_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_stormbird",
+              "h3_stormbird_upg",
+              "h3_stormbird_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_stormbird"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_4": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Captain",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_scouting",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Elmore",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_4",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_4_source_navigation_specialist",
+        "nameText": "Navigation",
+        "descriptionText": "Increases adventure movement and view radius as the hero gains levels.",
+        "iconKey": "skill_logistic",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "movementPerBonus",
+              "0.04"
+            ],
+            "upgrade": {
+              "increment": 0.02,
+              "levelStep": 6
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "viewRadius",
+              "1"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:navigation"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_5": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Captain",
+      "startSquad": [
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_crew_mate",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Derek",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_5",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_5_source_h3_crew_mate_specialist",
+        "nameText": "Crew Mate Specialist",
+        "descriptionText": "Crew Mate creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_crew_mate",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_crew_mate",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_crew_mate",
+              "h3_crew_mate_upg",
+              "h3_crew_mate_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_crew_mate",
+              "h3_crew_mate_upg",
+              "h3_crew_mate_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_crew_mate",
+              "h3_crew_mate_upg",
+              "h3_crew_mate_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_crew_mate",
+              "h3_crew_mate_upg",
+              "h3_crew_mate_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_crew_mate",
+              "h3_crew_mate_upg",
+              "h3_crew_mate_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_crew_mate"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_6": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Captain",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_economy",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Leena",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_6",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_6_source_gold_specialist",
+        "nameText": "Gold",
+        "descriptionText": "Generates additional gold each day.",
+        "iconKey": "skill_economy",
+        "bonuses": [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              "350"
+            ],
+            "upgrade": {
+              "increment": 50,
+              "levelStep": 5
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:gold"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_7": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Captain",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Anabel",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_7",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_7_source_h3_pirate_specialist",
+        "nameText": "Pirate Specialist",
+        "descriptionText": "Pirate creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_pirate",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_pirate",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_pirate",
+              "h3_pirate_upg",
+              "h3_pirate_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_pirate",
+              "h3_pirate_upg",
+              "h3_pirate_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_pirate",
+              "h3_pirate_upg",
+              "h3_pirate_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_pirate",
+              "h3_pirate_upg",
+              "h3_pirate_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_pirate",
+              "h3_pirate_upg",
+              "h3_pirate_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_pirate"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_8": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Captain",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Cassiopeia",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_8",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_8_source_h3_nymph_specialist",
+        "nameText": "Nymph Specialist",
+        "descriptionText": "Nymph creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_nymph",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_nymph",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_nymph",
+              "h3_nymph_upg",
+              "h3_nymph_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_nymph",
+              "h3_nymph_upg",
+              "h3_nymph_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_nymph",
+              "h3_nymph_upg",
+              "h3_nymph_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_nymph",
+              "h3_nymph_upg",
+              "h3_nymph_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_nymph",
+              "h3_nymph_upg",
+              "h3_nymph_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_nymph"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_9": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Navigator",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Casmetra",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_9",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_9_source_h3_sea_witch_specialist",
+        "nameText": "Sea Witch Specialist",
+        "descriptionText": "Sea Witch creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_sea_witch",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_sea_witch",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_sea_witch",
+              "h3_sea_witch_upg",
+              "h3_sea_witch_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_sea_witch",
+              "h3_sea_witch_upg",
+              "h3_sea_witch_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_sea_witch",
+              "h3_sea_witch_upg",
+              "h3_sea_witch_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_sea_witch",
+              "h3_sea_witch_upg",
+              "h3_sea_witch_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_sea_witch",
+              "h3_sea_witch_upg",
+              "h3_sea_witch_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_sea_witch"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_10": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Navigator",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Eovacius",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_10",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_10_olden_era_masterful_space_10_magic_mirror_copy",
+        "nameText": "Masterful Mirror Copy",
+        "descriptionText": "Starts with Masterful Mirror Copy. It casts as one tier stronger.",
+        "iconKey": "space_10_magic_mirror_copy",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "space_10_magic_mirror_copy",
+              "space_10_magic_mirror_copy_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:space_10_magic_mirror_copy",
+        "masterfulSpellBaseSid": "space_10_magic_mirror_copy",
+        "masterfulSpellSpecialSid": "space_10_magic_mirror_copy_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_11": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Navigator",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Spint",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_11",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_11_source_sorcery_specialist",
+        "nameText": "Sorcery",
+        "descriptionText": "Increases spell damage and weakens enemy spell pressure as the hero gains levels.",
+        "iconKey": "skill_sorcery",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicAttackPerBonus",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          },
+          {
+            "type": "heroStatBattle",
+            "receiverAllegiance": "enemy",
+            "parameters": [
+              "magicAttackPerBonus",
+              "-0.10"
+            ],
+            "upgrade": {
+              "increment": -0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:sorcery"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_12": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Navigator",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Andal",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_12",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_12_source_crystal_specialist",
+        "nameText": "Crystal",
+        "descriptionText": "Generates additional crystals each day.",
+        "iconKey": "skill_economy",
+        "bonuses": [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "crystals",
+              "1"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 7
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:crystal"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_13": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Navigator",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Manfred",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_13",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_13_olden_era_masterful_primal_4_magic_fire_globe",
+        "nameText": "Masterful Fireball",
+        "descriptionText": "Starts with Masterful Fireball. It casts as one tier stronger.",
+        "iconKey": "primal_4_magic_fire_globe",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "primal_4_magic_fire_globe",
+              "primal_4_magic_fire_globe_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:primal_4_magic_fire_globe",
+        "masterfulSpellBaseSid": "primal_4_magic_fire_globe",
+        "masterfulSpellSpecialSid": "primal_4_magic_fire_globe_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_14": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Navigator",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Zilare",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_14",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_14_olden_era_masterful_night_9_magic_twilight",
+        "nameText": "Masterful Twilight",
+        "descriptionText": "Starts with Masterful Twilight. It casts as one tier stronger.",
+        "iconKey": "night_9_magic_twilight",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "night_9_magic_twilight",
+              "night_9_magic_twilight_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:night_9_magic_twilight",
+        "masterfulSpellBaseSid": "night_9_magic_twilight",
+        "masterfulSpellSpecialSid": "night_9_magic_twilight_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_15": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Navigator",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Astra",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_15",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_15_olden_era_masterful_day_1_magic_healing_water",
+        "nameText": "Masterful Healing Water",
+        "descriptionText": "Starts with Masterful Healing Water. It casts as one tier stronger.",
+        "iconKey": "day_1_magic_healing_water",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "day_1_magic_healing_water",
+              "day_1_magic_healing_water_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:day_1_magic_healing_water",
+        "masterfulSpellBaseSid": "day_1_magic_healing_water",
+        "masterfulSpellSpecialSid": "day_1_magic_healing_water_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_16": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Navigator",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Dargem",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_16",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_16_olden_era_masterful_space_4_magic_optical_illusion",
+        "nameText": "Masterful Optical Illusion",
+        "descriptionText": "Starts with Masterful Optical Illusion. It casts as one tier stronger. This version also gives the target 25% spell-damage resistance.",
+        "iconKey": "space_4_magic_optical_illusion",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "space_4_magic_optical_illusion",
+              "space_4_magic_optical_illusion_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:space_4_magic_optical_illusion",
+        "masterfulSpellBaseSid": "space_4_magic_optical_illusion",
+        "masterfulSpellSpecialSid": "space_4_magic_optical_illusion_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_17": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Navigator",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Balfour",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_17",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_17_olden_era_masterful_night_9_magic_twilight",
+        "nameText": "Masterful Twilight",
+        "descriptionText": "Starts with Masterful Twilight. It casts as one tier stronger.",
+        "iconKey": "night_9_magic_twilight",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "night_9_magic_twilight",
+              "night_9_magic_twilight_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:forgetfulness",
+        "masterfulSpellBaseSid": "night_9_magic_twilight",
+        "masterfulSpellSpecialSid": "night_9_magic_twilight_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_cove_hero_18": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Captain",
+      "startSquad": [
+        {
+          "sid": "h3_nymph",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_crew_mate",
+          "min": 6,
+          "max": 9
+        },
+        {
+          "sid": "h3_pirate",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_nymph",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_logistic",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Miriam",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_cove_18",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_cove_hero_18_source_scouting_specialist",
+        "nameText": "Scouting",
+        "descriptionText": "Reveals a wider area of the adventure map and exposes enemy hero and army information.",
+        "iconKey": "skill_scouting",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "viewRadius",
+              "2"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 6
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "enableEnemyHeroInfo",
+              "true"
+            ]
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "enableSquadCounts",
+              "true"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:scouting"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    }
+  }
+}

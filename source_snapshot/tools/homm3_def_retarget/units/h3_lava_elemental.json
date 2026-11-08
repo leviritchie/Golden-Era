@@ -1,0 +1,198 @@
+{
+ "unit": "h3_lava_elemental",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.05,
+   0.82
+  ],
+  "Spine": [
+   0.0,
+   0.05,
+   0.95
+  ],
+  "Spine1": [
+   0.0,
+   0.05,
+   1.08
+  ],
+  "Spine2": [
+   0.0,
+   0.05,
+   1.2
+  ],
+  "Neck": [
+   0.01,
+   0.03,
+   1.36
+  ],
+  "Head": [
+   0.02,
+   -0.03,
+   1.48
+  ],
+  "HeadTop_End": [
+   0.03,
+   -0.08,
+   1.7
+  ],
+  "LeftShoulder": [
+   0.12,
+   0.08,
+   1.3
+  ],
+  "RightShoulder": [
+   -0.12,
+   0.08,
+   1.3
+  ],
+  "LeftArm": [
+   0.3,
+   0.1,
+   1.28
+  ],
+  "RightArm": [
+   -0.3,
+   0.1,
+   1.28
+  ],
+  "LeftForeArm": [
+   0.422,
+   0.082,
+   1.0
+  ],
+  "RightForeArm": [
+   -0.404,
+   0.025,
+   1.0
+  ],
+  "LeftHand": [
+   0.364,
+   -0.12,
+   0.999
+  ],
+  "RightHand": [
+   -0.339,
+   -0.12,
+   0.992
+  ],
+  "LeftHand_End": [
+   0.25,
+   -0.18,
+   1.03
+  ],
+  "RightHand_End": [
+   -0.25,
+   -0.18,
+   1.03
+  ],
+  "LeftUpLeg": [
+   0.19,
+   0.05,
+   0.8
+  ],
+  "RightUpLeg": [
+   -0.19,
+   0.05,
+   0.8
+  ],
+  "LeftLeg": [
+   0.194,
+   0.019,
+   0.48
+  ],
+  "RightLeg": [
+   -0.169,
+   0.01,
+   0.48
+  ],
+  "LeftFoot": [
+   0.166,
+   0.047,
+   0.13
+  ],
+  "RightFoot": [
+   -0.162,
+   0.057,
+   0.13
+  ],
+  "LeftToeBase": [
+   0.24,
+   -0.1,
+   0.04
+  ],
+  "RightToeBase": [
+   -0.24,
+   -0.1,
+   0.04
+  ],
+  "LeftToe_End": [
+   0.3,
+   -0.2,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.3,
+   -0.2,
+   0.02
+  ]
+ },
+ "extensions": [
+  "conflux_weights",
+  "conflux_rubble",
+  "element_motion"
+ ],
+ "conflux": {
+  "legTop": [
+   0.78,
+   0.92
+  ],
+  "armFalloff": {
+   "width": 0.06
+  },
+  "rubbleSettle": {
+   "gather": 0.35,
+   "power": 0.8
+  },
+  "fillUnweighted": true
+ },
+ "smoothPasses": 3,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "armCut": {
+  "maxDist": 0.11
+ },
+ "shatter": {
+  "start": 2,
+  "chunks": 40,
+  "burst": 0.4,
+  "up": 0.5,
+  "spin": 6,
+  "solid": true
+ },
+ "elementMotion": {
+  "mode": "roil",
+  "period": 8
+ },
+ "shatterReason": "authenticity lane-B 2026-10-11: the deferred rubble (deferMeshes) was not drawn in game, so the Death ended in a vanish; solid chunks + the rubbleSettle heap on the ground (h3_behemoth / h3_vampire / h3_fire_hound recipe), so the conflux_slice_v1 row can move to mergeMeshes.",
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: the strike winds up with both fists high over the head (f1-f2) like the DEF before the slam, instead of only lifting them to the chest",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lava_elemental_attack_overhead_windup_rot.json",
+    "regrid": true,
+    "sha256": "7247438a357abf7e51a2d8e392474235fcc547819c6a2e320228fcd48a83efc8"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lava_elemental_attack_overhead_windup_rot.json",
+    "regrid": true,
+    "sha256": "7247438a357abf7e51a2d8e392474235fcc547819c6a2e320228fcd48a83efc8"
+   }
+  ]
+ }
+}

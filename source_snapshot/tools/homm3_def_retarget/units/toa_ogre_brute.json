@@ -1,0 +1,333 @@
+{
+ "unit": "toa_ogre_brute",
+ "joints": {
+  "Hips": [
+   0.024,
+   0.017,
+   0.742
+  ],
+  "Spine": [
+   0.024,
+   0.03,
+   0.843
+  ],
+  "Spine1": [
+   0.024,
+   0.042,
+   0.945
+  ],
+  "Spine2": [
+   0.024,
+   0.056,
+   1.058
+  ],
+  "Neck": [
+   0.024,
+   0.066,
+   1.147
+  ],
+  "Head": [
+   0.052,
+   0.01,
+   1.28
+  ],
+  "HeadTop_End": [
+   0.05,
+   0.0,
+   1.62
+  ],
+  "LeftShoulder": [
+   0.136,
+   0.052,
+   1.161
+  ],
+  "LeftArm": [
+   0.269,
+   0.059,
+   1.126
+  ],
+  "LeftForeArm": [
+   0.325,
+   0.115,
+   0.938
+  ],
+  "LeftHand": [
+   0.366,
+   0.031,
+   0.735
+  ],
+  "LeftHand_End": [
+   0.383,
+   -0.002,
+   0.654
+  ],
+  "RightShoulder": [
+   -0.059,
+   0.066,
+   1.161
+  ],
+  "RightArm": [
+   -0.199,
+   0.108,
+   1.126
+  ],
+  "RightForeArm": [
+   -0.304,
+   0.157,
+   0.931
+  ],
+  "RightHand": [
+   -0.332,
+   -0.08,
+   0.861
+  ],
+  "RightHand_End": [
+   -0.342,
+   -0.166,
+   0.836
+  ],
+  "LeftUpLeg": [
+   0.136,
+   0.01,
+   0.721
+  ],
+  "LeftLeg": [
+   0.206,
+   -0.066,
+   0.435
+  ],
+  "LeftFoot": [
+   0.227,
+   0.08,
+   0.114
+  ],
+  "LeftToeBase": [
+   0.269,
+   -0.052,
+   0.016
+  ],
+  "LeftToe_End": [
+   0.283,
+   -0.178,
+   -0.012
+  ],
+  "RightUpLeg": [
+   -0.087,
+   0.024,
+   0.728
+  ],
+  "RightLeg": [
+   -0.157,
+   -0.01,
+   0.435
+  ],
+  "RightFoot": [
+   -0.185,
+   0.122,
+   0.114
+  ],
+  "RightToeBase": [
+   -0.206,
+   -0.024,
+   0.016
+  ],
+  "RightToe_End": [
+   -0.206,
+   -0.15,
+   -0.026
+  ]
+ },
+ "extensions": [
+  "stronghold_propbone",
+  "stronghold_rip"
+ ],
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "Club"
+  ]
+ },
+ "rips": [
+  {
+   "name": "rarm_torso",
+   "a": [
+    "RightHand",
+    "RightForeArm"
+   ],
+   "b": [
+    "Hips",
+    "Spine",
+    "Spine1",
+    "Spine2",
+    "RightUpLeg"
+   ],
+   "box": [
+    [
+     -1,
+     -1,
+     0.5
+    ],
+    [
+     -0.15,
+     1,
+     1.2
+    ]
+   ]
+  },
+  {
+   "name": "larm_torso",
+   "a": [
+    "LeftHand",
+    "LeftForeArm"
+   ],
+   "b": [
+    "Hips",
+    "Spine",
+    "Spine1",
+    "Spine2",
+    "LeftUpLeg"
+   ],
+   "box": [
+    [
+     0.15,
+     -1,
+     0.5
+    ],
+    [
+     1,
+     1,
+     1.2
+    ]
+   ]
+  }
+ ],
+ "propBones": [
+  {
+   "name": "Club",
+   "parent": "RightHand",
+   "head": [
+    -0.33,
+    -0.12,
+    0.88
+   ],
+   "tail": [
+    -0.14,
+    0.24,
+    1.6
+   ],
+   "faceTest": "centroid",
+   "regions": [
+    {
+     "segments": [
+      [
+       [
+        -0.36,
+        -0.2,
+        0.8
+       ],
+       [
+        -0.3,
+        -0.05,
+        1.1
+       ]
+      ],
+      [
+       [
+        -0.3,
+        -0.05,
+        1.1
+       ],
+       [
+        -0.2,
+        0.15,
+        1.45
+       ]
+      ],
+      [
+       [
+        -0.2,
+        0.15,
+        1.45
+       ],
+       [
+        -0.14,
+        0.25,
+        1.66
+       ]
+      ]
+     ],
+     "radius": 0.09,
+     "color": {
+      "expr": "mx",
+      "min": 0.26
+     },
+     "coreRadius": 0.045
+    },
+    {
+     "sphere": [
+      [
+       -0.17,
+       0.07,
+       1.35
+      ],
+      0.11
+     ],
+     "color": {
+      "expr": "mx",
+      "min": 0.26
+     }
+    },
+    {
+     "sphere": [
+      [
+       -0.14,
+       0.22,
+       1.6
+      ],
+      0.18
+     ],
+     "color": {
+      "expr": "mx",
+      "min": 0.3
+     }
+    }
+   ]
+  }
+ ],
+ "glbPatch": {
+  "reason": "authenticity lane B 2026-10-11: AttackFront - club raised high up-back (DEF f1-f2) instead of resting on the shoulder behind the head; stretchRelax on AttackFront for the re-posed creases",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/toa_ogre_brute_club_windup_rot.json",
+    "regrid": true,
+    "sha256": "b35d1e07ddfbb8f2ebed9196b82d4a5372c4b2dbb860ca810335a9e54f7790d1"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/toa_ogre_brute_club_windup_rot.json",
+    "regrid": true,
+    "sha256": "b35d1e07ddfbb8f2ebed9196b82d4a5372c4b2dbb860ca810335a9e54f7790d1"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "crease of the re-posed joints"
+   }
+  ]
+ }
+}

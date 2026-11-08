@@ -1,0 +1,406 @@
+{
+ "unit": "h3_naga_upg",
+ "strideExempt": "legless body: serpent tail, no legs; the rig has no leg chain",
+ "joints": {
+  "Hips": [
+   0.025,
+   -0.089,
+   0.612
+  ],
+  "Spine": [
+   0.016,
+   -0.073,
+   0.745
+  ],
+  "Spine1": [
+   0.007,
+   -0.057,
+   0.878
+  ],
+  "Spine2": [
+   -0.003,
+   -0.039,
+   1.027
+  ],
+  "Neck": [
+   -0.011,
+   -0.025,
+   1.144
+  ],
+  "Head": [
+   -0.025,
+   -0.032,
+   1.258
+  ],
+  "HeadTop_End": [
+   -0.039,
+   -0.067,
+   1.577
+  ],
+  "LeftShoulder": [
+   0.018,
+   0.011,
+   1.18
+  ],
+  "LeftArm": [
+   0.146,
+   -0.018,
+   1.151
+  ],
+  "LeftForeArm": [
+   0.245,
+   0.053,
+   0.91
+  ],
+  "LeftHand": [
+   0.422,
+   -0.06,
+   0.945
+  ],
+  "LeftHand_End": [
+   0.444,
+   -0.195,
+   0.86
+  ],
+  "RightShoulder": [
+   -0.046,
+   0.011,
+   1.187
+  ],
+  "RightArm": [
+   -0.174,
+   -0.039,
+   1.194
+  ],
+  "RightForeArm": [
+   -0.302,
+   0.004,
+   1.002
+  ],
+  "RightHand": [
+   -0.359,
+   -0.075,
+   0.803
+  ],
+  "RightHand_End": [
+   -0.323,
+   -0.153,
+   0.683
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "roll": 20
+  }
+ },
+ "tail": {
+  "segments": 24,
+  "amplitude": 0.2,
+  "wavelength": 0.75,
+  "behind": [
+   0.0,
+   1.0,
+   0.0
+  ],
+  "handsAboveZ": 0.72,
+  "handsRadius": 0.35,
+  "excludeMetal": true,
+  "excludeNearHands": 0.1,
+  "behindReason": "Model-space trail axis: the body faces -Y (look stamp frontResolved -y), so the Move tail trails +Y, straight opposite travel. The earlier [-0.893, 0.416, 0] was -right of the sprite camera (screen-left in the DEF 2D view), which in 3D put the Move tail 65 deg off the travel axis (in-game 2026-09-30: the tail went diagonal instead of dragging behind).",
+  "waistBlend": 1.2,
+  "fuseCut": 2.4,
+  "snapGrounded": 0.002
+ },
+ "metalBlades": {
+  "minValue": 0.35,
+  "maxSat": 0.25,
+  "minExtent": 0.25
+ },
+ "extensions": [
+  "cove_reweight",
+  "cove_tailpath",
+  "cove_tube",
+  "dungeon_slump"
+ ],
+ "slump": {
+  "clip": "Death",
+  "frames": 2,
+  "angle": 65,
+  "dir": [
+   0.4,
+   -0.9,
+   0.0
+  ],
+  "reason": "Death rest: the DEF naga collapses flat onto her coil over the last Death frames (f5-f7 of 8), but the human capture keeps the torso upright, so the delivered Death ended as an upright slump (worker C sheets 2026-09-27: naga tips half over, naga_upg slumps, naga_rani stays upright). Same snake body plan as the Dungeon medusas (tail.behind identical), so the medusa slump knob is reused: dungeon_slump, last 2 Death frames, 65 deg forward."
+ },
+ "coveTailPath": {
+  "points": [
+   [
+    0.025,
+    -0.089,
+    0.612
+   ],
+   [
+    0.03,
+    -0.2,
+    0.52
+   ],
+   [
+    0.02,
+    -0.36,
+    0.48
+   ],
+   [
+    0.02,
+    -0.47,
+    0.4
+   ],
+   [
+    0.02,
+    -0.5,
+    0.3
+   ],
+   [
+    0.02,
+    -0.47,
+    0.2
+   ],
+   [
+    0.02,
+    -0.38,
+    0.13
+   ],
+   [
+    0.02,
+    -0.28,
+    0.12
+   ],
+   [
+    0.08,
+    -0.2,
+    0.159
+   ],
+   [
+    0.2,
+    -0.15,
+    0.15
+   ],
+   [
+    0.3,
+    -0.08,
+    0.17
+   ],
+   [
+    0.35,
+    0.0,
+    0.17
+   ],
+   [
+    0.33,
+    0.15,
+    0.15
+   ],
+   [
+    0.2,
+    0.23,
+    0.176
+   ],
+   [
+    0.08,
+    0.2,
+    0.154
+   ],
+   [
+    -0.05,
+    0.13,
+    0.134
+   ],
+   [
+    -0.2,
+    0.06,
+    0.119
+   ],
+   [
+    -0.33,
+    0.06,
+    0.129
+   ],
+   [
+    -0.43,
+    0.15,
+    0.13
+   ],
+   [
+    -0.45,
+    0.28,
+    0.15
+   ],
+   [
+    -0.38,
+    0.4,
+    0.136
+   ],
+   [
+    -0.25,
+    0.45,
+    0.176
+   ],
+   [
+    -0.1,
+    0.47,
+    0.167
+   ],
+   [
+    0.05,
+    0.5,
+    0.142
+   ],
+   [
+    0.08,
+    0.6,
+    0.139
+   ],
+   [
+    0.04,
+    0.72,
+    0.14
+   ],
+   [
+    -0.05,
+    0.78,
+    0.159
+   ],
+   [
+    -0.2,
+    0.8,
+    0.171
+   ],
+   [
+    -0.36,
+    0.75,
+    0.18
+   ],
+   [
+    -0.5,
+    0.66,
+    0.19
+   ],
+   [
+    -0.6,
+    0.52,
+    0.239
+   ],
+   [
+    -0.64,
+    0.42,
+    0.318
+   ],
+   [
+    -0.66,
+    0.36,
+    0.399
+   ],
+   [
+    -0.67,
+    0.3,
+    0.5
+   ],
+   [
+    -0.63,
+    0.31,
+    0.72
+   ]
+  ],
+  "fuseCut": 3.0,
+  "reason": "2026-10-10 user send-back (tail horribly deformed in most clips): the auto surface-distance centreline cut across the fused coil laps, so Move's straight trail tore the laps apart. Hand-placed Blender-space centreline: waist, C-shaped descent behind, the ground coil, the tip rising at the left."
+ },
+ "coveReweight": [
+  {
+   "box": [
+    [
+     -0.52,
+     -0.05,
+     0.45
+    ],
+    [
+     -0.18,
+     0.4,
+     0.95
+    ]
+   ],
+   "dropBones": [
+    "Tail_00",
+    "Tail_01",
+    "Tail_02",
+    "Tail_03",
+    "Tail_04",
+    "Tail_05",
+    "Tail_06",
+    "Tail_07",
+    "Tail_08",
+    "Tail_09",
+    "Tail_10",
+    "Tail_11",
+    "Tail_12",
+    "Tail_13",
+    "Tail_14",
+    "Tail_15",
+    "Tail_16",
+    "Tail_17",
+    "Tail_18",
+    "Tail_19",
+    "Tail_20",
+    "Tail_21",
+    "Tail_22",
+    "Tail_23"
+   ],
+   "fallback": "RightHand",
+   "note": "the right fist's gold sword hilt/guard behind the hand carried 100% Tail_05/06 weight and flew off with the coil in Move/Death"
+  }
+ ],
+ "coveTube": {
+  "weldS": 0.1,
+  "weldRadius": 0.3,
+  "ringsPerBone": 5,
+  "blendRings": 3,
+  "tipTaper": 0.15,
+  "radiusPct": 75,
+  "uvGrid": 512,
+  "reason": "2026-10-10 coordinator ruling (b) on the user send-back: Meshy merged the coil laps, so the uncoiled tail shows holes and fins however the contact is cut (chains 1-3); the tail past the waist is rebuilt as a swept tube along the coveTailPath centreline, welded at the waist plane and textured from the old tail's scales. numpy dry-run (tube/dry.py, linear bone blend): Move tail edges >2x 156 -> 64, max 41 -> 12, p99 1.91 -> 1.86. Chain 2: tail.segments 12 -> 24: the rest coil turns up to ~150 deg between adjacent bones at 12 segments, so the Move uncoil bends single joints ~150-170 deg and linear blend skinning flattens the swept tube there (ring min/max 0.10, chain 1 boards); 24 segments halve the per-joint bend. waistBlend 1.2 keeps the 12-segment waist blend length (0.6 x 2). The weld loop's bisect near-duplicates are welded (weldMergeFrac) and the ring angles even out over blendRings (chain 1 carried the loop's uneven angles down the tube: sub-mm tip edges, a 0.0003 weld sliver the Death heap tore 35x -> 52x). Segment-unit knobs doubled with the count so their physical reach is unchanged: tail.waistBlend 0.6 -> 1.2, tail.fuseCut (build default 1.2) -> 2.4, coveTailPath.fuseCut 1.5 -> 3.0 (at 1.5 the 24-segment cut opened holes across the waist and the weld plane had no closed loop). tail.snapGrounded 0.002 rad (build_unit opt-in): at 24 segments the Idle hips ride left ~1e-5 rad jitter on the resting coil, the glTF exporter flattened Tail_19's channel and verify_glb missed 1.2e-4 at the tip (gate 1e-4); grounded bones within 0.002 rad of rest are now exactly at rest. Chain 3 (coordinator-approved): the tube is triangulated; bake_cs welds Blender's polygons and the patch lane the GLB triangles, so quads failed the numpy CS parity gate (p99 0.013 of the height) and the Death heap could not be applied.",
+  "weldMergeFrac": 0.25
+ },
+ "glbPatch": {
+  "reason": "authenticity lane-A 2026-10-10: Death collapses into the DEF heap (torso falls back-left onto the coils f4-f6 and settles f7; hands held on the waist skin they are fused to by two-bone arm IK, so the fall does not tear them off); Hitted torso knocked back-left f1-f3 like the DEF recoil. Spec: tools/homm3_glb_patch/key_rotations/h3_naga_upg_heap_spec.json (split table: rot applied twice).",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_naga_upg_heap_rot.json",
+    "sha256": "b98d56c50febc1547efdbd82aa308d7909017d9bc56e000472eba63d69404c08",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_naga_upg_heap_rot.json",
+    "sha256": "b98d56c50febc1547efdbd82aa308d7909017d9bc56e000472eba63d69404c08",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_naga_upg_heap_tr.json",
+    "sha256": "138a4b8fe91a3d55a655a6373dc05edd389f4c4adafb7b758ee00eab48305735",
+    "regrid": true
+   }
+  ]
+ }
+}

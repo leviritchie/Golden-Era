@@ -1,0 +1,370 @@
+{
+ "unit": "h3_mage_upg",
+ "joints": {
+  "Hips": [
+   -0.052,
+   -0.024,
+   0.742
+  ],
+  "Spine": [
+   -0.052,
+   -0.016,
+   0.806
+  ],
+  "Spine1": [
+   -0.052,
+   -0.007,
+   0.871
+  ],
+  "Spine2": [
+   -0.052,
+   0.003,
+   0.943
+  ],
+  "Neck": [
+   -0.052,
+   0.01,
+   1.0
+  ],
+  "Head": [
+   -0.052,
+   0.017,
+   1.16
+  ],
+  "HeadTop_End": [
+   -0.052,
+   0.059,
+   1.46
+  ],
+  "LeftShoulder": [
+   -0.017,
+   0.017,
+   1.153
+  ],
+  "LeftArm": [
+   0.087,
+   -0.003,
+   1.139
+  ],
+  "LeftForeArm": [
+   0.157,
+   0.066,
+   0.965
+  ],
+  "LeftHand": [
+   0.241,
+   -0.066,
+   0.951
+  ],
+  "LeftHand_End": [
+   0.289,
+   -0.142,
+   0.943
+  ],
+  "RightShoulder": [
+   -0.087,
+   0.017,
+   1.153
+  ],
+  "RightArm": [
+   -0.199,
+   -0.003,
+   1.139
+  ],
+  "RightForeArm": [
+   -0.283,
+   0.031,
+   0.937
+  ],
+  "RightHand": [
+   -0.269,
+   -0.122,
+   0.805
+  ],
+  "RightHand_End": [
+   -0.262,
+   -0.19,
+   0.746
+  ],
+  "LeftUpLeg": [
+   0.024,
+   -0.024,
+   0.728
+  ],
+  "LeftLeg": [
+   0.073,
+   -0.024,
+   0.337
+  ],
+  "LeftFoot": [
+   0.108,
+   -0.024,
+   0.009
+  ],
+  "LeftToeBase": [
+   0.143,
+   -0.08,
+   0.072
+  ],
+  "LeftToe_End": [
+   0.178,
+   -0.136,
+   0.135
+  ],
+  "RightUpLeg": [
+   -0.136,
+   -0.024,
+   0.728
+  ],
+  "RightLeg": [
+   -0.185,
+   -0.024,
+   0.337
+  ],
+  "RightFoot": [
+   -0.213,
+   -0.024,
+   0.009
+  ],
+  "RightToeBase": [
+   -0.241,
+   -0.073,
+   0.079
+  ],
+  "RightToe_End": [
+   -0.269,
+   -0.122,
+   0.149
+  ]
+ },
+ "props": [
+  {
+   "name": "staff",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.246,
+      -0.135,
+      0.08
+     ],
+     [
+      0.246,
+      -0.135,
+      1.52
+     ]
+    ]
+   ],
+   "radius": 0.045
+  },
+  {
+   "name": "orb",
+   "bone": "LeftHand",
+   "sphere": [
+    [
+     0.246,
+     -0.135,
+     1.6
+    ],
+    0.14
+   ]
+  }
+ ],
+ "sleeve": {
+  "x": 0.24,
+  "zMin": 0.55,
+  "zMax": 1.12
+ },
+ "bootTop": 0.08,
+ "skirtLegShare": 0.3,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ],
+  "propAimDepth": "imagePlane",
+  "propAimRange": 60,
+  "propAimReason": "2026-10-10 lane A authenticity: the free propAim tilt toward/away from the sprite camera (unobservable in a silhouette) laid the staff along the view ray, so the sprite view matched the DEF while the battle and preview cameras showed it horizontal behind the head (Move f0-f1, f7), jutting out level in Hitted, Defence and Death. The DEF draws the staff at full length, upright in front of the body. imagePlane lays it into the image plane and fits only the on-screen swing, within 60 deg of the capture's hand pose"
+ },
+ "extensions": [
+  "tower_propfix",
+  "tower_handsep",
+  "stronghold_propbone"
+ ],
+ "propFix": [
+  {
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.246,
+      -0.135,
+      0.08
+     ],
+     [
+      0.246,
+      -0.135,
+      0.85
+     ]
+    ]
+   ],
+   "radius": 0.055,
+   "minCorners": 3
+  }
+ ],
+ "handSep": [
+  {
+   "hand": "RightHand",
+   "center": [
+    -0.228,
+    -0.157,
+    0.762
+   ],
+   "radius": 0.1
+  }
+ ],
+ "armStrip": [
+  {
+   "chain": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "belowZ": 0.55,
+   "armKeep": 0.999
+  },
+  {
+   "chain": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "belowZ": 0.55,
+   "armKeep": 0.999
+  }
+ ],
+ "propBones": [
+  {
+   "name": "Staff",
+   "parent": "LeftHand",
+   "head": [
+    0.246,
+    -0.135,
+    0.97
+   ],
+   "tail": [
+    0.246,
+    -0.135,
+    1.6
+   ],
+   "onlyWeight": {
+    "bone": "LeftHand",
+    "min": 0.99
+   },
+   "regions": [
+    {
+     "segments": [
+      [
+       [
+        0.246,
+        -0.135,
+        -0.02
+       ],
+       [
+        0.246,
+        -0.135,
+        1.52
+       ]
+      ]
+     ],
+     "radius": 0.065
+    },
+    {
+     "sphere": [
+      [
+       0.246,
+       -0.135,
+       1.6
+      ],
+      0.16
+     ]
+    }
+   ],
+   "reason": "2026-10-11 lane C: the staff on its own child bone of LeftHand (rigid shaft + orb only; onlyWeight keeps the blended fingers and the LeftToeBase copies inside the staff foot off it) so Death can let it fall free like the DEF g05 f1-f7 (bindAt before_keys: bound after silhouetteRefine so propAim on LeftHand still fits the staff)",
+   "bindAt": "before_keys"
+  }
+ ],
+ "glbPatch": {
+  "reason": "2026-10-10 lane A, staff flips: the capture hand pose lays the staff near horizontal or orb-down on single keys (world-up component -0.59..0.07, orb at the hand): ShootFront f4-f8 (the cast) and Hitted f0 and f3. propAim's +/-60 image-plane range cannot reach upright there. The DEF holds the staff upright with the orb on top through the cast and the hit. The LeftHand is turned (82-120 deg, minimal rotation) on those keys so the staff holds the world direction of its neighbouring keys (ShootFront f3->f9 blended, Hitted f1, Hitted f2->f4), upright with the orb on top in sprite, battle and preview views; all other keys untouched | 2026-10-10 coordinator send-back: Hitted was a 25 deg Hips-tilt lean (the whole-body cheat), now a crouch carried by the knees, spine and neck with the Hips at 12 deg; AttackFront f5-f6 staff swung horizontal by the arm and wrist (DEF f5-f7), not the root. Death: a partial heap (kneel, Hips down to 0.37 H, chest and head folded, staff shaft tipped down to the floor). A true heap is blocked by the robe mesh: the floor-length robe has too few horizontal edge loops, so any deeper hip drop tears it (kneel to 0.22 H +552 edges, sit +1500, fold +1750; weight-only fixes and a Death-only accordion corrective emulated in numpy all fail the stretch gate, 7370 -> 8422..11647). Needs real geometry: more horizontal loops or a layered robe. Stretch gate dry-run 7370 -> 7328 edges (worst 26.56, unchanged) past 2x | 2026-10-11 lane C: the staff is on its own bone (propBones Staff, child of LeftHand: rigid shaft + orb; onlyWeight keeps the fingers and the toe copies inside the staff foot on their bones) and Death lets it go: from f1 it tips about its foot, which settles on the floor out at his left, and lies flat in front-left of him, orb forward, from f4 (DEF g05 f1-f3 the staff drops away). The body folds forward over the knees into the heap (Hips->Neck aim, spine/neck curl, head bowed), with no deeper hip drop (this rig's shins lie flat, so a deeper crouch pushes the knees through the floor). Tables were generated by laneC_tools/gen.py (fall op) from key_rotations/h3_mage_upg_heap_staff_spec.json. The staff translation is split into thirds under the 0.25 H per-key cap, because a falling prop leaves the hand by up to 1.25. Stretch gate dry run: 7370 -> 7324 edges, worst 26.56 unchanged.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_upg_staff_aim_rot.json",
+    "sha256": "e578986048f69ed24ad0c0747667c1850a1b2686bf5bc65f8c6f8faa8fb9f330",
+    "regrid": true,
+    "note": "LeftHand turned so the staff holds its neighbouring keys world direction (orb up): ShootFront f4-f8 (f3->f9), Hitted f0 (f1), Hitted f3 (f2->f4)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_upg_sendback_rot.json",
+    "sha256": "3d7bbc7953c4e0f6d930640abec2336f9697be935d24e5f4867f56bb185067e4",
+    "regrid": true,
+    "note": "send-back pose (computed on the staff-patched base; half offset, applied twice under the 120 deg per-key cap): Hitted f0-f3 Hips straightened from 18-27 deg to 12 deg, the crouch carried by the knees (legs IK'd to their own planted feet) with the chest and neck kept and bowed; AttackFront f5-f6 staff swung horizontal by the LeftArm/ForeArm and wrist; Death f2-f7 partial heap: kneel (shins down, knees forward) with the Hips lowered to 0.37 of the rest height, spine and neck folded forward, arms down; f5-f7 the wrist tips the staff shaft down so its foot rests on the floor (the orb end is the grip; the staff stays in hand, a free fall needs a staff bone)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_upg_sendback_rot.json",
+    "sha256": "3d7bbc7953c4e0f6d930640abec2336f9697be935d24e5f4867f56bb185067e4",
+    "regrid": true,
+    "note": "(2/2)"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_upg_sendback_tr.json",
+    "sha256": "123661907fde644791ec82542d940be363f1807be5a46e77857824bfcaf4183c",
+    "regrid": true,
+    "note": "Death f2-f7 Hips lowered into the kneel (paired with the rotations above)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_upg_heap_staff_rot.json",
+    "sha256": "27abfb97a9c96f594093580de307e852f544397645c2bc690d246cb53ad94551",
+    "regrid": true,
+    "note": "Death heap fold + Staff fall rotation (half offset, applied twice under the 120 deg per-key cap)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_upg_heap_staff_rot.json",
+    "sha256": "27abfb97a9c96f594093580de307e852f544397645c2bc690d246cb53ad94551",
+    "regrid": true,
+    "note": "(2/2)"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_upg_staff_fall_tr.json",
+    "sha256": "d42c7f95392f96944a9289a1fce05f1edd0587623e33667b31ce360b6083ca99",
+    "regrid": true,
+    "note": "Staff fall translation (1/3)"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_upg_staff_fall_tr.json",
+    "sha256": "d42c7f95392f96944a9289a1fce05f1edd0587623e33667b31ce360b6083ca99",
+    "regrid": true,
+    "note": "Staff fall translation (2/3)"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_upg_staff_fall_tr.json",
+    "sha256": "d42c7f95392f96944a9289a1fce05f1edd0587623e33667b31ce360b6083ca99",
+    "regrid": true,
+    "note": "Staff fall translation (3/3)"
+   }
+  ]
+ }
+}

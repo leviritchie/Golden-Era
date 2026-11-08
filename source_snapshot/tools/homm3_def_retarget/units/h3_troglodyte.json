@@ -1,0 +1,290 @@
+{
+ "unit": "h3_troglodyte",
+ "joints": {
+  "Hips": [
+   -0.05,
+   0.15,
+   0.7
+  ],
+  "Spine": [
+   -0.05,
+   0.1,
+   0.8
+  ],
+  "Spine1": [
+   -0.05,
+   0.02,
+   0.92
+  ],
+  "Spine2": [
+   -0.05,
+   -0.06,
+   1.02
+  ],
+  "Neck": [
+   -0.05,
+   -0.14,
+   1.06
+  ],
+  "Head": [
+   -0.05,
+   -0.22,
+   1.02
+  ],
+  "HeadTop_End": [
+   -0.05,
+   -0.52,
+   1.0
+  ],
+  "LeftShoulder": [
+   0.0,
+   -0.05,
+   1.05
+  ],
+  "LeftArm": [
+   0.2,
+   -0.1,
+   1.0
+  ],
+  "LeftForeArm": [
+   0.3,
+   -0.02,
+   0.77
+  ],
+  "LeftHand": [
+   0.45,
+   -0.07,
+   0.5
+  ],
+  "LeftHand_End": [
+   0.46,
+   -0.07,
+   0.4
+  ],
+  "RightShoulder": [
+   -0.1,
+   -0.05,
+   1.05
+  ],
+  "RightArm": [
+   -0.27,
+   -0.1,
+   1.02
+  ],
+  "RightForeArm": [
+   -0.4,
+   -0.08,
+   0.75
+  ],
+  "RightHand": [
+   -0.46,
+   -0.15,
+   0.48
+  ],
+  "RightHand_End": [
+   -0.47,
+   -0.18,
+   0.32
+  ],
+  "LeftUpLeg": [
+   0.119,
+   0.147,
+   0.674
+  ],
+  "LeftLeg": [
+   0.205,
+   -0.052,
+   0.402
+  ],
+  "LeftFoot": [
+   0.132,
+   0.094,
+   0.076
+  ],
+  "LeftToeBase": [
+   0.205,
+   -0.039,
+   0.05
+  ],
+  "LeftToe_End": [
+   0.278,
+   -0.172,
+   0.023
+  ],
+  "RightUpLeg": [
+   -0.22,
+   0.147,
+   0.674
+  ],
+  "RightLeg": [
+   -0.3,
+   -0.052,
+   0.402
+  ],
+  "RightFoot": [
+   -0.233,
+   0.094,
+   0.076
+  ],
+  "RightToeBase": [
+   -0.3,
+   -0.039,
+   0.056
+  ],
+  "RightToe_End": [
+   -0.366,
+   -0.172,
+   0.037
+  ]
+ },
+ "props": [
+  {
+   "name": "spear",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.441,
+      -0.007,
+      -0.01
+     ],
+     [
+      0.475,
+      -0.03,
+      1.15
+     ]
+    ],
+    [
+     [
+      0.475,
+      -0.03,
+      1.15
+     ],
+     [
+      0.494,
+      -0.042,
+      1.76
+     ]
+    ]
+   ],
+   "radius": 0.1
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "dy": 20,
+   "roll": 20
+  },
+  "propAim": [
+   "LeftHand"
+  ],
+  "propAimDepth": "imagePlane",
+  "propAimRange": 25,
+  "propAimReason": "2026-09-30 in-game report: troglodyte-line spears flail back and forth. The free propAim tilt toward/away from the sprite camera is unobservable in a silhouette and flipped sign frame to frame (h3_troglodyte idle aim2 53/51/53/-41 -> 77.6 deg spear step on the loop seam; attack 94.7 deg, hitted 105 deg). imagePlane lays the spear into the image plane (the DEF draws it at full length) and fits only the on-screen swing, within propAimRange deg of the capture's hand pose (a wider swing chases the spear's tip/butt mirror line)."
+ },
+ "extensions": [
+  "dungeon_fixweights",
+  "fortress_rig"
+ ],
+ "propFloor": {
+  "bone": "LeftHand",
+  "prop": "spear",
+  "clips": [
+   "AttackFront",
+   "Death",
+   "Defence",
+   "Hitted",
+   "Idle",
+   "Mouseover",
+   "Move"
+  ],
+  "reason": "2026-09-30 propAimDepth imagePlane rebuild: the spear, now held at full length in the image plane instead of foreshortened toward the camera, puts its butt through the floor (Move 0.081 below the Idle floor, AttackFront 0.023, Idle 0.006 world units); ground_glb refused to lift the whole body for it (the planted Move soles would float). The DEF stands the butt on the floor. Every clip is listed; a clip whose spear stays above the floor is left alone."
+ },
+ "fortress": {
+  "chains": [
+   {
+    "name": "Tail",
+    "parent": "Hips",
+    "points": [
+     [
+      -0.045,
+      0.33,
+      0.56
+     ],
+     [
+      -0.053,
+      0.365,
+      0.409
+     ],
+     [
+      -0.052,
+      0.34,
+      0.339
+     ],
+     [
+      -0.054,
+      0.33,
+      0.276
+     ],
+     [
+      -0.059,
+      0.327,
+      0.193
+     ],
+     [
+      -0.079,
+      0.349,
+      0.122
+     ],
+     [
+      -0.084,
+      0.39,
+      0.064
+     ],
+     [
+      -0.115,
+      0.445,
+      0.035
+     ]
+    ],
+    "radius": 0.1,
+    "rootBlend": 0.1,
+    "ratio": 1.0,
+    "geodesic": 0.6
+   }
+  ],
+  "chainsReason": "2026-09-30: the floor-resting tail was a rigid Hips prop (box), so it dipped with the pelvis that the stride-matched Move drops for the smaller imagePlane body and went through the floor (ground_glb then lifted the swing foot past its tolerance / floated the plant). A Hips-parented tail chain with surface (geodesic 0.6) ownership, as h3_kobold_upg_alt and the Fortress tails; centreline traced over the welded surface from the tail's floor end. stride_match_glb's tail_clearance then curls Tail_00 up onto the Idle floor where the Move dips it."
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-10 authenticity (DEF spear): AttackFront thrust - spear lowers to horizontal f1-f6 and rises f7-f9, Spine1 leans 14 deg and the arm reaches at f5 (was a vertical spear through the whole attack); Hitted spear upright tipping back; Death f0-f2 spear upright before the fall; Defence f0/f1/f4/f5 spear raised",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_troglodyte_attack_spear_rot.json",
+    "sha256": "5fab3fea4afad36f8db24a450928fb503b4632e561c5dda06696e21423ff02c1"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "waist crease of the thrust lean"
+   }
+  ]
+ }
+}

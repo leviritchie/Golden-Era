@@ -1,0 +1,298 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_cove",
+  "unitOverrides": {
+    "h3_nymph": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "passives:1",
+          "slotKind": "passives",
+          "index": 1,
+          "enabled": true,
+          "nameKey": "base_passive_blink_name",
+          "descriptionKey": "base_passive_blink_description",
+          "nameText": "Blink",
+          "descriptionText": "Teleports directly to destination hex, ignoring obstacles and traps.",
+          "iconKey": "space_6_magic_blink",
+          "abilityType": "",
+          "animationIndex": 3,
+          "turnBehavior": "ends",
+          "energyLevel": 0,
+          "cooldown": 0,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "cove.nymph_line",
+      "decisionTest": "Nymph defines the tier baseline for cove; upgrades should create a meaningful standard-versus-alternate decision from this role."
+    },
+    "h3_oceanid": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "cove.nymph_line",
+      "decisionTest": "Oceanid should be chosen over Nereid when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_nymph_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_nymph_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_nymph_upg_alt_redesign_ability_description",
+          "nameText": "Healing Water",
+          "descriptionText": "Spend 1 Focus to heal an allied living stack for 50 health plus 5 per stack. Can be used twice per battle.",
+          "iconKey": "sub_skill_faction_homm3_ability_healing_water",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 1,
+          "cooldown": 2,
+          "rank": 1,
+          "charges": 2,
+          "effectKey": "day_1_magic_healing_water:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Healing Water",
+          "effectPayload": {
+            "spellSid": "day_1_magic_healing_water",
+            "spellTier": 1,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "targetMechanics": [
+              {
+                "mech": "heal",
+                "values": [
+                  "50",
+                  "1",
+                  "5",
+                  "without respawn"
+                ]
+              }
+            ]
+          },
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass.",
+          "spellSid": "day_1_magic_healing_water",
+          "spellTier": 1,
+          "spellLevel": 1,
+          "dealerIndex": 0,
+          "targetMechanics": [
+            {
+              "mech": "heal",
+              "values": [
+                "50",
+                "1",
+                "5",
+                "without respawn"
+              ]
+            }
+          ]
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "cove.nymph_line",
+      "decisionTest": "Nereid should be chosen over Oceanid when its alternate role creates a better army, matchup, or build-timing decision."
+    },
+    "h3_crew_mate": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "cove.crew_mate_line",
+      "decisionTest": "Crew Mate defines the tier baseline for cove; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_seaman": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "cove.crew_mate_line",
+      "decisionTest": "Seaman should be chosen over Swashbuckler when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_crew_mate_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "cove.crew_mate_line",
+      "decisionTest": "Swashbuckler should be chosen over Seaman when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_pirate": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "cove.pirate_line",
+      "decisionTest": "Pirate defines the tier baseline for cove; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_corsair": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "cove.pirate_line",
+      "decisionTest": "Corsair should be chosen over Sea Dog when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_sea_dog": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "cove.gunpowder_warehouse_sea_dog",
+      "decisionTest": "Sea Dog should remain a distinct alternate-upgrade decision; its Gunpowder Warehouse prerequisite is a changed city-build contract until a per-upgrade prerequisite route exists.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_stormbird": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "cove.stormbird_line",
+      "decisionTest": "Stormbird defines the tier baseline for cove; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_ayssid": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "cove.stormbird_line",
+      "decisionTest": "Ayssid should be chosen over Halcyon when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_stormbird_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "cove.stormbird_line",
+      "decisionTest": "Halcyon should be chosen over Ayssid when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_sea_witch": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "cove.sea_witch_line",
+      "decisionTest": "Sea Witch defines the tier baseline for cove; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_sorceress": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "cove.sea_witch_line",
+      "decisionTest": "Sorceress should be chosen over Tidecaller when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_sea_witch_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "cove.sea_witch_line",
+      "decisionTest": "Tidecaller should be chosen over Sorceress when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_nix": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "cove.nix_line",
+      "decisionTest": "Nix defines the tier baseline for cove; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_nix_warrior": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "cove.nix_line",
+      "decisionTest": "Nix Warrior should be chosen over Nix Praetorian when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_nix_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "cove.nix_line",
+      "decisionTest": "Nix Praetorian should be chosen over Nix Warrior when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_sea_serpent": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "cove.sea_serpent_line",
+      "decisionTest": "Sea Serpent defines the tier baseline for cove; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_haspid": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "cove.sea_serpent_line",
+      "decisionTest": "Haspid should be chosen over Abyss Serpent when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_sea_serpent_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "cove.sea_serpent_line",
+      "decisionTest": "Abyss Serpent should be chosen over Haspid when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_sea_serpent_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_sea_serpent_upg_alt_redesign_ability_description",
+          "nameText": "Whirlpool",
+          "descriptionText": "Spend 2 Focus to give an enemy -2 Speed and -2 Initiative for 3 rounds.",
+          "iconKey": "",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "aqualotl_upg_alt:abilities:1",
+          "effectKind": "unit-special",
+          "effectLabel": "Whirlpool",
+          "effectPayload": {},
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    }
+  }
+}

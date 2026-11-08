@@ -1,0 +1,43 @@
+{
+  "schema": "plugin_payload_abi_surfaces.v1",
+  "doc": "docs/plugin_payload_abi.md",
+  "source": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/PluginPayloadAbi.cs",
+  "surfaces": {
+    "UnitBundle": {
+      "const": "UnitBundleContractVersion",
+      "dependsOn": "owned-skinned unit bundles in homm3_bundles: homm3_import.json bindings, prefab layout, __homm3_vfx_* node names, homm3_mesh_fx catalog and vanilla-style FX rows",
+      "readers": [
+        "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/Homm3ImportVisuals.cs",
+        "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/Homm3UnitLookVfxRuntime.cs",
+        "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/Homm3MeshFx.cs"
+      ],
+      "acknowledged": {
+        "version": 1,
+        "readerSha256": {
+          "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/Homm3ImportVisuals.cs": "6c30badcd37712c63fc93d4d61f5f48c9a5a46ec662660d6d411e29e87f3881c",
+          "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/Homm3UnitLookVfxRuntime.cs": "f5b5dfad7432edf71e24990a3621095e63a0285396a3fb6e2a70908372a15584",
+          "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/Homm3MeshFx.cs": "607132aed7e928b51eae5a7916e4a3ba39c6eebafacba695125185e765ec1138"
+        },
+        "at": "2026-10-02T21:29:23Z",
+        "note": "Map loading optimization: cache successful final fit/ground transform for fresh immutable map prefab clones; exact miss measurement, bundle/table/prefab schema and per-instance presentation contract unchanged. Source review and owning source gate passed; runtime equivalence unproven."
+      }
+    },
+    "TownScene": {
+      "const": "TownSceneContractVersion",
+      "dependsOn": "full-3D town scenes: scene3d/<town>/catalog.json schema and the bundle shaders it names",
+      "readers": [
+        "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/Homm3TownScene3d.cs",
+        "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/Homm3FactoryCityWorldVisuals.cs"
+      ],
+      "acknowledged": {
+        "version": 2,
+        "readerSha256": {
+          "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/Homm3TownScene3d.cs": "54f66e856b172dd901a3007461619e208fb02665543bfc3944d5aeb7ad8d4ee0",
+          "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/Homm3FactoryCityWorldVisuals.cs": "43fa7c745e9b354af75638a500c13a93fc444143cc786ea15b99633e58bedb2d"
+        },
+        "at": "2026-10-01T20:01:07Z",
+        "note": "v2: Homm3TownScene3d.cs reads clothLook (cloth flag wave, 838786b2b7) and skyLook panorama _TimeOffset (8d6c4c9c0a); catalogs shipping clothLook/skyLook need v2 (validate_town_scene3d_contract TOWN_SCENE_KEY_MIN)"
+      }
+    }
+  }
+}

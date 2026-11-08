@@ -1,0 +1,155 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_lich_master",
+ "status": "look",
+ "notes": "necropolis rollout",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "burst_flash",
+   "treatment": "dynamic",
+   "notes": "the staff starburst lights the body gold-orange (attack/shoot f4-8)"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "staff_burst",
+    "type": "defFlipbook",
+    "provenance": "roster inventory necropolis g12/g15 on-body tint (fire) f4-7; the red-white starburst at the staff tip f4-8 (defEffects keeps 98/1096 px). mask: tools/homm3_unit_look/units/masks/necropolis_masks.py staff_burst",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       4,
+       5,
+       6,
+       7,
+       8
+      ]
+     },
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       4,
+       5,
+       6,
+       7,
+       8
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_lich_master/staff_burst"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": {
+      "Unit_AttackFront": [
+       [
+        194,
+        205
+       ],
+       [
+        195,
+        199
+       ],
+       [
+        222,
+        197
+       ],
+       [
+        231,
+        206
+       ],
+       [
+        232,
+        212
+       ]
+      ],
+      "Unit_ShootFront": [
+       [
+        194,
+        205
+       ],
+       [
+        195,
+        199
+       ],
+       [
+        222,
+        197
+       ],
+       [
+        231,
+        206
+       ],
+       [
+        232,
+        212
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "burst_flash",
+    "notes": "no staff bone: pinned to the staff hand (LeftHand). Each key's origin is chosen so the effect lands on the MESH staff tip: origin = DEF effect centroid - (mesh staff tip - mesh LeftHand), with the tip read off the def_retarget SpriteCam render (farthest mesh pixel from the hand along the hand->effect line). The mesh staff is shorter/angled differently than the DEF's, so the DEF offset alone left the effect floating off the tip."
+   },
+   {
+    "id": "burst_flash_light",
+    "type": "effectLight",
+    "lightId": "burst_flash",
+    "carrier": "staff_burst",
+    "anchor": {
+     "bone": "LeftHand",
+     "towardLayerCentroid": 0.4,
+     "towardCameraU": 0.4
+    },
+    "rgb": [
+     1.0,
+     0.7,
+     0.45
+    ],
+    "range": 3.5,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.968,
+      1.08,
+      0.484,
+      0.348,
+      0.188,
+      0.051
+     ],
+     "Unit_ShootFront": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.998,
+      1.157,
+      0.518,
+      0.346,
+      0.182,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

@@ -1,0 +1,1177 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_bulwark",
+  "heroOverrides": {
+    "homm3_bulwark_hero_1": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Chieftain",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Dhuin",
+      "descriptionText": "On the field where elves from all over Vori converge at springtime to compete in military prowess, a memorial stone with the name Dhuin Ironhand has been standing for years: no one has yet been able to hurl a dart any farther. Dhuin is as straight and firm as his famed spear, and many fathers show him the highest degree of reverence, entrusting their eldest sons to him for training.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_1",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_1_source_h3_snow_elf_specialist",
+        "nameText": "Snow Elf Specialist",
+        "descriptionText": "Snow Elves and their upgrades gain weekly growth, Speed, and level-scaled Attack while Dhuin leads them.",
+        "iconKey": "h3_snow_elf",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_snow_elf",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_snow_elf",
+              "h3_steel_elf",
+              "h3_snow_elf_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_snow_elf",
+              "h3_steel_elf",
+              "h3_snow_elf_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_snow_elf"
+      },
+      "notes": "HotA Bulwark archive: exact Kobold plus two Snow Elf source stacks and first source skill Archery mapped to Assault."
+    },
+    "homm3_bulwark_hero_2": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Chieftain",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Oidana",
+      "descriptionText": "In every tribe of Vori, someone traces their lineage back to Oidana, and she is known as the Mother of the Chieftains — only she herself has long grown weary of the ceaseless bickering among her unruly descendants. Having lived in the world for far too long to harbor preferences, she has equal affection for everyone with ancient Vori blood in their veins.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_2",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_2_source_diplomacy_specialist",
+        "nameText": "Diplomacy",
+        "descriptionText": "Adapts Oidana's HotA Diplomacy specialty into stronger army morale command.",
+        "iconKey": "skill_trainer",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "moral",
+              "1"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 7
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:diplomacy"
+      },
+      "notes": "HotA Bulwark archive: exact mixed source army and first source skill Archery mapped to Assault; Diplomacy is an explicit Olden Era substitution."
+    },
+    "homm3_bulwark_hero_3": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Chieftain",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Neia",
+      "descriptionText": "Missing the target with your only shot often means starving to death. A native of the harshest part of Vori, the Volee glacier, Neia knows it all too well; this fate has befallen many hunters of her tribe. She is one of the only Vori elves alive who prefer a bow to a powerful javelin, but Neia's aim is so perfect that even a lightweight arrow spells certain end.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_3",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_3_source_archery_specialist",
+        "nameText": "Archery",
+        "descriptionText": "Improves ranged and shooting attack damage for Neia's army.",
+        "iconKey": "skill_assault",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "range_attack",
+              "0.11"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          },
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "shoot_attack",
+              "0.11"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:archery"
+      },
+      "notes": "HotA Bulwark archive: exact mixed source army and Advanced Archery mapped to Advanced Assault."
+    },
+    "homm3_bulwark_hero_4": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Chieftain",
+      "startSquad": [
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        },
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        },
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_mountain_ram",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_protection",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Eikthurn",
+      "descriptionText": "The Jotunns are serious about celestial omens. Those born in the days when the Great Aries dominates the starry expanse know that their fates are forever intertwined with mountain rams, willful and awesomely brave. Ever since he learned to walk, Eikthurn has been fearlessly scaling mountain peaks in the company of his tough-horned friends, adamant in that they are the only ones incapable of betrayal.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_4",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_4_source_h3_mountain_ram_specialist",
+        "nameText": "Mountain Ram Specialist",
+        "descriptionText": "Mountain Rams and their upgrades gain weekly growth, Speed, and level-scaled Attack while Eikthurn leads them.",
+        "iconKey": "h3_mountain_ram",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_mountain_ram",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_mountain_ram",
+              "h3_argali",
+              "h3_mountain_ram_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_mountain_ram",
+              "h3_argali",
+              "h3_mountain_ram_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_mountain_ram"
+      },
+      "notes": "HotA Bulwark archive: exact three Mountain Ram source stacks and first source skill Armorer mapped to Protection."
+    },
+    "homm3_bulwark_hero_5": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Chieftain",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_protection",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Creyle",
+      "descriptionText": "Creyle's father, the konung, refused to let her succeed him. Knowing better than to try and reason with the old grouch, she decided to find others who would accept her leadership. Creyle then went and challenged the alpha of Vori's largest mammoth herd: she wrestled him down bare-handed, snapped off his tusk and made it into a war horn. She blasts it as she leads what is now her own herd into battle.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_5",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_5_source_h3_mammoth_specialist",
+        "nameText": "Mammoth Specialist",
+        "descriptionText": "Mammoths and their upgrades gain weekly growth, Speed, and level-scaled Defense while Creyle leads them.",
+        "iconKey": "h3_mammoth",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_mammoth",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_mammoth",
+              "h3_war_mammoth",
+              "h3_mammoth_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_mammoth",
+              "h3_war_mammoth",
+              "h3_mammoth_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 6
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_mammoth"
+      },
+      "notes": "HotA Bulwark archive: exact mixed source army and Advanced Armorer mapped to Advanced Protection."
+    },
+    "homm3_bulwark_hero_6": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Chieftain",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_logistic",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Spadum",
+      "descriptionText": "Spadum is not the strongest warrior or the most skilled hunter among the Yeti; still, his kin hold him in the highest regard. The answer as to why is simple: he is fluent in the languages of all races in Vori. This often helps him settle disputes over valuable land in favor of his people without the parties resorting to needless violence.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_6",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_6_source_h3_yeti_specialist",
+        "nameText": "Yeti Specialist",
+        "descriptionText": "Yetis and their upgrades gain weekly growth, Speed, and level-scaled Defense while Spadum leads them.",
+        "iconKey": "h3_yeti",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_yeti",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_yeti",
+              "h3_yeti_runemaster",
+              "h3_yeti_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_yeti",
+              "h3_yeti_runemaster",
+              "h3_yeti_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 4
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_yeti"
+      },
+      "notes": "HotA Bulwark archive: exact mixed source army and first source skill Pathfinding mapped to Logistics."
+    },
+    "homm3_bulwark_hero_7": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Chieftain",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_economy",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Kynr",
+      "descriptionText": "Many believe that Kynr is not a name, but rather a rank or title, because Kynr has always been among kobolds. Whenever disaster strikes the mines, and tunnels collapse, it is Kynr who leads the rescue parties. At his call, every kobold immediately suspends their dealings and obeys without question, knowing full well that lives are at stake.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_7",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_7_source_h3_kobold_specialist",
+        "nameText": "Kobold Specialist",
+        "descriptionText": "Kobolds and their upgrades gain weekly growth, Speed, and level-scaled Attack while Kynr leads them.",
+        "iconKey": "h3_kobold",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_kobold",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_kobold",
+              "h3_kobold_foreman",
+              "h3_kobold_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_kobold",
+              "h3_kobold_foreman",
+              "h3_kobold_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_kobold"
+      },
+      "notes": "HotA Bulwark archive: exact three Kobold source stacks and first source skill Estates mapped to Economy."
+    },
+    "homm3_bulwark_hero_8": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Chieftain",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_logistic",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Ergon",
+      "descriptionText": "Ergon spent his long life in constant movement. He served in Lord Slayer's guard in Enroth, guarded elven caravans in Jadame, and sold his sword in Antagarich, only to realize in his later years that he yearned for the place whereto time itself seemed to come to rest. That said, his skill in arranging swift marches is still there, whenever need arises.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_8",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_8_source_pathfinding_specialist",
+        "nameText": "Pathfinding",
+        "descriptionText": "Improves movement across difficult terrain and restores movement after battle.",
+        "iconKey": "skill_logistic_2",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "landscapePenaltyPerBonus",
+              "-0.15"
+            ],
+            "upgrade": {
+              "increment": -0.01,
+              "levelStep": 2
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "movementAfterBattleBonus",
+              "150"
+            ],
+            "upgrade": {
+              "increment": 25,
+              "levelStep": 4
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:pathfinding"
+      },
+      "notes": "HotA Bulwark archive: exact mixed source army and first source skill Pathfinding mapped to Logistics."
+    },
+    "homm3_bulwark_hero_9": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Elder",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Kriv",
+      "descriptionText": "When the shamans surmised that the gods would never grant their tribe another spring without a great sacrifice, the lot fell on Kriv. Chained to a runestone, he waited for death; indeed, she appeared to him as a white owl, yet only took his eyes, repaying him with the gift of seeing through time. Kriv returned to accurately predict the warm season's arrival, establishing himself as a peerless shaman.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_9",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_9_source_h3_shaman_specialist",
+        "nameText": "Shaman Specialist",
+        "descriptionText": "Shamans and their upgrades gain weekly growth, Speed, and level-scaled Attack while Kriv leads them.",
+        "iconKey": "h3_shaman",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_shaman",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_shaman",
+              "h3_great_shaman",
+              "h3_shaman_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_shaman",
+              "h3_great_shaman",
+              "h3_shaman_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 5
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_shaman"
+      },
+      "notes": "HotA Bulwark archive: exact mixed source army and Advanced Wisdom."
+    },
+    "homm3_bulwark_hero_10": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Elder",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Glacius",
+      "descriptionText": "The expanses of Vori, covered with years of snow, only seem lifeless; those who know what to look for will find out that the disembodied inhabitants of these lands make fine interlocutors, or maybe even sources of power. Glacius has a reputation for being the Bane of Spirits: their empty shells crumble into bursts of magical light, as he greedily devours their energy and unleashes it upon his enemies.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_10",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_10_source_frost_ring_specialist",
+        "nameText": "Frost Ring",
+        "descriptionText": "Adapts Glacius's HotA Frost Ring specialty into increased spell pressure.",
+        "iconKey": "skill_sorcery",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicAttackPerBonus",
+              "0.13"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "spell:frostRing"
+      },
+      "notes": "HotA Bulwark archive: exact mixed source army, first source skill Wisdom, and Frost Ring starting spell; the specialization is an explicit Olden Era substitution."
+    },
+    "homm3_bulwark_hero_11": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Elder",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Sial",
+      "descriptionText": "Sial can always be traced on the battlefield by shards of ice statues that once were her enemies. Legend says another doing of hers is the infamous Crystal Lake, which stays frozen even through the brief summers. Once, its waters swallowed an entire tribe whose chieftain had angered her; they remain eternally still since.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_11",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_11_source_ice_bolt_specialist",
+        "nameText": "Ice Bolt",
+        "descriptionText": "Adapts Sial's HotA Ice Bolt specialty into reduced spell Focus costs.",
+        "iconKey": "skill_sorcery",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "manaCostBonusPercent",
+              "-0.11"
+            ],
+            "upgrade": {
+              "increment": -0.01,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "spell:iceBolt"
+      },
+      "notes": "HotA Bulwark archive: exact mixed source army, first source skill Wisdom, and Ice Bolt starting spell; the specialization is an explicit Olden Era substitution."
+    },
+    "homm3_bulwark_hero_12": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Elder",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Dalton",
+      "descriptionText": "Plain weapons can barely scratch a Jotunn, but believing these hulks neglect protection exposes a fool. Dalton is the most adept armorer capable of forging equipment of such immense size. Lean as Vori's ores are, Dalton has penetrated the secrets of magic to ensure his creations can withstand anything, an ice demon's fury included.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_12",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_12_source_shield_specialist",
+        "nameText": "Shield",
+        "descriptionText": "Adapts Dalton's HotA Shield specialty into reduced basic-attack damage received.",
+        "iconKey": "skill_protection",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "inDmgMods",
+              "basic_attack",
+              "-0.12"
+            ],
+            "upgrade": {
+              "increment": -0.01,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "spell:shield"
+      },
+      "notes": "HotA Bulwark archive: exact mixed source army, first source skill Wisdom, and Shield starting spell; the specialization is an explicit Olden Era substitution."
+    },
+    "homm3_bulwark_hero_13": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Elder",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Biarma",
+      "descriptionText": "Everyone in Vori knows: when all remedies fail, the last and only resort for the ailing is to seek out old Biarma. Those who dare to face her no longer care for Biarma's motives as to who will be granted a new lease on life, and who will instead donate their skull to the eerie adornment of her remote abode's palisade.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_13",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_13_olden_era_masterful_day_1_magic_healing_water",
+        "nameText": "Masterful Healing Water",
+        "descriptionText": "Starts with Masterful Healing Water. It casts as one tier stronger.",
+        "iconKey": "day_1_magic_healing_water",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "day_1_magic_healing_water",
+              "day_1_magic_healing_water_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "skill:firstAid",
+        "masterfulSpellBaseSid": "day_1_magic_healing_water",
+        "masterfulSpellSpecialSid": "day_1_magic_healing_water_special"
+      },
+      "notes": "HotA Bulwark archive: Kobold, First Aid Tent, and Snow Elf source army. The unsupported war-machine stack is recorded here rather than emitted as a creature; Biarma is the source-defined non-water roster substitute."
+    },
+    "homm3_bulwark_hero_14": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Elder",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Akka",
+      "descriptionText": "The yeti's knack for survival in the frost is often attributed to their thick hides and dense fur. However, their resilience stems from an innate magical power that radiates warmth throughout their bodies. Only a select few can consciously harness it, and Akka is among the most adept. Her expertise stems from her deep understanding of the warlike furor her clansmen tend to give in to.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_14",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_14_source_bloodlust_specialist",
+        "nameText": "Bloodlust",
+        "descriptionText": "Adapts Akka's HotA Bloodlust specialty into stronger basic-attack damage.",
+        "iconKey": "skill_sorcery",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "basic_attack",
+              "0.12"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 4
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "spell:bloodlust"
+      },
+      "notes": "HotA Bulwark archive: exact mixed source army, first source skill Wisdom, and Bloodlust starting spell; the specialization is an explicit Olden Era substitution."
+    },
+    "homm3_bulwark_hero_15": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Elder",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Vehr",
+      "descriptionText": "Vehr earned her moniker, Goldtooth, long before replacing her worn-out fangs with ones of pure metal. To this day, her teeth remain the primary tool of her trade, as she possesses the remarkable talent to discern a rock's composition simply by biting into it. Being so blessed, she does not waste time on trifles; her expertise lies in finding rich gold veins.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_15",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_15_source_gold_specialist",
+        "nameText": "Gold",
+        "descriptionText": "Generates additional gold each day.",
+        "iconKey": "skill_economy",
+        "bonuses": [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              "350"
+            ],
+            "upgrade": {
+              "increment": 50,
+              "levelStep": 5
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:gold"
+      },
+      "notes": "HotA Bulwark archive: exact mixed source army and first source skill Wisdom."
+    },
+    "homm3_bulwark_hero_16": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Elder",
+      "startSquad": [
+        {
+          "sid": "h3_kobold",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_mountain_ram",
+          "min": 6,
+          "max": 8
+        },
+        {
+          "sid": "h3_snow_elf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_kobold",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Allora",
+      "descriptionText": "This mysterious woman once fled to Vori from the mainland, allegedly facing execution for interfering with the succession in some barony. Allora herself denies this, but her excellent magic skills can affect the bodies and minds of other sentient beings alike. This might be the only reason she was accepted at Vori and hasn't been exiled yet.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_bulwark_16",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_bulwark_hero_16_source_sorcery_specialist",
+        "nameText": "Sorcery",
+        "descriptionText": "Increases spell damage and weakens enemy spell pressure as Allora gains levels.",
+        "iconKey": "skill_sorcery",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicAttackPerBonus",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          },
+          {
+            "type": "heroStatBattle",
+            "receiverAllegiance": "enemy",
+            "parameters": [
+              "magicAttackPerBonus",
+              "-0.10"
+            ],
+            "upgrade": {
+              "increment": -0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:sorcery"
+      },
+      "notes": "HotA Bulwark archive: exact mixed source army and first source skill Wisdom."
+    }
+  }
+}

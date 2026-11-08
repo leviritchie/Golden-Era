@@ -1,0 +1,125 @@
+﻿{
+    "schemaVersion":  1,
+    "purpose":  "Source-authored predicate contract for custom calendar law profiles that depend on battle start, round start, unit turn, or day/calendar lifecycle events. This is lifecycle semantics evidence only; it does not prove hook ordering, active law state, idempotence, or authorize gameplay mutation.",
+    "validationState":  "source-prepared-runtime-unproven",
+    "policy":  {
+                   "effectKeysMustMatchRequiresBattleStartOrRoundEventProfiles":  true,
+                   "genericBattleEventSubstitutionForbidden":  true,
+                   "adventureDayMustBeSeparatedFromBattleRound":  true,
+                   "battleStartMustBeSeparatedFromUnitTurnStart":  true,
+                   "runtimeProofStillRequiredForGameplay":  true
+               },
+    "requiredRuntimeProof":  [
+                                 "battle start hook ordering proof",
+                                 "round start hook ordering proof",
+                                 "unit turn start hook ordering proof when used",
+                                 "adventure day/calendar idempotence proof",
+                                 "active law owner/rank proof in lifecycle context",
+                                 "battle/session cleanup proof"
+                             ],
+    "contracts":  {
+                      "castle.support-blessing-astrology-calendar":  {
+                                                                         "lifecycleKinds":  [
+                                                                                                "adventure-day-astrology-progress",
+                                                                                                "first-combat-blessing",
+                                                                                                "battle-start-support-window"
+                                                                                            ],
+                                                                         "companionPredicates":  [
+                                                                                                     "RequiresAstrologyProgressMutation",
+                                                                                                     "RequiresSpellCastEvent"
+                                                                                                 ],
+                                                                         "forbiddenSubstitutes":  [
+                                                                                                      "any battle event",
+                                                                                                      "any round start",
+                                                                                                      "spellbook open state",
+                                                                                                      "generic day refresh without astrology law state"
+                                                                                                  ],
+                                                                         "notes":  "Castle calendar lifecycle requires exact adventure-day astrology and first-combat/battle-start support windows; spellcast support remains separate."
+                                                                     },
+                      "conflux.day-phase-elemental-calendar":  {
+                                                                   "lifecycleKinds":  [
+                                                                                          "adventure-day-phase-refresh",
+                                                                                          "battle-start-elemental-aspect-refresh",
+                                                                                          "round-start-harmony-refresh"
+                                                                                      ],
+                                                                   "companionPredicates":  [
+                                                                                               "RequiresElementalFamilyMapping"
+                                                                                           ],
+                                                                   "forbiddenSubstitutes":  [
+                                                                                                "any battle event",
+                                                                                                "random elemental phase",
+                                                                                                "battle round treated as adventure day",
+                                                                                                "static faction element without family mapping"
+                                                                                            ],
+                                                                   "notes":  "Conflux calendar lifecycle requires deterministic day phase and explicit elemental-family mapping; battle or round refresh behavior remains runtime-gated."
+                                                               },
+                      "cove.focus-storm-omen-calendar":  {
+                                                             "lifecycleKinds":  [
+                                                                                    "battle-start-storm-omen-window",
+                                                                                    "round-start-focus-omen-window"
+                                                                                ],
+                                                             "companionPredicates":  [
+                                                                                         "RequiresFocusEvent"
+                                                                                     ],
+                                                             "forbiddenSubstitutes":  [
+                                                                                          "any battle event",
+                                                                                          "any ranged attack",
+                                                                                          "passive all-ranged bonus",
+                                                                                          "storm flavor without Focus event"
+                                                                                      ],
+                                                             "notes":  "Cove calendar lifecycle requires storm omen windows tied to Focus generation/spend; passive ranged bonuses remain forbidden and runtime-gated."
+                                                         },
+                      "fortress.poison-slow-duration-calendar":  {
+                                                                     "lifecycleKinds":  [
+                                                                                            "battle-start-witch-sign-window",
+                                                                                            "first-poison-or-slow-application-window",
+                                                                                            "unit-turn-adjacent-regeneration-window"
+                                                                                        ],
+                                                                     "companionPredicates":  [
+                                                                                                 "RequiresStatusDurationMutation"
+                                                                                             ],
+                                                                     "forbiddenSubstitutes":  [
+                                                                                                  "any battle event",
+                                                                                                  "any negative status application",
+                                                                                                  "round start as status duration mutation proof",
+                                                                                                  "adjacency ignored for regeneration branch"
+                                                                                              ],
+                                                                     "notes":  "Fortress calendar lifecycle requires first poison/slow and unit-turn adjacency windows while status duration mutation remains separate."
+                                                                 },
+                      "rampart.cleanse-regeneration-resistance-calendar":  {
+                                                                               "lifecycleKinds":  [
+                                                                                                      "battle-start-cleanse-cycle-window",
+                                                                                                      "unit-turn-regeneration-window",
+                                                                                                      "round-start-resistance-refresh"
+                                                                                                  ],
+                                                                               "companionPredicates":  [
+                                                                                                           "RequiresStatusDurationMutation"
+                                                                                                       ],
+                                                                               "forbiddenSubstitutes":  [
+                                                                                                            "any battle event",
+                                                                                                            "any positive status",
+                                                                                                            "round start as cleanse proof",
+                                                                                                            "regeneration inferred from law name"
+                                                                                                        ],
+                                                                               "notes":  "Rampart calendar lifecycle requires explicit cleanse/regeneration/resistance windows while status mutation remains separate."
+                                                                           },
+                      "stronghold.warcry-festival-calendar":  {
+                                                                  "lifecycleKinds":  [
+                                                                                         "adventure-day-astrology-progress",
+                                                                                         "battle-start-warcry-festival-window",
+                                                                                         "round-start-warcry-followup-window"
+                                                                                     ],
+                                                                  "companionPredicates":  [
+                                                                                              "RequiresAstrologyProgressMutation",
+                                                                                              "RequiresWarcryExecution"
+                                                                                          ],
+                                                                  "forbiddenSubstitutes":  [
+                                                                                               "any battle event",
+                                                                                               "traditional spell cooldown event",
+                                                                                               "Warcry skill presence without execution",
+                                                                                               "generic day refresh without astrology law state"
+                                                                                           ],
+                                                                  "notes":  "Stronghold calendar lifecycle requires Warcry execution/followup windows; traditional spell cooldown assumptions remain forbidden and runtime-gated."
+                                                              }
+                  }
+}

@@ -1,0 +1,201 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_thunderbird",
+ "status": "look",
+ "notes": "stronghold rollout: bird (golden). lightning from the beak cut with a region file mask (the bolt shares the golden body's highlight colours, defEffects kept only frame 5)",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "beak_lightning",
+   "treatment": "dynamic",
+   "notes": "the beak bolt flash lights the head and breast"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "beak_bolt",
+    "type": "defFlipbook",
+    "provenance": "roster inventory stronghold g12 attack_front (thrown fire f3-5; the drawn bolt spans f2-5); mask: tools/homm3_unit_look/units/masks/stronghold_masks.py (region in front of the beak, bright non-red pixels): 66/324/588/390 px vs defEffects 0/0/0/342",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       2,
+       3,
+       4,
+       5
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_thunderbird/beak_bolt"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": "auto",
+     "boneTip": true
+    },
+    "texelsPerDefPx": 1,
+    "light": "beak_lightning"
+   },
+   {
+    "id": "beak_lightning_light",
+    "type": "effectLight",
+    "lightId": "beak_lightning",
+    "carrier": "beak_bolt",
+    "anchor": {
+     "bone": "Head",
+     "towardLayerCentroid": 0.4,
+     "towardCameraU": 0.4
+    },
+    "rgb": [
+     1.0,
+     0.95,
+     0.7
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      1.356,
+      2.795,
+      2.851,
+      3.654,
+      4.944,
+      0.536,
+      0.156
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "hit_feathers",
+    "type": "defFlipbook",
+    "provenance": "roster inventory stronghold g03 hitted detached particles f3-6 (feathers)",
+    "clips": {
+     "Unit_Hitted": {
+      "defGroup": 3,
+      "frames": [
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": {
+      "Unit_Hitted": [
+       [
+        180,
+        220
+       ],
+       [
+        175,
+        211
+       ],
+       [
+        181,
+        215
+       ],
+       [
+        197,
+        220
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "Feathers shed as detached DEF particles. Pinned at the DEF body centroid of each frame (not auto: auto picks the nearest feather) to Spine1 so the burst stays centred on the bird rather than swinging with a wing tip. classes=[fire] adds nothing beyond the detached components (checked: same px as the ripper's detached-only cut)."
+   },
+   {
+    "id": "death_feathers",
+    "type": "defFlipbook",
+    "provenance": "roster inventory stronghold g05 death detached particles f1-6 (feathers)",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": {
+      "Unit_Death": [
+       [
+        211,
+        211
+       ],
+       [
+        200,
+        198
+       ],
+       [
+        203,
+        204
+       ],
+       [
+        214,
+        211
+       ],
+       [
+        213,
+        213
+       ],
+       [
+        215,
+        220
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "Feathers shed as detached DEF particles. Pinned at the DEF body centroid of each frame (not auto: auto picks the nearest feather) to Spine1 so the burst stays centred on the bird rather than swinging with a wing tip. classes=[fire] adds nothing beyond the detached components (checked: same px as the ripper's detached-only cut)."
+   }
+  ]
+ }
+}

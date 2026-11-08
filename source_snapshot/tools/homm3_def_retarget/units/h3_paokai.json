@@ -1,0 +1,1265 @@
+{
+ "unit": "h3_paokai",
+ "joints": {
+  "Hips": [
+   0.038,
+   0.12,
+   0.49
+  ],
+  "Spine": [
+   0.038,
+   0.02,
+   0.6
+  ],
+  "Spine1": [
+   0.038,
+   -0.05,
+   0.68
+  ],
+  "Spine2": [
+   0.038,
+   -0.12,
+   0.8
+  ],
+  "Neck": [
+   0.038,
+   -0.143,
+   0.868
+  ],
+  "Head": [
+   0.024,
+   -0.045,
+   1.057
+  ],
+  "HeadTop_End": [
+   -0.024,
+   -0.024,
+   1.224
+  ],
+  "LeftUpLeg": [
+   0.227,
+   0.164,
+   0.442
+  ],
+  "LeftLeg": [
+   0.318,
+   -0.01,
+   0.296
+  ],
+  "LeftFoot": [
+   0.255,
+   0.073,
+   0.107
+  ],
+  "LeftToeBase": [
+   0.269,
+   -0.038,
+   0.02
+  ],
+  "LeftToe_End": [
+   0.283,
+   -0.171,
+   0.03
+  ],
+  "RightUpLeg": [
+   -0.15,
+   0.164,
+   0.442
+  ],
+  "RightLeg": [
+   -0.199,
+   0.031,
+   0.261
+  ],
+  "RightFoot": [
+   -0.178,
+   0.164,
+   0.121
+  ],
+  "RightToeBase": [
+   -0.199,
+   0.052,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.206,
+   -0.1,
+   0.037
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "fortress_rig",
+  "idle_cycle"
+ ],
+ "fortress": {
+  "procedural": true,
+  "chains": [
+   {
+    "name": "NeckC",
+    "parent": "Spine2",
+    "points": [
+     [
+      0.025,
+      -0.12,
+      0.8
+     ],
+     [
+      0.03,
+      -0.09,
+      0.9
+     ],
+     [
+      0.03,
+      -0.07,
+      1.0
+     ],
+     [
+      0.02,
+      -0.02,
+      1.1
+     ],
+     [
+      -0.01,
+      -0.01,
+      1.2
+     ],
+     [
+      -0.05,
+      -0.04,
+      1.28
+     ],
+     [
+      -0.09,
+      -0.12,
+      1.33
+     ],
+     [
+      -0.11,
+      -0.21,
+      1.3
+     ],
+     [
+      -0.12,
+      -0.3,
+      1.23
+     ],
+     [
+      -0.143,
+      -0.792,
+      1.05
+     ]
+    ],
+    "radius": 0.16,
+    "rootBlend": 0.1,
+    "ratio": 1.0,
+    "geodesic": 0.45,
+    "absorb": [
+     "Neck",
+     "Head"
+    ]
+   },
+   {
+    "name": "Tail",
+    "parent": "Hips",
+    "points": [
+     [
+      0.038,
+      0.2,
+      0.45
+     ],
+     [
+      0.038,
+      0.367,
+      0.303
+     ],
+     [
+      0.031,
+      0.478,
+      0.163
+     ],
+     [
+      -0.052,
+      0.597,
+      0.065
+     ],
+     [
+      -0.192,
+      0.646,
+      0.044
+     ]
+    ],
+    "radius": 0.12,
+    "rootBlend": 0.15,
+    "ratio": 1.0,
+    "geodesic": 0.6
+   },
+   {
+    "name": "WingL",
+    "parent": "Spine2",
+    "points": [
+     [
+      0.15,
+      0.0,
+      0.75
+     ],
+     [
+      0.283,
+      0.262,
+      0.8
+     ],
+     [
+      0.34,
+      0.3,
+      1.19
+     ],
+     [
+      0.6,
+      0.6,
+      0.7
+     ],
+     [
+      0.51,
+      0.5,
+      0.37
+     ]
+    ],
+    "radius": 0.32,
+    "rootBlend": 0.1,
+    "ratio": 1.0,
+    "geodesic": 1.2
+   },
+   {
+    "name": "WingR",
+    "parent": "Spine2",
+    "points": [
+     [
+      -0.1,
+      0.0,
+      0.75
+     ],
+     [
+      -0.234,
+      0.255,
+      0.833
+     ],
+     [
+      -0.269,
+      0.311,
+      1.266
+     ],
+     [
+      -0.62,
+      0.5,
+      0.83
+     ],
+     [
+      -0.513,
+      0.429,
+      0.365
+     ]
+    ],
+    "radius": 0.32,
+    "rootBlend": 0.1,
+    "ratio": 1.0,
+    "geodesic": 1.2
+   }
+  ],
+  "params": {
+   "neckDown": {
+    "type": "rot",
+    "bones": [
+     [
+      "NeckC_00",
+      0.45
+     ],
+     [
+      "NeckC_01",
+      0.35
+     ],
+     [
+      "NeckC_02",
+      0.2
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     -45,
+     45
+    ],
+    "step": 10
+   },
+   "spinePitch": {
+    "type": "rot",
+    "bones": [
+     [
+      "Spine",
+      0.35
+     ],
+     [
+      "Spine1",
+      0.35
+     ],
+     [
+      "Spine2",
+      0.3
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     -30,
+     30
+    ],
+    "step": 8
+   },
+   "sideRoll": {
+    "type": "rot",
+    "bones": [
+     [
+      "Hips",
+      1.0
+     ]
+    ],
+    "axis": [
+     0,
+     1,
+     0
+    ],
+    "limit": [
+     -110,
+     110
+    ],
+    "step": 20
+   },
+   "fl": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "fr": {
+    "type": "rot",
+    "bones": [
+     [
+      "RightArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "hl": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftUpLeg",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "hr": {
+    "type": "rot",
+    "bones": [
+     [
+      "RightUpLeg",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "flk": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftForeArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "frk": {
+    "type": "rot",
+    "bones": [
+     [
+      "RightForeArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "hlk": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftLeg",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "hrk": {
+    "type": "rot",
+    "bones": [
+     [
+      "RightLeg",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "frontReach": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftArm",
+      1
+     ],
+     [
+      "RightArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     -70,
+     40
+    ],
+    "step": 12
+   },
+   "legFold": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftArm",
+      -0.5
+     ],
+     [
+      "RightArm",
+      -0.5
+     ],
+     [
+      "LeftForeArm",
+      1
+     ],
+     [
+      "RightForeArm",
+      1
+     ],
+     [
+      "LeftUpLeg",
+      0.6
+     ],
+     [
+      "RightUpLeg",
+      0.6
+     ],
+     [
+      "LeftLeg",
+      -1
+     ],
+     [
+      "RightLeg",
+      -1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     0,
+     70
+    ],
+    "step": 15
+   },
+   "TailLift": {
+    "type": "chain",
+    "chain": "Tail",
+    "mode": "curl",
+    "axis": [
+     -1,
+     0,
+     0
+    ],
+    "limit": [
+     -50,
+     50
+    ],
+    "step": 12
+   },
+   "TailSide": {
+    "type": "chain",
+    "chain": "Tail",
+    "mode": "curl",
+    "axis": [
+     0,
+     0,
+     1
+    ],
+    "limit": [
+     -60,
+     60
+    ],
+    "step": 12
+   },
+   "TailStraight": {
+    "type": "chain",
+    "chain": "Tail",
+    "mode": "straight",
+    "dir": [
+     0,
+     1,
+     0
+    ],
+    "limit": [
+     0,
+     1
+    ],
+    "step": 0.25
+   },
+   "TailWave": {
+    "type": "chain",
+    "chain": "Tail",
+    "mode": "wave",
+    "axis": [
+     0,
+     0,
+     1
+    ],
+    "phaseParam": "TailPhase",
+    "wavelength": 6,
+    "limit": [
+     -30,
+     30
+    ]
+   },
+   "TailPhase": {
+    "type": "rot",
+    "bones": [],
+    "axis": [
+     0,
+     0,
+     1
+    ]
+   },
+   "NeckCurl": {
+    "type": "chain",
+    "chain": "NeckC",
+    "mode": "curl",
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "weights": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     0.2
+    ],
+    "limit": [
+     -50,
+     50
+    ],
+    "step": 12
+   },
+   "NeckStraight": {
+    "type": "chain",
+    "chain": "NeckC",
+    "mode": "straight",
+    "dir": [
+     0,
+     -1,
+     0.15
+    ],
+    "limit": [
+     0,
+     1
+    ],
+    "step": 0.25
+   },
+   "wingSpread": {
+    "type": "rot",
+    "bones": [
+     [
+      "WingL_00",
+      -1
+     ],
+     [
+      "WingR_00",
+      1
+     ]
+    ],
+    "axis": [
+     0,
+     1,
+     0
+    ],
+    "limit": [
+     -40,
+     120
+    ],
+    "step": 20
+   },
+   "wingSweep": {
+    "type": "rot",
+    "bones": [
+     [
+      "WingL_00",
+      1
+     ],
+     [
+      "WingR_00",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     -60,
+     60
+    ],
+    "step": 15
+   },
+   "legTuck": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftUpLeg",
+      -1
+     ],
+     [
+      "RightUpLeg",
+      -1
+     ],
+     [
+      "LeftLeg",
+      1.2
+     ],
+     [
+      "RightLeg",
+      1.2
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     0,
+     80
+    ],
+    "step": 15
+   },
+   "NeckWave": {
+    "type": "chain",
+    "chain": "NeckC",
+    "mode": "wave",
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "phaseParam": "NeckPhase",
+    "wavelength": 9,
+    "limit": [
+     -15,
+     15
+    ]
+   },
+   "NeckPhase": {
+    "type": "rot",
+    "bones": [],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   }
+  },
+  "anim": {
+   "Idle": {
+    "neckDown": {
+     "sin": 3
+    },
+    "NeckCurl": {
+     "sin": 4
+    },
+    "TailSide": {
+     "sin": 8
+    },
+    "wingSpread": {
+     "sin": 4
+    }
+   },
+   "MoveStart": {
+    "wingSpread": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       90
+      ]
+     ]
+    },
+    "legTuck": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       40
+      ]
+     ]
+    },
+    "NeckWave": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       5
+      ]
+     ]
+    },
+    "spinePitch": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       15
+      ]
+     ]
+    },
+    "roll": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       22
+      ]
+     ]
+    },
+    "TailLift": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       30
+      ]
+     ]
+    }
+   },
+   "Move": {
+    "wingSpread": {
+     "sin": 45,
+     "cycles": 1,
+     "phase": 150,
+     "offset": 80
+    },
+    "legTuck": {
+     "offset": 45
+    },
+    "TailStraight": {
+     "offset": 0.7
+    },
+    "lift": {
+     "sin": 0.03,
+     "cycles": 1,
+     "phase": 60
+    },
+    "NeckWave": {
+     "offset": 5
+    },
+    "NeckPhase": {
+     "ramp": 360
+    },
+    "spinePitch": {
+     "offset": 15
+    },
+    "roll": {
+     "offset": 22
+    },
+    "TailLift": {
+     "offset": 30
+    }
+   },
+   "MoveEnd": {
+    "wingSpread": {
+     "keys": [
+      [
+       0,
+       90
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "legTuck": {
+     "keys": [
+      [
+       0,
+       40
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "NeckWave": {
+     "keys": [
+      [
+       0,
+       5
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "spinePitch": {
+     "keys": [
+      [
+       0,
+       15
+      ],
+      [
+       0.34,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "roll": {
+     "keys": [
+      [
+       0,
+       22
+      ],
+      [
+       0.34,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "TailLift": {
+     "keys": [
+      [
+       0,
+       30
+      ],
+      [
+       0.34,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Mouseover": {
+    "neckDown": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       -10
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "wingSpread": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.35,
+       60
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "neckDown": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       -20
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Defence": {
+    "wingSpread": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       60
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "neckDown": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.4,
+       15
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "wingSpread": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.4,
+       60
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "NeckCurl": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.35,
+       -25
+      ],
+      [
+       0.65,
+       25
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Death": {
+    "wingSpread": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.4,
+       60
+      ],
+      [
+       1,
+       30
+      ]
+     ]
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "dx",
+    "dy",
+    "roll",
+    "neckDown",
+    "NeckCurl",
+    "wingSpread",
+    "TailLift",
+    "TailSide"
+   ],
+   "clips": {
+    "Death": [
+     "sideRoll",
+     "legTuck"
+    ],
+    "Move": [
+     "TailStraight",
+     "wingSweep"
+    ],
+    "MoveStart": [
+     "TailStraight",
+     "wingSweep"
+    ],
+    "MoveEnd": [
+     "TailStraight",
+     "wingSweep"
+    ],
+    "Hitted": [
+     "wingSweep"
+    ],
+    "Defence": [
+     "wingSweep"
+    ],
+    "AttackFront": [
+     "wingSweep",
+     "NeckStraight"
+    ]
+   },
+   "limits": {
+    "dx": [
+     -80,
+     80
+    ],
+    "dy": [
+     -100,
+     100
+    ],
+    "roll": [
+     -90,
+     90
+    ]
+   },
+   "penalty": 0.0004,
+   "smooth": 0.0006,
+   "camYawSearch": [
+    0,
+    -15,
+    -30,
+    -45,
+    -60,
+    -75,
+    -90
+   ],
+   "scan": {
+    "roll": [
+     -45,
+     -30,
+     -15,
+     0,
+     15,
+     30,
+     45
+    ],
+    "TailStraight": [
+     0,
+     0.5,
+     1
+    ],
+    "BodyStraight": [
+     0,
+     0.5,
+     1
+    ],
+    "sideRoll": [
+     -90,
+     -45,
+     0,
+     45,
+     90
+    ]
+   },
+   "tip": {
+    "clips": [
+     "Move",
+     "MoveStart",
+     "MoveEnd",
+     "AttackFront"
+    ],
+    "side": "right",
+    "weight": 0.003
+   },
+   "skip": {
+    "AttackFront": [
+     "roll"
+    ],
+    "Move": [
+     "roll"
+    ],
+    "MoveStart": [
+     "roll"
+    ],
+    "MoveEnd": [
+     "roll"
+    ]
+   }
+  },
+  "animReason": "2026-09-27 workerB: Move wingSpread was 2 beats per clip; the DEF g00_move (6 frames) draws ONE beat: wings level on frames 0 and 3-4, down on 2, raised on 5 -> 1 cycle, phase 150 (peak at frame 5, trough at frame 2, level at 0/3). Amplitude unchanged (35). Body lift follows the beat (one bob, highest on the downstroke). The paokai has no def_wing_range row (calibration tool refused it), so it is judged on the flat 60-degree floor; before this change wingSwing was 48.5. 2026-09-30: amplitude 35 -> 45 (wyvern line, all three): with the torso pitched for flight and roll no longer fit in Move, the fit stopped adding wing motion, and 1.5 x 35 = 52.5 deg from frame 0 is under the 60 deg flatFloor; the DEF frame-5 upstroke against the frame-2 downstroke is wider than 70 deg."
+ },
+ "idleCycle": {
+  "rot": [
+   {
+    "bones": [
+     [
+      "NeckC_00",
+      0.5
+     ],
+     [
+      "NeckC_01",
+      0.5
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "peak": 3.6,
+    "shape": "sin",
+    "phase": 0
+   },
+   {
+    "bones": [
+     [
+      "WingL_00",
+      1.0
+     ]
+    ],
+    "axis": [
+     0,
+     1,
+     0
+    ],
+    "peak": 3.3,
+    "shape": "sin",
+    "phase": 90
+   },
+   {
+    "bones": [
+     [
+      "WingR_00",
+      1.0
+     ]
+    ],
+    "axis": [
+     0,
+     1,
+     0
+    ],
+    "peak": -3.3,
+    "shape": "sin",
+    "phase": 90
+   }
+  ]
+ }
+}

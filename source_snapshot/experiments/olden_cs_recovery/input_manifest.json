@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "description": "Pinned expected inputs for Olden Era C# recovery. Paths are recorded; contents are not invented. validate_inputs fails closed when required entries are missing.",
+  "repo_relative_root_hint": "experiments/olden_cs_recovery",
+  "inputs": [
+    {
+      "id": "il2cpp_dumper_dated",
+      "kind": "il2cpp_dumper_dump",
+      "required": true,
+      "path": "tools/il2cpp_out_20260719_golden_era",
+      "path_convention": "tools/il2cpp_out_YYYYMMDD_golden_era/ per tools/IL2CPP_DUMP.md",
+      "expect_present": [
+        "dump.cs",
+        "script.json",
+        "DummyDll"
+      ],
+      "notes": "Do not use a stale il2cpp_out_live path. Prefer the newest dated Golden Era dump matching the active Steam install."
+    },
+    {
+      "id": "cpp2il_diffable_cs_hex",
+      "kind": "cpp2il_diffable_cs",
+      "required": true,
+      "path": "tmp/cpp2il_experiment/out_dev_diffable_cs/DiffableCs/Hex",
+      "expect_present": [
+        "edb.cs",
+        "Hex/Session/Battle"
+      ],
+      "notes": "Battle EventArgs live under Hex/Session/Battle/*EventArgs.cs relative to this DiffableCs Hex assembly root."
+    },
+    {
+      "id": "cpp2il_isil_hex",
+      "kind": "cpp2il_isil",
+      "required": true,
+      "path": "tmp/cpp2il_experiment/out_dev_isil/IsilDump/Hex",
+      "expect_present": [
+        "edb.txt",
+        "Hex/Session/Battle"
+      ],
+      "notes": "ISIL companion dumps for DiffableCs shells."
+    },
+    {
+      "id": "address_map_session_battle",
+      "kind": "method_pointer_map",
+      "required": true,
+      "path": "experiments/cpp2il_readable_csharp/samples/latest_refresh/address_map_hex_session_battle.json",
+      "expect_present": [],
+      "notes": "Battle session method-pointer map from the readable Cpp2IL pipeline."
+    },
+    {
+      "id": "address_map_all_dummydll",
+      "kind": "method_pointer_map",
+      "required": false,
+      "path": "experiments/cpp2il_readable_csharp/samples/latest_refresh/address_map_all_dummydll_methods.json",
+      "expect_present": [],
+      "notes": "Broader DummyDll method-pointer map; optional for Phase 0 seed, required before deep lift of non-battle partitions."
+    },
+    {
+      "id": "mono_deobf_semantic_map",
+      "kind": "mono_semantic_map",
+      "required": true,
+      "path": "experiments/cpp2il_readable_csharp/samples/latest_refresh/mono_deobf_semantic_map.json",
+      "expect_present": [],
+      "notes": "Rename oracle input for Phase 2; pinned early so input validation covers the rename path."
+    },
+    {
+      "id": "mono_demo_hex_dll",
+      "kind": "mono_demo_assembly",
+      "required": true,
+      "path": "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic Olden Era Demo/HeroesOE_Data/Managed/Hex.dll",
+      "path_is_absolute": true,
+      "expect_present": [],
+      "notes": "Same default as experiments/cpp2il_readable_csharp/build_mono_deobf_semantic_map.py DEFAULT_MONO_HEX."
+    },
+    {
+      "id": "live_probe_bridge",
+      "kind": "live_bridge",
+      "required": true,
+      "path": "V:/SteamLibrary/steamapps/common/Heroes of Might and Magic Olden Era - Golden Era/BepInEx/plugins/OfflineUnlockMod/live_probe_bridge",
+      "path_is_absolute": true,
+      "expect_present": [],
+      "notes": "Same DEFAULT_BRIDGE as tools/release_port/live_probe_request.py used by experiments/cpp2il_readable_csharp/prove_live_bridge_resolver.py."
+    },
+    {
+      "id": "gameassembly_dll",
+      "kind": "gameassembly",
+      "required": true,
+      "path": "V:/SteamLibrary/steamapps/common/Heroes of Might and Magic Olden Era - Golden Era/GameAssembly.dll",
+      "path_is_absolute": true,
+      "expect_present": [],
+      "expected_sha256": "D47706EB0FFEDBDA0EC07EDE47ABC778E6022ED820AE1A1FD23522D3ACDB8416",
+      "notes": "Pinned Golden Era GameAssembly hash for oracle_traces versioning. Phase 3 capture fails closed on mismatch."
+    },
+    {
+      "id": "il2cpp_dump_policy_doc",
+      "kind": "documentation",
+      "required": true,
+      "path": "tools/IL2CPP_DUMP.md",
+      "expect_present": [],
+      "notes": "Policy for dated dump folders; not dump contents."
+    }
+  ]
+}

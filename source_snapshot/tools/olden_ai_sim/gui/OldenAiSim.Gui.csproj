@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>OldenAiSim.Gui</RootNamespace>
+    <AssemblyName>OldenAiSim.Gui</AssemblyName>
+    <ApplicationIcon />
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OldenAiSim.csproj" />
+    <None Include="..\data\**\*" CopyToOutputDirectory="PreserveNewest" LinkBase="data" />
+  </ItemGroup>
+</Project>

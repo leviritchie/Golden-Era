@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "purpose": "HotA neutral creature pool prepared for Golden Era import readiness.",
+  "evidenceLevel": "source_prepared",
+  "sourceZip": "vcmi/Mods/hota/mods/neutralCreatures/content.zip",
+  "prepareScript": "tools/homm3_import/prepare_hota_factory_bulwark_neutral_bundles.py",
+  "catalog": "tools/homm3_import/faction_concepts/homm3_neutral.json",
+  "notes": [
+    "Fangarm/Satyr/Leprechaun/Steel Golem are owned by tools/homm3_import/faction_concepts/homm3_neutral.json.",
+    "Core overlay emission, arena_pick merge, and neutral dwellings are generated from that catalog.",
+    "HotA dwellings exist for Fangarm (Ziggurat), Satyr (Wineyard), and Leprechaun (Alehouse); Steel Golem has no dwelling.",
+    "Do not treat map-gen spawn eligibility as runtime-proven until SpawnsCreator smoke is recorded."
+  ],
+  "units": [
+    {
+      "sid": "h3_fangarm",
+      "labSid": "h3_fangarm",
+      "sourceConfig": "config/hotaNeutralCreatures/fangarm.json",
+      "level": 5,
+      "bundleName": "custom_units_neutral_h3_fangarm",
+      "coreRows": {
+        "logic": "DB/units/units_logics/neutral/h3_fangarm_l.json",
+        "view": "DB/units/units_views/neutral/h3_fangarm_v.json"
+      },
+      "status": "catalog_owned_core_and_pool_eligible",
+      "poolEligible": true
+    },
+    {
+      "sid": "h3_satyr",
+      "labSid": "h3_satyr",
+      "sourceConfig": "config/hotaNeutralCreatures/satyr.json",
+      "level": 4,
+      "bundleName": "custom_units_neutral_h3_satyr",
+      "coreRows": {
+        "logic": "DB/units/units_logics/neutral/h3_satyr_l.json",
+        "view": "DB/units/units_views/neutral/h3_satyr_v.json"
+      },
+      "status": "catalog_owned_core_and_pool_eligible",
+      "poolEligible": true
+    },
+    {
+      "sid": "h3_leprechaun",
+      "labSid": "h3_leprechaun",
+      "sourceConfig": "config/hotaNeutralCreatures/leprechaun.json",
+      "level": 2,
+      "bundleName": "custom_units_neutral_h3_leprechaun",
+      "coreRows": {
+        "logic": "DB/units/units_logics/neutral/h3_leprechaun_l.json",
+        "view": "DB/units/units_views/neutral/h3_leprechaun_v.json"
+      },
+      "status": "catalog_owned_core_and_pool_eligible",
+      "poolEligible": true
+    },
+    {
+      "sid": "h3_steel_golem",
+      "labSid": "h3_steel_golem",
+      "sourceConfig": "config/hotaNeutralCreatures/steelGolem.json",
+      "level": 4,
+      "bundleName": "custom_units_neutral_h3_steel_golem",
+      "coreRows": {
+        "logic": "DB/units/units_logics/neutral/h3_steel_golem_l.json",
+        "view": "DB/units/units_views/neutral/h3_steel_golem_v.json"
+      },
+      "status": "catalog_owned_core_and_pool_eligible",
+      "poolEligible": true
+    }
+  ]
+}

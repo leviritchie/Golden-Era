@@ -1,0 +1,159 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "RoE Dungeon Evil1 (Dungeons and Devils) continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub evil1; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_04_roe_dungeon_evil1",
+    "campaignTitle": "Dungeons and Devils",
+    "campaignEntry": "EVIL1.H3C",
+    "batchManifest": "scenarios/roe_remaining_campaigns/batch_manifest.json",
+    "missionConfigPrefix": "homm3_roe_dungeon",
+    "defaultSpawn": {
+      "factionSid": "homm3_dungeon",
+      "heroSid": "homm3_dungeon_hero_7"
+    },
+    "missionSpawns": {
+      "a_devilish_plan": {
+        "heroSid": "homm3_dungeon_hero_7",
+        "factionSid": "homm3_dungeon"
+      },
+      "groundbreaking": {
+        "heroSid": "homm3_dungeon_hero_7",
+        "factionSid": "homm3_dungeon"
+      },
+      "steadwicks_fall": {
+        "heroSid": "homm3_dungeon_hero_7",
+        "factionSid": "homm3_dungeon"
+      }
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart)."
+  },
+  "storyHubMapSidOverrides": {
+    "a_devilish_plan": "h3_roe_dungeon_a_devilish_plan_raw_translation",
+    "groundbreaking": "h3_roe_dungeon_groundbreaking_raw_translation",
+    "steadwicks_fall": "h3_roe_dungeon_steadwicks_fall_raw_translation",
+    "choiceReason": "Dungeons and Devils missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "a_devilish_plan",
+      "toMissionId": "groundbreaking",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 12,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "Your Heroes will be limited to 12th level in this scenario, but your 8 strongest Heroes will be available to you in the next scenario.",
+      "mapSids": {
+        "from": "h3_roe_dungeon_a_devilish_plan_raw_translation",
+        "to": "h3_roe_dungeon_groundbreaking_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "a_devilish_plan",
+    "groundbreaking",
+    "steadwicks_fall"
+  ],
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Pandora mana/morale/luck reward fidelity (omitted at alignment with explicit gap list)"
+  ],
+  "videoContract": {
+    "status": "mission_clips_via_native_playvideo_serial_queue_hub_hover_strip_omitted",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": "Cevil1",
+    "hubFirstShowOmitReason": "Cevil1 is a silent hover-menu strip; mission pins use composed Evil1a–c cutscenes.",
+    "requiredMp4RelativeToStreamingAssets": "video/Cevil1.mp4",
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_04_roe_dungeon_evil1/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "sourceMp4RelativeToStreamingAssets": "video/Cevil1.mp4",
+      "stillArtifact": "artifacts/campaign_port_poc/roe_castle_campaign/storyhub_visual/Cevil1_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.28,
+      "focusY": 0.48,
+      "cropReason": "Medusa silhouette on the balcony with courtyard context",
+      "cropsCatalog": "scenarios/roe_castle_campaign/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "a_devilish_plan": "Evil1a",
+      "groundbreaking": "Evil1b",
+      "steadwicks_fall": "Evil1c"
+    },
+    "actionOrder": "PlayVideo then OpenMissionsPrologue on each mission pin interactionActions",
+    "hdEditionSources": [
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Cevil1.ogv",
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Evil1a.ogv",
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Evil1b.ogv",
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Evil1c.ogv"
+    ],
+    "transcodeRequirement": "Mission clips: compose via tools/bake_roe_castle_campaign_videos.py.",
+    "composeRecipe": "experiments/campaign_port_poc/campaign_video_compose.py",
+    "narrationSnd": "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/LOC/EN/HEROES3CD.SND",
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "minComposedDurationSec": 12,
+    "requireComposedAudio": true,
+    "failClosed": "Evil1 hub firstShowActions must stay empty. Per-mission PlayVideo only when composed MP4 exists."
+  }
+}

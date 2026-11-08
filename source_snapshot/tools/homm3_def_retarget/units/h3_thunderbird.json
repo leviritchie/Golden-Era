@@ -1,0 +1,405 @@
+{
+ "unit": "h3_thunderbird",
+ "joints": {
+  "Hips": [
+   0,
+   0.15,
+   0.5
+  ],
+  "Spine": [
+   0,
+   0.07,
+   0.68
+  ],
+  "Spine1": [
+   0,
+   -0.02,
+   0.86
+  ],
+  "Spine2": [
+   0,
+   -0.1,
+   1.04
+  ],
+  "Neck": [
+   0,
+   -0.22,
+   1.2
+  ],
+  "Head": [
+   0,
+   -0.36,
+   1.38
+  ],
+  "HeadTop_End": [
+   0,
+   -0.66,
+   1.5
+  ],
+  "RightUpLeg": [
+   -0.15,
+   0.1,
+   0.47
+  ],
+  "RightLeg": [
+   -0.17,
+   0.04,
+   0.3
+  ],
+  "RightFoot": [
+   -0.18,
+   0.0,
+   0.17
+  ],
+  "RightToeBase": [
+   -0.18,
+   -0.12,
+   0.11
+  ],
+  "RightToe_End": [
+   -0.18,
+   -0.32,
+   0.08
+  ],
+  "LeftUpLeg": [
+   0.15,
+   0.1,
+   0.47
+  ],
+  "LeftLeg": [
+   0.17,
+   0.04,
+   0.3
+  ],
+  "LeftFoot": [
+   0.18,
+   0.0,
+   0.17
+  ],
+  "LeftToeBase": [
+   0.18,
+   -0.12,
+   0.11
+  ],
+  "LeftToe_End": [
+   0.18,
+   -0.32,
+   0.08
+  ]
+ },
+ "wingMaxDeg": 0,
+ "wings": [
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.22,
+    0.08,
+    1.3
+   ],
+   "tail": [
+    -0.5,
+    0.2,
+    1.6
+   ],
+   "sign": 1,
+   "region": {
+    "box": [
+     [
+      -1,
+      -0.4,
+      0.3
+     ],
+     [
+      -0.265,
+      0.9,
+      1.8
+     ]
+    ]
+   }
+  },
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.22,
+    0.08,
+    1.3
+   ],
+   "tail": [
+    0.5,
+    0.2,
+    1.6
+   ],
+   "sign": -1,
+   "region": {
+    "box": [
+     [
+      0.265,
+      -0.4,
+      0.3
+     ],
+     [
+      1,
+      0.9,
+      1.8
+     ]
+    ]
+   }
+  }
+ ],
+ "extensions": [
+  "inferno_capture",
+  "wing_chain"
+ ],
+ "captureRemap": "bip01",
+ "wingChain": {
+  "wings": [
+   {
+    "bone": "LeftWing",
+    "side": 1,
+    "parent": "Spine1"
+   },
+   {
+    "bone": "RightWing",
+    "side": -1,
+    "parent": "Spine1"
+   }
+  ],
+  "anim": {
+   "MoveStart": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       0.7
+      ],
+      [
+       0.66,
+       1
+      ],
+      [
+       1,
+       1
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       -20
+      ],
+      [
+       0.66,
+       50
+      ],
+      [
+       1,
+       -10
+      ]
+     ]
+    }
+   },
+   "Move": {
+    "open": 1,
+    "flap": {
+     "sin": 45,
+     "phase": -90
+    },
+    "fold": {
+     "sin": 50,
+     "half": "pos"
+    },
+    "droop": {
+     "sin": 30,
+     "half": "pos"
+    }
+   },
+   "MoveEnd": {
+    "open": {
+     "keys": [
+      [
+       0,
+       1
+      ],
+      [
+       0.33,
+       0.8
+      ],
+      [
+       0.66,
+       0.35
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       -30
+      ],
+      [
+       0.33,
+       -30
+      ],
+      [
+       0.66,
+       -10
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       0.8
+      ],
+      [
+       0.83,
+       0.7
+      ],
+      [
+       1,
+       0.3
+      ]
+     ]
+    }
+   },
+   "Defence": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.4,
+       0.5
+      ],
+      [
+       0.7,
+       0.5
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.15,
+       0.7
+      ],
+      [
+       0.6,
+       1
+      ],
+      [
+       0.85,
+       0.4
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Death": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       1
+      ],
+      [
+       0.7,
+       0.8
+      ],
+      [
+       1,
+       0.3
+      ]
+     ]
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "flap",
+    "open",
+    "fold",
+    "droop",
+    "sweep"
+   ],
+   "offsets": [
+    "dx",
+    "dy"
+   ],
+   "bounce": 4,
+   "penalty": 0.0008,
+   "smooth": 0.0008
+  },
+  "steady": {
+   "Move": 1.0,
+   "MoveStart": 0.5,
+   "MoveEnd": 0.5
+  },
+  "bodyTurn": {
+   "fit": [
+    "Move"
+   ],
+   "rampIn": {
+    "MoveStart": "Move"
+   },
+   "rampOut": {
+    "MoveEnd": "Move"
+   }
+  },
+  "adoptWeights": "nearest"
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: Move flies level on the facing (capture yawed +65 deg and dived -20) with the head and beak forward (capture hung the head beak-down); MoveStart/MoveEnd ramp the same correction. The 2026-09-28 Move:Hips ground exception is dropped: the levelled flight passes the entry band",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_thunderbird_flight_facing_head_level_rot.json",
+    "regrid": true,
+    "sha256": "d7d55ab3bb154577873150555554057edf0826783b47ed73646d876f0f7ad62e"
+   }
+  ]
+ }
+}

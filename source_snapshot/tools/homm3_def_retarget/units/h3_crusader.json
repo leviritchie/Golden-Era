@@ -1,0 +1,237 @@
+{
+ "unit": "h3_crusader",
+ "joints": {
+  "Hips": [
+   0.003,
+   0.066,
+   0.812
+  ],
+  "Spine": [
+   0.003,
+   0.073,
+   0.912
+  ],
+  "Spine1": [
+   0.003,
+   0.08,
+   1.012
+  ],
+  "Spine2": [
+   0.003,
+   0.088,
+   1.123
+  ],
+  "Neck": [
+   0.003,
+   0.094,
+   1.211
+  ],
+  "Head": [
+   0.003,
+   0.101,
+   1.343
+  ],
+  "HeadTop_End": [
+   0.017,
+   0.136,
+   1.623
+  ],
+  "LeftShoulder": [
+   0.038,
+   0.031,
+   1.294
+  ],
+  "LeftArm": [
+   0.157,
+   0.129,
+   1.281
+  ],
+  "LeftForeArm": [
+   0.283,
+   0.185,
+   1.029
+  ],
+  "LeftHand": [
+   0.276,
+   -0.003,
+   0.945
+  ],
+  "LeftHand_End": [
+   0.273,
+   -0.086,
+   0.909
+  ],
+  "RightShoulder": [
+   -0.031,
+   0.031,
+   1.294
+  ],
+  "RightArm": [
+   -0.15,
+   0.129,
+   1.281
+  ],
+  "RightForeArm": [
+   -0.269,
+   0.157,
+   1.015
+  ],
+  "RightHand": [
+   -0.332,
+   -0.017,
+   0.889
+  ],
+  "RightHand_End": [
+   -0.357,
+   -0.088,
+   0.839
+  ],
+  "LeftUpLeg": [
+   0.087,
+   0.08,
+   0.819
+  ],
+  "LeftLeg": [
+   0.213,
+   -0.059,
+   0.47
+  ],
+  "LeftFoot": [
+   0.206,
+   0.024,
+   0.03
+  ],
+  "LeftToeBase": [
+   0.234,
+   -0.045,
+   -0.012
+  ],
+  "LeftToe_End": [
+   0.262,
+   -0.115,
+   -0.054
+  ],
+  "RightUpLeg": [
+   -0.073,
+   0.038,
+   0.819
+  ],
+  "RightLeg": [
+   -0.129,
+   0.003,
+   0.435
+  ],
+  "RightFoot": [
+   -0.206,
+   0.206,
+   0.03
+  ],
+  "RightToeBase": [
+   -0.22,
+   0.136,
+   -0.012
+  ],
+  "RightToe_End": [
+   -0.234,
+   0.066,
+   -0.054
+  ]
+ },
+ "props": [
+  {
+   "name": "sword",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.362,
+      -0.033,
+      0.751
+     ],
+     [
+      0.069,
+      -0.349,
+      1.681
+     ]
+    ]
+   ],
+   "radius": 0.04
+  },
+  {
+   "name": "fist",
+   "bone": "RightHand",
+   "sphere": [
+    [
+     -0.33,
+     -0.03,
+     0.87
+    ],
+    0.07
+   ]
+  },
+  {
+   "name": "shield",
+   "bone": "LeftForeArm",
+   "box": [
+    [
+     0.175,
+     -0.27,
+     0.58
+    ],
+    [
+     0.4,
+     0.245,
+     1.13
+    ]
+   ]
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "castle_handcut",
+  "castle_refine"
+ ],
+ "castleRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ],
+  "aimRange": 120,
+  "aimFromRest": true
+ },
+ "castleHandCut": {
+  "sides": [
+   "Right",
+   "Left"
+  ],
+  "handRadius": 0.1,
+  "foreRadius": 0.07
+ },
+  "glbPatch": {
+    "reason": "authenticity pass a27 (lane A): Hitted and Defence key poses re-authored by motion intent against the DEF (Hitted: doubled-over recoil with the sword flung back and the front leg kicking; Defence: braced behind a steady raised shield, sword lowered and angled down-forward, small step back). Tear gate over master targets 1023 -> 923. 2026-10-08 check pass: head held steady at the Idle carriage through MoveStart/Move/MoveEnd (was swinging 16 deg sideways and pitching 13 deg each stride; the DEF helm stays level). Move sword carriage: the blade points forward and pitches from 45 deg up to 45 deg down as the arm swings back, like the DEF (was standing vertical through f2-f7).",
+    "ops": [
+      {
+        "op": "keyRotations",
+        "table": "tools/homm3_glb_patch/key_rotations/h3_crusader_pose_rot.json",
+        "sha256": "f372532dcd77582239e62d577bfb84c7a324b1916aebc8b33bec299985547224",
+        "regrid": true
+      },
+      {
+        "op": "keyRotations",
+        "table": "tools/homm3_glb_patch/key_rotations/h3_crusader_pose_rot2.json",
+        "sha256": "ca7bfc4c7a8e64ee422cda66322e9d1cd93b2324a74dc1828e3243fa950c6829",
+        "regrid": true
+      },
+      {
+        "op": "keyTranslations",
+        "table": "tools/homm3_glb_patch/key_rotations/h3_crusader_pose_tr.json",
+        "sha256": "8bf3ec30a703e52f9fea0d8964cc2f417bd0f384f592fc78806ff8047779fae0",
+        "regrid": true
+      }
+    ]
+  }
+}

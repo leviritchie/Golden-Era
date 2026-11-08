@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for Inferno law profiles that require gated, sacrifice, or teleported identity semantics. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "contractsMustMatchExactPredicateProfiles": true,
+    "infernoOnly": true,
+    "transactionOrMovementIdentityRequired": true,
+    "gatedOrSummonedUnitTagShortcutForbidden": true,
+    "ordinaryCasualtySubstituteForbidden": true,
+    "teleportRequiresMovementEventIdentity": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": ["homm3_inferno"],
+  "contracts": {
+    "RequiresGatedOrSacrificeIdentity": {
+      "allowedFamilies": ["MoralePackage", "MoraleTrigger"],
+      "requiredEffectKeys": ["inferno.death-sacrifice-gated-loss-momentum", "inferno.death-sacrifice-gating-momentum-package"],
+      "requiredRuntimeSemantics": [
+        "gated temporary loss identity",
+        "sacrifice transaction identity",
+        "friendly loss owner identity",
+        "permanent casualty exclusion"
+      ],
+      "companionPredicates": ["RequiresKillOrLossEvent"],
+      "forbiddenSubstitutes": [
+        "ordinary permanent casualty counted as gated or sacrifice identity",
+        "generic kill or loss event counted as gated or sacrifice identity",
+        "gatedOrSummoned unit tag counted as transaction proof",
+        "summoned unit existence without loss or sacrifice transaction proof",
+        "Inferno faction membership counted as gated or sacrifice identity",
+        "fire damage or fire spell counted as sacrifice identity"
+      ],
+      "notes": "Frenzy requires exact gated temporary-loss or sacrifice transaction identity. Existing kill/loss evidence is companion evidence only; gameplay still requires transaction identity, owner correlation, permanent casualty exclusion, and idempotence proof."
+    },
+    "RequiresGatedOrTeleportedIdentity": {
+      "allowedFamilies": ["Formation"],
+      "requiredEffectKeys": ["inferno.gating-teleport-adjacency"],
+      "requiredRuntimeSemantics": [
+        "gated entry identity",
+        "teleport movement identity",
+        "acting stack identity",
+        "post-movement adjacency correlation"
+      ],
+      "companionPredicates": ["RequiresGeometryPredicate"],
+      "forbiddenSubstitutes": [
+        "ordinary movement counted as gated or teleported identity",
+        "generic adjacency counted as gated or teleported identity",
+        "gatedOrSummoned unit tag counted as movement identity proof",
+        "Inferno faction membership counted as gated or teleported identity",
+        "teleport-themed spell text counted without movement event proof",
+        "geometry predicate counted as gated or teleported identity"
+      ],
+      "notes": "Hellpack Assault requires exact gated-entry or teleport movement identity before adjacency behavior can apply. Geometry is companion evidence only; gameplay still requires movement event identity, acting stack identity, owner correlation, and post-movement adjacency ordering proof."
+    }
+  },
+  "requiredRuntimeProof": [
+    "gated temporary-loss transaction proof",
+    "sacrifice transaction proof",
+    "permanent casualty exclusion proof",
+    "gated entry or teleport movement event proof",
+    "acting or lost stack identity proof",
+    "law-owner side correlation proof",
+    "geometry or adjacency ordering proof",
+    "idempotent per-transaction or per-movement application proof"
+  ]
+}

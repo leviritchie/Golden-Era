@@ -1,0 +1,178 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "RoE Castle Good3 (Song for the Father) continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub good3; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_03_roe_castle_good3",
+    "campaignTitle": "Song for the Father",
+    "campaignEntry": "Good3.h3c",
+    "batchManifest": "scenarios/roe_remaining_campaigns/batch_manifest.json",
+    "missionConfigPrefix": "homm3_roe_castle",
+    "defaultSpawn": {
+      "factionSid": "homm3_necropolis",
+      "heroSid": "homm3_necropolis_hero_12"
+    },
+    "missionSpawns": {
+      "safe_passage": {
+        "heroSid": "homm3_necropolis_hero_12",
+        "factionSid": "homm3_necropolis"
+      },
+      "united_front": {
+        "heroSid": "homm3_necropolis_hero_12",
+        "factionSid": "homm3_necropolis"
+      },
+      "for_king_and_country": {
+        "heroSid": "homm3_castle_hero_5",
+        "factionSid": "homm3_castle"
+      }
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart)."
+  },
+  "storyHubMapSidOverrides": {
+    "safe_passage": "h3_roe_castle_safe_passage_raw_translation",
+    "united_front": "h3_roe_castle_united_front_raw_translation",
+    "for_king_and_country": "h3_roe_castle_for_king_and_country_raw_translation",
+    "choiceReason": "Song for the Father missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "safe_passage",
+      "toMissionId": "united_front",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 0,
+      "strongestHeroesCarryCount": 7,
+      "sourceTextProven": "H3M levelLimit=0 for safe_passage (unlimited); no scenario hero level restriction.",
+      "mapSids": {
+        "from": "h3_roe_castle_safe_passage_raw_translation",
+        "to": "h3_roe_castle_united_front_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "united_front",
+      "toMissionId": "for_king_and_country",
+      "sourceBlockIndex": 2,
+      "nextBlockIndex": 3,
+      "levelCap": 0,
+      "strongestHeroesCarryCount": 6,
+      "sourceTextProven": "H3M levelLimit=0 for united_front (unlimited); no scenario hero level restriction.",
+      "mapSids": {
+        "from": "h3_roe_castle_united_front_raw_translation",
+        "to": "h3_roe_castle_for_king_and_country_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "safe_passage",
+    "united_front",
+    "for_king_and_country"
+  ],
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Catherine / Lord Haart loss-condition fidelity"
+  ],
+  "videoContract": {
+    "status": "mission_clips_via_native_playvideo_serial_queue_hub_hover_strip_omitted",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": "Cgood3",
+    "hubFirstShowOmitReason": "Cgood3 is a silent hover-menu strip with no HEROES3CD narration; refuse shipping it as a finished hub intro. Mission pins use composed Good3a–c cutscenes.",
+    "requiredMp4RelativeToStreamingAssets": "video/Cgood3.mp4",
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_03_roe_castle_good3/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "sourceMp4RelativeToStreamingAssets": "video/Cgood3.mp4",
+      "stillArtifact": "artifacts/campaign_port_poc/roe_castle_campaign/storyhub_visual/Cgood3_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.18,
+      "focusY": 0.5,
+      "cropReason": "Hooded figure lit by the wall torch in the gothic hall",
+      "cropsCatalog": "scenarios/roe_castle_campaign/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "safe_passage": "Good3a",
+      "united_front": "Good3b",
+      "for_king_and_country": "Good3c"
+    },
+    "actionOrder": "PlayVideo then OpenMissionsPrologue on each mission pin interactionActions (native StoryHub serial queue; does not mask load time)",
+    "hdEditionSources": [
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Cgood3.ogv",
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Good3a.ogv",
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Good3b.ogv",
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Good3c.ogv"
+    ],
+    "transcodeRequirement": "Mission clips: compose via tools/bake_roe_castle_campaign_videos.py. Do not treat plain hover-strip letterboxes as finished cutscenes.",
+    "composeRecipe": "experiments/campaign_port_poc/campaign_video_compose.py",
+    "narrationSnd": "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/LOC/EN/HEROES3CD.SND",
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "minComposedDurationSec": 12,
+    "requireComposedAudio": true,
+    "failClosed": "Good3 hub firstShowActions must stay empty (no Cgood3 PlayVideo). Per-mission pin PlayVideo emits only when the matching composed MP4 exists under StreamingAssets/video."
+  }
+}

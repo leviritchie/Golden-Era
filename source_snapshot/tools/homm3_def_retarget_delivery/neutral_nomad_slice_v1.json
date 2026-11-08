@@ -1,0 +1,31 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "neutral_nomad_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/neutral_nomad_slice_v1",
+  "note": "Neutral nomad: hand-keyed rider (no mocap capture exists for a mounted rider) on the procedural stronghold_quadruped horse; scimitar rigid on RightHand; faces -60 fleet bind; all 9 clips. 2026-10-01: rebuilt (full run_unit + fleet_rebuild) on the Meshy-retextured mesh (task 01a0f863, commit 7e110ee3d3): the rider was one flat tan before. Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_nomad 0.485. | look B (vanilla philosophy finish, finish.py; look.py --stages finish,apply), animation unchanged Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_nomad 0.485. | authenticity pass 2026-10-11 lane A: Hitted horse rears on its hind hooves per DEF g03 (Hips pivot turn, keyRotations split pair + keyTranslations) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_nomad 0.485.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_nomad",
+      "gameSid": "h3_nomad",
+      "bundleName": "custom_units_neutral_h3_nomad",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "b95c5a0ae74fed67191401fe9a94b032ff92e1efba90640fcb7782ea945abcac",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "f16a1caff05c8047e4c72074fe4d142ca4e24d74548fb102f7172974175e38f7",
+        "idleRetimedGlbSha256": "55d39150253dcd8e3d4db65210126aceea7d9be55b27d5ef3e4eb77497b4737c",
+        "vfxManifestSha256": "0edfc0eef3f1b53d5e5d2c6f5e58fe915a45a54aace9a208610852df0b450675",
+        "specSha256": "9a67fa7fc6afd144d6d862b0160c98a2e5c9e5c13e25e6d02fa96cf470592b91",
+        "basecolorSha256": "94feede70ee932bf4722226df20803533bf4d147f9c7aa23905b3956d7ab9271"
+      }
+    }
+  ]
+}

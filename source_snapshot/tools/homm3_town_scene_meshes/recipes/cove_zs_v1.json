@@ -1,0 +1,60 @@
+{
+ "schema": "town_full3d_recipe.v2",
+ "faction": "cove",
+ "seed": "gc_v1",
+ "candidate": "zs_v1",
+ "note": "cove zs_v1 (2026-10-01, town agent): castle_zs_v6's recipe v2 on seed gc_v1 = a fork of the installed ssr_dfix (building depth contact_v1, seams, SSR water) with every Meshy prop dropped (all 28 agave/reeds: they were placed on the smear curtains this LDI cuts away and float up to 43 m after it; town_t2_props.py drop, recorded in work/props/placement.json) and five near-field rocks removed (Mesh_Near_rocks_0 x2, Mesh_Near_pebbles x3, 121 verts each, 3.8-4.9 m over the ground after the LDI, on the cut curtain; neither slide nor fill keeps the rest frame; work/dropped_pieces.json). ssr_dfix is not an LDI candidate, so the LDI runs here (fromPreLdi false). Plus the sprite ground decals (\"decal\": {}, as Castle zs_v8) for building-seed coverage gaps the rest-paint term finds; flap is the per-chart rule (a691220b95). paintOrder (2026-10-02, cove agent): the build-state painting-order cut (town_full3d_recipe.paint_order_cut): tbcvsa2p's Meshy body stood over the hall's gable and tbcvsor1's over the mage guild in their min_ states (rest paint 1326 / 458 px), which cove_t2_stage's paintOrder never cut because it only paired layers of the profile's three states. certificate.extraPoses (2026-10-02, cove agent): the poses final (loop 36 full set) failed at on build8 (visible behind: periphery 74 px at loop_264/276, bldg_front 16-19 px; ground hole 4 px; unseen faces 84 px worst loop_060), as Necropolis zs_v1 / Factory zs_v1. Then build9's final failed only on unseen faces (16-34 px); a per-pose scan of the final set (every state) found them at transition_005, loop_132, loop_084, loop_300, transition_019, transition_061, transition_063, transition_009, transition_014, added too.",
+ "ldi": {
+  "pieces": [
+   "Mesh_Terrain"
+  ],
+  "cut": "zone",
+  "backRule": "vlb",
+  "vlbK": 2.0,
+  "keepRounds": 0,
+  "reachLoop": 12,
+  "fromPreLdi": false
+ },
+ "backstop": {
+  "K": 2.0,
+  "stepPx": 4,
+  "groundSrcM": 1.0
+ },
+ "repair": {
+  "rules": [
+   "drop",
+   "card",
+   "flap",
+   "planar"
+  ],
+  "rounds": 8
+ },
+ "certificate": {
+  "loop": 12,
+  "extraPoses": [
+   "free_catmullRom_restRotation_high",
+   "free_polygon_lookAt_right",
+   "loop_048",
+   "loop_060",
+   "loop_096",
+   "loop_120",
+   "loop_168",
+   "loop_228",
+   "loop_264",
+   "loop_276",
+   "loop_312",
+   "transition_032",
+   "transition_005",
+   "loop_132",
+   "loop_084",
+   "loop_300",
+   "transition_019",
+   "transition_061",
+   "transition_063",
+   "transition_009",
+   "transition_014"
+  ]
+ },
+ "decal": {},
+ "paintOrder": {}
+}

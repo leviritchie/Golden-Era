@@ -1,0 +1,51 @@
+{
+ "schema": "town_full3d_recipe.v2",
+ "faction": "dungeon",
+ "seed": "props_v3",
+ "candidate": "zs_v9",
+ "note": "dungeon zs_v9 (2026-10-02): zs_v8 (build PASS, binsSha bf57657c) passed final's behind/unseen terms and failed ground-hole growth 2 px at 8 new poses (loop_264/336, free_catmullRom_restRotation_high, transition_004/028/052/054/096; all groundHiddenPx): each extraPoses round-trip moves the 1-px slits to poses the build does not see. certificate.extraPoses \"final\": the build certifies final's own pose set. dungeon zs_v8 (2026-10-02): zs_v7 (build PASS, binsSha ffa15e06; floor fill) passed final's behind/unseen terms; ground-hole growth 1-2 px remained at 6 poses (loop_228, transition_002/016/048/075/087), all groundHiddenPx. Measured (an_ground.py/an_bs.py): 1-px slits where the pose ray passes between Mesh_Back_Terrain columns and meets no backstop, because the sky-side prune removed that backstop triangle: the prune judges ground rays over the build's cams only (loop 12 + extraPoses), so a triangle that only a final pose's ground ray sees goes. Those poses join certificate.extraPoses so the prune keeps their ground triangles. dungeon zs_v7 (2026-10-02): zs_v6 (build PASS, binsSha fcc73e80) passed final's behind (0) and unseen (0) terms in every state; it failed only ground-hole growth 5 px, all groundHiddenPx (hidden ground behind an occluder: loop_048 5, loop_156 4, loop_168 / transition_044 3, 13 more poses 1-2 px). backstop.groundFloor (the floor fill, Inferno zs_v3) answers exactly that term; the four worst poses join certificate.extraPoses. dungeon zs_v6 (2026-10-02): zs_v5 (recipe gate passed, binsSha c0334c10) failed final (157 poses): periphery behind 431 px at loop_120 (55 loop_192, 87/90 transition_061/062, 24 transition_026/074), unseen faces up to 32 px (worst loop_240 / loop_120 / loop_132 / transition_017 / free_polygon_restRotation_high), ground-hole growth 8 (transition_036/038/084/086). Those poses go to certificate.extraPoses so the repair rounds see them. dungeon zs_v5 (2026-10-02): zs_v4 rebuilt on merged main (peripherySettle merged; zs_v4 was built in the dungeon fork and passed, binsSha c0334c10). zs_v4: zs_v3 (peripherySettle; certificate passed in all 32 states) failed two other v2 terms. (1) ground contact: the last Meshy prop (mushrooms) stood half off the frame's left edge on Mesh_OuterL1's intrusion; seed props_v3 = props_v2 with it dropped (town_t2_props drop, reason in placement.json), 0 props left. (2) rest-paint in anim / min_tbdnhrd2 / min_tbdndw_0_2 (499 / 499 / 434 px, also in the seed props_v2 itself: not caused by the settle): the Troglodyte pit's painted foreground mushrooms at frame (55-280, 580-673) drawn by Mesh_Terrain and the dwelling's Meshy body; the sprite ground decals (decal {}) for the environment part.",
+ "ldi": {
+  "pieces": [
+   "Mesh_Terrain"
+  ],
+  "cut": "zone",
+  "backRule": "vlb",
+  "vlbK": 2.0,
+  "keepRounds": 0,
+  "reachLoop": 12,
+  "fromPreLdi": false
+ },
+ "backstop": {
+  "K": 2.0,
+  "stepPx": 4,
+  "groundSrcM": 1.0,
+  "groundFloor": true
+ },
+ "repair": {
+  "rules": [
+   "drop",
+   "card",
+   "flap",
+   "planar"
+  ],
+  "rounds": 8
+ },
+ "certificate": {
+  "loop": 12,
+  "extraPoses": "final"
+ },
+ "peripherySettle": {
+  "pieces": [
+   "Mesh_OuterC0",
+   "Mesh_OuterC1",
+   "Mesh_OuterL0",
+   "Mesh_OuterL1",
+   "Mesh_OuterL2",
+   "Mesh_OuterR0",
+   "Mesh_OuterR1",
+   "Mesh_OuterR2"
+  ],
+  "why": "the polar periphery sheets are drawn in front of the staged frame surface at rest in 7416 px (OuterL1 5555 at x 0-21, down to 0.69 x the frame depth): the periphery's own settle rule (frameIntrusions 0) re-applied against the post-LDI frame"
+ },
+ "decal": {}
+}

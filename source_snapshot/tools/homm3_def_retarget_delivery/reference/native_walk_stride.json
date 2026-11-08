@@ -1,0 +1,688 @@
+{
+ "schema": "native_walk_stride.v1",
+ "rule": "01.Walk sampled over one loop; world = prefab root with UnitViewConfig.scale on the first child; cycle = clip length / 0.8 (move state speed x battleSpeed 1); slip against moveSpeed",
+ "assumptions": [
+  "ground translation speed = UnitViewConfig.moveSpeed world units / s (docs: live worldSpeed matched the field)",
+  "battleSpeed scales clip playback and translation alike"
+ ],
+ "medianRequiredOverActual": 1.657,
+ "effectiveBattleSpeed": 1.657,
+ "effectiveBattleSpeedNote": "the vanilla walks need their clips played this much faster than 0.8 (or the body moved this much slower than moveSpeed) for their kinematic stride to match; stride_match_glb.py plays owned walks under the same factor",
+ "calibratedMedianSlipRatio": 0.467,
+ "calibratedP75SlipRatio": 0.686,
+ "medianSlipRatio": 0.421,
+ "units": {
+  "humans/1prefabs/esquire": {
+   "forwardAxis": [
+    0.9994,
+    -0.0,
+    -0.0342
+   ],
+   "cycleClipSeconds": 0.8,
+   "cycleGameSeconds": 1.0,
+   "moveSpeed": 4.3,
+   "worldScale": 1.0,
+   "plantedGroundSpeed": 1.9313,
+   "strideRequired": 4.3,
+   "strideActual": 1.9313,
+   "requiredOverActual": 2.2265,
+   "slipPerCycle": 0.5413,
+   "slipRatio": 0.395,
+   "limbs": {
+    "Toe_R#332536": {
+     "contactFraction": 0.329,
+     "backwardFraction": 0.475,
+     "backSweep": 1.0038,
+     "strideActual": 2.1133,
+     "slipPerCycle": 0.5241,
+     "slipRatio": 0.3703,
+     "excursion": 1.0038
+    },
+    "Toe_L#424440": {
+     "contactFraction": 0.308,
+     "backwardFraction": 0.542,
+     "backSweep": 0.94754,
+     "strideActual": 1.7493,
+     "slipPerCycle": 0.5586,
+     "slipRatio": 0.4213,
+     "excursion": 0.94754
+    }
+   },
+   "viewId": "esquire",
+   "viewScale": 0.66,
+   "clip": "walk",
+   "clipLength": 0.8,
+   "bodyHeight": 1.406,
+   "posedCurves": 83,
+   "eulerCurvesSkipped": 0,
+   "contacts": [
+    "Toe_L#424440",
+    "Toe_R#332536"
+   ],
+   "strideRequiredOverHeight": 3.058,
+   "strideActualOverHeight": 1.374,
+   "firstBoneLoopTravel": 0.0,
+   "calibrated": {
+    "slipRatio": 0.2778,
+    "requiredOverActual": 1.3438,
+    "cycleGameSeconds": 0.60354,
+    "strideRequiredOverHeight": 1.846
+   }
+  },
+  "humans/1prefabs/crossbowman": {
+   "forwardAxis": [
+    1.0,
+    -0.0,
+    0.0007
+   ],
+   "cycleClipSeconds": 1.6,
+   "cycleGameSeconds": 2.0,
+   "moveSpeed": 3.5,
+   "worldScale": 1.0,
+   "plantedGroundSpeed": 2.7034,
+   "strideRequired": 7.0,
+   "strideActual": 5.4068,
+   "requiredOverActual": 1.2947,
+   "slipPerCycle": 0.8164,
+   "slipRatio": 0.3942,
+   "limbs": {
+    "Toe_R_end#413655": {
+     "contactFraction": 0.267,
+     "backwardFraction": 0.483,
+     "backSweep": 2.45226,
+     "strideActual": 5.0736,
+     "slipPerCycle": 0.4875,
+     "slipRatio": 0.2612,
+     "excursion": 1.22716
+    },
+    "Toe_L_end#313526": {
+     "contactFraction": 0.325,
+     "backwardFraction": 0.433,
+     "backSweep": 2.48735,
+     "strideActual": 5.74,
+     "slipPerCycle": 1.1452,
+     "slipRatio": 0.5034,
+     "excursion": 1.24457
+    }
+   },
+   "viewId": "crossbowman",
+   "viewScale": 0.65,
+   "clip": "walk",
+   "clipLength": 1.6,
+   "bodyHeight": 2.0074,
+   "posedCurves": 133,
+   "eulerCurvesSkipped": 0,
+   "contacts": [
+    "Toe_L_end#313526",
+    "Toe_R_end#413655"
+   ],
+   "strideRequiredOverHeight": 3.487,
+   "strideActualOverHeight": 2.693,
+   "firstBoneLoopTravel": 0.0,
+   "calibrated": {
+    "slipRatio": 0.93,
+    "requiredOverActual": 0.7814,
+    "cycleGameSeconds": 1.20707,
+    "strideRequiredOverHeight": 2.105
+   }
+  },
+  "humans/1prefabs/inquisitor": {
+   "forwardAxis": [
+    0.9985,
+    -0.0,
+    0.0546
+   ],
+   "cycleClipSeconds": 0.93333,
+   "cycleGameSeconds": 1.16667,
+   "moveSpeed": 3.5,
+   "worldScale": 1.0,
+   "plantedGroundSpeed": 1.9262,
+   "strideRequired": 4.0833,
+   "strideActual": 2.2473,
+   "requiredOverActual": 1.817,
+   "slipPerCycle": 0.5632,
+   "slipRatio": 0.4534,
+   "limbs": {
+    "Toe_R_end#370007": {
+     "contactFraction": 0.258,
+     "backwardFraction": 0.508,
+     "backSweep": 1.23311,
+     "strideActual": 2.4258,
+     "slipPerCycle": 0.3257,
+     "slipRatio": 0.3087,
+     "excursion": 1.23311
+    },
+    "Toe_L_end#460195": {
+     "contactFraction": 0.35,
+     "backwardFraction": 0.558,
+     "backSweep": 1.15506,
+     "strideActual": 2.0688,
+     "slipPerCycle": 0.8007,
+     "slipRatio": 0.5602,
+     "excursion": 1.15506
+    }
+   },
+   "viewId": "inquisitor",
+   "viewScale": 0.46,
+   "clip": "walk",
+   "clipLength": 0.9333,
+   "bodyHeight": 1.7665,
+   "posedCurves": 148,
+   "eulerCurvesSkipped": 0,
+   "contacts": [
+    "Toe_L_end#460195",
+    "Toe_R_end#370007"
+   ],
+   "strideRequiredOverHeight": 2.312,
+   "strideActualOverHeight": 1.272,
+   "firstBoneLoopTravel": 0.0,
+   "calibrated": {
+    "slipRatio": 0.6389,
+    "requiredOverActual": 1.0966,
+    "cycleGameSeconds": 0.70413,
+    "strideRequiredOverHeight": 1.395
+   }
+  },
+  "humans/1prefabs/sunlight_cavalry": {
+   "forwardAxis": [
+    1.0,
+    -0.0,
+    0.0
+   ],
+   "cycleClipSeconds": 0.6,
+   "cycleGameSeconds": 0.75,
+   "moveSpeed": 6.0,
+   "worldScale": 1.0,
+   "plantedGroundSpeed": 3.9867,
+   "strideRequired": 4.5,
+   "strideActual": 2.99,
+   "requiredOverActual": 1.505,
+   "slipPerCycle": 0.5869,
+   "slipRatio": 0.3901,
+   "limbs": {
+    "Hrs_f_hoof.R#378172": {
+     "contactFraction": 0.292,
+     "backwardFraction": 0.271,
+     "backSweep": 0.92317,
+     "strideActual": 3.4086,
+     "slipPerCycle": 0.553,
+     "slipRatio": 0.4213,
+     "excursion": 0.92317
+    },
+    "Hrs_f_hoof.L#341467": {
+     "contactFraction": 0.321,
+     "backwardFraction": 0.263,
+     "backSweep": 0.87376,
+     "strideActual": 3.3286,
+     "slipPerCycle": 0.6502,
+     "slipRatio": 0.4503,
+     "excursion": 0.87376
+    },
+    "Hrs_r_hoof.R#399616": {
+     "contactFraction": 0.362,
+     "backwardFraction": 0.442,
+     "backSweep": 1.15072,
+     "strideActual": 2.6054,
+     "slipPerCycle": 0.5783,
+     "slipRatio": 0.3545,
+     "excursion": 1.15072
+    },
+    "Hrs_r_hoof.L#387983": {
+     "contactFraction": 0.362,
+     "backwardFraction": 0.442,
+     "backSweep": 1.15609,
+     "strideActual": 2.6176,
+     "slipPerCycle": 0.5663,
+     "slipRatio": 0.3472,
+     "excursion": 1.15609
+    }
+   },
+   "viewId": "sunlight_cavalry",
+   "viewScale": 1.0,
+   "clip": "Rig_Base|Walk",
+   "clipLength": 0.6,
+   "bodyHeight": 2.7483,
+   "posedCurves": 144,
+   "eulerCurvesSkipped": 0,
+   "contacts": [
+    "Hrs_f_hoof.L#341467",
+    "Hrs_f_hoof.R#378172",
+    "Hrs_r_hoof.L#387983",
+    "Hrs_r_hoof.R#399616"
+   ],
+   "strideRequiredOverHeight": 1.637,
+   "strideActualOverHeight": 1.088,
+   "firstBoneLoopTravel": 0.0,
+   "calibrated": {
+    "slipRatio": 0.4666,
+    "requiredOverActual": 0.9083,
+    "cycleGameSeconds": 0.45265,
+    "strideRequiredOverHeight": 0.988
+   }
+  },
+  "nature/1prefabs/ent": {
+   "forwardAxis": [
+    0.9999,
+    -0.0,
+    0.0128
+   ],
+   "cycleClipSeconds": 0.8,
+   "cycleGameSeconds": 1.0,
+   "moveSpeed": 2.83,
+   "worldScale": 1.0,
+   "plantedGroundSpeed": 1.708,
+   "strideRequired": 2.83,
+   "strideActual": 1.708,
+   "requiredOverActual": 1.6569,
+   "slipPerCycle": 0.5306,
+   "slipRatio": 0.3557,
+   "limbs": {
+    "Foot_R_end#320370": {
+     "contactFraction": 0.479,
+     "backwardFraction": 0.579,
+     "backSweep": 1.01996,
+     "strideActual": 1.7611,
+     "slipPerCycle": 0.4094,
+     "slipRatio": 0.3019,
+     "excursion": 1.01996
+    },
+    "Foot_L_end#400866": {
+     "contactFraction": 0.575,
+     "backwardFraction": 0.713,
+     "backSweep": 1.17915,
+     "strideActual": 1.6549,
+     "slipPerCycle": 0.6517,
+     "slipRatio": 0.4005,
+     "excursion": 1.17907
+    }
+   },
+   "viewId": "ent",
+   "viewScale": 0.8,
+   "clip": "walk",
+   "clipLength": 0.8,
+   "bodyHeight": 1.8554,
+   "posedCurves": 46,
+   "eulerCurvesSkipped": 0,
+   "contacts": [
+    "Foot_L_end#400866",
+    "Foot_R_end#320370"
+   ],
+   "strideRequiredOverHeight": 1.525,
+   "strideActualOverHeight": 0.921,
+   "firstBoneLoopTravel": 0.0,
+   "calibrated": {
+    "slipRatio": 0.3397,
+    "requiredOverActual": 1.0,
+    "cycleGameSeconds": 0.60354,
+    "strideRequiredOverHeight": 0.921
+   }
+  },
+  "neutral/1prefabs/unicorn": {
+   "forwardAxis": [
+    1.0,
+    -0.0,
+    -0.0001
+   ],
+   "cycleClipSeconds": 0.6,
+   "cycleGameSeconds": 0.75,
+   "moveSpeed": 6.5,
+   "worldScale": 1.0,
+   "plantedGroundSpeed": 3.9543,
+   "strideRequired": 4.875,
+   "strideActual": 2.9657,
+   "requiredOverActual": 1.6438,
+   "slipPerCycle": 0.6958,
+   "slipRatio": 0.4629,
+   "limbs": {
+    "DEF.Hoof-F.R#463781": {
+     "contactFraction": 0.375,
+     "backwardFraction": 0.458,
+     "backSweep": 1.38087,
+     "strideActual": 3.0128,
+     "slipPerCycle": 0.5599,
+     "slipRatio": 0.3062,
+     "excursion": 1.38087
+    },
+    "DEF.Hoof-F.L#443324": {
+     "contactFraction": 0.308,
+     "backwardFraction": 0.396,
+     "backSweep": 1.26502,
+     "strideActual": 3.1958,
+     "slipPerCycle": 0.359,
+     "slipRatio": 0.2388,
+     "excursion": 1.26502
+    },
+    "DEF.Hoof-B.R#347017": {
+     "contactFraction": 0.283,
+     "backwardFraction": 0.392,
+     "backSweep": 1.19555,
+     "strideActual": 3.0525,
+     "slipPerCycle": 1.1196,
+     "slipRatio": 0.8106,
+     "excursion": 1.19439
+    },
+    "DEF.Hoof-B.L#386972": {
+     "contactFraction": 0.267,
+     "backwardFraction": 0.412,
+     "backSweep": 1.07326,
+     "strideActual": 2.6018,
+     "slipPerCycle": 0.7447,
+     "slipRatio": 0.5728,
+     "excursion": 1.07201
+    }
+   },
+   "viewId": "unicorn",
+   "viewScale": 0.96,
+   "clip": "walk",
+   "clipLength": 0.6,
+   "bodyHeight": 3.5136,
+   "posedCurves": 56,
+   "eulerCurvesSkipped": 0,
+   "contacts": [
+    "DEF.Hoof-B.L#386972",
+    "DEF.Hoof-B.R#347017",
+    "DEF.Hoof-F.L#443324",
+    "DEF.Hoof-F.R#463781"
+   ],
+   "strideRequiredOverHeight": 1.387,
+   "strideActualOverHeight": 0.844,
+   "firstBoneLoopTravel": 0.0,
+   "calibrated": {
+    "slipRatio": 0.7329,
+    "requiredOverActual": 0.9921,
+    "cycleGameSeconds": 0.45265,
+    "strideRequiredOverHeight": 0.837
+   }
+  },
+  "neutral/1prefabs/halfling": {
+   "forwardAxis": [
+    1.0,
+    -0.0,
+    -0.0
+   ],
+   "cycleClipSeconds": 0.53333,
+   "cycleGameSeconds": 0.66667,
+   "moveSpeed": 5.2,
+   "worldScale": 1.0,
+   "plantedGroundSpeed": 2.8931,
+   "strideRequired": 3.4667,
+   "strideActual": 1.9287,
+   "requiredOverActual": 1.7974,
+   "slipPerCycle": 1.1957,
+   "slipRatio": 0.7773,
+   "limbs": {
+    "Toe_R_end#440252": {
+     "contactFraction": 0.429,
+     "backwardFraction": 0.504,
+     "backSweep": 0.97329,
+     "strideActual": 1.9305,
+     "slipPerCycle": 1.2092,
+     "slipRatio": 0.8128,
+     "excursion": 0.97329
+    },
+    "Toe_L_end#389932": {
+     "contactFraction": 0.458,
+     "backwardFraction": 0.483,
+     "backSweep": 0.93135,
+     "strideActual": 1.9269,
+     "slipPerCycle": 1.1822,
+     "slipRatio": 0.744,
+     "excursion": 0.93135
+    }
+   },
+   "viewId": "halfling",
+   "viewScale": 0.25,
+   "clip": "walk",
+   "clipLength": 0.5333,
+   "bodyHeight": 4.36,
+   "posedCurves": 74,
+   "eulerCurvesSkipped": 0,
+   "contacts": [
+    "Toe_L_end#389932",
+    "Toe_R_end#440252"
+   ],
+   "strideRequiredOverHeight": 0.795,
+   "strideActualOverHeight": 0.442,
+   "firstBoneLoopTravel": 0.0,
+   "calibrated": {
+    "slipRatio": 0.9821,
+    "requiredOverActual": 1.0848,
+    "cycleGameSeconds": 0.40236,
+    "strideRequiredOverHeight": 0.48
+   }
+  },
+  "neutral/1prefabs/ghoul": {
+   "forwardAxis": [
+    0.9983,
+    -0.0,
+    -0.0577
+   ],
+   "cycleClipSeconds": 0.93333,
+   "cycleGameSeconds": 1.16667,
+   "moveSpeed": 4.0,
+   "worldScale": 1.0,
+   "plantedGroundSpeed": 2.5169,
+   "strideRequired": 4.6667,
+   "strideActual": 2.9364,
+   "requiredOverActual": 1.5892,
+   "slipPerCycle": 0.6421,
+   "slipRatio": 0.2962,
+   "limbs": {
+    "Toe_R#333803": {
+     "contactFraction": 0.508,
+     "backwardFraction": 0.608,
+     "backSweep": 1.8282,
+     "strideActual": 3.0053,
+     "slipPerCycle": 0.6822,
+     "slipRatio": 0.2876,
+     "excursion": 1.8282
+    },
+    "Toe_L#393014": {
+     "contactFraction": 0.421,
+     "backwardFraction": 0.558,
+     "backSweep": 1.60106,
+     "strideActual": 2.8676,
+     "slipPerCycle": 0.602,
+     "slipRatio": 0.3066,
+     "excursion": 1.60106
+    }
+   },
+   "viewId": "undead_peasant",
+   "viewScale": 1.2,
+   "clip": "walk",
+   "clipLength": 0.9333,
+   "bodyHeight": 1.4398,
+   "posedCurves": 79,
+   "eulerCurvesSkipped": 0,
+   "contacts": [
+    "Toe_L#393014",
+    "Toe_R#333803"
+   ],
+   "strideRequiredOverHeight": 3.241,
+   "strideActualOverHeight": 2.039,
+   "firstBoneLoopTravel": 0.0,
+   "calibrated": {
+    "slipRatio": 0.346,
+    "requiredOverActual": 0.9592,
+    "cycleGameSeconds": 0.70413,
+    "strideRequiredOverHeight": 1.956
+   }
+  },
+  "undead/1prefabs/skeleton": {
+   "forwardAxis": [
+    0.9996,
+    -0.0,
+    -0.0269
+   ],
+   "cycleClipSeconds": 0.8,
+   "cycleGameSeconds": 1.0,
+   "moveSpeed": 2.4,
+   "worldScale": 1.0,
+   "plantedGroundSpeed": 1.5814,
+   "strideRequired": 2.4,
+   "strideActual": 1.5814,
+   "requiredOverActual": 1.5177,
+   "slipPerCycle": 0.8561,
+   "slipRatio": 0.5577,
+   "limbs": {
+    "Toe_R_end#349118": {
+     "contactFraction": 0.596,
+     "backwardFraction": 0.588,
+     "backSweep": 1.01072,
+     "strideActual": 1.7204,
+     "slipPerCycle": 0.8626,
+     "slipRatio": 0.6032,
+     "excursion": 1.01072
+    },
+    "Toe_L_end#401062": {
+     "contactFraction": 0.683,
+     "backwardFraction": 0.637,
+     "backSweep": 0.91951,
+     "strideActual": 1.4424,
+     "slipPerCycle": 0.8496,
+     "slipRatio": 0.518,
+     "excursion": 0.91951
+    }
+   },
+   "viewId": "skeleton",
+   "viewScale": 0.55,
+   "clip": "walk",
+   "clipLength": 0.8,
+   "bodyHeight": 1.3538,
+   "posedCurves": 87,
+   "eulerCurvesSkipped": 0,
+   "contacts": [
+    "Toe_L_end#401062",
+    "Toe_R_end#349118"
+   ],
+   "strideRequiredOverHeight": 1.773,
+   "strideActualOverHeight": 1.168,
+   "firstBoneLoopTravel": 0.0,
+   "calibrated": {
+    "slipRatio": 0.5521,
+    "requiredOverActual": 0.916,
+    "cycleGameSeconds": 0.60354,
+    "strideRequiredOverHeight": 1.07
+   }
+  },
+  "dungeon/1prefabs/troglodyte": {
+   "forwardAxis": [
+    0.9982,
+    -0.0,
+    -0.0594
+   ],
+   "cycleClipSeconds": 0.66667,
+   "cycleGameSeconds": 0.83333,
+   "moveSpeed": 4.0,
+   "worldScale": 1.0,
+   "plantedGroundSpeed": 1.8493,
+   "strideRequired": 3.3333,
+   "strideActual": 1.5411,
+   "requiredOverActual": 2.1629,
+   "slipPerCycle": 0.6268,
+   "slipRatio": 0.4987,
+   "limbs": {
+    "PinkyToe2_R#313609": {
+     "contactFraction": 0.404,
+     "backwardFraction": 0.6,
+     "backSweep": 0.91541,
+     "strideActual": 1.5257,
+     "slipPerCycle": 0.6985,
+     "slipRatio": 0.5185,
+     "excursion": 0.91541
+    },
+    "PinkyToe1_L#437388": {
+     "contactFraction": 0.35,
+     "backwardFraction": 0.654,
+     "backSweep": 1.01823,
+     "strideActual": 1.5565,
+     "slipPerCycle": 0.5551,
+     "slipRatio": 0.4758,
+     "excursion": 1.01823
+    }
+   },
+   "viewId": "trogl",
+   "viewScale": 44.0,
+   "clip": "walk",
+   "clipLength": 0.6667,
+   "bodyHeight": 1.32,
+   "posedCurves": 78,
+   "eulerCurvesSkipped": 0,
+   "contacts": [
+    "PinkyToe1_L#437388",
+    "PinkyToe2_R#313609"
+   ],
+   "strideRequiredOverHeight": 2.525,
+   "strideActualOverHeight": 1.167,
+   "firstBoneLoopTravel": 0.0,
+   "calibrated": {
+    "slipRatio": 0.3886,
+    "requiredOverActual": 1.3054,
+    "cycleGameSeconds": 0.50295,
+    "strideRequiredOverHeight": 1.524
+   }
+  },
+  "dungeon/1prefabs/minos": {
+   "forwardAxis": [
+    1.0,
+    -0.0,
+    -0.0024
+   ],
+   "cycleClipSeconds": 0.8,
+   "cycleGameSeconds": 1.0,
+   "moveSpeed": 2.7,
+   "worldScale": 1.0,
+   "plantedGroundSpeed": 1.4266,
+   "strideRequired": 2.7,
+   "strideActual": 1.4266,
+   "requiredOverActual": 1.8927,
+   "slipPerCycle": 0.5302,
+   "slipRatio": 0.4208,
+   "limbs": {
+    "Foot_R#426716": {
+     "contactFraction": 0.479,
+     "backwardFraction": 0.658,
+     "backSweep": 0.90836,
+     "strideActual": 1.3798,
+     "slipPerCycle": 0.5612,
+     "slipRatio": 0.4338,
+     "excursion": 0.90836
+    },
+    "Foot_L#377107": {
+     "contactFraction": 0.454,
+     "backwardFraction": 0.583,
+     "backSweep": 0.85945,
+     "strideActual": 1.4733,
+     "slipPerCycle": 0.4991,
+     "slipRatio": 0.407,
+     "excursion": 0.85945
+    }
+   },
+   "viewId": "minos",
+   "viewScale": 0.22,
+   "clip": "walk",
+   "clipLength": 0.8,
+   "bodyHeight": 2.8592,
+   "posedCurves": 91,
+   "eulerCurvesSkipped": 0,
+   "contacts": [
+    "Foot_L#377107",
+    "Foot_R#426716"
+   ],
+   "strideRequiredOverHeight": 0.944,
+   "strideActualOverHeight": 0.499,
+   "firstBoneLoopTravel": 0.0,
+   "calibrated": {
+    "slipRatio": 0.0746,
+    "requiredOverActual": 1.1423,
+    "cycleGameSeconds": 0.60354,
+    "strideRequiredOverHeight": 0.57
+   }
+  }
+ },
+ "skipped": {
+  "nature/1prefabs/elf_tracker": "ValueError: no AnimatorOverrideController mapping 01.Walk",
+  "dungeon/1prefabs/medusa": "ValueError: no foot/toe/hoof node under the Animator"
+ },
+ "proof": "static read of the installed assets (UnityPy); not a runtime capture"
+}

@@ -1,0 +1,260 @@
+{
+ "unit": "h3_minotaur_king",
+ "joints": {
+  "Hips": [
+   0.018,
+   0.215,
+   0.721
+  ],
+  "Spine": [
+   0.018,
+   0.198,
+   0.82
+  ],
+  "Spine1": [
+   0.018,
+   0.182,
+   0.92
+  ],
+  "Spine2": [
+   0.018,
+   0.163,
+   1.031
+  ],
+  "Neck": [
+   0.018,
+   0.148,
+   1.119
+  ],
+  "Head": [
+   0.01,
+   0.2,
+   1.32
+  ],
+  "HeadTop_End": [
+   0.01,
+   -0.05,
+   1.55
+  ],
+  "LeftShoulder": [
+   0.065,
+   0.248,
+   1.225
+  ],
+  "LeftArm": [
+   0.204,
+   0.268,
+   1.212
+  ],
+  "LeftForeArm": [
+   0.29,
+   0.248,
+   0.953
+  ],
+  "LeftHand": [
+   0.31,
+   0.12,
+   0.84
+  ],
+  "LeftHand_End": [
+   0.31,
+   0.07,
+   0.74
+  ],
+  "RightShoulder": [
+   -0.022,
+   0.248,
+   1.225
+  ],
+  "RightArm": [
+   -0.154,
+   0.275,
+   1.212
+  ],
+  "RightForeArm": [
+   -0.241,
+   0.261,
+   0.953
+  ],
+  "RightHand": [
+   -0.28,
+   0.08,
+   0.82
+  ],
+  "RightHand_End": [
+   -0.27,
+   0.03,
+   0.72
+  ],
+  "LeftUpLeg": [
+   0.13,
+   0.2,
+   0.7
+  ],
+  "LeftLeg": [
+   0.193,
+   0.184,
+   0.4
+  ],
+  "LeftFoot": [
+   0.235,
+   0.237,
+   0.102
+  ],
+  "LeftToeBase": [
+   0.265,
+   0.17,
+   0.04
+  ],
+  "LeftToe_End": [
+   0.296,
+   0.104,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.12,
+   0.2,
+   0.7
+  ],
+  "RightLeg": [
+   -0.168,
+   0.196,
+   0.399
+  ],
+  "RightFoot": [
+   -0.194,
+   0.273,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.225,
+   0.199,
+   0.04
+  ],
+  "RightToe_End": [
+   -0.256,
+   0.125,
+   0.0
+  ]
+ },
+ "props": [
+  {
+   "name": "axe",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.26,
+      0.03,
+      0.76
+     ],
+     [
+      -0.15,
+      -0.42,
+      1.06
+     ]
+    ],
+    [
+     [
+      -0.19,
+      -0.2,
+      0.72
+     ],
+     [
+      -0.17,
+      -0.2,
+      1.08
+     ]
+    ],
+    [
+     [
+      -0.15,
+      -0.38,
+      0.74
+     ],
+     [
+      -0.13,
+      -0.38,
+      1.1
+     ]
+    ]
+   ],
+   "radius": 0.08
+  },
+  {
+   "name": "axegrip",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.26,
+      0.03,
+      0.76
+     ],
+     [
+      -0.34,
+      0.3,
+      0.5
+     ]
+    ]
+   ],
+   "radius": 0.045
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "dungeon_fixweights"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "dy": 20,
+   "roll": 20
+  },
+  "propAim": [
+   "RightHand"
+  ]
+ },
+ "strideMatch": {
+  "maxDrop": 0.2,
+  "reason": "Default 0.15 fails the ratio (1.47, cadence at the 1.6 cap, slip 0.237). Scratch sweep (worker A, 2026-09-27) on the pre-stride GLB: 0.20 slip 0.066 ratio 1.104 cadence 1.22 jitter 0.20; 0.25 slip 0.057 ratio 1.076. Smallest drop that passes."
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: Death - the capture fell back but yawed ~50 deg sideways from key 2, reading from the battle camera as a crawl away; the DEF flings both arms up (axe overhead) and slumps straight back, so the Hips yaw back 50 deg over keys 2-6 and both arms (clavicle shared) rise over keys 1-4. AttackFront - the DEF winds the axe up overhead before a level forward chop; the right arm and clavicle raise the axe up-back at keys 1-2, then reach forward at 3-5 with the axe head (hand-local head axis measured from the hand-skinned axe verts) aimed level forward. Rotation tables listed twice (split halves); stretchRelax on the shoulder crease (CS gate 195 -> 250 torn edges without it).",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_minotaur_king_death_attack_rot.json",
+    "regrid": true,
+    "sha256": "dd665e4ccacd7c10db1c36e3d1d6f635e44fbea54ab9f60c58e765b80f8d5712"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_minotaur_king_death_attack_rot.json",
+    "regrid": true,
+    "sha256": "dd665e4ccacd7c10db1c36e3d1d6f635e44fbea54ab9f60c58e765b80f8d5712"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death",
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "crease of the re-posed joints"
+   }
+  ]
+ }
+}

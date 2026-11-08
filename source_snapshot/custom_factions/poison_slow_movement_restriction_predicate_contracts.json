@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require exact poison, slow, or movement-restriction semantics. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresPoisonSlowMovementRestrictionProfiles": true,
+    "spellSchoolFamilyOnly": true,
+    "fortressOnly": true,
+    "poisonSlowMovementRestrictionRequired": true,
+    "genericNegativeStatusSubstituteForbidden": true,
+    "classificationAloneIsNotLiveStatusProof": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": ["homm3_fortress"],
+  "allowedFamily": "SpellSchool",
+  "requiredRuntimeProof": [
+    "hero spell cast commit proof",
+    "affected target identity proof",
+    "live poison status query proof",
+    "live slow status query proof",
+    "live movement restriction status query proof",
+    "status owner and receiver correlation proof",
+    "spell taxonomy to live status ordering proof",
+    "law-owner side correlation proof",
+    "idempotent status extension application proof"
+  ],
+  "contracts": {
+    "fortress.primal-slow-poison-extension": {
+      "requiredStatusOrSpellKinds": [
+        "poison live status",
+        "slow live status or slow-classified committed spell effect",
+        "movement-restriction live status or movement-restriction-classified committed spell effect"
+      ],
+      "companionPredicates": ["RequiresNativeTerrainOrAdjacency", "RequiresSpellCastEvent"],
+      "forbiddenSubstitutes": [
+        "generic negative status counted as poison slow movement restriction",
+        "Primal school access counted as poison slow movement restriction",
+        "spell taxonomy classification counted without live target status or committed spell effect proof",
+        "status display text or SID substring counted as status classification",
+        "terrain or adjacency predicate counted as poison slow movement restriction",
+        "spell cast event counted without affected target proof"
+      ],
+      "notes": "Bog Witchcraft may only extend exact poison, slow, or movement-restriction semantics. Static status/spell taxonomy can prepare the classifier, but gameplay still requires live target status or committed spell-effect proof plus owner/target correlation."
+    }
+  }
+}

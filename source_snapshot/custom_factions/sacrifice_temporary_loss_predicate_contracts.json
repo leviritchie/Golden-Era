@@ -1,0 +1,78 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require Inferno sacrifice or temporary summoned/gated loss identity. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresSacrificeOrTemporaryLossProfiles": true,
+    "infernoOnly": true,
+    "rewardOrCooldownFamilyOnly": true,
+    "temporaryLossIdentityRequired": true,
+    "ordinaryCasualtySubstituteForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedEffectKeyPrefixes": [
+    "inferno."
+  ],
+  "allowedFamilies": [
+    "RewardEconomy",
+    "SpellCooldown"
+  ],
+  "requiredRuntimeProof": [
+    "sacrifice transaction proof",
+    "gated or summoned temporary loss proof",
+    "permanent casualty versus temporary loss discriminator proof",
+    "law-owner and loss-owner side correlation proof",
+    "reward or cooldown trigger ordering proof",
+    "idempotent per-loss application proof",
+    "ordinary permanent casualty exclusion proof"
+  ],
+  "contracts": {
+    "inferno.fire-gated-signs": {
+      "lossKinds": [
+        "committed-sacrifice-or-temporary-loss",
+        "calendar-gated-sign-companion-only"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "ordinary permanent casualty counted as sacrifice or temporary loss",
+        "generic kill or loss event counted without sacrifice identity",
+        "summoned unit existence counted without loss transaction",
+        "fire spell cast counted as sacrifice",
+        "reward row counted without loss transaction proof"
+      ],
+      "notes": "Requires committed sacrifice or temporary summoned/gated loss identity before Infernal Signs reward behavior can apply; ordinary permanent casualties and fire spell casts are not enough."
+    },
+    "inferno.sacrifice-summoned-loss-economy": {
+      "lossKinds": [
+        "committed-sacrifice-or-temporary-loss",
+        "gold-economy-loss-reward"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "ordinary permanent casualty counted as sacrifice or temporary loss",
+        "generic kill or loss event counted without sacrifice identity",
+        "summoned unit existence counted without loss transaction",
+        "fire spell cast counted as sacrifice",
+        "reward row counted without loss transaction proof"
+      ],
+      "notes": "Requires committed sacrifice or temporary summoned/gated loss identity before Soul Contract economy rewards can apply; generic deaths, kills, and reward rows are not the proof."
+    },
+    "inferno.fire-gating-sacrifice-cooldown": {
+      "lossKinds": [
+        "committed-sacrifice-or-temporary-loss",
+        "cooldown-trigger-loss-context"
+      ],
+      "companionPredicates": [
+        "RequiresSpellSchoolOrSidClass"
+      ],
+      "forbiddenSubstitutes": [
+        "ordinary permanent casualty counted as sacrifice or temporary loss",
+        "generic kill or loss event counted without sacrifice identity",
+        "summoned unit existence counted without loss transaction",
+        "fire spell cast counted as sacrifice",
+        "reward row counted without loss transaction proof"
+      ],
+      "notes": "Requires committed sacrifice or temporary summoned/gated loss identity before Sacrificial Casting can reduce cooldowns; spell school classification only scopes the affected spells."
+    }
+  }
+}

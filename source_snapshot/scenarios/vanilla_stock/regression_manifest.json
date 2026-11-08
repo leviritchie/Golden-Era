@@ -1,0 +1,166 @@
+{
+  "schema": "homm3.vanilla_stock_batch_manifest.v1",
+  "title": "Vanilla stock regression sample",
+  "description": "Curated RoE/AB/SoD/HotA sample for golden fingerprint regression. Required eras: RoE, AB, SoD (WINSTANDARD/TAKEMINES maps that currently emit). Official HotA and fan HotA rows are buildOptional soft-fail until remaining HotA-only emit gaps close. Proof boundary: generated-artifact + fingerprint only; runtime unvalidated.",
+  "pipeline": "vanilla_stock_raw_parity",
+  "suite": "regression",
+  "h3mRoot": "HoMM 3 Complete/Maps",
+  "artifactRoot": "artifacts/campaign_port_poc/vanilla_stock",
+  "baselineRoot": "scenarios/vanilla_stock/regression_baselines",
+  "stockCore": "V:/SteamLibrary/steamapps/common/Heroes of Might and Magic Olden Era/HeroesOldenEra_Data/StreamingAssets/Core.zip",
+  "templateMap": "V:/SteamLibrary/steamapps/common/Heroes of Might and Magic Olden Era/HeroesOldenEra_Data/StreamingAssets/maps/Thirst_for_Power.map",
+  "installMapsDir": "V:/SteamLibrary/steamapps/common/Heroes of Might and Magic Olden Era - Golden Era/HeroesOldenEra_Data/StreamingAssets/maps",
+  "scenarios": [
+    {
+      "id": "ascension",
+      "h3m": "Ascension.h3m",
+      "mapSid": "vanilla_stock_ascension",
+      "era": "RoE",
+      "formatVersion": 14,
+      "role": "regression",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "good_to_go",
+      "h3m": "Good to Go.h3m",
+      "mapSid": "vanilla_stock_good_to_go",
+      "era": "RoE",
+      "formatVersion": 14,
+      "role": "regression",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "dead_and_buried",
+      "h3m": "Dead and Buried.h3m",
+      "mapSid": "vanilla_stock_dead_and_buried",
+      "era": "RoE",
+      "formatVersion": 14,
+      "role": "regression",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "barbarian_breakout",
+      "h3m": "Barbarian Breakout.h3m",
+      "mapSid": "vanilla_stock_barbarian_breakout",
+      "era": "RoE",
+      "formatVersion": 14,
+      "role": "regression",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "dungeon_keeper",
+      "h3m": "Dungeon Keeper.h3m",
+      "mapSid": "vanilla_stock_dungeon_keeper",
+      "era": "AB",
+      "formatVersion": 21,
+      "role": "regression",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "treasure_hunt",
+      "h3m": "Treasure Hunt.h3m",
+      "mapSid": "vanilla_stock_treasure_hunt",
+      "era": "AB",
+      "formatVersion": 21,
+      "role": "regression",
+      "expectVictoryMode": "TAKEMINES",
+      "expectMineEntityCount": 36
+    },
+    {
+      "id": "twins",
+      "h3m": "Twins.h3m",
+      "mapSid": "vanilla_stock_twins",
+      "era": "AB",
+      "formatVersion": 21,
+      "role": "regression",
+      "expectVictoryMode": "WINSTANDARD",
+      "expectMapEventCount": 6
+    },
+    {
+      "id": "elbow_room",
+      "h3m": "Elbow Room.h3m",
+      "mapSid": "vanilla_stock_elbow_room",
+      "era": "AB",
+      "formatVersion": 21,
+      "role": "regression",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "faeries",
+      "h3m": "Faeries.h3m",
+      "mapSid": "vanilla_stock_faeries",
+      "era": "AB",
+      "formatVersion": 21,
+      "role": "regression",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "chasing_a_dream",
+      "h3m": "Chasing a Dream.h3m",
+      "mapSid": "vanilla_stock_chasing_a_dream",
+      "era": "SoD",
+      "formatVersion": 28,
+      "role": "regression",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "last_chance",
+      "h3m": "Last Chance.h3m",
+      "mapSid": "vanilla_stock_last_chance",
+      "era": "SoD",
+      "formatVersion": 28,
+      "role": "regression",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "terrible_rumor",
+      "h3m": "Terrible Rumor.h3m",
+      "mapSid": "vanilla_stock_terrible_rumor",
+      "era": "SoD",
+      "formatVersion": 28,
+      "role": "regression",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "arrogance",
+      "h3m": "Arrogance.h3m",
+      "mapSid": "vanilla_stock_arrogance",
+      "era": "SoD",
+      "formatVersion": 28,
+      "role": "regression",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "hota_claws",
+      "h3m": "[HotA] Claws.h3m",
+      "mapSid": "vanilla_stock_hota_claws",
+      "era": "HotA",
+      "formatVersion": 32,
+      "role": "hota_soft",
+      "buildOptional": true,
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "hota_challenge",
+      "h3m": "[HotA] Challenge.h3m",
+      "mapSid": "vanilla_stock_hota_challenge",
+      "era": "HotA",
+      "formatVersion": 32,
+      "role": "hota_soft",
+      "buildOptional": true,
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "the_mysterious_island",
+      "h3m": "[HotA] The Mysterious Island - v1-5-h.h3m",
+      "mapSid": "vanilla_stock_the_mysterious_island",
+      "era": "HotA",
+      "formatVersion": 32,
+      "role": "fan_import",
+      "buildOptional": true,
+      "sourceVersion": "1.5.h",
+      "sourceUrl": "https://www.maps4heroes.com/forum/opinions.php?game=3&map_id=2809",
+      "expectVictoryMode": "WINSTANDARD"
+    }
+  ]
+}

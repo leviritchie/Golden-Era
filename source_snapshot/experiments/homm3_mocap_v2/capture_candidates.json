@@ -1,0 +1,420 @@
+{
+  "proof": "generated-artifact",
+  "phase": "intermediate_vendor_skeleton",
+  "status": "unproven",
+  "hypothesis": "V2 captures familiar vendor skeletons better than custom SmartRig graphs. Captured joint trajectories would then retarget onto the original SmartRig mesh.",
+  "notAReturnToDirectSmartRigTuning": true,
+  "selectionPolicy": "anatomical compatibility before sprite inference; at most two candidates per asset; freeze the chosen reference across that asset's clips",
+  "doNotInventCoverage": true,
+  "vendorSkeletonsUnmodified": true,
+  "assets": {
+    "h3_swordsman": {
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "sourceIdentity": {
+        "defName": "CSWORD.DEF",
+        "nativeIdleSha256": "3467ebd2cca303f6dbdf02e41e31598ca654c9748417949e8718a3eef54af7d8"
+      },
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Original Swordsman bind views and CSWORD idle show a biped with paired arms and legs, a spine and head. The reviewed 25-joint donor recipe covers this graph. The longsword and shield are rigid hand attachments, not independently articulated capture joints.",
+        "concerns": "No independent fingers. Sword and shield follow the holding hands; two-handed contact and physical ownership remain unreviewed."
+      },
+      "comparison": null
+    },
+    "h3_monk": {
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "sourceIdentity": {
+        "defName": "CMONKK.DEF",
+        "nativeIdleSha256": "1bf9d408b34a39fcce990f0fa60509e9401e24d9737960d7d7dbd149cc7d1815"
+      },
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Original Monk bind views and CMONKK idle show a biped under a robe with paired sleeves, a spine and a hooded head. The reviewed 25-joint donor recipe covers this graph. The source mesh has no leg bones; Mixamo legs are authored at the hem and are not independently articulated capture joints.",
+        "concerns": "No independent fingers, face, or legs. Robe hem follow-through and tucked-sleeve hands remain unreviewed."
+      },
+      "comparison": null
+    },
+    "h3_marksman": {
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "sourceIdentity": {
+        "defName": "CHCBOW.DEF",
+        "nativeIdleSha256": "fe9476369056dc5ca19da7e1abb3953e470e0a1fba1a4b0f979293b97176b066"
+      },
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Original Marksman bind views and CHCBOW idle show a biped with paired arms and legs, a spine and head. The reviewed 25-joint donor recipe covers this graph. The longbow is a rigid left-hand attachment; the lower limb parented under the right palm is not an independently articulated capture joint.",
+        "concerns": "No independent fingers or bowstring joint. Two-hand draw contact and quiver/cloak follow-through remain unreviewed."
+      },
+      "comparison": null
+    },
+    "h3_archer": {
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "sourceIdentity": {
+        "defName": "CLCBOW.DEF",
+        "nativeIdleSha256": "b076de486f4b59369f1fa035c5ffe25613488ffed7d0ba6d78e84ae16f4d1dd8"
+      },
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Original Archer bind views and CLCBOW idle show a biped with paired arms and legs, a spine and head. The reviewed 25-joint donor recipe covers this graph. The crossbow is a rigid left-hand attachment, not an independently articulated capture joint.",
+        "concerns": "No independent fingers, bowstring, or bolt-release joint. Fitted motion and bow attachment require visual review."
+      },
+      "comparison": null
+    },
+    "h3_pikeman": {
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "sourceIdentity": {
+        "defName": "CPKMAN.DEF",
+        "nativeIdleSha256": "3bc73a5e18985e9d80d3c2c64df764d19e7e3748f0ed6c250b71acd7156e0014"
+      },
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Original Pikeman bind views and its own CPKMAN idle sprite show a biped with paired arms and legs, a spine and head. The reviewed 25-joint donor recipe covers this graph; source anatomy and preprocessing remain unit-owned.",
+        "concerns": "No independent fingers or pike capture joint. The rigid pike follows the lower right hand; independent upper-left-hand shaft contact is not enforced and must be reviewed in motion."
+      },
+      "comparison": null
+    },
+    "h3_roc": {
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "zoo",
+        "refSeq": "Eagle#Eagle-Landing/y15",
+        "configName": "demo_zoo.yaml",
+        "why": "Complete installed package used by the successful vendor known-motion control. Flyer graph: hips to pelvis; pelvis to tail and spine; spine to two thighs and spine1; spine1 to two wings and neck.",
+        "anatomy": {
+          "centralStructure": "hips-pelvis-spine-neck",
+          "limbAttachment": "paired thighs on spine; paired wings on spine1; tail on pelvis",
+          "branchIdentity": "named left/right wings, legs, tail, toes",
+          "articulationCoverage": "wing chains, leg chains, neck/head, tail"
+        }
+      },
+      "comparison": {
+        "assetRole": "comparison",
+        "kind": "zoo",
+        "refSeq": "Bird#BIRD-Attack/y0",
+        "configName": "demo_zoo.yaml",
+        "why": "Second complete flyer package with a different wing-arm naming graph (BN_UpperArm / BN_Forearm, 53 joints). Not a search by animation score. Use only if the Eagle primary fails the source-action test.",
+        "anatomy": {
+          "centralStructure": "hips-pelvis-spine-neck",
+          "limbAttachment": "paired wing-arms and legs on a bird spine",
+          "branchIdentity": "named left/right chains",
+          "articulationCoverage": "wings, legs, tail, neck"
+        }
+      }
+    },
+    "h3_crusader": {
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Complete Mixamo humanoid with 25 joints: hips to spine plus two legs plus two arms plus head. No finger fan. Chosen for central biped structure, not because it has a demo score.",
+        "anatomy": {
+          "centralStructure": "hips-spine-neck-head",
+          "limbAttachment": "LeftUpLeg/RightUpLeg on hips; shoulders on the spine chain",
+          "branchIdentity": "Mixamo left/right names",
+          "articulationCoverage": "hip-knee-ankle, shoulder-elbow-wrist, neck-head"
+        },
+        "concerns": "No expected_results video in this mini demo. Generic Objaverse character, not a knight mesh."
+      },
+      "comparison": {
+        "assetRole": "comparison",
+        "kind": "obj",
+        "refSeq": "0a763d17-417d-5473-a41a-7d1a796544d2#0a763d17-417d-5473-a41a-7d1a796544d2/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Second humanoid package. This is the vendor obj known-motion control (69 joints, fingers/jaw/eyes, demo + expected video). Heavier than needed; use only if the 25-joint primary fails the source-action test.",
+        "anatomy": {
+          "centralStructure": "hips-spine-neck-head",
+          "limbAttachment": "paired legs on hips; paired arms on the spine chain",
+          "branchIdentity": "left/right Mixamo-style names plus finger fans",
+          "articulationCoverage": "full limbs plus fingers"
+        },
+        "concerns": "Finger-heavy. Image embed only on y0."
+      }
+    },
+    "h3_behemoth": {
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Source idle shows a hunched biped with paired long arms and two legs, not a quadruped. The complete 25-joint package covers that articulation graph; target proportions are fitted separately without changing the capture skeleton.",
+        "concerns": "No independent finger or claw articulation. Captured motion and skin deformation remain experimental, not visually accepted."
+      },
+      "comparison": null
+    },
+    "h3_goblin": {
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Reviewed biped anatomy with rigid hand-owned club; complete 25-joint capture graph retained.",
+        "concerns": "No independent fingers or weapon capture joint; generated motion requires visual review."
+      },
+      "comparison": null
+    },
+    "h3_hobgoblin": {
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Biped hips/spine/head and paired arms/legs match the 25-joint package. The mace is a rigid hand attachment, not an independently articulated capture joint.",
+        "concerns": "No independent finger articulation. Weapon attachment and motion require generated-preview review."
+      },
+      "comparison": null
+    },
+    "h3_orc": {
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Inspected authentic idle is a biped with paired arms and legs, torso and head. Use the established 25-joint capture graph; fit target anatomy separately.",
+        "concerns": "Ranged prop release and terminal hand orientation are not independently observed joints. First-pass generated motion requires visual review."
+      },
+      "comparison": null
+    },
+    "h3_ogre": {
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Inspected authentic idle is a broad biped with paired arms and legs and a hand-held club. Use the established 25-joint capture graph; fit target proportions separately.",
+        "concerns": "Club direction and fingers lack independent capture joints. First-pass generated motion requires visual review."
+      },
+      "comparison": null
+    },
+    "h3_cyclops": {
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Source idle and target rest hierarchy show a broad biped with paired arms and legs. Retain the established 25-joint capture graph; target proportions are fitted separately.",
+        "concerns": "Thrown-rock release and fingers are not independent capture joints. First-pass generated motion requires visual review."
+      },
+      "comparison": null
+    },
+    "h3_orc_chieftain": {
+      "sourceIdentity": {"defName": "CORCCH.def", "nativeIdleSha256": "01857744d66634ff728b0601c01e2746c9c7e36d320100db391f06eb0e3ec20b"},
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Inspected source idle shows an armored biped with paired arms and legs. Use the established 25-joint capture graph; target anatomy is mapped independently from the base Orc.",
+        "concerns": "Thrown prop release and terminal hand orientation are not independent capture joints. Generated motion requires visual review."
+      },
+      "comparison": null
+    },
+    "h3_cyclops_king": {
+      "sourceIdentity": {"defName": "CcyclLor.def", "nativeIdleSha256": "59d31886f5cd3e0fa2f3d9bcf5478452e5c6d59cd01ee95639f8fec9470428e4"},
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Inspected source idle shows an armored biped holding a rock in front of its torso. Use the established 25-joint capture graph; do not copy base Cyclops target indices.",
+        "concerns": "Rock release and finger articulation are not represented by the capture graph. Generated motion requires visual review."
+      },
+      "comparison": null
+    },
+    "h3_ogre_mage": {
+      "sourceIdentity": {"defName": "COGMAG.def", "nativeIdleSha256": "20130e77d0435188ac99bf5dd458ce0ea22538b69a04973e91badc2085a0b42b"},
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Original archive COGMAG idle inspected: biped with paired arms and legs and a held club. Use the established 25-joint capture graph; target semantic rig is independently mapped.",
+        "concerns": "Historical mage COGRE corpus duplicates base Ogre and is not valid Mage ground truth. Club release and terminal orientation are not independent capture joints."
+      },
+      "comparison": null
+    },
+    "h3_ancient_behemoth": {
+      "sourceIdentity": {"defName": "CABEHE.def", "nativeIdleSha256": "9d1d6fe02a380914ca8d07b8237cedb64b08d23c4e9ee48ff5aa64e764371be6"},
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary", "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Inspected native idle shows a hunched biped with paired arms and legs. Retain the established Behemoth capture graph with independently verified target mapping.",
+        "concerns": "Long claws and terminal hand orientation are not independent capture joints. Generated motion requires visual review."
+      },
+      "comparison": null
+    },
+    "h3_orc_berserker": {
+      "sourceIdentity": {"defName": "lvl3alt.def", "nativeIdleSha256": "2da1d8a834d1cd8e4655aeecda175fbe89f916bf9d2fb600d0b6dfb11c558d07"},
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary", "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Inspected native idle shows an armored biped holding an axe. Retain the established 25-joint capture graph and map this mesh independently.",
+        "concerns": "Axe release and terminal hand orientation are not independent capture joints. Generated motion requires visual review."
+      },
+      "comparison": null
+    },
+    "h3_blood_eyed_cyclops": {
+      "sourceIdentity": {"defName": "lvl6alt.def", "nativeIdleSha256": "04668546d3d806f930102d1a369dfac01d455302edbbe3615ce7262a661f5653"},
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary", "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Inspected native idle shows a biped holding a rock before its torso. Retain the established capture graph; verify this target's wrists independently.",
+        "concerns": "Independent rock release and finger articulation are not represented by this capture graph. Generated motion requires visual review."
+      },
+      "comparison": null
+    },
+    "h3_goblin_trapper": {
+      "sourceIdentity": {
+        "defName": "lvl1alt.def",
+        "nativeIdleSha256": "d68640d01fee850c6460b6bfdc0d6d30d11eea17f6d5b14c9db0c6339735b6e2"
+      },
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Inspected native idle: small armored biped with paired arms and legs; carried equipment has no independent capture joints. Retain the fixed 25-joint capture graph; target mesh mapping is independently gated.",
+        "concerns": "Generated capture requires visual review; no target anatomy mapping is implied."
+      },
+      "comparison": null
+    },
+    "h3_ogre_brute": {
+      "sourceIdentity": {
+        "defName": "lvl4alt.def",
+        "nativeIdleSha256": "65101187de6a40b27aede83009cfab31ca9cf96be42bfbaf4f93dd726b3b2e43"
+      },
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Inspected native idle: armored biped carrying a long club; weapon orientation and release have no independent capture joints. Retain the fixed 25-joint capture graph; target mesh mapping is independently gated.",
+        "concerns": "Generated capture requires visual review; no target anatomy mapping is implied."
+      },
+      "comparison": null
+    },
+    "h3_ghost_behemoth": {
+      "sourceIdentity": {
+        "defName": "lvl7alt.def",
+        "nativeIdleSha256": "999adbe45360c84bcfa1770575c15f882cbaf0d8df08a3eb41f21bd19b6a24c1"
+      },
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "obj",
+        "refSeq": "00160523-f3b6-5765-931a-351e339862d7#00160523-f3b6-5765-931a-351e339862d7/y0",
+        "configName": "demo_obj.yaml",
+        "why": "Inspected native idle: hunched biped with long arms and claws; claws have no independent capture joints. Retain the fixed 25-joint capture graph; target mesh mapping is independently gated.",
+        "concerns": "Generated capture requires visual review; no target anatomy mapping is implied."
+      },
+      "comparison": null
+    },
+    "h3_thunderbird": {
+      "sourceIdentity": {
+        "defName": "CTBIRD.def",
+        "nativeIdleSha256": "3e27adf8ff36979dc266345ec2868d04aec810df30f8db295055f3e8d5bee3fa"
+      },
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "zoo",
+        "refSeq": "Eagle#Eagle-Landing/y15",
+        "configName": "demo_zoo.yaml",
+        "why": "Inspected native idle is a winged bird with paired wings, legs, tail, and neck/head branches. Reuse the complete installed Eagle flyer package as the fixed donor; target mapping remains independently gated.",
+        "concerns": "Source package does not provide independent feather or prop articulation. Generated motion requires visual review."
+      },
+      "comparison": null
+    },
+    "h3_shahrokh": {
+      "sourceIdentity": {
+        "defName": "lvl5alt.def",
+        "nativeIdleSha256": "14e95dde5c1ca3bfef243c2456e01b68d5e778a73ae8f5e3fe16eddd4b168c51"
+      },
+      "coverage": "compatible",
+      "frozenAcrossClips": true,
+      "primary": {
+        "assetRole": "primary",
+        "kind": "zoo",
+        "refSeq": "Eagle#Eagle-Landing/y15",
+        "configName": "demo_zoo.yaml",
+        "why": "Inspected native idle is a winged bird with paired wings, legs, tail, and neck/head branches. Reuse the complete installed Eagle flyer package as the fixed donor; target mapping remains independently gated.",
+        "concerns": "Source package does not provide independent feather or prop articulation. Generated motion requires visual review."
+      },
+      "comparison": null
+    },
+    "h3_beholder": {
+      "coverage": "unsupported",
+      "frozenAcrossClips": true,
+      "primary": null,
+      "comparison": null,
+      "why": "No installed zoo or obj package is a central globe with several similar-length tentacle chains. Snakes are one or two body chains. Obj packages on disk are Mixamo humanoids. Successful Roc capture alone does not establish a shared pipeline.",
+      "rejectedLookalikes": [
+        "Spider / SpiderG / Scorpion / Ant / FireAnt / Roach / Centipede / Crab — many similar chains, but legs or pincers, not tentacles",
+        "Anaconda / KingCobra — long body chains, not a globe hub",
+        "Mixamo finger fans — hand digits, not tentacles"
+      ],
+      "doNotAssign": [
+        "spider legs to tentacles",
+        "humanoid arms to tentacles",
+        "Mixamo fingers to tentacles"
+      ]
+    }
+  }
+}

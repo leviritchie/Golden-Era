@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_necropolis",
+  "sourceDoc": "docs/custom_faction_recommendations.md and docs/custom_faction_technical_implementation_proposals.md",
+  "mechanics": [
+    {
+      "id": "necropolis.necromancy_amplifier",
+      "surface": "building",
+      "sourceName": "Necromancy Amplifier",
+      "status": "substituted",
+      "reason": "Native Necromancy scaling is custom hero/combat logic, not proven city-building data.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "Necromancy Amplifier",
+        "Necromancy skill"
+      ],
+      "currentRows": [
+        "Build_Bank"
+      ],
+      "playerTextTokens": [
+        "Homm3Necropolis_Build_Bank_description",
+        "Homm3Necropolis_Build_Bank_name",
+        "Homm3Necropolis_Build_Bank_narrativeDescription"
+      ]
+    },
+    {
+      "id": "necropolis.cover_of_darkness",
+      "surface": "building",
+      "sourceName": "Cover of Darkness",
+      "status": "changed",
+      "reason": "Fog-of-war suppression needs map-visibility tracing before being promised.",
+      "playerTextPolicy": "source_changed_out",
+      "changeDisposition": "removed_from_current_city_design",
+      "implementationOwner": "no current generated city row",
+      "forbiddenPlayerText": [
+        "Cover of Darkness",
+        "fog of war",
+        "shroud",
+        "map visibility"
+      ]
+    },
+    {
+      "id": "necropolis.unearthed_graves",
+      "surface": "building",
+      "sourceName": "Unearthed Graves",
+      "status": "exact",
+      "reason": "Generated city row grants +6 weekly growth to the Skeleton line.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot_level_2"
+      ],
+      "playerTextTokens": [
+        "Homm3Necropolis_Build_Resource_Depot_level_2_description",
+        "Homm3Necropolis_Build_Resource_Depot_level_2_name",
+        "Homm3Necropolis_Build_Resource_Depot_level_2_narrativeDescription"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
+    },
+    {
+      "id": "necropolis.skeleton_converter",
+      "surface": "building",
+      "sourceName": "Skeleton Converter",
+      "status": "substituted",
+      "reason": "The native unitsConverters config targets the Necropolis base creature of the same tier, not HoMM3 Skeleton Transformer rules. Opening the native conversion window and completing its transaction remain runtime-unproven; the Unique Building menu failed in the user's 2026-10-02 run.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "Skeleton Converter",
+        "convert creatures"
+      ],
+      "currentRows": [
+        "Build_Skeleton_Converter"
+      ],
+      "playerTextTokens": [
+        "Homm3Necropolis_Build_Skeleton_Converter_description",
+        "Homm3Necropolis_Build_Skeleton_Converter_name",
+        "Homm3Necropolis_Build_Skeleton_Converter_narrativeDescription"
+      ]
+    },
+    {
+      "id": "necropolis.soul_prison",
+      "surface": "building",
+      "sourceName": "Soul Prison",
+      "status": "substituted",
+      "reason": "Grail/source behavior is not verified as a custom city mechanic.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "Soul Prison",
+        "Necromancy bonus"
+      ],
+      "currentRows": [
+        "Build_Gaping_Maw"
+      ],
+      "playerTextTokens": [
+        "Homm3Necropolis_Build_Gaping_Maw_description",
+        "Homm3Necropolis_Build_Gaping_Maw_name",
+        "Homm3Necropolis_Build_Gaping_Maw_narrativeDescription"
+      ]
+    },
+    {
+      "id": "necropolis.skeletal_necromancy",
+      "surface": "faction_skill",
+      "sourceName": "Necromancy",
+      "status": "substituted",
+      "reason": "Current skill design grants Skeleton-line stacks after battle based on eligible defeated enemy squad value. The default reward is h3_skeleton; the Warrior Levy and Grave Archers subskills upgrade the reward to h3_skeleton_upg or h3_skeleton_upg_alt. It does not expose an in-combat resurrection or corpse-conversion hero action.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "skill_faction_homm3_necropolis"
+      ],
+      "forbiddenPlayerText": [
+        "native Necromancy only",
+        "raises any undead",
+        "automatic Skeleton conversion",
+        "corpse-HP Skeleton conversion",
+        "corpse HP",
+        "hero action",
+        "combat resurrection",
+        "in-combat resurrection",
+        "during battle"
+      ]
+    }
+  ]
+}

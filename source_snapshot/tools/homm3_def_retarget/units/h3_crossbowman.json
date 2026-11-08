@@ -1,0 +1,337 @@
+{
+ "unit": "h3_crossbowman",
+ "joints": {
+  "Hips": [
+   -0.066,
+   0.024,
+   0.798
+  ],
+  "Spine": [
+   -0.04,
+   0.009,
+   0.92
+  ],
+  "Spine1": [
+   -0.014,
+   -0.007,
+   1.043
+  ],
+  "Spine2": [
+   0.015,
+   -0.025,
+   1.179
+  ],
+  "Neck": [
+   0.038,
+   -0.038,
+   1.287
+  ],
+  "Head": [
+   0.038,
+   -0.038,
+   1.387
+  ],
+  "HeadTop_End": [
+   0.143,
+   0.003,
+   1.259
+  ],
+  "LeftShoulder": [
+   0.143,
+   0.003,
+   1.259
+  ],
+  "LeftArm": [
+   0.234,
+   0.087,
+   1.078
+  ],
+  "LeftForeArm": [
+   0.241,
+   0.073,
+   0.819
+  ],
+  "LeftHand": [
+   0.255,
+   -0.031,
+   0.463
+  ],
+  "LeftHand_End": [
+   0.258,
+   -0.057,
+   0.377
+  ],
+  "RightShoulder": [
+   -0.164,
+   0.052,
+   1.287
+  ],
+  "RightArm": [
+   -0.241,
+   0.122,
+   1.266
+  ],
+  "RightForeArm": [
+   -0.304,
+   0.241,
+   1.098
+  ],
+  "RightHand": [
+   -0.304,
+   0.024,
+   0.959
+  ],
+  "RightHand_End": [
+   -0.304,
+   -0.051,
+   0.91
+  ],
+  "LeftUpLeg": [
+   0.045,
+   -0.017,
+   0.749
+  ],
+  "LeftLeg": [
+   0.129,
+   -0.129,
+   0.491
+  ],
+  "LeftFoot": [
+   0.178,
+   -0.08,
+   0.079
+  ],
+  "LeftToeBase": [
+   0.199,
+   -0.213,
+   0.003
+  ],
+  "LeftToe_End": [
+   0.213,
+   -0.227,
+   -0.025
+  ],
+  "RightUpLeg": [
+   -0.171,
+   -0.017,
+   0.749
+  ],
+  "RightLeg": [
+   -0.227,
+   -0.059,
+   0.463
+  ],
+  "RightFoot": [
+   -0.262,
+   0.129,
+   0.079
+  ],
+  "RightToeBase": [
+   -0.283,
+   -0.01,
+   0.003
+  ],
+  "RightToe_End": [
+   -0.297,
+   -0.038,
+   -0.025
+  ]
+ },
+ "props": [
+  {
+   "name": "crossbow",
+   "bone": "LeftHand",
+   "box": [
+    [
+     0.235,
+     -0.4,
+     0.05
+    ],
+    [
+     0.42,
+     0.25,
+     0.5
+    ]
+   ]
+  },
+  {
+   "name": "crossbowlimb",
+   "bone": "LeftHand",
+   "box": [
+    [
+     0.2,
+     -0.42,
+     0.5
+    ],
+    [
+     0.42,
+     -0.18,
+     0.74
+    ]
+   ]
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "castle_handcut",
+  "castle_refine",
+  "castle_islandbind",
+  "castle_armsep"
+ ],
+ "castleRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ],
+  "aimRange": 120,
+  "aimFromRest": true
+ },
+ "castleHandCut": {
+  "sides": [
+   "Right",
+   "Left"
+  ],
+  "handRadius": 0.1,
+  "foreRadius": 0.07,
+  "foreMinLum": 0.0
+ },
+ "skirtLegShare": 0.5,
+ "bootTop": 0.4,
+ "islandBinds": [
+  {
+   "table": "tools/homm3_def_retarget/island_binds/h3_crossbowman_stock.json",
+   "bone": "LeftHand",
+   "note": "crossbow stock slivers (4 islands) Meshy welded to the left leg: rigid to LeftHand like the crossbow"
+  },
+  {
+   "table": "tools/homm3_def_retarget/island_binds/h3_crossbowman_cuff.json",
+   "adoptFrom": [
+    "LeftHand",
+    "LeftForeArm"
+   ],
+   "note": "left glove cuff islands with a stray LeftLeg vertex: adopt the hand/forearm surface weights"
+  },
+  {
+   "table": "tools/homm3_def_retarget/island_binds/h3_crossbowman_legstrip.json",
+   "adoptFrom": [
+    "LeftLeg",
+    "LeftUpLeg",
+    "LeftFoot",
+    "Hips"
+   ],
+   "note": "outer left-leg strip with 7 LeftForeArm vertices where the hanging forearm touches the thigh: adopt the leg surface weights"
+  },
+  {
+   "table": "tools/homm3_def_retarget/island_binds/h3_crossbowman_back.json",
+   "bone": "Hips",
+   "minMatch": 0.95
+  },
+  {
+   "table": "tools/homm3_def_retarget/island_binds/h3_crossbowman_shards.json",
+   "adoptFrom": [
+    "LeftFoot",
+    "LeftLeg",
+    "LeftUpLeg",
+    "Hips"
+   ],
+   "note": "boot sliver on LeftHand and thigh sliver on LeftForeArm: adopt the leg/foot surface weights they sit on"
+  }
+ ],
+ "glbPatch": {
+  "reason": "2026-10-09 authenticity pass (lane B): h3_crossbowman crossbow carried on authored lines by motion intent (the base flipped it 69-124 deg in single frames and held it vertical at the waist). ShootFront: crossbow lifted f1 and held level at the enemy f2-f5 (prod forward, limbs flat), whole upper arm raised to DEF shoulder height with the forearm level at the enemy, the shot kicks the prod up at f6, settles level f7. Mouseover: crossbow lifted level at the hip, head counter-pitched so it no longer ducks 33 deg at the crossbow. Defence: crossbow raised upright as a chest guard, head/chest tucked. Hitted: f2 carriage held through the recoil (no 124 deg flip at f3), eased to the Idle hang. AttackFront: crossbow held low in the left hand (the DEF strikes with the right) instead of snapping 91 deg bow-up. Death: crossbow laid flat on the ground instead of standing on its limbs. The shoulder raise is unblocked by castle_armsep (arm cut free of the fused waist/hip skin; base tears 1549 -> 1099).",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_crossbowman_pose.json",
+    "sha256": "db503aceab1311c3908d36b31262d8b1887997d9b7379c6a4f99925c9b486c2e",
+    "regrid": true,
+    "note": "LeftHand crossbow orientation, left arm aim, head and chest key poses by motion intent"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_crossbowman_pose2.json",
+    "sha256": "bb1d3262e57af02d5731f3709961311c73235a90fcbcf8e63590713a4f816c7f",
+    "regrid": true,
+    "note": "second half of rotations over 115 deg"
+   }
+  ]
+ },
+ "armSep": {
+  "armBones": [
+   "LeftArm",
+   "LeftForeArm",
+   "LeftHand"
+  ],
+  "axis": [
+   [
+    0.2,
+    0.06,
+    1.05
+   ],
+   [
+    0.203,
+    0.06,
+    0.92
+   ],
+   [
+    0.225,
+    0.062,
+    0.85
+   ],
+   [
+    0.215,
+    0.075,
+    0.75
+   ],
+   [
+    0.21,
+    0.07,
+    0.65
+   ],
+   [
+    0.235,
+    0.02,
+    0.55
+   ],
+   [
+    0.25,
+    -0.03,
+    0.46
+   ]
+  ],
+  "radius": [
+   0.088,
+   0.083,
+   0.066,
+   0.055,
+   0.05,
+   0.06,
+   0.06
+  ],
+  "margin": 0.012,
+  "low": 0.4,
+  "top": 1.02,
+  "ramp": 0.06,
+  "bodyMaxX": 9.0,
+  "neutralDominant": [
+   "LeftHand"
+  ],
+  "elbowHandoff": {
+   "z": 0.79,
+   "ramp": 0.06,
+   "smooth": {
+    "band": [
+     0.66,
+     0.95
+    ],
+    "iterations": 20,
+    "alpha": 0.5
+   }
+  },
+  "note": "left arm hangs fused to the waist/hip: cut it free so ShootFront can shoulder the crossbow (axis/radius fitted to the sleeve cross-sections of the 2026-10-09 base, Blender build space)"
+ }
+}

@@ -1,0 +1,49 @@
+# Pre-existing findings of tools/validate_game_symbols_hint_contract.py (symbol-literal tier).
+# Format: <build>|flat|<GameSymbols group>|<status>. This list may only SHRINK:
+#   - never add a line to make the gate pass; fix or scope the group instead;
+#   - the gate fails on a line that no longer matches a finding, so remove fixed entries.
+# "ambiguous" = the group's hints reach more than one distinct type on that build (usually a live
+# pin plus a legacy alias that now names another class). The pre-migration first-hint resolver
+# still binds the first hint's type on Golden Era; migrate the group into GameSymbols.TypeGroups
+# (exactly one type of a pinned shape) to retire the line.
+# Scoped (TypeGroups) findings are never allow-listable.
+golden|flat|AdventureVisionLaws.SessionHolderTypeHints|ambiguous
+golden|flat|BattleEventLaws.BattleEventDispatcherTypeHints|ambiguous
+golden|flat|BattleForecast.CalculatorTypeHints|ambiguous
+golden|flat|BattleUnitInit.BattleLogicTypeHints|ambiguous
+golden|flat|BattleUnitInit.SideTypeHints|ambiguous
+golden|flat|CustomTownMapBillboard.ObjectMetaTypeHints|ambiguous
+golden|flat|CustomTownMapBillboard.PlacedObjectTypeHints|ambiguous
+golden|flat|DirectStateLaws.ActionQueueEntryTypeHints|ambiguous
+golden|flat|HeroMap.DrawerTypeHints|ambiguous
+golden|flat|HeroMap.SessionHeroVisualTypeHints|ambiguous
+golden|flat|HomecomingWaterPresentation.CursorColorProviderTypeHints|ambiguous
+golden|flat|HomecomingWaterPresentation.HoverCursorProviderTypeHints|ambiguous
+golden|flat|ImportVisuals.BattlePoolTypeHints|ambiguous
+golden|flat|MapSquadVisual.ControllerTypeHints|ambiguous
+golden|flat|MapSquadVisual.InitContextTypeHints|ambiguous
+golden|flat|MapSquadVisual.WorldSquadTypeHints|ambiguous
+golden|flat|ReleaseTownUi.CityWrapperTypeHints|ambiguous
+golden|flat|ReleaseTownUi.FbiCityWrapperTypeHints|ambiguous
+golden|flat|SmoothOpening.OpenTimeTrackerTypeHints|ambiguous
+golden|flat|TerrainMaterial.RendererTypeHints|ambiguous
+# current (Steam 25672315), seeded 2026-10-06 with --print-allowlist once the current flat check evaluated
+# the generated GameSymbolsCurrent.g.cs scopes. Each line is the counterpart of the golden line above
+# (same group, same status): a multi-type hint list that ships on both builds (several consumers patch
+# every listed type, so trimming it is a runtime change). Shrink-only from here, like the golden lines.
+current|flat|AdventureVisionLaws.SessionHolderTypeHints|ambiguous
+current|flat|BattleEventLaws.BattleEventDispatcherTypeHints|ambiguous
+current|flat|BattleUnitInit.BattleLogicTypeHints|ambiguous
+current|flat|CustomTownMapBillboard.ObjectMetaTypeHints|ambiguous
+current|flat|CustomTownMapBillboard.PlacedObjectTypeHints|ambiguous
+current|flat|DirectStateLaws.ActionQueueEntryTypeHints|ambiguous
+current|flat|HeroMap.DrawerTypeHints|ambiguous
+current|flat|HeroMap.SessionHeroVisualTypeHints|ambiguous
+current|flat|HomecomingWaterPresentation.CursorColorProviderTypeHints|ambiguous
+current|flat|HomecomingWaterPresentation.HoverCursorProviderTypeHints|ambiguous
+current|flat|MapSquadVisual.InitContextTypeHints|ambiguous
+current|flat|MapSquadVisual.WorldSquadTypeHints|ambiguous
+current|flat|ReleaseTownUi.CityWrapperTypeHints|ambiguous
+current|flat|ReleaseTownUi.FbiCityWrapperTypeHints|ambiguous
+current|flat|SmoothOpening.OpenTimeTrackerTypeHints|ambiguous
+current|flat|TerrainMaterial.RendererTypeHints|ambiguous

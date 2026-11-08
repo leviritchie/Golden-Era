@@ -1,0 +1,436 @@
+{
+ "unit": "h3_faerie",
+ "joints": {
+  "Hips": [
+   0.0,
+   -0.15,
+   0.95
+  ],
+  "Spine": [
+   0.0,
+   -0.13,
+   1.05
+  ],
+  "Spine1": [
+   0.0,
+   -0.12,
+   1.16
+  ],
+  "Spine2": [
+   0.0,
+   -0.11,
+   1.27
+  ],
+  "Neck": [
+   0.0,
+   -0.12,
+   1.38
+  ],
+  "Head": [
+   0.0,
+   -0.16,
+   1.45
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.2,
+   1.66
+  ],
+  "LeftShoulder": [
+   0.05,
+   -0.08,
+   1.37
+  ],
+  "RightShoulder": [
+   -0.05,
+   -0.08,
+   1.37
+  ],
+  "LeftArm": [
+   0.14,
+   -0.08,
+   1.35
+  ],
+  "RightArm": [
+   -0.14,
+   -0.08,
+   1.35
+  ],
+  "LeftForeArm": [
+   0.16,
+   -0.1,
+   1.13
+  ],
+  "RightForeArm": [
+   -0.16,
+   -0.1,
+   1.13
+  ],
+  "LeftHand": [
+   0.09,
+   -0.04,
+   0.81
+  ],
+  "RightHand": [
+   -0.09,
+   -0.04,
+   0.81
+  ],
+  "LeftHand_End": [
+   0.03,
+   -0.02,
+   0.72
+  ],
+  "RightHand_End": [
+   -0.03,
+   -0.02,
+   0.72
+  ],
+  "LeftUpLeg": [
+   0.08,
+   -0.15,
+   0.9
+  ],
+  "RightUpLeg": [
+   -0.08,
+   -0.15,
+   0.9
+  ],
+  "LeftLeg": [
+   0.08,
+   -0.19,
+   0.5
+  ],
+  "RightLeg": [
+   -0.08,
+   -0.19,
+   0.5
+  ],
+  "LeftFoot": [
+   0.09,
+   -0.2,
+   0.08
+  ],
+  "RightFoot": [
+   -0.09,
+   -0.2,
+   0.08
+  ],
+  "LeftToeBase": [
+   0.1,
+   -0.27,
+   0.03
+  ],
+  "RightToeBase": [
+   -0.1,
+   -0.27,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.1,
+   -0.33,
+   0.01
+  ],
+  "RightToe_End": [
+   -0.1,
+   -0.33,
+   0.01
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "wingMaxDeg": 0,
+ "skirtLegShare": 0.35,
+ "bootTop": 0.12,
+ "wings": [
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.03,
+    0.03,
+    1.3
+   ],
+   "tail": [
+    -0.25,
+    0.3,
+    1.6
+   ],
+   "sign": 1,
+   "region": {
+    "box": [
+     [
+      -0.6,
+      0.04,
+      0.2
+     ],
+     [
+      0.0,
+      0.7,
+      1.9
+     ]
+    ]
+   }
+  },
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.03,
+    0.03,
+    1.3
+   ],
+   "tail": [
+    0.25,
+    0.3,
+    1.6
+   ],
+   "sign": -1,
+   "region": {
+    "box": [
+     [
+      0.0,
+      0.04,
+      0.2
+     ],
+     [
+      0.6,
+      0.7,
+      1.9
+     ]
+    ]
+   }
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 40,
+   "dy": 60
+  }
+ },
+ "extensions": [
+  "conflux_weights",
+  "conflux_leash",
+  "wing_chain"
+ ],
+ "conflux": {
+  "fillUnweighted": true,
+  "limbLeash": {
+   "bones": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "maxDist": 0.07,
+   "boneMaxDist": {
+    "LeftHand": 0.07,
+    "RightHand": 0.07
+   },
+   "nearestOnly": true,
+   "maxDistAll": 0.35,
+   "partition": [
+    "LeftUpLeg",
+    "RightUpLeg",
+    "Hips",
+    "Spine"
+   ],
+   "handSplit": true,
+   "sideSplit": true
+  }
+ },
+ "wingChain": {
+  "wings": [
+   {
+    "bone": "LeftWing",
+    "side": 1
+   },
+   {
+    "bone": "RightWing",
+    "side": -1
+   }
+  ],
+  "adoptWeights": "nearest",
+  "anim": {
+   "Idle": {
+    "open": 0,
+    "flap": {
+     "sin": 15,
+     "phase": -90
+    }
+   },
+   "Mouseover": {
+    "open": 0,
+    "flap": {
+     "sin": 15,
+     "phase": -90
+    }
+   },
+   "MoveStart": {
+    "open": 0,
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       40
+      ],
+      [
+       1,
+       60
+      ]
+     ]
+    }
+   },
+   "Move": {
+    "open": 0,
+    "flap": {
+     "sin": 60,
+     "phase": 90
+    }
+   },
+   "MoveEnd": {
+    "open": 0,
+    "flap": {
+     "keys": [
+      [
+       0,
+       60
+      ],
+      [
+       0.5,
+       25
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "open": 0,
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       30
+      ],
+      [
+       0.6,
+       15
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Defence": {
+    "open": 0,
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       30
+      ],
+      [
+       0.67,
+       30
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "open": 0,
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       25
+      ],
+      [
+       0.6,
+       10
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Death": {
+    "open": 0,
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.25,
+       25
+      ],
+      [
+       0.6,
+       10
+      ],
+      [
+       1,
+       -15
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "glbPatch": {
+  "reason": "DEF g00 move: the faerie glides laid forward with the legs trailing, aloft; the capture flew upright and dived to the floor at f2-f3. Hips aimed along the flight line (20 deg nose-up) on every key, thighs aimed back, Hips held aloft (f2-f3 copy f0's height, +0.12-0.25 lift)",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_faerie_pose_rot.json",
+    "sha256": "35e5b5e743c8594f76c6d429883f9a4c01865ffed6a3add38c1e722fc080270c",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_faerie_pose_tr.json",
+    "sha256": "39500cfd9bbaa94accd6e74376e8ca706c010d154f56cf0a5e9c9f8dd7fec883"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_faerie_pose_tr.json",
+    "sha256": "39500cfd9bbaa94accd6e74376e8ca706c010d154f56cf0a5e9c9f8dd7fec883"
+   }
+  ]
+ }
+}

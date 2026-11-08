@@ -1,0 +1,618 @@
+{
+ "unit": "h3_automaton_upg_alt",
+ "joints": {
+  "Hips": [
+   0.45,
+   0,
+   0.95
+  ],
+  "Spine": [
+   0.2,
+   0,
+   1.0
+  ],
+  "Spine1": [
+   -0.05,
+   0,
+   1.0
+  ],
+  "Spine2": [
+   -0.3,
+   0,
+   1.0
+  ],
+  "Neck": [
+   -0.5,
+   0,
+   1.0
+  ],
+  "Head": [
+   -0.7,
+   0,
+   0.95
+  ],
+  "HeadTop_End": [
+   -1.1,
+   0,
+   0.9
+  ],
+  "LeftShoulder": [
+   -0.232,
+   -0.276,
+   1.0
+  ],
+  "LeftArm": [
+   -0.463,
+   -0.552,
+   0.893
+  ],
+  "LeftForeArm": [
+   -0.597,
+   -0.712,
+   0.79
+  ],
+  "LeftHand": [
+   -0.677,
+   -0.802,
+   0.08
+  ],
+  "LeftHand_End": [
+   -0.697,
+   -0.826,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.236,
+   0.272,
+   1.0
+  ],
+  "RightArm": [
+   -0.472,
+   0.543,
+   0.894
+  ],
+  "RightForeArm": [
+   -0.603,
+   0.694,
+   0.827
+  ],
+  "RightHand": [
+   -0.681,
+   0.785,
+   0.08
+  ],
+  "RightHand_End": [
+   -0.701,
+   0.808,
+   0.0
+  ],
+  "LeftUpLeg": [
+   0.575,
+   -0.433,
+   1.0
+  ],
+  "LeftLeg": [
+   0.895,
+   -0.674,
+   0.916
+  ],
+  "LeftFoot": [
+   0.997,
+   -0.737,
+   0.08
+  ],
+  "LeftToeBase": [
+   0.997,
+   -0.737,
+   0.03
+  ],
+  "LeftToe_End": [
+   1.027,
+   -0.759,
+   0.0
+  ],
+  "RightUpLeg": [
+   0.575,
+   0.433,
+   1.0
+  ],
+  "RightLeg": [
+   0.84,
+   0.633,
+   0.884
+  ],
+  "RightFoot": [
+   0.941,
+   0.698,
+   0.08
+  ],
+  "RightToeBase": [
+   0.941,
+   0.698,
+   0.03
+  ],
+  "RightToe_End": [
+   0.969,
+   0.719,
+   0.0
+  ]
+ },
+ "props": [
+  {
+   "name": "gun",
+   "bone": "Head",
+   "box": [
+    [
+     -1.2,
+     -0.35,
+     0.55
+    ],
+    [
+     -0.72,
+     0.35,
+     1.3
+    ]
+   ]
+  },
+  {
+   "name": "midleg0",
+   "bone": "Spine1",
+   "box": [
+    [
+     -0.05,
+     -1.0,
+     0.0
+    ],
+    [
+     0.32,
+     -0.42,
+     1.1
+    ]
+   ]
+  },
+  {
+   "name": "midleg1",
+   "bone": "Spine1",
+   "box": [
+    [
+     -0.05,
+     0.42,
+     0.0
+    ],
+    [
+     0.32,
+     1.0,
+     1.1
+    ]
+   ]
+  }
+ ],
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped",
+  "hand_keys",
+  "idle_cycle",
+  "prop_extend"
+ ],
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    -20,
+    70
+   ],
+   "fold": 70,
+   "side": 95,
+   "sideClips": [],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ]
+  },
+  "restYawDeg": 90
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "handKeys": {
+  "AttackFront": [
+   {
+    "f": 0,
+    "root": [
+     0,
+     0,
+     0
+    ],
+    "bones": {
+     "Neck": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 4,
+    "root": [
+     0,
+     0.08,
+     0
+    ],
+    "bones": {
+     "Neck": [
+      -8,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 6,
+    "root": [
+     0,
+     -0.2,
+     0
+    ],
+    "bones": {
+     "Neck": [
+      6,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 9,
+    "root": [
+     0,
+     0,
+     0
+    ],
+    "bones": {
+     "Neck": [
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Hitted": [
+   {
+    "f": 0,
+    "root": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "f": 2,
+    "root": [
+     0,
+     0.1,
+     0.03
+    ]
+   },
+   {
+    "f": 5,
+    "root": [
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "Defence": [
+   {
+    "f": 0,
+    "root": [
+     0,
+     0.0,
+     -0.0
+    ]
+   },
+   {
+    "f": 1,
+    "root": [
+     0,
+     0.0114,
+     -0.0152
+    ]
+   },
+   {
+    "f": 2,
+    "root": [
+     0,
+     0.0288,
+     -0.0384
+    ]
+   },
+   {
+    "f": 3,
+    "root": [
+     0,
+     0.051,
+     -0.068
+    ]
+   },
+   {
+    "f": 4,
+    "root": [
+     0,
+     0.06,
+     -0.08
+    ]
+   },
+   {
+    "f": 5,
+    "root": [
+     0,
+     0.0576,
+     -0.0768
+    ]
+   },
+   {
+    "f": 6,
+    "root": [
+     0,
+     0.051,
+     -0.068
+    ]
+   },
+   {
+    "f": 7,
+    "root": [
+     0,
+     0.0336,
+     -0.0448
+    ]
+   },
+   {
+    "f": 8,
+    "root": [
+     0,
+     0.0156,
+     -0.0208
+    ]
+   },
+   {
+    "f": 9,
+    "root": [
+     0,
+     0.0066,
+     -0.0088
+    ]
+   },
+   {
+    "f": 10,
+    "root": [
+     0,
+     0.0,
+     -0.0
+    ]
+   }
+  ],
+  "Mouseover": [
+   {
+    "f": 0,
+    "root": [
+     0,
+     0,
+     0
+    ],
+    "bones": {
+     "Neck": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 4,
+    "root": [
+     0,
+     0,
+     0.03
+    ],
+    "bones": {
+     "Neck": [
+      0,
+      0,
+      10
+     ]
+    }
+   },
+   {
+    "f": 9,
+    "root": [
+     0,
+     0,
+     0
+    ],
+    "bones": {
+     "Neck": [
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  ]
+ },
+ "shatter": {
+  "start": 2,
+  "chunks": 45,
+  "burst": 0.5,
+  "up": 0.35,
+  "spin": 3
+ },
+ "idleCycle": {
+  "rigidParts": [
+   {
+    "name": "Rotor",
+    "center": [
+     0.002,
+     0.761,
+     1.604
+    ],
+    "axis": [
+     0.0,
+     0.425,
+     0.905
+    ],
+    "radius": 0.21,
+    "hMin": -0.05,
+    "hMax": 0.12,
+    "parent": "Hips"
+   }
+  ],
+  "spin": [
+   {
+    "bone": "Rotor",
+    "turns": 1
+   }
+  ],
+  "rot": [
+   {
+    "bones": [
+     [
+      "Neck",
+      0.5
+     ],
+     [
+      "Head",
+      0.5
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "peak": 2.4,
+    "shape": "sin"
+   },
+   {
+    "bones": [
+     [
+      "Spine2",
+      1.0
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "peak": 1.2,
+    "shape": "sin",
+    "phase": 90
+   }
+  ],
+  "lift": {
+   "vec": [
+    0,
+    0,
+    0.02
+   ],
+   "shape": "breath"
+  }
+ },
+ "handKeysDefenceReason": "2026-09-27 workerB: the brace held one root pose over frames 3-8 (freeze gate: 4 held frames while the DEF moves). The DEF g04_defence eases in and out: silhouette centroid dy vs frame 0 = 0, .5, 1.3, 2.3, 2.7, 2.6, 2.3, 1.5, .7, .3 px, so the root offset follows that curve (normalised, same peak [0, 0.06, -0.08]).",
+ "propExtend": [
+  {
+   "name": "GunExt",
+   "parent": "Head",
+   "axis": [
+    -1,
+    0,
+    0
+   ],
+   "region": {
+    "box": [
+     [
+      -1.2,
+      -0.35,
+      0.55
+     ],
+     [
+      -0.72,
+      0.35,
+      1.3
+     ]
+    ]
+   },
+   "segments": 5,
+   "copyScale": 0.06,
+   "showAbove": 0.02,
+   "clips": {
+    "AttackFront": [
+     0,
+     0,
+     0,
+     0.1,
+     0.29,
+     0.37,
+     0.39,
+     0.33,
+     0.2,
+     0.06
+    ]
+   },
+   "reason": "DEF g12_attack_front telescopes the drill arm: front edge vs Idle f0 is [0,-.05,-.08,+.04,+.29,+.41,+.45,+.39,+.24,+.08] body lengths (peak +0.45 at DEF f64) while the rebuilt GLB (e9cec4be) peaks at +0.078; the emphasis stamp reports 'reach ratio 0.0 missed' and hand_keys only rotates. Curve = DEF minus the GLB's own body reach per DEF frame, so the tip lands on the DEF's front edge. Measured by reach.py (coordinator approval 2026-09-27). Result (GLB 1480f925, 5 sections): reach.py peak 0.468 L vs DEF 0.45 (before 0.078); edges >2x rest 0 before and after on every clip, worst AttackFront ratio 1.04 unchanged; precheck PASS, jitter p90 0.123.",
+   "defPeakL": 0.45
+  }
+ ]
+}

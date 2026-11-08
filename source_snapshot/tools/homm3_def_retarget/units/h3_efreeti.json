@@ -1,0 +1,133 @@
+{
+ "unit": "h3_efreeti",
+ "joints": {
+  "Hips": [
+   0.004,
+   0.032,
+   0.983
+  ],
+  "Spine": [
+   0.004,
+   0.026,
+   1.075
+  ],
+  "Spine1": [
+   0.004,
+   0.021,
+   1.166
+  ],
+  "Spine2": [
+   0.004,
+   0.015,
+   1.269
+  ],
+  "Neck": [
+   0.004,
+   0.011,
+   1.35
+  ],
+  "Head": [
+   0.004,
+   0.032,
+   1.421
+  ],
+  "HeadTop_End": [
+   0.004,
+   -0.039,
+   1.725
+  ],
+  "LeftShoulder": [
+   0.004,
+   0.032,
+   1.421
+  ],
+  "LeftArm": [
+   0.18,
+   0.032,
+   1.4
+  ],
+  "LeftForeArm": [
+   0.286,
+   0.081,
+   1.237
+  ],
+  "LeftHand": [
+   0.321,
+   -0.046,
+   1.145
+  ],
+  "LeftHand_End": [
+   0.341,
+   -0.117,
+   1.094
+  ],
+  "RightShoulder": [
+   0.004,
+   0.032,
+   1.421
+  ],
+  "RightArm": [
+   -0.18,
+   0.032,
+   1.4
+  ],
+  "RightForeArm": [
+   -0.293,
+   0.074,
+   1.23
+  ],
+  "RightHand": [
+   -0.321,
+   -0.06,
+   1.138
+  ],
+  "RightHand_End": [
+   -0.337,
+   -0.133,
+   1.088
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ]
+ },
+ "shrinkOut": {
+  "start": 2
+ },
+ "glbPatch": {
+  "reason": "DEF g12 fire punch: AttackFront raises both hands overhead in the wind-up (f1-f2), then thrusts both arms straight forward with the body held near upright (hold Hips partly at the clip's first pose; the capture tipped the whole body ~30 deg forward instead of thrusting the arms). stretchRelax evens the armpit/elbow edges of the overhead raise.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreeti_punch_rot.json",
+    "sha256": "a889f11b9d501cc0e0b7c39d17b7a2dda62f591443abe0354ca034393be64ad5",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreeti_punch_rot.json",
+    "sha256": "a889f11b9d501cc0e0b7c39d17b7a2dda62f591443abe0354ca034393be64ad5",
+    "regrid": true
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.4,
+    "maxMove": 0.08
+   }
+  ]
+ }
+}

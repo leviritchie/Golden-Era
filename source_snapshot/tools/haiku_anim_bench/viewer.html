@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Haiku Anim Bench</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--bg:#15171a;--fg:#e8e6e3;--mut:#9aa0a6;--acc:#e0a63a;--card:#1f2226;--line:#33383e;--ok:#6cc070;--bad:#e06a5a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:13px system-ui,sans-serif}
+header{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 12px;background:var(--card);border-bottom:1px solid var(--line)}
+header b{color:var(--acc);font-size:14px}
+select,button,label.btn{font:inherit;color:var(--fg);background:#2a2e33;border:1px solid #3a3f45;border-radius:4px;padding:3px 8px;cursor:pointer}
+button:hover{border-color:var(--acc)} input[type=range]{width:160px}
+#stop{border-color:#7a3a33} .on{background:#3d3420;border-color:var(--acc)}
+main{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:8px;padding:8px;height:calc(100vh - 50px)}
+@media (max-width:1000px){main{grid-template-columns:1fr;height:auto}#view{height:60vh}}
+#view{position:relative;background:#c4c6ca;border-radius:6px;overflow:hidden;min-height:320px}
+#view canvas.gl{display:block;width:100%;height:100%}
+#badge{position:absolute;left:8px;top:8px;background:#000a;color:#fff;padding:2px 8px;border-radius:4px;font-size:12px}
+#def{position:absolute;right:8px;top:8px;width:180px;height:180px;background:#c4c6ca;border:1px solid #888;border-radius:4px}
+aside{display:flex;flex-direction:column;gap:8px;overflow:auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:8px}
+.card h3{margin:0 0 6px;font-size:12px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+#sheet{width:100%;display:block;border-radius:4px;background:#000}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-variant-numeric:tabular-nums}
+.kv span:nth-child(odd){color:var(--mut)}
+#op{font-family:ui-monospace,monospace;font-size:12px;white-space:pre-wrap;word-break:break-word}
+#why{color:var(--acc);margin-top:4px}
+#edits{font-family:ui-monospace,monospace;font-size:11px;color:var(--mut);white-space:pre-wrap;max-height:180px;overflow:auto}
+.ok{color:var(--ok)} .bad{color:var(--bad)}
+#check{font-size:12px;max-height:240px;overflow:auto}
+#check div{padding:2px 0;border-bottom:1px solid var(--line)} #check .done{color:var(--mut);text-decoration:line-through}
+#check .tick{display:inline-block;width:16px}
+.sev{display:inline-block;font-size:10px;font-weight:700;padding:0 4px;border-radius:3px;margin-right:4px;color:#fff}
+.sev-BIG{background:#c0392b} .sev-MEDIUM{background:#d68910} .sev-SMALL{background:#2e86c1}
+#check .now{background:rgba(214,137,16,.15)} #check .parked{color:#a569bd} #check .parked .why{font-size:11px}
+#funnel{font-size:12px;margin-bottom:6px} #funnel .tiers{display:flex;gap:4px;margin:4px 0}
+#funnel .tiers div{flex:1;border:1px solid var(--line);border-radius:4px;padding:2px 4px;text-align:center}
+#funnel .tiers .cur{border-color:#d68910;font-weight:700} #funnel .bar{height:4px;background:var(--line);border-radius:2px;margin-top:2px}
+#funnel .bar i{display:block;height:4px;background:#d68910;border-radius:2px}
+#flog{font-size:11px;color:var(--mut);max-height:90px;overflow:auto;margin-top:4px}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.gal figure{margin:0;cursor:pointer} .gal img{width:100%;display:block;border-radius:3px;background:#000}
+.gal figcaption{font-size:10px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+</style>
+<script type="importmap">
+{"imports":{"three":"https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js",
+"three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+</script>
+</head><body>
+<header><b>Haiku Anim Bench</b><span id="unit" hidden></span>
+<select id="unitSel" title="unit (switches the bench: one GL context; finish or stop a Haiku run first)"></select>
+<select id="clip" title="clip"></select>
+<button id="play">pause</button>
+<input type="range" id="scrub" min="0" max="1000" value="0" title="clip time">
+<label class="btn"><input type="checkbox" id="edited" checked> edited (off = original)</label>
+<label class="btn"><input type="checkbox" id="follow" checked> follow Haiku</label>
+<label class="btn"><input type="checkbox" id="skel"> joints</label>
+<span style="flex:1"></span>
+<button id="pause">pause run</button><button id="resume">resume</button><button id="stop">stop run</button>
+<span id="ctl" style="color:var(--mut)"></span>
+</header>
+<main>
+<div id="view"><span id="badge">loading GLB...</span><canvas id="defc" style="display:none"></canvas><canvas id="def" width="192" height="192" title="DEF sprite, synced to the clip time"></canvas></div>
+<aside>
+<div class="card"><h3>Haiku</h3>
+<div class="kv"><span>step</span><span id="step">-</span><span>ms / step</span><span id="ms">-</span><span>median</span><span id="med">-</span>
+<span>changes</span><span id="tally">-</span><span>pending</span><span id="pline">-</span>
+<span>mesh</span><span id="mesh">-</span><span>joints added</span><span id="newb">-</span></div>
+<div id="op" style="margin-top:6px">-</div><div id="why"></div></div>
+<div class="card"><h3>Image Haiku saw</h3><img id="sheet" alt="latest image"></div>
+<div class="card"><h3>Checklist and funnel <span id="phase" style="float:right"></span></h3><div id="funnel"></div><div id="check">-</div><div id="flog"></div></div>
+<div class="card"><h3>Haiku's camera views</h3><div id="views" class="gal"></div></div>
+<div class="card"><h3>Kept mesh / rig changes</h3><div id="mops">-</div></div>
+<div class="card"><h3>Kept pose edits</h3><div id="edits">-</div></div>
+</aside>
+</main>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+const $ = id => document.getElementById(id);
+let viewsKey = '', lastViewK = null;
+const esc = t => String(t || '').replace(/[&<>]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;'}[c]));
+// Haiku's free camera in the 3D view: same clip/frame, yaw (0 = the unit's front, 90 = its left), pitch, box size
+function camTo(v) {
+  if (!v || !mixer || !S) return;
+  if (cur !== v.clip) play(v.clip, false);
+  const info = S.clips[v.clip]; action.time = info.start + v.frames[0] * info.step; mixer.update(0);
+  playing = false; action.paused = true; $('play').textContent = 'play';
+  model.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(model, true), H = box.getSize(new THREE.Vector3()).y;
+  const o = v.at && v.at !== 'body' ? model.getObjectByName(v.at) : null;
+  const tgt = o ? o.getWorldPosition(new THREE.Vector3()) : box.getCenter(new THREE.Vector3());
+  const a = v.yaw * Math.PI / 180, e = v.pitch * Math.PI / 180, d = v.dist * H / (2 * Math.tan(17.5 * Math.PI / 180));
+  const dir = new THREE.Vector3(Math.sin(a) * Math.cos(e), Math.sin(e), Math.cos(a) * Math.cos(e));
+  controls.target.copy(tgt); camera.position.copy(tgt).addScaledVector(dir, d); controls.update();
+}
+let S = null, stackKey = '', sheetId = -1, lastFocus = '', playing = true, cur = null;
+const renderer = new THREE.WebGLRenderer({canvas: document.createElement('canvas'), antialias: true});
+renderer.domElement.className = 'gl'; $('view').prepend(renderer.domElement);
+renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+renderer.setClearColor(0xc4c6ca);
+const scene = new THREE.Scene();
+scene.add(new THREE.HemisphereLight(0xffffff, 0x5a5048, 1.6));
+const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(-2, 4, 3); scene.add(key);
+const camera = new THREE.PerspectiveCamera(35, 1, 0.01, 100);
+const controls = new OrbitControls(camera, renderer.domElement);
+const grid = new THREE.GridHelper(4, 16, 0x888888, 0xaaaaaa); scene.add(grid);
+let model, mixer, origClips = {}, action = null, framedClip = null;
+function resize() { const r = $('view').getBoundingClientRect(); renderer.setSize(r.width, r.height, false); camera.aspect = r.width / r.height; camera.updateProjectionMatrix(); }
+addEventListener('resize', resize);
+
+// ---- the bench's edit math (anim_core.edited_channels): per-key offsets on the clip grid, post-multiplied
+function bump(t, tc, hw, period) {
+  let d = Math.abs(t - tc);
+  if (period > 0) { d = ((d % period) + period) % period; d = Math.min(d, period - d); }
+  if (hw >= 1e5) return 1;
+  if (hw <= 1e-5) return d < 1e-4 ? 1 : 0;
+  return d < hw ? 0.5 * (1 + Math.cos(Math.PI * Math.min(1, d / hw))) : 0;
+}
+function sampleRot(tr, x) {   // patch_glb.resample_rot: hold for STEP, slerp for LINEAR
+  const t = tr.times, v = tr.values, n = t.length; let j = 0;
+  while (j + 1 < n && t[j + 1] <= x + 1e-6) j++;
+  const a = new THREE.Quaternion().fromArray(v, 4 * j);
+  if (tr.getInterpolation() === THREE.InterpolateDiscrete || j === n - 1 || t[j + 1] - t[j] <= 0) return a;
+  const b = new THREE.Quaternion().fromArray(v, 4 * (j + 1));
+  return a.slerp(b, Math.min(1, Math.max(0, (x - t[j]) / (t[j + 1] - t[j]))));
+}
+function sampleVec(tr, x) {
+  const t = tr.times, v = tr.values, n = t.length; let j = 0;
+  while (j + 1 < n && t[j + 1] <= x + 1e-6) j++;
+  const a = new THREE.Vector3().fromArray(v, 3 * j);
+  if (tr.getInterpolation() === THREE.InterpolateDiscrete || j === n - 1) return a;
+  return a.lerp(new THREE.Vector3().fromArray(v, 3 * (j + 1)), Math.min(1, Math.max(0, (x - t[j]) / (t[j + 1] - t[j]))));
+}
+function edited(clipName, edits) {
+  const orig = origClips[clipName]; const info = S && S.clips[clipName];
+  const mine = edits.filter(e => e.clip === clipName);
+  if (!mine.length || !info) return orig;
+  const g = info.grid, rq = {}, td = {};
+  for (const e of mine) {
+    if (e.kind === 'net') {   // net stack: one collapsed per-key offset per joint (anim_core.net_collapse)
+      const qs = e.vals.map(a => new THREE.Quaternion(a[0], a[1], a[2], a[3]));
+      rq[e.bone] = rq[e.bone] ? rq[e.bone].map((q, i) => q.clone().multiply(qs[i])) : qs;
+      continue;
+    }
+    if (e.kind === 'nettr') {
+      const d = e.vals.map(a => new THREE.Vector3(a[0], a[1], a[2]));
+      td[e.bone] = td[e.bone] ? td[e.bone].map((v, i) => v.clone().add(d[i])) : d;
+      continue;
+    }
+    const w = g.map(t => bump(t, e.tc, e.hwT, e.period));
+    if (e.kind === 'rot') {
+      const ax = new THREE.Vector3().fromArray(e.axisLocal).normalize();
+      const qs = w.map(x => new THREE.Quaternion().setFromAxisAngle(ax, e.deg * x * Math.PI / 180));
+      rq[e.bone] = rq[e.bone] ? rq[e.bone].map((q, i) => q.clone().multiply(qs[i])) : qs;
+    } else {
+      const d = w.map(x => new THREE.Vector3().fromArray(e.deltaLocal).multiplyScalar(x));
+      td[e.bone] = td[e.bone] ? td[e.bone].map((v, i) => v.clone().add(d[i])) : d;
+    }
+  }
+  // loop seam bridge (anim_core.Unit.offsets): transition keys between the last DEF frame and the wrap are the
+  // nlerp/lerp of the offsets there, so the seam follows the edits
+  if (info.period > 0) {
+    const tLast = info.start + (info.n - 1) * info.step, tWrap = info.start + info.period;
+    const ks = g.map((t, i) => [t, i]).filter(([t]) => t > tLast + 1e-5 && t < tWrap - 1e-5);
+    if (ks.length) {
+      const at = (e, t) => bump(t, e.tc, e.hwT, e.period);
+      const nv = (e, t) => (t === tLast ? e.last : e.wrap) || [0, 0, 0, 1];
+      const qAt = (b, t) => mine.filter(e => (e.kind === 'rot' || e.kind === 'net') && e.bone === b).reduce((q, e) =>
+        q.multiply(e.kind === 'net' ? new THREE.Quaternion(...nv(e, t)) :
+          new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3().fromArray(e.axisLocal).normalize(), e.deg * at(e, t) * Math.PI / 180)), new THREE.Quaternion());
+      const dAt = (b, t) => mine.filter(e => (e.kind === 'tr' || e.kind === 'nettr') && e.bone === b).reduce((v, e) =>
+        v.add(e.kind === 'nettr' ? new THREE.Vector3(...((t === tLast ? e.last : e.wrap) || [0, 0, 0])) :
+          new THREE.Vector3().fromArray(e.deltaLocal).multiplyScalar(at(e, t))), new THREE.Vector3());
+      for (const b in rq) {
+        const q0 = qAt(b, tLast), q1 = qAt(b, tWrap);
+        const s1 = q0.dot(q1) >= 0 ? 1 : -1;
+        for (const [t, i] of ks) {
+          const a = (t - tLast) / (tWrap - tLast);
+          rq[b][i] = new THREE.Quaternion((1 - a) * q0.x + a * s1 * q1.x, (1 - a) * q0.y + a * s1 * q1.y,
+                                          (1 - a) * q0.z + a * s1 * q1.z, (1 - a) * q0.w + a * s1 * q1.w).normalize();
+        }
+      }
+      for (const b in td) {
+        const d0 = dAt(b, tLast), d1 = dAt(b, tWrap);
+        for (const [t, i] of ks) td[b][i] = d0.clone().lerp(d1, (t - tLast) / (tWrap - tLast));
+      }
+    }
+  }
+  const tracks = orig.tracks.map(tr => {
+    const k = tr.name.lastIndexOf('.'), node = tr.name.slice(0, k), prop = tr.name.slice(k + 1);
+    if (prop === 'quaternion' && rq[node]) {
+      const vals = new Float32Array(4 * g.length);
+      g.forEach((t, i) => { const q = sampleRot(tr, t).multiply(rq[node][i]); q.toArray(vals, 4 * i); });
+      return new THREE.QuaternionKeyframeTrack(tr.name, g, vals);
+    }
+    if (prop === 'position' && td[node]) {
+      const vals = new Float32Array(3 * g.length);
+      g.forEach((t, i) => sampleVec(tr, t).add(td[node][i]).toArray(vals, 3 * i));
+      return new THREE.VectorKeyframeTrack(tr.name, g, vals);
+    }
+    return tr;
+  });
+  return new THREE.AnimationClip(clipName + '#edited', orig.duration, tracks);
+}
+
+// parity hook (debug): world-space bone positions/quaternions at clip time t, edited or original
+window.benchPose = (clipName, t, useEdits, bones) => {
+  const clip = useEdits ? edited(clipName, curEdits()) : origClips[clipName];
+  const m2 = new THREE.AnimationMixer(model), a2 = m2.clipAction(clip); a2.play(); a2.time = t; m2.update(0);
+  model.updateMatrixWorld(true);
+  const out = {};
+  for (const b of bones) { const o = model.getObjectByName(b); const q = o.getWorldQuaternion(new THREE.Quaternion()), p = o.getWorldPosition(new THREE.Vector3()); out[b] = {q: q.toArray(), p: p.toArray()}; }
+  a2.stop(); m2.uncacheRoot(model); if (action) { mixer.update(0); }
+  return out;
+};
+function curEdits() { return S ? S.kept.concat(S.pendingEdits || []) : []; }
+function play(clipName, keepTime) {
+  if (!mixer || !origClips[clipName]) return;
+  const t = action && keepTime ? action.time : 0;
+  const clip = $('edited').checked ? edited(clipName, curEdits()) : origClips[clipName];
+  if (action) { action.stop(); mixer.uncacheAction(action.getClip()); }
+  action = mixer.clipAction(clip); action.setLoop(THREE.LoopRepeat); action.play(); action.time = t; action.paused = !playing;
+  mixer.update(0); cur = clipName; $('clip').value = clipName; loadDef(clipName);
+  if (framedClip !== clipName) { framedClip = clipName; frame(); }
+}
+// ---- DEF strip, synced to the clip time
+let defImg = null, defClip = '';
+function loadDef(c) { if (c === defClip) return; defClip = c; defImg = new Image(); defImg.src = `/api/def/${c}.png`; }
+function drawDef() {
+  const cv = $('def'), cx = cv.getContext('2d'); if (!defImg || !defImg.complete || !S || !cur || !action) return;
+  const info = S.clips[cur]; let f = Math.floor((action.time - info.start) / info.step + 1e-4);
+  f = Math.max(0, Math.min(info.n - 1, f));
+  cx.drawImage(defImg, f * 192, 0, 192, 192, 0, 0, 192, 192);
+  cx.fillStyle = '#000a'; cx.fillRect(0, 0, 70, 16); cx.fillStyle = '#fff'; cx.font = '11px system-ui'; cx.fillText(`DEF f${f}`, 4, 12);
+}
+// ---- load (and reload when Haiku changes the rig, skin weights or rest shape: the bench serves work.glb + its rig)
+let loadedRig = null, loadingRig = null, skel = null, loadedUnit = null;
+fetch('/api/units').then(r => r.json()).then(d => { const us = $('unitSel');
+  for (const n of d.units) { const o = document.createElement('option'); o.value = o.text = n; us.add(o); } us.value = d.current; });
+$('unitSel').onchange = async () => { const us = $('unitSel'); us.disabled = true; $('badge').textContent = 'switching unit...';
+  const r = await (await fetch('/api/switch', {method: 'POST', body: JSON.stringify({unit: us.value, clip: 'Unit_Move'})})).json();
+  us.disabled = false; if (r.error) { $('badge').textContent = r.error; us.value = loadedUnit; } poll(); };
+function loadModel(rigKey) {
+  if (loadingRig === rigKey) return; loadingRig = rigKey;
+  $('badge').textContent = 'loading GLB...';
+  new GLTFLoader().load('/work.glb?rig=' + encodeURIComponent(rigKey || '0'), gltf => {
+    const t = action ? action.time : 0;
+    if (model) { scene.remove(model); if (skel) { scene.remove(skel); skel = null; } if (action) action.stop(); action = null;
+      model.traverse(o => { if (o.isMesh) { o.geometry.dispose(); } }); }
+    model = gltf.scene; scene.add(model); origClips = {};
+    model.traverse(o => { if (o.isMesh) { o.frustumCulled = false; } });
+    mixer = new THREE.AnimationMixer(model);
+    for (const c of gltf.animations) origClips[c.name] = c;
+    loadedRig = rigKey; setSkel();
+    $('badge').textContent = 'drag: orbit, wheel: zoom, right-drag: pan' + (rigKey && !rigKey.endsWith('|') ? '  (edited rig)' : '');
+    const c = cur || (S ? S.focus.clip : gltf.animations[0].name); cur = null; play(c, false); if (action) { action.time = t; mixer.update(0); }
+  }, undefined, e => { $('badge').textContent = 'GLB load failed: ' + e; loadingRig = null; });
+}
+function setSkel() {
+  if (skel) { scene.remove(skel); skel = null; }
+  if ($('skel').checked && model) { skel = new THREE.SkeletonHelper(model); skel.material.depthTest = false; skel.material.linewidth = 2; scene.add(skel); }
+}
+$('skel').onchange = setSkel;
+function frame() {  // skinned (posed) bounds, not the bind-pose box
+  model.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(model, true), size = box.getSize(new THREE.Vector3()), ctr = box.getCenter(new THREE.Vector3());
+  const h = Math.max(size.x, size.y, size.z);
+  controls.target.copy(ctr); camera.position.set(ctr.x + h * 1.7, ctr.y + h * 0.6, ctr.z + h * 2.6); controls.update();
+}
+$('clip').onchange = () => { $('follow').checked = false; play($('clip').value, false); };
+$('edited').onchange = () => play(cur, true);
+$('play').onclick = () => { playing = !playing; if (action) action.paused = !playing; $('play').textContent = playing ? 'pause' : 'play'; };
+$('scrub').oninput = () => { if (!action) return; playing = false; action.paused = true; $('play').textContent = 'play';
+  action.time = $('scrub').value / 1000 * action.getClip().duration; mixer.update(0); };
+for (const s of ['pause', 'resume', 'stop']) $(s).onclick = () => {
+  if (s === 'stop' && !confirm('Stop the Haiku run? (the bench and viewer keep running)')) return;
+  fetch('/api/control', {method: 'POST', body: JSON.stringify({state: s === 'resume' ? 'run' : s})}).then(poll); };
+// ---- poll the bench
+async function poll() {
+  try { S = await (await fetch('/api/state')).json(); } catch (e) { $('badge').textContent = 'bench not reachable'; return; }
+  const sel = $('clip');
+  if (S.unit !== loadedUnit) { loadedUnit = S.unit; sel.innerHTML = ''; cur = null; defClip = null; lastFocus = null; stackKey = null; framedClip = null;
+    if ($('unitSel').options.length) $('unitSel').value = S.unit; }
+  if (!sel.options.length) for (const c of Object.keys(S.clips)) { const o = document.createElement('option'); o.value = o.text = c; sel.add(o); }
+  $('unit').textContent = S.unit;
+  const d = S.driver || {};
+  $('step').textContent = d.step != null ? `${d.step} / ${d.maxSteps}  (session ${d.session}, ${d.status || ''})` : 'driver not started';
+  $('ms').textContent = d.ms ? `${d.ms.step} total = render ${d.ms.render} + model ${d.ms.model} (+${d.ms.other} other)` : '-';
+  const m = S.medians; $('med').textContent = m.step ? `${m.step} total, render ${m.render}, model ${m.model}` : '-';
+  const t = S.tally; $('tally').innerHTML = `${t.edits} pose, ${t.repairs} repair, ${t.rigOps} rig: <span class="ok">${t.kept} kept</span>, ${t.reverted} reverted, ${t.refused} refused; <span class="bad">${t.keptWhileFlagged} kept while red</span>`;
+  $('pline').textContent = S.pendingLine;
+  $('mesh').innerHTML = S.mesh === 'clean' ? '<span class="ok">clean</span>' : `<span class="bad">${S.mesh}</span>`;
+  $('newb').textContent = (S.newBones || []).join(', ') || 'none';
+  $('mops').textContent = (S.mops || []).slice().reverse().map(m => `#${m.id} ${m.text}  ${m.why || ''}`).join('\n') || 'none yet';
+  const rk = S.unit + '|' + S.rigKey;
+  if (rk !== loadedRig) loadModel(rk);
+  $('op').textContent = d.op ? JSON.stringify(d.op) : '-';
+  $('why').textContent = d.op && d.op.why ? d.op.why : '';
+  if (d.mesh && d.mesh !== 'clean') $('why').textContent += `  [mesh: ${d.mesh}]`;
+  $('ctl').textContent = 'run: ' + S.control;
+  $('edits').textContent = S.kept.slice().reverse().map(e => `#${e.id} ${e.clip.replace('Unit_', '')} ${e.bone} ` +
+    (e.kind === 'rot' ? `${e.deg > 0 ? '+' : ''}${e.deg}deg @${(e.tc).toFixed(3)}s` : e.kind === 'net' ? 'net rotation' : e.kind === 'nettr' ? 'net move' : `tr @${(e.tc).toFixed(3)}s`) + `  ${e.why || ''}`).join('\n') || 'none yet';
+  // survey checklist (live, ticked as Haiku marks items fixed) and Haiku's free-camera views
+  const F = S.funnel;
+  $('phase').textContent = S.phase === 'survey' ? 'phase 1: survey' : (F ? 'phase 2: tier ' + F.tier : 'phase 2: fixing');
+  const TI = ['BIG', 'MEDIUM', 'SMALL'];
+  $('funnel').innerHTML = F ? `<div class="tiers">${TI.map(t => `<div class="${F.tier === t ? 'cur' : ''}">${t} ${F.used[t]}/${F.budget[t]}<div class="bar"><i style="width:${Math.min(100, 100 * F.used[t] / Math.max(1, F.budget[t]))}%"></i></div></div>`).join('')}<div class="${F.tier === 'DONE' ? 'cur' : ''}">DONE</div></div>`
+    + (F.check ? `<div>tier check: ${new Set(F.check.yaws).size}/2 angles viewed</div>` : '')
+    + (F.jumpFrom ? `<div>jumped back from ${F.jumpFrom}</div>` : '') : '';
+  const cl = (S.checklist || []).slice();
+  const rank = x => x.status === 'open' ? 0 : x.status === 'parked' ? 1 : 2;
+  const tierOf = x => x.revisit ? 'SMALL' : (x.sev || 'MEDIUM');
+  cl.sort((a, b) => rank(a) - rank(b) || TI.indexOf(tierOf(a)) - TI.indexOf(tierOf(b)) || a.id - b.id);
+  $('check').innerHTML = cl.length ? cl.map(x => `<div class="${x.status === 'fixed' || x.status === 'dropped' ? 'done' : ''} ${x.status === 'parked' ? 'parked' : ''} ${F && F.work === x.id ? 'now' : ''}"><span class="tick">${x.status === 'fixed' ? '&#10003;' : x.status === 'dropped' ? '&ndash;' : x.status === 'parked' ? '&#8214;' : '&#9744;'}</span><span class="sev sev-${x.sev || 'MEDIUM'}">${x.sev || '?'}</span>#${x.id} ${x.clip.replace('Unit_', '')}${x.frame != null ? ' f' + x.frame : ''} <b>${esc(x.region)}</b>: ${esc(x.issue)}${x.status === 'parked' && x.parked ? ` <span class="why">(parked: ${esc(x.parked)})</span>` : ''}${x.revisit ? ' <i>(revisit)</i>' : ''}</div>`).join('') : 'no notes yet';
+  $('flog').innerHTML = F ? F.log.slice().reverse().map(e => `<div>t${e.turn} ${esc(e.text)}</div>`).join('') : '';
+  const vs = S.views || [], vkey = vs.map(v => v.k).join(',');
+  if (vkey !== viewsKey) { viewsKey = vkey;
+    $('views').innerHTML = vs.slice().reverse().map(v => `<figure data-k="${v.k}"><img src="/api/view/${v.k}.jpg?k=${v.k}"><figcaption>${v.clip.replace('Unit_', '')} f${v.frames.join('-')} ${v.mode} y${v.yaw} p${v.pitch} ${v.at}</figcaption></figure>`).join('');
+    for (const f of $('views').querySelectorAll('figure')) f.onclick = () => camTo(vs.find(v => v.k == f.dataset.k));
+  }
+  if (S.lastView && S.lastView.k !== lastViewK && mixer && action) { lastViewK = S.lastView.k; if ($('follow').checked) camTo(S.lastView); }
+  if (S.sheetId !== sheetId) { sheetId = S.sheetId; $('sheet').src = '/api/sheet.jpg?k=' + sheetId; }
+  const key = JSON.stringify([S.kept, S.pendingEdits, S.rigKey]);
+  const f = JSON.stringify(S.focus);
+  if ($('follow').checked && f !== lastFocus && mixer) {
+    lastFocus = f; play(S.focus.clip, false);
+    const info = S.clips[S.focus.clip]; action.time = info.start + S.focus.frame * info.step; mixer.update(0); stackKey = key;
+  } else if (key !== stackKey && mixer) { stackKey = key; play(cur || S.focus.clip, true); }
+  if (!cur && mixer) play(S.focus.clip, false);
+}
+setInterval(poll, 500); poll();
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const dt = clock.getDelta(); if (mixer) mixer.update(playing ? dt : 0);
+  if (action) $('scrub').value = Math.round(1000 * action.time / action.getClip().duration);
+  drawDef(); controls.update(); renderer.render(scene, camera);
+});
+resize();
+</script>
+</body></html>

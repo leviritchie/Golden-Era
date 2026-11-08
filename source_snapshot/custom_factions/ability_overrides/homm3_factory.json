@@ -1,0 +1,1103 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_factory",
+  "unitOverrides": {
+    "h3_halfling": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "factory.halfling_line",
+      "decisionTest": "Halfling is the Natural tier-one baseline with Positive Luck floor; no Human donor mechanics may leak into this stack."
+    },
+    "h3_halfling_grenadier": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Bombardier Mark",
+          "descriptionText": "Spend 1 Focus to weaken an enemy's Attack and Defense for 2 rounds.",
+          "iconKey": "day_5_magic_shorten_shadow",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "free",
+          "energyLevel": 1,
+          "cooldown": 2,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "day_5_magic_shorten_shadow:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Bombardier Mark",
+          "effectPayload": {
+            "spellSid": "day_5_magic_shorten_shadow",
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "dealer": {
+              "tags": [],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "enemy",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "enemy",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "buffTarget_": "enemy",
+              "buff": {
+                "sid": "magic_shorten_shadow_effect_0",
+                "duration": 2
+              }
+            }
+          },
+          "notes": "Source/static configured from the locked Factory ability kit; runtime behavior remains unproven."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "factory.halfling_line",
+      "decisionTest": "Halfling Grenadier is the source-authentic standard branch: shooter with 30% Defense pierce and Positive Luck floor. Grenade shot is intentionally omitted."
+    },
+    "h3_halfling_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Ember Canister",
+          "descriptionText": "Spend 1 Focus to mark an enemy so it takes extra damage for 2 rounds.",
+          "iconKey": "night_11_magic_vulnerability",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "free",
+          "energyLevel": 1,
+          "cooldown": 2,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "night_11_magic_vulnerability:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Ember Canister",
+          "effectPayload": {
+            "spellSid": "night_11_magic_vulnerability",
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "dealer": {
+              "tags": [],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "enemy",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "enemy",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "buffTarget_": "enemy",
+              "buff": {
+                "sid": "magic_vulnerability_effect_0",
+                "duration": 2
+              }
+            }
+          },
+          "notes": "Source/static configured from the locked Factory ability kit; runtime behavior remains unproven."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "factory.halfling_line",
+      "decisionTest": "Firebug is the material-class alternate: Ember Canister Focus mark instead of Defense pierce, while keeping Positive Luck."
+    },
+    "h3_mechanic": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "factory.mechanic_line",
+      "decisionTest": "Mechanic is the Industrial tier-two baseline with two-hex breath; no Human donor mechanics may leak into this stack."
+    },
+    "h3_engineer": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Field Drive",
+          "descriptionText": "Spend 2 Focus to grant an allied stack +2 Speed for 1 round.",
+          "iconKey": "day_3_magic_haste",
+          "abilityType": "Ability_type_buff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "day_3_magic_haste:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Field Drive",
+          "effectPayload": {
+            "spellSid": "day_3_magic_haste",
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "dealer": {
+              "tags": [
+                "haste"
+              ],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "ally",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "ally",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "buffTarget_": "ally",
+              "buff": {
+                "sid": "magic_haste_effect_0",
+                "duration": 1
+              }
+            },
+            "spellTier": 1,
+            "school": "day",
+            "buffSid": "magic_haste_effect_0",
+            "duration": 1
+          },
+          "notes": "Source/static configured from the locked Factory ability kit; runtime behavior remains unproven."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "factory.mechanic_line",
+      "decisionTest": "Engineer keeps two-hex breath and uses a Speed Focus buff. HotA Repair is intentionally replaced by this Speed Focus."
+    },
+    "h3_mechanic_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Overclock",
+          "descriptionText": "Spend 2 Focus to grant an allied stack +3 Initiative for 1 round.",
+          "iconKey": "space_1_magic_early_start",
+          "abilityType": "Ability_type_buff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "space_1_magic_early_start:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Overclock",
+          "effectPayload": {
+            "spellSid": "space_1_magic_early_start",
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "dealer": {
+              "tags": [],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "ally",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "ally",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "buffTarget_": "ally",
+              "buff": {
+                "sid": "magic_early_start_effect_0",
+                "duration": 1
+              }
+            },
+            "spellTier": 1,
+            "school": "space",
+            "buffSid": "magic_early_start_effect_0",
+            "duration": 1
+          },
+          "notes": "Source/static configured from the locked Factory ability kit; runtime behavior remains unproven."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "factory.mechanic_line",
+      "decisionTest": "Tinker has Long Reach and no breath. Overclock is its Initiative Focus sidegrade to Engineer's Speed Focus."
+    },
+    "h3_armadillo": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "factory.armadillo_line",
+      "decisionTest": "Armadillo is the Natural tier-three baseline tank; HotA has no special ability on this line."
+    },
+    "h3_bellwether_armadillo": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Shoulder Check",
+          "descriptionText": "Spend 1 Focus to move an adjacent enemy to a free hex within 1 hex of its position.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 1,
+          "cooldown": 2,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "arbitrator:abilities:1",
+          "effectKind": "unit-special",
+          "effectLabel": "Shoulder Check",
+          "effectPayload": {},
+          "attackType": "cast",
+          "directStateNativeShell": {
+            "mode": "restoreNativeMechanic",
+            "reshape": {
+              "attackType_": "cast",
+              "damageDealer": {
+                "attackPatternSid": "attack_single_buff",
+                "damageTarget_": "none",
+                "triggerCounter": false,
+                "shootRange": 1,
+                "tags": ["ability", "movement_ability"],
+                "castTargetParams": {
+                  "targetTags": ["unit"],
+                  "castTarget_": "enemy",
+                  "selection": "object",
+                  "targetCondition_": "alive"
+                },
+                "affectTargetParams": {
+                  "targetTags": ["unit"],
+                  "castTarget_": "enemy",
+                  "selection": "object",
+                  "targetCondition_": "alive"
+                },
+                "multitargetType": "ordered",
+                "numTargets": 2,
+                "orderedCastParams": [
+                  {
+                    "targetTags": [],
+                    "castTarget_": "none",
+                    "selection": "hex",
+                    "distanceFromFirst": 1
+                  }
+                ],
+                "orderedAffectParams": [
+                  {
+                    "targetTags": [],
+                    "castTarget_": "none",
+                    "selection": "hex",
+                    "distanceFromFirst": 1
+                  }
+                ],
+                "targetMechanics": [
+                  {
+                    "mech": "teleport",
+                    "values": []
+                  }
+                ]
+              }
+            }
+          },
+          "notes": "Native shape from Schism T6 Arbitrator Command: Fear (arbitrator:abilities:1): ordered unit+hex cast with mech teleport. Reshape tightens distanceFromFirst 4→1 and sets shootRange=1 (Fear has no shootRange = infinite unit pick). DS MovementPush pilot stays off."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "factory.armadillo_line",
+      "decisionTest": "Bellwether Armadillo gains a 1 Focus enemy reposition (1-hex teleport) as its standard-branch identity."
+    },
+    "h3_armadillo_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Taunting Plate",
+          "descriptionText": "Spend 2 Focus to force nearby enemies to target this stack.",
+          "iconKey": "day_8_magic_taunt",
+          "abilityType": "Ability_type_buff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "day_8_magic_taunt:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Taunting Plate",
+          "effectPayload": {
+            "spellSid": "day_8_magic_taunt",
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "dealer": {
+              "tags": [],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "self",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "self",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "buffTarget_": "self"
+            },
+            "spellTier": 1,
+            "school": "day"
+          },
+          "notes": "Source/static configured from the locked Factory ability kit; runtime behavior remains unproven."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "factory.armadillo_line",
+      "decisionTest": "Plated Armadillo is the taunt wall alternate at 2 Focus."
+    },
+    "h3_automaton": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Blow Up",
+          "descriptionText": "Spend 2 Focus to self-destruct, dealing Magic Damage to all adjacent creatures.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "lava_larva:abilities:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Blow Up",
+          "effectPayload": {},
+          "notes": "Copies Core demons/lava_larva abilities[0] (Blow Up / destroy_self adjacent Magic Damage)."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "factory.automaton_line",
+      "decisionTest": "Automaton is the Industrial construct baseline. HotA Ignition/Detonation is remapped to a Fire Larva Blow Up Focus."
+    },
+    "h3_sentinel_automaton": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Blow Up",
+          "descriptionText": "Spend 2 Focus to self-destruct, dealing Magic Damage to all adjacent creatures.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "lava_larva:abilities:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Blow Up",
+          "effectPayload": {},
+          "notes": "Copies Core demons/lava_larva abilities[0] (Blow Up / destroy_self adjacent Magic Damage)."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "factory.automaton_line",
+      "decisionTest": "Sentinel Automaton keeps construct + no-retaliation and uses Fire Larva Blow Up instead of HotA Ignition/Detonation."
+    },
+    "h3_automaton_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Wind-Up",
+          "descriptionText": "Spend 2 Focus to empower this stack with an extra attack for 1 round.",
+          "iconKey": "primal_14_magic_hksmillas_rampage",
+          "abilityType": "Ability_type_buff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "primal_14_magic_hksmillas_rampage:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Wind-Up",
+          "effectPayload": {
+            "spellSid": "primal_14_magic_hksmillas_rampage",
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "dealer": {
+              "tags": [],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "self",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "self",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "buffTarget_": "self"
+            }
+          },
+          "notes": "Source/static configured from the locked Factory ability kit; runtime behavior remains unproven."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "factory.automaton_line",
+      "decisionTest": "Clockwork Automaton is the Wind-Up extra-attack alternate instead of Blow Up."
+    },
+    "h3_sandworm": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "factory.sandworm_line",
+      "decisionTest": "Sandworm keeps teleport burrow and gains tier-3 magic immunity; Blind/Stone Gaze immunities are intentionally replaced."
+    },
+    "h3_olgoi_khorkhoi": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Devour Corpses",
+          "descriptionText": "Spend 2 Focus to jump onto a corpse within range and devour it, gaining Attack, Defense, Speed, and Initiative until the end of battle.",
+          "iconKey": "",
+          "abilityType": "Ability_type_movement",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "locust:abilities:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Devour Corpses",
+          "effectPayload": {},
+          "notes": "Copies Core demons/locust abilities[0] (Harvest / destroy_corpse_with_buff). Larva summon support remains deferred."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "factory.sandworm_line",
+      "decisionTest": "Olgoi-Khorkhoi keeps burrow + tier-3 magic immunity. Devour Corpses maps to Hive Locust Harvest; larva support is deferred."
+    },
+    "h3_sandworm_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Shatter",
+          "descriptionText": "Spend 2 Focus to shred an enemy's Attack and Defense for 2 rounds.",
+          "iconKey": "day_5_magic_shorten_shadow",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "day_5_magic_shorten_shadow:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Shatter",
+          "effectPayload": {
+            "spellSid": "day_5_magic_shorten_shadow",
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "dealer": {
+              "tags": [],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "enemy",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "enemy",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "buffTarget_": "enemy",
+              "buff": {
+                "sid": "magic_shorten_shadow_effect_0",
+                "duration": 2
+              }
+            }
+          },
+          "notes": "Source/static configured from the locked Factory ability kit; runtime behavior remains unproven."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "factory.sandworm_line",
+      "decisionTest": "Glassworm keeps burrow and uses Shatter instead of the corpse-devour package."
+    },
+    "h3_gunslinger": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "factory.gunslinger_line",
+      "decisionTest": "Gunslinger is the Industrial shooter baseline. Ranged First Strike maps to Parry (counter-first); ranged retaliation maps to Medusa-line Countershot."
+    },
+    "h3_bounty_hunter": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Bounty Mark",
+          "descriptionText": "Spend 2 Focus to make an enemy more vulnerable for 2 rounds.",
+          "iconKey": "night_11_magic_vulnerability",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "night_11_magic_vulnerability:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Bounty Mark",
+          "effectPayload": {
+            "spellSid": "night_11_magic_vulnerability",
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "dealer": {
+              "tags": [],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "enemy",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "enemy",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "buffTarget_": "enemy",
+              "buff": {
+                "sid": "magic_vulnerability_effect_0",
+                "duration": 2
+              }
+            }
+          },
+          "notes": "Source/static configured from the locked Factory ability kit; runtime behavior remains unproven."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "factory.gunslinger_line",
+      "decisionTest": "Bounty Hunter keeps shooter + unlimited retaliation, with Parry counter-first and Medusa-style Countershot as the HotA remap."
+    },
+    "h3_gunslinger_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Suppressing Fire",
+          "descriptionText": "Spend 2 Focus to place a trap on a free hex. When triggered, it deals Pure Damage equal to 150% of this stack's normal attack.",
+          "iconKey": "space_5_magic_trap_jaws",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "space_5_magic_trap_jaws:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Suppressing Fire",
+          "effectPayload": {
+            "spellSid": "space_5_magic_trap_jaws",
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "dealer": {
+              "tags": [
+                "ability",
+                "trap_ability"
+              ],
+              "triggerCounter": false,
+              "castTargetParams": {
+                "targetTags": [],
+                "castTarget_": "all",
+                "selection": "hex"
+              },
+              "affectTargetParams": {
+                "targetTags": [],
+                "castTarget_": "all",
+                "selection": "hex"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "targetMechanics": [
+                {
+                  "mech": "spawn_object",
+                  "values": [
+                    "trap",
+                    "homm3_factory_suppressing_fire_trap",
+                    "1",
+                    "3",
+                    "1",
+                    "true"
+                  ]
+                }
+              ]
+            },
+            "spellTier": 1,
+            "school": "space"
+          },
+          "notes": "Places custom trap homm3_factory_suppressing_fire_trap (jaws VFX + Wall-of-Flame magic_pure base damage). Magog statDmgMult-on-trap is rejected: ekh.Init allocates empty UnitStat. Homm3MarshalSuppressingFireTrapBridge stamps 150% placer stack damageMin/Max onto the instance TrapConfig at Init. Combat live-positive still required."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "factory.gunslinger_line",
+      "decisionTest": "Marshal keeps Parry + Countershot + unlimited retaliation, and places a damage trap dealing 150% of this stack's attack."
+    },
+    "h3_couatl": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "factory.couatl_line",
+      "decisionTest": "Couatl is the Natural primary tier-seven flyer. Meditation remaps to Carapace on the upgraded branches."
+    },
+    "h3_crimson_couatl": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Meditation",
+          "descriptionText": "Spend 2 Focus to shield this stack with Carapace, negating the next instance of Damage.",
+          "iconKey": "space_8_magic_carapace",
+          "abilityType": "Ability_type_buff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "space_8_magic_carapace:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Meditation",
+          "effectPayload": {
+            "spellSid": "space_8_magic_carapace",
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "dealer": {
+              "tags": [],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "self",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "self",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "buffTarget_": "self",
+              "buff": {
+                "sid": "magic_carapace_effect_0",
+                "duration": 1
+              }
+            },
+            "spellTier": 1,
+            "school": "space",
+            "buffSid": "magic_carapace_effect_0",
+            "duration": 1
+          },
+          "notes": "Source/static configured from the locked Factory ability kit; runtime behavior remains unproven."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "factory.couatl_line",
+      "decisionTest": "Crimson Couatl Meditation is the vanilla Carapace damage-negate effect on self."
+    },
+    "h3_couatl_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Jade Ward",
+          "descriptionText": "Spend 2 Focus to shield an allied stack with Carapace, negating the next instance of Damage.",
+          "iconKey": "space_8_magic_carapace",
+          "abilityType": "Ability_type_buff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "space_8_magic_carapace:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Jade Ward",
+          "effectPayload": {
+            "spellSid": "space_8_magic_carapace",
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "dealer": {
+              "tags": [],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "ally",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "ally",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "buffTarget_": "ally",
+              "buff": {
+                "sid": "magic_carapace_effect_0",
+                "duration": 1
+              }
+            },
+            "spellTier": 1,
+            "school": "space",
+            "buffSid": "magic_carapace_effect_0",
+            "duration": 1
+          },
+          "notes": "Source/static configured from the locked Factory ability kit; runtime behavior remains unproven."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "factory.couatl_line",
+      "decisionTest": "Jade Coatl grants Carapace to an ally instead of self-Meditation."
+    },
+    "h3_dreadnought": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "factory.dreadnought_line",
+      "decisionTest": "Dreadnought is the Industrial Gantry construct baseline. Heat Stroke remaps to a Hydra-style alternate attack on the upgraded branches."
+    },
+    "h3_juggernaut": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Boiler Rampage",
+          "descriptionText": "Spend 3 Focus to empower an allied stack for 1 round.",
+          "iconKey": "primal_14_magic_hksmillas_rampage",
+          "abilityType": "Ability_type_buff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 3,
+          "cooldown": 3,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "primal_14_magic_hksmillas_rampage:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Boiler Rampage",
+          "effectPayload": {
+            "spellSid": "primal_14_magic_hksmillas_rampage",
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "dealer": {
+              "tags": [],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "ally",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "ally",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "buffTarget_": "ally"
+            }
+          },
+          "notes": "Source/static configured from the locked Factory ability kit; runtime behavior remains unproven."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "factory.dreadnought_line",
+      "decisionTest": "Juggernaut Heat Stroke is wired as the Hydra multi-hex alternate attack family. Boiler Rampage remains a supporting Focus buff."
+    },
+    "h3_dreadnought_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Fortress Mode",
+          "descriptionText": "Spend 2 Focus to grant this stack a Carapace barrier for 1 round, negating the next instance of damage.",
+          "iconKey": "space_8_magic_carapace",
+          "abilityType": "Ability_type_buff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "space_8_magic_carapace:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Fortress Mode",
+          "effectPayload": {
+            "spellSid": "space_8_magic_carapace",
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "dealer": {
+              "tags": [],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "self",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "self",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "buffTarget_": "self",
+              "buff": {
+                "sid": "magic_carapace_effect_0",
+                "duration": 1
+              }
+            },
+            "spellTier": 1,
+            "school": "space",
+            "buffSid": "magic_carapace_effect_0",
+            "duration": 1
+          },
+          "notes": "The configured effect is the one-round Carapace barrier only; no stationary/bunker movement lock is part of this ability configuration, and runtime behavior remains unvalidated."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "factory.dreadnought_line",
+      "decisionTest": "Ironclad is the alternate with a one-round Carapace Focus action instead of Heat Stroke."
+    }
+  }
+}

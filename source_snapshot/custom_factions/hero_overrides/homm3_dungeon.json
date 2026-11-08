@@ -1,0 +1,1605 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_dungeon",
+  "heroOverrides": {
+    "homm3_dungeon_hero_1": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Overlord",
+      "startSquad": [
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_harpy",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_scouting",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Lorelei",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_1",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_1_source_h3_harpy_specialist",
+        "nameText": "Harpy Specialist",
+        "descriptionText": "Harpy creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_harpy",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_harpy",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_harpy",
+              "h3_harpy_upg",
+              "h3_harpy_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_harpy",
+              "h3_harpy_upg",
+              "h3_harpy_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_harpy",
+              "h3_harpy_upg",
+              "h3_harpy_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_harpy",
+              "h3_harpy_upg",
+              "h3_harpy_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_harpy",
+              "h3_harpy_upg",
+              "h3_harpy_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_harpy"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_2": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Overlord",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_siege",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Arlach",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_2",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_2_source_ballista_specialist",
+        "nameText": "Ballista",
+        "descriptionText": "Improves Heroic Strike at battle start and as the hero gains levels.",
+        "iconKey": "skill_battlemage",
+        "bonuses": [
+          {
+            "type": "battleSubskillBonus",
+            "parameters": [
+              "hero_ability",
+              "specializations_skill_warrior_ability_base_bonus"
+            ]
+          },
+          {
+            "activationLevel": 5,
+            "type": "battleSubskillBonus",
+            "parameters": [
+              "hero_ability",
+              "specializations_skill_warrior_ability_level_bonus"
+            ]
+          },
+          {
+            "activationLevel": 10,
+            "type": "battleSubskillBonus",
+            "parameters": [
+              "hero_ability",
+              "specializations_skill_warrior_ability_level_bonus"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:ballista"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_3": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Overlord",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_tactics",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Dace",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_3",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_3_source_h3_minotaur_specialist",
+        "nameText": "Minotaur Specialist",
+        "descriptionText": "Minotaur creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_minotaur",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_minotaur",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_minotaur",
+              "h3_minotaur_upg",
+              "h3_minotaur_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_minotaur",
+              "h3_minotaur_upg",
+              "h3_minotaur_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_minotaur",
+              "h3_minotaur_upg",
+              "h3_minotaur_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_minotaur",
+              "h3_minotaur_upg",
+              "h3_minotaur_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_minotaur",
+              "h3_minotaur_upg",
+              "h3_minotaur_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_minotaur"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_4": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Overlord",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Ajit",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_4",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_4_source_h3_beholder_specialist",
+        "nameText": "Beholder Specialist",
+        "descriptionText": "Beholder creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_beholder",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_beholder",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_beholder",
+              "h3_beholder_upg",
+              "h3_beholder_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_beholder",
+              "h3_beholder_upg",
+              "h3_beholder_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_beholder",
+              "h3_beholder_upg",
+              "h3_beholder_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_beholder",
+              "h3_beholder_upg",
+              "h3_beholder_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_beholder",
+              "h3_beholder_upg",
+              "h3_beholder_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_beholder"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_5": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Overlord",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Damacon",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_5",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_5_source_gold_specialist",
+        "nameText": "Gold",
+        "descriptionText": "Generates additional gold each day.",
+        "iconKey": "skill_economy",
+        "bonuses": [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              "350"
+            ],
+            "upgrade": {
+              "increment": 50,
+              "levelStep": 5
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:gold"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_6": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Overlord",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_logistic",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Gunnar",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_6",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_6_source_logistics_specialist",
+        "nameText": "Logistics",
+        "descriptionText": "Increases movement on the adventure map and improves travel on roads.",
+        "iconKey": "skill_logistic",
+        "bonuses": [
+          {
+            "activationLevel": 8,
+            "type": "heroStat",
+            "parameters": [
+              "movementPerBonus",
+              "0.05"
+            ],
+            "upgrade": {
+              "increment": 0.05,
+              "levelStep": 8
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "roadPerBonus",
+              "0.33333334"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:logistics"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_7": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Overlord",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Synca",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_7",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_7_source_h3_manticore_specialist",
+        "nameText": "Manticore Specialist",
+        "descriptionText": "Manticore creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_manticore",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_manticore",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_manticore",
+              "h3_manticore_upg",
+              "h3_manticore_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_manticore",
+              "h3_manticore_upg",
+              "h3_manticore_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_manticore",
+              "h3_manticore_upg",
+              "h3_manticore_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_manticore",
+              "h3_manticore_upg",
+              "h3_manticore_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_manticore",
+              "h3_manticore_upg",
+              "h3_manticore_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_manticore"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_8": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Overlord",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_tactics",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Shakti",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_8",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_8_source_h3_troglodyte_specialist",
+        "nameText": "Troglodyte Specialist",
+        "descriptionText": "Troglodyte creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_troglodyte",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_troglodyte",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_troglodyte",
+              "h3_troglodyte_upg",
+              "h3_troglodyte_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_troglodyte",
+              "h3_troglodyte_upg",
+              "h3_troglodyte_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_troglodyte",
+              "h3_troglodyte_upg",
+              "h3_troglodyte_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_troglodyte",
+              "h3_troglodyte_upg",
+              "h3_troglodyte_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_troglodyte",
+              "h3_troglodyte_upg",
+              "h3_troglodyte_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_troglodyte"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_9": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Warlock",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Alamar",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_9",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_9_olden_era_masterful_space_12_magic_rewind",
+        "nameText": "Masterful Rewind Life",
+        "descriptionText": "Starts with Masterful Rewind Life. It casts as one tier stronger.",
+        "iconKey": "space_12_magic_rewind",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "space_12_magic_rewind",
+              "space_12_magic_rewind_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:space_12_magic_rewind",
+        "masterfulSpellBaseSid": "space_12_magic_rewind",
+        "masterfulSpellSpecialSid": "space_12_magic_rewind_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_10": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Warlock",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Jaegar",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_10",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_10_source_mysticism_specialist",
+        "nameText": "Mysticism",
+        "descriptionText": "Increases the hero's mana reserves and allows one additional spell use each round.",
+        "iconKey": "skill_wisdom",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "manaBonusPercent",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.05,
+              "levelStep": 5
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicUsageLimitBonus",
+              "1"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:mysticism"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_11": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Warlock",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Malekith",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_11",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_11_source_sorcery_specialist",
+        "nameText": "Sorcery",
+        "descriptionText": "Increases spell damage and weakens enemy spell pressure as the hero gains levels.",
+        "iconKey": "skill_sorcery",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicAttackPerBonus",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          },
+          {
+            "type": "heroStatBattle",
+            "receiverAllegiance": "enemy",
+            "parameters": [
+              "magicAttackPerBonus",
+              "-0.10"
+            ],
+            "upgrade": {
+              "increment": -0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:sorcery"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_12": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Warlock",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Jeddite",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_12",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_12_olden_era_masterful_space_12_magic_rewind",
+        "nameText": "Masterful Rewind Life",
+        "descriptionText": "Starts with Masterful Rewind Life. It casts as one tier stronger.",
+        "iconKey": "space_12_magic_rewind",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "space_12_magic_rewind",
+              "space_12_magic_rewind_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:space_12_magic_rewind",
+        "masterfulSpellBaseSid": "space_12_magic_rewind",
+        "masterfulSpellSpecialSid": "space_12_magic_rewind_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_13": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Warlock",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Geon",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_13",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_13_source_eagleEye_specialist",
+        "nameText": "Eagle Eye",
+        "descriptionText": "Improves spell pressure and magical awareness in combat.",
+        "iconKey": "skill_scouting",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicAttackPerBonus",
+              "0.06"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "viewRadius",
+              "1"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:eagleEye"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_14": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Warlock",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Deemer",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_14",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_14_olden_era_masterful_space_13_magic_black_hole",
+        "nameText": "Masterful Black Hole",
+        "descriptionText": "Starts with Masterful Black Hole. It casts as one tier stronger.",
+        "iconKey": "space_13_magic_black_hole",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "space_13_magic_black_hole",
+              "space_13_magic_black_hole_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:space_13_magic_black_hole",
+        "masterfulSpellBaseSid": "space_13_magic_black_hole",
+        "masterfulSpellSpecialSid": "space_13_magic_black_hole_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_15": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Warlock",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Sephinroth",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_15",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_15_source_crystal_specialist",
+        "nameText": "Crystal",
+        "descriptionText": "Generates additional crystals each day.",
+        "iconKey": "skill_economy",
+        "bonuses": [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "crystals",
+              "1"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 7
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:crystal"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_16": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Warlock",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Darkstorn",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_16",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_16_source_stone_specialist",
+        "nameText": "Stone",
+        "descriptionText": "Generates additional stone each day.",
+        "iconKey": "skill_economy",
+        "bonuses": [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "stone",
+              "1"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 7
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:stone"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_17": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Overlord",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 30,
+          "max": 40
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_economy",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Mutare",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_17",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_17_source_h3_red_dragon_specialist",
+        "nameText": "Red Dragon Specialist",
+        "descriptionText": "Red Dragon creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_red_dragon",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_red_dragon",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_red_dragon",
+              "h3_red_dragon_upg",
+              "h3_red_dragon_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_red_dragon",
+              "h3_red_dragon_upg",
+              "h3_red_dragon_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_red_dragon",
+              "h3_red_dragon_upg",
+              "h3_red_dragon_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_red_dragon",
+              "h3_red_dragon_upg",
+              "h3_red_dragon_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_red_dragon",
+              "h3_red_dragon_upg",
+              "h3_red_dragon_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_red_dragon"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_dungeon_hero_18": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Overlord",
+      "startSquad": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_harpy",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_beholder",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_troglodyte",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_economy",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Mutare Drake",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_dungeon_18",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_dungeon_hero_18_source_h3_red_dragon_specialist",
+        "nameText": "Red Dragon Specialist",
+        "descriptionText": "Red Dragon creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_red_dragon",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_red_dragon",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_red_dragon",
+              "h3_red_dragon_upg",
+              "h3_red_dragon_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_red_dragon",
+              "h3_red_dragon_upg",
+              "h3_red_dragon_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_red_dragon",
+              "h3_red_dragon_upg",
+              "h3_red_dragon_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_red_dragon",
+              "h3_red_dragon_upg",
+              "h3_red_dragon_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_red_dragon",
+              "h3_red_dragon_upg",
+              "h3_red_dragon_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_red_dragon"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    }
+  }
+}

@@ -1,0 +1,273 @@
+{
+ "unit": "h3_elf_wardancer",
+ "joints": {
+  "Hips": [
+   -0.038,
+   -0.017,
+   0.925
+  ],
+  "Spine": [
+   -0.038,
+   -0.01,
+   1.051
+  ],
+  "Spine1": [
+   -0.038,
+   -0.003,
+   1.177
+  ],
+  "Spine2": [
+   -0.038,
+   0.004,
+   1.318
+  ],
+  "Neck": [
+   -0.038,
+   0.01,
+   1.429
+  ],
+  "Head": [
+   -0.038,
+   -0.017,
+   1.499
+  ],
+  "HeadTop_End": [
+   -0.024,
+   0.031,
+   1.709
+  ],
+  "LeftShoulder": [
+   0.03,
+   0.0,
+   1.38
+  ],
+  "LeftArm": [
+   0.14,
+   0.02,
+   1.36
+  ],
+  "LeftForeArm": [
+   0.22,
+   0.04,
+   1.1
+  ],
+  "LeftHand": [
+   0.27,
+   0.0,
+   0.84
+  ],
+  "LeftHand_End": [
+   0.3,
+   -0.02,
+   0.76
+  ],
+  "RightShoulder": [
+   -0.1,
+   0.0,
+   1.38
+  ],
+  "RightArm": [
+   -0.22,
+   0.03,
+   1.36
+  ],
+  "RightForeArm": [
+   -0.3,
+   0.08,
+   1.1
+  ],
+  "RightHand": [
+   -0.32,
+   0.07,
+   0.87
+  ],
+  "RightHand_End": [
+   -0.32,
+   0.06,
+   0.8
+  ],
+  "LeftUpLeg": [
+   0.045,
+   -0.017,
+   0.883
+  ],
+  "LeftLeg": [
+   0.087,
+   0.01,
+   0.513
+  ],
+  "LeftFoot": [
+   0.136,
+   0.031,
+   0.079
+  ],
+  "LeftToeBase": [
+   0.192,
+   -0.031,
+   -0.012
+  ],
+  "LeftToe_End": [
+   0.262,
+   -0.101,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.129,
+   -0.017,
+   0.883
+  ],
+  "RightLeg": [
+   -0.157,
+   0.01,
+   0.513
+  ],
+  "RightFoot": [
+   -0.199,
+   0.052,
+   0.079
+  ],
+  "RightToeBase": [
+   -0.234,
+   -0.031,
+   -0.012
+  ],
+  "RightToe_End": [
+   -0.276,
+   -0.129,
+   0.0
+  ]
+ },
+ "props": [
+  {
+   "name": "staff",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      -0.38,
+      0.48,
+      1.365
+     ],
+     [
+      0.38,
+      -0.085,
+      0.7
+     ]
+    ]
+   ],
+   "radius": 0.06
+  },
+  {
+   "name": "sword",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.3,
+      0.02,
+      0.8
+     ],
+     [
+      -0.28,
+      -0.07,
+      0.68
+     ]
+    ],
+    [
+     [
+      -0.28,
+      -0.07,
+      0.68
+     ],
+     [
+      -0.27,
+      -0.16,
+      0.55
+     ]
+    ],
+    [
+     [
+      -0.27,
+      -0.16,
+      0.55
+     ],
+     [
+      -0.22,
+      -0.3,
+      0.38
+     ]
+    ],
+    [
+     [
+      -0.22,
+      -0.3,
+      0.38
+     ],
+     [
+      -0.19,
+      -0.39,
+      0.29
+     ]
+    ],
+    [
+     [
+      -0.19,
+      -0.39,
+      0.29
+     ],
+     [
+      -0.13,
+      -0.5,
+      0.21
+     ]
+    ]
+   ],
+   "radius": 0.05
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 40,
+   "dy": 30
+  },
+  "propAim": [
+   "RightHand"
+  ]
+ },
+ "glbPatch": {
+  "reason": "Authenticity pass 2026-10-09 (lane-A): AttackFront pivot per DEF (hips turn toward the viewer with a wide crouch f2-f5, through the cut to a back-to-viewer forward-bent lunge f7-f9, feet planted by two-bone leg IK, spine and head carry the bend); Mouseover kata turn away f3-f7; Hitted f0 hunch from the blow; Defence crouch with the sword raised tip-up in front as a parry, head ducked; Death f0 hunch and f1-f3 knee buckle before the fall.",
+  "ops": [
+   {
+    "op": "diffuseWeights",
+    "bones": [
+     "LeftLeg",
+     "RightLeg"
+    ],
+    "iterations": 8,
+    "alpha": 0.5,
+    "note": "knee crease: spread the thigh/shin boundary so the Death knee buckle does not tear it"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_elf_wardancer_pose_rot.json",
+    "sha256": "0df991de5de91af2530b8f6d8c3fcefd456a1c9fc1cc24c35bbc2dfee99484e7",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_elf_wardancer_crouch_tr.json",
+    "sha256": "a5a6d36d06c904e1bb9acf60f474c5109c68d6aad8d5bf24c9824d457d1207c6",
+    "regrid": true
+   }
+  ]
+ }
+}

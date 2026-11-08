@@ -1,0 +1,72 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law predicates that depend on named spell taxonomy predicate groups. This is static classification evidence only and does not authorize cooldown, cast-gate, spellbook, or gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "contractsMustMatchExactPredicateProfiles": true,
+    "spellTaxonomyGroupsMustExist": true,
+    "coveredTagsMustMatchTaxonomyGroups": true,
+    "missingTagsMustRemainExplicit": true,
+    "oceanTravelInferenceForbidden": true,
+    "genericSchoolMatchForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "contracts": {
+    "RequiresMovementStormSeaClassification": {
+      "requiredEffectKeys": ["cove.movement-storm-sea-cooldown"],
+      "allowedFamilies": ["SpellCooldown"],
+      "taxonomyGroup": "movementStormSeaClassification",
+      "requiredCoveredTags": ["control", "movement", "sea", "slow", "storm", "tide"],
+      "requiredMissingTags": [],
+      "companionPredicates": ["RequiresSpellSchoolOrSidClass"],
+      "forbiddenSubstitutes": [
+        "any Space school spell counted as movement/storm/sea classification",
+        "any ranged spell counted as storm or sea classification",
+        "ocean travel mechanic inferred from sea or tide tag",
+        "spell SID substring contains sea or storm",
+        "cooldown preview counted as classified spell identity"
+      ],
+      "notes": "Cove movement/storm/sea classification must use the exact spell taxonomy predicate group. Sea/tide means Doreath's Tide battle spell flavor/effect only, not ocean travel mechanics."
+    },
+    "RequiresNightCurseClassification": {
+      "requiredEffectKeys": ["dungeon.night-curse-kill-cooldown"],
+      "allowedFamilies": ["SpellCooldown"],
+      "taxonomyGroup": "nightCurseClassification",
+      "requiredCoveredTags": ["anti_heal", "control", "curse", "death", "decay", "disable", "night", "slow"],
+      "requiredMissingTags": [],
+      "companionPredicates": ["RequiresSpellSchoolOrSidClass"],
+      "forbiddenSubstitutes": [
+        "any Night school spell counted as curse classification",
+        "any negative status counted as Night curse spell classification",
+        "spell SID substring contains curse or night",
+        "enemy kill without debuff or disable correlation counted as classification",
+        "cooldown preview counted as classified spell identity"
+      ],
+      "notes": "Dungeon Night curse classification must use the exact spell taxonomy predicate group for Night curse, disable, decay, anti-heal, slow/control, and death seeds."
+    },
+    "RequiresSupportBlessingClassification": {
+      "requiredEffectKeys": ["castle.daylight-support-cooldown"],
+      "allowedFamilies": ["SpellCooldown"],
+      "taxonomyGroup": "supportBlessingClassification",
+      "requiredCoveredTags": ["blessing", "cleanse", "daylight", "defense", "heal", "initiative", "protection", "support"],
+      "requiredMissingTags": ["morale"],
+      "companionPredicates": ["RequiresSpellSchoolOrSidClass"],
+      "forbiddenSubstitutes": [
+        "any Day school spell counted as support or blessing classification",
+        "any positive buff counted as support spell classification",
+        "morale support silently treated as covered despite taxonomy missingTags",
+        "spell SID substring contains support or blessing",
+        "cooldown preview counted as classified spell identity"
+      ],
+      "notes": "Castle support/blessing classification must use exact Daylight support/blessing/heal/cleanse/protection/defense/initiative seeds. Morale-specific support remains an explicit taxonomy gap and must not be silently inferred."
+    }
+  },
+  "requiredRuntimeProof": [
+    "spell runtime identity proof",
+    "spell taxonomy lookup proof in the consuming packet",
+    "caster law-owner correlation proof",
+    "cooldown read/mutation ordering proof",
+    "spellbook UI preview exclusion proof",
+    "idempotent per-spell application proof"
+  ]
+}

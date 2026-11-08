@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_rampart",
+  "sourceDoc": "docs/custom_faction_recommendations.md and docs/custom_faction_technical_implementation_proposals.md",
+  "mechanics": [
+    {
+      "id": "rampart.resource_silo",
+      "surface": "building",
+      "sourceName": "Resource Silo",
+      "status": "exact",
+      "reason": "Generated city row grants fixed crystal income.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "rampart.miners_guild",
+      "surface": "building",
+      "sourceName": "Miners' Guild",
+      "status": "exact",
+      "reason": "Generated city row grants +4 weekly growth to the Dwarf line.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot_level_2"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "rampart.dendroid_saplings",
+      "surface": "building",
+      "sourceName": "Dendroid Saplings",
+      "status": "exact",
+      "reason": "Generated city row grants +2 weekly growth to the Dendroid line.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Mycelium_Roots"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "rampart.mystic_pond",
+      "surface": "building",
+      "sourceName": "Mystic Pond",
+      "status": "substituted",
+      "reason": "Random-resource source behavior is represented as a fixed native economy substitute until random income is traced.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Bank"
+      ],
+      "forbiddenPlayerText": [
+        "random resource"
+      ]
+    },
+    {
+      "id": "rampart.fountain_of_fortune",
+      "surface": "building",
+      "sourceName": "Fountain of Fortune",
+      "status": "substituted",
+      "reason": "Luck/fountain source behavior is represented through a modest native-safe substitute until exact behavior is traced.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Mother_Nature"
+      ],
+      "forbiddenPlayerText": [
+        "Luck"
+      ]
+    },
+    {
+      "id": "rampart.avenger",
+      "surface": "faction_skill",
+      "sourceName": "Avenger",
+      "status": "substituted",
+      "reason": "Current skill design marks enemies with Rampart-owned debuffs and exposes explicit Avenger subskill upgrades.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "skill_faction_homm3_rampart"
+      ],
+      "forbiddenPlayerText": [
+        "favored enemy",
+        "creature choice",
+        "enemy type selection"
+      ]
+    }
+  ]
+}

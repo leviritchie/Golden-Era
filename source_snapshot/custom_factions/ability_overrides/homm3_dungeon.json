@@ -1,0 +1,530 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_dungeon",
+  "unitOverrides": {
+    "h3_troglodyte": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_troglodyte_stunning_blow_name",
+          "descriptionKey": "h3_troglodyte_stunning_blow_description",
+          "nameText": "Cave Bash",
+          "descriptionText": "Spend 3 Focus to club an enemy for 50% normal damage and suppress 1 retaliation.",
+          "iconKey": "",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "energyLevel": 3,
+          "cooldown": 3,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "dungeon.troglodyte_line",
+      "decisionTest": "Troglodyte defines the tier baseline for dungeon; upgrades should create a meaningful standard-versus-alternate decision from this role."
+    },
+    "h3_troglodyte_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "dungeon.troglodyte_line",
+      "decisionTest": "Infernal Troglodyte should be chosen over Chthonian when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_troglodyte_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "space_6_magic_blink_name",
+          "descriptionKey": "space_6_magic_blink_description",
+          "nameText": "Transport",
+          "descriptionText": "Spend 2 Focus to teleport an allied unit to a free hex within 4 hexes.",
+          "iconKey": "sub_skill_faction_homm3_ability_transport",
+          "abilityType": "",
+          "animationIndex": 0,
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "space_6_magic_blink:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Blink L1",
+          "effectPayload": {
+            "spellSid": "space_6_magic_blink",
+            "spellTier": 2,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "buffSid": "",
+            "duration": null,
+            "nameKey": "space_6_magic_blink_name",
+            "descriptionKey": "space_6_magic_blink_description",
+            "icon": "sub_skill_faction_homm3_ability_transport",
+            "school": "space",
+            "dealer": {
+              "tags": [
+                "magic",
+                "teleport"
+              ],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "ally",
+                "selection": "object",
+                "targetCondition_": "alive"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "ally",
+                "selection": "object",
+                "targetCondition_": "alive"
+              },
+              "multitargetType": "ordered",
+              "numTargets": 2,
+              "orderedCastParams": [
+                {
+                  "targetTags": [],
+                  "castTarget_": "none",
+                  "selection": "hex",
+                  "distanceFromFirst": 4
+                }
+              ],
+              "orderedAffectParams": [
+                {
+                  "targetTags": [],
+                  "castTarget_": "none",
+                  "selection": "hex",
+                  "distanceFromFirst": 4
+                }
+              ],
+              "attackPatternSid": "attack_single_buff",
+              "damageTarget_": "none",
+              "targetMechanics": [
+                {
+                  "mech": "teleport",
+                  "values": []
+                }
+              ]
+            }
+          },
+          "notes": ""
+        },
+        {
+          "key": "passives:1",
+          "slotKind": "passives",
+          "index": 1,
+          "enabled": true,
+          "nameKey": "base_passive_blink_name",
+          "descriptionKey": "base_passive_blink_description",
+          "nameText": "Blink",
+          "descriptionText": "Moves through obstacles when moving",
+          "iconKey": "space_6_magic_blink",
+          "abilityType": "",
+          "animationIndex": 1,
+          "energyLevel": 0,
+          "cooldown": 0,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "dungeon.troglodyte_line",
+      "decisionTest": "Chthonian should be chosen over Infernal Troglodyte when its alternate role creates a better army, matchup, or build-timing decision."
+    },
+    "h3_harpy": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_common_ability_attack_defense_debuff_name",
+          "descriptionKey": "h3_common_ability_attack_defense_debuff_description",
+          "nameText": "Hit and Run",
+          "descriptionText": "Attack for 50% normal damage, then return to this unit's original position.",
+          "iconKey": "",
+          "abilityType": "",
+          "animationIndex": 0,
+          "energyLevel": 0,
+          "cooldown": 0,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "assassin:alternativeAttacks:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Alternative Attack: Fighting Style: Hit and Run",
+          "effectPayload": {},
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "dungeon.harpy_line",
+      "decisionTest": "Harpy defines the tier baseline for dungeon; upgrades should create a meaningful standard-versus-alternate decision from this role."
+    },
+    "h3_harpy_upg": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "alternativeAttacks:0",
+          "slotKind": "alternativeAttacks",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "assassin_ability_1_name",
+          "descriptionKey": "assassin_ability_1_description",
+          "nameText": "Hit and Run",
+          "descriptionText": "Attack for 50% normal damage, then return to this unit's original position.",
+          "iconKey": "",
+          "abilityType": "",
+          "animationIndex": 0,
+          "energyLevel": 0,
+          "cooldown": 0,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "assassin:alternativeAttacks:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Alternative Attack: Fighting Style: Hit and Run",
+          "effectPayload": {},
+          "notes": ""
+        },
+        {
+          "key": "passives:0",
+          "slotKind": "passives",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_common_melee_attack_name",
+          "descriptionKey": "h3_common_melee_attack_description",
+          "nameText": "Melee Attack",
+          "descriptionText": "Attacks an adjacent enemy unit.",
+          "iconKey": "sub_skill_assault_1_icon",
+          "abilityType": "",
+          "animationIndex": 0,
+          "energyLevel": 0,
+          "cooldown": 0,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        },
+        {
+          "key": "passives:2",
+          "slotKind": "passives",
+          "index": 2,
+          "enabled": true,
+          "nameKey": "base_passive_melee_attack_no_counter_name",
+          "descriptionKey": "base_passive_melee_attack_no_counter_description",
+          "nameText": "Melee Attack",
+          "descriptionText": "Can only attack adjacent enemies. <b>Enemies do not counterattack.</b>",
+          "iconKey": "assassin_buff_icon",
+          "abilityType": "",
+          "animationIndex": 0,
+          "energyLevel": 0,
+          "cooldown": 0,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        },
+        {
+          "key": "passives:3",
+          "slotKind": "passives",
+          "index": 3,
+          "enabled": true,
+          "nameKey": "base_passive_noncounter_name",
+          "descriptionKey": "base_passive_noncounter_description",
+          "nameText": "Swift Strike",
+          "descriptionText": "Enemies do not counterattack.",
+          "iconKey": "sub_skill_faction_homm3_ability_swift_strike",
+          "abilityType": "",
+          "animationIndex": 0,
+          "energyLevel": 0,
+          "cooldown": 0,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "dungeon.harpy_line",
+      "decisionTest": "Harpy Hag should be chosen over Fury when its standard role is the better answer for the current army, matchup, or build timing."
+    },
+    "h3_harpy_upg_alt": {
+      "abilities": [
+        {
+          "id": "hit_and_run",
+          "templateId": "copied_unit_special",
+          "enabled": true,
+          "fields": {
+            "nameToken": "assassin_ability_1_name",
+            "descriptionToken": "assassin_ability_1_description",
+            "displayName": "Hit and Run",
+            "description": "Attack for 50% normal damage, then return to this unit's starting hex.",
+            "unitSpecialKey": "assassin:alternativeAttacks:0",
+            "sourceUnitSid": "assassin",
+            "sourceSlotKind": "alternativeAttacks",
+            "sourceSlotIndex": 0,
+            "abilityType": "Ability_type_attack_alt",
+            "animationIndex": 1,
+            "energyLevel": 0,
+            "cooldown": -1,
+            "rank": 1,
+            "iconKey": "neutral_magic_second_sight",
+            "mechanicsDebt": ""
+          },
+          "notes": ""
+        }
+      ],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "dungeon.harpy_line",
+      "decisionTest": "Fury should be chosen over Harpy Hag when its alternate role creates a better army, matchup, or build-timing decision."
+    },
+    "h3_beholder": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "dungeon.beholder_line",
+      "decisionTest": "Beholder defines the tier baseline for dungeon; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_beholder_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "dungeon.beholder_line",
+      "decisionTest": "Evil Eye should be chosen over Fargazer when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_beholder_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "dungeon.beholder_line",
+      "decisionTest": "Fargazer should be chosen over Evil Eye when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_medusa": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "dungeon.medusa_line",
+      "decisionTest": "Medusa defines the tier baseline for dungeon; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_medusa_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "dungeon.medusa_line",
+      "decisionTest": "Medusa Queen should be chosen over Medusa Warrior when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_medusa_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "dungeon.medusa_line",
+      "decisionTest": "Medusa Warrior should be chosen over Medusa Queen when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_medusa_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_medusa_upg_alt_redesign_ability_description",
+          "nameText": "Slither Away",
+          "descriptionText": "Spend 1 Focus to move to another reachable hex.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 1,
+          "turnBehavior": "ends",
+          "energyLevel": 1,
+          "cooldown": 1,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "medusa:abilities:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Slither Away",
+          "effectPayload": {},
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_minotaur": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "dungeon.minotaur_line",
+      "decisionTest": "Minotaur defines the tier baseline for dungeon; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_minotaur_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "dungeon.minotaur_line",
+      "decisionTest": "Minotaur King should be chosen over Minotaur Taskmaster when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_minotaur_upg_redesign_ability_name",
+          "descriptionKey": "h3_minotaur_upg_redesign_ability_description",
+          "nameText": "Unyielding Will",
+          "descriptionText": "Spend 2 Focus to ignore attackers' Attack values until the end of the round.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "minos_upg:abilities:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Unyielding Will",
+          "effectPayload": {},
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_minotaur_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "dungeon.minotaur_line",
+      "decisionTest": "Minotaur Taskmaster should be chosen over Minotaur King when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_minotaur_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_minotaur_upg_alt_redesign_ability_description",
+          "nameText": "Earthshatter",
+          "descriptionText": "Spend 2 Focus to make all enemies within a 2-hex radius target only this stack until the end of the round.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "ent_upg_alt:abilities:1",
+          "effectKind": "unit-special",
+          "effectLabel": "Earthshatter",
+          "effectPayload": {},
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_manticore": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "dungeon.manticore_line",
+      "decisionTest": "Manticore defines the tier baseline for dungeon; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_manticore_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "dungeon.manticore_line",
+      "decisionTest": "Scorpicore should be chosen over Chimera when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_manticore_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "dungeon.manticore_line",
+      "decisionTest": "Chimera should be chosen over Scorpicore when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_red_dragon": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "dungeon.red_dragon_line",
+      "decisionTest": "Red Dragon defines the tier baseline for dungeon; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_red_dragon_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "dungeon.red_dragon_line",
+      "decisionTest": "Black Dragon should be chosen over Shadow Dragon when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_red_dragon_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "dungeon.red_dragon_line",
+      "decisionTest": "Shadow Dragon should be chosen over Black Dragon when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    }
+  }
+}

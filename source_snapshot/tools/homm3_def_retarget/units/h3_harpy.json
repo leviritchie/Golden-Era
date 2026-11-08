@@ -1,0 +1,541 @@
+{
+ "unit": "h3_harpy",
+ "joints": {
+  "Hips": [
+   0.003,
+   -0.025,
+   0.78
+  ],
+  "Spine": [
+   0.001,
+   -0.068,
+   0.82
+  ],
+  "Spine1": [
+   -0.001,
+   -0.111,
+   0.86
+  ],
+  "Spine2": [
+   -0.002,
+   -0.159,
+   0.905
+  ],
+  "Neck": [
+   -0.004,
+   -0.197,
+   0.94
+  ],
+  "Head": [
+   0.003,
+   -0.27,
+   1.152
+  ],
+  "HeadTop_End": [
+   0.003,
+   -0.27,
+   1.352
+  ],
+  "LeftUpLeg": [
+   0.136,
+   -0.018,
+   0.661
+  ],
+  "LeftLeg": [
+   0.129,
+   -0.237,
+   0.408
+  ],
+  "LeftFoot": [
+   0.169,
+   -0.005,
+   0.302
+  ],
+  "LeftToeBase": [
+   0.169,
+   -0.104,
+   0.076
+  ],
+  "LeftToe_End": [
+   0.179,
+   -0.057,
+   0.065
+  ],
+  "RightUpLeg": [
+   -0.13,
+   0.002,
+   0.661
+  ],
+  "RightLeg": [
+   -0.177,
+   -0.184,
+   0.402
+  ],
+  "RightFoot": [
+   -0.15,
+   0.055,
+   0.302
+  ],
+  "RightToeBase": [
+   -0.15,
+   -0.051,
+   0.076
+  ],
+  "RightToe_End": [
+   -0.141,
+   -0.004,
+   0.072
+  ]
+ },
+ "extensions": [
+  "dungeon_fixweights",
+  "wing_chain"
+ ],
+ "wingMaxDeg": 0,
+ "wings": [
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.15,
+    0.0,
+    1.0
+   ],
+   "tail": [
+    -0.44,
+    -0.13,
+    1.5
+   ],
+   "sign": 1,
+   "region": {
+    "box": [
+     [
+      -0.65,
+      -0.4,
+      0.75
+     ],
+     [
+      -0.2,
+      0.35,
+      1.75
+     ]
+    ]
+   }
+  },
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.15,
+    0.0,
+    1.0
+   ],
+   "tail": [
+    0.44,
+    -0.13,
+    1.5
+   ],
+   "sign": -1,
+   "region": {
+    "box": [
+     [
+      0.2,
+      -0.4,
+      0.75
+     ],
+     [
+      0.65,
+      0.35,
+      1.75
+     ]
+    ]
+   }
+  }
+ ],
+ "wingChain": {
+  "wings": [
+   {
+    "bone": "LeftWing",
+    "side": 1
+   },
+   {
+    "bone": "RightWing",
+    "side": -1
+   }
+  ],
+  "adoptWeights": "nearest",
+  "anim": {
+   "MoveStart": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       0.5
+      ],
+      [
+       1,
+       1
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       20
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Move": {
+    "open": 1,
+    "flap": {
+     "sin": 55,
+     "phase": 180
+    },
+    "fold": {
+     "sin": 50,
+     "phase": -90,
+     "half": "pos"
+    },
+    "droop": {
+     "sin": 30,
+     "phase": -90,
+     "half": "pos"
+    }
+   },
+   "MoveEnd": {
+    "open": {
+     "keys": [
+      [
+       0,
+       1
+      ],
+      [
+       0.4,
+       0.7
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.4,
+       20
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "open": {
+     "keys": [
+      [
+       0,
+       1
+      ],
+      [
+       0.45,
+       1
+      ],
+      [
+       0.75,
+       0.6
+      ],
+      [
+       1,
+       0.4
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       10
+      ],
+      [
+       0.45,
+       10
+      ],
+      [
+       0.75,
+       -20
+      ],
+      [
+       1,
+       -30
+      ]
+     ]
+    }
+   },
+   "Defence": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0.6
+      ],
+      [
+       0.3,
+       0.8
+      ],
+      [
+       0.7,
+       0.5
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       -30
+      ],
+      [
+       0.3,
+       -20
+      ],
+      [
+       0.7,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       0.6
+      ],
+      [
+       0.6,
+       0.4
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       -20
+      ],
+      [
+       0.6,
+       -30
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Death": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       1
+      ],
+      [
+       0.6,
+       0.8
+      ],
+      [
+       1,
+       0.5
+      ]
+     ]
+    }
+   },
+   "Mouseover": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       1
+      ],
+      [
+       0.65,
+       1
+      ],
+      [
+       0.85,
+       0.3
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       40
+      ],
+      [
+       0.65,
+       40
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "flap",
+    "open",
+    "fold",
+    "droop",
+    "sweep"
+   ],
+   "offsets": [
+    "dx",
+    "dy"
+   ],
+   "clips": [
+    "MoveStart",
+    "Move",
+    "MoveEnd",
+    "Hitted",
+    "AttackFront",
+    "Death",
+    "Defence"
+   ],
+   "bounce": 4,
+   "penalty": 0.0008,
+   "smooth": 0.0008
+  },
+  "steady": {
+   "Move": 1.0,
+   "MoveStart": 0.5,
+   "MoveEnd": 0.5
+  },
+  "bodyTurn": {
+   "fit": [
+    "Move"
+   ],
+   "rampIn": {
+    "MoveStart": "Move"
+   },
+   "rampOut": {
+    "MoveEnd": "Move"
+   },
+   "params": [
+    "yaw",
+    "roll",
+    "dx",
+    "dy"
+   ],
+   "scanPitch": [
+    55
+   ],
+   "note": "2026-10-10 lane B: pitch fixed at 55 deg forward (the DEF harpy flies with a level body; the IoU fit settled on 6 deg and left her upright with the legs dangling); yaw/roll kept within 15 deg (unbounded, the fit twisted the pitched body 61 deg yaw / -45 roll), offsets fitted",
+   "scanYaw": [
+    -10,
+    0,
+    10
+   ],
+   "limits": {
+    "yaw": [
+     -15,
+     15
+    ],
+    "roll": [
+     -15,
+     15
+    ]
+   }
+  }
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-10 authenticity: level-flight legs - with the body flown level (wingChain bodyTurn pitch 55) the capture's legs hung from the hips with the bird shins folded up behind and the right thigh splayed; the DEF carries the talons forward under the body, so the thighs swing forward-down and the shins hang down-back in Move (ramped over MoveStart/MoveEnd); stretchRelax evens the hip/knee crease; Hitted (2026-10-10 coordinator send-back): the spread wings read edge-on from the battle camera, so the wing chains are aimed up-out-back and their panels turned broadside to it (keyRotations h3_harpy_hitted_wings_rot)",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_harpy_flight_legs_rot.json",
+    "sha256": "b2827ab604d3b4bd4a24a903bb15c9be8bdd03071cebf2b6085fb073bab8de67"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_harpy_hitted_wings_rot.json",
+    "sha256": "126c4d4a04ad28d94dd2d8bf7f805294b29559dc75f3efaaac231d3f5c2211f6"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "hip/knee crease of the flight legs"
+   }
+  ]
+ }
+}

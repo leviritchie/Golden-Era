@@ -1,0 +1,216 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "toa_shahrokh",
+ "status": "look",
+ "notes": "stronghold rollout: storm bird (ToA). DEF body is pale silver-blue with violet wisps; the attack crackles blue lightning over the whole bird",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "storm_aura",
+   "treatment": "dynamic",
+   "notes": "the attack's body-wide lightning crackle"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "attack_crackle",
+    "type": "defFlipbook",
+    "provenance": "roster inventory stronghold g12 attack_front water/ice f4-8 (the blue lightning fringe over wings and body)",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       4,
+       5,
+       6,
+       7,
+       8
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "water",
+      "electric"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 40
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": {
+      "Unit_AttackFront": [
+       [
+        189,
+        217
+       ],
+       [
+        209,
+        204
+       ],
+       [
+        208,
+        205
+       ],
+       [
+        248,
+        224
+       ],
+       [
+        234,
+        222
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "storm_aura",
+    "notes": "Pinned at the DEF body centroid to Spine1 rather than the ripper's RightWing: the mesh does not spread its wings like the DEF (retarget issue), so a wing pin would swing the fringe further off."
+   },
+   {
+    "id": "storm_aura_light",
+    "type": "effectLight",
+    "lightId": "storm_aura",
+    "carrier": "attack_crackle",
+    "anchor": {
+     "bone": "Spine1",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.4
+    },
+    "rgb": [
+     0.6,
+     0.7,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.037,
+      0.016,
+      0.189,
+      0.831,
+      2.433,
+      1.98,
+      0.0,
+      0.096
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "hit_feathers",
+    "type": "defFlipbook",
+    "provenance": "roster inventory stronghold g03 hitted smoke/dust f3-4 (white feathers)",
+    "clips": {
+     "Unit_Hitted": {
+      "defGroup": 3,
+      "frames": [
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "smoke"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": {
+      "Unit_Hitted": [
+       [
+        181,
+        210
+       ],
+       [
+        187,
+        219
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "Feathers shed as detached DEF particles. defOrigin = the DEF body centroid of each frame (auto would pick the nearest feather), pinned to Spine1 so the burst stays centred on the bird."
+   },
+   {
+    "id": "death_feathers",
+    "type": "defFlipbook",
+    "provenance": "roster inventory stronghold g05 death smoke/dust f2-6 (white feathers)",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "smoke"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": {
+      "Unit_Death": [
+       [
+        217,
+        210
+       ],
+       [
+        206,
+        197
+       ],
+       [
+        218,
+        209
+       ],
+       [
+        218,
+        211
+       ],
+       [
+        221,
+        234
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "Feathers shed as detached DEF particles. defOrigin = the DEF body centroid of each frame (auto would pick the nearest feather), pinned to Spine1 so the burst stays centred on the bird."
+   }
+  ]
+ }
+}

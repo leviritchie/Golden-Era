@@ -1,0 +1,370 @@
+{
+ "unit": "h3_war_unicorn",
+ "joints": {
+  "Hips": [
+   0,
+   0.38,
+   0.86
+  ],
+  "Spine": [
+   0,
+   0.18,
+   0.9
+  ],
+  "Spine1": [
+   0,
+   -0.02,
+   0.9
+  ],
+  "Spine2": [
+   0,
+   -0.2,
+   0.93
+  ],
+  "Neck": [
+   0,
+   -0.32,
+   1.02
+  ],
+  "Head": [
+   0,
+   -0.46,
+   1.3
+  ],
+  "HeadTop_End": [
+   0,
+   -0.72,
+   1.06
+  ],
+  "LeftShoulder": [
+   0.066,
+   -0.28,
+   0.92
+  ],
+  "LeftArm": [
+   0.11,
+   -0.32,
+   0.65
+  ],
+  "LeftForeArm": [
+   0.11,
+   -0.3,
+   0.36
+  ],
+  "LeftHand": [
+   0.11,
+   -0.3,
+   0.1
+  ],
+  "LeftHand_End": [
+   0.11,
+   -0.32999999999999996,
+   0.0
+  ],
+  "LeftUpLeg": [
+   0.11,
+   0.38,
+   0.8
+  ],
+  "LeftLeg": [
+   0.12100000000000001,
+   0.45,
+   0.38
+  ],
+  "LeftFoot": [
+   0.12100000000000001,
+   0.4,
+   0.1
+  ],
+  "LeftToeBase": [
+   0.12100000000000001,
+   0.38,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.12100000000000001,
+   0.34,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.054,
+   -0.28,
+   0.92
+  ],
+  "RightArm": [
+   -0.09,
+   -0.27,
+   0.65
+  ],
+  "RightForeArm": [
+   -0.09,
+   -0.25,
+   0.36
+  ],
+  "RightHand": [
+   -0.09,
+   -0.25,
+   0.1
+  ],
+  "RightHand_End": [
+   -0.09,
+   -0.28,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.09,
+   0.38,
+   0.8
+  ],
+  "RightLeg": [
+   -0.099,
+   0.52,
+   0.38
+  ],
+  "RightFoot": [
+   -0.125,
+   0.55,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.13,
+   0.52,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.13,
+   0.46,
+   0.0
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped"
+ ],
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "tail": {
+   "points": [
+    [
+     0,
+     0.55,
+     0.9
+    ],
+    [
+     0,
+     0.64,
+     0.62
+    ],
+    [
+     0,
+     0.66,
+     0.32
+    ],
+    [
+     0,
+     0.65,
+     0.0
+    ]
+   ],
+   "region": {
+    "box": [
+     [
+      -0.22,
+      0.56,
+      0.0
+     ],
+     [
+      0.08,
+      0.76,
+      0.95
+     ]
+    ],
+    "exclude": [
+     {
+      "segments": [
+       [
+        [
+         -0.099,
+         0.52,
+         0.38
+        ],
+        [
+         -0.125,
+         0.55,
+         0.1
+        ]
+       ],
+       [
+        [
+         -0.125,
+         0.55,
+         0.1
+        ],
+        [
+         -0.13,
+         0.45,
+         0.0
+        ]
+       ]
+      ],
+      "radius": 0.08
+     }
+    ]
+   },
+   "rootBlend": 0.6
+  },
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    0,
+    25
+   ],
+   "fold": 70,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ],
+   "dx": [
+    -4,
+    4
+   ],
+   "groundClips": [
+    "Idle",
+    "Mouseover",
+    "Hitted",
+    "Defence",
+    "AttackFront"
+   ],
+   "note": "2026-10-09 user send-back (full-body rotation cheating part-body moves): the silhouette fit may only rear the body up to 25 deg about the hind feet, never pitch it nose-down (was [-20, 70]: lunges and thrusts were whole-body dives), may not slide it (dx +-4 px), keeps standing clips on their floor. The motion moves into the neck, torso, forelegs and hind legs (glbPatch keys).",
+   "pitchClips": {
+    "Defence": [
+     0,
+     12
+    ],
+    "Hitted": [
+     0,
+     10
+    ]
+   }
+  }
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "strideMatch": {
+  "maxDrop": 0.25,
+  "reason": "Short reach (forelegs 0.18 H cap at 0.15 drop) forces cadence 1.6 on a short Move, whose step harmonics then read as jitter (0.39 > 0.35, worst RightHand). maxDrop 0.25 lowers the cadence need to 1.24: slip 0.055, ratio 1.06, jitter 0.16, pelvis drop 0.067 H; fixes the cause rather than smoothing with highHarmonicKeep (2026-09-27)."
+ },
+ "glbPatch": {
+  "reason": "2026-10-09 authenticity send-back fix 1 (lane A, Rampart): the user rejected whole-body rotation doing part-body moves. The quadruped fit is narrowed (pitch 0..25 about the hind feet only where the DEF rears: AttackFront f2-f3; Hitted 0..10, Defence 0..12 half-rears on planted hinds; dx +-4 px; standing clips on the floor) and the keys add no Hips pitch on top. AttackFront: the f2-f3 rear on planted hinds with the forelegs folded high, then a level body for the horn thrust carried by the neck and head (Neck +10, Head +30 at f4-f6). Hitted: half-rear with the head thrown back by the neck and head (-35/-50). Defence: half-rear on planted hinds, head tucked (Neck +10). Death (lane B u8 choreography): pre-collapse rear trimmed to 6 deg, roll at f3-f4, side-lie with legs folded. Mesh repairs carried: tail weights off the hind legs, tail/hock boundary diffused. Gate 1129 -> 1060 edges over 2x.",
+  "ops": [
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftUpLeg",
+     "RightUpLeg",
+     "LeftLeg",
+     "RightLeg",
+     "LeftFoot",
+     "RightFoot"
+    ],
+    "to": "QTail_02",
+    "region": [
+     {
+      "axis": "z",
+      "below": 1000,
+      "ramp": 0.001
+     }
+    ],
+    "onlyWith": {
+     "bones": [
+      "QTail_0*"
+     ],
+     "atLeast": 0.5
+    },
+    "note": "tail-dominant vertices follow the tail, not the planted hind legs, during the rear"
+   },
+   {
+    "op": "diffuseWeights",
+    "bones": [
+     "QTail_01",
+     "QTail_02",
+     "RightLeg",
+     "RightFoot",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "iterations": 5,
+    "alpha": 0.5,
+    "note": "soften the weight boundary"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_war_unicorn_pose_rot.json",
+    "sha256": "6064513e33659fb3620ecb5abaf4c9657d86958f18ff46b57d09126e6849cb4f",
+    "regrid": true,
+    "note": "motion-intent key poses (apose)"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_war_unicorn_pose_tr.json",
+    "sha256": "283ff6c0ab9ea91ceb0d2c77322a64bc5c48df27a8e57b11f8f6bb439d5463b2",
+    "regrid": true,
+    "note": "Hips translation keys"
+   }
+  ]
+ }
+}

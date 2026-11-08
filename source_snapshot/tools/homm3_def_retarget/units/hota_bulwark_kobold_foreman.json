@@ -1,0 +1,280 @@
+{
+ "unit": "hota_bulwark_kobold_foreman",
+ "joints": {
+  "Hips": [
+   -0.018,
+   -0.074,
+   0.581
+  ],
+  "Spine": [
+   -0.019,
+   -0.091,
+   0.749
+  ],
+  "Spine1": [
+   -0.021,
+   -0.109,
+   0.917
+  ],
+  "Spine2": [
+   -0.023,
+   -0.128,
+   1.106
+  ],
+  "Neck": [
+   -0.025,
+   -0.144,
+   1.253
+  ],
+  "Head": [
+   -0.018,
+   -0.2,
+   1.274
+  ],
+  "HeadTop_End": [
+   -0.032,
+   -0.494,
+   1.463
+  ],
+  "LeftShoulder": [
+   0.102,
+   -0.081,
+   1.141
+  ],
+  "LeftArm": [
+   0.228,
+   -0.095,
+   1.078
+  ],
+  "LeftForeArm": [
+   0.291,
+   -0.074,
+   0.791
+  ],
+  "LeftHand": [
+   0.375,
+   -0.158,
+   0.581
+  ],
+  "LeftHand_End": [
+   0.406,
+   -0.189,
+   0.503
+  ],
+  "RightShoulder": [
+   -0.137,
+   -0.081,
+   1.141
+  ],
+  "RightArm": [
+   -0.256,
+   -0.095,
+   1.092
+  ],
+  "RightForeArm": [
+   -0.347,
+   -0.13,
+   0.798
+  ],
+  "RightHand": [
+   -0.326,
+   -0.368,
+   0.882
+  ],
+  "RightHand_End": [
+   -0.318,
+   -0.452,
+   0.912
+  ],
+  "LeftUpLeg": [
+   0.13,
+   -0.095,
+   0.581
+  ],
+  "LeftLeg": [
+   0.193,
+   -0.2,
+   0.308
+  ],
+  "LeftFoot": [
+   0.228,
+   -0.109,
+   0.098
+  ],
+  "LeftToeBase": [
+   0.305,
+   -0.256,
+   0.021
+  ],
+  "LeftToe_End": [
+   0.389,
+   -0.354,
+   0.091
+  ],
+  "RightUpLeg": [
+   -0.165,
+   -0.053,
+   0.574
+  ],
+  "RightLeg": [
+   -0.207,
+   -0.011,
+   0.266
+  ],
+  "RightFoot": [
+   -0.2,
+   0.144,
+   0.091
+  ],
+  "RightToeBase": [
+   -0.27,
+   0.004,
+   -0.014
+  ],
+  "RightToe_End": [
+   -0.326,
+   -0.095,
+   0.028
+  ]
+ },
+ "props": [
+  {
+   "name": "pick",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.18,
+      0.12,
+      1.47
+     ],
+     [
+      -0.28,
+      -0.47,
+      0.78
+     ]
+    ]
+   ],
+   "radius": 0.045
+  },
+  {
+   "name": "pickhead",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.17,
+      0.3,
+      1.35
+     ],
+     [
+      -0.15,
+      -0.26,
+      1.71
+     ]
+    ]
+   ],
+   "radius": 0.06
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.12
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.95,
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.95,
+   "keepDist": 0.12
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "strideMatch": {
+  "maxDrop": 0.3,
+  "reason": "short-reach walker (legs near straight at the source Move): default 0.15: slip 0.723 ratio 2.10; 0.25: ratio 1.48; 0.30: slip 0.541 ratio 1.296 (workerB scratch trials 2026-09-27)"
+ },
+ "glbPatch": {
+  "reason": "authenticity lane B 2026-10-11: AttackFront lifts the pick high over the head at f3 before the chop, like the DEF",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_kobold_foreman_arm_weights.json",
+    "sha256": "291373bce57f974e6ed6877f3f89f30d9c2579c8d34e2ba085c9e302d812b878",
+    "note": "shoulder weight re-solve (wsolve --newonly, GPU) on the edges the overhead raise tears"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_kobold_foreman_attack_pick_overhead_rot.json",
+    "regrid": true,
+    "sha256": "97bfd58af935e079944374646753c3378e042ca4d38bd834c451804a247a02d4"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_kobold_foreman_attack_pick_overhead_rot.json",
+    "regrid": true,
+    "sha256": "97bfd58af935e079944374646753c3378e042ca4d38bd834c451804a247a02d4"
+   }
+  ]
+ }
+}

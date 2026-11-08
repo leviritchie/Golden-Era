@@ -1,0 +1,595 @@
+{
+ "unit": "hota_factory_sentinel_automaton",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.45,
+   0.95
+  ],
+  "Spine": [
+   0.0,
+   0.2,
+   1.0
+  ],
+  "Spine1": [
+   0.0,
+   -0.05,
+   1.0
+  ],
+  "Spine2": [
+   0.0,
+   -0.3,
+   1.0
+  ],
+  "Neck": [
+   0.0,
+   -0.55,
+   1.0
+  ],
+  "Head": [
+   0.0,
+   -0.75,
+   1.0
+  ],
+  "HeadTop_End": [
+   0.0,
+   -1.3,
+   1.0
+  ],
+  "LeftShoulder": [
+   0.312,
+   -0.18,
+   1.0
+  ],
+  "LeftArm": [
+   0.624,
+   -0.36,
+   1.0
+  ],
+  "LeftForeArm": [
+   0.898,
+   -0.519,
+   0.874
+  ],
+  "LeftHand": [
+   1.062,
+   -0.461,
+   0.08
+  ],
+  "LeftHand_End": [
+   1.093,
+   -0.475,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.231,
+   -0.276,
+   1.0
+  ],
+  "RightArm": [
+   -0.463,
+   -0.552,
+   1.0
+  ],
+  "RightForeArm": [
+   -0.752,
+   -0.896,
+   0.847
+  ],
+  "RightHand": [
+   -0.713,
+   -1.074,
+   0.08
+  ],
+  "RightHand_End": [
+   -0.735,
+   -1.106,
+   0.0
+  ],
+  "LeftUpLeg": [
+   0.338,
+   0.636,
+   1.0
+  ],
+  "LeftLeg": [
+   0.496,
+   0.933,
+   0.922
+  ],
+  "LeftFoot": [
+   0.521,
+   1.055,
+   0.08
+  ],
+  "LeftToeBase": [
+   0.521,
+   1.055,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.536,
+   1.086,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.552,
+   0.463,
+   1.0
+  ],
+  "RightLeg": [
+   -0.833,
+   0.699,
+   0.933
+  ],
+  "RightFoot": [
+   -0.961,
+   0.73,
+   0.08
+  ],
+  "RightToeBase": [
+   -0.961,
+   0.73,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.99,
+   0.752,
+   0.0
+  ]
+ },
+ "props": [
+  {
+   "name": "gun",
+   "bone": "Head",
+   "box": [
+    [
+     -0.3,
+     -1.3,
+     0.6
+    ],
+    [
+     0.4,
+     -0.72,
+     1.3
+    ]
+   ]
+  },
+  {
+   "name": "midleg0",
+   "bone": "Spine1",
+   "segments": [
+    [
+     [
+      -0.713,
+      -0.1,
+      1.0
+     ],
+     [
+      -0.912,
+      -0.128,
+      0.832
+     ]
+    ],
+    [
+     [
+      -0.912,
+      -0.128,
+      0.832
+     ],
+     [
+      -1.014,
+      -0.236,
+      0.08
+     ]
+    ]
+   ],
+   "radius": 0.17
+  },
+  {
+   "name": "midleg1",
+   "bone": "Spine1",
+   "segments": [
+    [
+     [
+      0.677,
+      0.246,
+      1.0
+     ],
+     [
+      0.948,
+      0.345,
+      0.871
+     ]
+    ],
+    [
+     [
+      0.948,
+      0.345,
+      0.871
+     ],
+     [
+      1.039,
+      0.442,
+      0.08
+     ]
+    ]
+   ],
+   "radius": 0.17
+  }
+ ],
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped",
+  "hand_keys",
+  "idle_cycle"
+ ],
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    -20,
+    70
+   ],
+   "fold": 70,
+   "side": 95,
+   "sideClips": [],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ]
+  }
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "handKeys": {
+  "AttackFront": [
+   {
+    "f": 0,
+    "root": [
+     0,
+     0,
+     0
+    ],
+    "bones": {
+     "Neck": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 4,
+    "root": [
+     0,
+     0.08,
+     0
+    ],
+    "bones": {
+     "Neck": [
+      -8,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 6,
+    "root": [
+     0,
+     -0.2,
+     0
+    ],
+    "bones": {
+     "Neck": [
+      6,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 9,
+    "root": [
+     0,
+     0,
+     0
+    ],
+    "bones": {
+     "Neck": [
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Hitted": [
+   {
+    "f": 0,
+    "root": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "f": 2,
+    "root": [
+     0,
+     0.1,
+     0.03
+    ]
+   },
+   {
+    "f": 5,
+    "root": [
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "Defence": [
+   {
+    "f": 0,
+    "root": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "f": 3,
+    "root": [
+     0,
+     0.06,
+     -0.08
+    ]
+   },
+   {
+    "f": 8,
+    "root": [
+     0,
+     0.06,
+     -0.08
+    ]
+   },
+   {
+    "f": 10,
+    "root": [
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "Idle": [
+   {
+    "f": 0,
+    "root": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "f": 5,
+    "root": [
+     0,
+     0,
+     0.02
+    ]
+   },
+   {
+    "f": 9,
+    "root": [
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "Mouseover": [
+   {
+    "f": 0,
+    "root": [
+     0,
+     0,
+     0
+    ],
+    "bones": {
+     "Neck": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 4,
+    "root": [
+     0,
+     0,
+     0.03
+    ],
+    "bones": {
+     "Neck": [
+      0,
+      0,
+      10
+     ]
+    }
+   },
+   {
+    "f": 9,
+    "root": [
+     0,
+     0,
+     0
+    ],
+    "bones": {
+     "Neck": [
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  ]
+ },
+ "shatter": {
+  "start": 2,
+  "chunks": 45,
+  "burst": 0.5,
+  "up": 0.35,
+  "spin": 3
+ },
+ "jointsSideReason": "facing gate: Left*/Right* joints were placed on the mesh's right/left (Blender -Y forward, left = +X), so the rig read -160/-170 deg though the head faces +Z; labels swapped to the mesh's own sides",
+ "sourceMesh": "artifacts/homm3_mesh_surgery/hota_factory_sentinel_automaton_arm_a1.glb",
+ "meshSurgeryReason": "2026-10-11 lane A (coordinator-relayed approval; the automaton line's user-approved surgery): telescoping arm. arm_telescope_surgery.py cuts the gripper free of the drum plate and parks three nested sleeves inside the body behind it; idleCycle.rigidParts (wholeIslands) bind each rigid 100% to its own bone, chained Head > ArmSleeve1 > ArmSleeve2 > ArmSleeve3 > ArmGripper, so the AttackFront patch can slide each sleeve out along -Y like the DEF's arm. rigidParts only: the capture's Idle is kept as it is.",
+ "idleCycle": {
+  "rigidParts": [
+   {
+    "name": "ArmSleeve1",
+    "center": [
+     0.04,
+     -0.748,
+     0.92
+    ],
+    "axis": [
+     0,
+     -1,
+     0
+    ],
+    "radius": 0.134,
+    "hMin": -0.47,
+    "hMax": 0.01,
+    "parent": "Head",
+    "wholeIslands": 0.9
+   },
+   {
+    "name": "ArmSleeve2",
+    "center": [
+     0.04,
+     -0.754,
+     0.92
+    ],
+    "axis": [
+     0,
+     -1,
+     0
+    ],
+    "radius": 0.119,
+    "hMin": -0.47,
+    "hMax": 0.01,
+    "parent": "ArmSleeve1",
+    "wholeIslands": 0.9
+   },
+   {
+    "name": "ArmSleeve3",
+    "center": [
+     0.04,
+     -0.76,
+     0.92
+    ],
+    "axis": [
+     0,
+     -1,
+     0
+    ],
+    "radius": 0.104,
+    "hMin": -0.47,
+    "hMax": 0.01,
+    "parent": "ArmSleeve2",
+    "wholeIslands": 0.9
+   },
+   {
+    "name": "ArmGripper",
+    "center": [
+     0.04,
+     -0.762,
+     0.92
+    ],
+    "axis": [
+     0,
+     -1,
+     0
+    ],
+    "radius": 0.4,
+    "hMin": -0.001,
+    "hMax": 0.519,
+    "parent": "ArmSleeve3",
+    "wholeIslands": 0.9
+   }
+  ]
+ },
+ "glbPatch": {
+  "reason": "authenticity: DEF g12 attack - the drill arm (mesh surgery a1: three nested sleeves + gripper on their own bones under Head) telescopes about one body length out of the front drum (f4 half, f5-f7 full) and draws back in (f8-f9), instead of the welded barrel staying put; the sleeves are separate rigid islands, so no weights change. regrid: the sleeve translation channels are 2-key static holds, resampled onto the table's 10-key grid",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_sentinel_automaton_pose_tr.json",
+    "sha256": "c97c76dcb6f28c94c414441552893c13612899e3b0e96c49f8b8ff8656712453",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_sentinel_automaton_pose_tr.json",
+    "sha256": "c97c76dcb6f28c94c414441552893c13612899e3b0e96c49f8b8ff8656712453",
+    "regrid": true
+   }
+  ]
+ }
+}

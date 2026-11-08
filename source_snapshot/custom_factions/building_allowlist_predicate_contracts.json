@@ -1,0 +1,168 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom construction law profiles that depend on building allowlists. This is static category evidence only; it does not prove construction commit ordering, displayed/charged cost parity, city owner resolution, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresBuildingAllowlistProfiles": true,
+    "mustReferenceConstructionBuildingCategoryContracts": true,
+    "missingGroupsMustRemainExplicit": true,
+    "genericTownBuildingInferenceForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredStaticEvidence": [
+    "custom_factions/construction_building_category_contracts.json",
+    "exact source mechanic id and currentRows evidence for concrete groups",
+    "explicit missingGroups entry for every intended group without exact row evidence"
+  ],
+  "requiredRuntimeProof": [
+    "construction commit ordering proof",
+    "displayed and charged cost parity proof",
+    "city owner to law-owner correlation proof",
+    "building data SID/group lookup proof",
+    "construction idempotence proof"
+  ],
+  "contracts": {
+    "conflux-elemental-alignment-build": {
+      "factionSid": "homm3_conflux",
+      "requiredGroups": [
+        "elemental-building"
+      ],
+      "companionPredicates": [
+        "RequiresElementalBuildingMapping"
+      ],
+      "forbiddenSubstitutes": [
+        "any Conflux building",
+        "any Primal-themed building name",
+        "donor Nature building category",
+        "building icon or scene-object inference"
+      ],
+      "notes": "Conflux construction allowlist must use exact elemental-building group rows and separate elemental-building mapping proof."
+    },
+    "cove.harbor-infrastructure-extra-build": {
+      "factionSid": "homm3_cove",
+      "requiredGroups": [
+        "market",
+        "tavern",
+        "cannon",
+        "pirate-infrastructure"
+      ],
+      "explicitMissingGroups": [
+        "cannon"
+      ],
+      "companionPredicates": [
+        "RequiresDisplayedAndChargedCostParity"
+      ],
+      "forbiddenSubstitutes": [
+        "any Cove building",
+        "any harbor or ocean-themed building name",
+        "ship/water behavior",
+        "donor faction market category",
+        "building icon or scene-object inference"
+      ],
+      "notes": "Cove construction allowlist must use exact market/tavern/pirate infrastructure rows and keep cannon blocked until an exact Cannon-yard row exists."
+    },
+    "dungeon.capture-token-dwelling-build": {
+      "factionSid": "homm3_dungeon",
+      "requiredGroups": [
+        "dungeon-dwelling-build-or-upgrade"
+      ],
+      "explicitMissingGroups": [
+        "dungeon-dwelling-build-or-upgrade"
+      ],
+      "companionPredicates": [
+        "RequiresCaptureToken"
+      ],
+      "forbiddenSubstitutes": [
+        "any Dungeon building",
+        "any dwelling-looking row without generated Core evidence",
+        "captured object display text",
+        "donor Dungeon-style category",
+        "building icon or scene-object inference"
+      ],
+      "notes": "Dungeon dwelling construction remains blocked until exact generated Core dwelling build/upgrade row evidence exists."
+    },
+    "fortress-fortification-extra-build": {
+      "factionSid": "homm3_fortress",
+      "requiredGroups": [
+        "fortification",
+        "defensive-support"
+      ],
+      "companionPredicates": [
+        "RequiresDisplayedAndChargedCostParity"
+      ],
+      "forbiddenSubstitutes": [
+        "any Fortress building",
+        "any defensive-sounding display name",
+        "donor defensive category",
+        "building icon or scene-object inference"
+      ],
+      "notes": "Fortress construction allowlist must use exact fortification and defensive-support source mechanic rows."
+    },
+    "necropolis-deathworks-credit-build": {
+      "factionSid": "homm3_necropolis",
+      "requiredGroups": [
+        "dwelling",
+        "converter"
+      ],
+      "companionPredicates": [
+        "RequiresDeathworksCredit"
+      ],
+      "forbiddenSubstitutes": [
+        "any Necropolis building",
+        "any corpse-themed display name",
+        "external dwelling conversion without exact row evidence",
+        "building icon or scene-object inference"
+      ],
+      "notes": "Necropolis construction allowlist must use exact dwelling/converter rows; deathworks credit remains a separate runtime predicate."
+    },
+    "rampart-mature-dwelling-upgrade": {
+      "factionSid": "homm3_rampart",
+      "requiredGroups": [
+        "matured-dwelling-upgrade"
+      ],
+      "companionPredicates": [
+        "RequiresPersistentMatureDwellingState"
+      ],
+      "forbiddenSubstitutes": [
+        "any Rampart building",
+        "any dwelling or growth display name",
+        "donor Nature growth category",
+        "building icon or scene-object inference"
+      ],
+      "notes": "Rampart construction allowlist must use exact matured-dwelling-upgrade row evidence and keep persistent mature state separate."
+    },
+    "stronghold-military-extra-build": {
+      "factionSid": "homm3_stronghold",
+      "requiredGroups": [
+        "military"
+      ],
+      "companionPredicates": [
+        "RequiresDisplayedAndChargedCostParity"
+      ],
+      "forbiddenSubstitutes": [
+        "any Stronghold building",
+        "any military-sounding display name",
+        "donor combat category",
+        "building icon or scene-object inference"
+      ],
+      "notes": "Stronghold construction allowlist must use exact military group source mechanic rows."
+    },
+    "tower-magical-construct-workshop-slot": {
+      "factionSid": "homm3_tower",
+      "requiredGroups": [
+        "magical",
+        "construct"
+      ],
+      "companionPredicates": [
+        "RequiresDisplayedAndChargedCostParity"
+      ],
+      "forbiddenSubstitutes": [
+        "any Tower building",
+        "any magic or construct display name",
+        "normal construction slot counted as workshop slot",
+        "building icon or scene-object inference"
+      ],
+      "notes": "Tower construction allowlist must use exact magical/construct rows; normal-slot versus workshop-slot behavior remains separate runtime proof."
+    }
+  }
+}

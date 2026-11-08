@@ -1,0 +1,253 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "factionSid": "homm3_rampart",
+    "citySid": "homm3_rampart_city",
+    "displayNameToken": "homm3_rampart_name",
+    "descriptionToken": "homm3_rampart_desc",
+    "nativeBiome": "Hills",
+    "donorFactionSid": "nature",
+    "donorCitySid": "nature_city"
+  },
+  "coreOverlay": {
+    "factionJson": "DB/fractions/12_homm3_rampart.json",
+    "cityLogic": "DB/objects_logic/cities/homm3_rampart_city.json",
+    "lawsTable": "DB/fractions_laws/fractions_laws_table_homm3_rampart.json",
+    "squadTree": "DB/squads/squads_homm3_rampart/",
+    "heroSubClasses": "DB/heroes_sub_classes/sub_classes_homm3_rampart.json",
+    "heroSpecializations": "DB/heroes_specializations/specializations_homm3_rampart.json",
+    "directCityMapObject": "homm3_rampart_city",
+    "directDwellingPrefix": "barracks_homm3_rampart_"
+  },
+  "unitVariants": [
+    "",
+    "_upg",
+    "_upg_alt"
+  ],
+  "unitLines": [
+    {
+      "tier": 1,
+      "baseSid": "h3_centaur",
+      "variantSids": {
+        "_upg": "h3_centaur_captain",
+        "_upg_alt": "h3_centaur_ranger_upg_alt"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "sunlight_cavalry",
+      "names": [
+        "Centaur",
+        "Centaur Captain",
+        "Centaur Ranger"
+      ]
+    },
+    {
+      "tier": 2,
+      "baseSid": "h3_dwarf",
+      "variantSids": {
+        "_upg": "h3_battle_dwarf",
+        "_upg_alt": "h3_dwarf_battlerager_upg_alt"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "esquire",
+      "names": [
+        "Dwarf",
+        "Battle Dwarf",
+        "Dwarf Battlerager"
+      ]
+    },
+    {
+      "tier": 3,
+      "baseSid": "h3_wood_elf",
+      "variantSids": {
+        "_upg": "h3_grand_elf",
+        "_upg_alt": "h3_elf_wardancer_upg_alt"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "elf_tracker",
+      "donorVariantFactionSids": {
+        "_upg_alt": "dungeon"
+      },
+      "donorVariantSids": {
+        "_upg_alt": "trogl_upg_alt"
+      },
+      "names": [
+        "Wood Elf",
+        "Grand Elf",
+        "Elf Wardancer"
+      ]
+    },
+    {
+      "tier": 4,
+      "baseSid": "h3_pegasus",
+      "variantSids": {
+        "_upg": "h3_silver_pegasus",
+        "_upg_alt": "h3_gold_pegasus_upg_alt"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "twinkle",
+      "names": [
+        "Pegasus",
+        "Silver Pegasus",
+        "Gold Pegasus"
+      ]
+    },
+    {
+      "tier": 5,
+      "baseSid": "h3_dendroid_guard",
+      "variantSids": {
+        "_upg": "h3_dendroid_soldier",
+        "_upg_alt": "h3_dendroid_shaman_upg_alt"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "ent",
+      "names": [
+        "Dendroid Guard",
+        "Dendroid Soldier",
+        "Dendroid Shaman"
+      ],
+      "mechanicsDebt": [
+        "Dendroid Binding lifecycle cleanup"
+      ]
+    },
+    {
+      "tier": 6,
+      "baseSid": "h3_unicorn",
+      "variantSids": {
+        "_upg": "h3_war_unicorn",
+        "_upg_alt": "h3_pristine_unicorn_upg_alt"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "qilin",
+      "names": [
+        "Unicorn",
+        "War Unicorn",
+        "Pristine Unicorn"
+      ]
+    },
+    {
+      "tier": 7,
+      "baseSid": "h3_green_dragon",
+      "variantSids": {
+        "_upg": "h3_gold_dragon",
+        "_upg_alt": "h3_diamond_dragon_upg_alt"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "phoenix",
+      "names": [
+        "Green Dragon",
+        "Gold Dragon",
+        "Diamond Dragon"
+      ]
+    }
+  ],
+  "recruitmentBaseSids": [
+    "h3_centaur",
+    "h3_dwarf",
+    "h3_wood_elf",
+    "h3_pegasus",
+    "h3_dendroid_guard",
+    "h3_unicorn",
+    "h3_green_dragon"
+  ],
+  "releaseScaffold": {
+    "biome": "Hills",
+    "citySceneName": "cityFactory",
+    "factionIcon": "fraction_nature",
+    "factionLawIcon": "homm3_rampart_faction_banner",
+    "lawIcon": "homm3_rampart_faction_banner"
+  },
+  "heroes": {
+    "count": 18,
+    "heroPrefix": "homm3_rampart_hero_",
+    "iconPrefix": "hero_homm3_rampart_",
+    "specializationsRequired": true,
+    "mightClassName": "Ranger",
+    "magicClassName": "Druid",
+    "specializationTitle": "Rampart Specialist",
+    "mightSpecializationDescription": "Improves this Ranger while leading Rampart armies. Exact HoMM3 specialty scaling is pending static tracing.",
+    "magicSpecializationDescription": "Improves this Druid while leading Rampart armies. Exact HoMM3 specialty scaling is pending static tracing.",
+    "names": [
+      "Mephala",
+      "Ufretin",
+      "Jenova",
+      "Ryland",
+      "Thorgrim",
+      "Ivor",
+      "Clancy",
+      "Kyrre",
+      "Coronius",
+      "Uland",
+      "Elleshar",
+      "Gem",
+      "Malcom",
+      "Melodia",
+      "Alagar",
+      "Aeris",
+      "Gelu",
+      "Ordwald"
+    ]
+  },
+  "skillsAndLaws": {
+    "factionSkillSid": "skill_faction_homm3_rampart",
+    "lawPrefix": "fraction_law_homm3_rampart_",
+    "skillName": "Avenger",
+    "lawThemes": [
+      "centaur_outriders",
+      "dwarven_resolve",
+      "elven_volleys",
+      "pegasus_winds",
+      "unicorn_blessing",
+      "dragon_groves"
+    ]
+  },
+  "searchTokens": [
+    "Homm3Rampart",
+    "Centaur Captain",
+    "Battle Dwarf",
+    "Grand Elf",
+    "Silver Pegasus",
+    "Dendroid Soldier",
+    "War Unicorn",
+    "Gold Dragon",
+    "Diamond Dragon"
+  ],
+  "assets": {
+    "factionIcon": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/faction_icons/homm3_rampart/Icon_Faction_Rampart.png",
+    "factionCard": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_scene_refs/homm3_rampart/Rampart-in-background.png",
+    "cityIcon": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_hud_icons/homm3_rampart/fort_available.png",
+    "cityBillboard": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/map_object_refs/homm3_rampart_city/capitol.dir/00_00.png",
+    "townSceneFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_scene_refs/homm3_rampart/",
+    "buildingIconFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_scene_refs/homm3_rampart/building_icons/",
+    "cityBillboardFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/map_object_refs/homm3_rampart_city/",
+    "dwellingBillboardFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/map_object_refs/homm3_rampart_dwellings/"
+  },
+  "runtime": {
+    "customToDonorSource": "manifest",
+    "reverseDonorLookup": "context_required",
+    "allowGlobalDonorReverseLookup": false,
+    "displayName": "Rampart (HoMM3)",
+    "description": "The Rampart protects AvLee's forests with centaurs, dwarves, elves, pegasi, dendroids, unicorns, and dragons. Rangers and druids favor morale, resistance, and nature-bound battlefield control over donor Nature behavior.",
+    "cityMapBillboardHeight": 4.5,
+    "dwellingBillboardImages": [
+      "AVGCENT0.dir/00_00.png",
+      "AVGdwrf0.dir/00_00.png",
+      "AVGelf0.dir/00_00.png",
+      "AVGpega0.dir/00_00.png",
+      "AVGtree0.dir/00_00.png",
+      "AVGUNIC0.dir/00_00.png",
+      "AVGgdrg0.dir/00_00.png"
+    ],
+    "dwellingDonorPrefixes": [
+      "barracks_nature_"
+    ]
+  },
+  "validation": {
+    "status": "asset_pending",
+    "runtimeMirrorRequired": true,
+    "allowedDebt": [
+      "Rampart is mirrored in Homm3CustomFactionRegistry for selection/runtime identity, and source plugin unit import rows, bundles, static portraits, preview manifests, lab sidecars, and hero portraits are present for base/upgraded/alternate units. It remains asset-pending for town layers, build-tree icons, UI validation, and mechanics.",
+      "The manifest uses HoMM3/ToA named upgrade SIDs from docs/homm3_faction_plans/rampart.md, so release generators and runtime mirrors must use unitLines[].variantSids instead of assuming every custom variant is baseSid + suffix.",
+      "Do not promote Rampart through Core.zip until Dwarf resistance, Pegasus Magic Damper, Dendroid Binding lifecycle cleanup, Unicorn Blind/aura, dragon breath/immunity, Treasury, Mystic Pond, and Fountain of Fortune are represented or explicitly blocked in generated audit output."
+    ]
+  }
+}

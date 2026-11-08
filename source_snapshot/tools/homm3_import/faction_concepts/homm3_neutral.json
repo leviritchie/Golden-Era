@@ -1,0 +1,809 @@
+{
+  "schemaVersion": 1,
+  "purpose": "True HoMM3/HotA neutral creatures for Olden Era wandering-monster pool and creature-keyed dwellings.",
+  "evidenceLevel": "source_prepared",
+  "notes": [
+    "Not a playable faction: no city, heroes, or laws.",
+    "Cannon stays Cove-owned summon support and is intentionally absent from this catalog.",
+    "SoD Halfling uses h3_neutral_halfling to avoid colliding with Factory h3_halfling.",
+    "Dwellings are listed only where HoMM3/HotA ships a recruit generator DEF.",
+    "Steel Golem and special dragons have no adventure-map recruit dwelling in this catalog."
+  ],
+  "coreOverlay": {
+    "enabled": true,
+    "logicFolder": "DB/units/units_logics/neutral/",
+    "viewFolder": "DB/units/units_views/neutral/",
+    "squadTree": "DB/squads/squads_homm3_neutral/",
+    "directDwellingPrefix": "barracks_homm3_neutral_",
+    "donorDwellingSid": "barracks_human_1"
+  },
+  "oeKitContract": {
+    "schema": "oeKit rebuilds each neutral's kit on its donor attack shell. profile: living|undead|construct|dragon|native_donor|hand_authored. actives: STRONG_VANILLA library kinds (optional own name/description). mechanics: see apply_homm3_neutral_oe_kits in tools/release_port/apply_release_core_overlay.py.",
+    "tierRule": "Tier is the HoMM3/HotA level. Stats stay inside the native OE tier band with 20% tolerance on each bound (tools/validate_homm3_neutral_catalog_contract.py).",
+    "doc": "docs/homm3_neutral_oe_kits.md"
+  },
+  "units": [
+    {
+      "sid": "h3_peasant",
+      "displayName": "Peasant",
+      "tier": 1,
+      "poolEligible": true,
+      "donorFactionSid": "neutral",
+      "donorUnitSid": "peasant",
+      "nativeBiome": "Valleys",
+      "ai": "melee_type",
+      "tags": ["unit", "neutral"],
+      "stats": {
+        "hp": 5,
+        "offence": 1,
+        "defence": 1,
+        "damageMin": 1,
+        "damageMax": 1,
+        "initiative": 3,
+        "speed": 3,
+        "squadValue": 15,
+        "gold": 15
+      },
+      "source": "sod",
+      "battleDef": "Cpeas.def",
+      "mapDef": "AVWpeas.def",
+      "battleLod": "H3sprite.lod",
+      "bundleName": "custom_units_neutral_h3_peasant",
+      "dwelling": {
+        "name": "Hovel",
+        "defName": "AVGpeas.def",
+        "barracksSid": "barracks_homm3_neutral_peasant",
+        "growth": 25,
+        "costGold": 15
+      },
+      "oeKit": {
+        "profile": "native_donor",
+        "keepDonorPassives": true,
+        "actives": [],
+        "mechanics": [],
+        "bandExempt": "Native OE peasant (neutral/peasant: 5 HP, 1/1, 1 damage) is itself below every tier band; the HoMM3 Peasant keeps that filler role.",
+        "homm3Identity": "Plain level-1 filler.",
+        "design": "Uses the native OE peasant body and its own native passives (the OE design for the same creature); HP raised 1 -> 5 to match it."
+      }
+    },
+    {
+      "sid": "h3_neutral_halfling",
+      "displayName": "Halfling",
+      "tier": 1,
+      "poolEligible": true,
+      "donorFactionSid": "neutral",
+      "donorUnitSid": "halfling",
+      "nativeBiome": "Valleys",
+      "ai": "range_type",
+      "tags": ["unit", "neutral", "shooter"],
+      "stats": {
+        "hp": 6,
+        "offence": 4,
+        "defence": 2,
+        "damageMin": 1,
+        "damageMax": 3,
+        "initiative": 5,
+        "speed": 5,
+        "ammo": 24,
+        "squadValue": 75,
+        "gold": 40
+      },
+      "source": "sod",
+      "battleDef": "CHalf.def",
+      "mapDef": "AVWhalf.def",
+      "battleLod": "H3sprite.lod",
+      "bundleName": "custom_units_neutral_h3_neutral_halfling",
+      "dwelling": {
+        "name": "Thatched Hut",
+        "defName": "AVGhalf.def",
+        "barracksSid": "barracks_homm3_neutral_halfling",
+        "growth": 15,
+        "costGold": 40
+      },
+      "oeKit": {
+        "profile": "living",
+        "actives": [],
+        "mechanics": [
+          {
+            "mech": "positive_luck"
+          }
+        ],
+        "homm3Identity": "Level-1 shooter with positive luck.",
+        "design": "HoMM3 stats with HP raised 4 -> 6 (t1 floor, native halfling HP). No actives at t1, as native t1 units. Luck floor +1 carries the identity."
+      }
+    },
+    {
+      "sid": "h3_boar",
+      "displayName": "Boar",
+      "tier": 2,
+      "poolEligible": true,
+      "donorFactionSid": "homm3_stronghold",
+      "donorUnitSid": "h3_wolf_rider",
+      "nativeBiome": "Mountains",
+      "ai": "melee_type",
+      "tags": ["unit", "neutral"],
+      "stats": {
+        "hp": 15,
+        "offence": 6,
+        "defence": 5,
+        "damageMin": 2,
+        "damageMax": 3,
+        "initiative": 6,
+        "speed": 6,
+        "squadValue": 145,
+        "gold": 150
+      },
+      "source": "sod",
+      "battleDef": "Cboar.def",
+      "mapDef": "AVWboar.def",
+      "battleLod": "H3sprite.lod",
+      "bundleName": "custom_units_neutral_h3_boar",
+      "dwelling": {
+        "name": "Boar Glen",
+        "defName": "AVGboar.def",
+        "barracksSid": "barracks_homm3_neutral_boar",
+        "growth": 8,
+        "costGold": 150
+      },
+      "oeKit": {
+        "profile": "living",
+        "actives": [],
+        "mechanics": [],
+        "homm3Identity": "Plain level-2 mount beast.",
+        "design": "HoMM3 stats; gold 60 -> 150 onto the native t2 neutral anchor (halfling/peasant 150). Donor Wolf Rider luck removed. Deliberately plain."
+      }
+    },
+    {
+      "sid": "h3_rogue",
+      "displayName": "Rogue",
+      "tier": 2,
+      "poolEligible": true,
+      "donorFactionSid": "homm3_castle",
+      "donorUnitSid": "h3_swordsman",
+      "nativeBiome": "Valleys",
+      "ai": "melee_type",
+      "tags": ["unit", "neutral"],
+      "stats": {
+        "hp": 10,
+        "offence": 8,
+        "defence": 3,
+        "damageMin": 2,
+        "damageMax": 4,
+        "initiative": 6,
+        "speed": 6,
+        "squadValue": 135,
+        "gold": 100
+      },
+      "source": "sod",
+      "battleDef": "Crogue.def",
+      "mapDef": "AVWrog.def",
+      "battleLod": "H3sprite.lod",
+      "bundleName": "custom_units_neutral_h3_rogue",
+      "dwelling": {
+        "name": "Rogue Cavern",
+        "defName": "AVGrog.def",
+        "barracksSid": "barracks_homm3_neutral_rogue",
+        "growth": 8,
+        "costGold": 100
+      },
+      "oeKit": {
+        "profile": "living",
+        "actives": [],
+        "mechanics": [
+          {
+            "mech": "no_retaliation"
+          }
+        ],
+        "homm3Identity": "Enemies do not retaliate; spy (adventure-map scouting).",
+        "gaps": [
+          "Spy is an adventure-map scouting ability with no combat surface; not carried."
+        ],
+        "design": "HoMM3 stats in band. No-retaliation melee through the native triggerCounter=false attack flag. Donor Swordsman guard damage reduction removed."
+      }
+    },
+    {
+      "sid": "h3_nomad",
+      "displayName": "Nomad",
+      "tier": 3,
+      "poolEligible": true,
+      "donorFactionSid": "homm3_castle",
+      "donorUnitSid": "h3_cavalier",
+      "nativeBiome": "Sand",
+      "ai": "melee_type",
+      "tags": ["unit", "neutral"],
+      "stats": {
+        "hp": 30,
+        "offence": 9,
+        "defence": 8,
+        "damageMin": 3,
+        "damageMax": 6,
+        "initiative": 7,
+        "speed": 7,
+        "squadValue": 300,
+        "gold": 200
+      },
+      "source": "sod",
+      "battleDef": "Cnomad.def",
+      "mapDef": "AVWnomd.def",
+      "battleLod": "H3sprite.lod",
+      "bundleName": "custom_units_neutral_h3_nomad",
+      "dwelling": {
+        "name": "Nomad Tent",
+        "defName": "AVGnomd.def",
+        "barracksSid": "barracks_homm3_neutral_nomad",
+        "growth": 7,
+        "costGold": 200
+      },
+      "oeKit": {
+        "profile": "living",
+        "actives": [],
+        "mechanics": [],
+        "homm3Identity": "Sand walker (no sand movement penalty on the adventure map).",
+        "gaps": [
+          "Sand walking is adventure-map movement; the OE equivalent is the unit's nativeBiome (Sand), already set."
+        ],
+        "design": "HoMM3 stats; damage 2-6 -> 3-6 onto the t3 floor, squad value 345 -> 300 inside the t3 band. Donor Cavalier jousting (damagePerHex) removed."
+      }
+    },
+    {
+      "sid": "h3_mummy",
+      "displayName": "Mummy",
+      "tier": 3,
+      "poolEligible": true,
+      "donorFactionSid": "homm3_necropolis",
+      "donorUnitSid": "h3_walking_dead",
+      "nativeBiome": "Sand",
+      "ai": "melee_type",
+      "tags": ["unit", "neutral", "undead"],
+      "stats": {
+        "hp": 30,
+        "offence": 7,
+        "defence": 7,
+        "damageMin": 3,
+        "damageMax": 5,
+        "initiative": 5,
+        "speed": 5,
+        "squadValue": 270,
+        "gold": 300
+      },
+      "source": "sod",
+      "battleDef": "Cmummy.def",
+      "mapDef": "AVWmumy.def",
+      "battleLod": "H3sprite.lod",
+      "bundleName": "custom_units_neutral_h3_mummy",
+      "dwelling": {
+        "name": "Tomb of Curses",
+        "defName": "AVGmumy.def",
+        "barracksSid": "barracks_homm3_neutral_mummy",
+        "growth": 7,
+        "costGold": 300
+      },
+      "oeKit": {
+        "profile": "undead",
+        "actives": [
+          {
+            "kind": "curse"
+          }
+        ],
+        "mechanics": [],
+        "homm3Identity": "Undead; curses on attack.",
+        "gaps": [
+          "HoMM3 applies Curse as a 50% on-hit chance; OE carries it as a Focus active, the native way casters apply debuffs."
+        ],
+        "design": "HoMM3 stats in band. Undead immunity profile, morale locked, Curse focus active."
+      }
+    },
+    {
+      "sid": "h3_troll",
+      "displayName": "Troll",
+      "tier": 5,
+      "poolEligible": true,
+      "donorFactionSid": "homm3_stronghold",
+      "donorUnitSid": "h3_ogre",
+      "nativeBiome": "Swamp",
+      "ai": "melee_type",
+      "tags": ["unit", "neutral"],
+      "stats": {
+        "hp": 45,
+        "offence": 14,
+        "defence": 10,
+        "damageMin": 10,
+        "damageMax": 15,
+        "initiative": 7,
+        "speed": 7,
+        "squadValue": 1024,
+        "gold": 500
+      },
+      "source": "sod",
+      "battleDef": "Ctroll.def",
+      "mapDef": null,
+      "battleLod": "H3sprite.lod",
+      "bundleName": "custom_units_neutral_h3_troll",
+      "oeKit": {
+        "profile": "living",
+        "actives": [],
+        "mechanics": [
+          {
+            "mech": "regeneration",
+            "value": 1.0,
+            "name": "Regeneration",
+            "description": "At the start of its turn, the top Troll restores all of its lost health.",
+            "icon": "magic_healing_water_effect_icon"
+          }
+        ],
+        "homm3Identity": "Level 5; regenerates the top creature fully each turn.",
+        "design": "Tier 4 -> 5 (HoMM3 level). HP 40 -> 45 and Defense 7 -> 10 toward the t5 band while staying the low-Defense bruiser. Regeneration uses the native heal_percent max_unit 1.0 shape (native Hydra)."
+      }
+    },
+    {
+      "sid": "h3_enchanter",
+      "displayName": "Enchanter",
+      "tier": 6,
+      "poolEligible": true,
+      "donorFactionSid": "homm3_tower",
+      "donorUnitSid": "h3_mage_upg",
+      "nativeBiome": "Snow",
+      "ai": "range_type",
+      "tags": ["unit", "neutral", "shooter"],
+      "stats": {
+        "hp": 60,
+        "offence": 19,
+        "defence": 15,
+        "damageMin": 14,
+        "damageMax": 14,
+        "initiative": 9,
+        "speed": 9,
+        "ammo": 32,
+        "squadValue": 1400,
+        "gold": 750
+      },
+      "source": "sod",
+      "battleDef": "Cench.def",
+      "mapDef": "AVWench.def",
+      "battleLod": "H3sprite.lod",
+      "bundleName": "custom_units_neutral_h3_enchanter",
+      "dwelling": {
+        "name": "Enchanter's Hollow",
+        "defName": "AVGench.def",
+        "barracksSid": "barracks_homm3_neutral_enchanter",
+        "growth": 2,
+        "costGold": 750
+      },
+      "oeKit": {
+        "profile": "living",
+        "actives": [
+          {
+            "kind": "bless_spell"
+          },
+          {
+            "kind": "magnetic_slow"
+          }
+        ],
+        "mechanics": [
+          {
+            "mech": "free_shooting"
+          }
+        ],
+        "homm3Identity": "Level 6; casts mass buffs and Slow each turn; no obstacle penalty.",
+        "gaps": [
+          "HoMM3 casts the mass (army-wide) versions; OE carries single-target creature spells."
+        ],
+        "design": "Level-6 body lifted onto the t6 band (HP 30 -> 60, Attack 17 -> 19, Defense 12 -> 15). Squad value 1210 -> 1400. Free Shooting plus two caster actives replace the donor Tower mage's channeler passive."
+      }
+    },
+    {
+      "sid": "h3_sharpshooter",
+      "displayName": "Sharpshooter",
+      "tier": 4,
+      "poolEligible": true,
+      "donorFactionSid": "homm3_castle",
+      "donorUnitSid": "h3_archer_upg",
+      "nativeBiome": "Valleys",
+      "ai": "range_type",
+      "tags": ["unit", "neutral", "shooter"],
+      "stats": {
+        "hp": 25,
+        "offence": 12,
+        "defence": 10,
+        "damageMin": 8,
+        "damageMax": 10,
+        "initiative": 9,
+        "speed": 8,
+        "ammo": 32,
+        "squadValue": 585,
+        "gold": 400
+      },
+      "source": "sod",
+      "battleDef": "Csharp.def",
+      "mapDef": "AVWsharp.def",
+      "battleLod": "H3sprite.lod",
+      "bundleName": "custom_units_neutral_h3_sharpshooter",
+      "dwelling": {
+        "name": "Sharpshooter's Nest",
+        "defName": "AVGshrp.def",
+        "barracksSid": "barracks_homm3_neutral_sharpshooter",
+        "growth": 4,
+        "costGold": 400
+      },
+      "oeKit": {
+        "profile": "living",
+        "actives": [],
+        "mechanics": [
+          {
+            "mech": "sharpshooter"
+          }
+        ],
+        "homm3Identity": "No range or obstacle penalty.",
+        "design": "HoMM3 stats with HP 15 -> 25 (native t4 floor is 30, tolerance 24) and speed 9 -> 8 (t4 band cap). Library sharpshooter flags. Donor Marksman double shot removed so the kit is its own."
+      }
+    },
+    {
+      "sid": "h3_azure_dragon",
+      "displayName": "Azure Dragon",
+      "tier": 7,
+      "poolEligible": true,
+      "donorFactionSid": "homm3_rampart",
+      "donorUnitSid": "h3_gold_dragon",
+      "nativeBiome": "Snow",
+      "ai": "melee_type",
+      "tags": ["unit", "neutral", "dragon"],
+      "stats": {
+        "hp": 400,
+        "offence": 40,
+        "defence": 40,
+        "damageMin": 60,
+        "damageMax": 75,
+        "initiative": 16,
+        "speed": 11,
+        "squadValue": 8000,
+        "gold": 5000,
+        "moveType": "fly"
+      },
+      "source": "sod",
+      "battleDef": "CaDrgn.def",
+      "mapDef": "AVWazure.def",
+      "battleLod": "H3sprite.lod",
+      "bundleName": "custom_units_neutral_h3_azure_dragon",
+      "oeKit": {
+        "profile": "dragon",
+        "actives": [
+          {
+            "kind": "fearsome"
+          }
+        ],
+        "mechanics": [
+          {
+            "mech": "magic_level_immunity",
+            "value": 3
+          },
+          {
+            "mech": "fearless"
+          }
+        ],
+        "homm3Identity": "Strongest neutral: fear, immune to spells of levels 1-3.",
+        "gaps": [
+          "HoMM3 fear is a passive on every enemy stack; OE carries it as the library Fearsome focus debuff."
+        ],
+        "design": "Top of the t7 band (Sentinel body plus initiative/speed caps). Level-3 spell immunity, Fearsome, and immunity to fear itself."
+      }
+    },
+    {
+      "sid": "h3_crystal_dragon",
+      "displayName": "Crystal Dragon",
+      "tier": 7,
+      "poolEligible": true,
+      "donorFactionSid": "homm3_rampart",
+      "donorUnitSid": "h3_diamond_dragon_upg_alt",
+      "nativeBiome": "Snow",
+      "ai": "melee_type",
+      "tags": ["unit", "neutral", "dragon", "construct"],
+      "stats": {
+        "hp": 360,
+        "offence": 36,
+        "defence": 36,
+        "damageMin": 55,
+        "damageMax": 65,
+        "initiative": 14,
+        "speed": 9,
+        "squadValue": 7000,
+        "gold": 4500,
+        "moveType": "fly"
+      },
+      "source": "sod",
+      "battleDef": "Ccdrgn.def",
+      "mapDef": null,
+      "battleLod": "H3sprite.lod",
+      "bundleName": "custom_units_neutral_h3_crystal_dragon",
+      "oeKit": {
+        "profile": "dragon",
+        "actives": [],
+        "mechanics": [
+          {
+            "mech": "magic_resistance",
+            "value": 0.2,
+            "name": "Crystal Scales",
+            "description": "Takes 20% less damage from spells.",
+            "icon": "sub_skill_resistance_1_icon"
+          }
+        ],
+        "homm3Identity": "20% magic resistance; generates crystal.",
+        "gaps": [
+          "Weekly crystal generation is an adventure-map economy effect; not carried."
+        ],
+        "design": "Resistance as a native magic-damage modifier replaces the donor's spell-level immunity. Sits at the Sentinel's value."
+      }
+    },
+    {
+      "sid": "h3_faerie_dragon",
+      "displayName": "Faerie Dragon",
+      "tier": 7,
+      "poolEligible": true,
+      "donorFactionSid": "neutral",
+      "donorUnitSid": "fairy_dragon",
+      "nativeBiome": "Woods",
+      "ai": "melee_type",
+      "tags": ["unit", "neutral", "dragon"],
+      "stats": {
+        "hp": 250,
+        "offence": 22,
+        "defence": 22,
+        "damageMin": 25,
+        "damageMax": 35,
+        "initiative": 13,
+        "speed": 9,
+        "squadValue": 6200,
+        "gold": 4000,
+        "moveType": "fly"
+      },
+      "source": "sod",
+      "battleDef": "Cfdrgn.def",
+      "mapDef": null,
+      "battleLod": "H3sprite.lod",
+      "bundleName": "custom_units_neutral_h3_faerie_dragon",
+      "oeKit": {
+        "profile": "native_donor",
+        "keepDonorPassives": true,
+        "donorActives": true,
+        "actives": [
+          {
+            "kind": "thunderbolt"
+          }
+        ],
+        "mechanics": [],
+        "homm3Identity": "Casts offensive spells; Magic Mirror.",
+        "gaps": [
+          "Magic Mirror (spell reflection) has no native unit surface; the native OE fairy dragon kit (spell immunity, dispel, summon destruction) stands in."
+        ],
+        "design": "Keeps the native OE fairy_dragon passives and actives and adds Thunderbolt as its offensive spell. Compressed onto the t7 band below the Sentinel (400 HP, sv 7000)."
+      }
+    },
+    {
+      "sid": "h3_rust_dragon",
+      "displayName": "Rust Dragon",
+      "tier": 7,
+      "poolEligible": true,
+      "donorFactionSid": "homm3_dungeon",
+      "donorUnitSid": "h3_red_dragon",
+      "nativeBiome": "Wasteland",
+      "ai": "melee_type",
+      "tags": ["unit", "neutral", "dragon"],
+      "stats": {
+        "hp": 320,
+        "offence": 30,
+        "defence": 30,
+        "damageMin": 50,
+        "damageMax": 50,
+        "initiative": 15,
+        "speed": 10,
+        "squadValue": 5800,
+        "gold": 4000,
+        "moveType": "fly"
+      },
+      "source": "sod",
+      "battleDef": "CRDRGN.def",
+      "mapDef": "AVWrust.def",
+      "battleLod": "H3sprite.lod",
+      "bundleName": "custom_units_neutral_h3_rust_dragon",
+      "oeKit": {
+        "profile": "dragon",
+        "actives": [
+          {
+            "kind": "disrupting_ray",
+            "name": "Acid Breath",
+            "description": "Spend 1 Focus to corrode an enemy, permanently reducing its Defense by 1."
+          }
+        ],
+        "mechanics": [],
+        "homm3Identity": "Acid breath reduces Defense; no spell immunity.",
+        "design": "Breath shell kept, donor Red Dragon spell immunity removed (HoMM3 Rust Dragon has none). Acid as the native permanent Defense debuff. Lowest t7 value, as in HoMM3."
+      }
+    },
+    {
+      "sid": "h3_fangarm",
+      "displayName": "Fangarm",
+      "tier": 5,
+      "poolEligible": true,
+      "donorFactionSid": "neutral",
+      "donorUnitSid": "peasant",
+      "nativeBiome": "Tropical",
+      "ai": "melee_type",
+      "tags": ["unit", "neutral"],
+      "stats": {
+        "hp": 50,
+        "offence": 12,
+        "defence": 12,
+        "damageMin": 8,
+        "damageMax": 12,
+        "initiative": 6,
+        "speed": 6,
+        "squadValue": 929,
+        "gold": 600,
+        "moveType": "fly",
+        "numCounters": 999
+      },
+      "source": "hota",
+      "handAuthoredCore": true,
+      "battleDef": "CFANGARM.def",
+      "mapDef": "AVWfngrm.def",
+      "bundleName": "custom_units_neutral_h3_fangarm",
+      "dwelling": {
+        "name": "Ziggurat",
+        "defName": "AVGfngrm.def",
+        "defNameAliases": ["avgfngrm.def"],
+        "barracksSid": "barracks_homm3_neutral_fangarm",
+        "growth": 3,
+        "costGold": 600
+      },
+      "oeKit": {
+        "profile": "hand_authored",
+        "keepDonorPassives": true,
+        "actives": [],
+        "mechanics": [],
+        "homm3Identity": "HotA: hypnotize after attack, flying, unlimited retaliation.",
+        "design": "Keeps the Cove hand-authored kit (Hypnotic Strike, flying, unlimited retaliation); stats pinned here."
+      }
+    },
+    {
+      "sid": "h3_satyr",
+      "displayName": "Satyr",
+      "tier": 4,
+      "poolEligible": true,
+      "donorFactionSid": "homm3_rampart",
+      "donorUnitSid": "h3_centaur",
+      "nativeBiome": "Woods",
+      "ai": "melee_type",
+      "tags": ["unit", "neutral"],
+      "stats": {
+        "hp": 35,
+        "offence": 10,
+        "defence": 11,
+        "damageMin": 6,
+        "damageMax": 10,
+        "initiative": 7,
+        "speed": 7,
+        "squadValue": 518,
+        "gold": 300
+      },
+      "source": "hota",
+      "battleDef": "CSATYR.def",
+      "mapDef": "AvWSatyr.def",
+      "bundleName": "custom_units_neutral_h3_satyr",
+      "dwelling": {
+        "name": "Wineyard",
+        "defName": "AVGsaty0.def",
+        "barracksSid": "barracks_homm3_neutral_satyr",
+        "growth": 4,
+        "costGold": 300
+      },
+      "oeKit": {
+        "profile": "living",
+        "actives": [
+          {
+            "kind": "mirth_spell"
+          }
+        ],
+        "mechanics": [],
+        "homm3Identity": "HotA: casts Mirth (+morale).",
+        "design": "HotA stats in band. Library Mirth ally buff active (2 charges)."
+      }
+    },
+    {
+      "sid": "h3_leprechaun",
+      "displayName": "Leprechaun",
+      "tier": 2,
+      "poolEligible": true,
+      "donorFactionSid": "neutral",
+      "donorUnitSid": "halfling",
+      "nativeBiome": "Woods",
+      "ai": "melee_type",
+      "tags": ["unit", "neutral"],
+      "stats": {
+        "hp": 15,
+        "offence": 8,
+        "defence": 5,
+        "damageMin": 3,
+        "damageMax": 5,
+        "initiative": 5,
+        "speed": 5,
+        "ammo": 24,
+        "squadValue": 190,
+        "gold": 100
+      },
+      "source": "hota",
+      "battleDef": "CLEPRCHN.def",
+      "mapDef": "AVWlepr.def",
+      "bundleName": "custom_units_neutral_h3_leprechaun",
+      "dwelling": {
+        "name": "Alehouse",
+        "defName": "AVGlprch.def",
+        "barracksSid": "barracks_homm3_neutral_leprechaun",
+        "growth": 9,
+        "costGold": 100
+      },
+      "oeKit": {
+        "profile": "living",
+        "actives": [
+          {
+            "kind": "fortune_spell"
+          }
+        ],
+        "mechanics": [
+          {
+            "mech": "luck_aura",
+            "value": 1,
+            "name": "Lucky Charm",
+            "description": "Adjacent allied stacks gain +1 Luck.",
+            "icon": "sub_skill_luck_1_icon"
+          }
+        ],
+        "homm3Identity": "HotA: casts Fortune (+luck) 3 times per battle; doubles the army's positive-luck chance.",
+        "gaps": [
+          "HotA army-wide luck doubling approximated by a native adjacent-ally aura (+1 Luck), the only native unit aura shape.",
+          "Donor shell is the native Halfling shooter; HotA Leprechaun is melee."
+        ],
+        "design": "HotA stats in band. One charge-limited buff active (native t2 units carry 0-1 actives) plus a native aura."
+      }
+    },
+    {
+      "sid": "h3_steel_golem",
+      "displayName": "Steel Golem",
+      "tier": 4,
+      "poolEligible": true,
+      "donorFactionSid": "homm3_tower",
+      "donorUnitSid": "h3_golem",
+      "nativeBiome": "Snow",
+      "ai": "melee_type",
+      "tags": ["unit", "neutral", "construct"],
+      "stats": {
+        "hp": 45,
+        "offence": 10,
+        "defence": 11,
+        "damageMin": 6,
+        "damageMax": 8,
+        "initiative": 6,
+        "speed": 6,
+        "squadValue": 597,
+        "gold": 400
+      },
+      "source": "hota",
+      "battleDef": "cstlgole.def",
+      "mapDef": "avwslgl0.def",
+      "bundleName": "custom_units_neutral_h3_steel_golem",
+      "oeKit": {
+        "profile": "construct",
+        "actives": [],
+        "mechanics": [
+          {
+            "mech": "magic_resistance",
+            "value": 0.8,
+            "name": "Spell Damage Resistance",
+            "description": "Takes 80% less damage from spells.",
+            "icon": "sub_skill_resistance_1_icon"
+          }
+        ],
+        "homm3Identity": "HotA: non-living, 80% spell damage reduction.",
+        "design": "HotA stats in band. Construct profile; magic damage -0.8 continues the port's golem ladder (Stone -0.5, Iron -0.75)."
+      }
+    }
+  ]
+}

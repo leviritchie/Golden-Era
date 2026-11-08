@@ -1,0 +1,33 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "neutral_azure_dragon_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/neutral_azure_dragon_slice_v1",
+  "note": "Neutral azure dragon: hand-keyed body (no capture) with wing_chain finger-fan wings (red dragon recipe), keyed beat (Unit_Move wingSwing 138), wing-only fit on hitted/defence/attack/death; faces -60 fleet bind; all 9 clips | look-only re-freeze on the ground-stamped canonical (fleet_rebuild ground_glb apply; coordinator item 3) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_azure_dragon 0.45. | vanilla-style VFX promotion 2026-10-12 lane E (user-approved lab previews) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_azure_dragon 0.45. | Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_azure_dragon 0.45.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_azure_dragon",
+      "gameSid": "h3_azure_dragon",
+      "bundleName": "custom_units_neutral_h3_azure_dragon",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "1672b0b312de6440afe9b39e8e23c230075632228927c55dfedd7c5338383c06",
+      "identityReview": "none",
+      "vfxAuthority": "vanilla_style",
+      "vanillaStyleSpec": "tools/homm3_vfx/vanilla_style/units/h3_azure_dragon.json",
+      "frozen": {
+        "lookDeliveredGlbSha256": "baba99faadc7a9c7dd659beb45a5ae0762e0304c63119c8bf4cac35010cd4313",
+        "idleRetimedGlbSha256": "2d0e26eb07f137546dcb09ca9b2d532d1fb77d111891c0e10fd997098cecd3ba",
+        "vfxManifestSha256": "f42982ca2bea47bc2929baad9961d5ac1742e1cda47d211c5de2d3d2f0f997bf",
+        "specSha256": "7f3d512764a426b123587b9a3adc27ba118eed34dadbbf8df66e6e7f4ea081f5",
+        "basecolorSha256": "4be3e22cfd4e6b2b756c5289336a966c9ff581a309eb655f184b6f80577460f2"
+      }
+    }
+  ]
+}

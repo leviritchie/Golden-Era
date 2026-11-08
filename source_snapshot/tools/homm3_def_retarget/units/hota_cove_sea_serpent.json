@@ -1,0 +1,220 @@
+{
+ "unit": "hota_cove_sea_serpent",
+ "strideExempt": "legless body: sea serpent, no legs; the rig has no leg chain",
+ "joints": {
+  "Hips": [
+   0.07,
+   -0.16,
+   1.2
+  ],
+  "Spine": [
+   0.07,
+   -0.12,
+   1.33
+  ],
+  "Spine1": [
+   0.07,
+   -0.09,
+   1.45
+  ],
+  "Spine2": [
+   0.07,
+   -0.07,
+   1.55
+  ],
+  "Neck": [
+   0.07,
+   -0.06,
+   1.63
+  ],
+  "Head": [
+   0.08,
+   -0.2,
+   1.6
+  ],
+  "HeadTop_End": [
+   0.12,
+   -0.5,
+   1.45
+  ]
+ },
+ "grounding": false,
+ "tail": {
+  "segments": 20,
+  "belowHips": 0.05,
+  "neckRadius": 0.15,
+  "handsAboveZ": 9.0,
+  "torsoRadius": 0.15,
+  "amplitude": 0.25,
+  "wavelength": 1.0,
+  "behind": [
+   -0.342,
+   0.939,
+   0.0
+  ],
+  "groundZ": 0.3
+ },
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "roll": 20
+  }
+ },
+ "extensions": [
+  "cove_tailpath",
+  "cove_serpent"
+ ],
+ "coveSlump": {
+  "start": 2,
+  "deg": 70,
+  "pivotZ": 0.2
+ },
+ "coveLunge": {
+  "deg": 45,
+  "peak": 0.6,
+  "width": 0.35,
+  "pivotZ": 0.5
+ },
+ "coveTailPath": {
+  "points": [
+   [
+    0.07,
+    -0.16,
+    1.2
+   ],
+   [
+    0.11,
+    -0.235,
+    1.02
+   ],
+   [
+    0.12,
+    -0.379,
+    0.82
+   ],
+   [
+    0.12,
+    -0.398,
+    0.573
+   ],
+   [
+    0.13,
+    -0.25,
+    0.354
+   ],
+   [
+    0.12,
+    0.021,
+    0.296
+   ],
+   [
+    0.08,
+    0.194,
+    0.409
+   ],
+   [
+    0.0,
+    0.288,
+    0.577
+   ],
+   [
+    -0.1,
+    0.298,
+    0.827
+   ],
+   [
+    -0.15,
+    0.135,
+    1.02
+   ],
+   [
+    -0.18,
+    -0.111,
+    1.045
+   ],
+   [
+    -0.18,
+    -0.303,
+    0.912
+   ],
+   [
+    -0.19,
+    -0.39,
+    0.7
+   ],
+   [
+    -0.17,
+    -0.349,
+    0.449
+   ],
+   [
+    -0.18,
+    -0.125,
+    0.277
+   ],
+   [
+    -0.15,
+    0.107,
+    0.268
+   ],
+   [
+    -0.1,
+    0.3,
+    0.3
+   ],
+   [
+    -0.07,
+    0.42,
+    0.22
+   ],
+   [
+    -0.03,
+    0.49,
+    0.12
+   ],
+   [
+    0.0,
+    0.44,
+    0.03
+   ]
+  ],
+  "fuseCut": 1.5
+ },
+ "glbPatch": {
+  "reason": "DEF g12 attack: the sea serpent uncoils its neck and strikes the head far forward at the target with the jaws level (f3-f5), then recoils, instead of buckling the head down into its own coil; neck/upper-coil weights re-solved so the strike does not tear the throat",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sea_serpent_neck_weights.json",
+    "sha256": "d12d8c1e0a132625b44d229645d9ee374541a6c3595a81ed9a747212e1cd6259",
+    "note": "neck / upper-coil weight re-solve (wsolve fixed point, GPU) for the forward strike"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sea_serpent_pose_rot.json",
+    "sha256": "e4d187172c30d5f2296c127a4f0194f110ee8d0c626135650178124d79d8b920",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sea_serpent_pose_rot.json",
+    "sha256": "e4d187172c30d5f2296c127a4f0194f110ee8d0c626135650178124d79d8b920",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sea_serpent_pose_tr.json",
+    "sha256": "9dd171b6b5ebe2faef2e2f5f1c96b97fd7ab174682151d7ee6acd4a8f5783e09"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sea_serpent_pose_tr.json",
+    "sha256": "9dd171b6b5ebe2faef2e2f5f1c96b97fd7ab174682151d7ee6acd4a8f5783e09"
+   }
+  ]
+ }
+}

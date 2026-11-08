@@ -1,0 +1,29 @@
+{
+  "clip": "roc_start_move_end",
+  "defGroups": [20, 0, 21],
+  "mesh": "artifacts/meshy_downloads/h3_roc_smartrigged.glb",
+  "anatomyGroupsPath": "tools/homm3_silhouette_pose_fit/roc_smartrig_anatomy_groups.json",
+  "author": "llm",
+  "method": "llm_anatomy_priority_for_clip",
+  "rationale": "HoMM3 roc start→move→end is a flyer transit. The silhouette change is almost entirely bilateral wing flap; trunk pitch/roll carries travel lean; neck/head tracks heading with moderate motion; tail is secondary counterbalance; legs stay tucked and must not steal silhouette budget from the wings.",
+  "groupVisitOrder": [
+    "wing_a",
+    "wing_b",
+    "trunk",
+    "neck_head",
+    "tail",
+    "leg_a",
+    "leg_b"
+  ],
+  "rotationScaleByGroup": {
+    "wing_a": 1.0,
+    "wing_b": 1.0,
+    "trunk": 0.55,
+    "neck_head": 0.45,
+    "tail": 0.35,
+    "leg_a": 0.22,
+    "leg_b": 0.22
+  },
+  "withinGroupOrder": "dependency",
+  "proof": "authored intent only until cascade run consumes search_bones + bone_limit_scale_overrides"
+}

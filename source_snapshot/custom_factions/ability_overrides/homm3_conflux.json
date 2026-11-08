@@ -1,0 +1,778 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_conflux",
+  "unitOverrides": {
+    "h3_pixie": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "conflux.pixie_line",
+      "decisionTest": "Pixie defines the tier baseline for conflux; upgrades should create a meaningful standard-versus-alternate decision from this role."
+    },
+    "h3_pixie_upg": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "conflux.pixie_line",
+      "decisionTest": "Sprite should be chosen over Faerie when its standard role is the better answer for the current army, matchup, or build timing."
+    },
+    "h3_pixie_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "passives:3",
+          "slotKind": "passives",
+          "index": 3,
+          "enabled": false,
+          "nameKey": "base_passive_noncounter_name",
+          "descriptionKey": "base_passive_noncounter_description",
+          "nameText": "Swift Strike",
+          "descriptionText": "Enemies do not counterattack.",
+          "iconKey": "",
+          "abilityType": "",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 0,
+          "cooldown": 0,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        },
+        {
+          "key": "alternativeAttacks:0",
+          "slotKind": "alternativeAttacks",
+          "index": 0,
+          "enabled": false,
+          "nameKey": "common_attack_1_name",
+          "descriptionKey": "common_attack_1_description",
+          "nameText": "Melee Attack",
+          "descriptionText": "Performs an alternative Melee attack.",
+          "iconKey": "",
+          "abilityType": "Ability_type_attack_alt",
+          "animationIndex": 1,
+          "turnBehavior": "ends",
+          "energyLevel": 0,
+          "cooldown": 0,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        },
+        {
+          "key": "passives:2",
+          "slotKind": "passives",
+          "index": 2,
+          "enabled": false,
+          "nameKey": "base_passive_melee_attack_no_counter_name",
+          "descriptionKey": "base_passive_melee_attack_no_counter_description",
+          "nameText": "Melee Attack",
+          "descriptionText": "Can only attack adjacent enemies. <b>Enemies do not counterattack.</b>",
+          "iconKey": "",
+          "abilityType": "",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 0,
+          "cooldown": 0,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "conflux.pixie_line",
+      "decisionTest": "Faerie should be chosen over Sprite when its alternate role creates a better army, matchup, or build-timing decision."
+    },
+    "h3_air_elemental": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "conflux.air_elemental_line",
+      "decisionTest": "Air Elemental defines the tier baseline for conflux; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_air_elemental_upg": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "primal_1_magic_thunderbolt_name",
+          "descriptionKey": "primal_1_magic_thunderbolt_description",
+          "nameText": "Thunderbolt",
+          "descriptionText": "Spend 2 Focus without ending the turn to deal 25 pure magic damage plus 10 per stack.",
+          "iconKey": "sub_skill_faction_homm3_ability_thunderbolt",
+          "abilityType": "Ability_type_attack",
+          "animationIndex": 2,
+          "turnBehavior": "free",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "primal_1_magic_thunderbolt:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Lightning Bolt L1",
+          "effectPayload": {
+            "spellSid": "primal_1_magic_thunderbolt",
+            "spellTier": 1,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "buffSid": "",
+            "duration": null,
+            "nameKey": "primal_1_magic_thunderbolt_name",
+            "descriptionKey": "primal_1_magic_thunderbolt_description",
+            "icon": "sub_skill_faction_homm3_ability_thunderbolt",
+            "school": "primal",
+            "dealer": {
+              "tags": [
+                "magic_damage",
+                "primal_1_magic_thunderbolt_damage"
+              ],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "enemy",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "enemy",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "enemy",
+              "damageType_": "magic_pure",
+              "minBaseDmg": 25,
+              "maxBaseDmg": 25,
+              "minStackDmg": 10,
+              "maxStackDmg": 10
+            }
+          },
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "conflux.air_elemental_line",
+      "decisionTest": "Storm Elemental should be chosen over Hurricane Elemental when its standard role is the better answer for the current army, matchup, or build timing."
+    },
+    "h3_air_elemental_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "day_3_magic_haste_name",
+          "descriptionKey": "day_3_magic_haste_description",
+          "nameText": "Haste",
+          "descriptionText": "Spend 2 Focus without ending the turn to give an allied stack +2 Speed for 1 round.",
+          "iconKey": "sub_skill_faction_homm3_ability_haste",
+          "abilityType": "Ability_type_attack",
+          "animationIndex": 2,
+          "turnBehavior": "free",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "day_3_magic_haste:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Haste L1",
+          "effectPayload": {
+            "spellSid": "day_3_magic_haste",
+            "spellTier": 1,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "buffSid": "magic_haste_effect_0",
+            "duration": 1,
+            "nameKey": "day_3_magic_haste_name",
+            "descriptionKey": "day_3_magic_haste_description",
+            "icon": "sub_skill_faction_homm3_ability_haste",
+            "school": "day",
+            "dealer": {
+              "tags": [
+                "haste"
+              ],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "ally",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "ally",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "buffTarget_": "ally",
+              "buff": {
+                "sid": "magic_haste_effect_0",
+                "duration": 1,
+                "durationPerStack": [
+                  4,
+                  1
+                ]
+              },
+              "targetMechanics": []
+            }
+          },
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "conflux.air_elemental_line",
+      "decisionTest": "Hurricane Elemental should be chosen over Storm Elemental when its alternate role creates a better army, matchup, or build-timing decision."
+    },
+    "h3_water_elemental": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": false,
+          "nameKey": "h3_common_ability_blind_name",
+          "descriptionKey": "h3_common_ability_blind_description",
+          "nameText": "Blinding Strike",
+          "descriptionText": "Spend Focus to attack and apply the native Unicorn blind effect.",
+          "iconKey": "",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 1,
+          "turnBehavior": "ends",
+          "energyLevel": 3,
+          "cooldown": 3,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "conflux.water_elemental_line",
+      "decisionTest": "Water Elemental defines the tier baseline for conflux; upgrades should create a meaningful standard-versus-alternate decision from this role."
+    },
+    "h3_water_elemental_upg": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_common_ability_blind_name",
+          "descriptionKey": "h3_common_ability_blind_description",
+          "nameText": "Blinding Strike",
+          "descriptionText": "Spend 3 Focus to attack for 100% normal damage and blind the enemy for 2 rounds, removed if it takes damage.",
+          "iconKey": "sub_skill_faction_homm3_ability_blinding_strike",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 1,
+          "turnBehavior": "ends",
+          "energyLevel": 3,
+          "cooldown": 3,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "conflux.water_elemental_line",
+      "decisionTest": "Ice Elemental should be chosen over Frost Elemental when its standard role is the better answer for the current army, matchup, or build timing."
+    },
+    "h3_water_elemental_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "conflux.water_elemental_line",
+      "decisionTest": "Frost Elemental should be chosen over Ice Elemental when its alternate role creates a better army, matchup, or build-timing decision."
+    },
+    "h3_fire_elemental": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": false,
+          "nameKey": "h3_common_ability_thunderbolt_name",
+          "descriptionKey": "h3_common_ability_thunderbolt_description",
+          "nameText": "Thunderbolt",
+          "descriptionText": "Spend Focus to deal native pure magic damage.",
+          "iconKey": "",
+          "abilityType": "Ability_type_attack",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "conflux.fire_elemental_line",
+      "decisionTest": "Fire Elemental defines the tier baseline for conflux; upgrades should create a meaningful standard-versus-alternate decision from this role."
+    },
+    "h3_fire_elemental_upg": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "space_1_magic_early_start_name",
+          "descriptionKey": "space_1_magic_early_start_description",
+          "nameText": "Jumpstart",
+          "descriptionText": "Spend 2 Focus without ending the turn to give an allied stack +3 Initiative for 1 round.",
+          "iconKey": "sub_skill_faction_homm3_ability_jumpstart",
+          "abilityType": "Ability_type_attack",
+          "animationIndex": 2,
+          "turnBehavior": "free",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "space_1_magic_early_start:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Early Start L1",
+          "effectPayload": {
+            "spellSid": "space_1_magic_early_start",
+            "spellTier": 1,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "buffSid": "magic_early_start_effect_0",
+            "duration": 1,
+            "nameKey": "space_1_magic_early_start_name",
+            "descriptionKey": "space_1_magic_early_start_description",
+            "icon": "sub_skill_faction_homm3_ability_jumpstart",
+            "school": "space",
+            "dealer": {
+              "tags": [],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "ally",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "ally",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "none",
+              "damageType_": "none",
+              "buffTarget_": "ally",
+              "buff": {
+                "sid": "magic_early_start_effect_0",
+                "duration": 1,
+                "durationPerStack": [
+                  4,
+                  1
+                ]
+              }
+            }
+          },
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "conflux.fire_elemental_line",
+      "decisionTest": "Energy Elemental should be chosen over Plasma Elemental when its standard role is the better answer for the current army, matchup, or build timing."
+    },
+    "h3_fire_elemental_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "primal_12_magic_chain_lightning_name",
+          "descriptionKey": "primal_12_magic_chain_lightning_description",
+          "nameText": "Chain Lightning",
+          "descriptionText": "Spend 3 Focus to deal 100 pure magic damage plus 20 per stack, then jump within 3 hexes for 50% damage.",
+          "iconKey": "sub_skill_faction_homm3_ability_chain_lightning",
+          "abilityType": "Ability_type_attack",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 3,
+          "cooldown": 3,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "primal_12_magic_chain_lightning:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Chain Lightning L1",
+          "effectPayload": {
+            "spellSid": "primal_12_magic_chain_lightning",
+            "spellTier": 4,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "buffSid": "",
+            "duration": null,
+            "nameKey": "primal_12_magic_chain_lightning_name",
+            "descriptionKey": "primal_12_magic_chain_lightning_description",
+            "icon": "sub_skill_faction_homm3_ability_chain_lightning",
+            "school": "primal",
+            "dealer": {
+              "tags": [
+                "magic_damage",
+                "primal_12_magic_chain_lightning_damage"
+              ],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "all",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "all",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "numTargets": 2,
+              "orderedCastParams": [
+                {
+                  "targetTags": [
+                    "unit"
+                  ],
+                  "castTarget_": "all",
+                  "targetCondition_": "alive",
+                  "selection": "object",
+                  "distanceFromFirst": 3,
+                  "dmgMultiplierPerMultitarget": 0.5
+                }
+              ],
+              "orderedAffectParams": [
+                {
+                  "targetTags": [
+                    "unit"
+                  ],
+                  "castTarget_": "all",
+                  "targetCondition_": "alive",
+                  "selection": "object",
+                  "distanceFromFirst": 3,
+                  "dmgMultiplierPerMultitarget": 0.5
+                }
+              ],
+              "excludeAffected": true,
+              "autoFillSelection": true,
+              "multitargetType": "chain",
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "all",
+              "damageType_": "magic_pure",
+              "minBaseDmg": 100,
+              "maxBaseDmg": 100,
+              "minStackDmg": 20,
+              "maxStackDmg": 20
+            }
+          },
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "conflux.fire_elemental_line",
+      "decisionTest": "Plasma Elemental should be chosen over Energy Elemental when its alternate role creates a better army, matchup, or build-timing decision."
+    },
+    "h3_earth_elemental": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": false,
+          "nameKey": "h3_common_ability_stunning_blow_name",
+          "descriptionKey": "h3_common_ability_stunning_blow_description",
+          "nameText": "Stunning Blow",
+          "descriptionText": "Spend Focus to apply a native one-round stun effect.",
+          "iconKey": "",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 3,
+          "cooldown": 3,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "conflux.earth_elemental_line",
+      "decisionTest": "Earth Elemental defines the tier baseline for conflux; upgrades should create a meaningful standard-versus-alternate decision from this role."
+    },
+    "h3_earth_elemental_upg": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "primal_4_magic_fire_globe_name",
+          "descriptionKey": "primal_4_magic_fire_globe_description",
+          "nameText": "Fireball",
+          "descriptionText": "Spend 3 Focus to deal 50 pure magic area damage plus 10 per stack.",
+          "iconKey": "sub_skill_faction_homm3_ability_fireball",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 3,
+          "cooldown": 3,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "primal_4_magic_fire_globe:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Fireball L1",
+          "effectPayload": {
+            "spellSid": "primal_4_magic_fire_globe",
+            "spellTier": 2,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "buffSid": "",
+            "duration": null,
+            "nameKey": "primal_4_magic_fire_globe_name",
+            "descriptionKey": "primal_4_magic_fire_globe_description",
+            "icon": "sub_skill_faction_homm3_ability_fireball",
+            "school": "primal",
+            "dealer": {
+              "tags": [
+                "magic_damage",
+                "primal_4_magic_fire_globe_damage"
+              ],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "all",
+                "selection": "hexOrObject",
+                "targetCondition_": "all"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "all",
+                "selection": "object",
+                "targetCondition_": "alive"
+              },
+              "attackPatternSid": "attack_rumble_x1_x100",
+              "damageTarget_": "all",
+              "damageType_": "magic_pure",
+              "minBaseDmg": 50,
+              "maxBaseDmg": 50,
+              "minStackDmg": 10,
+              "maxStackDmg": 10
+            }
+          },
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "conflux.earth_elemental_line",
+      "decisionTest": "Magma Elemental should be chosen over Lava Elemental when its standard role is the better answer for the current army, matchup, or build timing."
+    },
+    "h3_earth_elemental_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "primal_7_magic_wall_of_flame_name",
+          "descriptionKey": "primal_7_magic_wall_of_flame_description",
+          "nameText": "Firewall",
+          "descriptionText": "Spend 2 Focus to place 2 fire-wall traps that last 2 rounds.",
+          "iconKey": "sub_skill_faction_homm3_ability_firewall",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "primal_7_magic_wall_of_flame:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Firewall L1",
+          "effectPayload": {
+            "spellSid": "primal_7_magic_wall_of_flame",
+            "spellTier": 3,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "buffSid": "",
+            "duration": null,
+            "nameKey": "primal_7_magic_wall_of_flame_name",
+            "descriptionKey": "primal_7_magic_wall_of_flame_description",
+            "icon": "sub_skill_faction_homm3_ability_firewall",
+            "school": "primal",
+            "dealer": {
+              "tags": [],
+              "castTargetParams": {
+                "castTarget_": "all",
+                "selection": "hex"
+              },
+              "affectTargetParams": {
+                "castTarget_": "all",
+                "selection": "hex"
+              },
+              "multitargetType": "simultaneous",
+              "numTargets": 2,
+              "attackPatternSid": "attack_single_x100",
+              "targetMechanics": [
+                {
+                  "mech": "spawn_object",
+                  "values": [
+                    "trap",
+                    "magic_primal_wall_of_flame_summon",
+                    "2",
+                    "1",
+                    "0",
+                    "true"
+                  ]
+                }
+              ]
+            }
+          },
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "conflux.earth_elemental_line",
+      "decisionTest": "Lava Elemental should be chosen over Magma Elemental when its alternate role creates a better army, matchup, or build-timing decision."
+    },
+    "h3_psychic_elemental": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "conflux.psychic_elemental_line",
+      "decisionTest": "Psychic Elemental defines the tier baseline for conflux; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_psychic_elemental_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "conflux.psychic_elemental_line",
+      "decisionTest": "Magic Elemental should be chosen over Astral Elemental when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_psychic_elemental_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "conflux.psychic_elemental_line",
+      "decisionTest": "Astral Elemental should be chosen over Magic Elemental when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_firebird": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "conflux.firebird_line",
+      "decisionTest": "Firebird defines the tier baseline for conflux; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_firebird_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "conflux.firebird_line",
+      "decisionTest": "Phoenix should be chosen over Sacred Phoenix when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_firebird_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "conflux.firebird_line",
+      "decisionTest": "Sacred Phoenix should be chosen over Phoenix when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    }
+  }
+}

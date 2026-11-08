@@ -1,0 +1,277 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "hota_cove_tidecaller",
+ "status": "look",
+ "notes": "cove rollout (sea witch template): held red orb (committed file mask, every clip) + the shoot_front charge swirl (file mask, g15 f2-6; this DEF's g15 draws no bolt, the ranged hit is the runtime ray) + the defence ward as a fitted dynamic light carried by the orb. Masks: tools/homm3_unit_look/units/masks/cove_masks.py.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "ward_glow",
+   "treatment": "dynamic",
+   "notes": "defence g04: the ward sparks light the body"
+  },
+  {
+   "id": "charge_glow",
+   "treatment": "dynamic",
+   "notes": "shoot g15 f2-6: the charge swirl over the head and raised hand"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "orb",
+    "type": "defFlipbook",
+    "provenance": "roster inventory cove: recurring ~4% event in every group (the held red orb); body paint to defEffects (calm-group vote), so cove_masks.py rule orb",
+    "clips": {
+     "Unit_Move": {
+      "defGroup": 0,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ]
+     },
+     "Unit_Mouseover": {
+      "defGroup": 1,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10
+      ]
+     },
+     "Unit_Idle": {
+      "defGroup": 2,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     "Unit_Hitted": {
+      "defGroup": 3,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5
+      ]
+     },
+     "Unit_Defence": {
+      "defGroup": 4,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14
+      ]
+     },
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9
+      ]
+     },
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8
+      ]
+     },
+     "Unit_MoveStart": {
+      "defGroup": 20,
+      "frames": [
+       0,
+       1
+      ]
+     },
+     "Unit_MoveEnd": {
+      "defGroup": 21,
+      "frames": [
+       0,
+       1
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/hota_cove_tidecaller/orb"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "ward_glow",
+    "notes": "empty cells on death f5-6 (the orb pops)"
+   },
+   {
+    "id": "charge",
+    "type": "defFlipbook",
+    "provenance": "DEF g15 shoot_front f2-6: the swirl gathered over the head and thrown off the raised hand (body-paint colours; cove_masks.py rule paleblue)",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/hota_cove_tidecaller/charge"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "charge_glow"
+   },
+   {
+    "id": "ward_light",
+    "type": "effectLight",
+    "lightId": "ward_glow",
+    "carrier": "orb",
+    "anchor": {
+     "bone": "Spine1",
+     "towardLayerCentroid": 0.0,
+     "towardCameraU": 0.4
+    },
+    "rgb": [
+     1.0,
+     0.35,
+     0.35
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_Defence": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.038,
+      0.05,
+      0.045,
+      0.068,
+      0.047,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "charge_light",
+    "type": "effectLight",
+    "lightId": "charge_glow",
+    "carrier": "charge",
+    "anchor": {
+     "bone": "RightHand",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.35,
+     0.35
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_ShootFront": [
+      0.0,
+      0.0,
+      0.131,
+      0.332,
+      0.684,
+      0.906,
+      0.0,
+      0.0,
+      0.064
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

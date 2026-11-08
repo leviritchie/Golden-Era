@@ -1,0 +1,32 @@
+{
+  "rigFamily": "owned_rider_mount",
+  "unitSid": "h3_cavalier",
+  "masterGlb": "artifacts/cavalier_pose_pipeline/owned_bind/h3_cavalier_master.glb",
+  "notes": "Owned Cavalier bind. Horse hooves, rider wrists/helmet, and lance tip are first-class sites. Mixamo smart-rig is not delivery authority.",
+  "joints": {
+    "HorseNose": "HorseHead",
+    "RiderHelmet": "RiderHead",
+    "LanceTip": "LanceTip",
+    "RHoofFore": "HorseRightForeHoof",
+    "LHoofFore": "HorseLeftForeHoof",
+    "RHoofHind": "HorseRightHindHoof",
+    "LHoofHind": "HorseLeftHindHoof",
+    "RWrist": "RiderRightHand",
+    "LWrist": "RiderLeftHand",
+    "Saddle": "Saddle"
+  },
+  "jointSites": {
+    "HorseNose": { "mode": "farthest_skinned_vert", "skinBones": ["HorseHead"], "minWeight": 0.15, "fromBone": "HorseNeck", "cacheBone": "HorseHead" },
+    "RiderHelmet": { "mode": "farthest_skinned_vert", "skinBones": ["RiderHead"], "minWeight": 0.15, "fromBone": "RiderNeck", "cacheBone": "RiderHead" },
+    "LanceTip": { "mode": "bone", "bone": "LanceTip", "end": "head" }
+  },
+  "primaryJoints": ["HorseNose", "RiderHelmet", "LanceTip", "LHoofFore", "RHoofFore", "LHoofHind", "RHoofHind", "LWrist", "RWrist"],
+  "optimizeBones": [
+    "MountRoot", "HorseSpine1", "HorseNeck", "HorseHead",
+    "HorseLeftShoulder", "HorseLeftForeLeg", "HorseRightShoulder", "HorseRightForeLeg",
+    "HorseLeftHip", "HorseLeftHindLeg", "HorseRightHip", "HorseRightHindLeg",
+    "RiderHips", "RiderSpine", "RiderChest", "RiderHead",
+    "RiderRightArm", "RiderRightHand", "Lance"
+  ],
+  "lockedBones": ["LanceTip"]
+}

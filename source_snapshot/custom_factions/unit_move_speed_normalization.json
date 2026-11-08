@@ -1,0 +1,211 @@
+{
+  "schema": "homm3_unit_move_speed_normalization.v1",
+  "doc": "docs/homm3_stride_match.md (Move speed normalization)",
+  "rule": "A custom walker's battle ground speed (UnitViewConfig.moveSpeed, world units / s) is the mean installed moveSpeed of the vanilla Olden Era units named as its class references: units of a similar body plan, size and battle role. The Move clip is then stride matched to that speed (stride_match_glb.py); the speed is never lowered to fit a short DEF stride. targetMoveSpeed is pinned and must equal round(mean(refs), 3) over the installed vanilla view rows (tools/validate_unit_move_speed_normalization_contract.py).",
+  "consumers": [
+    "tools/release_port/apply_release_core_overlay.py (normalize_custom_unit_view_move_speeds: writes moveSpeed into the unit's Core view row)",
+    "tools/homm3_def_retarget_delivery/stride_match_glb.py (view_move_speed: the ground speed the Move is stride matched to, and freeze_slice's stride gate)"
+  ],
+  "adoption": "Only `units` is consumed. `proposed` carries mappings awaiting review; a unit moves from `proposed` to `units` when its rebuilt Move has been reviewed at the new speed. Stronghold walkers adopted 2026-09-28 (user: \"both approved\" after the orc chieftain / wolf raider pilot). Fortress walkers (gnoll, lizardman, basilisk, gorgon, hydra lines) adopted 2026-09-28 under the user's standing goal approval; their Move clips are rebuilt stride-matched to the new speed and re-frozen before the Fortress slice ships.",
+  "classes": {
+    "small_humanoid_infantry": {
+      "refs": [
+        "trogl",
+        "undead_peasant",
+        "esquire"
+      ],
+      "targetMoveSpeed": 4.1,
+      "reason": "Goblins: one-hex, tier-1 sized biped foot soldiers. Troglodyte (their Core donor), ghoul and esquire are the vanilla one-hex humanoid infantry of that size.",
+      "moveType": "walk"
+    },
+    "medium_humanoid_infantry": {
+      "refs": [
+        "esquire",
+        "crossbowman",
+        "unfrozen_cultist"
+      ],
+      "targetMoveSpeed": 4.1,
+      "reason": "Orcs: one-hex, human-sized biped infantry (thrower). The Core donor blade_dancer (5.8) is a sprinting elf dancer; the vanilla human-sized marching infantry are esquire, crossbowman and cultist.",
+      "moveType": "walk"
+    },
+    "large_humanoid_brute": {
+      "refs": [
+        "minos",
+        "ent"
+      ],
+      "targetMoveSpeed": 2.765,
+      "reason": "Ogres and cyclopes: one-hex, heavy bipeds a head or more taller than a man. Minotaur and ent are the vanilla heavy, large bipeds; both lumber at 2.7-2.83.",
+      "moveType": "walk"
+    },
+    "mounted_beast_rider": {
+      "refs": [
+        "sunlight_cavalry",
+        "frostworm_rider"
+      ],
+      "targetMoveSpeed": 5.5,
+      "reason": "Wolf riders: a rider on a running beast mount. The Core donor assassin (3.33) is a walking biped; the vanilla mounted units are sunlight cavalry (horse) and frostworm rider.",
+      "moveType": "walk"
+    },
+    "large_beast_quadruped": {
+      "refs": [
+        "unicorn",
+        "qilin",
+        "gorilla"
+      ],
+      "targetMoveSpeed": 6.133,
+      "reason": "Behemoths: a large running beast on four legs. The Core donor black_dragon (7.0) is a flier; the vanilla large ground beasts are unicorn, qilin and gorilla.",
+      "moveType": "walk"
+    },
+    "multi_headed_reptile": {
+      "refs": [
+        "hydra"
+      ],
+      "targetMoveSpeed": 2.6,
+      "reason": "Hydras: a massive two-hex many-headed reptile on short legs. The vanilla OE hydra (Dungeon) is the same creature and body plan; the only vanilla reference that fits.",
+      "moveType": "walk"
+    },
+    "small_flier": {
+      "moveType": "fly",
+      "refs": [
+        "pixie",
+        "twinkle",
+        "flicker",
+        "wasp"
+      ],
+      "targetMoveSpeed": 6.832,
+      "reason": "Tiny winged bodies (sprites, dragonflies, the vermin swarm). Pixie, twinkle, flicker and wasp are the vanilla fliers of that size; they dart at 6-7.33."
+    },
+    "medium_flier": {
+      "moveType": "fly",
+      "refs": [
+        "griffin",
+        "kitten_horn",
+        "vampire"
+      ],
+      "targetMoveSpeed": 6.333,
+      "reason": "One-hex fliers from man to horse size (gargoyles, harpies, wights, vampires, griffins, pegasi, genies, efreet, flying elementals, stormbirds, small dragons). Griffin, kitten_horn and vampire are the vanilla one-hex fliers of that size."
+    },
+    "large_flier": {
+      "moveType": "fly",
+      "refs": [
+        "angel",
+        "phoenix",
+        "dragon",
+        "black_dragon"
+      ],
+      "targetMoveSpeed": 6.75,
+      "reason": "Big two-hex fliers (dragons, angels, rocs, manticores, wyverns, couatls, firebirds, the ghost behemoth). Angel, phoenix, dragon and black dragon are the vanilla large fliers."
+    }
+  },
+  "units": {
+    "h3_orc_upg": "medium_humanoid_infantry",
+    "h3_wolf_rider_upg": "mounted_beast_rider",
+    "h3_goblin": "small_humanoid_infantry",
+    "h3_goblin_upg": "small_humanoid_infantry",
+    "h3_goblin_upg_alt": "small_humanoid_infantry",
+    "h3_ogre": "large_humanoid_brute",
+    "h3_ogre_upg": "large_humanoid_brute",
+    "h3_ogre_upg_alt": "large_humanoid_brute",
+    "h3_cyclops": "large_humanoid_brute",
+    "h3_cyclops_upg": "large_humanoid_brute",
+    "h3_cyclops_upg_alt": "large_humanoid_brute",
+    "h3_behemoth_upg": "large_beast_quadruped",
+    "h3_pixie": "small_flier",
+    "h3_pixie_upg": "small_flier",
+    "h3_pixie_upg_alt": "small_flier",
+    "h3_serpent_fly": "small_flier",
+    "h3_serpent_fly_upg": "small_flier",
+    "h3_serpent_fly_upg_alt": "small_flier",
+    "h3_imp_upg_alt": "small_flier",
+    "h3_air_elemental_upg_alt": "medium_flier",
+    "h3_ayssid": "medium_flier",
+    "h3_efreeti": "medium_flier",
+    "h3_efreeti_upg": "medium_flier",
+    "h3_efreeti_upg_alt": "medium_flier",
+    "h3_faerie_dragon": "medium_flier",
+    "h3_fangarm": "medium_flier",
+    "h3_fire_elemental_upg": "medium_flier",
+    "h3_fire_elemental_upg_alt": "medium_flier",
+    "h3_gargoyle": "medium_flier",
+    "h3_gargoyle_upg": "medium_flier",
+    "h3_gargoyle_upg_alt": "medium_flier",
+    "h3_genie": "medium_flier",
+    "h3_genie_upg": "medium_flier",
+    "h3_genie_upg_alt": "medium_flier",
+    "h3_gold_pegasus_upg_alt": "medium_flier",
+    "h3_griffin": "medium_flier",
+    "h3_griffin_upg": "medium_flier",
+    "h3_griffin_upg_alt": "medium_flier",
+    "h3_harpy": "medium_flier",
+    "h3_harpy_upg": "medium_flier",
+    "h3_harpy_upg_alt": "medium_flier",
+    "h3_pegasus": "medium_flier",
+    "h3_silver_pegasus": "medium_flier",
+    "h3_stormbird": "medium_flier",
+    "h3_stormbird_upg_alt": "medium_flier",
+    "h3_vampire": "medium_flier",
+    "h3_vampire_upg": "medium_flier",
+    "h3_vampire_upg_alt": "medium_flier",
+    "h3_wight": "medium_flier",
+    "h3_wight_upg": "medium_flier",
+    "h3_wight_upg_alt": "medium_flier",
+    "h3_angel": "large_flier",
+    "h3_angel_upg": "large_flier",
+    "h3_angel_upg_alt": "large_flier",
+    "h3_azure_dragon": "large_flier",
+    "h3_behemoth_upg_alt": "large_flier",
+    "h3_bone_dragon": "large_flier",
+    "h3_bone_dragon_upg": "large_flier",
+    "h3_bone_dragon_upg_alt": "large_flier",
+    "h3_couatl": "large_flier",
+    "h3_couatl_upg_alt": "large_flier",
+    "h3_crimson_couatl": "large_flier",
+    "h3_diamond_dragon_upg_alt": "large_flier",
+    "h3_firebird": "large_flier",
+    "h3_firebird_upg": "large_flier",
+    "h3_firebird_upg_alt": "large_flier",
+    "h3_gold_dragon": "large_flier",
+    "h3_green_dragon": "large_flier",
+    "h3_manticore": "large_flier",
+    "h3_manticore_upg": "large_flier",
+    "h3_manticore_upg_alt": "large_flier",
+    "h3_red_dragon": "large_flier",
+    "h3_red_dragon_upg": "large_flier",
+    "h3_red_dragon_upg_alt": "large_flier",
+    "h3_roc": "large_flier",
+    "h3_roc_upg": "large_flier",
+    "h3_roc_upg_alt": "large_flier",
+    "h3_rust_dragon": "large_flier",
+    "h3_wyvern": "large_flier",
+    "h3_wyvern_upg": "large_flier",
+    "h3_wyvern_upg_alt": "large_flier",
+    "h3_wolf_rider": "mounted_beast_rider",
+    "h3_orc_upg_alt": "medium_humanoid_infantry",
+    "h3_behemoth": "large_beast_quadruped",
+    "h3_gnoll": "medium_humanoid_infantry",
+    "h3_gnoll_upg": "medium_humanoid_infantry",
+    "h3_gnoll_upg_alt": "medium_humanoid_infantry",
+    "h3_lizardman": "medium_humanoid_infantry",
+    "h3_lizardman_upg": "medium_humanoid_infantry",
+    "h3_basilisk": "large_beast_quadruped",
+    "h3_basilisk_upg": "large_beast_quadruped",
+    "h3_basilisk_upg_alt": "large_beast_quadruped",
+    "h3_gorgon": "large_beast_quadruped",
+    "h3_gorgon_upg": "large_beast_quadruped",
+    "h3_gorgon_upg_alt": "large_beast_quadruped",
+    "h3_hydra": "multi_headed_reptile",
+    "h3_hydra_upg": "multi_headed_reptile",
+    "h3_hydra_upg_alt": "multi_headed_reptile"
+  },
+  "proposed": {
+    "h3_orc": "medium_humanoid_infantry"
+  },
+  "fliers": "A flier (Core units_logics stats.moveType \"fly\", and a HoMM3 flier in reference/homm3_fliers.json where it has a DEF-retarget lab unit) is normalized only in a moveType \"fly\" class, a walker only in a \"walk\" class. stride_match_glb.py does not stride match a flier: its Move is flown with no planted contact, and OE plays every Move clip at 0.8 x battleSpeed whatever the moveSpeed (vanilla pixie 6 and angel 7 fly one clip rate), so there is no native wing-cadence coupling to match. A flier's speed is a speed decision only.",
+  "notNormalized": {
+    "h3_crystal_dragon": "Core moveType fly but HoMM3 walker (reference/homm3_fliers.json): the two sources disagree; settle the class first.",
+    "h3_devil, h3_devil_upg, h3_devil_upg_alt, h3_troglodyte_upg_alt, h3_lizardman_upg_alt, h3_nymph, h3_nymph_upg_alt, h3_oceanid, h3_sandworm, h3_sandworm_upg_alt, h3_olgoi_khorkhoi": "HoMM3 flier/teleporter lab but Core moveType is not fly: the two sources disagree; settle the class first."
+  },
+  "proposedHeld": {
+    "h3_orc": "no stride-matched DEF-retarget delivery for this game sid (h3_orc is not in the Stronghold slice); its shipped Move would not be matched to the new speed"
+  }
+}

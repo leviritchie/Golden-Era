@@ -1,0 +1,553 @@
+{
+  "sourceMesh": "artifacts/meshy_downloads/h3_griffin_folded_smartrigged.glb",
+  "meshNote": "2026-10-05 user-approved folded-wing ground mesh: Meshy-7 image-to-3d (task 01a10e44, 30 cr, unit cap 80) from artifacts/creature_aaa_3d_upscale/h3_griffin.png (DEF 02_00 silhouette IoU 0.914); provenance in artifacts/meshy_downloads/h3_griffin_folded_smartrigged.provenance.json, identity pinned as identity_reviews.json defRetargetMesh. Upright rampant, wings folded behind, left talon raised. Built on the pre-84835aca85 rig recipe (rigid one-bone wings, castle_refine) re-seated on this mesh; the per-DEF-frame body motion comes from glbPatch. The spread-wing h3_griffin_smartrigged.glb (01a0e4b2) stays the unit's own/coverage mesh and the flight-swap source.",
+  "unit": "h3_griffin",
+  "joints": {
+    "Hips": [
+      0,
+      0.12,
+      0.6
+    ],
+    "Spine": [
+      0,
+      0.06,
+      0.76
+    ],
+    "Spine1": [
+      0,
+      -0.02,
+      0.92
+    ],
+    "Spine2": [
+      0,
+      -0.08,
+      1.08
+    ],
+    "Neck": [
+      0.01,
+      -0.18,
+      1.28
+    ],
+    "Head": [
+      0.03,
+      -0.28,
+      1.48
+    ],
+    "HeadTop_End": [
+      0.03,
+      -0.55,
+      1.5
+    ],
+    "LeftShoulder": [
+      0.06,
+      -0.16,
+      1.12
+    ],
+    "LeftArm": [
+      0.16,
+      -0.28,
+      1.02
+    ],
+    "LeftForeArm": [
+      0.2,
+      -0.44,
+      0.84
+    ],
+    "LeftHand": [
+      0.21,
+      -0.6,
+      1.1
+    ],
+    "LeftHand_End": [
+      0.21,
+      -0.74,
+      1.32
+    ],
+    "RightShoulder": [
+      -0.06,
+      -0.16,
+      1.12
+    ],
+    "RightArm": [
+      -0.16,
+      -0.27,
+      1.0
+    ],
+    "RightForeArm": [
+      -0.17,
+      -0.38,
+      0.84
+    ],
+    "RightHand": [
+      -0.13,
+      -0.48,
+      0.71
+    ],
+    "RightHand_End": [
+      -0.12,
+      -0.53,
+      0.6
+    ],
+    "LeftUpLeg": [
+      0.17,
+      0.1,
+      0.62
+    ],
+    "LeftLeg": [
+      0.21,
+      -0.06,
+      0.36
+    ],
+    "LeftFoot": [
+      0.24,
+      0.03,
+      0.15
+    ],
+    "LeftToeBase": [
+      0.25,
+      -0.18,
+      0.06
+    ],
+    "LeftToe_End": [
+      0.26,
+      -0.33,
+      0.03
+    ],
+    "RightUpLeg": [
+      -0.16,
+      0.14,
+      0.6
+    ],
+    "RightLeg": [
+      -0.16,
+      0.12,
+      0.36
+    ],
+    "RightFoot": [
+      -0.18,
+      0.3,
+      0.14
+    ],
+    "RightToeBase": [
+      -0.19,
+      0.17,
+      0.05
+    ],
+    "RightToe_End": [
+      -0.2,
+      0.04,
+      0.03
+    ]
+  },
+  "wingMaxDeg": 60,
+  "wings": [
+    {
+      "bone": "RightWing",
+      "head": [
+        -0.15,
+        0.12,
+        1.25
+      ],
+      "tail": [
+        -0.33,
+        0.38,
+        1.75
+      ],
+      "sign": 1,
+      "region": {
+        "box": [
+          [
+            -0.6,
+            0.12,
+            0.3
+          ],
+          [
+            -0.1,
+            0.95,
+            1.95
+          ]
+        ],
+        "exclude": [
+          {
+            "box": [
+              [
+                -0.6,
+                -0.3,
+                0.0
+              ],
+              [
+                0.6,
+                0.42,
+                0.85
+              ]
+            ]
+          },
+          {
+            "segments": [
+              [
+                [
+                  0.0,
+                  0.27,
+                  0.45
+                ],
+                [
+                  0.03,
+                  0.42,
+                  0.42
+                ]
+              ],
+              [
+                [
+                  0.03,
+                  0.42,
+                  0.42
+                ],
+                [
+                  0.06,
+                  0.56,
+                  0.47
+                ]
+              ],
+              [
+                [
+                  0.06,
+                  0.56,
+                  0.47
+                ],
+                [
+                  0.07,
+                  0.62,
+                  0.6
+                ]
+              ]
+            ],
+            "radius": 0.07
+          },
+          {
+            "box": [
+              [
+                -0.14,
+                0.0,
+                0.85
+              ],
+              [
+                0.14,
+                0.25,
+                1.35
+              ]
+            ]
+          },
+          {
+            "box": [
+              [
+                -0.6,
+                0,
+                0
+              ],
+              [
+                0.6,
+                0.55,
+                0.45
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "bone": "LeftWing",
+      "head": [
+        0.15,
+        0.12,
+        1.25
+      ],
+      "tail": [
+        0.33,
+        0.38,
+        1.75
+      ],
+      "sign": -1,
+      "region": {
+        "box": [
+          [
+            0.1,
+            0.12,
+            0.3
+          ],
+          [
+            0.6,
+            0.95,
+            1.95
+          ]
+        ],
+        "exclude": [
+          {
+            "box": [
+              [
+                -0.6,
+                -0.3,
+                0.0
+              ],
+              [
+                0.6,
+                0.42,
+                0.85
+              ]
+            ]
+          },
+          {
+            "segments": [
+              [
+                [
+                  0.0,
+                  0.27,
+                  0.45
+                ],
+                [
+                  0.03,
+                  0.42,
+                  0.42
+                ]
+              ],
+              [
+                [
+                  0.03,
+                  0.42,
+                  0.42
+                ],
+                [
+                  0.06,
+                  0.56,
+                  0.47
+                ]
+              ],
+              [
+                [
+                  0.06,
+                  0.56,
+                  0.47
+                ],
+                [
+                  0.07,
+                  0.62,
+                  0.6
+                ]
+              ]
+            ],
+            "radius": 0.07
+          },
+          {
+            "box": [
+              [
+                -0.14,
+                0.0,
+                0.85
+              ],
+              [
+                0.14,
+                0.25,
+                1.35
+              ]
+            ]
+          },
+          {
+            "box": [
+              [
+                -0.6,
+                0,
+                0
+              ],
+              [
+                0.6,
+                0.55,
+                0.45
+              ]
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "extensions": [
+    "castle_refine"
+  ],
+  "castleRefine": {
+    "params": [
+      "dx",
+      "dy",
+      "roll",
+      "wing"
+    ],
+    "limits": {
+      "dx": 60,
+      "dy": 120,
+      "roll": 30,
+      "wing": 90
+    }
+  },
+  "props": [
+    {
+      "name": "tail",
+      "bone": "Hips",
+      "segments": [
+        [
+          [
+            0.0,
+            0.27,
+            0.45
+          ],
+          [
+            0.03,
+            0.42,
+            0.42
+          ]
+        ],
+        [
+          [
+            0.03,
+            0.42,
+            0.42
+          ],
+          [
+            0.06,
+            0.56,
+            0.47
+          ]
+        ],
+        [
+          [
+            0.06,
+            0.56,
+            0.47
+          ],
+          [
+            0.07,
+            0.62,
+            0.6
+          ]
+        ]
+      ],
+      "radius": 0.045
+    }
+  ],
+  "deliveryDensify": {
+    "clips": [
+      "MoveStart",
+      "Move",
+      "MoveEnd"
+    ],
+    "keysPerSpan": 3
+  },
+  "glbPatch": {
+    "reason": "2026-10-08 authenticity a26 (lane-A): CRGRIF is a recolour of CGRIFF (same animation frame for frame), so the passed h3_royal_griffin motion is transferred bone by bone (V:/olden_port_work/authenticity/h3_griffin/xfer/xfer2.py, idle-delta mode: each shared bone takes the royal's world-rotation change since Unit_Idle key 0 on top of this unit's own approved Idle key 0; Hips path scaled by the height ratio). Flight clips keep the beak at its idle pitch and reach the fore talons forward under the head as the DEF does. The rigid folded wings keep the 2026-10-05 fit's own local keys (its DEF-phased beat), now carried by the new body. Unit_Idle is not transferred (the approved build idle, untouched, keeps its closed loop). Replaces h3_griffin_folded_body.json. Wing spread (Defence/Hitted/Death/MoveStart fan) is not reachable on the folded mesh: a wing_chain build tears 1594 -> 5340 edges at full spread and still over at 25%; that needs the parked ground/flight mesh swap (user decision).",
+    "ops": [
+      {
+        "op": "diffuseWeights",
+        "bones": [
+          "LeftArm",
+          "RightArm"
+        ],
+        "iterations": 3,
+        "alpha": 0.5,
+        "note": "a26 mesh repair: soften the upper-foreleg weight boundary so the forward reach in flight does not tear (gate 1467 -> 1455 <= input 1458)"
+      },
+      {
+        "op": "keyRotations",
+        "table": "tools/homm3_glb_patch/key_rotations/h3_griffin_xfer_rot.json",
+        "sha256": "833349863a58de314c8c6dfd999cc825f130fdaa169bdecad001bbaeffdf562f",
+        "regrid": true
+      },
+      {
+        "op": "keyRotations",
+        "table": "tools/homm3_glb_patch/key_rotations/h3_griffin_xfer_rot2.json",
+        "sha256": "fa07d41f9d507c623191b87fc6167fb5c955848a3a5f1f93f347b81df8bd3356",
+        "regrid": true
+      },
+      {
+        "op": "keyTranslations",
+        "table": "tools/homm3_glb_patch/key_rotations/h3_griffin_xfer_tr.json",
+        "sha256": "321ab1b9ba865d2e4b6d7e1594fc8c8be3970fe1bdf80b347f61c7efe4032f37",
+        "regrid": true
+      },
+      {
+        "op": "keyTranslations",
+        "table": "tools/homm3_glb_patch/key_rotations/h3_griffin_xfer_tr2.json",
+        "sha256": "fa7c6a011967150c541ab5a5473a1dbf36e1b10f1f4604134f83e8805d83c13d",
+        "regrid": true
+      },
+      {
+        "op": "keyTranslations",
+        "table": "tools/homm3_glb_patch/key_rotations/h3_griffin_xfer_tr3.json",
+        "sha256": "1470bc1d8393a9e23c9c5c773a5a7c1f35e3af3a0044e8b15392995c6e1575f9",
+        "regrid": true
+      }
+    ]
+  },
+  "wingChain": {
+    "wings": [
+      {
+        "bone": "LeftWing",
+        "side": 1,
+        "points": [
+          [
+            0.15,
+            0.12,
+            1.25
+          ],
+          [
+            0.3537,
+            0.3766,
+            1.6968
+          ],
+          [
+            0.269,
+            0.5194,
+            1.2154
+          ],
+          [
+            0.191,
+            0.6507,
+            0.7726
+          ],
+          [
+            0.1164,
+            0.7764,
+            0.349
+          ]
+        ]
+      },
+      {
+        "bone": "RightWing",
+        "side": -1,
+        "points": [
+          [
+            -0.15,
+            0.12,
+            1.25
+          ],
+          [
+            -0.3377,
+            0.3383,
+            1.7419
+          ],
+          [
+            -0.3028,
+            0.4666,
+            1.2364
+          ],
+          [
+            -0.2706,
+            0.5846,
+            0.7714
+          ],
+          [
+            -0.2399,
+            0.6975,
+            0.3265
+          ]
+        ]
+      }
+    ],
+    "note": "2026-10-07 authenticity pass (lane-A): explicit per-wing chain points for the folded mesh (head -> wrist (top 2% of the wing cut by height) -> tip (farthest 1% from the wrist below it), sampled at ratios 0/.3/.55/.78/1 of arc length; wrist at arc .285 both sides, L/R mirror gap <= 0.15). The automatic SVD chain is ambiguous on a folded wing (far reach L .856 vs R .527). Read by wing_lengthen.py now; ext/wing_chain.py builds chain bones from the same points only once 'wing_chain' is in extensions (this unit still builds with castle_refine)."
+  }
+}

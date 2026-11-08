@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom Conflux law profiles that require explicit elemental family mapping. This records authored elemental-family identity only; it does not prove dynamic family selection, spell/object family correlation, battle stack identity, day-phase choice, reveal target selection, cooldown mutation, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresElementalFamilyMappingProfiles": true,
+    "confluxOnly": true,
+    "familyMappingMustComeFromConfluxManifestAndUnitFamilyTags": true,
+    "pixieAndFirebirdAreNotElementalFamilyMappings": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredStaticEvidence": {
+    "manifestPath": "custom_factions/homm3_conflux.json",
+    "unitFamilyTagsPath": "custom_factions/unit_family_tags.json",
+    "factionSid": "homm3_conflux",
+    "requiredElementalFamilies": {
+      "air": [
+        "h3_air_elemental",
+        "h3_air_elemental_upg",
+        "h3_air_elemental_upg_alt"
+      ],
+      "water": [
+        "h3_water_elemental",
+        "h3_water_elemental_upg",
+        "h3_water_elemental_upg_alt"
+      ],
+      "fire": [
+        "h3_fire_elemental",
+        "h3_fire_elemental_upg",
+        "h3_fire_elemental_upg_alt"
+      ],
+      "earth": [
+        "h3_earth_elemental",
+        "h3_earth_elemental_upg",
+        "h3_earth_elemental_upg_alt"
+      ],
+      "psychic": [
+        "h3_psychic_elemental",
+        "h3_psychic_elemental_upg",
+        "h3_psychic_elemental_upg_alt"
+      ]
+    },
+    "excludedConfluxBaseSids": [
+      "h3_pixie",
+      "h3_firebird"
+    ],
+    "requiredFact": "elemental=yes"
+  },
+  "requiredRuntimeProof": [
+    "active elemental family selection proof",
+    "live battle stack or party unit SID proof",
+    "spell school or spell SID to elemental family correlation proof",
+    "object SID or category to elemental family correlation proof",
+    "day phase to elemental family correlation proof",
+    "law owner to selected family correlation proof",
+    "idempotent family-specific effect application proof"
+  ],
+  "contracts": {
+    "conflux.day-phase-elemental-calendar": {
+      "mappingKinds": [
+        "calendar-day-phase-elemental-family",
+        "explicit-conflux-elemental-family-map"
+      ],
+      "companionPredicates": [
+        "RequiresBattleStartOrRoundEvent"
+      ],
+      "forbiddenSubstitutes": [
+        "Conflux faction membership counted as elemental family mapping",
+        "any elemental unit counted without family identity",
+        "Pixie counted as elemental family mapping",
+        "Firebird counted as elemental family mapping",
+        "SID substring elemental inference",
+        "day phase counted without explicit family correlation"
+      ],
+      "notes": "Conflux day-phase elemental calendar requires explicit authored elemental family mapping and separate day/battle timing proof; Conflux membership or day phase alone is not enough."
+    },
+    "conflux.elemental-family-cooldown": {
+      "mappingKinds": [
+        "spell-cooldown-elemental-family",
+        "explicit-conflux-elemental-family-map"
+      ],
+      "companionPredicates": [
+        "RequiresSpellSchoolOrSidClass"
+      ],
+      "forbiddenSubstitutes": [
+        "Conflux faction membership counted as elemental family mapping",
+        "any elemental unit counted without family identity",
+        "Pixie counted as elemental family mapping",
+        "Firebird counted as elemental family mapping",
+        "SID substring elemental inference",
+        "spell school counted without explicit elemental family correlation"
+      ],
+      "notes": "Conflux elemental-family cooldown requires explicit authored elemental family mapping plus separate spell school/SID classification proof; spell school alone is not family mapping."
+    },
+    "conflux.elemental-site-reveal": {
+      "mappingKinds": [
+        "vision-elemental-site-family",
+        "explicit-conflux-elemental-family-map"
+      ],
+      "companionPredicates": [
+        "RequiresFogRevealMutation",
+        "RequiresObjectSidOrCategoryAllowlist"
+      ],
+      "forbiddenSubstitutes": [
+        "Conflux faction membership counted as elemental family mapping",
+        "any elemental unit counted without family identity",
+        "Pixie counted as elemental family mapping",
+        "Firebird counted as elemental family mapping",
+        "SID substring elemental inference",
+        "elemental-themed object counted without explicit family correlation"
+      ],
+      "notes": "Conflux elemental-site reveal requires explicit authored elemental family mapping plus separate object allowlist and fog reveal proof; elemental theme alone is not family mapping."
+    }
+  }
+}

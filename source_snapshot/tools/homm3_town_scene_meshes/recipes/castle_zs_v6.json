@@ -1,0 +1,41 @@
+{
+ "schema": "town_full3d_recipe.v2",
+ "faction": "castle",
+ "seed": "carve_v1",
+ "candidate": "zs_v6",
+ "note": "zs_v6 (2026-10-01): zs_v5's recipe under schema v2 on a re-carved seed (user on zs_v5 in game: cottages float, meshes not lined up with their textures). Seed carve_v1 = rx_ldi_zone_old_nfix3_cloth, LDI unlayered, with the houses-lane carve fix (no pit under any footprint: town_full3d_houses.py group_ground) carried into its terrain by town_full3d_carve_delta.py (before carve_repro / after carve_fixstage: props_v1 restaged today with the fix off / on), so the LDI runs here (fromPreLdi false). v2 adds: every build state of the HoMM3 building tree (32 for Castle); ground contact (town_full3d_ground_contact: piece slide, else the ground fill, else fail closed; rest frame 0 px in every state); the unseen-face term repaired by rule planar; `final` at the reachable range before install.",
+ "ldi": {
+  "pieces": [
+   "Mesh_Terrain"
+  ],
+  "cut": "zone",
+  "backRule": "vlb",
+  "vlbK": 2.0,
+  "keepRounds": 0,
+  "reachLoop": 12,
+  "fromPreLdi": false
+ },
+ "backstop": {
+  "K": 2.0,
+  "stepPx": 4,
+  "groundSrcM": 1.0
+ },
+ "repair": {
+  "rules": [
+   "drop",
+   "card",
+   "flap",
+   "planar"
+  ],
+  "rounds": 8
+ },
+ "certificate": {
+  "loop": 12,
+  "extraPoses": [
+   "loop_060",
+   "loop_096",
+   "loop_240",
+   "loop_336"
+  ]
+ }
+}

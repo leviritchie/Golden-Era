@@ -1,0 +1,238 @@
+{
+ "unit": "h3_guardsman",
+ "joints": {
+  "Hips": [
+   0.031,
+   0.138,
+   0.727
+  ],
+  "Spine": [
+   0.031,
+   0.153,
+   0.853
+  ],
+  "Spine1": [
+   0.031,
+   0.168,
+   0.979
+  ],
+  "Spine2": [
+   0.031,
+   0.185,
+   1.121
+  ],
+  "Neck": [
+   0.031,
+   0.198,
+   1.232
+  ],
+  "Head": [
+   0.024,
+   0.165,
+   1.305
+  ],
+  "HeadTop_End": [
+   0.071,
+   0.264,
+   1.624
+  ],
+  "LeftShoulder": [
+   0.058,
+   0.138,
+   1.225
+  ],
+  "LeftArm": [
+   0.204,
+   0.152,
+   1.245
+  ],
+  "LeftForeArm": [
+   0.336,
+   0.178,
+   1.046
+  ],
+  "LeftHand": [
+   0.29,
+   -0.008,
+   0.933
+  ],
+  "LeftHand_End": [
+   0.271,
+   -0.083,
+   0.887
+  ],
+  "RightShoulder": [
+   -0.009,
+   0.138,
+   1.225
+  ],
+  "RightArm": [
+   -0.148,
+   0.152,
+   1.245
+  ],
+  "RightForeArm": [
+   -0.241,
+   0.218,
+   1.046
+  ],
+  "RightHand": [
+   -0.361,
+   0.019,
+   0.96
+  ],
+  "RightHand_End": [
+   -0.404,
+   -0.054,
+   0.928
+  ],
+  "LeftUpLeg": [
+   0.117,
+   0.138,
+   0.754
+  ],
+  "LeftLeg": [
+   0.184,
+   -0.048,
+   0.468
+  ],
+  "LeftFoot": [
+   0.197,
+   0.032,
+   0.096
+  ],
+  "LeftToeBase": [
+   0.197,
+   -0.014,
+   0.037
+  ],
+  "LeftToe_End": [
+   0.197,
+   -0.061,
+   -0.023
+  ],
+  "RightUpLeg": [
+   -0.055,
+   0.138,
+   0.754
+  ],
+  "RightLeg": [
+   -0.122,
+   0.092,
+   0.422
+  ],
+  "RightFoot": [
+   -0.135,
+   0.331,
+   0.096
+  ],
+  "RightToeBase": [
+   -0.135,
+   0.205,
+   0.023
+  ],
+  "RightToe_End": [
+   -0.135,
+   0.152,
+   0.023
+  ]
+ },
+ "props": [
+  {
+   "name": "sword",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.36,
+      0.0,
+      0.97
+     ],
+     [
+      -0.147,
+      -0.468,
+      1.677
+     ]
+    ]
+   ],
+   "radius": 0.07
+  },
+  {
+   "name": "guard",
+   "bone": "RightHand",
+   "sphere": [
+    [
+     -0.33,
+     -0.08,
+     1.06
+    ],
+    0.06
+   ]
+  },
+  {
+   "name": "shield",
+   "bone": "LeftForeArm",
+   "box": [
+    [
+     0.215,
+     -0.26,
+     0.64
+    ],
+    [
+     0.45,
+     0.24,
+     1.13
+    ]
+   ],
+   "exclude": [
+    {
+     "box": [
+      [
+       0.05,
+       0.17,
+       0.5
+      ],
+      [
+       0.3,
+       0.6,
+       1.3
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "castle_refine"
+ ],
+ "castleRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ],
+  "aimRange": 120,
+  "aimFromRest": true
+ },
+ "glbPatch": {
+  "reason": "authenticity pass (lane B): Defence re-authored by motion intent against the DEF. The guardsman pulls the shield up before his face (shield face toward the enemy, rim at helm height, f2-f8) and drops the sword low at his right side with the blade angled down toward the enemy, then returns to rest (f9-f10); the base flung the shield out behind the left shoulder and thrust the sword out horizontally to his right, so the shield vanished at the hold. Feet stay planted (no DEF step-back), consistent with the swordsman. Other clips judged against the DEF and kept: Idle, Move*, Mouseover, AttackFront (thrust), Hitted (recoil, sword flung back), Death (falls back rather than the DEF's crumple; same intent). Helm roll (2026-10-08 user report from in game: the head tilts to his right when walking): the Head is counter-rolled so the helm's up axis stays in the vertical plane of travel in Move (shipped roll up to +8.7 deg to his right), MoveStart (+11), MoveEnd (+12) and Mouseover (-9, to his left). The pitch keeps its authored per-frame value; only the sideways roll is removed. Idle untouched (roll within 3 deg except f7 +6). Tear gate over master targets 1236 -> 1193, worst edge unchanged (9.523). Helm pitch (2026-10-08, battle-view tilt): the Move/Mouseover helm was tipped back 24-30 deg, which reads as a sideways tilt in the 3/4 battle camera; Head now held near-upright (Idle-level ~6 deg back) through Move and Mouseover, matching the DEF's level helm.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_guardsman_pose_rot.json",
+    "sha256": "f5a3aa68ad8cede9f83624b3f8dc534d3324e295033f6b286b384b018ca3af07",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_guardsman_pose_rot2.json",
+    "sha256": "7a24149246fb67253530568f40942410225c9df57ff6557d4a3f0f6c31ad9f0b",
+    "regrid": true
+   }
+  ]
+ }
+}

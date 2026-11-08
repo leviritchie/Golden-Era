@@ -1,0 +1,224 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "Festival of Life continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub festival; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_12_ab_stronghold_festival",
+    "campaignTitle": "Festival of Life",
+    "campaignEntry": "festival.h3c",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "missionConfigPrefix": "homm3_ab_stronghold",
+    "defaultSpawn": {
+      "factionSid": "homm3_stronghold",
+      "heroSid": "homm3_stronghold_hero_17"
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart).",
+    "regionPixels": {
+      "for_the_throne": [
+        80.0,
+        220.0
+      ],
+      "clan_war": [
+        320.0,
+        220.0
+      ],
+      "taming_of_the_wild": [
+        560.0,
+        220.0
+      ],
+      "razor_claw": [
+        800.0,
+        220.0
+      ]
+    },
+    "missionSpawns": {
+      "razor_claw": {
+        "heroSid": "homm3_stronghold_hero_17",
+        "factionSid": "homm3_stronghold"
+      },
+      "taming_of_the_wild": {
+        "heroSid": "homm3_stronghold_hero_17",
+        "factionSid": "homm3_stronghold"
+      },
+      "clan_war": {
+        "heroSid": "homm3_stronghold_hero_17",
+        "factionSid": "homm3_stronghold"
+      },
+      "for_the_throne": {
+        "heroSid": "homm3_stronghold_hero_17",
+        "factionSid": "homm3_stronghold"
+      }
+    }
+  },
+  "storyHubMapSidOverrides": {
+    "for_the_throne": "h3_stronghold_for_the_throne_raw_translation",
+    "clan_war": "h3_stronghold_clan_war_raw_translation",
+    "taming_of_the_wild": "h3_stronghold_taming_of_the_wild_raw_translation",
+    "razor_claw": "h3_stronghold_razor_claw_raw_translation",
+    "choiceReason": "Festival of Life missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "razor_claw",
+      "toMissionId": "taming_of_the_wild",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 12,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=12 for razor_claw (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_stronghold_razor_claw_raw_translation",
+        "to": "h3_stronghold_taming_of_the_wild_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "taming_of_the_wild",
+      "toMissionId": "clan_war",
+      "sourceBlockIndex": 2,
+      "nextBlockIndex": 3,
+      "levelCap": 20,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=20 for taming_of_the_wild (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_stronghold_taming_of_the_wild_raw_translation",
+        "to": "h3_stronghold_clan_war_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "clan_war",
+      "toMissionId": "for_the_throne",
+      "sourceBlockIndex": 3,
+      "nextBlockIndex": 4,
+      "levelCap": 30,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=30 for clan_war (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_stronghold_clan_war_raw_translation",
+        "to": "h3_stronghold_for_the_throne_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "razor_claw",
+    "taming_of_the_wild",
+    "clan_war",
+    "for_the_throne"
+  ],
+  "missionTitles": {
+    "for_the_throne": "For the Throne",
+    "clan_war": "Clan War",
+    "taming_of_the_wild": "Taming of the wild",
+    "razor_claw": "Razor Claw"
+  },
+  "missionDescriptions": {
+    "for_the_throne": "You have three months to depose the king while keeping Kilgor alive. This is for the throne of Krewlod so do not fail.",
+    "clan_war": "Three other clans also fight for the right to have their nominee be the king. Defeat them all without losing Kilgor and his three starting allies or lose the game. Only...",
+    "taming_of_the_wild": "To prove you can keep land safe for the citizens you must defeat all of the creatures inhabiting this area inside of four months. If Kilgor or any of his lieutenants are...",
+    "razor_claw": "The task of killing Razor Claw has been given to you. Prove yourself and defeat the Ancient Behemoth in three months or lose your chance at becoming King. If Kilgor is l..."
+  },
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Dedicated AB/SoD MapImage bake",
+    "Town growth / negative resource timed-event fidelity"
+  ],
+  "videoContract": {
+    "status": "mission_clips_wired_hub_still_only",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": null,
+    "hubFirstShowOmitReason": "RoE parity: hub hover strip is selection-still only; mission pins PlayVideo when composed MP4 meets contract.",
+    "requireComposedAudio": true,
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "requiredMp4RelativeToStreamingAssets": null,
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_12_ab_stronghold_festival/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "stillArtifact": "artifacts/campaign_port_poc/ab_sod_campaigns/storyhub_visual/festival_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.5,
+      "focusY": 0.42,
+      "cropReason": "Battlefield corpse mound and clan flags under the fire sky",
+      "cropsCatalog": "scenarios/ab_sod_campaigns/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "for_the_throne": "H3ABfl4",
+      "clan_war": "H3ABfl3",
+      "taming_of_the_wild": "H3ABfl2",
+      "razor_claw": "H3ABfl1"
+    },
+    "actionOrder": "PlayVideo (when composed MP4 ready) then OpenMissionsPrologue on each mission pin; hub firstShowActions stay empty",
+    "failClosed": "festival hub firstShowActions must stay empty (hubFirstShowPlayVideo=false). Mission PlayVideo requires StreamingAssets/video/{{clip}}.mp4 + softsub sidecar meeting compose contract; otherwise omit PlayVideo and keep prologue."
+  }
+}

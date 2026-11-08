@@ -1,0 +1,1872 @@
+{
+ "schema": "homm3_map_object_anim_coverage.v1",
+ "owner": "docs/homm3_map_object_animation_audit.md",
+ "censusSchema": "homm3_map_object_anim_census.v1",
+ "lanes": {
+  "inventory_row": "animation planned/delivered per map_building_anim_inventory.json",
+  "native_covered": "shown as a native Olden Era object that has its own Animator or ParticleSystems",
+  "vanilla_style_effect": "smoke/fire/glow/water planned per docs/olden_era_vanilla_vfx_style.md (no DEF flipbooks)",
+  "bob": "whole object floats/bobs on water; needs a presentation that shows the object",
+  "creature_deferred": "a creature moves (swan); not a building lane",
+  "not_presented": "the translated map draws nothing (or unrelated scenery) for this object; animation is moot until it is presented"
+ },
+ "rows": [
+  {
+   "id": "dwelling_and_town_inventory_rows",
+   "object": "creature dwellings and towns with a map_building_anim_inventory row",
+   "defs": [
+    "avgair0.def",
+    "avgbhmt0.def",
+    "avgdfly0.def",
+    "avgefre0.def",
+    "avgelp.def",
+    "avgerth0.def",
+    "avgfbrd.def",
+    "avgfire0.def",
+    "avggogs0.def",
+    "avggolm0.def",
+    "avggrem0.def",
+    "avghalf.def",
+    "avghydr0.def",
+    "avgimp0.def",
+    "avgpega0.def",
+    "avgpit0.def",
+    "avgpixie.def",
+    "avgrdrg0.def",
+    "avgwatr0.def"
+   ],
+   "frames": {
+    "avgair0.def": 8,
+    "avgbhmt0.def": 8,
+    "avgdfly0.def": 8,
+    "avgefre0.def": 5,
+    "avgelp.def": 21,
+    "avgerth0.def": 8,
+    "avgfbrd.def": 21,
+    "avgfire0.def": 8,
+    "avggogs0.def": 5,
+    "avggolm0.def": 20,
+    "avggrem0.def": 16,
+    "avghalf.def": 7,
+    "avghydr0.def": 12,
+    "avgimp0.def": 8,
+    "avgpega0.def": 10,
+    "avgpit0.def": 8,
+    "avgpixie.def": 9,
+    "avgrdrg0.def": 6,
+    "avgwatr0.def": 8
+   },
+   "placements": 317,
+   "homm3Animates": true,
+   "presentation": "our_mesh_or_billboard",
+   "homm3MovingParts": [],
+   "lane": "inventory_row",
+   "note": "motion parts, label and lane live in map_building_anim_inventory.json (MOTION_KINDS); see docs/homm3_map_object_animation_audit.md Part A"
+  },
+  {
+   "id": "sod_conflux_elemental_dwellings",
+   "object": "SoD elemental dwellings (air/earth/fire/water, object 17/69-72)",
+   "defs": [
+    "avg2ela.def",
+    "avg2ele.def",
+    "avg2elf.def",
+    "avg2elw.def"
+   ],
+   "frames": {
+    "avg2ela.def": 15,
+    "avg2ele.def": 8,
+    "avg2elf.def": 8,
+    "avg2elw.def": 8
+   },
+   "placements": 50,
+   "homm3Animates": true,
+   "presentation": "our_mesh",
+   "homm3MovingParts": [
+    {
+     "part": "elemental swirl / flame / ripple",
+     "type": "effect"
+    }
+   ],
+   "lane": "inventory_row",
+   "note": "placed under the conflux dwelling SIDs, so the map shows the HotA conflux mesh (AVGair0/AVGerth0/AVGfire0/AVGwatr0 rows) and inherits that row's plan"
+  },
+  {
+   "id": "elemental_conflux_multi_dwelling",
+   "object": "Elemental Conflux (object 20/0)",
+   "defs": [
+    "avgelem0.def"
+   ],
+   "frames": {
+    "avgelem0.def": 8
+   },
+   "placements": 5,
+   "homm3Animates": true,
+   "presentation": "our_mesh",
+   "homm3MovingParts": [
+    {
+     "part": "fire bowl",
+     "type": "fire"
+    },
+    {
+     "part": "water fountain",
+     "type": "water"
+    },
+    {
+     "part": "air swirl",
+     "type": "glow"
+    }
+   ],
+   "lane": "inventory_row",
+   "note": "placed as homm3_landon_barracks_conflux_7, which shows the AVGelp (magic elemental) mesh; the elemental-conflux look itself is not presented"
+  },
+  {
+   "id": "faerie_dragon_dwelling",
+   "object": "Faerie dragon dwelling (object 17/64)",
+   "defs": [
+    "avgfdrg.def"
+   ],
+   "frames": {
+    "avgfdrg.def": 8
+   },
+   "placements": 1,
+   "homm3Animates": true,
+   "presentation": "our_mesh",
+   "homm3MovingParts": [
+    {
+     "part": "sparkles over the mushroom houses",
+     "type": "glow"
+    }
+   ],
+   "lane": "inventory_row",
+   "note": "placed as homm3_landon_barracks_rampart_7, which shows the static AVGgdrg0 (dragon cliffs) mesh; sparkles lost with the substitution"
+  },
+  {
+   "id": "towns_fortress_inferno_hota",
+   "object": "Fortress / Inferno towns (HotA x variants)",
+   "defs": [
+    "avcftrx0.def",
+    "avcinfx0.def"
+   ],
+   "frames": {
+    "avcftrx0.def": 20,
+    "avcinfx0.def": 9
+   },
+   "placements": 75,
+   "homm3Animates": true,
+   "presentation": "our_mesh",
+   "homm3MovingParts": [
+    {
+     "part": "window/brazier glow",
+     "type": "fire"
+    }
+   ],
+   "lane": "inventory_row",
+   "note": "shown as homm3_fortress_city / homm3_inferno_city meshes = the capitol inventory rows"
+  },
+  {
+   "id": "mine_alchemist",
+   "object": "Alchemist's lab (mine 53/1)",
+   "defs": [
+    "avmalch0.def",
+    "avmalcs0.def"
+   ],
+   "frames": {
+    "avmalch0.def": 8,
+    "avmalcs0.def": 8
+   },
+   "placements": 306,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/mine_mercury"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "coloured window glow flicker",
+     "type": "glow"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native mine_mercury clone (Animator ichor_idle)"
+  },
+  {
+   "id": "mine_crystal",
+   "object": "Crystal cavern mine (53/4)",
+   "defs": [
+    "avmcrdr0.def",
+    "avmcrds0.def",
+    "avmcrgr0.def",
+    "avmcrrf0.def",
+    "avmcrsn0.def",
+    "avmcrsu0.def",
+    "avmcrsw0.def",
+    "avmcrvo0.def",
+    "avmcrys0.def"
+   ],
+   "frames": {
+    "avmcrdr0.def": 16,
+    "avmcrds0.def": 16,
+    "avmcrgr0.def": 16,
+    "avmcrrf0.def": 16,
+    "avmcrsn0.def": 16,
+    "avmcrsu0.def": 16,
+    "avmcrsw0.def": 16,
+    "avmcrvo0.def": 16,
+    "avmcrys0.def": 16
+   },
+   "placements": 308,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/mine_crystals"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "crystal glints",
+     "type": "glow"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native mine_crystals clone (Animator firmament_splint_ctrl)"
+  },
+  {
+   "id": "mine_gems",
+   "object": "Gem pond (53/5)",
+   "defs": [
+    "avmgedr0.def",
+    "avmgelv0.def",
+    "avmgems0.def",
+    "avmgerf0.def",
+    "avmgesn0.def"
+   ],
+   "frames": {
+    "avmgedr0.def": 16,
+    "avmgelv0.def": 16,
+    "avmgems0.def": 16,
+    "avmgerf0.def": 16,
+    "avmgesn0.def": 16
+   },
+   "placements": 293,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/mine_gemstones"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "gem glints",
+     "type": "glow"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native mine_gemstones clone (Animator gems_mine_ctrl)"
+  },
+  {
+   "id": "mine_gold",
+   "object": "Gold mine (53/6)",
+   "defs": [
+    "avmgodr0.def",
+    "avmgods0.def",
+    "avmgogr0.def",
+    "avmgold0.def",
+    "avmgorf0.def",
+    "avmgosb0.def",
+    "avmgosn0.def",
+    "avmgosw0.def",
+    "avmgovo0.def"
+   ],
+   "frames": {
+    "avmgodr0.def": 16,
+    "avmgods0.def": 16,
+    "avmgogr0.def": 16,
+    "avmgold0.def": 16,
+    "avmgorf0.def": 16,
+    "avmgosb0.def": 16,
+    "avmgosn0.def": 16,
+    "avmgosw0.def": 16,
+    "avmgovo0.def": 16
+   },
+   "placements": 325,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/mine_gold"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "gold glints on the ore cart",
+     "type": "glow"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native mine_gold clone has no Animator, one ParticleSystem; counts as covered (native effect), not the HoMM3 glints"
+  },
+  {
+   "id": "windmill",
+   "object": "Windmill (112)",
+   "defs": [
+    "avmwmsn0.def",
+    "avmwndd0.def"
+   ],
+   "frames": {
+    "avmwmsn0.def": 8,
+    "avmwndd0.def": 8
+   },
+   "placements": 343,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/windmill"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "four sails",
+     "type": "spin",
+     "pivot": "horizontal hub axis"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native windmill (Animator NewMill_ctrl) spins its sails"
+  },
+  {
+   "id": "water_wheel",
+   "object": "Water wheel (109)",
+   "defs": [
+    "avmwwhl0.def"
+   ],
+   "frames": {
+    "avmwwhl0.def": 8
+   },
+   "placements": 161,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/windmill"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "water wheel",
+     "type": "spin",
+     "pivot": "horizontal axle"
+    },
+    {
+     "part": "mill-race water",
+     "type": "water"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "presented as the native windmill (its sails spin), not a water wheel; a real water wheel needs a new building mesh - user decision"
+  },
+  {
+   "id": "star_axis",
+   "object": "Star axis (61)",
+   "defs": [
+    "avsaxis0.def"
+   ],
+   "frames": {
+    "avsaxis0.def": 20
+   },
+   "placements": 145,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/altar_of_magic_1"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "spoked star wheel",
+     "type": "spin",
+     "pivot": "horizontal axle facing the viewer"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "presented as altar_of_magic_1 (Animator + particles), a different object with its own motion; the HoMM3 wheel spin is not shown"
+  },
+  {
+   "id": "rally_flag",
+   "object": "Rally flag (64)",
+   "defs": [
+    "avxrlly0.def"
+   ],
+   "frames": {
+    "avxrlly0.def": 8
+   },
+   "placements": 161,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/quixs_path"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "banner cloth",
+     "type": "flag_cloth"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "presented as quixs_path (Animator quick_path_ctrl)"
+  },
+  {
+   "id": "buoy",
+   "object": "Buoy (11)",
+   "defs": [
+    "avsbuoy0.def"
+   ],
+   "frames": {
+    "avsbuoy0.def": 8
+   },
+   "placements": 50,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/quixs_path"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "whole buoy",
+     "type": "bob"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "presented as quixs_path (Animator)"
+  },
+  {
+   "id": "sea_chest",
+   "object": "Sea chest (82)",
+   "defs": [
+    "avxccht0.def"
+   ],
+   "frames": {
+    "avxccht0.def": 8
+   },
+   "placements": 248,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/resource/resource_chest"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "whole chest on water",
+     "type": "bob"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "presented as native chest (10 ParticleSystems)"
+  },
+  {
+   "id": "flotsam",
+   "object": "Flotsam (29)",
+   "defs": [
+    "avaflot0.def"
+   ],
+   "frames": {
+    "avaflot0.def": 8
+   },
+   "placements": 495,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/resource/resource_wood"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "whole flotsam on water",
+     "type": "bob"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "presented as homm3_flotsam_pickup = native resource_wood pile (2 ParticleSystems); it does not bob"
+  },
+  {
+   "id": "ocean_bottle",
+   "object": "Ocean bottle (59)",
+   "defs": [
+    "avxbttl0.def"
+   ],
+   "frames": {
+    "avxbttl0.def": 5
+   },
+   "placements": 20,
+   "homm3Animates": true,
+   "presentation": "scenery_standin",
+   "homm3MovingParts": [
+    {
+     "part": "whole bottle",
+     "type": "bob"
+    }
+   ],
+   "lane": "bob",
+   "note": "presented as flowers scenery; the object itself is not shown - fix the presentation first"
+  },
+  {
+   "id": "shipwreck_survivor",
+   "object": "Shipwreck survivor (86)",
+   "defs": [
+    "avasurv0.def"
+   ],
+   "frames": {
+    "avasurv0.def": 14
+   },
+   "placements": 69,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/watchtower"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "rowing boat",
+     "type": "bob"
+    },
+    {
+     "part": "water around it",
+     "type": "water"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "presented as watchtower (2 ParticleSystems); covered only in the sense that the stand-in animates"
+  },
+  {
+   "id": "campfire",
+   "object": "Campfire (12)",
+   "defs": [
+    "adcfra.def",
+    "avxcfds0.def",
+    "avxcflv0.def",
+    "avxcfsn0.def"
+   ],
+   "frames": {
+    "adcfra.def": 8,
+    "avxcfds0.def": 8,
+    "avxcflv0.def": 8,
+    "avxcfsn0.def": 8
+   },
+   "placements": 576,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/resource/resource_camp_fire_1"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "fire",
+     "type": "fire"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native camp_fire (14 ParticleSystems)"
+  },
+  {
+   "id": "refugee_camp",
+   "object": "Refugee camp (78)",
+   "defs": [
+    "avgrefg0.def"
+   ],
+   "frames": {
+    "avgrefg0.def": 8
+   },
+   "placements": 124,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/fx/fx_map_light"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "campfire",
+     "type": "fire"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "presented as fx_map_light only (no tents); the building itself is not shown"
+  },
+  {
+   "id": "mercenary_camp",
+   "object": "Mercenary camp (51)",
+   "defs": [
+    "avsmerc0.def"
+   ],
+   "frames": {
+    "avsmerc0.def": 8
+   },
+   "placements": 169,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/stinging_sword"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "campfire",
+     "type": "fire"
+    }
+   ],
+   "lane": "vanilla_style_effect",
+   "note": "native stinging_sword has no Animator and no particles"
+  },
+  {
+   "id": "creature_banks",
+   "object": "Imp cache / Medusa stores (16/3, 16/4)",
+   "defs": [
+    "avxbnk40.def",
+    "avxbnk50.def"
+   ],
+   "frames": {
+    "avxbnk40.def": 8,
+    "avxbnk50.def": 10
+   },
+   "placements": 145,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/shady_den"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "roof brazier fire / glow",
+     "type": "fire"
+    }
+   ],
+   "lane": "vanilla_style_effect",
+   "note": "native shady_den has no Animator and no particles"
+  },
+  {
+   "id": "hut_of_magi",
+   "object": "Hut of magi (37)",
+   "defs": [
+    "avxhutm0.def"
+   ],
+   "frames": {
+    "avxhutm0.def": 8
+   },
+   "placements": 33,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/watchtower"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "chimney smoke",
+     "type": "smoke"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "watchtower stand-in (2 ParticleSystems)"
+  },
+  {
+   "id": "lighthouse",
+   "object": "Lighthouse (42)",
+   "defs": [
+    "avxlths0.def"
+   ],
+   "frames": {
+    "avxlths0.def": 8
+   },
+   "placements": 31,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/watchtower"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "lamp-room light flicker",
+     "type": "glow"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "watchtower stand-in (2 ParticleSystems); no rotating beacon in the DEF"
+  },
+  {
+   "id": "pillar_of_fire",
+   "object": "Pillar of fire (60)",
+   "defs": [
+    "avxpllr0.def"
+   ],
+   "frames": {
+    "avxpllr0.def": 8
+   },
+   "placements": 22,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/watchtower"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "top fire",
+     "type": "fire"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "watchtower stand-in (2 ParticleSystems)"
+  },
+  {
+   "id": "school_of_magic",
+   "object": "School of magic (47)",
+   "defs": [
+    "avsschm0.def"
+   ],
+   "frames": {
+    "avsschm0.def": 8
+   },
+   "placements": 128,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/mana_tower"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "star sparkles",
+     "type": "glow"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "orb_observatory = mana_tower (13 ParticleSystems)"
+  },
+  {
+   "id": "fountains",
+   "object": "Fountain of fortune / youth (30, 31)",
+   "defs": [
+    "avsfntn0.def",
+    "avxfyth0.def"
+   ],
+   "frames": {
+    "avsfntn0.def": 8,
+    "avxfyth0.def": 8
+   },
+   "placements": 301,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/fountain"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "water jet / cascade",
+     "type": "water"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native fountain (17 ParticleSystems)"
+  },
+  {
+   "id": "faerie_ring",
+   "object": "Faerie ring (28)",
+   "defs": [
+    "avsring0.def"
+   ],
+   "frames": {
+    "avsring0.def": 8
+   },
+   "placements": 123,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/fairy_ring"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "faerie",
+     "type": "creature"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native fairy_ring (7 ParticleSystems)"
+  },
+  {
+   "id": "eye_of_magi",
+   "object": "Eye of the magi (27)",
+   "defs": [
+    "avxeyem0.def"
+   ],
+   "frames": {
+    "avxeyem0.def": 12
+   },
+   "placements": 111,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/insaras_eye"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "eye creature",
+     "type": "creature"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native insaras_eye (Animator + 17 ParticleSystems)"
+  },
+  {
+   "id": "learning_stone",
+   "object": "Gazebo / learning stone (100)",
+   "defs": [
+    "avsgzbo0.def"
+   ],
+   "frames": {
+    "avsgzbo0.def": 15
+   },
+   "placements": 450,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/learning_stone"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "crystal glow",
+     "type": "glow"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native learning_stone (Animator)"
+  },
+  {
+   "id": "mysterious_stone",
+   "object": "Mysterious stone (55, HotA)",
+   "defs": [
+    "avtmyst0.def"
+   ],
+   "frames": {
+    "avtmyst0.def": 14
+   },
+   "placements": 123,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/learning_stone_old"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "leprechaun figure",
+     "type": "creature"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native learning_stone_old (Animator)"
+  },
+  {
+   "id": "scholar",
+   "object": "Scholar (81)",
+   "defs": [
+    "avxschl0.def"
+   ],
+   "frames": {
+    "avxschl0.def": 8
+   },
+   "placements": 281,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/wise_owl"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "scholar reading",
+     "type": "creature"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native wise_owl (Animator)"
+  },
+  {
+   "id": "stables",
+   "object": "Stables (94)",
+   "defs": [
+    "avxstbl0.def"
+   ],
+   "frames": {
+    "avxstbl0.def": 8
+   },
+   "placements": 82,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/stables"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "horse in the doorway",
+     "type": "creature"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native stables (Animator stables_white_ctrl)"
+  },
+  {
+   "id": "tavern",
+   "object": "Tavern (95)",
+   "defs": [
+    "avxtvrn0.def"
+   ],
+   "frames": {
+    "avxtvrn0.def": 8
+   },
+   "placements": 45,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/tavern"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "chimney smoke, window flicker",
+     "type": "smoke"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native tavern (1 ParticleSystem)"
+  },
+  {
+   "id": "tree_of_knowledge",
+   "object": "Tree of knowledge (102)",
+   "defs": [
+    "avxtrek0.def"
+   ],
+   "frames": {
+    "avxtrek0.def": 26
+   },
+   "placements": 119,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/tree_of_knowledge"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "blinking eyes",
+     "type": "creature"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native tree_of_knowledge (Animator)"
+  },
+  {
+   "id": "whirlpool",
+   "object": "Whirlpool (111)",
+   "defs": [
+    "avxwhrl0.def"
+   ],
+   "frames": {
+    "avxwhrl0.def": 8
+   },
+   "placements": 52,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/magic_portal_hex"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "swirl",
+     "type": "water"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native portal_magic (33 ParticleSystems)"
+  },
+  {
+   "id": "two_way_monoliths",
+   "object": "Two-way monoliths (45)",
+   "defs": [
+    "avxmn2g0.def",
+    "avxmn2o0.def",
+    "avxmn2p0.def",
+    "avxmn4b0.def",
+    "avxmn5b0.def",
+    "avxmn6b0.def",
+    "avxmn7b0.def",
+    "avxmn8b0.def"
+   ],
+   "frames": {
+    "avxmn2g0.def": 8,
+    "avxmn2o0.def": 8,
+    "avxmn2p0.def": 8,
+    "avxmn4b0.def": 8,
+    "avxmn5b0.def": 8,
+    "avxmn6b0.def": 9,
+    "avxmn7b0.def": 8,
+    "avxmn8b0.def": 7
+   },
+   "placements": 175,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/portal_1_1",
+    "objects/interactive/portal_1_2",
+    "objects/interactive/portal_2_1",
+    "objects/interactive/portal_3_1",
+    "objects/interactive/portal_4_1",
+    "objects/interactive/portal_5_1"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "portal shimmer",
+     "type": "glow"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native portals (Animators / particles); avxmn4b0 is blocked (nothing) in the ground truth"
+  },
+  {
+   "id": "shrines",
+   "object": "Shrines of magic (88-90)",
+   "defs": [
+    "avxl1sh0.def",
+    "avxl2sh0.def",
+    "avxl3sh0.def"
+   ],
+   "frames": {
+    "avxl1sh0.def": 8,
+    "avxl2sh0.def": 8,
+    "avxl3sh0.def": 8
+   },
+   "placements": 481,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/artifact/scroll_box",
+    "objects/artifact/enchanted_scroll_box",
+    "objects/artifact/mythic_scroll_box"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "shrine glow",
+     "type": "glow"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "scroll boxes (Animator artifact_anim_ctrl)"
+  },
+  {
+   "id": "magic_plains",
+   "object": "Magic plains (46)",
+   "defs": [
+    "avxplns0.def"
+   ],
+   "frames": {
+    "avxplns0.def": 8
+   },
+   "placements": 267,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/altar_of_magic_1"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "sparkles over grass",
+     "type": "glow"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "altar_of_magic_1 stand-in (Animator + 54 ParticleSystems)"
+  },
+  {
+   "id": "treasure_chest_hota",
+   "object": "Treasure chest (101, HotA sparkle)",
+   "defs": [
+    "avtchst0.def"
+   ],
+   "frames": {
+    "avtchst0.def": 8
+   },
+   "placements": 3939,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/resource/resource_chest"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "sparkle",
+     "type": "glow"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "native chest (10 ParticleSystems)"
+  },
+  {
+   "id": "swan_pond",
+   "object": "Swan pond (14)",
+   "defs": [
+    "avsclvd0.def",
+    "avsclvg0.def",
+    "avsclvs0.def"
+   ],
+   "frames": {
+    "avsclvd0.def": 8,
+    "avsclvg0.def": 8,
+    "avsclvs0.def": 8
+   },
+   "placements": 91,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/interactive/knowledge_garden"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "swan swimming",
+     "type": "creature"
+    },
+    {
+     "part": "water ripple",
+     "type": "water"
+    }
+   ],
+   "lane": "creature_deferred",
+   "note": "native knowledge_garden stand-in has no Animator and no particles; a swan needs an animated creature, not a building lane"
+  },
+  {
+   "id": "trading_post",
+   "object": "Trading post (99)",
+   "defs": [
+    "avxpost0.def",
+    "avxpstr0.def"
+   ],
+   "frames": {
+    "avxpost0.def": 8,
+    "avxpstr0.def": 8
+   },
+   "placements": 80,
+   "homm3Animates": true,
+   "presentation": "scenery_standin",
+   "homm3MovingParts": [
+    {
+     "part": "chimney smoke",
+     "type": "smoke"
+    }
+   ],
+   "lane": "not_presented",
+   "note": "presented as mushroom/grass scenery; the building is not shown"
+  },
+  {
+   "id": "garrisons",
+   "object": "Garrisons incl. anti-magic (33, 219)",
+   "defs": [
+    "avcgar20.def",
+    "avcvgarm.def"
+   ],
+   "frames": {
+    "avcgar20.def": 8,
+    "avcvgarm.def": 8
+   },
+   "placements": 32,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "anti-magic sparkles",
+     "type": "glow"
+    }
+   ],
+   "lane": "not_presented",
+   "note": "emitted as random-squad (guards only); no garrison building is drawn"
+  },
+  {
+   "id": "derelict_ship",
+   "object": "Derelict ship (24)",
+   "defs": [
+    "avadlic0.def"
+   ],
+   "frames": {
+    "avadlic0.def": 8
+   },
+   "placements": 42,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "water lapping the hull",
+     "type": "water"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "shipwreck",
+   "object": "Shipwreck (85)",
+   "defs": [
+    "avawre20.def",
+    "avawrek0.def"
+   ],
+   "frames": {
+    "avawre20.def": 8,
+    "avawrek0.def": 8
+   },
+   "placements": 112,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "water lapping",
+     "type": "water"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "cartographer",
+   "object": "Cartographer (13)",
+   "defs": [
+    "avxmapw0.def"
+   ],
+   "frames": {
+    "avxmapw0.def": 8
+   },
+   "placements": 8,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "water at the stilts",
+     "type": "water"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "cover_of_darkness",
+   "object": "Cover of darkness (15)",
+   "defs": [
+    "avxcovr0.def"
+   ],
+   "frames": {
+    "avxcovr0.def": 9
+   },
+   "placements": 35,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "dark cloud swirl",
+     "type": "smoke"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "graveyard",
+   "object": "Graveyard (84)",
+   "defs": [
+    "avxgyds0.def",
+    "avxgyne0.def",
+    "avxgysn0.def"
+   ],
+   "frames": {
+    "avxgyds0.def": 8,
+    "avxgyne0.def": 8,
+    "avxgysn0.def": 8
+   },
+   "placements": 100,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "door lamps flicker",
+     "type": "fire"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "magic_spring",
+   "object": "Magic spring (48)",
+   "defs": [
+    "avxmags0.def"
+   ],
+   "frames": {
+    "avxmags0.def": 8
+   },
+   "placements": 36,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "spring cascade",
+     "type": "water"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "mermaids",
+   "object": "Mermaids (52)",
+   "defs": [
+    "avxmerm0.def"
+   ],
+   "frames": {
+    "avxmerm0.def": 8
+   },
+   "placements": 21,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "mermaid",
+     "type": "creature"
+    },
+    {
+     "part": "water",
+     "type": "water"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "sirens",
+   "object": "Sirens (92)",
+   "defs": [
+    "avxsirn0.def"
+   ],
+   "frames": {
+    "avxsirn0.def": 7
+   },
+   "placements": 19,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "sirens",
+     "type": "creature"
+    },
+    {
+     "part": "water",
+     "type": "water"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "one_way_monoliths",
+   "object": "One-way monoliths (43)",
+   "defs": [
+    "avxmn1b0.def",
+    "avxmn1r0.def",
+    "avxmn1y0.def",
+    "avxmn5i0.def",
+    "avxmn6i0.def",
+    "avxmn7i0.def",
+    "avxmn8i0.def"
+   ],
+   "frames": {
+    "avxmn1b0.def": 8,
+    "avxmn1r0.def": 8,
+    "avxmn1y0.def": 8,
+    "avxmn5i0.def": 8,
+    "avxmn6i0.def": 8,
+    "avxmn7i0.def": 8,
+    "avxmn8i0.def": 8
+   },
+   "placements": 72,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "portal shimmer",
+     "type": "glow"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "war_machine_factory",
+   "object": "War machine factory (106)",
+   "defs": [
+    "avgsieg0.def"
+   ],
+   "frames": {
+    "avgsieg0.def": 15
+   },
+   "placements": 121,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "forge fire",
+     "type": "fire"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "trading_post_snow",
+   "object": "Trading post, snow (221, HotA)",
+   "defs": [
+    "avxpssn.def"
+   ],
+   "frames": {
+    "avxpssn.def": 8
+   },
+   "placements": 7,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "chimney smoke",
+     "type": "smoke"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "favorable_winds",
+   "object": "Favorable winds clouds (225, HotA)",
+   "defs": [
+    "avxfw0.def",
+    "avxfw2.def",
+    "avxfw3.def",
+    "avxfw4.def",
+    "avxfw5.def",
+    "avxfw6.def",
+    "avxfw7.def"
+   ],
+   "frames": {
+    "avxfw0.def": 8,
+    "avxfw2.def": 8,
+    "avxfw3.def": 8,
+    "avxfw4.def": 8,
+    "avxfw5.def": 8,
+    "avxfw6.def": 8,
+    "avxfw7.def": 8
+   },
+   "placements": 42,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "drifting clouds",
+     "type": "smoke"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "fire_fields",
+   "object": "Fire fields (226, HotA)",
+   "defs": [
+    "avxff0.def",
+    "avxff1.def",
+    "avxff2.def",
+    "avxff3.def",
+    "avxff4.def",
+    "avxff5.def",
+    "avxff6.def",
+    "avxff7.def"
+   ],
+   "frames": {
+    "avxff0.def": 6,
+    "avxff1.def": 6,
+    "avxff2.def": 6,
+    "avxff3.def": 6,
+    "avxff4.def": 6,
+    "avxff5.def": 6,
+    "avxff6.def": 6,
+    "avxff7.def": 6
+   },
+   "placements": 63,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "fire field",
+     "type": "fire"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "magic_plains_hota",
+   "object": "Magic plains patches (230, HotA)",
+   "defs": [
+    "avxmp1.def",
+    "avxmp2.def",
+    "avxmp3.def",
+    "avxmp4.def",
+    "avxmp5.def",
+    "avxmp6.def"
+   ],
+   "frames": {
+    "avxmp1.def": 8,
+    "avxmp2.def": 8,
+    "avxmp3.def": 8,
+    "avxmp4.def": 8,
+    "avxmp5.def": 8,
+    "avxmp6.def": 8
+   },
+   "placements": 23,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "sparkles",
+     "type": "glow"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "river_deltas",
+   "object": "River / lava / mud deltas (143)",
+   "defs": [
+    "clrdelt1.def",
+    "clrdelt2.def",
+    "clrdelt3.def",
+    "clrdelt4.def",
+    "icedelt1.def",
+    "lavdelt1.def",
+    "lavdelt2.def",
+    "lavdelt3.def",
+    "lavdelt4.def",
+    "muddelt1.def",
+    "muddelt2.def",
+    "muddelt3.def"
+   ],
+   "frames": {
+    "clrdelt1.def": 12,
+    "clrdelt2.def": 12,
+    "clrdelt3.def": 12,
+    "clrdelt4.def": 12,
+    "icedelt1.def": 12,
+    "lavdelt1.def": 9,
+    "lavdelt2.def": 9,
+    "lavdelt3.def": 9,
+    "lavdelt4.def": 9,
+    "muddelt1.def": 12,
+    "muddelt2.def": 12,
+    "muddelt3.def": 12
+   },
+   "placements": 81,
+   "homm3Animates": true,
+   "presentation": "nothing",
+   "homm3MovingParts": [
+    {
+     "part": "flowing water/lava",
+     "type": "water"
+    }
+   ],
+   "lane": "not_presented",
+   "note": ""
+  },
+  {
+   "id": "kelp",
+   "object": "Kelp (125)",
+   "defs": [
+    "avlklp10.def",
+    "avlklp20.def"
+   ],
+   "frames": {
+    "avlklp10.def": 6,
+    "avlklp20.def": 8
+   },
+   "placements": 573,
+   "homm3Animates": true,
+   "presentation": "scenery_standin",
+   "homm3MovingParts": [
+    {
+     "part": "kelp sway",
+     "type": "water"
+    }
+   ],
+   "lane": "vanilla_style_effect",
+   "note": "water_reed_1 scenery stand-in; low priority decoration"
+  },
+  {
+   "id": "lava_lakes",
+   "object": "Lava lakes / flows (127, 128)",
+   "defs": [
+    "avllav10.def",
+    "avllav20.def",
+    "avllav30.def",
+    "avllav40.def",
+    "avllav50.def",
+    "avllav60.def",
+    "avllav70.def",
+    "avllav80.def",
+    "avllav90.def",
+    "avlllk10.def",
+    "avlllk20.def",
+    "avllv100.def",
+    "avllv110.def",
+    "avllv120.def",
+    "avllv130.def",
+    "avllv140.def",
+    "avllv150.def",
+    "avllv160.def",
+    "avllv170.def",
+    "avllv180.def",
+    "avllv190.def",
+    "avllv1u0.def",
+    "avllv200.def",
+    "avllv210.def",
+    "avllv220.def",
+    "avllv230.def",
+    "avllv240.def",
+    "avllv250.def",
+    "avllv260.def",
+    "avllv2u0.def",
+    "avllv3u0.def"
+   ],
+   "frames": {
+    "avllav10.def": 9,
+    "avllav20.def": 9,
+    "avllav30.def": 9,
+    "avllav40.def": 9,
+    "avllav50.def": 9,
+    "avllav60.def": 9,
+    "avllav70.def": 9,
+    "avllav80.def": 9,
+    "avllav90.def": 9,
+    "avlllk10.def": 9,
+    "avlllk20.def": 9,
+    "avllv100.def": 9,
+    "avllv110.def": 9,
+    "avllv120.def": 9,
+    "avllv130.def": 9,
+    "avllv140.def": 9,
+    "avllv150.def": 9,
+    "avllv160.def": 9,
+    "avllv170.def": 9,
+    "avllv180.def": 9,
+    "avllv190.def": 9,
+    "avllv1u0.def": 9,
+    "avllv200.def": 9,
+    "avllv210.def": 9,
+    "avllv220.def": 9,
+    "avllv230.def": 9,
+    "avllv240.def": 9,
+    "avllv250.def": 9,
+    "avllv260.def": 9,
+    "avllv2u0.def": 9,
+    "avllv3u0.def": 9
+   },
+   "placements": 2517,
+   "homm3Animates": true,
+   "presentation": "scenery_standin",
+   "homm3MovingParts": [
+    {
+     "part": "lava flow",
+     "type": "fire"
+    }
+   ],
+   "lane": "vanilla_style_effect",
+   "note": "mountain / pool scenery stand-ins (pool_lava_small_1 static); low priority decoration"
+  },
+  {
+   "id": "rocks_in_water",
+   "object": "Rocks in water (147)",
+   "defs": [
+    "avlrk1w0.def",
+    "avlrk2w0.def",
+    "avlrk3w0.def",
+    "avlrk4w0.def"
+   ],
+   "frames": {
+    "avlrk1w0.def": 12,
+    "avlrk2w0.def": 12,
+    "avlrk3w0.def": 12,
+    "avlrk4w0.def": 12
+   },
+   "placements": 929,
+   "homm3Animates": true,
+   "presentation": "scenery_standin",
+   "homm3MovingParts": [
+    {
+     "part": "water lapping",
+     "type": "water"
+    }
+   ],
+   "lane": "vanilla_style_effect",
+   "note": "water_reed / rocks scenery stand-ins; low priority"
+  },
+  {
+   "id": "volcanoes",
+   "object": "Volcanoes (158)",
+   "defs": [
+    "avlvol10.def",
+    "avlvol20.def",
+    "avlvol30.def",
+    "avlvol40.def",
+    "avlvol50.def"
+   ],
+   "frames": {
+    "avlvol10.def": 9,
+    "avlvol20.def": 9,
+    "avlvol30.def": 8,
+    "avlvol40.def": 9,
+    "avlvol50.def": 14
+   },
+   "placements": 560,
+   "homm3Animates": true,
+   "presentation": "scenery_standin",
+   "homm3MovingParts": [
+    {
+     "part": "crater glow, smoke plume (avlvol50)",
+     "type": "smoke"
+    }
+   ],
+   "lane": "vanilla_style_effect",
+   "note": "mountain_dirt_small stand-ins; low priority"
+  },
+  {
+   "id": "reefs",
+   "object": "Reefs (161)",
+   "defs": [
+    "avlref10.def",
+    "avlref20.def",
+    "avlref30.def",
+    "avlref40.def",
+    "avlref50.def",
+    "avlref60.def"
+   ],
+   "frames": {
+    "avlref10.def": 12,
+    "avlref20.def": 12,
+    "avlref30.def": 12,
+    "avlref40.def": 12,
+    "avlref50.def": 12,
+    "avlref60.def": 12
+   },
+   "placements": 2616,
+   "homm3Animates": true,
+   "presentation": "native_oe_object",
+   "nativePrefabPaths": [
+    "objects/fx/fx_map_light"
+   ],
+   "homm3MovingParts": [
+    {
+     "part": "surf lapping",
+     "type": "water"
+    }
+   ],
+   "lane": "native_covered",
+   "note": "fx_map_light stand-in (9 ParticleSystems); the reef rocks are not drawn"
+  }
+ ],
+ "inventoryLabelCorrections": [
+  {
+   "def": "avggrem0",
+   "before": "articulated_rigid: clock-face wheel turns + pendulum swings",
+   "after": "pendulum: brass pendulum only",
+   "finding": "the clock face is identical in all 16 frames; only the pendulum under the house moves (commit b10ecfcafc over-corrected)",
+   "severity": "wrong_parts"
+  },
+  {
+   "def": "avggolm0",
+   "before": "smoke: furnace steam and smoke",
+   "after": "rotor (two riveted flywheels) + smoke (stack steam)",
+   "finding": "rivet rings on the front flywheel and the right-side wheel rotate; missed mechanical animation",
+   "severity": "missed_mechanical"
+  },
+  {
+   "def": "hasphtpl",
+   "before": "water_rotation -> planned rotor ('water wheel')",
+   "after": "water -> vanilla_style_effect",
+   "finding": "a flat whirlpool swirling in a basin; there is no wheel or axle",
+   "severity": "wrong_lane"
+  },
+  {
+   "def": "avgworm",
+   "before": "fire: lava pit bubbling",
+   "after": "glow_pulse: green vent lights",
+   "finding": "the moving pixels are green lights pulsing on the dome",
+   "severity": "wrong_kind"
+  },
+  {
+   "def": "avgerth0",
+   "before": "glow_pulse: lava pool glow",
+   "after": "water: bubbling mud pool",
+   "finding": "grey-brown mud bubbling, no glow",
+   "severity": "wrong_kind"
+  },
+  {
+   "def": "avgpixie",
+   "before": "glow_particles: pixie sparkles",
+   "after": "water: pond ripple/cascade + glow_pulse window flicker",
+   "finding": "motion is the pond under the house",
+   "severity": "wrong_kind"
+  },
+  {
+   "def": "avgdfly0",
+   "before": "glow_particles: small sparkles",
+   "after": "glow_pulse: red tree-trunk hollows",
+   "finding": "pulsing hollows, not particles",
+   "severity": "wrong_kind"
+  },
+  {
+   "def": "avgkbl01",
+   "before": "articulated_rigid: crane arm swings a load",
+   "after": "articulated_rigid: jib slews about the vertical mast (holds f0-20, f28-41, f50-71); the ore bucket rides the jib at a fixed rope length (no hoist)",
+   "finding": "lane right, note incomplete (two parts, vertical slew axis)",
+   "severity": "incomplete_note"
+  },
+  {
+   "def": "avgarma",
+   "before": "rotor: 4 paddles + slats",
+   "after": "rotor: multi-blade windpump rotor",
+   "finding": "many blades, not 4 paddles",
+   "severity": "incomplete_note"
+  },
+  {
+   "def": "avggogs0",
+   "before": "fire: forge fire and smoke",
+   "after": "fire: lava pour from cauldron + lava basin",
+   "finding": "no smoke in the DEF",
+   "severity": "incomplete_note"
+  },
+  {
+   "def": "avgfbrd",
+   "before": "glow_particles: fire/magic portal swirl",
+   "after": "glow_particles: fire vortex with lightning arcs",
+   "finding": "lightning arcs",
+   "severity": "incomplete_note"
+  },
+  {
+   "def": "avgelp",
+   "before": "glow_pulse: magic glow pulse",
+   "after": "glow_pulse: cloud swirl in the mirror + bead glints",
+   "finding": "",
+   "severity": "incomplete_note"
+  },
+  {
+   "def": "avgefre0",
+   "before": "fire: fire pit",
+   "after": "fire: molten gold/lava bed around the base",
+   "finding": "",
+   "severity": "incomplete_note"
+  },
+  {
+   "def": "avcfacz0",
+   "before": "fire: small furnace lights",
+   "after": "glow_pulse: dome-drum window flicker",
+   "finding": "",
+   "severity": "incomplete_note"
+  },
+  {
+   "def": "22 planned effect rows",
+   "before": "planned lane flipbook",
+   "after": "planned lane vanilla_style_effect",
+   "finding": "user rejected HoMM3 sprite flipbooks on flat panels",
+   "severity": "lane_policy"
+  }
+ ]
+}

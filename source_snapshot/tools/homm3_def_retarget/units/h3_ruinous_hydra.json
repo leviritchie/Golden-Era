@@ -1,0 +1,1084 @@
+{
+ "unit": "h3_ruinous_hydra",
+ "joints": {
+  "Hips": [
+   0.01,
+   0.25,
+   0.38
+  ],
+  "Spine": [
+   0.01,
+   0.07,
+   0.4
+  ],
+  "Spine1": [
+   0.01,
+   -0.14,
+   0.45
+  ],
+  "Spine2": [
+   0.01,
+   -0.31,
+   0.5
+  ],
+  "Neck": [
+   0.01,
+   -0.37,
+   0.6
+  ],
+  "Head": [
+   0.05,
+   -0.4,
+   0.7
+  ],
+  "HeadTop_End": [
+   0.05,
+   -0.3,
+   0.8
+  ],
+  "LeftShoulder": [
+   0.108,
+   -0.31,
+   0.5
+  ],
+  "LeftArm": [
+   0.337,
+   -0.201,
+   0.411
+  ],
+  "LeftForeArm": [
+   0.372,
+   -0.083,
+   0.287
+  ],
+  "LeftHand": [
+   0.343,
+   -0.214,
+   0.088
+  ],
+  "LeftHand_End": [
+   0.373,
+   -0.352,
+   0.02
+  ],
+  "RightShoulder": [
+   -0.074,
+   -0.31,
+   0.5
+  ],
+  "RightArm": [
+   -0.269,
+   -0.206,
+   0.401
+  ],
+  "RightForeArm": [
+   -0.33,
+   -0.021,
+   0.283
+  ],
+  "RightHand": [
+   -0.291,
+   -0.153,
+   0.099
+  ],
+  "RightHand_End": [
+   -0.331,
+   -0.345,
+   0.02
+  ],
+  "LeftUpLeg": [
+   0.227,
+   0.171,
+   0.318
+  ],
+  "LeftLeg": [
+   0.209,
+   0.185,
+   0.122
+  ],
+  "LeftFoot": [
+   0.183,
+   0.203,
+   0.031
+  ],
+  "LeftToeBase": [
+   0.213,
+   0.038,
+   0.02
+  ],
+  "LeftToe_End": [
+   0.239,
+   0.03,
+   0.02
+  ],
+  "RightUpLeg": [
+   -0.199,
+   0.171,
+   0.318
+  ],
+  "RightLeg": [
+   -0.183,
+   0.177,
+   0.123
+  ],
+  "RightFoot": [
+   -0.136,
+   0.214,
+   0.045
+  ],
+  "RightToeBase": [
+   -0.192,
+   0.045,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.22,
+   0.038,
+   0.02
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "fortress_rig",
+  "idle_cycle"
+ ],
+ "fortress": {
+  "procedural": true,
+  "chains": [
+   {
+    "name": "Tail",
+    "parent": "Hips",
+    "points": [
+     [
+      0.01,
+      0.373,
+      0.318
+     ],
+     [
+      0.01,
+      0.513,
+      0.185
+     ],
+     [
+      -0.005,
+      0.599,
+      0.046
+     ],
+     [
+      -0.131,
+      0.652,
+      0.03
+     ],
+     [
+      -0.276,
+      0.607,
+      0.022
+     ],
+     [
+      -0.381,
+      0.482,
+      0.014
+     ],
+     [
+      -0.418,
+      0.349,
+      0.052
+     ],
+     [
+      -0.417,
+      0.281,
+      0.125
+     ]
+    ],
+    "radius": 0.14,
+    "rootBlend": 0.15,
+    "ratio": 1.0
+   },
+   {
+    "name": "Necks",
+    "parent": "Head",
+    "points": [
+     [
+      0.05,
+      -0.3,
+      0.8
+     ],
+     [
+      -0.13,
+      -0.2,
+      0.95
+     ],
+     [
+      -0.14,
+      -0.22,
+      1.15
+     ],
+     [
+      0.01,
+      -0.29,
+      1.3
+     ],
+     [
+      0.17,
+      -0.33,
+      1.45
+     ],
+     [
+      0.19,
+      -0.3,
+      1.7
+     ]
+    ],
+    "radius": 0.6,
+    "rootBlend": 0.12,
+    "ratio": 3.0
+   }
+  ],
+  "params": {
+   "neckDown": {
+    "type": "rot",
+    "bones": [
+     [
+      "Neck",
+      0.6
+     ],
+     [
+      "Head",
+      0.4
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     -45,
+     45
+    ],
+    "step": 10
+   },
+   "spinePitch": {
+    "type": "rot",
+    "bones": [
+     [
+      "Spine",
+      0.35
+     ],
+     [
+      "Spine1",
+      0.35
+     ],
+     [
+      "Spine2",
+      0.3
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     -30,
+     30
+    ],
+    "step": 8
+   },
+   "sideRoll": {
+    "type": "rot",
+    "bones": [
+     [
+      "Hips",
+      1.0
+     ]
+    ],
+    "axis": [
+     0,
+     1,
+     0
+    ],
+    "limit": [
+     -110,
+     110
+    ],
+    "step": 20
+   },
+   "fl": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "fr": {
+    "type": "rot",
+    "bones": [
+     [
+      "RightArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "hl": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftUpLeg",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "hr": {
+    "type": "rot",
+    "bones": [
+     [
+      "RightUpLeg",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "flk": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftForeArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "frk": {
+    "type": "rot",
+    "bones": [
+     [
+      "RightForeArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "hlk": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftLeg",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "hrk": {
+    "type": "rot",
+    "bones": [
+     [
+      "RightLeg",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "frontReach": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftArm",
+      1
+     ],
+     [
+      "RightArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     -70,
+     40
+    ],
+    "step": 12
+   },
+   "legFold": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftArm",
+      -0.5
+     ],
+     [
+      "RightArm",
+      -0.5
+     ],
+     [
+      "LeftForeArm",
+      1
+     ],
+     [
+      "RightForeArm",
+      1
+     ],
+     [
+      "LeftUpLeg",
+      0.6
+     ],
+     [
+      "RightUpLeg",
+      0.6
+     ],
+     [
+      "LeftLeg",
+      -1
+     ],
+     [
+      "RightLeg",
+      -1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     0,
+     70
+    ],
+    "step": 15
+   },
+   "TailLift": {
+    "type": "chain",
+    "chain": "Tail",
+    "mode": "curl",
+    "axis": [
+     -1,
+     0,
+     0
+    ],
+    "limit": [
+     -50,
+     50
+    ],
+    "step": 12
+   },
+   "TailSide": {
+    "type": "chain",
+    "chain": "Tail",
+    "mode": "curl",
+    "axis": [
+     0,
+     0,
+     1
+    ],
+    "limit": [
+     -60,
+     60
+    ],
+    "step": 12
+   },
+   "TailStraight": {
+    "type": "chain",
+    "chain": "Tail",
+    "mode": "straight",
+    "dir": [
+     0,
+     1,
+     0
+    ],
+    "limit": [
+     0,
+     1
+    ],
+    "step": 0.25
+   },
+   "TailWave": {
+    "type": "chain",
+    "chain": "Tail",
+    "mode": "wave",
+    "axis": [
+     0,
+     0,
+     1
+    ],
+    "phaseParam": "TailPhase",
+    "wavelength": 6,
+    "limit": [
+     -30,
+     30
+    ]
+   },
+   "TailPhase": {
+    "type": "rot",
+    "bones": [],
+    "axis": [
+     0,
+     0,
+     1
+    ]
+   },
+   "NecksCurl": {
+    "type": "chain",
+    "chain": [
+     "Necks"
+    ],
+    "mode": "curl",
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     -50,
+     50
+    ],
+    "step": 12
+   },
+   "NecksSide": {
+    "type": "chain",
+    "chain": "Necks",
+    "mode": "curl",
+    "axis": [
+     0,
+     0,
+     1
+    ],
+    "limit": [
+     -30,
+     30
+    ]
+   },
+   "NecksNod": {
+    "type": "chain",
+    "chain": "Necks",
+    "mode": "curl",
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     -30,
+     30
+    ]
+   }
+  },
+  "anim": {
+   "Idle": {
+    "TailSide": {
+     "sin": 6
+    },
+    "NecksSide": {
+     "sin": 7,
+     "phase": 0
+    },
+    "NecksNod": {
+     "sin": 5,
+     "phase": 60
+    }
+   },
+   "Move": {
+    "fl": {
+     "sin": 18,
+     "cycles": 1,
+     "phase": 0
+    },
+    "hr": {
+     "sin": 18,
+     "cycles": 1,
+     "phase": 0
+    },
+    "fr": {
+     "sin": 18,
+     "cycles": 1,
+     "phase": 180
+    },
+    "hl": {
+     "sin": 18,
+     "cycles": 1,
+     "phase": 180
+    },
+    "flk": {
+     "sin": 9.0,
+     "cycles": 1,
+     "phase": 90,
+     "offset": 9.0
+    },
+    "frk": {
+     "sin": 9.0,
+     "cycles": 1,
+     "phase": 270,
+     "offset": 9.0
+    },
+    "hlk": {
+     "sin": -9.0,
+     "cycles": 1,
+     "phase": 270,
+     "offset": -9.0
+    },
+    "hrk": {
+     "sin": -9.0,
+     "cycles": 1,
+     "phase": 90,
+     "offset": -9.0
+    },
+    "lift": {
+     "sin": 0.015,
+     "cycles": 2
+    },
+    "NecksSide": {
+     "sin": 8,
+     "phase": 0
+    }
+   },
+   "MoveStart": {
+    "fl": {
+     "sin": 9.0,
+     "cycles": 1,
+     "phase": 0
+    },
+    "hr": {
+     "sin": 9.0,
+     "cycles": 1,
+     "phase": 0
+    },
+    "fr": {
+     "sin": 9.0,
+     "cycles": 1,
+     "phase": 180
+    },
+    "hl": {
+     "sin": 9.0,
+     "cycles": 1,
+     "phase": 180
+    },
+    "flk": {
+     "sin": 4.5,
+     "cycles": 1,
+     "phase": 90,
+     "offset": 4.5
+    },
+    "frk": {
+     "sin": 4.5,
+     "cycles": 1,
+     "phase": 270,
+     "offset": 4.5
+    },
+    "hlk": {
+     "sin": -4.5,
+     "cycles": 1,
+     "phase": 270,
+     "offset": -4.5
+    },
+    "hrk": {
+     "sin": -4.5,
+     "cycles": 1,
+     "phase": 90,
+     "offset": -4.5
+    },
+    "lift": {
+     "sin": 0.0075,
+     "cycles": 2
+    }
+   },
+   "MoveEnd": {
+    "fl": {
+     "sin": 9.0,
+     "cycles": 1,
+     "phase": 0
+    },
+    "hr": {
+     "sin": 9.0,
+     "cycles": 1,
+     "phase": 0
+    },
+    "fr": {
+     "sin": 9.0,
+     "cycles": 1,
+     "phase": 180
+    },
+    "hl": {
+     "sin": 9.0,
+     "cycles": 1,
+     "phase": 180
+    },
+    "flk": {
+     "sin": 4.5,
+     "cycles": 1,
+     "phase": 90,
+     "offset": 4.5
+    },
+    "frk": {
+     "sin": 4.5,
+     "cycles": 1,
+     "phase": 270,
+     "offset": 4.5
+    },
+    "hlk": {
+     "sin": -4.5,
+     "cycles": 1,
+     "phase": 270,
+     "offset": -4.5
+    },
+    "hrk": {
+     "sin": -4.5,
+     "cycles": 1,
+     "phase": 90,
+     "offset": -4.5
+    },
+    "lift": {
+     "sin": 0.0075,
+     "cycles": 2
+    }
+   },
+   "Mouseover": {
+    "NecksCurl": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       -12
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "NecksCurl": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       -25
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Defence": {
+    "NecksCurl": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.4,
+       20
+      ],
+      [
+       0.8,
+       20
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "NecksCurl": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.25,
+       -25
+      ],
+      [
+       0.45,
+       30
+      ],
+      [
+       0.7,
+       -10
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "ShootFront": {
+    "NecksSide": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       -20
+      ],
+      [
+       0.6,
+       20
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "NecksCurl": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.25,
+       -25
+      ],
+      [
+       0.45,
+       30
+      ],
+      [
+       0.7,
+       -10
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Death": {
+    "legFold": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       1,
+       40
+      ]
+     ]
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "dx",
+    "dy",
+    "roll",
+    "spinePitch",
+    "NecksCurl",
+    "NecksSide",
+    "TailLift",
+    "TailSide"
+   ],
+   "clips": {
+    "Death": [
+     "sideRoll",
+     "legFold"
+    ]
+   },
+   "limits": {
+    "dx": [
+     -80,
+     80
+    ],
+    "dy": [
+     -100,
+     100
+    ],
+    "roll": [
+     -60,
+     60
+    ]
+   },
+   "penalty": 0.0004,
+   "smooth": 0.0006,
+   "camYawSearch": [
+    0,
+    -15,
+    -30,
+    -45,
+    -60,
+    -75,
+    -90
+   ],
+   "scan": {
+    "roll": [
+     -45,
+     -30,
+     -15,
+     0,
+     15,
+     30,
+     45
+    ],
+    "TailStraight": [
+     0,
+     0.5,
+     1
+    ],
+    "BodyStraight": [
+     0,
+     0.5,
+     1
+    ],
+    "sideRoll": [
+     -90,
+     -45,
+     0,
+     45,
+     90
+    ]
+   }
+  }
+ },
+ "idleCycle": {
+  "rot": [
+   {
+    "bones": [
+     [
+      "Neck",
+      0.5
+     ],
+     [
+      "Head",
+      0.5
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "peak": 7,
+    "shape": "sin"
+   }
+  ],
+  "wave": [
+   {
+    "prefix": "Tail_",
+    "axis": [
+     0,
+     0,
+     1
+    ],
+    "amp": 1.5,
+    "wavelength": 8,
+    "grow": 2
+   }
+  ]
+ },
+ "strideMatch": {
+  "maxDrop": 0.2,
+  "reason": "Fortress pass 2026-09-28 at the adopted multi_headed_reptile 2.6: default 0.15 fails the stride gate (slip 0.853, ratio 1.157, cadence 1.6 cap; fleet_rebuild gate regression stride:slip). Scratch sweep of the canonical .blend export (artifacts/claude_takeover_20260927/fortress/sweep/h3_ruinous_hydra): 0.20 slip 0.562 ratio 1.155, ground ok, no Move/stride/articulation faults; 0.25 0.545; 0.30 0.528; 0.35 0.509. 0.20 is the smallest drop that passes."
+ },
+ "glbPatch": {
+  "reason": "DEF g12 attack: the hydra rears its necks up tall (f3-f6), then throws the whole body low and forward at the target, heads striking flat (f7-f12), then recoils; DEF g04 defence: the necks rise straight up and back (f2-f7); the capture barely moved in both",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_ruinous_hydra_neck_weights.json",
+    "sha256": "87287935e8d697103ff862209b1bd5719e450356d841f3c760eb9fc16ae52b90",
+    "note": "chest / neck-seam / flank weights re-solved (wsolve fixed point, GPU) so the rear and lunge do not tear (Necks_00/Spine/Hips bleed at the chest)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_ruinous_hydra_pose_rot.json",
+    "sha256": "30a5f7c9f4f544688c3a9b58917652a151ae6508faef5f9a2f0725ffa2419be4",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_ruinous_hydra_pose_rot.json",
+    "sha256": "30a5f7c9f4f544688c3a9b58917652a151ae6508faef5f9a2f0725ffa2419be4",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_ruinous_hydra_pose_tr.json",
+    "sha256": "98f0984667f1cda59e1d15b85b00f122447766711802c5a718b0ef69ec840e3a"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_ruinous_hydra_pose_tr.json",
+    "sha256": "98f0984667f1cda59e1d15b85b00f122447766711802c5a718b0ef69ec840e3a"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront",
+     "Unit_Defence"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "bones": [
+     "Hips",
+     "Spine",
+     "Spine1",
+     "Spine2",
+     "Neck",
+     "Head",
+     "Necks_00"
+    ],
+    "maxMove": 0.05,
+    "note": "relax the last over-stretched chest/neck-seam edges of the rear and lunge"
+   }
+  ]
+ }
+}

@@ -1,0 +1,109 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom construction law profiles that require displayed cost and charged cost parity. This is cost semantics evidence only; it does not prove construction UI hooks, resource mutation ordering, build commit, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresDisplayedAndChargedCostParityProfiles": true,
+    "uiOnlyCostChangeForbidden": true,
+    "displayedAndChargedCostMustShareFormula": true,
+    "extraBuildSlotMustBeSeparatedFromDiscount": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredRuntimeProof": [
+    "displayed cost hook proof",
+    "charged cost mutation proof",
+    "build commit ordering proof",
+    "resource affordability check parity proof",
+    "refund or surcharge idempotence proof",
+    "city owner to law-owner correlation proof"
+  ],
+  "contracts": {
+    "cove.harbor-infrastructure-extra-build": {
+      "costKinds": [
+        "eligible-building-discount-or-extra-build",
+        "market/tavern/pirate-infrastructure-cost"
+      ],
+      "companionPredicates": [
+        "RequiresBuildingAllowlist"
+      ],
+      "forbiddenSubstitutes": [
+        "UI-only discount",
+        "charged-only discount",
+        "any Cove building discount",
+        "ship or water cost mechanic",
+        "extra build slot counted as cost discount"
+      ],
+      "notes": "Cove construction cost parity requires matching displayed and charged costs for exact eligible infrastructure and keeps extra-build behavior separate."
+    },
+    "fortress-fortification-extra-build": {
+      "costKinds": [
+        "eligible-fortification-discount-or-extra-build",
+        "defensive-support-cost"
+      ],
+      "companionPredicates": [
+        "RequiresBuildingAllowlist"
+      ],
+      "forbiddenSubstitutes": [
+        "UI-only discount",
+        "charged-only discount",
+        "any Fortress building discount",
+        "defensive display-name inference",
+        "extra build slot counted as cost discount"
+      ],
+      "notes": "Fortress construction cost parity requires matching displayed and charged costs for exact fortification/support groups and keeps extra-build behavior separate."
+    },
+    "inferno-garrison-sacrifice-extra-build": {
+      "costKinds": [
+        "garrison-sacrifice-value-credit",
+        "gold-cost-offset",
+        "extra-build-after-sacrifice"
+      ],
+      "companionPredicates": [
+        "RequiresGarrisonSacrifice"
+      ],
+      "forbiddenSubstitutes": [
+        "UI-only discount",
+        "charged-only discount",
+        "any Inferno building discount",
+        "garrison unit removed without deterministic value proof",
+        "temporary summoned unit counted as sacrifice value"
+      ],
+      "notes": "Inferno construction cost parity requires deterministic garrison sacrifice value to match displayed and charged gold offset before extra-build behavior."
+    },
+    "stronghold-military-extra-build": {
+      "costKinds": [
+        "eligible-military-ore-discount",
+        "extra-build-after-military-construction"
+      ],
+      "companionPredicates": [
+        "RequiresBuildingAllowlist"
+      ],
+      "forbiddenSubstitutes": [
+        "UI-only discount",
+        "charged-only discount",
+        "any Stronghold building discount",
+        "ore discount displayed as gold discount",
+        "extra build slot counted as cost discount"
+      ],
+      "notes": "Stronghold construction cost parity requires matching displayed and charged ore discount for exact military groups and keeps extra-build behavior separate."
+    },
+    "tower-magical-construct-workshop-slot": {
+      "costKinds": [
+        "visible-workshop-surcharge",
+        "magical-or-construct-building-cost",
+        "normal-slot-versus-workshop-slot"
+      ],
+      "companionPredicates": [
+        "RequiresBuildingAllowlist"
+      ],
+      "forbiddenSubstitutes": [
+        "UI-only surcharge",
+        "charged-only surcharge",
+        "any Tower building surcharge",
+        "normal construction slot counted as workshop slot",
+        "construct display-name inference"
+      ],
+      "notes": "Tower construction cost parity requires visible surcharge and charged surcharge to match for exact magical/construct groups while preserving normal-slot/workshop-slot distinction."
+    }
+  }
+}

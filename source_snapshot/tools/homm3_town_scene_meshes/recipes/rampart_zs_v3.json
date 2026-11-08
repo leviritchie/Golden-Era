@@ -1,0 +1,36 @@
+{
+  "schema": "town_full3d_recipe.v2",
+  "faction": "rampart",
+  "seed": "props_gc_v1",
+  "candidate": "zs_v3",
+  "note": "rampart zs_v2 (2026-10-02 night): recipe v2 (castle_zs_v7 shape: drop/card/flap/planar, every build state, ground contact, unseen-face, rest-paint). Seed props_gc_v1 = rx_layer_card_bgrp (the installed rx_layer_card_dfix, bundle 91947b09, plus the body_v2 residual; the installed candidate's staged assets are no longer on disk) with props fixed by town_t2_props: boulders 4, 10 and later 5, 9 re-placed and 11, 13, 15, 19 dropped (ground contact 0.4-1.2 m, no rest-preserving anchor); fir 2 re-placed, fir 7 and oak 8 dropped (props check per build state: 2048-3027 px at rest). Supersedes zs_v1 (v1 schema, failed on periphery only from the since-fixed prune bug). fromPreLdi false. v3: + sprite ground decals (rest-paint start/full/anim failures were all bottom-edge Mesh_Terrain under building sprites tbrmdw_0, tbrmdw_0_2, tbrmmark, tbrmhal3, tbrmext0).",
+  "ldi": {
+    "pieces": [
+      "Mesh_Terrain"
+    ],
+    "cut": "zone",
+    "backRule": "vlb",
+    "vlbK": 2.0,
+    "keepRounds": 0,
+    "reachLoop": 12,
+    "fromPreLdi": false
+  },
+  "backstop": {
+    "K": 2.0,
+    "stepPx": 4,
+    "groundSrcM": 1.0
+  },
+  "repair": {
+    "rules": [
+      "drop",
+      "card",
+      "flap",
+      "planar"
+    ],
+    "rounds": 8
+  },
+  "certificate": {
+    "loop": 12
+  },
+  "decal": {}
+}

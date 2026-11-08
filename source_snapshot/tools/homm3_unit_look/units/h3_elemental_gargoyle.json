@@ -1,0 +1,58 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_elemental_gargoyle",
+ "status": "look",
+ "notes": "tower rollout: molten death heap ripped from the DEF (whole frames, mesh hidden). Idle 'self-fire' flicker in the roster is the red chest gem/eyes: body paint, no layer",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "death_melt",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       14,
+       15,
+       16
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_elemental_gargoyle/death_melt"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Root",
+     "defOrigin": [
+      199,
+      264
+     ]
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "roster g05 death f13-16 fire: the gargoyle melts to a molten ember heap (f14-16); tower_fx_masks.whole_frame",
+    "notes": "the mesh never collapses (tower_retarget_issues.md), so the DEF heap replaces it from f14; Root is stationary"
+   },
+   {
+    "id": "death_hide",
+    "type": "event",
+    "clip": "Unit_Death",
+    "defFrame": 14,
+    "action": "hideMesh",
+    "provenance": "DEF g05 f14: the body is molten"
+   }
+  ]
+ }
+}

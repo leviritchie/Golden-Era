@@ -1,0 +1,45 @@
+{
+  "formatVersion": 1,
+  "creatureId": "pikeman",
+  "displayName": {
+    "singular": "Pikeman",
+    "plural": "Pikemen"
+  },
+  "source": {
+    "vcmiMapReference": "V:\\Games\\Olden Era Playtest Tweak\\vcmi\\Mods\\hota\\mods\\newGraphics\\Content\\config\\hota\\newGraphics\\castle\\newCreatureAnimations.json",
+    "adventureAnimationVcmi": "V:\\Games\\Olden Era Playtest Tweak\\vcmi\\Mods\\hota\\mods\\newGraphics\\Content\\sprites\\hota\\castle\\adventureMap\\creatures\\avwpike.def",
+    "battleAnimationNote": "Classic battle CPKEMAN/PIKEMAN is inside H3 H3SPRITE.LOD (not in this git tree). The automated prefab build uses the same avwpike HotA art as a temporary battle billboard. Replace in Unity with true battle DEF when you have a loose DEF or LOD extract.",
+    "extractedPngs": "tools/unity_exports/pikeman/extracted_avwpike/ (from avwpike.def via tools/defextract_py3.py)"
+  },
+  "unityHints": {
+    "renderMode": "camera_facing_billboard",
+    "defaultPrototypeAttack": "attack_front",
+    "pivot": "bottom_center",
+    "pixelsPerUnit": 100,
+    "filterMode": "point",
+    "esquireNote": "After exporting clips, build prefabs in oldenera_factions under Assets/CustomUnits/esquire/ and run BuildCustomUnitBundles with ../../custom_prefab_pipeline/custom_units_manifest.json",
+    "oldenEraBattlePrefab": {
+      "renderer": "MeshRenderer on a built-in Quad (or plane), not SpriteRenderer",
+      "materialShaders": ["Hex/Lit", "Sprites/Default"],
+      "reason": "Battle uses the same 3D forward path as stock units; SpriteRenderer is not reliable there."
+    }
+  },
+  "prototypeClipMap": {
+    "idle": "idle",
+    "moveStart": "movement_start",
+    "moveLoop": "movement",
+    "moveEnd": "movement_end",
+    "hit": "hitted",
+    "defendHit": "defence",
+    "death": "death",
+    "attack": "attack_front"
+  },
+  "directionalVariants": {
+    "attack": [
+      "attack_up",
+      "attack_front",
+      "attack_down"
+    ]
+  },
+  "clips": []
+}

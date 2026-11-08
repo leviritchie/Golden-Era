@@ -1,0 +1,114 @@
+{
+ "unit": "hota_cove_abyss_serpent",
+ "strideExempt": "legless body: sea serpent, no legs; the rig has no leg chain",
+ "joints": {
+  "Hips": [
+   0.1,
+   -0.08,
+   1.05
+  ],
+  "Spine": [
+   0.1,
+   -0.02,
+   1.15
+  ],
+  "Spine1": [
+   0.1,
+   0.02,
+   1.24
+  ],
+  "Spine2": [
+   0.1,
+   0.0,
+   1.32
+  ],
+  "Neck": [
+   0.1,
+   -0.12,
+   1.36
+  ],
+  "Head": [
+   0.1,
+   -0.3,
+   1.34
+  ],
+  "HeadTop_End": [
+   0.1,
+   -0.62,
+   1.27
+  ]
+ },
+ "grounding": false,
+ "tail": {
+  "segments": 12,
+  "belowHips": 0.05,
+  "neckRadius": 0.13,
+  "handsAboveZ": 9.0,
+  "torsoRadius": 0.13,
+  "amplitude": 0.15,
+  "wavelength": 0.8,
+  "behind": [
+   -0.893,
+   0.416,
+   0.0
+  ],
+  "groundZ": 0.35
+ },
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "roll": 20
+  }
+ },
+ "extensions": [
+  "cove_serpent"
+ ],
+ "coveSlump": {
+  "start": 2,
+  "deg": 70,
+  "pivotZ": 0.2
+ },
+ "coveLunge": {
+  "deg": 45,
+  "peak": 0.6,
+  "width": 0.35,
+  "pivotZ": 0.5
+ },
+ "glbPatch": {
+  "reason": "DEF g12 attack: the serpent uncoils its neck and strikes the head far forward at the target, jaws level (f3-f5), then recoils; the shipped clip buckled the head down into its own coil",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_abyss_serpent_neck_weights.json",
+    "sha256": "518d24ecc359fdd9ee6fee9f55461b2641f00d85b8f910b07b977da09adff1cd",
+    "note": "neck / upper-coil Hips bleed re-solved (wsolve, GPU) so the strike does not tear the throat (4319 -> 3550 torn edges)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_abyss_serpent_pose_rot.json",
+    "sha256": "656ba348108d5071b9cb263109d09f7606d83e96a9d535c74c605b8a50aed950",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_abyss_serpent_pose_rot.json",
+    "sha256": "656ba348108d5071b9cb263109d09f7606d83e96a9d535c74c605b8a50aed950",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_abyss_serpent_pose_tr.json",
+    "sha256": "2aff48487704d46972ec04496ccba05c3e2bcf2a107f0b79d63a384370b9cb77"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_abyss_serpent_pose_tr.json",
+    "sha256": "2aff48487704d46972ec04496ccba05c3e2bcf2a107f0b79d63a384370b9cb77"
+   }
+  ]
+ }
+}

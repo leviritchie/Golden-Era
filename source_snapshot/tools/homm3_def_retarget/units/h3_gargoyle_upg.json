@@ -1,0 +1,657 @@
+{
+ "unit": "h3_gargoyle_upg",
+ "joints": {
+  "Hips": [
+   0,
+   0.05,
+   0.75
+  ],
+  "Spine": [
+   0,
+   0.05,
+   0.88
+  ],
+  "Spine1": [
+   0,
+   0.05,
+   1.0
+  ],
+  "Spine2": [
+   0,
+   0.04,
+   1.12
+  ],
+  "Neck": [
+   0,
+   0.0,
+   1.25
+  ],
+  "Head": [
+   0,
+   -0.05,
+   1.35
+  ],
+  "HeadTop_End": [
+   0,
+   -0.05,
+   1.6
+  ],
+  "LeftShoulder": [
+   0.08,
+   0.03,
+   1.2
+  ],
+  "RightShoulder": [
+   -0.08,
+   0.03,
+   1.2
+  ],
+  "LeftArm": [
+   0.2,
+   0.03,
+   1.2
+  ],
+  "RightArm": [
+   -0.2,
+   0.03,
+   1.2
+  ],
+  "LeftForeArm": [
+   0.26,
+   0.0,
+   0.98
+  ],
+  "RightForeArm": [
+   -0.26,
+   0.0,
+   0.98
+  ],
+  "LeftHand": [
+   0.25,
+   -0.2,
+   0.8
+  ],
+  "RightHand": [
+   -0.25,
+   -0.2,
+   0.8
+  ],
+  "LeftHand_End": [
+   0.25,
+   -0.26,
+   0.7
+  ],
+  "RightHand_End": [
+   -0.25,
+   -0.26,
+   0.7
+  ],
+  "LeftUpLeg": [
+   0.12,
+   0.05,
+   0.72
+  ],
+  "RightUpLeg": [
+   -0.12,
+   0.05,
+   0.72
+  ],
+  "LeftLeg": [
+   0.16,
+   -0.08,
+   0.42
+  ],
+  "RightLeg": [
+   -0.16,
+   -0.08,
+   0.42
+  ],
+  "LeftFoot": [
+   0.18,
+   0.05,
+   0.12
+  ],
+  "RightFoot": [
+   -0.18,
+   0.05,
+   0.12
+  ],
+  "LeftToeBase": [
+   0.2,
+   -0.08,
+   0.03
+  ],
+  "RightToeBase": [
+   -0.2,
+   -0.08,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.22,
+   -0.18,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.22,
+   -0.18,
+   0.02
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "wingMaxDeg": 0,
+ "wings": [
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.18,
+    0.15,
+    1.2
+   ],
+   "tail": [
+    -0.4,
+    0.1,
+    1.58
+   ],
+   "sign": 1,
+   "region": {
+    "box": [
+     [
+      -0.65,
+      -0.3,
+      0.3
+     ],
+     [
+      -0.3,
+      0.45,
+      1.7
+     ]
+    ]
+   }
+  },
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.18,
+    0.15,
+    1.2
+   ],
+   "tail": [
+    0.4,
+    0.1,
+    1.58
+   ],
+   "sign": -1,
+   "region": {
+    "box": [
+     [
+      0.3,
+      -0.3,
+      0.3
+     ],
+     [
+      0.65,
+      0.45,
+      1.7
+     ]
+    ]
+   }
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 40,
+   "dy": 60
+  }
+ },
+ "shatter": {
+  "start": 14,
+  "chunks": 45,
+  "burst": 0.35,
+  "up": 0.2,
+  "spin": 3,
+  "solid": true
+ },
+ "extensions": [
+  "wing_chain",
+  "conflux_rubble"
+ ],
+ "wingChain": {
+  "wings": [
+   {
+    "bone": "LeftWing",
+    "side": 1,
+    "fan": {
+     "wrist": [
+      0.4,
+      0.06,
+      1.6
+     ],
+     "fingers": 3,
+     "anchorR": 0.2,
+     "anchorBlend": 0.2
+    }
+   },
+   {
+    "bone": "RightWing",
+    "side": -1,
+    "fan": {
+     "wrist": [
+      -0.41,
+      0.06,
+      1.6
+     ],
+     "fingers": 3,
+     "anchorR": 0.2,
+     "anchorBlend": 0.2
+    }
+   }
+  ],
+  "anim": {
+   "Idle": {
+    "open": 0,
+    "fold": 10
+   },
+   "MoveStart": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       0.6
+      ],
+      [
+       1,
+       1
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.66,
+       65
+      ],
+      [
+       1,
+       100
+      ]
+     ]
+    }
+   },
+   "Move": {
+    "open": 1,
+    "flap": {
+     "sin": 60,
+     "phase": -90,
+     "offset": 40
+    },
+    "fold": {
+     "sin": 50,
+     "phase": -90,
+     "half": "pos"
+    },
+    "droop": {
+     "sin": 30,
+     "phase": -90,
+     "half": "pos"
+    }
+   },
+   "MoveEnd": {
+    "open": {
+     "keys": [
+      [
+       0,
+       1
+      ],
+      [
+       0.5,
+       0.5
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       100
+      ],
+      [
+       0.5,
+       40
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Mouseover": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       0.15
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       1
+      ],
+      [
+       0.5,
+       0.9
+      ],
+      [
+       0.83,
+       0.2
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       25
+      ],
+      [
+       0.6,
+       15
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Defence": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       0.7
+      ],
+      [
+       0.67,
+       0.7
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       35
+      ],
+      [
+       0.67,
+       35
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       0.8
+      ],
+      [
+       0.6,
+       1
+      ],
+      [
+       0.8,
+       0.7
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       30
+      ],
+      [
+       0.6,
+       10
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Death": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.25,
+       0.9
+      ],
+      [
+       0.5,
+       1
+      ],
+      [
+       0.75,
+       0.3
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.25,
+       30
+      ],
+      [
+       0.6,
+       10
+      ],
+      [
+       1,
+       -15
+      ]
+     ]
+    },
+    "droop": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.6,
+       0
+      ],
+      [
+       1,
+       40
+      ]
+     ]
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "flap",
+    "open",
+    "fan",
+    "fold",
+    "droop",
+    "sweep"
+   ],
+   "penalty": 0.0008,
+   "smooth": 0.0008,
+   "offsets": [],
+   "clips": [
+    "Hitted",
+    "Defence",
+    "AttackFront",
+    "Death"
+   ]
+  },
+  "adoptWeights": "nearest"
+ },
+ "conflux": {
+  "rubbleSettle": {
+   "gather": 0.6,
+   "power": 0.8
+  }
+ },
+ "glbPatch": {
+  "reason": "2026-10-10 lane A (Tower rubble pass): the full rebuild for the Death rubble settle re-ran the wing_chain IoU fit under today's tools, which drifted the non-Death clips from the shipped 2026-09-28 build (AttackFront 0.17 H, Hitted 0.14 H, Defence 0.12 H, Move 0.09 H). These tables restore the shipped motion: per bone, the local offset from the rebuilt clip to the shipped one (AttackFront, Hitted, Defence, Mouseover, Move, MoveEnd), split into identical rot + rot2 halves, plus Hips translation. Death keeps the rebuild (the intended change: solid rubble that settles into a heap). Stretch gate 2589 -> 2551 edges. 2026-10-10 lane A wing pass (gargoyle recipe): Spine2+wing diffuseWeights over each wing (x beyond 0.12, alpha 0.8, 50 iterations) spreads the folded-drape membrane stretch at the wing root, then the restore tables, then h3_gargoyle_upg_wings_rot.json applied twice (each half under the 120 deg cap): AttackFront spread wings up and out, Move upstroke raised into a fan, Defence wing wrap forward, Mouseover small lift, Hitted f0-f3 and Death f0-f4 wings flung open as in the DEF. Idle, MoveStart and MoveEnd keep the shipped motion. Stretch gate 2589 -> 1886 edges.",
+  "ops": [
+   {
+    "op": "diffuseWeights",
+    "bones": [
+     "Spine2",
+     "WingL_*"
+    ],
+    "alpha": 0.8,
+    "iterations": 50,
+    "region": [
+     {
+      "axis": "x",
+      "above": 0.12,
+      "ramp": 0.06
+     }
+    ]
+   },
+   {
+    "op": "diffuseWeights",
+    "bones": [
+     "Spine2",
+     "WingR_*"
+    ],
+    "alpha": 0.8,
+    "iterations": 50,
+    "region": [
+     {
+      "axis": "x",
+      "below": -0.12,
+      "ramp": 0.06
+     }
+    ]
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gargoyle_upg_restore_rot.json",
+    "sha256": "24f0643255474e6aa8917c8596d738991d1ab412a7d1fe4ad53bd3f89580bbc1",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gargoyle_upg_restore_rot2.json",
+    "sha256": "24f0643255474e6aa8917c8596d738991d1ab412a7d1fe4ad53bd3f89580bbc1",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gargoyle_upg_restore_tr.json",
+    "sha256": "c05773edf9261ceaddfc420763516b66d7b88facb3ded94af14281ce032f9333",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gargoyle_upg_wings_rot.json",
+    "sha256": "62b56f249cbc2e3b87b293012b0d80eecc85e96a243411d60944047776958149",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gargoyle_upg_wings_rot.json",
+    "sha256": "62b56f249cbc2e3b87b293012b0d80eecc85e96a243411d60944047776958149",
+    "regrid": true
+   }
+  ]
+ }
+}

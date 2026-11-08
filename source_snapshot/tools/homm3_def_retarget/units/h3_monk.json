@@ -1,0 +1,237 @@
+{
+ "unit": "h3_monk",
+ "sourceMesh": "artifacts/homm3_mesh_surgery/h3_monk_chest_c3.glb",
+ "armPart": {
+  "mesh": "artifacts/homm3_mesh_surgery/h3_monk_chest_c3.glb",
+  "record": "artifacts/homm3_mesh_surgery/h3_monk_chest_c3.glb.surgery.json",
+  "elbowRadius": 0.12,
+  "panelSmooth": 40,
+  "panelStrip": [
+   "LeftArm",
+   "RightArm",
+   "LeftShoulder",
+   "RightShoulder",
+   "LeftForeArm",
+   "RightForeArm",
+   "LeftHand",
+   "RightHand"
+  ],
+  "bones": [
+   "Arm",
+   "ForeArm",
+   "Hand"
+  ],
+  "keepJoint": "Arm",
+  "armSmooth": 80,
+  "smoothShoulder": true,
+  "diffuse": {
+   "bones": [
+    "*Shoulder",
+    "*Arm",
+    "*ForeArm",
+    "*Hand",
+    "Spine*",
+    "Neck",
+    "Head"
+   ],
+   "iterations": 100
+  },
+  "shortEdgeTie": 0.005
+ },
+ "joints": {
+  "Hips": [
+   0,
+   -0.02,
+   0.92
+  ],
+  "Spine": [
+   0,
+   -0.03,
+   1.02
+  ],
+  "Spine1": [
+   0,
+   -0.04,
+   1.12
+  ],
+  "Spine2": [
+   0,
+   -0.04,
+   1.24
+  ],
+  "Neck": [
+   0,
+   -0.04,
+   1.36
+  ],
+  "Head": [
+   0,
+   -0.05,
+   1.44
+  ],
+  "HeadTop_End": [
+   0,
+   -0.05,
+   1.62
+  ],
+  "LeftShoulder": [
+   0.04,
+   -0.04,
+   1.36
+  ],
+  "LeftArm": [
+   0.18,
+   -0.03,
+   1.34
+  ],
+  "LeftForeArm": [
+   0.24,
+   -0.08,
+   1.12
+  ],
+  "LeftHand": [
+   0.06,
+   -0.26,
+   1.12
+  ],
+  "LeftHand_End": [
+   -0.02,
+   -0.28,
+   1.13
+  ],
+  "RightShoulder": [
+   -0.04,
+   -0.04,
+   1.36
+  ],
+  "RightArm": [
+   -0.18,
+   -0.03,
+   1.34
+  ],
+  "RightForeArm": [
+   -0.24,
+   -0.08,
+   1.12
+  ],
+  "RightHand": [
+   -0.06,
+   -0.26,
+   1.08
+  ],
+  "RightHand_End": [
+   0.02,
+   -0.28,
+   1.08
+  ],
+  "LeftUpLeg": [
+   0.09,
+   -0.02,
+   0.88
+  ],
+  "LeftLeg": [
+   0.1,
+   -0.04,
+   0.48
+  ],
+  "LeftFoot": [
+   0.1,
+   -0.02,
+   0.08
+  ],
+  "LeftToeBase": [
+   0.1,
+   -0.14,
+   0.02
+  ],
+  "LeftToe_End": [
+   0.1,
+   -0.22,
+   0.01
+  ],
+  "RightUpLeg": [
+   -0.09,
+   -0.02,
+   0.88
+  ],
+  "RightLeg": [
+   -0.1,
+   -0.04,
+   0.48
+  ],
+  "RightFoot": [
+   -0.1,
+   -0.02,
+   0.08
+  ],
+  "RightToeBase": [
+   -0.1,
+   -0.14,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.1,
+   -0.22,
+   0.01
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "skirtLegShare": 0.2,
+ "bootTop": 0.08,
+ "extensions": [
+  "castle_armblock"
+ ],
+ "armBlock": {
+  "bones": [
+   "Neck",
+   "Head",
+   "LeftShoulder",
+   "LeftArm",
+   "LeftForeArm",
+   "LeftHand",
+   "RightShoulder",
+   "RightArm",
+   "RightForeArm",
+   "RightHand"
+  ],
+  "follow": 0.15,
+  "clipFollow": {},
+  "boneFollow": {
+   "Neck": 0.3,
+   "Head": 0.3,
+   "LeftForeArm": 1.0,
+   "LeftHand": 1.0,
+   "RightForeArm": 1.0,
+   "RightHand": 1.0,
+   "LeftArm": 0.3,
+   "RightArm": 0.3
+  }
+ },
+ "legDamp": 0.6,
+ "glbPatch": {
+  "reason": "2026-10-08 authenticity pass (lane A): with chest_c1 freeing both sleeves, the arms act by motion intent: AttackFront/ShootFront gather at the chest, then a full two-armed cast toward the enemy (straight arms, shoulders protracted 0.35, torso leaning 18 deg over Spine+Spine1), withdraw and refold; Hitted/Defence arms recoil and ward; Death arms flung wide then collapse. Aim keys per DEF frame (pose.py spec z4), numpy patch lane.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_monk_pose.json",
+    "sha256": "114717eb2aabe3d3cfc8e52e4579b96e3f4fc42bd54941d3fe08883c6023aafb",
+    "regrid": true,
+    "note": "arm, shoulder and spine key poses by motion intent (whole sleeves freed by chest_c1)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_monk_pose2.json",
+    "sha256": "df5ca713115550c7954174d5ea983fc858ee21df3929fc6f053836785a4095d4",
+    "regrid": true,
+    "note": "second half of rotations over 115 deg (Death, Hitted fling)"
+   }
+  ]
+ }
+}

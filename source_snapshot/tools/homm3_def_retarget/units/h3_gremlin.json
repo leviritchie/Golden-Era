@@ -1,0 +1,195 @@
+{
+ "joints": {
+  "Hips": [
+   0.0,
+   0.08,
+   0.7
+  ],
+  "Spine": [
+   0.0,
+   0.08,
+   0.82
+  ],
+  "Spine1": [
+   0.0,
+   0.08,
+   0.95
+  ],
+  "Spine2": [
+   0.0,
+   0.06,
+   1.08
+  ],
+  "Neck": [
+   0.02,
+   0.03,
+   1.22
+  ],
+  "Head": [
+   0.05,
+   0.0,
+   1.32
+  ],
+  "HeadTop_End": [
+   0.05,
+   0.0,
+   1.58
+  ],
+  "RightShoulder": [
+   -0.05,
+   0.06,
+   1.15
+  ],
+  "RightArm": [
+   -0.2,
+   0.06,
+   1.14
+  ],
+  "RightForeArm": [
+   -0.28,
+   0.05,
+   0.93
+  ],
+  "RightHand": [
+   -0.3,
+   -0.2,
+   0.77
+  ],
+  "RightHand_End": [
+   -0.31,
+   -0.29,
+   0.75
+  ],
+  "LeftShoulder": [
+   0.05,
+   0.06,
+   1.15
+  ],
+  "LeftArm": [
+   0.2,
+   0.06,
+   1.14
+  ],
+  "LeftForeArm": [
+   0.3,
+   0.08,
+   0.9
+  ],
+  "LeftHand": [
+   0.32,
+   -0.18,
+   0.76
+  ],
+  "LeftHand_End": [
+   0.33,
+   -0.32,
+   0.74
+  ],
+  "RightUpLeg": [
+   -0.1,
+   0.08,
+   0.66
+  ],
+  "RightLeg": [
+   -0.18,
+   0.12,
+   0.38
+  ],
+  "RightFoot": [
+   -0.26,
+   0.22,
+   0.12
+  ],
+  "RightToeBase": [
+   -0.27,
+   0.06,
+   0.04
+  ],
+  "RightToe_End": [
+   -0.27,
+   -0.03,
+   0.04
+  ],
+  "LeftUpLeg": [
+   0.1,
+   0.06,
+   0.66
+  ],
+  "LeftLeg": [
+   0.17,
+   -0.02,
+   0.38
+  ],
+  "LeftFoot": [
+   0.22,
+   -0.08,
+   0.12
+  ],
+  "LeftToeBase": [
+   0.29,
+   -0.22,
+   0.05
+  ],
+  "LeftToe_End": [
+   0.35,
+   -0.29,
+   0.08
+  ]
+ },
+ "flail": {
+  "chainTop": [
+   -0.31,
+   -0.29,
+   1.13
+  ],
+  "grip": [
+   -0.31,
+   -0.29,
+   0.72
+  ],
+  "chain": [
+   [
+    -0.31,
+    -0.29,
+    0.52
+   ],
+   [
+    -0.3,
+    -0.29,
+    0.33
+   ]
+  ],
+  "ball": [
+   -0.3,
+   -0.29,
+   0.165
+  ],
+  "ballR": 0.175,
+  "radius": 0.055,
+  "radiusBelowGrip": 0.085,
+  "slack": {
+   "Death": 5,
+   "Defence": [
+    3,
+    8,
+    "near"
+   ]
+  }
+ },
+ "sleeve": {
+  "x": 0.2,
+  "zMin": 0.38,
+  "zMax": 1.02
+ },
+ "bootTop": 0.18,
+ "skirtLegShare": 0.3,
+ "ballSeed": [
+  186,
+  258
+ ],
+ "unit": "h3_gremlin",
+ "strideMatch": {
+  "maxDrop": 0.3,
+  "reason": "DEF Move keeps the right leg near straight: at the default 0.15 pelvis drop its reach cap is 0 (stride delivered 0.25 of required) and cadence 1.6 leaves ratio 1.73 (slip 0.40). Scratch sweep (worker A, 2026-09-27) on the pre-stride GLB: maxDrop 0.20 slip 0.166, ratio 1.144, cadence 1.6, jitter 0.155; 0.25 slip 0.109, ratio 1.072. Smallest drop that passes with margin. | worker C 2026-09-28: after 794015d6f6 planted feet stand on the Idle floor and the post-commit rebuild failed stride at maxDrop 0.2 (see worker C pass table); maxDrop 0.2 -> 0.3 (cap 0.35), measured: maxDrop 0.20 now slip 0.6911 ratio 1.5877 (FAIL); 0.30 slip 0.4148 ratio 1.0579 cadence 1.32 jitter 0.213 (PASS)."
+ }
+}

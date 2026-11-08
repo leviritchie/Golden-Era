@@ -1,0 +1,14 @@
+Source: Heroes of Might & Magic Olden Era Demo, AssetStudio v2.4.1 asset map (XML) over HeroesOE_Data.
+AnimationClip names adjacent in level* data (PathID block ~14566+ on level1):
+
+  Walk_idle          — idle (shared naming; listed next to esquire clips in asset map)
+  esquire_walk       — move loop
+  esquire_attack     — attack
+  esuire_damage      — hit (vanilla typo: esuire, not esquire)
+  esquire_death      — death
+  Campaign_esquire_Death_map — campaign / map variant (not used for standard battle hook)
+
+EsquireBillboardAnimatorBuild uses these exact strings for Animator *state* names and generated clip .anim names.
+
+Regenerate map: tools\AssetStudioCLI\bootstrap.cmd then build_asset_map.cmd
+Extract sample clips: tools\AssetStudioCLI\export_esquire_clips.cmd

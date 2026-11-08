@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "olden-ai-driver://schemas/visible_snapshot.schema.json",
+  "title": "Olden AI Driver Visible Snapshot",
+  "description": "Pared on-screen subset of a screen_dump catalog. Still not screen-reader ordered.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "dumpId",
+    "frame",
+    "mode",
+    "timestamp",
+    "visibleElements",
+    "gaps",
+    "srSafe"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "ai-driver.v1.visible-snapshot" },
+    "dumpId": { "type": "string", "minLength": 16 },
+    "frame": { "type": "integer", "minimum": 0 },
+    "mode": {
+      "type": "string",
+      "enum": ["main_menu", "adventure_map", "town", "battle", "loading", "unknown"]
+    },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "visibleElements": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "screen_dump.schema.json#/$defs/dumpElement" }
+    },
+    "gaps": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "screen_dump.schema.json#/$defs/gap" }
+    },
+    "srSafe": { "const": false }
+  }
+}

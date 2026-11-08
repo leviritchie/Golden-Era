@@ -1,0 +1,133 @@
+{
+ "unit": "h3_efreet_sufi",
+ "joints": {
+  "Hips": [
+   -0.017,
+   -0.038,
+   1.05
+  ],
+  "Spine": [
+   -0.017,
+   -0.009,
+   1.127
+  ],
+  "Spine1": [
+   -0.017,
+   0.021,
+   1.204
+  ],
+  "Spine2": [
+   -0.017,
+   0.054,
+   1.29
+  ],
+  "Neck": [
+   -0.017,
+   0.08,
+   1.357
+  ],
+  "Head": [
+   -0.017,
+   0.059,
+   1.42
+  ],
+  "HeadTop_End": [
+   0.003,
+   0.101,
+   1.713
+  ],
+  "LeftShoulder": [
+   0.08,
+   -0.017,
+   1.364
+  ],
+  "LeftArm": [
+   0.178,
+   0.059,
+   1.364
+  ],
+  "LeftForeArm": [
+   0.297,
+   -0.01,
+   1.252
+  ],
+  "LeftHand": [
+   0.29,
+   -0.22,
+   1.259
+  ],
+  "LeftHand_End": [
+   0.287,
+   -0.31,
+   1.262
+  ],
+  "RightShoulder": [
+   -0.108,
+   -0.017,
+   1.364
+  ],
+  "RightArm": [
+   -0.206,
+   0.059,
+   1.364
+  ],
+  "RightForeArm": [
+   -0.318,
+   -0.024,
+   1.245
+  ],
+  "RightHand": [
+   -0.248,
+   -0.213,
+   1.176
+  ],
+  "RightHand_End": [
+   -0.218,
+   -0.293,
+   1.146
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ]
+ },
+ "shrinkOut": {
+  "start": 2
+ },
+ "glbPatch": {
+  "reason": "authenticity lane-A 2026-10-10: DEF g12 fire punch wind-up: AttackFront f1-f2 raise both hands overhead (the capture held one fist at the face); keyRotations (half offset, applied twice). The f3-f5 forward pitch on the flame tail is in this DEF and stays as captured (no Hips hold, unlike the sultan). stretchRelax evens the armpit/elbow edges of the overhead raise.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreet_sufi_windup_rot.json",
+    "sha256": "b21c9ac6a95d796a17de4612899192e60ebcf61baecd8d0188f9a2779c7d8e60",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreet_sufi_windup_rot.json",
+    "sha256": "b21c9ac6a95d796a17de4612899192e60ebcf61baecd8d0188f9a2779c7d8e60",
+    "regrid": true
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.4,
+    "maxMove": 0.08
+   }
+  ]
+ }
+}

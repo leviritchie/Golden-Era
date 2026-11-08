@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "olden-cs-recovery"
+version = "0.3.0"
+description = "Vehicle-agnostic queue + worker CLI for Olden Era IL2CPP→C# recovery (bar C)."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "jsonschema>=4.0",
+]
+
+[project.scripts]
+olden-cs-recovery-worker = "olden_cs_recovery.worker:main"
+olden-cs-recovery-seed = "olden_cs_recovery.seed_battle_partition:main"
+olden-cs-recovery-validate-inputs = "olden_cs_recovery.validate_inputs:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["olden_cs_recovery*"]

@@ -1,0 +1,271 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_arch_devil",
+ "status": "look",
+ "notes": "inferno rollout: devil family; the fire-cloud teleport (MoveStart/MoveEnd) and the burning death ripped from the DEF, plus the flaming scythe arc on the attack",
+ "lighting": {
+  "mode": "v6m",
+  "notes": "Current-GLB mode trial on 2026-09-27: v6m body L-hist 6.89 versus raw 7.43 and v7c 10.02; review sheet keeps the DEF's warmer bone and scythe tones.",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "teleport_fire",
+   "treatment": "dynamic",
+   "notes": "the teleport fireball lights the body as it vanishes / reappears"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "scythe_arc",
+    "type": "defFlipbook",
+    "provenance": "roster inventory inferno: g12 attack_front held fire f1-7 (the burning scythe sweep)",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1
+   },
+   {
+    "id": "teleport",
+    "type": "defFlipbook",
+    "provenance": "inferno_fx_masks.py opaque_all: g20 move_start f4-13 + g21 move_end f0-7, the fire cloud (the sprite is the cloud; defEffects kept only its orange flecks)",
+    "clips": {
+     "Unit_MoveStart": {
+      "defGroup": 20,
+      "frames": [
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13
+      ]
+     },
+     "Unit_MoveEnd": {
+      "defGroup": 21,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_arch_devil/teleport"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Hips",
+     "defOrigin": {
+      "Unit_MoveStart": [
+       [
+        202,
+        236
+       ],
+       [
+        202,
+        236
+       ],
+       [
+        201,
+        232
+       ],
+       [
+        200,
+        230
+       ],
+       [
+        199,
+        224
+       ],
+       [
+        198,
+        217
+       ],
+       [
+        197,
+        210
+       ],
+       [
+        197,
+        203
+       ],
+       [
+        196,
+        192
+       ],
+       [
+        196,
+        175
+       ]
+      ],
+      "Unit_MoveEnd": [
+       [
+        195,
+        184
+       ],
+       [
+        196,
+        201
+       ],
+       [
+        197,
+        212
+       ],
+       [
+        198,
+        218
+       ],
+       [
+        199,
+        224
+       ],
+       [
+        200,
+        230
+       ],
+       [
+        201,
+        232
+       ],
+       [
+        202,
+        232
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "teleport_fire",
+    "notes": "defOrigin = the mask centroid per frame (the sprite is the effect, so 'auto' has no body contact)."
+   },
+   {
+    "id": "teleport_light",
+    "type": "effectLight",
+    "lightId": "teleport_fire",
+    "carrier": "teleport",
+    "anchor": {
+     "bone": "Hips",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.62,
+     0.3
+    ],
+    "range": 4.0,
+    "intensity": {
+     "Unit_MoveStart": [
+      0.0,
+      0.116,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "Unit_MoveEnd": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "death_burn",
+    "type": "defFlipbook",
+    "provenance": "roster inventory inferno: g05 death fire (flames licking the body as it collapses)",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1
+   }
+  ]
+ }
+}

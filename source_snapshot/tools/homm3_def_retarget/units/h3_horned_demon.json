@@ -1,0 +1,354 @@
+{
+ "unit": "h3_horned_demon",
+ "joints": {
+  "Hips": [
+   0.024,
+   0.136,
+   0.777
+  ],
+  "Spine": [
+   0.024,
+   0.12,
+   0.847
+  ],
+  "Spine1": [
+   0.024,
+   0.105,
+   0.917
+  ],
+  "Spine2": [
+   0.024,
+   0.087,
+   0.995
+  ],
+  "Neck": [
+   0.024,
+   0.073,
+   1.056
+  ],
+  "Head": [
+   0.017,
+   0.038,
+   1.231
+  ],
+  "HeadTop_End": [
+   0.01,
+   -0.185,
+   1.412
+  ],
+  "LeftShoulder": [
+   0.129,
+   -0.045,
+   1.105
+  ],
+  "LeftArm": [
+   0.234,
+   0.066,
+   1.168
+  ],
+  "LeftForeArm": [
+   0.304,
+   0.22,
+   0.966
+  ],
+  "LeftHand": [
+   0.297,
+   0.003,
+   0.84
+  ],
+  "LeftHand_End": [
+   0.294,
+   -0.074,
+   0.795
+  ],
+  "RightShoulder": [
+   -0.08,
+   -0.045,
+   1.105
+  ],
+  "RightArm": [
+   -0.192,
+   0.066,
+   1.168
+  ],
+  "RightForeArm": [
+   -0.29,
+   0.122,
+   0.945
+  ],
+  "RightHand": [
+   -0.29,
+   -0.045,
+   0.798
+  ],
+  "RightHand_End": [
+   -0.29,
+   -0.113,
+   0.739
+  ],
+  "LeftUpLeg": [
+   0.122,
+   0.073,
+   0.756
+  ],
+  "LeftLeg": [
+   0.199,
+   -0.094,
+   0.463
+  ],
+  "LeftFoot": [
+   0.213,
+   0.094,
+   0.261
+  ],
+  "LeftToeBase": [
+   0.234,
+   0.003,
+   -0.011
+  ],
+  "LeftToe_End": [
+   0.248,
+   -0.094,
+   -0.025
+  ],
+  "RightUpLeg": [
+   -0.073,
+   0.073,
+   0.756
+  ],
+  "RightLeg": [
+   -0.136,
+   -0.066,
+   0.442
+  ],
+  "RightFoot": [
+   -0.15,
+   0.171,
+   0.261
+  ],
+  "RightToeBase": [
+   -0.171,
+   0.101,
+   -0.011
+  ],
+  "RightToe_End": [
+   -0.185,
+   0.031,
+   -0.011
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "gateExceptions": {
+  "ground": {
+   "Move:Hips": {
+    "value": 0.13,
+    "reason": "joint entry infeasible: the feet and Hips bands do not meet at the stride-matched Move entry; measured on the rebuild's grounded candidate: Move Hips steps +0.130 from Idle at entry (DEF allows 0.081); user-approved exception 2026-09-28"
+   }
+  }
+ },
+ "props": [
+  {
+   "name": "tail",
+   "bone": "Hips",
+   "segments": [
+    [
+     [
+      0.034,
+      0.227,
+      0.87
+     ],
+     [
+      0.011,
+      0.288,
+      0.802
+     ]
+    ],
+    [
+     [
+      0.011,
+      0.288,
+      0.802
+     ],
+     [
+      0.022,
+      0.284,
+      0.749
+     ]
+    ],
+    [
+     [
+      0.022,
+      0.284,
+      0.749
+     ],
+     [
+      -0.03,
+      0.302,
+      0.674
+     ]
+    ],
+    [
+     [
+      -0.03,
+      0.302,
+      0.674
+     ],
+     [
+      -0.038,
+      0.29,
+      0.57
+     ]
+    ],
+    [
+     [
+      -0.038,
+      0.29,
+      0.57
+     ],
+     [
+      -0.073,
+      0.32,
+      0.521
+     ]
+    ],
+    [
+     [
+      -0.073,
+      0.32,
+      0.521
+     ],
+     [
+      -0.121,
+      0.32,
+      0.426
+     ]
+    ],
+    [
+     [
+      -0.121,
+      0.32,
+      0.426
+     ],
+     [
+      -0.145,
+      0.31,
+      0.341
+     ]
+    ],
+    [
+     [
+      -0.145,
+      0.31,
+      0.341
+     ],
+     [
+      -0.151,
+      0.308,
+      0.299
+     ]
+    ]
+   ],
+   "radius": 0.06,
+   "exclude": [
+    {
+     "sphere": [
+      [
+       0.021,
+       0.221,
+       0.906
+      ],
+      0.05
+     ]
+    }
+   ],
+   "note": "2026-10-10 lane-A: traced tail centreline (Blender axes); the tail hung rigid, its lower part skinned to the right shin (fused limb); inferno_whipchain re-skins it onto Tail_00..09."
+  }
+ ],
+ "whipChain": {
+  "parent": "Hips",
+  "prop": "tail",
+  "prefix": "Tail",
+  "bones": 10,
+  "grip": 0.04,
+  "gripBlend": 0.06,
+  "radius": 0.06
+ },
+ "extensions": [
+  "inferno_whipchain"
+ ],
+ "glbPatch": {
+  "reason": "h3_horned_demon DEF fidelity (lane-A authenticity 2026-10-10): AttackFront g12 horn charge with both arms swept down/back f3-f5 and the head pitched up so the horns aim level forward (capture tucked the head, horns pointing down); Death g05 arms thrown up f2-f3 then the full thigh fold into a hunched seated heap f5-f8, f8 collapsing forward. Weight repair: thigh bleed up the belly/chest (LeftUpLeg/RightUpLeg to y 1.0) handed to Hips and shoulder bleed on the belly handed to Spine1, so the full RightUpLeg fold passes the tear gate (worst 7.254 -> 7.26, edges>2x 1721 -> 1614). keyRotations x2 (split table). || tail: 2026-10-10 authenticity (lane A): tail whip-chain keys (h3_horned_demon_tail_rot.json x2) - DEF Move trail at knee height with a travelling flick, AttackFront swings low then hooks the tip up behind, Defence curls it up behind, Death flings and curls it, then rests it just off the floor in the heap (a trailing tip would lift the heap 8 cm through grounding)",
+  "ops": [
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftUpLeg",
+     "RightUpLeg"
+    ],
+    "to": "Hips",
+    "space": "blender",
+    "region": [
+     {
+      "axis": "z",
+      "above": 0.78,
+      "ramp": 0.12
+     }
+    ]
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftShoulder",
+     "RightShoulder"
+    ],
+    "to": "Spine1",
+    "space": "blender",
+    "region": [
+     {
+      "axis": "z",
+      "below": 0.98,
+      "ramp": 0.06
+     },
+     {
+      "axis": "x",
+      "above": -0.17,
+      "ramp": 0.04
+     },
+     {
+      "axis": "x",
+      "below": 0.22,
+      "ramp": 0.04
+     }
+    ]
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_horned_demon_charge_rot.json",
+    "sha256": "2705f1a6ae26dafb49e13ec4b3da8a2abec25c1988cd444b116edfd0cf03c2a4",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_horned_demon_charge_rot.json",
+    "sha256": "2705f1a6ae26dafb49e13ec4b3da8a2abec25c1988cd444b116edfd0cf03c2a4",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_horned_demon_tail_rot.json",
+    "sha256": "790f3da9f8238ef4298d26585acbd05da173af736b575adc35d99f389c4a986e",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_horned_demon_tail_rot.json",
+    "sha256": "790f3da9f8238ef4298d26585acbd05da173af736b575adc35d99f389c4a986e",
+    "regrid": true
+   }
+  ]
+ }
+}

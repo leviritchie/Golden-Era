@@ -1,0 +1,53 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_dragon_fly",
+ "status": "look",
+ "notes": "fortress rollout: fire-spark spit ripped from the DEF (defEffects fire)",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "fire_spit",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 1
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "roster inventory fortress: g12 attack_front detached fire sparks f3-6 (+f2 onset)",
+    "notes": "HoMM3 dragon fly fire sparks sprayed from the mouth. Idle self-fire (6% body, flicker) is the orange head/body paint moving with the wing beat, left in the base colour."
+   }
+  ]
+ }
+}

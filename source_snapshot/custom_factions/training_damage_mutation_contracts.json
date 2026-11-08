@@ -1,0 +1,183 @@
+﻿{
+    "schemaVersion":  1,
+    "purpose":  "Source-authored mutation design contracts for TrainingDamage committed-damage custom laws. This is design classification only; it does not authorize damage, stat, status, resource, turn-order, or cleanup mutation.",
+    "validationState":  "source-prepared-runtime-unproven",
+    "policy":  {
+                   "noFallbacks":  true,
+                   "effectKeysMustMatchTrainingDamageProfiles":  true,
+                   "runtimeProofStillRequiredForGameplay":  true
+               },
+    "allowedMutationKinds":  [
+                                 "damage-percent-scalar",
+                                 "target-stat-debuff",
+                                 "attacker-damage-reduction",
+                                 "target-vulnerability-mark",
+                                 "stacking-temporary-stat-buff",
+                                 "elemental-family-stat-aspect",
+                                 "gated-entry-damage-scalar",
+                                 "temporary-resource-credit",
+                                 "wounded-speed-buff"
+                             ],
+    "contracts":  {
+                      "castle.damage-per-positive-morale":  {
+                                                                "mutationKind":  "damage-percent-scalar",
+                                                                "direction":  "outgoing-damage",
+                                                                "mutationPoint":  "final-positive-damage-before-commit",
+                                                                "requiredRuntimeProof":  [
+                                                                                             "final unit damage ordering proof",
+                                                                                             "positive morale value read proof",
+                                                                                             "safe effect mutation point"
+                                                                                         ],
+                                                                "numericInputs":  [
+                                                                                      "DamagePercentBonus",
+                                                                                      "positive morale value"
+                                                                                  ],
+                                                                "cleanup":  "none",
+                                                                "notes":  "Scale outgoing committed damage by current positive morale; do not mutate morale."
+                                                            },
+                      "cove.gunpowder-defense-debuff":  {
+                                                            "mutationKind":  "target-vulnerability-mark",
+                                                            "direction":  "target-custom-battle-state",
+                                                            "mutationPoint":  "after-successful-cove-gunpowder-hit-before-damage-commit",
+                                                            "requiredRuntimeProof":  [
+                                                                                         "final unit damage ordering proof",
+                                                                                         "exact Cove gunpowder dealer classification proof",
+                                                                                         "battle-local ash state idempotence proof",
+                                                                                         "safe committed-damage mutation point"
+                                                                                     ],
+                                                            "numericInputs":  [
+                                                                                  "DefenseDebuffPerHit as ash points",
+                                                                                  "BurningAshPercentPerPoint",
+                                                                                  "BurningAshMaxPercent"
+                                                                              ],
+                                                            "cleanup":  "battle-local ConditionalWeakTable target state; no native cleanup or status removal required",
+                                                            "notes":  "Robust custom-code route: exact Cove gunpowder hits add battle-local ash points to the target; later committed damage to that target is increased by +5% per ash point, capped at +30%. This intentionally avoids native buff/status mutation and does not claim Cannon/Pirate-only filtering until that classifier exists."
+                                                        },
+                      "dungeon.isolated-target-damage":  {
+                                                             "mutationKind":  "damage-percent-scalar",
+                                                             "direction":  "outgoing-damage",
+                                                             "mutationPoint":  "final-positive-damage-before-commit",
+                                                             "requiredRuntimeProof":  [
+                                                                                          "final unit damage ordering proof",
+                                                                                          "isolated target geometry proof",
+                                                                                          "safe effect mutation point"
+                                                                                      ],
+                                                             "numericInputs":  [
+                                                                                   "DamagePercentBonus"
+                                                                               ],
+                                                             "cleanup":  "none",
+                                                             "notes":  "Scale outgoing damage only when the receiver satisfies the exact isolated-target predicate."
+                                                         },
+                      "fortress.debuffed-attacker-damage-reduction":  {
+                                                                          "mutationKind":  "attacker-damage-reduction",
+                                                                          "direction":  "outgoing-damage",
+                                                                          "mutationPoint":  "final-positive-damage-before-commit",
+                                                                          "requiredRuntimeProof":  [
+                                                                                                       "final unit damage ordering proof",
+                                                                                                       "dealer negative status query proof",
+                                                                                                       "receiver Fortress law-owner proof",
+                                                                                                       "safe effect mutation point"
+                                                                                                   ],
+                                                                          "numericInputs":  [
+                                                                                                "DamagePercentBonus"
+                                                                                            ],
+                                                                          "cleanup":  "none",
+                                                                          "notes":  "Reduce outgoing damage from enemies who have explicit negative-status taxonomy matches."
+                                                                      },
+                      "rampart.avenger-vulnerability":  {
+                                                            "mutationKind":  "damage-percent-scalar",
+                                                            "direction":  "outgoing-damage",
+                                                            "mutationPoint":  "final-positive-damage-before-commit",
+                                                            "requiredRuntimeProof":  [
+                                                                                         "final unit damage ordering proof",
+                                                                                         "custom Avenger marker SID state proof",
+                                                                                         "safe effect mutation point"
+                                                                                     ],
+                                                            "numericInputs":  [
+                                                                                  "DamagePercentBonus"
+                                                                              ],
+                                                            "cleanup":  "custom marker SID gates active duration; battle-local ConditionalWeakTable stores potency count only",
+                                                            "notes":  "Native Avenger marks are mirrored into the explicit homm3_law_marker_avenger_intensity buff SID. Damage-time Avenger laws require that marker SID; the battle-local ConditionalWeakTable stores only potency/count data and does not prove active duration by itself."
+                                                        },
+                      "tower.spellcast-stacking-attack-defense":  {
+                                                                      "mutationKind":  "stacking-temporary-stat-buff",
+                                                                      "direction":  "friendly-stack-stat",
+                                                                      "mutationPoint":  "after-successful-hero-spell-cast",
+                                                                      "requiredRuntimeProof":  [
+                                                                                                   "spell cast event proof",
+                                                                                                   "target construct/friendly stack identity proof",
+                                                                                                   "native attack/defense stat mutation proof",
+                                                                                                   "battle cleanup proof"
+                                                                                               ],
+                                                                      "numericInputs":  [
+                                                                                            "rank"
+                                                                                        ],
+                                                                      "cleanup":  "round-or-battle cleanup required",
+                                                                      "notes":  "Stack temporary Attack/Defense calibration after successful spell casts; not a direct damage-event mutation."
+                                                                  },
+                      "conflux.family-stat-aspect":  {
+                                                         "mutationKind":  "damage-percent-scalar",
+                                                         "direction":  "outgoing-damage",
+                                                         "mutationPoint":  "final-positive-damage-before-commit",
+                                                         "requiredRuntimeProof":  [
+                                                                                      "final unit damage ordering proof",
+                                                                                      "exact elemental unit classifier proof",
+                                                                                      "safe effect mutation point"
+                                                                                  ],
+                                                         "numericInputs":  [
+                                                                               "DamagePercentBonus"
+                                                                           ],
+                                                         "cleanup":  "none",
+                                                         "notes":  "Scale outgoing committed damage only for units classified as elemental by the exact custom unit-family registry. Fire/Earth/Air/Water stat-aspect split remains unimplemented until stat mutation and subfamily surfaces exist."
+                                                     },
+                      "inferno.gated-entry-damage":  {
+                                                         "mutationKind":  "gated-entry-damage-scalar",
+                                                         "direction":  "outgoing-damage",
+                                                         "mutationPoint":  "final-positive-damage-before-commit",
+                                                         "requiredRuntimeProof":  [
+                                                                                      "final unit damage ordering proof",
+                                                                                      "gated unit identity proof",
+                                                                                      "permanent recruited unit exclusion proof",
+                                                                                      "safe effect mutation point"
+                                                                                  ],
+                                                         "numericInputs":  [
+                                                                               "DamagePercentBonus"
+                                                                           ],
+                                                         "cleanup":  "none",
+                                                         "notes":  "Scale only damage from proven temporary/gated entrants; never affect permanent recruited units."
+                                                     },
+                      "necropolis.temp-mana-per-corpse":  {
+                                                              "mutationKind":  "temporary-resource-credit",
+                                                              "direction":  "hero-temporary-resource",
+                                                              "mutationPoint":  "corpse-count-consumption-or-battle-result-phase",
+                                                              "requiredRuntimeProof":  [
+                                                                                           "corpse count proof",
+                                                                                           "temporary mana mutation proof",
+                                                                                           "cleanup proof",
+                                                                                           "idempotence proof"
+                                                                                       ],
+                                                              "numericInputs":  [
+                                                                                    "TemporaryManaPerCorpse",
+                                                                                    "corpse count"
+                                                                                ],
+                                                              "cleanup":  "temporary mana cleanup required",
+                                                              "notes":  "Grant temporary mana from logical corpse count only through a proven temporary-resource surface."
+                                                          },
+                      "stronghold.wounded-speed":  {
+                                                       "mutationKind":  "wounded-speed-buff",
+                                                       "direction":  "friendly-stack-stat",
+                                                       "mutationPoint":  "safe-round-or-turn-refresh",
+                                                       "requiredRuntimeProof":  [
+                                                                                    "wounded threshold proof",
+                                                                                    "native speed stat mutation proof",
+                                                                                    "turn-order refresh proof",
+                                                                                    "cleanup proof"
+                                                                                ],
+                                                       "numericInputs":  [
+                                                                             "SpeedDelta"
+                                                                         ],
+                                                       "cleanup":  "battle cleanup or wounded-state refresh required",
+                                                       "notes":  "Apply speed only from a proven wounded predicate at a safe refresh point; do not mutate initiative mid-action without proof."
+                                                   }
+                  }
+}

@@ -1,0 +1,343 @@
+{
+ "unit": "h3_lizard_warrior",
+ "joints": {
+  "Hips": [
+   -0.005,
+   0.074,
+   0.88
+  ],
+  "Spine": [
+   -0.004,
+   0.104,
+   0.966
+  ],
+  "Spine1": [
+   -0.002,
+   0.133,
+   1.053
+  ],
+  "Spine2": [
+   -0.0,
+   0.167,
+   1.149
+  ],
+  "Neck": [
+   0.001,
+   0.193,
+   1.225
+  ],
+  "Head": [
+   -0.005,
+   0.027,
+   1.312
+  ],
+  "HeadTop_End": [
+   -0.005,
+   -0.099,
+   1.484
+  ],
+  "LeftShoulder": [
+   0.061,
+   0.021,
+   1.258
+  ],
+  "LeftArm": [
+   0.147,
+   0.054,
+   1.258
+  ],
+  "LeftForeArm": [
+   0.22,
+   0.113,
+   1.039
+  ],
+  "LeftHand": [
+   0.227,
+   -0.092,
+   1.006
+  ],
+  "LeftHand_End": [
+   0.23,
+   -0.181,
+   0.992
+  ],
+  "RightShoulder": [
+   -0.078,
+   0.021,
+   1.258
+  ],
+  "RightArm": [
+   -0.158,
+   0.054,
+   1.258
+  ],
+  "RightForeArm": [
+   -0.225,
+   0.113,
+   1.046
+  ],
+  "RightHand": [
+   -0.251,
+   -0.059,
+   0.92
+  ],
+  "RightHand_End": [
+   -0.262,
+   -0.131,
+   0.867
+  ],
+  "LeftUpLeg": [
+   0.081,
+   0.007,
+   0.827
+  ],
+  "LeftLeg": [
+   0.134,
+   -0.112,
+   0.495
+  ],
+  "LeftFoot": [
+   0.127,
+   -0.059,
+   0.136
+  ],
+  "LeftToeBase": [
+   0.2,
+   -0.219,
+   0.076
+  ],
+  "LeftToe_End": [
+   0.254,
+   -0.312,
+   0.023
+  ],
+  "RightUpLeg": [
+   -0.085,
+   0.007,
+   0.827
+  ],
+  "RightLeg": [
+   -0.151,
+   -0.046,
+   0.488
+  ],
+  "RightFoot": [
+   -0.145,
+   0.107,
+   0.136
+  ],
+  "RightToeBase": [
+   -0.205,
+   -0.053,
+   0.07
+  ],
+  "RightToe_End": [
+   -0.258,
+   -0.145,
+   0.03
+  ]
+ },
+ "extensions": [
+  "fortress_rig"
+ ],
+ "fortress": {
+  "chains": [
+   {
+    "name": "Tail",
+    "parent": "Hips",
+    "points": [
+     [
+      0.0,
+      0.15,
+      0.78
+     ],
+     [
+      0.025,
+      0.121,
+      0.64
+     ],
+     [
+      0.04,
+      0.094,
+      0.529
+     ],
+     [
+      0.015,
+      0.073,
+      0.417
+     ],
+     [
+      -0.01,
+      0.052,
+      0.305
+     ],
+     [
+      -0.009,
+      0.045,
+      0.189
+     ],
+     [
+      -0.008,
+      0.083,
+      0.099
+     ],
+     [
+      -0.006,
+      0.189,
+      0.051
+     ],
+     [
+      -0.006,
+      0.301,
+      0.058
+     ]
+    ],
+    "radius": 0.1,
+    "rootBlend": 0.12,
+    "ratio": 1.0
+   }
+  ],
+  "params": {
+   "tailLift": {
+    "type": "chain",
+    "chain": "Tail",
+    "mode": "curl",
+    "axis": [
+     -1,
+     0,
+     0
+    ],
+    "limit": [
+     -30,
+     70
+    ],
+    "step": 12
+   },
+   "tailSide": {
+    "type": "chain",
+    "chain": "Tail",
+    "mode": "curl",
+    "axis": [
+     0,
+     1,
+     0
+    ],
+    "limit": [
+     -40,
+     40
+    ],
+    "step": 12
+   }
+  },
+  "anim": {
+   "Idle": {
+    "tailSide": {
+     "sin": 6,
+     "cycles": 1
+    }
+   },
+   "Move": {
+    "tailSide": {
+     "sin": 15,
+     "cycles": 1
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "tailLift",
+    "tailSide"
+   ],
+   "clips": {
+    "Death": [
+     "dx",
+     "roll"
+    ]
+   },
+   "limits": {
+    "dx": [
+     -40,
+     40
+    ],
+    "dy": [
+     -60,
+     60
+    ]
+   },
+   "penalty": 0.0003,
+   "smooth": 0.0005,
+   "clipsReason": "Death fits dx/roll only: with dy the silhouette fit (IoU 0.03-0.36 on the fall, gains <= 0.07) drifted the whole body up the screen frame by frame (dy 4 -> 27..39 px through the smooth term), so the body hung ~0.23 of its height above the floor through the fall and dropped onto it on the last frame (float-then-pop). The DEF lands progressively; vertical placement is left to build_unit grounding."
+  },
+  "armSplit": {
+   "sides": [
+    "Left"
+   ],
+   "foreRadius": 0.07,
+   "handRadius": 0.09,
+   "armKeep": 0.12
+  }
+ },
+ "props": [
+  {
+   "name": "mace",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.17,
+      -0.17,
+      0.9
+     ],
+     [
+      0.21,
+      -0.27,
+      1.74
+     ]
+    ]
+   ],
+   "radius": 0.045
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "armCut": {
+  "maxDist": 0.07
+ },
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "glbPatch": {
+  "reason": "DEF g12 attack: blade raised up-back over the shoulder (f3-f4), then a low lunge with the body bent forward and the arm thrusting level at the target (f5), recovering f6; the capture kept the arm low and the body upright",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lizard_warrior_arm_weights.json",
+    "sha256": "a55c5b5352eb7f2bdef50cc217c6fc15e83b2b7e8e382542b34ccd4f8e0d0f1f",
+    "note": "arm/torso/hip weight re-solve so the raise and lunge do not tear (wsolve.py, z<1.15)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lizard_warrior_pose_rot.json",
+    "sha256": "03ed15793da08c620b66ca95c366dbad3dbd5e78a061aca2ce37f25421f3802f",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lizard_warrior_pose_rot.json",
+    "sha256": "03ed15793da08c620b66ca95c366dbad3dbd5e78a061aca2ce37f25421f3802f",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lizard_warrior_pose_tr.json",
+    "sha256": "fab312d1fd50231d574aed4d69a6444f3f488103c031d81493976ad3dd159a0f"
+   }
+  ]
+ }
+}

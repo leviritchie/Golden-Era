@@ -1,0 +1,333 @@
+{
+ "unit": "h3_ogre",
+ "joints": {
+  "Hips": [
+   0.01,
+   0.031,
+   0.833
+  ],
+  "Spine": [
+   0.016,
+   0.051,
+   0.942
+  ],
+  "Spine1": [
+   0.021,
+   0.07,
+   1.05
+  ],
+  "Spine2": [
+   0.027,
+   0.091,
+   1.171
+  ],
+  "Neck": [
+   0.031,
+   0.108,
+   1.266
+  ],
+  "Head": [
+   0.01,
+   0.045,
+   1.392
+  ],
+  "HeadTop_End": [
+   -0.017,
+   -0.038,
+   1.671
+  ],
+  "LeftShoulder": [
+   0.115,
+   0.115,
+   1.301
+  ],
+  "LeftArm": [
+   0.255,
+   0.073,
+   1.245
+  ],
+  "LeftForeArm": [
+   0.332,
+   0.136,
+   1.008
+  ],
+  "LeftHand": [
+   0.375,
+   0.0,
+   0.76
+  ],
+  "LeftHand_End": [
+   0.35,
+   -0.05,
+   0.6
+  ],
+  "RightShoulder": [
+   -0.073,
+   0.129,
+   1.301
+  ],
+  "RightArm": [
+   -0.206,
+   0.115,
+   1.245
+  ],
+  "RightForeArm": [
+   -0.325,
+   0.171,
+   1.029
+  ],
+  "RightHand": [
+   -0.374,
+   -0.073,
+   0.994
+  ],
+  "RightHand_End": [
+   -0.391,
+   -0.161,
+   0.981
+  ],
+  "LeftUpLeg": [
+   0.129,
+   0.024,
+   0.833
+  ],
+  "LeftLeg": [
+   0.213,
+   -0.045,
+   0.484
+  ],
+  "LeftFoot": [
+   0.22,
+   0.08,
+   0.107
+  ],
+  "LeftToeBase": [
+   0.241,
+   -0.094,
+   0.023
+  ],
+  "LeftToe_End": [
+   0.255,
+   -0.192,
+   -0.033
+  ],
+  "RightUpLeg": [
+   -0.108,
+   0.024,
+   0.833
+  ],
+  "RightLeg": [
+   -0.206,
+   -0.045,
+   0.484
+  ],
+  "RightFoot": [
+   -0.213,
+   0.08,
+   0.107
+  ],
+  "RightToeBase": [
+   -0.234,
+   -0.094,
+   0.023
+  ],
+  "RightToe_End": [
+   -0.276,
+   -0.192,
+   -0.033
+  ]
+ },
+ "extensions": [
+  "stronghold_props",
+  "stronghold_rip"
+ ],
+ "colorProps": [
+  {
+   "name": "club",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.38,
+      -0.19,
+      0.95
+     ],
+     [
+      -0.325,
+      -0.03,
+      1.3
+     ]
+    ],
+    [
+     [
+      -0.325,
+      -0.03,
+      1.3
+     ],
+     [
+      -0.23,
+      0.15,
+      1.66
+     ]
+    ]
+   ],
+   "radius": 0.15,
+   "color": {
+    "expr": "r-g",
+    "min": 0.04
+   },
+   "coreRadius": 0.03
+  },
+  {
+   "name": "lforearm",
+   "bone": "LeftForeArm",
+   "box": [
+    [
+     0.272,
+     -0.25,
+     0.7
+    ],
+    [
+     0.6,
+     0.4,
+     1.0
+    ]
+   ],
+   "exclude": [
+    {
+     "sphere": [
+      [
+       0.34,
+       -0.035,
+       0.635
+      ],
+      0.095
+     ]
+    }
+   ]
+  }
+ ],
+ "props": [
+  {
+   "name": "fist",
+   "bone": "RightHand",
+   "sphere": [
+    [
+     -0.375,
+     -0.17,
+     1.0
+    ],
+    0.1
+   ]
+  },
+  {
+   "name": "lfist",
+   "bone": "LeftHand",
+   "sphere": [
+    [
+     0.34,
+     -0.035,
+     0.635
+    ],
+    0.095
+   ],
+   "exclude": [
+    {
+     "box": [
+      [
+       -1,
+       -1,
+       0
+      ],
+      [
+       0.262,
+       1,
+       2
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "sleeve": {
+  "x": 0.25,
+  "zMin": 0.85,
+  "zMax": 1.15
+ },
+ "rips": [
+  {
+   "name": "lhand_thigh",
+   "a": [
+    "LeftHand",
+    "LeftForeArm"
+   ],
+   "b": [
+    "LeftUpLeg",
+    "LeftLeg",
+    "Hips",
+    "Spine"
+   ],
+   "box": [
+    [
+     0.15,
+     -1,
+     0.3
+    ],
+    [
+     1,
+     1,
+     1.05
+    ]
+   ]
+  }
+ ],
+ "glbPatch": {
+  "reason": "authenticity lane B 2026-10-11: AttackFront - club raised high up-back (DEF f1-f2) and swung level at the target (f3); Death - upright leap with both arms flung overhead (f2-f4); stretchRelax on both for the re-posed creases",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_ogre_club_swing_death_leap_tr.json",
+    "regrid": true,
+    "sha256": "1d7681b8776dfaa8f0fc9e0c9cfa5d3a48f66a7a4df137160d70b0aee086d9a0"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_ogre_club_swing_death_leap_rot.json",
+    "regrid": true,
+    "sha256": "681795943e320cedb40cfab4f1bbc412830d386e94b453914f27424c3f48c119"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_ogre_club_swing_death_leap_rot.json",
+    "regrid": true,
+    "sha256": "681795943e320cedb40cfab4f1bbc412830d386e94b453914f27424c3f48c119"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death",
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "crease of the re-posed joints"
+   }
+  ]
+ }
+}

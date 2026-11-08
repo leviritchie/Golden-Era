@@ -1,0 +1,88 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "hota_bulwark_great_shaman",
+ "status": "look",
+ "notes": "bulwark rollout: staff lightning ripped from the DEF (g15 shoot_front, defEffects electric) with its fitted dynamic light, as on hota_bulwark_shaman. The g12 'water' candidates are the blue robe paint, not an effect: no layer.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "staff_bolt_flash",
+   "treatment": "dynamic",
+   "notes": "the staff discharge lights the caster"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "staff_bolt",
+    "type": "defFlipbook",
+    "provenance": "roster inventory bulwark: g15 shoot_front held lightning/bolt (white-blue) f0-6 (CGSHMN); def_effect_ripper explicit",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 12
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "staff_bolt_flash"
+   },
+   {
+    "id": "staff_bolt_light",
+    "type": "effectLight",
+    "lightId": "staff_bolt_flash",
+    "carrier": "staff_bolt",
+    "anchor": {
+     "bone": "LeftHand",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.75,
+     0.87,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_ShootFront": [
+      0.0,
+      0.129,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

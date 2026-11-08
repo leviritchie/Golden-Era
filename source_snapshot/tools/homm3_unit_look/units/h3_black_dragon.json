@@ -1,0 +1,106 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_black_dragon",
+ "status": "look",
+ "notes": "dungeon rollout: dragon; attack_front breath cut from the DEF by a committed file mask (dungeon_fx_masks.py), with its fitted dynamic light",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "breath_fire",
+   "treatment": "dynamic",
+   "notes": "breath lights the head, neck and forelimbs"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "breath",
+    "type": "defFlipbook",
+    "provenance": "roster inventory dungeon: g12 attack_front fire f3-6; file mask because defEffects keeps nothing on f3 and 12 px on f4 (breath drawn in the belly's own orange ramp)",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_black_dragon/breath"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": {
+      "Unit_AttackFront": [
+       [
+        229,
+        189
+       ],
+       [
+        235,
+        185
+       ],
+       [
+        249,
+        185
+       ],
+       [
+        244,
+        182
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "breath_fire",
+    "notes": "defOrigin per key = the DEF mouth (read off gridded DEF zooms) minus the mesh's own Head-joint-to-snout offset (~22 px forward on the SpriteCam, measured from renders/sprite_NNN.png vs def_effects.BoneProjector), so the flame root lands at the mesh snout. 'auto' pinned the snout contact straight onto the Head joint (back of the skull) and, on the detached puff keys f5-f6, the puff's near edge: the flame covered the head. render unitPlane: directional pieces (thrown/jetting forward) turn with the unit (vfx_depth.py).",
+    "render": "unitPlane"
+   },
+   {
+    "id": "breath_light",
+    "type": "effectLight",
+    "lightId": "breath_fire",
+    "carrier": "breath",
+    "anchor": {
+     "bone": "Head",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.55,
+     0.3
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.45,
+      0.35,
+      0.7,
+      2.0,
+      2.8,
+      0.06,
+      0.0
+     ]
+    },
+    "intensitySource": "authored",
+    "notes": "authored at ~half the fitted curve (fitted peak 5.93): the fitted mean-L* rise comes from the DEF's breath-lit wing membrane and belly, and one point light at the head reproduces it by bleaching the head and neck white"
+   }
+  ]
+ }
+}

@@ -1,0 +1,58 @@
+{
+ "schema": "town_full3d_recipe.v2",
+ "faction": "fortress",
+ "seed": "props_drop_v1",
+ "candidate": "zs_v2",
+ "note": "fortress zs_v2 (2026-10-02): recipe v2 on props_drop_v1 = the installed ssr_v1 (bundle 24672b11) with its failing props dropped (coordinator decision, no Meshy): all 21 staged instances: 19 rest-visible / floating on ssr_v1's check, then the reeds (1317 rest px once the others were gone), then the last fern (the LDI zone cut removes the terrain under it: ground contact 'unsupported'), the scene ships no props (stage: shipped false). Supersedes the ssr_v1 seed (ground-contact grid failed closed at 95.6M entries before Ground.split_oversized) and zs_v1 (v1 schema). fromPreLdi false: the seed is not an LDI candidate. restOwner + decal answer rest-paint (seed defects, byte-identical on ssr_v1: Meshy bodies outside their sprites and tbfrcstl_3 over tbfrhrd2; env terrain under painted sprite px). repair.rounds 12: the restOwner-pushed tbfrcstl_3 faces converge at round 12 (96 -> 27 -> 11 -> 8 -> 14 -> 5 -> 9 -> 0 from round 5). Installed as-is (user 2026-10-02): no certificate.extraPoses and `final` not run; the first final run failed 109 of 157 reachable poses (visible-behind or ground growth; periphery 46685 px summed, bldg_residual 24157, bldg_front 1454, terrain_sheet 480), so those poses are known defects.",
+ "ldi": {
+  "pieces": [
+   "Mesh_Terrain"
+  ],
+  "cut": "zone",
+  "backRule": "vlb",
+  "vlbK": 2.0,
+  "keepRounds": 0,
+  "reachLoop": 12,
+  "fromPreLdi": false
+ },
+ "backstop": {
+  "K": 2.0,
+  "stepPx": 4,
+  "groundSrcM": 1.0
+ },
+ "repair": {
+  "rules": [
+   "drop",
+   "card",
+   "flap",
+   "planar"
+  ],
+  "rounds": 12
+ },
+ "certificate": {
+  "loop": 12
+ },
+ "peripherySettle": {
+  "pieces": [
+   "Mesh_OuterC0",
+   "Mesh_OuterC1",
+   "Mesh_OuterC2",
+   "Mesh_OuterL0",
+   "Mesh_OuterL1",
+   "Mesh_OuterL2",
+   "Mesh_OuterR0",
+   "Mesh_OuterR1",
+   "Mesh_OuterR2"
+  ],
+  "why": "fortress zs_v2 2026-10-02: the polar periphery is drawn in front of the staged frame surface at rest in 8921 px (OuterL1 3998, OuterC1 2206, OuterL2 1412, OuterC2 878, OuterL0 427: periphery.measured); its re-failed card (OuterL1 face 4811, 17 px at loop_252) is that intrusion"
+ },
+ "restOwner": {
+  "layers": [
+   "tbfrdw_0_2",
+   "tbfrdw_2",
+   "tbfrcstl_3"
+  ],
+  "why": "fortress zs_v2 2026-10-02 rest-paint: Meshy T2 tbfrdw_0_2 (2067 px, min_tbfrdw_0_2; 668 px in full) and tbfrdw_2 (768 + 246 px, min_tbfrdw_2) bodies drawn outside their sprites; tbfrcstl_3's wall drawn over tbfrhrd2 in full (404 + 367 px) where the painting's z order shows the horde building. Byte-identical in the seed ssr_v1 (rest-paint probe)."
+ },
+ "decal": {}
+}

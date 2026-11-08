@@ -1,0 +1,635 @@
+{
+  "lawOverrides": {
+    "fraction_law_homm3_conflux_13": {
+      "enabled": true,
+      "nameText": "Elemental Backlash",
+      "descriptionText": "Friendly creatures' counterattacks deal 50% more damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "counter_attack",
+                "0.50"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_air_elemental",
+                "h3_water_elemental",
+                "h3_fire_elemental",
+                "h3_earth_elemental",
+                "h3_psychic_elemental",
+                "h3_firebird"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Retribution (schools/life/retribution.jpg). Runtime icon key: fraction_law_homm3_conflux_13_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Retribution",
+      "homm4IconPath": "schools/life/retribution.jpg",
+      "iconKey": "fraction_law_homm3_conflux_13_icon"
+    },
+    "fraction_law_homm3_conflux_18": {
+      "enabled": true,
+      "nameText": "Opposed Elements",
+      "descriptionText": "Friendly creatures deal 10% more melee damage and take 10% less melee damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "melee_attack",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_fire_elemental",
+                "h3_fire_elemental_upg",
+                "h3_fire_elemental_upg_alt",
+                "h3_earth_elemental",
+                "h3_earth_elemental_upg",
+                "h3_earth_elemental_upg_alt",
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "melee_attack",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_pixie_upg",
+                "h3_pixie_upg_alt",
+                "h3_air_elemental",
+                "h3_air_elemental_upg",
+                "h3_air_elemental_upg_alt",
+                "h3_water_elemental",
+                "h3_water_elemental_upg",
+                "h3_water_elemental_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "Creature portrait law icon pass: uses h3_air_elemental.png for this creature-function law under runtime icon key fraction_law_homm3_conflux_18_icon. Static/deploy proven only; law-tree visual smoke still required.",
+      "homm4IconLabel": "Summon air elemental",
+      "homm4IconPath": "schools/nature/summon_air_elemental.jpg",
+      "iconKey": "fraction_law_homm3_conflux_18_icon",
+      "portraitIconSid": "h3_air_elemental"
+    },
+    "fraction_law_homm3_conflux_19": {
+      "enabled": true,
+      "nameText": "Elemental Ward",
+      "descriptionText": "Friendly creatures deal 10% more ranged damage and take 10% less ranged damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "shoot_attack",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_air_elemental",
+                "h3_water_elemental",
+                "h3_fire_elemental",
+                "h3_earth_elemental",
+                "h3_psychic_elemental",
+                "h3_firebird"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "shoot_attack",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_air_elemental",
+                "h3_water_elemental",
+                "h3_fire_elemental",
+                "h3_earth_elemental",
+                "h3_psychic_elemental",
+                "h3_firebird"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Creature portrait law icon pass: uses h3_earth_elemental.png for this creature-function law under runtime icon key fraction_law_homm3_conflux_19_icon. Static/deploy proven only; law-tree visual smoke still required.",
+      "homm4IconLabel": "Summon earth elemental",
+      "homm4IconPath": "schools/nature/summon_earth_elemental.jpg",
+      "iconKey": "fraction_law_homm3_conflux_19_icon",
+      "portraitIconSid": "h3_earth_elemental"
+    },
+    "fraction_law_homm3_conflux_2": {
+      "enabled": true,
+      "nameText": "Planar Attunement",
+      "descriptionText": "Heroes gain +2/+4/+6 Sight radius by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "viewRadius",
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "viewRadius",
+                "4"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "viewRadius",
+                "6"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Canonical shared-law icon pass: external-building Sight laws use a shared structure/scouting vanilla icon. Static/deploy validation pending.",
+      "iconKey": "fraction_law_nature_2_icon"
+    },
+    "fraction_law_homm3_conflux_21": {
+      "enabled": true,
+      "nameText": "Elemental Market",
+      "descriptionText": "Produces +1/+2 Crystal daily by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "crystals",
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "crystals",
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "Mechanic-derived icon contract: direct Crystal production uses the vanilla Crystal production/mining icon. Candidate/deploy validation pending.",
+      "homm4IconLabel": "Fortune",
+      "iconKey": "fraction_law_nature_14_icon"
+    },
+    "fraction_law_homm3_conflux_25": {
+      "enabled": true,
+      "nameText": "Elemental Exultation",
+      "descriptionText": "Morale trigger chance for friendly creatures increases by +1%/+2%/+3% per Morale point by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.01"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_air_elemental",
+                "h3_water_elemental",
+                "h3_fire_elemental",
+                "h3_earth_elemental",
+                "h3_psychic_elemental",
+                "h3_firebird"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.02"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_air_elemental",
+                "h3_water_elemental",
+                "h3_fire_elemental",
+                "h3_earth_elemental",
+                "h3_psychic_elemental",
+                "h3_firebird"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.03"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_air_elemental",
+                "h3_water_elemental",
+                "h3_fire_elemental",
+                "h3_earth_elemental",
+                "h3_psychic_elemental",
+                "h3_firebird"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_25_icon"
+    },
+    "fraction_law_homm3_conflux_28": {
+      "enabled": true,
+      "nameText": "Planar Alignment",
+      "descriptionText": "Your towns gain an additional daily construction allowance.",
+      "parametersPerLevel": [
+        {
+          "cost": 6,
+          "bonuses": [
+            {
+              "type": "constructionDailyLimit",
+              "parameters": [
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_28_icon"
+    },
+    "fraction_law_homm3_conflux_33": {
+      "enabled": true,
+      "nameText": "Planar Calendar",
+      "descriptionText": "Produces 250/500/750 Astrology points daily by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "250"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "500"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "750"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconKey": "fraction_law_human_34_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_conflux_34": {
+      "enabled": true,
+      "nameText": "Aspect Cooldowns",
+      "descriptionText": "Positive effects on friendly creatures last +1 additional rounds by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inComingBuffDuration",
+                "1"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_air_elemental",
+                "h3_water_elemental",
+                "h3_fire_elemental",
+                "h3_earth_elemental",
+                "h3_psychic_elemental",
+                "h3_firebird"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "homm4IconLabel": "Spell shackle",
+      "homm4IconPath": "schools/chaos/spell_shackle.jpg",
+      "iconNotes": "HOMM4 art-source candidate: Spell shackle (schools/chaos/spell_shackle.jpg). Runtime icon key: fraction_law_homm3_conflux_34_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "iconKey": "fraction_law_homm3_conflux_34_icon"
+    },
+    "fraction_law_homm3_conflux_6": {
+      "enabled": true,
+      "nameText": "Elemental Aspect",
+      "descriptionText": "Friendly creatures deal +10% damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_air_elemental",
+                "h3_water_elemental",
+                "h3_fire_elemental",
+                "h3_earth_elemental",
+                "h3_psychic_elemental",
+                "h3_firebird"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Creature portrait law icon pass: uses h3_fire_elemental.png for this creature-function law under runtime icon key fraction_law_homm3_conflux_6_icon. Static/deploy proven only; law-tree visual smoke still required.",
+      "homm4IconLabel": "Summon fire elemental",
+      "homm4IconPath": "schools/nature/summon_fire_elemental.jpg",
+      "iconKey": "fraction_law_homm3_conflux_6_icon",
+      "portraitIconSid": "h3_fire_elemental"
+    },
+    "fraction_law_homm3_conflux_4": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_4_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_4_icon"
+    },
+    "fraction_law_homm3_conflux_5": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_5_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_5_icon"
+    },
+    "fraction_law_homm3_conflux_10": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_10_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_10_icon"
+    },
+    "fraction_law_homm3_conflux_11": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_11_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_11_icon"
+    },
+    "fraction_law_homm3_conflux_14": {
+      "iconNotes": "Canonical resource icon pass: mining laws use the vanilla icon matching the produced special resource instead of donor-faction inheritance. Static/deploy validation pending.",
+      "iconKey": "fraction_law_dungeon_14_icon"
+    },
+    "fraction_law_homm3_conflux_15": {
+      "iconNotes": "HOMM4 art-source candidate: Summon water elemental (schools/nature/summon_water_elemental.jpg). Runtime icon key: fraction_law_homm3_conflux_15_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "enabled": true,
+      "nameText": "Primal Wheel",
+      "descriptionText": "Heroes can learn tier 1 Primal spells.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "magicSchoolSet",
+                "primal",
+                "0",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "homm4IconLabel": "Summon water elemental",
+      "homm4IconPath": "schools/nature/summon_water_elemental.jpg",
+      "iconKey": "fraction_law_homm3_conflux_15_icon"
+    },
+    "fraction_law_homm3_conflux_16": {
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_16_icon"
+    },
+    "fraction_law_homm3_conflux_17": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_17_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_17_icon"
+    },
+    "fraction_law_homm3_conflux_20": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_20_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_20_icon"
+    },
+    "fraction_law_homm3_conflux_22": {
+      "iconNotes": "Canonical shared-law icon pass: hero Morale laws use the same vanilla morale icon across custom factions. Static/deploy validation pending.",
+      "enabled": true,
+      "nameText": "Elemental Poise",
+      "descriptionText": "Heroes gain +1/+2 Morale by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "moral",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "moral",
+                "2"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconKey": "fraction_law_human_22_icon"
+    },
+    "fraction_law_homm3_conflux_23": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_23_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_23_icon"
+    },
+    "fraction_law_homm3_conflux_24": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_24_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_24_icon"
+    },
+    "fraction_law_homm3_conflux_26": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_26_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_26_icon"
+    },
+    "fraction_law_homm3_conflux_27": {
+      "iconNotes": "Creature portrait law icon pass: uses h3_psychic_elemental.png for this creature-function law under runtime icon key fraction_law_homm3_conflux_27_icon. Static/deploy proven only; law-tree visual smoke still required.",
+      "enabled": true,
+      "nameText": "Celestial Wheel",
+      "descriptionText": "Your heroes can store 1 additional Focus Charge.",
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "maxEnergyLevelsBonus",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "homm4IconLabel": "Mana flare",
+      "homm4IconPath": "schools/chaos/mana_flare.jpg",
+      "iconKey": "fraction_law_homm3_conflux_27_icon",
+      "portraitIconSid": "h3_psychic_elemental"
+    },
+    "fraction_law_homm3_conflux_30": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_30_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_30_icon"
+    },
+    "fraction_law_homm3_conflux_31": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_31_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_31_icon"
+    },
+    "fraction_law_homm3_conflux_1": {
+      "iconKey": "fraction_law_human_1_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_conflux_3": {
+      "iconKey": "fraction_law_human_3_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_conflux_7": {
+      "iconKey": "fraction_law_human_7_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_conflux_8": {
+      "iconKey": "fraction_law_human_8_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_conflux_9": {
+      "iconKey": "fraction_law_human_9_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_conflux_12": {
+      "iconKey": "fraction_law_human_12_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_conflux_29": {
+      "iconKey": "fraction_law_human_29_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_conflux_32": {
+      "enabled": true,
+      "nameText": "Leyline Currents",
+      "descriptionText": "Your heroes gain +10/+20 Movement points.",
+      "parametersPerLevel": [
+        {
+          "cost": 5,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "movementBonus",
+                "10"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 5,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "movementBonus",
+                "20"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "Canonical shared-law icon pass: Native Mastery uses the same vanilla icon across custom factions. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_32_icon"
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_shadow_dragon",
+ "status": "look",
+ "notes": "dungeon rollout: dragon; attack_front breath cut from the DEF by a committed file mask (dungeon_fx_masks.py), with its fitted dynamic light",
+ "lighting": {
+  "mode": "v6m",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "breath_fire",
+   "treatment": "dynamic",
+   "notes": "breath lights the head, neck and forelimbs"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "breath",
+    "type": "defFlipbook",
+    "provenance": "roster inventory dungeon: g12 attack_front fire f3-6; file mask because defEffects keeps nothing on f3 and 12 px on f4 (breath drawn in the belly's own orange ramp)",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_shadow_dragon/breath"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": {
+      "Unit_AttackFront": [
+       [
+        226,
+        188
+       ],
+       [
+        232,
+        184
+       ],
+       [
+        246,
+        184
+       ],
+       [
+        241,
+        181
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "breath_fire",
+    "notes": "defOrigin per key = the DEF mouth (read off gridded DEF zooms) minus the mesh's own Head-joint-to-snout offset (~22 px forward on the SpriteCam, measured from renders/sprite_NNN.png vs def_effects.BoneProjector), so the flame root lands at the mesh snout. 'auto' pinned the snout contact straight onto the Head joint (back of the skull) and, on the detached puff keys f5-f6, the puff's near edge: the flame covered the head. render unitPlane: directional pieces (thrown/jetting forward) turn with the unit (vfx_depth.py).",
+    "render": "unitPlane"
+   },
+   {
+    "id": "breath_light",
+    "type": "effectLight",
+    "lightId": "breath_fire",
+    "carrier": "breath",
+    "anchor": {
+     "bone": "Head",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.8,
+     0.4
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.326,
+      0.192,
+      0.928,
+      2.575,
+      5.851,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

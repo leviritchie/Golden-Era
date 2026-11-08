@@ -1,0 +1,63 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require successful hero spell-cast identity. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresHeroSpellCastProfiles": true,
+    "towerOnly": true,
+    "heroCastIdentityRequired": true,
+    "unitAbilityOrSpellbookUiSubstituteForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedEffectKeyPrefixes": [
+    "tower."
+  ],
+  "allowedFamilies": [
+    "Formation",
+    "TrainingDamage"
+  ],
+  "requiredRuntimeProof": [
+    "successful committed hero spell cast event proof",
+    "casting hero identity proof",
+    "law-owner and caster-side correlation proof",
+    "spellbook preview or open-state exclusion proof",
+    "unit ability cast exclusion proof",
+    "spell target or affected stack correlation proof when used",
+    "battle timing and cleanup proof",
+    "idempotent per-cast application proof"
+  ],
+  "contracts": {
+    "tower.construct-intercept-overcharge": {
+      "castKinds": [
+        "successful-committed-hero-spell-cast",
+        "construct-classifier-companion-only"
+      ],
+      "companionPredicates": [
+        "RequiresConstructClassifier"
+      ],
+      "forbiddenSubstitutes": [
+        "spellbook opened or previewed counted as hero spell cast",
+        "unit ability cast counted as hero spell cast",
+        "static spellbook ownership counted as committed cast",
+        "construct identity counted as spell cast",
+        "cooldown preview or calculation counted as committed cast"
+      ],
+      "notes": "Requires successful committed Tower hero spell-cast identity before Battle Automata can overcharge constructs; construct classification is companion evidence only."
+    },
+    "tower.spellcast-stacking-attack-defense": {
+      "castKinds": [
+        "successful-committed-hero-spell-cast",
+        "stacking-timed-battle-buff-trigger"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "spellbook opened or previewed counted as hero spell cast",
+        "unit ability cast counted as hero spell cast",
+        "static spellbook ownership counted as committed cast",
+        "construct identity counted as spell cast",
+        "cooldown preview or calculation counted as committed cast"
+      ],
+      "notes": "Requires successful committed Tower hero spell-cast identity before Arcane Calibration can add stacking timed attack/defense buffs; spellbook UI and cooldown previews are not casts."
+    }
+  }
+}

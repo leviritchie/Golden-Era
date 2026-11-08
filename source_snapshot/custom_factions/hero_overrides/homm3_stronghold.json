@@ -1,0 +1,1749 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_stronghold",
+  "heroOverrides": {
+    "homm3_stronghold_hero_1": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Barbarian",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Crag Hack",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_1",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_1_source_offence_specialist",
+        "nameText": "Offense",
+        "descriptionText": "Increases basic attack damage for the hero's army.",
+        "iconKey": "skill_assault",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "basic_attack",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:offence"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_2": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Barbarian",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Gurnisson",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_2",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_2_source_ballista_specialist",
+        "nameText": "Ballista",
+        "descriptionText": "Improves Heroic Strike at battle start and as the hero gains levels.",
+        "iconKey": "skill_battlemage",
+        "bonuses": [
+          {
+            "type": "battleSubskillBonus",
+            "parameters": [
+              "hero_ability",
+              "specializations_skill_warrior_ability_base_bonus"
+            ]
+          },
+          {
+            "activationLevel": 5,
+            "type": "battleSubskillBonus",
+            "parameters": [
+              "hero_ability",
+              "specializations_skill_warrior_ability_level_bonus"
+            ]
+          },
+          {
+            "activationLevel": 10,
+            "type": "battleSubskillBonus",
+            "parameters": [
+              "hero_ability",
+              "specializations_skill_warrior_ability_level_bonus"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:ballista"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_3": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Barbarian",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Jabarkas",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_3",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_3_source_h3_orc_specialist",
+        "nameText": "H3 Orc Specialist",
+        "descriptionText": "H3 Orc creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_orc",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_orc",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_orc",
+              "h3_orc_upg",
+              "h3_orc_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_orc",
+              "h3_orc_upg",
+              "h3_orc_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_orc",
+              "h3_orc_upg",
+              "h3_orc_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_orc",
+              "h3_orc_upg",
+              "h3_orc_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_orc",
+              "h3_orc_upg",
+              "h3_orc_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_orc"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_4": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Barbarian",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Shiva",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_4",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_4_source_h3_roc_specialist",
+        "nameText": "H3 Roc Specialist",
+        "descriptionText": "H3 Roc creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_roc",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_roc",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_roc",
+              "h3_roc_upg",
+              "h3_roc_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_roc",
+              "h3_roc_upg",
+              "h3_roc_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_roc",
+              "h3_roc_upg",
+              "h3_roc_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_roc",
+              "h3_roc_upg",
+              "h3_roc_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_roc",
+              "h3_roc_upg",
+              "h3_roc_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_roc"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_5": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Barbarian",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Yog",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_5",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_5_source_h3_cyclops_specialist",
+        "nameText": "H3 Cyclops Specialist",
+        "descriptionText": "H3 Cyclops creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_cyclops",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_cyclops",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_cyclops",
+              "h3_cyclops_upg",
+              "h3_cyclops_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_cyclops",
+              "h3_cyclops_upg",
+              "h3_cyclops_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_cyclops",
+              "h3_cyclops_upg",
+              "h3_cyclops_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_cyclops",
+              "h3_cyclops_upg",
+              "h3_cyclops_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_cyclops",
+              "h3_cyclops_upg",
+              "h3_cyclops_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_cyclops"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_6": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Barbarian",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_orc",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_tactics",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Boragus",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_6",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_6_source_h3_ogre_specialist",
+        "nameText": "H3 Ogre Specialist",
+        "descriptionText": "H3 Ogre creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_ogre",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_ogre",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_ogre"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    },
+    "homm3_stronghold_hero_7": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Battle Mage",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Oris",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_7",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_7_source_eagleEye_specialist",
+        "nameText": "Eagle Eye",
+        "descriptionText": "Improves spell pressure and magical awareness in combat.",
+        "iconKey": "skill_scouting",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicAttackPerBonus",
+              "0.06"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "viewRadius",
+              "1"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:eagleEye"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_8": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Barbarian",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Krellion",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_8",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_8_source_h3_ogre_specialist",
+        "nameText": "H3 Ogre Specialist",
+        "descriptionText": "H3 Ogre creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_ogre",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_ogre",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_ogre"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_9": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Barbarian",
+      "startSquad": [
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_wolf_rider",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Tyraxor",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_9",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_9_source_h3_wolf_rider_specialist",
+        "nameText": "H3 Wolf Rider Specialist",
+        "descriptionText": "H3 Wolf Rider creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_wolf_rider",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_wolf_rider",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wolf_rider",
+              "h3_wolf_rider_upg",
+              "h3_wolf_rider_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wolf_rider",
+              "h3_wolf_rider_upg",
+              "h3_wolf_rider_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wolf_rider",
+              "h3_wolf_rider_upg",
+              "h3_wolf_rider_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wolf_rider",
+              "h3_wolf_rider_upg",
+              "h3_wolf_rider_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wolf_rider",
+              "h3_wolf_rider_upg",
+              "h3_wolf_rider_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_wolf_rider"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_10": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Battle Mage",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Gird",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_10",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_10_source_sorcery_specialist",
+        "nameText": "Sorcery",
+        "descriptionText": "Increases spell damage and weakens enemy spell pressure as the hero gains levels.",
+        "iconKey": "skill_sorcery",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicAttackPerBonus",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          },
+          {
+            "type": "heroStatBattle",
+            "receiverAllegiance": "enemy",
+            "parameters": [
+              "magicAttackPerBonus",
+              "-0.10"
+            ],
+            "upgrade": {
+              "increment": -0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:sorcery"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_11": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Battle Mage",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Vey",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_11",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_11_source_h3_ogre_specialist",
+        "nameText": "H3 Ogre Specialist",
+        "descriptionText": "H3 Ogre creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_ogre",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_ogre",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_ogre"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_12": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Battle Mage",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Gundula",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_12",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_12_source_offence_specialist",
+        "nameText": "Offense",
+        "descriptionText": "Increases basic attack damage for the hero's army.",
+        "iconKey": "skill_assault",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "basic_attack",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:offence"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_13": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Battle Mage",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Zubin",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_13",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_13_source_artillery_specialist",
+        "nameText": "Artillery",
+        "descriptionText": "Improves ranged and shooting attack damage for the hero's army.",
+        "iconKey": "skill_siege",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "range_attack",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          },
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "shoot_attack",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:artillery"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_14": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Battle Mage",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Terek",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_14",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_14_olden_era_masterful_day_3_magic_haste",
+        "nameText": "Masterful Haste",
+        "descriptionText": "Starts with Masterful Haste. It casts as one tier stronger.",
+        "iconKey": "day_3_magic_haste",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "day_3_magic_haste",
+              "day_3_magic_haste_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:day_3_magic_haste",
+        "masterfulSpellBaseSid": "day_3_magic_haste",
+        "masterfulSpellSpecialSid": "day_3_magic_haste_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_15": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Battle Mage",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Dessa",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_15",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_15_source_logistics_specialist",
+        "nameText": "Logistics",
+        "descriptionText": "Increases movement on the adventure map and improves travel on roads.",
+        "iconKey": "skill_logistic",
+        "bonuses": [
+          {
+            "activationLevel": 8,
+            "type": "heroStat",
+            "parameters": [
+              "movementPerBonus",
+              "0.05"
+            ],
+            "upgrade": {
+              "increment": 0.05,
+              "levelStep": 8
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "roadPerBonus",
+              "0.33333334"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:logistics"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_16": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Battle Mage",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_orc",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Saurug",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_16",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_16_source_gem_specialist",
+        "nameText": "Gems",
+        "descriptionText": "Generates additional gemstones each day.",
+        "iconKey": "skill_economy",
+        "bonuses": [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gemstones",
+              "1"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 7
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:gem"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_stronghold_hero_17": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Barbarian",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_orc",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_tactics",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Kilgor",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_17",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_17_source_h3_behemoth_specialist",
+        "nameText": "Behemoths",
+        "descriptionText": "Improves Behemoths and their upgrades in the hero's army.",
+        "iconKey": "h3_behemoth",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_behemoth",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_behemoth",
+              "h3_behemoth_upg",
+              "h3_behemoth_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_behemoth",
+              "h3_behemoth_upg",
+              "h3_behemoth_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_behemoth",
+              "h3_behemoth_upg",
+              "h3_behemoth_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_behemoth",
+              "h3_behemoth_upg",
+              "h3_behemoth_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_behemoth",
+              "h3_behemoth_upg",
+              "h3_behemoth_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_behemoth"
+      },
+      "notes": "Campaign hero Kilgor; creature specialty from homm3_stronghold_hero_6."
+    },
+    "homm3_stronghold_hero_18": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Battle Mage",
+      "startSquad": [
+        {
+          "sid": "h3_goblin",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_wolf_rider",
+          "min": 5,
+          "max": 7
+        },
+        {
+          "sid": "h3_ogre",
+          "min": 3,
+          "max": 4
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_goblin",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Zog",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_stronghold_18",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_stronghold_hero_18_source_h3_ogre_specialist",
+        "nameText": "H3 Ogre Specialist",
+        "descriptionText": "H3 Ogre creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_ogre",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_ogre",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_ogre",
+              "h3_ogre_upg",
+              "h3_ogre_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_ogre"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses exact local VCMI/HotA hero army row."
+    }
+  }
+}

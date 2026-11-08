@@ -1,0 +1,136 @@
+{
+ "unit": "h3_efreet_sultan",
+ "joints": {
+  "Hips": [
+   0,
+   0.02,
+   1.1
+  ],
+  "Spine": [
+   0,
+   0.01,
+   1.22
+  ],
+  "Spine1": [
+   0,
+   0.0,
+   1.33
+  ],
+  "Spine2": [
+   0,
+   0.0,
+   1.45
+  ],
+  "Neck": [
+   0,
+   0.0,
+   1.6
+  ],
+  "Head": [
+   0,
+   -0.01,
+   1.68
+  ],
+  "HeadTop_End": [
+   0,
+   0.0,
+   1.88
+  ],
+  "LeftShoulder": [
+   0.08,
+   0.02,
+   1.55
+  ],
+  "LeftArm": [
+   0.22,
+   0.02,
+   1.52
+  ],
+  "LeftForeArm": [
+   0.33,
+   0.03,
+   1.3
+  ],
+  "LeftHand": [
+   0.36,
+   -0.08,
+   1.15
+  ],
+  "LeftHand_End": [
+   0.37,
+   -0.14,
+   1.05
+  ],
+  "RightShoulder": [
+   -0.08,
+   0.02,
+   1.55
+  ],
+  "RightArm": [
+   -0.22,
+   0.02,
+   1.52
+  ],
+  "RightForeArm": [
+   -0.33,
+   0.03,
+   1.3
+  ],
+  "RightHand": [
+   -0.36,
+   -0.08,
+   1.15
+  ],
+  "RightHand_End": [
+   -0.37,
+   -0.14,
+   1.05
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ]
+ },
+ "shrinkOut": {
+  "start": 2
+ },
+ "groundContact": {
+  "exempt": "hovers on a flame tail: HoMM3 flier (CEFRES.def), legless, and no DEF ground shadow falls below the body; grounding would pin the flame tip to the floor (measured Hitted Hips -0.131 at entry on the grounded candidate); user-approved exception 2026-09-28"
+ },
+ "glbPatch": {
+  "reason": "DEF g12 fire punch (as h3_efreeti): AttackFront raises both hands overhead in the wind-up (f1-f2), then thrusts both arms straight forward with the body held near upright (hold Hips partly at the clip's first pose; the capture tipped the whole body forward instead of thrusting the arms). stretchRelax evens the armpit/elbow edges of the overhead raise.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreet_sultan_punch_rot.json",
+    "sha256": "09f379f5a0dddcffc205a88214abe5dddcd137db479c6158094f569b943eab37",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreet_sultan_punch_rot.json",
+    "sha256": "09f379f5a0dddcffc205a88214abe5dddcd137db479c6158094f569b943eab37",
+    "regrid": true
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.4,
+    "maxMove": 0.08
+   }
+  ]
+ }
+}

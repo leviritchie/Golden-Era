@@ -1,0 +1,162 @@
+{
+ "unit": "h3_magic_elemental",
+ "strideExempt": "legless body: the HoMM3 magic elemental floats on a vortex/wave/energy base with no legs; the rig has no leg chain",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.0,
+   0.75
+  ],
+  "Spine": [
+   0.0,
+   0.0,
+   0.9
+  ],
+  "Spine1": [
+   0.0,
+   0.0,
+   1.05
+  ],
+  "Spine2": [
+   0.0,
+   0.0,
+   1.2
+  ],
+  "Neck": [
+   0.0,
+   0.0,
+   1.33
+  ],
+  "Head": [
+   0.0,
+   0.0,
+   1.45
+  ],
+  "HeadTop_End": [
+   0.0,
+   0.0,
+   1.8
+  ]
+ },
+ "grounding": false,
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ]
+ },
+ "shrinkOut": {
+  "start": 3,
+  "power": 1.0
+ },
+ "extensions": [
+  "conflux_weights",
+  "conflux_tilt",
+  "element_motion",
+  "rig_chain"
+ ],
+ "conflux": {
+  "fillUnweighted": true,
+  "maxBodyTilt": 75.0,
+  "maxBodyTiltClips": {
+   "Defence": 5.0
+  },
+  "tiltAxis": "head"
+ },
+ "elementMotion": {
+  "mode": "shimmer",
+  "period": 8
+ },
+ "rigChains": [
+  {
+   "prefix": "LeftArm",
+   "names": [
+    "LeftArm"
+   ],
+   "parent": "Spine2",
+   "bones": 1,
+   "points": [
+    [
+     0.05,
+     0,
+     1.24
+    ],
+    [
+     0.21,
+     0,
+     1.18
+    ]
+   ],
+   "radius": 0.1,
+   "root": 0.02,
+   "rootBlend": 0.08,
+   "minParent": 0.3,
+   "reason": "lane C 2026-10-12 rig surgery: the rig is a spine chain with an upright Head, so the facing contract (lateralPair / wingPair / headAxis) could not measure Unit_Idle and freeze_slice refused the unit; a one-bone shoulder pair cut from the robe's shoulder caps (follows Spine2 rigidly, no motion change) gives it a lateralPair. Named LeftArm/RightArm (2026-10-12): the owned-skinned facing validator's LIMB_PAIRS measures LeftArm/RightArm, not shoulders"
+  },
+  {
+   "prefix": "RightArm",
+   "names": [
+    "RightArm"
+   ],
+   "parent": "Spine2",
+   "bones": 1,
+   "points": [
+    [
+     -0.05,
+     0,
+     1.24
+    ],
+    [
+     -0.21,
+     0,
+     1.18
+    ]
+   ],
+   "radius": 0.1,
+   "root": 0.02,
+   "rootBlend": 0.08,
+   "minParent": 0.3,
+   "reason": "lane C 2026-10-12 rig surgery: the rig is a spine chain with an upright Head, so the facing contract (lateralPair / wingPair / headAxis) could not measure Unit_Idle and freeze_slice refused the unit; a one-bone shoulder pair cut from the robe's shoulder caps (follows Spine2 rigidly, no motion change) gives it a lateralPair. Named LeftArm/RightArm (2026-10-12): the owned-skinned facing validator's LIMB_PAIRS measures LeftArm/RightArm, not shoulders"
+  }
+ ],
+ "glbPatch": {
+  "reason": "lane C 2026-10-12 authenticity: the DEF magic elemental flings its red cloak wide open at AttackFront f2-f6 while facing the target; ours barely moved the cloak and spun the whole column round at f3-f5",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_magic_elemental_cape_weights.json",
+    "sha256": "4953cc4a362b09fddde6ea00ae0b2fe08c5f83e7d56830fe2da9beec1ac064e1",
+    "note": "the red cloak's side panels handed to the Left/RightArm bones (smooth |x| / round-from-back / height field, Laplacian smoothed, hem pinned) so the shoulders can carry the cloak"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_magic_elemental_attack_yaw.json",
+    "sha256": "709e543a8d7324b7b7e2e718f90fe6a2e803c284c1d4be5b6d6799f8ac480c18",
+    "regrid": true,
+    "note": "DEF g12 AttackFront keeps facing the target; the retarget spun the column round at f3-f5 (Hips yaw -12 -> -72 -> +142 -> -48 deg): a Hips vertical turn restores f3/f5 and f4 holds f3's trunk and column (half offset; applied twice)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_magic_elemental_attack_yaw.json",
+    "sha256": "709e543a8d7324b7b7e2e718f90fe6a2e803c284c1d4be5b6d6799f8ac480c18",
+    "regrid": true,
+    "note": "second half of the yaw fix"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_magic_elemental_cape_rot.json",
+    "sha256": "e02227d3c19943774d566bae35596ad4a3ecc5372734a79d1ed949927b0ad109",
+    "regrid": true,
+    "note": "Left/RightArm track the cloak panels' original motion on every clip (weighted Kabsch, so the re-weight changes nothing elsewhere) and on AttackFront f2-f6 turn 50 deg out and up so the cloak flings open like the DEF (half offset; applied twice)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_magic_elemental_cape_rot.json",
+    "sha256": "e02227d3c19943774d566bae35596ad4a3ecc5372734a79d1ed949927b0ad109",
+    "regrid": true,
+    "note": "second half of the cloak fling"
+   }
+  ]
+ }
+}

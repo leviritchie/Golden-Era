@@ -1,0 +1,272 @@
+{
+ "unit": "hota_bulwark_argali",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.35,
+   0.95
+  ],
+  "Spine": [
+   0.0,
+   0.164,
+   0.98
+  ],
+  "Spine1": [
+   0.0,
+   -0.022,
+   1.01
+  ],
+  "Spine2": [
+   0.0,
+   -0.208,
+   1.04
+  ],
+  "Neck": [
+   0.0,
+   -0.4,
+   1.15
+  ],
+  "Head": [
+   0.0,
+   -0.5,
+   1.3
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.72,
+   1.22
+  ],
+  "LeftShoulder": [
+   0.07,
+   -0.27,
+   1.05
+  ],
+  "LeftArm": [
+   0.14,
+   -0.28,
+   0.8
+  ],
+  "LeftForeArm": [
+   0.14,
+   -0.28,
+   0.45
+  ],
+  "LeftHand": [
+   0.14,
+   -0.27,
+   0.12
+  ],
+  "LeftHand_End": [
+   0.14,
+   -0.33,
+   0.0
+  ],
+  "LeftUpLeg": [
+   0.14,
+   0.35,
+   0.85
+  ],
+  "LeftLeg": [
+   0.14,
+   0.33,
+   0.55
+  ],
+  "LeftFoot": [
+   0.14,
+   0.42,
+   0.15
+  ],
+  "LeftToeBase": [
+   0.14,
+   0.38,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.14,
+   0.3,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.07,
+   -0.27,
+   1.05
+  ],
+  "RightArm": [
+   -0.14,
+   -0.28,
+   0.8
+  ],
+  "RightForeArm": [
+   -0.14,
+   -0.28,
+   0.45
+  ],
+  "RightHand": [
+   -0.14,
+   -0.27,
+   0.12
+  ],
+  "RightHand_End": [
+   -0.14,
+   -0.33,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.14,
+   0.35,
+   0.85
+  ],
+  "RightLeg": [
+   -0.14,
+   0.33,
+   0.55
+  ],
+  "RightFoot": [
+   -0.14,
+   0.42,
+   0.15
+  ],
+  "RightToeBase": [
+   -0.14,
+   0.38,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.14,
+   0.3,
+   0.0
+  ]
+ },
+ "props": [
+  {
+   "name": "hornL",
+   "bone": "Head",
+   "box": [
+    [
+     0.12,
+     -0.75,
+     0.98
+    ],
+    [
+     0.7,
+     0.0,
+     1.8
+    ]
+   ]
+  },
+  {
+   "name": "hornR",
+   "bone": "Head",
+   "box": [
+    [
+     -0.7,
+     -0.75,
+     0.98
+    ],
+    [
+     -0.12,
+     0.0,
+     1.8
+    ]
+   ]
+  }
+ ],
+ "extensions": [
+  "rampart_quadruped"
+ ],
+ "silhouetteRefine": {
+  "params": []
+ },
+ "grounding": false,
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    -20,
+    70
+   ],
+   "fold": 70,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ]
+  }
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: Defence ducks the head so the horns point forward (spine + neck nod f1-f8); Death topples over through f4-f5 (blended toward the lying f6 pose, Hips carried sideways within the translation cap) instead of standing reared until f5 and popping flat",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_argali_defence_duck_death_fall_tr.json",
+    "regrid": true,
+    "sha256": "8299f30b88ed6e7514f010538e79aad13d11ed0db864ccb3ff657b31b4c6d7c5"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_argali_defence_duck_death_fall_rot.json",
+    "regrid": true,
+    "sha256": "e568559685d59db72a0ee81dee15c055bec50c67a85a07873e7571e9c6e16e07"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_argali_defence_duck_death_fall_rot.json",
+    "regrid": true,
+    "sha256": "e568559685d59db72a0ee81dee15c055bec50c67a85a07873e7571e9c6e16e07"
+   }
+  ]
+ }
+}

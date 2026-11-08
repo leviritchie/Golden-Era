@@ -1,0 +1,63 @@
+{
+  "unitSid": "h3_hobgoblin",
+  "clipId": "attack_g11",
+  "fps": 12,
+  "masterGlb": "artifacts/hobgoblin_attack_pose_pipeline/master/hobgoblin_apose_mace_attach.glb",
+  "outputDir": "artifacts/hobgoblin_attack_pose_pipeline/out_dense_skeleton_g11/fit_check",
+  "boneRoles": "artifacts/hobgoblin_attack_pose_pipeline/out_attack_g11_bone_overlay_apose_mace/bone_roles_grip_no_hip_yaw.json",
+  "cullDefSoftShadows": true,
+  "camera": {
+    "axis": "iso",
+    "isoAzimuthDeg": 40.0,
+    "isoElevationDeg": 30.0,
+    "distance": 3.0,
+    "orthoScale": 2.6,
+    "rootYawDeg": 0.0
+  },
+  "frames": [
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_00.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_01.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_02.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_03.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_04.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_05.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_06.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_07.png"}
+  ],
+  "method_kind": "keypoints",
+  "method": "dense_skeleton_consensus_check",
+  "poseSource": "sprite_landmarks",
+  "optimizeBones": [
+    "Hips",
+    "Spine02",
+    "Spine01",
+    "Spine",
+    "neck",
+    "Head",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+    "LeftUpLeg",
+    "LeftLeg",
+    "RightUpLeg",
+    "RightLeg"
+  ],
+  "keypointOptimizer": {
+    "boundRad": 0.95,
+    "restWeight": 0.04,
+    "motionWeight": 0.12,
+    "maxStepRad": 0.85,
+    "localRestarts": true,
+    "identityFrame0": false,
+    "maxiter": 200,
+    "maxfev": 700,
+    "restarts": 5,
+    "seed": 7
+  },
+  "notes": "CHECK ONLY: Mixamo fit driven by dense multi-angle 3D consensus projected to original sprite space. Pose authority is consensus/joints_3d.json — not this GIF."
+}

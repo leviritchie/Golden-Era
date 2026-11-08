@@ -1,0 +1,39 @@
+{
+  "unitSid": "h3_hobgoblin",
+  "species": "humanoid",
+  "mesh": "artifacts/meshy_downloads/h3_hobgoblin_smartrigged_rigidized.glb",
+  "proof": "landmarks and groups from bone_roles_unirig_hobgoblin.json joint maps on this smartrig. Hood has no dedicated bone label.",
+  "openUnknowns": ["hood"],
+  "landmarks": {
+    "head": "Bone_004",
+    "neck": "Bone_006",
+    "weaponTip": "Bone_029",
+    "hips": "Bone_002"
+  },
+  "groups": {
+    "trunk": {
+      "role": "torso",
+      "bonesDependencyOrder": ["Bone_003", "Bone_002"]
+    },
+    "head": {
+      "role": "cranium_and_neck",
+      "bonesDependencyOrder": ["Bone_006", "Bone_005", "Bone_004"]
+    },
+    "arm_weapon": {
+      "role": "striking_arm_and_mace",
+      "bonesDependencyOrder": ["Bone_033", "Bone_032", "Bone_031", "Bone_030", "Bone_029"]
+    },
+    "arm_off": {
+      "role": "off_hand",
+      "bonesDependencyOrder": ["Bone_028", "Bone_027", "Bone_026", "Bone_024"]
+    },
+    "leg_a": {
+      "role": "right_leg",
+      "bonesDependencyOrder": ["Bone_011", "Bone_010", "Bone_009", "Bone_008"]
+    },
+    "leg_b": {
+      "role": "left_leg",
+      "bonesDependencyOrder": ["Bone_016", "Bone_015", "Bone_014", "Bone_013"]
+    }
+  }
+}

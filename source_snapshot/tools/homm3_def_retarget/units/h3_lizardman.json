@@ -1,0 +1,334 @@
+{
+ "unit": "h3_lizardman",
+ "joints": {
+  "Hips": [
+   0.003,
+   0.031,
+   0.84
+  ],
+  "Spine": [
+   -0.003,
+   0.07,
+   0.94
+  ],
+  "Spine1": [
+   -0.01,
+   0.108,
+   1.039
+  ],
+  "Spine2": [
+   -0.018,
+   0.151,
+   1.151
+  ],
+  "Neck": [
+   -0.024,
+   0.185,
+   1.239
+  ],
+  "Head": [
+   -0.003,
+   -0.017,
+   1.406
+  ],
+  "HeadTop_End": [
+   -0.003,
+   -0.227,
+   1.595
+  ],
+  "LeftShoulder": [
+   0.073,
+   0.024,
+   1.35
+  ],
+  "LeftArm": [
+   0.164,
+   0.024,
+   1.378
+  ],
+  "LeftForeArm": [
+   0.325,
+   0.059,
+   1.141
+  ],
+  "LeftHand": [
+   0.269,
+   -0.136,
+   1.008
+  ],
+  "LeftHand_End": [
+   0.248,
+   -0.209,
+   0.959
+  ],
+  "RightShoulder": [
+   -0.073,
+   0.024,
+   1.357
+  ],
+  "RightArm": [
+   -0.171,
+   0.024,
+   1.378
+  ],
+  "RightForeArm": [
+   -0.318,
+   0.094,
+   1.134
+  ],
+  "RightHand": [
+   -0.297,
+   -0.052,
+   0.938
+  ],
+  "RightHand_End": [
+   -0.289,
+   -0.106,
+   0.866
+  ],
+  "LeftUpLeg": [
+   0.101,
+   0.031,
+   0.84
+  ],
+  "LeftLeg": [
+   0.143,
+   -0.129,
+   0.463
+  ],
+  "LeftFoot": [
+   0.15,
+   -0.094,
+   0.079
+  ],
+  "LeftToeBase": [
+   0.213,
+   -0.227,
+   0.037
+  ],
+  "LeftToe_End": [
+   0.283,
+   -0.367,
+   -0.005
+  ],
+  "RightUpLeg": [
+   -0.094,
+   0.031,
+   0.84
+  ],
+  "RightLeg": [
+   -0.122,
+   -0.038,
+   0.449
+  ],
+  "RightFoot": [
+   -0.15,
+   0.122,
+   0.086
+  ],
+  "RightToeBase": [
+   -0.206,
+   -0.017,
+   0.037
+  ],
+  "RightToe_End": [
+   -0.276,
+   -0.143,
+   0.009
+  ]
+ },
+ "extensions": [
+  "fortress_rig"
+ ],
+ "fortress": {
+  "chains": [
+   {
+    "name": "Tail",
+    "parent": "Hips",
+    "points": [
+     [
+      -0.002,
+      0.123,
+      0.76
+     ],
+     [
+      -0.001,
+      0.093,
+      0.612
+     ],
+     [
+      -0.003,
+      0.068,
+      0.495
+     ],
+     [
+      -0.016,
+      0.056,
+      0.377
+     ],
+     [
+      -0.027,
+      0.047,
+      0.258
+     ],
+     [
+      -0.018,
+      0.06,
+      0.139
+     ],
+     [
+      0.001,
+      0.149,
+      0.068
+     ],
+     [
+      0.011,
+      0.252,
+      0.051
+     ],
+     [
+      0.009,
+      0.36,
+      0.101
+     ]
+    ],
+    "radius": 0.1,
+    "rootBlend": 0.12,
+    "ratio": 1.0
+   }
+  ],
+  "params": {
+   "tailLift": {
+    "type": "chain",
+    "chain": "Tail",
+    "mode": "curl",
+    "axis": [
+     -1,
+     0,
+     0
+    ],
+    "limit": [
+     -30,
+     70
+    ],
+    "step": 12
+   },
+   "tailSide": {
+    "type": "chain",
+    "chain": "Tail",
+    "mode": "curl",
+    "axis": [
+     0,
+     1,
+     0
+    ],
+    "limit": [
+     -40,
+     40
+    ],
+    "step": 12
+   }
+  },
+  "anim": {
+   "Idle": {
+    "tailSide": {
+     "sin": 6,
+     "cycles": 1
+    }
+   },
+   "Move": {
+    "tailSide": {
+     "sin": 15,
+     "cycles": 1
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "tailLift",
+    "tailSide"
+   ],
+   "clips": {
+    "Death": [
+     "dx",
+     "roll"
+    ]
+   },
+   "limits": {
+    "dx": [
+     -40,
+     40
+    ],
+    "dy": [
+     -60,
+     60
+    ]
+   },
+   "penalty": 0.0003,
+   "smooth": 0.0005,
+   "clipsReason": "Death fits dx/roll only: with dy the silhouette fit (IoU 0.03-0.36 on the fall, gains <= 0.07) drifted the whole body up the screen frame by frame (dy 4 -> 27..39 px through the smooth term), so the body hung ~0.23 of its height above the floor through the fall and dropped onto it on the last frame (float-then-pop). The DEF lands progressively; vertical placement is left to build_unit grounding."
+  },
+  "armSplit": {
+   "sides": [
+    "Left"
+   ],
+   "foreRadius": 0.07,
+   "handRadius": 0.09,
+   "armKeep": 0.12
+  }
+ },
+ "props": [
+  {
+   "name": "stick",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.15,
+      -0.19,
+      1.0
+     ],
+     [
+      0.13,
+      -0.32,
+      1.52
+     ]
+    ]
+   ],
+   "radius": 0.045
+  },
+  {
+   "name": "arrow",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.12,
+      -0.34,
+      1.43
+     ],
+     [
+      0.1,
+      -0.15,
+      1.2
+     ]
+    ]
+   ],
+   "radius": 0.03
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "armCut": {
+  "maxDist": 0.07
+ },
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ }
+}

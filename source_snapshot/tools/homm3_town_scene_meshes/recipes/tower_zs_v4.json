@@ -1,0 +1,52 @@
+{
+  "schema": "town_full3d_recipe.v2",
+  "faction": "tower",
+  "seed": "body_v2_gc",
+  "candidate": "zs_v4",
+  "note": "tower zs_v2 (2026-10-01 night): zs_v1's recipe (built and passed the loop-12 v2 gate, 32 states, rest-paint max 372 px) plus certificate.extraPoses: the sweep samples its one-time `final` (157 poses) failed at: loop_084 (42 px bldg_front + unseen 20, full), loop_096/276/300 (unseen 17), loop_120/132 (ground hole 3/1 px), free_polygon_lookAt_right (unseen 17), transition_016/020/021 (unseen 34/32/22), transition_040/041 (ground hole 1 px). Seed props_gc_v1 = installed rx_cond_oldlow_mono_env_dfix_swing (bundle 3109ae45) with crag 30 re-placed (ground contact 0.97 m) and slab 28 dropped (rest 3706 px). v3: seed body_v2_gc = props_gc_v1 plus the residual body_v2 redepth (seed rx_cond_oldlow_mono_env), because zs_v2 failed the validator's seams_v2 gate on most layers (no residual rule in the seed). v4: + extraPoses loop_264 (zs_v3 final: unseen-face 16 px start, 32 px min_tbtwmage_3) and loop_156 (2 px ground hole). + repair.seamAware: zs_v3's repair opened a seams_v2 split on tbtwdw_6 (34/2348, p99 8.6 px) that its seed body_v2_gc did not have (validator OK on the seed).",
+  "ldi": {
+    "pieces": [
+      "Mesh_Terrain"
+    ],
+    "cut": "zone",
+    "backRule": "vlb",
+    "vlbK": 2.0,
+    "keepRounds": 0,
+    "reachLoop": 12,
+    "fromPreLdi": false
+  },
+  "backstop": {
+    "K": 2.0,
+    "stepPx": 4,
+    "groundSrcM": 1.0
+  },
+  "repair": {
+    "rules": [
+      "drop",
+      "card",
+      "flap",
+      "planar"
+    ],
+    "rounds": 8,
+    "seamAware": true
+  },
+  "certificate": {
+    "loop": 12,
+    "extraPoses": [
+      "loop_084",
+      "loop_096",
+      "loop_120",
+      "loop_132",
+      "loop_276",
+      "loop_300",
+      "free_polygon_lookAt_right",
+      "transition_016",
+      "transition_020",
+      "transition_021",
+      "transition_040",
+      "transition_041",
+      "loop_264",
+      "loop_156"
+    ]
+  }
+}

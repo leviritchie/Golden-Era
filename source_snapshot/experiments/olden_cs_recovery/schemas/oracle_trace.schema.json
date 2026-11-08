@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://olden-era.local/schemas/oracle_trace.schema.json",
+  "title": "OldenCsRecoveryOracleTrace",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "method_id",
+    "capture_kind",
+    "synthetic",
+    "game_build_id",
+    "gameassembly_sha256",
+    "captured_at",
+    "inputs",
+    "outputs",
+    "protocol"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "method_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capture_kind": {
+      "type": "string",
+      "enum": [
+        "live_surface_metadata",
+        "live_execution",
+        "synthetic_execution"
+      ],
+      "description": "live_surface_metadata observes type/field/ctor MethodInfoPtr via bridge (not bar-C body proof). live_execution / synthetic_execution carry inputs→outputs for EquivTester. Only execution kinds may become equivalence-proven."
+    },
+    "synthetic": {
+      "type": "boolean",
+      "description": "true only for harness fixtures under oracle_traces/synthetic/. Synthetic fixtures must never promote real queue methods."
+    },
+    "game_build_id": {
+      "type": ["string", "null"]
+    },
+    "gameassembly_sha256": {
+      "type": "string",
+      "minLength": 16
+    },
+    "bridge_profile": {
+      "type": ["string", "null"]
+    },
+    "bridge_scene": {
+      "type": ["string", "null"]
+    },
+    "bridge_frame": {
+      "type": ["integer", "null"]
+    },
+    "captured_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "identity_criteria": {
+      "type": ["string", "null"]
+    },
+    "identity_proof_path": {
+      "type": ["string", "null"]
+    },
+    "type_name": {
+      "type": ["string", "null"]
+    },
+    "signature": {
+      "type": ["string", "null"]
+    },
+    "inputs": {
+      "type": "object"
+    },
+    "outputs": {
+      "type": "object"
+    },
+    "numeric_tolerances": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "notes"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "integer" },
+        "notes": { "type": "string" }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

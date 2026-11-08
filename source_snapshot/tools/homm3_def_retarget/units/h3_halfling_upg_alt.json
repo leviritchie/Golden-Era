@@ -1,0 +1,267 @@
+{
+ "unit": "h3_halfling_upg_alt",
+ "joints": {
+  "Hips": [
+   0.042,
+   0.048,
+   0.774
+  ],
+  "Spine": [
+   0.042,
+   0.051,
+   0.887
+  ],
+  "Spine1": [
+   0.042,
+   0.055,
+   0.999
+  ],
+  "Spine2": [
+   0.042,
+   0.059,
+   1.126
+  ],
+  "Neck": [
+   0.042,
+   0.061,
+   1.225
+  ],
+  "Head": [
+   0.055,
+   0.055,
+   1.305
+  ],
+  "HeadTop_End": [
+   0.068,
+   -0.005,
+   1.756
+  ],
+  "LeftShoulder": [
+   0.148,
+   0.075,
+   1.212
+  ],
+  "LeftArm": [
+   0.214,
+   0.101,
+   1.232
+  ],
+  "LeftForeArm": [
+   0.354,
+   0.154,
+   1.019
+  ],
+  "LeftHand": [
+   0.473,
+   0.022,
+   0.86
+  ],
+  "LeftHand_End": [
+   0.518,
+   -0.028,
+   0.8
+  ],
+  "RightShoulder": [
+   -0.045,
+   0.048,
+   1.212
+  ],
+  "RightArm": [
+   -0.111,
+   0.055,
+   1.232
+  ],
+  "RightForeArm": [
+   -0.251,
+   0.108,
+   1.026
+  ],
+  "RightHand": [
+   -0.35,
+   0.055,
+   0.833
+  ],
+  "RightHand_End": [
+   -0.39,
+   0.033,
+   0.756
+  ],
+  "LeftUpLeg": [
+   0.154,
+   0.048,
+   0.774
+  ],
+  "LeftLeg": [
+   0.221,
+   -0.045,
+   0.481
+  ],
+  "LeftFoot": [
+   0.221,
+   0.088,
+   0.136
+  ],
+  "LeftToeBase": [
+   0.267,
+   -0.045,
+   0.037
+  ],
+  "LeftToe_End": [
+   0.307,
+   -0.171,
+   0.043
+  ],
+  "RightUpLeg": [
+   -0.071,
+   0.048,
+   0.774
+  ],
+  "RightLeg": [
+   -0.125,
+   -0.058,
+   0.481
+  ],
+  "RightFoot": [
+   -0.198,
+   0.095,
+   0.156
+  ],
+  "RightToeBase": [
+   -0.171,
+   -0.045,
+   0.063
+  ],
+  "RightToe_End": [
+   -0.138,
+   -0.198,
+   0.063
+  ]
+ },
+ "props": [
+  {
+   "name": "sling",
+   "bone": "RightHand",
+   "box": [
+    [
+     -0.5,
+     -0.2,
+     0.2
+    ],
+    [
+     -0.3,
+     0.3,
+     0.86
+    ]
+   ]
+  },
+  {
+   "name": "bag",
+   "bone": "Hips",
+   "box": [
+    [
+     0.205,
+     -0.25,
+     0.56
+    ],
+    [
+     0.41,
+     0.3,
+     0.9
+    ]
+   ],
+   "exclude": [
+    {
+     "box": [
+      [
+       0.2,
+       -1,
+       0.5
+      ],
+      [
+       0.24,
+       1,
+       0.63
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.12
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.9,
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.9,
+   "keepDist": 0.12
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "strideMatch": {
+  "maxDrop": 0.25,
+  "reason": "short-reach walker (legs near straight at the source Move): default 0.15: slip 0.590 ratio 1.50; 0.25: slip 0.412 ratio 1.052 (workerB scratch trials 2026-09-27)"
+ }
+}

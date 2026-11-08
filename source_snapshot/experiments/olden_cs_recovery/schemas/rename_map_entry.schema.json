@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://olden-era.local/schemas/rename_map_entry.schema.json",
+  "title": "OldenCsRecoveryRenameMapEntry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "current_type_name",
+    "proposed_mono_type_name",
+    "decision",
+    "confidence",
+    "evidence_classes",
+    "updated_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "current_type_name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Current Golden Era / DiffableCs type full name."
+    },
+    "proposed_mono_type_name": {
+      "type": ["string", "null"],
+      "description": "Mono demo semantic type full name; null when no map match (fail-closed empty proposal)."
+    },
+    "proposed_mono_namespace": {
+      "type": ["string", "null"]
+    },
+    "proposed_mono_simple_name": {
+      "type": ["string", "null"]
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "renamed-accepted",
+        "renamed-proposed",
+        "skipped",
+        "collision-rejected"
+      ]
+    },
+    "confidence": {
+      "type": ["string", "null"],
+      "enum": [
+        null,
+        "strong-static",
+        "probable-static",
+        "candidate",
+        "weak-candidate",
+        "missing-side"
+      ]
+    },
+    "evidence_classes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "name_identity",
+          "signature_shape",
+          "string_loc_anchor",
+          "call_neighborhood"
+        ]
+      }
+    },
+    "second_evidence_present": {
+      "type": "boolean"
+    },
+    "map_score": {
+      "type": ["number", "null"]
+    },
+    "map_reasons": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "method_id": {
+      "type": "string",
+      "description": "Queue method_id that drove this write (type-level map may be shared)."
+    },
+    "member_renames": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "current_name", "mono_name"],
+        "properties": {
+          "kind": { "type": "string", "enum": ["method", "field"] },
+          "current_name": { "type": "string" },
+          "mono_name": { "type": "string" },
+          "confidence": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "collision_reason": {
+      "type": ["string", "null"]
+    },
+    "skip_reason": {
+      "type": ["string", "null"]
+    },
+    "applied_to_recovered": {
+      "type": "boolean"
+    },
+    "recovered_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "mono_map_path": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

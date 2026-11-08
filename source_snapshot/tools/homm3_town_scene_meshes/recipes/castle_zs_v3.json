@@ -1,0 +1,34 @@
+{
+ "schema": "town_full3d_recipe.v1",
+ "faction": "castle",
+ "seed": "rx_ldi_zone_old_nfix3_cloth",
+ "candidate": "zs_v3",
+ "note": "zs_v3 = nfix3_cloth (building depth contact_v1, residual body_v2 passing seams_v1, cloth banners, props) + the zero-streak recipe of zs_v2 unchanged: terrain unlayered exactly (fromPreLdi) and re-layered with the VLB back rule, backstop, drop/card repair. repair.seamAware (2026-10-01): residual faces near their body's rest silhouette are never dropped or carded. Result: the build fails closed - after 2 rounds only guarded faces still fail (guard 2 px: 148 faces, full max 355 px behind; guard 1 px: 66 faces, 187 px), so on Castle the faces that carry the seam are the faces that streak. The unguarded build passes the certificate but re-opens seams_v1 on tbcsdw_5_2 (22/1738).",
+ "ldi": {
+  "pieces": [
+   "Mesh_Terrain"
+  ],
+  "cut": "zone",
+  "backRule": "vlb",
+  "vlbK": 2.0,
+  "keepRounds": 0,
+  "reachLoop": 12,
+  "fromPreLdi": true
+ },
+ "backstop": {
+  "K": 2.0,
+  "stepPx": 4,
+  "groundSrcM": 1.0
+ },
+ "repair": {
+  "rules": [
+   "drop",
+   "card"
+  ],
+  "rounds": 8,
+  "seamAware": true
+ },
+ "certificate": {
+  "loop": 12
+ }
+}

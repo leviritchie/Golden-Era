@@ -1,0 +1,247 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_hurricane_elemental",
+ "status": "look",
+ "notes": "conflux rollout: hurricane elemental. The peach branching bolts (attack: from the fists; shoot: above the raised hands) are cut from the DEF with a committed thin-structure file mask (masks/conflux_fx_masks.py); defEffects keeps only specks because the bolt colours are also body paint. The bolt's root at the DEF fist (pixel [251, 185], taken from the frame where the trunk is drawn) is pinned to the mesh LeftHand on every key (explicit defOrigin), so the bolt leaves the mesh's hand although the mesh does not lunge like the DEF; the shoot bolts (if any) keep the DEF placement (explicit defOrigin = projected Spine2).",
+ "lighting": {
+  "mode": "v7c",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "bolt_flash",
+   "treatment": "dynamic",
+   "notes": "the bolts light the arms and chest"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "element_flow",
+    "type": "uvAtlas",
+    "provenance": "element_flow_scores.py mode vortex: 10 cells per 10-frame cycle, in phase with the retarget's element_motion keys; brightness-modulated look texture",
+    "modulate": {
+     "gain": 0.45
+    },
+    "clips": {
+     "Unit_Idle": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+     ],
+     "Unit_MoveStart": [
+      0
+     ],
+     "Unit_Move": [
+      0,
+      2,
+      5,
+      7
+     ],
+     "Unit_MoveEnd": [
+      0
+     ],
+     "Unit_Mouseover": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "Unit_Hitted": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_Defence": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      0
+     ],
+     "Unit_AttackFront": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_ShootFront": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_Death": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "source": {
+     "scores": "artifacts/homm3_vfx_experiments/element_flow/h3_hurricane_elemental_scores.npz",
+     "generator": "tools/homm3_vfx/element_flow_scores.py"
+    },
+    "gutterPx": 16
+   },
+   {
+    "id": "attack_bolt",
+    "type": "defFlipbook",
+    "provenance": "roster inventory conflux: g12 attack_front bolt; thin-structure mask",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_hurricane_elemental/attack_bolt"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": {
+      "Unit_AttackFront": [
+       [
+        251,
+        185
+       ],
+       [
+        251,
+        185
+       ],
+       [
+        251,
+        185
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "bolt_flash"
+   },
+   {
+    "id": "shoot_bolt",
+    "type": "defFlipbook",
+    "provenance": "roster inventory conflux: g15 shoot_front bolt above the hands; thin-structure mask",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       1,
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_hurricane_elemental/shoot_bolt"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine2",
+     "defOrigin": {
+      "Unit_ShootFront": [
+       [
+        184,
+        187
+       ],
+       [
+        186,
+        183
+       ],
+       [
+        192,
+        180
+       ],
+       [
+        195,
+        177
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "bolt_flash"
+   },
+   {
+    "id": "bolt_flash_light",
+    "type": "effectLight",
+    "lightId": "bolt_flash",
+    "carrier": "attack_bolt",
+    "anchor": {
+     "bone": "LeftHand",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.8,
+     0.65
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      4.656,
+      9.286,
+      6.595,
+      1.143,
+      0.119
+     ],
+     "Unit_ShootFront": [
+      0.0,
+      1.441,
+      1.019,
+      13.853,
+      2.605,
+      0.25
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

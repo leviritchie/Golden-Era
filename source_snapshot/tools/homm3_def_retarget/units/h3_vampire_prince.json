@@ -1,0 +1,219 @@
+{
+ "unit": "h3_vampire_prince",
+ "skipDefGroups": {
+  "15": "never shoots: installed view h3_vampire_upg_alt has no projectile attack or ability; DEF shoot groups 14/15/16 are one head-glow cast, and its Blind ability on animationIndex 1 must play the melee swing (15.Skill_1 -> Unit_AttackFront), not the cast; user-approved 2026-09-28"
+ },
+ "joints": {
+  "Hips": [
+   0.003,
+   0.13,
+   0.8
+  ],
+  "Spine": [
+   0.003,
+   0.084,
+   0.92
+  ],
+  "Spine1": [
+   0.003,
+   0.037,
+   1.039
+  ],
+  "Spine2": [
+   0.003,
+   -0.015,
+   1.173
+  ],
+  "Neck": [
+   0.003,
+   -0.056,
+   1.278
+  ],
+  "Head": [
+   0.003,
+   -0.109,
+   1.431
+  ],
+  "HeadTop_End": [
+   0.017,
+   -0.082,
+   1.63
+  ],
+  "LeftShoulder": [
+   0.07,
+   -0.022,
+   1.351
+  ],
+  "LeftArm": [
+   0.176,
+   0.004,
+   1.325
+  ],
+  "LeftForeArm": [
+   0.276,
+   0.024,
+   1.112
+  ],
+  "LeftHand": [
+   0.262,
+   -0.142,
+   1.119
+  ],
+  "LeftHand_End": [
+   0.255,
+   -0.232,
+   1.123
+  ],
+  "RightShoulder": [
+   -0.063,
+   -0.022,
+   1.351
+  ],
+  "RightArm": [
+   -0.163,
+   0.004,
+   1.325
+  ],
+  "RightForeArm": [
+   -0.269,
+   0.024,
+   1.112
+  ],
+  "RightHand": [
+   -0.256,
+   -0.142,
+   1.119
+  ],
+  "RightHand_End": [
+   -0.248,
+   -0.232,
+   1.123
+  ],
+  "LeftUpLeg": [
+   0.129,
+   0.13,
+   0.767
+  ],
+  "LeftLeg": [
+   0.129,
+   0.017,
+   0.322
+  ],
+  "LeftFoot": [
+   0.129,
+   0.06,
+   0.1
+  ],
+  "LeftToeBase": [
+   0.129,
+   -0.05,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.129,
+   -0.14,
+   0.02
+  ],
+  "RightUpLeg": [
+   -0.123,
+   0.13,
+   0.767
+  ],
+  "RightLeg": [
+   -0.123,
+   0.017,
+   0.322
+  ],
+  "RightFoot": [
+   -0.123,
+   0.06,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.123,
+   -0.05,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.123,
+   -0.14,
+   0.02
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 50,
+   "dy": 30
+  }
+ },
+ "mistForm": {
+  "power": 1.2
+ },
+ "shatter": {
+  "start": 4,
+  "chunks": 45
+ },
+ "bonePile": {
+  "spread": 0.8,
+  "heapHeight": 0.18,
+  "tumble": 80
+ },
+ "extensions": [
+  "necropolis_weightfill",
+  "necropolis_mistform",
+  "necropolis_bonepile"
+ ],
+ "bootTop": -0.1,
+ "skirtLegShare": 0.15,
+ "sleeve": {
+  "x": 0.2,
+  "zMin": 0.8,
+  "zMax": 1.22
+ },
+ "glbPatch": {
+  "reason": "authenticity lane D 2026-10-11: vampire lord recipe per DEF (AttackFront f2 rear arms up then f3-f4 low claw lunge, Hitted arm overhead then flung wide, Death arms raised in a V before the crumble) with Defence f3-f6 arms spread wide like opened wings",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_vampire_prince_pose_tr.json",
+    "regrid": true,
+    "sha256": "258e1dcbb864ec0bb8928e0a1665317ca2a6958da6cf4d0b6b0630afe6f47bae"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_vampire_prince_pose_rot.json",
+    "regrid": true,
+    "sha256": "0ced74ad9d04ee180eeb72054de864775457b77175ea474c6a52726d0e4c44ef"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_vampire_prince_pose_rot.json",
+    "regrid": true,
+    "sha256": "0ced74ad9d04ee180eeb72054de864775457b77175ea474c6a52726d0e4c44ef"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront",
+     "Unit_Hitted",
+     "Unit_Defence",
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "crease of the re-posed joints"
+   }
+  ]
+ }
+}

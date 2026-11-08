@@ -1,0 +1,167 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "RoE Evil2 (Long Live the King) continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub evil2; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_05_roe_necropolis_evil2",
+    "campaignTitle": "Long Live the King",
+    "campaignEntry": "Evil2.h3c",
+    "batchManifest": "scenarios/roe_remaining_campaigns/batch_manifest.json",
+    "missionConfigPrefix": "homm3_roe_necropolis",
+    "defaultSpawn": {
+      "factionSid": "homm3_necropolis",
+      "heroSid": "homm3_necropolis_hero_7"
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart).",
+    "missionSpawns": {
+      "a_gryphons_heart": {
+        "heroSid": "homm3_necropolis_hero_7",
+        "factionSid": "homm3_necropolis"
+      },
+      "season_of_harvest": {
+        "heroSid": "homm3_necropolis_hero_15",
+        "factionSid": "homm3_necropolis"
+      },
+      "corporeal_punishment": {
+        "heroSid": "homm3_necropolis_hero_7",
+        "factionSid": "homm3_necropolis"
+      },
+      "from_day_to_night": {
+        "heroSid": "homm3_necropolis_hero_2",
+        "factionSid": "homm3_necropolis"
+      }
+    }
+  },
+  "storyHubMapSidOverrides": {
+    "a_gryphons_heart": "h3_roe_necropolis_a_gryphons_heart_raw_translation",
+    "season_of_harvest": "h3_roe_necropolis_season_of_harvest_raw_translation",
+    "corporeal_punishment": "h3_roe_necropolis_corporeal_punishment_raw_translation",
+    "from_day_to_night": "h3_roe_necropolis_from_day_to_night_raw_translation",
+    "choiceReason": "Evil2 missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "a_gryphons_heart",
+      "toMissionId": "season_of_harvest",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 0,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=0 for a_gryphons_heart (unlimited); no scenario hero level restriction.",
+      "mapSids": {
+        "from": "h3_roe_necropolis_a_gryphons_heart_raw_translation",
+        "to": "h3_roe_necropolis_season_of_harvest_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "a_gryphons_heart",
+    "season_of_harvest",
+    "corporeal_punishment",
+    "from_day_to_night"
+  ],
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Quest artifact carry across Seer / border-guard gates"
+  ],
+  "videoContract": {
+    "status": "mission_clips_via_native_playvideo_serial_queue_hub_hover_strip_omitted",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": "Cevil2",
+    "hubFirstShowOmitReason": "Cevil2 is a silent hover-menu strip; mission pins use composed Evil2a–d cutscenes.",
+    "requiredMp4RelativeToStreamingAssets": "video/Cevil2.mp4",
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_05_roe_necropolis_evil2/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "sourceMp4RelativeToStreamingAssets": "video/Cevil2.mp4",
+      "stillArtifact": "artifacts/campaign_port_poc/roe_castle_campaign/storyhub_visual/Cevil2_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.82,
+      "focusY": 0.48,
+      "cropReason": "Hooded figure on the mound with lightning reaching toward them",
+      "cropsCatalog": "scenarios/roe_castle_campaign/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "a_gryphons_heart": "Evil2a",
+      "season_of_harvest": "Evil2b",
+      "corporeal_punishment": "Evil2c",
+      "from_day_to_night": "Evil2d"
+    },
+    "actionOrder": "PlayVideo then OpenMissionsPrologue on each mission pin interactionActions",
+    "hdEditionSources": [
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Cevil2.ogv",
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Evil2a.ogv",
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Evil2b.ogv",
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Evil2c.ogv",
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Evil2d.ogv"
+    ],
+    "transcodeRequirement": "Mission clips: compose via tools/bake_roe_castle_campaign_videos.py.",
+    "composeRecipe": "experiments/campaign_port_poc/campaign_video_compose.py",
+    "narrationSnd": "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/LOC/EN/HEROES3CD.SND",
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "minComposedDurationSec": 12,
+    "requireComposedAudio": true,
+    "failClosed": "Evil2 hub firstShowActions must stay empty. Per-mission PlayVideo only when composed MP4 exists."
+  }
+}

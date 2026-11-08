@@ -1,0 +1,69 @@
+{
+  "unitSid": "h3_hobgoblin",
+  "clipId": "attack_g11_painted",
+  "fps": 12,
+  "method": "silhouette_iou",
+  "masterGlb": "artifacts/hobgoblin_attack_pose_pipeline/master/Meshy_AI_Character_multiview_portrait.glb",
+  "outputDir": "artifacts/hobgoblin_attack_pose_pipeline/out_attack_g11_silhouette_painted",
+  "boneRoles": "tools/homm3_silhouette_pose_fit/bone_roles_unirig_hobgoblin_multiview22.json",
+  "camera": {
+    "axis": "-X",
+    "distance": 3.0,
+    "height": 0.85,
+    "orthoScale": 2.6,
+    "rootYawDeg": 0.0
+  },
+  "render": {
+    "width": 192,
+    "height": 170
+  },
+  "optimizeBones": [
+    "Bone_001",
+    "Bone_003",
+    "Bone_002",
+    "Bone_013",
+    "Bone_017",
+    "Bone_016",
+    "Bone_015",
+    "Bone_014",
+    "Bone_021",
+    "Bone_020",
+    "Bone_019"
+  ],
+  "optimizer": {
+    "method": "hybrid",
+    "boundRad": 0.96,
+    "restWeight": 0.0,
+    "deMaxiter": 5,
+    "popsize": 18,
+    "polishIters": 40,
+    "seed": 7
+  },
+  "frames": [
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_00.png"
+    },
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_01.png"
+    },
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_02.png"
+    },
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_03.png"
+    },
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_04.png"
+    },
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_05.png"
+    },
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_06.png"
+    },
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_07.png"
+    }
+  ],
+  "notes": "Silhouette fit of multiview master to painted-upscale g11 frames (GenerateImage + chroma postpass)."
+}

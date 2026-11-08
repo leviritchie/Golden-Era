@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom Conflux law profiles that require mixed elemental family composition. This records elemental-family mix semantics only; it does not prove live party enumeration, battle stack identity, temporary summon exclusion, day-phase state, reward trigger ordering, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresElementalFamilyMixProfiles": true,
+    "confluxOnly": true,
+    "elementalFamilyFactMustComeFromUnitFamilyTags": true,
+    "mixedFamilyMeansAtLeastTwoDistinctElementalFamilies": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredStaticEvidence": {
+    "unitFamilyTagsPath": "custom_factions/unit_family_tags.json",
+    "requiredFact": "elemental=yes",
+    "minimumElementalUnitSids": 12
+  },
+  "requiredRuntimeProof": [
+    "live hero party composition proof",
+    "battle stack unit identity proof",
+    "distinct elemental family discriminator proof",
+    "temporary summon exclusion proof",
+    "law owner to party or battle side correlation proof",
+    "composition snapshot timing proof",
+    "idempotent reward or trigger application proof"
+  ],
+  "contracts": {
+    "conflux.mixed-elemental-composition": {
+      "mixKinds": [
+        "formation-composition",
+        "at-least-two-distinct-elemental-families"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "any elemental unit count",
+        "same elemental family duplicates counted as a mix",
+        "Conflux faction membership counted as elemental family mix",
+        "SID substring elemental inference",
+        "display-name elemental inference",
+        "temporary summoned elemental counted without summon exclusion proof"
+      ],
+      "notes": "Conflux mixed elemental composition requires at least two distinct authored elemental families in the relevant formation/composition context, not just any elemental unit or Conflux membership."
+    },
+    "conflux.mixed-elemental-resonance-package": {
+      "mixKinds": [
+        "morale-package-composition",
+        "at-least-two-distinct-elemental-families"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "any elemental unit count",
+        "same elemental family duplicates counted as a mix",
+        "Conflux faction membership counted as elemental family mix",
+        "SID substring elemental inference",
+        "display-name elemental inference",
+        "morale event counted without composition snapshot proof"
+      ],
+      "notes": "Conflux mixed elemental resonance package requires at least two distinct authored elemental families at the morale package snapshot, not a generic elemental or morale event."
+    },
+    "conflux.elemental-family-resonance": {
+      "mixKinds": [
+        "morale-trigger-composition",
+        "at-least-two-distinct-elemental-families"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "any elemental unit count",
+        "same elemental family duplicates counted as a mix",
+        "Conflux faction membership counted as elemental family mix",
+        "SID substring elemental inference",
+        "display-name elemental inference",
+        "morale animation counted without committed morale trigger proof"
+      ],
+      "notes": "Conflux elemental family resonance requires at least two distinct authored elemental families when the committed morale trigger is evaluated."
+    },
+    "conflux.elemental-family-market": {
+      "mixKinds": [
+        "reward-economy-composition",
+        "at-least-two-distinct-elemental-families"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "any elemental unit count",
+        "same elemental family duplicates counted as a mix",
+        "Conflux faction membership counted as elemental family mix",
+        "SID substring elemental inference",
+        "display-name elemental inference",
+        "reward granted without committed reward identity proof"
+      ],
+      "notes": "Conflux elemental family market requires at least two distinct authored elemental families before reward economy behavior can be considered."
+    },
+    "conflux.planar-day-phase": {
+      "mixKinds": [
+        "reward-economy-day-phase-composition",
+        "at-least-two-distinct-elemental-families"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "any elemental unit count",
+        "same elemental family duplicates counted as a mix",
+        "Conflux faction membership counted as elemental family mix",
+        "SID substring elemental inference",
+        "display-name elemental inference",
+        "day phase substituted for elemental family mix"
+      ],
+      "notes": "Conflux planar day phase requires at least two distinct authored elemental families plus the separate day-phase context; day phase alone is not a family mix."
+    }
+  }
+}

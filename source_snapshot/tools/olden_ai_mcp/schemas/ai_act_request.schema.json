@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "olden-ai-driver://schemas/ai_act_request.schema.json",
+  "title": "Olden AI Driver Action Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "observationId", "screenId", "actionId", "targetFingerprint"],
+  "properties": {
+    "schemaVersion": { "const": "ai-driver.v1.act-request" },
+    "observationId": { "type": "string", "minLength": 16 },
+    "screenId": { "type": "string", "minLength": 16 },
+    "actionId": { "type": "string", "minLength": 16 },
+    "targetFingerprint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": { "type": "string", "enum": ["screen_path"] },
+        "value": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

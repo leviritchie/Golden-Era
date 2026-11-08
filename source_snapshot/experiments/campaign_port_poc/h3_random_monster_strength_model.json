@@ -1,0 +1,19 @@
+{
+  "model": "h3_random_monster_level_to_olden_squad_value_median_v1",
+  "nominalH3RandomStackCountsByLevel": {
+    "1": 20,
+    "2": 20,
+    "3": 15,
+    "4": 10,
+    "5": 8,
+    "6": 7,
+    "7": 4
+  },
+  "oldenFormula": "requestedValue = round_half_up_to_increment(unit_or_tier_median_squadValue * nominal_or_explicit_h3_count, 50). NeutralsDifficulty multiplies at runtime when isIgnoreMultiply is false.",
+  "requestedValueRounding": 50.0,
+  "schema": "homm3.random_monster_strength_model.v1",
+  "scope": "Generic HoMM3 random monster level objects (AVWmonN.def) and concrete typed monsters with H3M count==0 (CRTRAITS default-quantity sentinel).",
+  "sourceNote": "VCMI/CGCreature rolls uniform CRTRAITS advMapAmount min..max when count==0. Nominal-by-tier counts are a mid-pool guideline for ports, not a hardcoded CRTRAITS dump. Olden squadValue always comes from installed Core.zip. Do not bake skirmish difficulty into requestedValue.",
+  "sourceStatus": "guideline_from_vcmi_crtraits_default_quantity_unvalidated_against_full_per_creature_tables",
+  "concreteZeroCountPolicy": "use_unit_tier_nominal_count_times_unit_squad_value"
+}

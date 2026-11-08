@@ -1,0 +1,85 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "hota_bulwark_jotunn_warlord",
+ "status": "look",
+ "notes": "bulwark rollout: frost breath on mouseover and the frost rising off the head on death, both ripped from the DEF (CWJOTN, defEffects electric). The g12 'water/ice' candidate is sparkle on the axe head, a held prop the mesh draws in a different pose: no flipbook.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "frost_breath",
+    "type": "defFlipbook",
+    "provenance": "roster inventory bulwark: g01 mouseover lightning/bolt (white-blue) f4 + f6-8 (frost breath from the mouth); def_effect_ripper --auto",
+    "clips": {
+     "Unit_Mouseover": {
+      "defGroup": 1,
+      "frames": [
+       4,
+       5,
+       6,
+       7,
+       8
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 12
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1
+   },
+   {
+    "id": "death_frost",
+    "type": "defFlipbook",
+    "provenance": "roster inventory bulwark: g05 death lightning/bolt (white-blue) f5-8 (frost spark rising off the head); def_effect_ripper --auto",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       5,
+       6,
+       7,
+       8
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 12
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1
+   }
+  ]
+ }
+}

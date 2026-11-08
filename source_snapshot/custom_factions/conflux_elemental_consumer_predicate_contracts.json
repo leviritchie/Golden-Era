@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for Conflux elemental-family consumer predicates. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "contractsMustMatchExactPredicateProfiles": true,
+    "confluxOnly": true,
+    "elementalFamilyMustUseAuthoredFamilyMap": true,
+    "elementalBuildingMustUseBuildingCategoryContract": true,
+    "themeOrNameInferenceForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": ["homm3_conflux"],
+  "requiredStaticEvidence": {
+    "elementalFamilyMappingContract": "custom_factions/elemental_family_mapping_predicate_contracts.json",
+    "constructionBuildingCategoryContract": "custom_factions/construction_building_category_contracts.json",
+    "unitFamilyTagsPath": "custom_factions/unit_family_tags.json",
+    "requiredUnitFact": "elemental=yes",
+    "requiredBuildingGroup": "elemental-building"
+  },
+  "contracts": {
+    "RequiresElementalFamily": {
+      "allowedFamilies": ["TrainingDamage"],
+      "requiredEffectKeys": ["conflux.family-stat-aspect"],
+      "requiredStaticSemantics": ["explicit Conflux elemental family map", "attacker or affected unit family selection"],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "Conflux faction membership counted as elemental family",
+        "any elemental unit counted without specific family identity",
+        "Pixie or Firebird counted as elemental family source",
+        "SID substring elemental inference",
+        "spell school counted as unit elemental family",
+        "building elemental category counted as unit elemental family"
+      ],
+      "notes": "Elemental Aspect requires exact authored elemental-family identity for the relevant unit before applying family-specific stat aspect behavior. Runtime still needs battle unit SID, selected family, damage ordering, and owner correlation proof."
+    },
+    "RequiresElementalBuildingMapping": {
+      "allowedFamilies": ["Construction"],
+      "requiredEffectKeys": ["conflux-elemental-alignment-build"],
+      "requiredStaticSemantics": ["construction_building_category_contracts elemental-building group", "explicit Conflux elemental alignment building mapping"],
+      "companionPredicates": ["RequiresBuildingAllowlist"],
+      "forbiddenSubstitutes": [
+        "Conflux town membership counted as elemental building mapping",
+        "building display name or icon counted as elemental building mapping",
+        "elemental-themed source mechanic counted without exact currentRows contract",
+        "unit elemental family counted as building elemental mapping",
+        "building allowlist counted without elemental-building group proof",
+        "construction UI preview counted as committed elemental building mapping"
+      ],
+      "notes": "Planar Alignment requires an exact elemental-building group mapping from construction building category contracts. Runtime still needs city/building payload, commit ordering, owner correlation, and extra-build idempotence proof."
+    }
+  },
+  "requiredRuntimeProof": [
+    "battle unit SID to elemental family proof",
+    "selected elemental family to stat-aspect proof",
+    "committed damage ordering proof",
+    "construction city owner proof",
+    "construction building SID or row proof",
+    "committed construction ordering proof",
+    "law-owner side correlation proof",
+    "idempotent per-hit or per-build application proof"
+  ]
+}

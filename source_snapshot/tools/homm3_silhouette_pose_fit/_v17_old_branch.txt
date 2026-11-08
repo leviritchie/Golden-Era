@@ -1,0 +1,11 @@
+    if str(spec["unit_class"]) == "flyer":
+        # Default profile_init orients against discovered idle plates; that freezes
+        # a standing camera on flight clips. Point orientation at the Move frames.
+        move_frames = Path(_sprite_dir(choice))
+        culled = Path(str(move_frames) + "_shadow_culled")
+        orient_dir = culled if culled.is_dir() else move_frames
+        if not orient_dir.is_dir():
+            raise RuntimeError(f"{label}: missing Move profile target dir: {orient_dir}")
+        gpu_kwargs["profile_init_target_dir"] = orient_dir
+        camera_lock["profileInitTargetDir"] = str(orient_dir).replace("\\", "/")
+        print(f"flyer profile_init_target_dir={orient_dir}", flush=True)

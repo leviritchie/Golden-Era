@@ -1,0 +1,251 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_genie",
+ "status": "look",
+ "notes": "tower rollout: genie sparkle attack/defence/death ripped from the DEF (committed file masks)",
+ "lighting": {
+  "mode": "v6m",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "sparkle_glint",
+   "treatment": "dynamic",
+   "notes": "the attack sparkle cloud lights the torso"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "attack_sparkle",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       2,
+       3,
+       4,
+       5
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_genie/attack_sparkle"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine2",
+     "defOrigin": {
+      "Unit_AttackFront": [
+       [
+        182,
+        186
+       ],
+       [
+        211,
+        200
+       ],
+       [
+        212,
+        203
+       ],
+       [
+        205,
+        197
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "sparkle_glint",
+    "provenance": "roster g12 attack_front sparkle cloud f2-5; tower_fx_masks.genie_star_sparkle (cream star colours are calm-group body paint to defEffects)",
+    "notes": "defOrigin = the mesh Spine2 projected per key, so the cloud keeps its DEF place in front of the torso (the mesh arms do not thrust; see tower_retarget_issues.md)"
+   },
+   {
+    "id": "sparkle_glint_light",
+    "type": "effectLight",
+    "lightId": "sparkle_glint",
+    "carrier": "attack_sparkle",
+    "anchor": {
+     "bone": "Spine2",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.95,
+     0.78
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.038,
+      0.183,
+      0.508,
+      0.297,
+      0.076,
+      0.016
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "defence_sparkle",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_Defence": {
+      "defGroup": 4,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_genie/defence_sparkle"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine2",
+     "defOrigin": {
+      "Unit_Defence": [
+       [
+        190,
+        203
+       ],
+       [
+        190,
+        198
+       ],
+       [
+        189,
+        193
+       ],
+       [
+        189,
+        196
+       ],
+       [
+        190,
+        198
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "roster g04 defence blue-white sparkle f1-5; tower_fx_masks.genie_blue_sparkle above the Spine1 row (the smoke tail below is the same blue)"
+   },
+   {
+    "id": "death_sparkle",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_genie/death_sparkle"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Root",
+     "defOrigin": {
+      "Unit_Death": [
+       [
+        196,
+        267
+       ],
+       [
+        196,
+        267
+       ],
+       [
+        196,
+        267
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "roster g05 death dissolve sparkle f2-4; tower_fx_masks.genie_blue_sparkle"
+   },
+   {
+    "id": "death_remains",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       5,
+       6,
+       7
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_genie/death_remains"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Root",
+     "defOrigin": {
+      "Unit_Death": [
+       [
+        196,
+        267
+       ],
+       [
+        196,
+        267
+       ],
+       [
+        196,
+        267
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "DEF g05 f5-7 whole frame (last sparkle + the lamp); the mesh is hidden from f5",
+    "notes": "Root is stationary, so the DEF frame lands where the sprite draws it"
+   },
+   {
+    "id": "death_hide",
+    "type": "event",
+    "clip": "Unit_Death",
+    "defFrame": 5,
+    "action": "hideMesh",
+    "provenance": "DEF g05 f5: the genie is gone, only sparkle and the lamp remain; the mesh shrinks there"
+   }
+  ]
+ }
+}

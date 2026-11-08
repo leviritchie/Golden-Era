@@ -1,0 +1,86 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_red_dragon",
+ "status": "look",
+ "notes": "pilot: dragon, with the fire breath ripped from the DEF (defEffects) and its fitted dynamic light",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "breath_fire",
+   "treatment": "dynamic",
+   "notes": "breath lights the head and neck"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "breath",
+    "type": "defFlipbook",
+    "provenance": "roster inventory dungeon: g12 attack_front breath/spit fire f3-5",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       3,
+       4,
+       5
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "breath_fire",
+    "notes": "defOrigin auto pins the flame's body contact (the DEF mouth) to the Head joint. The rig has no jaw/snout bone and Head's tail points up (boneTip put the flame above the skull), so the joint is the nearest pin: the flame root sits over the back of the head rather than the snout (reviewed on review_worst_row.png). render unitPlane: directional pieces (thrown/jetting forward) turn with the unit (vfx_depth.py).",
+    "render": "unitPlane"
+   },
+   {
+    "id": "breath_light",
+    "type": "effectLight",
+    "lightId": "breath_fire",
+    "carrier": "breath",
+    "anchor": {
+     "bone": "Head",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.7,
+     0.35
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      1.088,
+      0.66,
+      1.764,
+      6.847,
+      8.153,
+      0.113,
+      0.026
+     ]
+    },
+    "intensitySource": "fitted",
+    "notes": "Fitted: the DEF body brightens up to +16 L* on the breath keys; the mesh gets that mean rise from one point light at the head, so the head reads hotter than the DEF's broader glow (known model limit)."
+   }
+  ]
+ }
+}

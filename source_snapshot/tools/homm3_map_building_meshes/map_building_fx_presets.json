@@ -1,0 +1,162 @@
+{
+ "schema": "homm3_map_building_fx_presets.v1",
+ "note": "Vanilla Olden Era adventure-map effect subtrees reused on HoMM3 map-building meshes (lane vanilla_style_effect). Each preset clones one bare ParticleSystem subtree of a native map-object prefab; keepNodes are the systems left emitting (all magic/VfxUber, which does its own fog-of-war discard). nativeWorldRotation is the childPath's world rotation inside its own prefab with the prefab root excluded (Unity xyzw, static read); the anchor empty bakes it so the clone keeps its native orientation. scale is the default world size in unscaled model (Meshy GLB) units; rows override it. anchorNode (optional) is the kept node that lands on the anchor (the fountain systems sit ~0.5 native units above their subtree root).",
+ "presets": {
+  "smoke": {
+   "resPath": "objects/fx/fx_map_smoke",
+   "childPath": "map_smoke/Transform",
+   "keepNodes": [
+    "Smoke_01",
+    "Smoke_02",
+    "Smoke_03",
+    "Smoke_04"
+   ],
+   "nativeWorldRotation": [
+    0.64506,
+    -0.28966,
+    0.28966,
+    0.64506
+   ],
+   "scale": 0.1,
+   "note": "native map chimney smoke (fx_map_smoke)"
+  },
+  "fire": {
+   "resPath": "objects/resource/resource_camp_fire_1",
+   "childPath": "Camp_fire_effects/Transform",
+   "keepNodes": [
+    "Fire_01",
+    "Fire_02",
+    "Flame_sparks_01",
+    "Sparks_01",
+    "Smoke_01"
+   ],
+   "nativeWorldRotation": [
+    0.70711,
+    0.0,
+    0.0,
+    0.70711
+   ],
+   "scale": 0.1,
+   "note": "native campfire flames, sparks and a little smoke; Fire_01 (the flame base, 0.24 native units below the subtree root) lands on the anchor",
+   "anchorNode": "Fire_01"
+  },
+  "lava": {
+   "resPath": "objects/fx/fx_map_fire",
+   "childPath": "map_fire/Transform",
+   "keepNodes": [
+    "Fire_spark_01",
+    "Flame_sparks_01",
+    "flash_ground",
+    "Sparks_02"
+   ],
+   "nativeWorldRotation": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": 0.1,
+   "note": "native map fire without its ground crack (non-VfxUber shader): embers, low flames and a warm ground flash for molten beds and pools"
+  },
+  "glints": {
+   "resPath": "objects/interactive/fairy_ring",
+   "childPath": "Global_object_fairy_ring_vfx",
+   "keepNodes": [
+    "flick_01",
+    "flick_02"
+   ],
+   "nativeWorldRotation": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": 0.1,
+   "note": "fairy ring flicks: brief sparkles"
+  },
+  "vortex": {
+   "resPath": "objects/interactive/altar_of_magic_1",
+   "childPath": "scale_roll/altar_of_magic_1/Altar_of_magic_01_ball/Global_Altar_of_magic_ball_01_vfx",
+   "keepNodes": [
+    "Portal",
+    "flick",
+    "Smoke"
+   ],
+   "nativeWorldRotation": [
+    -0.23027,
+    0.66856,
+    0.66856,
+    0.23027
+   ],
+   "scale": 0.1,
+   "note": "altar of magic ball: turning vortex, energy wisps and flicks"
+  },
+  "fountain": {
+   "resPath": "objects/interactive/fountain",
+   "childPath": "Scale_roll/effects",
+   "keepNodes": [
+    "Water_stretch_01",
+    "Water_stretch_02",
+    "Water_stretch_03",
+    "Wave_low"
+   ],
+   "nativeWorldRotation": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": 0.1,
+   "note": "native fountain jets and the ring wave on the basin",
+   "anchorNode": "Wave_low"
+  },
+  "ripple": {
+   "resPath": "objects/interactive/fountain",
+   "childPath": "Scale_roll/effects",
+   "keepNodes": [
+    "Wave_low"
+   ],
+   "nativeWorldRotation": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": 0.1,
+   "note": "fountain ring wave alone: water surface ripple",
+   "anchorNode": "Wave_low"
+  },
+  "splash": {
+   "resPath": "objects/interactive/fountain",
+   "childPath": "Scale_roll/effects",
+   "keepNodes": [
+    "Water_sparks_01"
+   ],
+   "nativeWorldRotation": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": 0.1,
+   "note": "fountain spray droplets alone (pair with ripple where a fall meets its pool)",
+   "anchorNode": "Water_sparks_01"
+  },
+  "candle": {
+   "resPath": "objects/interactive/altar_of_magic_1",
+   "childPath": "scale_roll/altar_of_magic_1/Altar_of_magic_01/Global_Altar_of_magic_01_vfx/Candle_01/Candle_02",
+   "keepNodes": [
+    "",
+    "flash"
+   ],
+   "nativeWorldRotation": [
+    0.00295,
+    0.20273,
+    0.01426,
+    0.97913
+   ],
+   "scale": 0.25,
+   "note": "altar of magic candle: a small flame (the cloned root) and its warm glow (Global_glow_04, alpha 0.88), flickering; used for lit windows, doors, vents and hollows. flash_big is a dim violet swell whose luminance-kept recolour stays too faint to read on a facade."
+  }
+ }
+}

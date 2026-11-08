@@ -1,0 +1,61 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "pegasus_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/pegasus_slice_v1",
+  "note": "float64 CS bake v3 + cs_rekey re-freeze 2026-09-30 (docs/homm3_cs_bake_float64.md) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_pegasus 0.3898, h3_silver_pegasus 0.3334, h3_gold_pegasus 0.3274. | authenticity h3_pegasus: AttackFront pelvis rear + slash, Death far-leg tuck (cb1bbba643) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_pegasus 0.3245. Carried over unchanged: h3_silver_pegasus, h3_gold_pegasus. | authenticity: silver/gold keys synced to h3_pegasus (AttackFront rear + slash, Death RiderLegL tuck + rollSlide), 88661a38b5 Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_silver_pegasus 0.3334, h3_gold_pegasus 0.3274. Carried over unchanged: h3_pegasus. | look fix: coat/wing/armour/rider defPalette regions (user: black splotches over the pegasi in game); animation unchanged from 3428537e9e Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_silver_pegasus 0.3334, h3_gold_pegasus 0.3274. Carried over unchanged: h3_pegasus. | look B (vanilla philosophy finish, finish.py; look.py --stages finish,apply), animation unchanged Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_pegasus 0.3245, h3_silver_pegasus 0.3334, h3_gold_pegasus 0.3274. | look B (vanilla philosophy finish, finish.py; look.py --stages finish,apply), animation unchanged Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_silver_pegasus 0.3334, h3_gold_pegasus 0.3274. Carried over unchanged: h3_pegasus. | 2026-10-10 lane-A: silver + gold partBody keys (send-back rule: AttackFront rear 25 deg about the hind hooves with forelegs/spine/neck carrying rear and strike, no nose-down lunge; Hitted slide cut; Death rider falls at f7) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_silver_pegasus 0.3334, h3_gold_pegasus 0.3274. Carried over unchanged: h3_pegasus. | 2026-10-10 lane-A: h3_pegasus reopened for the whole-body AttackFront (40 deg pelvis-pivot rear + nose-down dive): partBody keys as silver/gold (rear 25 deg about the hind hooves, forelegs/spine/neck carry rear and strike; Hitted slide 0.07; Death rider falls at f7) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_pegasus 0.3245. Carried over unchanged: h3_silver_pegasus, h3_gold_pegasus.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_pegasus",
+      "gameSid": "h3_pegasus",
+      "bundleName": "custom_units_rampart_h3_pegasus",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "46272a63d530c389572dc49432df2d3b4fe6394b053029d7c8e125626c5c32c9",
+      "identityReview": "46272a63d530c389572dc49432df2d3b4fe6394b053029d7c8e125626c5c32c9",
+      "frozen": {
+        "lookDeliveredGlbSha256": "35616cf6d38901cf830852a61577e1f3301af5d9f0643da7721bd7ebe31917bc",
+        "idleRetimedGlbSha256": "c1bf3eda84b58f640f75255c1004ef9855998d4babd12c65a86722295872c1e8",
+        "vfxManifestSha256": "d4645982c678547c7698d0f302ad2c3eefa1e69bf2bb8bad06ccc0065f7175df",
+        "specSha256": "5cce7e167f7480946032d28628322aa1c159b32ed9665ff4afe7cd8b4ee72c10",
+        "basecolorSha256": "2d6e612cf3bf163fefbfafd17365ae666b4842a4be60923fbb167ebe48b16983"
+      }
+    },
+    {
+      "labSid": "h3_silver_pegasus",
+      "gameSid": "h3_silver_pegasus",
+      "bundleName": "custom_units_rampart_h3_silver_pegasus",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "328f559b57261cb2207a52a118a7f1b7a5a95aa847bc17c2f36a62c93fa07ad2",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "8ba712634e082190de84c3f1e98a733d028c18db4af91f88cf86f7cb5b5528cc",
+        "idleRetimedGlbSha256": "1cb85f49ffd02eda8a7574959dba321567e8fbc317761a49917b7ef19a31765a",
+        "vfxManifestSha256": "c5c38b69dcbbecb65900fe9e3f00a76efb4bc5bf4fb54cc31eba4abe9eacbe2c",
+        "specSha256": "fa528f7291148baa57d77be1072b77c30d63889282a1ef1744c7dca49de693a7",
+        "basecolorSha256": "7f887507b7f2e452e57d467eb3f1342887498d8fc1992f52717fbd9b349e7e6e"
+      }
+    },
+    {
+      "labSid": "h3_gold_pegasus",
+      "gameSid": "h3_gold_pegasus_upg_alt",
+      "bundleName": "custom_units_rampart_h3_gold_pegasus",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "21d92085d1188a9532bb3807e64c969477ce69d917b650e1062d012ca242a18b",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "1f9ffeb6ab277d52b730515455e5c3b3e5d264bf4c798bfdcf6dbc9eda501eca",
+        "idleRetimedGlbSha256": "4a68aca8f031c9e7bc1a9445018682b188c8f465c8d1c34b7de313fa0e0d9aa2",
+        "vfxManifestSha256": "d1e338a9b8ae76d6a4251925062f877ccef8ce6be40e5e2661af0a1c9f3aaab7",
+        "specSha256": "717ef1026519e2bd7c0359541bea152618652af44fc4f3a17eeea7896da519b0",
+        "basecolorSha256": "20bed9af7ac914b2701a37645491bc05da48b553b3d07de04d59d5e44de9f6ab"
+      }
+    }
+  ]
+}

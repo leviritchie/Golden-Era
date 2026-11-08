@@ -1,0 +1,152 @@
+{
+ "unit": "h3_air_elemental",
+ "strideExempt": "legless body: the HoMM3 air elemental floats on a vortex/wave/energy base with no legs; the rig has no leg chain",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.0,
+   0.95
+  ],
+  "Spine": [
+   0.0,
+   0.0,
+   1.05
+  ],
+  "Spine1": [
+   0.0,
+   0.0,
+   1.15
+  ],
+  "Spine2": [
+   0.0,
+   0.0,
+   1.25
+  ],
+  "Neck": [
+   -0.02,
+   -0.02,
+   1.4
+  ],
+  "Head": [
+   -0.03,
+   -0.05,
+   1.5
+  ],
+  "HeadTop_End": [
+   -0.05,
+   -0.05,
+   1.72
+  ],
+  "LeftShoulder": [
+   0.06,
+   0.0,
+   1.35
+  ],
+  "RightShoulder": [
+   -0.06,
+   0.0,
+   1.35
+  ],
+  "LeftArm": [
+   0.18,
+   0.0,
+   1.33
+  ],
+  "RightArm": [
+   -0.18,
+   0.0,
+   1.33
+  ],
+  "LeftForeArm": [
+   0.28,
+   0.02,
+   1.18
+  ],
+  "RightForeArm": [
+   -0.28,
+   0.02,
+   1.18
+  ],
+  "LeftHand": [
+   0.3,
+   -0.08,
+   1.2
+  ],
+  "RightHand": [
+   -0.3,
+   -0.08,
+   1.2
+  ],
+  "LeftHand_End": [
+   0.33,
+   -0.14,
+   1.2
+  ],
+  "RightHand_End": [
+   -0.33,
+   -0.14,
+   1.2
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ]
+ },
+ "shrinkOut": {
+  "start": 4,
+  "power": 1.2
+ },
+ "extensions": [
+  "conflux_weights",
+  "conflux_tilt",
+  "element_motion"
+ ],
+ "conflux": {
+  "fillUnweighted": true,
+  "maxBodyTilt": 60.0
+ },
+ "elementMotion": {
+  "mode": "vortex",
+  "period": 6
+ },
+ "glbPatch": {
+  "reason": "lane C 2026-10-12 authenticity: the DEF air elemental punches both arms out at the target (AttackFront f3-f4); the arm stubs sat inside the cloud mass and a wind ribbon rode the right arm",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_air_elemental_ribbon_weights.json",
+    "sha256": "31cf34a5eb5e390ff0ea4180451a492227fe5c2a88bae1a66c6f093efa238070",
+    "note": "the 531-vertex wind ribbon at the back-right of the column top carried arm weight (an arm swing dragged it: most of the unit's tears); arm weight dropped"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_air_elemental_punch_rot.json",
+    "sha256": "74547d1cb22d20c5dc6a2b7c2998e41384f8a46ad367e8845bb3641de63bedcc",
+    "regrid": true,
+    "note": "DEF g12 AttackFront f3-f4: both arms thrust forward and out in a V (upper arms + forearms aimed, f2-f5); split table, first half"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_air_elemental_punch_rot.json",
+    "sha256": "74547d1cb22d20c5dc6a2b7c2998e41384f8a46ad367e8845bb3641de63bedcc",
+    "regrid": true,
+    "note": "second half of the split arm table (keyRotations caps 120 deg per key)"
+   },
+   {
+    "op": "keyScales",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_air_elemental_punch_scale.json",
+    "sha256": "82cfd70ed372561e32e79da03d48851c96dcffed717713267601a2f99c69086e",
+    "note": "the upper arms lengthen along the bone (1.2 f2, 1.8 f3, 1.9 f4, 1.3 f5; exactly 1 at f0/f6) so the stubs shoot out of the cloud mass"
+   }
+  ]
+ }
+}

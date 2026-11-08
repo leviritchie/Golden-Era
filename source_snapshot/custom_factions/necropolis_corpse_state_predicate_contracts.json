@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "policy": {
+    "contractsMustMatchExactPredicateProfiles": true,
+    "necropolisOnly": true,
+    "corpseStatePredicatesAreNotCorpseContextProof": true,
+    "corpseConsumptionRequiresCommittedConsumptionEvent": true,
+    "corpseCountRequiresLogicalCountSource": true,
+    "battleSiteRevealRequiresExplicitObjectOrStateEvidence": true,
+    "raiseConsumptionRequiresSpellOrRaiseEventCorrelation": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredRuntimeProof": [
+    "active Necropolis law-owner side correlation proof",
+    "logical corpse availability source proof",
+    "committed corpse consumption event proof",
+    "corpse count read timing proof",
+    "raise or corpse-consuming spell commit proof",
+    "corpse or battle-site object identity proof",
+    "friendly versus enemy corpse ownership policy proof",
+    "temporary summon or gated loss exclusion proof",
+    "corpse accounting idempotence proof",
+    "corpse state cleanup or lifecycle proof"
+  ],
+  "contracts": {
+    "RequiresCorpseConsumption": {
+      "requiredEffectKeys": [
+        "necropolis.raise-drain-curse-corpse-cooldown"
+      ],
+      "allowedFactions": [
+        "homm3_necropolis"
+      ],
+      "allowedFamilies": [
+        "SpellCooldown"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must observe a committed corpse consumption event associated with the Necropolis law owner side.",
+        "The consumed corpse source must be correlated to a successful raise, drain, curse, or Night death spell after spell classification has passed.",
+        "Cooldown mutation may only use the event once, after consumption is committed and before duplicate spell or UI preview paths can fire."
+      ],
+      "forbiddenSubstitutes": [
+        "corpse availability counted as corpse consumption",
+        "corpse count read counted as committed consumption",
+        "undead unit identity counted as consumed corpse",
+        "spell classification counted without corpse consumption",
+        "spellbook preview or hover counted as consumption",
+        "generic death event counted as consumed corpse",
+        "temporary summoned loss counted as consumed corpse"
+      ]
+    },
+    "RequiresCorpseCount": {
+      "requiredEffectKeys": [
+        "necropolis.temp-mana-per-corpse"
+      ],
+      "allowedFactions": [
+        "homm3_necropolis"
+      ],
+      "allowedFamilies": [
+        "TrainingDamage"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must read a logical corpse count from a defined battle, site, or side-scoped corpse state source.",
+        "The corpse count must be captured at the law packet's intended timing before temporary mana is granted and later cleaned up.",
+        "Corpse count, affected hero, battle context, and Necropolis law owner must all correlate before any temporary resource mutation."
+      ],
+      "forbiddenSubstitutes": [
+        "undead unit identity counted as corpse count",
+        "undead unit count counted as corpse count",
+        "temporary summoned loss counted as corpse count",
+        "generic casualty count counted as corpse count without corpse-production policy",
+        "dead stack animation counted as corpse count",
+        "battle result loser count counted without ownership policy",
+        "corpse-themed display name counted as corpse count",
+        "static necromancy config counted as live corpse count"
+      ]
+    },
+    "RequiresCorpseOrBattleSiteData": {
+      "requiredEffectKeys": [
+        "necropolis.corpse-site-undead-reveal"
+      ],
+      "allowedFactions": [
+        "homm3_necropolis"
+      ],
+      "allowedFamilies": [
+        "Vision"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must identify an explicit corpse site, recent battle site, corpse-rich location, graveyard, or undead-dwelling object/state source.",
+        "Reveal targets must come from exact object allowlists or proven corpse/battle-site state, not from visual corpse art.",
+        "Object or site identity, reveal radius origin, target side, and Necropolis law owner must correlate before fog reveal mutation is allowed."
+      ],
+      "forbiddenSubstitutes": [
+        "visual corpse inference counted as corpse or battle-site data",
+        "corpse-themed display name counted as corpse site data",
+        "undead unit identity counted as reveal target data",
+        "temporary summoned loss counted as corpse or battle-site data",
+        "generic battlefield terrain counted as recent battle site",
+        "object icon counted without exact object SID or state proof",
+        "owned Necropolis structure counted as corpse site without target object evidence"
+      ]
+    },
+    "RequiresCorpseOrRaiseConsumption": {
+      "requiredEffectKeys": [
+        "necropolis.corpse-raise-death-moon-calendar"
+      ],
+      "allowedFactions": [
+        "homm3_necropolis"
+      ],
+      "allowedFamilies": [
+        "Calendar"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must observe either committed corpse consumption or a committed raise event that consumes a corpse-equivalent resource.",
+        "The event must be correlated to the Necropolis law owner and to the Death Moon calendar timing before Astrology progress or pressure effects are granted.",
+        "Raise/corpse consumption must be idempotent across battle result, spell result, and calendar refresh paths."
+      ],
+      "forbiddenSubstitutes": [
+        "undead unit identity counted as committed raise or corpse consumption",
+        "raise-capable spell classification counted without committed raise or corpse consumption",
+        "corpse availability counted as raise consumption",
+        "necromancy config counted as committed raise event",
+        "generic kill or casualty event counted as consumed corpse",
+        "calendar day refresh counted without raise or corpse event",
+        "temporary summoned loss counted as corpse-equivalent consumption"
+      ]
+    }
+  }
+}

@@ -1,0 +1,2448 @@
+{
+ "unit": "h3_royal_griffin",
+ "joints": {
+  "Hips": [
+   0,
+   0.3,
+   0.42
+  ],
+  "Spine": [
+   0,
+   0.12,
+   0.42
+  ],
+  "Spine1": [
+   0,
+   -0.05,
+   0.43
+  ],
+  "Spine2": [
+   0,
+   -0.2,
+   0.45
+  ],
+  "Neck": [
+   0,
+   -0.28,
+   0.58
+  ],
+  "Head": [
+   0,
+   -0.3,
+   0.72
+  ],
+  "HeadTop_End": [
+   0,
+   -0.46,
+   0.66
+  ],
+  "LeftShoulder": [
+   0.05,
+   -0.22,
+   0.45
+  ],
+  "LeftArm": [
+   0.1,
+   -0.24,
+   0.33
+  ],
+  "LeftForeArm": [
+   0.1,
+   -0.22,
+   0.18
+  ],
+  "LeftHand": [
+   0.1,
+   -0.26,
+   0.05
+  ],
+  "LeftHand_End": [
+   0.1,
+   -0.34,
+   0.0
+  ],
+  "LeftUpLeg": [
+   0.14,
+   0.3,
+   0.4
+  ],
+  "LeftLeg": [
+   0.15,
+   0.26,
+   0.22
+  ],
+  "LeftFoot": [
+   0.155,
+   0.36,
+   0.08
+  ],
+  "LeftToeBase": [
+   0.155,
+   0.3,
+   0.02
+  ],
+  "LeftToe_End": [
+   0.155,
+   0.22,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.05,
+   -0.22,
+   0.45
+  ],
+  "RightArm": [
+   -0.1,
+   -0.24,
+   0.33
+  ],
+  "RightForeArm": [
+   -0.1,
+   -0.22,
+   0.18
+  ],
+  "RightHand": [
+   -0.1,
+   -0.26,
+   0.05
+  ],
+  "RightHand_End": [
+   -0.1,
+   -0.34,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.14,
+   0.3,
+   0.4
+  ],
+  "RightLeg": [
+   -0.15,
+   0.26,
+   0.22
+  ],
+  "RightFoot": [
+   -0.155,
+   0.36,
+   0.08
+  ],
+  "RightToeBase": [
+   -0.155,
+   0.3,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.155,
+   0.22,
+   0.0
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped_sit",
+  "rampart_quadruped",
+  "wing_chain",
+  "flight_life"
+ ],
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "tail": {
+   "points": [
+    [
+     0,
+     0.42,
+     0.42
+    ],
+    [
+     0,
+     0.47,
+     0.3
+    ],
+    [
+     0,
+     0.52,
+     0.18
+    ],
+    [
+     0,
+     0.62,
+     0.12
+    ],
+    [
+     0,
+     0.76,
+     0.14
+    ]
+   ],
+   "region": {
+    "box": [
+     [
+      -0.045,
+      0.42,
+      0.09
+     ],
+     [
+      0.045,
+      0.79,
+      0.48
+     ]
+    ]
+   },
+   "rootBlend": 1.2
+  },
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    0,
+    0
+   ],
+   "fold": 40,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ],
+   "yaw": -100,
+   "groundClips": [
+    "Idle",
+    "Mouseover",
+    "Hitted",
+    "Defence",
+    "AttackFront"
+   ],
+   "dyEase": {
+    "MoveEnd": "out",
+    "Death": "in"
+   }
+  },
+  "chains": [
+   {
+    "prefix": "QNeck",
+    "parent": "Neck",
+    "points": [
+     [
+      0,
+      -0.29,
+      0.65
+     ],
+     [
+      0,
+      -0.3,
+      0.72
+     ]
+    ],
+    "reparent": [
+     "Head"
+    ],
+    "rootBlend": 0,
+    "region": {
+     "box": [
+      [
+       9,
+       9,
+       9
+      ],
+      [
+       9,
+       9,
+       9
+      ]
+     ]
+    }
+   },
+   {
+    "prefix": "QJaw",
+    "parent": "Head",
+    "points": [
+     [
+      0,
+      -0.315,
+      0.672
+     ],
+     [
+      0,
+      -0.47,
+      0.645
+     ]
+    ],
+    "rootBlend": 0.25,
+    "region": {
+     "box": [
+      [
+       -0.1,
+       -0.5,
+       0.6
+      ],
+      [
+       0.1,
+       -0.33,
+       0.7
+      ]
+     ],
+     "below": [
+      [
+       0,
+       -0.468,
+       0.664
+      ],
+      [
+       -0.0,
+       -0.21693,
+       0.976187
+      ]
+     ]
+    }
+   },
+   {
+    "prefix": "QTalLIn",
+    "parent": "LeftHand",
+    "points": [
+     [
+      0.055,
+      -0.29,
+      0.03
+     ],
+     [
+      0.05,
+      -0.33,
+      0.02
+     ],
+     [
+      0.042,
+      -0.37,
+      0.005
+     ]
+    ],
+    "rootBlend": 0.3,
+    "blend": 0.3,
+    "region": {
+     "segments": [
+      [
+       [
+        0.055,
+        -0.29,
+        0.03
+       ],
+       [
+        0.05,
+        -0.33,
+        0.02
+       ]
+      ],
+      [
+       [
+        0.05,
+        -0.33,
+        0.02
+       ],
+       [
+        0.042,
+        -0.37,
+        0.005
+       ]
+      ]
+     ],
+     "radius": 0.035,
+     "exclude": [
+      {
+       "box": [
+        [
+         -1,
+         -0.285,
+         -1
+        ],
+        [
+         1,
+         1,
+         1
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   {
+    "prefix": "QTalLMid",
+    "parent": "LeftHand",
+    "points": [
+     [
+      0.11,
+      -0.3,
+      0.03
+     ],
+     [
+      0.118,
+      -0.345,
+      0.02
+     ],
+     [
+      0.125,
+      -0.395,
+      0.005
+     ]
+    ],
+    "rootBlend": 0.3,
+    "blend": 0.3,
+    "region": {
+     "segments": [
+      [
+       [
+        0.11,
+        -0.3,
+        0.03
+       ],
+       [
+        0.118,
+        -0.345,
+        0.02
+       ]
+      ],
+      [
+       [
+        0.118,
+        -0.345,
+        0.02
+       ],
+       [
+        0.125,
+        -0.395,
+        0.005
+       ]
+      ]
+     ],
+     "radius": 0.035,
+     "exclude": [
+      {
+       "box": [
+        [
+         -1,
+         -0.285,
+         -1
+        ],
+        [
+         1,
+         1,
+         1
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   {
+    "prefix": "QTalLOut",
+    "parent": "LeftHand",
+    "points": [
+     [
+      0.15,
+      -0.285,
+      0.03
+     ],
+     [
+      0.17,
+      -0.315,
+      0.02
+     ],
+     [
+      0.19,
+      -0.35,
+      0.005
+     ]
+    ],
+    "rootBlend": 0.3,
+    "blend": 0.3,
+    "region": {
+     "segments": [
+      [
+       [
+        0.15,
+        -0.285,
+        0.03
+       ],
+       [
+        0.17,
+        -0.315,
+        0.02
+       ]
+      ],
+      [
+       [
+        0.17,
+        -0.315,
+        0.02
+       ],
+       [
+        0.19,
+        -0.35,
+        0.005
+       ]
+      ]
+     ],
+     "radius": 0.035,
+     "exclude": [
+      {
+       "box": [
+        [
+         -1,
+         -0.285,
+         -1
+        ],
+        [
+         1,
+         1,
+         1
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   {
+    "prefix": "QTalRIn",
+    "parent": "RightHand",
+    "points": [
+     [
+      -0.055,
+      -0.29,
+      0.03
+     ],
+     [
+      -0.05,
+      -0.33,
+      0.02
+     ],
+     [
+      -0.042,
+      -0.37,
+      0.005
+     ]
+    ],
+    "rootBlend": 0.3,
+    "blend": 0.3,
+    "region": {
+     "segments": [
+      [
+       [
+        -0.055,
+        -0.29,
+        0.03
+       ],
+       [
+        -0.05,
+        -0.33,
+        0.02
+       ]
+      ],
+      [
+       [
+        -0.05,
+        -0.33,
+        0.02
+       ],
+       [
+        -0.042,
+        -0.37,
+        0.005
+       ]
+      ]
+     ],
+     "radius": 0.035,
+     "exclude": [
+      {
+       "box": [
+        [
+         -1,
+         -0.285,
+         -1
+        ],
+        [
+         1,
+         1,
+         1
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   {
+    "prefix": "QTalRMid",
+    "parent": "RightHand",
+    "points": [
+     [
+      -0.11,
+      -0.3,
+      0.03
+     ],
+     [
+      -0.118,
+      -0.345,
+      0.02
+     ],
+     [
+      -0.125,
+      -0.395,
+      0.005
+     ]
+    ],
+    "rootBlend": 0.3,
+    "blend": 0.3,
+    "region": {
+     "segments": [
+      [
+       [
+        -0.11,
+        -0.3,
+        0.03
+       ],
+       [
+        -0.118,
+        -0.345,
+        0.02
+       ]
+      ],
+      [
+       [
+        -0.118,
+        -0.345,
+        0.02
+       ],
+       [
+        -0.125,
+        -0.395,
+        0.005
+       ]
+      ]
+     ],
+     "radius": 0.035,
+     "exclude": [
+      {
+       "box": [
+        [
+         -1,
+         -0.285,
+         -1
+        ],
+        [
+         1,
+         1,
+         1
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   {
+    "prefix": "QTalROut",
+    "parent": "RightHand",
+    "points": [
+     [
+      -0.15,
+      -0.285,
+      0.03
+     ],
+     [
+      -0.17,
+      -0.315,
+      0.02
+     ],
+     [
+      -0.19,
+      -0.35,
+      0.005
+     ]
+    ],
+    "rootBlend": 0.3,
+    "blend": 0.3,
+    "region": {
+     "segments": [
+      [
+       [
+        -0.15,
+        -0.285,
+        0.03
+       ],
+       [
+        -0.17,
+        -0.315,
+        0.02
+       ]
+      ],
+      [
+       [
+        -0.17,
+        -0.315,
+        0.02
+       ],
+       [
+        -0.19,
+        -0.35,
+        0.005
+       ]
+      ]
+     ],
+     "radius": 0.035,
+     "exclude": [
+      {
+       "box": [
+        [
+         -1,
+         -0.285,
+         -1
+        ],
+        [
+         1,
+         1,
+         1
+        ]
+       ]
+      }
+     ]
+    }
+   }
+  ],
+  "segmentWeights": [
+   {
+    "bones": [
+     "Spine2",
+     "Neck",
+     "QNeck_00",
+     "Head"
+    ],
+    "points": [
+     [
+      0,
+      -0.28,
+      0.58
+     ],
+     [
+      0,
+      -0.29,
+      0.65
+     ],
+     [
+      0,
+      -0.3,
+      0.72
+     ]
+    ],
+    "blend": 0.025,
+    "region": {
+     "box": [
+      [
+       -0.2,
+       -0.3,
+       0.5
+      ],
+      [
+       0.2,
+       0.0,
+       0.95
+      ]
+     ]
+    }
+   }
+  ],
+  "rigNote": "2026-10-07 authenticity lane-A (rubric 3a, fix route 1a): tail 4 bones (was 2; smooth triangular blend, rootBlend 1.2 so the hips seam eases over the same length as the old 2-bone 0.6), QNeck_00 mid-neck joint carrying Head (Neck heat had owned the whole skull; segmentWeights re-splits Spine2/Neck/QNeck_00/Head along the neck axis with 0.025 blends), QJaw lower mandible under Head (rootBlend 0.4 softens the mouth corners), three 2-bone talon digits per fore foot (QTal{L,R}{In,Mid,Out}) with short joint blends; driven by the patch-lane keyRotations table. Talon regions radius 0.035: the webs between the fused Meshy digits ride a digit (all digits curl together), not the Hand (the 0.022 cut stretched the web 5-7x at a 75 deg curl)."
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "wings": [
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.16,
+    0.03,
+    0.64
+   ],
+   "tail": [
+    0.45,
+    0.0,
+    0.85
+   ],
+   "sign": -1,
+   "region": {
+    "box": [
+     [
+      0.15,
+      -0.12,
+      0.55
+     ],
+     [
+      1.15,
+      0.22,
+      1.45
+     ]
+    ],
+    "exclude": [
+     {
+      "box": [
+       [
+        0.0,
+        -0.8,
+        0.0
+       ],
+       [
+        0.23,
+        -0.09,
+        1.0
+       ]
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.16,
+    0.03,
+    0.64
+   ],
+   "tail": [
+    -0.45,
+    0.0,
+    0.85
+   ],
+   "sign": 1,
+   "region": {
+    "box": [
+     [
+      -1.15,
+      -0.12,
+      0.55
+     ],
+     [
+      -0.15,
+      0.22,
+      1.45
+     ]
+    ],
+    "exclude": [
+     {
+      "box": [
+       [
+        -0.23,
+        -0.8,
+        0.0
+       ],
+       [
+        0.0,
+        -0.09,
+        1.0
+       ]
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "wingMaxDeg": 0,
+ "wingChain": {
+  "wings": [
+   {
+    "bone": "LeftWing",
+    "side": 1,
+    "primaries": [
+     {
+      "tip": [
+       0.93,
+       -0.03,
+       0.93
+      ],
+      "from": 2,
+      "s0": 0.05,
+      "blend": 0.3,
+      "uIn": 0.8
+     }
+    ]
+   },
+   {
+    "bone": "RightWing",
+    "side": -1,
+    "primaries": [
+     {
+      "tip": [
+       0.93,
+       -0.03,
+       0.93
+      ],
+      "from": 2,
+      "s0": 0.05,
+      "blend": 0.3,
+      "uIn": 0.8
+     }
+    ]
+   }
+  ],
+  "adoptWeights": "nearest",
+  "anim": {
+   "*": {
+    "flap": 54.0,
+    "sweep": 43.0,
+    "fold": 25.0,
+    "droop": 0.0
+   },
+   "Idle": {
+    "flap": {
+     "sin": 8
+    },
+    "fold": {
+     "sin": 12,
+     "phase": 90,
+     "offset": 80.0
+    },
+    "droop": {
+     "sin": 8,
+     "phase": 180,
+     "offset": 40.0
+    }
+   },
+   "Mouseover": {
+    "flap": {
+     "sin": 8
+    },
+    "fold": {
+     "sin": 12,
+     "phase": 90,
+     "offset": 80.0
+    },
+    "droop": {
+     "sin": 8,
+     "phase": 180,
+     "offset": 40.0
+    }
+   },
+   "Move": {
+    "open": 1,
+    "flap": {
+     "sin": 60,
+     "phase": 180,
+     "offset": -49.0
+    },
+    "fold": {
+     "sin": 50,
+     "phase": 270,
+     "half": "pos",
+     "offset": -25.0
+    },
+    "droop": {
+     "sin": 25,
+     "phase": 225
+    },
+    "sweep": -43.0
+   },
+   "MoveStart": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       0.5
+      ],
+      [
+       1,
+       1
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0.0
+      ],
+      [
+       0.5,
+       -7.0
+      ],
+      [
+       1,
+       -54.0
+      ]
+     ]
+    },
+    "sweep": {
+     "keys": [
+      [
+       0,
+       -0.0
+      ],
+      [
+       1,
+       -43.0
+      ]
+     ]
+    },
+    "fold": {
+     "keys": [
+      [
+       0,
+       80.0
+      ],
+      [
+       1,
+       -25.0
+      ]
+     ]
+    },
+    "droop": {
+     "keys": [
+      [
+       0,
+       40.0
+      ],
+      [
+       1,
+       -17.7
+      ]
+     ]
+    }
+   },
+   "MoveEnd": {
+    "open": {
+     "keys": [
+      [
+       0,
+       1
+      ],
+      [
+       0.4,
+       0.7
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       -54.0
+      ],
+      [
+       0.4,
+       -12.4
+      ],
+      [
+       1,
+       0.0
+      ]
+     ]
+    },
+    "sweep": {
+     "keys": [
+      [
+       0,
+       -43.0
+      ],
+      [
+       1,
+       -0.0
+      ]
+     ]
+    },
+    "fold": {
+     "keys": [
+      [
+       0,
+       -25.0
+      ],
+      [
+       1,
+       80.0
+      ]
+     ]
+    },
+    "droop": {
+     "keys": [
+      [
+       0,
+       17.7
+      ],
+      [
+       0.5,
+       0
+      ],
+      [
+       1,
+       40.0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.35,
+       0.8
+      ],
+      [
+       0.65,
+       0.5
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "fold": {
+     "keys": [
+      [
+       0,
+       80.0
+      ],
+      [
+       0.35,
+       0
+      ],
+      [
+       0.65,
+       0
+      ],
+      [
+       1,
+       80.0
+      ]
+     ]
+    },
+    "droop": {
+     "keys": [
+      [
+       0,
+       40.0
+      ],
+      [
+       0.35,
+       0
+      ],
+      [
+       0.65,
+       0
+      ],
+      [
+       1,
+       40.0
+      ]
+     ]
+    }
+   },
+   "Defence": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       0.8
+      ],
+      [
+       0.7,
+       0.5
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0.0
+      ],
+      [
+       0.3,
+       -74.0
+      ],
+      [
+       0.7,
+       -37.8
+      ],
+      [
+       1,
+       0.0
+      ]
+     ]
+    },
+    "sweep": {
+     "keys": [
+      [
+       0,
+       -0.0
+      ],
+      [
+       0.3,
+       -43.0
+      ],
+      [
+       0.7,
+       -30.1
+      ],
+      [
+       1,
+       -0.0
+      ]
+     ]
+    },
+    "fold": {
+     "keys": [
+      [
+       0,
+       80.0
+      ],
+      [
+       0.3,
+       -25.0
+      ],
+      [
+       0.7,
+       -17.5
+      ],
+      [
+       1,
+       80.0
+      ]
+     ]
+    },
+    "droop": {
+     "keys": [
+      [
+       0,
+       40.0
+      ],
+      [
+       0.3,
+       -0.0
+      ],
+      [
+       0.7,
+       -0.0
+      ],
+      [
+       1,
+       40.0
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.14,
+       0.7
+      ],
+      [
+       0.29,
+       1
+      ],
+      [
+       0.43,
+       0.8
+      ],
+      [
+       0.57,
+       0.1
+      ],
+      [
+       0.71,
+       0.3
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0.0
+      ],
+      [
+       0.29,
+       -74.0
+      ],
+      [
+       0.43,
+       -40.0
+      ],
+      [
+       0.57,
+       0.0
+      ],
+      [
+       0.71,
+       -20.0
+      ],
+      [
+       1,
+       0.0
+      ]
+     ]
+    },
+    "sweep": {
+     "keys": [
+      [
+       0,
+       -0.0
+      ],
+      [
+       0.3,
+       -43.0
+      ],
+      [
+       0.6,
+       -30.1
+      ],
+      [
+       1,
+       -0.0
+      ]
+     ]
+    },
+    "fold": {
+     "keys": [
+      [
+       0,
+       80.0
+      ],
+      [
+       0.3,
+       -25.0
+      ],
+      [
+       0.6,
+       -17.5
+      ],
+      [
+       1,
+       80.0
+      ]
+     ]
+    },
+    "droop": {
+     "keys": [
+      [
+       0,
+       40.0
+      ],
+      [
+       0.3,
+       -0.0
+      ],
+      [
+       0.6,
+       -0.0
+      ],
+      [
+       1,
+       40.0
+      ]
+     ]
+    }
+   },
+   "Death": {
+    "fold": {
+     "keys": [
+      [
+       0,
+       80.0
+      ],
+      [
+       0.3,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "droop": {
+     "keys": [
+      [
+       0,
+       40.0
+      ],
+      [
+       0.3,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "flap",
+    "open",
+    "fold",
+    "droop",
+    "sweep"
+   ],
+   "offsets": [
+    "dx",
+    "dy"
+   ],
+   "clips": [
+    "MoveStart",
+    "MoveEnd",
+    "AttackFront",
+    "Death",
+    "Defence"
+   ],
+   "bounce": 4,
+   "penalty": 0.0008,
+   "smooth": 0.0008
+  },
+  "steady": {
+   "Move": 1.0,
+   "MoveStart": 0.5,
+   "MoveEnd": 0.5
+  },
+  "bodyTurn": {
+   "fit": [
+    "Move"
+   ],
+   "rampIn": {
+    "MoveStart": "Move"
+   },
+   "rampOut": {
+    "MoveEnd": "Move"
+   },
+   "params": [
+    "dx",
+    "dy"
+   ],
+   "limits": {
+    "yaw": [
+     0,
+     0
+    ],
+    "pitch": [
+     0,
+     0
+    ],
+    "roll": [
+     0,
+     0
+    ]
+   },
+   "note": "2026-09-29 FP: attitude held level (no yaw/pitch/roll; dx/dy only). The free fit turned the flying body 38 deg sideways to lengthen its sprite silhouette (a toy held sideways, travelling off its heading); with yaw pinned it pitched the body belly-up (-24) for +0.025 IoU. flight_life carries the body motion."
+  },
+  "limits": {
+   "sweep": [
+    -50,
+    63.0
+   ],
+   "fold": [
+    -30,
+    110
+   ]
+  },
+  "foldIdleNote": "2026-09-27: the DEF sits with its wings folded (Idle, Mouseover, and the start/end of Hitted, Defence, AttackFront); '*' folds the spread-at-rest mesh wings (flap 54.0, sweep 43.0, fold 25.0, droop 0.0); clips add deltas that unfold them where the DEF opens them; values from a one-off fit of Idle/Mouseover against the DEF (median flap 54 sweep 44 fold 26 droop 0, IoU 0.5->0.6)",
+  "hittedNote": "2026-09-29 FP: Hitted is authored, not silhouette-fitted. Under the level attitude the fit drove the wing to open 1.1 / flap ~0 at frames 2-4 (the sprite camera's profile spread), which on the battle camera is the near wing swept back edge-on, a thin dark stick. The authored recoil keeps the wing raised and broad (net flap >= 36, open <= 0.45, close to the fit's own frame 1: open 0.24 / flap 43.5, IoU 0.513); the body recoil stays in flightLife Hitted."
+ },
+ "meshNote": "2026-09-26 Meshy-7 regen with wings spread at rest (identity_regen/h3_royal_griffin); the folded-wing mesh tore under the finger fan. Quadruped layout: arms = eagle front legs, legs = lion hind legs; rampart_quadruped fit pitch rears the body onto its haunches for the DEF's sitting clips.",
+ "quadrupedSit": {
+  "clips": [
+   "Idle",
+   "Mouseover",
+   "Hitted",
+   "Defence"
+  ],
+  "pitch": [
+   0,
+   60
+  ],
+  "drop": [
+   0,
+   0.25
+  ],
+  "keep": [
+   "QTail_00"
+  ],
+  "yaw": -100,
+  "lambda": 0.002,
+  "fixed": {
+   "pitch": 78.0,
+   "drop": 0.04
+  },
+  "easeOut": [
+   "MoveStart",
+   "Death"
+  ],
+  "easeIn": [
+   "MoveEnd"
+  ],
+  "bracket": [
+   "AttackFront"
+  ],
+  "tuck": {
+   "clips": [
+    "Move"
+   ],
+   "easeIn": [
+    "MoveStart"
+   ],
+   "easeOut": [
+    "MoveEnd"
+   ],
+   "front": 80,
+   "hind": 60,
+   "rigid": true
+  }
+ },
+ "deliveryDensify": {
+  "clips": [
+   "MoveStart",
+   "Move",
+   "MoveEnd"
+  ],
+  "keysPerSpan": 3
+ },
+ "flightLife": {
+  "moves": [
+   {
+    "clips": [
+     "Move"
+    ],
+    "heave": 0.06,
+    "phase": 0
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "Hips",
+    "axis": "lat",
+    "deg": 5,
+    "phase": 270
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "Neck",
+    "axis": "lat",
+    "deg": -5,
+    "phase": 270
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "Head",
+    "axis": "lat",
+    "deg": 3,
+    "phase": 330
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "LeftArm",
+    "axis": "lat",
+    "deg": 20,
+    "phase": 180
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "RightArm",
+    "axis": "lat",
+    "deg": 20,
+    "phase": 210
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "LeftForeArm",
+    "axis": "lat",
+    "deg": -16,
+    "phase": 135
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "RightForeArm",
+    "axis": "lat",
+    "deg": -16,
+    "phase": 165
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "LeftUpLeg",
+    "axis": "lat",
+    "deg": 12,
+    "phase": 215
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "RightUpLeg",
+    "axis": "lat",
+    "deg": 12,
+    "phase": 245
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "LeftLeg",
+    "axis": "lat",
+    "deg": -8,
+    "phase": 170
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "RightLeg",
+    "axis": "lat",
+    "deg": -8,
+    "phase": 200
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "QTail_00",
+    "axis": "lat",
+    "deg": 18,
+    "phase": 200
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "Spine1",
+    "axis": "lat",
+    "deg": 5,
+    "phase": 0
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "Neck",
+    "axis": "up",
+    "deg": 14,
+    "phase": 90
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "Head",
+    "axis": "lat",
+    "deg": 7,
+    "phase": 0,
+    "cycles": 2
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "QTail_00",
+    "axis": "up",
+    "deg": 14,
+    "phase": 45
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "LeftArm",
+    "axis": "lat",
+    "deg": 5,
+    "phase": 180
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "RightArm",
+    "axis": "lat",
+    "deg": 5,
+    "phase": 0
+   },
+   {
+    "clips": [
+     "Hitted"
+    ],
+    "bone": "QTail_00",
+    "axis": "up",
+    "deg": 15,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Defence"
+    ],
+    "bone": "Spine1",
+    "axis": "lat",
+    "deg": -8,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Defence"
+    ],
+    "bone": "Neck",
+    "axis": "lat",
+    "deg": 12,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Idle",
+     "MoveStart",
+     "Move",
+     "MoveEnd",
+     "Mouseover",
+     "Hitted",
+     "Defence",
+     "AttackFront",
+     "Death"
+    ],
+    "bone": "QTail_00",
+    "axis": "lat",
+    "deg": 0,
+    "offset": 25
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover",
+     "Hitted",
+     "Defence"
+    ],
+    "ease": {
+     "MoveStart": "out",
+     "MoveEnd": "in",
+     "Death": "out"
+    },
+    "bone": "WingL_00",
+    "axis": "lat",
+    "deg": 0,
+    "offset": 80.0
+   },
+   {
+    "clips": [
+     "Hitted"
+    ],
+    "bone": "WingL_00",
+    "axis": "lat",
+    "deg": -45,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover",
+     "Hitted",
+     "Defence"
+    ],
+    "ease": {
+     "MoveStart": "out",
+     "MoveEnd": "in",
+     "Death": "out"
+    },
+    "bone": "WingR_00",
+    "axis": "lat",
+    "deg": 0,
+    "offset": 80.0
+   },
+   {
+    "clips": [
+     "Hitted"
+    ],
+    "bone": "WingR_00",
+    "axis": "lat",
+    "deg": -45,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Hitted"
+    ],
+    "bone": "Spine1",
+    "axis": "lat",
+    "deg": -12,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Hitted"
+    ],
+    "bone": "Neck",
+    "axis": "lat",
+    "deg": -10,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Hitted"
+    ],
+    "bone": "Head",
+    "axis": "lat",
+    "deg": -14,
+    "phase": 20,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "Spine1",
+    "axis": "lat",
+    "deg": 0,
+    "offset": 22
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "Neck",
+    "axis": "lat",
+    "deg": 0,
+    "offset": 10
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "Head",
+    "axis": "lat",
+    "deg": 0,
+    "offset": -22
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "LeftLeg",
+    "axis": "lat",
+    "deg": 0,
+    "offset": 35
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "RightLeg",
+    "axis": "lat",
+    "deg": 0,
+    "offset": 35
+   },
+   {
+    "clips": [
+     "AttackFront"
+    ],
+    "bone": "Spine",
+    "axis": "lat",
+    "keys": [
+     [
+      0,
+      0
+     ],
+     [
+      0.14,
+      -8
+     ],
+     [
+      0.29,
+      -14
+     ],
+     [
+      0.43,
+      14
+     ],
+     [
+      0.57,
+      46
+     ],
+     [
+      0.71,
+      10
+     ],
+     [
+      0.86,
+      0
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   },
+   {
+    "clips": [
+     "AttackFront"
+    ],
+    "bone": "Neck",
+    "axis": "lat",
+    "keys": [
+     [
+      0,
+      0
+     ],
+     [
+      0.29,
+      -10
+     ],
+     [
+      0.43,
+      6
+     ],
+     [
+      0.57,
+      18
+     ],
+     [
+      0.71,
+      2
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   },
+   {
+    "clips": [
+     "AttackFront"
+    ],
+    "bone": "Head",
+    "axis": "lat",
+    "keys": [
+     [
+      0,
+      0
+     ],
+     [
+      0.29,
+      -8
+     ],
+     [
+      0.57,
+      10
+     ],
+     [
+      0.71,
+      0
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   },
+   {
+    "clips": [
+     "AttackFront"
+    ],
+    "bone": "WingL_00",
+    "axis": "lat",
+    "keys": [
+     [
+      0,
+      70
+     ],
+     [
+      0.14,
+      55
+     ],
+     [
+      0.29,
+      45
+     ],
+     [
+      0.43,
+      -10
+     ],
+     [
+      0.57,
+      -25
+     ],
+     [
+      0.71,
+      35
+     ],
+     [
+      0.86,
+      60
+     ],
+     [
+      1,
+      70
+     ]
+    ]
+   },
+   {
+    "clips": [
+     "AttackFront"
+    ],
+    "bone": "WingR_00",
+    "axis": "lat",
+    "keys": [
+     [
+      0,
+      70
+     ],
+     [
+      0.14,
+      55
+     ],
+     [
+      0.29,
+      45
+     ],
+     [
+      0.43,
+      -10
+     ],
+     [
+      0.57,
+      -25
+     ],
+     [
+      0.71,
+      35
+     ],
+     [
+      0.86,
+      60
+     ],
+     [
+      1,
+      70
+     ]
+    ]
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover",
+     "Hitted",
+     "Defence"
+    ],
+    "ease": {
+     "MoveStart": "out",
+     "MoveEnd": "in",
+     "Death": "out",
+     "AttackFront": "bracket"
+    },
+    "bone": "LeftArm",
+    "axis": "lat",
+    "deg": 0,
+    "offset": 30.0
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover",
+     "Hitted",
+     "Defence"
+    ],
+    "ease": {
+     "MoveStart": "out",
+     "MoveEnd": "in",
+     "Death": "out",
+     "AttackFront": "bracket"
+    },
+    "bone": "RightArm",
+    "axis": "lat",
+    "deg": 0,
+    "offset": 30.0
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover",
+     "Hitted",
+     "Defence"
+    ],
+    "ease": {
+     "MoveStart": "out",
+     "MoveEnd": "in",
+     "Death": "out",
+     "AttackFront": "bracket"
+    },
+    "bone": "LeftForeArm",
+    "axis": "lat",
+    "deg": 0,
+    "offset": -60.0
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover",
+     "Hitted",
+     "Defence"
+    ],
+    "ease": {
+     "MoveStart": "out",
+     "MoveEnd": "in",
+     "Death": "out",
+     "AttackFront": "bracket"
+    },
+    "bone": "RightForeArm",
+    "axis": "lat",
+    "deg": 0,
+    "offset": -78.0
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover",
+     "Hitted",
+     "Defence"
+    ],
+    "ease": {
+     "MoveStart": "out",
+     "MoveEnd": "in",
+     "Death": "out",
+     "AttackFront": "bracket"
+    },
+    "bone": "Neck",
+    "axis": "lat",
+    "deg": 0,
+    "offset": -5.0
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover",
+     "Hitted",
+     "Defence"
+    ],
+    "ease": {
+     "MoveStart": "out",
+     "MoveEnd": "in",
+     "Death": "out",
+     "AttackFront": "bracket"
+    },
+    "bone": "Head",
+    "axis": "lat",
+    "deg": 0,
+    "offset": -25.0
+   }
+  ]
+ },
+ "flightLifeNote": "2026-09-29 FP: stroke pitch capped. Hips lat 14 swung the Hips->Head axis 13.5-39.4 deg over the stroke, which on the battle camera read as a dive/tumble. Hips 5, Neck -5 in the same phase (the neck holds its world angle), Head 3: the head stays near level and the heave carries the bob. Hind legs: quadrupedSit.tuck.hind 80 -> 60, UpLeg swing 24 -> 12, Leg -16 -> -8 (main review 2026-09-29): at 80 + 24 the lion legs folded above the back line (rump-up / dead-bug); now they trail back about level, a leaping lion stretched out. v5 (main review 2026-09-29): Move flies level - the rest mesh's eagle forepart stands upright, so Spine1 +22 / Neck +10 bend it forward and Head -22 keeps the beak level (mesh body axis hind->chest +22..+32 -> +10..+21, DEF plates +3..+22); Leg +35 trails the hind legs back instead of hanging. AttackFront is an authored rear-and-strike in DEF timing (flightLife keys): Spine -14 at x 0.29 (rear, wings spread high: wingChain open/flap keys, WingL/R_00 lift keys) then +46 at 0.57 (lunge, head leading low via Neck/Head keys, wings closing back), recovered by 0.86; the wings' raised-lift no longer brackets AttackFront. Idle / Hitted as v4 (raised wings, flinch). Mesh body axis per 1/8 clip: 75 74 64 36 9 49 69 75 (DEF sit / rear / drive / lunge / recover). 2026-09-29 standing (s5): the sit clips now hold the DEF's rampant stand - quadrupedSit pitched upright on the planted hind legs, forelegs (Arm +30 / ForeArm -60) raised with talons forward, Neck -5 / Head -25 so the head sits up rather than curling forward, wings folded and raised behind the back (Idle/Mouseover fold/droop offsets, matched at the first/last key of every clip that enters or leaves the sit). Reviewed against the DEF standing frame from the battle camera (V:/olden_fp_work/stands5/<unit>_standing_sheet.png); residual: the Meshy wings are longer than the DEF's, so the raised fold reads taller.",
+ "groundNote": "2026-09-29 FP (main review): the DEF idle (02_00) rears on its hind legs ON the ground, and flight belongs to Move / MoveStart / MoveEnd only. The quadruped fit's free vertical screen offset had lifted every ground clip +13..+18 px (Idle mesh floor 0.135 above z=0, about 13% of the height). quadruped.fit.groundClips pins that dy to 0. Tail: flightLife QTail_00 lat offset +25 in the ground clips lifts the tail root, because the sit's 'keep' tail drops with the rear and its curl went 0.09-0.11 of the height below z=0 (sink_probe 2026-09-29). dyEase MoveEnd out / Death in: the landing ends on the idle floor and Death enters from the stance (the free fit had griffin MoveEnd rise 7 -> 15 px and end 0.22 of the height up, then pop down into Idle). 2026-09-29 (fleet ground_glb): the tail lift is held in EVERY clip, not only the ground clips: with Idle grounded, MoveEnd's and Death's entry tail (QTail_02) hung 0.13-0.18 of the height below the body as the lowest vertex, so ground apply lifted those clips and their Hips stepped past the DEF allowance (battle MoveEnd +0.203 vs 0.125, Death +0.132 vs 0.040; base Death +0.109). Held everywhere, no clip boundary pops. Death also enters unrolled (dyEase 'in' eases the side roll: a free 30 deg roll at key 0 put the Hips +0.07 above Idle's).",
+ "glbPatch": {
+  "reason": "2026-10-02 user: the four-legged sit idle (14ab695470) is not approved - the idle must stay HoMM3-authentic, and the rearing stance kept stiff forelimbs 'like its miming the air'. Op 1 restores the DEF rampant stand of 04d8d99ff1 (sitRepose: lean 20 deg forward and lower 0.06 H about the hind hips with the hind feet IK-planted, neck +20 / head +40 so the beak leads the chest, wings swept back 40, left foreleg raised 30); the four-legged foreLegs op is dropped. Cause of the miming: the staticCapture build holds Arm/ForeArm/Hand at rest or fixed flightLife offsets, so the forelegs stay rigid against the chest on every sit clip while the DEF moves shoulder, elbow, wrist and talons every frame. Op 2 (keyRotations): per-DEF-frame rotation offsets on both foreleg chains (Arm, ForeArm, Hand), fitted on GPU to hand-placed DEF foreleg keypoints (forearm and talon direction plus wrist/talon position after a per-frame torso shift, skin-stretch penalty, 95 deg soft cap), interpolated onto each clip's own key grid; loop clips ease back to frame 0. Body, hind legs, wings, tail and Move root motion are untouched. Numpy patch lane. 2026-10-04 user: 'the griffin animation seems completely wrong, including the idle pose'. Op 3 (keyRotations, body): per-DEF-frame local rotation offsets on the whole skeleton (hips, spine, neck, head, shoulders/forelegs, all wing joints, hind legs, tail) fitted on GPU to every DEF plate of every clip (silhouette inside/cover, colour regions, hand-placed beak/head/thigh/tail/wing keypoints, hind feet planted, wing mirror symmetry, skin-stretch penalty) with one shared fixed camera, so the rampant upright stand, folded upright wings, rear-up/lunge attack, wing-raised defence and hit recoil follow the DEF instead of the leaned sit. DEF frames pixel-identical to idle frame 0 (start/end of mouseover, move start/end, hit, defence, attack, death) take the exact fitted idle frame-0 pose. Sparse 2-key channels (Spine/Spine2/Shoulder/ForeArm/Hand/Wing_01 holds) are resampled onto the clip grid (regrid: true) so their per-frame offsets survive (not on Unit_Move, whose densified key sets must stay on the densify stride). Unit_Move wing joints keep the v4 flight beat (the fitted Move wings fell under the 60 deg wing-swing floor). Royal: the fit view is pinned to the board camera (config yaw -100, no elevation) because a free camera drifted to a 28 deg low view and fitted upright poses as fallen; idle frame 0 and its anchors are eased 15% toward v4 to stay under the worst-edge stretch rule. 2026-10-07 authenticity pass (lane-A): rest-pose wings lengthened 1.22x (meshSurgery); op 2 regrid: true (the rebuild's Mouseover forelimb channels are 2-key holds); keyTranslations keeps the fitted Hips path; op 4 body table = the v8 DEF fit transferred onto the rebuilt base keys plus a gate-aware refit of Defence/Hitted, attenuated by the stretch gate (candidate cand_w5; all clips still under review). 2026-10-07 lane-A attempt 4: body table w10 = w5 + AttackFront refit on the lifted Hips (folded-wing lunge kept, f3-f5 frozen in the gate), Death refit seeded with a -110 deg Hips roll (backward tumble onto its back), Defence refit (w-cover 3, w-sym 1: far wing raised). 2026-10-07 lane-A attempt 5: body table w13 = w10 + Hitted refit (w-cover 3, w-sym 1, w-kp 1.5: wings spread and raised f1-f5, anchors f0/f6 kept), Move refit (w-cover 3, w-sym 5, w-kp 1.5: f0/f2 glide wings level and swept back, f1 downstroke), Death refit (w-kp 1.5; anchor f0 kept). w15b: + AttackFront refit (w-kp 1.5, w-cover 3, w-inside 8; f0/f8 anchors kept, f3-f5 frozen in the gate: f4 lunge extends forward) and MoveEnd refit (w-kp 1.5, w-cover 3; anchor f3 kept). w17: + Death and Hitted refits with the hind toes freed and a capture hinge-delta term on Neck/Head/feet/toes (rubric 3a; anchors kept): toes and feet now articulate, Death f5 head held up.",
+  "ops": [
+   {
+    "op": "moveWeights",
+    "from": [
+     "WingL_P0"
+    ],
+    "to": "WingL_01",
+    "space": "blender",
+    "keep": 0.3,
+    "region": [
+     {
+      "axis": "x",
+      "above": 0.6,
+      "ramp": 0.02
+     },
+     {
+      "axis": "x",
+      "below": 0.69,
+      "ramp": 0.02
+     },
+     {
+      "axis": "z",
+      "above": 0.72,
+      "ramp": 0.015
+     },
+     {
+      "axis": "z",
+      "below": 0.82,
+      "ramp": 0.015
+     }
+    ],
+    "note": "2026-10-08 lane-A a22 gate headroom: 28 vertices at the left wing elbow (glTF ~[0.65,0.76,-0.075]) tore in 27 frames because their WingL_P0 share (0.14-0.25) pulled against WingL_01; 70% of that share moved to WingL_01. WingL_01 tears 88 -> 46, output edges>2x 278 -> 236. Moving WingL_00 or diffusing WingL_01 raised the worst stretch and was refused."
+   },
+   {
+    "op": "sitRepose",
+    "clips": {
+     "Unit_Idle": "full",
+     "Unit_Mouseover": "full",
+     "Unit_Hitted": "full",
+     "Unit_Defence": "full",
+     "Unit_MoveStart": "easeOut",
+     "Unit_Death": "easeOut",
+     "Unit_MoveEnd": "easeIn",
+     "Unit_AttackFront": "bracket"
+    },
+    "pitch": 20.0,
+    "drop": 0.06,
+    "turns": [
+     {
+      "bone": "Neck",
+      "deg": 20.0
+     },
+     {
+      "bone": "Head",
+      "deg": 40.0
+     },
+     {
+      "bone": "WingL_00",
+      "deg": -40.0
+     },
+     {
+      "bone": "WingR_00",
+      "deg": -40.0
+     },
+     {
+      "bone": "LeftArm",
+      "deg": -30.0
+     }
+    ],
+    "note": "DEF rampant stand: crouched planted hind legs, head up and forward of swept-back wings, left talon raised"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_royal_griffin_forelimbs.json",
+    "sha256": "07fe1cea1d51bbab3e95b2d28145fa1a51c579e02fd79fd6f7396a63eb4d773a",
+    "note": "forelimbs follow the DEF plates per frame (fitted to DEF keypoints)",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_royal_griffin_hips_w122.json",
+    "sha256": "2dd3cbc5c0e70ef78eac4e3c78928912f3bb63dfb04ee24bf5d63ace8b99aa17",
+    "note": "Hips path of the run-20261007-1157 v8 fit carried across the 2026-10-07 wing-surgery rebuild (its wing_chain screen-offset fit moved the root 0.02-0.13 per clip); AttackFront f2-f6 Hips lifted +0.02/+0.05/+0.15/+0.12/+0.04 H (the DEF lunge leaves the floor, DEF bottom row up to +0.17 H)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_royal_griffin_body.json",
+    "sha256": "d2c331c205e3551beed50701900006576e451b136a10206d0362a388b2c1aeb9",
+    "regrid": true,
+    "note": "whole body follows the DEF plates per frame (full-body DEF fit, V:/olden_port_work/griffin_repair)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_royal_griffin_rig.json",
+    "sha256": "18d7ee3cf50322cbd60ecae537d775f9137b66e0537a41eabe953f3b53537bb9",
+    "regrid": true,
+    "note": "2026-10-07 rig extension (fix route 1a): tail QTail_01-03, mid-neck QNeck_00, beak QJaw_00 and 2-bone talon digits follow the DEF per clip (authored off the DEF board rows; no DEF keypoint tracks yet)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_royal_griffin_kc.json",
+    "sha256": "d4d25ac4b24e32c4177ed134906bc9ef0975673354b2ac71f647b5506ae4de73",
+    "regrid": true,
+    "note": "2026-10-07 lane-A attempts 10-11: every bone refitted per DEF frame on top of ops 0-4 to the ordered DEF keypoint chains plus silhouette (posefit_kc), all 9 clips; the neck/head carriage is op 6's"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_royal_griffin_tuck.json",
+    "sha256": "9e452767b29901dd043e49a64887d09bf790dfdc587fdf32df06d70fbe09b96f",
+    "regrid": true,
+    "note": "2026-10-07 lane-A attempt 11, head crane: the DEF carries the head level on a short neck tucked to the chest; ours stood it high on a stretched neck. Not the QNeck reparent (QNeck_00 rest is identity; Head rest and Idle world pose unchanged across e44c5a0f4b): the carriage came from the op0 neck/head turns plus the op3/op5 silhouette fits. Tuck after the fits: Neck forward, QNeck_00 carries its share, Head counter-turned level (Move: beak level ahead); per-key weights eased only where the CS stretch gate tore edges"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_royal_griffin_depop.json",
+    "sha256": "8b120f5bc5707b2693e21426496c3a5c288582c3fca65b12ef7a8737fd30c583",
+    "regrid": true,
+    "note": "Unit_Idle keys [0.5]: pop between steady DEF frames (body leans back, head rises); keys set onto the slerp between 0.41667 and 0.58333"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_royal_griffin_depop_mo.json",
+    "sha256": "96b8e4aeba8602de7f0fca6e8218059b9c3bcbd8c244ec5be589f994e03a18c5",
+    "regrid": true,
+    "note": "Unit_Mouseover keys [0.5, 0.58333]: pop between steady DEF frames (body leans back, head rises); keys set onto the slerp between 0.41667 and 0.66666"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_royal_griffin_anchor_ms.json",
+    "sha256": "8a7974abb500eb02a88baf0c70c890d0de7796af8fdb30b583e4ebdf722fd22a",
+    "regrid": true,
+    "note": "MoveStart f0 = Idle f0 pose (DEF frames identical)"
+   },
+   {
+    "op": "diffuseWeights",
+    "bones": [
+     "LeftArm",
+     "RightArm"
+    ],
+    "iterations": 6,
+    "alpha": 0.5,
+    "note": "2026-10-07 lane-A a19 gate headroom: Laplacian diffusion of the foreleg-root (LeftArm/RightArm) skin weights across welded seams; skinning tears at the shoulder slivers drop (2182 -> 2165 edges over 2x, worst 9.01 -> 6.91). Neck/wing diffusion tried and refused (CS-driven slivers)."
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_royal_griffin_pose.json",
+    "sha256": "1dde1286e3de98d2bc2a333dc7b909136c30218f868e3d5878b7dd01e504ed7f",
+    "regrid": true,
+    "note": "a24 s170 wing fold up the back"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_royal_griffin_pose_tr.json",
+    "sha256": "a02b8c77755629ceb3185bcd04b3625813d9ef5b410282bdf36e52f037c2604a",
+    "regrid": true,
+    "note": "pose edits: root drops"
+   }
+  ]
+ },
+ "sourceMesh": "artifacts/homm3_mesh_surgery/h3_royal_griffin_sliver_s2.glb",
+ "meshSurgery": {
+  "tool": "tools/homm3_def_retarget/wing_lengthen.py",
+  "input": "artifacts/meshy_downloads/h3_royal_griffin_smartrigged.glb",
+  "scale": 1.22,
+  "ramp": [
+   0.22,
+   0.38
+  ],
+  "note": "2026-10-07 authenticity pass (lane-A): the Meshy wings spanned only .75-.85 of the DEF width in the spread frames with straight chains at full reach; rest-pose wings lengthened 1.22x about the WingX_01 head (ramped over chain coord 0.22-0.38), region boxes widened to x 1.15 / z 1.45 to hold them. Same tool for the griffin line.",
+  "mouthSplit": {
+   "tool": "tools/homm3_def_retarget/mouth_split.py",
+   "input": "artifacts/homm3_mesh_surgery/h3_royal_griffin_wings122.glb",
+   "record": "artifacts/homm3_mesh_surgery/h3_royal_griffin_mouth_s1.surgery.json",
+   "note": "2026-10-07 lane-A attempt 8: the beak was one fused surface, so every triangle across the mouth line stretched when QJaw opened (12.3x at Hitted f3). The mesh is cut along the mouth-line plane (31 faces, lip copies 0.6 mm apart, double-sided roof/floor caps); QJaw is now rigid below that plane with a 0.25 corner band (rootBlend, was 0.7)."
+  },
+  "tailGrow": {
+   "tool": "tools/homm3_def_retarget/tail_grow.py",
+   "input": "artifacts/homm3_mesh_surgery/h3_royal_griffin_mouth_s1.glb",
+   "spec": "tools/homm3_def_retarget/tail_specs_h3_royal_griffin.json",
+   "record": "artifacts/homm3_mesh_surgery/h3_royal_griffin_tail_g1.surgery.json",
+   "note": "2026-10-07 lane-A a19: the Meshy mesh has only a 0.13 tail stub, so the 4-bone tail chain moved air and the tail read short against the DEF's lion tail in every clip. A 0.47 tube (10 sides, taper .021 -> .012, tuft .026) is grown out of the stub along a hang-and-curl path with the stub's own UVs; quadruped.tail points follow the new tail and its region box is narrowed to x +-0.045 (it had reached the hind heels) and extended to hold it."
+  },
+  "sliverCollapse": {
+   "tool": "tools/homm3_def_retarget/sliver_collapse.py",
+   "input": "artifacts/homm3_mesh_surgery/h3_royal_griffin_tail_g1.glb",
+   "targets": "tools/homm3_def_retarget/sliver_targets_h3_royal_griffin.json",
+   "args": "--max-len 0.01 --near 0.006 --min-dot 0.3",
+   "record": "artifacts/homm3_mesh_surgery/h3_royal_griffin_sliver_s1.surgery.json",
+   "note": "2026-10-07 lane-A a20 gate headroom: 84% of the delivered tears (1912 of 2279) sat on 278 Meshy sliver edges under 0.01 long (mesh median 0.021) in the neck/chest, shoulders and wing roots, blown up by the corrective smooth; weight diffusion made the neck worse. 232 of them collapsed at their midpoints (max vertex move 5 mm, no face flips), seam copies merged; rest silhouette unchanged."
+  },
+  "sliverCollapse2": {
+   "tool": "tools/homm3_def_retarget/sliver_collapse.py",
+   "input": "artifacts/homm3_mesh_surgery/h3_royal_griffin_sliver_s1.glb",
+   "targets": "tools/homm3_def_retarget/sliver_targets_h3_royal_griffin_s2.json",
+   "args": "--max-len 0.015 --near 0.008 --min-dot 0.3",
+   "record": "artifacts/homm3_mesh_surgery/h3_royal_griffin_sliver_s2.surgery.json",
+   "note": "2026-10-08 lane-A a21 gate headroom, second pass: after sliver_s1 the delivered tears (604) were mostly in the neck (241) on edges 0.01-0.015 long; 120 torn edges under 0.015 targeted, 126 collapses, max move 0.0075 (median edge 0.0217). Neck weight diffusion was tried first and raised the tears (604 -> 728)."
+  }
+ },
+ "correctiveSmooth": {
+  "excludeBones": [
+   "WingL_01",
+   "WingL_02",
+   "WingL_03",
+   "WingL_P0",
+   "WingR_01",
+   "WingR_02",
+   "WingR_03",
+   "WingR_P0"
+  ],
+  "reason": "2026-10-07 authenticity lane-A attempt 9: thirty length-weighted CS iterations collapse the 1.22x lengthened wing tips by 0.22 m (16% of the body height), and the rotating tip frames stretched 6 mm tip edges 10.6x in the base bake, which capped the primaries spread (patch-lane worst-edge gate). The distal wing bones are rigid segments: their CS displacement is scaled by 1 - the vertex's weight on them (ramped through the WingX_00/01 blend). Simulated: base worst 10.60 -> 8.42 (now QNeck), edges>2x 10208 -> 4353; PRIMW 1 patched 8.42 / 3776 (gate OK)."
+ }
+}

@@ -1,0 +1,224 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_firebird",
+ "status": "look",
+ "notes": "Firebird (CFBIRD): no idle fire (the body is orange feathers, not flame), so no boil, no tongues, no steady light. It shares the phoenix's breath and ash art (identical mask px), so its events follow the phoenix spec: DEF-ripped breath with a breath light, a death flare light (DEF death frames 1-2 flash the whole body yellow: roster peak body luma rise 36.7), the burning pillar and the ash pile. Masks are region-segmented (tools/homm3_vfx/phoenix_fire_masks.py): the roster colour rule sees the jet only once it detaches (frames 10-11) because the body shares the fire palette. Both light curves are fitted by the runner (rise over the clip's first key; the death flare peaks on frames 1-2, after key 0, so it is fittable). See docs/homm3_vfx_experiments.md 'Phoenix fire'.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "breath_glow",
+   "treatment": "dynamic",
+   "notes": "the jet lights the head and chest; 2-frame (6 Hz) flicker like the DEF"
+  },
+  {
+   "id": "death_flare",
+   "treatment": "dynamic",
+   "notes": "the body flares yellow on death frames 1-2 before burning down"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "breath",
+    "type": "defFlipbook",
+    "def": "CFBIRD.DEF",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_firebird/breath"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": [
+      276,
+      214
+     ],
+     "boneTip": true
+    },
+    "texelsPerDefPx": 1,
+    "light": "breath_glow",
+    "provenance": "phoenix_fire_masks.py (phoenix_fire_lab.breath_mask): everything opaque in front of the beak (DEF x >= 276, y >= 190 until x >= 320); roster ripper defEffects sees 80-157 px on frames 4-9, this mask 2796-4417",
+    "notes": "Same art and jet root as the phoenix (DEF x 276, mean y 214), pinned to the Head bone tail so the jet leaves the mesh beak whether or not the retarget lunges."
+   },
+   {
+    "id": "breath_glow_light",
+    "type": "effectLight",
+    "lightId": "breath_glow",
+    "carrier": "breath",
+    "anchor": {
+     "bone": "Head",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.45
+    },
+    "rgb": [
+     1.0,
+     0.72,
+     0.36
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.104,
+      0.802,
+      0.835,
+      2.591,
+      2.567,
+      1.772,
+      1.978,
+      1.66,
+      1.675,
+      1.865,
+      0.894
+     ]
+    },
+    "intensitySource": "fitted",
+    "notes": "Pure rise (no body fire floor); the runner fits and rewrites the curve."
+   },
+   {
+    "id": "death_burn",
+    "type": "defFlipbook",
+    "def": "CFBIRD.DEF",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       1,
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_firebird/death_burn"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": {
+      "Unit_Death": [
+       [
+        207,
+        195
+       ],
+       [
+        213,
+        188
+       ],
+       [
+        213,
+        212
+       ],
+       [
+        214,
+        229
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "death_flare",
+    "provenance": "phoenix_fire_masks.py: DEF g5 frames 1-3 flame+ember (the flared feather fringe), frame 4 the whole frame off the mesh (the burning pillar); origin = the DEF body centroid of each frame"
+   },
+   {
+    "id": "death_flare_light",
+    "type": "effectLight",
+    "lightId": "death_flare",
+    "carrier": "death_burn",
+    "anchor": {
+     "bone": "Spine1",
+     "towardCameraU": 0.45
+    },
+    "rgb": [
+     1.0,
+     0.85,
+     0.45
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_Death": [
+      0.0,
+      0.792,
+      1.179,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted",
+    "notes": "Fitted by the runner on the DEF body L* rise over death key 0 (the frame 1-2 peak)."
+   },
+   {
+    "id": "death_ash",
+    "type": "defFlipbook",
+    "def": "CFBIRD.DEF",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_firebird/death_ash"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "Root",
+     "defOrigin": [
+      225,
+      270
+     ]
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "phoenix_fire_masks.py: DEF g5 frames 5-6, the whole frame (the ash pile); origin = the SpriteCam's projection of the world origin (offset 225.09, 270.21)",
+    "notes": "Billboard, not groundPlane: the pile is a side-view mound, not a flat pool.",
+    "render": "billboard"
+   },
+   {
+    "id": "hide_body",
+    "type": "event",
+    "clip": "Unit_Death",
+    "defFrame": 5,
+    "action": "hideMesh",
+    "notes": "All unit SkinnedMeshRenderers (body + rubble): the ash flipbook replaces the unit."
+   }
+  ]
+ }
+}

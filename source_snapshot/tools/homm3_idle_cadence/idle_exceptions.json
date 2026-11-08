@@ -1,0 +1,117 @@
+{
+ "schema": "homm3_idle_cadence.exceptions.v1",
+ "note": "Per-unit idle-cadence decisions, read by idle_cadence_rule.treatment_for. Every unit the detector flags must have an entry whose flags match. See docs/homm3_idle_cadence.md.",
+ "units": {
+  "h3_damsel_fly": {
+   "treatment": "wingDecouple",
+   "flags": [],
+   "wingBones": [
+    "Wing"
+   ],
+   "wingCycles": 3,
+   "reason": "Re-decided 2026-09-28, user-approved (\"proceed with all four recommendations\"): after the 2026-09-27 rollout-B rebuild (98c0319977) the source idle's wing bones swing 32.2 deg in a single beat per 0.50 s loop (detector: 1 beat, below the wingFlutter minimum of 2, so no flag), where the 2026-09-25 build had 3 beats of 29 deg. The body still takes the global 3.2x (0.50 -> 1.60 s) and the wing bones play their source loop 3x over it on purpose (wing beat ~0.53 s): a hovering buzz over a slow body like the native wasp, instead of one slow flap per 1.6 s loop. Prior decision (2026-09-25): DEF idle is a hovering wing buzz (wing bones swing 29 deg, 3 beats per 0.50 s loop)."
+  },
+  "h3_dragon_fly": {
+   "treatment": "wingDecouple",
+   "flags": [],
+   "wingBones": [
+    "Wing"
+   ],
+   "wingCycles": 3,
+   "reason": "Re-decided 2026-09-28, user-approved (\"proceed with all four recommendations\"): after the 2026-09-27 rollout-B rebuild (98c0319977) the source idle's wing bones swing 32.2 deg in a single beat per 0.50 s loop (detector: 1 beat, below the wingFlutter minimum of 2, so no flag), where the 2026-09-25 build had 3 beats of 29 deg. The body still takes the global 3.2x (0.50 -> 1.60 s) and the wing bones play their source loop 3x over it on purpose (wing beat ~0.53 s): a hovering buzz over a slow body like the native wasp, instead of one slow flap per 1.6 s loop. Prior decision (2026-09-25): DEF idle is a hovering wing buzz (wing bones swing 29 deg, 3 beats per 0.50 s loop)."
+  },
+  "h3_elf_wardancer": {
+   "treatment": "rule",
+   "flags": [
+    "static"
+   ],
+   "reason": "DEF idle is itself a single still pose (DEF silhouette change 0.0); retiming a still pose changes nothing visible. Faithful."
+  },
+  "h3_fargazer": {
+   "treatment": "rule",
+   "flags": [
+    "fastAfterRule"
+   ],
+   "reason": "After the 3.2x rule the idle still runs 51 deg/s mean / 410 deg/s peak-p90, above the native p95 (41.8 / 330.7). The DEF idle itself is among the most-moving in the roster (eyestalk writhe; DEF silhouette change 0.0584, rank 238/255), so the speed is faithful motion content, not tempo; no native unit is a like-for-like analog. Global rule kept: a larger factor would make the DEF's continuous eyestalk writhe read as slow motion. Reviewed after rollout (artifacts/homm3_idle_cadence/review/h3_fargazer/): the retimed idle is one 2.67 s pulse in which the tentacles splay and close and the body tilts (88 deg p90 swing); the tempo sits at the native beat and the speed is amplitude. Rule kept."
+  },
+  "h3_genie_upg": {
+   "treatment": "rule",
+   "flags": [
+    "nearStatic"
+   ],
+   "reason": "Accepted as nearStatic 2026-09-28, user-approved (\"proceed with all four recommendations\"): the most-moving bones swing 2.758 deg (p90), below the quietest native idle (3.13 deg), on the hand-keyed identity-regenerated mesh lane (33c1fc508b). Not boosted; the idle keeps the global tempo rule like the other accepted nearStatic units (an `exclude` would make the slice freeze's retime_idle.py refuse the unit)."
+  },
+  "h3_hurricane_elemental": {
+   "treatment": "rule",
+   "flags": [
+    "fastAfterRule"
+   ],
+   "reason": "After the 3.2x rule the idle still runs 122 deg/s mean / 424 deg/s peak-p90, above the native p95 (41.8 / 330.7). The DEF idle itself is among the most-moving in the roster (whirlwind swirl; DEF silhouette change 0.0794, rank 246/255), so the speed is faithful motion content, not tempo; no native unit is a like-for-like analog. Global rule kept: a larger factor would make the DEF's continuous whirlwind swirl read as slow motion. Reviewed after rollout (artifacts/homm3_idle_cadence/review/h3_hurricane_elemental/): the retimed idle is one 2.93 s twist of the whirlwind column (58 deg median swing); no native vortex exists to fit a smaller factor to, and a larger one would slow the spin further. Rule kept."
+  },
+  "h3_lich_master": {
+   "treatment": "rule",
+   "flags": [
+    "static"
+   ],
+   "reason": "DEF idle is itself a single still pose (DEF silhouette change 0.0); retiming a still pose changes nothing visible. Faithful."
+  },
+  "h3_mammoth_upg_alt": {
+   "treatment": "rule",
+   "flags": [
+    "nearStatic"
+   ],
+   "reason": "Most-moving bones swing 3.0 deg, below the quietest native idle; the DEF idle itself is nearly still too (silhouette change 0.005, bottom quartile of the roster). Faithful to HoMM3; tempo rule stands, amplitude not boosted."
+  },
+  "h3_ogre_mage": {
+   "treatment": "rule",
+   "flags": [
+    "nearStatic"
+   ],
+   "reason": "Accepted as nearStatic 2026-09-28, user-approved (\"proceed with all four recommendations\"): the most-moving bones swing 2.502 deg (p90), below the quietest native idle (3.13 deg), on the hand-keyed identity-regenerated mesh lane (33c1fc508b). Not boosted; the idle keeps the global tempo rule like the other accepted nearStatic units (an `exclude` would make the slice freeze's retime_idle.py refuse the unit)."
+  },
+  "h3_peasant": {
+   "treatment": "rule",
+   "flags": [
+    "nearStatic"
+   ],
+   "reason": "Most-moving bones swing 2.16 deg p90 (LeftForeArm 2.5, RightHand 1.9, Head 1.5), below the quietest native idle. The DEF idle is a sub-pixel breath: the pitchfork centroid moves 0.56 px and the head 0.2 px on an 82 px body. Its silhouette change is 0.0126 (roster median), but that metric reads high on small sprites because edge flicker is a larger share of the area; at the same board scale our sprite already changes about 2x the DEF (0.0218 vs 0.0102). Faithful to HoMM3; tempo rule stands, amplitude not boosted. Coordinator decision 2026-10-09 per mammoth_upg_alt precedent."
+  },
+  "h3_serpent_fly": {
+   "treatment": "wingDecouple",
+   "flags": [],
+   "wingBones": [
+    "Wing"
+   ],
+   "wingCycles": 3,
+   "reason": "Re-decided 2026-09-28, user-approved (\"proceed with all four recommendations\"): after the 2026-09-27 rollout-B rebuild (98c0319977) the source idle's wing bones swing 32.2 deg in a single beat per 0.50 s loop (detector: 1 beat, below the wingFlutter minimum of 2, so no flag), where the 2026-09-25 build had 3 beats of 29 deg. The body still takes the global 3.2x (0.50 -> 1.60 s) and the wing bones play their source loop 3x over it on purpose (wing beat ~0.53 s): a hovering buzz over a slow body like the native wasp, instead of one slow flap per 1.6 s loop. Prior decision (2026-09-25): DEF idle is a hovering wing buzz (wing bones swing 29 deg, 3 beats per 0.50 s loop)."
+  },
+  "h3_sharpshooter": {
+   "treatment": "rule",
+   "flags": [
+    "nearStatic"
+   ],
+   "reason": "Most-moving bones swing 2.54 deg p90, below the quietest native idle (3.13): Spine1 2.58, Head 2.43, LeftHand 1.95, Spine2 0.86. The DEF's moving part is the cape; its body is still (bow-side edge 0.41 px). Since the 2026-10-09 send-back the lower cape is skinned to Spine1 down to the hem (idle Spine1 4.5 / Spine2 -1.5, sum unchanged; head and hand keys untouched, no Hips keys), so the cape sways through skinning, which the bone-swing detector cannot see: back-cape hem displacement mean 4.3 cm (max 7.6 cm) at the breath's peak vs about 4.7 cm in the DEF (2 px of an 81 px sprite, 1.9 m figure); the bow-side edge went from 3.3 to 2.7 px. Boosting to clear the detector would put the hem at about 2.7x the DEF. Faithful to HoMM3; tempo rule stands, amplitude not boosted. Coordinator decision 2026-10-09 per mammoth_upg_alt precedent."
+  },
+  "h3_troll": {
+   "treatment": "rule",
+   "flags": [
+    "nearStatic"
+   ],
+   "reason": "Most-moving bones swing 3.09 deg p90, just below the quietest native idle (3.13): RightHand 3.16, LeftForeArm 2.98, Head 2.79, Spine2 1.55. The DEF idle is a gentle breath (silhouette change 0.0216), about 1-1.7 px of edge sway. Same board, same scale (H 173 px), DEF vs ours: upper left edge 1.23 vs 1.60 px, upper right edge 1.71 vs 1.91 px, head x 1.52 vs 2.73 px; ours already matches or exceeds the DEF on every edge, so a boost would overshoot. Faithful to HoMM3; tempo rule stands, amplitude not boosted. Coordinator decision 2026-10-09 per mammoth_upg_alt precedent."
+  },
+  "hota_bulwark_mammoth": {
+   "treatment": "rule",
+   "flags": [
+    "nearStatic"
+   ],
+   "reason": "Most-moving bones swing 2.9 deg, below the quietest native idle; the DEF idle itself is nearly still too (silhouette change 0.0051, bottom quartile of the roster). Faithful to HoMM3; tempo rule stands, amplitude not boosted."
+  },
+  "hota_bulwark_war_mammoth": {
+   "treatment": "rule",
+   "flags": [
+    "nearStatic"
+   ],
+   "reason": "Most-moving bones swing 3.0 deg, below the quietest native idle; the DEF idle itself is nearly still too (silhouette change 0.005, bottom quartile of the roster). Faithful to HoMM3; tempo rule stands, amplitude not boosted."
+  }
+ }
+}

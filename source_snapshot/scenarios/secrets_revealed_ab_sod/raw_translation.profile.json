@@ -1,0 +1,58 @@
+{
+  "schema": "homm3.olden_layered_atlas_scenario_profile.v1",
+  "scenarioId": "secrets_revealed_ab_sod",
+  "mapSid": "h3_necropolis_secrets_revealed_raw_translation",
+  "title": "Secrets Revealed - Raw Translation",
+  "description": "Parallel Secrets Revealed emit-only raw_translation map (same pipeline class as Homecoming). Runtime gameplay remains user-unvalidated.",
+  "artifactRoot": "artifacts/campaign_port_poc/ab_sod_campaigns/secrets_revealed",
+  "outputSubdir": "raw_translation_map",
+  "inputs": {
+    "alignment": "artifacts/campaign_port_poc/ab_sod_campaigns/secrets_revealed/olden_storage_alignment/secrets_revealed.olden_storage_alignment.json",
+    "substitutionMap": "artifacts/campaign_port_poc/ab_sod_campaigns/secrets_revealed/entity_substitutions/secrets_revealed.olden_entity_substitution_map.json",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "coreCatalog": "artifacts/campaign_port_poc/olden_entity_catalog/olden_core_map_valid_entity_catalog.json",
+    "templateMap": "V:\\SteamLibrary\\steamapps\\common\\Heroes of Might and Magic Olden Era - Golden Era\\HeroesOldenEra_Data\\StreamingAssets\\maps\\Thirst_for_Power.map"
+  },
+  "sourceEnvelope": {
+    "width": 72,
+    "height": 72
+  },
+  "layers": {
+    "layerIds": [
+      0
+    ],
+    "undergroundLayers": []
+  },
+  "spawn": {
+    "factionSid": "homm3_stronghold",
+    "heroSid": "homm3_stronghold_hero_5",
+    "playersCount": 1
+  },
+  "startHeroContract": {
+    "sourceLayer": 0,
+    "heroType": 96,
+    "owner": 1,
+    "payloadKind": "hero_or_prison",
+    "templateAnimation": "ah00_e.def",
+    "templateObjectId": 34,
+    "sourceKey": "0:15:5",
+    "campaignGranted": true
+  },
+  "pathability": {
+    "surfaceGapFill": false,
+    "emitCoreOverlay": true
+  },
+  "knownGaps": [
+    "AB/SoD StoryHub raw_translation first pass; videos deferred; runtime unvalidated.",
+    "Campaign-unique heroes may map lossily via h3m_hero_sid."
+  ],
+  "runtimeScriptComment": "secrets_revealed raw-translation runtime script generated from campaign alignment story.",
+  "coreOverlay": {
+    "mode": "emit_fresh"
+  },
+  "validation": {
+    "expectedSourceLayerEntityCounts": {
+      "0": 1427
+    }
+  }
+}

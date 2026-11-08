@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sprite pose editor</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.1/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.1/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>Sprite pose editor</h1>
+      <p id="meta">Loading Roc clip…</p>
+    </div>
+    <div class="actions">
+      <details class="toggles" id="toggleMenu">
+        <summary>View &amp; edit toggles</summary>
+        <div class="toggle-grid" id="toggleGrid"></div>
+      </details>
+      <button type="button" id="meshPreviewBtn" aria-pressed="false" title="Show only the mesh. Click again to restore. V also toggles.">Mesh only</button>
+      <button type="button" id="resetViewBtn" title="Reset zoom. Double-click empty view space does the same.">Reset zoom</button>
+      <button type="button" id="exportBtn">Export JSON</button>
+      <button type="button" class="primary" id="saveBtn">Save to worktree</button>
+    </div>
+  </header>
+
+  <main>
+    <aside class="plate" id="platePane">
+      <h2>Original sprite</h2>
+      <div class="plate-stage">
+        <img id="spritePlate" alt="original sprite" draggable="false">
+      </div>
+      <p class="plate-meta" id="plateMeta">f00 perch</p>
+    </aside>
+
+    <section class="stage">
+      <div class="viewport" id="viewport">
+        <img id="spritePrev" class="onion" alt="" draggable="false">
+        <img id="spriteNext" class="onion" alt="" draggable="false">
+        <img id="sprite" alt="sprite plate" draggable="false">
+        <canvas id="overlay"></canvas>
+        <canvas id="view"></canvas>
+        <div id="hits"></div>
+        <div id="labels"></div>
+        <div class="hud" id="hud"></div>
+      </div>
+      <div class="timeline">
+        <button type="button" id="prevBtn" title="Previous frame">◀</button>
+        <input id="frameSlider" type="range" min="0" max="0" value="0">
+        <button type="button" id="nextBtn" title="Next frame">▶</button>
+        <button type="button" id="playBtn">Play</button>
+        <label class="frame-readout"><span id="frameLabel">f00</span> <span id="phaseLabel">perch</span></label>
+      </div>
+    </section>
+
+    <aside class="side">
+      <label>Joint
+        <select id="jointSelect"></select>
+      </label>
+      <p class="hint" id="jointHint">Click a joint in the view, then drag it. Sliders stay live while you drag.</p>
+      <div class="sliders" id="sliders"></div>
+      <div class="row">
+        <button type="button" id="zeroJoint">Zero this joint</button>
+        <button type="button" id="copyPrev">Copy previous frame</button>
+      </div>
+      <div class="row">
+        <label class="grow">Symmetry
+          <select id="symmetryMode">
+            <option value="copy_a_to_b">Copy A onto B</option>
+            <option value="copy_b_to_a">Copy B onto A</option>
+            <option value="average">Average paired joints</option>
+          </select>
+        </label>
+        <button type="button" id="enforceSymmetry" title="Apply the selected symmetry mode to every catalog pair on this frame. Pair motion is the same anatomical raise/sweep/twist on both sides (left-right match). A/B follow the catalog (wing_a/wing_b, leg_a/leg_b).">Enforce symmetry</button>
+      </div>
+      <div class="row">
+        <button type="button" id="resetIdlePose" title="Copy idle-frame joint angles onto this frame. Fly frames keep their motion root so the bird stays in the fly camera slot.">Reset this frame to idle pose</button>
+      </div>
+      <pre id="status" class="status"></pre>
+    </aside>
+  </main>
+  <script type="module" src="/static/app.js"></script>
+</body>
+</html>

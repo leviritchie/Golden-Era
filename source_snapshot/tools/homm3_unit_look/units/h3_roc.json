@@ -1,0 +1,134 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_roc",
+ "status": "look",
+ "notes": "pilot bird, re-run in the stronghold rollout. v7c by --try-modes (fx 3.27 / body 3.57 vs v6m 4.49 / 4.59; raw 4.16). The earlier withdrawal measured 5 views; with the feather layers the review covers all Hitted/Death keys. Idle improves 6.2->2.4, but Move f3 stays worse (3.17 raw -> 6.12: the DEF spreads dark wings the mesh does not) and Death f7 (DEF lies flat, mesh still stands) dominates the worst row. Bound hit grade:whiteR=1.5 (DEF is warmer than the grade can reach).",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "hit_feathers",
+    "type": "defFlipbook",
+    "provenance": "roster inventory stronghold g03 hitted detached particles f3-6 (feathers)",
+    "clips": {
+     "Unit_Hitted": {
+      "defGroup": 3,
+      "frames": [
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "smoke"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": {
+      "Unit_Hitted": [
+       [
+        180,
+        220
+       ],
+       [
+        175,
+        211
+       ],
+       [
+        181,
+        215
+       ],
+       [
+        197,
+        220
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "Feathers shed as detached DEF particles. defOrigin = the DEF body centroid of each frame (auto would pick the nearest feather), pinned to Spine1 so the burst stays centred on the bird."
+   },
+   {
+    "id": "death_feathers",
+    "type": "defFlipbook",
+    "provenance": "roster inventory stronghold g05 death detached particles f1-6 (feathers)",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "smoke"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": {
+      "Unit_Death": [
+       [
+        211,
+        211
+       ],
+       [
+        201,
+        198
+       ],
+       [
+        203,
+        204
+       ],
+       [
+        215,
+        211
+       ],
+       [
+        213,
+        213
+       ],
+       [
+        215,
+        220
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "Feathers shed as detached DEF particles. defOrigin = the DEF body centroid of each frame (auto would pick the nearest feather), pinned to Spine1 so the burst stays centred on the bird."
+   }
+  ]
+ }
+}

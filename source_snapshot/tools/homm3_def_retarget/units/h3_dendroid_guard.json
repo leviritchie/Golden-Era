@@ -1,0 +1,472 @@
+{
+ "unit": "h3_dendroid_guard",
+ "joints": {
+  "Hips": [
+   0,
+   0.02,
+   0.62
+  ],
+  "Spine": [
+   0,
+   0.02,
+   0.76
+  ],
+  "Spine1": [
+   0,
+   0.02,
+   0.9
+  ],
+  "Spine2": [
+   0,
+   0.02,
+   1.04
+  ],
+  "Neck": [
+   0,
+   0.0,
+   1.24
+  ],
+  "Head": [
+   0,
+   -0.02,
+   1.33
+  ],
+  "HeadTop_End": [
+   0,
+   0.05,
+   1.62
+  ],
+  "LeftShoulder": [
+   0.04,
+   0.02,
+   1.16
+  ],
+  "LeftArm": [
+   0.19,
+   0.02,
+   1.12
+  ],
+  "LeftForeArm": [
+   0.29,
+   0.06,
+   0.87
+  ],
+  "LeftHand": [
+   0.3,
+   -0.08,
+   0.54
+  ],
+  "LeftHand_End": [
+   0.31,
+   -0.18,
+   0.36
+  ],
+  "RightShoulder": [
+   -0.04,
+   0.02,
+   1.16
+  ],
+  "RightArm": [
+   -0.21,
+   0.02,
+   1.12
+  ],
+  "RightForeArm": [
+   -0.3,
+   0.06,
+   0.87
+  ],
+  "RightHand": [
+   -0.29,
+   -0.08,
+   0.55
+  ],
+  "RightHand_End": [
+   -0.29,
+   -0.18,
+   0.36
+  ],
+  "LeftUpLeg": [
+   0.1,
+   0.02,
+   0.58
+  ],
+  "LeftLeg": [
+   0.13,
+   0.0,
+   0.32
+  ],
+  "LeftFoot": [
+   0.14,
+   0.04,
+   0.1
+  ],
+  "LeftToeBase": [
+   0.16,
+   -0.08,
+   0.02
+  ],
+  "LeftToe_End": [
+   0.17,
+   -0.18,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.12,
+   0.02,
+   0.58
+  ],
+  "RightLeg": [
+   -0.15,
+   0.02,
+   0.32
+  ],
+  "RightFoot": [
+   -0.16,
+   0.1,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.18,
+   -0.02,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.19,
+   -0.1,
+   0.0
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "armCut": {
+  "maxDist": 0.13
+ },
+ "shatter": {
+  "start": 3,
+  "chunks": 14,
+  "burst": 0.4,
+  "up": 0.6,
+  "spin": 5
+ },
+ "sleeve": {
+  "x": 0.125,
+  "zMin": 0.6,
+  "zMax": 1.08
+ },
+ "extensions": [
+  "castle_armsep",
+  "conflux_rubble"
+ ],
+ "armSep": [
+  {
+   "side": "left",
+   "armBones": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "axis": [
+    [
+     0.256,
+     0.008,
+     1.118
+    ],
+    [
+     0.227,
+     0.047,
+     1.063
+    ],
+    [
+     0.211,
+     0.029,
+     0.985
+    ],
+    [
+     0.237,
+     0.063,
+     0.909
+    ],
+    [
+     0.245,
+     0.07,
+     0.834
+    ],
+    [
+     0.218,
+     0.062,
+     0.752
+    ],
+    [
+     0.24,
+     0.014,
+     0.67
+    ],
+    [
+     0.273,
+     -0.072,
+     0.586
+    ],
+    [
+     0.274,
+     -0.171,
+     0.511
+    ],
+    [
+     0.253,
+     -0.199,
+     0.424
+    ],
+    [
+     0.251,
+     -0.19,
+     0.349
+    ],
+    [
+     0.25,
+     -0.184,
+     0.29
+    ]
+   ],
+   "radius": [
+    0.09,
+    0.12,
+    0.125,
+    0.09,
+    0.095,
+    0.11,
+    0.095,
+    0.11,
+    0.12,
+    0.13,
+    0.115,
+    0.07
+   ],
+   "margin": 0.012,
+   "low": 0.12,
+   "top": 1.12,
+   "ramp": 0.04,
+   "bodyMaxX": 0.2,
+   "neutralDominant": [
+    "LeftHand"
+   ],
+   "bodyBehindY": -0.08,
+   "note": "left branch arm: hangs to the knee in front of the thigh and Meshy welded hand/forearm to the thigh and knee (one 29k-vert island); LeftHand webbed to LeftUpLeg/LeftLeg 6-9x whenever the arm lifts. Axis fitted to the arm cross-sections shoulder -> hand (z 1.12 -> 0.29); the hand stays neutral. Band down to z 0.12 so the cut reaches the hand/knee contact; bodyBehindY -0.08 classes the thigh behind the hanging hand as BODY; shoulder points widened. cutcheck v2: bridges 7."
+  },
+  {
+   "side": "right",
+   "armBones": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "axis": [
+    [
+     -0.267,
+     0.02,
+     1.129
+    ],
+    [
+     -0.242,
+     0.038,
+     1.064
+    ],
+    [
+     -0.224,
+     0.029,
+     0.989
+    ],
+    [
+     -0.241,
+     0.045,
+     0.91
+    ],
+    [
+     -0.26,
+     0.072,
+     0.832
+    ],
+    [
+     -0.256,
+     0.045,
+     0.749
+    ],
+    [
+     -0.224,
+     0.047,
+     0.658
+    ],
+    [
+     -0.256,
+     -0.062,
+     0.593
+    ],
+    [
+     -0.269,
+     -0.192,
+     0.506
+    ],
+    [
+     -0.229,
+     -0.207,
+     0.426
+    ],
+    [
+     -0.221,
+     -0.178,
+     0.348
+    ],
+    [
+     -0.232,
+     -0.124,
+     0.29
+    ]
+   ],
+   "radius": [
+    0.075,
+    0.12,
+    0.12,
+    0.1,
+    0.1,
+    0.1,
+    0.09,
+    0.12,
+    0.13,
+    0.13,
+    0.11,
+    0.06
+   ],
+   "margin": 0.012,
+   "low": 0.12,
+   "top": 1.12,
+   "ramp": 0.04,
+   "bodyMaxX": 0.2,
+   "neutralDominant": [
+    "RightHand"
+   ],
+   "bodyBehindY": -0.08,
+   "note": "right branch arm: same contact on the right hip/thigh (RightForeArm bleed on the thigh). Band down to z 0.12 so the cut reaches the hand/knee contact; bodyBehindY -0.08 classes the thigh behind the hanging hand as BODY; shoulder points widened. cutcheck v2: bridges 0."
+  }
+ ],
+ "conflux": {
+  "rubbleSettle": {
+   "gather": 0.3,
+   "power": 0.5
+  }
+ },
+ "glbPatch": {
+  "reason": "AttackFront backhand club sweep per DEF (f1 gather, f2 wind the right branch arm back wide, f3-f4 flat sweep at the enemy with trunk twist, f5 follow-through, f6 recover; face held on the enemy); Defence left arm raised in front of the face as a shield f3-f7; Hitted f1 forward flinch then arms flung wide f2-f5. Left hand/knee cut chip (7 mixed hand+leg verts, CS offset 0.775 h) snapped whole: 1 vert to the hand, 6 to the knee (morph 0.775 -> 0.109).",
+  "ops": [
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftUpLeg",
+     "LeftLeg"
+    ],
+    "to": "LeftHand",
+    "region": [
+     {
+      "axis": "x",
+      "above": 0.195,
+      "ramp": 0.005
+     },
+     {
+      "axis": "x",
+      "below": 0.235,
+      "ramp": 0.003
+     },
+     {
+      "axis": "y",
+      "above": -0.095,
+      "ramp": 0.005
+     },
+     {
+      "axis": "y",
+      "below": -0.025,
+      "ramp": 0.005
+     },
+     {
+      "axis": "z",
+      "above": 0.305,
+      "ramp": 0.005
+     },
+     {
+      "axis": "z",
+      "below": 0.435,
+      "ramp": 0.005
+     }
+    ],
+    "onlyWith": {
+     "bones": [
+      "LeftHand"
+     ],
+     "atLeast": 0.3
+    },
+    "note": "left hand/knee cut chip: the one chip vertex welded to the hand side (x<0.235) goes wholly to the hand"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftHand",
+     "LeftForeArm"
+    ],
+    "to": "LeftLeg",
+    "region": [
+     {
+      "axis": "x",
+      "above": 0.235,
+      "ramp": 0.003
+     },
+     {
+      "axis": "x",
+      "below": 0.315,
+      "ramp": 0.005
+     },
+     {
+      "axis": "y",
+      "above": -0.095,
+      "ramp": 0.005
+     },
+     {
+      "axis": "y",
+      "below": -0.025,
+      "ramp": 0.005
+     },
+     {
+      "axis": "z",
+      "above": 0.305,
+      "ramp": 0.005
+     },
+     {
+      "axis": "z",
+      "below": 0.435,
+      "ramp": 0.005
+     }
+    ],
+    "onlyWith": {
+     "bones": [
+      "LeftUpLeg",
+      "LeftLeg"
+     ],
+     "atLeast": 0.1
+    },
+    "note": "the rest of the 7-vert mixed chip (LeftHand .44-.68 + LeftUpLeg/LeftLeg, CS offset 0.775 h) goes wholly to the knee"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_dendroid_guard_pose_rot.json",
+    "sha256": "d8f35046e802e3fcc013f7f6c3794efeaf8259cadde0b554b2401576c312d523",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_dendroid_guard_crouch_tr.json",
+    "sha256": "adcc13951f399c5bfb3cae8191d8ac65976931e9212ffd7cea3f5435498d5f17",
+    "regrid": true
+   }
+  ]
+ }
+}

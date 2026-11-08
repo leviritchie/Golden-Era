@@ -1,0 +1,236 @@
+{
+ "unit": "h3_cerberus",
+ "joints": {
+  "Hips": [
+   -0.28,
+   0.65,
+   1.05
+  ],
+  "Spine": [
+   -0.26,
+   0.35,
+   1.1
+  ],
+  "Spine1": [
+   -0.24,
+   0.05,
+   1.15
+  ],
+  "Spine2": [
+   -0.22,
+   -0.25,
+   1.2
+  ],
+  "Neck": [
+   -0.18,
+   -0.55,
+   1.22
+  ],
+  "Head": [
+   -0.16,
+   -0.8,
+   1.2
+  ],
+  "HeadTop_End": [
+   -0.14,
+   -1.2,
+   1.05
+  ],
+  "LeftUpLeg": [
+   -0.12,
+   0.65,
+   1.0
+  ],
+  "LeftLeg": [
+   -0.11,
+   0.85,
+   0.6
+  ],
+  "LeftFoot": [
+   -0.12,
+   0.96,
+   0.25
+  ],
+  "LeftToeBase": [
+   -0.08,
+   0.8,
+   0.06
+  ],
+  "LeftToe_End": [
+   -0.06,
+   0.7,
+   0.03
+  ],
+  "RightUpLeg": [
+   -0.44,
+   0.65,
+   1.0
+  ],
+  "RightLeg": [
+   -0.47,
+   0.88,
+   0.6
+  ],
+  "RightFoot": [
+   -0.44,
+   1.02,
+   0.25
+  ],
+  "RightToeBase": [
+   -0.6,
+   0.85,
+   0.06
+  ],
+  "RightToe_End": [
+   -0.62,
+   0.72,
+   0.03
+  ],
+  "LeftShoulder": [
+   -0.1,
+   -0.2,
+   1.15
+  ],
+  "LeftArm": [
+   0.08,
+   -0.18,
+   0.95
+  ],
+  "LeftForeArm": [
+   0.1,
+   -0.1,
+   0.55
+  ],
+  "LeftHand": [
+   0.12,
+   -0.16,
+   0.22
+  ],
+  "LeftHand_End": [
+   0.18,
+   -0.34,
+   0.04
+  ],
+  "RightShoulder": [
+   -0.34,
+   -0.2,
+   1.15
+  ],
+  "RightArm": [
+   -0.48,
+   -0.2,
+   0.95
+  ],
+  "RightForeArm": [
+   -0.5,
+   -0.1,
+   0.55
+  ],
+  "RightHand": [
+   -0.53,
+   -0.14,
+   0.22
+  ],
+  "RightHand_End": [
+   -0.5,
+   -0.34,
+   0.04
+  ]
+ },
+ "extensions": [
+  "inferno_capture",
+  "conflux_rubble"
+ ],
+ "captureUp": "camera",
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ]
+ },
+ "wingMaxDeg": 0,
+ "wings": [
+  {
+   "bone": "HeadLeft",
+   "parent": "Spine2",
+   "head": [
+    -0.5,
+    -0.55,
+    1.1
+   ],
+   "tail": [
+    -0.7,
+    -0.95,
+    1.0
+   ],
+   "sign": 1,
+   "region": {
+    "box": [
+     [
+      -0.9,
+      -1.15,
+      0.75
+     ],
+     [
+      -0.42,
+      -0.5,
+      1.45
+     ]
+    ]
+   }
+  },
+  {
+   "bone": "HeadRight",
+   "parent": "Spine2",
+   "head": [
+    0.3,
+    -0.5,
+    1.25
+   ],
+   "tail": [
+    0.62,
+    -0.75,
+    1.25
+   ],
+   "sign": -1,
+   "region": {
+    "box": [
+     [
+      0.2,
+      -0.85,
+      1.0
+     ],
+     [
+      0.9,
+      -0.4,
+      1.62
+     ]
+    ]
+   }
+  }
+ ],
+ "shatter": {
+  "start": 4,
+  "chunks": 45,
+  "burst": 0.3,
+  "up": 0.4,
+  "spin": 3,
+  "solid": true
+ },
+ "gateExceptions": {
+  "ground": {
+   "Defence:Hips": {
+    "value": -0.082,
+    "reason": "joint entry infeasible: the Defence crouch enters with its Hips under Idle; measured on the grounded candidate: Defence Hips steps -0.082 from Idle at entry (DEF allows 0.040); user-approved exception 2026-09-28"
+   }
+  }
+ },
+ "conflux": {
+  "rubbleSettle": {
+   "gather": 0.5,
+   "power": 1.0
+  }
+ },
+ "shatterReason": "authenticity lane-A 2026-10-10: the DEF Death burns from f1-f2 and falls apart into a bone heap on the ground by f6-f7; the shell shatter left the chunks hanging in a body-shaped cloud in mid-air. Solid chunks + the rubbleSettle heap (h3_golem / h3_hell_hound recipe)."
+}

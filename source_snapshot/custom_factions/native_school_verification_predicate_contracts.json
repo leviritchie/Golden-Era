@@ -1,0 +1,84 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom spell-school profiles that require native school/access verification. This is static row/profile verification only; it does not prove spellbook access mutation, cast-gate behavior, prepared spell state, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresNativeSchoolVerificationProfiles": true,
+    "nativeSchoolNameMustMatchProfileRows": true,
+    "lowAndHighRowsMustShareExactEffectKeySemantics": true,
+    "staticSchoolAccessMustNotBecomeRuntimeGameplayTruth": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredStaticEvidence": [
+    "custom_factions/custom_law_effect_plan_inventory.json values.NativeSchoolName",
+    "custom_factions/custom_law_effect_plan_inventory.json values.NativeAccessShape",
+    "paired spell-low and spell-high rows for each effect key"
+  ],
+  "requiredRuntimeProof": [
+    "spellbook access mutation surface proof",
+    "spellbook UI synchronization proof",
+    "cast-gate ordering proof",
+    "hero spellbook/source school collection proof",
+    "caster law-owner correlation proof when runtime add-ons are used"
+  ],
+  "contracts": {
+    "cove.space-arcane-gunpowder-support": {
+      "expectedNativeSchoolName": "Space/Arcane",
+      "requiredHandlers": [
+        "spell.low",
+        "spell.high"
+      ],
+      "companionPredicates": [
+        "RequiresFocusCredit",
+        "RequiresGunpowderOrRangedSupport",
+        "RequiresSpellCastEvent"
+      ],
+      "forbiddenSubstitutes": [
+        "any Space school row",
+        "any Arcane school row",
+        "Storm Charts law name inference",
+        "ranged support without gunpowder or Focus predicate",
+        "spellbook UI preview"
+      ],
+      "notes": "Cove native school verification must match exact Space/Arcane profile rows; Focus, gunpowder, and cast events remain companion runtime predicates."
+    },
+    "inferno.primal-fire-gating-charge": {
+      "expectedNativeSchoolName": "Primal",
+      "requiredHandlers": [
+        "spell.low",
+        "spell.high"
+      ],
+      "companionPredicates": [
+        "RequiresGatingSacrificeOrSummon",
+        "RequiresSpellCastEvent"
+      ],
+      "forbiddenSubstitutes": [
+        "any Primal school row as fire/gating proof",
+        "fire inferred from law name",
+        "summon inferred as gating",
+        "sacrifice inferred from friendly loss",
+        "spellbook UI preview"
+      ],
+      "notes": "Inferno native school verification must match exact Primal profile rows; fire/gating/sacrifice semantics remain companion runtime predicates."
+    },
+    "tower.prepared-spellbook-reuse": {
+      "expectedNativeSchoolName": "generator-profile-school",
+      "requiredHandlers": [
+        "spell.low",
+        "spell.high"
+      ],
+      "companionPredicates": [
+        "RequiresSpellCastEvent",
+        "RequiresSpellbookReuseState"
+      ],
+      "forbiddenSubstitutes": [
+        "hardcoded Tower school",
+        "any magic school row",
+        "prepared state inferred from cooldown value",
+        "spellbook open state",
+        "spellbook UI preview"
+      ],
+      "notes": "Tower native school verification must read the generator profile school; prepared reuse state remains a separate runtime predicate."
+    }
+  }
+}

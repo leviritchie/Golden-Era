@@ -1,0 +1,29 @@
+{
+  "clip": "roc_move",
+  "defGroups": [0],
+  "mesh": "artifacts/meshy_downloads/h3_roc_smartrigged.glb",
+  "anatomyGroupsPath": "tools/homm3_silhouette_pose_fit/roc_smartrig_anatomy_groups.json",
+  "author": "llm",
+  "method": "llm_anatomy_priority_for_layer_surface",
+  "rationale": "Roc move is a flyer transit. layer_surface stays one-joint-at-a-time, but visit order must prioritize bilateral wings before trunk/neck/tail/legs so bind-depth cannot schedule legs ahead of wings. Rotation scales keep legs/tail from spending silhouette budget.",
+  "groupVisitOrder": [
+    "wing_a",
+    "wing_b",
+    "trunk",
+    "neck_head",
+    "tail",
+    "leg_a",
+    "leg_b"
+  ],
+  "rotationScaleByGroup": {
+    "wing_a": 1.0,
+    "wing_b": 1.0,
+    "trunk": 0.55,
+    "neck_head": 0.45,
+    "tail": 0.35,
+    "leg_a": 0.22,
+    "leg_b": 0.22
+  },
+  "withinGroupOrder": "dependency",
+  "proof": "authored intent for layer_surface schedule; cascade must preserve search_bones order"
+}

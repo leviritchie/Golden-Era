@@ -1,0 +1,59 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require committed reward source identity. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresCommittedRewardIdentityProfiles": true,
+    "rewardEconomyFamilyOnly": true,
+    "committedRewardSourceIdentityRequired": true,
+    "resourceMutationAloneIsNotRewardIdentity": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": [
+    "homm3_cove",
+    "homm3_stronghold"
+  ],
+  "allowedFamily": "RewardEconomy",
+  "requiredRuntimeProof": [
+    "committed reward selection or grant event proof",
+    "reward source object or battle result identity proof",
+    "reward recipient side proof",
+    "resource mutation correlation proof",
+    "law-owner and reward-recipient correlation proof",
+    "capture versus combat versus chest discriminator proof",
+    "duplicate reward application prevention proof",
+    "reward preview or offer exclusion proof"
+  ],
+  "contracts": {
+    "cove.plunder-treasure-bank-gold": {
+      "rewardIdentityKinds": [
+        "committed-plunder-or-treasure-bank-reward",
+        "defeated-neutral-reward-source"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "resource mutation counted without committed reward identity",
+        "reward preview or offer counted as committed reward",
+        "any combat victory counted as plunder reward",
+        "object category counted without reward commit proof",
+        "chest choice counted without selected reward proof"
+      ],
+      "notes": "Requires committed plunder, treasure-bank, creature-bank, or defeated-neutral reward identity before Prize Shares can grant extra gold; resource mutation and object category evidence alone are not enough."
+    },
+    "stronghold.raid-tribute-income": {
+      "rewardIdentityKinds": [
+        "committed-defeated-neutral-or-capture-reward",
+        "raid-tribute-source"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "resource mutation counted without committed reward identity",
+        "reward preview or offer counted as committed reward",
+        "any combat victory counted as plunder reward",
+        "object category counted without reward commit proof",
+        "chest choice counted without selected reward proof"
+      ],
+      "notes": "Requires committed defeated-neutral or capture reward identity before Spoils Ledger can grant raid tribute income; broad all-combat income and raw resource mutation are forbidden substitutes."
+    }
+  }
+}

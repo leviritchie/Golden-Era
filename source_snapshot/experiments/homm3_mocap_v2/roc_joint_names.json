@@ -1,0 +1,50 @@
+{
+  "unitSid": "h3_roc",
+  "mesh": "artifacts/meshy_downloads/h3_roc_smartrigged.glb",
+  "meshSha256": "F3644A01A07413441DD0081406E63C56C45EE70218D38E7A2A525864C67ACF3A",
+  "sourceFacing": [0.0, 0.0, 1.0],
+  "aliases": {
+    "Bone_000": "body root",
+    "Bone_001": "thorax keel",
+    "Bone_003": "pectoral girdle",
+    "Bone_007": "hindlimb A root",
+    "Bone_011": "hindlimb B root",
+    "Bone_013": "tail root",
+    "Bone_002": "shoulder pivot",
+    "Bone_006": "hindlimb A mid",
+    "Bone_010": "hindlimb B mid",
+    "Bone_012": "tail tip",
+    "Bone_016": "neck head root",
+    "Bone_019": "wing A shoulder",
+    "Bone_022": "wing B shoulder",
+    "Bone_005": "hindlimb A distal",
+    "Bone_009": "hindlimb B distal",
+    "Bone_015": "neck head mid",
+    "Bone_018": "wing A mid",
+    "Bone_021": "wing B mid",
+    "Bone_004": "hindlimb A tip",
+    "Bone_008": "hindlimb B tip",
+    "Bone_014": "head tip",
+    "Bone_017": "wing A tip",
+    "Bone_020": "wing B tip"
+  },
+  "aimChains": [
+    ["Bone_001", "Bone_003", "Bone_002"],
+    ["Bone_016", "Bone_015", "Bone_014"],
+    ["Bone_019", "Bone_018", "Bone_017"],
+    ["Bone_022", "Bone_021", "Bone_020"],
+    ["Bone_007", "Bone_006", "Bone_005", "Bone_004"],
+    ["Bone_011", "Bone_010", "Bone_009", "Bone_008"],
+    ["Bone_013", "Bone_012"]
+  ],
+  "loopPolicy": "idle_bookend",
+  "evidence": {
+    "anatomyGroups": "tools/homm3_silhouette_pose_fit/roc_smartrig_anatomy_groups.json",
+    "anatomyGroupsBasis": "UniRig parent chains and mesh-specific landmarks; wing/leg/head group order is retained",
+    "sourceFacingBasis": "bindAxes.ventralProof records characterForward and pale chest facing +Z",
+    "skinOwnership": "Actual h3_roc_smartrigged.glb skin influences place Bone_019/018/017 and Bone_022/021/020 on the two wing masses, Bone_007/006/005/004 and Bone_011/010/009/008 on the two hindlimb masses, and Bone_016/015/014 on the cranial chain",
+    "sideNaming": "A/B is intentional: the source evidence establishes paired ownership but does not provide a stable left/right convention for this 23-joint SmartRig",
+    "motionScope": "Semantic aliases describe existing mesh ownership only; they do not author sprite frames or alter the parent tree"
+  },
+  "proof": "geometry_audited_semantic_candidate"
+}

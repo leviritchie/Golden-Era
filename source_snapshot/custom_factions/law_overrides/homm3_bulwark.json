@@ -1,0 +1,125 @@
+{
+  "lawOverrides": {
+    "fraction_law_homm3_bulwark_1": {"iconKey": "fraction_law_nature_1_icon"},
+    "fraction_law_homm3_bulwark_2": {"iconKey": "fraction_law_nature_2_icon"},
+    "fraction_law_homm3_bulwark_3": {"iconKey": "fraction_law_nature_3_icon"},
+    "fraction_law_homm3_bulwark_5": {"iconKey": "fraction_law_nature_5_icon"},
+    "fraction_law_homm3_bulwark_6": {"iconKey": "fraction_law_nature_6_icon"},
+    "fraction_law_homm3_bulwark_7": {"iconKey": "fraction_law_nature_7_icon"},
+    "fraction_law_homm3_bulwark_8": {"iconKey": "fraction_law_nature_8_icon"},
+    "fraction_law_homm3_bulwark_9": {"iconKey": "fraction_law_nature_9_icon"},
+    "fraction_law_homm3_bulwark_10": {"iconKey": "fraction_law_nature_10_icon"},
+    "fraction_law_homm3_bulwark_12": {"iconKey": "fraction_law_nature_12_icon"},
+    "fraction_law_homm3_bulwark_13": {"iconKey": "fraction_law_nature_13_icon"},
+    "fraction_law_homm3_bulwark_14": {"iconKey": "fraction_law_nature_14_icon"},
+    "fraction_law_homm3_bulwark_15": {"iconKey": "fraction_law_nature_15_icon"},
+    "fraction_law_homm3_bulwark_16": {"iconKey": "fraction_law_nature_16_icon"},
+    "fraction_law_homm3_bulwark_18": {"iconKey": "fraction_law_nature_18_icon"},
+    "fraction_law_homm3_bulwark_19": {"iconKey": "fraction_law_nature_19_icon"},
+    "fraction_law_homm3_bulwark_21": {"iconKey": "fraction_law_nature_21_icon"},
+    "fraction_law_homm3_bulwark_22": {"iconKey": "fraction_law_nature_22_icon"},
+    "fraction_law_homm3_bulwark_23": {"iconKey": "fraction_law_nature_23_icon"},
+    "fraction_law_homm3_bulwark_25": {"iconKey": "fraction_law_nature_25_icon"},
+    "fraction_law_homm3_bulwark_27": {"iconKey": "fraction_law_nature_27_icon"},
+    "fraction_law_homm3_bulwark_28": {"iconKey": "fraction_law_nature_28_icon"},
+    "fraction_law_homm3_bulwark_29": {"iconKey": "fraction_law_nature_29_icon"},
+    "fraction_law_homm3_bulwark_32": {"iconKey": "fraction_law_nature_32_icon"},
+    "fraction_law_homm3_bulwark_33": {"iconKey": "fraction_law_nature_33_icon"},
+    "fraction_law_homm3_bulwark_34": {"iconKey": "fraction_law_nature_34_icon"},
+    "fraction_law_homm3_bulwark_4": {
+      "enabled": true,
+      "nameText": "Resource Riches I",
+      "descriptionText": "Provides 2500 Gold, 5 Wood, and 5 Ore when enacted.",
+      "parametersPerLevel": [{"cost": 1, "bonuses": [
+        {"type": "sideOneTimeAddRes", "parameters": ["gold", "2500"]},
+        {"type": "sideOneTimeAddRes", "parameters": ["wood", "5"]},
+        {"type": "sideOneTimeAddRes", "parameters": ["ore", "5"]}
+      ]}],
+      "iconKey": "fraction_law_nature_4_icon",
+      "notes": "Olden Era integration law copied from the Nature donor's Core-native row. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+    },
+    "fraction_law_homm3_bulwark_11": {
+      "enabled": true,
+      "nameText": "Mountain Wildness",
+      "descriptionText": "Friendly creatures deal 25%/50% more damage with Lucky Strikes by rank.",
+      "parametersPerLevel": [
+        {"cost": 2, "bonuses": [{"type": "unitStat", "parameters": ["crit", "0.25"]}]},
+        {"cost": 2, "bonuses": [{"type": "unitStat", "parameters": ["crit", "0.50"]}]}
+      ],
+      "iconKey": "fraction_law_nature_11_icon",
+      "notes": "Olden Era integration law using exact Core-native Nature bonus rows. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+    },
+    "fraction_law_homm3_bulwark_17": {
+      "enabled": true,
+      "nameText": "Hold the High Ground",
+      "descriptionText": "When battling in the area you control, friendly creatures gain +2/+4/+6 Attack and Defense by rank.",
+      "parametersPerLevel": [
+        {"cost": 2, "bonuses": [
+          {"type": "unitStat", "receiverAllegiance": "ally", "actionArea": "allied", "parameters": ["offence", "2"]},
+          {"type": "unitStat", "receiverAllegiance": "ally", "actionArea": "allied", "parameters": ["defence", "2"]}
+        ]},
+        {"cost": 2, "bonuses": [
+          {"type": "unitStat", "receiverAllegiance": "ally", "actionArea": "allied", "parameters": ["offence", "4"]},
+          {"type": "unitStat", "receiverAllegiance": "ally", "actionArea": "allied", "parameters": ["defence", "4"]}
+        ]},
+        {"cost": 2, "bonuses": [
+          {"type": "unitStat", "receiverAllegiance": "ally", "actionArea": "allied", "parameters": ["offence", "6"]},
+          {"type": "unitStat", "receiverAllegiance": "ally", "actionArea": "allied", "parameters": ["defence", "6"]}
+        ]}
+      ],
+      "iconKey": "fraction_law_nature_17_icon",
+      "notes": "Olden Era integration law using exact Core-native territorial stat rows. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+    },
+    "fraction_law_homm3_bulwark_20": {
+      "enabled": true,
+      "nameText": "Mountain Homesteads",
+      "descriptionText": "Creature growth of your external dwellings increases by 50%/100% by rank.",
+      "parametersPerLevel": [
+        {"cost": 4, "bonuses": [{"type": "barrackUnitsIncrementPer", "parameters": ["all", "0.5"]}]},
+        {"cost": 4, "bonuses": [{"type": "barrackUnitsIncrementPer", "parameters": ["all", "1.0"]}]}
+      ],
+      "iconKey": "fraction_law_nature_20_icon",
+      "notes": "Olden Era integration law using exact Core-native external-dwelling growth rows. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+    },
+    "fraction_law_homm3_bulwark_24": {
+      "enabled": true,
+      "nameText": "Fortune of the Clans",
+      "descriptionText": "Friendly creatures gain +1%/+2%/+3% Lucky Strike chance per point of Luck by rank.",
+      "parametersPerLevel": [
+        {"cost": 2, "bonuses": [{"type": "unitStat", "parameters": ["critChanceModifier", "0.01"]}]},
+        {"cost": 2, "bonuses": [{"type": "unitStat", "parameters": ["critChanceModifier", "0.02"]}]},
+        {"cost": 2, "bonuses": [{"type": "unitStat", "parameters": ["critChanceModifier", "0.03"]}]}
+      ],
+      "iconKey": "fraction_law_nature_24_icon",
+      "notes": "Olden Era integration law using exact Core-native Luck rows. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+    },
+    "fraction_law_homm3_bulwark_26": {
+      "enabled": true,
+      "nameText": "Resource Riches III",
+      "descriptionText": "Provides 7500 Gold, 15 Wood, and 15 Ore when enacted.",
+      "parametersPerLevel": [{"cost": 3, "bonuses": [
+        {"type": "sideOneTimeAddRes", "parameters": ["gold", "7500"]},
+        {"type": "sideOneTimeAddRes", "parameters": ["wood", "15"]},
+        {"type": "sideOneTimeAddRes", "parameters": ["ore", "15"]}
+      ]}],
+      "iconKey": "fraction_law_nature_26_icon",
+      "notes": "Olden Era integration law copied from the Nature donor's Core-native row. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+    },
+    "fraction_law_homm3_bulwark_30": {
+      "enabled": true,
+      "nameText": "Clear Mountain Sky",
+      "descriptionText": "Produces 250 Astrology Points daily.",
+      "parametersPerLevel": [{"cost": 1, "bonuses": [{"type": "astrologyExp", "parameters": ["250", "0.0"]}]}],
+      "iconKey": "fraction_law_nature_30_icon",
+      "notes": "Olden Era integration law using the exact Core-native Astrology row. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+    },
+    "fraction_law_homm3_bulwark_31": {
+      "enabled": true,
+      "nameText": "Runic Serenity",
+      "descriptionText": "The cooldowns of all battle spells of your heroes are reduced by 1 round.",
+      "parametersPerLevel": [{"cost": 4, "bonuses": [{"type": "heroStat", "parameters": ["magicCdBonus", "-1"]}]}],
+      "iconKey": "fraction_law_nature_31_icon",
+      "notes": "Olden Era integration law using the exact Core-native cooldown row. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+    }
+  }
+}

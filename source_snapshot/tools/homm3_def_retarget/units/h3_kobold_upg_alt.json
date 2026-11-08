@@ -1,0 +1,348 @@
+{
+ "unit": "h3_kobold_upg_alt",
+ "joints": {
+  "Hips": [
+   -0.01,
+   -0.024,
+   0.589
+  ],
+  "Spine": [
+   -0.017,
+   -0.075,
+   0.745
+  ],
+  "Spine1": [
+   -0.024,
+   -0.126,
+   0.9
+  ],
+  "Spine2": [
+   -0.032,
+   -0.183,
+   1.075
+  ],
+  "Neck": [
+   -0.038,
+   -0.227,
+   1.212
+  ],
+  "Head": [
+   -0.038,
+   -0.234,
+   1.225
+  ],
+  "HeadTop_End": [
+   -0.094,
+   -0.584,
+   1.449
+  ],
+  "LeftShoulder": [
+   0.048,
+   -0.145,
+   1.057
+  ],
+  "LeftArm": [
+   0.234,
+   -0.108,
+   1.037
+  ],
+  "LeftForeArm": [
+   0.353,
+   -0.087,
+   0.799
+  ],
+  "LeftHand": [
+   0.346,
+   -0.171,
+   0.603
+  ],
+  "LeftHand_End": [
+   0.37,
+   -0.26,
+   0.44
+  ],
+  "RightShoulder": [
+   -0.097,
+   -0.086,
+   1.064
+  ],
+  "RightArm": [
+   -0.248,
+   0.01,
+   1.044
+  ],
+  "RightForeArm": [
+   -0.402,
+   -0.066,
+   0.834
+  ],
+  "RightHand": [
+   -0.325,
+   -0.255,
+   0.89
+  ],
+  "RightHand_End": [
+   -0.255,
+   -0.339,
+   0.981
+  ],
+  "LeftUpLeg": [
+   0.129,
+   -0.08,
+   0.526
+  ],
+  "LeftLeg": [
+   0.192,
+   -0.213,
+   0.352
+  ],
+  "LeftFoot": [
+   0.227,
+   -0.087,
+   0.121
+  ],
+  "LeftToeBase": [
+   0.346,
+   -0.22,
+   0.002
+  ],
+  "LeftToe_End": [
+   0.43,
+   -0.318,
+   0.044
+  ],
+  "RightUpLeg": [
+   -0.157,
+   0.024,
+   0.526
+  ],
+  "RightLeg": [
+   -0.255,
+   0.017,
+   0.31
+  ],
+  "RightFoot": [
+   -0.248,
+   0.199,
+   0.121
+  ],
+  "RightToeBase": [
+   -0.339,
+   0.059,
+   -0.012
+  ],
+  "RightToe_End": [
+   -0.395,
+   -0.094,
+   0.03
+  ]
+ },
+ "props": [
+  {
+   "name": "pick",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.17,
+      0.19,
+      1.56
+     ],
+     [
+      -0.26,
+      -0.38,
+      0.85
+     ]
+    ]
+   ],
+   "radius": 0.045
+  },
+  {
+   "name": "pickhead",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.18,
+      0.4,
+      1.38
+     ],
+     [
+      -0.18,
+      0.2,
+      1.57
+     ]
+    ],
+    [
+     [
+      -0.18,
+      0.2,
+      1.57
+     ],
+     [
+      -0.18,
+      -0.19,
+      1.71
+     ]
+    ]
+   ],
+   "radius": 0.06
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.12
+ },
+ "extensions": [
+  "bulwark_limbcut",
+  "fortress_rig"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.9,
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.9,
+   "keepDist": 0.12
+  }
+ ],
+ "strideMatch": {
+  "maxDrop": 0.35,
+  "reason": "short-reach walker (legs near straight at the source Move): default 0.15: slip 0.712 ratio 1.99; 0.30: ratio 1.351 (thin); 0.35: slip 0.531 ratio 1.272 (workerB scratch trials 2026-09-27)"
+ },
+ "fortress": {
+  "chains": [
+   {
+    "name": "Tail",
+    "parent": "Hips",
+    "points": [
+     [
+      0.03,
+      0.215,
+      0.37
+     ],
+     [
+      0.015,
+      0.212,
+      0.3
+     ],
+     [
+      0.01,
+      0.245,
+      0.23
+     ],
+     [
+      -0.01,
+      0.275,
+      0.15
+     ],
+     [
+      -0.045,
+      0.335,
+      0.08
+     ],
+     [
+      -0.085,
+      0.393,
+      0.043
+     ],
+     [
+      -0.115,
+      0.465,
+      0.05
+     ],
+     [
+      -0.15,
+      0.555,
+      0.135
+     ]
+    ],
+    "radius": 0.1,
+    "rootBlend": 0.12,
+    "ratio": 1.0,
+    "geodesic": 0.6
+   }
+  ],
+  "chainsReason": "2026-09-30: the tail lies on the floor behind the feet and bone heat split it between both thighs and the hips, so a swinging thigh dragged it under the Idle floor and ground_glb refused the stride-matched Move (P2: planted soles lifted +0.14/+0.13 H, lowest other point RightUpLeg-owned). A Hips-parented tail chain with surface (geodesic 0.6) ownership, as the Fortress tails; centreline traced over the welded surface from the tail tip."
+ },
+ "glbPatch": {
+  "reason": "authenticity lane B 2026-10-11: AttackFront lifts the pick high over the head at f3 before the chop, like the DEF",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_kobold_upg_alt_arm_weights.json",
+    "sha256": "0b816470dd2023cc85b5514ab8a2ffa32ec955ca46744ca9647b5fc477718ce6",
+    "note": "shoulder weight re-solve (wsolve --newonly, GPU) on the edges the overhead raise tears"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_kobold_upg_alt_attack_pick_overhead_rot.json",
+    "regrid": true,
+    "sha256": "20bf85ecd235dcc1ba4ed763c4af8c1a41b89245c61acdeb8851eafe601ddb30"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_kobold_upg_alt_attack_pick_overhead_rot.json",
+    "regrid": true,
+    "sha256": "20bf85ecd235dcc1ba4ed763c4af8c1a41b89245c61acdeb8851eafe601ddb30"
+   }
+  ]
+ }
+}

@@ -1,0 +1,47 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contract for Inferno law profiles that require exact gated-entry identity semantics. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "contractsMustMatchExactPredicateProfiles": true,
+    "infernoOnly": true,
+    "trainingDamageOnly": true,
+    "gatedEntryIdentityRequired": true,
+    "permanentRecruitedUnitSubstituteForbidden": true,
+    "gatedOrSummonedUnitTagShortcutForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": ["homm3_inferno"],
+  "contracts": {
+    "RequiresGatedIdentity": {
+      "allowedFamilies": ["TrainingDamage"],
+      "requiredEffectKeys": ["inferno.gated-entry-damage"],
+      "requiredRuntimeSemantics": [
+        "gating spawn or entry identity",
+        "acting gated stack identity",
+        "permanent recruited unit exclusion",
+        "law-owner side correlation",
+        "committed damage ordering"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "Inferno faction membership counted as gated entry identity",
+        "gatedOrSummoned unit tag counted as gated entry proof",
+        "permanent recruited Inferno unit counted as gated entry identity",
+        "teleport movement counted as gated entry identity without Gating spawn proof",
+        "summoned unit existence without entry transaction proof counted as gated identity",
+        "fire damage or fire spell counted as gated identity",
+        "damage event without acting gated stack proof counted as gated identity"
+      ],
+      "notes": "Infernal Ascension requires exact Gating spawn/entry identity before gated-entry damage can apply. Unit tags, Inferno membership, fire theming, teleport movement, and ordinary damage events are context only; gameplay still requires entry transaction identity, acting stack identity, owner correlation, permanent recruited unit exclusion, committed damage ordering, and idempotence proof."
+    }
+  },
+  "requiredRuntimeProof": [
+    "gating spawn or entry transaction proof",
+    "acting gated stack identity proof",
+    "permanent recruited unit exclusion proof",
+    "law-owner side correlation proof",
+    "committed damage ordering proof",
+    "idempotent per-entry or per-attack application proof"
+  ]
+}

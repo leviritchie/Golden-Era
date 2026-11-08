@@ -1,0 +1,406 @@
+{
+ "unit": "h3_arch_demon",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.13,
+   0.847
+  ],
+  "Spine": [
+   0.0,
+   0.14,
+   0.95
+  ],
+  "Spine1": [
+   0.0,
+   0.14,
+   1.05
+  ],
+  "Spine2": [
+   0.0,
+   0.14,
+   1.16
+  ],
+  "Neck": [
+   0.0,
+   0.13,
+   1.3
+  ],
+  "Head": [
+   0.0,
+   0.11,
+   1.39
+  ],
+  "HeadTop_End": [
+   0.0,
+   0.1,
+   1.58
+  ],
+  "LeftShoulder": [
+   0.07,
+   0.14,
+   1.25
+  ],
+  "LeftArm": [
+   0.2,
+   0.13,
+   1.26
+  ],
+  "LeftForeArm": [
+   0.29,
+   0.06,
+   1.03
+  ],
+  "LeftHand": [
+   0.21,
+   -0.09,
+   1.22
+  ],
+  "LeftHand_End": [
+   0.17,
+   -0.14,
+   1.31
+  ],
+  "RightShoulder": [
+   -0.07,
+   0.14,
+   1.25
+  ],
+  "RightArm": [
+   -0.2,
+   0.13,
+   1.26
+  ],
+  "RightForeArm": [
+   -0.248,
+   0.052,
+   1.014
+  ],
+  "RightHand": [
+   -0.225,
+   -0.09,
+   0.79
+  ],
+  "RightHand_End": [
+   -0.14,
+   -0.15,
+   0.71
+  ],
+  "LeftUpLeg": [
+   0.101,
+   0.122,
+   0.777
+  ],
+  "LeftLeg": [
+   0.178,
+   -0.024,
+   0.435
+  ],
+  "LeftFoot": [
+   0.192,
+   0.08,
+   0.086
+  ],
+  "LeftToeBase": [
+   0.192,
+   -0.024,
+   0.016
+  ],
+  "LeftToe_End": [
+   0.192,
+   -0.129,
+   -0.053
+  ],
+  "RightUpLeg": [
+   -0.108,
+   0.122,
+   0.777
+  ],
+  "RightLeg": [
+   -0.129,
+   0.024,
+   0.414
+  ],
+  "RightFoot": [
+   -0.157,
+   0.157,
+   0.065
+  ],
+  "RightToeBase": [
+   -0.157,
+   0.038,
+   -0.005
+  ],
+  "RightToe_End": [
+   -0.157,
+   -0.08,
+   -0.074
+  ]
+ },
+ "extensions": [
+  "inferno_teleport",
+  "inferno_leash",
+  "floater_fix"
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "props": [
+  {
+   "name": "scythe",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.2,
+      -0.13,
+      1.38
+     ],
+     [
+      0.073,
+      -0.13,
+      1.0
+     ]
+    ],
+    [
+     [
+      0.073,
+      -0.13,
+      1.0
+     ],
+     [
+      -0.16,
+      -0.13,
+      0.59
+     ]
+    ],
+    [
+     [
+      -0.16,
+      -0.13,
+      0.59
+     ],
+     [
+      -0.27,
+      -0.14,
+      0.22
+     ]
+    ],
+    [
+     [
+      -0.27,
+      -0.14,
+      0.22
+     ],
+     [
+      -0.3,
+      -0.16,
+      0.2
+     ]
+    ],
+    [
+     [
+      -0.3,
+      -0.16,
+      0.2
+     ],
+     [
+      -0.21,
+      -0.26,
+      0.26
+     ]
+    ],
+    [
+     [
+      -0.21,
+      -0.26,
+      0.26
+     ],
+     [
+      -0.14,
+      -0.32,
+      0.3
+     ]
+    ],
+    [
+     [
+      -0.14,
+      -0.32,
+      0.3
+     ],
+     [
+      -0.1,
+      -0.35,
+      0.38
+     ]
+    ],
+    [
+     [
+      -0.1,
+      -0.35,
+      0.38
+     ],
+     [
+      -0.06,
+      -0.36,
+      0.48
+     ]
+    ]
+   ],
+   "radius": 0.08
+  },
+  {
+   "name": "scythe_blade",
+   "bone": "LeftHand",
+   "box": [
+    [
+     -0.34,
+     -0.4,
+     0.13
+    ],
+    [
+     -0.04,
+     -0.12,
+     0.52
+    ]
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "teleport": {
+  "out": [
+   "MoveStart",
+   4,
+   7
+  ],
+  "in": [
+   "MoveEnd",
+   5,
+   8
+  ]
+ },
+ "shrinkOut": {
+  "start": 3
+ },
+ "limbLeash": {
+  "bones": [
+   "LeftArm",
+   "LeftForeArm",
+   "LeftHand",
+   "RightArm",
+   "RightForeArm",
+   "RightHand"
+  ],
+  "maxDist": 0.15,
+  "nearestOnly": true,
+  "boneMaxDist": {
+   "LeftHand": 0.07,
+   "RightHand": 0.07
+  },
+  "maxDistAll": 0.35,
+  "handSplit": true,
+  "partition": [
+   "RightUpLeg",
+   "LeftUpLeg",
+   "RightLeg",
+   "LeftLeg",
+   "Hips",
+   "Spine1",
+   "Spine2",
+   "LeftShoulder",
+   "RightShoulder"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "sourceMesh": "artifacts/homm3_mesh_surgery/h3_arch_demon_sliver_s1.glb",
+ "sliverCollapse": {
+  "tool": "tools/homm3_def_retarget/sliver_collapse.py",
+  "input": "artifacts/meshy_downloads/h3_arch_demon_smartrigged.glb",
+  "targets": "tools/homm3_def_retarget/sliver_targets_h3_arch_demon.json",
+  "args": "--max-len 0.005 --near 0.0015 --min-dot 0.3",
+  "record": "artifacts/homm3_mesh_surgery/h3_arch_demon_sliver_s1.surgery.json",
+  "note": "2026-10-10 lane-A: a 1 mm Meshy sliver at the back of the right armpit (RightArm 0.57 / RightShoulder 0.27 / Spine1 0.11 on both ends) was blown to 37x its rest length by the corrective smooth in the Defence guard (t 0.583), with a 3.9 mm neighbour at 9.9x; both collapsed at their midpoints (2 collapses, max vertex move 1.8 mm, 7012 -> 7008 vertices, no face flips). Re-weighting cannot help: the ends already share their weights."
+ },
+ "glbPatch": {
+  "reason": "authenticity lane-A 2026-10-10: DEF g12 scythe strike (arch devil spec ported; shaft axis re-measured on this scythe from the shaft segment of the props polyline): the capture swung the scythe one-handed and let it hang. AttackFront levels the scythe two-handed pointing back (f1), swings it up over the shoulder (f2-f3), sweeps it forward at the waist with a forward lean (f4) and follows through down-front (f5-f7); the shaft aim is split between LeftForeArm (0.8) and LeftHand so the wrist does not break. Defence (g04 guard): the torso leans back away from the blow f2-f8, and LeftHand is then held at its f0 world orientation so the scythe stays upright against the body (the capture flailed it out behind f3-f5 and up overhead f7). keyRotations half offset, applied twice; stretchRelax on AttackFront. || defenceStepBack (lane B 2026-10-10): Defence backs off 0.42 (Hips, f1-f9 ramp) with the torso leaning back 12 deg, as the DEF steps back and guards",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_arch_demon_scythe_rot.json",
+    "sha256": "ece8b49c3752a21d41dc8d7f7dc2c6353a28d2001de6d4764f73100ad82b0c90",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_arch_demon_scythe_rot.json",
+    "sha256": "ece8b49c3752a21d41dc8d7f7dc2c6353a28d2001de6d4764f73100ad82b0c90",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_arch_demon_defence_stepback_tr.json",
+    "sha256": "e4cbc251b09f95b4bf28fecf422c2c4c295ce1564e0722906a06a9c344f56140",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_arch_demon_defence_stepback_rot.json",
+    "sha256": "c30dddfcea27497c73d2382c3ba51cbe8b40abbff29361d31bf5a3f90621e8e5"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.4,
+    "maxMove": 0.08
+   }
+  ]
+ },
+ "floaterFix": {
+  "k": 8,
+  "maxVerts": 400,
+  "stage": "before_keys",
+  "pieces": [
+   {
+    "point": [
+     -0.09772,
+     -0.05907,
+     0.66336
+    ],
+    "from": "LeftHand",
+    "weights": "vertex",
+    "note": "2026-10-10 lane B: 6-vert thigh sliver cut onto LeftHand (sits on RightUpLeg; 4.8 cm open in Idle): nearest thigh surface weights"
+   },
+   {
+    "point": [
+     0.14843,
+     -0.0239,
+     1.34171
+    ],
+    "from": "LeftShoulder",
+    "note": "2026-10-10 lane B: 38-vert forearm-face sliver cut onto LeftShoulder (rest forearm is bent up by the shoulder; 2.5 cm open in Mouseover f8): k-mean surface weights (LeftForeArm)"
+   },
+   {
+    "point": [
+     0.09165,
+     -0.07351,
+     1.30605
+    ],
+    "from": "LeftShoulder",
+    "note": "2026-10-10 lane B: same, 15 verts"
+   }
+  ]
+ }
+}

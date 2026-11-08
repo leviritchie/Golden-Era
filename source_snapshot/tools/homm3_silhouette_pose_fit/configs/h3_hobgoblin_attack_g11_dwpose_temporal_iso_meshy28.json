@@ -1,0 +1,53 @@
+{
+  "unitSid": "h3_hobgoblin",
+  "clipId": "attack_g11",
+  "fps": 12,
+  "method": "dwpose_reprojection",
+  "masterGlb": "artifacts/hobgoblin_attack_pose_pipeline/master/Meshy_AI_Character_output_2.glb",
+  "outputDir": "artifacts/hobgoblin_attack_pose_pipeline/out_attack_g11_dwpose_temporal_iso_meshy28",
+  "boneRoles": "tools/homm3_silhouette_pose_fit/bone_roles_unirig_hobgoblin_meshy28.json",
+  "camera": {
+    "axis": "iso",
+    "isoAzimuthDeg": 40.0,
+    "isoElevationDeg": 30.0,
+    "distance": 3.0,
+    "orthoScale": 2.6,
+    "rootYawDeg": 0.0
+  },
+  "dwpose": {
+    "longEdges": [1024, 1280, 1536],
+    "backgrounds": [[0, 0, 0], [32, 32, 32], [180, 180, 180]],
+    "minMeanBodyScore": 0.14,
+    "minVisibleJoints": 8,
+    "scoreThr": 0.18,
+    "requireVerticalLegs": false
+  },
+  "temporalSmooth": {
+    "enabled": true,
+    "method": "score_weighted_gaussian",
+    "window": 5,
+    "sigma": 1.25,
+    "scorePower": 1.0
+  },
+  "keypointOptimizer": {
+    "boundRad": 0.85,
+    "restWeight": 0.08,
+    "motionWeight": 0.20,
+    "identityFrame0": true,
+    "maxiter": 200,
+    "maxfev": 700,
+    "restarts": 6,
+    "seed": 7
+  },
+  "frames": [
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_00.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_01.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_02.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_03.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_04.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_05.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_06.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_07.png" }
+  ],
+  "notes": "Meshy28 + iso + identityFrame0. DWPose + Gaussian track smooth + motionWeight (no MotionBERT/RIFE)."
+}

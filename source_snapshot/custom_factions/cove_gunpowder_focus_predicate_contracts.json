@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for Cove gunpowder, ranged support, Focus, and reload predicates. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "allContractsMustMatchExactRequiresPredicateProfiles": true,
+    "coveOnly": true,
+    "gunpowderUsesAuthoredUnitFactsOnly": true,
+    "pirateNameInferenceForbidden": true,
+    "focusCreditRequiresCommittedCreditEvent": true,
+    "reloadRequiresExactAbilityOrEventIdentity": true,
+    "rangedSupportRequiresShooterRoleEvidence": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": ["homm3_cove"],
+  "contracts": {
+    "RequiresGunpowderOrPirate": {
+      "allowedFamilies": ["Formation"],
+      "requiredEffectKeys": ["cove.first-gunpowder-volley", "cove.pirate-adjacent-shooter-protection"],
+      "requiredStaticFacts": ["unit_family_tags.gunpowder=yes"],
+      "futureStaticFacts": ["exact pirate-family classifier may be added only as authored data, never from SID/name text"],
+      "companionPredicates": ["RequiresFocusOrReload"],
+      "forbiddenSubstitutes": [
+        "unit SID or display name containing pirate counted as pirate classifier",
+        "Cove faction membership counted as gunpowder or pirate",
+        "shooter role counted as gunpowder or pirate",
+        "law name or icon counted as unit classifier",
+        "battle payload counted without exact unit SID classifier proof"
+      ],
+      "notes": "Gunpowder/Pirate predicates currently have exact authored gunpowder=yes unit facts for the Cove gunpowder shooter line. Pirate-specific classification is not a separate current fact and must not be inferred from names."
+    },
+    "RequiresFocusOrReload": {
+      "allowedFamilies": ["Formation"],
+      "requiredEffectKeys": ["cove.first-gunpowder-volley", "cove.pirate-adjacent-shooter-protection"],
+      "requiredRuntimeSemantics": ["committed Focus event", "exact reload ability or reload event identity"],
+      "companionPredicates": ["RequiresGunpowderOrPirate"],
+      "forbiddenSubstitutes": [
+        "hero energy pool existence counted as Focus event",
+        "ability config existence counted as reload event",
+        "ranged attack counted as reload",
+        "turn start counted as Focus or reload without exact event proof",
+        "gunpowder unit classifier counted as Focus or reload"
+      ],
+      "notes": "Focus/reload is an event identity predicate. Static energy/ability surfaces can prepare diagnostics, but gameplay needs committed Focus credit/spend or exact reload event proof."
+    },
+    "RequiresGunpowderOrRangedSupport": {
+      "allowedFamilies": ["SpellSchool"],
+      "requiredEffectKeys": ["cove.space-arcane-gunpowder-support"],
+      "requiredStaticFacts": ["unit_family_tags.gunpowder=yes", "unit_family_tags.shooter=yes"],
+      "companionPredicates": ["RequiresFocusCredit", "RequiresNativeSchoolVerification", "RequiresSpellCastEvent"],
+      "forbiddenSubstitutes": [
+        "Space or Arcane school access counted as gunpowder or ranged support",
+        "generic support spell counted as ranged support",
+        "Cove faction membership counted as gunpowder or ranged support",
+        "shooter role counted as gunpowder without gunpowder fact",
+        "spell cast event counted without supporting unit or Focus correlation"
+      ],
+      "notes": "Storm Charts support requires exact gunpowder or ranged-support semantics. Static unit role facts can prepare the classifier, but runtime still needs supporting unit/side correlation and spell-cast ordering."
+    },
+    "RequiresFocusCredit": {
+      "allowedFamilies": ["SpellSchool"],
+      "requiredEffectKeys": ["cove.space-arcane-gunpowder-support"],
+      "requiredRuntimeSemantics": ["committed Focus credit", "credit recipient side or hero identity", "credit ordering after qualifying spell/support event"],
+      "companionPredicates": ["RequiresGunpowderOrRangedSupport", "RequiresNativeSchoolVerification", "RequiresSpellCastEvent"],
+      "forbiddenSubstitutes": [
+        "hero energy pool existence counted as Focus credit",
+        "Focus UI value counted without committed credit event",
+        "spell cast event counted as Focus credit",
+        "gunpowder support classifier counted as Focus credit",
+        "side energy payload counted without recipient and ordering proof"
+      ],
+      "notes": "Focus credit is a committed resource/event predicate. Static energy payload surfaces are preparation only; gameplay requires recipient identity, ordering, and idempotence proof."
+    }
+  },
+  "requiredRuntimeProof": [
+    "battle unit SID to authored classifier correlation proof",
+    "law-owner side correlation proof",
+    "committed Focus credit event proof",
+    "Focus recipient identity proof",
+    "exact reload ability or event proof",
+    "ranged support actor identity proof",
+    "spell-cast to support/Focus ordering proof",
+    "idempotent per-action application proof"
+  ]
+}

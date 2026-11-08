@@ -1,0 +1,53 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "conflux_vanilla_style_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/conflux_vanilla_style_slice_v1",
+  "note": "User-approved rebuild (coordinator relay 2026-09-28, build agent report): re-frozen from the current canonical (OK fleet_rebuild, current idle retime); mesh identity attested by source_mesh_identity.attest, look stamp equals the canonical. Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_storm_elemental 0.266. Carried over unchanged: h3_fire_elemental. | look B (vanilla philosophy finish, finish.py; look.py --stages finish,apply), animation unchanged Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_storm_elemental 0.266. Carried over unchanged: h3_fire_elemental. | look-only re-freeze on the ground-stamped canonical (fleet_rebuild ground_glb apply; coordinator item 3) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_fire_elemental 0.1974. Carried over unchanged: h3_storm_elemental. | lane B batch 5: storm AttackFront arms overhead + arm weights, fire solid shatter Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_storm_elemental 0.2749, h3_fire_elemental 0.1974.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_fire_elemental",
+      "gameSid": "h3_fire_elemental",
+      "bundleName": "custom_units_conflux_h3_fire_elemental",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "c4529f8561841f03d3c52d9f8507da08f4147bf2ff5d8bb0a6a81bf4fbbdcc02",
+      "identityReview": "c4529f8561841f03d3c52d9f8507da08f4147bf2ff5d8bb0a6a81bf4fbbdcc02",
+      "vfxAuthority": "vanilla_style",
+      "vanillaStyleSpec": "tools/homm3_vfx/vanilla_style/units/h3_fire_elemental.json",
+      "mergeMeshes": {
+        "h3_fire_elemental_Rubble": "the death shatter's rubble mesh (build_unit.py shatter) is merged into the body primitive at prepare (merge_rubble_glb.py): one SkinnedMeshRenderer, the Chunk bones already in its bone list, zero offsets for every corrective morph, so the death breaks into falling chunks in game instead of vanishing"
+      },
+      "frozen": {
+        "lookDeliveredGlbSha256": "8cfe19796f195e4840389ac2d5f7ae71456f486c277e434803a30c88dbbba7b0",
+        "idleRetimedGlbSha256": "4dfdd4f825384db1ed00ca5266b406d4f07fb526b34e52fffc03a09bad34d601",
+        "vfxManifestSha256": "30f2fadb0198127419056428366a60a0159da41c2b4fdd8c152fb95d48a3a43f",
+        "specSha256": "c7fffbdeea636b4b313c819d1e33dfbb5bd887bbca02ccc8567d16059f64833f",
+        "basecolorSha256": "2e71ed6958b54658423850f4908600190e1244dcfb0d1bdee3d22a3d81be0b2a"
+      }
+    },
+    {
+      "labSid": "h3_storm_elemental",
+      "gameSid": "h3_air_elemental_upg",
+      "bundleName": "custom_units_conflux_h3_storm_elemental",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "c4a32dd4791153365d17f1ca01c8f6f7a7d013d30809e9ea8be648f005111da8",
+      "identityReview": "none",
+      "vfxAuthority": "vanilla_style",
+      "vanillaStyleSpec": "tools/homm3_vfx/vanilla_style/units/h3_storm_elemental.json",
+      "frozen": {
+        "lookDeliveredGlbSha256": "4127cee87cee6ac983fb6d98d705f7819e85eee8e935c50b0117dfb4c8bdc331",
+        "idleRetimedGlbSha256": "99d4dcc22e267c277f2196beeeb4aec2d33e6265f44fed59d3ed38c5ff5deb0f",
+        "vfxManifestSha256": "541890d6d936ad2eacf5514bca2cac15723525182efeec7199502ce3e5182927",
+        "specSha256": "c2626e43ea7594442a34b6873fc123aacb5e8709118d31d216928904fd7a3375",
+        "basecolorSha256": "c75a651e93578949958d87b86b11f5acbf9a8178362b3699ecc4b71a26123174"
+      }
+    }
+  ]
+}

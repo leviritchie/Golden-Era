@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom Necropolis law profiles that require corpse or casualty context. This records Necropolis undead/casualty semantics only; it does not prove corpse availability, casualty accounting, battle result ordering, corpse consumption, raise consumption, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresCorpseOrCasualtyContextProfiles": true,
+    "necropolisOnly": true,
+    "undeadFactMustComeFromUnitFamilyTags": true,
+    "undeadIdentityIsNotCorpseAvailability": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredStaticEvidence": {
+    "manifestPath": "custom_factions/homm3_necropolis.json",
+    "unitFamilyTagsPath": "custom_factions/unit_family_tags.json",
+    "factionSid": "homm3_necropolis",
+    "requiredNecropolisBaseSids": [
+      "h3_skeleton",
+      "h3_walking_dead",
+      "h3_wight",
+      "h3_vampire",
+      "h3_lich",
+      "h3_black_knight",
+      "h3_bone_dragon"
+    ],
+    "requiredUndeadUnitSids": [
+      "h3_skeleton",
+      "h3_skeleton_upg",
+      "h3_skeleton_upg_alt",
+      "h3_walking_dead",
+      "h3_walking_dead_upg",
+      "h3_walking_dead_upg_alt",
+      "h3_wight",
+      "h3_wight_upg",
+      "h3_wight_upg_alt",
+      "h3_vampire",
+      "h3_vampire_upg",
+      "h3_vampire_upg_alt",
+      "h3_lich",
+      "h3_lich_upg",
+      "h3_lich_upg_alt",
+      "h3_black_knight",
+      "h3_black_knight_upg",
+      "h3_black_knight_upg_alt",
+      "h3_bone_dragon",
+      "h3_bone_dragon_upg",
+      "h3_bone_dragon_upg_alt"
+    ],
+    "requiredFact": "undead=yes",
+    "corpseProducingFactPolicy": "must remain runtime-unproven unless exact corpse production evidence is added"
+  },
+  "requiredRuntimeProof": [
+    "battle casualty result proof",
+    "corpse availability or corpse site proof",
+    "friendly versus enemy casualty ownership proof",
+    "permanent casualty versus temporary summon loss proof",
+    "corpse accounting idempotence proof",
+    "corpse or casualty consumption ordering proof",
+    "law owner to battle or reward context correlation proof"
+  ],
+  "contracts": {
+    "necropolis.casualty-corpse-accounting": {
+      "corpseKinds": [
+        "reward-economy-casualty-accounting",
+        "corpse-context-runtime-required"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "undead unit identity counted as corpse availability",
+        "generic death event counted as corpse context",
+        "temporary summoned loss counted as permanent casualty",
+        "battle result loser row counted without casualty ownership proof",
+        "SID substring undead inference",
+        "display-name corpse inference"
+      ],
+      "notes": "Necropolis casualty corpse accounting requires runtime casualty and corpse context proof; authored undead identity is static evidence only and is not corpse availability."
+    },
+    "necropolis.corpse-raise-death-moon": {
+      "corpseKinds": [
+        "reward-economy-corpse-raise-context",
+        "corpse-context-runtime-required"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "undead unit identity counted as corpse availability",
+        "generic death event counted as corpse context",
+        "raise spell text counted as corpse consumption",
+        "temporary summoned loss counted as permanent casualty",
+        "SID substring undead inference",
+        "display-name corpse inference"
+      ],
+      "notes": "Necropolis corpse raise death moon behavior requires runtime corpse availability and raise/casualty context proof; spell text or undead identity is not enough."
+    },
+    "necropolis.night-corpse-rite": {
+      "corpseKinds": [
+        "spell-school-night-corpse-rite-context",
+        "corpse-context-runtime-required"
+      ],
+      "companionPredicates": [
+        "RequiresSpellCastEvent"
+      ],
+      "forbiddenSubstitutes": [
+        "undead unit identity counted as corpse availability",
+        "generic death event counted as corpse context",
+        "night spell cast counted as corpse context",
+        "spell cast counted without corpse or casualty context proof",
+        "temporary summoned loss counted as permanent casualty",
+        "SID substring undead inference",
+        "display-name corpse inference"
+      ],
+      "notes": "Necropolis night corpse rite requires separate spell-cast proof plus runtime corpse or casualty context proof; night spell execution alone is not corpse context."
+    }
+  }
+}

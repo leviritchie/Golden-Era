@@ -1,0 +1,31 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "neutral_rogue_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/neutral_rogue_slice_v1",
+  "note": "Neutral rogue own model: hand-keyed (no mocap capture; no shipped capture has the two-blade hunched stab). User asked to bundle the finished neutral meshes; deploy is the user's. Jitter pass 2026-09-27: silhouetteRefine removed (per-frame dx/dy silhouette offsets read as whole-body jumps), re-shipped in place. | look-only re-freeze on the ground-stamped canonical (fleet_rebuild ground_glb apply; coordinator item 3) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_rogue 0.2129. | authenticity pass 2026-10-11 lane A: Hitted arms flung out sideways at shoulder height per DEF g03 (keyRotations split patch) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_rogue 0.2129.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_rogue",
+      "gameSid": "h3_rogue",
+      "bundleName": "custom_units_neutral_h3_rogue",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "705d311b0fc72281eec4b9ed8e594a0321ea20e7610fd1e145bc6fc4877ee996",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "8515a8c396414749910c922a3885f754f2184f0ddb10a0c53f815d4443c29dcf",
+        "idleRetimedGlbSha256": "7dd894f06a758f1c828a953a2f4c743376e9bc914cd46c4bbe6ce6cb0a32150a",
+        "vfxManifestSha256": "29e805104849e0def385a2371613a8dcef2daad9c8381d397e1521f6bad7ecbd",
+        "specSha256": "293c8a1bcc2be8c61a91fedc6333e93ddbb2ad917478164bd392067d22e64df5",
+        "basecolorSha256": "f7e388afa73dc02595b911d588bc571ae1b15b78757b8bd29378cf043091fbef"
+      }
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Custom Unit Ability Catalog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Olden Era · HoMM3 custom factions</p>
+        <h1>Unit Ability Catalog</h1>
+        <p class="lede">Browse every custom creature’s actives, passives, Focus costs, and hire price from the live Golden Era Core payload.</p>
+      </div>
+      <div class="hero-stats" id="heroStats" aria-live="polite"></div>
+    </header>
+
+    <section class="controls" aria-label="Catalog filters">
+      <label class="search-field">
+        <span class="sr-only">Search units and abilities</span>
+        <input id="searchInput" type="search" placeholder="Search units, abilities, buffs, SIDs…" autocomplete="off">
+      </label>
+      <div class="filter-row" id="factionFilters" role="toolbar" aria-label="Faction filter"></div>
+      <div class="filter-row compact">
+        <div class="chip-group" id="tierFilters" role="toolbar" aria-label="Tier filter"></div>
+        <div class="chip-group" id="kindFilters" role="toolbar" aria-label="Ability kind filter"></div>
+        <label class="toggle">
+          <input id="identityOnly" type="checkbox">
+          <span>Identity passives only</span>
+        </label>
+      </div>
+      <p class="result-count" id="resultCount"></p>
+    </section>
+
+    <main class="workspace">
+      <aside class="unit-rail" aria-label="Unit list">
+        <div id="unitList" class="unit-list"></div>
+      </aside>
+      <section class="detail" id="detailPane" aria-live="polite">
+        <div class="detail-empty">
+          <h2>Select a unit</h2>
+          <p>Pick a creature from the list to read its actives, passives, and costs.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span id="generatedMeta"></span>
+      <span>Installed Core readback · not runtime-behavior proof</span>
+    </footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1741 @@
+{
+ "schema": "game_symbols_current_scope_overrides.v1",
+ "buildId": "25509697",
+ "note": "Hand-curated current-build scopes the P1 remap cannot derive, re-derived for Steam build 25509697 from the 25061458 set. Evidence: tools/port_current/override_evidence.py over artifacts/port_current/idx2_live (25061458, GameAssembly BB4EA1F5...) and artifacts/port_current/idx2_live_25509697 (GameAssembly CF5B0414...), with owners mapped by the drift type map. The loop-cap check used capstone over the 25509697 GameAssembly. Block counts quoted from the evidence log are unwind-chunk instruction counts, not the whole-function counts of the 25061458 notes. Proof tier: generated artifact (static native evidence); runtime unproven.",
+ "symbols": {
+  "ModBugReporting.ScreenStaticAutoSend": {
+   "split": true,
+   "goldenLiterals": [
+    "Method_Public_Static_Void_Boolean_0"
+   ],
+   "live": [
+    "Method_Public_Static_Void_0",
+    "Method_Public_Static_Void_1"
+   ],
+   "owners": [
+    "Hex.UI.Reports.BhBugReportScreen"
+   ],
+   "evidence": "25509697 re-derivation (artifacts/port_current/override_evidence_25509697.{json,log} (tools/port_current/override_evidence.py, 25061458 -> 25509697 via the drift type map)): BhBugReportScreen still has exactly two parameterless statics with the launcher body fingerprint, Method_Public_Static_Void_0 (token 100689878, native vaj, VA 0x182E15A60) and Method_Public_Static_Void_1 (token 100689879, native vak, VA 0x182E15B40), each fold=1 and body similarity 0.9353 to the 25061458 tnu/tnv launchers; every other static/virtual on the type keeps its 25061458 shape and similarity (0.04-0.60). Both remain blocked as a split. Prior build (25061458) evidence: Signature changed and split (remap: no same-signature member in its order gap). Golden BhBugReportScreen.Method_Public_Static_Void_Boolean_0 (token 100687699, native tjd, CallerCount 1, 13 xrefs) has a 47-instruction body that allocates the capture iterator +cpd, runs its .ctor and tail-jumps to the static coroutine queue et.Enqueue; the bool is not stored. Live 25061458 has two parameterless statics with that same body fingerprint (47 instructions, identical callee shapes, immediates and metadata-usage count; each CallerCount 1, 13 xrefs): Method_Public_Static_Void_0 (token 100687863, native tnu) allocates +cpk and Method_Public_Static_Void_1 (token 100687864, native tnv) allocates +cpl, and both tail-jump to et.Enqueue. The MoveNext of +cpk (token 100687888) and of +cpl (token 100687894) each yield WaitForEndOfFrame, then ScreenCapture.CaptureScreenshotAsTexture, Texture2D.ReadPixels/Apply, ImageConversion.EncodeToJPG, Logger2.LogHandler log capture and BhBugReportScreen's log-dictionary builder, then call Hex.SharedLibrary.HexAnalytics.SendReport directly and Debug.Log; they differ only in their encrypted-string helpers. Both are therefore desync auto-send launchers and both must be blocked. The other statics on the type do not send: Show opens the form, tny/tnz only read log files into the report dictionary, and the two static IEnumerator factories have CallerCount 0."
+  },
+  "TerrainMaterial.RendererPrepareMap": {
+   "goldenLiterals": [
+    "kwc",
+    "jmr",
+    "kvo",
+    "Method_Public_Void_Map_Boolean_Boolean_0",
+    "Method_Public_Void_Map_Boolean_Boolean_1"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    "Method_Public_Void_Map_Boolean_Boolean_0",
+    "Method_Public_Void_Map_Boolean_Boolean_1"
+   ],
+   "owners": [
+    "ObjectPublicInbvTeInbvCoReVebvInUnique"
+   ],
+   "evidence": "25509697 re-derivation (artifacts/port_current/override_evidence_25509697.{json,log} (tools/port_current/override_evidence.py, 25061458 -> 25509697 via the drift type map)): the renderer maps ObjectPublicInbtTeInbtCoReVebtInUnique -> ObjectPublicInbvTeInbvCoReVebvInUnique (aligned). It now has three (Map,bool,bool) metadata methods, Method_Public_Void_Map_Boolean_Boolean_0/_1/_2 (tokens 100672818/100672823/100672845, natives lft/lln/ewh), and identical-code folding puts all three at one VA 0x1828E6790 (fold=3) with body similarity 1.0 to the 25061458 PrepareMap (VA 0x1827B0020). Because the three names are one native function, binding _0 and _1 hooks the same code as on the prior build; _2 is the same address and adds nothing. In-order names agree: 25061458 _1 kzr sits before kzs..kzx, and 25509697 _1 lln sits before llo..llt. Prior build (25061458) evidence: Remap refused it as 4 golden vs 2 live same-signature members because identical-code folding gives several metadata methods one native function. Golden renderer beh: Method_Public_Void_Map_Boolean_Boolean_0..3 (tokens 100672698/100672708/100672711/100672717, natives eng/igt/kwh/lsf) are all VA 0x1826C4DA0. Live renderer bei: Method_Public_Void_Map_Boolean_Boolean_0/_1 (tokens 100672711/100672721, natives ghh/kzr) are both VA 0x1827B0020, called directly from Map.okp. Both bodies are 51 instructions with the same shape: null-check the Map, read its width/height (golden Map.oga/ogb, live okh/oki), call the (int,int) sizer (golden kwo, live kzy), then call the first Map pass when the first bool is set (golden kwl, live kzv) and the texture-node upload when the second is set (golden kwm, live kzw). The golden literal _0 therefore names the same native code as live _0 and _1. The dead older natives kwc/jmr/kvo bind nothing."
+  },
+  "TerrainMaterial.RendererUploadTextureNodes": {
+   "goldenLiterals": [
+    "kwm",
+    "Method_Private_Void_Map_0"
+   ],
+   "live": [
+    null,
+    "Method_Private_Void_Map_0"
+   ],
+   "owners": [
+    "ObjectPublicInbvTeInbvCoReVebvInUnique"
+   ],
+   "evidence": "25509697 re-derivation (artifacts/port_current/override_evidence_25509697.{json,log} (tools/port_current/override_evidence.py, 25061458 -> 25509697 via the drift type map)): the interop ordinal of the renderer's two non-PDM (Map) methods flipped. On 25061458, Method_Private_Void_Map_0 kzv was the 502-block first Map pass and Method_Private_Void_Map_1 kzw the 114-block texture-node upload. On 25509697, Method_Private_Void_Map_1 is llr (502 blocks, similarity 0.23 to kzw) and Method_Private_Void_Map_0 is lls (token 100672838, VA 0x1828EADC0, 114 blocks, similarity 1.0 to kzw). The class's sequential obfuscator names map one-for-one (kzr->lln PrepareMap _1, kzs->llo, kzt->llp builder, kzu->llq, kzv->llr first pass, kzw->lls upload, kzx->llt), so the upload is lls = Method_Private_Void_Map_0. The random-named 114-block copies dtc/kmm/mjk/clv (PDM_0/2/4/5) are decoys and are not bound. Prior build (25061458) evidence: Golden Method_Private_Void_Map_0 (native kwm, VA 0x1826CAE40, 118 instructions) is the texture-node upload that PrepareMap (VA 0x1826C4DA0) calls under its second bool. The live PrepareMap (VA 0x1827B0020) calls live Method_Private_Void_Map_1 (native kzw, VA 0x1827B31D0, 118 instructions) at the same call position, and that is its only direct caller. Normalised bodies differ only in build-renamed callees (Map.oga/ogb/ogk -> okh/oki/okr) and one metadata reference. The live 118-instruction PDM copies (dw, myi, nko) have no callers."
+  },
+  "TerrainMaterial.RendererRebuildMaterialArrays": {
+   "goldenLiterals": [
+    "Method_Private_Void_PDM_5",
+    "nac",
+    "ivz",
+    "kwe",
+    "bbd",
+    "hpm",
+    "ne"
+   ],
+   "live": [
+    "Method_Private_Void_PDM_2",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "ObjectPublicInbvTeInbvCoReVebvInUnique"
+   ],
+   "evidence": "25509697 re-derivation (artifacts/port_current/override_evidence_25509697.{json,log} (tools/port_current/override_evidence.py, 25061458 -> 25509697 via the drift type map)): the 25061458 binding car (PDM_5) was the uncalled packed-material builder copy with a loop cap above 16. On 25509697 the builder family has two members with body similarity 1.0 to car: llp (Method_Private_Void_2, token 100672824, VA 0x1828E93D0), the in-order successor of the 25061458 real builder kzt, whose min(biomes.Count, cap) cap is 0x10 (cmp eax, 0x10 / mov edx, 0x10); and mbg (Method_Private_Void_PDM_2, token 100672830, VA 0x1828EC1B0), a random-named copy with cap 0x15 (21) and the same 0x20 packed-state constant (capstone over the 25509697 GameAssembly). mbg therefore plays car's role: it is an uncalled copy whose cap is above the plugin's NativePackedMaterialSlotLimit of 16, so every reachable biome count behaves identically. llp stays the game's own builder. The 23-block (similarity 0.79) and 182-block members are other methods. Prior build (25061458) evidence: Golden binds Method_Private_Void_PDM_5 (native jwp, VA 0x1826C8E40): an uncalled 348-instruction copy of the packed-material builder kwj (Method_Private_Void_2, called from the .ctor and the public entry kkd). It differs from kwj only in the loop cap of min(SoTerrainMaterial.biomes.Count, cap): kwj 16, jwp 30 (the 30-slot builder of docs/offlineunlockmod_dll_provenance.md 2026-06-08). Live has the same builder kzt (Method_Private_Void_0, 348 instructions, called from the .ctor and the public entry kzs, cap 16) and uncalled copies car (Method_Private_Void_PDM_5, cap 65) and kas (Method_Private_Void_PDM_2, cap 63). Normalised bodies differ only in that cap and the renamed owner type. The plugin fails closed when the active biome count exceeds NativePackedMaterialSlotLimit (16) and expands packed state to 32. So every reachable count is below both golden jwp's cap and live car's cap, and live car behaves as golden jwp. It also keeps the interop name that RendererPackedBuildStatePrepMethodNames keys on. nac/ivz/kwe/bbd/hpm/ne are dead older natives."
+  },
+  "TerrainMaterial.RendererPackedBuildStatePrepMethodNames": {
+   "goldenLiterals": [
+    "Method_Private_Void_PDM_5"
+   ],
+   "live": [
+    "Method_Private_Void_PDM_2"
+   ],
+   "evidence": "25509697: names the same method as TerrainMaterial.RendererRebuildMaterialArrays (mbg, Method_Private_Void_PDM_2 on ObjectPublicInbvTeInbvCoReVebvInUnique); see that entry. Prior build (25061458) evidence: Names the same method as TerrainMaterial.RendererRebuildMaterialArrays: golden jwp -> live car, both interop Method_Private_Void_PDM_5 on the terrain renderer. See that entry's evidence."
+  },
+  "TerrainSound.HeroBiomeBuildMap": {
+   "goldenLiterals": [
+    "bias",
+    "bhzp",
+    "Method_Public_Void_Map_0",
+    "Method_Public_Void_Map_PDM_0",
+    "Method_Public_Void_Map_PDM_1"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    "Method_Public_Void_Map_PDM_0",
+    null
+   ],
+   "owners": [
+    "ObjectPublicEHcoMaItcoEHcoEHUnique"
+   ],
+   "evidence": "25509697 re-derivation (artifacts/port_current/override_evidence_25509697.{json,log} (tools/port_current/override_evidence.py, 25061458 -> 25509697 via the drift type map)): the hero-biome sound type maps ObjectPublicEHckMaItckEHckEHUnique -> ObjectPublicEHcoMaItcoEHcoEHUnique (aligned; native type fkf). Its four (Map) methods, PDM_0 blmp / PDM_1 hbq / PDM_2 niy / PDM_3 ncz, have body similarity 1.0 at distinct VAs and none has a direct call. The binding is therefore by in-order native name, as before. On 25061458 it bound bist, the first of the class run bist/bisu followed by the ambient type's bisv/bisw (bisw = AmbientBiomeBuild). On 25509697 the run is blmp (0x1823B02D0) / blmq (0x1823B03D0, the tile lookup) followed by the ambient type's blmr/blms, and blms is the re-derived AmbientBiomeBuild. So the method is blmp = Method_Public_Void_Map_PDM_0. hbq/niy/ncz are random-named decoys; the same names occur as unrelated methods on other types. Prior build (25061458) evidence: Golden hero-biome sound type ezc (ObjectPublicEHciMaItciEHciEHUnique) binds Method_Public_Void_Map_PDM_0 (native bicq, VA 0x1821F8710, 71 instructions: Map.oga/ogb, then the tile lookup ezc.bicr). Its copies njp (PDM_1) and omr (PDM_2) are byte-identical at their own VAs. None has a direct call or RIP-relative reference, so the method is reached indirectly, and golden hooks the in-order native bicq, which sits in the class's sequential obfuscator names bicq/bicr and ezd bics/bict. Live fav (ObjectPublicEHckMaItckEHckEHUnique) has the same order: bist/bisu and faw bisv/bisw. Live Method_Public_Void_Map_PDM_2 (native bist, VA 0x18229DEA0, 71 instructions) differs from golden bicq only in the renamed callees (Map.okh/oki, fav.bisu = golden bicr). Its random-named copies bdk/dzy/fqm/ihf (PDM_3/1/0/4) are distinct native functions and are not bound. The golden literals PDM_0/PDM_1 name random-named decoys on live, so they map to nothing."
+  },
+  "TerrainSound.AmbientBiomeBuild": {
+   "goldenLiterals": [
+    "Method_Private_Void_0",
+    "Method_Private_Void_PDM_0",
+    "Method_Private_Void_PDM_1",
+    "biav",
+    "bhzs",
+    "bict",
+    "Method_Public_Void_PDM_0"
+   ],
+   "live": [
+    "Method_Private_Void_0",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "ObjectPublicPrcoInSicoEAMacoEAcoUnique"
+   ],
+   "evidence": "25509697 re-derivation (artifacts/port_current/override_evidence_25509697.{json,log} (tools/port_current/override_evidence.py, 25061458 -> 25509697 via the drift type map)): the ambient-biome sound type maps ObjectPublicPrckInSickEAMackEAckUnique -> ObjectPublicPrcoInSicoEAMacoEAcoUnique (aligned). Method_Private_Void_0 (token 100718430, native blms, VA 0x1823B0E10, similarity 1.0) is the in-order non-PDM member (run blmp/blmq/blmr/blms, matching 25061458 bist/bisu/bisv/bisw). dew/mtl (PDM_0/1) are random-named copies and are not bound. Prior build (25061458) evidence: Golden ambient-biome sound type ezd binds Method_Private_Void_0 (native bict, VA 0x1821F9370, 99 instructions). It is called directly from GetSoundsVolume+0x61 and its copy iej+0x61. Its copies bin/guj (PDM_0/1) have no callers. Live faw (ObjectPublicPrckInSickEAMackEAckUnique) Method_Private_Void_0 (native bisw, VA 0x18229EC00, 99 instructions) is called directly from GetSoundsVolume+0x61 and its copies kid/nxh+0x61. Normalised bodies differ only in the renamed owner type and Map getters (oga/ogb/ohk/ohe -> okh/oki/olr/oll). Copies fsf/inf/mpf (PDM_2/1/0) have no callers and are not bound."
+  },
+  "SelectedUnitHud.HudEventBind": {
+   "goldenLiterals": [
+    "bejn",
+    "behr",
+    "begs",
+    "befw",
+    "beeu",
+    "begr",
+    "befv",
+    "beet",
+    "Method_Private_Void_Object_BattleEventArgs_0",
+    "Method_Private_Void_Object_BattleEventArgs_PDM_0"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Private_Void_Object_BattleEventArgs_PDM_0"
+   ],
+   "owners": [
+    "Hex.Session.Battle.BhSelectedUnitHud"
+   ],
+   "evidence": "25509697 re-derivation (artifacts/port_current/override_evidence_25509697.{json,log} (tools/port_current/override_evidence.py, 25061458 -> 25509697 via the drift type map)): on BhSelectedUnitHud (stable name), Method_Private_Void_Object_BattleEventArgs_PDM_0 (token 100711596, native bhow, VA 0x1821D88C0, 142 blocks) has body similarity 0.9954 to the 25061458 event bind beyj. The only other (Object,BattleEventArgs) members are PDM_1/PDM_2 bhoy/bhoz, still one folded 19-block stub (VA 0x1821D9000, similarity 0.08). Prior build (25061458) evidence: Remap refused it as owner-ambiguous, because the generated literal is bound on 43 Golden Era types. The consumer resolves it on BhSelectedUnitHud only (a real-named type on both builds). Golden BhSelectedUnitHud.Method_Private_Void_Object_BattleEventArgs_PDM_0 (native bejn, VA 0x18203AE90, 347 instructions) is the unit event bind: it calls Unit.beyw and the UiAnimatorPrime In/Out, and calls the direct bind bejo (Method_Public_Void_Boolean_Unit_PDM_0) twice. Live BhSelectedUnitHud.Method_Private_Void_Object_BattleEventArgs_PDM_0 (native beyj, VA 0x1820D0A50, 347 instructions) has the same body. Normalised, it differs only in renamed callees and types (Unit.bfob, beyk = the scoped HudDirectBind, dzm.bbdm = the scoped ability manager, dzn[] = the scoped ability wrapper), the PrivateImplementationDetails class, and one field-offset pair (0x188/0x190 -> 0x178/0x180). The other (Object,BattleEventArgs) methods on the type are 25-instruction folded stubs (PDM_1/PDM_2) on both builds. Method_Private_Void_Object_BattleEventArgs_0 exists on neither build, and the short natives are dead older aliases."
+  },
+  "BattleUi.SelectedHudEventBind": {
+   "goldenLiterals": [
+    "bejn",
+    "behr",
+    "begs",
+    "beic",
+    "begr",
+    "beib",
+    "befv",
+    "beet",
+    "Method_Private_Void_Object_BattleEventArgs_0",
+    "Method_Private_Void_Object_BattleEventArgs_PDM_0"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Private_Void_Object_BattleEventArgs_PDM_0"
+   ],
+   "owners": [
+    "Hex.Session.Battle.BhSelectedUnitHud"
+   ],
+   "evidence": "25509697 re-derivation (artifacts/port_current/override_evidence_25509697.{json,log} (tools/port_current/override_evidence.py, 25061458 -> 25509697 via the drift type map)): on BhSelectedUnitHud (stable name), Method_Private_Void_Object_BattleEventArgs_PDM_0 (token 100711596, native bhow, VA 0x1821D88C0, 142 blocks) has body similarity 0.9954 to the 25061458 event bind beyj. The only other (Object,BattleEventArgs) members are PDM_1/PDM_2 bhoy/bhoz, still one folded 19-block stub (VA 0x1821D9000, similarity 0.08). Prior build (25061458) evidence: Remap refused it as owner-ambiguous, because the generated literal is bound on 43 Golden Era types. The consumer resolves it on BhSelectedUnitHud only (a real-named type on both builds). Golden BhSelectedUnitHud.Method_Private_Void_Object_BattleEventArgs_PDM_0 (native bejn, VA 0x18203AE90, 347 instructions) is the unit event bind: it calls Unit.beyw and the UiAnimatorPrime In/Out, and calls the direct bind bejo (Method_Public_Void_Boolean_Unit_PDM_0) twice. Live BhSelectedUnitHud.Method_Private_Void_Object_BattleEventArgs_PDM_0 (native beyj, VA 0x1820D0A50, 347 instructions) has the same body. Normalised, it differs only in renamed callees and types (Unit.bfob, beyk = the scoped HudDirectBind, dzm.bbdm = the scoped ability manager, dzn[] = the scoped ability wrapper), the PrivateImplementationDetails class, and one field-offset pair (0x188/0x190 -> 0x178/0x180). The other (Object,BattleEventArgs) methods on the type are 25-instruction folded stubs (PDM_1/PDM_2) on both builds. Method_Private_Void_Object_BattleEventArgs_0 exists on neither build, and the short natives are dead older aliases."
+  },
+  "SelectedUnitHud.ControlsSelect": {
+   "goldenLiterals": [
+    "belt",
+    "bejx",
+    "beiy",
+    "beic",
+    "beix",
+    "beib",
+    "Method_Private_Void_ObjectPublicObceInBoInceAbObELInUnique_PDM_0"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Private_Void_ObjectPublicObcjInBoIncjAbObELInUnique_PDM_0"
+   ],
+   "owners": [
+    "Hex.Session.Battle.BhUnitControlsView"
+   ],
+   "evidence": "25509697 re-derivation (artifacts/port_current/override_evidence_25509697.{json,log} (tools/port_current/override_evidence.py, 25061458 -> 25509697 via the drift type map)): the ability wrapper is now ObjectPublicObcjInBoIncjAbObELInUnique. BhUnitControlsView has two methods taking it. PDM_0 bhrh (token 100711703, VA 0x1821E8CB0, 139 blocks) has similarity 0.79 to the 25061458 select bfau (155 blocks). PDM_1 bhrk (69 blocks, similarity 0.40) is the counterpart of the 25061458 69-block bfax, which was itself 0.52 to bfau. The select body changed in this build (16 fewer blocks), so the binding rests on the role pairing: PDM_0 keeps the select's size class and ordinal, and PDM_1 keeps the other method's. Runtime proof pending. Prior build (25061458) evidence: Remap refused it as owner-ambiguous (the literal binds on 2 Golden Era types); the consumer resolves it on BhUnitControlsView only. Golden BhUnitControlsView.Method_Private_Void_ObjectPublicObceInBoInceAbObELInUnique_PDM_0 (native belt, VA 0x182040D80, 166 instructions: Object.op_Equality/op_Inequality, BhAbilityViewBase.uhf/uhj) takes the ability wrapper dxy. Live BhUnitControlsView.Method_Private_Void_ObjectPublicObcfInBoIncfAbObELInUnique_PDM_0 (native bfau, VA 0x1820D6D10, 166 instructions) takes the scoped live wrapper dzn (ObjectPublicObcfInBoIncfAbObELInUnique). Normalised, it differs only in renamed callees (BhAbilityViewBase.uvq/uvv), the nested closure type ekt -> emj and metadata references. The only other method with that parameter is the 71-instruction PDM_1 on both builds (golden belw, live bfax), which is a different method (ratio 0.35)."
+  },
+  "SelectedUnitHud.ControlsHotkey": {
+   "goldenLiterals": [
+    "beme",
+    "bdrf",
+    "beki",
+    "bejj",
+    "beji",
+    "beim",
+    "Method_Private_Void_Object_HotkeyAbilityArgs_PDM_0"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Private_Void_Object_HotkeyAbilityArgs_PDM_0"
+   ],
+   "owners": [
+    "Hex.Session.Battle.BhUnitControlsView"
+   ],
+   "evidence": "25509697 re-derivation (artifacts/port_current/override_evidence_25509697.{json,log} (tools/port_current/override_evidence.py, 25061458 -> 25509697 via the drift type map)): Method_Private_Void_Object_HotkeyAbilityArgs_PDM_0 (token 100711714, native bhrs, VA 0x1821E9890, 46 blocks against 43, similarity 0.71) is still the only (Object,HotkeyAbilityArgs) method on BhUnitControlsView. Prior build (25061458) evidence: Remap refused it as owner-ambiguous (2 Golden Era types); the consumer resolves it on BhUnitControlsView only. Golden Method_Private_Void_Object_HotkeyAbilityArgs_PDM_0 (native beme, VA 0x1820419D0, 44 instructions) calls BhUnitControlsView.belo, the ability click. Live Method_Private_Void_Object_HotkeyAbilityArgs_PDM_0 (native bfbf, VA 0x1820D7960, 44 instructions) calls bfap, which is the scoped SelectedUnitHud.ControlsClick. Normalised bodies differ only in that callee and metadata references. It is the only (Object,HotkeyAbilityArgs) method on the type on both builds."
+  },
+  "SelectedUnitHud.BasicCommandsWaitRefresh": {
+   "goldenLiterals": [
+    "Method_Public_Void_Unit_PDM_0"
+   ],
+   "live": [
+    "Method_Public_Void_Unit_PDM_0"
+   ],
+   "owners": [
+    "Hex.UI.BhUnitBasicCommands"
+   ],
+   "evidence": "25509697 re-derivation (artifacts/port_current/override_evidence_25509697.{json,log} (tools/port_current/override_evidence.py, 25061458 -> 25509697 via the drift type map)): Hex.UI.BhUnitBasicCommands still has exactly two (Unit) methods, PDM_0 tfq (token 100686777, VA 0x182D9CD30) and PDM_1 tfr (token 100686778, VA 0x182D9CF10), 105 blocks each. The similarity matrix keeps the diagonal: tfq is 0.8469 to the 25061458 wait refresh spj and 0.8153 to skip spk, and tfr is 0.8469 to spk and 0.8153 to spj. So wait and skip are not swapped. Prior build (25061458) evidence: Remap refused it as owner-dependent (the literal names different methods on 2 Golden Era types); the consumer resolves it on Hex.UI.BhUnitBasicCommands only. That type has exactly two (Unit) methods on both builds: golden PDM_0 smf / PDM_1 smg and live PDM_0 spj / PDM_1 spk, each 120 instructions. The pair differ from each other only in the button fields they touch (PDM_0: +0x28/+0x30/+0x38, PDM_1: +0x20/+0x40/+0x48). Live PDM_0 keeps golden PDM_0's offsets exactly and live PDM_1 keeps golden PDM_1's; the other differences are the renamed runtime-init helper and metadata references. So the interop names map to themselves and wait/skip are not swapped."
+  },
+  "SelectedUnitHud.BasicCommandsSkipRefresh": {
+   "goldenLiterals": [
+    "Method_Public_Void_Unit_PDM_1"
+   ],
+   "live": [
+    "Method_Public_Void_Unit_PDM_1"
+   ],
+   "owners": [
+    "Hex.UI.BhUnitBasicCommands"
+   ],
+   "evidence": "25509697: see SelectedUnitHud.BasicCommandsWaitRefresh (tfr = PDM_1 pairs with 25061458 skip spk on the diagonal, 0.8469 vs 0.8153). Prior build (25061458) evidence: See SelectedUnitHud.BasicCommandsWaitRefresh: golden PDM_1 smg (fields +0x20/+0x40/+0x48) = live PDM_1 spk with the same offsets."
+  },
+  "SelectedUnitHud.AbilityBucket": {
+   "goldenLiterals": [
+    "baql",
+    "baox",
+    "jus",
+    "itp",
+    "mpy",
+    "bana",
+    "bama",
+    "baoa",
+    "banz",
+    "klu",
+    "ihh",
+    "fnd",
+    "fsk",
+    "bar",
+    "drf",
+    "Method_Public_Il2CppReferenceArray_1_ObjectPublicObceInBoInceAbObELInUnique_EAbilityType_0"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Public_Il2CppReferenceArray_1_ObjectPublicObcjInBoIncjAbObELInUnique_EAbilityType_0"
+   ],
+   "owners": [
+    "ObjectPublicObcjDiObcj2EAInBoInUnique"
+   ],
+   "evidence": "25509697 re-derivation (artifacts/port_current/override_evidence_25509697.{json,log} (tools/port_current/override_evidence.py, 25061458 -> 25509697 via the drift type map)): the ability manager maps ObjectPublicObcfDiObcf2EAInBoInUnique -> ObjectPublicObcjDiObcj2EAInBoInUnique (aligned). Its two same-signature members are the in-order non-PDM ..._EAbilityType_0 (token 100704301, native bdtb, VA 0x181F41E30) and the random-named copy ..._PDM_0 (kfo), both with similarity 0.8947 to the 25061458 bucket bbdm. As before, the real method is the in-order non-PDM one, and the copy is not bound. Prior build (25061458) evidence: Remap refused it as 1 golden vs 2 live same-signature members; the live pair is the real method and a random-named copy. Golden ability manager dxx.Method_Public_Il2CppReferenceArray_1_ObjectPublicObceInBoInceAbObELInUnique_EAbilityType_0 (native baql, VA 0x182E9CAC0, 94 instructions) is the in-order bucket (baql/baqm/baqp/baqq/baqr). Live dzm.Method_Public_Il2CppReferenceArray_1_ObjectPublicObcfInBoIncfAbObELInUnique_EAbilityType_0 (native bbdm, VA 0x182FA9030, 94 instructions) is in the same in-order run (bbdm/bbdn/bbdq/bbdr/bbds). The live copy gjo (..._PDM_0) has a random name. The unit event bind calls this bucket twice on each build: golden BhSelectedUnitHud bejn calls dxx.baql, and live beyj calls dzm.bbdm at the same positions."
+  },
+  "SelectedUnitHud.AbilityManagerFieldObjectInit": {
+   "goldenLiterals": [
+    "Init",
+    "Method_Public_Void_FieldObjectPublicAbstractObUnObcfcnObstcnUnHeUnique_PDM_0",
+    "Method_Public_Void_FieldObjectPublicAbstractObUnObcfcnObstcnUnHeUnique_PDM_1",
+    "Method_Public_Void_FieldObjectPublicAbstractObUnObcfcnObstcnUnHeUnique_PDM_2",
+    "Method_Public_Void_FieldObjectPublicAbstractObUnObcfcnObstcnUnHeUnique_PDM_3"
+   ],
+   "live": [
+    "Init",
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "ObjectPublicObcjDiObcj2EAInBoInUnique"
+   ],
+   "evidence": "New for 25509697. Runtime run 1 failed Plugin.Load at the required selected-unit HUD guard because this symbol was refused. The remap refused it as 4 golden vs 1 live same-signature PDM members. Golden ability manager (ObjectPublicObceDiObce2EAInBoInUnique) Init(FieldObject) (token 100700188, VA 0x182E9C2E0, 21 blocks) and its PDM_0..3 copies dsb/bmz/bnn/kun are byte-identical (similarity 1.0). On 25509697, the ability manager ObjectPublicObcjDiObcj2EAInBoInUnique (aligned; the scoped AbilityManagerTypeNames) keeps the real-named Init(FieldObjectPublicAbstractObUnObckctObstctUnHeUnique) (token 100704242, VA 0x181F41550, similarity 0.8596) and one random-named copy, Method_Public_Void_..._PDM_0 hhv (same similarity). The golden literal Init names the real-named method on both builds, as on 25061458. The PDM literals name golden-only copies and map to nothing; hhv is not bound. Hex.Session.Battle.Unit derives from the field-object parameter type (shape index shape_index_66d636922aa9046393aff782.tsv), so the guard's IsAssignableFrom check holds. Evidence was produced by tools/port_current/override_evidence.py golden -> 25509697. Runtime pending."
+  },
+  "ElangFontBootstrap.Bootstrap": {
+   "goldenLiterals": [
+    "Method_Private_Static_Void_ELang_Dictionary_2_String_FontByLang_0",
+    "hmn",
+    "hjs"
+   ],
+   "live": [
+    "Method_Private_Static_Void_ELang_Dictionary_2_String_FontByLang_0",
+    null,
+    null
+   ],
+   "owners": [
+    "ObjectPublicAbstractSealedDi2StFobtTMDi2StbtUnique"
+   ],
+   "evidence": "New declaration (2026-09-30). On run 1 the plugin scanned every Hex type for the raw Golden Era name hjs, and HarmonyX logged 7430 warnings. The remap maps the owner ObjectPublicAbstractSealedDi2StFobpTMDi2StbpUnique -> ObjectPublicAbstractSealedDi2StFobtTMDi2StbtUnique (aligned; native types iq -> iu), but refused the method as 1 golden vs 5 live same-signature members. Golden binds Method_Private_Static_Void_ELang_Dictionary_2_String_FontByLang_0 (native hmw, token 100666047, VA 0x1829F7070, 155 blocks), the in-order name in the class run hmu/hmv/hmw/hmx/hmy. On 25509697 the five (ELang, Dictionary<string,FontByLang>) statics all have similarity 0.8611 to hmw at distinct VAs. The non-PDM _0 is native ian (token 100666123, VA 0x182D23E10), which sits in the in-order run ial/iam/ian/iao/iap on iu. PDM_0..3 (did/hwz/ear/ltw) have random names and are decoys. So _0 maps to itself. hmn/hjs are older dead natives. Evidence: tools/port_current/override_evidence.py golden -> 25509697. Runtime pending."
+  },
+  "SelectedUnitHud.ControlsClickEnabled": {
+   "goldenLiterals": [
+    "belz",
+    "bekd",
+    "beje",
+    "beii",
+    "bejd",
+    "beih",
+    "Method_Private_Void_Boolean_PDM_0"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Private_Void_Boolean_PDM_0"
+   ],
+   "owners": [
+    "Hex.Session.Battle.BhUnitControlsView"
+   ],
+   "evidence": "New for 25509697. Runtime run 2 (2026-10-01, V:/olden_port_work/LogOutput_25509697_run2.log) failed Plugin.Load at the required selected-unit HUD guard: 'REFUSED owner: battle.selectedUnit.controls.setClickEnabled looked up on Hex.Session.Battle.BhUnitControlsView, but its live names were mapped on Hex.Session.Battle.BhHeroView'. The remap chose BhHeroView by ownerBasis most_hits because the stale older-build literals beje/beii/bejd/beih happen to name members of BhHeroView on Golden Era; the same mis-owner was latent on 25061458. The consumer (Homm3ImportBhSelectedUnitHudFix.FindReleaseControlsClickEnabledMethod) resolves it on BhUnitControlsView only. On Golden Era (idx2_golden_installed) BhUnitControlsView has exactly one private void(bool) method besides the field setter: Method_Private_Void_Boolean_PDM_0, token 100707405, ordinal 15. On 25509697 (idx2_live_25509697) it has exactly one: Method_Private_Void_Boolean_PDM_0, token 100711709, native bhrn, ordinal 15, between the same neighbours (bind PDM_0 at ordinal 3, Boolean(wrapper) at 5, Boolean(array) at 16). Binding rests on unique signature on the owner plus unchanged ordinal; no native body comparison was run. Runtime pending."
+  },
+  "SelectedUnitHud.ControlsSelectedViewFields": {
+   "goldenLiterals": [
+    "field_Private_BhUnitAbilityView_0",
+    "chao",
+    "cgxt",
+    "cgwy",
+    "cgwv",
+    "cgvy",
+    "cguj"
+   ],
+   "live": [
+    "field_Private_BhUnitAbilityView_0",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "Hex.Session.Battle.BhUnitControlsView"
+   ],
+   "evidence": "New for 25509697. The remap owned this on a BhBattleCameraToolsUI enumerator closure (stale short literals collide there); the consumers (Homm3ImportBhSelectedUnitHudFix selected-view read/clear, Homm3SelectedUnitHudHotkeyProbe) read it from BhUnitControlsView. Golden BhUnitControlsView field 3 is the only BhUnitAbilityView field (interop field_Private_BhUnitAbilityView_0, native chao); on 25509697 field 3 is still the only one (field_Private_BhUnitAbilityView_0, native cmkz), field order unchanged (static int, abilities, dictionary, view, array, closure, int, bool). Interop name only, as the other overrides. Runtime pending."
+  },
+  "SelectedUnitHud.ControlsCurrentAbilityArrayFields": {
+   "goldenLiterals": [
+    "field_Private_Il2CppReferenceArray_1_ObjectPublicObceInBoInceAbObELInUnique_0",
+    "chap",
+    "cgxu",
+    "cgwz",
+    "cgvz",
+    "cguk"
+   ],
+   "live": [
+    "field_Private_Il2CppReferenceArray_1_ObjectPublicObcjInBoIncjAbObELInUnique_0",
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "Hex.Session.Battle.BhUnitControlsView"
+   ],
+   "evidence": "New for 25509697. Same mis-owner as ControlsSelectedViewFields (BhBattleCameraToolsUI enumerator closure). Golden BhUnitControlsView field 4 is the only ability-wrapper array (native chap); on 25509697 field 4 is field_Private_Il2CppReferenceArray_1_ObjectPublicObcjInBoIncjAbObELInUnique_0 (native cmla), whose element type is the scoped live ability wrapper ObjectPublicObcjInBoIncjAbObELInUnique (see SelectedUnitHud.ControlsSelect). Runtime pending."
+  },
+  "SessionLoader.StartWithStartInfo": {
+   "goldenLiterals": [
+    "Method_Public_Void_StartInfo_0",
+    "Method_Public_Void_StartInfo_1"
+   ],
+   "live": [
+    "Method_Public_Void_StartInfo_0",
+    "Method_Public_Void_StartInfo_1"
+   ],
+   "owners": [
+    "Hex.Session.Loader"
+   ],
+   "evidence": "25509697 port run 3 (2026-10-01): ai_start_match failed with 'REFUSED: SessionLoader.StartWithStartInfo - remap unmapped: owner ambiguous' then 'GameMember MISS: session.loader.start.startInfo on Hex.Session.Loader'. Golden Hex.Session.Loader has Method_Public_Void_StartInfo_0 (native vie, token 100690979, ordinal 1) and _1 (vif, token 100690980, ordinal 2); live 25509697 Hex.Session.Loader has the same two names (yga token 100694820 VA 0x182F625B0, ygb token 100694821 VA 0x182F626A0). Native body similarity (tools/port_current/symbol_remap/native_body.py): golden _0 -> live _0 0.976 (56/56 instructions), golden _1 -> live _1 1.000 (30/30); cross pairs 0.532. The ambiguity was a stale-literal collision, not an owner change."
+  },
+  "BattleVisual.BattleDrawerTypeNames": {
+   "goldenLiterals": [
+    "Object1PublicIncfUnIncfObBhIncfAnUnique",
+    "eck",
+    "ecd"
+   ],
+   "live": [
+    "Object1PublicInckUnInckObBhInckAnUnique",
+    "emh",
+    null
+   ],
+   "typeChecks": [
+    [
+     "Object1PublicInckUnInckObBhInckAnUnique",
+     "ObjectPublicGackTrInGaTrckBoBockUnique",
+     267,
+     306,
+     ""
+    ],
+    [
+     "Object1PublicInckUnInckObBhInckAnUnique",
+     "ObjectPublicGackTrInGaTrckBoBockUnique",
+     267,
+     306,
+     "emh"
+    ],
+    null
+   ],
+   "evidence": "25509697 port re-enable (2026-10-01). Golden Era binds the battle unit drawer to Object1PublicIncfUnIncfObBhIncfAnUnique (native eck, base ObjectPublicGacfTrInGaTrcfBoBocfUnique, 271 fields, owns Init(UnitViewConfig,TransferUnit,Random,Vector3,Single,Boolean,Int32) token 100702858); the GE runtime log patches 5 Init-shaped methods on it. The remap maps both eck spellings to live Object1PublicInckUnInckObBhInckAnUnique (native emh, base ObjectPublicGackTrInGaTrckBoBockUnique, 267 fields, Init token 100706891, same 7-parameter signature) at 0.9434. ecd (golden Object1PublicbbVoa92bbb92a8c9, a 4-field closure type) never resolves first on Golden Era and its live candidates tie at 1.0 across three closure types, so it is dropped."
+  },
+  "HeroProfile.HeroSelectButtonBind": {
+   "goldenLiterals": [
+    "hpt",
+    "hpm"
+   ],
+   "live": [
+    "Method_Public_Void_HeroConfig_Action_Action_0",
+    null
+   ],
+   "owners": [
+    "Hex.BhHeroSelectButton"
+   ],
+   "evidence": "GE runtime pick Method_Public_Void_HeroConfig_Action_Action_0 (stale-hints shape pick); live same-named method, native body 1.000."
+  },
+  "CustomGame.HeroSelectButtonBind": {
+   "goldenLiterals": [
+    "hpt",
+    "hpm",
+    "hpf",
+    "Method_Public_Void_HeroConfig_Action_Action_0"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    "Method_Public_Void_HeroConfig_Action_Action_0"
+   ],
+   "owners": [
+    "Hex.BhHeroSelectButton"
+   ],
+   "evidence": "Same surface as HeroProfile.HeroSelectButtonBind: golden Method_Public_Void_HeroConfig_Action_Action_0 -> live same name, native body 1.000; hpt/hpm/hpf are dead native method names."
+  },
+  "HeroProfile.TooltipHeroItemBind": {
+   "goldenLiterals": [
+    "tcj",
+    "tck",
+    "tcl",
+    "tco",
+    "tcb",
+    "tcc",
+    "tcd",
+    "tcg",
+    "Method_Public_Void_Hero_Boolean_Boolean_0",
+    "Method_Public_Void_Hero_Boolean_0"
+   ],
+   "live": [
+    "Method_Public_Void_Hero_0",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Public_Void_Hero_Boolean_Boolean_0",
+    "Method_Public_Void_Hero_Boolean_0"
+   ],
+   "owners": [
+    "Hex.UI.BhTooltipHeroItemView"
+   ],
+   "evidence": "GE registered Hero_Boolean_Boolean_0, Hero_0 (stale pick) and Hero_Boolean_0 on BhTooltipHeroItemView; each maps to the same live name with native body 1.000. Native-name literals are dead off golden."
+  },
+  "HeroProfile.PortraitViewBind": {
+   "goldenLiterals": [
+    "zxx",
+    "zya",
+    "zwm",
+    "zwp",
+    "zvo",
+    "zvr",
+    "ztr",
+    "ztu"
+   ],
+   "live": [
+    "Method_Public_Void_Hero_Boolean_Boolean_0",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "Hex.Session.UI.HeroProfile.BhHeroPortraitView"
+   ],
+   "evidence": "GE stale-hints pick Method_Public_Void_Hero_Boolean_Boolean_0 on BhHeroPortraitView; live same name, native body 1.000. The remap scoped native names (bdaa...) that never match by reflection."
+  },
+  "HeroProfile.ProfileWindowShown": {
+   "goldenLiterals": [
+    "giw",
+    "gip"
+   ],
+   "live": [
+    "Method_Private_Void_0",
+    null
+   ],
+   "owners": [
+    "Hex.Session.HeroProfile.BhHeroProfileWindow"
+   ],
+   "evidence": "GE registered BhHeroProfileWindow.Method_Private_Void_0; live Method_Private_Void_0 (bnzm), native body 0.947."
+  },
+  "HeroProfile.DataViewInit": {
+   "goldenLiterals": [
+    "Init"
+   ],
+   "live": [
+    "Init"
+   ],
+   "owners": [
+    "Hex.Session.UI.HeroProfile.BhHeroDataView"
+   ],
+   "evidence": "GE registered BhHeroDataView.Init(Hero,bool,bool); live Init is the sole same-signature candidate, native body 0.784."
+  },
+  "HeroProfile.DataViewRefresh": {
+   "goldenLiterals": [
+    "zfi",
+    "zfj",
+    "zfm",
+    "zfn",
+    "zfo",
+    "hjd",
+    "zwe",
+    "zwf",
+    "zwi",
+    "zwj",
+    "zwk",
+    "hly",
+    "zuj",
+    "zuk",
+    "zun",
+    "zvf",
+    "zvg",
+    "zvh",
+    "zvi",
+    "zvj",
+    "zvk",
+    "zvl",
+    "zvm",
+    "ztj",
+    "ztk",
+    "ztn",
+    "zto",
+    "ztp"
+   ],
+   "live": [
+    "Method_Private_Void_0",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "Hex.Session.UI.HeroProfile.BhHeroDataView"
+   ],
+   "evidence": "GE stale-hints pick BhHeroDataView.Method_Private_Void_0; live Method_Private_Void_0, native body 0.953."
+  },
+  "ImportVisuals.SummaryCardHeroBind": {
+   "goldenLiterals": [
+    "lwy",
+    "lxc",
+    "lwk",
+    "lwo",
+    "lwh",
+    "lwi",
+    "Method_Public_Void_HeroConfig_String_0"
+   ],
+   "live": [
+    "Method_Private_Void_HeroConfig_0",
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Public_Void_HeroConfig_String_0"
+   ],
+   "owners": [
+    "Hex.Pick.BhSummaryCard"
+   ],
+   "evidence": "GE registered BhSummaryCard.Method_Public_Void_HeroConfig_String_0 and Method_Private_Void_HeroConfig_0 (stale pick); live same names, native body 0.906 / 0.961."
+  },
+  "HeroProfile.TavernHeroBind": {
+   "goldenLiterals": [
+    "zer"
+   ],
+   "live": [
+    "Method_Public_Void_Hero_Int32_Func_2_Int32_Boolean_Func_3_Int32_Int32_HeroHiringType_Action_2_Int32_Boolean_Boolean_0"
+   ],
+   "owners": [
+    "Hex.Session.UI.BhTavernHeroView"
+   ],
+   "evidence": "GE stale-hints pick on BhTavernHeroView; live same name, native body 0.973. The remap mapped zer onto BhLevelUpStatsAndSkillsView."
+  },
+  "HeroProfile.SideHeroInit": {
+   "goldenLiterals": [
+    "Init"
+   ],
+   "live": [
+    "Init"
+   ],
+   "owners": [
+    "Hex.Session.Hud.BhHeroUIElement"
+   ],
+   "evidence": "GE registered BhHeroUIElement.Init(hero wrapper); live Init, native body 0.974."
+  },
+  "HeroProfile.SideHeroRefresh": {
+   "goldenLiterals": [
+    "Method_Private_Void_0",
+    "waj",
+    "wak",
+    "wcb",
+    "wcc",
+    "wcd",
+    "wce"
+   ],
+   "live": [
+    "Method_Private_Void_0",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "Hex.Session.Hud.BhHeroUIElement"
+   ],
+   "evidence": "GE registered BhHeroUIElement.Method_Private_Void_0; live same name, native body 1.000. The remap mapped the name onto Hex.UI.BhScreen."
+  },
+  "ImportVisuals.HeroHudPanelRefresh": {
+   "goldenLiterals": [
+    "gix",
+    "vsl",
+    "vsh",
+    "Method_Public_Void_0"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    "Method_Public_Void_0"
+   ],
+   "owners": [
+    "Hex.Session.Hud.BhHeroHUDPanel"
+   ],
+   "evidence": "GE registered BhHeroHUDPanel.Method_Public_Void_0; live same name, native body 0.994."
+  },
+  "ImportVisuals.CityHeroWithPartyRefresh": {
+   "goldenLiterals": [
+    "Method_Public_Void_ObjectPublicInDaObETccLiIncc1cnUnique_PDM_0",
+    "uag",
+    "uah",
+    "uai",
+    "uaj",
+    "uak"
+   ],
+   "live": [
+    "Method_Public_Void_ObjectPublicInDaObOwBoLi1chObctUnique_PDM_0",
+    "Method_Private_Void_PDM_0",
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "Hex.UI.City.BhHeroWithPartyCityView"
+   ],
+   "evidence": "GE registered BhHeroWithPartyCityView wrapper refresh (golden ...ObjectPublicInDaObETccLiIncc1cnUnique_PDM_0 -> live ...ObjectPublicInDaObOwBoLi1chObctUnique_PDM_0, body 0.867) and Method_Private_Void_PDM_0 (stale pick; live same name, body 1.000). The remap mapped it onto BhCityUISession+__c."
+  },
+  "ReleaseTownUi.HeroStatRewardShow": {
+   "goldenLiterals": [
+    "giw"
+   ],
+   "live": [
+    "Method_Private_Void_0"
+   ],
+   "owners": [
+    "Hex.UI.City.BhRewardNotificationHeroStat"
+   ],
+   "evidence": "GE stale-hints pick BhRewardNotificationHeroStat.Method_Private_Void_0 (golden ttx); live Method_Private_Void_0 (vsz), native body 0.874."
+  },
+  "ReleaseTownUi.HeroStatRewardHideOrApply": {
+   "goldenLiterals": [
+    "hly"
+   ],
+   "live": [
+    "Method_Private_Void_0"
+   ],
+   "owners": [
+    "Hex.UI.City.BhRewardNotificationHeroStat"
+   ],
+   "evidence": "GE stale-hints pick BhRewardNotificationHeroStat.Method_Private_Void_0 (same method as the show symbol); live Method_Private_Void_0 (vsz), native body 0.874."
+  },
+  "ReleaseTownUi.HeroStatRewardHide": {
+   "goldenLiterals": [
+    "OnHide"
+   ],
+   "live": [
+    "Method_Public_Virtual_Void_0"
+   ],
+   "owners": [
+    "Hex.UI.City.BhRewardNotificationHeroStat"
+   ],
+   "evidence": "Golden OnHide (ord 2) -> live Method_Public_Virtual_Void_0 (igf, ord 2), native body 0.800, next 0.168."
+  },
+  "ReleaseTownUi.CitySessionHide": {
+   "goldenLiterals": [
+    "OnHide"
+   ],
+   "live": [
+    "Method_Public_Virtual_Void_3"
+   ],
+   "owners": [
+    "Hex.UI.City.BhCityUISession"
+   ],
+   "evidence": "Golden OnHide (ord 5) -> live Method_Public_Virtual_Void_3 (igf, ord 5), native body 0.991, next 0.620."
+  },
+  "ReleaseTownUi.BuildingViewHide": {
+   "goldenLiterals": [
+    "OnHide"
+   ],
+   "live": [
+    "Method_Public_Void_PDM_0"
+   ],
+   "owners": [
+    "Hex.UI.City.BhBuildingView"
+   ],
+   "evidence": "Golden OnHide (ord 12) -> live Method_Public_Void_PDM_0 (vqt, ord 12), native body 0.789, next 0.468."
+  },
+  "ReleaseTownUi.UpgradeUnitsEscapeClick": {
+   "goldenLiterals": [
+    "OnEscapeClick"
+   ],
+   "live": [
+    "Method_Private_Void_1"
+   ],
+   "owners": [
+    "Hex.Session.City.ScUpgradeUnits"
+   ],
+   "evidence": "Golden OnEscapeClick (ord 12) -> live Method_Private_Void_1 (bdrw, ord 12), native body 0.993; ICF-folded with OnExitButtonClick."
+  },
+  "ReleaseTownUi.UpgradeUnitsHide": {
+   "goldenLiterals": [
+    "OnHide"
+   ],
+   "live": [
+    "Method_Public_Virtual_Void_0"
+   ],
+   "owners": [
+    "Hex.Session.City.ScUpgradeUnits"
+   ],
+   "evidence": "Golden OnHide (ord 3) -> live Method_Public_Virtual_Void_0 (igf, ord 3), native body 0.895, next 0.793."
+  },
+  "ReleaseTownUi.CityUiElementRefreshIndexed": {
+   "goldenLiterals": [
+    "wbr"
+   ],
+   "live": [
+    "Method_Public_Void_Int32_0"
+   ],
+   "owners": [
+    "Hex.Session.Hud.BhCityUIElement"
+   ],
+   "evidence": "GE stale-hints pick BhCityUIElement.Method_Public_Void_Int32_0; live same name, native body 0.868 (sole method candidate)."
+  },
+  "ReleaseTownUi.CityUiElementRefresh": {
+   "goldenLiterals": [
+    "wbs"
+   ],
+   "live": [
+    "Method_Private_Void_PDM_0"
+   ],
+   "owners": [
+    "Hex.Session.Hud.BhCityUIElement"
+   ],
+   "evidence": "GE registered BhCityUIElement.Method_Private_Void_PDM_0; live same name, native body 0.978, next 0.408. Run 6 fell back to Method_Public_Void_PDM_0 (body 0.340), a wrong target."
+  },
+  "ReleaseTownUi.BuildingTooltipBind": {
+   "goldenLiterals": [
+    "tam",
+    "tan"
+   ],
+   "live": [
+    "Method_Public_Void_BhBuildingView_ObjectPublicBuObcjStObcjctInBoctUnique_Int32_Action_0",
+    null
+   ],
+   "owners": [
+    "Hex.UI.BhTooltipBuilding"
+   ],
+   "evidence": "GE stale-hints pick BhTooltipBuilding.Method_Public_Void_BhBuildingView_ObjectPublicBuObcdStObcdcnInBocnUnique_Int32_Action_0; live sole candidate ..._ObjectPublicBuObcjStObcjctInBoctUnique_Int32_Action_0, native body 0.949."
+  },
+  "ReleaseTownUi.HireUnitItemRefresh": {
+   "goldenLiterals": [
+    "ttx",
+    "tty",
+    "ttz"
+   ],
+   "live": [
+    "Method_Public_Void_HireArgs_Int32_PDM_0",
+    null,
+    null
+   ],
+   "owners": [
+    "Hex.UI.City.BhHireUnitItemView"
+   ],
+   "evidence": "GE stale-hints pick BhHireUnitItemView.Method_Public_Void_HireArgs_Int32_PDM_0; live same name (sole candidate), native body 0.811."
+  },
+  "ReleaseTownUi.CitySpecialRefresh": {
+   "goldenLiterals": [
+    "ube"
+   ],
+   "live": [
+    "Method_Private_Void_1"
+   ],
+   "owners": [
+    "Hex.UI.City.BhCitySpecialView"
+   ],
+   "evidence": "GE registered BhCitySpecialView.Method_Private_Void_0 (golden ucw); live Method_Private_Void_1 (wcw), native body 1.000, next 0.475. Run 6 fell back to Method_Public_Void_0 (body 0.163), a wrong target."
+  },
+  "NativeSpriteCatalog.ResolverTypeHints": {
+   "goldenLiterals": [
+    "ObjectPublicObbxDi2StSpbxDi2StUnique"
+   ],
+   "live": [
+    "ObjectPublicObcbDi2StSpcbDi2StUnique"
+   ],
+   "typeChecks": [
+    [
+     "ObjectPublicObcbDi2StSpcbDi2StUnique",
+     "Il2CppSystem.Object",
+     62,
+     103,
+     ""
+    ]
+   ],
+   "evidence": "Golden cko ObjectPublicObbxDi2StSpbxDi2StUnique -> live cnd ObjectPublicObcbDi2StSpcbDi2StUnique: singleton body 1.000, sprite-by-key body 0.895, Method_Public_Sprite_String_Boolean_0 body 1.000."
+  },
+  "NativeSpriteCatalog.ResolverSingleton": {
+   "goldenLiterals": [
+    "Method_Public_Static_ObjectPublicObbxDi2StSpbxDi2StUnique_0"
+   ],
+   "live": [
+    "Method_Public_Static_ObjectPublicObcbDi2StSpcbDi2StUnique_0"
+   ],
+   "owners": [
+    "ObjectPublicObcbDi2StSpcbDi2StUnique"
+   ],
+   "evidence": "Golden sfk -> live szr, native body 1.000."
+  },
+  "NativeSpriteCatalog.SpriteCatalogGetter": {
+   "goldenLiterals": [
+    "get_field_Public_Dictionary_2_String_Sprite_0"
+   ],
+   "live": [
+    "get_field_Public_Dictionary_2_String_Sprite_0"
+   ],
+   "owners": [
+    "ObjectPublicObcbDi2StSpcbDi2StUnique"
+   ],
+   "evidence": "Dictionary<string,Sprite> field 0 on both builds (golden bxvb ord 22, live cbuo ord 24): the first of the same-typed dictionary run, the slot sfo/szv reads first."
+  },
+  "NativeSpriteCatalog.ResolveSprite": {
+   "goldenLiterals": [
+    "Method_Public_Sprite_String_0"
+   ],
+   "live": [
+    "Method_Public_Sprite_String_0"
+   ],
+   "owners": [
+    "ObjectPublicObcbDi2StSpcbDi2StUnique"
+   ],
+   "evidence": "Golden sfo -> live szv, sole same-signature candidate, native body 0.895."
+  },
+  "ReleaseTownUi.MagicItemShowArg0TypeHints": {
+   "goldenLiterals": [
+    "dtl"
+   ],
+   "live": [
+    "ebw"
+   ],
+   "typeChecks": [
+    [
+     "ObjectPublicSichObStchObctMachInUnique",
+     "Il2CppSystem.Object",
+     31,
+     33,
+     "ebw"
+    ]
+   ],
+   "evidence": "BhMagicItemView.Show is real-named on both builds with the same parameter positions; golden arg0 dtl -> live arg0 ebw (ObjectPublicSichObStchObctMachInUnique)."
+  },
+  "ReleaseTownUi.MagicItemShowArg2TypeHints": {
+   "goldenLiterals": [
+    "dtm"
+   ],
+   "live": [
+    "ebx"
+   ],
+   "typeChecks": [
+    [
+     "ObjectPublicInchSiInchObDiInch2Unique",
+     "Il2CppSystem.Object",
+     94,
+     103,
+     "ebx"
+    ]
+   ],
+   "evidence": "BhMagicItemView.Show is real-named on both builds with the same parameter positions; golden arg2 dtm -> live arg2 ebx (ObjectPublicInchSiInchObDiInch2Unique)."
+  },
+  "Minimap.RendererRenderMapData": {
+   "goldenLiterals": [
+    "Method_Private_Void_RenderTexture_MapData_RectInt_SoMinimapConfig_Boolean_0",
+    "klu"
+   ],
+   "live": [
+    "Method_Private_Void_RenderTexture_MapData_RectInt_SoMinimapConfig_Boolean_0",
+    null
+   ],
+   "owners": [
+    "ObjectPublicInbvStInbvCoStMaInbvUnique"
+   ],
+   "evidence": "GE registered Method_Private_Void_RenderTexture_MapData_RectInt_SoMinimapConfig_Boolean_0 (golden klu) on the minimap renderer; live sole same-signature method (laz), native body 0.975 (the golden PDM_0..3 siblings score 0.959-0.960)."
+  },
+  "HeroMap.SessionHeroTypeHints": {
+   "goldenLiterals": [
+    "ObjectPublicHeObInObciSiObVeSeObUnique",
+    "etc",
+    "eta"
+   ],
+   "live": [
+    "ObjectPublicHeObInObcnSiObVeBoObUnique",
+    null,
+    null
+   ],
+   "typeChecks": [
+    [
+     "ObjectPublicHeObInObcnSiObVeBoObUnique",
+     "Il2CppSystem.Object",
+     209,
+     230,
+     ""
+    ],
+    null,
+    null
+   ],
+   "evidence": "Golden ObjectPublicHeObInObciSiObVeSeObUnique -> live ObjectPublicHeObInObcnSiObVeBoObUnique: the BhHeroUIElement.Init parameter on both builds (body 0.974), the BhTooltipHeroItemView wrapper-bind parameter (body 1.000), the BhHeroHUDPanel hero-arg parameter (body 0.950) and the type HeroMap.DrawerSessionHeroFields already scopes; its Init(Hero, ...) maps body 0.913."
+  },
+  "HeroMap.SessionHeroInit": {
+   "goldenLiterals": [
+    "Init",
+    "fih",
+    "cjd"
+   ],
+   "live": [
+    "Init",
+    null,
+    null
+   ],
+   "owners": [
+    "ObjectPublicHeObInObcnSiObVeBoObUnique"
+   ],
+   "evidence": "GE registered ObjectPublicHeObInObciSiObVeSeObUnique.Init; live Init(Hero, ...) on the session hero wrapper, native body 0.913 (next 0.777)."
+  },
+  "HeroMap.RootGameObjectGetter": {
+   "goldenLiterals": [
+    "get__cibn_k__BackingField",
+    "Method_Public_get_GameObject_0",
+    "bgus",
+    "bgun",
+    "eiq",
+    "bguu",
+    "fsl",
+    "fnd",
+    "cfl",
+    "bgwl",
+    "bgws",
+    "gtn",
+    "lah",
+    "ndc",
+    "oee",
+    "bgtp",
+    "bgtk",
+    "bgto",
+    "bgtj",
+    "gzd",
+    "bgtq",
+    "hbj",
+    "ein",
+    "bgsn",
+    "bgss",
+    "hug",
+    "bgrd",
+    "bgrk"
+   ],
+   "live": [
+    "get__cnms_k__BackingField",
+    "Method_Public_get_GameObject_0",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "Object1PublicGacnGaTrcnObAnGaBhcnUnique"
+   ],
+   "evidence": "Hero drawer root: golden get__cibn_k__BackingField -> live get__cnms_k__BackingField (HeroMap.RootGameObjectProperties already scopes cibn -> cnms); golden Method_Public_get_GameObject_0 (bgwl, ord 25) -> live same name (bkdw, ord 25), native body 1.000."
+  },
+  "HomecomingWaterPresentation.EmptyTerrainCursorMapperMethodHints": {
+   "goldenLiterals": [
+    "bgud",
+    "Method_Private_Void_0",
+    "Method_Private_Void_PDM_0",
+    "Method_Private_Void_PDM_1",
+    "Method_Private_Void_PDM_2",
+    "Method_Private_Void_PDM_3"
+   ],
+   "live": [
+    null,
+    "Method_Private_Void_0",
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "ObjectPrivateObcnBoObcnECcncnUnique"
+   ],
+   "evidence": "GE pinned erq Method_Private_Void_0 (bgud, VA 0x182133900, ECursor immediates 0x17-0x1a). Live Method_Private_Void_0 (bkbj, VA 0x1822e0d20) is the same flow (body 0.810) and the only own body emitting ValidPath/ValidPathGray/InvalidTarget; 25509697 maps terrain result 1 to ValidPathGray, so ValidPathRed (0x18) is gone. Siblings PDM_0..3 carry other cursor values."
+  },
+  "HomecomingWaterPresentation.CursorStackApplyMethodHints": {
+   "goldenLiterals": [
+    "byv",
+    "rmc",
+    "mte",
+    "Method_Public_Boolean_ECursor_Int32_0",
+    "Method_Public_Boolean_ECursor_Int32_1",
+    "Method_Public_Boolean_ECursor_Int32_2"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    "Method_Public_Boolean_ECursor_Int32_0",
+    null,
+    null
+   ],
+   "owners": [
+    "ObjectPublicObcbLiOb1csObcbcbObUnique"
+   ],
+   "evidence": "GE registered apply Method_Public_Boolean_ECursor_Int32_0 (VA 0x182ab4e00, the call target of golden bgud). Live Method_Public_Boolean_ECursor_Int32_0 (sfy) is at VA 0x182d442f0, the call target of live Method_Private_Void_0's cursor branches; native body 1.000 (ICF-folded with its _1.._4 siblings)."
+  },
+  "BattleVisual.SpawnFactoryTypeNames": {
+   "goldenLiterals": [
+    "ObjectPublicObLi1FicfHeLi1IncfUnique",
+    "ebz",
+    "edh",
+    "eda"
+   ],
+   "live": [
+    "ObjectPublicObLi1FickHeLi1InckUnique",
+    null,
+    null,
+    null
+   ],
+   "typeChecks": [
+    [
+     "ObjectPublicObLi1FickHeLi1InckUnique",
+     "Il2CppSystem.Object",
+     18,
+     21,
+     ""
+    ],
+    null,
+    null,
+    null
+   ],
+   "evidence": "Golden factory ObjectPublicObLi1FicfHeLi1IncfUnique -> live ObjectPublicObLi1FickHeLi1InckUnique: the only live type with the FieldObject(EFieldObjectType,String,Int32,side,Hex,...) spawn overloads (body 0.978) and the FieldObject(EFieldObjectType,TransferUnit,side,Hex) family (body 0.944); it is also param 0 of the live SpawnObject helpers."
+  },
+  "BattleVisual.RawFieldObjectSpawnMethodNames": {
+   "goldenLiterals": [
+    "Method_Public_FieldObject_EFieldObjectType_String_Int32_ObjectPublicPrcgObPrcgInTrPrcgInUnique_Hex_Int32_Boolean_Boolean_Boolean_InterfacePublicAbstractbaBoaObVobabaObInUnique_InterfacePublicAbstractbaObbbUnInbbUnObbbObUnique_0",
+    "Method_Public_FieldObject_EFieldObjectType_String_Int32_ObjectPublicPrcgObPrcgInTrPrcgInUnique_Hex_Int32_Boolean_Boolean_Boolean_InterfacePublicAbstractbaBoaObVobabaObInUnique_InterfacePublicAbstractbaObbbUnInbbUnObbbObUnique_PDM_0",
+    "bcvc",
+    "leh"
+   ],
+   "live": [
+    "Method_Public_FieldObject_EFieldObjectType_String_Int32_ObjectPublicPrclObPrclInTrPrclInUnique_Hex_Int32_Boolean_Boolean_Boolean_InterfacePublicAbstractbdBoaObVobdbaObInUnique_InterfacePublicAbstractbdObbeUnHebeUnInbeObUnique_0",
+    "Method_Public_FieldObject_EFieldObjectType_String_Int32_ObjectPublicPrclObPrclInTrPrclInUnique_Hex_Int32_Boolean_Boolean_Boolean_InterfacePublicAbstractbdBoaObVobdbaObInUnique_InterfacePublicAbstractbdObbeUnHebeUnInbeObUnique_PDM_0",
+    "Method_Public_FieldObject_EFieldObjectType_String_Int32_ObjectPublicPrclObPrclInTrPrclInUnique_Hex_Int32_Boolean_Boolean_Boolean_InterfacePublicAbstractbdBoaObVobdbaObInUnique_InterfacePublicAbstractbdObbeUnHebeUnInbeObUnique_PDM_1",
+    null
+   ],
+   "owners": [
+    "ObjectPublicObLi1FickHeLi1InckUnique"
+   ],
+   "evidence": "Golden Era patched both same-shape string spawn overloads (bcvc, leh; 37-instruction wrappers). Live has three (bfyb, coi, fdf), each 37 instructions with native body 0.978 against both golden ones; all three are mapped so the context prefix covers every overload, as on Golden Era."
+  },
+  "BattleVisual.SpawnHelperTypeNames": {
+   "goldenLiterals": [
+    "enk",
+    "eni",
+    "enp",
+    "elw"
+   ],
+   "live": [
+    "ObjectPublicAbstractSealedStcnbiStcnInaStcnbUnique",
+    null,
+    null,
+    null
+   ],
+   "typeChecks": [
+    [
+     "ObjectPublicAbstractSealedStcnbiStcnInaStcnbUnique",
+     "Il2CppSystem.Object",
+     153,
+     159,
+     ""
+    ],
+    null,
+    null,
+    null
+   ],
+   "evidence": "Golden spawn helper enk (ObjectPublicAbstractSealedStchbfStchBoaStch14Unique) -> live exo (ObjectPublicAbstractSealedStcnbiStcnInaStcnbUnique), the only live type with static FieldObject(factory,Unit,side,Int32,String,Boolean,Boolean,Boolean) helpers; native body 0.862. eni/enp/elw were legacy aliases."
+  },
+  "BattleVisual.SpawnObject": {
+   "goldenLiterals": [
+    "Method_Public_Static_FieldObject_ObjectPublicObLi1FicfHeLi1IncfUnique_Unit_ObjectPublicPrcgObPrcgInTrPrcgInUnique_Int32_String_Boolean_Boolean_Boolean_0",
+    "Method_Public_Static_FieldObject_ObjectPublicObLi1FicfHeLi1IncfUnique_Unit_ObjectPublicPrcgObPrcgInTrPrcgInUnique_Int32_String_Boolean_Boolean_Boolean_1",
+    "bffg",
+    "fua",
+    "ndy",
+    "beki",
+    "bfdk",
+    "bfcl",
+    "bpk"
+   ],
+   "live": [
+    "Method_Public_Static_FieldObject_ObjectPublicObLi1FickHeLi1InckUnique_Unit_ObjectPublicPrclObPrclInTrPrclInUnique_Int32_String_Boolean_Boolean_Boolean_0",
+    "Method_Public_Static_FieldObject_ObjectPublicObLi1FickHeLi1InckUnique_Unit_ObjectPublicPrclObPrclInTrPrclInUnique_Int32_String_Boolean_Boolean_Boolean_1",
+    "Method_Public_Static_FieldObject_ObjectPublicObLi1FickHeLi1InckUnique_Unit_ObjectPublicPrclObPrclInTrPrclInUnique_Int32_String_Boolean_Boolean_Boolean_2",
+    "Method_Public_Static_FieldObject_ObjectPublicObLi1FickHeLi1InckUnique_Unit_ObjectPublicPrclObPrclInTrPrclInUnique_Int32_String_Boolean_Boolean_Boolean_3",
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "ObjectPublicAbstractSealedStcnbiStcnInaStcnbUnique"
+   ],
+   "evidence": "Golden fua/bffg fold to one native body (VA 0x182082280, 65 instr); live bile/csj/jqb/dqv fold to one native body (VA 0x18222f0c0, 63 instr), similarity 0.862. Same folded method, so every live alias is mapped."
+  },
+  "SkeletalNecromancy.TransferSideSortBySlot": {
+   "goldenLiterals": [
+    "Method_Public_Void_0",
+    "becl",
+    "SortUnitsBySlotPos"
+   ],
+   "live": [
+    "Method_Public_Void_0",
+    null,
+    null
+   ],
+   "owners": [
+    "Hex.Session.Battle.TransferSide"
+   ],
+   "evidence": "Golden TransferSide.becl (ord 8) -> live TransferSide bhhl (ord 8), native body 0.930, unique. The remap had scoped the name onto ObjectPublicPrclInPrclSiBoPrclInUnique, a wrong owner."
+  },
+  "SwashbucklerGold.AddResource": {
+   "goldenLiterals": [
+    "Method_Public_Void_String_Int32_0",
+    "ymj",
+    "nbg",
+    "cpw",
+    "mjn",
+    "exi"
+   ],
+   "live": [
+    "Method_Public_Void_String_Int32_0",
+    null,
+    "Method_Public_Void_String_Int32_PDM_1",
+    "Method_Public_Void_String_Int32_PDM_2",
+    "Method_Public_Void_String_Int32_PDM_3",
+    "Method_Public_Void_String_Int32_PDM_4"
+   ],
+   "owners": [
+    "ObjectPublicRechDi2StRechUnique"
+   ],
+   "evidence": "Golden owner ObjectPublicReccDi2StReccUnique -> live ObjectPublicRechDi2StRechUnique. The 37-instruction ADD family carries a fourth per-resource add call (live 0x1822baec0 vs golden 0x18210d790); the 34-instruction SET family (_1 / PDM_0) lacks it and is not mapped."
+  },
+  "CoveAfterShot.BuffAddMethods": {
+   "goldenLiterals": [
+    "bbgf",
+    "okg",
+    "nyc",
+    "bber",
+    "nyl",
+    "bvq",
+    "bbcv",
+    "jeg",
+    "dgc",
+    "bbbv",
+    "hrc",
+    "fhp",
+    "jlv",
+    "jon"
+   ],
+   "live": [
+    "Method_Public_Object1PublicBoInchStBucodaBuObtaUnique_String_Int32_Int32_InterfacePublicAbstractbdObbeUnHebeUnInbeObUnique_Int32_Boolean_0",
+    "Method_Public_Object1PublicBoInchStBucodaBuObtaUnique_String_Int32_Int32_InterfacePublicAbstractbdObbeUnHebeUnInbeObUnique_Int32_Boolean_PDM_0",
+    "Method_Public_Object1PublicBoInchStBucodaBuObtaUnique_String_Int32_Int32_InterfacePublicAbstractbdObbeUnHebeUnInbeObUnique_Int32_Boolean_PDM_1",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "ObjectPublicDi2StLi1ObcjInLi1Unique"
+   ],
+   "evidence": "Golden buff manager ObjectPublicDi2StLi1ObceInLi1Unique -> live ObjectPublicDi2StLi1ObcjInLi1Unique. Live has three buff-add wrappers (beis, dkj, ofy) with identical call sequences, native body 0.752 against golden bbgf; the other golden aliases have no live counterpart."
+  },
+  "CoveAfterShot.BuffAddShape": {
+   "goldenLiterals": [
+    "bbgf",
+    "bber",
+    "bbcv",
+    "Method_Public_Object1PublicBoInchStBucodaBuObtaUnique_String_Int32_Int32_InterfacePublicAbstractbaObbbUnInbbUnObbbObUnique_Int32_Boolean_0"
+   ],
+   "live": [
+    "Method_Public_Object1PublicBoInchStBucodaBuObtaUnique_String_Int32_Int32_InterfacePublicAbstractbdObbeUnHebeUnInbeObUnique_Int32_Boolean_0",
+    "Method_Public_Object1PublicBoInchStBucodaBuObtaUnique_String_Int32_Int32_InterfacePublicAbstractbdObbeUnHebeUnInbeObUnique_Int32_Boolean_PDM_0",
+    "Method_Public_Object1PublicBoInchStBucodaBuObtaUnique_String_Int32_Int32_InterfacePublicAbstractbdObbeUnHebeUnInbeObUnique_Int32_Boolean_PDM_1",
+    null
+   ],
+   "owners": [
+    "ObjectPublicDi2StLi1ObcjInLi1Unique"
+   ],
+   "evidence": "Same three live buff-add wrappers as CoveAfterShot.BuffAddMethods (body 0.752 vs golden bbgf)."
+  },
+  "DraconicDominion.BattleLogicHeroDataHeroMembers": {
+   "goldenLiterals": [
+    "get__cbfh_k__BackingField",
+    "get_cbfh",
+    "xal",
+    "cbfh",
+    "_cbfh_k__BackingField",
+    "ccez",
+    "_ccez_k__BackingField"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "_chkw_k__BackingField"
+   ],
+   "owners": [
+    "Hex.Session.Logic.Hero"
+   ],
+   "evidence": "Golden Hero ccez backing field (DataHero) -> live Hex.Session.Logic.Hero <chkw>k__BackingField, the sole DataHero-typed field; cbfh/xal literals are dead off golden."
+  },
+  "DraconicDominion.UnitCost": {
+   "goldenLiterals": [
+    "bgvs",
+    "Method_Public_Static_UnitCost_Boolean_ObjectPublicHeObInObciSiObVeSeObUnique_String_0"
+   ],
+   "live": [
+    "Method_Public_Static_UnitCost_Boolean_ObjectPublicHeObInObcnSiObVeBoObUnique_String_0",
+    null
+   ],
+   "owners": [
+    "ObjectPublicAbstractSealedHa1StcnUnique"
+   ],
+   "evidence": "Golden bgvs (ord 6) -> live bkdd (ord 17), the sole UnitCost(Boolean,hero,String) static; native body 0.962."
+  },
+  "DraconicDominion.SquadEscapeOnEscapeClick": {
+   "goldenLiterals": [
+    "OnEscapeClick"
+   ],
+   "live": [
+    "Method_Public_Void_0"
+   ],
+   "owners": [
+    "Hex.Session.UI.BhSquadEscapeUISession"
+   ],
+   "evidence": "Golden OnEscapeClick (real-named) -> live bbvc (ord 4), native body 0.907."
+  },
+  "DraconicDominion.SquadEscapeHide": {
+   "goldenLiterals": [
+    "OnHide"
+   ],
+   "live": [
+    "Method_Public_Virtual_Void_0"
+   ],
+   "owners": [
+    "Hex.Session.UI.BhSquadEscapeUISession"
+   ],
+   "evidence": "Golden OnHide (ord 2) -> live igf Method_Public_Virtual_Void_0 (ord 2), native body 0.905."
+  },
+  "DraconicDominion.DiplomacyUnitsPanelHide": {
+   "goldenLiterals": [
+    "OnHide"
+   ],
+   "live": [
+    "Method_Public_Virtual_Void_0"
+   ],
+   "owners": [
+    "Hex.Session.UI.BhDiplomacyUnitsPanel"
+   ],
+   "evidence": "Golden OnHide -> live igf Method_Public_Virtual_Void_0, native body 0.900."
+  },
+  "ImportVisuals.ResManagerObjectLoader": {
+   "goldenLiterals": [
+    "bmts",
+    "bmsl",
+    "bmsi",
+    "bmfq",
+    "Get",
+    "Method_Private_Object_String_0"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Private_Object_String_0"
+   ],
+   "owners": [
+    "Hex.ResManager"
+   ],
+   "evidence": "GE selected ResManager.Method_Private_Object_String_0 (ordinal 13, generic Object(String)) as the known loader; live same name at the same ordinal."
+  },
+  "MapSquadVisual.ControllerTypeHints": {
+   "goldenLiterals": [
+    "ObjectPublicGaObcjObUncjAnBhObStUnique",
+    "ezp",
+    "ezn"
+   ],
+   "live": [
+    "ObjectPublicGaObcoObUncoAnBhObStUnique",
+    null,
+    null
+   ],
+   "typeChecks": [
+    [
+     "ObjectPublicGaObcoObUncoAnBhObStUnique",
+     "Il2CppSystem.Object",
+     58,
+     67,
+     ""
+    ],
+    null,
+    null
+   ],
+   "evidence": "Golden controller ObjectPublicGaObcjObUncjAnBhObStUnique -> live ObjectPublicGaObcoObUncoAnBhObStUnique; its visibility bind body is 1.000 against golden."
+  },
+  "MapSquadVisual.VisibilityBind": {
+   "goldenLiterals": [
+    "bieq",
+    "jxp",
+    "Method_Public_Void_Boolean_PDM_2"
+   ],
+   "live": [
+    null,
+    null,
+    "Method_Public_Void_Boolean_PDM_0"
+   ],
+   "owners": [
+    "ObjectPublicGaObcoObUncoAnBhObStUnique"
+   ],
+   "evidence": "Golden bieq/jxp/Method_Public_Void_Boolean_PDM_2 fold to one native body (VA 0x18220dd00); live Method_Public_Void_Boolean_PDM_0 folds with its alias at VA 0x1823c64e0, native body 1.000."
+  },
+  "WarcryHeroAbility.PerAbilityBind": {
+   "goldenLiterals": [
+    "sli",
+    "skw",
+    "skk",
+    "Method_Public_Void_ObjectPublicAbbwObBubwObItUnbwObUnique_ObjectPublicObBochBoObchBochBoUnique_0"
+   ],
+   "live": [
+    "Method_Public_Void_ObjectPublicAbcaObBucaObItUncaObUnique_ObjectPublicObBocmBoObcmBocmBoUnique_0",
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "Hex.UI.BhHeroAbilitiyView"
+   ],
+   "evidence": "Golden BhHeroAbilitiyView.sli(ability container, wrapper) -> live tet, the sole same-signature method, native body 0.881."
+  },
+  "WarcryHeroAbility.ContainerBind": {
+   "goldenLiterals": [
+    "ski",
+    "skj",
+    "sjw",
+    "sjx",
+    "sjk",
+    "sjl",
+    "Method_Public_Void_ObjectPublicAbbwObBubwObItUnbwObUnique_List_1_ObjectPublicStInHeInObHecfObchcfUnique_0",
+    "Method_Public_Void_ObjectPublicAbbwObBubwObItUnbwObUnique_List_1_ObjectPublicStInHeInObHecfObchcfUnique_1"
+   ],
+   "live": [
+    "Method_Public_Void_ObjectPublicAbcaObBucaObItUncaObUnique_List_1_ObjectPublicStInHeInObHeckObchckUnique_0",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "Hex.UI.Battle.BhHeroAbilitiesView"
+   ],
+   "evidence": "The view moved to Hex.UI.Battle and its two golden container binds ski/skj (container, List<ability>) became one: live wpu, the sole same-signature method, native body 0.622 / 0.574. The golden arena bind skk has no live counterpart and stays refused."
+  },
+  "WarcryHeroAbility.ContainerContextSet": {
+   "goldenLiterals": [
+    "skp",
+    "skd",
+    "sjr",
+    "Method_Public_Void_ObjectPublicStInHeInObHecfObchcfUnique_PDM_0"
+   ],
+   "live": [
+    "Method_Public_Void_ObjectPublicStInHeInObHeckObchckUnique_PDM_0",
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "Hex.UI.Battle.BhHeroAbilitiesView"
+   ],
+   "evidence": "Golden skp (ability) -> live wpp, the sole Void(ability) method on the moved view, native body 0.600."
+  },
+  "WarcryHeroAbility.HeroAbilityViewListFields": {
+   "goldenLiterals": [
+    "heroAbilities",
+    "separateHeroAbilities"
+   ],
+   "live": [
+    "heroAbilities",
+    null
+   ],
+   "owners": [
+    "Hex.UI.Battle.BhHeroAbilitiesView"
+   ],
+   "evidence": "Live Hex.UI.Battle.BhHeroAbilitiesView keeps the real-named heroAbilities list; separateHeroAbilities was removed from the view."
+  },
+  "WarcryHeroAbility.HeroAbilityGetters": {
+   "goldenLiterals": [
+    "slf",
+    "get_cnhp",
+    "skt",
+    "skh",
+    "get_cneu",
+    "get_cndx"
+   ],
+   "live": [
+    "Method_Public_get_ObjectPublicStInHeInObHeckObchckUnique_0",
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "Hex.UI.BhHeroAbilitiyView"
+   ],
+   "evidence": "Golden BhHeroAbilitiyView.slf (ability getter, ord 1) -> live teq (ord 2), native body 1.000. skt/skh were container-view methods, not getters; the get_* literals are deobf names."
+  },
+  "WarcryHeroAbility.HeroAbilityOutGetters": {
+   "goldenLiterals": [
+    "beuf",
+    "cwk",
+    "dmw",
+    "dlx",
+    "csf",
+    "beqn",
+    "fby",
+    "mgo",
+    "besj",
+    "mzn",
+    "berk",
+    "hhg",
+    "Method_Public_Boolean_ObjectPublicUnchInBhchTuTuchchUnique_PDM_0",
+    "Method_Public_Boolean_ObjectPublicUnchInBhchTuTuchchUnique_PDM_1"
+   ],
+   "live": [
+    "Method_Public_Boolean_byref_ObjectPublicStInHeInObHeckObchckUnique_PDM_1",
+    "Method_Public_Boolean_byref_ObjectPublicStInHeInObHeckObchckUnique_PDM_0",
+    "Method_Public_Boolean_byref_ObjectPublicStInHeInObHeckObchckUnique_PDM_2",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Public_Boolean_ObjectPublicUncmInBhcmTuTucmcmUnique_PDM_0",
+    "Method_Public_Boolean_ObjectPublicUncmInBhcmTuTucmcmUnique_PDM_1"
+   ],
+   "owners": [
+    "ObjectPublicObBocmBoObcmBocmBoUnique",
+    "ObjectPublicIncmObUncmFu1BhcmDiUnique"
+   ],
+   "evidence": "Golden wrapper out-getters beuf/cwk read field +0x10 into the out ability; the three live ability out-getters (lej, bhzw, cma) have identical bodies (1.000) reading the same +0x10 field. The GE required pick Method_Public_Boolean_ObjectPublicUnchInBhchTuTuchchUnique_PDM_0 (ete) -> live bhxz/iwg, body 0.830 each."
+  },
+  "WarcryHeroAbility.HeroAbilityFields": {
+   "goldenLiterals": [
+    "bydd",
+    "bwhs",
+    "chev",
+    "<chev>k__BackingField",
+    "bybb",
+    "bxzr",
+    "field_Private_edn_0",
+    "field_Public_edn_0",
+    "field_Private_ObjectPublicStInHeInObHecfObchcfUnique_0",
+    "prop_ObjectPublicStInHeInObHecfObchcfUnique_0"
+   ],
+   "live": [
+    null,
+    "cago",
+    null,
+    "<cmpf>k__BackingField",
+    null,
+    null,
+    null,
+    "field_Public_ObjectPublicStInHeInObHeckObchckUnique_0",
+    "field_Private_ObjectPublicStInHeInObHeckObchckUnique_0",
+    null
+   ],
+   "owners": [
+    "Hex.UI.BhHeroAbilitiyView",
+    "ObjectPublicAbcaObBucaObItUncaObUnique",
+    "ObjectPublicObBocmBoObcmBocmBoUnique"
+   ],
+   "evidence": "The GE required check matched BhHeroAbilitiyView.field_Private_ObjectPublicStInHeInObHecfObchcfUnique_0 (bydd); live is field_Private_ObjectPublicStInHeInObHeckObchckUnique_0 (cccp) on the same type. The ability container public ability field (golden bwhs) is live cago; the wrapper backing field (golden chev) is live <cmpf>k__BackingField. The generated scope had kept golden interop names that do not exist on live."
+  },
+  "FactoryCityScene.SceneNameParse": {
+   "goldenLiterals": [
+    "Method_Public_Static_EScene_String_0",
+    "Method_Public_Static_EScene_String_PDM_0",
+    "Method_Public_Static_EScene_String_PDM_1",
+    "Method_Public_Static_EScene_String_PDM_2"
+   ],
+   "live": [
+    "Method_Public_Static_EScene_String_0",
+    "Method_Public_Static_EScene_String_PDM_0",
+    "Method_Public_Static_EScene_String_PDM_1",
+    "Method_Public_Static_EScene_String_PDM_2"
+   ],
+   "owners": [
+    "ObjectPublicAbstractSealedcrBoaESqpdwBoaESStUnique"
+   ],
+   "evidence": "GE patches every static EScene(String) on the parse helper (four golden copies, identical bodies). Live has five, each native body 1.000 against every golden copy; the four golden slots map to the same-named live copies, and the fifth live copy (PDM_3) has no golden slot and stays unpatched. The prefix only rewrites the string cityFactory; native parse of cityFactory already works through the metadata pin."
+  },
+  "FactoryCityScene.EsceneSceneLoad": {
+   "goldenLiterals": [
+    "Method_Public_Void_EScene_0",
+    "Method_Public_Void_EScene_PDM_0",
+    "Method_Public_Void_EScene_PDM_1",
+    "Method_Public_Void_EScene_PDM_2",
+    "Method_Public_Void_EScene_Boolean_0",
+    "Method_Public_Void_EScene_Boolean_PDM_0",
+    "Method_Public_Void_EScene_Boolean_PDM_1",
+    "Method_Public_Void_EScene_Boolean_PDM_2",
+    "Method_Public_Void_EScene_Boolean_PDM_3"
+   ],
+   "live": [
+    "Method_Public_Void_EScene_0",
+    "Method_Public_Void_EScene_PDM_0",
+    "Method_Public_Void_EScene_PDM_1",
+    "Method_Public_Void_EScene_PDM_2",
+    "Method_Public_Void_EScene_Boolean_0",
+    "Method_Public_Void_EScene_PDM_3",
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "ObjectPublicDi2ESObcaUnique"
+   ],
+   "evidence": "GE patches every instance Void(EScene) and Void(EScene,Boolean) on the scene helper. Live Void(EScene) copies jiz/cgw/qpc/hbf/bgg each score 0.895 against every golden copy; the single live Void(EScene,Boolean) qoy scores 0.947. Golden has five Void(EScene,Boolean) slots for one live copy, so the spare slot carries the fifth live Void(EScene) copy (bgg). The prefix acts only on ordinal 26."
+  },
+  "FactoryCityScene.EsceneSceneIsLoaded": {
+   "goldenLiterals": [
+    "Method_Public_Boolean_EScene_0"
+   ],
+   "live": [
+    "Method_Public_Boolean_EScene_0"
+   ],
+   "owners": [
+    "ObjectPublicDi2ESObcaUnique"
+   ],
+   "evidence": "Golden pvn Method_Public_Boolean_EScene_0 -> live same name (qox), native body 0.789 (four equal live copies). The registrar prefix is a pass-through."
+  },
+  "CustomDwellingCity.CityWorldObjectInit": {
+   "goldenLiterals": [
+    "Init",
+    "Method_Public_Void_0",
+    "Method_Public_Void_1",
+    "Method_Public_Void_2",
+    "Method_Public_Void_3"
+   ],
+   "live": [
+    null,
+    "Method_Public_Void_PDM_0",
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "ObjectPublicAbstractObcoESObcocuEScucoObUnique"
+   ],
+   "evidence": "GE registered city=4: golden Method_Public_Void_0..3 are four aliases of one native body (VA 0x18224cf90). Live has one public Void() on the type, Method_Public_Void_PDM_0 (blzb, ord 1), native body 0.818."
+  },
+  "HomecomingBoatTravel.MapDataLevelsMapMembers": {
+   "goldenLiterals": [
+    "levelsMap"
+   ],
+   "live": [
+    "levelsMap"
+   ],
+   "owners": [
+    "Hex.Map.MapData"
+   ],
+   "evidence": "Declared 2026-10-01 for the campaign ocean identity (tile 2 + waterMap 2 at levelsMap -1), after the remap was generated. Real-name field: ilspycmd -t Hex.Map.MapData on the 25509697 interop (F:/olden_port_work/Current Era 25509697 BepInEx/BepInEx/interop/Hex.dll) shows `public Il2CppStructArray<sbyte> levelsMap` with GetIl2CppField(..., \"levelsMap\"), the same name and type as the Golden Era interop. Proof tier: static interop evidence; runtime unproven."
+  }
+ }
+}

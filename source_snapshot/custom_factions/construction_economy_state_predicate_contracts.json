@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "policy": {
+    "contractsMustMatchExactPredicateProfiles": true,
+    "transactionStatePredicatesAreNotNativeGameplayProof": true,
+    "constructionPredicatesRequireCommittedConstructionProof": true,
+    "rewardPredicatesRequireCommittedRewardOrOwnershipProof": true,
+    "customLedgerPredicatesRequireExplicitSideScopedLedgerProof": true,
+    "uiPreviewOrStaticReadSubstituteForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredRuntimeProof": [
+    "active law-owner side correlation proof",
+    "committed construction transaction proof",
+    "committed reward or ownership transition proof",
+    "displayed and charged cost parity proof where costs change",
+    "side-scoped custom ledger read/write proof",
+    "persistent state save/load or lifecycle proof",
+    "idempotent per-transaction application proof",
+    "transaction cancellation/preview exclusion proof"
+  ],
+  "contracts": {
+    "RequiresCaptureToken": {
+      "requiredEffectKeys": [
+        "dungeon.capture-token-dwelling-build"
+      ],
+      "allowedFactions": [
+        "homm3_dungeon"
+      ],
+      "allowedFamilies": [
+        "Construction"
+      ],
+      "requiredRuntimeSemantics": [
+        "A side-scoped capture token must be created only by a committed capture or equivalent adventure-object ownership event.",
+        "The token must be consumed by a committed eligible construction transaction, not by previewing or opening the construction UI.",
+        "The token source, token owner, city owner, and active law owner must all correlate to the same Dungeon side."
+      ],
+      "forbiddenSubstitutes": [
+        "building allowlist alone counted as a capture token",
+        "ordinary ownership read counted without a transfer event",
+        "captured object display text counted as a token",
+        "object icon or map visual counted as a token",
+        "construction preview counted as token consumption",
+        "global token ledger without side and source correlation"
+      ]
+    },
+    "RequiresCaptureOrOwnershipTransfer": {
+      "requiredEffectKeys": [
+        "dungeon.mine-guard-underground-income"
+      ],
+      "allowedFactions": [
+        "homm3_dungeon"
+      ],
+      "allowedFamilies": [
+        "RewardEconomy"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must observe a committed mine, external dwelling, guarded object, or equivalent ownership transfer result.",
+        "A static object owner read is only context; it is not the transfer event.",
+        "Reward application must happen once after the transfer result is committed and correlated to the Dungeon law owner."
+      ],
+      "forbiddenSubstitutes": [
+        "map object owned by Dungeon counted without transfer timing",
+        "combat start or win counted without ownership result",
+        "reward preview counted as committed income",
+        "mine income tick counted as capture reward",
+        "object proximity or hover text counted as ownership transfer",
+        "generic adventure reward event without captured object identity"
+      ]
+    },
+    "RequiresPersistentMatureDwellingState": {
+      "requiredEffectKeys": [
+        "rampart-mature-dwelling-upgrade"
+      ],
+      "allowedFactions": [
+        "homm3_rampart"
+      ],
+      "allowedFamilies": [
+        "Construction"
+      ],
+      "requiredRuntimeSemantics": [
+        "A mature dwelling state must be explicitly recorded for a specific Rampart city or dwelling source.",
+        "The persistent state must survive the intended lifecycle boundary before enabling an upgrade or extra construction benefit.",
+        "The mature state, target building, city owner, and active law owner must all correlate before any construction mutation."
+      ],
+      "forbiddenSubstitutes": [
+        "building allowlist alone counted as mature dwelling state",
+        "any Rampart dwelling counted as mature",
+        "growth display text counted as persistent maturation",
+        "same-turn construction preview counted as mature state",
+        "visual upgrade icon counted as mature state",
+        "global mature flag without city or dwelling identity"
+      ]
+    },
+    "RequiresGarrisonSacrifice": {
+      "requiredEffectKeys": [
+        "inferno-garrison-sacrifice-extra-build"
+      ],
+      "allowedFactions": [
+        "homm3_inferno"
+      ],
+      "allowedFamilies": [
+        "Construction"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must represent a committed, deterministic sacrifice of units from the relevant city garrison or allowed party source.",
+        "Sacrifice value must be computed from exact unit stacks and compared against the configured percent threshold before construction is committed.",
+        "The sacrificed stack owner, city owner, construction target, and active Inferno law owner must correlate, with cancellation leaving units unchanged."
+      ],
+      "forbiddenSubstitutes": [
+        "garrison existence counted as sacrifice",
+        "selected UI unit counted before transaction commit",
+        "ordinary build cost payment counted as sacrifice",
+        "Inferno faction membership counted as sacrifice",
+        "displayed cost discount counted without unit removal",
+        "temporary summon or gated unit counted as permanent sacrifice without identity proof"
+      ]
+    },
+    "RequiresDeathworksCredit": {
+      "requiredEffectKeys": [
+        "necropolis-deathworks-credit-build"
+      ],
+      "allowedFactions": [
+        "homm3_necropolis"
+      ],
+      "allowedFamilies": [
+        "Construction"
+      ],
+      "requiredRuntimeSemantics": [
+        "Deathworks credit must be an explicit side-scoped ledger generated by committed casualty, corpse, or captured-dwelling events defined by the law packet.",
+        "The ledger must be consumed only by a committed eligible Necropolis construction transaction.",
+        "Credit source, credit owner, city owner, building allowlist, and active law owner must all correlate before an extra build or cost mutation."
+      ],
+      "forbiddenSubstitutes": [
+        "corpse count alone counted as deathworks credit",
+        "undead unit identity counted as construction credit",
+        "building allowlist alone counted as credit",
+        "Necropolis faction membership counted as credit",
+        "necromancy or corpse-themed display text counted as credit",
+        "global credit ledger without side and source correlation"
+      ]
+    },
+    "RequiresRareResourceBalance": {
+      "requiredEffectKeys": [
+        "tower.rare-resource-transmutation"
+      ],
+      "allowedFactions": [
+        "homm3_tower"
+      ],
+      "allowedFamilies": [
+        "RewardEconomy"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must read exact committed rare-resource balances for the Tower law owner side after the reward/economy transaction point.",
+        "The transmutation policy must identify which resource types are rare resources and apply a capped conversion exactly once.",
+        "Resource reads, resource writes, reward identity, and active law owner must all correlate to the same side."
+      ],
+      "forbiddenSubstitutes": [
+        "resource primitive existence counted as rare-resource balance",
+        "reward preview counted as committed resource state",
+        "gold balance counted as rare resource",
+        "generic resource delta counted without rare-resource classification",
+        "Tower faction membership counted as available transmutation",
+        "UI resource text counted without side resource heap proof"
+      ]
+    }
+  }
+}

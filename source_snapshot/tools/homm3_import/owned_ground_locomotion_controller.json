@@ -1,0 +1,28 @@
+{
+  "schema": "owned_ground_locomotion_controller.v1",
+  "parameter": "move",
+  "applyRootMotion": false,
+  "runtimePlayOrCrossFade": false,
+  "updatePoller": false,
+  "states": [
+    {"name": "22.Idle", "clipRole": "Idle", "loop": true},
+    {"name": "ground.MoveStart", "clipRole": "MoveStart", "loop": false},
+    {"name": "01.Walk", "clipRole": "Move", "loop": true},
+    {"name": "ground.MoveEnd", "clipRole": "MoveEnd", "loop": false}
+  ],
+  "transitions": [
+    {"from": "22.Idle", "to": "ground.MoveStart", "param": "move", "equals": true, "hasExitTime": false},
+    {"from": "ground.MoveStart", "to": "01.Walk", "param": null, "equals": null, "hasExitTime": true},
+    {"from": "01.Walk", "to": "ground.MoveEnd", "param": "move", "equals": false, "hasExitTime": false},
+    {"from": "ground.MoveEnd", "to": "22.Idle", "param": null, "equals": null, "hasExitTime": true},
+    {"from": "ground.MoveStart", "to": "ground.MoveEnd", "param": "move", "equals": false, "hasExitTime": false, "interrupt": true},
+    {"from": "ground.MoveEnd", "to": "ground.MoveStart", "param": "move", "equals": true, "hasExitTime": false, "interrupt": true}
+  ],
+  "forbiddenTransitions": [
+    {"from": "22.Idle", "to": "01.Walk"},
+    {"from": "01.Walk", "to": "22.Idle"}
+  ],
+  "maxStopLatencyMovePeriods": 1.0,
+  "stopUsesCanonicalMovePhaseAnchor": true,
+  "proofTier": "source/static structural contract; Unity clone of StockEsquireBattle is not yet generated"
+}

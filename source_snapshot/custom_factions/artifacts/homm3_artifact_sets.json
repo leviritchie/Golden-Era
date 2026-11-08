@@ -1,0 +1,565 @@
+{
+  "schema": "homm3_artifact_sets.v1",
+  "notes": "HoMM3 SoD+HotA combination artifacts mapped to OE item_sets. Components keep their slots; set bonuses approximate combo effects (best-effort, no fake exotic mechanics).",
+  "sets": [
+    {
+      "id": "homm3_angelic_alliance_item_set",
+      "name": "Angelic Alliance",
+      "source": "sod",
+      "componentH3Ids": [31, 32, 33, 34, 35, 36],
+      "bonuses": [
+        {
+          "requiredItemsAmount": "3",
+          "desc": "homm3_angelic_alliance_item_set_description_1",
+          "descText": "Creatures from different factions do not lower each other's Morale.",
+          "heroBonuses": [
+            {
+              "type": "unitBoolStat",
+              "parameters": ["ignoreFractionsCount", "true"]
+            }
+          ]
+        },
+        {
+          "requiredItemsAmount": "6",
+          "desc": "homm3_angelic_alliance_item_set_description_2",
+          "descText": "+3 Initiative and Speed to all friendly creatures (Prayer stand-in).",
+          "heroBonuses": [
+            {
+              "type": "unitStat",
+              "receivers": [],
+              "parameters": ["speed", "3"]
+            },
+            {
+              "type": "unitStat",
+              "receivers": [],
+              "parameters": ["initiative", "3"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_armor_of_the_damned_item_set",
+      "name": "Armor of the Damned",
+      "source": "sod",
+      "componentH3Ids": [8, 17, 20, 26],
+      "bonuses": [
+        {
+          "requiredItemsAmount": "2",
+          "desc": "homm3_armor_of_the_damned_item_set_description_1",
+          "descText": "-1 Morale and Luck to all enemy creatures.",
+          "heroBonuses": [
+            {
+              "type": "unitStat",
+              "receiverAllegiance": "enemy",
+              "parameters": ["luck", "-1"]
+            },
+            {
+              "type": "unitStat",
+              "receiverAllegiance": "enemy",
+              "parameters": ["moral", "-1"]
+            }
+          ]
+        },
+        {
+          "requiredItemsAmount": "3",
+          "desc": "homm3_armor_of_the_damned_item_set_description_2",
+          "descText": "-1 Initiative and Speed to all enemy creatures.",
+          "heroBonuses": [
+            {
+              "type": "unitStat",
+              "receiverAllegiance": "enemy",
+              "parameters": ["initiative", "-1"]
+            },
+            {
+              "type": "unitStat",
+              "receiverAllegiance": "enemy",
+              "parameters": ["speed", "-1"]
+            }
+          ]
+        },
+        {
+          "requiredItemsAmount": "4",
+          "desc": "homm3_armor_of_the_damned_item_set_description_3",
+          "descText": "All enemy creatures deal minimal Damage (opening-curse stand-in).",
+          "heroBonuses": [
+            {
+              "type": "unitBoolStat",
+              "receiverAllegiance": "enemy",
+              "parameters": ["alwaysMinDmg", "true"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_cloak_of_the_undead_king_item_set",
+      "name": "Cloak of the Undead King",
+      "source": "sod",
+      "componentH3Ids": [54, 55, 56],
+      "mechanicsStatus": "partial",
+      "bonuses": [
+        {
+          "requiredItemsAmount": "2",
+          "desc": "homm3_cloak_of_the_undead_king_item_set_description_1",
+          "descText": "+1 Morale to all friendly creatures (necromancy stand-in).",
+          "heroBonuses": [
+            {
+              "type": "unitStat",
+              "receivers": [],
+              "parameters": ["moral", "1"]
+            }
+          ]
+        },
+        {
+          "requiredItemsAmount": "3",
+          "desc": "homm3_cloak_of_the_undead_king_item_set_description_2",
+          "descText": "+25% maximum HP to all friendly creatures (raised-undead strength stand-in; true necromancy % unmapped).",
+          "heroBonuses": [
+            {
+              "type": "unitStat",
+              "receivers": [],
+              "parameters": ["hpPerc", "0.25"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_elixir_of_life_item_set",
+      "name": "Elixir of Life",
+      "source": "sod",
+      "componentH3Ids": [94, 95, 96],
+      "bonuses": [
+        {
+          "requiredItemsAmount": "2",
+          "desc": "homm3_elixir_of_life_item_set_description_1",
+          "descText": "+10% maximum HP to all friendly creatures.",
+          "heroBonuses": [
+            {
+              "type": "unitStat",
+              "receivers": [],
+              "parameters": ["hpPerc", "0.10"]
+            }
+          ]
+        },
+        {
+          "requiredItemsAmount": "3",
+          "desc": "homm3_elixir_of_life_item_set_description_2",
+          "descText": "+25% maximum HP to all friendly creatures.",
+          "heroBonuses": [
+            {
+              "type": "unitStat",
+              "receivers": [],
+              "parameters": ["hpPerc", "0.25"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_statue_of_legion_item_set",
+      "name": "Statue of Legion",
+      "source": "sod",
+      "componentH3Ids": [118, 119, 120, 121, 122],
+      "bonuses": [
+        {
+          "requiredItemsAmount": "3",
+          "desc": "homm3_statue_of_legion_item_set_description_1",
+          "descText": "+25% creature growth in all towns.",
+          "heroBonuses": [
+            {
+              "type": "cityUnitsIncrementPer",
+              "parameters": ["all", "0.25"]
+            }
+          ]
+        },
+        {
+          "requiredItemsAmount": "5",
+          "desc": "homm3_statue_of_legion_item_set_description_2",
+          "descText": "+50% creature growth in all towns.",
+          "heroBonuses": [
+            {
+              "type": "cityUnitsIncrementPer",
+              "parameters": ["all", "0.50"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_power_of_the_dragon_father_item_set",
+      "name": "Power of the Dragon Father",
+      "source": "sod",
+      "componentH3Ids": [37, 38, 39, 40, 41, 42, 43, 44, 45],
+      "bonuses": [
+        {
+          "requiredItemsAmount": "3",
+          "desc": "homm3_power_of_the_dragon_father_item_set_description_1",
+          "descText": "+2 to all primary attributes.",
+          "heroBonuses": [
+            { "type": "heroStat", "parameters": ["offence", "2"] },
+            { "type": "heroStat", "parameters": ["defence", "2"] },
+            { "type": "heroStat", "parameters": ["intelligence", "2"] },
+            { "type": "heroStat", "parameters": ["spellPower", "2"] }
+          ]
+        },
+        {
+          "requiredItemsAmount": "6",
+          "desc": "homm3_power_of_the_dragon_father_item_set_description_2",
+          "descText": "Friendly creatures are immune to all negative effects.",
+          "heroBonuses": [
+            {
+              "type": "unitBoolStat",
+              "parameters": ["immuneToDebuffs", "true"]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": ["enableImmuneDebufInMap", "true"]
+            }
+          ]
+        },
+        {
+          "requiredItemsAmount": "9",
+          "desc": "homm3_power_of_the_dragon_father_item_set_description_3",
+          "descText": "+4 to all primary attributes (full dragon-father stand-in; true spell-level immunity unmapped).",
+          "heroBonuses": [
+            { "type": "heroStat", "parameters": ["offence", "4"] },
+            { "type": "heroStat", "parameters": ["defence", "4"] },
+            { "type": "heroStat", "parameters": ["intelligence", "4"] },
+            { "type": "heroStat", "parameters": ["spellPower", "4"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_titans_thunder_item_set",
+      "name": "Titan's Thunder",
+      "source": "sod",
+      "componentH3Ids": [12, 18, 24, 30],
+      "bonuses": [
+        {
+          "requiredItemsAmount": "2",
+          "desc": "homm3_titans_thunder_item_set_description_1",
+          "descText": "+2 Attack, Defense, Spell Power, and Knowledge.",
+          "heroBonuses": [
+            { "type": "heroStat", "parameters": ["offence", "2"] },
+            { "type": "heroStat", "parameters": ["defence", "2"] },
+            { "type": "heroStat", "parameters": ["spellPower", "2"] },
+            { "type": "heroStat", "parameters": ["intelligence", "2"] }
+          ]
+        },
+        {
+          "requiredItemsAmount": "4",
+          "desc": "homm3_titans_thunder_item_set_description_2",
+          "descText": "+4 Attack, Defense, Spell Power, and Knowledge (Titan's Lightning stand-in).",
+          "heroBonuses": [
+            { "type": "heroStat", "parameters": ["offence", "4"] },
+            { "type": "heroStat", "parameters": ["defence", "4"] },
+            { "type": "heroStat", "parameters": ["spellPower", "4"] },
+            { "type": "heroStat", "parameters": ["intelligence", "4"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_admirals_hat_item_set",
+      "name": "Admiral's Hat",
+      "source": "sod",
+      "componentH3Ids": [71, 123],
+      "bonuses": [
+        {
+          "requiredItemsAmount": "2",
+          "desc": "homm3_admirals_hat_item_set_description_1",
+          "descText": "+1200 Movement (boarding/whirlpool conversion stand-in).",
+          "heroBonuses": [
+            {
+              "type": "heroStat",
+              "parameters": ["movementBonus", "1200"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_bow_of_the_sharpshooter_item_set",
+      "name": "Bow of the Sharpshooter",
+      "source": "sod",
+      "componentH3Ids": [60, 61, 62],
+      "mechanicsStatus": "partial",
+      "bonuses": [
+        {
+          "requiredItemsAmount": "2",
+          "desc": "homm3_bow_of_the_sharpshooter_item_set_description_1",
+          "descText": "+1 Initiative to all friendly creatures.",
+          "heroBonuses": [
+            {
+              "type": "unitStat",
+              "receivers": [],
+              "parameters": ["initiative", "1"]
+            }
+          ]
+        },
+        {
+          "requiredItemsAmount": "3",
+          "desc": "homm3_bow_of_the_sharpshooter_item_set_description_2",
+          "descText": "+2 Initiative and always deal maximum Damage (no range/obstacle penalty stand-in).",
+          "heroBonuses": [
+            {
+              "type": "unitStat",
+              "receivers": [],
+              "parameters": ["initiative", "2"]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": ["alwaysMaxDmg", "true"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_wizards_well_item_set",
+      "name": "Wizard's Well",
+      "source": "sod",
+      "componentH3Ids": [73, 74, 75],
+      "bonuses": [
+        {
+          "requiredItemsAmount": "2",
+          "desc": "homm3_wizards_well_item_set_description_1",
+          "descText": "Restore 50% of maximum Mana each day.",
+          "heroBonuses": [
+            {
+              "type": "heroStat",
+              "parameters": ["manaRestoreBonusPercent", "0.5"]
+            }
+          ]
+        },
+        {
+          "requiredItemsAmount": "3",
+          "desc": "homm3_wizards_well_item_set_description_2",
+          "descText": "Fully restore Mana each day.",
+          "heroBonuses": [
+            {
+              "type": "heroStat",
+              "parameters": ["manaRestoreBonusPercent", "1"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_ring_of_the_magi_item_set",
+      "name": "Ring of the Magi",
+      "source": "sod",
+      "componentH3Ids": [76, 77, 78],
+      "bonuses": [
+        {
+          "requiredItemsAmount": "2",
+          "desc": "homm3_ring_of_the_magi_item_set_description_1",
+          "descText": "+1 duration to outgoing buffs.",
+          "heroBonuses": [
+            {
+              "type": "heroStat",
+              "parameters": ["outComingBuffDuration", "1"]
+            }
+          ]
+        },
+        {
+          "requiredItemsAmount": "3",
+          "desc": "homm3_ring_of_the_magi_item_set_description_2",
+          "descText": "+2 duration to outgoing buffs (spell-duration stand-in).",
+          "heroBonuses": [
+            {
+              "type": "heroStat",
+              "parameters": ["outComingBuffDuration", "2"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_cornucopia_item_set",
+      "name": "Cornucopia",
+      "source": "sod",
+      "componentH3Ids": [109, 110, 111, 113],
+      "bonuses": [
+        {
+          "requiredItemsAmount": "2",
+          "desc": "homm3_cornucopia_item_set_description_1",
+          "descText": "+2 Crystals, Gemstones, Mercury, and Sulfur per day.",
+          "heroBonuses": [
+            { "type": "sideRes", "parameters": ["crystals", "2"] },
+            { "type": "sideRes", "parameters": ["gemstones", "2"] },
+            { "type": "sideRes", "parameters": ["mercury", "2"] },
+            { "type": "sideRes", "parameters": ["sulfur", "2"] }
+          ]
+        },
+        {
+          "requiredItemsAmount": "4",
+          "desc": "homm3_cornucopia_item_set_description_2",
+          "descText": "+5 Crystals, Gemstones, Mercury, and Sulfur per day.",
+          "heroBonuses": [
+            { "type": "sideRes", "parameters": ["crystals", "5"] },
+            { "type": "sideRes", "parameters": ["gemstones", "5"] },
+            { "type": "sideRes", "parameters": ["mercury", "5"] },
+            { "type": "sideRes", "parameters": ["sulfur", "5"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_diplomats_cloak_item_set",
+      "name": "Diplomat's Cloak",
+      "source": "hota",
+      "componentH3Ids": [66, 67, 68],
+      "assembledH3Id": 142,
+      "bonuses": [
+        {
+          "requiredItemsAmount": "2",
+          "desc": "homm3_diplomats_cloak_item_set_description_1",
+          "descText": "Improved diplomacy efficiency.",
+          "heroBonuses": [
+            {
+              "type": "heroStat",
+              "parameters": ["diplomacyEfficiencyPerBonus", "0.10"]
+            }
+          ]
+        },
+        {
+          "requiredItemsAmount": "3",
+          "desc": "homm3_diplomats_cloak_item_set_description_2",
+          "descText": "Neutral squads join for free; surrender/diplomacy cost reduced (full HotA diplomacy extras unmapped).",
+          "heroBonuses": [
+            {
+              "type": "heroStat",
+              "parameters": ["diplomacyCostPerBonus", "-1.0"]
+            },
+            {
+              "type": "heroStat",
+              "parameters": ["diplomacyEfficiencyPerBonus", "0.20"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_pendant_of_reflection_item_set",
+      "name": "Pendant of Reflection",
+      "source": "hota",
+      "componentH3Ids": [57, 58, 59],
+      "assembledH3Id": 143,
+      "bonuses": [
+        {
+          "requiredItemsAmount": "2",
+          "desc": "homm3_pendant_of_reflection_item_set_description_1",
+          "descText": "Enemy magic schools are weakened by 1.",
+          "heroBonuses": [
+            {
+              "type": "heroStatBattle",
+              "receiverAllegiance": "enemy",
+              "parameters": ["magicSchoolSet", "day", "0", "-1"]
+            },
+            {
+              "type": "heroStatBattle",
+              "receiverAllegiance": "enemy",
+              "parameters": ["magicSchoolSet", "night", "0", "-1"]
+            },
+            {
+              "type": "heroStatBattle",
+              "receiverAllegiance": "enemy",
+              "parameters": ["magicSchoolSet", "space", "0", "-1"]
+            },
+            {
+              "type": "heroStatBattle",
+              "receiverAllegiance": "enemy",
+              "parameters": ["magicSchoolSet", "primal", "0", "-1"]
+            }
+          ]
+        },
+        {
+          "requiredItemsAmount": "3",
+          "desc": "homm3_pendant_of_reflection_item_set_description_2",
+          "descText": "Friendly creatures are immune to negative effects (magic-resistance stand-in).",
+          "heroBonuses": [
+            {
+              "type": "unitBoolStat",
+              "parameters": ["immuneToDebuffs", "true"]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": ["enableImmuneDebufInMap", "true"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_ironfist_of_the_ogre_item_set",
+      "name": "Ironfist of the Ogre",
+      "source": "hota",
+      "componentH3Ids": [10, 16, 22, 28],
+      "assembledH3Id": 144,
+      "mechanicsStatus": "partial",
+      "bonuses": [
+        {
+          "requiredItemsAmount": "2",
+          "desc": "homm3_ironfist_of_the_ogre_item_set_description_1",
+          "descText": "+2 Attack, Defense, Spell Power, and Knowledge.",
+          "heroBonuses": [
+            { "type": "heroStat", "parameters": ["offence", "2"] },
+            { "type": "heroStat", "parameters": ["defence", "2"] },
+            { "type": "heroStat", "parameters": ["spellPower", "2"] },
+            { "type": "heroStat", "parameters": ["intelligence", "2"] }
+          ]
+        },
+        {
+          "requiredItemsAmount": "4",
+          "desc": "homm3_ironfist_of_the_ogre_item_set_description_2",
+          "descText": "+2 Speed/Initiative to all friendly creatures (opening battle buffs stand-in).",
+          "heroBonuses": [
+            {
+              "type": "unitStat",
+              "receivers": [],
+              "parameters": ["speed", "2"]
+            },
+            {
+              "type": "unitStat",
+              "receivers": [],
+              "parameters": ["initiative", "2"]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": ["alwaysCounter", "true"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homm3_golden_goose_item_set",
+      "name": "Golden Goose",
+      "source": "hota",
+      "componentH3Ids": [115, 116, 117],
+      "assembledH3Id": 160,
+      "bonuses": [
+        {
+          "requiredItemsAmount": "2",
+          "desc": "homm3_golden_goose_item_set_description_1",
+          "descText": "+2000 Gold per day.",
+          "heroBonuses": [
+            { "type": "sideRes", "parameters": ["gold", "2000"] }
+          ]
+        },
+        {
+          "requiredItemsAmount": "3",
+          "desc": "homm3_golden_goose_item_set_description_2",
+          "descText": "+4750 Gold per day (with components totals ~7000).",
+          "heroBonuses": [
+            { "type": "sideRes", "parameters": ["gold", "4750"] }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,219 @@
+{
+ "unit": "h3_genie",
+ "sourceMesh": "artifacts/homm3_mesh_surgery/h3_genie_from_genie_upg.glb",
+ "sourceMeshReason": "2026-10-10 coordinator-approved transplant (option a): the plain-Genie Meshy mesh had the arms fused crossed over a chest that does not exist, so they could not open. Built from the Master Genie's open-arm mesh with only the base colour re-graded to the CGENIE palette (tools/homm3_unit_look/genie_recolor.py: steel-grey skin, red vest, blue turban and topknot, gold trim); geometry identical to artifacts/meshy_downloads/h3_genie_upg_smartrigged.glb. Joints are the h3_genie_upg hand-placed joints. Known deviation: the turban is the Master Genie's round turban with a hanging tail, not CGENIE's tall topknot.",
+ "joints": {
+  "Hips": [
+   0,
+   0.0,
+   0.95
+  ],
+  "Spine": [
+   0,
+   0.01,
+   1.07
+  ],
+  "Spine1": [
+   0,
+   0.01,
+   1.2
+  ],
+  "Spine2": [
+   0,
+   0.01,
+   1.33
+  ],
+  "Neck": [
+   0,
+   0.02,
+   1.51
+  ],
+  "Head": [
+   0,
+   0.0,
+   1.58
+  ],
+  "HeadTop_End": [
+   0,
+   0.0,
+   1.86
+  ],
+  "LeftShoulder": [
+   0.06,
+   0.02,
+   1.44
+  ],
+  "LeftArm": [
+   0.19,
+   0.02,
+   1.42
+  ],
+  "LeftForeArm": [
+   0.3,
+   -0.03,
+   1.2
+  ],
+  "LeftHand": [
+   0.41,
+   -0.1,
+   1.0
+  ],
+  "LeftHand_End": [
+   0.44,
+   -0.16,
+   0.88
+  ],
+  "RightShoulder": [
+   -0.06,
+   0.02,
+   1.44
+  ],
+  "RightArm": [
+   -0.19,
+   0.02,
+   1.42
+  ],
+  "RightForeArm": [
+   -0.3,
+   -0.03,
+   1.2
+  ],
+  "RightHand": [
+   -0.41,
+   -0.1,
+   1.0
+  ],
+  "RightHand_End": [
+   -0.44,
+   -0.16,
+   0.88
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ]
+ },
+ "shrinkOut": {
+  "start": 4
+ },
+ "armCut": {
+  "maxDist": 0.07
+ },
+ "glbPatch": {
+  "reason": "authenticity lane-A 2026-10-10: the CGENIE capture leaves the transplanted open-arm body with hanging arms; the DEF folds them across the chest at rest/move/mouseover, raises the left arm in Defence f2-f5, flings both wide in Hitted f1-f4, raises then thrusts both hands at the target in AttackFront f2-f4 and throws them overhead in Death f2+. Spec: tools/homm3_glb_patch/key_rotations/h3_genie_arms_spec.json (generator V:/olden_port_work/authenticity/h3_genie/work/armspec.py, SOFT=0.3, CLAV=0, XLU=0.8,-0.35,0.5, XLF=-0.95,0.15,0.25 (2026-10-10 follow-up: the folded forearms cross at chest height instead of the belly, as in the DEF): the raised/wide/thrust directions are blended 30% toward hanging-forward so the shoulders hold; split table: rot applied twice).",
+  "ops": [
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftHand",
+     "RightHand",
+     "LeftForeArm",
+     "RightForeArm"
+    ],
+    "to": "Hips",
+    "region": [
+     {
+      "axis": "x",
+      "above": -0.3,
+      "ramp": 0.03
+     },
+     {
+      "axis": "x",
+      "below": 0.3,
+      "ramp": 0.03
+     },
+     {
+      "axis": "z",
+      "below": 0.75,
+      "ramp": 0.05
+     }
+    ],
+    "note": "2026-10-10 smoke-tail tip surgery: the heat weights bled up to 18% hand/forearm weight onto the smoke tail (1300 verts below the waist, tip 0.82 Hips / 0.09 LeftHand / 0.08 RightHand), so any arm pose change swung the tip (the chest fold moved the Idle-entry tip 0.085 and failed the ground gate); the tail follows the Hips only. The hands rest at |x| 0.39-0.48, z 0.84+, outside the region."
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftArm",
+     "RightArm",
+     "LeftShoulder",
+     "RightShoulder"
+    ],
+    "to": "Spine2",
+    "region": [
+     {
+      "axis": "x",
+      "above": -0.13,
+      "ramp": 0.02
+     },
+     {
+      "axis": "x",
+      "below": 0.13,
+      "ramp": 0.02
+     },
+     {
+      "axis": "z",
+      "above": 1.11,
+      "ramp": 0.02
+     },
+     {
+      "axis": "z",
+      "below": 1.25,
+      "ramp": 0.02
+     },
+     {
+      "axis": "y",
+      "below": -0.1,
+      "ramp": 0.02
+     }
+    ],
+    "note": "the arm/shoulder weight bleeding onto the front of the chest under the armpit (Spine1/2 + Arm verts at x +-0.06, height 1.18) tore to 9x when the arms fold or rise; it is chest skin, so it follows Spine2"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_genie_arms_rot.json",
+    "sha256": "9c6650fcd3d190fa83f8fce07aec860c80062430df18d6e428e22db2ac5a82b5",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_genie_arms_rot.json",
+    "sha256": "9c6650fcd3d190fa83f8fce07aec860c80062430df18d6e428e22db2ac5a82b5",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_genie_hitted_lift_tr.json",
+    "sha256": "89225287c86a094964e2c03ba845df72894e7ffa91582c84589627df63bf541c",
+    "note": "2026-10-10: the smoke tail now follows the Hips only (moveWeights above), so the Hitted recoil crouch (Hips y 0.95 -> 0.79) pushed the tail tip 0.085 H below the floor; the DEF's lowest point sinks only 0.022 H in Hitted. Hips +0.03/+0.06/+0.06 (glTF units) on keys 3-5 keeps the recoil and backward lurch but makes the crouch shallower, which matches the DEF floor line."
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Idle",
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd",
+     "Unit_Mouseover",
+     "Unit_Defence",
+     "Unit_Hitted",
+     "Unit_AttackFront",
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "strain-limits the shoulder and armpit folds of the folded/raised arm poses (gate 931 -> 498 <= input; worst 4.97 <= 4.956 x 1.05)"
+   }
+  ]
+ }
+}

@@ -1,0 +1,503 @@
+{
+ "unit": "h3_centaur_ranger",
+ "joints": {
+  "Hips": [
+   0,
+   0.28,
+   0.68
+  ],
+  "Spine": [
+   0,
+   0,
+   0.68
+  ],
+  "Spine1": [
+   0,
+   -0.38,
+   0.85
+  ],
+  "Spine2": [
+   0,
+   -0.42,
+   1.1
+  ],
+  "Neck": [
+   0,
+   -0.44,
+   1.28
+  ],
+  "Head": [
+   0,
+   -0.46,
+   1.36
+  ],
+  "HeadTop_End": [
+   0,
+   -0.47,
+   1.6
+  ],
+  "LeftShoulder": [
+   0.06,
+   -0.45,
+   1.22
+  ],
+  "LeftArm": [
+   0.2,
+   -0.45,
+   1.22
+  ],
+  "LeftForeArm": [
+   0.28,
+   -0.5,
+   1.06
+  ],
+  "LeftHand": [
+   0.32,
+   -0.6,
+   0.97
+  ],
+  "LeftHand_End": [
+   0.33,
+   -0.64,
+   0.93
+  ],
+  "RightShoulder": [
+   -0.06,
+   -0.45,
+   1.22
+  ],
+  "RightArm": [
+   -0.2,
+   -0.45,
+   1.22
+  ],
+  "RightForeArm": [
+   -0.3,
+   -0.42,
+   1.0
+  ],
+  "RightHand": [
+   -0.37,
+   -0.45,
+   0.83
+  ],
+  "RightHand_End": [
+   -0.4,
+   -0.46,
+   0.76
+  ],
+  "LeftUpLeg": [
+   0.12,
+   0.3,
+   0.62
+  ],
+  "LeftLeg": [
+   0.17,
+   0.3,
+   0.3
+  ],
+  "LeftFoot": [
+   0.19,
+   0.2,
+   0.08
+  ],
+  "LeftToeBase": [
+   0.19,
+   0.18,
+   0.02
+  ],
+  "LeftToe_End": [
+   0.19,
+   0.14,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.1,
+   0.32,
+   0.62
+  ],
+  "RightLeg": [
+   -0.08,
+   0.5,
+   0.3
+  ],
+  "RightFoot": [
+   -0.12,
+   0.38,
+   0.08
+  ],
+  "RightToeBase": [
+   -0.12,
+   0.36,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.12,
+   0.32,
+   0.0
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped"
+ ],
+ "props": [
+  {
+   "name": "bow",
+   "bone": "LeftHand",
+   "box": [
+    [
+     0.25,
+     -0.82,
+     0.5
+    ],
+    [
+     0.4,
+     -0.44,
+     1.62
+    ]
+   ],
+   "exclude": [
+    {
+     "box": [
+      [
+       0.2,
+       -0.58,
+       0.9
+      ],
+      [
+       0.4,
+       -0.4,
+       1.2
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "quadruped": {
+  "staticCapture": false,
+  "reset": [
+   "Hips",
+   "Spine",
+   "LeftUpLeg",
+   "LeftLeg",
+   "LeftFoot",
+   "LeftToeBase",
+   "RightUpLeg",
+   "RightLeg",
+   "RightFoot",
+   "RightToeBase"
+  ],
+  "chains": [
+   {
+    "prefix": "QFL",
+    "points": [
+     [
+      0.12,
+      -0.47,
+      0.52
+     ],
+     [
+      0.12,
+      -0.47,
+      0.26
+     ],
+     [
+      0.12,
+      -0.49,
+      0.07
+     ],
+     [
+      0.12,
+      -0.51,
+      0.0
+     ]
+    ],
+    "region": {
+     "box": [
+      [
+       0.02,
+       -0.62,
+       0.0
+      ],
+      [
+       0.24,
+       -0.34,
+       0.5
+      ]
+     ]
+    },
+    "parent": "Spine",
+    "rootBlend": 0.5
+   },
+   {
+    "prefix": "QFR",
+    "points": [
+     [
+      -0.1,
+      -0.34,
+      0.52
+     ],
+     [
+      -0.1,
+      -0.32,
+      0.26
+     ],
+     [
+      -0.09,
+      -0.3,
+      0.07
+     ],
+     [
+      -0.09,
+      -0.28,
+      0.0
+     ]
+    ],
+    "region": {
+     "box": [
+      [
+       -0.22,
+       -0.46,
+       0.0
+      ],
+      [
+       0.02,
+       -0.18,
+       0.5
+      ]
+     ]
+    },
+    "parent": "Spine",
+    "rootBlend": 0.5
+   }
+  ],
+  "legs": [
+   {
+    "bones": [
+     "QFL_00",
+     "QFL_01",
+     "QFL_02"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "QFR_00",
+     "QFR_01",
+     "QFR_02"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "tail": {
+   "points": [
+    [
+     0,
+     0.46,
+     0.9
+    ],
+    [
+     0,
+     0.6,
+     0.7
+    ],
+    [
+     0,
+     0.68,
+     0.45
+    ],
+    [
+     0,
+     0.74,
+     0.25
+    ]
+   ],
+   "region": {
+    "box": [
+     [
+      -0.16,
+      0.5,
+      0.2
+     ],
+     [
+      0.14,
+      0.8,
+      1.0
+     ]
+    ],
+    "exclude": [
+     {
+      "box": [
+       [
+        -0.2,
+        0.4,
+        0.0
+       ],
+       [
+        0.1,
+        0.64,
+        0.45
+       ]
+      ]
+     }
+    ]
+   },
+   "rootBlend": 0.6
+  },
+  "nod": {
+   "bones": [],
+   "deg": 0
+  },
+  "fit": {
+   "pitch": [
+    0,
+    10
+   ],
+   "fold": 25,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "QFL_00",
+     "QFL_01"
+    ],
+    [
+     "QFR_00",
+     "QFR_01"
+    ]
+   ],
+   "dx": [
+    -4,
+    4
+   ],
+   "groundClips": [
+    "Idle",
+    "Mouseover",
+    "Hitted",
+    "Defence",
+    "AttackFront",
+    "ShootFront"
+   ],
+   "note": "2026-10-09 user send-back (full-body rotation cheating part-body moves): the silhouette fit may only rear the body up to 10 deg about the hind feet, never pitch it nose-down (was [-15, 50]: lunges and thrusts were whole-body dives), may not slide it (dx +-4 px), keeps standing clips on their floor, and the Death roll starts at the collapse (was sideRampFrames 3). The motion moves into the neck, torso, forelegs and hind legs (glbPatch keys).",
+   "pitchClips": {
+    "Defence": [
+     0,
+     0
+    ],
+    "ShootFront": [
+     0,
+     0
+    ]
+   }
+  },
+  "settle": {
+   "clips": [
+    "Death"
+   ],
+   "bones": [
+    "Spine1",
+    "Spine2",
+    "Neck",
+    "Head"
+   ],
+   "reach": 0.6
+  }
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "glbPatch": {
+  "reason": "2026-10-09 authenticity send-back fix 1 (lane A, Rampart): the user rejected whole-body rotation doing part-body moves. The quadruped fit is narrowed (pitch 0..10 about the hind feet, Defence and ShootFront 0, dx +-4 px, standing clips on the floor, Death roll only at the collapse) and the keys carry no Hips or horse-Spine rotation. ShootFront (from spec r8): quiver reach f1, nock f2, full draw f3-f4 with the shoulders turned side-on and the draw hand at the cheek, release f5, aim held f6-f9, recover f10-f12, over a level, planted horse. AttackFront: the rear is the forelegs tucked at the knee (QF_00 -45, QF_01 +70 at f2-f3), then the bow-thrust lunge in Spine1/Spine2 (24/12 deg). Hitted: hunch and recoil in Spine1/Spine2/Neck. Death: hind legs buckle and the forelegs give (Hips sinks 0.05 H, f3-f5), the rider slumps flat over the neck, then the base side fall at f6. Defence: guard turn in Spine1/Neck over a level horse. Weight repair: foreleg shoulder and horse-to-torso waist boundaries diffused (the tuck and lunge tore them). Gate 609 -> 603 edges over 2x (worst 8.85 -> 5.74).",
+  "ops": [
+   {
+    "op": "diffuseWeights",
+    "bones": [
+     "LeftShoulder",
+     "RightShoulder",
+     "LeftArm",
+     "RightArm",
+     "Spine1",
+     "Spine2",
+     "Spine"
+    ],
+    "iterations": 8,
+    "alpha": 0.5,
+    "note": "soften the armpit/shoulder weight boundary"
+   },
+   {
+    "op": "diffuseWeights",
+    "bones": [
+     "QFL_00",
+     "QFR_00",
+     "Spine"
+    ],
+    "iterations": 6,
+    "alpha": 0.5,
+    "note": "soften the foreleg shoulder weight boundary so the rear tuck folds without tearing"
+   },
+   {
+    "op": "diffuseWeights",
+    "bones": [
+     "Spine",
+     "Spine1",
+     "Spine2",
+     "RightArm",
+     "RightShoulder"
+    ],
+    "iterations": 8,
+    "alpha": 0.5,
+    "note": "soften the horse-to-torso waist weight boundary"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_ranger_pose_rot.json",
+    "sha256": "18b8354b0b2d924d79faddaaaa1903d85f76e33e4384d4fdf3b34dd70699f51a",
+    "regrid": true,
+    "note": "motion-intent key poses (apose)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_ranger_pose_rot2.json",
+    "sha256": "8587078df902e173847abdb066ebba42902f39d94b49c0f0ecf7c117521d59b1",
+    "regrid": true,
+    "note": "second half of the >115 deg turns"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_ranger_pose_tr.json",
+    "sha256": "b94ec3c8343b30de5ad5ec12b626875e3e85d4e5d8cea6c5599a3e6b6a284e63",
+    "regrid": true,
+    "note": "Hips translation keys"
+   }
+  ]
+ }
+}

@@ -1,0 +1,179 @@
+{
+ "unit": "h3_banshee",
+ "joints": {
+  "Hips": [
+   0.003,
+   0.129,
+   0.923
+  ],
+  "Spine": [
+   0.003,
+   0.122,
+   1.023
+  ],
+  "Spine1": [
+   0.003,
+   0.115,
+   1.123
+  ],
+  "Spine2": [
+   0.003,
+   0.108,
+   1.234
+  ],
+  "Neck": [
+   0.003,
+   0.101,
+   1.322
+  ],
+  "Head": [
+   0.003,
+   0.129,
+   1.406
+  ],
+  "HeadTop_End": [
+   -0.01,
+   0.052,
+   1.581
+  ],
+  "LeftShoulder": [
+   0.059,
+   0.129,
+   1.378
+  ],
+  "LeftArm": [
+   0.178,
+   0.094,
+   1.308
+  ],
+  "LeftForeArm": [
+   0.269,
+   0.178,
+   1.098
+  ],
+  "LeftHand": [
+   0.22,
+   -0.031,
+   1.105
+  ],
+  "LeftHand_End": [
+   0.2,
+   -0.119,
+   1.108
+  ],
+  "RightShoulder": [
+   -0.052,
+   0.129,
+   1.378
+  ],
+  "RightArm": [
+   -0.171,
+   0.094,
+   1.308
+  ],
+  "RightForeArm": [
+   -0.262,
+   0.178,
+   1.098
+  ],
+  "RightHand": [
+   -0.206,
+   -0.031,
+   1.105
+  ],
+  "RightHand_End": [
+   -0.183,
+   -0.118,
+   1.108
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 60,
+   "dy": 60,
+   "roll": 90
+  }
+ },
+ "shatter": {
+  "start": 6,
+  "chunks": 40
+ },
+ "bonePile": {
+  "spread": 0.7,
+  "heapHeight": 0.18,
+  "tumble": 70
+ },
+ "extensions": [
+  "castle_armsep",
+  "necropolis_weightfill",
+  "necropolis_bonepile"
+ ],
+ "armSep": [
+  {
+   "armBones": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "shell": {
+    "share": 0.4,
+    "minVerts": 400
+   },
+   "low": 0.5,
+   "top": 1.3,
+   "ramp": 0.08,
+   "side": "left",
+   "note": "banshee sleeves: bone heat fused the hanging sleeves (z 0.65-1.35) to the robe, so the overhead AttackFront raise (DEF g12 f1-f2) tore 7250 -> 9366; shell-mode cut frees the sleeve like the wight/wraith (2026-10-11)"
+  },
+  {
+   "armBones": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "shell": {
+    "share": 0.4,
+    "minVerts": 400
+   },
+   "low": 0.5,
+   "top": 1.3,
+   "ramp": 0.08,
+   "side": "right",
+   "note": "banshee sleeves: bone heat fused the hanging sleeves (z 0.65-1.35) to the robe, so the overhead AttackFront raise (DEF g12 f1-f2) tore 7250 -> 9366; shell-mode cut frees the sleeve like the wight/wraith (2026-10-11)"
+  }
+ ],
+ "glbPatch": {
+  "reason": "DEF g12 attack: both hands thrown up overhead (f1), stretched along the rising diagonal (f2), then the claws dive forward-down at the target (f3-f5); robe front stripped of bled arm weights (z<0.55) + GPU weight re-solve so the raise does not tear the robe (gate 3490 -> 3476)",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_banshee_robe_weights.json",
+    "sha256": "9437456206de788ac2e1661c97f2ef723935c4e588c883ff3beed2ae28c143dc",
+    "note": "robe: strip arm weights bled into the robe front below the sleeves (z<0.55, armstrip.py) + GPU re-solve of the sleeve/robe band vs the AttackFront raise (wsolve.py x2)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_banshee_pose_rot.json",
+    "sha256": "c20569e4c998553d2f7fdd58455ac84141d1d0f04b5f4fcd5fe10d65d9336a70",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_banshee_pose_rot.json",
+    "sha256": "c20569e4c998553d2f7fdd58455ac84141d1d0f04b5f4fcd5fe10d65d9336a70",
+    "regrid": true
+   }
+  ]
+ }
+}

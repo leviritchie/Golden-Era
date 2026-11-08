@@ -1,0 +1,247 @@
+{
+ "unit": "h3_marksman",
+ "joints": {
+  "Hips": [
+   -0.024,
+   -0.087,
+   0.827
+  ],
+  "Spine": [
+   -0.023,
+   -0.082,
+   0.919
+  ],
+  "Spine1": [
+   -0.021,
+   -0.077,
+   1.012
+  ],
+  "Spine2": [
+   -0.019,
+   -0.071,
+   1.115
+  ],
+  "Neck": [
+   -0.017,
+   -0.066,
+   1.197
+  ],
+  "Head": [
+   -0.017,
+   -0.073,
+   1.343
+  ],
+  "HeadTop_End": [
+   -0.003,
+   -0.15,
+   1.734
+  ],
+  "LeftShoulder": [
+   0.052,
+   -0.073,
+   1.35
+  ],
+  "LeftArm": [
+   0.185,
+   -0.045,
+   1.274
+  ],
+  "LeftForeArm": [
+   0.262,
+   0.038,
+   1.057
+  ],
+  "LeftHand": [
+   0.353,
+   0.017,
+   0.855
+  ],
+  "LeftHand_End": [
+   0.389,
+   0.009,
+   0.773
+  ],
+  "RightShoulder": [
+   -0.087,
+   -0.073,
+   1.35
+  ],
+  "RightArm": [
+   -0.22,
+   -0.045,
+   1.309
+  ],
+  "RightForeArm": [
+   -0.325,
+   0.066,
+   1.106
+  ],
+  "RightHand": [
+   -0.262,
+   -0.101,
+   0.966
+  ],
+  "RightHand_End": [
+   -0.237,
+   -0.168,
+   0.911
+  ],
+  "LeftUpLeg": [
+   0.087,
+   -0.101,
+   0.813
+  ],
+  "LeftLeg": [
+   0.171,
+   -0.185,
+   0.505
+  ],
+  "LeftFoot": [
+   0.234,
+   -0.143,
+   0.114
+  ],
+  "LeftToeBase": [
+   0.248,
+   -0.262,
+   0.003
+  ],
+  "LeftToe_End": [
+   0.276,
+   -0.402,
+   -0.011
+  ],
+  "RightUpLeg": [
+   -0.136,
+   -0.101,
+   0.813
+  ],
+  "RightLeg": [
+   -0.213,
+   -0.171,
+   0.484
+  ],
+  "RightFoot": [
+   -0.276,
+   -0.024,
+   0.114
+  ],
+  "RightToeBase": [
+   -0.297,
+   -0.143,
+   0.003
+  ],
+  "RightToe_End": [
+   -0.339,
+   -0.297,
+   -0.011
+  ]
+ },
+ "props": [
+  {
+   "name": "bow",
+   "bone": "LeftHand",
+   "box": [
+    [
+     0.255,
+     -0.45,
+     0.1
+    ],
+    [
+     0.42,
+     0.35,
+     0.7
+    ]
+   ]
+  },
+  {
+   "name": "quiver",
+   "bone": "Spine",
+   "box": [
+    [
+     0.08,
+     0.12,
+     0.72
+    ],
+    [
+     0.32,
+     0.46,
+     1.12
+    ]
+   ]
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "castle_handcut",
+  "castle_refine",
+  "castle_islandbind"
+ ],
+ "castleRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ],
+  "aimRange": 120,
+  "aimFromRest": true
+ },
+ "castleHandCut": {
+  "sides": [
+   "Right",
+   "Left"
+  ],
+  "handRadius": 0.1,
+  "foreRadius": 0.07
+ },
+ "glbPatch": {
+  "reason": "authenticity pass (lane B): ShootFront re-authored by motion intent against the DEF: brings the crossbow up and holds it level at the enemy f2-f5 with the limbs flat, kicks the prod up on the shot at f6 and lowers. Defence keeps the base keys; only its single-frame 90 deg crossbow snaps (f1, f8) are replaced by the midway pose of their neighbours, still held low. Mouseover is left as shipped and the Defence guard raise is deferred: a lifted crossbow exposes the thigh-welded limb arc as a ghost second crossbow until mesh surgery (coordinator 2026-10-08). AttackFront is left as shipped: blocked by the right forearm welded to the chest. Tear gate over master targets 1347 -> 1336, worst edge unchanged (8.171). 2026-10-08 check pass: head held at its Idle carriage through Mouseover (was ducking down at the crossbow mid-clip; DEF looks ahead). 2026-10-09 lane A (after the crossbow island rip 3a34ae4fb0 removed the thigh-welded ghost limb): Mouseover level lift and Defence upright guard raise (Spine1/Head tuck) restored from a85d060716; the Mouseover head hold is kept.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_marksman_pose_rot.json",
+    "sha256": "b910893bf1d4cd0bd26b0e812d6be1a1c95b946377dccc8b6b79b4f36a7e61f3",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_marksman_pose_rot2.json",
+    "sha256": "1848565003531bf0a470231f5853c02cb354831a8b7b9912309069ad81192aca",
+    "regrid": true
+   }
+  ]
+ },
+ "islandBinds": [
+  {
+   "table": "tools/homm3_def_retarget/island_binds/h3_marksman_crossbow.json",
+   "bone": "LeftHand",
+   "note": "crossbow stock + back limb (30 islands) that Meshy welded to the left thigh: rigid to LeftHand like the bow region"
+  },
+  {
+   "table": "tools/homm3_def_retarget/island_binds/h3_marksman_hip_chips.json",
+   "bone": "RightHand",
+   "adoptFrom": [
+    "RightHand",
+    "RightForeArm"
+   ],
+   "note": "hip-blended chips welded to the right fist on the hip: adopt the fist weights"
+  },
+  {
+   "table": "tools/homm3_def_retarget/island_binds/h3_marksman_thigh_chips.json",
+   "bone": "RightUpLeg",
+   "adoptFrom": [
+    "LeftUpLeg",
+    "RightUpLeg"
+   ],
+   "note": "thigh-surface chips weighted to an arm (RightHand / LeftForeArm): adopt the thigh weights of their weld copies"
+  },
+  {
+   "table": "tools/homm3_def_retarget/island_binds/h3_marksman_crossbow_boot_chips.json",
+   "bone": "LeftHand",
+   "note": "crossbow limb-tip chips at the boots (LeftLeg) welded to the crossbow: rigid LeftHand like the crossbow"
+  }
+ ]
+}

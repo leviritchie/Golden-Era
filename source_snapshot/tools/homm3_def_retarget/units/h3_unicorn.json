@@ -1,0 +1,318 @@
+{
+ "unit": "h3_unicorn",
+ "joints": {
+  "Hips": [
+   0,
+   0.38,
+   0.86
+  ],
+  "Spine": [
+   0,
+   0.18,
+   0.9
+  ],
+  "Spine1": [
+   0,
+   -0.02,
+   0.9
+  ],
+  "Spine2": [
+   0,
+   -0.2,
+   0.93
+  ],
+  "Neck": [
+   0,
+   -0.32,
+   1.02
+  ],
+  "Head": [
+   0,
+   -0.46,
+   1.3
+  ],
+  "HeadTop_End": [
+   0,
+   -0.72,
+   1.06
+  ],
+  "LeftShoulder": [
+   0.066,
+   -0.28,
+   0.92
+  ],
+  "LeftArm": [
+   0.11,
+   -0.32,
+   0.65
+  ],
+  "LeftForeArm": [
+   0.11,
+   -0.3,
+   0.36
+  ],
+  "LeftHand": [
+   0.11,
+   -0.3,
+   0.1
+  ],
+  "LeftHand_End": [
+   0.11,
+   -0.32999999999999996,
+   0.0
+  ],
+  "LeftUpLeg": [
+   0.11,
+   0.38,
+   0.8
+  ],
+  "LeftLeg": [
+   0.12100000000000001,
+   0.45,
+   0.38
+  ],
+  "LeftFoot": [
+   0.12100000000000001,
+   0.4,
+   0.1
+  ],
+  "LeftToeBase": [
+   0.12100000000000001,
+   0.38,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.12100000000000001,
+   0.34,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.054,
+   -0.28,
+   0.92
+  ],
+  "RightArm": [
+   -0.09,
+   -0.27,
+   0.65
+  ],
+  "RightForeArm": [
+   -0.09,
+   -0.25,
+   0.36
+  ],
+  "RightHand": [
+   -0.09,
+   -0.25,
+   0.1
+  ],
+  "RightHand_End": [
+   -0.09,
+   -0.28,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.09,
+   0.38,
+   0.8
+  ],
+  "RightLeg": [
+   -0.099,
+   0.52,
+   0.38
+  ],
+  "RightFoot": [
+   -0.125,
+   0.55,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.13,
+   0.52,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.13,
+   0.46,
+   0.0
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped"
+ ],
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "tail": {
+   "points": [
+    [
+     0,
+     0.55,
+     0.9
+    ],
+    [
+     0,
+     0.64,
+     0.62
+    ],
+    [
+     0,
+     0.66,
+     0.32
+    ],
+    [
+     0,
+     0.65,
+     0.0
+    ]
+   ],
+   "region": {
+    "box": [
+     [
+      -0.22,
+      0.56,
+      0.0
+     ],
+     [
+      0.08,
+      0.76,
+      0.95
+     ]
+    ],
+    "exclude": [
+     {
+      "segments": [
+       [
+        [
+         -0.099,
+         0.52,
+         0.38
+        ],
+        [
+         -0.125,
+         0.55,
+         0.1
+        ]
+       ],
+       [
+        [
+         -0.125,
+         0.55,
+         0.1
+        ],
+        [
+         -0.13,
+         0.45,
+         0.0
+        ]
+       ]
+      ],
+      "radius": 0.08
+     }
+    ]
+   },
+   "rootBlend": 0.6
+  },
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    -20,
+    70
+   ],
+   "fold": 70,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ]
+  }
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "glbPatch": {
+  "reason": "2026-10-09 authenticity pass (lane B), Rampart. Death: the base reared only ~27 deg and then flopped 90 deg onto its side in one frame with the root jumping 0.55 H sideways and the legs stiff; now it rears hard f1-f3 (+15 deg, hind legs and tail held on their planted lines), starts leaning over at f3 (15 deg), is mid-fall at f4 (pose slerped halfway from the base's own f3 rear to its f5 lie, root halfway along the path and lifted to keep the hooves on the ground), lands at f5 and lies dead f5-f7 with the forelegs and bottom hind leg folded, root pulled 0.24 H back toward its hex (rest drift 0.476 -> 0.29 H; the per-key 0.25 H translation guard is the limit; the top hind leg stays straight because the tail is fused to that hock). AttackFront: the head stayed up with the horn pointing skyward through the charge; now the neck and head drop at f4-f6 so the horn is levelled at the enemy, as the DEF. Hitted: the head never moved; now it is thrown up and back (horn tipping back) f1-f4 with the base's half-rear. Defence: +10 deg more rear f3-f8 with hinds and tail held. Tear gate 1106 -> 1023 (worst 8.236 -> 8.58, within slack) after the tail/hock weight diffusion.",
+  "ops": [
+   {
+    "op": "diffuseWeights",
+    "bones": [
+     "QTail_01",
+     "QTail_02",
+     "RightLeg",
+     "RightFoot",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "iterations": 5,
+    "alpha": 0.5,
+    "note": "mesh repair: the hanging tail is fused to the hocks, so any hind-leg or Hips motion against the tail tore the strands; soften the tail/lower-hind-leg weight boundary (Move 1013 -> 906 torn edges as a side effect)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_unicorn_pose_rot.json",
+    "sha256": "f86c61b12241926180646a024f75b0b00095c0b06ff3166c9c3246e84b1d3e9e",
+    "regrid": true,
+    "note": "motion-intent key poses (apose u8)"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_unicorn_pose_tr.json",
+    "sha256": "0acc399c4d2f7c90b8df00ba9a01f3c45343a587f9d494285b6f1cd9b8da9a65",
+    "regrid": true,
+    "note": "Death root: arcs from the f3 rear over the f4 mid-fall to the lying pose, pulled back toward the hex (0.24 H, the per-key guard)"
+   }
+  ]
+ }
+}

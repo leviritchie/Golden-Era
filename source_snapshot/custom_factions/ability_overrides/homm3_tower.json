@@ -1,0 +1,450 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_tower",
+  "unitOverrides": {
+    "h3_gremlin": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "tower.gremlin_line",
+      "decisionTest": "Gremlin defines the tier baseline for tower; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_gremlin_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "tower.gremlin_line",
+      "decisionTest": "Master Gremlin should be chosen over Gremlin Mechanic when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_gremlin_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "tower.gremlin_line",
+      "decisionTest": "Gremlin Mechanic should be chosen over Master Gremlin when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_gargoyle": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "tower.gargoyle_line",
+      "decisionTest": "Stone Gargoyle defines the tier baseline for tower; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_gargoyle_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "tower.gargoyle_line",
+      "decisionTest": "Obsidian Gargoyle should be chosen over Elemental Gargoyle when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_gargoyle_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "tower.gargoyle_line",
+      "decisionTest": "Elemental Gargoyle should be chosen over Obsidian Gargoyle when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_gargoyle_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_gargoyle_upg_alt_redesign_ability_description",
+          "nameText": "Carapace",
+          "descriptionText": "Spend 2 Focus to shield an allied stack with a 1-hit barrier for 1 round.",
+          "iconKey": "sub_skill_faction_homm3_ability_carapace",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "space_8_magic_carapace:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Carapace",
+          "effectPayload": {
+            "spellSid": "space_8_magic_carapace",
+            "spellTier": 2,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "duration": 1,
+            "buffSid": "magic_carapace_effect_0",
+            "buffCharges": 1
+          },
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass.",
+          "spellSid": "space_8_magic_carapace",
+          "spellTier": 2,
+          "spellLevel": 1,
+          "dealerIndex": 0,
+          "duration": 1,
+          "buffSid": "magic_carapace_effect_0",
+          "buffCharges": 1
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_golem": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "tower.golem_line",
+      "decisionTest": "Stone Golem defines the tier baseline for tower; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_golem_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "tower.golem_line",
+      "decisionTest": "Iron Golem should be chosen over Magnetic Golem when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_golem_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "tower.golem_line",
+      "decisionTest": "Magnetic Golem should be chosen over Iron Golem when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_golem_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_golem_upg_alt_redesign_ability_description",
+          "nameText": "Web",
+          "descriptionText": "Spend 2 Focus to give an enemy -2 Speed for 1 round.",
+          "iconKey": "sub_skill_faction_homm3_ability_web",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "night_2_magic_web:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Web",
+          "effectPayload": {
+            "spellSid": "night_2_magic_web",
+            "spellTier": 2,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "duration": 1,
+            "buffSid": "magic_web_effect_0"
+          },
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass.",
+          "spellSid": "night_2_magic_web",
+          "spellTier": 2,
+          "spellLevel": 1,
+          "dealerIndex": 0,
+          "duration": 1,
+          "buffSid": "magic_web_effect_0"
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_mage": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "tower.mage_line",
+      "decisionTest": "Mage defines the tier baseline for tower; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_mage_silence_ability_name",
+          "descriptionKey": "h3_mage_silence_ability_description",
+          "nameText": "Silence",
+          "descriptionText": "Spend 2 Focus to prevent an enemy from using active abilities or gaining Focus for 1 round.",
+          "iconKey": "sub_skill_faction_homm3_ability_silence",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "night_10_magic_silence:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Silence",
+          "effectPayload": {
+            "spellSid": "night_10_magic_silence",
+            "spellTier": 3,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "duration": 1,
+            "buffSid": "magic_silence_effect"
+          },
+          "notes": "June 25 source-validated/runtime-unvalidated balance pass: base Mage reuses the validator-backed Silence spell-effect row shape already used by Battle Mage.",
+          "spellSid": "night_10_magic_silence",
+          "spellTier": 3,
+          "spellLevel": 1,
+          "dealerIndex": 0,
+          "duration": 1,
+          "buffSid": "magic_silence_effect"
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_mage_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "tower.mage_line",
+      "decisionTest": "Arch Mage should be chosen over Battle Mage when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_mage_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "tower.mage_line",
+      "decisionTest": "Battle Mage should be chosen over Arch Mage when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_mage_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_mage_upg_alt_redesign_ability_description",
+          "nameText": "Silence",
+          "descriptionText": "Spend 2 Focus to prevent an enemy from using active abilities or gaining Focus for 1 round.",
+          "iconKey": "sub_skill_faction_homm3_ability_silence",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "night_10_magic_silence:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Silence",
+          "effectPayload": {
+            "spellSid": "night_10_magic_silence",
+            "spellTier": 3,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "duration": 1,
+            "buffSid": "magic_silence_effect"
+          },
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass.",
+          "spellSid": "night_10_magic_silence",
+          "spellTier": 3,
+          "spellLevel": 1,
+          "dealerIndex": 0,
+          "duration": 1,
+          "buffSid": "magic_silence_effect"
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_genie": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "tower.genie_line",
+      "decisionTest": "Genie defines the tier baseline for tower; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_genie_redesign_ability_name",
+          "descriptionKey": "h3_genie_redesign_ability_description",
+          "nameText": "Command: Reposition",
+          "descriptionText": "Spend 2 Focus to move an allied non-self creature to a free hex within 4 hexes.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "arbitrator:abilities:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Command: Reposition",
+          "effectPayload": {},
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_genie_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "tower.genie_line",
+      "decisionTest": "Master Genie should be chosen over Genie Vizier when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_genie_upg_redesign_ability_name",
+          "descriptionKey": "h3_genie_upg_redesign_ability_description",
+          "nameText": "Refract and Reflect",
+          "descriptionText": "Spend 1 Focus to copy this stack's positive effects to another allied stack.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 1,
+          "cooldown": 2,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "angel:abilities:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Refract and Reflect",
+          "effectPayload": {},
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_genie_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "tower.genie_line",
+      "decisionTest": "Genie Vizier should be chosen over Master Genie when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_genie_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_genie_upg_alt_redesign_ability_description",
+          "nameText": "Command: Switch Places",
+          "descriptionText": "Spend 2 Focus to swap a non-self creature with another non-self creature within 8 hexes.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "arbitrator_upg_alt:abilities:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Command: Switch Places",
+          "effectPayload": {},
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_naga": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "tower.naga_line",
+      "decisionTest": "Naga defines the tier baseline for tower; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_naga_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "tower.naga_line",
+      "decisionTest": "Naga Queen should be chosen over Naga Rani when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_naga_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "tower.naga_line",
+      "decisionTest": "Naga Rani should be chosen over Naga Queen when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_giant": {
+      "branchRole": "base-non-shooter",
+      "sourceMechanicId": "tower.giant_titan_shooter_split",
+      "decisionTest": "Giant should not expose Titan shooter behavior before upgrade; choose it as a high-tier melee power stack.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_giant_upg": {
+      "branchRole": "standard-shooter",
+      "sourceMechanicId": "tower.giant_titan_shooter_split",
+      "decisionTest": "Titan should be chosen when the player wants the source shooter branch.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_giant_upg_alt": {
+      "branchRole": "alternate-non-shooter",
+      "sourceMechanicId": "tower.giant_titan_shooter_split",
+      "decisionTest": "Storm Giant should remain a non-shooter alternate unless source data proves otherwise.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_giant_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_giant_upg_alt_redesign_ability_description",
+          "nameText": "Judgement",
+          "descriptionText": "Spend 3 Focus to strike up to 4 enemies for 200 pure damage plus 30 per stack, split across targets.",
+          "iconKey": "sub_skill_faction_homm3_ability_judgement",
+          "abilityType": "Ability_type_attack",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 3,
+          "cooldown": 3,
+          "rank": 5,
+          "charges": "",
+          "effectKey": "day_15_magic_judgement:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Judgement",
+          "effectPayload": {
+            "spellSid": "day_15_magic_judgement",
+            "spellTier": 5,
+            "spellLevel": 1,
+            "dealerIndex": 0
+          },
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass.",
+          "spellSid": "day_15_magic_judgement",
+          "spellTier": 5,
+          "spellLevel": 1,
+          "dealerIndex": 0
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    }
+  }
+}

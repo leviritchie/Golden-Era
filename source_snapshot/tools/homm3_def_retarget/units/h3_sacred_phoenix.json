@@ -1,0 +1,693 @@
+{
+ "unit": "h3_sacred_phoenix",
+ "joints": {
+  "Hips": [
+   0,
+   -0.05,
+   0.55
+  ],
+  "Spine": [
+   0,
+   -0.1,
+   0.7
+  ],
+  "Spine1": [
+   0,
+   -0.15,
+   0.85
+  ],
+  "Spine2": [
+   0,
+   -0.2,
+   1.0
+  ],
+  "Neck": [
+   0,
+   -0.25,
+   1.1
+  ],
+  "Head": [
+   0,
+   -0.33,
+   1.22
+  ],
+  "HeadTop_End": [
+   0,
+   -0.55,
+   1.15
+  ],
+  "LeftUpLeg": [
+   0.1,
+   -0.1,
+   0.5
+  ],
+  "LeftLeg": [
+   0.1,
+   -0.2,
+   0.38
+  ],
+  "LeftFoot": [
+   0.1,
+   -0.28,
+   0.28
+  ],
+  "LeftToeBase": [
+   0.1,
+   -0.35,
+   0.24
+  ],
+  "LeftToe_End": [
+   0.1,
+   -0.45,
+   0.2
+  ],
+  "RightUpLeg": [
+   -0.1,
+   -0.1,
+   0.5
+  ],
+  "RightLeg": [
+   -0.1,
+   -0.2,
+   0.38
+  ],
+  "RightFoot": [
+   -0.1,
+   -0.28,
+   0.28
+  ],
+  "RightToeBase": [
+   -0.1,
+   -0.35,
+   0.24
+  ],
+  "RightToe_End": [
+   -0.1,
+   -0.45,
+   0.2
+  ]
+ },
+ "grounding": true,
+ "extensions": [
+  "conflux_weights",
+  "hand_keys",
+  "conflux_wingfold",
+  "conflux_rubble",
+  "idle_cycle"
+ ],
+ "conflux": {
+  "fillUnweighted": true,
+  "rubbleSettle": {
+   "gather": 0.5,
+   "power": 0.8
+  },
+  "wingFold": {
+   "deg": 0,
+   "upDeg": 80,
+   "axis": "side",
+   "clipAngles": {
+    "Move": [
+     -40,
+     -20,
+     20,
+     30,
+     20,
+     -30
+    ],
+    "Death": [
+     -10,
+     -40,
+     -60,
+     -60,
+     -30,
+     0,
+     0
+    ]
+   }
+  }
+ },
+ "wingMaxDeg": 0,
+ "wings": [
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.17,
+    -0.1,
+    1.05
+   ],
+   "tail": [
+    -0.2,
+    0.45,
+    0.35
+   ],
+   "sign": 1,
+   "parent": "Spine2",
+   "region": {
+    "box": [
+     [
+      -0.6,
+      -0.12,
+      0.3
+     ],
+     [
+      -0.15,
+      0.8,
+      1.15
+     ]
+    ]
+   }
+  },
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.17,
+    -0.1,
+    1.05
+   ],
+   "tail": [
+    0.2,
+    0.45,
+    0.35
+   ],
+   "sign": -1,
+   "parent": "Spine2",
+   "region": {
+    "box": [
+     [
+      0.15,
+      -0.12,
+      0.3
+     ],
+     [
+      0.6,
+      0.8,
+      1.15
+     ]
+    ]
+   }
+  }
+ ],
+ "handKeys": {
+  "Idle": [
+   {
+    "f": 0,
+    "bones": {
+     "Hips": [
+      0,
+      55,
+      0
+     ]
+    }
+   },
+   {
+    "f": 0,
+    "bones": {
+     "Neck": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 4,
+    "bones": {
+     "Neck": [
+      -4,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 7,
+    "bones": {
+     "Neck": [
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Mouseover": [
+   {
+    "f": 0,
+    "bones": {
+     "Hips": [
+      0,
+      55,
+      0
+     ]
+    }
+   },
+   {
+    "f": 0,
+    "bones": {
+     "Head": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 4,
+    "bones": {
+     "Head": [
+      0,
+      0,
+      -20
+     ]
+    }
+   },
+   {
+    "f": 8,
+    "bones": {
+     "Head": [
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Hitted": [
+   {
+    "f": 0,
+    "bones": {
+     "Hips": [
+      0,
+      55,
+      0
+     ]
+    }
+   },
+   {
+    "f": 0,
+    "bones": {
+     "Spine1": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 2,
+    "bones": {
+     "Spine1": [
+      15,
+      0,
+      0
+     ],
+     "Neck": [
+      10,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 5,
+    "bones": {
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Neck": [
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Defence": [
+   {
+    "f": 0,
+    "bones": {
+     "Hips": [
+      0,
+      55,
+      0
+     ]
+    }
+   },
+   {
+    "f": 0,
+    "bones": {
+     "Spine1": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 3,
+    "bones": {
+     "Spine1": [
+      -12,
+      0,
+      0
+     ],
+     "Neck": [
+      -15,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 6,
+    "bones": {
+     "Spine1": [
+      -12,
+      0,
+      0
+     ],
+     "Neck": [
+      -15,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 8,
+    "bones": {
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Neck": [
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "AttackFront": [
+   {
+    "f": 0,
+    "bones": {
+     "Hips": [
+      0,
+      55,
+      0
+     ]
+    }
+   },
+   {
+    "f": 0,
+    "bones": {
+     "Spine1": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 3,
+    "bones": {
+     "Spine1": [
+      10,
+      0,
+      0
+     ],
+     "Neck": [
+      10,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 5,
+    "bones": {
+     "Spine1": [
+      -15,
+      0,
+      0
+     ],
+     "Neck": [
+      -20,
+      0,
+      0
+     ],
+     "Head": [
+      -10,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 10,
+    "bones": {
+     "Spine1": [
+      -15,
+      0,
+      0
+     ],
+     "Neck": [
+      -20,
+      0,
+      0
+     ],
+     "Head": [
+      -10,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 11,
+    "bones": {
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Neck": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Death": [
+   {
+    "f": 0,
+    "bones": {
+     "Hips": [
+      0,
+      55,
+      0
+     ]
+    }
+   },
+   {
+    "f": 0,
+    "bones": {
+     "Spine1": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 3,
+    "bones": {
+     "Spine1": [
+      12,
+      0,
+      0
+     ],
+     "Neck": [
+      20,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "MoveStart": [
+   {
+    "f": 0,
+    "bones": {
+     "Hips": [
+      0,
+      55,
+      0
+     ]
+    }
+   },
+   {
+    "f": 2,
+    "bones": {
+     "Hips": [
+      35,
+      55,
+      0
+     ]
+    }
+   }
+  ],
+  "Move": [
+   {
+    "f": 0,
+    "bones": {
+     "Hips": [
+      45,
+      55,
+      0
+     ]
+    }
+   }
+  ],
+  "MoveEnd": [
+   {
+    "f": 0,
+    "bones": {
+     "Hips": [
+      35,
+      55,
+      0
+     ]
+    }
+   },
+   {
+    "f": 2,
+    "bones": {
+     "Hips": [
+      0,
+      55,
+      0
+     ]
+    }
+   }
+  ]
+ },
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 40,
+   "dy": 60,
+   "roll": 15
+  }
+ },
+ "shatter": {
+  "start": 4,
+  "chunks": 45,
+  "burst": 0.3,
+  "up": 0.4,
+  "spin": 5,
+  "solid": true
+ },
+ "idleCycle": {
+  "rot": [
+   {
+    "bones": [
+     [
+      "Neck",
+      0.5
+     ],
+     [
+      "Head",
+      0.5
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "peak": 11,
+    "shape": "sin",
+    "phase": 0
+   },
+   {
+    "bones": [
+     [
+      "Spine2",
+      1.0
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "peak": 3,
+    "shape": "sin"
+   },
+   {
+    "bones": [
+     [
+      "LeftWing",
+      1.0
+     ]
+    ],
+    "axis": [
+     0,
+     1,
+     0
+    ],
+    "peak": 8,
+    "shape": "sin",
+    "phase": 90
+   },
+   {
+    "bones": [
+     [
+      "RightWing",
+      1.0
+     ]
+    ],
+    "axis": [
+     0,
+     1,
+     0
+    ],
+    "peak": -8,
+    "shape": "sin",
+    "phase": 90
+   }
+  ]
+ },
+ "glbPatch": {
+  "reason": "2026-10-12 lane D facing fix (user decision: graded look + fix): the Hips [0,55,0] handKeys turn the whole bird (legs, wings and head) ~52 deg off glTF +Z, so freeze_slice's facing gate refused Unit_Idle f0 at 51.9 (cap 45). Hips yaw -17 deg about world up on every clip (whole body, rigid; no Spine counter-rotation: a Hips/Spine twist tears the waist, 7 -> 394 edges past 2x) brings idle-0 to 34.9 while the clips keep the DEF's 3/4 read (board IoU within ~0.02 of the unpatched delivery; a full -52 to +Z drops it 0.71 -> 0.55). Move wing beat (2026-10-12, gargoyle bar): the capture beat the folded wing bones over the back (tailward <-> dorsal, 9..80 deg), which reads as almost no flap; LeftWing/RightWing re-aimed into a spread lateral beat like DEF g00 (15 deg sweep, stroke x1.8 about mid-stroke: up ~+64 / down ~-64 deg), MoveStart/MoveEnd ramped into and out of it; Idle and the other clips untouched.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_sacred_phoenix_facing_rot.json",
+    "regrid": true,
+    "sha256": "a7485e14a67dece7362164b06bde91ac1673cf5bb7f63165d00f0dca1f1ba7e4"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_sacred_phoenix_wing_rot.json",
+    "regrid": true,
+    "sha256": "6fa931c33979595656161abf2d6026307d4ef9c38832a597279d1d9c6dccf12d"
+   }
+  ]
+ }
+}

@@ -1,0 +1,62 @@
+{
+  "schema": "homm3.olden_layered_atlas_scenario_profile.v1",
+  "scenarioId": "maker_of_sorrows_ab_sod",
+  "mapSid": "h3_conflux_maker_of_sorrows_raw_translation",
+  "title": "Maker of Sorrows - Raw Translation",
+  "description": "Parallel Maker of Sorrows emit-only raw_translation map (same pipeline class as Homecoming). Runtime gameplay remains user-unvalidated.",
+  "artifactRoot": "artifacts/campaign_port_poc/ab_sod_campaigns/maker_of_sorrows",
+  "outputSubdir": "raw_translation_map",
+  "inputs": {
+    "alignment": "artifacts/campaign_port_poc/ab_sod_campaigns/maker_of_sorrows/olden_storage_alignment/maker_of_sorrows.olden_storage_alignment.json",
+    "substitutionMap": "artifacts/campaign_port_poc/ab_sod_campaigns/maker_of_sorrows/entity_substitutions/maker_of_sorrows.olden_entity_substitution_map.json",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "coreCatalog": "artifacts/campaign_port_poc/olden_entity_catalog/olden_core_map_valid_entity_catalog.json",
+    "templateMap": "V:\\SteamLibrary\\steamapps\\common\\Heroes of Might and Magic Olden Era - Golden Era\\HeroesOldenEra_Data\\StreamingAssets\\maps\\Thirst_for_Power.map"
+  },
+  "sourceEnvelope": {
+    "width": 108,
+    "height": 108
+  },
+  "layers": {
+    "layerIds": [
+      0,
+      1
+    ],
+    "undergroundLayers": [
+      1
+    ]
+  },
+  "spawn": {
+    "factionSid": "homm3_inferno",
+    "heroSid": "homm3_inferno_hero_17",
+    "playersCount": 1
+  },
+  "startHeroContract": {
+    "sourceLayer": 0,
+    "heroType": 49,
+    "owner": 0,
+    "payloadKind": "hero_or_prison",
+    "templateAnimation": "ah06_e.def",
+    "templateObjectId": 34,
+    "sourceKey": "0:98:81",
+    "sourceIndex": 3274
+  },
+  "pathability": {
+    "surfaceGapFill": false,
+    "emitCoreOverlay": true
+  },
+  "knownGaps": [
+    "AB/SoD StoryHub raw_translation first pass; videos deferred; runtime unvalidated.",
+    "Campaign-unique heroes may map lossily via h3m_hero_sid."
+  ],
+  "runtimeScriptComment": "maker_of_sorrows raw-translation runtime script generated from campaign alignment story.",
+  "coreOverlay": {
+    "mode": "emit_fresh"
+  },
+  "validation": {
+    "expectedSourceLayerEntityCounts": {
+      "0": 3329,
+      "1": 336
+    }
+  }
+}

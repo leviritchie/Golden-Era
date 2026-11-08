@@ -1,0 +1,273 @@
+{
+ "unit": "hota_factory_gunslinger",
+ "joints": {
+  "Hips": [
+   -0.01,
+   -0.017,
+   0.833
+  ],
+  "Spine": [
+   -0.01,
+   0.003,
+   0.947
+  ],
+  "Spine1": [
+   -0.01,
+   0.024,
+   1.06
+  ],
+  "Spine2": [
+   -0.01,
+   0.048,
+   1.187
+  ],
+  "Neck": [
+   -0.01,
+   0.03,
+   1.3
+  ],
+  "Head": [
+   0.0,
+   -0.01,
+   1.38
+  ],
+  "HeadTop_End": [
+   0.0,
+   0.0,
+   1.62
+  ],
+  "LeftShoulder": [
+   0.07,
+   0.02,
+   1.28
+  ],
+  "LeftArm": [
+   0.19,
+   0.03,
+   1.26
+  ],
+  "LeftForeArm": [
+   0.31,
+   0.0,
+   1.06
+  ],
+  "LeftHand": [
+   0.25,
+   -0.18,
+   1.2
+  ],
+  "LeftHand_End": [
+   0.23,
+   -0.25,
+   1.22
+  ],
+  "RightShoulder": [
+   -0.024,
+   -0.031,
+   1.28
+  ],
+  "RightArm": [
+   -0.185,
+   0.031,
+   1.266
+  ],
+  "RightForeArm": [
+   -0.29,
+   0.066,
+   1.078
+  ],
+  "RightHand": [
+   -0.339,
+   -0.066,
+   0.889
+  ],
+  "RightHand_End": [
+   -0.357,
+   -0.117,
+   0.817
+  ],
+  "LeftUpLeg": [
+   0.094,
+   -0.024,
+   0.826
+  ],
+  "LeftLeg": [
+   0.171,
+   -0.059,
+   0.463
+  ],
+  "LeftFoot": [
+   0.199,
+   0.01,
+   0.065
+  ],
+  "LeftToeBase": [
+   0.241,
+   -0.045,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.255,
+   -0.052,
+   0.002
+  ],
+  "RightUpLeg": [
+   -0.101,
+   -0.038,
+   0.826
+  ],
+  "RightLeg": [
+   -0.171,
+   -0.045,
+   0.456
+  ],
+  "RightFoot": [
+   -0.227,
+   0.08,
+   0.079
+  ],
+  "RightToeBase": [
+   -0.234,
+   0.01,
+   0.051
+  ],
+  "RightToe_End": [
+   -0.248,
+   0.017,
+   0.009
+  ]
+ },
+ "props": [
+  {
+   "name": "rifle",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.32,
+      -0.5,
+      1.08
+     ],
+     [
+      0.03,
+      0.47,
+      1.68
+     ]
+    ]
+   ],
+   "radius": 0.06
+  },
+  {
+   "name": "butt",
+   "bone": "LeftHand",
+   "box": [
+    [
+     0.2,
+     -0.52,
+     1.0
+    ],
+    [
+     0.39,
+     -0.29,
+     1.2
+    ]
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.12
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.9,
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.9,
+   "keepDist": 0.12
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "glbPatch": {
+  "reason": "authenticity: DEF g15 shoot + g12 attack - the gunslinger raises the rifle to the left shoulder and levels it at the target (shoot f2-f6) instead of holding it upright; in melee he draws it back level at head height (f2-f3) and lunges a level thrust at chest height (f4-f6). Both arms IK'd to stock/barrel grips with the rifle turned level (propturn), split over two keyRotations passes; arm/shoulder weights re-solved (accumulating wsolve, GPU) for the gate",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_gunslinger_gunslinger_rifle_weights.json",
+    "sha256": "b58b99b6e3d3b9efe28fe48ed8933ba38e0320da422ba5b4069224bd186ab0ad",
+    "note": "gunslinger rifle aim + thrust: arm/shoulder weights re-solved (wsolve, GPU)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_gunslinger_pose_rot.json",
+    "sha256": "9b113629698d8d13b54ff8e380c8f373d8732b2d9b389bf694bb27ad1dd746d1",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_gunslinger_pose_rot.json",
+    "sha256": "9b113629698d8d13b54ff8e380c8f373d8732b2d9b389bf694bb27ad1dd746d1",
+    "regrid": true
+   }
+  ]
+ }
+}

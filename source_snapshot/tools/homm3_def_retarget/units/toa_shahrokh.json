@@ -1,0 +1,207 @@
+{
+ "unit": "toa_shahrokh",
+ "joints": {
+  "Hips": [
+   0,
+   0.05,
+   0.55
+  ],
+  "Spine": [
+   0,
+   -0.05,
+   0.75
+  ],
+  "Spine1": [
+   0,
+   -0.15,
+   0.95
+  ],
+  "Spine2": [
+   0,
+   -0.22,
+   1.15
+  ],
+  "Neck": [
+   0,
+   -0.3,
+   1.35
+  ],
+  "Head": [
+   0,
+   -0.38,
+   1.5
+  ],
+  "HeadTop_End": [
+   0,
+   -0.62,
+   1.52
+  ],
+  "LeftUpLeg": [
+   0.12,
+   -0.05,
+   0.5
+  ],
+  "LeftLeg": [
+   0.13,
+   -0.15,
+   0.35
+  ],
+  "LeftFoot": [
+   0.13,
+   -0.25,
+   0.22
+  ],
+  "LeftToeBase": [
+   0.13,
+   -0.38,
+   0.2
+  ],
+  "LeftToe_End": [
+   0.13,
+   -0.5,
+   0.18
+  ],
+  "RightUpLeg": [
+   -0.12,
+   -0.05,
+   0.5
+  ],
+  "RightLeg": [
+   -0.13,
+   -0.15,
+   0.35
+  ],
+  "RightFoot": [
+   -0.13,
+   -0.25,
+   0.22
+  ],
+  "RightToeBase": [
+   -0.13,
+   -0.38,
+   0.2
+  ],
+  "RightToe_End": [
+   -0.13,
+   -0.5,
+   0.18
+  ]
+ },
+ "wingMaxDeg": 60,
+ "wings": [
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.24,
+    0.1,
+    1.35
+   ],
+   "tail": [
+    -0.55,
+    0.35,
+    1.55
+   ],
+   "sign": 1,
+   "region": {
+    "box": [
+     [
+      -1,
+      -0.2,
+      0.3
+     ],
+     [
+      -0.235,
+      1,
+      1.8
+     ]
+    ]
+   }
+  },
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.24,
+    0.1,
+    1.35
+   ],
+   "tail": [
+    0.55,
+    0.35,
+    1.55
+   ],
+   "sign": -1,
+   "region": {
+    "box": [
+     [
+      0.235,
+      -0.2,
+      0.3
+     ],
+     [
+      1,
+      1,
+      1.8
+     ]
+    ]
+   }
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll",
+   "wing"
+  ],
+  "limits": {
+   "dx": 40,
+   "dy": 70,
+   "roll": 80,
+   "wing": 170
+  }
+ },
+ "legDamp": 0.5,
+ "shatter": {
+  "start": 4,
+  "chunks": 50,
+  "burst": 0.5,
+  "up": -16.0,
+  "spin": 3,
+  "seed": 11,
+  "solid": true
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: Move flies level on the facing (capture dived -35 deg and swung the body +-30 deg) with the head stretched forward (capture hung it beak-down against the chest); the wing beat is amplified 2.3x about frame 0 (58 -> 133 deg peak to peak; wingamp.py), so the wings out-swing the body; MoveStart/MoveEnd ramp the levelling; stretchRelax on the re-posed creases",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/toa_shahrokh_flight_level_head_forward_rot.json",
+    "regrid": true,
+    "sha256": "da60d2e584c2959c23068e08755c89f229d695afcbc15433fa35e78e331965e8"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "crease of the re-posed joints"
+   }
+  ]
+ },
+ "extensions": [
+  "conflux_rubble"
+ ],
+ "conflux": {
+  "rubbleSettle": {
+   "gather": 0.5,
+   "power": 1.0
+  }
+ },
+ "shatterReason": "authenticity lane-B 2026-10-11: the deferred shell rubble (deferMeshes) was not drawn, so the Death ended in a vanish; solid chunks + the rubbleSettle heap on the ground (h3_vampire / h3_lich / h3_fire_hound recipe)."
+}

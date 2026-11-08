@@ -1,0 +1,73 @@
+{
+  "schema": "homm3.olden_layered_atlas_scenario_profile.v1",
+  "scenarioId": "from_day_to_night_roe_necropolis",
+  "mapSid": "h3_roe_necropolis_from_day_to_night_raw_translation",
+  "title": "From Day to Night - Raw Translation",
+  "description": "Parallel From Day to Night emit-only raw_translation map (same pipeline class as Homecoming). Runtime gameplay remains user-unvalidated.",
+  "artifactRoot": "artifacts/campaign_port_poc/roe_remaining_campaigns/from_day_to_night",
+  "outputSubdir": "raw_translation_map",
+  "inputs": {
+    "alignment": "artifacts/campaign_port_poc/roe_remaining_campaigns/from_day_to_night/olden_storage_alignment/from_day_to_night.olden_storage_alignment.json",
+    "substitutionMap": "artifacts/campaign_port_poc/roe_remaining_campaigns/from_day_to_night/entity_substitutions/from_day_to_night.olden_entity_substitution_map.json",
+    "batchManifest": "scenarios/roe_remaining_campaigns/batch_manifest.json",
+    "coreCatalog": "artifacts/campaign_port_poc/olden_entity_catalog/olden_core_map_valid_entity_catalog.json",
+    "templateMap": "V:\\SteamLibrary\\steamapps\\common\\Heroes of Might and Magic Olden Era - Golden Era\\HeroesOldenEra_Data\\StreamingAssets\\maps\\Thirst_for_Power.map"
+  },
+  "sourceEnvelope": {
+    "width": 108,
+    "height": 108
+  },
+  "layers": {
+    "layerIds": [
+      0,
+      1
+    ],
+    "undergroundLayers": [
+      1
+    ]
+  },
+  "spawn": {
+    "factionSid": "homm3_necropolis",
+    "heroSid": "homm3_necropolis_hero_2",
+    "playersCount": 1
+  },
+  "startHeroContract": {
+    "sourceLayer": 0,
+    "heroType": 65,
+    "owner": 5,
+    "payloadKind": "hero_or_prison",
+    "templateAnimation": "ah08_e.def",
+    "templateObjectId": 34,
+    "sourceKey": "0:62:7",
+    "sourceIndex": 2713
+  },
+  "pathability": {
+    "surfaceGapFill": false,
+    "emitCoreOverlay": true
+  },
+  "knownGaps": [
+    "Raw translation is the only campaign map generation lane; the StoryHub continuity installer ships this SID. Layered-atlas, approach-cell, zone-atlas and single-layer lanes are retired.",
+    "emit_fresh core overlay for every mission; no lane inherits another lane's overlay.",
+    "Emit-only: land-on GATE clones, HoMM3 block-mask solid-square mountain/tree sizing, and BR-to-Olden multi-tile node shift are the only placement transforms.",
+    "Forbidden: block parity pads, accessibility repair, mountain merge, local approach-cell clears, spawn unbury, sign omit-as-policy, stray-water GATE clears, boat/decoration extras, functional emit scenery omit, exact-anchor scenery suppress, UG scenery suppress, footprint_alignment, functional_points.",
+    "UG tunnel clearance ON when underground layers exist (chebyshev_two_tile_elevation_shoulder_rock_to_burrow_clearance): H3 rock projects as levelsMap=1 cliffs, so thin corridors would lose 2x2 clearance without the shoulder. Runtime UG traversal remains user-unvalidated.",
+    "Gate-face mirror rotation ON for eligible single-GATE footprints.",
+    "Pickup range fallback ON (pickup_gate_ring_nearby_range_fallback_v1).",
+    "Occupied stacks and buried visits are intentional diagnostics of honest 1:1 translation; they are not fail-closed contract failures.",
+    "Signs keep source placements when substitution emits them; no fx_quest_mark_* omit policy.",
+    "Hero hire: HoMM3-authentic multi-hero (heroCountMin=1, heroCountMax=8). Per-mission H3M levelLimit drives enableCustomHeroMaxLevel/customHeroMaxLevel (0 = unlimited). Cities keep default_buildings_ban so tavern is not banned.",
+    "Per-placement three-way ground truth is emitted as <missionId>.raw_translation_placement_ground_truth.json (HoMM3 object + substitution mapping + Olden sid/node/occupied).",
+    "Underground HoMM3 ocean terrain is converted to walkable Burrow land with pond scenery (pool_dirt_small_1 / pool_dirt_big_1) unless terrain.preserveUndergroundOcean is set.",
+    "Runtime clickability, pathing, and hole-free playtest remain user-unvalidated."
+  ],
+  "runtimeScriptComment": "from_day_to_night raw-translation runtime script generated from campaign alignment story.",
+  "coreOverlay": {
+    "mode": "emit_fresh"
+  },
+  "validation": {
+    "expectedSourceLayerEntityCounts": {
+      "0": 2738,
+      "1": 800
+    }
+  }
+}

@@ -1,0 +1,121 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>DamageHistogramMod</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GameRoot Condition="'$(GameRoot)' == ''">$(MSBuildThisFileDirectory)..\</GameRoot>
+    <GameRootDir>$([MSBuild]::EnsureTrailingSlash('$(GameRoot)'))</GameRootDir>
+    <BepInExRoot Condition="'$(BepInExRoot)' == ''">$(GameRootDir)BepInEx\</BepInExRoot>
+    <BepInExRootDir>$([MSBuild]::EnsureTrailingSlash('$(BepInExRoot)'))</BepInExRootDir>
+    <PluginDeployDir Condition="'$(PluginDeployDir)' == ''">$(BepInExRootDir)plugins\DamageHistogramMod\</PluginDeployDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="Exists('$(BepInExRootDir)interop\UnityEngine.UnityWebRequestAudioModule.dll')">
+    <DefineConstants>$(DefineConstants);HAS_UNITYWEBREQUEST_AUDIO_MODULE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(BepInExRootDir)core\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="BepInEx.Core">
+      <HintPath>$(BepInExRootDir)core\BepInEx.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="BepInEx.Unity.IL2CPP">
+      <HintPath>$(BepInExRootDir)core\BepInEx.Unity.IL2CPP.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppInterop.Common">
+      <HintPath>$(BepInExRootDir)core\Il2CppInterop.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppInterop.Runtime">
+      <HintPath>$(BepInExRootDir)core\Il2CppInterop.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Hex">
+      <HintPath>$(BepInExRootDir)interop\Hex.dll</HintPath>
+    </Reference>
+    <Reference Include="Hex.Shared">
+      <HintPath>$(BepInExRootDir)interop\Hex.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Hex.Sound.Runtime">
+      <HintPath>$(BepInExRootDir)interop\Hex.Sound.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>$(BepInExRootDir)interop\Il2Cppmscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(BepInExRootDir)interop\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(BepInExRootDir)interop\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(BepInExRootDir)interop\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>$(BepInExRootDir)interop\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(BepInExRootDir)interop\UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(BepInExRootDir)interop\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(BepInExRootDir)interop\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(BepInExRootDir)interop\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(BepInExRootDir)interop\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(BepInExRootDir)interop\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>$(BepInExRootDir)interop\UnityEngine.UnityWebRequestModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAudioModule" Condition="Exists('$(BepInExRootDir)interop\UnityEngine.UnityWebRequestAudioModule.dll')">
+      <HintPath>$(BepInExRootDir)interop\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(BepInExRootDir)interop\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VideoModule">
+      <HintPath>$(BepInExRootDir)interop\UnityEngine.VideoModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="DamageHistogramConfig.cs" />
+    <Compile Include="DamageHistogramPlugin.cs" />
+    <Compile Include="..\OfflineUnlockMod\DamageDistribution.cs" Link="DamageDistribution.cs" />
+    <Compile Include="..\OfflineUnlockMod\GameSymbols.cs" Link="GameSymbols.cs" />
+    <Compile Include="..\OfflineUnlockMod\DamageHistogramCastBlocklist.cs" Link="DamageHistogramCastBlocklist.cs" />
+    <Compile Include="..\OfflineUnlockMod\DamageHistogramGameChrome.cs" Link="DamageHistogramGameChrome.cs" />
+    <Compile Include="..\OfflineUnlockMod\DamageHistogramIcons.cs" Link="DamageHistogramIcons.cs" />
+    <Compile Include="..\OfflineUnlockMod\DamageHistogramOverlay.cs" Link="DamageHistogramOverlay.cs" />
+    <Compile Include="..\OfflineUnlockMod\DamageHistogramPanelUgui.cs" Link="DamageHistogramPanelUgui.cs" />
+    <Compile Include="..\OfflineUnlockMod\DamageKillMapping.cs" Link="DamageKillMapping.cs" />
+    <Compile Include="..\OfflineUnlockMod\LuckCritMixture.cs" Link="LuckCritMixture.cs" />
+  </ItemGroup>
+
+  <Target Name="DeployPluginToGame" AfterTargets="Build" Condition="'$(DeployPluginToGame)' != 'false' and '$(TargetExt)' == '.dll' and Exists('$(OutDir)DamageHistogramMod.dll')">
+    <ItemGroup>
+      <DeployFile Include="$(OutDir)DamageHistogramMod.dll" />
+      <DeployHistogramIcon Include="$(MSBuildThisFileDirectory)..\OfflineUnlockMod\histogram_icons\**\*.*" />
+    </ItemGroup>
+    <MakeDir Directories="$(PluginDeployDir)" Condition="!Exists('$(PluginDeployDir)')" />
+    <Copy SourceFiles="@(DeployFile)" DestinationFiles="@(DeployFile->'$(PluginDeployDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy
+      SourceFiles="@(DeployHistogramIcon)"
+      DestinationFiles="@(DeployHistogramIcon->'$(PluginDeployDir)histogram_icons\%(RecursiveDir)%(FileName)%(Extension)')"
+      SkipUnchangedFiles="true"
+      Condition="'@(DeployHistogramIcon)' != ''" />
+  </Target>
+
+</Project>

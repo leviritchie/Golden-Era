@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom Stronghold law profiles that require real Warcry execution. This records Stronghold faction-skill identity and Warcry-only semantics; it does not prove the native Warcry execution event, cooldown mutation, replacement school behavior, battle timing, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresWarcryExecutionProfiles": true,
+    "strongholdOnly": true,
+    "factionSkillSidMustMatchManifest": true,
+    "warcryExecutionMustNotBeSubstitutedBySpellCast": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredStaticEvidence": {
+    "manifestPath": "custom_factions/homm3_stronghold.json",
+    "factionSid": "homm3_stronghold",
+    "factionSkillSid": "skill_faction_homm3_stronghold",
+    "lawPrefix": "fraction_law_homm3_stronghold_"
+  },
+  "requiredRuntimeProof": [
+    "native Warcry execution event proof",
+    "executing hero owner and side proof",
+    "Warcry identity or row SID proof",
+    "successful execution versus preview or failed execution proof",
+    "Warcry cooldown read and mutation ordering proof",
+    "battle timing and round interaction proof",
+    "idempotent reward or tempo application proof"
+  ],
+  "contracts": {
+    "stronghold.warcry-festival-calendar": {
+      "warcryKinds": [
+        "calendar-warcry-festival-progress",
+        "warcry-execution-gated-astrology-progress"
+      ],
+      "companionPredicates": [
+        "RequiresAstrologyProgressMutation",
+        "RequiresBattleStartOrRoundEvent"
+      ],
+      "forbiddenSubstitutes": [
+        "spell cast counted as Warcry execution",
+        "hero ability level counted as Warcry execution",
+        "battle start counted as Warcry execution",
+        "round start counted as Warcry execution",
+        "static faction skill ownership counted as execution",
+        "cooldown preview counted as Warcry execution"
+      ],
+      "notes": "Stronghold War Festival calendar behavior requires real Warcry execution plus separate astrology and battle lifecycle predicates; static skill ownership is not execution."
+    },
+    "stronghold.warcry-festival": {
+      "warcryKinds": [
+        "reward-economy-warcry-festival",
+        "warcry-execution-gated-reward"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "spell cast counted as Warcry execution",
+        "hero ability level counted as Warcry execution",
+        "battle start counted as Warcry execution",
+        "morale trigger counted as Warcry execution",
+        "static faction skill ownership counted as execution",
+        "reward granted without committed Warcry execution proof"
+      ],
+      "notes": "Stronghold Warcry Festival reward behavior requires committed real Warcry execution, not generic battle, morale, spell, or static skill state."
+    },
+    "stronghold.warcry-cooldown-tempo": {
+      "warcryKinds": [
+        "spell-cooldown-warcry-tempo",
+        "warcry-execution-cooldown-interaction"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "spell cast counted as Warcry execution",
+        "hero ability level counted as Warcry execution",
+        "spell cooldown event counted as Warcry execution",
+        "cooldown preview counted as Warcry execution",
+        "static faction skill ownership counted as execution",
+        "cooldown mutation without successful Warcry execution proof"
+      ],
+      "notes": "Stronghold Warcry cooldown tempo requires real successful Warcry execution and separate cooldown mutation proof, not generic spell cooldown traffic."
+    },
+    "stronghold.real-warcry-school-replacement": {
+      "warcryKinds": [
+        "spell-school-replacement-with-real-warcry",
+        "warcry-execution-gated-school-replacement"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "spell cast counted as Warcry execution",
+        "hero ability level counted as Warcry execution",
+        "magic school access counted as Warcry execution",
+        "static faction skill ownership counted as execution",
+        "generic ability execution counted as Warcry execution",
+        "replacement school behavior without native Warcry identity proof"
+      ],
+      "notes": "Stronghold real Warcry school replacement requires native Warcry identity and Warcry execution proof; magic-school access or generic ability state is not enough."
+    }
+  }
+}

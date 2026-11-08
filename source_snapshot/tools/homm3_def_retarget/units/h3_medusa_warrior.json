@@ -1,0 +1,262 @@
+{
+ "unit": "h3_medusa_warrior",
+ "skipDefGroups": {
+  "15": "never shoots: installed view h3_medusa_upg_alt has no projectile attack or ability, and its ability on animationIndex 1 must play the melee swing (15.Skill_1 -> Unit_AttackFront), not the DEF shot; user-approved 2026-09-28"
+ },
+ "strideExempt": "legless body: serpent tail, no legs; the rig has no leg chain",
+ "joints": {
+  "Hips": [
+   -0.1,
+   -0.29,
+   0.99
+  ],
+  "Spine": [
+   -0.1,
+   -0.278,
+   1.058
+  ],
+  "Spine1": [
+   -0.101,
+   -0.268,
+   1.129
+  ],
+  "Spine2": [
+   -0.103,
+   -0.257,
+   1.209
+  ],
+  "Neck": [
+   -0.105,
+   -0.25,
+   1.28
+  ],
+  "Head": [
+   -0.1,
+   -0.25,
+   1.38
+  ],
+  "HeadTop_End": [
+   -0.08,
+   -0.3,
+   1.65
+  ],
+  "LeftShoulder": [
+   -0.02,
+   -0.25,
+   1.27
+  ],
+  "LeftArm": [
+   0.08,
+   -0.24,
+   1.28
+  ],
+  "LeftForeArm": [
+   0.13,
+   -0.14,
+   1.06
+  ],
+  "LeftHand": [
+   0.14,
+   -0.42,
+   0.99
+  ],
+  "LeftHand_End": [
+   0.13,
+   -0.52,
+   0.99
+  ],
+  "RightShoulder": [
+   -0.18,
+   -0.25,
+   1.27
+  ],
+  "RightArm": [
+   -0.27,
+   -0.24,
+   1.26
+  ],
+  "RightForeArm": [
+   -0.33,
+   -0.22,
+   1.03
+  ],
+  "RightHand": [
+   -0.22,
+   -0.47,
+   0.915
+  ],
+  "RightHand_End": [
+   -0.16,
+   -0.54,
+   0.885
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "dungeon_fixweights",
+  "dungeon_yawclamp",
+  "dungeon_slump"
+ ],
+ "props": [
+  {
+   "name": "bow",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      -0.03,
+      -0.49,
+      0.915
+     ],
+     [
+      0.0,
+      -0.49,
+      0.92
+     ]
+    ],
+    [
+     [
+      0.0,
+      -0.49,
+      0.92
+     ],
+     [
+      0.13,
+      -0.47,
+      0.99
+     ]
+    ],
+    [
+     [
+      0.13,
+      -0.47,
+      0.99
+     ],
+     [
+      0.27,
+      -0.45,
+      1.12
+     ]
+    ],
+    [
+     [
+      0.27,
+      -0.45,
+      1.12
+     ],
+     [
+      0.34,
+      -0.38,
+      1.25
+     ]
+    ],
+    [
+     [
+      0.34,
+      -0.38,
+      1.25
+     ],
+     [
+      0.5,
+      -0.4,
+      1.45
+     ]
+    ]
+   ],
+   "radius": 0.05,
+   "exclude": [
+    {
+     "sphere": [
+      [
+       -0.17,
+       -0.5,
+       0.9
+      ],
+      0.08
+     ]
+    }
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "roll": 20
+  },
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "tail": {
+  "segments": 12,
+  "amplitude": 0.2,
+  "wavelength": 0.75,
+  "handsAboveZ": 0.85,
+  "handsRadius": 0.3,
+  "excludeNearHands": 0.05,
+  "behind": [
+   0.0,
+   1.0,
+   0.0
+  ],
+  "behindReason": "Model-space trail axis: the body faces -Y (capture forward ~ -Y; the frozen idle faces glTF +Z under the facing contract), so the Move tail trails +Y, straight opposite travel. The earlier [-0.893, 0.416, 0] was -right of the sprite camera (screen-left in the DEF 2D view), which in 3D put the Move tail ~65 deg off the travel axis (same defect as the nagas, 0699b5d146). The look stamp's frontResolved +y is lighting.front 'auto' reading the Head-Hips lean, not the facing."
+ },
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "slump": {
+  "clip": "Death",
+  "frames": 2,
+  "angle": 65,
+  "dir": [
+   0.4,
+   -0.9,
+   0.0
+  ]
+ },
+ "yawClamp": 30,
+ "glbPatch": {
+  "reason": "authenticity lane D 2026-10-11: Death coil-heap fold (ported from h3_medusa_queen) with the torso falling forward onto it; Hitted torso and neck thrown far back at f1-f2 and recovered, per DEF g03/g05",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_medusa_warrior_pose_tr.json",
+    "regrid": true,
+    "sha256": "f273ec5a95033428363d1dd9c06d2e743dd476927e06a52e8e22be82e643f8f1"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_medusa_warrior_pose_rot.json",
+    "regrid": true,
+    "sha256": "56a05c8fe92a0c7f21614973628ac761c4f913a2c7a0b176df21b03a7da1f4b8"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_medusa_warrior_pose_rot.json",
+    "regrid": true,
+    "sha256": "56a05c8fe92a0c7f21614973628ac761c4f913a2c7a0b176df21b03a7da1f4b8"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death",
+     "Unit_Hitted"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "crease of the re-posed joints"
+   }
+  ]
+ }
+}

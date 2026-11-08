@@ -1,0 +1,11 @@
+{
+ "schema": "town_full3d_recipe.v1",
+ "faction": "castle",
+ "seed": "props_v1",
+ "candidate": "zs_v1",
+ "note": "Methodology v2 option H, first recipe: pilot 1 (VLB + cards, no hole keeping) on the terrain (Mesh_Houses is atlas-mapped, not frame-affine, so LDI refuses it and the repair rules take it), pilot 3's Lipschitz backstop with a far-side ground quilt, faces hidden at rest in every state dropped. Measured in memory on the full state: 474 -> 0 visible px, ground holes 0 = rest (docs/homm3_town_scene_methodology_v2.md).",
+ "ldi": {"pieces": ["Mesh_Terrain"], "cut": "zone", "backRule": "vlb", "vlbK": 2.0, "keepRounds": 0, "reachLoop": 12},
+ "backstop": {"K": 2.0, "stepPx": 4, "groundSrcM": 1.0},
+ "repair": {"rules": ["drop", "card"], "rounds": 8},
+ "certificate": {"loop": 12}
+}

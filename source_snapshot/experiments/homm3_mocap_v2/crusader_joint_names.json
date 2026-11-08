@@ -1,0 +1,264 @@
+{
+  "unit": "h3_crusader",
+  "mesh": "artifacts/meshy_downloads/h3_crusader_smartrigged.glb",
+  "meshSha256": "607ccbe1ad782b7366ea7ed754b03880985f369ef09bb9be3b01ac4ccd32772d",
+  "sourceFacing": [0.0, 0.0, 1.0],
+  "modelLabelPolicy": "natural_language_only_no_raw_bone_suffix",
+  "proof": "geometry_audited_semantic_candidate",
+  "aliases": {
+    "Bone_000": "root anchor",
+    "Bone_001": "pelvis mid hip",
+    "Bone_003": "pelvis auxiliary posterior branch",
+    "Bone_005": "pelvis auxiliary right branch",
+    "Bone_010": "lower spine root",
+    "Bone_014": "left hip",
+    "Bone_018": "right leg proximal",
+    "Bone_002": "pelvis auxiliary posterior endpoint",
+    "Bone_004": "pelvis auxiliary right endpoint",
+    "Bone_009": "lower spine",
+    "Bone_013": "left knee",
+    "Bone_017": "right leg knee",
+    "Bone_008": "mid lower spine",
+    "Bone_012": "left shin",
+    "Bone_016": "right leg ankle",
+    "Bone_007": "mid upper spine",
+    "Bone_011": "left ankle",
+    "Bone_015": "right foot endpoint",
+    "Bone_006": "chest anchor",
+    "Bone_021": "neck base",
+    "Bone_026": "left shoulder",
+    "Bone_031": "right shoulder",
+    "Bone_020": "neck joint",
+    "Bone_025": "left arm proximal segment",
+    "Bone_030": "right arm proximal segment",
+    "Bone_019": "head nose",
+    "Bone_024": "left arm distal segment",
+    "Bone_029": "right arm elbow",
+    "Bone_023": "left forearm proximal segment",
+    "Bone_028": "right forearm",
+    "Bone_022": "left arm split",
+    "Bone_027": "right hand mount",
+    "Bone_035": "left elbow approach",
+    "Bone_039": "shield chain proximal",
+    "Bone_043": "right accessory proximal",
+    "Bone_047": "weapon chain proximal",
+    "Bone_034": "left elbow approach distal",
+    "Bone_038": "shield chain middle",
+    "Bone_042": "right accessory middle",
+    "Bone_046": "weapon chain middle",
+    "Bone_033": "left elbow",
+    "Bone_037": "shield chain distal",
+    "Bone_041": "right accessory distal",
+    "Bone_045": "weapon chain distal",
+    "Bone_032": "left wrist",
+    "Bone_036": "shield center",
+    "Bone_040": "right accessory endpoint",
+    "Bone_044": "weapon tip"
+  },
+  "aimChains": [
+    ["Bone_010", "Bone_009", "Bone_008", "Bone_007", "Bone_006", "Bone_021", "Bone_020", "Bone_019"],
+    ["Bone_014", "Bone_013", "Bone_012", "Bone_011"],
+    ["Bone_018", "Bone_017", "Bone_016", "Bone_015"],
+    ["Bone_026", "Bone_025", "Bone_024", "Bone_023", "Bone_022"],
+    ["Bone_035", "Bone_034", "Bone_033", "Bone_032"],
+    ["Bone_039", "Bone_038", "Bone_037", "Bone_036"],
+    ["Bone_031", "Bone_030", "Bone_029", "Bone_028", "Bone_027"],
+    ["Bone_047", "Bone_046", "Bone_045", "Bone_044"],
+    ["Bone_043", "Bone_042", "Bone_041", "Bone_040"]
+  ],
+  "loopPolicy": "idle_bookend",
+  "evidence": {
+    "Bone_000": {
+      "status": "topology_confirmed",
+      "notes": "Only root in the active GLB; retained as the motion root anchor."
+    },
+    "Bone_001": {
+      "status": "explicit_and_topology_confirmed",
+      "notes": "Existing semantic file names this MidHip; root child with central pelvis position."
+    },
+    "Bone_003": {
+      "status": "neutral_helper",
+      "notes": "Pelvis child ending at Bone_002; generated branch does not support a standard limb label."
+    },
+    "Bone_005": {
+      "status": "legacy_assignment_conflict",
+      "notes": "Existing semantic file calls this RHip, but it is a pelvis child in an ungrounded branch; keep the label auxiliary."
+    },
+    "Bone_010": {
+      "status": "topology_and_skin_inferred",
+      "notes": "Central pelvis child leading into the continuous spine/head chain; broad torso influence."
+    },
+    "Bone_014": {
+      "status": "explicit_and_geometry_confirmed",
+      "notes": "Existing LHip assignment; starts the grounded left limb chain Bone_014 to Bone_013 to Bone_012 to Bone_011."
+    },
+    "Bone_018": {
+      "status": "legacy_assignment_conflict",
+      "notes": "Existing file calls this RShoulder, but active bind position and skin range descend from hip height to ground as a right leg chain."
+    },
+    "Bone_002": {
+      "status": "legacy_assignment_conflict",
+      "notes": "Existing file calls this RAnkle, but this endpoint remains near pelvis height and is not connected to the grounded right limb."
+    },
+    "Bone_004": {
+      "status": "legacy_assignment_conflict",
+      "notes": "Existing file calls this RKnee; active topology makes it a terminal pelvis branch and it has no positive skin influence."
+    },
+    "Bone_009": {
+      "status": "topology_and_skin_inferred",
+      "notes": "Second central torso joint in the lower-spine chain."
+    },
+    "Bone_013": {
+      "status": "explicit_and_geometry_confirmed",
+      "notes": "Existing LKnee assignment; grounded left limb position and influence range agree."
+    },
+    "Bone_017": {
+      "status": "legacy_assignment_conflict",
+      "notes": "Existing file calls this RElbow, but its active position and influence range are knee-like in the grounded right limb."
+    },
+    "Bone_008": {
+      "status": "topology_and_skin_inferred",
+      "notes": "Central torso chain between lower and upper spine segments."
+    },
+    "Bone_012": {
+      "status": "topology_and_skin_inferred",
+      "notes": "Left grounded limb segment between the explicit knee and ankle."
+    },
+    "Bone_016": {
+      "status": "legacy_assignment_conflict",
+      "notes": "Existing file calls this RWrist, but active position and influence range are ankle-like."
+    },
+    "Bone_007": {
+      "status": "topology_and_skin_inferred",
+      "notes": "Upper section of the central torso chain below the chest."
+    },
+    "Bone_011": {
+      "status": "explicit_and_geometry_confirmed",
+      "notes": "Existing LAnkle assignment; terminal grounded left limb joint."
+    },
+    "Bone_015": {
+      "status": "topology_and_skin_inferred",
+      "notes": "Terminal joint of the grounded right limb below the explicit ankle-like Bone_016."
+    },
+    "Bone_006": {
+      "status": "topology_and_skin_inferred",
+      "notes": "Central chest joint; branches to neck and both upper-body side structures."
+    },
+    "Bone_021": {
+      "status": "topology_and_position_inferred",
+      "notes": "Central joint immediately before the explicit neck; upper torso height."
+    },
+    "Bone_026": {
+      "status": "explicit_and_geometry_confirmed",
+      "notes": "Existing LShoulder assignment; left upper-body branch from the chest."
+    },
+    "Bone_031": {
+      "status": "topology_and_position_inferred",
+      "notes": "Right upper-body branch from the chest; shoulder-height position and positive-X side skin influence."
+    },
+    "Bone_020": {
+      "status": "explicit_and_topology_confirmed",
+      "notes": "Existing Neck assignment; central child of the neck-base branch."
+    },
+    "Bone_025": {
+      "status": "topology_and_position_inferred",
+      "notes": "First segment after the explicit left shoulder on the left upper-body branch."
+    },
+    "Bone_030": {
+      "status": "topology_and_position_inferred",
+      "notes": "First segment after the right shoulder-height branch."
+    },
+    "Bone_019": {
+      "status": "explicit_and_geometry_confirmed",
+      "notes": "Existing Nose assignment; terminal central head joint at the top of the bind."
+    },
+    "Bone_024": {
+      "status": "topology_and_position_inferred",
+      "notes": "Left side segment after Bone_025; retained as a segment label because the generated chain is over-segmented."
+    },
+    "Bone_029": {
+      "status": "topology_and_position_inferred",
+      "notes": "Right side joint at the elbow-height bend of the upper-body branch."
+    },
+    "Bone_023": {
+      "status": "topology_and_position_inferred",
+      "notes": "Left forearm-side segment; exact anatomical boundary is not independently labeled in the source asset."
+    },
+    "Bone_028": {
+      "status": "topology_and_position_inferred",
+      "notes": "Right forearm-side segment before the hand mount."
+    },
+    "Bone_022": {
+      "status": "neutral_branch_helper",
+      "notes": "Left-side topology junction that splits into arm and shield subchains; no stronger body-part claim is supported."
+    },
+    "Bone_027": {
+      "status": "topology_and_position_inferred",
+      "notes": "Right-side topology junction that splits into accessory and weapon subchains."
+    },
+    "Bone_035": {
+      "status": "topology_and_skin_inferred",
+      "notes": "Short left branch segment immediately before Bone_034 and the explicit left elbow."
+    },
+    "Bone_039": {
+      "status": "neutral_prop_helper",
+      "notes": "Zero-influence shield-side branch root; retained because its child chain ends at the explicit ShieldCenter."
+    },
+    "Bone_043": {
+      "status": "neutral_prop_helper",
+      "notes": "Right accessory branch root; generated topology does not identify a specific body part."
+    },
+    "Bone_047": {
+      "status": "neutral_prop_helper",
+      "notes": "Weapon branch root leading to the explicit WeaponTip chain."
+    },
+    "Bone_034": {
+      "status": "topology_and_skin_inferred",
+      "notes": "Short left branch segment immediately before the explicit left elbow."
+    },
+    "Bone_038": {
+      "status": "neutral_prop_helper",
+      "notes": "Shield-side branch middle segment."
+    },
+    "Bone_042": {
+      "status": "neutral_prop_helper",
+      "notes": "Right accessory branch middle segment."
+    },
+    "Bone_046": {
+      "status": "neutral_prop_helper",
+      "notes": "Weapon branch middle segment."
+    },
+    "Bone_033": {
+      "status": "explicit_role_confirmed",
+      "notes": "Existing LElbow assignment; endpoint of the left arm branch before the explicit wrist."
+    },
+    "Bone_037": {
+      "status": "neutral_prop_helper",
+      "notes": "Shield-side branch distal segment before the explicit ShieldCenter."
+    },
+    "Bone_041": {
+      "status": "neutral_prop_helper",
+      "notes": "Right accessory branch distal segment."
+    },
+    "Bone_045": {
+      "status": "neutral_prop_helper",
+      "notes": "Weapon branch distal segment before the explicit WeaponTip."
+    },
+    "Bone_032": {
+      "status": "explicit_role_confirmed",
+      "notes": "Existing LWrist assignment; left arm terminal joint."
+    },
+    "Bone_036": {
+      "status": "explicit_role_confirmed",
+      "notes": "Existing ShieldCenter assignment; terminal shield-side prop joint."
+    },
+    "Bone_040": {
+      "status": "neutral_prop_helper",
+      "notes": "Terminal right accessory branch joint without an independently grounded prop name."
+    },
+    "Bone_044": {
+      "status": "explicit_role_confirmed",
+      "notes": "Existing WeaponTip assignment, backed by the explicit global vertex site in the role file."
+    }
+  }
+}

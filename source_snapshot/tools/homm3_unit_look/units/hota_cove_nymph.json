@@ -1,0 +1,264 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "hota_cove_nymph",
+ "status": "look",
+ "notes": "cove rollout: water-ball attack (gather f3-4 committed file mask + thrown ball f5-6 defEffects) and the hitted/death splash droplets (defEffects detached). The animated water column (idle self-electric flicker 0.65) would need a uvAtlas + scores generator like the oceanid; not done (no generator for the nymph line).",
+ "lighting": {
+  "mode": "v7c",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "element_flow",
+    "type": "uvAtlas",
+    "provenance": "element_flow_scores.py mode vortex: 8 cells per 8-frame cycle, in phase with the retarget's element_motion keys; brightness-modulated look texture",
+    "modulate": {
+     "gain": 0.45
+    },
+    "clips": {
+     "Unit_Idle": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "Unit_MoveStart": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "Unit_Move": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "Unit_MoveEnd": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "Unit_Mouseover": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2
+     ],
+     "Unit_Hitted": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_Defence": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1
+     ],
+     "Unit_AttackFront": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "Unit_Death": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0
+     ]
+    },
+    "source": {
+     "scores": "artifacts/homm3_vfx_experiments/element_flow/hota_cove_nymph_scores.npz",
+     "generator": "tools/homm3_vfx/element_flow_scores.py"
+    },
+    "gutterPx": 16
+   },
+   {
+    "id": "water_gather",
+    "type": "defFlipbook",
+    "def": "CNIMPH.DEF",
+    "provenance": "DEF g12 attack_front f3-4: the ball gathered in the hands (body-paint water colours; cove_masks.py rule gather)",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/hota_cove_nymph/gather"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1
+   },
+   {
+    "id": "hit_splash",
+    "type": "defFlipbook",
+    "def": "CNIMPH.DEF",
+    "clips": {
+     "Unit_Hitted": {
+      "defGroup": 3,
+      "frames": [
+       2,
+       3
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric",
+      "water"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightForeArm",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "def_effect_ripper: detached particles (g3 frames 2-3)"
+   },
+   {
+    "id": "death_splash",
+    "type": "defFlipbook",
+    "def": "CNIMPH.DEF",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       2,
+       3
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric",
+      "water"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "def_effect_ripper: detached particles (g5 frames 2-3)"
+   },
+   {
+    "id": "water_ball",
+    "type": "defFlipbook",
+    "def": "CNIMPH.DEF",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric",
+      "water"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 40
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "def_effect_ripper: detached particles (g12 frames 5-6)"
+   }
+  ]
+ }
+}

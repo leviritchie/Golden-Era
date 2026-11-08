@@ -1,0 +1,314 @@
+{
+ "unit": "h3_halberdier",
+ "joints": {
+  "Hips": [
+   -0.024,
+   0.101,
+   0.666
+  ],
+  "Spine": [
+   -0.023,
+   0.108,
+   0.749
+  ],
+  "Spine1": [
+   -0.021,
+   0.115,
+   0.833
+  ],
+  "Spine2": [
+   -0.019,
+   0.123,
+   0.927
+  ],
+  "Neck": [
+   -0.017,
+   0.129,
+   1.001
+  ],
+  "Head": [
+   -0.024,
+   0.115,
+   1.071
+  ],
+  "HeadTop_End": [
+   -0.038,
+   0.094,
+   1.315
+  ],
+  "LeftShoulder": [
+   0.017,
+   0.087,
+   1.015
+  ],
+  "LeftArm": [
+   0.129,
+   0.122,
+   1.008
+  ],
+  "LeftForeArm": [
+   0.213,
+   0.038,
+   0.868
+  ],
+  "LeftHand": [
+   0.122,
+   -0.052,
+   0.987
+  ],
+  "LeftHand_End": [
+   0.076,
+   -0.099,
+   1.048
+  ],
+  "RightShoulder": [
+   -0.059,
+   0.087,
+   1.015
+  ],
+  "RightArm": [
+   -0.171,
+   0.129,
+   1.008
+  ],
+  "RightForeArm": [
+   -0.276,
+   0.087,
+   0.861
+  ],
+  "RightHand": [
+   -0.206,
+   -0.031,
+   0.728
+  ],
+  "RightHand_End": [
+   -0.173,
+   -0.087,
+   0.666
+  ],
+  "LeftUpLeg": [
+   0.059,
+   0.115,
+   0.631
+  ],
+  "LeftLeg": [
+   0.108,
+   0.066,
+   0.33
+  ],
+  "LeftFoot": [
+   0.157,
+   0.094,
+   0.051
+  ],
+  "LeftToeBase": [
+   0.164,
+   0.003,
+   -0.005
+  ],
+  "LeftToe_End": [
+   0.164,
+   -0.08,
+   -0.047
+  ],
+  "RightUpLeg": [
+   -0.115,
+   0.115,
+   0.631
+  ],
+  "RightLeg": [
+   -0.15,
+   0.087,
+   0.33
+  ],
+  "RightFoot": [
+   -0.185,
+   0.136,
+   0.051
+  ],
+  "RightToeBase": [
+   -0.199,
+   0.045,
+   -0.005
+  ],
+  "RightToe_End": [
+   -0.213,
+   -0.038,
+   -0.047
+  ]
+ },
+ "props": [
+  {
+   "name": "shaft",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.339,
+      -0.038,
+      0.182
+     ],
+     [
+      0.338,
+      -0.089,
+      1.696
+     ]
+    ]
+   ],
+   "radius": 0.035
+  },
+  {
+   "name": "tassel",
+   "bone": "RightHand",
+   "sphere": [
+    [
+     0.148,
+     -0.075,
+     1.27
+    ],
+    0.1
+   ]
+  },
+  {
+   "name": "axehead",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      0.18,
+      -0.08,
+      1.33
+     ],
+     [
+      0.338,
+      -0.089,
+      1.72
+     ]
+    ]
+   ],
+   "radius": 0.15
+  },
+  {
+   "name": "bladeedge",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      0.215,
+      -0.205,
+      1.18
+     ],
+     [
+      0.305,
+      -0.225,
+      1.47
+     ]
+    ]
+   ],
+   "radius": 0.045
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "castle_refine",
+  "castle_islandbind"
+ ],
+ "castleRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ],
+  "aimRange": 120,
+  "aimFromRest": true,
+  "aimSlide": 0.3
+ },
+ "glbPatch": {
+  "reason": "authenticity pass (lane B): Hitted re-authored by motion intent against the DEF. The blow throws him back off balance: chest arched, head snapped back, half a step back with the front leg braced and the free arm flung out at f1-f3, and the halberd stays held upright at his side instead of dropping across his body; recovers by f5. Mesh fix: stray LeftHand weight on the right fist/halberd grip moved to RightHand, so the halberd hand can turn without tearing the grip. Tear gate over master targets 684 -> 678, worst edge unchanged (6.265).",
+  "ops": [
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftHand"
+    ],
+    "to": "RightHand",
+    "region": [
+     {
+      "axis": "x",
+      "below": -0.04,
+      "ramp": 0.01
+     },
+     {
+      "axis": "z",
+      "below": 0.86,
+      "ramp": 0.02
+     }
+    ],
+    "note": "stray LeftHand weight on the right fist/halberd grip (33 verts, 2 m from the left hand's reach) moves to RightHand, so the halberd hand can turn without tearing the grip"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftHand",
+     "Head"
+    ],
+    "to": "RightHand",
+    "region": [
+     {
+      "axis": "x",
+      "above": 0.185,
+      "ramp": 0.003
+     },
+     {
+      "axis": "x",
+      "below": 0.225,
+      "ramp": 0.003
+     },
+     {
+      "axis": "y",
+      "above": -0.205,
+      "ramp": 0.003
+     },
+     {
+      "axis": "y",
+      "below": -0.168,
+      "ramp": 0.003
+     },
+     {
+      "axis": "z",
+      "above": 1.225,
+      "ramp": 0.003
+     },
+     {
+      "axis": "z",
+      "below": 1.278,
+      "ramp": 0.003
+     }
+    ],
+    "note": "4-vert halberd-grip chip weighted LeftHand 0.51 / Head 0.49 by bone heat (weld-coincident only with RightHand grip islands) floated above the flung left hand in Hitted f1-f5: to RightHand. Done in the patch lane, not islandBinds, so castle_refine's RightHand prop-aim fit (rigid >0.99 verts) is unchanged"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_halberdier_pose_rot.json",
+    "sha256": "45a8fc55ec92f1729e6cc73569e2a8d5f50a13a64f878f315fbba25d05191243",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_halberdier_pose_tr.json",
+    "sha256": "42ed4663d122b5fef117681a87a230507366d4bb0434845b84adc36292c2e7a8",
+    "regrid": true
+   }
+  ]
+ },
+ "islandBinds": [
+  {
+   "table": "tools/homm3_def_retarget/island_binds/h3_halberdier_left_fingers.json",
+   "bone": "LeftHand",
+   "note": "left-fist fingers wrapped round the shaft (12 islands) were RightHand: rigid to LeftHand so they leave the halberd with the hand"
+  }
+ ]
+}

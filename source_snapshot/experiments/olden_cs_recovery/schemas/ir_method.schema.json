@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://olden-era.local/schemas/ir_method.schema.json",
+  "title": "OldenCsRecoveryIrMethod",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "method_id",
+    "type_name",
+    "method_name",
+    "isil_signature",
+    "basic_blocks",
+    "calls",
+    "field_touches",
+    "unresolved",
+    "sources",
+    "lifted_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "method_id": { "type": "string", "minLength": 1 },
+    "type_name": { "type": "string", "minLength": 1 },
+    "method_name": { "type": "string", "minLength": 1 },
+    "isil_signature": { "type": "string" },
+    "native_address": {
+      "type": ["string", "null"]
+    },
+    "basic_blocks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "instructions", "successors", "terminator"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "instructions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["index", "opcode", "raw"],
+              "properties": {
+                "index": { "type": "integer", "minimum": 0 },
+                "opcode": { "type": "string" },
+                "raw": { "type": "string" },
+                "operands": { "type": "string" }
+              }
+            }
+          },
+          "successors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "target"],
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "fallthrough",
+                    "unresolved",
+                    "return",
+                    "null_throw"
+                  ],
+                  "description": "null_throw = JE/null-check branch relinked to NRE helper epilogue (0x18048B100); evidence-based, not invented CF."
+                },
+                "target": { "type": "string" },
+                "reason": { "type": "string" },
+                "opaque_label": {
+                  "type": "string",
+                  "description": "Prior unresolved ISIL label (e.g. @b7) preserved when kind=null_throw."
+                }
+              }
+            }
+          },
+          "terminator": {
+            "type": "string",
+            "enum": ["fallthrough", "return", "conditional_jump", "jump", "unresolved"]
+          }
+        }
+      }
+    },
+    "calls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["instruction_index", "kind", "target_raw"],
+        "properties": {
+          "instruction_index": { "type": "integer", "minimum": 0 },
+          "kind": {
+            "type": "string",
+            "enum": ["named", "native_address", "unresolved"]
+          },
+          "target_raw": { "type": "string" },
+          "resolved_label": { "type": ["string", "null"] },
+          "resolved_signature": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "field_touches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["instruction_index", "offset_hex", "access"],
+        "properties": {
+          "instruction_index": { "type": "integer", "minimum": 0 },
+          "offset_hex": { "type": "string" },
+          "access": {
+            "type": "string",
+            "enum": ["read", "write", "address", "unknown"]
+          },
+          "field_name": { "type": ["string", "null"] },
+          "field_type": { "type": ["string", "null"] },
+          "raw": { "type": "string" }
+        }
+      }
+    },
+    "unresolved": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "message"],
+        "properties": {
+          "code": { "type": "string" },
+          "message": { "type": "string" },
+          "instruction_index": { "type": ["integer", "null"] },
+          "detail": { "type": "string" }
+        }
+      }
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["diffable_cs", "isil"],
+      "properties": {
+        "diffable_cs": { "type": "string" },
+        "isil": { "type": "string" },
+        "address_map": { "type": ["string", "null"] },
+        "native_disasm": { "type": ["string", "null"] }
+      }
+    },
+    "disasm_line_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "isil_instruction_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "lifted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": { "type": "string" }
+  }
+}

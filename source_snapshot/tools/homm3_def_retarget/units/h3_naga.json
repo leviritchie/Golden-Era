@@ -1,0 +1,446 @@
+{
+ "unit": "h3_naga",
+ "strideExempt": "legless body: serpent tail, no legs; the rig has no leg chain",
+ "joints": {
+  "Hips": [
+   0.06,
+   -0.2,
+   0.85
+  ],
+  "Spine": [
+   0.06,
+   -0.2,
+   0.95
+  ],
+  "Spine1": [
+   0.06,
+   -0.2,
+   1.07
+  ],
+  "Spine2": [
+   0.06,
+   -0.2,
+   1.2
+  ],
+  "Neck": [
+   0.06,
+   -0.22,
+   1.35
+  ],
+  "Head": [
+   0.06,
+   -0.22,
+   1.45
+  ],
+  "HeadTop_End": [
+   0.06,
+   -0.22,
+   1.68
+  ],
+  "RightShoulder": [
+   0.0,
+   -0.2,
+   1.3
+  ],
+  "RightArm": [
+   -0.15,
+   -0.18,
+   1.28
+  ],
+  "RightForeArm": [
+   -0.34,
+   -0.12,
+   1.07
+  ],
+  "RightHand": [
+   -0.36,
+   -0.13,
+   0.82
+  ],
+  "RightHand_End": [
+   -0.36,
+   -0.13,
+   0.74
+  ],
+  "LeftShoulder": [
+   0.12,
+   -0.2,
+   1.3
+  ],
+  "LeftArm": [
+   0.2,
+   -0.18,
+   1.28
+  ],
+  "LeftForeArm": [
+   0.35,
+   -0.12,
+   1.12
+  ],
+  "LeftHand": [
+   0.46,
+   -0.16,
+   1.04
+  ],
+  "LeftHand_End": [
+   0.52,
+   -0.17,
+   1.02
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extraArms": [
+  {
+   "prefix": "LowLeft",
+   "side": "Left",
+   "joints": {
+    "Shoulder": [
+     0.12,
+     -0.2,
+     1.22
+    ],
+    "Arm": [
+     0.26,
+     -0.2,
+     1.18
+    ],
+    "ForeArm": [
+     0.36,
+     -0.26,
+     0.97
+    ],
+    "Hand": [
+     0.38,
+     -0.35,
+     0.83
+    ],
+    "Hand_End": [
+     0.24,
+     -0.37,
+     0.76
+    ]
+   }
+  },
+  {
+   "prefix": "LowRight",
+   "side": "Right",
+   "joints": {
+    "Shoulder": [
+     0.0,
+     -0.2,
+     1.22
+    ],
+    "Arm": [
+     -0.18,
+     -0.2,
+     1.2
+    ],
+    "ForeArm": [
+     -0.24,
+     -0.24,
+     0.97
+    ],
+    "Hand": [
+     -0.2,
+     -0.31,
+     0.8
+    ],
+    "Hand_End": [
+     -0.2,
+     -0.33,
+     0.72
+    ]
+   }
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "roll": 20
+  }
+ },
+ "tail": {
+  "segments": 12,
+  "amplitude": 0.2,
+  "wavelength": 0.75,
+  "handsAboveZ": 0.6,
+  "handsRadius": 0.34,
+  "behind": [
+   0.0,
+   1.0,
+   0.0
+  ],
+  "behindReason": "Model-space trail axis: the body faces -Y (look stamp frontResolved -y), so the Move tail trails +Y, straight opposite travel. The earlier [-0.893, 0.416, 0] was -right of the sprite camera (screen-left in the DEF 2D view), which in 3D put the Move tail 65 deg off the travel axis (in-game 2026-09-30: the tail went diagonal instead of dragging behind)."
+ },
+ "props": [
+  {
+   "name": "lowblade",
+   "bone": "LowRightHand",
+   "segments": [
+    [
+     [
+      -0.2,
+      -0.33,
+      0.72
+     ],
+     [
+      -0.13,
+      -0.45,
+      0.82
+     ]
+    ],
+    [
+     [
+      -0.13,
+      -0.45,
+      0.82
+     ],
+     [
+      -0.03,
+      -0.58,
+      1.0
+     ]
+    ],
+    [
+     [
+      -0.03,
+      -0.58,
+      1.0
+     ],
+     [
+      0.04,
+      -0.6,
+      1.14
+     ]
+    ]
+   ],
+   "radius": 0.04
+  }
+ ],
+ "extensions": [
+  "tower_handsep",
+  "tower_hair",
+  "dungeon_slump"
+ ],
+ "handSep": [
+  {
+   "hand": "LowRightHand",
+   "center": [
+    -0.21,
+    -0.29,
+    0.73
+   ],
+   "radius": 0.16,
+   "bodyBones": [
+    "Hips",
+    "Spine",
+    "Tail"
+   ],
+   "splitAll": true
+  },
+  {
+   "hand": "LowRightHand",
+   "center": [
+    -0.24,
+    -0.2,
+    0.75
+   ],
+   "radius": 0.12,
+   "seedRadius": 0.001,
+   "bodyBones": [
+    "Hips",
+    "Spine",
+    "Tail"
+   ]
+  },
+  {
+   "hand": "LowRightHand",
+   "center": [
+    -0.25,
+    -0.21,
+    0.69
+   ],
+   "radius": 0.1,
+   "gateAll": true,
+   "gate": {
+    "minR": 0.05,
+    "minGR": 0.4,
+    "maxGR": 0.95,
+    "minBR": 0.0,
+    "maxBR": 0.97
+   },
+   "rigid": true
+  }
+ ],
+ "slump": {
+  "clip": "Death",
+  "frames": 2,
+  "angle": 65,
+  "dir": [
+   0.4,
+   -0.9,
+   0.0
+  ],
+  "reason": "Death rest: the DEF naga collapses flat onto her coil over the last Death frames (f5-f7 of 8), but the human capture keeps the torso upright, so the delivered Death ended as an upright slump (worker C sheets 2026-09-27: naga tips half over, naga_upg slumps, naga_rani stays upright). Same snake body plan as the Dungeon medusas (tail.behind identical), so the medusa slump knob is reused: dungeon_slump, last 2 Death frames, 65 deg forward."
+ },
+ "handSepReason": "authenticity lane-A 2026-10-10 (coordinator-approved surgery): the DEF flings all four arms free in Hitted, Death and AttackFront. Mesh anatomy (isolated weight renders): the LowLeft arm is a complete arm whose own hand grips the sword (weighted LowLeftForeArm); the fist on the left hip is an unrigged stub third arm Meshy fused into the waist, which the old LowLeftHand entry bound to the low arm so it floated off the hip -- it now goes wholly to the body (armStrip spheres, armKeep > 1), as do the upper-left fist and stub forearm that heat had tied to the low-left chain. The LowRight forearm, grip and sword are LowRightHand: splitAll finger entry r0.16 + seedless waist entry cut them off the hip/coil, and the hilt/pommel Meshy split across RightHand and Tail_00 is bound rigidly to LowRightHand (gateAll). handSepChains makes each arm chain its own split side; chainSep separates the upper-left forearm from the low-left upper arm and strips LowShoulder weight off the main upper arms. hairWeights (tower_hair) skins the back hair and back skin to the spine/head chain -- it carried LeftArm/LeftShoulder/LowLeftShoulder weight and shredded across the chest when the arms flung.",
+ "handSepChains": true,
+ "armStrip": [
+  {
+   "chain": [
+    "LowRightArm",
+    "LowRightForeArm",
+    "LowRightHand"
+   ],
+   "belowZ": 0.68,
+   "armKeep": 0.8
+  },
+  {
+   "chain": [
+    "LowLeftArm",
+    "LowLeftForeArm",
+    "LowLeftHand"
+   ],
+   "center": [
+    0.26,
+    -0.33,
+    0.77
+   ],
+   "radius": 0.13,
+   "armKeep": 1.01
+  },
+  {
+   "chain": [
+    "LowLeftArm",
+    "LowLeftForeArm",
+    "LowLeftHand"
+   ],
+   "center": [
+    0.47,
+    -0.33,
+    1.03
+   ],
+   "radius": 0.08,
+   "armKeep": 1.01
+  },
+  {
+   "chain": [
+    "LowLeftArm",
+    "LowLeftForeArm",
+    "LowLeftHand"
+   ],
+   "center": [
+    0.25,
+    -0.15,
+    0.86
+   ],
+   "radius": 0.095,
+   "armKeep": 1.01
+  }
+ ],
+ "chainSep": [
+  {
+   "chains": [
+    [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    [
+     "LowLeftArm",
+     "LowLeftForeArm",
+     "LowLeftHand"
+    ]
+   ],
+   "center": [
+    0.38,
+    -0.22,
+    1.0
+   ],
+   "radius": 0.22
+  },
+  {
+   "chains": [
+    [
+     "LeftArm"
+    ],
+    [
+     "LowLeftShoulder"
+    ]
+   ],
+   "center": [
+    0.2,
+    -0.15,
+    1.2
+   ],
+   "radius": 0.1,
+   "split": false
+  },
+  {
+   "chains": [
+    [
+     "RightArm"
+    ],
+    [
+     "LowRightShoulder"
+    ]
+   ],
+   "center": [
+    -0.12,
+    -0.17,
+    1.2
+   ],
+   "radius": 0.1,
+   "split": false
+  }
+ ],
+ "hairWeights": {
+  "box": [
+   [
+    -0.1,
+    -0.12,
+    0.95
+   ],
+   [
+    0.21,
+    0.2,
+    1.8
+   ]
+  ],
+  "maxV": 1.01,
+  "chain": [
+   "Spine",
+   "Spine1",
+   "Spine2",
+   "Neck",
+   "Head"
+  ],
+  "falloff": 0.06
+ },
+ "glbPatch": {
+  "reason": "authenticity lane-A 2026-10-10: DEF intent on the surgery base (low arms free of the hips). Hitted: knocked back, head thrown back, all four arms flung wide (f1-f3). Death: faces front holding her f0 stance while the upper and low arms fly overhead and outward (f1-f5), then the collapse (f6-f7). AttackFront: windup back (f1), lunge thrust (f3), sword high (f4), slash (f5-f6), low sword arms following. Table applied twice (split) so each half stays under the per-op delta cap.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_naga_intent15_rot.json",
+    "sha256": "a5cd9961ed29798f98c176e49caeeec5836ad6f70237301a17e7ab2d72b00795",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_naga_intent15_rot.json",
+    "sha256": "a5cd9961ed29798f98c176e49caeeec5836ad6f70237301a17e7ab2d72b00795",
+    "regrid": true
+   }
+  ]
+ }
+}

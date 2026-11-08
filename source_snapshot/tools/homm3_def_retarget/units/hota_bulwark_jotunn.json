@@ -1,0 +1,275 @@
+{
+ "unit": "hota_bulwark_jotunn",
+ "joints": {
+  "Hips": [
+   -0.032,
+   -0.088,
+   0.897
+  ],
+  "Spine": [
+   -0.032,
+   -0.051,
+   0.981
+  ],
+  "Spine1": [
+   -0.032,
+   -0.014,
+   1.065
+  ],
+  "Spine2": [
+   -0.032,
+   0.027,
+   1.16
+  ],
+  "Neck": [
+   -0.032,
+   0.06,
+   1.234
+  ],
+  "Head": [
+   -0.032,
+   -0.039,
+   1.382
+  ],
+  "HeadTop_End": [
+   -0.08,
+   -0.05,
+   1.7
+  ],
+  "LeftShoulder": [
+   0.08,
+   0.0,
+   1.38
+  ],
+  "LeftArm": [
+   0.25,
+   0.0,
+   1.33
+  ],
+  "LeftForeArm": [
+   0.36,
+   0.02,
+   1.07
+  ],
+  "LeftHand": [
+   0.4,
+   -0.03,
+   0.86
+  ],
+  "LeftHand_End": [
+   0.41,
+   -0.05,
+   0.76
+  ],
+  "RightShoulder": [
+   -0.12,
+   0.0,
+   1.38
+  ],
+  "RightArm": [
+   -0.28,
+   0.0,
+   1.33
+  ],
+  "RightForeArm": [
+   -0.42,
+   0.02,
+   1.07
+  ],
+  "RightHand": [
+   -0.47,
+   -0.03,
+   0.95
+  ],
+  "RightHand_End": [
+   -0.49,
+   -0.05,
+   0.83
+  ],
+  "LeftUpLeg": [
+   0.088,
+   -0.137,
+   0.883
+  ],
+  "LeftLeg": [
+   0.172,
+   -0.229,
+   0.531
+  ],
+  "LeftFoot": [
+   0.214,
+   -0.13,
+   0.095
+  ],
+  "LeftToeBase": [
+   0.313,
+   -0.25,
+   -0.003
+  ],
+  "LeftToe_End": [
+   0.383,
+   -0.306,
+   0.011
+  ],
+  "RightUpLeg": [
+   -0.151,
+   -0.137,
+   0.883
+  ],
+  "RightLeg": [
+   -0.236,
+   -0.109,
+   0.531
+  ],
+  "RightFoot": [
+   -0.306,
+   0.095,
+   0.095
+  ],
+  "RightToeBase": [
+   -0.306,
+   -0.039,
+   -0.003
+  ],
+  "RightToe_End": [
+   -0.32,
+   -0.137,
+   0.011
+  ]
+ },
+ "props": [
+  {
+   "name": "axe",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.2,
+      0.46,
+      0.96
+     ],
+     [
+      0.46,
+      -0.26,
+      0.5
+     ]
+    ]
+   ],
+   "radius": 0.075
+  },
+  {
+   "name": "axehead",
+   "bone": "LeftHand",
+   "box": [
+    [
+     0.31,
+     -0.46,
+     0.18
+    ],
+    [
+     0.6,
+     0.02,
+     0.84
+    ]
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.13
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.0,
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.0,
+   "keepDist": 0.13
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "skirtLegShare": 0.4,
+ "bootTop": 0.12,
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: the DEF jotunn raises the axe overhead at f2-f3, holds it upright in front at f4 and chops it forward and down at f5-f6; the capture ran a key early (head already level forward at f4, swung back down by f6). The axe hand is turned per key f2-f6 to the DEF timing",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_jotunn_arm_weights.json",
+    "sha256": "208d51258df0cfb568ea013d3f6e64a869eaf0abb5b0f36f8939167576156b34",
+    "note": "lane B 2026-10-11: axe-arm and flank skin weights re-solved on the edges the AttackFront axe-hand turns tear (wsolve --newonly, GPU)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_jotunn_axe_chop_timing_rot.json",
+    "regrid": true,
+    "sha256": "e80fe6dba8c34d807d4ff0a745355ae9b03ec931a1de1c3e6bcfc95fb50d565f"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_jotunn_axe_chop_timing_rot.json",
+    "regrid": true,
+    "sha256": "e80fe6dba8c34d807d4ff0a745355ae9b03ec931a1de1c3e6bcfc95fb50d565f"
+   }
+  ]
+ }
+}

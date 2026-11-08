@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_dungeon",
+  "sourceDoc": "docs/custom_faction_recommendations.md and docs/custom_faction_technical_implementation_proposals.md",
+  "mechanics": [
+    {
+      "id": "dungeon.mana_vortex",
+      "surface": "building",
+      "sourceName": "Mana Vortex",
+      "status": "substituted",
+      "reason": "Temporary mana-doubling source behavior requires hero/session resource tracing.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "doubles mana",
+        "Mana Vortex"
+      ],
+      "currentRows": [
+        "Build_Bank"
+      ],
+      "playerTextTokens": [
+        "Homm3Dungeon_Build_Bank_description",
+        "Homm3Dungeon_Build_Bank_name",
+        "Homm3Dungeon_Build_Bank_narrativeDescription"
+      ]
+    },
+    {
+      "id": "dungeon.portal_of_summoning",
+      "surface": "building",
+      "sourceName": "Portal of Summoning",
+      "status": "substituted",
+      "reason": "Weekly external-dwelling recruitment needs a source-equivalent city/session route.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "Portal of Summoning",
+        "external dwelling"
+      ],
+      "currentRows": [
+        "Build_Lyceum"
+      ],
+      "playerTextTokens": [
+        "Homm3Dungeon_Build_Lyceum_description",
+        "Homm3Dungeon_Build_Lyceum_name",
+        "Homm3Dungeon_Build_Lyceum_narrativeDescription"
+      ]
+    },
+    {
+      "id": "dungeon.gymnasium",
+      "surface": "building",
+      "sourceName": "Gymnasium",
+      "status": "substituted",
+      "reason": "Current design keeps only native-safe hero progression/stat style behavior until exact source parity is traced.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Gymnasium"
+      ],
+      "forbiddenPlayerText": [
+        "experience every week"
+      ]
+    },
+    {
+      "id": "dungeon.guardian_of_earth",
+      "surface": "building",
+      "sourceName": "Guardian of Earth",
+      "status": "substituted",
+      "reason": "Grail/source identity is represented through native city/grail-safe benefits rather than exact spell behavior.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "Earth spells",
+        "Guardian of Earth"
+      ],
+      "currentRows": [
+        "Build_Spy_Network"
+      ],
+      "playerTextTokens": [
+        "Homm3Dungeon_Build_Spy_Network_description",
+        "Homm3Dungeon_Build_Spy_Network_name",
+        "Homm3Dungeon_Build_Spy_Network_narrativeDescription"
+      ]
+    },
+    {
+      "id": "dungeon.draconic_dominion",
+      "surface": "faction_skill",
+      "sourceName": "Captives",
+      "status": "substituted",
+      "reason": "Captives replaces Draconic Dominion (2026-10-12). Homm3DungeonCaptivesRuntime is the single owner of BhSquadEscapeUISession.OnEscapeClick: a read-only prefix plus a postfix bank squadValue x count for every fleeing squad a human Captives hero lets go, persisted as hidden bonus-less hero buffs (strength in units of 100 across 20 bit buffs, squad count across 8) plus one visible tier buff (+1..+5 Attack/Defense at 2000/6000/12000/22000/36000 strength). Execute (XP 0.055/0.0825/0.11 per strength via native AddExp) and Ransom (gold 0.2/0.3/0.4 per strength) are change_use_necromancy world-magic rows intercepted by the runtime and empty the captives. Subskills keep the draconic_diplomacy SID slug: _1 Underworld Tribute (native data), _2 Interrogation (Execute mana = 10% of XP), _3 Imperial Menagerie and _4 Terror Mandate (hero-based TransferHero morale route in Homm3DungeonDraconicDominionHook), _5 Slave Markets (Ransom +25%), _6 Dungeon Cells (strength x1.25 for tiers). No Diplomacy buy UI. Proof tier: build; runtime unproven.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "skill_faction_homm3_dungeon"
+      ],
+      "forbiddenPlayerText": [
+        "artifact set",
+        "only mixed armies",
+        "dragon diplomacy source",
+        "Luck bonus"
+      ]
+    }
+  ]
+}

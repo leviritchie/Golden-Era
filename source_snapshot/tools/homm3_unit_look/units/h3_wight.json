@@ -1,0 +1,84 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_wight",
+ "status": "look",
+ "notes": "pilot: undead/ghost. front -y set explicitly: the rig has no toes and the head sits above the hips (auto fails closed); -y is what every foot-resolved unit of the def_retarget build gives, checked on the battle facings sheet; necropolis rollout: claw_slash flipbook added (the 'scythe glow' of the pilot note is the claw swipe trail the DEF draws on attack f1-4)",
+ "lighting": {
+  "mode": "v7c",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "claw_slash",
+    "type": "defFlipbook",
+    "provenance": "necropolis rollout: DEF g12/g15 (attack) f2-4, the white swipe trail of the claw (luma >= 230; absent from idle; defEffects drops it as relit bone colour)",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       2,
+       3,
+       4
+      ]
+     },
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "lumaSparse",
+     "minLuma": 230
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": {
+      "Unit_AttackFront": [
+       [
+        199,
+        209
+       ],
+       [
+        210,
+        203
+       ],
+       [
+        209,
+        212
+       ]
+      ],
+      "Unit_ShootFront": [
+       [
+        199,
+        209
+       ],
+       [
+        210,
+        203
+       ],
+       [
+        209,
+        212
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "the trail sweeps across both hands and the hips, so it is pinned body-relative: each key's origin is the mesh Spine1 projected through the SpriteCam on that DEF frame, so the trail keeps its DEF placement relative to the torso. Frame 1 (the raised glowing hand alone) is left out: the mesh does not raise its arm, so it floated off the body (review f050)."
+   }
+  ]
+ }
+}

@@ -1,0 +1,100 @@
+﻿{
+  "schemaVersion": 1,
+  "policy": {
+    "contractsMustMatchExactPredicateProfiles": true,
+    "visionMapEdgePredicatesAreNotFogMutationProof": true,
+    "roadTerrainRequiresNativeTerrainRead": true,
+    "readOnlyTooltipPreviewMustRemainNonGameplay": true,
+    "existingMapObjectClassesMustNotFabricateMechanics": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredRuntimeProof": [
+    "active law-owner side correlation proof",
+    "adventure hero position proof",
+    "native road terrain or road flag read proof",
+    "read-only tooltip preview boundary proof",
+    "native neutral data source proof when preview displays neutral intention",
+    "existing map object runtime identity proof",
+    "object class allowlist proof",
+    "fog reveal mutation ordering proof where reveal is used",
+    "map refresh and idempotence proof",
+    "nonexistent mechanic fabrication exclusion proof"
+  ],
+  "contracts": {
+    "RequiresRoadTerrain": {
+      "requiredEffectKeys": [
+        "castle.road-tile-view-radius"
+      ],
+      "allowedFactions": [
+        "homm3_castle"
+      ],
+      "allowedFamilies": [
+        "Vision"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must read native road terrain, road tile, or equivalent road flag state for the current Castle hero position.",
+        "Road state, hero coordinates, reveal side, fog mutation target, and active Castle law owner must correlate before conditional view-radius expansion.",
+        "The law must not replace road-conditioned vision with always-on view radius or generic movement/terrain bonuses."
+      ],
+      "forbiddenSubstitutes": [
+        "always-on view radius counted as road terrain",
+        "generic movement points counted as road terrain",
+        "biome or terrain category counted as road without road flag proof",
+        "road-looking map art counted as road terrain",
+        "pathfinding cost alone counted as road terrain",
+        "Castle faction membership counted as road terrain",
+        "fog reveal mutation counted without current hero road proof"
+      ]
+    },
+    "RequiresReadOnlyTooltipPreview": {
+      "requiredEffectKeys": [
+        "dungeon.neutral-intention-preview"
+      ],
+      "allowedFactions": [
+        "homm3_dungeon"
+      ],
+      "allowedFamilies": [
+        "Vision"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must remain a read-only tooltip or preview boundary for Dungeon neutral intention data.",
+        "Preview output must be backed by native neutral threat or intention data and must not mutate fog, rewards, diplomacy, combat, resources, or neutral stack state.",
+        "Hero proximity, target neutral stack identity, preview receiver, and active Dungeon law owner must correlate before showing the tooltip preview."
+      ],
+      "forbiddenSubstitutes": [
+        "tooltip text parsed as native neutral data",
+        "read-only tooltip preview counted as gameplay mutation",
+        "fog reveal mutation counted as tooltip preview",
+        "reward or diplomacy mutation counted as tooltip preview",
+        "object category allowlist counted as neutral intention data",
+        "Dungeon faction membership counted as tooltip preview permission",
+        "preview shown without neutral stack identity proof"
+      ]
+    },
+    "RequiresExistingMapObjectClasses": {
+      "requiredEffectKeys": [
+        "inferno.existing-gate-site-reveal"
+      ],
+      "allowedFactions": [
+        "homm3_inferno"
+      ],
+      "allowedFamilies": [
+        "Vision"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must classify existing runtime map objects that match the Hellgate Omens object allowlist or exact object-class taxonomy.",
+        "Existing object identity, object coordinates, reveal side, object allowlist, fog mutation target, and active Inferno law owner must correlate before reveal.",
+        "The law may reveal existing pocket-dimension, teleporter, Inferno-dwelling, or summoning-site objects, but must not create teleport, ocean travel, gate, or summoning mechanics."
+      ],
+      "forbiddenSubstitutes": [
+        "fabricated teleport mechanic counted as existing map object class",
+        "fabricated ocean travel mechanic counted as existing map object class",
+        "created object counted as existing map object without runtime object identity",
+        "object icon or art counted as object class",
+        "localized display text counted as object class",
+        "Inferno faction membership counted as object class",
+        "generic object category counted without exact allowlist proof"
+      ]
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "homm3.olden_layered_atlas_scenario_profile.v1",
+  "scenarioId": "oblivions_edge_ab_sod",
+  "mapSid": "h3_conflux_oblivions_edge_raw_translation",
+  "title": "Oblivion's Edge - Raw Translation",
+  "description": "Parallel Oblivion's Edge emit-only raw_translation map (same pipeline class as Homecoming). Runtime gameplay remains user-unvalidated.",
+  "artifactRoot": "artifacts/campaign_port_poc/ab_sod_campaigns/oblivions_edge",
+  "outputSubdir": "raw_translation_map",
+  "inputs": {
+    "alignment": "artifacts/campaign_port_poc/ab_sod_campaigns/oblivions_edge/olden_storage_alignment/oblivions_edge.olden_storage_alignment.json",
+    "substitutionMap": "artifacts/campaign_port_poc/ab_sod_campaigns/oblivions_edge/entity_substitutions/oblivions_edge.olden_entity_substitution_map.json",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "coreCatalog": "artifacts/campaign_port_poc/olden_entity_catalog/olden_core_map_valid_entity_catalog.json",
+    "templateMap": "V:\\SteamLibrary\\steamapps\\common\\Heroes of Might and Magic Olden Era - Golden Era\\HeroesOldenEra_Data\\StreamingAssets\\maps\\Thirst_for_Power.map"
+  },
+  "sourceEnvelope": {
+    "width": 72,
+    "height": 72
+  },
+  "layers": {
+    "layerIds": [
+      0
+    ],
+    "undergroundLayers": []
+  },
+  "spawn": {
+    "factionSid": "homm3_rampart",
+    "heroSid": "homm3_rampart_hero_17",
+    "playersCount": 1
+  },
+  "startHeroContract": {
+    "sourceLayer": 0,
+    "heroType": 146,
+    "owner": 1,
+    "payloadKind": "hero_or_prison",
+    "templateAnimation": "ah00_e.def",
+    "templateObjectId": 34,
+    "sourceKey": "0:4:14",
+    "campaignGranted": true
+  },
+  "pathability": {
+    "surfaceGapFill": false,
+    "emitCoreOverlay": true
+  },
+  "knownGaps": [
+    "AB/SoD StoryHub raw_translation first pass; videos deferred; runtime unvalidated.",
+    "Campaign-unique heroes may map lossily via h3m_hero_sid."
+  ],
+  "runtimeScriptComment": "oblivions_edge raw-translation runtime script generated from campaign alignment story.",
+  "coreOverlay": {
+    "mode": "emit_fresh"
+  },
+  "validation": {
+    "expectedSourceLayerEntityCounts": {
+      "0": 1411
+    }
+  }
+}

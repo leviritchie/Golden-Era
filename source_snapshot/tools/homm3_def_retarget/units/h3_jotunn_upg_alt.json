@@ -1,0 +1,364 @@
+{
+ "unit": "h3_jotunn_upg_alt",
+ "joints": {
+  "Hips": [
+   -0.05,
+   0.0,
+   0.72
+  ],
+  "Spine": [
+   -0.05,
+   0.0,
+   0.82
+  ],
+  "Spine1": [
+   -0.05,
+   -0.01,
+   0.92
+  ],
+  "Spine2": [
+   -0.05,
+   -0.02,
+   1.02
+  ],
+  "Neck": [
+   -0.05,
+   -0.03,
+   1.12
+  ],
+  "Head": [
+   -0.05,
+   -0.04,
+   1.2
+  ],
+  "HeadTop_End": [
+   -0.05,
+   -0.04,
+   1.45
+  ],
+  "RightShoulder": [
+   -0.12,
+   0.0,
+   1.1
+  ],
+  "RightArm": [
+   -0.28,
+   0.02,
+   1.08
+  ],
+  "RightForeArm": [
+   -0.36,
+   0.05,
+   0.86
+  ],
+  "RightHand": [
+   -0.42,
+   0.0,
+   0.72
+  ],
+  "RightHand_End": [
+   -0.45,
+   -0.02,
+   0.65
+  ],
+  "LeftShoulder": [
+   0.02,
+   0.0,
+   1.1
+  ],
+  "LeftArm": [
+   0.18,
+   0.02,
+   1.08
+  ],
+  "LeftForeArm": [
+   0.3,
+   0.05,
+   0.86
+  ],
+  "LeftHand": [
+   0.36,
+   0.0,
+   0.7
+  ],
+  "LeftHand_End": [
+   0.4,
+   -0.02,
+   0.62
+  ],
+  "RightUpLeg": [
+   -0.15,
+   0.0,
+   0.68
+  ],
+  "RightLeg": [
+   -0.22,
+   -0.02,
+   0.4
+  ],
+  "RightFoot": [
+   -0.26,
+   0.03,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.27,
+   -0.08,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.27,
+   -0.17,
+   0.02
+  ],
+  "LeftUpLeg": [
+   0.05,
+   0.0,
+   0.68
+  ],
+  "LeftLeg": [
+   0.13,
+   -0.02,
+   0.4
+  ],
+  "LeftFoot": [
+   0.17,
+   0.03,
+   0.1
+  ],
+  "LeftToeBase": [
+   0.18,
+   -0.08,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.19,
+   -0.17,
+   0.02
+  ]
+ },
+ "props": [
+  {
+   "name": "shield",
+   "bone": "RightHand",
+   "box": [
+    [
+     -0.7,
+     -0.6,
+     0.28
+    ],
+    [
+     -0.445,
+     0.6,
+     1.08
+    ]
+   ]
+  },
+  {
+   "name": "axe",
+   "bone": "LeftHand",
+   "box": [
+    [
+     0.42,
+     -0.6,
+     -0.02
+    ],
+    [
+     0.8,
+     0.6,
+     0.8
+    ]
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.12
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.95,
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.95,
+   "keepDist": 0.12
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "skirtLegShare": 0.4,
+ "bootTop": 0.12,
+ "glbPatch": {
+  "reason": "2026-09-30: the back fur hem (rest z 0.007-0.02 behind the heels, blender y > 0.18) sits on the floor. On the leg chain the stride plant's knee bend swung it under the stance floor (ground_glb refused the Move: planted LeftUpLeg sole lifted +0.091 at key 21, lowest other point RightLeg-owned); held on the Hips (the former bulwark_cloakhold rule) the 0.045 H stride pelvis drop took it under instead (+0.042/+0.057, Hips-owned); half-and-half still refused (+0.053/+0.064). Owned by the same-side foot, which the stride plant keeps on the floor, it passes. Numpy patch lane: tools/homm3_glb_patch, docs/homm3_glb_patch_lane.md. 2026-10-01 (CS bake v3 re-bake): the original ops (LeftUpLeg/LeftLeg and RightUpLeg/RightLeg -> same-side foot) tore more edges than the v3 export (the patch lane's stretch gate: 622 -> 640 edges past 2x over all 139 targets). The extra tears were on unchanged-weight edges at Blender z ~0.57-0.6 beside the right thigh, which the Corrective Smooth re-bake reached from the moved thigh share. Moving only the shin share (LeftLeg/RightLeg) plus the Hips split heals instead: 622 -> 560 edges, worst 6.965 unchanged. Measured in scratch on the v3 export: stride + cs_rekey + ground pass, and gate_faults is [] (as for the frozen delivery). 2026-10-11 (lane B authenticity): the DEF jotunn lifts the axe overhead and back at f1-f3 of AttackFront, brings it up in front at f4 and chops it level forward at f5-f6; the capture kept the axe hand low with the head pointing down. The axe arm is raised overhead f1-f3 and forward f4-f6, and the axe hand turned per key (keyRotations x2, split).",
+  "ops": [
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftLeg"
+    ],
+    "to": "LeftFoot",
+    "space": "blender",
+    "region": [
+     {
+      "axis": "y",
+      "above": 0.18,
+      "ramp": 0.05
+     },
+     {
+      "axis": "z",
+      "below": 0.3,
+      "ramp": 0.1
+     }
+    ],
+    "keep": 0.0,
+    "note": "floor-length back fur hem: the left shin's share rides the left foot (thigh share kept: v3 bake, see reason)"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "RightLeg"
+    ],
+    "to": "RightFoot",
+    "space": "blender",
+    "region": [
+     {
+      "axis": "y",
+      "above": 0.18,
+      "ramp": 0.05
+     },
+     {
+      "axis": "z",
+      "below": 0.3,
+      "ramp": 0.1
+     }
+    ],
+    "keep": 0.0,
+    "note": "the right shin's share rides the right foot (thigh share kept)"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "Hips"
+    ],
+    "to": "LeftFoot",
+    "space": "blender",
+    "region": [
+     {
+      "axis": "y",
+      "above": 0.18,
+      "ramp": 0.05
+     },
+     {
+      "axis": "z",
+      "below": 0.3,
+      "ramp": 0.1
+     },
+     {
+      "axis": "x",
+      "above": 0.0,
+      "ramp": 0.05
+     }
+    ],
+    "keep": 0.0,
+    "note": "the hem's hip share, left of centre, rides the left foot"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "Hips"
+    ],
+    "to": "RightFoot",
+    "space": "blender",
+    "region": [
+     {
+      "axis": "y",
+      "above": 0.18,
+      "ramp": 0.05
+     },
+     {
+      "axis": "z",
+      "below": 0.3,
+      "ramp": 0.1
+     },
+     {
+      "axis": "x",
+      "below": 0.0,
+      "ramp": 0.05
+     }
+    ],
+    "keep": 0.0,
+    "note": "the hem's hip share, right of centre, rides the right foot"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_jotunn_upg_alt_axe_overhead_chop_rot.json",
+    "regrid": true,
+    "sha256": "fbf5e74b908723c3169cef0a90a50d9da06ec5786395d05d4896aed0329bbfad"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_jotunn_upg_alt_axe_overhead_chop_rot.json",
+    "regrid": true,
+    "sha256": "fbf5e74b908723c3169cef0a90a50d9da06ec5786395d05d4896aed0329bbfad"
+   }
+  ]
+ }
+}

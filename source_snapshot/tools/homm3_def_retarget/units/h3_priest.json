@@ -1,0 +1,239 @@
+{
+ "unit": "h3_priest",
+ "sourceMesh": "artifacts/homm3_mesh_surgery/h3_priest_chest_c3.glb",
+ "armPart": {
+  "mesh": "artifacts/homm3_mesh_surgery/h3_priest_chest_c3.glb",
+  "record": "artifacts/homm3_mesh_surgery/h3_priest_chest_c3.glb.surgery.json",
+  "elbowRadius": 0.12,
+  "panelSmooth": 40,
+  "panelStrip": [
+   "LeftArm",
+   "RightArm",
+   "LeftShoulder",
+   "RightShoulder",
+   "LeftForeArm",
+   "RightForeArm",
+   "LeftHand",
+   "RightHand"
+  ],
+  "bones": [
+   "Arm",
+   "ForeArm",
+   "Hand"
+  ],
+  "keepJoint": "Arm",
+  "armSmooth": 80,
+  "smoothShoulder": true,
+  "diffuse": {
+   "bones": [
+    "*Shoulder",
+    "*Arm",
+    "*ForeArm",
+    "*Hand",
+    "Spine*",
+    "Neck",
+    "Head"
+   ],
+   "iterations": 100
+  },
+  "shortEdgeTie": 0.005
+ },
+ "joints": {
+  "Hips": [
+   0,
+   -0.02,
+   0.92
+  ],
+  "Spine": [
+   0,
+   -0.03,
+   1.02
+  ],
+  "Spine1": [
+   0,
+   -0.04,
+   1.12
+  ],
+  "Spine2": [
+   0,
+   -0.04,
+   1.24
+  ],
+  "Neck": [
+   0,
+   -0.04,
+   1.36
+  ],
+  "Head": [
+   0,
+   -0.05,
+   1.44
+  ],
+  "HeadTop_End": [
+   0,
+   -0.05,
+   1.62
+  ],
+  "LeftShoulder": [
+   0.04,
+   -0.04,
+   1.36
+  ],
+  "LeftArm": [
+   0.18,
+   -0.03,
+   1.34
+  ],
+  "LeftForeArm": [
+   0.24,
+   -0.08,
+   1.12
+  ],
+  "LeftHand": [
+   0.06,
+   -0.26,
+   1.12
+  ],
+  "LeftHand_End": [
+   -0.02,
+   -0.28,
+   1.13
+  ],
+  "RightShoulder": [
+   -0.04,
+   -0.04,
+   1.36
+  ],
+  "RightArm": [
+   -0.18,
+   -0.03,
+   1.34
+  ],
+  "RightForeArm": [
+   -0.24,
+   -0.08,
+   1.12
+  ],
+  "RightHand": [
+   -0.06,
+   -0.26,
+   1.08
+  ],
+  "RightHand_End": [
+   0.02,
+   -0.28,
+   1.08
+  ],
+  "LeftUpLeg": [
+   0.09,
+   -0.02,
+   0.88
+  ],
+  "LeftLeg": [
+   0.1,
+   -0.04,
+   0.48
+  ],
+  "LeftFoot": [
+   0.1,
+   -0.02,
+   0.08
+  ],
+  "LeftToeBase": [
+   0.1,
+   -0.14,
+   0.02
+  ],
+  "LeftToe_End": [
+   0.1,
+   -0.22,
+   0.01
+  ],
+  "RightUpLeg": [
+   -0.09,
+   -0.02,
+   0.88
+  ],
+  "RightLeg": [
+   -0.1,
+   -0.04,
+   0.48
+  ],
+  "RightFoot": [
+   -0.1,
+   -0.02,
+   0.08
+  ],
+  "RightToeBase": [
+   -0.1,
+   -0.14,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.1,
+   -0.22,
+   0.01
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "skirtLegShare": 0.2,
+ "bootTop": 0.08,
+ "extensions": [
+  "castle_armblock"
+ ],
+ "armBlock": {
+  "bones": [
+   "Spine2",
+   "Neck",
+   "Head",
+   "LeftShoulder",
+   "LeftArm",
+   "LeftForeArm",
+   "LeftHand",
+   "RightShoulder",
+   "RightArm",
+   "RightForeArm",
+   "RightHand"
+  ],
+  "follow": 0.15,
+  "clipFollow": {},
+  "boneFollow": {
+   "Spine2": 0.6,
+   "Neck": 0.1,
+   "Head": 0.1,
+   "LeftForeArm": 1.0,
+   "LeftHand": 1.0,
+   "RightForeArm": 1.0,
+   "RightHand": 1.0,
+   "LeftArm": 0.3,
+   "RightArm": 0.3
+  }
+ },
+ "legDamp": 0.6,
+ "glbPatch": {
+  "reason": "2026-10-09 authenticity pass (lane B): h3_priest is the h3_monk Meshy mesh re-textured, on the zealot DEF. With chest_c3 (lane A's monk surgery reused, sleeves freed and torso flanks rebuilt) the arms act by motion intent. AttackFront: gather at the chest f1-f2, full two-armed cast at the enemy f3-f4 (straight arms, shoulders protracted, torso leaning 9+9 deg), withdraw and refold (monk z4). ShootFront (14 DEF frames): the same gather and two-handed blast at f3-f4, then the NEAR arm in the DEF camera (the unit's left) raised forward-up above the hood f5-f9 with the chest counter-turned 20 deg so it clears the hood and the head tipped up 15 deg toward the hand, lowered at f10 and folded by f12; Head counter-pitched in the AttackFront/ShootFront casts (f2-f9, up to 45 deg) so the hood stays level on the target through the lean-in; armBlock keeps the priest head damping (Spine2 0.6, Neck/Head 0.1: Idle head pitch peak 5 deg as shipped). Defence/Hitted/Death: monk z4 (same frame counts and beats on this DEF: ward, recoil with the arm flung up, arms flung wide then collapse). Aim keys per DEF frame (pose.py spec pg), numpy patch lane; tear gate 133 -> 128 (worst 4.347 unchanged).",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_priest_pose.json",
+    "sha256": "79e21672c0cbf1301284d5008510ecbef58754b6f4bd027048fe4dab8804d1bb",
+    "regrid": true,
+    "note": "arm, shoulder, spine and head key poses by motion intent (sleeves freed by chest_c3)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_priest_pose2.json",
+    "sha256": "96e72f640cdad51cc08a1ce8b74b4c268306f0bf5cadf9f95efe386fea02a420",
+    "regrid": true,
+    "note": "second half of rotations over 115 deg (Death, Hitted fling)"
+   }
+  ]
+ }
+}

@@ -1,0 +1,90 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "hota_cove_pirate",
+ "status": "look",
+ "notes": "cove rollout: pistol muzzle flash ripped from the DEF (g15 f4, defEffects fire) with a fitted dynamic flash light. defOrigin is the DEF's LeftHand pixel (the DEF_Master projection of the joint) so the flash keeps its hand->muzzle offset instead of pinning its barrel contact to the hand.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "muzzle_flash",
+   "treatment": "dynamic",
+   "notes": "the shot lights the gun hand and face"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "muzzle",
+    "type": "defFlipbook",
+    "def": "CPIRATE.DEF",
+    "provenance": "roster inventory cove: g15 shoot_front fire/flame f4 (ripper candidate LeftHand)",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire"
+     ],
+     "includeDetached": false,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": [
+      217,
+      204
+     ]
+    },
+    "texelsPerDefPx": 1,
+    "light": "muzzle_flash"
+   },
+   {
+    "id": "muzzle_light",
+    "type": "effectLight",
+    "lightId": "muzzle_flash",
+    "carrier": "muzzle",
+    "anchor": {
+     "bone": "LeftHand",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.75,
+     0.4
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_ShootFront": [
+      0.0,
+      0.034,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

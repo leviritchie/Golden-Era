@@ -1,0 +1,141 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_fire_hound",
+ "status": "look",
+ "notes": "inferno rollout: hound; fire breath and the burning death ripped from the DEF (defEffects fire)",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "breath_fire",
+   "treatment": "dynamic",
+   "notes": "breath lights the head and forequarters"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "breath",
+    "type": "defFlipbook",
+    "provenance": "roster inventory inferno: g12 attack_front breath fire f1-6",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "HeadRight",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "breath_fire",
+    "render": "unitPlane",
+    "notes": "render unitPlane: directional pieces (thrown/jetting forward) turn with the unit (vfx_depth.py)."
+   },
+   {
+    "id": "breath_light",
+    "type": "effectLight",
+    "lightId": "breath_fire",
+    "carrier": "breath",
+    "anchor": {
+     "bone": "HeadRight",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.62,
+     0.3
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      3.791,
+      4.683,
+      12.029,
+      6.425,
+      2.361,
+      0.709,
+      0.065
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "death_burn",
+    "type": "defFlipbook",
+    "provenance": "inferno_fx_masks.py opaque_all: g5 death f2-5, the body goes up in flames and bursts into sparks (the sprite is the fire; defEffects kept only the orange rims)",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       2,
+       3,
+       4,
+       5
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_fire_hound/death_burn"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": {
+      "Unit_Death": [
+       [
+        204,
+        206
+       ],
+       [
+        205,
+        201
+       ],
+       [
+        209,
+        202
+       ],
+       [
+        213,
+        212
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "defOrigin = the mask centroid per frame (the sprite is the effect, so 'auto' has no body contact)."
+   }
+  ]
+ }
+}

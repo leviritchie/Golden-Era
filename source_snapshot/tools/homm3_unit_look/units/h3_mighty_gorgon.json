@@ -1,0 +1,122 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_mighty_gorgon",
+ "status": "look",
+ "notes": "fortress rollout: breath + snort ripped from the DEF (defEffects)",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "breath_glow",
+   "treatment": "dynamic",
+   "notes": "breath lights the muzzle"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "snort",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_Mouseover": {
+      "defGroup": 1,
+      "frames": [
+       1,
+       2,
+       3
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "magic",
+      "smoke"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "roster inventory fortress: g01 mouseover detached particles f1-3"
+   },
+   {
+    "id": "breath",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire",
+      "magic",
+      "smoke"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "roster inventory fortress: g12 attack_front thrown fire/flame f3-6",
+    "light": "breath_glow"
+   },
+   {
+    "id": "breath_glow_light",
+    "type": "effectLight",
+    "lightId": "breath_glow",
+    "carrier": "breath",
+    "anchor": {
+     "bone": "Head",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.65,
+     0.3
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.0,
+      0.0,
+      4.688,
+      1.267,
+      0.854,
+      0.9
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

@@ -1,0 +1,200 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_water_elemental",
+ "status": "look",
+ "notes": "conflux rollout: water elemental. The attack's water splash is ripped from the DEF (defEffects water). The DEF whips the tail tip into the splash after a full spin the mesh does not make, so the splash is placed where the DEF draws it: its cells are cut around the Spine1 joint's projected pixel and pinned there (explicit defOrigin), rather than pinned to a limb that is elsewhere.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "splash_flash",
+   "treatment": "dynamic",
+   "notes": "the splash's pale blue glow on the body"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "element_flow",
+    "type": "uvAtlas",
+    "provenance": "element_flow_scores.py mode coil: 8 cells per 8-frame cycle, in phase with the retarget's element_motion keys; brightness-modulated look texture",
+    "modulate": {
+     "gain": 0.4
+    },
+    "clips": {
+     "Unit_Idle": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "Unit_MoveStart": [
+      0,
+      1
+     ],
+     "Unit_Move": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "Unit_MoveEnd": [
+      0,
+      1
+     ],
+     "Unit_Mouseover": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "Unit_Hitted": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_Defence": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "Unit_AttackFront": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "Unit_Death": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    "source": {
+     "scores": "artifacts/homm3_vfx_experiments/element_flow/h3_water_elemental_scores.npz",
+     "generator": "tools/homm3_vfx/element_flow_scores.py"
+    },
+    "gutterPx": 16
+   },
+   {
+    "id": "attack_splash",
+    "type": "defFlipbook",
+    "provenance": "roster inventory conflux: g12 attack_front water/ice f5-7",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       5,
+       6,
+       7
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "water",
+      "electric"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": {
+      "Unit_AttackFront": [
+       [
+        252,
+        208
+       ],
+       [
+        250,
+        208
+       ],
+       [
+        245,
+        207
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "splash_flash"
+   },
+   {
+    "id": "splash_flash_light",
+    "type": "effectLight",
+    "lightId": "splash_flash",
+    "carrier": "attack_splash",
+    "anchor": {
+     "bone": "Spine1",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.7,
+     0.8,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.129,
+      0.0,
+      0.202,
+      0.0,
+      0.518,
+      0.0,
+      0.25
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

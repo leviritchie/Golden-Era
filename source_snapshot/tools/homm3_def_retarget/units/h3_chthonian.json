@@ -1,0 +1,279 @@
+{
+ "unit": "h3_chthonian",
+ "joints": {
+  "Hips": [
+   -0.05,
+   0.15,
+   0.7
+  ],
+  "Spine": [
+   -0.05,
+   0.1,
+   0.8
+  ],
+  "Spine1": [
+   -0.05,
+   0.02,
+   0.92
+  ],
+  "Spine2": [
+   -0.05,
+   -0.06,
+   1.02
+  ],
+  "Neck": [
+   -0.05,
+   -0.14,
+   1.06
+  ],
+  "Head": [
+   -0.05,
+   -0.22,
+   1.02
+  ],
+  "HeadTop_End": [
+   -0.05,
+   -0.52,
+   1.0
+  ],
+  "LeftShoulder": [
+   0.0,
+   -0.1,
+   1.1
+  ],
+  "LeftArm": [
+   0.2,
+   -0.12,
+   1.02
+  ],
+  "LeftForeArm": [
+   0.33,
+   -0.05,
+   0.8
+  ],
+  "LeftHand": [
+   0.39,
+   -0.1,
+   0.62
+  ],
+  "LeftHand_End": [
+   0.4,
+   -0.1,
+   0.52
+  ],
+  "RightShoulder": [
+   -0.1,
+   -0.1,
+   1.1
+  ],
+  "RightArm": [
+   -0.3,
+   -0.12,
+   1.02
+  ],
+  "RightForeArm": [
+   -0.38,
+   -0.05,
+   0.75
+  ],
+  "RightHand": [
+   -0.37,
+   -0.07,
+   0.47
+  ],
+  "RightHand_End": [
+   -0.37,
+   -0.07,
+   0.3
+  ],
+  "LeftUpLeg": [
+   0.122,
+   0.227,
+   0.722
+  ],
+  "LeftLeg": [
+   0.22,
+   -0.01,
+   0.407
+  ],
+  "LeftFoot": [
+   0.157,
+   0.164,
+   0.058
+  ],
+  "LeftToeBase": [
+   0.234,
+   0.003,
+   0.037
+  ],
+  "LeftToe_End": [
+   0.311,
+   -0.157,
+   0.016
+  ],
+  "RightUpLeg": [
+   -0.227,
+   0.227,
+   0.722
+  ],
+  "RightLeg": [
+   -0.28,
+   0.03,
+   0.42
+  ],
+  "RightFoot": [
+   -0.262,
+   0.164,
+   0.058
+  ],
+  "RightToeBase": [
+   -0.346,
+   0.003,
+   0.037
+  ],
+  "RightToe_End": [
+   -0.43,
+   -0.157,
+   0.016
+  ]
+ },
+ "props": [
+  {
+   "name": "spear",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.342,
+      -0.056,
+      0.14
+     ],
+     [
+      0.364,
+      -0.065,
+      1.15
+     ]
+    ]
+   ],
+   "radius": 0.055
+  },
+  {
+   "name": "spearhead",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.364,
+      -0.065,
+      1.15
+     ],
+     [
+      0.378,
+      -0.071,
+      1.76
+     ]
+    ]
+   ],
+   "radius": 0.085
+  },
+  {
+   "name": "spearfoot",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.339,
+      -0.055,
+      -0.01
+     ],
+     [
+      0.342,
+      -0.056,
+      0.14
+     ]
+    ]
+   ],
+   "radius": 0.03
+  },
+  {
+   "name": "tail",
+   "bone": "Hips",
+   "box": [
+    [
+     -0.13,
+     0.3,
+     -0.01
+    ],
+    [
+     0.03,
+     0.6,
+     0.55
+    ]
+   ]
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "dy": 20,
+   "roll": 20
+  },
+  "propAim": [
+   "LeftHand"
+  ],
+  "propAimDepth": "imagePlane",
+  "propAimRange": 25,
+  "propAimReason": "2026-09-30 in-game report: troglodyte-line spears flail back and forth. The free propAim tilt toward/away from the sprite camera is unobservable in a silhouette and flipped sign frame to frame (h3_troglodyte idle aim2 53/51/53/-41 -> 77.6 deg spear step on the loop seam; attack 94.7 deg, hitted 105 deg). imagePlane lays the spear into the image plane (the DEF draws it at full length) and fits only the on-screen swing, within propAimRange deg of the capture's hand pose (a wider swing chases the spear's tip/butt mirror line)."
+ },
+ "armCut": {
+  "maxDist": 0.1
+ },
+ "extensions": [
+  "dungeon_fixweights"
+ ],
+ "glbPatch": {
+  "reason": "2026-10-11 lane B authenticity (DEF g05/g12): Death - the capture flipped the chthonian onto its back with legs and spear up; the DEF collapses forward into a low heap with the spear on the floor (keys 4-7 copied (weights still settling 0.78-1 so the heap never holds one pose 3 frames) from the standing key 3, Hips pitched 55 deg forward and dropped 0.55 with leg IK to the planted feet, arms sprawled forward, spear laid flat). AttackFront - the capture held the spear vertical; the DEF thrusts it level forward at f3-f6 (left arm extended, spear axis measured from the LeftHand-skinned spear verts, local [0.123,-0.992,0.002], aimed at +Z). keyTranslations + split keyRotations; stretchRelax on both clips for the shoulder/hip creases.",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chthonian_death_attack_tr.json",
+    "regrid": true,
+    "sha256": "df7cdc33165afd1cf7cbe6036207c675e34e273f04fb4398cdf7cc78f6317e9b"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chthonian_death_attack_rot.json",
+    "regrid": true,
+    "sha256": "84e9f6e9319dc8d755e46250a55b03c2cc04ee240ae0ed7a213347cb62cd12b4"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chthonian_death_attack_rot.json",
+    "regrid": true,
+    "sha256": "84e9f6e9319dc8d755e46250a55b03c2cc04ee240ae0ed7a213347cb62cd12b4"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death",
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "crease of the re-posed joints"
+   }
+  ]
+ }
+}

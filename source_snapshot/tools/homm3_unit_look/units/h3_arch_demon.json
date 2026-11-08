@@ -1,0 +1,234 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_arch_demon",
+ "status": "look",
+ "notes": "inferno rollout: arch demon (HotA alt of the devil; fire-red body). The fire-cloud teleport uses committed whole-sprite file masks (the cloud's colours are body paint), minus the mesh silhouette; the flaming scythe arc is ripped with defEffects.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "teleport_fire",
+   "treatment": "dynamic",
+   "notes": "the teleport fireball lights the body as it vanishes / reappears"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "scythe_arc",
+    "type": "defFlipbook",
+    "provenance": "roster inventory inferno: g12 attack_front detached f2-6 (the burning scythe sweep)",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 3
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1
+   },
+   {
+    "id": "teleport",
+    "type": "defFlipbook",
+    "provenance": "inferno_fx_masks.py opaque_all: g20 move_start f4-13 + g21 move_end f0-7, the fire cloud",
+    "clips": {
+     "Unit_MoveStart": {
+      "defGroup": 20,
+      "frames": [
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13
+      ]
+     },
+     "Unit_MoveEnd": {
+      "defGroup": 21,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_arch_demon/teleport"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Hips",
+     "defOrigin": {
+      "Unit_MoveStart": [
+       [
+        200,
+        241
+       ],
+       [
+        200,
+        241
+       ],
+       [
+        199,
+        237
+       ],
+       [
+        198,
+        235
+       ],
+       [
+        197,
+        229
+       ],
+       [
+        196,
+        222
+       ],
+       [
+        195,
+        215
+       ],
+       [
+        195,
+        208
+       ],
+       [
+        194,
+        197
+       ],
+       [
+        194,
+        180
+       ]
+      ],
+      "Unit_MoveEnd": [
+       [
+        193,
+        189
+       ],
+       [
+        194,
+        206
+       ],
+       [
+        195,
+        217
+       ],
+       [
+        196,
+        223
+       ],
+       [
+        197,
+        229
+       ],
+       [
+        198,
+        235
+       ],
+       [
+        199,
+        237
+       ],
+       [
+        200,
+        237
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "teleport_fire",
+    "notes": "defOrigin = the mask centroid per frame (the sprite is the effect, so 'auto' has no body contact)."
+   },
+   {
+    "id": "teleport_light",
+    "type": "effectLight",
+    "lightId": "teleport_fire",
+    "carrier": "teleport",
+    "anchor": {
+     "bone": "Hips",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.62,
+     0.3
+    ],
+    "range": 4.0,
+    "intensity": {
+     "Unit_MoveStart": [
+      0.0,
+      0.195,
+      0.005,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "Unit_MoveEnd": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

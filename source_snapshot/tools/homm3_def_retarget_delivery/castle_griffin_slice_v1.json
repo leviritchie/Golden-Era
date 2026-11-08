@@ -1,0 +1,81 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "castle_griffin_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/castle_griffin_slice_v1",
+  "note": "2026-10-01 griffin rampant idle: glbPatch sitRepose on the sit clips (crouched planted hind legs, head forward of swept-back wings, talon raised); Unit_Move byte-identical to the previous freeze (docs/homm3_glb_patch_lane.md) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_griffin 0.1262. | 2026-10-01 four-legged sit: forelegs planted (sitRepose foreLegs), all four feet within 0.016 H of the floor over Idle/Mouseover; flight untouched Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_griffin 0.1262. | 2026-10-05 griffin line full-body DEF repair: rampant two-legged idle kept, whole skeleton follows every DEF plate per frame (keyRotations body tables, regrid), forelimbs articulated, hind feet planted, death falls; four-legged sit removed from all three (docs/homm3_griffin_animation_investigation.md) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_griffin 0.1262, h3_royal_griffin 0.1625, h3_battle_griffin 0.1854. | 2026-10-05 upright pass: h3_griffin idle/mouseover/move-end refit to the DEF's upright rearing stance (b17); royal and battle unchanged from dda0b09075 Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_griffin 0.1262, h3_royal_griffin 0.1625, h3_battle_griffin 0.1854. | 2026-10-05 folded-wing ground body: h3_griffin rebuilt on the user-approved Meshy folded-wing mesh (identity_reviews defRetargetMesh), per-DEF-frame body motion from one keyRotations table, Move keeps a rigid-wing beat until the flight body swap; royal and battle unchanged Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_griffin 0.2243. Carried over unchanged: h3_royal_griffin, h3_battle_griffin. | authenticity a23: all 9 clips pass by eye (spec s167) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_royal_griffin 0.0734. Carried over unchanged: h3_griffin, h3_battle_griffin. | a24 s170: wings folded up the back (Idle/Mouseover + entry/exit frames) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_royal_griffin 0.0924. Carried over unchanged: h3_griffin, h3_battle_griffin. | lane-A a25: royal-griffin transfer (upright rampant stand, wings folded up the back), sliver+mouth surgery (mouth_s2) and QJaw Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_battle_griffin 0.1098. Carried over unchanged: h3_griffin, h3_royal_griffin. | a26 authenticity: royal motion transfer (idle-delta), level head + talon reach in flight, shipped wing beat kept, arm weight diffusion; tears 1458->1454 worst 11.65->7.62 Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_griffin 0.1121. Carried over unchanged: h3_royal_griffin, h3_battle_griffin. | 2026-10-08 user: royal/battle are recolors of h3_griffin (frozen griffin mesh/rig/clips, own HoMM3 palette via tools/homm3_unit_look/recolor.py). Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_royal_griffin as h3_griffin, h3_battle_griffin as h3_griffin. Carried over unchanged: h3_griffin. | vanilla-style VFX promotion 2026-10-12 (user-approved lab previews) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_royal_griffin as h3_griffin. Carried over unchanged: h3_griffin, h3_battle_griffin.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_griffin",
+      "gameSid": "h3_griffin",
+      "bundleName": "custom_units_castle_h3_griffin",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "0a3b5f46da64d2ec6b8cf7d88dfbf04ce788b801c3daa1894546127249d3cf8a",
+      "identityReview": "0a3b5f46da64d2ec6b8cf7d88dfbf04ce788b801c3daa1894546127249d3cf8a",
+      "vfxAuthority": "vanilla_style",
+      "vanillaStyleSpec": "tools/homm3_vfx/vanilla_style/units/h3_griffin.json",
+      "frozen": {
+        "lookDeliveredGlbSha256": "819994ad89bf35d6958e48541cd82b0285a84bf2c7e2465a03974346fe2689d4",
+        "idleRetimedGlbSha256": "37a32badce93900f3a16b0dfa3b6c50f2000f19918861c075b71c8eaf9ffa564",
+        "vfxManifestSha256": "666133cd19e5911a474e987fbc8e6570362be2e89e8c5a27b02fccc31d223b95",
+        "specSha256": "999e902f0254f6e4199213c0d3bad215168c921e1436e71420acbe19d8e37ebd",
+        "basecolorSha256": "c9d065c82856901c8727a1e6747106530e2a336e95feae6ae444e5529526d98f"
+      }
+    },
+    {
+      "labSid": "h3_royal_griffin",
+      "gameSid": "h3_griffin_upg",
+      "bundleName": "custom_units_castle_h3_royal_griffin",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "0a3b5f46da64d2ec6b8cf7d88dfbf04ce788b801c3daa1894546127249d3cf8a",
+      "identityReview": "0a3b5f46da64d2ec6b8cf7d88dfbf04ce788b801c3daa1894546127249d3cf8a",
+      "vfxAuthority": "vanilla_style",
+      "vanillaStyleSpec": "tools/homm3_vfx/vanilla_style/units/h3_royal_griffin.json",
+      "recolor": {
+        "of": "h3_griffin",
+        "selection": "castle_griffin_slice_v1",
+        "spec": "tools/homm3_unit_look/recolor/h3_royal_griffin.json",
+        "specSha256": "66b8e31713036926516ddeafd183a19e0bd41915af44a477fad40859bd51f798",
+        "sourceIdleRetimedGlbSha256": "37a32badce93900f3a16b0dfa3b6c50f2000f19918861c075b71c8eaf9ffa564"
+      },
+      "frozen": {
+        "lookDeliveredGlbSha256": "9b0fa5283fd5b2ff3be13d74eadbfcabff08eaa950dd35e1eb35af14da4c12d5",
+        "idleRetimedGlbSha256": "3aa7ae8aad28e119aa71627c14fbd142081d1f131a819c69118acfd96ecd2e9e",
+        "vfxManifestSha256": "249b1cd0fe691a714e72fe153a17604edd4df41d402ba6f4476d6013c39e457e",
+        "specSha256": "49f51fe592eb5219dac85035b3a1a7339dafaaf98f3605614d2540c2a1bb988c",
+        "basecolorSha256": "afbeab746a4be0017d2ef530a48d7ec6c7e06da1a06973320837bc65c44f1092"
+      }
+    },
+    {
+      "labSid": "h3_battle_griffin",
+      "gameSid": "h3_griffin_upg_alt",
+      "bundleName": "custom_units_castle_h3_battle_griffin",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "0a3b5f46da64d2ec6b8cf7d88dfbf04ce788b801c3daa1894546127249d3cf8a",
+      "identityReview": "0a3b5f46da64d2ec6b8cf7d88dfbf04ce788b801c3daa1894546127249d3cf8a",
+      "vfxAuthority": "vanilla_style",
+      "vanillaStyleSpec": "tools/homm3_vfx/vanilla_style/units/h3_battle_griffin.json",
+      "recolor": {
+        "of": "h3_griffin",
+        "selection": "castle_griffin_slice_v1",
+        "spec": "tools/homm3_unit_look/recolor/h3_battle_griffin.json",
+        "specSha256": "84991b0654971a9e1f327e9d2c4f5425481e1ad33a889ca1c230995fe9c03bf7",
+        "sourceIdleRetimedGlbSha256": "37a32badce93900f3a16b0dfa3b6c50f2000f19918861c075b71c8eaf9ffa564"
+      },
+      "frozen": {
+        "lookDeliveredGlbSha256": "7590e0ab84337d9a47130ca1bc65ae93d0437fd77e41815dc44536e5fa46e97c",
+        "idleRetimedGlbSha256": "e44d49172bd21b20374563bb935e47e0eba9a18f8e125beaf6b0f1681f2dc501",
+        "vfxManifestSha256": "936a38e67938efec7afecf1652e3b4053573fff5fa188074d0bad41e6119ab8b",
+        "specSha256": "8958c9caa623f6016c296fea6c190838e3c2039286dde9ab4e87ab47a108ad7b",
+        "basecolorSha256": "22e66792bc76d0d60839f5b2a57ac427350db577178dc45d34d0a594abdc8977"
+      }
+    }
+  ]
+}

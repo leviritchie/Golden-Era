@@ -1,0 +1,352 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "Armageddon's Blade continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub ab; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_09_ab_conflux_ab",
+    "campaignTitle": "Armageddon's Blade",
+    "campaignEntry": "ab.h3c",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "missionConfigPrefix": "homm3_ab_conflux",
+    "defaultSpawn": {
+      "factionSid": "homm3_castle",
+      "heroSid": "homm3_castle_hero_17"
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart).",
+    "regionPixels": {
+      "catherines_charge": [
+        80.0,
+        220.0
+      ],
+      "seeking_armageddon": [
+        182.85714285714283,
+        220.0
+      ],
+      "shadows_of_the_forest": [
+        285.71428571428567,
+        220.0
+      ],
+      "maker_of_sorrows": [
+        388.57142857142856,
+        220.0
+      ],
+      "return_of_the_king": [
+        491.4285714285714,
+        220.0
+      ],
+      "a_blade_in_the_back": [
+        594.2857142857143,
+        220.0
+      ],
+      "to_kill_a_hero": [
+        697.1428571428571,
+        220.0
+      ],
+      "oblivions_edge": [
+        800.0,
+        220.0
+      ]
+    },
+    "missionSpawns": {
+      "catherines_charge": {
+        "heroSid": "homm3_castle_hero_17",
+        "factionSid": "homm3_castle"
+      },
+      "shadows_of_the_forest": {
+        "heroSid": "homm3_rampart_hero_17",
+        "factionSid": "homm3_rampart"
+      },
+      "seeking_armageddon": {
+        "heroSid": "homm3_inferno_hero_17",
+        "factionSid": "homm3_inferno"
+      },
+      "maker_of_sorrows": {
+        "heroSid": "homm3_inferno_hero_17",
+        "factionSid": "homm3_inferno"
+      },
+      "return_of_the_king": {
+        "heroSid": "homm3_necropolis_hero_18",
+        "factionSid": "homm3_necropolis"
+      },
+      "a_blade_in_the_back": {
+        "heroSid": "homm3_conflux_hero_11",
+        "factionSid": "homm3_conflux"
+      },
+      "to_kill_a_hero": {
+        "heroSid": "homm3_rampart_hero_17",
+        "factionSid": "homm3_rampart"
+      },
+      "oblivions_edge": {
+        "heroSid": "homm3_rampart_hero_17",
+        "factionSid": "homm3_rampart"
+      }
+    }
+  },
+  "storyHubMapSidOverrides": {
+    "catherines_charge": "h3_conflux_catherines_charge_raw_translation",
+    "seeking_armageddon": "h3_conflux_seeking_armageddon_raw_translation",
+    "shadows_of_the_forest": "h3_conflux_shadows_of_the_forest_raw_translation",
+    "maker_of_sorrows": "h3_conflux_maker_of_sorrows_raw_translation",
+    "return_of_the_king": "h3_conflux_return_of_the_king_raw_translation",
+    "a_blade_in_the_back": "h3_conflux_a_blade_in_the_back_raw_translation",
+    "to_kill_a_hero": "h3_conflux_to_kill_a_hero_raw_translation",
+    "oblivions_edge": "h3_conflux_oblivions_edge_raw_translation",
+    "choiceReason": "Armageddon's Blade missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "catherines_charge",
+      "toMissionId": "shadows_of_the_forest",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 18,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=18 for catherines_charge (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_conflux_catherines_charge_raw_translation",
+        "to": "h3_conflux_shadows_of_the_forest_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "shadows_of_the_forest",
+      "toMissionId": "seeking_armageddon",
+      "sourceBlockIndex": 2,
+      "nextBlockIndex": 3,
+      "levelCap": 12,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=12 for shadows_of_the_forest (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_conflux_shadows_of_the_forest_raw_translation",
+        "to": "h3_conflux_seeking_armageddon_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "seeking_armageddon",
+      "toMissionId": "maker_of_sorrows",
+      "sourceBlockIndex": 3,
+      "nextBlockIndex": 4,
+      "levelCap": 12,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=12 for seeking_armageddon (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_conflux_seeking_armageddon_raw_translation",
+        "to": "h3_conflux_maker_of_sorrows_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "maker_of_sorrows",
+      "toMissionId": "return_of_the_king",
+      "sourceBlockIndex": 4,
+      "nextBlockIndex": 5,
+      "levelCap": 24,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=24 for maker_of_sorrows (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_conflux_maker_of_sorrows_raw_translation",
+        "to": "h3_conflux_return_of_the_king_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "return_of_the_king",
+      "toMissionId": "a_blade_in_the_back",
+      "sourceBlockIndex": 5,
+      "nextBlockIndex": 6,
+      "levelCap": 24,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=24 for return_of_the_king (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_conflux_return_of_the_king_raw_translation",
+        "to": "h3_conflux_a_blade_in_the_back_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "a_blade_in_the_back",
+      "toMissionId": "to_kill_a_hero",
+      "sourceBlockIndex": 6,
+      "nextBlockIndex": 7,
+      "levelCap": 24,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=24 for a_blade_in_the_back (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_conflux_a_blade_in_the_back_raw_translation",
+        "to": "h3_conflux_to_kill_a_hero_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "to_kill_a_hero",
+      "toMissionId": "oblivions_edge",
+      "sourceBlockIndex": 7,
+      "nextBlockIndex": 8,
+      "levelCap": 36,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=36 for to_kill_a_hero (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_conflux_to_kill_a_hero_raw_translation",
+        "to": "h3_conflux_oblivions_edge_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "catherines_charge",
+    "shadows_of_the_forest",
+    "seeking_armageddon",
+    "maker_of_sorrows",
+    "return_of_the_king",
+    "a_blade_in_the_back",
+    "to_kill_a_hero",
+    "oblivions_edge"
+  ],
+  "missionTitles": {
+    "catherines_charge": "Catherine's Charge",
+    "seeking_armageddon": "Seeking Armageddon",
+    "shadows_of_the_forest": "Shadows of the Forest",
+    "maker_of_sorrows": "Maker of Sorrows",
+    "return_of_the_king": "Return of the King",
+    "a_blade_in_the_back": "A Blade in the Back",
+    "to_kill_a_hero": "To Kill A Hero",
+    "oblivions_edge": "Oblivion's Edge"
+  },
+  "missionDescriptions": {
+    "catherines_charge": "Catherine must defeat all of her enemies or they will flood Erathia with their evil. If Queen Catherine dies then all hope is lost and the devils of Eeofol will easily w...",
+    "seeking_armageddon": "Xeron must gather the Sword of Hellfire, Breastplate of Brimstone, and Shield of the Damned. If he dies, Eeofol's hopes die with him. He will be able to advance to 12th...",
+    "shadows_of_the_forest": "Gelu must defeat all enemies in this area using guerilla tactics. He is the only one with the skills to lead this raid, for without him all is lost. Gelu will be allowed...",
+    "maker_of_sorrows": "Xeron must seek out Grand Forgesmith Khazandar and force him to make Armageddon's Blade. If Xeron falls, all is lost. Xeron is only allowed to advance to 24th Level.",
+    "return_of_the_king": "Roland must defeat the demonic armies camped on the other side of the Great Lake. Without Roland, the men will go their separate ways. Roland will be allowed to attain 2...",
+    "a_blade_in_the_back": "Gelu must defeat all of the Eeofol armies in this region and cut off any escape route. Without him, this quest shall fail. Gelu will be allowed to advance to 24th Level...",
+    "to_kill_a_hero": "Catherine, Gelu and Roland must defeat the Demoniac hero Xeron. If any one of them falls, all is lost. Catherine, Roland and Gelu will be allowed to reach 36th Level and...",
+    "oblivions_edge": "You have 60 days for Gelu to take Armageddon's Blade to the Eeofol capitol of Kreelah before the forces of the Dungeon Overlords arrive to reinforce King Lucifer. If Gel..."
+  },
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Dedicated AB/SoD MapImage bake",
+    "Town growth / negative resource timed-event fidelity"
+  ],
+  "videoContract": {
+    "status": "mission_clips_wired_hub_still_only",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": null,
+    "hubFirstShowOmitReason": "RoE parity: hub hover strip is selection-still only; mission pins PlayVideo when composed MP4 meets contract.",
+    "requireComposedAudio": true,
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "requiredMp4RelativeToStreamingAssets": null,
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_09_ab_conflux_ab/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "stillArtifact": "artifacts/campaign_port_poc/ab_sod_campaigns/storyhub_visual/ab_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.5,
+      "focusY": 0.42,
+      "cropReason": "Armageddon's Blade planted in the cyan blast column",
+      "cropsCatalog": "scenarios/ab_sod_campaigns/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "catherines_charge": "H3ABab1",
+      "seeking_armageddon": "H3ABab2",
+      "shadows_of_the_forest": "H3ABab3",
+      "maker_of_sorrows": "H3ABab4",
+      "return_of_the_king": "H3ABab5",
+      "a_blade_in_the_back": "H3ABab6",
+      "to_kill_a_hero": "H3ABab7",
+      "oblivions_edge": "H3ABab8"
+    },
+    "actionOrder": "PlayVideo (when composed MP4 ready) then OpenMissionsPrologue on each mission pin; hub firstShowActions stay empty",
+    "failClosed": "ab hub firstShowActions must stay empty (hubFirstShowPlayVideo=false). Mission PlayVideo requires StreamingAssets/video/{{clip}}.mp4 + softsub sidecar meeting compose contract; otherwise omit PlayVideo and keep prologue."
+  }
+}

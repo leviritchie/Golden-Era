@@ -1,0 +1,253 @@
+{
+ "unit": "h3_cyclops",
+ "joints": {
+  "Hips": [
+   0.003,
+   0.129,
+   0.847
+  ],
+  "Spine": [
+   0.01,
+   0.143,
+   0.952
+  ],
+  "Spine1": [
+   0.017,
+   0.157,
+   1.057
+  ],
+  "Spine2": [
+   0.025,
+   0.173,
+   1.174
+  ],
+  "Neck": [
+   0.031,
+   0.185,
+   1.266
+  ],
+  "Head": [
+   0.01,
+   0.192,
+   1.343
+  ],
+  "HeadTop_End": [
+   0.01,
+   0.17,
+   1.69
+  ],
+  "LeftShoulder": [
+   0.073,
+   0.185,
+   1.315
+  ],
+  "LeftArm": [
+   0.192,
+   0.171,
+   1.252
+  ],
+  "LeftForeArm": [
+   0.276,
+   0.206,
+   1.036
+  ],
+  "LeftHand": [
+   0.304,
+   0.101,
+   0.875
+  ],
+  "LeftHand_End": [
+   0.317,
+   0.053,
+   0.8
+  ],
+  "RightShoulder": [
+   -0.052,
+   0.206,
+   1.322
+  ],
+  "RightArm": [
+   -0.171,
+   0.22,
+   1.266
+  ],
+  "RightForeArm": [
+   -0.276,
+   0.136,
+   1.078
+  ],
+  "RightHand": [
+   -0.255,
+   -0.031,
+   0.994
+  ],
+  "RightHand_End": [
+   -0.245,
+   -0.111,
+   0.954
+  ],
+  "LeftUpLeg": [
+   0.122,
+   0.122,
+   0.791
+  ],
+  "LeftLeg": [
+   0.227,
+   -0.01,
+   0.442
+  ],
+  "LeftFoot": [
+   0.276,
+   0.045,
+   0.05
+  ],
+  "LeftToeBase": [
+   0.29,
+   -0.094,
+   -0.027
+  ],
+  "LeftToe_End": [
+   0.318,
+   0.003,
+   0.085
+  ],
+  "RightUpLeg": [
+   -0.115,
+   0.122,
+   0.791
+  ],
+  "RightLeg": [
+   -0.171,
+   0.101,
+   0.393
+  ],
+  "RightFoot": [
+   -0.206,
+   0.318,
+   0.05
+  ],
+  "RightToeBase": [
+   -0.283,
+   0.178,
+   -0.027
+  ],
+  "RightToe_End": [
+   -0.269,
+   0.262,
+   0.057
+  ]
+ },
+ "extensions": [
+  "stronghold_propbone"
+ ],
+ "propBones": [
+  {
+   "name": "Rock",
+   "parent": "RightHand",
+   "head": [
+    -0.255,
+    -0.03,
+    0.994
+   ],
+   "tail": [
+    -0.08,
+    -0.13,
+    0.98
+   ],
+   "regions": [
+    {
+     "sphere": [
+      [
+       -0.08,
+       -0.13,
+       0.98
+      ],
+      0.29
+     ],
+     "color": {
+      "expr": "mx-mn",
+      "max": 0.12
+     }
+    },
+    {
+     "sphere": [
+      [
+       -0.05,
+       -0.19,
+       0.98
+      ],
+      0.26
+     ],
+     "exclude": [
+      {
+       "box": [
+        [
+         -1,
+         -0.02,
+         0
+        ],
+        [
+         1,
+         1,
+         2
+        ]
+       ]
+      },
+      {
+       "box": [
+        [
+         -1,
+         -1,
+         0
+        ],
+        [
+         -0.15,
+         1,
+         2
+        ]
+       ]
+      }
+     ]
+    }
+   ],
+   "hide": [
+    {
+     "clip": "ShootFront",
+     "from": 6,
+     "to": 13
+    }
+   ]
+  }
+ ],
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "Rock"
+  ]
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: Move carries the boulder at the chest with the eye and face fully clear above it in the battle and preview views (the capture held it 0.08 H higher than Idle, covering the eye); both upper arms turned 55 deg down, MoveStart/MoveEnd ramp it; arm/rock + hand/thigh weight bleed re-solved so the carry passes the CS gate",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cyclops_arm_rock_weights.json",
+    "sha256": "aeaee2fcdb25e522ad130a21c0278a73d08e2ee636789edae5e0839ac30607b2",
+    "note": "arm/rock + hand/thigh bleed weight re-solve (laneB wsolve, GPU) so the 55 deg boulder carry passes the CS gate"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cyclops_move_boulder_lowered_rot.json",
+    "regrid": true,
+    "sha256": "81f141e1ac96f263dd780aebc5882377b5b900b84cbaccf245e0af94d9c66841"
+   }
+  ]
+ }
+}

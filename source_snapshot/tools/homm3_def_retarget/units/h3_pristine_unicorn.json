@@ -1,0 +1,415 @@
+{
+ "unit": "h3_pristine_unicorn",
+ "joints": {
+  "Hips": [
+   0.45,
+   0,
+   0.86
+  ],
+  "Spine": [
+   0.2,
+   0,
+   0.9
+  ],
+  "Spine1": [
+   -0.02,
+   0,
+   0.9
+  ],
+  "Spine2": [
+   -0.25,
+   0,
+   0.93
+  ],
+  "Neck": [
+   -0.3,
+   0,
+   1.04
+  ],
+  "Head": [
+   -0.42,
+   0,
+   1.3
+  ],
+  "HeadTop_End": [
+   -0.74,
+   0,
+   1.05
+  ],
+  "LeftShoulder": [
+   -0.3,
+   -0.06,
+   0.92
+  ],
+  "LeftArm": [
+   -0.37,
+   -0.1,
+   0.62
+  ],
+  "LeftForeArm": [
+   -0.39,
+   -0.1,
+   0.32
+  ],
+  "LeftHand": [
+   -0.3,
+   -0.1,
+   0.1
+  ],
+  "LeftHand_End": [
+   -0.5,
+   -0.1,
+   0.0
+  ],
+  "LeftUpLeg": [
+   0.45,
+   -0.11,
+   0.8
+  ],
+  "LeftLeg": [
+   0.57,
+   -0.12,
+   0.45
+  ],
+  "LeftFoot": [
+   0.76,
+   -0.12,
+   0.12
+  ],
+  "LeftToeBase": [
+   0.62,
+   -0.12,
+   0.04
+  ],
+  "LeftToe_End": [
+   0.46,
+   -0.12,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.3,
+   0.06,
+   0.92
+  ],
+  "RightArm": [
+   -0.37,
+   0.1,
+   0.62
+  ],
+  "RightForeArm": [
+   -0.39,
+   0.1,
+   0.32
+  ],
+  "RightHand": [
+   -0.3,
+   0.1,
+   0.1
+  ],
+  "RightHand_End": [
+   -0.5,
+   0.1,
+   0.0
+  ],
+  "RightUpLeg": [
+   0.45,
+   0.11,
+   0.8
+  ],
+  "RightLeg": [
+   0.57,
+   0.12,
+   0.45
+  ],
+  "RightFoot": [
+   0.76,
+   0.12,
+   0.12
+  ],
+  "RightToeBase": [
+   0.62,
+   0.12,
+   0.04
+  ],
+  "RightToe_End": [
+   0.46,
+   0.12,
+   0.0
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped"
+ ],
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "tail": {
+   "points": [
+    [
+     0.58,
+     0,
+     1.06
+    ],
+    [
+     0.71,
+     0,
+     0.86
+    ],
+    [
+     0.78,
+     0,
+     0.58
+    ],
+    [
+     0.82,
+     0,
+     0.27
+    ]
+   ],
+   "region": {
+    "segments": [
+     [
+      [
+       0.6,
+       0,
+       1.08
+      ],
+      [
+       0.72,
+       0,
+       0.85
+      ]
+     ],
+     [
+      [
+       0.72,
+       0,
+       0.85
+      ],
+      [
+       0.79,
+       0,
+       0.58
+      ]
+     ],
+     [
+      [
+       0.79,
+       0,
+       0.58
+      ],
+      [
+       0.83,
+       0,
+       0.25
+      ]
+     ]
+    ],
+    "radius": 0.065
+   },
+   "rootBlend": 0.6
+  },
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    0,
+    25
+   ],
+   "fold": 70,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ],
+   "dx": [
+    -4,
+    4
+   ],
+   "groundClips": [
+    "Idle",
+    "Mouseover",
+    "Hitted",
+    "Defence",
+    "AttackFront"
+   ],
+   "pitchClips": {
+    "Defence": [
+     0,
+     12
+    ],
+    "Hitted": [
+     0,
+     10
+    ]
+   },
+   "note": "2026-10-09 authenticity pass (lane-A), the war unicorn's send-back rule (user: full-body rotation must not fake part-body moves): the silhouette fit may only rear the body up to 25 deg about the hind feet (Defence 0..12, Hitted 0..10 half-rears), never pitch it nose-down (was [-20, 70]), may not slide it (dx +-4 px), keeps standing clips on their floor. Forelegs, neck, head and tail carry the motion (glbPatch keys)."
+  },
+  "restYawDeg": 90
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "props": [
+  {
+   "name": "tailTuft",
+   "bone": "Hips",
+   "box": [
+    [
+     0.41,
+     -0.08,
+     1.015
+    ],
+    [
+     0.7,
+     0.08,
+     1.135
+    ]
+   ]
+  }
+ ],
+ "strideMatch": {
+  "maxDrop": 0.25,
+  "reason": "Short reach (left hind leg cap 0.016 H, forelegs 0.09/0.15 H at 0.15 drop) forces cadence 1.6 on a short Move (needed 2.15), whose step harmonics read as jitter (0.61 > 0.35, worst LeftHand). maxDrop 0.25 lowers the cadence need to 1.46: slip 0.11, ratio 1.06, jitter 0.27, pelvis drop 0.067 H; 0.20 still jittered (0.54) (2026-09-27)."
+ },
+ "glbPatch": {
+  "reason": "2026-10-09 authenticity pass (lane A, Rampart), built like the war unicorn's accepted send-back fix 1: no whole-body rotation fakes a part-body move. The quadruped fit is narrowed (pitch 0..25 about the hind feet, Hitted 0..10, Defence 0..12, dx +-4 px, standing clips on the floor), which also removes the Move tail-flag and gallop pitch. AttackFront: f1-f3 rear on held hind legs with the forelegs tucked high, then the horn levelled at the enemy by neck and head (Neck +10, Head +40 at f4-f6). Hitted: half-rear with forelegs tucked and the head thrown back by the neck and head (-20/-50). Defence: the DEF rear-and-strike: both forelegs struck out forward at chest height, neck up, hind legs planted, tail streaming out (half weight; full weight tore the hock). Death (lane B choreography on this base): rear trimmed to 6 deg, mid-fall slerp, roll, side-lie with folded legs, root pulled back toward the hex (0.24 H). Mesh repairs: the tail dock was skinned to LeftLeg in the base (moved to QTail_00; it tore the left hock whenever the tail moved and merged weld groups under the diffuse), tail-dominant vertices off the hind legs, tail/hock boundary diffused. Gate 8 -> 4 edges over 2x, worst 2.933 -> 2.356.",
+  "ops": [
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftLeg"
+    ],
+    "to": "QTail_00",
+    "region": [
+     {
+      "axis": "x",
+      "above": -0.09,
+      "ramp": 0.01
+     },
+     {
+      "axis": "x",
+      "below": 0.09,
+      "ramp": 0.01
+     },
+     {
+      "axis": "z",
+      "above": 0.78,
+      "ramp": 0.01
+     },
+     {
+      "axis": "y",
+      "above": 0.45,
+      "ramp": 0.01
+     }
+    ],
+    "note": "base weighting defect: the tail dock (|x| < 0.08, above the stifles, behind the rump) is skinned to LeftLeg; it belongs to the tail root"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftUpLeg",
+     "RightUpLeg",
+     "LeftLeg",
+     "RightLeg",
+     "LeftFoot",
+     "RightFoot"
+    ],
+    "to": "QTail_02",
+    "region": [
+     {
+      "axis": "z",
+      "below": 1000,
+      "ramp": 0.001
+     }
+    ],
+    "onlyWith": {
+     "bones": [
+      "QTail_0*"
+     ],
+     "atLeast": 0.5
+    },
+    "note": "tail-dominant vertices follow the tail, not the planted hind legs, when the tail streams out in the rears"
+   },
+   {
+    "op": "diffuseWeights",
+    "bones": [
+     "QTail_01",
+     "QTail_02",
+     "RightLeg",
+     "RightFoot",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "iterations": 5,
+    "alpha": 0.5,
+    "note": "soften the weight boundary"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_pristine_unicorn_pose_rot.json",
+    "sha256": "c921768ad60dd285c1d7f837291cb92b28478ed28fd0e3dd462462bd6c4cc8e5",
+    "regrid": true,
+    "note": "motion-intent key poses (apose, gen_p.py p4)"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_pristine_unicorn_pose_tr.json",
+    "sha256": "6b531f249deeb513073a7d7bb3d2cc50458ca194c9a099dc33f71af01bea4b4f",
+    "regrid": true,
+    "note": "Hips translation keys (Death root pull-back)"
+   }
+  ]
+ }
+}

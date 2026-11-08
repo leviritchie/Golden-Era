@@ -1,0 +1,100 @@
+﻿{
+  "schemaVersion": 1,
+  "policy": {
+    "contractsMustMatchExactPredicateProfiles": true,
+    "tempoPredicatesAreNotGenericLifecycleProof": true,
+    "firstVolleyRequiresFirstQualifyingCommittedAction": true,
+    "focusEventRequiresCommittedFocusGenerationOrSpend": true,
+    "warcryOrRageRequiresExplicitTempoEvent": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredRuntimeProof": [
+    "active law-owner side correlation proof",
+    "battle start and round ordering proof",
+    "acting unit identity proof",
+    "first qualifying action discriminator proof",
+    "committed ranged attack or volley proof",
+    "committed Focus generation or spend event proof",
+    "Focus recipient and owner correlation proof",
+    "committed Warcry execution or Rage tempo event proof",
+    "damage/kill companion event ordering proof for Rage",
+    "idempotent per-battle, per-round, or per-event application proof"
+  ],
+  "contracts": {
+    "RequiresFirstVolley": {
+      "requiredEffectKeys": [
+        "cove.first-gunpowder-volley"
+      ],
+      "allowedFactions": [
+        "homm3_cove"
+      ],
+      "allowedFamilies": [
+        "Formation"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must identify the first qualifying committed Cove gunpowder or pirate ranged volley/action in the relevant battle or round window.",
+        "First-volley state must be correlated to the acting unit, gunpowder/pirate classifier, Focus or reload companion predicate, active Cove law owner, and committed action timing.",
+        "The law must not become a passive all-ranged bonus or trigger from generic ranged attacks after the first qualifying volley has been consumed."
+      ],
+      "forbiddenSubstitutes": [
+        "passive all-ranged bonus counted as first volley",
+        "any ranged attack counted as first volley without first-action state",
+        "battle start counted as first volley",
+        "round start counted as first volley",
+        "shooter role counted as gunpowder first volley",
+        "Cove faction membership counted as first volley",
+        "Focus or reload config counted without committed action proof"
+      ]
+    },
+    "RequiresFocusEvent": {
+      "requiredEffectKeys": [
+        "cove.focus-storm-omen-calendar"
+      ],
+      "allowedFactions": [
+        "homm3_cove"
+      ],
+      "allowedFamilies": [
+        "Calendar"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must observe committed Focus generation, Focus spend, or Focus-consuming Pirate/Cannon ranged attack semantics for the Cove law owner.",
+        "Focus event timing must be correlated to battle lifecycle context, Focus recipient or spender, active Cove law owner, and Storm Omens calendar reward timing.",
+        "Hero energy pool existence, Focus UI values, side energy payloads, or generic ranged attacks are only context and cannot stand in for a committed Focus event."
+      ],
+      "forbiddenSubstitutes": [
+        "hero energy pool existence counted as Focus event",
+        "Focus UI value counted as committed Focus event",
+        "side energy payload counted without recipient and ordering proof",
+        "any ranged attack counted as Focus event",
+        "battle start counted as Focus generation",
+        "passive all-ranged bonus counted as Focus event",
+        "Cove faction membership counted as Focus event"
+      ]
+    },
+    "RequiresWarcryOrRageEvent": {
+      "requiredEffectKeys": [
+        "stronghold.damage-kill-rage-package"
+      ],
+      "allowedFactions": [
+        "homm3_stronghold"
+      ],
+      "allowedFamilies": [
+        "MoralePackage"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must observe a committed Stronghold Warcry execution or explicit Rage tempo event derived from the law packet's damage-taken and kill/loss companion events.",
+        "Rage state must be correlated to the acting or affected Stronghold unit, companion damage/kill event, active Stronghold law owner, and safe buff/tempo application point.",
+        "Morale animations, generic morale packages, static Warcry ownership, hero ability config, or ordinary spell cooldown state cannot stand in for a committed Warcry or Rage event."
+      ],
+      "forbiddenSubstitutes": [
+        "morale animation counted as Warcry or Rage event",
+        "generic morale package counted as Rage event",
+        "static Warcry skill ownership counted as Warcry execution",
+        "hero ability config counted as Warcry execution",
+        "damage event counted as Rage without companion ordering proof",
+        "kill event counted as Rage without companion ordering proof",
+        "Stronghold faction membership counted as Warcry or Rage event"
+      ]
+    }
+  }
+}

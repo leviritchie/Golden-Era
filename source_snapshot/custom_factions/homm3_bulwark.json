@@ -1,0 +1,682 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "factionSid": "homm3_bulwark",
+    "citySid": "homm3_bulwark_city",
+    "displayNameToken": "homm3_bulwark_name",
+    "descriptionToken": "homm3_bulwark_desc",
+    "nativeBiome": "Permafrost",
+    "donorFactionSid": "nature",
+    "donorCitySid": "nature_city"
+  },
+  "coreOverlay": {
+    "factionJson": "DB/fractions/22_homm3_bulwark.json",
+    "cityLogic": "DB/objects_logic/cities/homm3_bulwark_city.json",
+    "lawsTable": "DB/fractions_laws/fractions_laws_table_homm3_bulwark.json",
+    "squadTree": "DB/squads/squads_homm3_bulwark/",
+    "heroSubClasses": "DB/heroes_sub_classes/sub_classes_homm3_bulwark.json",
+    "heroSpecializations": "DB/heroes_specializations/specializations_homm3_bulwark.json",
+    "directCityMapObject": "homm3_bulwark_city",
+    "directDwellingPrefix": "barracks_homm3_bulwark_"
+  },
+  "unitVariants": [
+    "",
+    "_upg",
+    "_upg_alt"
+  ],
+  "unitLines": [
+    {
+      "tier": 1,
+      "baseSid": "h3_kobold",
+      "variantSids": {
+        "": "h3_kobold",
+        "_upg": "h3_kobold_foreman",
+        "_upg_alt": "h3_kobold_upg_alt"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "twinkle",
+      "names": [
+        "Kobold",
+        "Kobold Foreman",
+        "Kobold Runebearer"
+      ],
+      "sourceConfig": [
+        "kobold",
+        "koboldForeman"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "config/hota/bulwark/creatures/kobold.json",
+          "hp": 8,
+          "offence": 3,
+          "defence": 4,
+          "damageMin": 1,
+          "damageMax": 2,
+          "initiative": 3,
+          "speed": 3,
+          "squadValue": 54,
+          "cost": {
+            "gold": 40
+          }
+        },
+        "_upg": {
+          "source": "config/hota/bulwark/creatures/koboldForeman.json",
+          "hp": 8,
+          "offence": 5,
+          "defence": 6,
+          "damageMin": 1,
+          "damageMax": 2,
+          "initiative": 5,
+          "speed": 5,
+          "squadValue": 84,
+          "cost": {
+            "gold": 60
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Kobold Runebearer deliberately inherits Kobold Foreman source stats",
+          "hp": 8,
+          "offence": 5,
+          "defence": 6,
+          "damageMin": 1,
+          "damageMax": 2,
+          "initiative": 5,
+          "speed": 5,
+          "squadValue": 84,
+          "cost": {
+            "gold": 60
+          }
+        }
+      },
+      "mechanicsDebt": [
+        "HotA Kobold/Foreman gold-per-day mining is adventure-map debt (no battle Focus donor).",
+        "Foreman Cadence and Rune Brand Focus actives are source/static configured; runtime behavior unproven.",
+        "Rune Brand extra Rune Level gains depend on Homm3BulwarkRunesRuntime (registered); combat live-positive unproven."
+      ]
+    },
+    {
+      "tier": 2,
+      "baseSid": "h3_mountain_ram",
+      "variantSids": {
+        "": "h3_mountain_ram",
+        "_upg": "h3_argali",
+        "_upg_alt": "h3_mountain_ram_upg_alt"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "elf_tracker",
+      "names": [
+        "Mountain Ram",
+        "Argali",
+        "Aurora Ram"
+      ],
+      "sourceConfig": [
+        "mountainRam",
+        "argali"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "config/hota/bulwark/creatures/mountainRam.json",
+          "hp": 18,
+          "offence": 7,
+          "defence": 6,
+          "damageMin": 3,
+          "damageMax": 4,
+          "initiative": 7,
+          "speed": 7,
+          "squadValue": 228,
+          "cost": {
+            "gold": 135
+          }
+        },
+        "_upg": {
+          "source": "config/hota/bulwark/creatures/argali.json",
+          "hp": 18,
+          "offence": 8,
+          "defence": 6,
+          "damageMin": 3,
+          "damageMax": 4,
+          "initiative": 8,
+          "speed": 8,
+          "squadValue": 250,
+          "cost": {
+            "gold": 170
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Aurora Ram deliberately inherits Argali source stats",
+          "hp": 18,
+          "offence": 8,
+          "defence": 6,
+          "damageMin": 3,
+          "damageMax": 4,
+          "initiative": 8,
+          "speed": 8,
+          "squadValue": 250,
+          "cost": {
+            "gold": 170
+          }
+        }
+      },
+      "mechanicsDebt": [
+        "Argali adjacent +20% spell-damage aura remains debt; Frost Fracture Shorten Shadow Focus is the upgrade active.",
+        "Aurora Bound Blink self teleport is source/static configured; combat live-positive unproven."
+      ]
+    },
+    {
+      "tier": 3,
+      "baseSid": "h3_snow_elf",
+      "variantSids": {
+        "": "h3_snow_elf",
+        "_upg": "h3_steel_elf",
+        "_upg_alt": "h3_snow_elf_upg_alt"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "crossbowman",
+      "names": [
+        "Snow Elf",
+        "Steel Elf",
+        "Pine Elf"
+      ],
+      "sourceConfig": [
+        "snowElf",
+        "steelElf"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "config/hota/bulwark/creatures/snowElf.json",
+          "hp": 21,
+          "offence": 9,
+          "defence": 8,
+          "damageMin": 4,
+          "damageMax": 6,
+          "initiative": 6,
+          "speed": 6,
+          "shots": 4,
+          "squadValue": 370,
+          "cost": {
+            "gold": 230
+          }
+        },
+        "_upg": {
+          "source": "config/hota/bulwark/creatures/steelElf.json",
+          "hp": 24,
+          "offence": 9,
+          "defence": 10,
+          "damageMin": 4,
+          "damageMax": 6,
+          "initiative": 7,
+          "speed": 7,
+          "shots": 8,
+          "squadValue": 526,
+          "cost": {
+            "gold": 260
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Pine Elf deliberately inherits Steel Elf source stats",
+          "hp": 24,
+          "offence": 9,
+          "defence": 10,
+          "damageMin": 4,
+          "damageMax": 6,
+          "initiative": 7,
+          "speed": 7,
+          "shots": 8,
+          "squadValue": 526,
+          "cost": {
+            "gold": 260
+          }
+        }
+      },
+      "mechanicsDebt": [
+        "Frost Needle and Cold Shackles Focus actives are source/static configured; runtime behavior unproven.",
+        "Pine Elf Frost Shot after-shot Ice Bolt mark is overlay-wired; combat live-positive unproven."
+      ]
+    },
+    {
+      "tier": 4,
+      "baseSid": "h3_yeti",
+      "variantSids": {
+        "": "h3_yeti",
+        "_upg": "h3_yeti_runemaster",
+        "_upg_alt": "h3_yeti_upg_alt"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "ent",
+      "names": [
+        "Yeti",
+        "Yeti Runemaster",
+        "Yeti Stormcaller"
+      ],
+      "sourceConfig": [
+        "yeti",
+        "yetiRunemaster"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "config/hota/bulwark/creatures/yeti.json",
+          "hp": 40,
+          "offence": 10,
+          "defence": 8,
+          "damageMin": 7,
+          "damageMax": 9,
+          "initiative": 6,
+          "speed": 6,
+          "squadValue": 504,
+          "cost": {
+            "gold": 325
+          }
+        },
+        "_upg": {
+          "source": "config/hota/bulwark/creatures/yetiRunemaster.json",
+          "hp": 45,
+          "offence": 11,
+          "defence": 9,
+          "damageMin": 7,
+          "damageMax": 9,
+          "initiative": 7,
+          "speed": 7,
+          "squadValue": 751,
+          "cost": {
+            "gold": 400
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Yeti Stormcaller deliberately inherits Yeti Runemaster source stats",
+          "hp": 45,
+          "offence": 11,
+          "defence": 9,
+          "damageMin": 7,
+          "damageMax": 9,
+          "initiative": 7,
+          "speed": 7,
+          "squadValue": 751,
+          "cost": {
+            "gold": 400
+          }
+        }
+      },
+      "mechanicsDebt": [
+        "HotA one-round all-negative recovery has no exact passive donor; Rune Surge is Inquisitor movementNegative dispel Focus only.",
+        "Yeti Runemaster HotA Runes possession remains faction-skill runtime debt."
+      ]
+    },
+    {
+      "tier": 5,
+      "baseSid": "h3_shaman",
+      "variantSids": {
+        "": "h3_shaman",
+        "_upg": "h3_great_shaman",
+        "_upg_alt": "h3_shaman_upg_alt"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "lightweaver",
+      "names": [
+        "Shaman",
+        "Great Shaman",
+        "Frost Speaker"
+      ],
+      "sourceConfig": [
+        "shaman",
+        "greatShaman"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "config/hota/bulwark/creatures/shaman.json",
+          "hp": 35,
+          "offence": 11,
+          "defence": 8,
+          "damageMin": 11,
+          "damageMax": 13,
+          "initiative": 5,
+          "speed": 5,
+          "shots": 12,
+          "squadValue": 685,
+          "cost": {
+            "gold": 450
+          }
+        },
+        "_upg": {
+          "source": "config/hota/bulwark/creatures/greatShaman.json",
+          "hp": 35,
+          "offence": 12,
+          "defence": 11,
+          "damageMin": 11,
+          "damageMax": 13,
+          "initiative": 6,
+          "speed": 6,
+          "shots": 24,
+          "squadValue": 818,
+          "cost": {
+            "gold": 600
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Frost Speaker deliberately inherits Great Shaman source stats",
+          "hp": 35,
+          "offence": 12,
+          "defence": 11,
+          "damageMin": 11,
+          "damageMax": 13,
+          "initiative": 6,
+          "speed": 6,
+          "shots": 24,
+          "squadValue": 818,
+          "cost": {
+            "gold": 600
+          }
+        }
+      },
+      "mechanicsDebt": [
+        "Air Ward remaps HotA Air Shield to Optical Illusion ally ranged-damage reduction.",
+        "Freezing Hex is Ice Bolt Focus remap of Freezing Shot; Freezing Shot after-shot Ice Bolt mark is overlay-wired (combat live-positive unproven)."
+      ]
+    },
+    {
+      "tier": 6,
+      "baseSid": "h3_mammoth",
+      "variantSids": {
+        "": "h3_mammoth",
+        "_upg": "h3_war_mammoth",
+        "_upg_alt": "h3_mammoth_upg_alt"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "qilin",
+      "names": [
+        "Mammoth",
+        "War Mammoth",
+        "Tundra Mammoth"
+      ],
+      "sourceConfig": [
+        "mammoth",
+        "warMammoth"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "config/hota/bulwark/creatures/mammoth.json",
+          "hp": 120,
+          "offence": 12,
+          "defence": 16,
+          "damageMin": 14,
+          "damageMax": 20,
+          "initiative": 5,
+          "speed": 5,
+          "squadValue": 1359,
+          "cost": {
+            "gold": 850
+          }
+        },
+        "_upg": {
+          "source": "config/hota/bulwark/creatures/warMammoth.json",
+          "hp": 135,
+          "offence": 14,
+          "defence": 18,
+          "damageMin": 14,
+          "damageMax": 20,
+          "initiative": 6,
+          "speed": 6,
+          "squadValue": 1601,
+          "cost": {
+            "gold": 1000
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Tundra Mammoth deliberately inherits War Mammoth source stats",
+          "hp": 135,
+          "offence": 14,
+          "defence": 18,
+          "damageMin": 14,
+          "damageMax": 20,
+          "initiative": 6,
+          "speed": 6,
+          "squadValue": 1601,
+          "cost": {
+            "gold": 1000
+          }
+        }
+      },
+      "mechanicsDebt": [
+        "Tusker Guard is self Radiant Armor Focus; exact HotA defend-stance +100% Defense remains additive debt (Runes synergy)."
+      ]
+    },
+    {
+      "tier": 7,
+      "baseSid": "h3_jotunn",
+      "variantSids": {
+        "": "h3_jotunn",
+        "_upg": "h3_jotunn_warlord",
+        "_upg_alt": "h3_jotunn_upg_alt"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "phoenix",
+      "names": [
+        "Jotunn",
+        "Jotunn Warlord",
+        "Jotun Frostlord"
+      ],
+      "sourceConfig": [
+        "jotunn",
+        "jotunnWarlord"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "config/hota/bulwark/creatures/jotunn.json",
+          "hp": 165,
+          "offence": 18,
+          "defence": 18,
+          "damageMin": 40,
+          "damageMax": 50,
+          "initiative": 8,
+          "speed": 8,
+          "squadValue": 4180,
+          "cost": {
+            "gold": 2000
+          }
+        },
+        "_upg": {
+          "source": "config/hota/bulwark/creatures/jotunnWarlord.json",
+          "hp": 300,
+          "offence": 20,
+          "defence": 20,
+          "damageMin": 40,
+          "damageMax": 50,
+          "initiative": 10,
+          "speed": 10,
+          "squadValue": 6694,
+          "cost": {
+            "gold": 3500,
+            "gemstones": 1
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Jotun Frostlord deliberately inherits Jotunn Warlord source stats",
+          "hp": 300,
+          "offence": 20,
+          "defence": 20,
+          "damageMin": 40,
+          "damageMax": 50,
+          "initiative": 10,
+          "speed": 10,
+          "squadValue": 6694,
+          "cost": {
+            "gold": 3500,
+            "gemstones": 1
+          }
+        }
+      },
+      "mechanicsDebt": [
+        "Clan Warp ally teleport is source/static configured (1 charge on base, unlimited on Warlord); combat live-positive unproven.",
+        "Frostbound Skies flyer Speed slow (-1/-2) is source-wired in Homm3BulwarkUnitAbilityRuntime; combat live-positive unproven."
+      ]
+    }
+  ],
+  "recruitmentBaseSids": [
+    "h3_kobold",
+    "h3_mountain_ram",
+    "h3_snow_elf",
+    "h3_yeti",
+    "h3_shaman",
+    "h3_mammoth",
+    "h3_jotunn"
+  ],
+  "squadTree": {
+    "unitReplacements": {
+      "twinkle": "h3_kobold",
+      "twinkle_upg": "h3_kobold_foreman",
+      "twinkle_upg_alt": "h3_kobold_upg_alt",
+      "elf_tracker": "h3_mountain_ram",
+      "elf_tracker_upg": "h3_argali",
+      "elf_tracker_upg_alt": "h3_mountain_ram_upg_alt",
+      "crossbowman": "h3_snow_elf",
+      "crossbowman_upg": "h3_steel_elf",
+      "crossbowman_upg_alt": "h3_snow_elf_upg_alt",
+      "ent": "h3_yeti",
+      "ent_upg": "h3_yeti_runemaster",
+      "ent_upg_alt": "h3_yeti_upg_alt",
+      "lightweaver": "h3_shaman",
+      "lightweaver_upg": "h3_great_shaman",
+      "lightweaver_upg_alt": "h3_shaman_upg_alt",
+      "qilin": "h3_mammoth",
+      "qilin_upg": "h3_war_mammoth",
+      "qilin_upg_alt": "h3_mammoth_upg_alt",
+      "phoenix": "h3_jotunn",
+      "phoenix_upg": "h3_jotunn_warlord",
+      "phoenix_upg_alt": "h3_jotunn_upg_alt"
+    }
+  },
+  "releaseScaffold": {
+    "biome": "Permafrost",
+    "citySceneName": "cityFactory",
+    "factionIcon": "fraction_nature",
+    "factionLawIcon": "homm3_bulwark_faction_banner",
+    "lawIcon": "homm3_bulwark_faction_banner"
+  },
+  "heroes": {
+    "count": 16,
+    "heroPrefix": "homm3_bulwark_hero_",
+    "iconPrefix": "hero_homm3_bulwark_",
+    "specializationsRequired": true,
+    "mightClassName": "Chieftain",
+    "magicClassName": "Elder",
+    "specializationTitle": "Bulwark Commander",
+    "mightSpecializationDescription": "Adapts this Chieftain's exact HotA source specialty to an explicit Olden Era effect.",
+    "magicSpecializationDescription": "Adapts this Elder's exact HotA source specialty to an explicit Olden Era effect.",
+    "sourceHeroConfigs": [
+      "dhuin",
+      "oidana",
+      "neia",
+      "eikthurn",
+      "creyle",
+      "spadum",
+      "kynr",
+      "ergon",
+      "kriv",
+      "glacius",
+      "sial",
+      "dalton",
+      "biarma",
+      "akka",
+      "vehr",
+      "allora"
+    ],
+    "excludedLocalHeroConfigs": [
+      "haugir"
+    ],
+    "names": [
+      "Dhuin",
+      "Oidana",
+      "Neia",
+      "Eikthurn",
+      "Creyle",
+      "Spadum",
+      "Kynr",
+      "Ergon",
+      "Kriv",
+      "Glacius",
+      "Sial",
+      "Dalton",
+      "Biarma",
+      "Akka",
+      "Vehr",
+      "Allora"
+    ]
+  },
+  "skillsAndLaws": {
+    "factionSkillSid": "skill_faction_homm3_bulwark",
+    "lawPrefix": "fraction_law_homm3_bulwark_",
+    "factionSkillName": "Runes"
+  },
+  "searchTokens": [
+    "Homm3Bulwark",
+    "Runes",
+    "h3_kobold_foreman",
+    "h3_argali",
+    "h3_steel_elf",
+    "h3_yeti_runemaster",
+    "h3_great_shaman",
+    "h3_war_mammoth",
+    "h3_jotunn_warlord"
+  ],
+  "assets": {
+    "factionIcon": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/faction_icons/homm3_bulwark/Icon_Faction_Bulwark.png",
+    "factionCard": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_scene_refs/homm3_bulwark/Bulwark-in-background.png",
+    "cityIcon": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_hud_icons/homm3_bulwark/fort_available.png",
+    "cityBillboard": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/map_object_refs/homm3_bulwark_city/AVCbulZ0.dir/00_00.png",
+    "townSceneFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_scene_refs/homm3_bulwark/",
+    "buildingIconFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_scene_refs/homm3_bulwark/building_icons/",
+    "cityBillboardFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/map_object_refs/homm3_bulwark_city/",
+    "dwellingBillboardFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/map_object_refs/homm3_bulwark_dwellings/"
+  },
+  "sourceAssets": {
+    "primaryHotAArchive": "vcmi/Mods/hota/mods/bulwark/content.zip",
+    "primaryHotAArchiveSha256": "7EC5E79BC9D984B742F5A21C7170A3B0C8190A8BC3F5C796B83F1915EFD35509",
+    "creatureConfigFolder": "config/hota/bulwark/creatures/",
+    "heroConfigFolder": "config/hota/bulwark/heroes/",
+    "townConfigFolder": "config/hota/bulwark/town/",
+    "townBackdrop": "data/hota/bulwark/town/background.png",
+    "dwellingMapObjectOrder": [
+      "AVGkbl01.def",
+      "AVGagrl0.def",
+      "AVGvori0.def",
+      "AVGyeti0.def",
+      "AVGshmn0.def",
+      "AVGmmth0.def",
+      "AVGjotn0.def"
+    ]
+  },
+  "runtime": {
+    "customToDonorSource": "manifest",
+    "reverseDonorLookup": "context_required",
+    "allowGlobalDonorReverseLookup": false,
+    "displayName": "Bulwark",
+    "description": "Bulwark gathers kobolds, mountain beasts, snow elves, shamans, mammoths, and jotunns behind a defensive northern stronghold. Its Runes faction skill reproduces the source faction's per-creature rune progression.",
+    "cityMapBillboardHeight": 4.5,
+    "dwellingBillboardImages": [
+      "AVGkbl01.dir/00_00.png",
+      "AVGagrl0.dir/00_00.png",
+      "AVGvori0.dir/00_00.png",
+      "AVGyeti0.dir/00_00.png",
+      "AVGshmn0.dir/00_00.png",
+      "AVGmmth0.dir/00_00.png",
+      "AVGjotn0.dir/00_00.png"
+    ],
+    "dwellingDonorPrefixes": [
+      "barracks_nature_"
+    ]
+  },
+  "validation": {
+    "status": "basic_enabled",
+    "runtimeMirrorRequired": true,
+    "coreOverlayEnabled": true,
+    "releasePromotionBlocked": false,
+    "allowedDebt": [
+      "Bulwark is source/static configured from the pinned HotA Bulwark archive and generated runtime-asset manifest. Generated Core, installed payload, startup smoke, runtime behavior, and user-visible gameplay remain separate proof boundaries.",
+      "Bulwark owns Permafrost (tile 30), a Snow presentation clone registered through the shared custom-biome pack. It must not share Tower's Tundra ownership or fall back to built-in Snow.",
+      "Haugir is deliberately excluded because the HotA source marks him as water-map-only; Biarma is the source-defined non-water roster substitute.",
+      "Material-class alternate upgrades deliberately inherit their corresponding HotA standard-upgrade stats until their own balance rows are authored; that inheritance is explicit in sourceStats rather than a generator fallback.",
+      "All donor combat abilities/passives are cleared by the Bulwark ability override contract and generic unit normalize path. HotA-inspired baseline passives that map onto proven Olden Era GENERIC_* data mechanics (Snow/Steel Elf shooter role with no melee penalty and free shooting, Argali ice damage immunity) are wired through apply_release_core_overlay.py. Locked Focus remaps in ability_overrides/homm3_bulwark.json deliberately avoid Factory Focus donors and use Radiant Armor, Shorten Shadow, Blink, Ice Bolt, Shackles, Optical Illusion, Inquisitor dispel, Avalanche, and Arbitrator ally teleport (Clan Warp). Exact HotA-only leftovers or unproven add-ons: Kobold gold/day, Argali adjacent spell-damage aura (scaffold), Yeti all-negative one-round recovery + Runes possession (scaffold), Freezing Shot attack mutator exactness, War Mammoth defend-stance Defense multiplier (scaffold). Jotunn Frostbound Skies flyer Slow is source-wired; combat live-positive unproven.",
+      "Runes is the only Bulwark faction mechanic delivered by this milestone. Generated-Core validation must prove the exact faction-skill row and player-facing text. Homm3BulwarkRunesRuntime is registered (Defend/Skip and other gain paths); per-stack Rune Levels, action gains, rank caps, cumulative thresholds, one counter per stack, and battle reset remain combat live-positive / PROOF.json debt.",
+      "Every Bulwark standard and alternate upgrade keeps at least one Focus active; HotA passives are additive and must not strip upgrade actives."
+    ]
+  }
+}

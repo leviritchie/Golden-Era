@@ -1,0 +1,136 @@
+{
+  "schema": "homm3.homecoming_object_policy.v0",
+  "mission": "castle_1_homecoming",
+  "source": "Heroes3.snd/GOOD1A.H3C::Good-1a.h3m",
+  "policyMode": "reduced_playable_slice",
+  "notes": [
+    "This policy is intentionally fail-closed. Every decoded H3M object record in the Homecoming manifest must match exactly one explicit policy row before any reduced Olden map emission.",
+    "The current reduced slice targets map/layer/event proof only. It does not port unit, town economy, reward, pickup, mine, hero, prison, or general visitable mechanics.",
+    "A row with action=emit_stub authorizes coordinate/layer emission only when the named runtime requirement exists. It does not authorize native Olden SID guessing.",
+    "Rows may include sourceKeys and names selectors. Validation is per decoded source record, not per object id, because object ids such as 98 can cover both primary and non-primary mission records."
+  ],
+  "objectPolicies": [
+    {
+      "objectIds": [98],
+      "sourceCategory": "town",
+      "sourceKeys": ["1:35:35"],
+      "names": ["Terraneus"],
+      "action": "emit_stub",
+      "scope": "primary_objective",
+      "runtimeRequirement": "layer_aware_entity_emitter_and_capture_trigger",
+      "reason": "Terraneus is the mission victory target at 1:35:35; emit only this named decoded underground town record for the reduced playable slice."
+    },
+    {
+      "objectIds": [98],
+      "sourceCategory": "town",
+      "sourceKeys": ["0:10:54", "0:68:56", "0:35:35", "0:60:8"],
+      "names": ["Plinth", "Caryatid", "Mirham", "Trailia"],
+      "action": "defer",
+      "scope": "non_primary_town_mechanics_excluded",
+      "runtimeRequirement": "explicit_town_entity_policy_before_emission_or_omission",
+      "reason": "Non-objective towns share object id 98 with Terraneus, but are not required for the first reduced event/capture proof."
+    },
+    {
+      "objectIds": [26],
+      "sourceCategory": "map_event",
+      "action": "emit_stub",
+      "scope": "event_trigger",
+      "runtimeRequirement": "layer_aware_event_tile_trigger",
+      "reason": "The Guardhouse/Pikemen event at 0:18:35 has decoded text, player mask, computer activation, remove-after-visit, and empty reward counts."
+    },
+    {
+      "objectIds": [103, 111],
+      "sourceCategory": "travel_link_candidate",
+      "action": "emit_stub",
+      "scope": "layer_travel",
+      "runtimeRequirement": "layer_aware_travel_graph",
+      "reason": "Caves and whirlpools are required travel-link candidates for a faithful two-layer route; destination pairing is handled by the travel graph, not by inferred DEF names."
+    },
+    {
+      "objectIds": [8],
+      "sourceCategory": "boat_or_water_travel_object",
+      "action": "defer",
+      "scope": "travel_infrastructure",
+      "runtimeRequirement": "explicit_olden_boat_or_water_travel_mapping",
+      "reason": "Boat/water behavior is not needed for the first reduced event/capture proof and has no validated Olden object mapping yet."
+    },
+    {
+      "objectIds": [91],
+      "sourceCategory": "readable_sign_or_bottle",
+      "action": "defer",
+      "scope": "readable_text",
+      "runtimeRequirement": "explicit_readable_object_mapping",
+      "reason": "Readable text is map-adjacent but not required for the first reduced event/capture proof."
+    },
+    {
+      "objectIds": [54, 71, 72, 73, 74, 75, 162, 163, 164],
+      "sourceCategory": "monster_stack",
+      "action": "defer",
+      "scope": "unit_mechanics_excluded",
+      "runtimeRequirement": "explicit_monster_stack_mapping",
+      "reason": "Monster stacks are outside the user's current map/event-trigger scope."
+    },
+    {
+      "objectIds": [17, 18, 19, 20],
+      "sourceCategory": "external_dwelling",
+      "action": "defer",
+      "scope": "dwelling_recruitment_mechanics_excluded",
+      "runtimeRequirement": "exact_native_homm3_barracks_mapping_before_emission",
+      "reason": "HoMM3 fixed creature generators are external dwelling families; the reduced slice may map exact native HoMM3 barracks SIDs but must not classify these rows as artifacts."
+    },
+    {
+      "objectIds": [65, 66, 67, 68, 69],
+      "sourceCategory": "artifact_pickup",
+      "action": "defer",
+      "scope": "pickup_mechanics_excluded",
+      "runtimeRequirement": "explicit_artifact_mapping",
+      "reason": "Artifact pickup mechanics are outside the first reduced map/event-trigger proof."
+    },
+    {
+      "objectIds": [76, 79],
+      "sourceCategory": "resource_pickup",
+      "action": "defer",
+      "scope": "pickup_mechanics_excluded",
+      "runtimeRequirement": "explicit_resource_mapping",
+      "reason": "Resource pickup mechanics are outside the first reduced map/event-trigger proof."
+    },
+    {
+      "objectIds": [42, 53, 89, 90],
+      "sourceCategory": "mine",
+      "action": "defer",
+      "scope": "economy_mechanics_excluded",
+      "runtimeRequirement": "explicit_owned_map_object_mapping",
+      "reason": "Owned resource/economy map objects are outside the first reduced map/event-trigger proof."
+    },
+    {
+      "objectIds": [81, 113],
+      "sourceCategory": "interactive_reward_object",
+      "action": "defer",
+      "scope": "reward_mechanics_excluded",
+      "runtimeRequirement": "explicit_reward_object_mapping",
+      "reason": "Scholar and Witch Hut rewards are outside the first reduced map/event-trigger proof."
+    },
+    {
+      "objectIds": [34, 62],
+      "sourceCategory": "hero_or_prison",
+      "action": "defer",
+      "scope": "hero_mechanics_excluded",
+      "runtimeRequirement": "explicit_hero_or_prison_mapping",
+      "reason": "Hero and prison behavior is outside the first reduced map/event-trigger proof."
+    },
+    {
+      "objectIds": [
+        2, 4, 11, 14, 16, 21, 23, 27, 28, 29, 30, 31, 32, 35, 37, 38,
+        39, 41, 45, 46, 47, 49, 51, 55, 58, 60, 61, 64, 80, 82, 86, 94,
+        96, 97, 99, 100, 101, 102, 104, 107, 109, 112, 116, 118, 119,
+        120, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135,
+        136, 137, 147, 148, 149, 150, 151, 153, 155, 161
+      ],
+      "sourceCategory": "payloadless_object_unclassified_for_current_scope",
+      "action": "block",
+      "scope": "unresolved_payloadless_object_policy",
+      "runtimeRequirement": "per_object_id_policy_before_emission_or_omission",
+      "reason": "The walker proved no per-instance payload only; it did not prove these objects are static, non-interactive, or safe to omit."
+    }
+  ]
+}

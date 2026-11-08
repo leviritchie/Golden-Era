@@ -1,0 +1,1796 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GameRootExplicitlyProvided>false</GameRootExplicitlyProvided>
+    <GameRootExplicitlyProvided Condition="'$(GameRoot)' != ''">true</GameRootExplicitlyProvided>
+    <GameSymbolsHintContractBuild Condition="'$(GameSymbolsHintContractBuild)' == ''">current</GameSymbolsHintContractBuild>
+    <DeployPluginBinaryOnly Condition="'$(DeployPluginBinaryOnly)' == ''">false</DeployPluginBinaryOnly>
+    <DeployPluginBinaryOnlyNormalized>false</DeployPluginBinaryOnlyNormalized>
+    <DeployPluginBinaryOnlyNormalized Condition="'$(DeployPluginBinaryOnly)' == 'true' or '$(DeployPluginBinaryOnly)' == 'True' or '$(DeployPluginBinaryOnly)' == 'TRUE'">true</DeployPluginBinaryOnlyNormalized>
+    <GameRoot Condition="'$(GameRoot)' == ''">$(MSBuildThisFileDirectory)..\</GameRoot>
+    <GameRootDir>$([MSBuild]::EnsureTrailingSlash('$(GameRoot)'))</GameRootDir>
+    <BepInExRoot Condition="'$(BepInExRoot)' == ''">$(GameRootDir)BepInEx\</BepInExRoot>
+    <BepInExRootDir>$([MSBuild]::EnsureTrailingSlash('$(BepInExRoot)'))</BepInExRootDir>
+    <PluginDeployDir Condition="'$(PluginDeployDir)' == ''">$(BepInExRootDir)plugins\$(AssemblyName)\</PluginDeployDir>
+    <PublishPluginDir>$([MSBuild]::EnsureTrailingSlash('$(MSBuildThisFileDirectory)publish_plugin'))</PublishPluginDir>
+    <DeployHomm3LooseLabPngSidecars Condition="'$(DeployHomm3LooseLabPngSidecars)' == ''">false</DeployHomm3LooseLabPngSidecars>
+    <DeployHomm3Bundles Condition="'$(DeployHomm3Bundles)' == ''">false</DeployHomm3Bundles>
+    <DeployHomm3BundlesNormalized>false</DeployHomm3BundlesNormalized>
+    <DeployHomm3BundlesNormalized Condition="'$(DeployHomm3Bundles)' == 'true' or '$(DeployHomm3Bundles)' == 'True' or '$(DeployHomm3Bundles)' == 'TRUE'">true</DeployHomm3BundlesNormalized>
+    <DeployHomm3BundleNameNormalized>false</DeployHomm3BundleNameNormalized>
+    <DeployHomm3BundleNameNormalized Condition="'$(DeployHomm3BundleName)' != ''">true</DeployHomm3BundleNameNormalized>
+    <DeployHomm3FactoryBulwarkBundles Condition="'$(DeployHomm3FactoryBulwarkBundles)' == ''">false</DeployHomm3FactoryBulwarkBundles>
+    <DeployHomm3FactoryBulwarkBundlesNormalized>false</DeployHomm3FactoryBulwarkBundlesNormalized>
+    <DeployHomm3FactoryBulwarkBundlesNormalized Condition="'$(DeployHomm3FactoryBulwarkBundles)' == 'true' or '$(DeployHomm3FactoryBulwarkBundles)' == 'True' or '$(DeployHomm3FactoryBulwarkBundles)' == 'TRUE'">true</DeployHomm3FactoryBulwarkBundlesNormalized>
+    <!-- Whole installed homm3_bundles readback after any HoMM3 bundle deploy mode (see DeployPluginToGame).
+         Default false until the in-flight redeploys (stale bundles + pegasus line) land; then flip the default to true. -->
+    <ValidateInstalledHomm3BundleDir Condition="'$(ValidateInstalledHomm3BundleDir)' == ''">true</ValidateInstalledHomm3BundleDir>
+    <ValidateInstalledHomm3BundleDirNormalized>false</ValidateInstalledHomm3BundleDirNormalized>
+    <ValidateInstalledHomm3BundleDirNormalized Condition="'$(ValidateInstalledHomm3BundleDir)' == 'true' or '$(ValidateInstalledHomm3BundleDir)' == 'True' or '$(ValidateInstalledHomm3BundleDir)' == 'TRUE'">true</ValidateInstalledHomm3BundleDirNormalized>
+    <DeployHomm3ScenarioPayloads Condition="'$(DeployHomm3ScenarioPayloads)' == ''">false</DeployHomm3ScenarioPayloads>
+    <DeployHomm3ScenarioPayloadsNormalized>false</DeployHomm3ScenarioPayloadsNormalized>
+    <DeployHomm3ScenarioPayloadsNormalized Condition="'$(DeployHomm3ScenarioPayloads)' == 'true' or '$(DeployHomm3ScenarioPayloads)' == 'True' or '$(DeployHomm3ScenarioPayloads)' == 'TRUE'">true</DeployHomm3ScenarioPayloadsNormalized>
+    <RunExpensiveArtifactAudits Condition="'$(RunExpensiveArtifactAudits)' == ''">false</RunExpensiveArtifactAudits>
+    <RunExpensiveHomecomingArtifactAudits Condition="'$(RunExpensiveHomecomingArtifactAudits)' == ''">$(RunExpensiveArtifactAudits)</RunExpensiveHomecomingArtifactAudits>
+    <HexInteropRootDir Condition="'$(HexInteropRootDir)' == ''">$(PublishPluginDir)</HexInteropRootDir>
+    <UnityInteropRootDir Condition="'$(UnityInteropRootDir)' == ''">$(PublishPluginDir)</UnityInteropRootDir>
+    <UnityWebRequestAudioModuleHintPath Condition="Exists('$(PublishPluginDir)UnityEngine.UnityWebRequestAudioModule.dll')">$(PublishPluginDir)UnityEngine.UnityWebRequestAudioModule.dll</UnityWebRequestAudioModuleHintPath>
+    <UnityWebRequestAudioModuleHintPath Condition="'$(UnityWebRequestAudioModuleHintPath)' == '' and Exists('$(BepInExRootDir)interop\UnityEngine.UnityWebRequestAudioModule.dll')">$(BepInExRootDir)interop\UnityEngine.UnityWebRequestAudioModule.dll</UnityWebRequestAudioModuleHintPath>
+    <!-- Validation tiers (docs/build_validation_tiers.md): test deploys run compile + deploy-safety gates only;
+         -p:FullValidation=true (release / manual / contract-owning changes) runs every contract validator. -->
+    <FullValidationNormalized>false</FullValidationNormalized>
+    <FullValidationNormalized Condition="'$(FullValidation)' == 'true' or '$(FullValidation)' == 'True' or '$(FullValidation)' == 'TRUE' or '$(ReleaseCandidateBuild)' == 'true'">true</FullValidationNormalized>
+    <OfficialDeobfBuildNormalized>false</OfficialDeobfBuildNormalized>
+    <OfficialDeobfBuildNormalized Condition="'$(OfficialDeobfBuild)' == 'true' or '$(OfficialDeobfBuild)' == 'True' or '$(OfficialDeobfBuild)' == 'TRUE'">true</OfficialDeobfBuildNormalized>
+  </PropertyGroup>
+  <Target Name="ValidateDeployPluginBinaryOnlyOptions" BeforeTargets="BeforeBuild;DeployPluginToGame" Condition="'$(DeployPluginToGame)' == 'true' and '$(TargetExt)' == '.dll'">
+    <Error Text="DeployPluginBinaryOnly must be true or false; received '$(DeployPluginBinaryOnly)'." Condition="'$(DeployPluginBinaryOnly)' != 'true' and '$(DeployPluginBinaryOnly)' != 'True' and '$(DeployPluginBinaryOnly)' != 'TRUE' and '$(DeployPluginBinaryOnly)' != 'false' and '$(DeployPluginBinaryOnly)' != 'False' and '$(DeployPluginBinaryOnly)' != 'FALSE'" />
+    <Error Text="DeployPluginBinaryOnly cannot be combined with an opt-in HoMM3 bundle or scenario payload deploy." Condition="'$(DeployPluginBinaryOnlyNormalized)' == 'true' and ('$(DeployHomm3BundlesNormalized)' == 'true' or '$(DeployHomm3FactoryBulwarkBundlesNormalized)' == 'true' or '$(DeployHomm3BundleNameNormalized)' == 'true' or '$(DeployHomm3ScenarioPayloadsNormalized)' == 'true')" />
+  </Target>
+  <Target Name="ValidateDeployPluginBinaryOnlyContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' or ('$(DeployPluginToGame)' == 'true' and '$(DeployPluginBinaryOnlyNormalized)' == 'true')">
+    <Exec Command="python &quot;$(MSBuildThisFileDirectory)..\..\tools\validate_binary_only_plugin_deploy_contract.py&quot; --project &quot;$(MSBuildThisFileFullPath)&quot;" Timeout="30000" />
+  </Target>
+  <PropertyGroup Condition="'$(OfficialDeobfBuildNormalized)' == 'true'">
+    <HexInteropRootDir>$(BepInExRootDir)interop\</HexInteropRootDir>
+    <UnityInteropRootDir>$(PublishPluginDir)</UnityInteropRootDir>
+    <DefineConstants>$(DefineConstants);OFFICIAL_DEOBF_BUILD</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(ReleaseCandidateBuild)' == 'true'">
+    <DefineConstants>$(DefineConstants);RELEASE_CANDIDATE_BUILD</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(EnableSelectedUnitHudHotkeyProbe)' == 'true' and '$(ReleaseCandidateBuild)' != 'true'">
+    <DefineConstants>$(DefineConstants);ENABLE_SELECTED_UNIT_HUD_HOTKEY_PROBE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="Exists('$(BepInExRootDir)interop\UnityEngine.UnityWebRequestAudioModule.dll')">
+    <DefineConstants>$(DefineConstants);HAS_UNITYWEBREQUEST_AUDIO_MODULE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="6.0.11" ExcludeAssets="runtime" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(BepInExRootDir)core\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="BepInEx.Core">
+      <HintPath>$(BepInExRootDir)core\BepInEx.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="BepInEx.Unity.IL2CPP">
+      <HintPath>$(BepInExRootDir)core\BepInEx.Unity.IL2CPP.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppInterop.Common">
+      <HintPath>$(BepInExRootDir)core\Il2CppInterop.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppInterop.Runtime">
+      <HintPath>$(BepInExRootDir)core\Il2CppInterop.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Hex">
+      <HintPath>$(HexInteropRootDir)Hex.dll</HintPath>
+    </Reference>
+    <Reference Include="Hex.Shared">
+      <HintPath>$(HexInteropRootDir)Hex.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Hex.Sound.Runtime">
+      <HintPath>$(HexInteropRootDir)Hex.Sound.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>$(UnityInteropRootDir)Il2Cppmscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(UnityInteropRootDir)Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SixLabors.ImageSharp">
+      <HintPath>$(MSBuildThisFileDirectory)publish_plugin\SixLabors.ImageSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Postprocessing.Runtime">
+      <HintPath>$(UnityInteropRootDir)Unity.Postprocessing.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(UnityInteropRootDir)Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <!-- Screenshot capture is engine-owned; resolve the installed module but never deploy a private copy. -->
+    <Reference Include="UnityEngine.ScreenCaptureModule">
+      <HintPath>$(BepInExRootDir)interop\UnityEngine.ScreenCaptureModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- Analytics host guard (NativeAnalyticsHostGuard.cs): game-owned interop assemblies, never deployed. -->
+    <Reference Include="Il2CppSystem">
+      <HintPath>$(BepInExRootDir)interop\Il2CppSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Grpc.Net.Client">
+      <HintPath>$(BepInExRootDir)interop\Grpc.Net.Client.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.ParticleSystemModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.JSONSerializeModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.UnityWebRequestModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAudioModule" Condition="Exists('$(UnityWebRequestAudioModuleHintPath)')">
+      <HintPath>$(UnityWebRequestAudioModuleHintPath)</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VideoModule">
+      <HintPath>$(UnityInteropRootDir)UnityEngine.VideoModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(OfficialDeobfBuildNormalized)' == 'true'">
+    <None Remove="publish_plugin\Hex.dll" />
+    <None Remove="publish_plugin\Hex.Shared.dll" />
+    <None Remove="publish_plugin\Hex.Sound.Runtime.dll" />
+    <Content Remove="publish_plugin\Hex.dll" />
+    <Content Remove="publish_plugin\Hex.Shared.dll" />
+    <Content Remove="publish_plugin\Hex.Sound.Runtime.dll" />
+    <EmbeddedResource Remove="publish_plugin\Hex.dll" />
+    <EmbeddedResource Remove="publish_plugin\Hex.Shared.dll" />
+    <EmbeddedResource Remove="publish_plugin\Hex.Sound.Runtime.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\tools\olden_ai_sim\OldenAiSim.csproj">
+      <Private>true</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="_decompiled_shipped\**\*" />
+    <Compile Remove="_decompiled_filtered\**\*" />
+    <Compile Remove="_decompiled_release_hex\**\*" />
+    <Compile Remove="tmp_decomp_*.cs" />
+    <Compile Remove="tools\**\*" />
+    <Compile Remove="Homm3LiveProbeWorkbench.cs" Condition="'$(ReleaseCandidateBuild)' == 'true'" />
+    <Compile Remove="LiveProbeTownUiState.cs" Condition="'$(ReleaseCandidateBuild)' == 'true'" />
+    <Compile Remove="Homm3AiDriverBridge.cs" Condition="'$(ReleaseCandidateBuild)' == 'true'" />
+    <Compile Remove="Homm3AiDriverBridge.ScreenDump.cs" Condition="'$(ReleaseCandidateBuild)' == 'true'" />
+    <Compile Remove="Homm3AiDriverBridge.AdventureCapture.cs" Condition="'$(ReleaseCandidateBuild)' == 'true'" />
+    <Compile Remove="Homm3AiDriverBridge.Hover.cs" Condition="'$(ReleaseCandidateBuild)' == 'true'" />
+    <Compile Remove="Homm3AiDriverBridge.Focus.cs" Condition="'$(ReleaseCandidateBuild)' == 'true'" />
+    <Compile Remove="Homm3AiDriverBridge.Pilot.cs" Condition="'$(ReleaseCandidateBuild)' == 'true'" />
+    <Compile Remove="Homm3AiDriverFogCache.cs" Condition="'$(ReleaseCandidateBuild)' == 'true'" />
+    <Compile Remove="Homm3AdventureAiDecisionProbe.cs" Condition="'$(ReleaseCandidateBuild)' == 'true'" />
+    <Compile Remove="Homm3AdventureAiWeightBridge.cs" Condition="'$(ReleaseCandidateBuild)' == 'true'" />
+    <!-- Selected-unit hotkey probe: opt-in local diagnostics only (never ReleaseCandidate; default builds omit unless EnableSelectedUnitHudHotkeyProbe=true). -->
+    <Compile Remove="Homm3SelectedUnitHudHotkeyProbe.cs" Condition="'$(ReleaseCandidateBuild)' == 'true' or '$(EnableSelectedUnitHudHotkeyProbe)' != 'true'" />
+    <None Remove="publish_plugin\**\*" Condition="'$(UseLiveInteropOnly)' == 'true'" />
+    <None Remove="tools\**\*" Condition="'$(UseLiveInteropOnly)' == 'true'" />
+    <Content Remove="publish_plugin\**\*" Condition="'$(UseLiveInteropOnly)' == 'true'" />
+    <Content Remove="tools\**\*" Condition="'$(UseLiveInteropOnly)' == 'true'" />
+    <EmbeddedResource Remove="publish_plugin\**\*" Condition="'$(UseLiveInteropOnly)' == 'true'" />
+    <EmbeddedResource Remove="tools\**\*" Condition="'$(UseLiveInteropOnly)' == 'true'" />
+  </ItemGroup>
+  <Target Name="ValidateHomecomingRecognizableMapContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveHomecomingArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <HomecomingRecognizableMapValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_recognizable_map_contract.py</HomecomingRecognizableMapValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming recognizable underground-slice map validator: $(HomecomingRecognizableMapValidator)" Condition="!Exists('$(HomecomingRecognizableMapValidator)')" />
+    <Exec Command="python &quot;$(HomecomingRecognizableMapValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomecomingEditorTerrainProbeContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveHomecomingArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <HomecomingEditorTerrainProbeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_editor_terrain_probe_contract.py</HomecomingEditorTerrainProbeValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming editor terrain probe validator: $(HomecomingEditorTerrainProbeValidator)" Condition="!Exists('$(HomecomingEditorTerrainProbeValidator)')" />
+    <Exec Command="python &quot;$(HomecomingEditorTerrainProbeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomecomingAuthenticSliceContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveHomecomingArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <HomecomingAuthenticSliceValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_authentic_slice_contract.py</HomecomingAuthenticSliceValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming authentic Terraneus-layer slice validator: $(HomecomingAuthenticSliceValidator)" Condition="!Exists('$(HomecomingAuthenticSliceValidator)')" />
+    <Exec Command="python &quot;$(HomecomingAuthenticSliceValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomecomingReducedSliceRuntimeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <HomecomingReducedSliceRuntimeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_reduced_slice_runtime_contract.py</HomecomingReducedSliceRuntimeValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming reduced-slice runtime contract validator: $(HomecomingReducedSliceRuntimeValidator)" Condition="!Exists('$(HomecomingReducedSliceRuntimeValidator)')" />
+    <Exec Command="python &quot;$(HomecomingReducedSliceRuntimeValidator)&quot; --plugin-dir &quot;$(MSBuildThisFileDirectory).&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomecomingMapEmissionProbeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <HomecomingMapEmissionProbeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_map_emission_probe_contract.py</HomecomingMapEmissionProbeValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming map-emission feasibility probe validator: $(HomecomingMapEmissionProbeValidator)" Condition="!Exists('$(HomecomingMapEmissionProbeValidator)')" />
+    <Exec Command="python &quot;$(HomecomingMapEmissionProbeValidator)&quot; --plugin-dir &quot;$(MSBuildThisFileDirectory).&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomecomingPlayableShellLaunchContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <HomecomingPlayableShellLaunchValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_playable_shell_launch_contract.py</HomecomingPlayableShellLaunchValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming playable-shell launch validator: $(HomecomingPlayableShellLaunchValidator)" Condition="!Exists('$(HomecomingPlayableShellLaunchValidator)')" />
+    <Exec Command="python &quot;$(HomecomingPlayableShellLaunchValidator)&quot; --plugin-dir &quot;$(MSBuildThisFileDirectory).&quot;" Timeout="300000" />
+  </Target>
+  <!-- Default: source/weave continuity only. Installed Story_maps/Core SID readiness is opt-in via
+       RequireInstalledRoeCastlePayload=true (passes require-installed to the validator). Prefer that over Skip flags. -->
+  <Target Name="ValidateRoeCastleCampaignContinuityContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipRoeCastleContinuityContract)' != 'true')">
+    <PropertyGroup>
+      <RoeCastleCampaignContinuityValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_roe_castle_campaign_continuity_contract.py</RoeCastleCampaignContinuityValidator>
+      <RoeCastleContinuityRequireInstalledArgs Condition="'$(RequireInstalledRoeCastlePayload)' == 'true'"> --require-installed</RoeCastleContinuityRequireInstalledArgs>
+    </PropertyGroup>
+    <Error Text="Missing RoE Castle campaign continuity validator: $(RoeCastleCampaignContinuityValidator)" Condition="!Exists('$(RoeCastleCampaignContinuityValidator)')" />
+    <Exec Command="python &quot;$(RoeCastleCampaignContinuityValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;$(RoeCastleContinuityRequireInstalledArgs)" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateCampaignHeroLevelCapContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipCampaignHeroLevelCapContract)' != 'true')">
+    <PropertyGroup>
+      <CampaignHeroLevelCapValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_campaign_hero_level_cap_contract.py</CampaignHeroLevelCapValidator>
+    </PropertyGroup>
+    <Error Text="Missing campaign hero level-cap validator: $(CampaignHeroLevelCapValidator)" Condition="!Exists('$(CampaignHeroLevelCapValidator)')" />
+    <Exec Command="python &quot;$(CampaignHeroLevelCapValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3CampaignHeroesRosterSeparationContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3CampaignHeroesRosterSeparationContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3CampaignHeroesRosterSeparationValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_campaign_heroes_roster_separation_contract.py</Homm3CampaignHeroesRosterSeparationValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 campaignHeroes roster-separation validator: $(Homm3CampaignHeroesRosterSeparationValidator)" Condition="!Exists('$(Homm3CampaignHeroesRosterSeparationValidator)')" />
+    <Exec Command="python &quot;$(Homm3CampaignHeroesRosterSeparationValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3StoryHubMapBackgroundContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3StoryHubMapBackgroundContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3StoryHubMapBackgroundValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_storyhub_map_background_contract.py</Homm3StoryHubMapBackgroundValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 StoryHub map background validator: $(Homm3StoryHubMapBackgroundValidator)" Condition="!Exists('$(Homm3StoryHubMapBackgroundValidator)')" />
+    <Exec Command="python &quot;$(Homm3StoryHubMapBackgroundValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3UiScaleContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3UiScaleContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3UiScaleValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_ui_scale_contract.py</Homm3UiScaleValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 UI scale validator: $(Homm3UiScaleValidator)" Condition="!Exists('$(Homm3UiScaleValidator)')" />
+    <Exec Command="python &quot;$(Homm3UiScaleValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <!-- HoMM3 map squad death (docs/homm3_map_squad_death_contract.md): source gate that owned-skinned map shells hand the
+       native squad drawer the owned Animator (vanilla Die sets die/isDead on GetComponentInChildren<Animator>). The
+       installed-bundle data half runs in the homm3_bundles readback. -->
+  <Target Name="ValidateHomm3MapSquadDeathContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3MapSquadDeathContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3MapSquadDeathValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_map_squad_death_contract.py</Homm3MapSquadDeathValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 map squad death validator: $(Homm3MapSquadDeathValidator)" Condition="!Exists('$(Homm3MapSquadDeathValidator)')" />
+    <Exec Command="python &quot;$(Homm3MapSquadDeathValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateUnitMoveSpeedNormalizationContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <UnitMoveSpeedNormalizationValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_unit_move_speed_normalization_contract.py</UnitMoveSpeedNormalizationValidator>
+    </PropertyGroup>
+    <Error Text="Missing unit move speed normalization validator: $(UnitMoveSpeedNormalizationValidator)" Condition="!Exists('$(UnitMoveSpeedNormalizationValidator)')" />
+    <Exec Command="python &quot;$(UnitMoveSpeedNormalizationValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <!-- HoMM3 city building tree (docs/homm3_city_building_tree.md): every homm3_*_city and landon clone in the installed Core ships the canonical HoMM3 prevBuildings, a legal derived construction-tree layout and prerequisite-ordered buildOrders. -->
+  <Target Name="ValidateHomm3CityBuildingTreeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3CityBuildingTreeContract)' != 'true')">
+    <PropertyGroup><Homm3CityBuildingTreeValidator>$(MSBuildThisFileDirectory)..\..\tools\release_port\validate_homm3_city_building_tree_contract.py</Homm3CityBuildingTreeValidator></PropertyGroup>
+    <Error Text="Missing HoMM3 city building tree validator: $(Homm3CityBuildingTreeValidator)" Condition="!Exists('$(Homm3CityBuildingTreeValidator)')" />
+    <Exec Command="python &quot;$(Homm3CityBuildingTreeValidator)&quot;" Timeout="300000" />
+  </Target>
+  <!-- HoMM3 city building descriptions (docs/homm3_city_building_descriptions.md): every homm3_*_city building level in the installed Core has placeholder-free text, no mechanic/entity absent from OE, and a description equal to the one derived from its config row. -->
+  <Target Name="ValidateHomm3CityBuildingDescriptionsContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3CityBuildingDescriptionsContract)' != 'true')">
+    <PropertyGroup><Homm3CityBuildingDescriptionsValidator>$(MSBuildThisFileDirectory)..\..\tools\release_port\validate_homm3_city_building_descriptions_contract.py</Homm3CityBuildingDescriptionsValidator></PropertyGroup>
+    <Error Text="Missing HoMM3 city building descriptions validator: $(Homm3CityBuildingDescriptionsValidator)" Condition="!Exists('$(Homm3CityBuildingDescriptionsValidator)')" />
+    <Exec Command="python &quot;$(Homm3CityBuildingDescriptionsValidator)&quot;" Timeout="300000" />
+  </Target>
+  <!-- No upgrade may cost less than a unit it upgrades from, in any resource (installed Golden Era Core readback). -->
+  <Target Name="ValidateUnitUpgradeCostDeltaContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipUnitUpgradeCostDeltaContract)' != 'true')">
+    <PropertyGroup>
+      <UnitUpgradeCostDeltaValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_unit_upgrade_cost_delta_contract.py</UnitUpgradeCostDeltaValidator>
+    </PropertyGroup>
+    <Error Text="Missing unit upgrade cost delta validator: $(UnitUpgradeCostDeltaValidator)" Condition="!Exists('$(UnitUpgradeCostDeltaValidator)')" />
+    <Exec Command="python &quot;$(UnitUpgradeCostDeltaValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateNativeHookSafetyContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipNativeHookSafetyContract)' != 'true')">
+    <PropertyGroup>
+      <NativeHookSafetyValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_native_hook_safety_contract.py</NativeHookSafetyValidator>
+    </PropertyGroup>
+    <Error Text="Missing native hook safety validator: $(NativeHookSafetyValidator)" Condition="!Exists('$(NativeHookSafetyValidator)')" />
+    <Exec Command="python &quot;$(NativeHookSafetyValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <!-- Exact value reads: expected member-kind misses stay quiet; real getter failures are diagnosed without
+       invoking another alias. The full tier runs the production reader against the synthetic contract fixture. -->
+  <Target Name="ValidateGameMemberValueReaderContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <GameMemberValueReaderValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_game_member_value_reader_contract.py</GameMemberValueReaderValidator>
+    </PropertyGroup>
+    <Error Text="Missing exact member value reader validator: $(GameMemberValueReaderValidator)" Condition="!Exists('$(GameMemberValueReaderValidator)')" />
+    <Exec Command="python &quot;$(GameMemberValueReaderValidator)&quot; --run-fixture" Timeout="60000" />
+  </Target>
+  <!-- Runtime UI sprite persistence (CUSTOM_FACTION_UI_ASSET_LEARNINGS.md): main-menu prewarmed faction/city sprites are pinned against UnloadUnusedAssets, and the SoFractions clone and native sprite catalog never hand native UI a freed sprite (blank HUD faction icons, 2026-10-02). -->
+  <Target Name="ValidateRuntimeUiSpritePersistenceContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipRuntimeUiSpritePersistenceContract)' != 'true')">
+    <PropertyGroup><RuntimeUiSpritePersistenceValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_runtime_ui_sprite_persistence_contract.py</RuntimeUiSpritePersistenceValidator></PropertyGroup>
+    <Error Text="Missing runtime UI sprite persistence validator: $(RuntimeUiSpritePersistenceValidator)" Condition="!Exists('$(RuntimeUiSpritePersistenceValidator)')" />
+    <Exec Command="python &quot;$(RuntimeUiSpritePersistenceValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateModBugReportingContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <ModBugReportingValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_mod_bug_reporting_contract.py</ModBugReportingValidator>
+    </PropertyGroup>
+    <Error Text="Missing mod bug reporting validator: $(ModBugReportingValidator)" Condition="!Exists('$(ModBugReportingValidator)')" />
+    <Exec Command="python &quot;$(ModBugReportingValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="120000" />
+  </Target>
+  <Target Name="ValidateMapLoadPreflightContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipMapLoadPreflightContract)' != 'true')">
+    <PropertyGroup>
+      <MapLoadPreflightValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_map_load_preflight_contract.py</MapLoadPreflightValidator>
+    </PropertyGroup>
+    <Error Text="Missing map load preflight validator: $(MapLoadPreflightValidator)" Condition="!Exists('$(MapLoadPreflightValidator)')" />
+    <Exec Command="python &quot;$(MapLoadPreflightValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --core-only" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateDocumentationContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipDocumentationContract)' != 'true')">
+    <PropertyGroup>
+      <DocumentationContractValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_documentation_contract.py</DocumentationContractValidator>
+    </PropertyGroup>
+    <Error Text="Missing documentation contract validator: $(DocumentationContractValidator)" Condition="!Exists('$(DocumentationContractValidator)')" />
+    <Exec Command="python &quot;$(DocumentationContractValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateCampaignPortScenarioMenuContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipCampaignPortScenarioMenuContract)' != 'true')">
+    <PropertyGroup>
+      <CampaignPortScenarioMenuValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_campaign_port_scenario_menu_contract.py</CampaignPortScenarioMenuValidator>
+    </PropertyGroup>
+    <Error Text="Missing campaign-port scenario menu validator: $(CampaignPortScenarioMenuValidator)" Condition="!Exists('$(CampaignPortScenarioMenuValidator)')" />
+    <Exec Command="python &quot;$(CampaignPortScenarioMenuValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomecomingOldenStorageAlignmentContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveHomecomingArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <HomecomingOldenStorageAlignmentValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_olden_storage_alignment_contract.py</HomecomingOldenStorageAlignmentValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming olden storage alignment contract validator: $(HomecomingOldenStorageAlignmentValidator)" Condition="!Exists('$(HomecomingOldenStorageAlignmentValidator)')" />
+    <Exec Command="python &quot;$(HomecomingOldenStorageAlignmentValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomecomingMappingReviewMenuContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveHomecomingArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <HomecomingMappingReviewMenuValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_mapping_review_menu_contract.py</HomecomingMappingReviewMenuValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming mapping review menu contract validator: $(HomecomingMappingReviewMenuValidator)" Condition="!Exists('$(HomecomingMappingReviewMenuValidator)')" />
+    <Exec Command="python &quot;$(HomecomingMappingReviewMenuValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomecomingEntitySubstitutionMapContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveHomecomingArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <HomecomingEntitySubstitutionMapValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_entity_substitution_map_contract.py</HomecomingEntitySubstitutionMapValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming entity substitution map contract validator: $(HomecomingEntitySubstitutionMapValidator)" Condition="!Exists('$(HomecomingEntitySubstitutionMapValidator)')" />
+    <Exec Command="python &quot;$(HomecomingEntitySubstitutionMapValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --skip-generate" Timeout="300000" />
+  </Target>
+  <!-- The single_layer delivery lane is retired (see docs/campaign_map_generation_lane_retirement.md).
+       build_homecoming_single_layer_map.py survives only as an emit-helper library for the
+       tile-object / pathability / olden-object-knowledge diagnostics below; it no longer has a
+       map contract, installer, profile, or deploy target. -->
+  <Target Name="GenerateHomecomingTileObjectGrid" BeforeTargets="BeforeBuild;DeployPluginToGame" Condition="'$(RunExpensiveHomecomingArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <HomecomingTileObjectGridGenerator>$(MSBuildThisFileDirectory)..\..\experiments\campaign_port_poc\build_homecoming_tile_object_grid.py</HomecomingTileObjectGridGenerator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming tile-object grid generator: $(HomecomingTileObjectGridGenerator)" Condition="!Exists('$(HomecomingTileObjectGridGenerator)')" />
+    <Exec Command="python &quot;$(HomecomingTileObjectGridGenerator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" />
+  </Target>
+  <Target Name="ValidateHomecomingTileObjectGridContract" BeforeTargets="BeforeBuild" AfterTargets="DeployPluginToGame" DependsOnTargets="GenerateHomecomingTileObjectGrid" Condition="'$(RunExpensiveHomecomingArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <HomecomingTileObjectGridValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_tile_object_grid_contract.py</HomecomingTileObjectGridValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming tile-object grid contract validator: $(HomecomingTileObjectGridValidator)" Condition="!Exists('$(HomecomingTileObjectGridValidator)')" />
+    <Exec Command="python &quot;$(HomecomingTileObjectGridValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --skip-generate" Timeout="300000" />
+  </Target>
+  <Target Name="GenerateHomecomingOldenObjectKnowledge" BeforeTargets="BeforeBuild;DeployPluginToGame" DependsOnTargets="ValidateHomecomingTileObjectGridContract" Condition="'$(RunExpensiveHomecomingArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <HomecomingOldenObjectKnowledgeGenerator>$(MSBuildThisFileDirectory)..\..\experiments\campaign_port_poc\build_homecoming_olden_object_knowledge.py</HomecomingOldenObjectKnowledgeGenerator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming Olden object knowledge generator: $(HomecomingOldenObjectKnowledgeGenerator)" Condition="!Exists('$(HomecomingOldenObjectKnowledgeGenerator)')" />
+    <Exec Command="python &quot;$(HomecomingOldenObjectKnowledgeGenerator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" />
+  </Target>
+  <Target Name="ValidateHomecomingOldenObjectKnowledgeContract" BeforeTargets="BeforeBuild" AfterTargets="DeployPluginToGame" DependsOnTargets="GenerateHomecomingOldenObjectKnowledge" Condition="'$(RunExpensiveHomecomingArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <HomecomingOldenObjectKnowledgeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_olden_object_knowledge_contract.py</HomecomingOldenObjectKnowledgeValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming Olden object knowledge contract validator: $(HomecomingOldenObjectKnowledgeValidator)" Condition="!Exists('$(HomecomingOldenObjectKnowledgeValidator)')" />
+    <Exec Command="python &quot;$(HomecomingOldenObjectKnowledgeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --skip-generate" Timeout="300000" />
+  </Target>
+  <Target Name="GenerateHomecomingPathabilityGrid" BeforeTargets="BeforeBuild;DeployPluginToGame" DependsOnTargets="ValidateHomecomingTileObjectGridContract" Condition="'$(RunExpensiveHomecomingArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <HomecomingPathabilityGridGenerator>$(MSBuildThisFileDirectory)..\..\experiments\campaign_port_poc\build_homecoming_pathability_grid.py</HomecomingPathabilityGridGenerator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming pathability grid generator: $(HomecomingPathabilityGridGenerator)" Condition="!Exists('$(HomecomingPathabilityGridGenerator)')" />
+    <Exec Command="python &quot;$(HomecomingPathabilityGridGenerator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" />
+  </Target>
+  <Target Name="ValidateHomecomingPathabilityGridContract" BeforeTargets="BeforeBuild" AfterTargets="DeployPluginToGame" DependsOnTargets="GenerateHomecomingPathabilityGrid" Condition="'$(RunExpensiveHomecomingArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <HomecomingPathabilityGridValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_pathability_grid_contract.py</HomecomingPathabilityGridValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming pathability grid contract validator: $(HomecomingPathabilityGridValidator)" Condition="!Exists('$(HomecomingPathabilityGridValidator)')" />
+    <Exec Command="python &quot;$(HomecomingPathabilityGridValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --skip-generate" Timeout="300000" />
+  </Target>
+  <Target Name="GenerateOldenQuestScriptVocabulary" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <OldenQuestScriptVocabularyMiner>$(MSBuildThisFileDirectory)..\..\tools\mine_olden_quest_script_vocabulary.py</OldenQuestScriptVocabularyMiner>
+    </PropertyGroup>
+    <Error Text="Missing Olden QuestScript vocabulary miner: $(OldenQuestScriptVocabularyMiner)" Condition="!Exists('$(OldenQuestScriptVocabularyMiner)')" />
+    <Exec Command="python &quot;$(OldenQuestScriptVocabularyMiner)&quot;" WorkingDirectory="$(MSBuildThisFileDirectory)..\.." />
+  </Target>
+  <Target Name="ValidateOldenQuestScriptVocabularyContract" BeforeTargets="BeforeBuild" DependsOnTargets="GenerateOldenQuestScriptVocabulary" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <OldenQuestScriptVocabularyValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_olden_quest_script_vocabulary_contract.py</OldenQuestScriptVocabularyValidator>
+    </PropertyGroup>
+    <Error Text="Missing Olden QuestScript vocabulary validator: $(OldenQuestScriptVocabularyValidator)" Condition="!Exists('$(OldenQuestScriptVocabularyValidator)')" />
+    <Exec Command="python &quot;$(OldenQuestScriptVocabularyValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateScenarioSemanticCoverageContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <ScenarioSemanticCoverageValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_scenario_semantic_coverage_contract.py</ScenarioSemanticCoverageValidator>
+    </PropertyGroup>
+    <Error Text="Missing scenario semantic coverage contract validator: $(ScenarioSemanticCoverageValidator)" Condition="!Exists('$(ScenarioSemanticCoverageValidator)')" />
+    <Exec Command="python &quot;$(ScenarioSemanticCoverageValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <!-- raw_translation is the only campaign map generation lane. RawTranslationMissions selects
+       which missionIds of the RoE Castle batch manifest are regenerated; the default is the
+       Homecoming mission because that is the one the map contract validator pins. -->
+  <PropertyGroup>
+    <RawTranslationMissions Condition="'$(RawTranslationMissions)' == ''">homecoming</RawTranslationMissions>
+  </PropertyGroup>
+  <Target Name="GenerateRawTranslationMaps" BeforeTargets="BeforeBuild;DeployPluginToGame" Condition="'$(RunExpensiveHomecomingArtifactAudits)' == 'true' or '$(DeployHomm3ScenarioPayloadsNormalized)' == 'true'">
+    <PropertyGroup>
+      <RawTranslationBatchGenerator>$(MSBuildThisFileDirectory)..\..\experiments\campaign_port_poc\build_campaign_raw_translation_batch.py</RawTranslationBatchGenerator>
+      <RawTranslationBatchManifest>$(MSBuildThisFileDirectory)..\..\scenarios\roe_castle_campaign\batch_manifest.json</RawTranslationBatchManifest>
+    </PropertyGroup>
+    <Error Text="Missing raw_translation batch generator: $(RawTranslationBatchGenerator)" Condition="!Exists('$(RawTranslationBatchGenerator)')" />
+    <Error Text="Missing RoE Castle campaign batch manifest: $(RawTranslationBatchManifest)" Condition="!Exists('$(RawTranslationBatchManifest)')" />
+    <Exec Command="python &quot;$(RawTranslationBatchGenerator)&quot; --manifest &quot;$(RawTranslationBatchManifest)&quot; --mission $(RawTranslationMissions)" WorkingDirectory="$(MSBuildThisFileDirectory)..\..\experiments\campaign_port_poc" />
+  </Target>
+  <Target Name="ValidateHomecomingRawTranslationMapContract" BeforeTargets="BeforeBuild" DependsOnTargets="GenerateRawTranslationMaps" Condition="'$(RunExpensiveHomecomingArtifactAudits)' == 'true' or '$(DeployHomm3ScenarioPayloadsNormalized)' == 'true'">
+    <PropertyGroup>
+      <HomecomingRawTranslationMapValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_raw_translation_map_contract.py</HomecomingRawTranslationMapValidator>
+    </PropertyGroup>
+    <Error Text="Missing raw_translation map contract validator: $(HomecomingRawTranslationMapValidator)" Condition="!Exists('$(HomecomingRawTranslationMapValidator)')" />
+    <Exec Command="python &quot;$(HomecomingRawTranslationMapValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --skip-generate" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomecomingExact72ProbeMapContract" BeforeTargets="BeforeBuild" Condition="'$(DeployExact72ProbeMap)' == 'true'">
+    <PropertyGroup>
+      <HomecomingExact72ProbeMapValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_exact72_probe_map_contract.py</HomecomingExact72ProbeMapValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming exact72 probe map validator: $(HomecomingExact72ProbeMapValidator)" Condition="!Exists('$(HomecomingExact72ProbeMapValidator)')" />
+    <Exec Command="python &quot;$(HomecomingExact72ProbeMapValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="DeployHomecomingExact72ProbeScenario" AfterTargets="Build" DependsOnTargets="ValidateHomecomingExact72ProbeMapContract" Condition="'$(DeployExact72ProbeMap)' == 'true'">
+    <PropertyGroup>
+      <HomecomingExact72ProbeMapInstaller>$(MSBuildThisFileDirectory)..\..\tools\install_homecoming_exact72_probe_map.py</HomecomingExact72ProbeMapInstaller>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming exact72 probe map installer: $(HomecomingExact72ProbeMapInstaller)" Condition="!Exists('$(HomecomingExact72ProbeMapInstaller)')" />
+    <Exec Command="python &quot;$(HomecomingExact72ProbeMapInstaller)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" />
+  </Target>
+  <Target Name="ValidateEventRuntimeProbeMapContract" BeforeTargets="BeforeBuild" Condition="'$(DeployEventRuntimeProbeMap)' == 'true'">
+    <PropertyGroup>
+      <EventRuntimeProbeMapValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_event_runtime_probe_map_contract.py</EventRuntimeProbeMapValidator>
+    </PropertyGroup>
+    <Error Text="Missing event runtime probe map validator: $(EventRuntimeProbeMapValidator)" Condition="!Exists('$(EventRuntimeProbeMapValidator)')" />
+    <Exec Command="python &quot;$(EventRuntimeProbeMapValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="DeployEventRuntimeProbeScenario" AfterTargets="Build" DependsOnTargets="ValidateEventRuntimeProbeMapContract" Condition="'$(DeployEventRuntimeProbeMap)' == 'true'">
+    <PropertyGroup>
+      <EventRuntimeProbeMapInstaller>$(MSBuildThisFileDirectory)..\..\tools\install_event_runtime_probe_map.py</EventRuntimeProbeMapInstaller>
+    </PropertyGroup>
+    <Error Text="Missing event runtime probe map installer: $(EventRuntimeProbeMapInstaller)" Condition="!Exists('$(EventRuntimeProbeMapInstaller)')" />
+    <Exec Command="python &quot;$(EventRuntimeProbeMapInstaller)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --skip-validate" />
+  </Target>
+  <Target Name="ValidateHomecomingLayerViewToggleContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <HomecomingLayerViewToggleValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_layer_view_toggle_contract.py</HomecomingLayerViewToggleValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming layer view-toggle contract validator: $(HomecomingLayerViewToggleValidator)" Condition="!Exists('$(HomecomingLayerViewToggleValidator)')" />
+    <Exec Command="python &quot;$(HomecomingLayerViewToggleValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --plugin-dir &quot;$(MSBuildThisFileDirectory).&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomecomingNativeWaterRuntimeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <HomecomingNativeWaterRuntimeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_native_water_runtime_contract.py</HomecomingNativeWaterRuntimeValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming native water runtime contract validator: $(HomecomingNativeWaterRuntimeValidator)" Condition="!Exists('$(HomecomingNativeWaterRuntimeValidator)')" />
+    <Exec Command="python &quot;$(HomecomingNativeWaterRuntimeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --plugin-dir &quot;$(MSBuildThisFileDirectory).&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3CustomBiomeRuntimeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3CustomBiomeRuntimeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_custom_biome_runtime_contract.py</Homm3CustomBiomeRuntimeValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 custom-biome runtime contract validator: $(Homm3CustomBiomeRuntimeValidator)" Condition="!Exists('$(Homm3CustomBiomeRuntimeValidator)')" />
+    <Exec Command="python &quot;$(Homm3CustomBiomeRuntimeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3CustomBiomeRuntimeAfterDeploy" AfterTargets="DeployPluginToGame" Condition="'$(FullValidationNormalized)' == 'true' and ('$(DeployPluginToGame)' != 'false')">
+    <PropertyGroup>
+      <Homm3CustomBiomeRuntimeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_custom_biome_runtime_contract.py</Homm3CustomBiomeRuntimeValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 custom-biome runtime contract validator: $(Homm3CustomBiomeRuntimeValidator)" Condition="!Exists('$(Homm3CustomBiomeRuntimeValidator)')" />
+    <Exec Command="python &quot;$(Homm3CustomBiomeRuntimeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --plugin-dir &quot;$(PluginDeployDir).&quot; --core &quot;$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomecomingBoatTravelNativeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <HomecomingBoatTravelNativeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_boat_travel_native_contract.py</HomecomingBoatTravelNativeValidator>
+    </PropertyGroup>
+    <Error Text="Missing Homecoming boat-travel native contract validator: $(HomecomingBoatTravelNativeValidator)" Condition="!Exists('$(HomecomingBoatTravelNativeValidator)')" />
+    <Exec Command="python &quot;$(HomecomingBoatTravelNativeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3BoatMapSpriteContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <Homm3BoatMapSpriteValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_boat_map_sprite_contract.py</Homm3BoatMapSpriteValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 boat map sprite contract validator: $(Homm3BoatMapSpriteValidator)" Condition="!Exists('$(Homm3BoatMapSpriteValidator)')" />
+    <Exec Command="python &quot;$(Homm3BoatMapSpriteValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateH3mScenarioTranslationContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <H3mScenarioTranslationValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_h3m_scenario_translation_contract.py</H3mScenarioTranslationValidator>
+    </PropertyGroup>
+    <Error Text="Missing H3M scenario translation contract validator: $(H3mScenarioTranslationValidator)" Condition="!Exists('$(H3mScenarioTranslationValidator)')" />
+    <Exec Command="python &quot;$(H3mScenarioTranslationValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateH3mObjectRegistryContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <H3mObjectRegistryValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_h3m_object_registry_contract.py</H3mObjectRegistryValidator>
+    </PropertyGroup>
+    <Error Text="Missing H3M object registry contract validator: $(H3mObjectRegistryValidator)" Condition="!Exists('$(H3mObjectRegistryValidator)')" />
+    <Exec Command="python &quot;$(H3mObjectRegistryValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateH3mObjectWalkCampaignContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipH3mObjectWalkCampaignContract)' != 'true' and Exists('$(MSBuildThisFileDirectory)..\..\HoMM 3 Complete\Data\H3bitmap.lod'))">
+    <PropertyGroup>
+      <H3mObjectWalkCampaignValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_h3m_object_walk_campaign_contract.py</H3mObjectWalkCampaignValidator>
+    </PropertyGroup>
+    <Error Text="Missing H3M campaign object-walk contract validator: $(H3mObjectWalkCampaignValidator)" Condition="!Exists('$(H3mObjectWalkCampaignValidator)')" />
+    <Exec Command="python &quot;$(H3mObjectWalkCampaignValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateCampaignEventPolicyContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipCampaignEventPolicyContract)' != 'true' and Exists('$(MSBuildThisFileDirectory)..\..\HoMM 3 Complete\Data\H3bitmap.lod'))">
+    <PropertyGroup>
+      <CampaignEventPolicyValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_campaign_event_policy_contract.py</CampaignEventPolicyValidator>
+    </PropertyGroup>
+    <Error Text="Missing campaign event policy contract validator: $(CampaignEventPolicyValidator)" Condition="!Exists('$(CampaignEventPolicyValidator)')" />
+    <Exec Command="python &quot;$(CampaignEventPolicyValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateCampaignDialogPortraitContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipCampaignDialogPortraitContract)' != 'true')">
+    <PropertyGroup>
+      <CampaignDialogPortraitValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_campaign_dialog_portrait_contract.py</CampaignDialogPortraitValidator>
+    </PropertyGroup>
+    <Error Text="Missing campaign dialog portrait contract validator: $(CampaignDialogPortraitValidator)" Condition="!Exists('$(CampaignDialogPortraitValidator)')" />
+    <Exec Command="python &quot;$(CampaignDialogPortraitValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --all-hub-configs" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateMapAutobattleEmitContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipMapAutobattleEmitContract)' != 'true')">
+    <PropertyGroup>
+      <MapAutobattleEmitValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_map_autobattle_emit_contract.py</MapAutobattleEmitValidator>
+    </PropertyGroup>
+    <Error Text="Missing map autobattle emit contract validator: $(MapAutobattleEmitValidator)" Condition="!Exists('$(MapAutobattleEmitValidator)')" />
+    <Exec Command="python &quot;$(MapAutobattleEmitValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateRawTranslationProfileGenerationContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipRawTranslationProfileGenerationContract)' != 'true' and Exists('$(MSBuildThisFileDirectory)..\..\HoMM 3 Complete\Data\H3bitmap.lod'))">
+    <PropertyGroup>
+      <RawTranslationProfileGenerationValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_raw_translation_profile_generation_contract.py</RawTranslationProfileGenerationValidator>
+    </PropertyGroup>
+    <Error Text="Missing raw_translation profile generation contract validator: $(RawTranslationProfileGenerationValidator)" Condition="!Exists('$(RawTranslationProfileGenerationValidator)')" />
+    <Exec Command="python &quot;$(RawTranslationProfileGenerationValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateH3mScenarioProbeContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <H3mScenarioProbeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_h3m_scenario_probe_contract.py</H3mScenarioProbeValidator>
+    </PropertyGroup>
+    <Error Text="Missing H3M scenario probe contract validator: $(H3mScenarioProbeValidator)" Condition="!Exists('$(H3mScenarioProbeValidator)')" />
+    <Exec Command="python &quot;$(H3mScenarioProbeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3BattleAbilityIconContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3BattleAbilityIconContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3BattleAbilityIconValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_battle_ability_icon_contract.py</Homm3BattleAbilityIconValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 battle ability icon contract validator: $(Homm3BattleAbilityIconValidator)" Condition="!Exists('$(Homm3BattleAbilityIconValidator)')" />
+    <Exec Command="python &quot;$(Homm3BattleAbilityIconValidator)&quot; --plugin-dir &quot;$(MSBuildThisFileDirectory).&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3CastleEliteStrategemRuntimeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3CastleEliteStrategemRuntimeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_castle_elite_strategem_runtime_contract.py</Homm3CastleEliteStrategemRuntimeValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 Castle Elite Strategem runtime contract validator: $(Homm3CastleEliteStrategemRuntimeValidator)" Condition="!Exists('$(Homm3CastleEliteStrategemRuntimeValidator)')" />
+    <Exec Condition="'$(OfficialDeobfBuildNormalized)' != 'true'" Command="python &quot;$(Homm3CastleEliteStrategemRuntimeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+    <Error Condition="'$(OfficialDeobfBuildNormalized)' == 'true' and !Exists('$(HexInteropRootDir)Hex.dll')" Text="Missing live interop Hex.dll for the Castle Elite Strategem casting-hero pin: $(HexInteropRootDir)Hex.dll" />
+    <Exec Condition="'$(OfficialDeobfBuildNormalized)' == 'true'" Command="python &quot;$(Homm3CastleEliteStrategemRuntimeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --hex-dll &quot;$(HexInteropRootDir)Hex.dll&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateCustomFactionRewardUnitsContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <CustomFactionRewardUnitsValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_custom_faction_reward_units_contract.py</CustomFactionRewardUnitsValidator>
+    </PropertyGroup>
+    <Error Text="Missing custom-faction reward-units validator: $(CustomFactionRewardUnitsValidator)" Condition="!Exists('$(CustomFactionRewardUnitsValidator)')" />
+    <Exec Command="python &quot;$(CustomFactionRewardUnitsValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateBattleAiDecisionSurfaceContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <BattleAiDecisionSurfaceValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_battle_ai_decision_surface_contract.py</BattleAiDecisionSurfaceValidator>
+    </PropertyGroup>
+    <Error Text="Missing battle AI decision surface contract validator: $(BattleAiDecisionSurfaceValidator)" Condition="!Exists('$(BattleAiDecisionSurfaceValidator)')" />
+    <Exec Command="python &quot;$(BattleAiDecisionSurfaceValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateAdventureAiLookaheadSurfaceContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <AdventureAiLookaheadSurfaceValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_adventure_ai_lookahead_surface_contract.py</AdventureAiLookaheadSurfaceValidator>
+    </PropertyGroup>
+    <Error Text="Missing adventure AI lookahead surface contract validator: $(AdventureAiLookaheadSurfaceValidator)" Condition="!Exists('$(AdventureAiLookaheadSurfaceValidator)')" />
+    <Exec Command="python &quot;$(AdventureAiLookaheadSurfaceValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateOldenAiSimContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <OldenAiSimContractValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_olden_ai_sim_contract.py</OldenAiSimContractValidator>
+    </PropertyGroup>
+    <Error Text="Missing OldenAiSim contract validator: $(OldenAiSimContractValidator)" Condition="!Exists('$(OldenAiSimContractValidator)')" />
+    <Exec Command="python &quot;$(OldenAiSimContractValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3RecruitmentAbilityContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3RecruitmentAbilityValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_recruitment_ability_contract.py</Homm3RecruitmentAbilityValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 recruitment ability contract validator: $(Homm3RecruitmentAbilityValidator)" Condition="!Exists('$(Homm3RecruitmentAbilityValidator)')" />
+    <Exec Command="python &quot;$(Homm3RecruitmentAbilityValidator)&quot; --plugin-dir &quot;$(MSBuildThisFileDirectory).&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3NoDonorIdentityRewriteContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3NoDonorIdentityRewriteValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_no_donor_identity_rewrite_contract.py</Homm3NoDonorIdentityRewriteValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 no-donor identity rewrite validator: $(Homm3NoDonorIdentityRewriteValidator)" Condition="!Exists('$(Homm3NoDonorIdentityRewriteValidator)')" />
+    <Exec Command="python &quot;$(Homm3NoDonorIdentityRewriteValidator)&quot; --plugin-dir &quot;$(MSBuildThisFileDirectory).&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3UnitAbilityRedesignContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <Homm3UnitAbilityRedesignValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_unit_ability_redesign_contract.py</Homm3UnitAbilityRedesignValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 unit ability redesign contract validator: $(Homm3UnitAbilityRedesignValidator)" Condition="!Exists('$(Homm3UnitAbilityRedesignValidator)')" />
+    <Exec Command="python &quot;$(Homm3UnitAbilityRedesignValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3UnitBalanceAdjustmentContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <Homm3UnitBalanceAdjustmentValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_unit_balance_adjustment_contract.py</Homm3UnitBalanceAdjustmentValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 unit balance adjustment contract validator: $(Homm3UnitBalanceAdjustmentValidator)" Condition="!Exists('$(Homm3UnitBalanceAdjustmentValidator)')" />
+    <Exec Command="python &quot;$(Homm3UnitBalanceAdjustmentValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3FactorySplitAssemblyRuntimeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3FactorySplitAssemblyRuntimeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_factory_split_assembly_runtime_contract.py</Homm3FactorySplitAssemblyRuntimeValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 Factory Split Assembly runtime validator: $(Homm3FactorySplitAssemblyRuntimeValidator)" Condition="!Exists('$(Homm3FactorySplitAssemblyRuntimeValidator)')" />
+    <Exec Command="python &quot;$(Homm3FactorySplitAssemblyRuntimeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3MarshalSuppressingFireRuntimeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3MarshalSuppressingFireRuntimeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_marshal_suppressing_fire_runtime_contract.py</Homm3MarshalSuppressingFireRuntimeValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 Marshal Suppressing Fire runtime validator: $(Homm3MarshalSuppressingFireRuntimeValidator)" Condition="!Exists('$(Homm3MarshalSuppressingFireRuntimeValidator)')" />
+    <Exec Command="python &quot;$(Homm3MarshalSuppressingFireRuntimeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3FactoryBulwarkCoreSkillContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3FactoryBulwarkCoreSkillValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_factory_bulwark_core_skill_contract.py</Homm3FactoryBulwarkCoreSkillValidator>
+    </PropertyGroup>
+    <Error Text="Missing Factory/Bulwark Core skill validator: $(Homm3FactoryBulwarkCoreSkillValidator)" Condition="!Exists('$(Homm3FactoryBulwarkCoreSkillValidator)')" />
+    <Exec Command="python &quot;$(Homm3FactoryBulwarkCoreSkillValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3FactoryBulwarkProjectileDonorContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3FactoryBulwarkProjectileDonorValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_factory_bulwark_projectile_donor_contract.py</Homm3FactoryBulwarkProjectileDonorValidator>
+    </PropertyGroup>
+    <Error Text="Missing Factory/Bulwark projectile donor validator: $(Homm3FactoryBulwarkProjectileDonorValidator)" Condition="!Exists('$(Homm3FactoryBulwarkProjectileDonorValidator)')" />
+    <Exec Command="python &quot;$(Homm3FactoryBulwarkProjectileDonorValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3BulwarkAbilityUniquenessContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3BulwarkAbilityUniquenessValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_bulwark_ability_uniqueness_contract.py</Homm3BulwarkAbilityUniquenessValidator>
+    </PropertyGroup>
+    <Error Text="Missing Bulwark ability uniqueness validator: $(Homm3BulwarkAbilityUniquenessValidator)" Condition="!Exists('$(Homm3BulwarkAbilityUniquenessValidator)')" />
+    <Exec Command="python &quot;$(Homm3BulwarkAbilityUniquenessValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3BulwarkAbilityRepairContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3BulwarkAbilityRepairValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_bulwark_ability_repair_contract.py</Homm3BulwarkAbilityRepairValidator>
+      <Homm3BulwarkAbilityRepairCoreZip Condition="'$(Homm3BulwarkAbilityRepairCoreZip)' == ''">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3BulwarkAbilityRepairCoreZip>
+    </PropertyGroup>
+    <Error Text="Missing Bulwark ability repair validator: $(Homm3BulwarkAbilityRepairValidator)" Condition="!Exists('$(Homm3BulwarkAbilityRepairValidator)')" />
+    <Error Text="Missing Core.zip for Bulwark ability repair contract: $(Homm3BulwarkAbilityRepairCoreZip)" Condition="!Exists('$(Homm3BulwarkAbilityRepairCoreZip)')" />
+    <Exec Command="python &quot;$(Homm3BulwarkAbilityRepairValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --core &quot;$(Homm3BulwarkAbilityRepairCoreZip)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3BulwarkFlyerSlowRuntimeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3BulwarkFlyerSlowRuntimeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_bulwark_flyer_slow_runtime_contract.py</Homm3BulwarkFlyerSlowRuntimeValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 Bulwark flyer Slow runtime validator: $(Homm3BulwarkFlyerSlowRuntimeValidator)" Condition="!Exists('$(Homm3BulwarkFlyerSlowRuntimeValidator)')" />
+    <Exec Command="python &quot;$(Homm3BulwarkFlyerSlowRuntimeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3BulwarkRunesRuntimeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3BulwarkRunesRuntimeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_bulwark_runes_runtime_contract.py</Homm3BulwarkRunesRuntimeValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 Bulwark Runes runtime validator: $(Homm3BulwarkRunesRuntimeValidator)" Condition="!Exists('$(Homm3BulwarkRunesRuntimeValidator)')" />
+    <Exec Command="python &quot;$(Homm3BulwarkRunesRuntimeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3BulwarkRunesCorrelationFixture" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <Homm3BulwarkRunesCorrelationFixture>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_bulwark_runes_correlation_fixture.py</Homm3BulwarkRunesCorrelationFixture>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 Bulwark Runes correlation fixture: $(Homm3BulwarkRunesCorrelationFixture)" Condition="!Exists('$(Homm3BulwarkRunesCorrelationFixture)')" />
+    <Exec Command="python &quot;$(Homm3BulwarkRunesCorrelationFixture)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3BulwarkRunesInstalledCombatAudit" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <Homm3BulwarkRunesInstalledCombatAudit>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_bulwark_runes_installed_combat_audit.py</Homm3BulwarkRunesInstalledCombatAudit>
+      <Homm3BulwarkRunesInstalledCoreZip Condition="'$(Homm3BulwarkRunesInstalledCoreZip)' == ''">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3BulwarkRunesInstalledCoreZip>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 Bulwark Runes installed combat audit: $(Homm3BulwarkRunesInstalledCombatAudit)" Condition="!Exists('$(Homm3BulwarkRunesInstalledCombatAudit)')" />
+    <Error Text="Missing Core.zip for Bulwark Runes installed combat audit: $(Homm3BulwarkRunesInstalledCoreZip)" Condition="!Exists('$(Homm3BulwarkRunesInstalledCoreZip)')" />
+    <Exec Command="python &quot;$(Homm3BulwarkRunesInstalledCombatAudit)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --core &quot;$(Homm3BulwarkRunesInstalledCoreZip)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3UnitBuffSidContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3UnitBuffSidValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_unit_buff_sid_contract.py</Homm3UnitBuffSidValidator>
+      <Homm3UnitBuffSidCoreZip Condition="'$(Homm3UnitBuffSidCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' == 'true'">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3UnitBuffSidCoreZip>
+      <Homm3UnitBuffSidCoreZip Condition="'$(Homm3UnitBuffSidCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' != 'true'">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3UnitBuffSidCoreZip>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 unit buff SID validator: $(Homm3UnitBuffSidValidator)" Condition="!Exists('$(Homm3UnitBuffSidValidator)')" />
+    <Error Text="Missing Core.zip for HoMM3 unit buff SID contract: $(Homm3UnitBuffSidCoreZip)" Condition="!Exists('$(Homm3UnitBuffSidCoreZip)')" />
+    <Exec Command="python &quot;$(Homm3UnitBuffSidValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --core &quot;$(Homm3UnitBuffSidCoreZip)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3ConfluxFocusSpellPowerContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <Homm3ConfluxFocusSpellPowerValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_conflux_focus_spell_power_contract.py</Homm3ConfluxFocusSpellPowerValidator>
+      <Homm3ConfluxFocusSpellPowerCoreZip Condition="'$(Homm3ConfluxFocusSpellPowerCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' == 'true'">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3ConfluxFocusSpellPowerCoreZip>
+      <Homm3ConfluxFocusSpellPowerCoreZip Condition="'$(Homm3ConfluxFocusSpellPowerCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' != 'true'">$(MSBuildThisFileDirectory)..\..\artifacts\core_overlay_work\Core.zip</Homm3ConfluxFocusSpellPowerCoreZip>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 Conflux focus Spell Power contract validator: $(Homm3ConfluxFocusSpellPowerValidator)" Condition="!Exists('$(Homm3ConfluxFocusSpellPowerValidator)')" />
+    <Error Text="Missing HoMM3 Conflux focus Spell Power Core.zip: $(Homm3ConfluxFocusSpellPowerCoreZip). Pass -p:Homm3ConfluxFocusSpellPowerCoreZip=... or set GameRoot to the validated install root." Condition="!Exists('$(Homm3ConfluxFocusSpellPowerCoreZip)')" />
+    <Exec Command="python &quot;$(Homm3ConfluxFocusSpellPowerValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --core &quot;$(Homm3ConfluxFocusSpellPowerCoreZip)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3TowerArcaneBatteryContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <Homm3TowerArcaneBatteryValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_tower_arcane_battery_contract.py</Homm3TowerArcaneBatteryValidator>
+      <Homm3TowerArcaneBatteryCoreZip Condition="'$(Homm3TowerArcaneBatteryCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' == 'true'">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3TowerArcaneBatteryCoreZip>
+      <Homm3TowerArcaneBatteryCoreZip Condition="'$(Homm3TowerArcaneBatteryCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' != 'true'">$(MSBuildThisFileDirectory)..\..\artifacts\core_overlay_work\Core.zip</Homm3TowerArcaneBatteryCoreZip>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 Tower Arcane Battery contract validator: $(Homm3TowerArcaneBatteryValidator)" Condition="!Exists('$(Homm3TowerArcaneBatteryValidator)')" />
+    <Error Text="Missing HoMM3 Tower Arcane Battery Core.zip: $(Homm3TowerArcaneBatteryCoreZip). Pass -p:Homm3TowerArcaneBatteryCoreZip=... or set GameRoot to the validated install root." Condition="!Exists('$(Homm3TowerArcaneBatteryCoreZip)')" />
+    <Exec Command="python &quot;$(Homm3TowerArcaneBatteryValidator)&quot; --core &quot;$(Homm3TowerArcaneBatteryCoreZip)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3TowerArtificingContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3TowerArtificingValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_tower_artificing_contract.py</Homm3TowerArtificingValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 Tower Artificing contract validator: $(Homm3TowerArtificingValidator)" Condition="!Exists('$(Homm3TowerArtificingValidator)')" />
+    <Exec Command="python &quot;$(Homm3TowerArtificingValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3ConfluxSpellCopyVisualRuntimeContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <Homm3ConfluxSpellCopyVisualRuntimeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_conflux_spell_copy_visual_runtime_contract.py</Homm3ConfluxSpellCopyVisualRuntimeValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 Conflux spell-copy visual runtime contract validator: $(Homm3ConfluxSpellCopyVisualRuntimeValidator)" Condition="!Exists('$(Homm3ConfluxSpellCopyVisualRuntimeValidator)')" />
+    <Exec Command="python &quot;$(Homm3ConfluxSpellCopyVisualRuntimeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3RuntimeMechanicsContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3RuntimeMechanicsValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_runtime_mechanics_contract.py</Homm3RuntimeMechanicsValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 runtime-mechanics contract validator: $(Homm3RuntimeMechanicsValidator)" Condition="!Exists('$(Homm3RuntimeMechanicsValidator)')" />
+    <Exec Command="python &quot;$(Homm3RuntimeMechanicsValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3RuntimeStaticAssetSizeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3RuntimeStaticAssetSizeContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3RuntimeStaticAssetSizeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_runtime_static_asset_size_contract.py</Homm3RuntimeStaticAssetSizeValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 runtime static asset size contract validator: $(Homm3RuntimeStaticAssetSizeValidator)" Condition="!Exists('$(Homm3RuntimeStaticAssetSizeValidator)')" />
+    <Exec Command="python &quot;$(Homm3RuntimeStaticAssetSizeValidator)&quot; --plugin-root &quot;$(MSBuildThisFileDirectory).&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateCustomCombatEffectFrameworkContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <CustomCombatEffectFrameworkValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_custom_combat_effect_framework_contract.py</CustomCombatEffectFrameworkValidator>
+    </PropertyGroup>
+    <Error Text="Missing custom combat effect framework contract validator: $(CustomCombatEffectFrameworkValidator)" Condition="!Exists('$(CustomCombatEffectFrameworkValidator)')" />
+    <Exec Command="python &quot;$(CustomCombatEffectFrameworkValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateDirectStateAdapterInvariants" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <DirectStateAdapterInvariantValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_direct_state_adapter_invariants.py</DirectStateAdapterInvariantValidator>
+    </PropertyGroup>
+    <Error Text="Missing direct-state adapter invariant validator: $(DirectStateAdapterInvariantValidator)" Condition="!Exists('$(DirectStateAdapterInvariantValidator)')" />
+    <Exec Command="python &quot;$(DirectStateAdapterInvariantValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateDirectStateBannedSurfaces" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <DirectStateBannedSurfacesValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_direct_state_banned_surfaces.py</DirectStateBannedSurfacesValidator>
+    </PropertyGroup>
+    <Error Text="Missing direct-state banned-surfaces validator: $(DirectStateBannedSurfacesValidator)" Condition="!Exists('$(DirectStateBannedSurfacesValidator)')" />
+    <Exec Command="python &quot;$(DirectStateBannedSurfacesValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHexNeighbourInteropContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(OfficialDeobfBuildNormalized)' == 'true')">
+    <PropertyGroup>
+      <HexNeighbourInteropValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_hex_neighbour_interop_contract.py</HexNeighbourInteropValidator>
+      <HexNeighbourInteropHexDll Condition="'$(HexNeighbourInteropHexDll)' == ''">$(HexInteropRootDir)Hex.dll</HexNeighbourInteropHexDll>
+    </PropertyGroup>
+    <Error Text="Missing hex neighbour interop validator: $(HexNeighbourInteropValidator)" Condition="!Exists('$(HexNeighbourInteropValidator)')" />
+    <Error Text="Missing Hex.dll for neighbour interop gate: $(HexNeighbourInteropHexDll). Pass OfficialDeobfBuild with GameRoot, or -p:HexNeighbourInteropHexDll=..." Condition="!Exists('$(HexNeighbourInteropHexDll)')" />
+    <Exec Command="python &quot;$(HexNeighbourInteropValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --hex-dll &quot;$(HexNeighbourInteropHexDll)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateDirectStateHeadlessReplayContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <DirectStateHeadlessReplayValidator>$(MSBuildThisFileDirectory)..\..\tools\run_direct_state_replay.py</DirectStateHeadlessReplayValidator>
+    </PropertyGroup>
+    <Error Text="Missing direct-state headless replay validator: $(DirectStateHeadlessReplayValidator)" Condition="!Exists('$(DirectStateHeadlessReplayValidator)')" />
+    <Exec Command="python &quot;$(DirectStateHeadlessReplayValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3InfernoGatingHexEffectContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <Homm3InfernoGatingHexEffectValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_inferno_gating_hex_effect_contract.py</Homm3InfernoGatingHexEffectValidator>
+      <Homm3InfernoGatingHexEffectCoreZip Condition="'$(Homm3InfernoGatingHexEffectCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' == 'true'">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3InfernoGatingHexEffectCoreZip>
+      <Homm3InfernoGatingHexEffectCoreZip Condition="'$(Homm3InfernoGatingHexEffectCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' != 'true'">$(MSBuildThisFileDirectory)..\..\artifacts\core_overlay_work\Core.zip</Homm3InfernoGatingHexEffectCoreZip>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 Inferno Gating hex-effect contract validator: $(Homm3InfernoGatingHexEffectValidator)" Condition="!Exists('$(Homm3InfernoGatingHexEffectValidator)')" />
+    <Error Text="Missing HoMM3 Inferno Gating hex-effect Core.zip: $(Homm3InfernoGatingHexEffectCoreZip). Pass -p:Homm3InfernoGatingHexEffectCoreZip=... or set GameRoot to the validated install root." Condition="!Exists('$(Homm3InfernoGatingHexEffectCoreZip)')" />
+    <Exec Command="python &quot;$(Homm3InfernoGatingHexEffectValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --core &quot;$(Homm3InfernoGatingHexEffectCoreZip)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3CustomHeroLevelupSkillContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <Homm3CustomHeroLevelupSkillValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_custom_hero_levelup_skill_contract.py</Homm3CustomHeroLevelupSkillValidator>
+      <Homm3CustomHeroLevelupSkillCoreZip Condition="'$(Homm3CustomHeroLevelupSkillCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' == 'true'">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3CustomHeroLevelupSkillCoreZip>
+      <Homm3CustomHeroLevelupSkillCoreZip Condition="'$(Homm3CustomHeroLevelupSkillCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' != 'true'">$(MSBuildThisFileDirectory)..\..\artifacts\core_overlay_work\Core.zip</Homm3CustomHeroLevelupSkillCoreZip>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 custom hero level-up skill contract validator: $(Homm3CustomHeroLevelupSkillValidator)" Condition="!Exists('$(Homm3CustomHeroLevelupSkillValidator)')" />
+    <Error Text="Missing HoMM3 custom hero level-up skill Core.zip: $(Homm3CustomHeroLevelupSkillCoreZip). Regenerate the Core overlay or pass -p:Homm3CustomHeroLevelupSkillCoreZip=..." Condition="!Exists('$(Homm3CustomHeroLevelupSkillCoreZip)')" />
+    <Exec Command="python &quot;$(Homm3CustomHeroLevelupSkillValidator)&quot; --core &quot;$(Homm3CustomHeroLevelupSkillCoreZip)&quot; --manifest-dir &quot;$(MSBuildThisFileDirectory)..\..\custom_factions&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3ActiveAbilityLocalizationContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3ActiveAbilityLocalizationValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_active_ability_localization_contract.py</Homm3ActiveAbilityLocalizationValidator>
+      <Homm3ActiveAbilityLocalizationCoreZip Condition="'$(Homm3ActiveAbilityLocalizationCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' == 'true'">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3ActiveAbilityLocalizationCoreZip>
+      <Homm3ActiveAbilityLocalizationCoreZip Condition="'$(Homm3ActiveAbilityLocalizationCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' != 'true'">$(MSBuildThisFileDirectory)..\..\artifacts\core_overlay_work\Core.zip</Homm3ActiveAbilityLocalizationCoreZip>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 active ability localization contract validator: $(Homm3ActiveAbilityLocalizationValidator)" Condition="!Exists('$(Homm3ActiveAbilityLocalizationValidator)')" />
+    <Error Text="Missing HoMM3 active ability localization Core.zip: $(Homm3ActiveAbilityLocalizationCoreZip). Regenerate the Core overlay or pass -p:Homm3ActiveAbilityLocalizationCoreZip=..." Condition="!Exists('$(Homm3ActiveAbilityLocalizationCoreZip)')" />
+    <Exec Command="python &quot;$(Homm3ActiveAbilityLocalizationValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --core-zip &quot;$(Homm3ActiveAbilityLocalizationCoreZip)&quot; --run-fixtures" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateCityConstructionTreeLayout" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <CityConstructionTreeLayoutValidator>$(MSBuildThisFileDirectory)..\..\tools\release_port\validate_city_construction_tree_layout.py</CityConstructionTreeLayoutValidator>
+      <CityConstructionTreeLayoutCoreZip Condition="'$(CityConstructionTreeLayoutCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' == 'true'">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</CityConstructionTreeLayoutCoreZip>
+      <CityConstructionTreeLayoutCoreZip Condition="'$(CityConstructionTreeLayoutCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' != 'true'">$(MSBuildThisFileDirectory)..\..\artifacts\core_overlay_work\Core.zip</CityConstructionTreeLayoutCoreZip>
+    </PropertyGroup>
+    <Error Text="Missing city construction-tree layout validator: $(CityConstructionTreeLayoutValidator)" Condition="!Exists('$(CityConstructionTreeLayoutValidator)')" />
+    <Error Text="Missing city construction-tree layout Core.zip: $(CityConstructionTreeLayoutCoreZip). Regenerate the Core overlay or pass -p:CityConstructionTreeLayoutCoreZip=..." Condition="!Exists('$(CityConstructionTreeLayoutCoreZip)')" />
+    <Exec Command="python &quot;$(CityConstructionTreeLayoutValidator)&quot; --core &quot;$(CityConstructionTreeLayoutCoreZip)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3CustomLawCoreMetadataContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <Homm3CustomLawCoreMetadataValidator>$(MSBuildThisFileDirectory)..\..\tools\release_port\validate_custom_law_core_metadata.py</Homm3CustomLawCoreMetadataValidator>
+      <Homm3CustomLawCoreMetadataCoreZip Condition="'$(Homm3CustomLawCoreMetadataCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' == 'true'">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3CustomLawCoreMetadataCoreZip>
+      <Homm3CustomLawCoreMetadataCoreZip Condition="'$(Homm3CustomLawCoreMetadataCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' != 'true'">$(MSBuildThisFileDirectory)..\..\artifacts\core_overlay_work\Core.zip</Homm3CustomLawCoreMetadataCoreZip>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 custom law Core metadata validator: $(Homm3CustomLawCoreMetadataValidator)" Condition="!Exists('$(Homm3CustomLawCoreMetadataValidator)')" />
+    <Error Text="Missing HoMM3 custom law Core.zip: $(Homm3CustomLawCoreMetadataCoreZip). Regenerate the Core overlay or pass -p:Homm3CustomLawCoreMetadataCoreZip=..." Condition="!Exists('$(Homm3CustomLawCoreMetadataCoreZip)')" />
+    <Exec Command="python &quot;$(Homm3CustomLawCoreMetadataValidator)&quot; --core &quot;$(Homm3CustomLawCoreMetadataCoreZip)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3MasterfulSpellDescriptionContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <Homm3MasterfulSpellDescriptionValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_masterful_spell_description_contract.py</Homm3MasterfulSpellDescriptionValidator>
+      <Homm3MasterfulSpellDescriptionCoreZip Condition="'$(Homm3MasterfulSpellDescriptionCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' == 'true'">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3MasterfulSpellDescriptionCoreZip>
+      <Homm3MasterfulSpellDescriptionCoreZip Condition="'$(Homm3MasterfulSpellDescriptionCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' != 'true'">$(MSBuildThisFileDirectory)..\..\artifacts\core_overlay_work\Core.zip</Homm3MasterfulSpellDescriptionCoreZip>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 masterful spell description contract validator: $(Homm3MasterfulSpellDescriptionValidator)" Condition="!Exists('$(Homm3MasterfulSpellDescriptionValidator)')" />
+    <Error Text="Missing HoMM3 masterful spell description Core.zip: $(Homm3MasterfulSpellDescriptionCoreZip). Regenerate the Core overlay or pass -p:Homm3MasterfulSpellDescriptionCoreZip=..." Condition="!Exists('$(Homm3MasterfulSpellDescriptionCoreZip)')" />
+    <Exec Command="python &quot;$(Homm3MasterfulSpellDescriptionValidator)&quot; --core &quot;$(Homm3MasterfulSpellDescriptionCoreZip)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3CustomHeroStartSkillContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <Homm3CustomHeroStartSkillValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_custom_hero_start_skill_contract.py</Homm3CustomHeroStartSkillValidator>
+      <Homm3CustomHeroStartSkillCoreZip Condition="'$(Homm3CustomHeroStartSkillCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' == 'true'">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3CustomHeroStartSkillCoreZip>
+      <Homm3CustomHeroStartSkillCoreZip Condition="'$(Homm3CustomHeroStartSkillCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' != 'true'">$(MSBuildThisFileDirectory)..\..\artifacts\core_overlay_work\Core.zip</Homm3CustomHeroStartSkillCoreZip>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 custom hero start-skill contract validator: $(Homm3CustomHeroStartSkillValidator)" Condition="!Exists('$(Homm3CustomHeroStartSkillValidator)')" />
+    <Error Text="Missing HoMM3 custom hero start-skill Core.zip: $(Homm3CustomHeroStartSkillCoreZip). Regenerate the Core overlay or pass -p:Homm3CustomHeroStartSkillCoreZip=..." Condition="!Exists('$(Homm3CustomHeroStartSkillCoreZip)')" />
+    <Exec Command="python &quot;$(Homm3CustomHeroStartSkillValidator)&quot; --core &quot;$(Homm3CustomHeroStartSkillCoreZip)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateSelectedUnitHudActionBarContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <SelectedUnitHudActionBarValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_selected_unit_hud_actionbar_contract.py</SelectedUnitHudActionBarValidator>
+    </PropertyGroup>
+    <Error Text="Missing selected-unit HUD action-bar contract validator: $(SelectedUnitHudActionBarValidator)" Condition="!Exists('$(SelectedUnitHudActionBarValidator)')" />
+    <Exec Command="python &quot;$(SelectedUnitHudActionBarValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateGameSymbolsRuntimeInteropEvidence" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
+    <PropertyGroup>
+      <GameSymbolsRuntimeInteropEvidenceValidator>$(MSBuildThisFileDirectory)..\..\tools\release_port\validate_gamesymbols_runtime_interop_evidence.py</GameSymbolsRuntimeInteropEvidenceValidator>
+    </PropertyGroup>
+    <Error Text="Missing GameSymbols runtime interop evidence validator: $(GameSymbolsRuntimeInteropEvidenceValidator)" Condition="!Exists('$(GameSymbolsRuntimeInteropEvidenceValidator)')" />
+    <Exec Command="python &quot;$(GameSymbolsRuntimeInteropEvidenceValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateTownUiCanvasRaycasterContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <TownUiCanvasRaycasterValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_town_ui_canvas_raycaster_contract.py</TownUiCanvasRaycasterValidator>
+    </PropertyGroup>
+    <Error Text="Missing town UI canvas raycaster contract validator: $(TownUiCanvasRaycasterValidator)" Condition="!Exists('$(TownUiCanvasRaycasterValidator)')" />
+    <Exec Command="python &quot;$(TownUiCanvasRaycasterValidator)&quot; --plugin-cs &quot;$(MSBuildThisFileDirectory)Plugin.cs&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateFactoryCitySceneContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipFactoryCitySceneContract)' != 'true')">
+    <PropertyGroup>
+      <FactoryCitySceneValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_factory_city_scene_contract.py</FactoryCitySceneValidator>
+      <EsceneCityFactoryPinValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_escene_city_factory_pin.py</EsceneCityFactoryPinValidator>
+    </PropertyGroup>
+    <Error Text="Missing Factory city scene contract validator: $(FactoryCitySceneValidator)" Condition="!Exists('$(FactoryCitySceneValidator)')" />
+    <Exec Command="python &quot;$(FactoryCitySceneValidator)&quot;" Timeout="300000" />
+    <Error Text="Missing EScene cityFactory pin validator: $(EsceneCityFactoryPinValidator)" Condition="'$(OfficialDeobfBuildNormalized)' == 'true' and !Exists('$(EsceneCityFactoryPinValidator)')" />
+    <Exec Command="python &quot;$(EsceneCityFactoryPinValidator)&quot; --game-root &quot;$(GameRootDir.TrimEnd('\'))&quot; --strict-layout" Condition="'$(OfficialDeobfBuildNormalized)' == 'true' and '$(GameRootDir)' != ''" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateFactoryTownUpscaleContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipFactoryTownUpscaleContract)' != 'true')">
+    <PropertyGroup>
+      <FactoryTownUpscaleValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_factory_town_upscale_contract.py</FactoryTownUpscaleValidator>
+      <FactoryTownUpscaleRepoRoot>$(MSBuildThisFileDirectory)..\..</FactoryTownUpscaleRepoRoot>
+    </PropertyGroup>
+    <Error Text="Missing Factory town upscale contract validator: $(FactoryTownUpscaleValidator)" Condition="!Exists('$(FactoryTownUpscaleValidator)')" />
+    <Exec Command="python &quot;$(FactoryTownUpscaleValidator)&quot; --repo-root &quot;$(FactoryTownUpscaleRepoRoot)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateCoreRebuildLayerOrderContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipCoreRebuildLayerOrderContract)' != 'true')">
+    <PropertyGroup>
+      <CoreRebuildLayerOrderValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_core_rebuild_layer_order_contract.py</CoreRebuildLayerOrderValidator>
+    </PropertyGroup>
+    <Error Text="Missing Core rebuild layer-order contract validator: $(CoreRebuildLayerOrderValidator)" Condition="!Exists('$(CoreRebuildLayerOrderValidator)')" />
+    <Exec Command="python &quot;$(CoreRebuildLayerOrderValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateCustomTown4kBackgroundContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipCustomTown4kBackgroundContract)' != 'true')">
+    <PropertyGroup>
+      <CustomTown4kBackgroundValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_custom_town_4k_background_contract.py</CustomTown4kBackgroundValidator>
+      <CustomTown4kBackgroundRepoRoot>$(MSBuildThisFileDirectory)..\..</CustomTown4kBackgroundRepoRoot>
+    </PropertyGroup>
+    <Error Text="Missing custom town 4K background contract validator: $(CustomTown4kBackgroundValidator)" Condition="!Exists('$(CustomTown4kBackgroundValidator)')" />
+    <Exec Command="python &quot;$(CustomTown4kBackgroundValidator)&quot; --repo-root &quot;$(CustomTown4kBackgroundRepoRoot)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateFactoryTownUpscaleContractAfterDeploy" AfterTargets="DeployPluginToGame" Condition="'$(FullValidationNormalized)' == 'true' and ('$(DeployPluginToGame)' != 'false' and '$(SkipFactoryTownUpscaleContract)' != 'true')">
+    <PropertyGroup>
+      <FactoryTownUpscaleValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_factory_town_upscale_contract.py</FactoryTownUpscaleValidator>
+      <FactoryTownUpscaleRepoRoot>$(MSBuildThisFileDirectory)..\..</FactoryTownUpscaleRepoRoot>
+    </PropertyGroup>
+    <Error Text="Missing Factory town upscale contract validator: $(FactoryTownUpscaleValidator)" Condition="!Exists('$(FactoryTownUpscaleValidator)')" />
+    <Exec Command="python &quot;$(FactoryTownUpscaleValidator)&quot; --repo-root &quot;$(FactoryTownUpscaleRepoRoot)&quot; --plugin-root &quot;$(PluginDeployDir).&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3CityMusicSidecarContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3CityMusicSidecarContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3CityMusicSidecarValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_city_music_sidecar_contract.py</Homm3CityMusicSidecarValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 city music sidecar contract validator: $(Homm3CityMusicSidecarValidator)" Condition="!Exists('$(Homm3CityMusicSidecarValidator)')" />
+    <Exec Command="python &quot;$(Homm3CityMusicSidecarValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --skip-installed" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateCustomTownBillboardContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipCustomTownBillboardContract)' != 'true')">
+    <PropertyGroup>
+      <CustomTownBillboardValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_custom_town_billboard_contract.py</CustomTownBillboardValidator>
+    </PropertyGroup>
+    <Error Text="Missing custom town billboard contract validator: $(CustomTownBillboardValidator)" Condition="!Exists('$(CustomTownBillboardValidator)')" />
+    <Exec Command="python &quot;$(CustomTownBillboardValidator)&quot; --plugin-cs &quot;$(MSBuildThisFileDirectory)Plugin.cs&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3TownPrefabContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3TownPrefabContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3TownPrefabValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_town_prefab_contract.py</Homm3TownPrefabValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 town prefab contract validator: $(Homm3TownPrefabValidator)" Condition="!Exists('$(Homm3TownPrefabValidator)')" />
+    <Exec Command="python &quot;$(Homm3TownPrefabValidator)&quot; --plugin-root &quot;$(MSBuildThisFileDirectory).&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateMapBuildingMeshContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipMapBuildingMeshContract)' != 'true')">
+    <PropertyGroup>
+      <MapBuildingMeshValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_map_building_mesh_contract.py</MapBuildingMeshValidator>
+      <MapBuildingMeshInventory>$(MSBuildThisFileDirectory)..\..\artifacts\meshy_map_buildings\inventory.json</MapBuildingMeshInventory>
+      <MapBuildingMeshCatalog>$(MSBuildThisFileDirectory)homm3_map_building_meshes\catalog.json</MapBuildingMeshCatalog>
+    </PropertyGroup>
+    <Error Text="Missing map building mesh contract validator: $(MapBuildingMeshValidator)" Condition="!Exists('$(MapBuildingMeshValidator)')" />
+    <!-- Catalog optional until meshes are staged; pass require-catalog when enabling the runtime flag. -->
+    <Exec Command="python &quot;$(MapBuildingMeshValidator)&quot; --inventory &quot;$(MapBuildingMeshInventory)&quot; --catalog &quot;$(MapBuildingMeshCatalog)&quot;" Condition="Exists('$(MapBuildingMeshInventory)')" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateMapBuildingAnimContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipMapBuildingAnimContract)' != 'true')">
+    <PropertyGroup>
+      <MapBuildingAnimValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_map_building_anim_contract.py</MapBuildingAnimValidator>
+    </PropertyGroup>
+    <Error Text="Missing map building animation contract validator: $(MapBuildingAnimValidator)" Condition="!Exists('$(MapBuildingAnimValidator)')" />
+    <Exec Command="python &quot;$(MapBuildingAnimValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateMapObjectAnimCoverageContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipMapObjectAnimCoverageContract)' != 'true')">
+    <PropertyGroup>
+      <MapObjectAnimCoverageValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_map_object_anim_coverage_contract.py</MapObjectAnimCoverageValidator>
+    </PropertyGroup>
+    <Error Text="Missing map object animation coverage validator: $(MapObjectAnimCoverageValidator)" Condition="!Exists('$(MapObjectAnimCoverageValidator)')" />
+    <Exec Command="python &quot;$(MapObjectAnimCoverageValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateMapObjectPresentationContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipMapObjectPresentationContract)' != 'true')">
+    <PropertyGroup>
+      <MapObjectPresentationValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_map_object_presentation_contract.py</MapObjectPresentationValidator>
+    </PropertyGroup>
+    <Error Text="Missing map object presentation validator: $(MapObjectPresentationValidator)" Condition="!Exists('$(MapObjectPresentationValidator)')" />
+    <Exec Command="python &quot;$(MapObjectPresentationValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateBorderKeyGateContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipBorderKeyGateContract)' != 'true')">
+    <PropertyGroup>
+      <BorderKeyGateValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_border_key_gate_contract.py</BorderKeyGateValidator>
+    </PropertyGroup>
+    <Error Text="Missing border key gate validator: $(BorderKeyGateValidator)" Condition="!Exists('$(BorderKeyGateValidator)')" />
+    <Exec Command="python &quot;$(BorderKeyGateValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3ObjectBillboardContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3ObjectBillboardContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3ObjectBillboardValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_object_billboard_contract.py</Homm3ObjectBillboardValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 object billboard validator: $(Homm3ObjectBillboardValidator)" Condition="!Exists('$(Homm3ObjectBillboardValidator)')" />
+    <Exec Command="python &quot;$(Homm3ObjectBillboardValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3MeshFxCatalogContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3MeshFxCatalogContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3MeshFxCatalogValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_mesh_fx_catalog_contract.py</Homm3MeshFxCatalogValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 mesh FX catalog validator: $(Homm3MeshFxCatalogValidator)" Condition="!Exists('$(Homm3MeshFxCatalogValidator)')" />
+    <Exec Command="python &quot;$(Homm3MeshFxCatalogValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3MetalShineContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3MetalShineContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3MetalShineValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_metal_shine_contract.py</Homm3MetalShineValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 metal shine validator: $(Homm3MetalShineValidator)" Condition="!Exists('$(Homm3MetalShineValidator)')" />
+    <Exec Command="python &quot;$(Homm3MetalShineValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3VanillaStyleFxContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3VanillaStyleFxContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3VanillaStyleFxValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_vanilla_style_fx_contract.py</Homm3VanillaStyleFxValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 vanilla-style FX validator: $(Homm3VanillaStyleFxValidator)" Condition="!Exists('$(Homm3VanillaStyleFxValidator)')" />
+    <Exec Command="python &quot;$(Homm3VanillaStyleFxValidator)&quot;" Timeout="300000" />
+  </Target>
+  <!-- No active delivery selection may ship HoMM3 DEF-ripped effect pixels (defFlipbook layers) unless its row is
+       vfxAuthority vanilla_style; pre-gate units live in tools/homm3_vfx/vanilla_style/def_flipbook_debt.json, which
+       only shrinks (DEBT_CEILING in the validator). -->
+  <Target Name="ValidateHomm3NoDefFlipbookContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3NoDefFlipbookContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3NoDefFlipbookValidator>$(MSBuildThisFileDirectory)..\..\tools\homm3_vfx\validate_no_def_flipbook.py</Homm3NoDefFlipbookValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 no-defFlipbook validator: $(Homm3NoDefFlipbookValidator)" Condition="!Exists('$(Homm3NoDefFlipbookValidator)')" />
+    <Exec Command="python &quot;$(Homm3NoDefFlipbookValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateArtifactMeshContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipArtifactMeshContract)' != 'true')">
+    <PropertyGroup>
+      <ArtifactMeshValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_artifact_mesh_contract.py</ArtifactMeshValidator>
+      <ArtifactMeshInventory>$(MSBuildThisFileDirectory)..\..\artifacts\meshy_artifacts\inventory.json</ArtifactMeshInventory>
+      <ArtifactMeshCatalog>$(MSBuildThisFileDirectory)homm3_artifact_meshes\catalog.json</ArtifactMeshCatalog>
+    </PropertyGroup>
+    <Error Text="Missing artifact mesh contract validator: $(ArtifactMeshValidator)" Condition="!Exists('$(ArtifactMeshValidator)')" />
+    <Exec Command="python &quot;$(ArtifactMeshValidator)&quot; --inventory &quot;$(ArtifactMeshInventory)&quot; --catalog &quot;$(ArtifactMeshCatalog)&quot;" Condition="Exists('$(ArtifactMeshInventory)')" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHotaFactoryBulwarkRuntimeAssets" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHotaFactoryBulwarkRuntimeAssetValidation)' != 'true')">
+    <PropertyGroup>
+      <HotaFactoryBulwarkRuntimeAssetValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_hota_factory_bulwark_runtime_assets.py</HotaFactoryBulwarkRuntimeAssetValidator>
+    </PropertyGroup>
+    <Error Text="Missing Factory/Bulwark runtime asset validator: $(HotaFactoryBulwarkRuntimeAssetValidator)" Condition="!Exists('$(HotaFactoryBulwarkRuntimeAssetValidator)')" />
+    <Exec Command="python &quot;$(HotaFactoryBulwarkRuntimeAssetValidator)&quot; --plugin-root &quot;$(MSBuildThisFileDirectory).&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateOwnedBindSpeciesContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipOwnedBindSpeciesContract)' != 'true')">
+    <PropertyGroup>
+      <OwnedBindSpeciesValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_owned_bind_species_contract.py</OwnedBindSpeciesValidator>
+    </PropertyGroup>
+    <Error Text="Missing owned-bind species contract validator: $(OwnedBindSpeciesValidator)" Condition="!Exists('$(OwnedBindSpeciesValidator)')" />
+    <Exec Command="python &quot;$(OwnedBindSpeciesValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateCrusaderOwnedSkinnedRuntimeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipCrusaderOwnedSkinnedRuntimeContract)' != 'true')">
+    <PropertyGroup>
+      <CrusaderOwnedSkinnedRuntimeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_crusader_owned_skinned_runtime_contract.py</CrusaderOwnedSkinnedRuntimeValidator>
+    </PropertyGroup>
+    <Error Text="Missing Crusader owned-skinned runtime contract validator: $(CrusaderOwnedSkinnedRuntimeValidator)" Condition="!Exists('$(CrusaderOwnedSkinnedRuntimeValidator)')" />
+    <Exec Command="python &quot;$(CrusaderOwnedSkinnedRuntimeValidator)&quot; --require-artifact" Timeout="300000" />
+  </Target>
+  <!-- Unit detail preview (BhUnitWindowPreview) must swap in the owned skinned bundle prefab keyed on the id the
+       native factory received, never the donor; every owned skinned unit needs a registry donor for the native rig. -->
+  <Target Name="ValidateHomm3OwnedSkinnedPreviewContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3OwnedSkinnedPreviewContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3OwnedSkinnedPreviewValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_owned_skinned_preview_contract.py</Homm3OwnedSkinnedPreviewValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 owned-skinned preview contract validator: $(Homm3OwnedSkinnedPreviewValidator)" Condition="!Exists('$(Homm3OwnedSkinnedPreviewValidator)')" />
+    <Exec Command="python &quot;$(Homm3OwnedSkinnedPreviewValidator)&quot;" Timeout="300000" />
+  </Target>
+  <!-- Every UI preview lane (detail window, hire screen, BhUnitPreviews pool) frames an owned skinned unit by its own
+       battle size (battleHeightHexes x battleWorldHeightPerHex, feet on the model root), never by the donor. -->
+  <Target Name="ValidateHomm3OwnedPreviewFramingContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3OwnedPreviewFramingContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3OwnedPreviewFramingValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_owned_preview_framing_contract.py</Homm3OwnedPreviewFramingValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 owned preview framing contract validator: $(Homm3OwnedPreviewFramingValidator)" Condition="!Exists('$(Homm3OwnedPreviewFramingValidator)')" />
+    <Exec Command="python &quot;$(Homm3OwnedPreviewFramingValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3OwnedSkinnedFacingContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3OwnedSkinnedFacingContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3OwnedSkinnedFacingValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_owned_skinned_facing_contract.py</Homm3OwnedSkinnedFacingValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 owned-skinned facing contract validator: $(Homm3OwnedSkinnedFacingValidator)" Condition="!Exists('$(Homm3OwnedSkinnedFacingValidator)')" />
+    <Exec Command="python &quot;$(Homm3OwnedSkinnedFacingValidator)&quot;" Timeout="300000" />
+  </Target>
+  <!-- DEF-retarget deliveries must articulate (Unit_Move wing beat / leg swing against the vanilla OE reference,
+       no rigid "toy" body motion); pre-gate frozen failures live in tools/homm3_owned_skinned_articulation_debt.json. -->
+  <Target Name="ValidateHomm3OwnedSkinnedArticulationContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3OwnedSkinnedArticulationContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3OwnedSkinnedArticulationValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_owned_skinned_articulation_contract.py</Homm3OwnedSkinnedArticulationValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 owned-skinned articulation contract validator: $(Homm3OwnedSkinnedArticulationValidator)" Condition="!Exists('$(Homm3OwnedSkinnedArticulationValidator)')" />
+    <Exec Command="python &quot;$(Homm3OwnedSkinnedArticulationValidator)&quot;" Timeout="300000" />
+  </Target>
+  <!-- Two inventory units must not resolve to the same HoMM3 battle DEF unless tools/homm3_battle_def_shared_allowlist.json
+       says why (h3_rust_dragon was silently extracted from the Red Dragon's CRDRGN.def). -->
+  <Target Name="ValidateHomm3BattleDefUniquenessContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3BattleDefUniquenessContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3BattleDefUniquenessValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_battle_def_uniqueness_contract.py</Homm3BattleDefUniquenessValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 battle DEF uniqueness contract validator: $(Homm3BattleDefUniquenessValidator)" Condition="!Exists('$(Homm3BattleDefUniquenessValidator)')" />
+    <Exec Command="python &quot;$(Homm3BattleDefUniquenessValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3HeroMapSpriteFrameIndexContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3HeroMapSpriteFrameIndexTest>$(MSBuildThisFileDirectory)..\..\tools\test_homm3_hero_map_sprite_frame_index.ps1</Homm3HeroMapSpriteFrameIndexTest>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 hero-map frame-index contract fixture: $(Homm3HeroMapSpriteFrameIndexTest)" Condition="!Exists('$(Homm3HeroMapSpriteFrameIndexTest)')" />
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(Homm3HeroMapSpriteFrameIndexTest)&quot;" Timeout="30000" />
+  </Target>
+  <!-- Performance invariants: synthetic fixtures only; no native art/GPU/Unity jobs. -->
+  <Target Name="ValidateValidatorPerformanceContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <Exec Command="python &quot;$(MSBuildThisFileDirectory)..\..\tools\validate_validator_performance_contract.py&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="120000" />
+  </Target>
+  <!-- Cross-tool work-manager contract: isolated behavioral fixtures only, never the active coordination DB. -->
+  <Target Name="ValidateCrossAgentManagerContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <CrossAgentManagerValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_cross_agent_manager_contract.py</CrossAgentManagerValidator>
+    </PropertyGroup>
+    <Error Text="Missing cross-agent work-manager contract validator: $(CrossAgentManagerValidator)" Condition="!Exists('$(CrossAgentManagerValidator)')" />
+    <Exec Command="python &quot;$(CrossAgentManagerValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="60000" />
+  </Target>
+  <!-- Owned HoMM3 unit presentation (size vs tier, ground plant, clip sink, pivot, reach, basecolor, wrap) against the
+       vanilla stock envelope; fit/plant bounds must come from the baked silhouette. Re-measures changed bundles. -->
+  <Target Name="ValidateHomm3OwnedUnitPresentationContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3OwnedUnitPresentationContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3OwnedUnitPresentationValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_owned_unit_presentation_contract.py</Homm3OwnedUnitPresentationValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 owned unit presentation contract validator: $(Homm3OwnedUnitPresentationValidator)" Condition="!Exists('$(Homm3OwnedUnitPresentationValidator)')" />
+    <Exec Command="python &quot;$(Homm3OwnedUnitPresentationValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3ReferenceFrameBindContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3ReferenceFrameBindContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3ReferenceFrameBindValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_reference_frame_bind_contract.py</Homm3ReferenceFrameBindValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 reference-frame bind contract validator: $(Homm3ReferenceFrameBindValidator)" Condition="!Exists('$(Homm3ReferenceFrameBindValidator)')" />
+    <Exec Command="python &quot;$(Homm3ReferenceFrameBindValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <!-- Town-scene Meshy meshes (Homm3TownSceneMeshBundle, docs/custom_town_scene_paradigm.md): inventory building
+       rows vs the staged catalog + bundle beside it; required whenever config homm3TownSceneMeshes is on.
+       Generated artifact / staged payload contract only, not town runtime proof. -->
+  <Target Name="ValidateTownSceneMeshContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipTownSceneMeshContract)' != 'true')">
+    <PropertyGroup>
+      <TownSceneMeshValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_town_scene_mesh_contract.py</TownSceneMeshValidator>
+    </PropertyGroup>
+    <Error Text="Missing town-scene mesh contract validator: $(TownSceneMeshValidator)" Condition="!Exists('$(TownSceneMeshValidator)')" />
+    <Exec Command="python &quot;$(TownSceneMeshValidator)&quot;" Timeout="300000" />
+  </Target>
+  <!-- Camera-registered 3D town scene (Homm3TownScene3d, docs/conflux_town3d_pilot.md): staged scene3d catalogs vs
+       positions.json, painted-depth rows for every 2D layer, key/fill light, fog off, bundle hash; bundle required
+       whenever config homm3TownScene3d is on. Source/static + generated artifact contract, not runtime proof. -->
+  <Target Name="ValidateTownScene3dContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipTownScene3dContract)' != 'true')">
+    <PropertyGroup>
+      <TownScene3dValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_town_scene3d_contract.py</TownScene3dValidator>
+    </PropertyGroup>
+    <Error Text="Missing town-scene 3D contract validator: $(TownScene3dValidator)" Condition="!Exists('$(TownScene3dValidator)')" />
+    <Exec Command="python &quot;$(MSBuildThisFileDirectory)..\..\tools\homm3_town_scene_meshes\test_town_gpu_pan.py&quot; --cuda-parity" Timeout="60000" />
+    <Exec Command="python &quot;$(TownScene3dValidator)&quot;" Timeout="300000" />
+  </Target>
+  <!-- Full-3D town zero-visible-streak lane (docs/homm3_town_scene_methodology_v2.md): certificate pass rule, recipe
+       gate (zero visible behind px and no ground-hole growth in every state), LDI defaults unchanged, recipe schema;
+       every recipe candidate staged here re-hashed against its certified bins. Source/static + generated artifact. -->
+  <Target Name="ValidateTownZeroStreakContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipTownZeroStreakContract)' != 'true')">
+    <PropertyGroup>
+      <TownZeroStreakValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_town_zero_streak_contract.py</TownZeroStreakValidator>
+    </PropertyGroup>
+    <Error Text="Missing town zero-streak contract validator: $(TownZeroStreakValidator)" Condition="!Exists('$(TownZeroStreakValidator)')" />
+    <Exec Command="python &quot;$(TownZeroStreakValidator)&quot;" Timeout="2100000" />
+  </Target>
+  <!-- Town bench (docs/town_bench.md): a bench fix is a recipe step. Recipe "edits" step 5b + op file schema, recipes
+       with edits equal their base apart from candidate/note/edits, staged candidates record the op files sha256.
+       Source/static (no raster); about 0.4 s, under 50 MB RAM, no GPU. -->
+  <Target Name="ValidateTownBenchContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipTownBenchContract)' != 'true')">
+    <PropertyGroup>
+      <TownBenchValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_town_bench_contract.py</TownBenchValidator>
+    </PropertyGroup>
+    <Error Text="Missing town bench contract validator: $(TownBenchValidator)" Condition="!Exists('$(TownBenchValidator)')" />
+    <Exec Command="python &quot;$(TownBenchValidator)&quot;" Timeout="120000" />
+  </Target>
+  <!-- Full-3D town picking (Homm3TownScene3dPick): the drawn body meshes are the hit geometry; per staged fullScene3d
+       catalog, hit vs visible id buffers over the native pan and every town state (recall / precision / agreement
+       floors). Source/static + generated artifact contract; in-game hover/click is runtime-unproven. -->
+  <Target Name="ValidateTownScene3dPickContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipTownScene3dPickContract)' != 'true')">
+    <PropertyGroup>
+      <TownScene3dPickValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_town_scene3d_pick_contract.py</TownScene3dPickValidator>
+    </PropertyGroup>
+    <Error Text="Missing town-scene 3D pick contract validator: $(TownScene3dPickValidator)" Condition="!Exists('$(TownScene3dPickValidator)')" />
+    <Exec Command="python &quot;$(TownScene3dPickValidator)&quot;" Timeout="300000" />
+  </Target>
+  <!-- DEF-retarget emphasis (docs/homm3_def_retarget_emphasis.md): exceptions table, per-unit configs, and for
+       every emphasised unit the GLB stamp, key invariants (first/last frames, zero Hips/leg drift, caps, only
+       flagged clips), Idle/Move untouched and closing, stretch gate. Generated-artifact contract. -->
+  <Target Name="ValidateHomm3DefRetargetEmphasisContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3DefRetargetEmphasisContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3DefRetargetEmphasisValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_def_retarget_emphasis_contract.py</Homm3DefRetargetEmphasisValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 DEF-retarget emphasis contract validator: $(Homm3DefRetargetEmphasisValidator)" Condition="!Exists('$(Homm3DefRetargetEmphasisValidator)')" />
+    <Exec Command="python &quot;$(Homm3DefRetargetEmphasisValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <!-- HoMM3 unit look (prebaked lighting + VFX): docs/homm3_unit_look_pipeline.md. Fails on a stale stamp
+       (a def_retarget rebuild not re-applied ships the un-prebaked base colour), a double-counted light or a
+       malformed spec; units with a spec but no stamp yet pass (partial rollout). -->
+  <Target Name="ValidateHomm3UnitLookContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3UnitLookContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3UnitLookValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_unit_look_contract.py</Homm3UnitLookValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 unit look contract validator: $(Homm3UnitLookValidator)" Condition="!Exists('$(Homm3UnitLookValidator)')" />
+    <Exec Command="python &quot;$(Homm3UnitLookValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <!-- HoMM3 GLB patch lane (Blender-free localized fixes): docs/homm3_glb_patch_lane.md. Fails on a malformed
+       glbPatch, a patched GLB whose stamp / parity / config sha no longer holds, a declared patch not delivered on a
+       current chain, a broken retained base, or fleet_rebuild.py losing the patch stage / Blender-free route. -->
+  <Target Name="ValidateHomm3GlbPatchContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3GlbPatchContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3GlbPatchValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_glb_patch_contract.py</Homm3GlbPatchValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 GLB patch contract validator: $(Homm3GlbPatchValidator)" Condition="!Exists('$(Homm3GlbPatchValidator)')" />
+    <Exec Command="python &quot;$(Homm3GlbPatchValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <!-- Corrective Smooth morphs are baked in float64 by tools/homm3_glb_patch/cs_numpy.py with its degenerate-corner rule
+       (docs/homm3_cs_bake_float64.md): fails on bake_cs.py using Blender's float32 modifier again, a bad bake record, or
+       a new legacy (unstamped) CS bake not in tools/homm3_def_retarget/cs_bake_legacy.json (the list only shrinks). -->
+  <Target Name="ValidateHomm3CsBakeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3CsBakeContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3CsBakeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_cs_bake_contract.py</Homm3CsBakeValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 CS bake contract validator: $(Homm3CsBakeValidator)" Condition="!Exists('$(Homm3CsBakeValidator)')" />
+    <Exec Command="python &quot;$(Homm3CsBakeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="2100000" />
+  </Target>
+  <!-- Unity queue runner (docs/unity_queue_runner.md): agents submit, not launch. Fails on a switched caller launching
+       Unity (or a unitylock wrapper) itself, a queue builder without the UnityQueueArgs/UnityQueueExit shim, the
+       dispatcher/runner losing fail-closed behaviour, or a new tools/ script building a -batchmode command line that is
+       neither switched nor listed in LEGACY_UNSWITCHED (the list only shrinks). Source/static; launches no Unity. -->
+  <Target Name="ValidateUnityQueueContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipUnityQueueContract)' != 'true')">
+    <PropertyGroup>
+      <UnityQueueValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_unity_queue_contract.py</UnityQueueValidator>
+    </PropertyGroup>
+    <Error Text="Missing Unity queue contract validator: $(UnityQueueValidator)" Condition="!Exists('$(UnityQueueValidator)')" />
+    <Exec Command="python &quot;$(UnityQueueValidator)&quot;" Timeout="300000" />
+  </Target>
+  <!-- Every ExtraUnitDonorMappings sid in Homm3CustomFactionRegistry needs a bundled homm3_import.json row:
+       the main-menu preloader fails closed on a missing one (2026-09-29 launch crash on retired h3_cannon). -->
+  <Target Name="ValidateHomm3RegistryExtraUnitsContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3RegistryExtraUnitsValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_registry_extra_units_contract.py</Homm3RegistryExtraUnitsValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 registry extra units contract validator: $(Homm3RegistryExtraUnitsValidator)" Condition="!Exists('$(Homm3RegistryExtraUnitsValidator)')" />
+    <Exec Command="python &quot;$(Homm3RegistryExtraUnitsValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <!-- Idle cadence (docs/homm3_idle_cadence.md): exceptions table, retimed idle = factor x source,
+       other clips byte-identical to the retime input, loops close, no output stale against the
+       (emphasised) input. Generated-artifact contract; no bundle builder consumes the GLBs yet. -->
+  <Target Name="ValidateHomm3IdleCadenceContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3IdleCadenceContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3IdleCadenceValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_idle_cadence_contract.py</Homm3IdleCadenceValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 idle cadence contract validator: $(Homm3IdleCadenceValidator)" Condition="!Exists('$(Homm3IdleCadenceValidator)')" />
+    <Exec Command="python &quot;$(Homm3IdleCadenceValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <!-- def_retarget in-game delivery (docs/homm3_unit_look_pipeline.md, "def_retarget delivery"): the lab
+       builder keeps blendShape curves and bakes the VFX curves, the node-name contract matches
+       Homm3UnitLookVfxRuntime, and every built slice still matches its frozen inputs and bundle probe. -->
+  <Target Name="ValidateHomm3DefRetargetDeliveryContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3DefRetargetDeliveryContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3DefRetargetDeliveryValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_def_retarget_delivery_contract.py</Homm3DefRetargetDeliveryValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 def_retarget delivery contract validator: $(Homm3DefRetargetDeliveryValidator)" Condition="!Exists('$(Homm3DefRetargetDeliveryValidator)')" />
+    <Exec Command="python &quot;$(Homm3DefRetargetDeliveryValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHotaFactoryBulwarkRuntimeAssetsAfterDeploy" AfterTargets="DeployPluginToGame" Condition="'$(FullValidationNormalized)' == 'true' and ('$(DeployPluginToGame)' != 'false' and '$(SkipHotaFactoryBulwarkRuntimeAssetValidation)' != 'true')">
+    <PropertyGroup>
+      <HotaFactoryBulwarkRuntimeAssetValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_hota_factory_bulwark_runtime_assets.py</HotaFactoryBulwarkRuntimeAssetValidator>
+    </PropertyGroup>
+    <Error Text="Missing Factory/Bulwark runtime asset validator: $(HotaFactoryBulwarkRuntimeAssetValidator)" Condition="!Exists('$(HotaFactoryBulwarkRuntimeAssetValidator)')" />
+    <Exec Command="python &quot;$(HotaFactoryBulwarkRuntimeAssetValidator)&quot; --plugin-root &quot;$(PluginDeployDir).&quot;" Timeout="300000" />
+  </Target>
+
+  <Target Name="ValidateHomm3UpscaledSfxContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3UpscaledSfxValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_upscaled_sfx_contract.py</Homm3UpscaledSfxValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 upscaled SFX contract validator: $(Homm3UpscaledSfxValidator)" Condition="!Exists('$(Homm3UpscaledSfxValidator)')" />
+    <Exec Command="python &quot;$(Homm3UpscaledSfxValidator)&quot;" Timeout="300000" />
+  </Target>
+  <!-- Combat creature SFX state table (Homm3LabClipAudioDriver): billboard and stock battle controller states -> audio slot. -->
+  <Target Name="ValidateHomm3LabClipAudioDriverContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3LabClipAudioDriverValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_lab_clip_audio_driver_contract.py</Homm3LabClipAudioDriverValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 lab clip audio driver contract validator: $(Homm3LabClipAudioDriverValidator)" Condition="!Exists('$(Homm3LabClipAudioDriverValidator)')" />
+    <Exec Command="python &quot;$(Homm3LabClipAudioDriverValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3UpscaledSfxContractAfterDeploy" AfterTargets="DeployPluginToGame" Condition="'$(FullValidationNormalized)' == 'true' and ('$(DeployPluginToGame)' != 'false')">
+    <PropertyGroup>
+      <Homm3UpscaledSfxValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_upscaled_sfx_contract.py</Homm3UpscaledSfxValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 upscaled SFX contract validator: $(Homm3UpscaledSfxValidator)" Condition="!Exists('$(Homm3UpscaledSfxValidator)')" />
+    <Exec Command="python &quot;$(Homm3UpscaledSfxValidator)&quot; --sfx-root &quot;$(PluginDeployDir)homm3_upscaled_sfx&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3ArtifactPortContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3ArtifactPortValidation)' != 'true')">
+    <PropertyGroup>
+      <Homm3ArtifactPortValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_artifact_port_contract.py</Homm3ArtifactPortValidator>
+      <Homm3ArtifactPortCoreZip>$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3ArtifactPortCoreZip>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 artifact port contract validator: $(Homm3ArtifactPortValidator)" Condition="!Exists('$(Homm3ArtifactPortValidator)')" />
+    <Exec Command="python &quot;$(Homm3ArtifactPortValidator)&quot; --core &quot;$(Homm3ArtifactPortCoreZip)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3UnitPresentationStopgapContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3UnitPresentationStopgapContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3UnitStopgapValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_unit_presentation_stopgap_contract.py</Homm3UnitStopgapValidator>
+      <Homm3UnitStopgapCoreZip>$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3UnitStopgapCoreZip>
+      <Homm3UnitStopgapBundlesDir>$(GameRootDir)BepInEx\plugins\OfflineUnlockMod\homm3_bundles</Homm3UnitStopgapBundlesDir>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 unit presentation stopgap validator: $(Homm3UnitStopgapValidator)" Condition="!Exists('$(Homm3UnitStopgapValidator)')" />
+    <Exec Command="python &quot;$(Homm3UnitStopgapValidator)&quot; --core &quot;$(Homm3UnitStopgapCoreZip)&quot; --bundles-dir &quot;$(Homm3UnitStopgapBundlesDir)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3ArtifactPortContractAfterDeploy" AfterTargets="DeployPluginToGame" Condition="'$(FullValidationNormalized)' == 'true' and ('$(DeployPluginToGame)' != 'false' and '$(SkipHomm3ArtifactPortValidation)' != 'true')">
+    <PropertyGroup>
+      <Homm3ArtifactPortValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_artifact_port_contract.py</Homm3ArtifactPortValidator>
+      <Homm3ArtifactPortCoreZip>$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3ArtifactPortCoreZip>
+      <Homm3ArtifactPortPluginDir>$(PluginDeployDir).</Homm3ArtifactPortPluginDir>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 artifact port contract validator: $(Homm3ArtifactPortValidator)" Condition="!Exists('$(Homm3ArtifactPortValidator)')" />
+    <Exec Command="python &quot;$(Homm3ArtifactPortValidator)&quot; --core &quot;$(Homm3ArtifactPortCoreZip)&quot; --require-core-installed --require-plugin-assets &quot;$(Homm3ArtifactPortPluginDir)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3TownPrefabContractAfterDeploy" AfterTargets="DeployPluginToGame" Condition="'$(FullValidationNormalized)' == 'true' and ('$(DeployPluginToGame)' != 'false')">
+    <PropertyGroup>
+      <Homm3TownPrefabValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_town_prefab_contract.py</Homm3TownPrefabValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 town prefab contract validator: $(Homm3TownPrefabValidator)" Condition="!Exists('$(Homm3TownPrefabValidator)')" />
+    <Exec Command="python &quot;$(Homm3TownPrefabValidator)&quot; --plugin-root &quot;$(PluginDeployDir).&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3CustomFactionPayloadAfterDeploy" AfterTargets="DeployPluginToGame" Condition="'$(FullValidationNormalized)' == 'true' and ('$(DeployPluginToGame)' != 'false' and '$(SkipHomm3CustomFactionPayloadAfterDeploy)' != 'true')">
+    <PropertyGroup>
+      <Homm3CustomFactionManifestValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_custom_faction_manifests.py</Homm3CustomFactionManifestValidator>
+    </PropertyGroup>
+    <Error Text="Missing custom faction manifest validator: $(Homm3CustomFactionManifestValidator)" Condition="!Exists('$(Homm3CustomFactionManifestValidator)')" />
+    <Exec Command="python &quot;$(Homm3CustomFactionManifestValidator)&quot; --plugin-root &quot;$(PluginDeployDir).&quot;" Condition="'$(DeployHomm3BundleNameNormalized)' != 'true'" Timeout="300000" />
+    <Exec Command="python &quot;$(Homm3CustomFactionManifestValidator)&quot; --plugin-root &quot;$(PluginDeployDir).&quot; --bundle-name-prefix &quot;$(DeployHomm3BundleName)&quot;" Condition="'$(DeployHomm3BundleNameNormalized)' == 'true'" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3HeroPortraitParityAfterDeploy" AfterTargets="DeployPluginToGame" Condition="'$(FullValidationNormalized)' == 'true' and ('$(DeployPluginToGame)' != 'false')">
+    <PropertyGroup>
+      <Homm3HeroPortraitParityValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_hero_portrait_parity.py</Homm3HeroPortraitParityValidator>
+      <Homm3HeroPortraitParityCoreZip>$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3HeroPortraitParityCoreZip>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 hero portrait parity validator: $(Homm3HeroPortraitParityValidator)" Condition="!Exists('$(Homm3HeroPortraitParityValidator)')" />
+    <Exec Command="python &quot;$(Homm3HeroPortraitParityValidator)&quot; --plugin-root &quot;$(MSBuildThisFileDirectory).&quot; --deployed-plugin-root &quot;$(PluginDeployDir).&quot; --core-zip &quot;$(Homm3HeroPortraitParityCoreZip)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3RuntimeMechanicsAfterDeploy" AfterTargets="DeployPluginToGame" Condition="'$(FullValidationNormalized)' == 'true' and ('$(DeployPluginToGame)' != 'false')">
+    <PropertyGroup>
+      <Homm3RuntimeMechanicsValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_runtime_mechanics_contract.py</Homm3RuntimeMechanicsValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 runtime-mechanics contract validator: $(Homm3RuntimeMechanicsValidator)" Condition="!Exists('$(Homm3RuntimeMechanicsValidator)')" />
+    <Exec Command="python &quot;$(Homm3RuntimeMechanicsValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --contract-dir &quot;$(PluginDeployDir)custom_factions\runtime_mechanics&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateOfflineUnlockModDeployHash" AfterTargets="DeployPluginToGame" Condition="'$(DeployPluginToGame)' != 'false'">
+    <PropertyGroup>
+      <OfflineUnlockModDeployHashValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_offline_unlock_mod_deploy_hash.py</OfflineUnlockModDeployHashValidator>
+      <OfflineUnlockModDeployHashOfficialArg Condition="'$(OfficialDeobfBuildNormalized)' == 'true'">--require-official-deobf-build-sentinel</OfflineUnlockModDeployHashOfficialArg>
+    </PropertyGroup>
+    <Error Text="Missing OfflineUnlockMod deploy hash validator: $(OfflineUnlockModDeployHashValidator)" Condition="!Exists('$(OfflineUnlockModDeployHashValidator)')" />
+    <Exec Command="python &quot;$(OfflineUnlockModDeployHashValidator)&quot; --source-dir &quot;$(OutDir).&quot; --deploy-dir &quot;$(PluginDeployDir).&quot; --plugins-root &quot;$(BepInExRootDir)plugins&quot; $(OfflineUnlockModDeployHashOfficialArg)" Timeout="300000" />
+  </Target>
+  <!-- Plugin payload versions (docs/plugin_payload_abi.md). Quick tier: records pin PluginPayloadAbi.cs versions, not
+       the DLL sha256, so every deploy writes OfflineUnlockMod.payload_abi.json for exactly this DLL (deployed with it via
+       DeployFile) and reads it back; a hand-copied DLL without a regenerated sidecar fails every record check. The
+       version-bump guard only warns: it cannot tell a breaking reader edit from a cosmetic one. -->
+  <Target Name="EmitPluginPayloadAbiSidecar" BeforeTargets="DeployPluginToGame" Condition="'$(DeployPluginToGame)' == 'true' and '$(TargetExt)' == '.dll' and Exists('$(OutDir)OfflineUnlockMod.dll')">
+    <PropertyGroup>
+      <PluginPayloadAbiTool>$(MSBuildThisFileDirectory)..\..\tools\plugin_payload_abi\payload_abi.py</PluginPayloadAbiTool>
+    </PropertyGroup>
+    <Error Text="Missing plugin payload ABI tool: $(PluginPayloadAbiTool)" Condition="!Exists('$(PluginPayloadAbiTool)')" />
+    <Exec Command="python &quot;$(PluginPayloadAbiTool)&quot; emit --dll &quot;$(OutDir)OfflineUnlockMod.dll&quot;" Timeout="300000" />
+    <Exec Command="python &quot;$(PluginPayloadAbiTool)&quot; guard" Timeout="300000" />
+  </Target>
+  <Target Name="ValidatePluginPayloadAbiSidecar" AfterTargets="DeployPluginToGame" Condition="'$(DeployPluginToGame)' == 'true' and '$(TargetExt)' == '.dll'">
+    <PropertyGroup>
+      <PluginPayloadAbiTool>$(MSBuildThisFileDirectory)..\..\tools\plugin_payload_abi\payload_abi.py</PluginPayloadAbiTool>
+    </PropertyGroup>
+    <Exec Command="python &quot;$(PluginPayloadAbiTool)&quot; check-installed --require-source --plugin-dir &quot;$(PluginDeployDir).&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidatePluginPayloadAbiContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <PluginPayloadAbiContractValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_plugin_payload_abi_contract.py</PluginPayloadAbiContractValidator>
+    </PropertyGroup>
+    <Error Text="Missing plugin payload ABI contract validator: $(PluginPayloadAbiContractValidator)" Condition="!Exists('$(PluginPayloadAbiContractValidator)')" />
+    <Exec Command="python &quot;$(PluginPayloadAbiContractValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3SkillIcons" BeforeTargets="DeployPluginToGame" Condition="'$(DeployPluginToGame)' != 'false'">
+    <ItemGroup>
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_stronghold.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_stronghold_2.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_stronghold_3.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_castle.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_castle_2.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_castle_3.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\sub_skill_faction_homm3_castle_elite_strategem_forward_scouts.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\sub_skill_faction_homm3_castle_elite_strategem_signal_drills.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\sub_skill_faction_homm3_castle_elite_strategem_shield_wall.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\sub_skill_faction_homm3_castle_elite_strategem_rapid_redeployment.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\sub_skill_faction_homm3_castle_elite_strategem_flanking_maps.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\sub_skill_faction_homm3_castle_elite_strategem_coordinated_volley.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_tower.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_tower_2.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_tower_3.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_fortress.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_fortress_2.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_fortress_3.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_rampart.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_rampart_2.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_rampart_3.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_conflux.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_conflux_2.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_conflux_3.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_inferno.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_inferno_2.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_inferno_3.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_cove.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_cove_2.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_cove_3.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_dungeon.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_dungeon_2.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_dungeon_3.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_necropolis.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_necropolis_2.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_necropolis_3.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_factory.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_factory_2.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_factory_3.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_bulwark.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_bulwark_2.png" />
+      <RequiredHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\skill_faction_homm3_bulwark_3.png" />
+      <RequiredHomm3FactorySplitAssemblyHud Include="$(MSBuildThisFileDirectory)homm3_factory_split_assembly_hud\rail_frame.png" />
+      <RequiredHomm3FactorySplitAssemblyHud Include="$(MSBuildThisFileDirectory)homm3_factory_split_assembly_hud\pip_natural_empty.png" />
+      <RequiredHomm3FactorySplitAssemblyHud Include="$(MSBuildThisFileDirectory)homm3_factory_split_assembly_hud\pip_natural_filled.png" />
+      <RequiredHomm3FactorySplitAssemblyHud Include="$(MSBuildThisFileDirectory)homm3_factory_split_assembly_hud\pip_natural_locked.png" />
+      <RequiredHomm3FactorySplitAssemblyHud Include="$(MSBuildThisFileDirectory)homm3_factory_split_assembly_hud\pip_industrial_empty.png" />
+      <RequiredHomm3FactorySplitAssemblyHud Include="$(MSBuildThisFileDirectory)homm3_factory_split_assembly_hud\pip_industrial_filled.png" />
+      <RequiredHomm3FactorySplitAssemblyHud Include="$(MSBuildThisFileDirectory)homm3_factory_split_assembly_hud\pip_industrial_locked.png" />
+      <RequiredHomm3FactorySplitAssemblyHud Include="$(MSBuildThisFileDirectory)homm3_factory_split_assembly_hud\header_natural.png" />
+      <RequiredHomm3FactorySplitAssemblyHud Include="$(MSBuildThisFileDirectory)homm3_factory_split_assembly_hud\header_industrial.png" />
+      <RequiredHomm3FactorySplitAssemblyHud Include="$(MSBuildThisFileDirectory)homm3_factory_split_assembly_hud\overclock_mark.png" />
+      <RequiredHomm3FactorySplitAssemblyHud Include="$(MSBuildThisFileDirectory)homm3_factory_split_assembly_hud\tooltip_banner.png" />
+    </ItemGroup>
+    <Error Text="Missing required HoMM3 faction skill icon: %(RequiredHomm3SkillIcon.Identity)" Condition="!Exists('%(RequiredHomm3SkillIcon.Identity)')" />
+    <Error Text="Missing required Factory Split Assembly HUD art: %(RequiredHomm3FactorySplitAssemblyHud.Identity)" Condition="!Exists('%(RequiredHomm3FactorySplitAssemblyHud.Identity)')" />
+  </Target>
+  <!-- Default scenario payload deploy installs the raw_translation map that the StoryHub
+       continuity installer also ships. It used to install the layered-atlas map, which no
+       consumer loaded. -->
+  <Target Name="DeployHomecomingRawTranslationScenario" AfterTargets="Build" DependsOnTargets="ValidateHomecomingRawTranslationMapContract" Condition="'$(DeployHomm3ScenarioPayloadsNormalized)' == 'true'">
+    <Error Text="Scenario deployment requires an explicit /p:GameRoot pointing to the active Golden Era install." Condition="'$(GameRootExplicitlyProvided)' != 'true'" />
+    <PropertyGroup>
+      <HomecomingRawTranslationInstaller>$(MSBuildThisFileDirectory)..\..\tools\install_homecoming_raw_translation_map.py</HomecomingRawTranslationInstaller>
+    </PropertyGroup>
+    <Error Text="Missing raw_translation installer: $(HomecomingRawTranslationInstaller)" Condition="!Exists('$(HomecomingRawTranslationInstaller)')" />
+    <Exec Command="python &quot;$(HomecomingRawTranslationInstaller)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --game-root &quot;$(GameRoot)&quot;" />
+  </Target>
+  <!-- Every TypeRef/MemberRef the built plugin makes into the game's interop must resolve against the LIVE
+       Golden Era interop (BepInEx/interop), including one level into the called interop wrappers' own IL.
+       A direct deobf member reference that is absent live (BhUnitPreviews.get_me, 2026-09-26) otherwise
+       compiles and only throws MissingMethodException in game. Pre-existing gaps are allow-listed. -->
+  <Target Name="ValidatePluginLiveInteropRefs" AfterTargets="Build" BeforeTargets="DeployPluginToGame" Condition="'$(SkipPluginLiveInteropRefs)' != 'true' and '$(OfficialDeobfBuildNormalized)' == 'true' and '$(TargetExt)' == '.dll'">
+    <PropertyGroup>
+      <PluginLiveInteropRefsTool>$(MSBuildThisFileDirectory)..\..\tools\verify_plugin_live_interop_refs\VerifyPluginLiveInteropRefs.csproj</PluginLiveInteropRefsTool>
+      <PluginLiveInteropRefsAllowlist>$(MSBuildThisFileDirectory)..\..\tools\verify_plugin_live_interop_refs\allowlist.txt</PluginLiveInteropRefsAllowlist>
+      <PluginLiveInteropDir>$(BepInExRootDir)interop</PluginLiveInteropDir>
+    </PropertyGroup>
+    <Error Text="Missing live interop reference verifier: $(PluginLiveInteropRefsTool)" Condition="!Exists('$(PluginLiveInteropRefsTool)')" />
+    <Error Text="Live Golden Era interop not found at $(PluginLiveInteropDir); pass GameRoot or SkipPluginLiveInteropRefs=true explicitly." Condition="!Exists('$(PluginLiveInteropDir)\Hex.dll')" />
+    <Exec Command="dotnet run --project &quot;$(PluginLiveInteropRefsTool)&quot; -c Release -- --plugin &quot;$(TargetPath)&quot; --interop &quot;$(PluginLiveInteropDir)&quot; --search &quot;$(BepInExRootDir)core&quot; --search &quot;$(GameRootDir)dotnet&quot; --allowlist &quot;$(PluginLiveInteropRefsAllowlist)&quot;" Timeout="300000" />
+  </Target>
+  <!-- Synthetic coverage for the offline current-scope carry's fail-closed evidence and positional contract. -->
+  <Target Name="ValidateCurrentScopeOverrideCarryContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <CurrentScopeOverrideCarryTests>$(MSBuildThisFileDirectory)..\..\tools\port_current\test_carry_scope_overrides.py</CurrentScopeOverrideCarryTests>
+    </PropertyGroup>
+    <Error Text="Missing current-scope override carry tests: $(CurrentScopeOverrideCarryTests)" Condition="!Exists('$(CurrentScopeOverrideCarryTests)')" />
+    <Exec Command="python &quot;$(CurrentScopeOverrideCarryTests)&quot;" Timeout="60000" />
+  </Target>
+  <Target Name="ValidateCampaignLodReaderContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <CampaignLodReaderValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_campaign_lod_reader_contract.py</CampaignLodReaderValidator>
+    </PropertyGroup>
+    <Error Text="Missing campaign LOD reader validator: $(CampaignLodReaderValidator)" Condition="!Exists('$(CampaignLodReaderValidator)')" />
+    <Exec Command="python &quot;$(CampaignLodReaderValidator)&quot;" Timeout="60000" />
+  </Target>
+  <Target Name="ValidateGameSymbolsHintContractSelector" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <GameSymbolsHintContractSelectorTests>$(MSBuildThisFileDirectory)..\..\tools\test_game_symbols_hint_contract.py</GameSymbolsHintContractSelectorTests>
+    </PropertyGroup>
+    <Error Text="Missing GameSymbols hint contract selector tests: $(GameSymbolsHintContractSelectorTests)" Condition="!Exists('$(GameSymbolsHintContractSelectorTests)')" />
+    <Exec Command="python &quot;$(GameSymbolsHintContractSelectorTests)&quot;" Timeout="30000" />
+  </Target>
+  <Target Name="ValidateConfigElementNativeIdContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <ConfigElementNativeIdValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_config_element_native_id_contract.py</ConfigElementNativeIdValidator>
+    </PropertyGroup>
+    <Error Text="Missing config element native ID validator: $(ConfigElementNativeIdValidator)" Condition="!Exists('$(ConfigElementNativeIdValidator)')" />
+    <Exec Command="python &quot;$(ConfigElementNativeIdValidator)&quot;" Timeout="60000" />
+  </Target>
+  <!-- The current game build is the default. Golden remains available only as an explicit legacy check. -->
+  <Target Name="ValidateGameSymbolsHintContractBuildSelector" BeforeTargets="BeforeBuild" Condition="'$(OfficialDeobfBuildNormalized)' == 'true' and '$(TargetExt)' == '.dll'">
+    <Error Text="GameSymbolsHintContractBuild must be exactly 'current' or 'golden'; received '$(GameSymbolsHintContractBuild)'." Condition="'$(GameSymbolsHintContractBuild)' != 'current' and '$(GameSymbolsHintContractBuild)' != 'golden'" />
+  </Target>
+  <!-- Symbol-literal tier: every selected-build flat hint group must reach exactly one type, every selected
+       GameSymbols.TypeGroups scope exactly one type of its pinned shape (and on Golden, the same type the
+       pre-migration resolver bound), and no per-file ResolveFirstType copy may return. Existing findings in
+       tools/game_symbols_hint_allowlist.txt are shrink-only. SkipGameSymbolsHintContract=true is an explicit
+       test-build exception only; it does not change the normal quick-tier gate. -->
+  <Target Name="ValidateGameSymbolsHintContract" AfterTargets="Build" BeforeTargets="DeployPluginToGame" Condition="'$(SkipGameSymbolsHintContract)' != 'true' and '$(OfficialDeobfBuildNormalized)' == 'true' and '$(TargetExt)' == '.dll'">
+    <PropertyGroup>
+      <GameSymbolsHintContractValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_game_symbols_hint_contract.py</GameSymbolsHintContractValidator>
+      <GameSymbolsHintInteropDir>$(BepInExRootDir)interop</GameSymbolsHintInteropDir>
+    </PropertyGroup>
+    <Error Text="Missing GameSymbols hint contract validator: $(GameSymbolsHintContractValidator)" Condition="!Exists('$(GameSymbolsHintContractValidator)')" />
+    <Error Text="Selected game interop not found at $(GameSymbolsHintInteropDir); pass GameRoot explicitly." Condition="!Exists('$(GameSymbolsHintInteropDir)\Hex.dll')" />
+    <Exec Command="python &quot;$(GameSymbolsHintContractValidator)&quot; --build &quot;$(GameSymbolsHintContractBuild)&quot; --interop &quot;$(GameSymbolsHintInteropDir)&quot; --gate &quot;$(GameSymbolsHintContractBuild)&quot;" Timeout="300000" />
+  </Target>
+  <!-- Quick-tier deploy safety: never overwrite the installed plugin while the game has it loaded. -->
+  <Target Name="RefuseDeployWhileGameRunning" BeforeTargets="DeployPluginToGame" Condition="'$(DeployPluginToGame)' == 'true' and '$(TargetExt)' == '.dll' and '$(OS)' == 'Windows_NT'">
+    <Exec Command="python &quot;$(MSBuildThisFileDirectory)..\..\tools\homm3_def_retarget\launch_guard.py&quot; --game-only" Timeout="30000" />
+  </Target>
+  <Target Name="DeployPluginToGame" AfterTargets="Build" Condition="'$(DeployPluginToGame)' == 'true' and '$(TargetExt)' == '.dll' and Exists('$(OutDir)OfflineUnlockMod.dll')">
+    <ItemGroup>
+      <DeployFile Include="$(OutDir)OfflineUnlockMod.dll" />
+      <DeployFile Include="$(OutDir)OfflineUnlockMod.pdb" Condition="Exists('$(OutDir)OfflineUnlockMod.pdb')" />
+      <DeployFile Include="$(OutDir)OfflineUnlockMod.payload_abi.json" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(DeployPluginBinaryOnlyNormalized)' != 'true'">
+      <DeployHomm3ImportTable Include="$(MSBuildThisFileDirectory)homm3_import.json" />
+      <DeployHomm3UpscaledSfx Include="$(MSBuildThisFileDirectory)homm3_upscaled_sfx\**\*" />
+      <DeployCustomFactionManifest Include="$(MSBuildThisFileDirectory)..\..\custom_factions\**\homm3_*.json" />
+      <DeployHomm3Portrait Include="$(MSBuildThisFileDirectory)homm3_portraits\**\*.*" />
+      <DeployHomm3HeroPortrait Include="$(MSBuildThisFileDirectory)homm3_hero_portraits\**\*.*" />
+      <DeployHomm3HeroPortraitUpscaled Include="$(MSBuildThisFileDirectory)homm3_hero_portraits_upscaled\**\*.*" />
+      <DeployHomm3DialogPortraitBundle Include="$(MSBuildThisFileDirectory)homm3_dialog_portraits\**\*.*" />
+      <DeployHomm3DialogPortraitBundleBuilt Include="$(MSBuildThisFileDirectory)..\..\tools\homm3_import\build_out\homm3_dialog_portraits" Condition="Exists('$(MSBuildThisFileDirectory)..\..\tools\homm3_import\build_out\homm3_dialog_portraits')" />
+      <DeployHomm3UiPortraitBundle Include="$(MSBuildThisFileDirectory)homm3_ui_portraits\**\*" />
+      <DeployHomm3MapBillboardBundle Include="$(MSBuildThisFileDirectory)homm3_map_billboards\**\*" />
+      <DeployHomm3ArtifactMapBillboardBundle Include="$(MSBuildThisFileDirectory)homm3_artifact_map_billboards\**\*" />
+      <DeployHomm3TowerCityMapMeshBundle Include="$(MSBuildThisFileDirectory)homm3_tower_city_map_mesh\**\*" />
+      <DeployHomm3MapBuildingMeshesBundle Include="$(MSBuildThisFileDirectory)homm3_map_building_meshes\**\*" />
+      <DeployHomm3MeshFx Include="$(MSBuildThisFileDirectory)homm3_mesh_fx\**\*" />
+      <DeployHomm3SkinnedPbr Include="$(MSBuildThisFileDirectory)homm3_skinned_pbr\**\*" />
+      <DeployHomm3ArtifactMeshesBundle Include="$(MSBuildThisFileDirectory)homm3_artifact_meshes\**\*" />
+      <DeployHomm3TownSceneMeshesBundle Include="$(MSBuildThisFileDirectory)homm3_town_scene_meshes\**\*" />
+      <DeployHomm3HeroMapSprite Include="$(MSBuildThisFileDirectory)homm3_hero_map_sprites\**\*.*" />
+      <DeployHomm3BoatMapSprite Include="$(MSBuildThisFileDirectory)homm3_boat_map_sprites\**\*.*" />
+      <DeployHomm3AdventureCursor Include="$(MSBuildThisFileDirectory)homm3_adventure_cursors\cradvntr_go_ship\**\*.*" />
+      <DeployHomm3AdventureUi Include="$(MSBuildThisFileDirectory)homm3_adventure_ui\layer_toggle\**\*.*" />
+      <DeployHomm3SourceLabFrame Include="$(MSBuildThisFileDirectory)homm3_lab\**\*.*" />
+      <DeployHomm3MapFrame Include="$(MSBuildThisFileDirectory)..\..\oldenera_factions\Assets\CustomUnits\homm3_lab\**\00_00.png" Condition="'$(DeployHomm3LooseLabPngSidecars)' == 'true'" />
+      <DeployHomm3MapFrame Include="$(MSBuildThisFileDirectory)..\..\oldenera_factions\Assets\CustomUnits\homm3_lab\**\00_04.png" Condition="'$(DeployHomm3LooseLabPngSidecars)' == 'true'" />
+      <DeployHomm3MapFrame Include="$(MSBuildThisFileDirectory)..\..\oldenera_factions\Assets\CustomUnits\homm3_lab\**\02_*.png" Condition="'$(DeployHomm3LooseLabPngSidecars)' == 'true'" />
+      <DeployHomm3BattleFrame Include="$(MSBuildThisFileDirectory)..\..\oldenera_factions\Assets\CustomUnits\homm3_lab\**\extracted_battle\**\*.png" Condition="'$(DeployHomm3LooseLabPngSidecars)' == 'true'" />
+      <DeployHomm3Ui Include="$(MSBuildThisFileDirectory)homm3_ui\**\*.*" />
+      <DeployHomm3StoryHubMap Include="$(MSBuildThisFileDirectory)homm3_storyhub_maps\**\*.png" />
+      <DeployHomm3LawIcon Include="$(MSBuildThisFileDirectory)homm3_law_icons\**\*.*" />
+      <DeployHomm3SkillIcon Include="$(MSBuildThisFileDirectory)homm3_skill_icons\**\*.*" />
+      <DeployHomm3FactorySplitAssemblyHud Include="$(MSBuildThisFileDirectory)homm3_factory_split_assembly_hud\**\*.*" />
+      <DeployHistogramIcon Include="$(MSBuildThisFileDirectory)histogram_icons\**\*.*" />
+      <DeployHomm3RuntimeAsset Include="$(MSBuildThisFileDirectory)homm3_runtime_assets\**\*" />
+      <DeployHomm3TownPrefabPayload Include="$(MSBuildThisFileDirectory)homm3_town_prefabs\**\*.*" />
+    </ItemGroup>
+    <MakeDir Directories="$(PluginDeployDir)" Condition="!Exists('$(PluginDeployDir)')" />
+    <Copy SourceFiles="@(DeployFile)" DestinationFiles="@(DeployFile-&gt;'$(PluginDeployDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(DeployHomm3RuntimeAsset)" DestinationFiles="@(DeployHomm3RuntimeAsset-&gt;'$(PluginDeployDir)homm3_runtime_assets\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3RuntimeAsset)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3TownPrefabPayload)" DestinationFiles="@(DeployHomm3TownPrefabPayload-&gt;'$(PluginDeployDir)homm3_town_prefabs\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3TownPrefabPayload)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3ImportTable)" DestinationFiles="@(DeployHomm3ImportTable-&gt;'$(PluginDeployDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3ImportTable)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3UpscaledSfx)" DestinationFiles="@(DeployHomm3UpscaledSfx-&gt;'$(PluginDeployDir)homm3_upscaled_sfx\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3UpscaledSfx)' != ''" />
+    <Copy SourceFiles="@(DeployCustomFactionManifest)" DestinationFiles="@(DeployCustomFactionManifest-&gt;'$(PluginDeployDir)custom_factions\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployCustomFactionManifest)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3Portrait)" DestinationFiles="@(DeployHomm3Portrait-&gt;'$(PluginDeployDir)homm3_portraits\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3Portrait)' != ''" />
+    <!-- SkipUnchangedFiles=false: portrait promote can replace PNG bytes while leaving timestamps
+         in states that previously left the Golden Era plugin folder on stale Voy/pre-rebake art. -->
+    <Copy SourceFiles="@(DeployHomm3HeroPortrait)" DestinationFiles="@(DeployHomm3HeroPortrait-&gt;'$(PluginDeployDir)homm3_hero_portraits\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="false" Condition="'@(DeployHomm3HeroPortrait)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3HeroPortraitUpscaled)" DestinationFiles="@(DeployHomm3HeroPortraitUpscaled-&gt;'$(PluginDeployDir)homm3_hero_portraits_upscaled\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="false" Condition="'@(DeployHomm3HeroPortraitUpscaled)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3DialogPortraitBundle)" DestinationFiles="@(DeployHomm3DialogPortraitBundle-&gt;'$(PluginDeployDir)homm3_dialog_portraits\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3DialogPortraitBundle)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3DialogPortraitBundleBuilt)" DestinationFiles="@(DeployHomm3DialogPortraitBundleBuilt-&gt;'$(PluginDeployDir)homm3_dialog_portraits\%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3DialogPortraitBundleBuilt)' != ''" />
+    <!-- Phase 2 pilot dual deploy: UI bundles ship next to the PNG payloads they mirror. PNG deploy stays on. -->
+    <Copy SourceFiles="@(DeployHomm3UiPortraitBundle)" DestinationFiles="@(DeployHomm3UiPortraitBundle-&gt;'$(PluginDeployDir)homm3_ui_portraits\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3UiPortraitBundle)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3MapBillboardBundle)" DestinationFiles="@(DeployHomm3MapBillboardBundle-&gt;'$(PluginDeployDir)homm3_map_billboards\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3MapBillboardBundle)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3ArtifactMapBillboardBundle)" DestinationFiles="@(DeployHomm3ArtifactMapBillboardBundle-&gt;'$(PluginDeployDir)homm3_artifact_map_billboards\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3ArtifactMapBillboardBundle)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3TowerCityMapMeshBundle)" DestinationFiles="@(DeployHomm3TowerCityMapMeshBundle-&gt;'$(PluginDeployDir)homm3_tower_city_map_mesh\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3TowerCityMapMeshBundle)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3MapBuildingMeshesBundle)" DestinationFiles="@(DeployHomm3MapBuildingMeshesBundle-&gt;'$(PluginDeployDir)homm3_map_building_meshes\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3MapBuildingMeshesBundle)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3MeshFx)" DestinationFiles="@(DeployHomm3MeshFx-&gt;'$(PluginDeployDir)homm3_mesh_fx\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3MeshFx)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3SkinnedPbr)" DestinationFiles="@(DeployHomm3SkinnedPbr-&gt;'$(PluginDeployDir)homm3_skinned_pbr\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3SkinnedPbr)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3ArtifactMeshesBundle)" DestinationFiles="@(DeployHomm3ArtifactMeshesBundle-&gt;'$(PluginDeployDir)homm3_artifact_meshes\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3ArtifactMeshesBundle)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3TownSceneMeshesBundle)" DestinationFiles="@(DeployHomm3TownSceneMeshesBundle-&gt;'$(PluginDeployDir)homm3_town_scene_meshes\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3TownSceneMeshesBundle)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3HeroMapSprite)" DestinationFiles="@(DeployHomm3HeroMapSprite-&gt;'$(PluginDeployDir)homm3_hero_map_sprites\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3HeroMapSprite)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3BoatMapSprite)" DestinationFiles="@(DeployHomm3BoatMapSprite-&gt;'$(PluginDeployDir)homm3_boat_map_sprites\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3BoatMapSprite)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3AdventureCursor)" DestinationFiles="@(DeployHomm3AdventureCursor-&gt;'$(PluginDeployDir)homm3_adventure_cursors\cradvntr_go_ship\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3AdventureCursor)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3AdventureUi)" DestinationFiles="@(DeployHomm3AdventureUi-&gt;'$(PluginDeployDir)homm3_adventure_ui\layer_toggle\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3AdventureUi)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3SourceLabFrame)" DestinationFiles="@(DeployHomm3SourceLabFrame-&gt;'$(PluginDeployDir)homm3_lab\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3SourceLabFrame)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3MapFrame)" DestinationFiles="@(DeployHomm3MapFrame-&gt;'$(PluginDeployDir)homm3_lab\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3MapFrame)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3BattleFrame)" DestinationFiles="@(DeployHomm3BattleFrame-&gt;'$(PluginDeployDir)homm3_lab\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3BattleFrame)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3Ui)" DestinationFiles="@(DeployHomm3Ui-&gt;'$(PluginDeployDir)homm3_ui\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3Ui)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3StoryHubMap)" DestinationFiles="@(DeployHomm3StoryHubMap-&gt;'$(PluginDeployDir)homm3_storyhub_maps\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3StoryHubMap)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3LawIcon)" DestinationFiles="@(DeployHomm3LawIcon-&gt;'$(PluginDeployDir)homm3_law_icons\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3LawIcon)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3SkillIcon)" DestinationFiles="@(DeployHomm3SkillIcon-&gt;'$(PluginDeployDir)homm3_skill_icons\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3SkillIcon)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3FactorySplitAssemblyHud)" DestinationFiles="@(DeployHomm3FactorySplitAssemblyHud-&gt;'$(PluginDeployDir)homm3_factory_split_assembly_hud\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3FactorySplitAssemblyHud)' != ''" />
+    <Copy SourceFiles="@(DeployHistogramIcon)" DestinationFiles="@(DeployHistogramIcon-&gt;'$(PluginDeployDir)histogram_icons\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHistogramIcon)' != ''" />
+    <PropertyGroup>
+      <EsquireBundleSource>$(MSBuildThisFileDirectory)..\..\tools\custom_prefab_pipeline\build_out\custom_units_esquire</EsquireBundleSource>
+      <Homm3BundleSourceDir>$(MSBuildThisFileDirectory)..\..\tools\homm3_import\build_out\</Homm3BundleSourceDir>
+      <Homm3BundlePayloadDirectoryValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_bundle_payload_directory.py</Homm3BundlePayloadDirectoryValidator>
+      <Homm3UnitBundleAudioContractValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_unit_bundle_audio_contract.py</Homm3UnitBundleAudioContractValidator>
+    </PropertyGroup>
+    <ItemGroup Condition="'$(DeployPluginBinaryOnlyNormalized)' != 'true'">
+      <DeployHomm3Bundle Include="$(Homm3BundleSourceDir)custom_units_*" Exclude="$(Homm3BundleSourceDir)*.manifest" Condition="'$(DeployHomm3BundlesNormalized)' == 'true'" />
+      <DeployHomm3ScopedBundle Include="$(Homm3BundleSourceDir)$(DeployHomm3BundleName)" Exclude="$(Homm3BundleSourceDir)*.manifest" Condition="'$(DeployHomm3BundleNameNormalized)' == 'true'" />
+      <DeployHomm3FactoryBulwarkBundle Include="$(Homm3BundleSourceDir)custom_units_factory_*" Exclude="$(Homm3BundleSourceDir)*.manifest" Condition="'$(DeployHomm3FactoryBulwarkBundlesNormalized)' == 'true' and '$(DeployHomm3BundlesNormalized)' != 'true'" />
+      <DeployHomm3FactoryBulwarkBundle Include="$(Homm3BundleSourceDir)custom_units_bulwark_*" Exclude="$(Homm3BundleSourceDir)*.manifest" Condition="'$(DeployHomm3FactoryBulwarkBundlesNormalized)' == 'true' and '$(DeployHomm3BundlesNormalized)' != 'true'" />
+      <DeployHomm3TownPrefabBundle Include="$(MSBuildThisFileDirectory)..\..\tools\homm3_town_prefabs\build_out\homm3_town_prefabs" Condition="Exists('$(MSBuildThisFileDirectory)..\..\tools\homm3_town_prefabs\build_out\homm3_town_prefabs')" />
+      <DeployHomm3CityMusicBundle Include="$(Homm3BundleSourceDir)homm3_*_city_music" />
+      <DeployHomm3CombatMusicBundle Include="$(Homm3BundleSourceDir)homm3_combat_music" Condition="Exists('$(Homm3BundleSourceDir)homm3_combat_music')" />
+      <DeployHomm3ArrayUpscaleShaderBundle Include="$(Homm3BundleSourceDir)homm3_array_upscale_shader" Condition="Exists('$(Homm3BundleSourceDir)homm3_array_upscale_shader')" />
+      <DeployHomm2ShadeObjectClassShaderBundle Include="$(Homm3BundleSourceDir)homm2_shade_object_class" Condition="Exists('$(Homm3BundleSourceDir)homm2_shade_object_class')" />
+    </ItemGroup>
+    <Copy SourceFiles="$(EsquireBundleSource)" DestinationFiles="$(PluginDeployDir)custom_units_esquire" SkipUnchangedFiles="true" Condition="Exists('$(EsquireBundleSource)') and '$(DeployPluginBinaryOnlyNormalized)' != 'true'" />
+     <Message Importance="high" Text="Skipping homm3_bundles deploy from tools\homm3_import\build_out. Pass -p:DeployHomm3Bundles=true only after that source is intentionally refreshed and contract-valid, -p:DeployHomm3FactoryBulwarkBundles=true for the scoped Factory/Bulwark contract rows, or -p:DeployHomm3BundleName=&lt;exact bundle name&gt; for one contract-valid bundle." Condition="'$(DeployHomm3BundlesNormalized)' != 'true' and '$(DeployHomm3FactoryBulwarkBundlesNormalized)' != 'true' and '$(DeployHomm3BundleNameNormalized)' != 'true'" />
+     <Error Text="Missing HoMM3 bundle payload directory validator: $(Homm3BundlePayloadDirectoryValidator)" Condition="('$(DeployHomm3BundlesNormalized)' == 'true' or '$(DeployHomm3FactoryBulwarkBundlesNormalized)' == 'true' or '$(DeployHomm3BundleNameNormalized)' == 'true') and !Exists('$(Homm3BundlePayloadDirectoryValidator)')" />
+     <Error Text="Missing HoMM3 unit bundle audio contract validator: $(Homm3UnitBundleAudioContractValidator)" Condition="('$(DeployHomm3BundlesNormalized)' == 'true' or '$(DeployHomm3FactoryBulwarkBundlesNormalized)' == 'true' or '$(DeployHomm3BundleNameNormalized)' == 'true') and !Exists('$(Homm3UnitBundleAudioContractValidator)')" />
+     <Error Text="Refuse simultaneous full, Factory/Bulwark, and exact-name HoMM3 bundle deploy modes." Condition="('$(DeployHomm3BundlesNormalized)' == 'true' and ('$(DeployHomm3FactoryBulwarkBundlesNormalized)' == 'true' or '$(DeployHomm3BundleNameNormalized)' == 'true')) or ('$(DeployHomm3FactoryBulwarkBundlesNormalized)' == 'true' and '$(DeployHomm3BundleNameNormalized)' == 'true')" />
+     <Error Text="Missing exact-name HoMM3 bundle source: $(Homm3BundleSourceDir)$(DeployHomm3BundleName)" Condition="'$(DeployHomm3BundleNameNormalized)' == 'true' and !Exists('$(Homm3BundleSourceDir)$(DeployHomm3BundleName)')" />
+     <Exec Command="python &quot;$(Homm3UnitBundleAudioContractValidator)&quot; --bundle-dir &quot;$(Homm3BundleSourceDir).&quot;" Condition="'$(DeployHomm3BundlesNormalized)' == 'true' or '$(DeployHomm3FactoryBulwarkBundlesNormalized)' == 'true'" Timeout="300000" />
+     <Exec Command="python &quot;$(Homm3UnitBundleAudioContractValidator)&quot; --bundle-dir &quot;$(Homm3BundleSourceDir).&quot; --name-prefix &quot;$(DeployHomm3BundleName)&quot;" Condition="'$(DeployHomm3BundleNameNormalized)' == 'true'" Timeout="300000" />
+     <Exec Command="python &quot;$(Homm3BundlePayloadDirectoryValidator)&quot; --bundle-dir &quot;$(Homm3BundleSourceDir).&quot; --payload-glob custom_units_*" Condition="'$(DeployHomm3BundlesNormalized)' == 'true'" Timeout="300000" />
+     <Exec Command="python &quot;$(Homm3BundlePayloadDirectoryValidator)&quot; --bundle-dir &quot;$(Homm3BundleSourceDir).&quot; --payload-glob custom_units_* --name-prefix custom_units_factory_ --name-prefix custom_units_bulwark_" Condition="'$(DeployHomm3FactoryBulwarkBundlesNormalized)' == 'true' and '$(DeployHomm3BundlesNormalized)' != 'true'" Timeout="300000" />
+     <Exec Command="python &quot;$(Homm3BundlePayloadDirectoryValidator)&quot; --bundle-dir &quot;$(Homm3BundleSourceDir).&quot; --payload-glob custom_units_* --name-prefix &quot;$(DeployHomm3BundleName)&quot;" Condition="'$(DeployHomm3BundleNameNormalized)' == 'true'" Timeout="300000" />
+    <Copy SourceFiles="@(DeployHomm3Bundle)" DestinationFiles="@(DeployHomm3Bundle-&gt;'$(PluginDeployDir)homm3_bundles\%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3Bundle)' != ''" />
+     <Copy SourceFiles="@(DeployHomm3FactoryBulwarkBundle)" DestinationFiles="@(DeployHomm3FactoryBulwarkBundle-&gt;'$(PluginDeployDir)homm3_bundles\%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3FactoryBulwarkBundle)' != ''" />
+     <Copy SourceFiles="@(DeployHomm3ScopedBundle)" DestinationFiles="@(DeployHomm3ScopedBundle-&gt;'$(PluginDeployDir)homm3_bundles\%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3ScopedBundle)' != ''" />
+     <Exec Command="python &quot;$(Homm3BundlePayloadDirectoryValidator)&quot; --bundle-dir &quot;$(PluginDeployDir)homm3_bundles&quot; --payload-glob custom_units_* --name-prefix custom_units_factory_ --name-prefix custom_units_bulwark_" Condition="'$(DeployHomm3FactoryBulwarkBundlesNormalized)' == 'true' and '$(DeployHomm3BundlesNormalized)' != 'true'" Timeout="300000" />
+     <Exec Command="python &quot;$(Homm3BundlePayloadDirectoryValidator)&quot; --bundle-dir &quot;$(PluginDeployDir)homm3_bundles&quot; --payload-glob custom_units_* --name-prefix &quot;$(DeployHomm3BundleName)&quot;" Condition="'$(DeployHomm3BundleNameNormalized)' == 'true'" Timeout="300000" />
+    <!-- Installed-dir readback after every bundle deploy mode (exact-name, Factory/Bulwark, full): the scoped checks above
+         only see the bundles this deploy copied, so drift elsewhere in homm3_bundles (stale leftovers, contract-mismatched
+         bytes, an owned-skinned bundle whose Core view asks for a clip it lacks) passes them. These two run over the whole
+         installed directory against the installed Core.zip and the deployed homm3_import.json. Opt-in through
+         ValidateInstalledHomm3BundleDir, on by default since 2026-09-29 (the installed directory read back clean). -->
+    <PropertyGroup>
+      <Homm3BundleDeployModeActive>false</Homm3BundleDeployModeActive>
+      <Homm3BundleDeployModeActive Condition="'$(DeployHomm3BundlesNormalized)' == 'true' or '$(DeployHomm3FactoryBulwarkBundlesNormalized)' == 'true' or '$(DeployHomm3BundleNameNormalized)' == 'true'">true</Homm3BundleDeployModeActive>
+      <Homm3OwnedSkinnedAttackClipValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_owned_skinned_attack_clip_contract.py</Homm3OwnedSkinnedAttackClipValidator>
+      <Homm3InstalledBundleDirCoreZip Condition="'$(Homm3InstalledBundleDirCoreZip)' == ''">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3InstalledBundleDirCoreZip>
+    </PropertyGroup>
+     <Message Importance="high" Text="Skipping whole installed homm3_bundles readback (payload directory + owned-skinned attack clip). Pass -p:ValidateInstalledHomm3BundleDir=true to gate this deploy on it." Condition="'$(Homm3BundleDeployModeActive)' == 'true' and '$(ValidateInstalledHomm3BundleDirNormalized)' != 'true'" />
+     <Error Text="Missing owned-skinned attack clip validator: $(Homm3OwnedSkinnedAttackClipValidator)" Condition="'$(Homm3BundleDeployModeActive)' == 'true' and '$(ValidateInstalledHomm3BundleDirNormalized)' == 'true' and !Exists('$(Homm3OwnedSkinnedAttackClipValidator)')" />
+     <Error Text="Missing installed Core.zip for the homm3_bundles readback: $(Homm3InstalledBundleDirCoreZip). Pass -p:Homm3InstalledBundleDirCoreZip=... or set GameRoot to the install root." Condition="'$(Homm3BundleDeployModeActive)' == 'true' and '$(ValidateInstalledHomm3BundleDirNormalized)' == 'true' and !Exists('$(Homm3InstalledBundleDirCoreZip)')" />
+     <Exec Command="python &quot;$(Homm3BundlePayloadDirectoryValidator)&quot; --bundle-dir &quot;$(PluginDeployDir)homm3_bundles&quot;" Condition="'$(Homm3BundleDeployModeActive)' == 'true' and '$(ValidateInstalledHomm3BundleDirNormalized)' == 'true'" Timeout="300000" />
+     <Exec Command="python &quot;$(Homm3OwnedSkinnedAttackClipValidator)&quot; --bundle-dir &quot;$(PluginDeployDir)homm3_bundles&quot; --name-prefix custom_units_ --core &quot;$(Homm3InstalledBundleDirCoreZip)&quot; --import &quot;$(PluginDeployDir)homm3_import.json&quot;" Condition="'$(Homm3BundleDeployModeActive)' == 'true' and '$(ValidateInstalledHomm3BundleDirNormalized)' == 'true'" Timeout="300000" />
+     <Exec Command="python &quot;$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_lab_clip_audio_driver_contract.py&quot; --bundle-dir &quot;$(PluginDeployDir)homm3_bundles&quot; --name-prefix custom_units_" Condition="'$(Homm3BundleDeployModeActive)' == 'true' and '$(ValidateInstalledHomm3BundleDirNormalized)' == 'true'" Timeout="300000" />
+     <!-- Map squad death (docs/homm3_map_squad_death_contract.md): every installed owned-skinned map unit keeps the vanilla
+          die/isDead -> DYING contract on its single Animator and a death clip that fits deathTimeOffset + 2 s. -->
+     <Exec Command="python &quot;$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_map_squad_death_contract.py&quot; --bundle-dir &quot;$(PluginDeployDir)homm3_bundles&quot; --name-prefix custom_units_ --core &quot;$(Homm3InstalledBundleDirCoreZip)&quot; --import &quot;$(PluginDeployDir)homm3_import.json&quot;" Condition="'$(Homm3BundleDeployModeActive)' == 'true' and '$(ValidateInstalledHomm3BundleDirNormalized)' == 'true'" Timeout="300000" />
+    <Copy SourceFiles="@(DeployHomm3TownPrefabBundle)" DestinationFiles="@(DeployHomm3TownPrefabBundle-&gt;'$(PluginDeployDir)homm3_town_prefabs\%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3TownPrefabBundle)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3CityMusicBundle)" DestinationFiles="@(DeployHomm3CityMusicBundle-&gt;'$(PluginDeployDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3CityMusicBundle)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3CombatMusicBundle)" DestinationFiles="@(DeployHomm3CombatMusicBundle-&gt;'$(PluginDeployDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3CombatMusicBundle)' != ''" />
+    <Copy SourceFiles="@(DeployHomm3ArrayUpscaleShaderBundle)" DestinationFiles="@(DeployHomm3ArrayUpscaleShaderBundle-&gt;'$(PluginDeployDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3ArrayUpscaleShaderBundle)' != ''" />
+    <Copy SourceFiles="@(DeployHomm2ShadeObjectClassShaderBundle)" DestinationFiles="@(DeployHomm2ShadeObjectClassShaderBundle-&gt;'$(PluginDeployDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm2ShadeObjectClassShaderBundle)' != ''" />
+    <Exec Condition="'$(FullValidationNormalized)' == 'true'" Command="python &quot;$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_reduced_slice_runtime_contract.py&quot; --source-plugin-dir &quot;$(MSBuildThisFileDirectory).&quot; --plugin-dir &quot;$(PluginDeployDir).&quot;" Timeout="300000" />
+    <Delete Files="$(PluginDeployDir)homm3_runtime_assets\campaign_port\homecoming_water_layer.json" TreatErrorsAsWarnings="false" Condition="'$(DeployPluginBinaryOnlyNormalized)' != 'true'" />
+    <Delete Files="$(PluginDeployDir)homm3_runtime_assets\campaign_port\homecoming_water_traversal_plan.json" TreatErrorsAsWarnings="false" Condition="'$(DeployPluginBinaryOnlyNormalized)' != 'true'" />
+    <Delete Files="$(PluginDeployDir)homm3_runtime_assets\campaign_port\homecoming_water_tile_overlay_identity_manifest.json" TreatErrorsAsWarnings="false" Condition="'$(DeployPluginBinaryOnlyNormalized)' != 'true'" />
+    <Delete Files="$(PluginDeployDir)homm3_runtime_assets\custom_biomes\water\shore_sand.png" TreatErrorsAsWarnings="false" Condition="'$(DeployPluginBinaryOnlyNormalized)' != 'true'" />
+    <Delete Files="$(PluginDeployDir)homm3_homecoming_playable_shell_launch.flag;$(PluginDeployDir)homm3_homecoming_quickstart_state_probe.flag;$(PluginDeployDir)homm3_homecoming_boat_travel_native_proof.flag;$(PluginDeployDir)homm3_selected_unit_hud_hotkey_probe.flag;$(PluginDeployDir)homm3_selected_hud_diag.flag" TreatErrorsAsWarnings="false" Condition="'$(DeployPluginBinaryOnlyNormalized)' != 'true'" />
+    <Exec Condition="'$(FullValidationNormalized)' == 'true'" Command="python &quot;$(MSBuildThisFileDirectory)..\..\tools\validate_homecoming_native_water_runtime_contract.py&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --source-plugin-dir &quot;$(MSBuildThisFileDirectory).&quot; --plugin-dir &quot;$(PluginDeployDir).&quot;" Timeout="300000" />
+    <!-- Retired lanes (single_layer, layered_atlas) no longer have installed-readback
+         validators here. Installed-payload proof for the shipped raw_translation maps is
+         owned by ValidateRoeCastleCampaignContinuityContract and
+         ValidateMapLoadPreflightContract. -->
+  </Target>
+  <PropertyGroup>
+    <RunExpensiveProceduralScenarioAudits Condition="'$(RunExpensiveProceduralScenarioAudits)' == ''">false</RunExpensiveProceduralScenarioAudits>
+    <DeployProceduralScenarioBundle Condition="'$(DeployProceduralScenarioBundle)' == ''">false</DeployProceduralScenarioBundle>
+    <ProceduralScenarioValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_procedural_scenario_contract.py</ProceduralScenarioValidator>
+    <ProceduralScenarioCli>$(MSBuildThisFileDirectory)..\..\tools\procedural_scenario_cli.py</ProceduralScenarioCli>
+    <ProceduralScenarioAuditOutput Condition="'$(ProceduralScenarioAuditOutput)' == ''">$(MSBuildThisFileDirectory)..\..\build\procedural_audit</ProceduralScenarioAuditOutput>
+  </PropertyGroup>
+  <Target Name="ValidateProceduralScenarioContract" BeforeTargets="Build" Condition="'$(FullValidationNormalized)' == 'true'">
+    <Error Text="Missing procedural scenario contract validator: $(ProceduralScenarioValidator)" Condition="!Exists('$(ProceduralScenarioValidator)')" />
+    <Exec Command="python &quot;$(ProceduralScenarioValidator)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3AttachmentPipelineContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <Exec Command="python &quot;$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_attachment_pipeline_contract.py&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateLiveProbeCompileContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <LiveProbeCompileContractValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_live_probe_compile_contract.py</LiveProbeCompileContractValidator>
+    </PropertyGroup>
+    <Error Text="Missing live probe compile contract validator: $(LiveProbeCompileContractValidator)" Condition="!Exists('$(LiveProbeCompileContractValidator)')" />
+    <Exec Command="python &quot;$(LiveProbeCompileContractValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="60000" />
+  </Target>
+  <Target Name="ValidateHomm3AiHoverOwnerContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3AiHoverOwnerContractValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_ai_hover_owner_contract.py</Homm3AiHoverOwnerContractValidator>
+    </PropertyGroup>
+    <Error Text="Missing AI hover owner contract validator: $(Homm3AiHoverOwnerContractValidator)" Condition="!Exists('$(Homm3AiHoverOwnerContractValidator)')" />
+    <Exec Command="python &quot;$(Homm3AiHoverOwnerContractValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="60000" />
+  </Target>
+  <Target Name="ValidateManagedModSettingsJsonRuntime" BeforeTargets="BeforeBuild;DeployPluginToGame" Condition="'$(FullValidationNormalized)' == 'true' or '$(DeployPluginToGame)' == 'true'">
+    <Error Text="The selected game root must provide dotnet\System.Text.Json.dll at $(GameRootDir)dotnet\System.Text.Json.dll; the plugin uses the game-shared assembly and does not deploy a parser copy." Condition="!Exists('$(GameRootDir)dotnet\System.Text.Json.dll')" />
+    <ItemGroup>
+      <ManagedModSettingsJsonRuntimeAssembly Include="$(GameRootDir)dotnet\System.Text.Json.dll" />
+    </ItemGroup>
+    <GetAssemblyIdentity AssemblyFiles="@(ManagedModSettingsJsonRuntimeAssembly)">
+      <Output TaskParameter="Assemblies" ItemName="ManagedModSettingsJsonRuntimeIdentity" />
+    </GetAssemblyIdentity>
+    <PropertyGroup>
+      <ManagedModSettingsJsonRuntimeVersion>@(ManagedModSettingsJsonRuntimeIdentity-&gt;'%(Version)')</ManagedModSettingsJsonRuntimeVersion>
+    </PropertyGroup>
+    <Error Text="Could not read the game-shared System.Text.Json assembly identity from $(GameRootDir)dotnet\System.Text.Json.dll." Condition="'$(ManagedModSettingsJsonRuntimeVersion)' == ''" />
+    <Error Text="The selected game root provides System.Text.Json $(ManagedModSettingsJsonRuntimeVersion); version 6 or newer is required." Condition="'$(ManagedModSettingsJsonRuntimeVersion)' != '' and $([System.Version]::Parse('$(ManagedModSettingsJsonRuntimeVersion)').Major) &lt; 6" />
+  </Target>
+  <Target Name="ValidateNativePreviewStartupContract" BeforeTargets="BeforeBuild" DependsOnTargets="ValidateManagedModSettingsJsonRuntime" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <NativePreviewStartupContractValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_native_preview_startup_contract.py</NativePreviewStartupContractValidator>
+    </PropertyGroup>
+    <Error Text="Missing native preview startup contract validator: $(NativePreviewStartupContractValidator)" Condition="!Exists('$(NativePreviewStartupContractValidator)')" />
+    <Exec Command="python &quot;$(NativePreviewStartupContractValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="60000" />
+  </Target>
+  <Target Name="AuditProceduralScenarioGeneration" AfterTargets="Build" DependsOnTargets="ValidateProceduralScenarioContract" Condition="'$(RunExpensiveProceduralScenarioAudits)' == 'true'">
+    <Error Text="Procedural scenario artifact audit requires an explicit /p:GameRoot pointing to the active Golden Era install." Condition="'$(GameRootExplicitlyProvided)' != 'true'" />
+    <Exec Command="python &quot;$(ProceduralScenarioValidator)&quot; --expensive --core &quot;$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip&quot; --donor &quot;$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\maps\Thirst_for_Power.map&quot; --output &quot;$(ProceduralScenarioAuditOutput)&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="DeployProceduralScenario" AfterTargets="Build" DependsOnTargets="ValidateProceduralScenarioContract" Condition="'$(DeployProceduralScenarioBundle)' == 'true'">
+    <Error Text="Procedural scenario deployment requires an explicit /p:GameRoot pointing to the active Golden Era install." Condition="'$(GameRootExplicitlyProvided)' != 'true'" />
+    <Error Text="Procedural scenario deployment requires /p:ProceduralScenarioBundle pointing to a validated bundle." Condition="'$(ProceduralScenarioBundle)' == '' or !Exists('$(ProceduralScenarioBundle)\manifest.json')" />
+    <Exec Command="python &quot;$(ProceduralScenarioCli)&quot; install &quot;$(ProceduralScenarioBundle)&quot; --game-root &quot;$(GameRoot)&quot;" />
+  </Target>
+</Project>

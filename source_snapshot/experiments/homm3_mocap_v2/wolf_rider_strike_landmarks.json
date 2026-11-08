@@ -1,0 +1,35 @@
+{
+  "method": "human_eye_landmark_authoring",
+  "unit": "h3_wolf_rider",
+  "clip": "g12_attack_front",
+  "coordinateCanvas": [1050, 870],
+  "sourceFrameSha256": [
+    "d75d4886890166cddf0a9635a794c2f67784f42f6503d2503a9fd4ed2f3c4187",
+    "2ab784650b9f52f433fe8fcda3bcaa4d8471a57a53137cc87f137fb61ad248da",
+    "15ea492a83562e3d0fe752257390804bd023a8b97a7b8e9be85549a84a57a632",
+    "c0b978273301751de8d316d26afef655417ed2da4a51d37972ef70f557d9a979",
+    "a36f1efa0785c482530fbc8aa93bdb52eedbfa6ee7065342fc3edd3ca83c787b",
+    "a5862898752ab714110ac4f2930e1f90043a880fbb308adbf320d0fbeb11eeca",
+    "d57e9f8ab8b90c9b052a202bffa825c5cdd38397fdf53ca507bde6f3368e7320"
+  ],
+  "sourceSkinSha256": "289d9c9bf53cb944448c7131a0179e7fd4b44b61b2dc5e74824d27e7d4dadb6f",
+  "captureSha256": "7c6ed75b56e148fb7b8c88d47555541477fef92e632ef372dec818db93e0c7c0",
+  "anchorJoint": "rider:mixamorig:Hips",
+  "activeJoints": ["rider:mixamorig:Spine1", "rider:mixamorig:Spine2", "rider:mixamorig:RightShoulder", "rider:mixamorig:RightArm", "rider:mixamorig:RightForeArm", "rider:mixamorig:RightHand"],
+  "sites": {
+    "head": {"joint": "rider:mixamorig:Head", "localPoint": [0, 0, 0]},
+    "grip": {"joint": "rider:mixamorig:RightHand", "meshVertex": 657},
+    "tip": {"joint": "rider:mixamorig:RightHand", "meshVertex": 471}
+  },
+  "frames": [
+    {"hip": [480, 530], "head": [484, 322], "grip": [451, 476], "tip": [579, 372]},
+    {"hip": [440, 500], "head": [424, 322], "grip": [333, 383], "tip": [309, 188]},
+    {"hip": [530, 452], "head": [502, 293], "grip": [359, 241], "tip": [220, 119]},
+    {"hip": [640, 474], "head": [682, 331], "grip": [789, 344], "tip": [935, 213]},
+    {"hip": [653, 474], "head": [694, 348], "grip": [800, 470], "tip": [998, 468]},
+    {"hip": [565, 493], "head": [625, 337], "grip": [613, 533], "tip": [786, 568]},
+    {"hip": [499, 523], "head": [535, 322], "grip": [503, 509], "tip": [666, 487]}
+  ],
+  "targetPolicy": "hip-relative source displacement, scaled once by initial projected head-to-hip span; preserve initial mesh site offsets; weapon direction uses initial projected weapon length",
+  "notes": "Source hip and head centers are approximate visible anatomical landmarks. Weapon base/tip sites are pinned original mesh vertices, not assumed to coincide with the skeleton wrist. Frame zero and all context frames remain unchanged. Candidate only; this is not absolute silhouette registration."
+}

@@ -1,0 +1,295 @@
+{
+ "unit": "hota_cove_crew_mate",
+ "joints": {
+  "Hips": [
+   0.017,
+   0.192,
+   0.82
+  ],
+  "Spine": [
+   0.017,
+   0.194,
+   0.917
+  ],
+  "Spine1": [
+   0.017,
+   0.196,
+   1.015
+  ],
+  "Spine2": [
+   0.017,
+   0.198,
+   1.125
+  ],
+  "Neck": [
+   0.017,
+   0.199,
+   1.211
+  ],
+  "Head": [
+   0.024,
+   0.15,
+   1.406
+  ],
+  "HeadTop_End": [
+   0.031,
+   0.073,
+   1.741
+  ],
+  "LeftShoulder": [
+   0.038,
+   0.087,
+   1.357
+  ],
+  "LeftArm": [
+   0.227,
+   0.192,
+   1.315
+  ],
+  "LeftForeArm": [
+   0.346,
+   0.255,
+   1.099
+  ],
+  "LeftHand": [
+   0.381,
+   0.094,
+   0.868
+  ],
+  "LeftHand_End": [
+   0.392,
+   0.043,
+   0.795
+  ],
+  "RightShoulder": [
+   0.003,
+   0.087,
+   1.357
+  ],
+  "RightArm": [
+   -0.178,
+   0.192,
+   1.315
+  ],
+  "RightForeArm": [
+   -0.297,
+   0.262,
+   1.106
+  ],
+  "RightHand": [
+   -0.332,
+   0.108,
+   0.854
+  ],
+  "RightHand_End": [
+   -0.342,
+   0.062,
+   0.778
+  ],
+  "LeftUpLeg": [
+   0.115,
+   0.164,
+   0.868
+  ],
+  "LeftLeg": [
+   0.199,
+   0.038,
+   0.491
+  ],
+  "LeftFoot": [
+   0.283,
+   0.143,
+   0.072
+  ],
+  "LeftToeBase": [
+   0.339,
+   0.038,
+   -0.012
+  ],
+  "LeftToe_End": [
+   0.381,
+   -0.045,
+   -0.012
+  ],
+  "RightUpLeg": [
+   -0.08,
+   0.164,
+   0.868
+  ],
+  "RightLeg": [
+   -0.171,
+   0.129,
+   0.47
+  ],
+  "RightFoot": [
+   -0.269,
+   0.332,
+   0.072
+  ],
+  "RightToeBase": [
+   -0.332,
+   0.227,
+   -0.012
+  ],
+  "RightToe_End": [
+   -0.374,
+   0.143,
+   -0.012
+  ]
+ },
+ "props": [
+  {
+   "name": "scimitar",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.33,
+      -0.03,
+      0.84
+     ],
+     [
+      -0.23,
+      -0.19,
+      1.03
+     ]
+    ],
+    [
+     [
+      -0.23,
+      -0.19,
+      1.03
+     ],
+     [
+      -0.08,
+      -0.4,
+      1.43
+     ]
+    ]
+   ],
+   "radius": 0.07
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ]
+ },
+ "extensions": [
+  "cove_reweight"
+ ],
+ "coveReweight": [
+  {
+   "box": [
+    [
+     -0.31,
+     -0.08,
+     0.3
+    ],
+    [
+     -0.14,
+     0.16,
+     0.86
+    ]
+   ],
+   "dropBones": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+    "RightShoulder"
+   ],
+   "fallback": "RightUpLeg",
+   "minRedOverGreen": 1.4,
+   "cut": true
+  },
+  {
+   "box": [
+    [
+     -0.36,
+     -0.1,
+     0.28
+    ],
+    [
+     -0.14,
+     0.2,
+     0.73
+    ]
+   ],
+   "dropBones": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+    "RightShoulder"
+   ],
+   "fallback": "RightUpLeg",
+   "fadeTop": 0.04
+  },
+  {
+   "box": [
+    [
+     -0.37,
+     -0.08,
+     0.66
+    ],
+    [
+     -0.15,
+     0.2,
+     0.92
+    ]
+   ],
+   "dropBones": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+    "RightShoulder"
+   ],
+   "fallback": "RightUpLeg",
+   "keepSkin": [
+    1.2,
+    2.2,
+    0.08
+   ],
+   "skipRigid": true,
+   "cut": true,
+   "cutAgainstDrop": 0.5,
+   "rigidSphere": [
+    {
+     "center": [
+      -0.31,
+      0.04,
+      0.78
+     ],
+     "radius": 0.105,
+     "maxX": -0.265,
+     "maxRedOverGreen": 1.2,
+     "bone": "RightHand"
+    },
+    {
+     "center": [
+      -0.312,
+      0.159,
+      0.755
+     ],
+     "radius": 0.045,
+     "maxRedOverGreen": 1.2,
+     "bone": "RightHand"
+    }
+   ],
+   "smallIslandsTo": {
+    "bone": "RightHand",
+    "maxVerts": 40
+   }
+  }
+ ],
+ "metalBlades": {
+  "minValue": 0.35,
+  "maxSat": 0.25,
+  "minExtent": 0.25
+ }
+}

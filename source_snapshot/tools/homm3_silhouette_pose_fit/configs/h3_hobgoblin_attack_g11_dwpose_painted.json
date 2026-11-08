@@ -1,0 +1,43 @@
+{
+  "unitSid": "h3_hobgoblin",
+  "clipId": "attack_g11",
+  "fps": 12,
+  "method": "dwpose_reprojection",
+  "masterGlb": "artifacts/hobgoblin_attack_pose_pipeline/master/Meshy_AI_Character_multiview_portrait.glb",
+  "outputDir": "artifacts/hobgoblin_attack_pose_pipeline/out_attack_g11_dwpose_painted",
+  "boneRoles": "tools/homm3_silhouette_pose_fit/bone_roles_unirig_hobgoblin_multiview22_dwpose.json",
+  "camera": {
+    "axis": "-X",
+    "distance": 3.0,
+    "height": 0.85,
+    "orthoScale": 2.6,
+    "rootYawDeg": 0.0
+  },
+  "dwpose": {
+    "longEdges": [1024, 1280, 1536],
+    "backgrounds": [[0, 0, 0], [32, 32, 32], [180, 180, 180]],
+    "minMeanBodyScore": 0.16,
+    "minVisibleJoints": 8,
+    "scoreThr": 0.20,
+    "requireVerticalLegs": false
+  },
+  "keypointOptimizer": {
+    "boundRad": 0.85,
+    "restWeight": 0.12,
+    "maxiter": 200,
+    "maxfev": 700,
+    "restarts": 6,
+    "seed": 7
+  },
+  "frames": [
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_00.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_01.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_02.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_03.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_04.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_05.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_06.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_07.png" }
+  ],
+  "notes": "DWPose on painted g11 upscales → unconstrained (legs unlocked) UniRig22 keypoint reprojection. No whole-model hip lock."
+}

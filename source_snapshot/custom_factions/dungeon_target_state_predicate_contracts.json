@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for Dungeon target-state predicates. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "contractsMustMatchExactPredicateProfiles": true,
+    "dungeonOnly": true,
+    "isolatedTargetRequiresCurrentBoardGeometry": true,
+    "outnumberedTargetRequiresLiveStackComparison": true,
+    "genericAdjacencyOrArmySizeSubstituteForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": ["homm3_dungeon"],
+  "contracts": {
+    "RequiresIsolatedTarget": {
+      "allowedFamilies": ["TrainingDamage"],
+      "requiredEffectKeys": ["dungeon.isolated-target-damage"],
+      "requiredRuntimeSemantics": ["current target has no qualifying adjacent ally/support geometry", "current action target identity", "committed positive damage ordering"],
+      "forbiddenSubstitutes": ["any non-adjacent target counted as isolated without full neighbor scan", "any debuffed target counted as isolated target", "global enemy count counted as target isolation", "attacker isolation counted as target isolation", "damage event counted without target geometry proof", "Dungeon faction membership counted as isolated target"],
+      "notes": "Predator's Instruction requires current-board target isolation geometry for the affected stack. Runtime must prove target identity, neighbor scan semantics, damage ordering, and law-owner correlation."
+    },
+    "RequiresTargetOutnumbered": {
+      "allowedFamilies": ["CounterattackDoctrine"],
+      "requiredEffectKeys": ["dungeon.damage-vs-smaller-stack"],
+      "requiredRuntimeSemantics": ["current target stack is numerically outnumbered by the law-owner/acting stack", "counterattack or doctrine action target identity", "live stack counts at action time"],
+      "forbiddenSubstitutes": ["smaller army counted as target outnumbered", "lower tier counted as target outnumbered", "damaged stack counted as outnumbered without live count comparison", "global friendly/enemy unit counts counted as target outnumbered", "target surrounded geometry counted as numeric outnumbering", "counterattack event counted without target stack count proof"],
+      "notes": "Outnumber requires a live numeric stack-size comparison for the current target in the doctrine/counterattack context. Runtime must prove stack identities, count comparison, action timing, and law-owner correlation."
+    }
+  },
+  "requiredRuntimeProof": ["current action target identity proof", "current target board coordinate proof", "complete adjacent-neighbor scan proof", "isolated target predicate truth table proof", "acting or law-owner stack identity proof", "target stack count proof", "live count comparison timing proof", "counterattack or doctrine action correlation proof", "committed damage ordering proof", "law-owner side correlation proof", "idempotent per-action application proof"]
+}

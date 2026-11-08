@@ -1,0 +1,19 @@
+{
+  "schema": "homm3.unit-presentation-stopgaps.v1",
+  "owner": "tools/validate_homm3_unit_presentation_stopgap_contract.py; docs/homm3_unit_presentation_stopgap_census.md",
+  "proof": "generated-artifact: Core.zip produced by tools/release_port/apply_release_core_overlay.py build_overlay() into a scratch copy (V:/homm3_scratch/neutral_overlay_20260926/Core.zip, 2026-09-26) + homm3_import.json + installed homm3_bundles manifests + homm3_ui_portraits manifest. The installed Core.zip predates the neutral own-mesh/line-strip overlay change, so the build-time gate (which reads the installed Core) fails until that overlay is applied. Runtime visuals are not proven by this ledger. Portrait membership read from the rebuilt homm3_ui_portraits manifest (484 sprites, 2026-09-26; bundle staged in the plugin source folder, not installed).",
+  "rule": "Every computed stopgap must be listed with its exact issue signature and a fix plan. Remove a row when the unit stops being a stopgap. Never add a row just to pass: a new row is a decision that must also be recorded in the census doc.",
+  "stopgaps": {},
+  "declaredMeshIdentity": {
+    "h3_pegasus": {
+      "labSid": "h3_pegasus",
+      "evidence": "Mesh identity is correct (Meshy regen agent source check 2026-09-26) and it is delivered through tools/homm3_def_retarget_delivery/pegasus_slice_v1.json. The remaining issue is the rider-and-mount rig, not the mesh.",
+      "fix": "Rider-and-mount rig work on the existing mesh; remove this row once that is settled and seen in game."
+    },
+    "h3_mechanic_upg_alt": {
+      "labSid": "h3_mechanic_upg_alt",
+      "evidence": "Mesh-repair identity review: the installed bundle carries the stale canonical mesh (renders as a coiled snake statue). The corrected mesh is rebuilt and bundled in factory_mechanic_slice_v1 (bundle C9DDAA0A, offline probe OK 2026-09-26) but not installed. Installed bundle mesh not hashed directly.",
+      "fix": "Deploy tools/homm3_def_retarget_delivery/factory_mechanic_slice_v1.json; remove this row after installed readback and an in-game look."
+    }
+  }
+}

@@ -1,0 +1,227 @@
+{
+ "unit": "h3_archer",
+ "joints": {
+  "Hips": [
+   -0.045,
+   0.073,
+   0.819
+  ],
+  "Spine": [
+   -0.038,
+   0.077,
+   0.93
+  ],
+  "Spine1": [
+   -0.031,
+   0.08,
+   1.042
+  ],
+  "Spine2": [
+   -0.024,
+   0.084,
+   1.167
+  ],
+  "Neck": [
+   -0.017,
+   0.087,
+   1.265
+  ],
+  "Head": [
+   -0.038,
+   0.101,
+   1.349
+  ],
+  "HeadTop_End": [
+   -0.024,
+   0.045,
+   1.74
+  ],
+  "LeftShoulder": [
+   0.017,
+   0.08,
+   1.314
+  ],
+  "LeftArm": [
+   0.122,
+   0.038,
+   1.237
+  ],
+  "LeftForeArm": [
+   0.164,
+   0.038,
+   1.028
+  ],
+  "LeftHand": [
+   0.185,
+   0.024,
+   0.812
+  ],
+  "LeftHand_End": [
+   0.194,
+   0.019,
+   0.722
+  ],
+  "RightShoulder": [
+   -0.094,
+   0.122,
+   1.328
+  ],
+  "RightArm": [
+   -0.199,
+   0.185,
+   1.3
+  ],
+  "RightForeArm": [
+   -0.297,
+   0.297,
+   1.154
+  ],
+  "RightHand": [
+   -0.255,
+   0.129,
+   1.028
+  ],
+  "RightHand_End": [
+   -0.237,
+   0.059,
+   0.975
+  ],
+  "LeftUpLeg": [
+   0.052,
+   0.031,
+   0.784
+  ],
+  "LeftLeg": [
+   0.087,
+   -0.045,
+   0.456
+  ],
+  "LeftFoot": [
+   0.143,
+   -0.031,
+   0.086
+  ],
+  "LeftToeBase": [
+   0.171,
+   -0.185,
+   -0.026
+  ],
+  "LeftToe_End": [
+   0.171,
+   -0.143,
+   0.016
+  ],
+  "RightUpLeg": [
+   -0.15,
+   0.08,
+   0.784
+  ],
+  "RightLeg": [
+   -0.164,
+   0.094,
+   0.442
+  ],
+  "RightFoot": [
+   -0.185,
+   0.234,
+   0.086
+  ],
+  "RightToeBase": [
+   -0.241,
+   0.094,
+   -0.033
+  ],
+  "RightToe_End": [
+   -0.241,
+   0.108,
+   0.009
+  ]
+ },
+ "props": [
+  {
+   "name": "crossbow",
+   "bone": "LeftHand",
+   "box": [
+    [
+     0.0,
+     -0.37,
+     0.18
+    ],
+    [
+     0.37,
+     -0.14,
+     0.62
+    ]
+   ]
+  },
+  {
+   "name": "grip",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.165,
+      -0.14,
+      0.52
+     ],
+     [
+      0.185,
+      -0.04,
+      0.7
+     ]
+    ]
+   ],
+   "radius": 0.035
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "castle_handcut",
+  "castle_refine"
+ ],
+ "castleRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ],
+  "aimRange": 120,
+  "aimFromRest": true
+ },
+ "castleHandCut": {
+  "sides": [
+   "Right",
+   "Left"
+  ],
+  "handRadius": 0.1,
+  "foreRadius": 0.07
+ },
+ "skirtLegShare": 0.5,
+ "bootTop": 0.5,
+ "glbPatch": {
+  "reason": "authenticity pass (lane B): ShootFront, Mouseover, AttackFront and Hitted key poses re-authored by motion intent against the DEF (crossbow brought up and aimed level at the enemy, prod forward and limbs flat, kicking up on the shot; crossbow lifted level at the hip on mouseover; free arm wound up and driven straight at the enemy in a lunge with the chest and face kept on the target; hit knocks him back off balance with the head snapped back and both arms flung out). Upper-arm aims at 0.7 and the clavicles lifted on the hit to hold the tear gate over master targets 2630 -> 2616, worst edge unchanged (41.459). 2026-10-08 check pass: head held upright in MoveStart, Move, MoveEnd and Mouseover (was pitched down at the ground/crossbow; DEF looks ahead), and the crossbow hand held steady across the chest in Move (was flipping over the shoulder mid-stride; DEF holds it still).",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_archer_pose_rot.json",
+    "sha256": "a31ff7710a9486af0971435f93f69d35c0f3dd2f8f446984c55c73e761b8901f",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_archer_pose_rot2.json",
+    "sha256": "2ef6bf38a3e18671d5bf5761353ce27c8b565805dfd47a39afea9046d4607fec",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_archer_pose_tr.json",
+    "sha256": "269442e2de41519b54c69ac030cfcee58616482d6e0dfb0d0d56f63d274481d0",
+    "regrid": true
+   }
+  ]
+ }
+}

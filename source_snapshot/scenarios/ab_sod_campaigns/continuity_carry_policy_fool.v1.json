@@ -1,0 +1,224 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "Foolhardy Waywardness continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub fool; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_14_ab_castle_fool",
+    "campaignTitle": "Foolhardy Waywardness",
+    "campaignEntry": "fool.h3c",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "missionConfigPrefix": "homm3_ab_castle",
+    "defaultSpawn": {
+      "factionSid": "homm3_castle",
+      "heroSid": "homm3_castle_hero_7"
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart).",
+    "regionPixels": {
+      "lost_at_sea": [
+        80.0,
+        220.0
+      ],
+      "here_there_be_pirates": [
+        320.0,
+        220.0
+      ],
+      "hurry_up_and_wait": [
+        560.0,
+        220.0
+      ],
+      "their_end_of_the_bargain": [
+        800.0,
+        220.0
+      ]
+    },
+    "missionSpawns": {
+      "lost_at_sea": {
+        "heroSid": "homm3_castle_hero_7",
+        "factionSid": "homm3_castle"
+      },
+      "their_end_of_the_bargain": {
+        "heroSid": "homm3_castle_hero_7",
+        "factionSid": "homm3_castle"
+      },
+      "here_there_be_pirates": {
+        "heroSid": "homm3_castle_hero_7",
+        "factionSid": "homm3_castle"
+      },
+      "hurry_up_and_wait": {
+        "heroSid": "homm3_castle_hero_7",
+        "factionSid": "homm3_castle"
+      }
+    }
+  },
+  "storyHubMapSidOverrides": {
+    "lost_at_sea": "h3_castle_lost_at_sea_raw_translation",
+    "here_there_be_pirates": "h3_castle_here_there_be_pirates_raw_translation",
+    "hurry_up_and_wait": "h3_castle_hurry_up_and_wait_raw_translation",
+    "their_end_of_the_bargain": "h3_castle_their_end_of_the_bargain_raw_translation",
+    "choiceReason": "Foolhardy Waywardness missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "lost_at_sea",
+      "toMissionId": "their_end_of_the_bargain",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 8,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=8 for lost_at_sea (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_castle_lost_at_sea_raw_translation",
+        "to": "h3_castle_their_end_of_the_bargain_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "their_end_of_the_bargain",
+      "toMissionId": "here_there_be_pirates",
+      "sourceBlockIndex": 2,
+      "nextBlockIndex": 3,
+      "levelCap": 16,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=16 for their_end_of_the_bargain (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_castle_their_end_of_the_bargain_raw_translation",
+        "to": "h3_castle_here_there_be_pirates_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "here_there_be_pirates",
+      "toMissionId": "hurry_up_and_wait",
+      "sourceBlockIndex": 3,
+      "nextBlockIndex": 4,
+      "levelCap": 24,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=24 for here_there_be_pirates (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_castle_here_there_be_pirates_raw_translation",
+        "to": "h3_castle_hurry_up_and_wait_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "lost_at_sea",
+    "their_end_of_the_bargain",
+    "here_there_be_pirates",
+    "hurry_up_and_wait"
+  ],
+  "missionTitles": {
+    "lost_at_sea": "Lost at Sea",
+    "here_there_be_pirates": "Here There Be Pirates",
+    "hurry_up_and_wait": "Hurry Up and Wait",
+    "their_end_of_the_bargain": "Their End of the Bargain"
+  },
+  "missionDescriptions": {
+    "lost_at_sea": "Sir Christian must build the town on the southeastern peninsula of the island up to a capitol. He is limited to level 8. If he completes his quest, he will carry over hi...",
+    "here_there_be_pirates": "Great challenges lie before Sir Christian. To win, he must capture all enemy towns and castles and defeat all enemy heroes. He will be limited to experience level 24. If...",
+    "hurry_up_and_wait": "Sir Christian must do one thing to win this scenario. Stay alive for four months. He is literally surrounded by the enemy. He must keep the evil Regnin Pirates from over...",
+    "their_end_of_the_bargain": "To win, Sir Christian must defeat all the enemies. He now has an allied town, which lies, in the northwestern region. He is limited to level 16 in this scenario, but he..."
+  },
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Dedicated AB/SoD MapImage bake",
+    "Town growth / negative resource timed-event fidelity"
+  ],
+  "videoContract": {
+    "status": "mission_clips_wired_hub_still_only",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": null,
+    "hubFirstShowOmitReason": "RoE parity: hub hover strip is selection-still only; mission pins PlayVideo when composed MP4 meets contract.",
+    "requireComposedAudio": true,
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "requiredMp4RelativeToStreamingAssets": null,
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_14_ab_castle_fool/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "stillArtifact": "artifacts/campaign_port_poc/ab_sod_campaigns/storyhub_visual/fool_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.42,
+      "focusY": 0.55,
+      "cropReason": "Shoreline figure at the surf line between jungle and sea (Foolhardy / C1fw1)",
+      "cropsCatalog": "scenarios/ab_sod_campaigns/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "lost_at_sea": "H3ABfw1",
+      "here_there_be_pirates": "H3ABfw3",
+      "hurry_up_and_wait": "H3ABfw4",
+      "their_end_of_the_bargain": "H3ABfw2"
+    },
+    "actionOrder": "PlayVideo (when composed MP4 ready) then OpenMissionsPrologue on each mission pin; hub firstShowActions stay empty",
+    "failClosed": "fool hub firstShowActions must stay empty (hubFirstShowPlayVideo=false). Mission PlayVideo requires StreamingAssets/video/{{clip}}.mp4 + softsub sidecar meeting compose contract; otherwise omit PlayVideo and keep prologue."
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom vision law profiles that require owned-structure radius context. This records owned custom town/dwelling origin semantics only; it does not prove runtime structure ownership, map position extraction, radius scan, target filtering, fog reveal mutation, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresOwnedStructureRadiusProfiles": true,
+    "ownedStructureMustComeFromEnabledFactionManifest": true,
+    "citySidMustMatchDirectCityMapObject": true,
+    "dwellingPrefixMustBeExactManifestPrefix": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredStaticEvidence": {
+    "manifestDir": "custom_factions",
+    "requiredFactionSids": [
+      "homm3_cove",
+      "homm3_fortress",
+      "homm3_necropolis",
+      "homm3_tower"
+    ],
+    "requiredFields": [
+      "identity.factionSid",
+      "identity.citySid",
+      "coreOverlay.directCityMapObject",
+      "coreOverlay.directDwellingPrefix"
+    ]
+  },
+  "requiredRuntimeProof": [
+    "runtime adventure object SID proof",
+    "runtime structure owner side proof",
+    "law owner side to structure owner side correlation proof",
+    "structure map coordinate proof",
+    "radius distance metric proof",
+    "target object coordinate and filter proof",
+    "idempotent radius scan and reveal application proof"
+  ],
+  "contracts": {
+    "cove.structure-scout-treasure-banks": {
+      "originKinds": [
+        "owned-custom-city-or-dwelling-radius",
+        "cove-owned-structure-origin"
+      ],
+      "companionPredicates": [
+        "RequiresFogRevealMutation",
+        "RequiresNeutralThreatData",
+        "RequiresObjectSidOrCategoryAllowlist"
+      ],
+      "forbiddenSubstitutes": [
+        "any Cove map object counted as owned structure",
+        "donor faction city counted as owned structure",
+        "display-name structure inference",
+        "SID substring structure inference",
+        "structure proximity without owner proof",
+        "global treasure-bank scan without radius proof"
+      ],
+      "notes": "Cove owned-structure radius requires an exact manifest city SID or dwelling prefix, runtime owner proof, and radius-bound target scanning; Cove-themed object presence is not enough."
+    },
+    "fortress.structure-reveal-enemy-heroes": {
+      "originKinds": [
+        "owned-custom-city-or-dwelling-radius",
+        "fortress-owned-structure-origin"
+      ],
+      "companionPredicates": [
+        "RequiresEnemyHeroPositions",
+        "RequiresFogRevealMutation"
+      ],
+      "forbiddenSubstitutes": [
+        "any Fortress map object counted as owned structure",
+        "donor faction city counted as owned structure",
+        "display-name structure inference",
+        "SID substring structure inference",
+        "structure proximity without owner proof",
+        "all enemy heroes revealed without radius proof"
+      ],
+      "notes": "Fortress owned-structure radius requires an exact manifest city SID or dwelling prefix, runtime owner proof, and radius-bound enemy hero scanning."
+    },
+    "necropolis.corpse-site-undead-reveal": {
+      "originKinds": [
+        "owned-custom-city-or-dwelling-radius",
+        "necropolis-owned-structure-origin"
+      ],
+      "companionPredicates": [
+        "RequiresCorpseOrBattleSiteData",
+        "RequiresFogRevealMutation",
+        "RequiresObjectSidOrCategoryAllowlist"
+      ],
+      "forbiddenSubstitutes": [
+        "any Necropolis map object counted as owned structure",
+        "donor faction city counted as owned structure",
+        "display-name structure inference",
+        "SID substring structure inference",
+        "structure proximity without owner proof",
+        "corpse-site scan without radius proof"
+      ],
+      "notes": "Necropolis owned-structure radius requires an exact manifest city SID or dwelling prefix, runtime owner proof, and radius-bound corpse or undead-relevant target scanning."
+    },
+    "tower.structure-artifact-regional-reveal": {
+      "originKinds": [
+        "owned-custom-city-or-dwelling-radius",
+        "tower-owned-structure-origin"
+      ],
+      "companionPredicates": [
+        "RequiresFogRevealMutation",
+        "RequiresObjectSidOrCategoryAllowlist"
+      ],
+      "forbiddenSubstitutes": [
+        "any Tower map object counted as owned structure",
+        "donor faction city counted as owned structure",
+        "display-name structure inference",
+        "SID substring structure inference",
+        "structure proximity without owner proof",
+        "global artifact scan without radius proof"
+      ],
+      "notes": "Tower owned-structure radius requires an exact manifest city SID or dwelling prefix, runtime owner proof, and radius-bound artifact target scanning."
+    }
+  }
+}

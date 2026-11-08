@@ -1,0 +1,389 @@
+{
+ "unit": "h3_mage",
+ "joints": {
+  "Hips": [
+   0.003,
+   0.017,
+   0.805
+  ],
+  "Spine": [
+   0.002,
+   0.017,
+   0.895
+  ],
+  "Spine1": [
+   -0.0,
+   0.017,
+   0.986
+  ],
+  "Spine2": [
+   -0.002,
+   0.017,
+   1.088
+  ],
+  "Neck": [
+   -0.003,
+   0.017,
+   1.168
+  ],
+  "Head": [
+   0.003,
+   0.038,
+   1.272
+  ],
+  "HeadTop_End": [
+   0.003,
+   0.017,
+   1.419
+  ],
+  "LeftShoulder": [
+   0.01,
+   -0.038,
+   1.21
+  ],
+  "LeftArm": [
+   0.15,
+   0.017,
+   1.196
+  ],
+  "LeftForeArm": [
+   0.262,
+   0.031,
+   0.993
+  ],
+  "LeftHand": [
+   0.22,
+   -0.143,
+   1.0
+  ],
+  "LeftHand_End": [
+   0.199,
+   -0.231,
+   1.004
+  ],
+  "RightShoulder": [
+   -0.017,
+   -0.038,
+   1.21
+  ],
+  "RightArm": [
+   -0.15,
+   0.017,
+   1.196
+  ],
+  "RightForeArm": [
+   -0.255,
+   0.108,
+   0.993
+  ],
+  "RightHand": [
+   -0.227,
+   -0.031,
+   0.846
+  ],
+  "RightHand_End": [
+   -0.215,
+   -0.093,
+   0.782
+  ],
+  "LeftUpLeg": [
+   0.08,
+   -0.003,
+   0.742
+  ],
+  "LeftLeg": [
+   0.108,
+   -0.108,
+   0.399
+  ],
+  "LeftFoot": [
+   0.115,
+   -0.045,
+   0.078
+  ],
+  "LeftToeBase": [
+   0.136,
+   -0.157,
+   -0.02
+  ],
+  "LeftToe_End": [
+   0.122,
+   -0.241,
+   -0.006
+  ],
+  "RightUpLeg": [
+   -0.073,
+   0.031,
+   0.742
+  ],
+  "RightLeg": [
+   -0.108,
+   0.003,
+   0.399
+  ],
+  "RightFoot": [
+   -0.087,
+   0.15,
+   0.078
+  ],
+  "RightToeBase": [
+   -0.143,
+   0.059,
+   -0.02
+  ],
+  "RightToe_End": [
+   -0.185,
+   -0.024,
+   -0.006
+  ]
+ },
+ "props": [
+  {
+   "name": "staff",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.166,
+      -0.222,
+      0.11
+     ],
+     [
+      0.175,
+      -0.205,
+      0.95
+     ]
+    ],
+    [
+     [
+      0.175,
+      -0.205,
+      0.95
+     ],
+     [
+      0.195,
+      -0.19,
+      1.71
+     ]
+    ]
+   ],
+   "radius": 0.045
+  }
+ ],
+ "sleeve": {
+  "x": 0.24,
+  "zMin": 0.72,
+  "zMax": 1.12
+ },
+ "bootTop": 0.08,
+ "skirtLegShare": 0.3,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ],
+  "propAimDepth": "imagePlane",
+  "propAimRange": 60
+ },
+ "extensions": [
+  "tower_propfix",
+  "tower_handsep"
+ ],
+ "handSep": [
+  {
+   "hand": "RightHand",
+   "center": [
+    -0.15,
+    -0.09,
+    0.855
+   ],
+   "radius": 0.12
+  }
+ ],
+ "armStrip": [
+  {
+   "chain": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "belowZ": 0.85
+  },
+  {
+   "chain": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "belowZ": 0.75
+  }
+ ],
+ "propFix": [
+  {
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.166,
+      -0.222,
+      0.11
+     ],
+     [
+      0.174,
+      -0.207,
+      0.78
+     ]
+    ]
+   ],
+   "radius": 0.055,
+   "minCorners": 3
+  }
+ ],
+ "glbPatch": {
+  "reason": "2026-10-10 authenticity pass (lane-A). The patch lane runs on the propAimDepth imagePlane build. AttackFront f4-f7: the staff swings like the DEF, held out horizontal at f4, raised at f5, horizontal at f6, diagonal down at f7; before this it stayed near upright. Defence f3-f7: the staff is held out horizontal (the DEF block), with transitions at f2 and f8. ShootFront f0-f3 and f8-f11: the staff stands upright like the DEF instead of leaning diagonally. Death: the staff no longer stays upright while the body falls backward with its legs kicked out. It now collapses into a partial heap: kneel, Hips down to 0.30 of the rest height, chest and neck folded forward, arms down, staff laid across. A deeper heap tears the robe (Hips 0.27 at f7 raises the worst stretch 11.67 -> 12.66; 0.22 +90 edges). This is the same floor-length robe geometry limit as h3_mage_upg. Stretch gate dry-run 2917 -> 2867 edges past 2x, worst 11.84. | 2026-10-10 lane A pre-review pass: AttackFront f5 both hands overhead, Defence arm reaching forward, Hitted sit-back recoil by spine and neck, Mouseover staff upright, Death f6-f7 head visible. An upper-body diffuseWeights blend pays for the arm moves. Limits, all the robe or the arm-flank weld: any extra Hitted Hips drop tears the robe hem (0.02 +31 edges, 0.03 +65, 0.07 +190 even with hem reweights), and a full-strength overhead raise costs +36 more than the gate allows. Stretch gate dry-run 2917 -> 2911 edges past 2x, worst 11.84 (unchanged). 2026-10-11 lane-C: Death collapses into a heap like the DEF (torso folded forward over the sunk kneel, head bowed); robe hem ring weights re-solved and stretchRelax (waist/thigh skin only) on Death and the arm clips keep the unchanged tear gate (2917 -> 2387 torn edges).",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_hem_weights.json",
+    "sha256": "3c9964084125d9ae785079d675ccb5ecc9ce16dc1b0708f6e6bb494a1a828b1b",
+    "note": "robe hem ring (Blender z<0.45; hem + lower skirt, Hips/legs/feet only) re-solved (laneC_tools/wsolve.py, CPU, against every gated pose of the heap) so the hem between the legs no longer splits into left/right leg strips in the kneel: f6 tears and the worst edge (11.7 -> 6.5) drop"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftHand"
+    ],
+    "to": "LeftForeArm",
+    "region": [
+     {
+      "axis": "z",
+      "above": 0.97,
+      "ramp": 0.03
+     }
+    ],
+    "onlyWith": {
+     "bones": [
+      "LeftForeArm"
+     ],
+     "atLeast": 0.2
+    },
+    "keep": 0.3,
+    "note": "left sleeve cuff (LeftHand+LeftForeArm verts above z 0.97) follows the forearm, keep 0.3, so the wrist turns below don't tear the cuff"
+   },
+   {
+    "op": "diffuseWeights",
+    "bones": [
+     "Hips",
+     "Spine",
+     "Spine1",
+     "Spine2",
+     "LeftShoulder",
+     "RightShoulder",
+     "LeftArm",
+     "RightArm",
+     "Neck",
+     "LeftForeArm",
+     "RightForeArm",
+     "Head"
+    ],
+    "alpha": 0.5,
+    "iterations": 32,
+    "region": [
+     {
+      "axis": "z",
+      "above": 0.85,
+      "ramp": 0.04
+     },
+     {
+      "axis": "z",
+      "below": 1.4,
+      "ramp": 0.04
+     }
+    ],
+    "note": "upper-body weight blend (Blender z 0.85-1.4; torso, shoulders, upper arms, forearms, neck, head only, so the staff/hand and legs are untouched): spreads the arm weight bled into the flanks and armpits, so AttackFront's overhead raise and Defence's forward reach stop tearing the robe sides (gate 2917 -> 2800 before the new keys)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_sendback_rot.json",
+    "sha256": "1618b9c8d46b6a3be6e7f7cffe553c7c09cdcb66fdafae9bde4a2ac8c89c429d",
+    "regrid": true,
+    "note": "half offset, applied twice under the 120 deg per-key cap: LeftHand staff aims (AttackFront f4-f7, Defence f2-f8, Death f5-f7, ShootFront f0-f3/f8-f11 upright), Death f2-f7 kneel (Hips aim, leg IK), Spine2/Neck fold, arms down"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_sendback_rot.json",
+    "sha256": "1618b9c8d46b6a3be6e7f7cffe553c7c09cdcb66fdafae9bde4a2ac8c89c429d",
+    "regrid": true,
+    "note": "(2/2)"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_sendback_tr.json",
+    "sha256": "7b11d828f31d631e6799fea528ed5202c8170f64c96702858b4a9ea212eede60",
+    "regrid": true,
+    "note": "Death f2-f7 Hips lowered into the kneel"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_prereview_rot.json",
+    "sha256": "8b6c6c592fc7af21df28ea4811081deeec2cf084475f19316570993a3792ffad",
+    "regrid": true,
+    "note": "pre-review pass, half offset applied twice: AttackFront f5 both arms raised so the hands are overhead (f4/f6 15% transitions; upper arms 80%, forearms 50%; LeftHand keeps its world rotation, so the staff line is unchanged); Defence f2-f8 left upper arm reaches forward at the enemy with the forearm 30% straightened (staff stays horizontal); Hitted f0-f3 sit-back recoil carried by Spine1 18, Spine2 15 and Neck 22 deg away from the enemy (head thrown back f1-f2), no Hips tilt and no extra Hips drop; Mouseover staff upright (LeftHand aim, f0-f2 and f8-f10 full, f3-f7 half); Death f5-f7 Neck eased up (45%, f7 45%) and the Head turned up 30-60% at f6-f7 so the head stays visible in the heap"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_prereview_rot.json",
+    "sha256": "8b6c6c592fc7af21df28ea4811081deeec2cf084475f19316570993a3792ffad",
+    "regrid": true,
+    "note": "(2/2)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_heap_rot.json",
+    "sha256": "b8d3492a4c7f9252b44541df4fd8785d8f7a764f003ce9e63b422158decc8790",
+    "regrid": true,
+    "note": "Death heap (spec key_rotations/h3_mage_heap_spec.json; half offset, applied twice): f5-f7 torso folds forward over the knees (Hips->Neck aim), Spine1/Spine2/Neck curl, head bows into the pile, kneel sinks onto the shins"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_heap_rot.json",
+    "sha256": "b8d3492a4c7f9252b44541df4fd8785d8f7a764f003ce9e63b422158decc8790",
+    "regrid": true,
+    "note": "(2/2)"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mage_heap_tr.json",
+    "sha256": "f2bfb6ecc3b99e00c05b49c3e5ca33221f49e89e80443aa05db6a58cc11af536",
+    "regrid": true,
+    "note": "Death f5-f7 Hips lowered into the heap"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death",
+     "Unit_ShootFront",
+     "Unit_AttackFront",
+     "Unit_Hitted",
+     "Unit_Defence"
+    ],
+    "ratio": 1.7,
+    "iterations": 1000,
+    "smooth": 0.4,
+    "maxMove": 0.1,
+    "bones": [
+     "Hips",
+     "LeftUpLeg",
+     "RightUpLeg",
+     "Spine",
+     "Spine1"
+    ]
+   }
+  ]
+ }
+}

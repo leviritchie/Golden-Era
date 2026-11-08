@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://olden-era.local/schemas/direct_state_card.schema.json",
+  "title": "OldenCsRecoveryDirectStateSymbolCard",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "card_id",
+    "family",
+    "role",
+    "live_methods",
+    "mono_aliases",
+    "ordered_stores",
+    "publish",
+    "banned_surfaces",
+    "proof_status",
+    "adapter_binding",
+    "ungate_requires",
+    "updated_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "card_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable id, e.g. movement.commit.bfdi_v1"
+    },
+    "family": {
+      "type": "string",
+      "enum": ["movement", "damage", "lifecycle", "status", "focus", "kill", "nestedDamage", "other"]
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "commit_owner",
+        "occupancy_mutator",
+        "publish_hub",
+        "dest_recipe",
+        "presentation",
+        "readback",
+        "notify",
+        "side_effect_store",
+        "corpse_store"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "live_methods": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["method_id", "role", "status"],
+        "properties": {
+          "method_id": { "type": "string", "minLength": 1 },
+          "role": {
+            "type": "string",
+            "enum": [
+              "commit_owner",
+              "occupancy_mutator",
+              "publish_hub",
+              "publish_dispatcher",
+              "dest_recipe",
+              "presentation",
+              "readback",
+              "pre_notify",
+              "post_notify",
+              "side_effect_store",
+              "corpse_store"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "equivalence-proven",
+              "blocked",
+              "oracle-captured",
+              "identity-bridged",
+              "renamed-accepted",
+              "static-lifted",
+              "queued",
+              "missing"
+            ]
+          },
+          "blocked_reason": { "type": ["string", "null"] },
+          "mono_alias": { "type": ["string", "null"] },
+          "rva": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "mono_aliases": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "ordered_stores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["offset_or_member", "role"],
+        "properties": {
+          "offset_or_member": { "type": "string" },
+          "role": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "publish": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": { "type": "string", "enum": ["hub_field", "none"] },
+        "hub_type": { "type": ["string", "null"] },
+        "field": { "type": ["string", "null"] },
+        "offset": { "type": ["string", "null"] },
+        "english_name": { "type": ["string", "null"] },
+        "english_name_strength": {
+          "type": ["string", "null"],
+          "enum": [null, "ordinal-inferred", "source-static", "runtime-proven"]
+        },
+        "call_chain": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "banned_surfaces": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["surface", "reason"],
+        "properties": {
+          "surface": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "proof_status": {
+      "type": "string",
+      "enum": [
+        "equivalence-proven",
+        "milestone_incomplete",
+        "blocked",
+        "draft"
+      ],
+      "description": "Card promotes to equivalence-proven when every live_methods entry is equivalence-proven OR explicitly blocked with reason (and at least one proven)."
+    },
+    "adapter_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operations", "gateway_methods", "gameplay_gated"],
+      "properties": {
+        "operations": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "gateway_methods": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "gameplay_gated": { "type": "boolean" },
+        "notes": { "type": "string" }
+      }
+    },
+    "ungate_requires": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "Always includes focused_live_positive for production flags."
+    },
+    "pin_table_path": { "type": "string" },
+    "milestone_id": { "type": "string" },
+    "milestone_ledger_path": { "type": ["string", "null"] },
+    "gamesymbols_export": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "exported": { "type": "boolean" },
+        "reason": { "type": "string" },
+        "symbols": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "exported_at": { "type": "string", "format": "date-time" },
+        "target": { "type": "string" }
+      }
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": { "type": "string" }
+  }
+}

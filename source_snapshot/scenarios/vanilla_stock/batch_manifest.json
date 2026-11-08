@@ -1,0 +1,108 @@
+{
+  "schema": "homm3.vanilla_stock_batch_manifest.v1",
+  "title": "Vanilla stock scenario translator batch",
+  "description": "Standalone HoMM3 maps exercised through the vanilla_stock raw-parity emitter. Pilots: Dungeon Keeper + Treasure Hunt; event pilot: Twins (Dialog/GiveRes + guarded random-squad). The extended set includes Complete maps plus the fan-made HotA 1.8 scenario The Mysterious Island (fan_import is build-optional while HotA-only creature/event budgets remain incomplete). Runtime load/gameplay remain unvalidated.",
+  "pipeline": "vanilla_stock_raw_parity",
+  "h3mRoot": "HoMM 3 Complete/Maps",
+  "artifactRoot": "artifacts/campaign_port_poc/vanilla_stock",
+  "stockCore": "V:/SteamLibrary/steamapps/common/Heroes of Might and Magic Olden Era/HeroesOldenEra_Data/StreamingAssets/Core.zip",
+  "templateMap": "V:/SteamLibrary/steamapps/common/Heroes of Might and Magic Olden Era/HeroesOldenEra_Data/StreamingAssets/maps/Thirst_for_Power.map",
+  "installMapsDir": "V:/SteamLibrary/steamapps/common/Heroes of Might and Magic Olden Era - Golden Era/HeroesOldenEra_Data/StreamingAssets/maps",
+  "scenarios": [
+    {
+      "id": "dungeon_keeper",
+      "h3m": "Dungeon Keeper.h3m",
+      "mapSid": "vanilla_stock_dungeon_keeper",
+      "role": "pilot",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "treasure_hunt",
+      "h3m": "Treasure Hunt.h3m",
+      "mapSid": "vanilla_stock_treasure_hunt",
+      "role": "pilot",
+      "expectVictoryMode": "TAKEMINES",
+      "expectMineEntityCount": 36
+    },
+    {
+      "id": "elbow_room",
+      "h3m": "Elbow Room.h3m",
+      "mapSid": "vanilla_stock_elbow_room",
+      "role": "extended",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "chasing_a_dream",
+      "h3m": "Chasing a Dream.h3m",
+      "mapSid": "vanilla_stock_chasing_a_dream",
+      "role": "extended",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "jihad",
+      "h3m": "Jihad.h3m",
+      "mapSid": "vanilla_stock_jihad",
+      "role": "extended",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "sands_of_blood",
+      "h3m": "Sands of Blood.h3m",
+      "mapSid": "vanilla_stock_sands_of_blood",
+      "role": "extended",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "times_up",
+      "h3m": "Time's Up.h3m",
+      "mapSid": "vanilla_stock_times_up",
+      "role": "extended",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "twins",
+      "h3m": "Twins.h3m",
+      "mapSid": "vanilla_stock_twins",
+      "role": "event_pilot",
+      "expectVictoryMode": "WINSTANDARD",
+      "expectMapEventCount": 6
+    },
+    {
+      "id": "ascension",
+      "h3m": "Ascension.h3m",
+      "mapSid": "vanilla_stock_ascension",
+      "role": "extended",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "darwins_prize",
+      "h3m": "Darwin's Prize.h3m",
+      "mapSid": "vanilla_stock_darwins_prize",
+      "role": "extended",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "dragon_pass",
+      "h3m": "Dragon Pass.h3m",
+      "mapSid": "vanilla_stock_dragon_pass",
+      "role": "extended",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "faeries",
+      "h3m": "Faeries.h3m",
+      "mapSid": "vanilla_stock_faeries",
+      "role": "extended",
+      "expectVictoryMode": "WINSTANDARD"
+    },
+    {
+      "id": "the_mysterious_island",
+      "h3m": "[HotA] The Mysterious Island - v1-5-h.h3m",
+      "mapSid": "vanilla_stock_the_mysterious_island",
+      "role": "fan_import",
+      "sourceVersion": "1.5.h",
+      "sourceUrl": "https://www.maps4heroes.com/forum/opinions.php?game=3&map_id=2809",
+      "expectVictoryMode": "WINSTANDARD"
+    }
+  ]
+}

@@ -1,0 +1,365 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_fortress",
+  "unitOverrides": {
+    "h3_gnoll": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "fortress.gnoll_line",
+      "decisionTest": "Gnoll defines the tier baseline for fortress; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_gnoll_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "fortress.gnoll_line",
+      "decisionTest": "Gnoll Marauder should be chosen over Gnoll Marauder when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_gnoll_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "fortress.gnoll_line",
+      "decisionTest": "Gnoll Shaman should be chosen over Gnoll Marauder when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_gnoll_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_gnoll_upg_alt_redesign_ability_description",
+          "nameText": "Shorten Shadow",
+          "descriptionText": "Spend 1 Focus to lower an enemy's Attack and Defense for 1 round.",
+          "iconKey": "sub_skill_faction_homm3_ability_shorten_shadow",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 1,
+          "cooldown": 2,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "day_5_magic_shorten_shadow:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Shorten Shadow",
+          "effectPayload": {
+            "spellSid": "day_5_magic_shorten_shadow",
+            "spellTier": 1,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "duration": 1,
+            "buffSid": "magic_shorten_shadow_effect_0"
+          },
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass.",
+          "spellSid": "day_5_magic_shorten_shadow",
+          "spellTier": 1,
+          "spellLevel": 1,
+          "dealerIndex": 0,
+          "duration": 1,
+          "buffSid": "magic_shorten_shadow_effect_0"
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_lizardman": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "fortress.lizardman_line",
+      "decisionTest": "Lizardman defines the tier baseline for fortress; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_lizardman_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "fortress.lizardman_line",
+      "decisionTest": "Lizard Warrior should be chosen over Lizard Warrior when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_lizardman_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "fortress.lizardman_line",
+      "decisionTest": "Lizard Assassin should be chosen over Lizard Warrior when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_serpent_fly": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "fortress.serpent_fly_line",
+      "decisionTest": "Serpent Fly defines the tier baseline for fortress; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_serpent_fly_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "fortress.serpent_fly_line",
+      "decisionTest": "Dragon Fly should be chosen over Dragon Fly when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_serpent_fly_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "fortress.serpent_fly_line",
+      "decisionTest": "Damsel Fly should be chosen over Dragon Fly when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_basilisk": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "fortress.basilisk_line",
+      "decisionTest": "Basilisk defines the tier baseline for fortress; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_basilisk_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "fortress.basilisk_line",
+      "decisionTest": "Greater Basilisk should be chosen over Greater Basilisk when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_basilisk_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "fortress.basilisk_line",
+      "decisionTest": "Basilisk Flamespitter should be chosen over Greater Basilisk when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_basilisk_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_basilisk_upg_alt_redesign_ability_description",
+          "nameText": "Handcuffs",
+          "descriptionText": "Spend 1 Focus to prevent an enemy creature from using active abilities for 2 rounds.",
+          "iconKey": "",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 1,
+          "cooldown": 2,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "succubus:abilities:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Handcuffs",
+          "effectPayload": {},
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_gorgon": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "fortress.gorgon_line",
+      "decisionTest": "Gorgon defines the tier baseline for fortress; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_gorgon_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "fortress.gorgon_line",
+      "decisionTest": "Mighty Gorgon should be chosen over Mighty Gorgon when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_gorgon_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "fortress.gorgon_line",
+      "decisionTest": "Corrosive Gorgon should be chosen over Mighty Gorgon when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_gorgon_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_gorgon_upg_alt_redesign_ability_description",
+          "nameText": "Inner Flame",
+          "descriptionText": "Spend 3 Focus to deal 30 pure magic damage plus 10 per stack to melee attackers for 2 rounds.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 3,
+          "cooldown": 3,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "black_dragon:abilities:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Inner Flame",
+          "effectPayload": {},
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_wyvern": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "fortress.wyvern_line",
+      "decisionTest": "Wyvern defines the tier baseline for fortress; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_wyvern_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "fortress.wyvern_line",
+      "decisionTest": "Wyvern Monarch should be chosen over Wyvern Monarch when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_wyvern_upg_redesign_ability_name",
+          "descriptionKey": "h3_wyvern_upg_redesign_ability_description",
+          "nameText": "Swarm of Bees",
+          "descriptionText": "Spend 2 Focus to deal 16 normal damage plus 4 per stack, then repeat that damage for 3 rounds.",
+          "iconKey": "",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "druid:abilities:1",
+          "effectKind": "unit-special",
+          "effectLabel": "Swarm of Bees",
+          "effectPayload": {},
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_wyvern_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "fortress.wyvern_line",
+      "decisionTest": "Paokai should be chosen over Wyvern Monarch when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_wyvern_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_wyvern_upg_alt_redesign_ability_description",
+          "nameText": "Dragonflight",
+          "descriptionText": "Spend 2 Focus to fly to a target hex, deal 100% normal damage to all nearby creatures, including allies, in the landing area, and push them back.",
+          "iconKey": "",
+          "abilityType": "Ability_type_attack",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 5,
+          "charges": "",
+          "effectKey": "black_dragon_upg_alt:abilities:1",
+          "effectKind": "unit-special",
+          "effectLabel": "Dragonflight",
+          "effectPayload": {},
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_hydra": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "fortress.hydra_line",
+      "decisionTest": "Hydra defines the tier baseline for fortress; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_hydra_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "fortress.hydra_line",
+      "decisionTest": "Chaos Hydra should be chosen over Chaos Hydra when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_hydra_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "fortress.hydra_line",
+      "decisionTest": "Ruinous Hydra should be chosen over Chaos Hydra when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_hydra_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_hydra_upg_alt_redesign_ability_description",
+          "nameText": "Hksmilla's Rampage",
+          "descriptionText": "Spend 3 Focus to give an allied stack Double Strike, +10% damage dealt, and +10% damage taken for 1 round.",
+          "iconKey": "sub_skill_faction_homm3_ability_hksmillas_rampage",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 3,
+          "cooldown": 3,
+          "rank": 5,
+          "charges": "",
+          "effectKey": "primal_14_magic_hksmillas_rampage:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Hksmilla's Rampage",
+          "effectPayload": {
+            "spellSid": "primal_14_magic_hksmillas_rampage",
+            "spellTier": 5,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "duration": 1,
+            "buffSid": "magic_hksmillas_rampage_effect_0"
+          },
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass.",
+          "spellSid": "primal_14_magic_hksmillas_rampage",
+          "spellTier": 5,
+          "spellLevel": 1,
+          "dealerIndex": 0,
+          "duration": 1,
+          "buffSid": "magic_hksmillas_rampage_effect_0"
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    }
+  }
+}

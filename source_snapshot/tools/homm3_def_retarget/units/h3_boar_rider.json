@@ -1,0 +1,1073 @@
+{
+ "unit": "h3_boar_rider",
+ "joints": {
+  "Hips": [
+   0,
+   0.05,
+   0.56
+  ],
+  "Spine": [
+   0,
+   0.05,
+   0.63
+  ],
+  "Spine1": [
+   0,
+   0.045,
+   0.69
+  ],
+  "Spine2": [
+   0,
+   0.04,
+   0.74
+  ],
+  "Neck": [
+   0,
+   0.02,
+   0.79
+  ],
+  "Head": [
+   0,
+   0.0,
+   0.82
+  ],
+  "HeadTop_End": [
+   0,
+   -0.01,
+   0.95
+  ],
+  "LeftShoulder": [
+   0.04,
+   0.03,
+   0.76
+  ],
+  "LeftArm": [
+   0.13,
+   0.03,
+   0.73
+  ],
+  "LeftForeArm": [
+   0.19,
+   0.03,
+   0.63
+  ],
+  "LeftHand": [
+   0.18,
+   -0.06,
+   0.54
+  ],
+  "LeftHand_End": [
+   0.18,
+   -0.1,
+   0.51
+  ],
+  "RightShoulder": [
+   -0.04,
+   0.03,
+   0.76
+  ],
+  "RightArm": [
+   -0.13,
+   0.03,
+   0.73
+  ],
+  "RightForeArm": [
+   -0.19,
+   0.03,
+   0.63
+  ],
+  "RightHand": [
+   -0.18,
+   -0.06,
+   0.54
+  ],
+  "RightHand_End": [
+   -0.18,
+   -0.1,
+   0.51
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "stronghold_propbone",
+  "hand_keys",
+  "stronghold_quadruped",
+  "stronghold_quadruped_hips_parent",
+  "castle_yaw",
+  "stronghold_rip"
+ ],
+ "yawDeg": 40,
+ "propBones": [
+  {
+   "name": "Mace",
+   "parent": "RightHand",
+   "head": [
+    -0.16,
+    -0.06,
+    0.53
+   ],
+   "tail": [
+    -0.16,
+    -0.225,
+    0.665
+   ],
+   "regions": [
+    {
+     "sphere": [
+      [
+       0,
+       -0.235,
+       0.665
+      ],
+      0.14
+     ],
+     "exclude": [
+      {
+       "box": [
+        [
+         -1,
+         -1,
+         0
+        ],
+        [
+         1,
+         1,
+         0.6
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "sphere": [
+      [
+       0,
+       -0.235,
+       0.665
+      ],
+      0.13
+     ],
+     "color": {
+      "expr": "mx-mn",
+      "max": 0.09
+     }
+    },
+    {
+     "segments": [
+      [
+       [
+        0,
+        -0.17,
+        0.62
+       ],
+       [
+        0,
+        -0.065,
+        0.53
+       ]
+      ]
+     ],
+     "radius": 0.022
+    }
+   ],
+   "relocate": {
+    "from": [
+     [
+      0,
+      -0.07,
+      0.53
+     ],
+     [
+      0,
+      -0.79,
+      0.61
+     ],
+     [
+      1,
+      0,
+      0
+     ]
+    ],
+    "to": [
+     [
+      -0.16,
+      -0.06,
+      0.53
+     ],
+     [
+      0,
+      -0.79,
+      0.61
+     ],
+     [
+      1,
+      0,
+      0
+     ]
+    ]
+   },
+   "faceTest": "centroid"
+  }
+ ],
+ "quadruped": {
+  "bones": {
+   "WolfBody": [
+    [
+     0,
+     0.3,
+     0.38
+    ],
+    [
+     0,
+     -0.18,
+     0.38
+    ],
+    "Root"
+   ],
+   "WolfNeck": [
+    [
+     0,
+     -0.18,
+     0.38
+    ],
+    [
+     0,
+     -0.3,
+     0.38
+    ],
+    "WolfBody"
+   ],
+   "WolfHead": [
+    [
+     0,
+     -0.3,
+     0.38
+    ],
+    [
+     0,
+     -0.52,
+     0.3
+    ],
+    "WolfNeck"
+   ],
+   "WolfTail": [
+    [
+     0,
+     0.38,
+     0.44
+    ],
+    [
+     0,
+     0.47,
+     0.2
+    ],
+    "WolfBody"
+   ]
+  },
+  "legs": {
+   "FL": {
+    "front": true,
+    "side": 1,
+    "points": [
+     [
+      0.08,
+      -0.15,
+      0.33
+     ],
+     [
+      0.08,
+      -0.14,
+      0.2
+     ],
+     [
+      0.08,
+      -0.15,
+      0.07
+     ],
+     [
+      0.08,
+      -0.2,
+      0.0
+     ]
+    ]
+   },
+   "FR": {
+    "front": true,
+    "side": -1,
+    "points": [
+     [
+      -0.08,
+      -0.15,
+      0.33
+     ],
+     [
+      -0.08,
+      -0.14,
+      0.2
+     ],
+     [
+      -0.08,
+      -0.15,
+      0.07
+     ],
+     [
+      -0.08,
+      -0.2,
+      0.0
+     ]
+    ]
+   },
+   "RL": {
+    "front": false,
+    "side": 1,
+    "points": [
+     [
+      0.08,
+      0.28,
+      0.35
+     ],
+     [
+      0.08,
+      0.3,
+      0.2
+     ],
+     [
+      0.08,
+      0.31,
+      0.07
+     ],
+     [
+      0.08,
+      0.26,
+      0.0
+     ]
+    ]
+   },
+   "RR": {
+    "front": false,
+    "side": -1,
+    "points": [
+     [
+      -0.08,
+      0.28,
+      0.35
+     ],
+     [
+      -0.08,
+      0.3,
+      0.2
+     ],
+     [
+      -0.08,
+      0.31,
+      0.07
+     ],
+     [
+      -0.08,
+      0.26,
+      0.0
+     ]
+    ]
+   }
+  },
+  "rider": {
+   "box": [
+    [
+     -0.32,
+     -0.1,
+     0.5
+    ],
+    [
+     0.32,
+     0.15,
+     1.0
+    ]
+   ],
+   "minZ": 0.5,
+   "color": {
+    "expr": "r*0",
+    "min": 1
+   },
+   "boxes": [
+    [
+     [
+      0.14,
+      -0.15,
+      0.2
+     ],
+     [
+      0.32,
+      0.15,
+      0.62
+     ]
+    ],
+    [
+     [
+      -0.32,
+      -0.15,
+      0.2
+     ],
+     [
+      -0.14,
+      0.15,
+      0.62
+     ]
+    ]
+   ],
+   "saddle": [
+    0.44,
+    0.5
+   ],
+   "free": [
+    {
+     "box": [
+      [
+       0.12,
+       -0.13,
+       0.5
+      ],
+      [
+       0.24,
+       0.0,
+       0.62
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       -0.24,
+       -0.13,
+       0.5
+      ],
+      [
+       -0.12,
+       0.0,
+       0.62
+      ]
+     ]
+    }
+   ]
+  },
+  "protect": [
+   "Mace"
+  ],
+  "bodyRadius": 0.1,
+  "halfWidth": 0.15,
+  "gait": {
+   "stride": 30,
+   "knee": 35,
+   "pitch": 5,
+   "bob": 0.015
+  }
+ },
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 30,
+   "dy": 40,
+   "roll": 25
+  },
+  "propAim": [
+   "Mace"
+  ]
+ },
+ "handKeys": {
+  "Idle": [
+   {
+    "f": 0,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 6,
+    "bones": {
+     "RightArm": [
+      -52,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -32,
+      0,
+      0
+     ],
+     "Spine1": [
+      4,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 11,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Move": [
+   {
+    "f": 0,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 4,
+    "bones": {
+     "RightArm": [
+      -52,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -32,
+      0,
+      0
+     ],
+     "Spine1": [
+      4,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 7,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "MoveStart": [
+   {
+    "f": 0,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "MoveEnd": [
+   {
+    "f": 0,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Mouseover": [
+   {
+    "f": 0,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 4,
+    "bones": {
+     "RightArm": [
+      -52,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -32,
+      0,
+      0
+     ],
+     "Spine1": [
+      4,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 8,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "AttackFront": [
+   {
+    "f": 0,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 1,
+    "bones": {
+     "RightArm": [
+      -150,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -20,
+      0,
+      0
+     ],
+     "Spine1": [
+      -8,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 2,
+    "bones": {
+     "RightArm": [
+      -165,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -10,
+      0,
+      0
+     ],
+     "Spine1": [
+      -10,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 3,
+    "bones": {
+     "RightArm": [
+      -95,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      10,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 4,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      14,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 6,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Hitted": [
+   {
+    "f": 0,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 2,
+    "bones": {
+     "RightArm": [
+      -130,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -20,
+      0,
+      0
+     ],
+     "Spine1": [
+      -12,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 4,
+    "bones": {
+     "RightArm": [
+      -140,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -20,
+      0,
+      0
+     ],
+     "Spine1": [
+      -12,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 7,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Defence": [
+   {
+    "f": 0,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 3,
+    "bones": {
+     "RightArm": [
+      -100,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -30,
+      0,
+      0
+     ],
+     "Spine1": [
+      -8,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 6,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Death": [
+   {
+    "f": 0,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 3,
+    "bones": {
+     "RightArm": [
+      -150,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -10,
+      0,
+      0
+     ],
+     "LeftArm": [
+      -150,
+      0,
+      0
+     ],
+     "Spine1": [
+      -15,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 5,
+    "bones": {
+     "RightArm": [
+      -80,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -50,
+      0,
+      0
+     ],
+     "LeftArm": [
+      -60,
+      0,
+      0
+     ],
+     "Spine1": [
+      -5,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 7,
+    "bones": {
+     "RightArm": [
+      -40,
+      0,
+      -50
+     ],
+     "RightForeArm": [
+      -25,
+      0,
+      0
+     ],
+     "Spine1": [
+      10,
+      0,
+      0
+     ]
+    }
+   }
+  ]
+ },
+ "rips": [
+  {
+   "name": "rarm_leg",
+   "a": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "b": [
+    "Hips",
+    "Spine",
+    "WolfBody"
+   ],
+   "box": [
+    [
+     -0.35,
+     -0.2,
+     0.4
+    ],
+    [
+     -0.08,
+     0.15,
+     0.68
+    ]
+   ]
+  },
+  {
+   "name": "larm_leg",
+   "a": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "b": [
+    "Hips",
+    "Spine",
+    "WolfBody"
+   ],
+   "box": [
+    [
+     0.08,
+     -0.2,
+     0.4
+    ],
+    [
+     0.35,
+     0.15,
+     0.68
+    ]
+   ]
+  }
+ ],
+ "sourceMesh": "artifacts/homm3_mesh_surgery/h3_boar_rider_hand_c1.glb",
+ "meshSurgeryReason": "2026-10-11 lane D (standing mesh-surgery approval): the Meshy mesh welds the resting right fist and mace onto the boar's mane (56 bridge faces), so the DEF g12 mace swing (overhead, wound back, swung down in front) tore a mane shard out with the fist (patch gate: 2018 -> 2067 edges over 2x; a weight re-solve tore more, 2234). limb_cut_surgery.py (on a scratch copy of the source carrying the delivery skin) splits the bridge by majority and duplicates the 28 shared vertices; every original vertex, face, UV and texel is unchanged.",
+ "strideMatch": {
+  "highHarmonicKeep": 0.7,
+  "reason": "2026-10-11 lane D: after the hand_c1 limb cut (fist + mace off the mane) the rebuilt raw Move measures jitter p90 0.034, but the stride-matched (plant) Move reads 0.369 (worst FR2; cap 0.35), so fleet_rebuild refused it as a new articulation:jittery fault. k 0.7 gives p90 0.282 (worst FR2 0.553) with slipRatio 0.160 (prior delivery 0.112) and requiredOverActual 1.120 (1.074); no gate faults in a scratch run of the delivery stages"
+ },
+ "glbPatch": {
+  "reason": "2026-10-11 lane D authenticity: DEF g12 AttackFront mace swing - mace raised overhead (f0), wound back behind the shoulder (f1), overhead again (f2), swung forward (f3) and down in front of the boar's snout (f4), recovering at f5; the delivered swing barely left the shoulder. RightArm/RightForeArm aims per frame, split over two keyRotations ops. Death needs no patch (rider slumps, boar rears at f3-f4 already).",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_boar_rider_hand_split.json",
+    "sha256": "9979332933da79336122db296031e88f90fd400bd363c7fa1da5a885362e6cfe",
+    "note": "fist/mace vs mane contact after the hand_c1 limb cut: the build's heat skin bleeds RightHand/RightForeArm weight onto the mane and WolfBody/WolfNeck/Hips weight onto the fist across the open cut; geodesic split (45 to the arm, 15 to the body)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_boar_rider_pose_rot.json",
+    "regrid": true,
+    "sha256": "a60de9b9e3a93856b13d35e2ea3c41b163ff3d3712ad397779bbfb1e67a19869"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_boar_rider_pose_rot.json",
+    "regrid": true,
+    "sha256": "a60de9b9e3a93856b13d35e2ea3c41b163ff3d3712ad397779bbfb1e67a19869"
+   }
+  ]
+ }
+}

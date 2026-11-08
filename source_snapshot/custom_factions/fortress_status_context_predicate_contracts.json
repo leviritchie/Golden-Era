@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for Fortress status-context predicates. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "contractsMustMatchExactPredicateProfiles": true,
+    "fortressOnly": true,
+    "statusTaxonomyRequired": true,
+    "taxonomyClassificationAloneIsNotLiveState": true,
+    "mireStateRemainsRuntimeOnly": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": ["homm3_fortress"],
+  "requiredStaticEvidence": {
+    "statusTaxonomyContract": "custom_factions/status_taxonomy_contracts.json",
+    "requiredPredicateGroups": ["negativeStatusPredicate", "poisonSlowMovementRestriction", "enemySlowPoisonMireState"],
+    "requiredTags": ["negative", "poison", "slow", "movement_restriction"]
+  },
+  "contracts": {
+    "RequiresDebuffedAttacker": {
+      "allowedFamilies": ["TrainingDamage"],
+      "requiredEffectKeys": ["fortress.debuffed-attacker-damage-reduction"],
+      "requiredStatusGroups": ["negativeStatusPredicate"],
+      "requiredRuntimeSemantics": ["attacker has exact negative live status", "outgoing committed damage by that attacker"],
+      "forbiddenSubstitutes": [
+        "status taxonomy classification counted as live debuffed attacker",
+        "target debuff counted as attacker debuff",
+        "any buff or positive status counted as debuffed attacker",
+        "damage event counted without attacker status query proof",
+        "status SID substring or localized text counted as debuff",
+        "Fortress faction membership counted as debuffed attacker"
+      ],
+      "notes": "Hidebound Drill requires a live negative-status query on the attacker before reducing outgoing committed damage. Static taxonomy only defines eligible negative status IDs; runtime must prove attacker identity, status state, damage ordering, and owner correlation."
+    },
+    "RequiresEnemySlowPoisonMireState": {
+      "allowedFamilies": ["SpellCooldown"],
+      "requiredEffectKeys": ["fortress.enemy-slow-poison-cooldown-penalty"],
+      "requiredStatusGroups": ["poisonSlowMovementRestriction", "enemySlowPoisonMireState"],
+      "requiredRuntimeSemantics": ["enemy army has exact poison status", "enemy army has exact slow or movement-restriction status", "enemy army has proven mire terrain/state"],
+      "forbiddenSubstitutes": [
+        "status taxonomy classification counted as live enemy slow poison mire state",
+        "friendly slow or poison status counted as enemy army state",
+        "generic negative status counted as slow poison or mire",
+        "mire inferred from swamp flavor text or law name",
+        "spell cooldown row counted without enemy state proof",
+        "status SID substring or localized text counted as enemy state"
+      ],
+      "notes": "Bog Hex requires a live enemy army state: poison, slow/movement restriction, or separately proven mire. Static taxonomy covers poison/slow/movement-restriction only; mire, enemy-side correlation, cooldown ordering, and idempotence remain runtime-gated."
+    }
+  },
+  "requiredRuntimeProof": [
+    "attacker battle unit identity proof",
+    "live attacker negative status query proof",
+    "outgoing committed damage ordering proof",
+    "enemy side versus law-owner side proof",
+    "live enemy poison status query proof",
+    "live enemy slow or movement-restriction status query proof",
+    "mire terrain or state proof",
+    "cooldown mutation or penalty ordering proof",
+    "idempotent per-hit or per-cooldown application proof"
+  ]
+}

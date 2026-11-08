@@ -1,0 +1,26 @@
+{
+  "schema": "owned_skin_ownership_rules.v1",
+  "unitSid": "h3_crusader",
+  "description": "Rigid ownership corrections for disconnected Crusader armor components.",
+  "rules": [
+    {
+      "id": "shield_side_boundary",
+      "fromOwner": "Hips",
+      "toOwner": "LeftArm",
+      "when": {
+        "centerMin": {
+          "x": 0.05
+        },
+        "centerRelativeToBoneHeadMin": [
+          {
+            "bone": "Spine02",
+            "axis": "z",
+            "value": -0.1
+          }
+        ]
+      },
+      "minApplications": 1,
+      "reason": "Disconnected shield-side armor islands at the torso/arm seam follow the shield arm rather than the pelvis."
+    }
+  ]
+}

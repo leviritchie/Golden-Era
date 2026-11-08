@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_tower",
+  "sourceDoc": "docs/custom_faction_recommendations.md and docs/custom_faction_technical_implementation_proposals.md",
+  "mechanics": [
+    {
+      "id": "tower.resource_silo",
+      "surface": "building",
+      "sourceName": "Resource Silo",
+      "status": "exact",
+      "reason": "Generated city row grants fixed gem income.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "tower.sculptors_wings",
+      "surface": "building",
+      "sourceName": "Sculptor's Wings",
+      "status": "exact",
+      "reason": "Generated city row grants +4 weekly growth to the Gargoyle line.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot_level_2"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "tower.library",
+      "surface": "building",
+      "sourceName": "Library",
+      "status": "substituted",
+      "reason": "Current Tower design uses a native-safe vision/knowledge-style substitute until exact mage guild spell expansion is traced.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Intelligence_Academy"
+      ],
+      "forbiddenPlayerText": [
+        "extra spell",
+        "mage guild"
+      ]
+    },
+    {
+      "id": "tower.workshop_yard",
+      "surface": "building",
+      "sourceName": "Wall of Knowledge",
+      "status": "exact",
+      "reason": "Native heroBonusBank grants +1 Knowledge once to each visiting hero, as the HoMM3 Wall of Knowledge does.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Training_Range"
+      ],
+      "forbiddenPlayerText": [
+        "war machine"
+      ]
+    },
+    {
+      "id": "tower.skyship_beacon",
+      "surface": "building",
+      "sourceName": "Skyship Beacon",
+      "status": "substituted",
+      "reason": "Grail/source vision and flight identity need map/session tracing before player text claims them.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "fly",
+        "Skyship",
+        "reveals map"
+      ],
+      "currentRows": [
+        "Build_Golden_Calf"
+      ],
+      "playerTextTokens": [
+        "Homm3Tower_Build_Golden_Calf_description",
+        "Homm3Tower_Build_Golden_Calf_name",
+        "Homm3Tower_Build_Golden_Calf_narrativeDescription"
+      ]
+    },
+    {
+      "id": "tower.arcane_battery",
+      "surface": "faction_skill",
+      "sourceName": "Arcane Battery",
+      "status": "substituted",
+      "reason": "Arcane Battery grants a once-per-round hero ability at 2/1/0 Focus by Basic/Advanced/Expert. Native refresh_spell_book restores spellbook use this round. Per-spell cooldowns are intentionally not cleared (full wipe would be overtuned). Scholar Advanced/Expert subskills keep curriculum, Chronomancy, Mana Well Aegis, remote learning, spell economies, start Focus, and Mana Well Aegis (Homm3TowerBottomlessKnowledgeHook).",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "Bottomless Knowledge",
+        "Artifice",
+        "Spell Power as Attack",
+        "Knowledge as Defense",
+        "construct Attack",
+        "construct Defense",
+        "each morning",
+        "restore 33%",
+        "restore 66%",
+        "restore 100%",
+        "all curses",
+        "any curse",
+        "battle curses",
+        "battle side buffs",
+        "campaign debuffs",
+        "all negative buffs",
+        "clear all of your spell cooldowns",
+        "clear all of their spell cooldowns",
+        "per-spell cooldown",
+        "Deep Reservoirs",
+        "Maximum Mana increases by 25%"
+      ],
+      "forbiddenSidTokens": [
+        "bottomless_knowledge",
+        "sub_skill_faction_homm3_tower_arcane_curriculum",
+        "sub_skill_faction_homm3_tower_deep_reservoirs",
+        "sub_skill_faction_homm3_tower_arcane_battery_deep_reservoirs",
+        "sub_skill_faction_homm3_tower_mana_well_aegis",
+        "sub_skill_faction_homm3_tower_remote_library",
+        "sub_skill_faction_homm3_tower_spell_economies",
+        "sub_skill_faction_homm3_tower_focused_study"
+      ],
+      "currentRows": [
+        "skill_faction_homm3_tower",
+        "skill_faction_homm3_tower_ability_arcane_battery"
+      ],
+      "validationOwner": "validate_homm3_tower_arcane_battery_contract"
+    }
+  ]
+}

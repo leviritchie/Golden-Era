@@ -1,0 +1,181 @@
+{
+    "schemaVersion":  "ai-start-combat-live-metadata-probe.v1",
+    "status":  "source-prepared-only",
+    "commandExposure":  "ai_start_combat and ai_open_town must remain absent until this packet is proven and a one-route production implementation is runtime-proven.",
+    "freshnessPreflight":  {
+                               "command":  "node tools\\\\olden_ai_mcp\\\\check_runtime_freshness.mjs --ai-bridge-dir \"V:\\\\SteamLibrary\\\\steamapps\\\\common\\\\Heroes of Might and Magic Olden Era - Golden Era\\\\BepInEx\\\\plugins\\\\OfflineUnlockMod\\\\ai_driver_bridge\" --live-bridge-dir \"V:\\\\SteamLibrary\\\\steamapps\\\\common\\\\Heroes of Might and Magic Olden Era - Golden Era\\\\BepInEx\\\\plugins\\\\OfflineUnlockMod\\\\live_probe_bridge\" --sample-ms 1500 --require-fresh",
+                               "requiredBeforeLiveProbe":  true,
+                               "lastKnownBlockedState":  {
+                                                             "aiBridge":  "cityDungeon frame 35372 -\u003e 35372",
+                                                             "liveBridge":  "cityDungeon frame 35368 -\u003e 35368",
+                                                             "fresh":  false
+                                                         }
+                           },
+    "evidenceBoundary":  [
+                             "Every request in this packet is read-only metadata/listing inspection.",
+                             "resolve_decomp_method ranks runtime metadata candidates; it does not invoke methods, mutate state, or prove battle entry.",
+                             "method_signatures lists metadata only and must not be treated as owner instance discovery.",
+                             "Do not expose ai_start_combat until a later proof resolves a live owner instance, performs a safe non-production transition, and ai_observe confirms mode battle.",
+                             "Owner getter resolve requests are metadata-only; they rank generated getter candidates and do not call getters or discover live instances."
+                         ],
+    "liveProbeRequests":  [
+                              {
+                                  "label":  "eys method signatures",
+                                  "command":  "method_signatures",
+                                  "payload":  {
+                                                  "typeName":  "ObjectPublicInciObInciBoObStInciUnique",
+                                                  "limit":  120
+                                              },
+                                  "purpose":  "List generated eys runtime method metadata after freshness is true."
+                              },
+                              {
+                                  "label":  "cux method signatures",
+                                  "command":  "method_signatures",
+                                  "payload":  {
+                                                  "typeName":  "Object1PublicIncaStIncaBoStcaInStUnique",
+                                                  "limit":  80
+                                              },
+                                  "purpose":  "List generated cux runtime method metadata after freshness is true."
+                              },
+                              {
+                                  "label":  "owner BhWindowWorld signatures",
+                                  "command":  "method_signatures",
+                                  "payload":  {
+                                                  "typeName":  "Hex.Cheat.UI.BhWindowWorld",
+                                                  "limit":  120
+                                              },
+                                  "purpose":  "Confirm get_sideCheats metadata on the world cheat UI owner candidate."
+                              },
+                              {
+                                  "label":  "owner BhWindowHero signatures",
+                                  "command":  "method_signatures",
+                                  "payload":  {
+                                                  "typeName":  "Hex.Cheat.UI.BhWindowHero",
+                                                  "limit":  100
+                                              },
+                                  "purpose":  "Confirm get_sideCheats metadata on the hero cheat UI owner candidate."
+                              },
+                              {
+                                  "label":  "owner BhWindowMagic signatures",
+                                  "command":  "method_signatures",
+                                  "payload":  {
+                                                  "typeName":  "Hex.Cheat.UI.BhWindowMagic",
+                                                  "limit":  100
+                                              },
+                                  "purpose":  "Confirm get_sideCheats metadata on the magic cheat UI owner candidate."
+                              },
+                              {
+                                  "label":  "session root fda signatures",
+                                  "command":  "method_signatures",
+                                  "payload":  {
+                                                  "typeName":  "ObjectPublicObBhcjObIncjSiObIncoUnique",
+                                                  "limit":  160
+                                              },
+                                  "purpose":  "Confirm exact generated getter returning the eys runtime type on fda."
+                              },
+                              {
+                                  "label":  "resolve eys dvf",
+                                  "command":  "resolve_decomp_method",
+                                  "payload":  {
+                                                  "typeName":  "ObjectPublicInciObInciBoObStInciUnique",
+                                                  "signature":  "System.Void dvf()",
+                                                  "limit":  12
+                                              },
+                                  "requiredReason":  "obfuscated_name_exact"
+                              },
+                              {
+                                  "label":  "resolve eys bhzm",
+                                  "command":  "resolve_decomp_method",
+                                  "payload":  {
+                                                  "typeName":  "ObjectPublicInciObInciBoObStInciUnique",
+                                                  "signature":  "System.Void bhzm()",
+                                                  "limit":  12
+                                              },
+                                  "requiredReason":  "obfuscated_name_exact"
+                              },
+                              {
+                                  "label":  "resolve eys bhzo",
+                                  "command":  "resolve_decomp_method",
+                                  "payload":  {
+                                                  "typeName":  "ObjectPublicInciObInciBoObStInciUnique",
+                                                  "signature":  "System.Void bhzo()",
+                                                  "limit":  12
+                                              },
+                                  "requiredReason":  "obfuscated_name_exact"
+                              },
+                              {
+                                  "label":  "resolve eys bhzj",
+                                  "command":  "resolve_decomp_method",
+                                  "payload":  {
+                                                  "typeName":  "ObjectPublicInciObInciBoObStInciUnique",
+                                                  "signature":  "System.Void bhzj(System.Boolean a)",
+                                                  "limit":  12
+                                              },
+                                  "requiredReason":  "obfuscated_name_exact"
+                              },
+                              {
+                                  "label":  "resolve cux hsf",
+                                  "command":  "resolve_decomp_method",
+                                  "payload":  {
+                                                  "typeName":  "Object1PublicIncaStIncaBoStcaInStUnique",
+                                                  "signature":  "Hex.Processing.ECmd hsf()",
+                                                  "methodOrdinal":  4,
+                                                  "limit":  12
+                                              },
+                                  "requiredReasons":  [
+                                                          "obfuscated_name_exact",
+                                                          "runtime_callable_ordinal_match"
+                                                      ]
+                              },
+                              {
+                                  "label":  "resolve owner BhWindowWorld get_sideCheats",
+                                  "command":  "resolve_decomp_method",
+                                  "payload":  {
+                                                  "typeName":  "Hex.Cheat.UI.BhWindowWorld",
+                                                  "signature":  "ObjectPublicInciObInciBoObStInciUnique get_sideCheats()",
+                                                  "limit":  12
+                                              },
+                                  "requiredReason":  "signature_match",
+                                  "purpose":  "Rank runtime metadata candidates for the generated sideCheats getter on the world cheat UI owner candidate."
+                              },
+                              {
+                                  "label":  "resolve owner BhWindowHero get_sideCheats",
+                                  "command":  "resolve_decomp_method",
+                                  "payload":  {
+                                                  "typeName":  "Hex.Cheat.UI.BhWindowHero",
+                                                  "signature":  "ObjectPublicInciObInciBoObStInciUnique get_sideCheats()",
+                                                  "limit":  12
+                                              },
+                                  "requiredReason":  "signature_match",
+                                  "purpose":  "Rank runtime metadata candidates for the generated sideCheats getter on the hero cheat UI owner candidate."
+                              },
+                              {
+                                  "label":  "resolve owner BhWindowMagic get_sideCheats",
+                                  "command":  "resolve_decomp_method",
+                                  "payload":  {
+                                                  "typeName":  "Hex.Cheat.UI.BhWindowMagic",
+                                                  "signature":  "ObjectPublicInciObInciBoObStInciUnique get_sideCheats()",
+                                                  "limit":  12
+                                              },
+                                  "requiredReason":  "signature_match",
+                                  "purpose":  "Rank runtime metadata candidates for the generated sideCheats getter on the magic cheat UI owner candidate."
+                              },
+                              {
+                                  "label":  "resolve session root fda sideCheats getter",
+                                  "command":  "resolve_decomp_method",
+                                  "payload":  {
+                                                  "typeName":  "ObjectPublicObBhcjObIncjSiObIncoUnique",
+                                                  "signature":  "ObjectPublicInciObInciBoObStInciUnique get_field_Public_ObjectPublicInciObInciBoObStInciUnique_0()",
+                                                  "limit":  12
+                                              },
+                                  "requiredReason":  "signature_match",
+                                  "purpose":  "Rank runtime metadata candidates for the generated fda getter returning the eys runtime type."
+                              }
+                          ],
+    "nextProofAfterMetadata":  [
+                                   "Use read-only owner/instance discovery starting from proven owner types only.",
+                                   "Do not invoke eys/cux methods until owner instance identity, map target validity, and reversible proof plan are established.",
+                                   "A successful production command still needs one fail-closed route, build validation, Golden Era runtime proof, and ai_observe battle-mode postcondition.",
+                                   "After getter metadata resolves, use a separate read-only owner/instance discovery packet before any invocation proof."
+                               ]
+}

@@ -1,0 +1,386 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "factionSid": "homm3_cove",
+    "citySid": "homm3_cove_city",
+    "displayNameToken": "homm3_cove_name",
+    "descriptionToken": "homm3_cove_desc",
+    "nativeBiome": "Tropical",
+    "donorFactionSid": "humans",
+    "donorCitySid": "human_city"
+  },
+  "coreOverlay": {
+    "factionJson": "DB/fractions/20_homm3_cove.json",
+    "cityLogic": "DB/objects_logic/cities/homm3_cove_city.json",
+    "lawsTable": "DB/fractions_laws/fractions_laws_table_homm3_cove.json",
+    "squadTree": "DB/squads/squads_homm3_cove/",
+    "heroSubClasses": "DB/heroes_sub_classes/sub_classes_homm3_cove.json",
+    "heroSpecializations": "DB/heroes_specializations/specializations_homm3_cove.json",
+    "directCityMapObject": "homm3_cove_city",
+    "directDwellingPrefix": "barracks_homm3_cove_"
+  },
+  "unitVariants": [
+    "",
+    "_upg",
+    "_upg_alt"
+  ],
+  "unitLines": [
+    {
+      "tier": 1,
+      "baseSid": "h3_nymph",
+      "variantSids": {
+        "": "h3_nymph",
+        "_upg": "h3_oceanid",
+        "_upg_alt": "h3_nymph_upg_alt"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "twinkle",
+      "names": [
+        "Nymph",
+        "Oceanid",
+        "Nereid"
+      ],
+      "sourceConfig": [
+        "nymph",
+        "oceanid"
+      ],
+      "mechanicsDebt": []
+    },
+    {
+      "tier": 2,
+      "baseSid": "h3_crew_mate",
+      "variantSids": {
+        "": "h3_crew_mate",
+        "_upg": "h3_seaman",
+        "_upg_alt": "h3_crew_mate_upg_alt"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "esquire",
+      "names": [
+        "Crew Mate",
+        "Seaman",
+        "Swashbuckler"
+      ],
+      "sourceConfig": [
+        "crewmate",
+        "seaman"
+      ],
+      "mechanicsDebt": [
+        "Swashbuckler daily gold economy trace"
+      ]
+    },
+    {
+      "tier": 3,
+      "baseSid": "h3_pirate",
+      "variantSids": {
+        "": "h3_pirate",
+        "_upg": "h3_corsair",
+        "_upg_alt": "h3_sea_dog"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "crossbowman",
+      "names": [
+        "Pirate",
+        "Corsair",
+        "Sea Dog"
+      ],
+      "sourceConfig": [
+        "pirate",
+        "corsair",
+        "seadog"
+      ],
+      "mechanicsDebt": [
+        "Gunpowder Warehouse double-upgrade prerequisite"
+      ]
+    },
+    {
+      "tier": 4,
+      "baseSid": "h3_stormbird",
+      "variantSids": {
+        "": "h3_stormbird",
+        "_upg": "h3_ayssid",
+        "_upg_alt": "h3_stormbird_upg_alt"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "griffin",
+      "names": [
+        "Stormbird",
+        "Ayssid",
+        "Halcyon"
+      ],
+      "sourceConfig": [
+        "stormbird",
+        "ayssid"
+      ],
+      "mechanicsDebt": [
+        "Ayssid Ferocity attack sequencing"
+      ]
+    },
+    {
+      "tier": 5,
+      "baseSid": "h3_sea_witch",
+      "variantSids": {
+        "": "h3_sea_witch",
+        "_upg": "h3_sorceress",
+        "_upg_alt": "h3_sea_witch_upg_alt"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "lightweaver",
+      "names": [
+        "Sea Witch",
+        "Sorceress",
+        "Tidecaller"
+      ],
+      "sourceConfig": [
+        "seaWitch",
+        "sorceress"
+      ],
+      "mechanicsDebt": [
+        "After-shot Disrupting Ray state detection",
+        "Tidecaller Summon Fangarms trace"
+      ]
+    },
+    {
+      "tier": 6,
+      "baseSid": "h3_nix",
+      "variantSids": {
+        "": "h3_nix",
+        "_upg": "h3_nix_warrior",
+        "_upg_alt": "h3_nix_upg_alt"
+      },
+      "donorFactionSid": "dungeon",
+      "donorBaseSid": "minos",
+      "names": [
+        "Nix",
+        "Nix Warrior",
+        "Nix Praetorian"
+      ],
+      "sourceConfig": [
+        "nix",
+        "nixWarrior"
+      ],
+      "mechanicsDebt": [
+        "Nix Praetorian Bind focus conversion"
+      ]
+    },
+    {
+      "tier": 7,
+      "baseSid": "h3_sea_serpent",
+      "variantSids": {
+        "": "h3_sea_serpent",
+        "_upg": "h3_haspid",
+        "_upg_alt": "h3_sea_serpent_upg_alt"
+      },
+      "donorFactionSid": "dungeon",
+      "donorBaseSid": "hydra",
+      "names": [
+        "Sea Serpent",
+        "Haspid",
+        "Abyss Serpent"
+      ],
+      "sourceConfig": [
+        "seaserpent",
+        "haspid"
+      ],
+      "mechanicsDebt": [
+        "Haspid Revenge formula",
+        "Abyss Serpent exact Skeleton Transformer behavior"
+      ]
+    }
+  ],
+  "recruitmentBaseSids": [
+    "h3_nymph",
+    "h3_crew_mate",
+    "h3_pirate",
+    "h3_stormbird",
+    "h3_sea_witch",
+    "h3_nix",
+    "h3_sea_serpent"
+  ],
+  "squadTree": {
+    "unitReplacements": {
+      "twinkle": "h3_nymph",
+      "twinkle_upg": "h3_oceanid",
+      "twinkle_upg_alt": "h3_nymph_upg_alt",
+      "esquire": "h3_crew_mate",
+      "esquire_upg": "h3_seaman",
+      "esquire_upg_alt": "h3_crew_mate_upg_alt",
+      "crossbowman": "h3_pirate",
+      "crossbowman_upg": "h3_corsair",
+      "crossbowman_upg_alt": "h3_sea_dog",
+      "griffin": "h3_stormbird",
+      "griffin_upg": "h3_ayssid",
+      "griffin_upg_alt": "h3_stormbird_upg_alt",
+      "lightweaver": "h3_sea_witch",
+      "lightweaver_upg": "h3_sorceress",
+      "lightweaver_upg_alt": "h3_sea_witch_upg_alt",
+      "minos": "h3_nix",
+      "minos_upg": "h3_nix_warrior",
+      "minos_upg_alt": "h3_nix_upg_alt",
+      "hydra": "h3_sea_serpent",
+      "hydra_upg": "h3_haspid",
+      "hydra_upg_alt": "h3_sea_serpent_upg_alt"
+    }
+  },
+  "releaseScaffold": {
+    "biome": "Tropical",
+    "citySceneName": "cityFactory",
+    "factionIcon": "fraction_human",
+    "factionLawIcon": "homm3_cove_faction_banner",
+    "lawIcon": "homm3_cove_faction_banner"
+  },
+  "heroes": {
+    "count": 18,
+    "heroPrefix": "homm3_cove_hero_",
+    "iconPrefix": "hero_homm3_cove_",
+    "specializationsRequired": true,
+    "mightClassName": "Captain",
+    "magicClassName": "Navigator",
+    "specializationTitle": "Cove Commander",
+    "mightSpecializationDescription": "Improves this Captain while leading HoMM3 Cove armies. Exact HotA unit, Cannon, and Navigation specialties remain static-trace debt.",
+    "magicSpecializationDescription": "Improves this Navigator while leading HoMM3 Cove armies. Exact HotA spell, water-map, and Cannon specialties remain static-trace debt.",
+    "sourceHeroConfigs": [
+      "corkes",
+      "jeremy",
+      "illor",
+      "elmore",
+      "derek",
+      "leena",
+      "anabel",
+      "cassiopeia",
+      "casmetra",
+      "eovacius",
+      "spint",
+      "andal",
+      "manfred",
+      "zilare",
+      "astra",
+      "dargem",
+      "balfour",
+      "miriam"
+    ],
+    "excludedLocalHeroConfigs": [
+      "bidley",
+      "tark"
+    ],
+    "names": [
+      "Corkes",
+      "Jeremy",
+      "Illor",
+      "Elmore",
+      "Derek",
+      "Leena",
+      "Anabel",
+      "Cassiopeia",
+      "Casmetra",
+      "Eovacius",
+      "Spint",
+      "Andal",
+      "Manfred",
+      "Zilare",
+      "Astra",
+      "Dargem",
+      "Balfour",
+      "Miriam"
+    ]
+  },
+  "skillsAndLaws": {
+    "factionSkillSid": "skill_faction_homm3_cove",
+    "lawPrefix": "fraction_law_homm3_cove_",
+    "factionSkillName": "Treasure Hunting"
+  },
+  "searchTokens": [
+    "Homm3Cove",
+    "h3_oceanid",
+    "h3_nereid",
+    "h3_seaman",
+    "h3_swashbuckler",
+    "h3_corsair",
+    "h3_sea_dog",
+    "h3_ayssid",
+    "h3_halcyon",
+    "h3_sorceress",
+    "h3_tidecaller",
+    "h3_nix_warrior",
+    "h3_nix_praetorian",
+    "h3_haspid",
+    "h3_abyss_serpent",
+    "Treasure Hunting",
+    "Cannon",
+    "Accurate Shot"
+  ],
+  "assets": {
+    "factionIcon": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/faction_icons/homm3_cove/Icon_Faction_Cove.png",
+    "factionCard": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_scene_refs/homm3_cove/Cove-in-background.png",
+    "cityIcon": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_hud_icons/homm3_cove/fort_available.png",
+    "cityBillboard": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/map_object_refs/homm3_cove_city/avccovz0.dir/00_00.png",
+    "townSceneFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_scene_refs/homm3_cove/",
+    "buildingIconFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_scene_refs/homm3_cove/building_icons/",
+    "cityBillboardFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/map_object_refs/homm3_cove_city/",
+    "dwellingBillboardFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/map_object_refs/homm3_cove_dwellings/",
+    "cannonSourceManifest": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/cannon/homm3_cove/manifest.json"
+  },
+  "sourceAssets": {
+    "primaryHotARoot": "vcmi/Mods/hota/mods/cove/Content",
+    "cannonHotARoot": "vcmi/Mods/hota/mods/cannon/Content",
+    "creatureConfigFolder": "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures",
+    "heroConfigFolder": "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/heroes",
+    "townConfigFolder": "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/town",
+    "townBackdrop": "vcmi/Mods/hota/mods/cove/Content/data/hota/cove/town/background.png",
+    "townPlacementConfig": "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/town/structures.json",
+    "townBuildTreeIcons": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/town/townhall/",
+    "townAdventureMapCapitol": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/town/adventureMap/AVCcovz0.def",
+    "dwellingMapObjectOrder": [
+      "NIMPHFO.def",
+      "SWSHCAMP.DEF",
+      "FREGAT.DEF",
+      "NESTAS.DEF",
+      "TOWERZA.DEF",
+      "FORTNIXR.def",
+      "HASPHTPL.def"
+    ],
+    "accurateShotConfig": "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/spells/accurateShot.json",
+    "cannonCreatureConfig": "vcmi/Mods/hota/mods/cannon/Content/config/hotaCannon/cannonCreature.json",
+    "cannonArtilleryConfig": "vcmi/Mods/hota/mods/cannon/Content/config/hotaCannon/artillery.json",
+    "cannonYardConfig": "vcmi/Mods/hota/mods/cannon/Content/config/hotaCannon/cannonYard.json",
+    "cannonBattleSprite": "vcmi/Mods/hota/mods/cannon/Content/sprites/hota/battle/SMCANNON.DEF",
+    "cannonProjectileSprite": "vcmi/Mods/hota/mods/cannon/Content/sprites/hota/battle/SMCANX.DEF",
+    "cannonMapSprite": "vcmi/Mods/hota/mods/cannon/Content/sprites/hota/map/cannonMap.def"
+  },
+  "runtime": {
+    "customToDonorSource": "manifest",
+    "reverseDonorLookup": "context_required",
+    "allowGlobalDonorReverseLookup": false,
+    "displayName": "Cove (HoMM3)",
+    "description": "The Cove sails from the seas of Horn of the Abyss with nymphs, pirates, sea witches, nix, sea serpents, and haspids. Captains and navigators fight with powder, tide magic, brutal boarding actions, and the hard bargains of a pirate port.",
+    "cityMapBillboardHeight": 4.5,
+    "dwellingBillboardImages": [
+      "NIMPHFO.dir/00_00.png",
+      "SWSHCAMP.dir/00_00.png",
+      "FREGAT.dir/00_00.png",
+      "NESTAS.dir/00_00.png",
+      "TOWERZA.dir/00_00.png",
+      "FORTNIX.dir/00_00.png",
+      "HASPHTPL.dir/00_00.png"
+    ],
+    "dwellingDonorPrefixes": [
+      "barracks_human_"
+    ]
+  },
+  "validation": {
+    "status": "basic_enabled",
+    "runtimeMirrorRequired": true,
+    "coreOverlayEnabled": true,
+    "releasePromotionBlocked": false,
+    "allowedDebt": [
+      "Cove is basic-enabled from local HotA VCMI content only. The production-ready worktree has Cove import rows, unit bundles, portraits, hero portraits, town scene assets, city/dwelling billboard art, Cannon asset/audio payloads, extracted_battle lab sidecars, runtime registry rows, and generic release Core output enabled.",
+      "Exact variant SID support exists in the manifest/runtime model, and the current import table maps Cove gameUnitSids to HotA lab/bundle payloads. Advanced mechanics are intentionally separate debt: Accurate Shot, Poison, Revenge, after-shot spells, and other source mechanics still need user-guided implementation.",
+      "HoMM3 Complete LOD-only extraction is insufficient for Cove. Use vcmi/Mods/hota/mods/cove/Content plus vcmi/Mods/hota/mods/cannon/Content as the primary source lane for HotA Cove creatures, town, map objects, heroes, sounds, Accurate Shot, and Cannon.",
+      "Cannon config, battle/projectile/map sprites, icons, and WAV files remain packaged under homm3_runtime_assets/cannon/homm3_cove/ as inactive source assets. Cove's release faction skill is Treasure Hunting, not Cannon deployment.",
+      "Cove uses exact variant SIDs where the source docs require them. The manifest still maps ToA alternates through _upg_alt slots, while Pirate/Corsair/Sea Dog uses that third slot for HotA's second pirate upgrade.",
+      "Swamp is the target native terrain, but releaseScaffold.biome is Autumn until release terrain support is expanded. Do not write a new biome id or rely on fallback behavior.",
+      "Cove donor reverse lookup must remain context-required because Human, Nature, and Dungeon donors are shared with other custom factions and native factions.",
+      "Local HotA contains more Cove hero configs than the current 18-hero manifest contract. Final hero inclusion and class split must be decided before release promotion."
+    ]
+  }
+}

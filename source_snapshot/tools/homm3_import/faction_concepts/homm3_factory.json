@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "factionSid": "homm3_factory",
+    "citySid": "homm3_factory_city",
+    "displayNameToken": "homm3_factory_name",
+    "descriptionToken": "homm3_factory_desc",
+    "nativeBiome": "Foundry",
+    "donorFactionSid": "humans",
+    "donorCitySid": "human_city"
+  },
+  "status": {
+    "evidenceLevel": "active_runtime_manifest_source_static",
+    "notes": [
+      "Active production manifest: custom_factions/homm3_factory.json (town/Core/bundles present).",
+      "Material-class alternate upgrades are user-locked in alternate_upgrade_concepts/material_class_hs_selections.json.",
+      "Owned cityFactory presentation is user-visible proven; Split Assembly combat apply and campaign remain unproven.",
+      "Dreadnought is an additionalRecruitmentLines Gantry tier-7 line, not an invented tier 8."
+    ]
+  },
+  "assetSources": {
+    "hotaZip": "vcmi/Mods/hota/mods/factory/content.zip",
+    "prepareScript": "tools/homm3_import/prepare_hota_factory_bulwark_neutral_bundles.py",
+    "alternateUpgradeConceptGallery": "tools/homm3_import/alternate_upgrade_concepts/"
+  },
+  "coreOverlay": {
+    "factionJson": "DB/fractions/21_homm3_factory.json",
+    "cityLogic": "DB/objects_logic/cities/homm3_factory_city.json",
+    "lawsTable": "DB/fractions_laws/fractions_laws_table_homm3_factory.json",
+    "squadTree": "DB/squads/squads_homm3_factory/",
+    "heroSubClasses": "DB/heroes_sub_classes/sub_classes_homm3_factory.json",
+    "heroSpecializations": "DB/heroes_specializations/specializations_homm3_factory.json",
+    "directCityMapObject": "homm3_factory_city",
+    "directDwellingPrefix": "barracks_homm3_factory_"
+  },
+  "unitVariants": [
+    "",
+    "_upg",
+    "_upg_alt"
+  ],
+  "unitLines": [
+    {
+      "tier": 1,
+      "baseSid": "h3_halfling",
+      "variantSids": {
+        "": "h3_halfling",
+        "_upg": "h3_halfling_grenadier",
+        "_upg_alt": "h3_halfling_upg_alt"
+      },
+      "labSids": {
+        "": "hota_factory_halfling",
+        "_upg": "hota_factory_halfling_grenadier"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "esquire",
+      "names": [
+        "Halfling",
+        "Halfling Grenadier",
+        "Firebug"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "C",
+        "displayName": "Firebug",
+        "gameAltSid": "h3_halfling_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/factory__t1__h3_halfling/"
+    },
+    {
+      "tier": 2,
+      "baseSid": "h3_mechanic",
+      "variantSids": {
+        "": "h3_mechanic",
+        "_upg": "h3_engineer",
+        "_upg_alt": "h3_mechanic_upg_alt"
+      },
+      "labSids": {
+        "": "hota_factory_mechanic",
+        "_upg": "hota_factory_engineer"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "crossbowman",
+      "names": [
+        "Mechanic",
+        "Engineer",
+        "Tinker"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "B",
+        "displayName": "Tinker",
+        "gameAltSid": "h3_mechanic_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/factory__t2__h3_mechanic/"
+    },
+    {
+      "tier": 3,
+      "baseSid": "h3_armadillo",
+      "variantSids": {
+        "": "h3_armadillo",
+        "_upg": "h3_bellwether_armadillo",
+        "_upg_alt": "h3_armadillo_upg_alt"
+      },
+      "labSids": {
+        "": "hota_factory_armadillo",
+        "_upg": "hota_factory_bellwether_armadillo"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "griffin",
+      "names": [
+        "Armadillo",
+        "Bellwether Armadillo",
+        "Plated Armadillo"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "A",
+        "displayName": "Plated Armadillo",
+        "gameAltSid": "h3_armadillo_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/factory__t3__h3_armadillo/"
+    },
+    {
+      "tier": 4,
+      "baseSid": "h3_automaton",
+      "variantSids": {
+        "": "h3_automaton",
+        "_upg": "h3_sentinel_automaton",
+        "_upg_alt": "h3_automaton_upg_alt"
+      },
+      "labSids": {
+        "": "hota_factory_automaton",
+        "_upg": "hota_factory_sentinel_automaton"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "lightweaver",
+      "names": [
+        "Automaton",
+        "Sentinel Automaton",
+        "Clockwork Automaton"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "C",
+        "displayName": "Clockwork Automaton",
+        "gameAltSid": "h3_automaton_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/factory__t4__h3_automaton/"
+    },
+    {
+      "tier": 5,
+      "baseSid": "h3_sandworm",
+      "variantSids": {
+        "": "h3_sandworm",
+        "_upg": "h3_olgoi_khorkhoi",
+        "_upg_alt": "h3_sandworm_upg_alt"
+      },
+      "labSids": {
+        "": "hota_factory_sandworm",
+        "_upg": "hota_factory_olgoi_khorkhoi"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "sunlight_cavalry",
+      "names": [
+        "Sandworm",
+        "Olgoi-Khorkhoi",
+        "Glassworm"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "B",
+        "displayName": "Glassworm",
+        "gameAltSid": "h3_sandworm_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/factory__t5__h3_sandworm/"
+    },
+    {
+      "tier": 6,
+      "baseSid": "h3_gunslinger",
+      "variantSids": {
+        "": "h3_gunslinger",
+        "_upg": "h3_bounty_hunter",
+        "_upg_alt": "h3_gunslinger_upg_alt"
+      },
+      "labSids": {
+        "": "hota_factory_gunslinger",
+        "_upg": "hota_factory_bounty_hunter"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "inquisitor",
+      "names": [
+        "Gunslinger",
+        "Bounty Hunter",
+        "Marshal"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "B",
+        "displayName": "Marshal",
+        "gameAltSid": "h3_gunslinger_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/factory__t6__h3_gunslinger/"
+    },
+    {
+      "tier": 7,
+      "line": "couatl",
+      "baseSid": "h3_couatl",
+      "variantSids": {
+        "": "h3_couatl",
+        "_upg": "h3_crimson_couatl",
+        "_upg_alt": "h3_couatl_upg_alt"
+      },
+      "labSids": {
+        "": "hota_factory_couatl",
+        "_upg": "hota_factory_crimson_couatl"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "angel",
+      "names": [
+        "Couatl",
+        "Crimson Couatl",
+        "Jade Coatl"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "B",
+        "displayName": "Jade Coatl",
+        "gameAltSid": "h3_couatl_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/factory__t7__h3_couatl__couatl/",
+      "mechanicsDebt": []
+    },
+    {
+      "tier": 7,
+      "line": "dreadnought",
+      "baseSid": "h3_dreadnought",
+      "variantSids": {
+        "": "h3_dreadnought",
+        "_upg": "h3_juggernaut",
+        "_upg_alt": "h3_dreadnought_upg_alt"
+      },
+      "labSids": {
+        "": "hota_factory_dreadnought",
+        "_upg": "hota_factory_juggernaut"
+      },
+      "donorFactionSid": "dungeon",
+      "donorBaseSid": "hydra",
+      "names": [
+        "Dreadnought",
+        "Juggernaut",
+        "Ironclad"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "A",
+        "displayName": "Ironclad",
+        "gameAltSid": "h3_dreadnought_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/factory__t7__h3_dreadnought__dreadnought/",
+      "mechanicsDebt": [
+        "Ironclad immobility lock remains runtime debt"
+      ],
+      "additionalRecruitment": true
+    }
+  ],
+  "supportUnits": [
+    {
+      "sid": "h3_sandworm_larva",
+      "labSid": "hota_factory_sandworm_larva",
+      "role": "HotA sandworm larva support/summon visual; not a dwelling recruit"
+    }
+  ]
+}

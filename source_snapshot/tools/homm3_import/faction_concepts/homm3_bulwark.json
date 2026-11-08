@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "factionSid": "homm3_bulwark",
+    "citySid": "homm3_bulwark_city",
+    "displayNameToken": "homm3_bulwark_name",
+    "descriptionToken": "homm3_bulwark_desc",
+    "nativeBiome": "Permafrost",
+    "donorFactionSid": "nature",
+    "donorCitySid": "nature_city"
+  },
+  "status": {
+    "evidenceLevel": "active_runtime_manifest_source_static",
+    "notes": [
+      "Active production manifest: custom_factions/homm3_bulwark.json (town/Core/bundles present).",
+      "Material-class alternate upgrades are user-locked in alternate_upgrade_concepts/material_class_hs_selections.json.",
+      "Shared cityFactory owned-world path is wired; Bulwark-specific town presentation is not user-visible proven.",
+      "Runes battle hooks remain runtime-pending until the Defend-event pilot."
+    ]
+  },
+  "assetSources": {
+    "hotaZip": "vcmi/Mods/hota/mods/bulwark/content.zip",
+    "prepareScript": "tools/homm3_import/prepare_hota_factory_bulwark_neutral_bundles.py",
+    "alternateUpgradeConceptGallery": "tools/homm3_import/alternate_upgrade_concepts/"
+  },
+  "coreOverlay": {
+    "factionJson": "DB/fractions/22_homm3_bulwark.json",
+    "cityLogic": "DB/objects_logic/cities/homm3_bulwark_city.json",
+    "lawsTable": "DB/fractions_laws/fractions_laws_table_homm3_bulwark.json",
+    "squadTree": "DB/squads/squads_homm3_bulwark/",
+    "heroSubClasses": "DB/heroes_sub_classes/sub_classes_homm3_bulwark.json",
+    "heroSpecializations": "DB/heroes_specializations/specializations_homm3_bulwark.json",
+    "directCityMapObject": "homm3_bulwark_city",
+    "directDwellingPrefix": "barracks_homm3_bulwark_"
+  },
+  "unitVariants": [
+    "",
+    "_upg",
+    "_upg_alt"
+  ],
+  "unitLines": [
+    {
+      "tier": 1,
+      "baseSid": "h3_kobold",
+      "variantSids": {
+        "": "h3_kobold",
+        "_upg": "h3_kobold_foreman",
+        "_upg_alt": "h3_kobold_upg_alt"
+      },
+      "labSids": {
+        "": "hota_bulwark_kobold",
+        "_upg": "hota_bulwark_kobold_foreman"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "twinkle",
+      "names": [
+        "Kobold",
+        "Kobold Foreman",
+        "Kobold Runebearer"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "D",
+        "displayName": "Kobold Runebearer",
+        "gameAltSid": "h3_kobold_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/bulwark__t1__h3_kobold/"
+    },
+    {
+      "tier": 2,
+      "baseSid": "h3_mountain_ram",
+      "variantSids": {
+        "": "h3_mountain_ram",
+        "_upg": "h3_argali",
+        "_upg_alt": "h3_mountain_ram_upg_alt"
+      },
+      "labSids": {
+        "": "hota_bulwark_mountain_ram",
+        "_upg": "hota_bulwark_argali"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "elf_tracker",
+      "names": [
+        "Mountain Ram",
+        "Argali",
+        "Aurora Ram"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "D",
+        "displayName": "Aurora Ram",
+        "gameAltSid": "h3_mountain_ram_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/bulwark__t2__h3_mountain_ram/"
+    },
+    {
+      "tier": 3,
+      "baseSid": "h3_snow_elf",
+      "variantSids": {
+        "": "h3_snow_elf",
+        "_upg": "h3_steel_elf",
+        "_upg_alt": "h3_snow_elf_upg_alt"
+      },
+      "labSids": {
+        "": "hota_bulwark_snow_elf",
+        "_upg": "hota_bulwark_steel_elf"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "crossbowman",
+      "names": [
+        "Snow Elf",
+        "Steel Elf",
+        "Pine Elf"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "C",
+        "displayName": "Pine Elf",
+        "gameAltSid": "h3_snow_elf_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/bulwark__t3__h3_snow_elf/"
+    },
+    {
+      "tier": 4,
+      "baseSid": "h3_yeti",
+      "variantSids": {
+        "": "h3_yeti",
+        "_upg": "h3_yeti_runemaster",
+        "_upg_alt": "h3_yeti_upg_alt"
+      },
+      "labSids": {
+        "": "hota_bulwark_yeti",
+        "_upg": "hota_bulwark_yeti_runemaster"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "ent",
+      "names": [
+        "Yeti",
+        "Yeti Runemaster",
+        "Yeti Stormcaller"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "A",
+        "displayName": "Yeti Stormcaller",
+        "gameAltSid": "h3_yeti_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/bulwark__t4__h3_yeti/"
+    },
+    {
+      "tier": 5,
+      "baseSid": "h3_shaman",
+      "variantSids": {
+        "": "h3_shaman",
+        "_upg": "h3_great_shaman",
+        "_upg_alt": "h3_shaman_upg_alt"
+      },
+      "labSids": {
+        "": "hota_bulwark_shaman",
+        "_upg": "hota_bulwark_great_shaman"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "lightweaver",
+      "names": [
+        "Shaman",
+        "Great Shaman",
+        "Frost Speaker"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "B",
+        "displayName": "Frost Speaker",
+        "gameAltSid": "h3_shaman_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/bulwark__t5__h3_shaman/"
+    },
+    {
+      "tier": 6,
+      "baseSid": "h3_mammoth",
+      "variantSids": {
+        "": "h3_mammoth",
+        "_upg": "h3_war_mammoth",
+        "_upg_alt": "h3_mammoth_upg_alt"
+      },
+      "labSids": {
+        "": "hota_bulwark_mammoth",
+        "_upg": "hota_bulwark_war_mammoth"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "qilin",
+      "names": [
+        "Mammoth",
+        "War Mammoth",
+        "Tundra Mammoth"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "A",
+        "displayName": "Tundra Mammoth",
+        "gameAltSid": "h3_mammoth_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/bulwark__t6__h3_mammoth/"
+    },
+    {
+      "tier": 7,
+      "baseSid": "h3_jotunn",
+      "variantSids": {
+        "": "h3_jotunn",
+        "_upg": "h3_jotunn_warlord",
+        "_upg_alt": "h3_jotunn_upg_alt"
+      },
+      "labSids": {
+        "": "hota_bulwark_jotunn",
+        "_upg": "hota_bulwark_jotunn_warlord"
+      },
+      "donorFactionSid": "nature",
+      "donorBaseSid": "phoenix",
+      "names": [
+        "Jotunn",
+        "Jotunn Warlord",
+        "Jotun Frostlord"
+      ],
+      "altUpgradeSelection": {
+        "status": "user_locked",
+        "strategy": "material_class_hs",
+        "optionId": "A",
+        "displayName": "Jotun Frostlord",
+        "gameAltSid": "h3_jotunn_upg_alt",
+        "source": "tools/homm3_import/alternate_upgrade_concepts/material_class_hs_selections.json"
+      },
+      "altGallery": "tools/homm3_import/alternate_upgrade_concepts/bulwark__t7__h3_jotunn/"
+    }
+  ]
+}

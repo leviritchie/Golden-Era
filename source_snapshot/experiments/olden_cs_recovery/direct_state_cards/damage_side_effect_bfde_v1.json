@@ -1,0 +1,147 @@
+{
+  "adapter_binding": {
+    "gameplay_gated": true,
+    "gateway_methods": [
+      "TryCommitPreparedDamage"
+    ],
+    "notes": "Damage side-effect stores only. Do not treat Hex.bcxo as occupancy. Do not claim full ApplyDamage recovery. Gameplay flags stay gated until focused_live_positive for the consuming adapter.",
+    "operations": [
+      "DamageApply",
+      "KillConfirm",
+      "CorpseCreate"
+    ]
+  },
+  "banned_surfaces": [
+    {
+      "reason": "lastCorpse-shaped; M1 banned; M4 may own bcxo only as corpse_store",
+      "surface": "Hex.bcxo / cfqf as Unit occupancy commit store"
+    },
+    {
+      "reason": "View hub; M1 Logic publish is eda; M4 claims no publish hub",
+      "surface": "edb.* as movement/damage commit publish"
+    },
+    {
+      "reason": "Committed damage scalar already owned by NativeCombatWriteGateway.TryCommitPreparedDamage (pre-commit ref-int); refuse full pipeline recovery in this milestone",
+      "surface": "Unit.bbgw / full ApplyDamage as M4 write-body ownership"
+    },
+    {
+      "reason": "Same native VA as bfde (0x1820781D0); declare bfde only",
+      "surface": "UnitData.bfdd as distinct write body"
+    }
+  ],
+  "card_id": "damage.side_effect.bfde_v1",
+  "family": "damage",
+  "gamesymbols_export": {
+    "exported": true,
+    "exported_at": "2026-07-20T18:44:32Z",
+    "reason": "Exported proven surfaces only into GameSymbols.DirectStateLaws (UnitDataSumHpWriteMembers/UnitDataAllStacksReadMembers/UnitDataAliveReadMembers/HexLastCorpseWriteMembers/HexLastCorpseReadMembers). DamageScalar remains gateway-owned. Gameplay gated. bcxo is corpse_store only.",
+    "symbols": [
+      "UnitData.set_sumHp",
+      "UnitData.allStacks",
+      "UnitData.hasLivingStacks",
+      "Hex.set_lastCorpse",
+      "Hex.get_lastCorpse"
+    ],
+    "target": "GameSymbols.DirectStateLaws"
+  },
+  "live_methods": [
+    {
+      "blocked_reason": null,
+      "method_id": "Hex.Session.Battle.UnitData::bfde(int)",
+      "mono_alias": "UnitData.set_sumHp",
+      "role": "side_effect_store",
+      "rva": "0x20781D0",
+      "status": "equivalence-proven"
+    },
+    {
+      "blocked_reason": null,
+      "method_id": "Hex.Session.Battle.UnitData::bfda()",
+      "mono_alias": "UnitData.allStacks",
+      "role": "readback",
+      "rva": "0x2078160",
+      "status": "equivalence-proven"
+    },
+    {
+      "blocked_reason": null,
+      "method_id": "Hex.Session.Battle.UnitData::bfdf()",
+      "mono_alias": "UnitData.hasLivingStacks",
+      "role": "readback",
+      "rva": "0x2078290",
+      "status": "equivalence-proven"
+    },
+    {
+      "blocked_reason": null,
+      "method_id": "Hex.Session.Battle.Hex::bcxo(Unit)",
+      "mono_alias": "Hex.set_lastCorpse",
+      "role": "corpse_store",
+      "rva": "0x5EA470",
+      "status": "equivalence-proven"
+    },
+    {
+      "blocked_reason": null,
+      "method_id": "Hex.Session.Battle.Hex::bcxn()",
+      "mono_alias": "Hex.get_lastCorpse",
+      "role": "readback",
+      "rva": "0x5EA440",
+      "status": "equivalence-proven"
+    }
+  ],
+  "milestone_id": "ds_m4_damage_side",
+  "milestone_ledger_path": "experiments/olden_cs_recovery/proof_ledger/milestones/ds_m4_damage_side.ledger.json",
+  "mono_aliases": [
+    "UnitData.set_sumHp",
+    "UnitData.allStacks",
+    "UnitData.hasLivingStacks",
+    "Hex.set_lastCorpse",
+    "Hex.get_lastCorpse"
+  ],
+  "notes": "Bar C fail-closed. Primary oracle: field-delta on UnitData stack/HP + Hex.lastCorpse. DamageScalar remains NativeCombatWriteGateway.TryCommitPreparedDamage (pre-commit; journal restore no-op) \u2014 source-replay corroboration only. Card promotes when every live_methods entry is equivalence-proven OR blocked-with-reason. Bounded declared set only \u2014 not full damage-system recovery. Verified 2026-07-20 DiffableCs UnitData/Hex + ISIL UnitData.txt + method_pointers (bfdd\u2261bfde VA). Primary bar-C oracle: field-delta on UnitData stack/HP stores and Hex.lastCorpse. Secondary corroboration: ModelCombatWriteBackend DamageScalar accept/reject via Homm3RuntimeMechanicFixtureHarness (source-replay-validated only; not method equivalence). Do not claim user-visible gameplay. Promote damage.side_effect.bfde_v1 only when every method_id is equivalence-proven or blocked-with-reason.",
+  "ordered_stores": [
+    {
+      "notes": "Written by bfde; mono fullStacks; read via bfda allStacks composition",
+      "offset_or_member": "UnitData.fullStacks (+0x34)",
+      "role": "stack_count"
+    },
+    {
+      "notes": "ISIL-proven bfde store; mono hpLastUnit semantics (DamageKillMapping)",
+      "offset_or_member": "UnitData.choy (+0x40)",
+      "role": "hp_last_unit"
+    },
+    {
+      "notes": "Cleared with hpLastUnit on bfde(<=0) 64-bit zero of +0x40; counted by bfda",
+      "offset_or_member": "UnitData.choz (+0x44)",
+      "role": "temp_full_stacks"
+    },
+    {
+      "notes": "Cleared by bfde(<=0); gates bfdb visualStacks",
+      "offset_or_member": "UnitData.chpc (+0x50)",
+      "role": "partial_stack_flag"
+    },
+    {
+      "notes": "Hex.bcxo/bcxn; NOT occupancy (M1 banned). Corpse-eligibility adjacency only.",
+      "offset_or_member": "Hex.cfqf / lastCorpse (+0x30)",
+      "role": "corpse_store"
+    }
+  ],
+  "pin_table_path": "experiments/direct_state_movement_trace/mono_live_pin_table.md",
+  "proof_status": "equivalence-proven",
+  "publish": {
+    "call_chain": [],
+    "english_name": null,
+    "english_name_strength": null,
+    "field": null,
+    "hub_type": null,
+    "kind": "none",
+    "notes": "M4 does not claim eda/edb publish ownership. DamageScalar is gateway pre-commit ref-int (TryCommitPreparedDamage); no journal restore body.",
+    "offset": null
+  },
+  "role": "commit_owner",
+  "schema_version": 1,
+  "title": "M4 \u2014 Damage side-effect write bodies (stack/HP + lastCorpse)",
+  "ungate_requires": [
+    "focused_live_positive",
+    "field_delta_oracle_bar_c",
+    "damage_scalar_gateway_owned"
+  ],
+  "updated_at": "2026-07-20T18:44:32Z"
+}

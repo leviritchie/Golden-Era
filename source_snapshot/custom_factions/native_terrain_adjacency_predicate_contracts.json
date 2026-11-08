@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require native terrain or battle adjacency semantics. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresNativeTerrainOrAdjacencyProfiles": true,
+    "spellSchoolFamilyOnly": true,
+    "fortressOnly": true,
+    "nativeTerrainOrAdjacencyRequired": true,
+    "schoolAccessSubstituteForbidden": true,
+    "genericGeometrySubstituteForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": ["homm3_fortress"],
+  "allowedFamily": "SpellSchool",
+  "requiredRuntimeProof": [
+    "battle or adventure context discrimination proof",
+    "native terrain read proof",
+    "battle adjacency read proof",
+    "acting unit or spell target coordinate proof",
+    "terrain or adjacency timing proof",
+    "law-owner side correlation proof",
+    "idempotent terrain adjacency application proof"
+  ],
+  "contracts": {
+    "fortress.primal-slow-poison-extension": {
+      "requiredTerrainOrAdjacencyKinds": [
+        "native terrain predicate",
+        "battle adjacency predicate"
+      ],
+      "companionPredicates": ["RequiresPoisonSlowMovementRestriction", "RequiresSpellCastEvent"],
+      "forbiddenSubstitutes": [
+        "Primal school access counted as native terrain or adjacency",
+        "poison slow movement restriction counted as native terrain or adjacency",
+        "generic geometry counted without adjacency proof",
+        "map biome display text counted without native terrain read proof",
+        "spell cast event counted as terrain or adjacency proof",
+        "law-owner town terrain counted without actor or target position correlation"
+      ],
+      "notes": "Bog Witchcraft requires either a proven native-terrain condition or proven battle adjacency. Static terrain/geometry surfaces can prepare diagnostics, but gameplay still requires exact context, coordinates, timing, and law-owner correlation."
+    }
+  }
+}

@@ -1,0 +1,273 @@
+{
+ "unit": "hota_factory_bounty_hunter",
+ "joints": {
+  "Hips": [
+   0.011,
+   -0.002,
+   0.904
+  ],
+  "Spine": [
+   0.01,
+   -0.0,
+   0.968
+  ],
+  "Spine1": [
+   0.008,
+   0.001,
+   1.032
+  ],
+  "Spine2": [
+   0.007,
+   0.003,
+   1.104
+  ],
+  "Neck": [
+   0.005,
+   0.004,
+   1.16
+  ],
+  "Head": [
+   0.0,
+   0.0,
+   1.3
+  ],
+  "HeadTop_End": [
+   0.0,
+   0.0,
+   1.58
+  ],
+  "LeftShoulder": [
+   0.05,
+   0.0,
+   1.22
+  ],
+  "LeftArm": [
+   0.18,
+   0.02,
+   1.2
+  ],
+  "LeftForeArm": [
+   0.27,
+   0.02,
+   1.03
+  ],
+  "LeftHand": [
+   0.21,
+   -0.18,
+   1.17
+  ],
+  "LeftHand_End": [
+   0.2,
+   -0.25,
+   1.19
+  ],
+  "RightShoulder": [
+   -0.05,
+   0.0,
+   1.22
+  ],
+  "RightArm": [
+   -0.18,
+   0.03,
+   1.2
+  ],
+  "RightForeArm": [
+   -0.29,
+   0.05,
+   1.0
+  ],
+  "RightHand": [
+   -0.33,
+   -0.03,
+   0.84
+  ],
+  "RightHand_End": [
+   -0.35,
+   -0.07,
+   0.77
+  ],
+  "LeftUpLeg": [
+   0.112,
+   -0.012,
+   0.817
+  ],
+  "LeftLeg": [
+   0.158,
+   -0.052,
+   0.472
+  ],
+  "LeftFoot": [
+   0.178,
+   0.039,
+   0.147
+  ],
+  "LeftToeBase": [
+   0.254,
+   -0.046,
+   0.037
+  ],
+  "LeftToe_End": [
+   0.27,
+   -0.12,
+   0.02
+  ],
+  "RightUpLeg": [
+   -0.114,
+   0.008,
+   0.819
+  ],
+  "RightLeg": [
+   -0.165,
+   0.049,
+   0.48
+  ],
+  "RightFoot": [
+   -0.208,
+   0.049,
+   0.181
+  ],
+  "RightToeBase": [
+   -0.24,
+   0.013,
+   0.035
+  ],
+  "RightToe_End": [
+   -0.26,
+   -0.1,
+   0.02
+  ]
+ },
+ "props": [
+  {
+   "name": "rifle",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.27,
+      -0.49,
+      1.09
+     ],
+     [
+      0.06,
+      0.48,
+      1.6
+     ]
+    ]
+   ],
+   "radius": 0.06
+  },
+  {
+   "name": "butt",
+   "bone": "LeftHand",
+   "box": [
+    [
+     0.17,
+     -0.5,
+     0.99
+    ],
+    [
+     0.33,
+     -0.29,
+     1.2
+    ]
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.12
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.9,
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.9,
+   "keepDist": 0.12
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "glbPatch": {
+  "reason": "authenticity: DEF g15 shoot - raise the rifle muzzle-up, bring the stock to the shoulder and level the barrel straight at the target (f3-f7), fire, and raise it again (f8); the capture pointed the muzzle at the ground and hid the rifle behind the body. Arm/shoulder weights re-solved",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_bounty_hunter_bounty_hunter_aim_weights.json",
+    "sha256": "2f718fe0482914f163dcbc7b062563c4559c354e1ab959cc80efece857157401",
+    "note": "bounty hunter rifle aim: arm/shoulder weights re-solved (wsolve, GPU)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_bounty_hunter_pose_rot.json",
+    "sha256": "0f67b1a243e768bae88247a84f894b66f184ef7818ec5db30ac0ed74314e24c0",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_bounty_hunter_pose_rot.json",
+    "sha256": "0f67b1a243e768bae88247a84f894b66f184ef7818ec5db30ac0ed74314e24c0",
+    "regrid": true
+   }
+  ]
+ }
+}

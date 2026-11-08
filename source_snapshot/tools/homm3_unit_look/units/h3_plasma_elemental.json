@@ -1,0 +1,281 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_plasma_elemental",
+ "status": "look",
+ "notes": "conflux rollout: plasma elemental. The orange crackling arcs around the body (idle self-electric, every frame) and the attack's arc burst at the fists are cut from the DEF with a committed thin-structure file mask (masks/conflux_fx_masks.py); the arcs are body paint to defEffects. Cells are placed where the DEF draws them (explicit defOrigin = the Spine2 joint's projected pixel per key), because the retarget's pose differs from the DEF on these keys.",
+ "lighting": {
+  "mode": "v6m",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "arc_flash",
+   "treatment": "dynamic",
+   "notes": "the attack's arc burst lights the fists and chest"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "element_flow",
+    "type": "uvAtlas",
+    "provenance": "element_flow_scores.py mode crackle: 7 cells per 7-frame cycle, in phase with the retarget's element_motion keys; brightness-modulated look texture",
+    "modulate": {
+     "gain": 0.45
+    },
+    "clips": {
+     "Unit_Idle": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "Unit_MoveStart": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_Move": [
+      0,
+      1,
+      3,
+      5
+     ],
+     "Unit_MoveEnd": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "Unit_Mouseover": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_Hitted": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_Defence": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      0,
+      1,
+      2,
+      3
+     ],
+     "Unit_AttackFront": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      0
+     ],
+     "Unit_Death": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      0,
+      1
+     ]
+    },
+    "source": {
+     "scores": "artifacts/homm3_vfx_experiments/element_flow/h3_plasma_elemental_scores.npz",
+     "generator": "tools/homm3_vfx/element_flow_scores.py"
+    },
+    "gutterPx": 16
+   },
+   {
+    "id": "idle_arcs",
+    "type": "defFlipbook",
+    "provenance": "roster inventory conflux: idle self-electric (flicker); thin-structure mask",
+    "clips": {
+     "Unit_Idle": {
+      "defGroup": 2,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_plasma_elemental/idle_arcs"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Hips",
+     "defOrigin": {
+      "Unit_Idle": [
+       [
+        194,
+        211
+       ],
+       [
+        194,
+        211
+       ],
+       [
+        194,
+        210
+       ],
+       [
+        194,
+        211
+       ],
+       [
+        194,
+        211
+       ],
+       [
+        194,
+        211
+       ],
+       [
+        194,
+        212
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1
+   },
+   {
+    "id": "attack_arcs",
+    "type": "defFlipbook",
+    "provenance": "roster inventory conflux: g12 attack_front arcs + burst f3-7; thin-structure mask",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_plasma_elemental/attack_arcs"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine2",
+     "defOrigin": {
+      "Unit_AttackFront": [
+       [
+        192,
+        192
+       ],
+       [
+        190,
+        192
+       ],
+       [
+        188,
+        191
+       ],
+       [
+        191,
+        197
+       ],
+       [
+        194,
+        199
+       ],
+       [
+        195,
+        199
+       ],
+       [
+        195,
+        198
+       ],
+       [
+        195,
+        195
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "arc_flash"
+   },
+   {
+    "id": "arc_flash_light",
+    "type": "effectLight",
+    "lightId": "arc_flash",
+    "carrier": "attack_arcs",
+    "anchor": {
+     "bone": "Spine2",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.75,
+     0.45
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

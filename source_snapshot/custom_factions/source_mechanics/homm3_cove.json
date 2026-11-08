@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_cove",
+  "sourceDoc": "docs/custom_faction_recommendations.md and docs/custom_faction_technical_implementation_proposals.md",
+  "mechanics": [
+    {
+      "id": "cove.resource_silo",
+      "surface": "building",
+      "sourceName": "Resource Silo",
+      "status": "substituted",
+      "reason": "HoTA sulfur production is folded to Olden Era mercury by the generator.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot"
+      ],
+      "forbiddenPlayerText": [
+        "sulfur",
+        "HoTA sulfur"
+      ]
+    },
+    {
+      "id": "cove.pub",
+      "surface": "building",
+      "sourceName": "Pub",
+      "status": "exact",
+      "reason": "Generated city row grants +4 weekly growth to the Crew Mate line.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot_level_2"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "cove.roost",
+      "surface": "building",
+      "sourceName": "Roost",
+      "status": "exact",
+      "reason": "Generated city row grants +3 weekly growth to the Stormbird/Ayssid line.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Mother_Nature"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "cove.shipyard",
+      "surface": "building",
+      "sourceName": "Shipyard",
+      "status": "substituted",
+      "reason": "Water construction and ship purchase are not a proven custom city route in Olden Era.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "ship",
+        "boat",
+        "water",
+        "Shipyard"
+      ],
+      "currentRows": [
+        "Build_Artifact_Market"
+      ],
+      "playerTextTokens": [
+        "Homm3Cove_Build_Artifact_Market_description",
+        "Homm3Cove_Build_Artifact_Market_name",
+        "Homm3Cove_Build_Artifact_Market_narrativeDescription"
+      ]
+    },
+    {
+      "id": "cove.gunpowder_warehouse",
+      "surface": "building",
+      "sourceName": "Gunpowder Warehouse",
+      "status": "substituted",
+      "reason": "Sea Dog double-upgrade prerequisite needs a real Cove building/prerequisite row, not a donor alias.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "Sea Dog",
+        "Gunpowder Warehouse",
+        "double-upgrade"
+      ],
+      "currentRows": [
+        "Build_Treasury"
+      ],
+      "playerTextTokens": [
+        "Homm3Cove_Build_Treasury_description",
+        "Homm3Cove_Build_Treasury_name",
+        "Homm3Cove_Build_Treasury_narrativeDescription"
+      ]
+    },
+    {
+      "id": "cove.treasure_hunting",
+      "surface": "faction_skill",
+      "sourceName": "Treasure Hunting",
+      "status": "substituted",
+      "reason": "Current skill design grants Cove-owned 0-mana native Groundsight variants at Basic, Advanced, and Expert instead of the unstable Cannon support stack.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "skill_faction_homm3_cove"
+      ],
+      "forbiddenPlayerText": [
+        "Cannoneering",
+        "Deploy Cannon",
+        "cannon splash",
+        "projectile skin",
+        "war machine shop"
+      ]
+    }
+  ]
+}

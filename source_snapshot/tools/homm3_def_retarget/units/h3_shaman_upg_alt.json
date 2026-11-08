@@ -1,0 +1,403 @@
+{
+ "unit": "h3_shaman_upg_alt",
+ "joints": {
+  "Hips": [
+   0.122,
+   0.031,
+   0.868
+  ],
+  "Spine": [
+   0.122,
+   0.051,
+   0.954
+  ],
+  "Spine1": [
+   0.12,
+   0.09,
+   1.1
+  ],
+  "Spine2": [
+   0.12,
+   0.09,
+   1.22
+  ],
+  "Neck": [
+   0.12,
+   0.08,
+   1.33
+  ],
+  "Head": [
+   0.12,
+   0.04,
+   1.4
+  ],
+  "HeadTop_End": [
+   0.136,
+   -0.22,
+   1.56
+  ],
+  "LeftShoulder": [
+   0.199,
+   0.073,
+   1.315
+  ],
+  "LeftArm": [
+   0.318,
+   0.073,
+   1.315
+  ],
+  "LeftForeArm": [
+   0.402,
+   0.185,
+   1.106
+  ],
+  "LeftHand": [
+   0.43,
+   0.024,
+   0.938
+  ],
+  "LeftHand_End": [
+   0.44,
+   -0.037,
+   0.874
+  ],
+  "RightShoulder": [
+   0.052,
+   0.073,
+   1.315
+  ],
+  "RightArm": [
+   -0.052,
+   0.136,
+   1.336
+  ],
+  "RightForeArm": [
+   -0.143,
+   0.115,
+   1.106
+  ],
+  "RightHand": [
+   -0.255,
+   -0.01,
+   1.008
+  ],
+  "RightHand_End": [
+   -0.307,
+   -0.069,
+   0.963
+  ],
+  "LeftUpLeg": [
+   0.227,
+   -0.017,
+   0.819
+  ],
+  "LeftLeg": [
+   0.311,
+   -0.157,
+   0.491
+  ],
+  "LeftFoot": [
+   0.297,
+   -0.045,
+   0.107
+  ],
+  "LeftToeBase": [
+   0.353,
+   -0.171,
+   -0.005
+  ],
+  "LeftToe_End": [
+   0.367,
+   -0.283,
+   -0.019
+  ],
+  "RightUpLeg": [
+   -0.077,
+   0.02,
+   0.819
+  ],
+  "RightLeg": [
+   -0.14,
+   0.09,
+   0.491
+  ],
+  "RightFoot": [
+   -0.14,
+   0.2,
+   0.107
+  ],
+  "RightToeBase": [
+   -0.18,
+   0.08,
+   -0.005
+  ],
+  "RightToe_End": [
+   -0.2,
+   -0.02,
+   -0.019
+  ]
+ },
+ "props": [
+  {
+   "name": "staff",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.2,
+      -0.38,
+      1.23
+     ],
+     [
+      0.47,
+      0.39,
+      0.32
+     ]
+    ]
+   ],
+   "radius": 0.045
+  },
+  {
+   "name": "staffball",
+   "bone": "LeftHand",
+   "sphere": [
+    [
+     0.19,
+     -0.35,
+     1.2
+    ],
+    0.115
+   ],
+   "exclude": [
+    {
+     "box": [
+      [
+       -1,
+       -0.25,
+       0
+      ],
+      [
+       1,
+       1,
+       2
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "staffknob",
+   "bone": "LeftHand",
+   "sphere": [
+    [
+     0.44,
+     0.33,
+     0.38
+    ],
+    0.1
+   ]
+  },
+  {
+   "name": "drum",
+   "bone": "RightHand",
+   "sphere": [
+    [
+     -0.33,
+     -0.1,
+     1.02
+    ],
+    0.28
+   ],
+   "exclude": [
+    {
+     "box": [
+      [
+       -0.14,
+       -1,
+       0
+      ],
+      [
+       1,
+       1,
+       2
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       -1,
+       -1,
+       0
+      ],
+      [
+       1,
+       1,
+       0.82
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.1
+ },
+ "extensions": [
+  "bulwark_limbcut",
+  "limb_split",
+  "foot_sole"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.1
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.1
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.05,
+   "keepDist": 0.1
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.05,
+   "keepDist": 0.1
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "skirtLegShare": 0.35,
+ "bootTop": 0.12,
+ "limbSplit": [
+  {
+   "bones": [
+    "LeftHand",
+    "LeftForeArm",
+    "LeftArm"
+   ],
+   "box": [
+    [
+     0.22,
+     -0.2,
+     0.74
+    ],
+    [
+     0.52,
+     0.32,
+     1.14
+    ]
+   ],
+   "reason": "lane C 2026-10-11 surgery: the staff hand is modelled sunk into the robe at the left hip (130 faces with a 1/0 arm-weight jump); split the mesh along that seam so the DEF ShootFront staff raise (f1-f2) and forward thrust (f3-f4) lift the hand out of the robe instead of tearing it",
+   "harden": true,
+   "fallback": "Hips",
+   "islandMax": 300
+  },
+  {
+   "bones": [
+    "LeftHand",
+    "LeftForeArm",
+    "LeftArm"
+   ],
+   "box": [
+    [
+     0.18,
+     -0.4,
+     1.05
+    ],
+    [
+     0.32,
+     -0.22,
+     1.24
+    ]
+   ],
+   "reason": "lane C 2026-10-11: a 12-face gem set in the staff head (in front of the hip, outside the hand box) is rigged to Hips/LeftUpLeg and stays at the waist when the staff rises; the island rule hands it to the staff (no seam here, nothing split)",
+   "islandMax": 60
+  }
+ ],
+ "glbPatch": {
+  "reason": "lane C 2026-10-11 authenticity: with the staff hand cut out of the robe (limbSplit), the DEF ShootFront raises the staff overhead and thrusts it forward instead of firing from the hip",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_shaman_upg_alt_staff_rot.json",
+    "sha256": "eb5b26a184496d2afd68f1344be7069c8267c6bc50b47d0509f8f68c4ce9e95f",
+    "regrid": true,
+    "note": "DEF g15 ShootFront staff raise: LeftArm/LeftForeArm aim up (orb overhead f1-f2), forward thrust f3-f5, LeftHand turns the staff knob->orb axis with them (x0.85); split table, first half"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_shaman_upg_alt_staff_rot.json",
+    "sha256": "eb5b26a184496d2afd68f1344be7069c8267c6bc50b47d0509f8f68c4ce9e95f",
+    "regrid": true,
+    "note": "second half of the split staff table (keyRotations caps 120 deg per key)"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_ShootFront"
+    ],
+    "ratio": 1.3,
+    "iterations": 4000,
+    "smooth": 0.4,
+    "maxMove": 0.08,
+    "bones": [
+     "LeftShoulder",
+     "LeftArm",
+     "Spine",
+     "Spine1",
+     "Spine2"
+    ],
+    "note": "relax the shoulder/armpit micro-edges the raise stretches (not the forearm/hand: maxMove)"
+   }
+  ]
+ }
+}

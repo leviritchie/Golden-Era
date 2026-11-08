@@ -1,0 +1,30 @@
+{
+  "schema": "homm3.native_only_stock_emit_policy.v1",
+  "status": "documentation_only_emit_unwired",
+  "scenarioId": "homecoming_roe_castle",
+  "proposedMapSid": "h3_roe_castle_homecoming_native_only_stock",
+  "description": "Opt-in documentation for a future stock-Core-only emit. Not a layered-atlas scenario profile. Run tools/audit_native_only_stock_sids.py for the proof artifact. Do not pass this file to load_scenario_profile / GenerateHomecomingLayeredAtlasMap.",
+  "planDoc": "docs/plans/2026-07-12-native-only-homm3-scenario-feasibility.md",
+  "auditTool": "tools/audit_native_only_stock_sids.py",
+  "stockCoreHint": "V:/SteamLibrary/steamapps/common/Heroes of Might and Magic Olden Era/HeroesOldenEra_Data/StreamingAssets/Core.zip",
+  "intendedFlags": {
+    "emitPolicy.mode": "native_only_stock_core",
+    "pathability.surfaceGapFill": false,
+    "pathability.emitCoreOverlay": false,
+    "spawn.factionSid": "human",
+    "featuredCities.replacementSid": "dungeon_city",
+    "featuredCities.factionSid": "dungeon",
+    "forbidHomm3ObjectSids": true,
+    "forbidH3UnitSids": true,
+    "forbidCoreZipOverlayInstall": true
+  },
+  "objectRemapModule": "experiments/campaign_port_poc/native_only_stock.py",
+  "knownBlockers": [
+    "homm3_boat: stock Core has no boat ObjectConfig",
+    "homm3_* heroes: need an explicit lossy stock hero table before emit",
+    "h3_* units / homecoming squad overlays: need lossy stock unit table or random-squad-only",
+    "homm3_pathing_blocker / pathing visuals: require scenery-only path policy without GE overlays",
+    "Tower/Stronghold/Fortress/Conflux/Cove: no stock faction counterpart"
+  ],
+  "proofBoundary": "source/static policy draft; map emit and stock-install load unvalidated"
+}

@@ -1,0 +1,184 @@
+{
+ "unit": "h3_imp",
+ "joints": {
+  "Hips": [
+   -0.003,
+   0.178,
+   0.783
+  ],
+  "Spine": [
+   0.003,
+   0.143,
+   0.931
+  ],
+  "Spine1": [
+   0.01,
+   0.108,
+   1.079
+  ],
+  "Spine2": [
+   0.018,
+   0.069,
+   1.245
+  ],
+  "Neck": [
+   0.024,
+   0.038,
+   1.375
+  ],
+  "Head": [
+   0.038,
+   -0.108,
+   1.368
+  ],
+  "HeadTop_End": [
+   -0.024,
+   -0.443,
+   1.598
+  ],
+  "LeftShoulder": [
+   0.073,
+   -0.087,
+   1.319
+  ],
+  "LeftArm": [
+   0.261,
+   0.017,
+   1.312
+  ],
+  "LeftForeArm": [
+   0.359,
+   0.15,
+   1.089
+  ],
+  "LeftHand": [
+   0.345,
+   -0.129,
+   0.971
+  ],
+  "LeftHand_End": [
+   0.341,
+   -0.212,
+   0.936
+  ],
+  "RightShoulder": [
+   -0.01,
+   -0.094,
+   1.319
+  ],
+  "RightArm": [
+   -0.206,
+   -0.01,
+   1.319
+  ],
+  "RightForeArm": [
+   -0.324,
+   -0.08,
+   1.096
+  ],
+  "RightHand": [
+   -0.366,
+   -0.366,
+   0.992
+  ],
+  "RightHand_End": [
+   -0.378,
+   -0.45,
+   0.961
+  ],
+  "LeftUpLeg": [
+   0.143,
+   0.164,
+   0.727
+  ],
+  "LeftLeg": [
+   0.192,
+   -0.066,
+   0.448
+  ],
+  "LeftFoot": [
+   0.164,
+   0.045,
+   0.058
+  ],
+  "LeftToeBase": [
+   0.185,
+   -0.101,
+   0.023
+  ],
+  "LeftToe_End": [
+   0.254,
+   -0.227,
+   0.009
+  ],
+  "RightUpLeg": [
+   -0.15,
+   0.136,
+   0.72
+  ],
+  "RightLeg": [
+   -0.192,
+   -0.101,
+   0.427
+  ],
+  "RightFoot": [
+   -0.233,
+   0.129,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.233,
+   -0.003,
+   0.023
+  ],
+  "RightToe_End": [
+   -0.289,
+   -0.143,
+   -0.005
+  ]
+ },
+ "extensions": [
+  "inferno_capture"
+ ],
+ "captureRemap": "bip01",
+ "captureUp": "camera",
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "glbPatch": {
+  "reason": "authenticity lane-A 2026-10-10: DEF AttackFront is a pounce: crouch (f1), spring (f2), the body flies forward level with both claws reaching and the legs tucked (f3-f4), landing (f5); the capture hopped upright in place with one arm raised. keyRotations (half offset, applied twice): spine pitched forward, head held to its f0 gaze, both arms and forearms reaching forward, thighs forward and shins back under the body; keyTranslations: Hips up 0.34 and forward 0.14 at the peak. DEF Hitted recoils back with the head up; the capture hunched sideways with the head bowed: spine aimed back upright, head held to f0. stretchRelax on AttackFront strain-limits the shoulders. Tear gate PASS.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_imp_pounce_rot.json",
+    "sha256": "bc7a16984fc32411842b255e71333ba3d9129239a54e2a71c086f29d7f39d198",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_imp_pounce_rot.json",
+    "sha256": "bc7a16984fc32411842b255e71333ba3d9129239a54e2a71c086f29d7f39d198",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_imp_pounce_tr.json",
+    "sha256": "6ecc5c61b64e214f5c77f6fdfd2df1b350550fd83cfb289728b1ec6775ec0a36",
+    "regrid": true
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "strain-limits the shoulder and armpit folds of the pounce's forward-reaching arms (teardiag PASS)"
+   }
+  ]
+ }
+}

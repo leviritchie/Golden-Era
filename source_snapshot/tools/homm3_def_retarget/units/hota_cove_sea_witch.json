@@ -1,0 +1,218 @@
+{
+ "unit": "hota_cove_sea_witch",
+ "joints": {
+  "Hips": [
+   -0.02,
+   0.02,
+   0.95
+  ],
+  "Spine": [
+   -0.02,
+   0.02,
+   1.08
+  ],
+  "Spine1": [
+   -0.02,
+   0.03,
+   1.22
+  ],
+  "Spine2": [
+   -0.02,
+   0.03,
+   1.36
+  ],
+  "Neck": [
+   -0.02,
+   0.03,
+   1.53
+  ],
+  "Head": [
+   -0.02,
+   0.03,
+   1.61
+  ],
+  "HeadTop_End": [
+   -0.02,
+   0.02,
+   1.9
+  ],
+  "LeftShoulder": [
+   0.04,
+   0.03,
+   1.47
+  ],
+  "LeftArm": [
+   0.15,
+   0.04,
+   1.45
+  ],
+  "LeftForeArm": [
+   0.22,
+   0.01,
+   1.27
+  ],
+  "LeftHand": [
+   0.2,
+   -0.17,
+   1.4
+  ],
+  "LeftHand_End": [
+   0.17,
+   -0.31,
+   1.44
+  ],
+  "RightShoulder": [
+   -0.08,
+   0.03,
+   1.47
+  ],
+  "RightArm": [
+   -0.19,
+   0.04,
+   1.45
+  ],
+  "RightForeArm": [
+   -0.26,
+   0.03,
+   1.21
+  ],
+  "RightHand": [
+   -0.31,
+   0.01,
+   1.03
+  ],
+  "RightHand_End": [
+   -0.33,
+   0.0,
+   0.93
+  ],
+  "LeftUpLeg": [
+   0.1,
+   0.02,
+   0.9
+  ],
+  "LeftLeg": [
+   0.16,
+   0.0,
+   0.49
+  ],
+  "LeftFoot": [
+   0.22,
+   0.02,
+   0.13
+  ],
+  "LeftToeBase": [
+   0.28,
+   -0.13,
+   0.04
+  ],
+  "LeftToe_End": [
+   0.32,
+   -0.26,
+   0.02
+  ],
+  "RightUpLeg": [
+   -0.12,
+   0.02,
+   0.9
+  ],
+  "RightLeg": [
+   -0.16,
+   0.0,
+   0.49
+  ],
+  "RightFoot": [
+   -0.21,
+   0.05,
+   0.13
+  ],
+  "RightToeBase": [
+   -0.29,
+   -0.02,
+   0.04
+  ],
+  "RightToe_End": [
+   -0.36,
+   -0.08,
+   0.02
+  ]
+ },
+ "props": [
+  {
+   "name": "orb",
+   "bone": "LeftHand",
+   "sphere": [
+    [
+     0.187,
+     -0.325,
+     1.651
+    ],
+    0.105
+   ]
+  },
+  {
+   "name": "sword",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.286,
+      0.0,
+      1.039
+     ],
+     [
+      -0.286,
+      -0.615,
+      0.424
+     ]
+    ],
+    [
+     [
+      -0.322,
+      0.004,
+      0.97
+     ],
+     [
+      -0.314,
+      0.113,
+      1.062
+     ]
+    ]
+   ],
+   "radius": 0.11,
+   "wholeIslands": 0.6
+  }
+ ],
+ "bootTop": 0.15,
+ "skirtLegShare": 0.4,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "meshReason": "2026-09-27 workerD: the old smartrigged mesh was the wrong identity (plumed-hat gunman); regenerated with Meshy-7 from the unit's concept (task 01a0e5a4-095a-73d4-bec4-b5a27fa50cf1, 30 credits) and installed with install_mesh.py. Joints hand-placed on shaded front/side views of the new mesh; props and knobs follow the sorceress (same DEF family): orb rigid on LeftHand, sheathed sword rigid on Hips. The old gunman knobs (blunderbuss prop, propAim, cove_reweight, coveArmReach) described the retired mesh and were dropped. 2026-10-11 lane A (user-approved prop surgery): the DEF AttackFront draws the cutlass overhead and slashes, so the sword is cut from the hip and re-seated in the right fist (sword_draw_surgery.py -> sword_m1); prop sword is rigid on RightHand and binds only the cut-free sword island (wholeIslands), not the fist around the grip.",
+ "sourceMesh": "artifacts/homm3_mesh_surgery/hota_cove_sea_witch_sword_m1.glb",
+ "glbPatch": {
+  "reason": "authenticity: DEF g12 attack - with the cutlass now in her right fist (sword prop surgery), she winds it back out to the side (f3), raises it overhead (f4), slashes down in front (f5-f6) and levels it at the target (f7), instead of jabbing with the hand low by the hip. Right arm/shoulder weights re-solved",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sea_witch_sea_witch_slash_weights.json",
+    "sha256": "559134c75d54ee7e8279a0befb020717227b54f0c00a4b725cd49f4571876171",
+    "note": "sea witch overhead slash: right arm/shoulder weights re-solved (wsolve, GPU)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sea_witch_pose_rot.json",
+    "sha256": "2e5d1ab94485f2a8dd3ce81a0de12eb35da2690b8ab051415935b94f82a5b319",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sea_witch_pose_rot.json",
+    "sha256": "2e5d1ab94485f2a8dd3ce81a0de12eb35da2690b8ab051415935b94f82a5b319",
+    "regrid": true
+   }
+  ]
+ }
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://olden-era.local/schemas/input_manifest.schema.json",
+  "title": "OldenCsRecoveryInputManifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "inputs"],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "repo_relative_root_hint": {
+      "type": "string"
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "required", "path", "expect_present"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "kind": { "type": "string", "minLength": 1 },
+          "required": { "type": "boolean" },
+          "path": { "type": "string", "minLength": 1 },
+          "path_is_absolute": { "type": "boolean" },
+          "path_convention": { "type": "string" },
+          "expect_present": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "notes": { "type": "string" },
+          "expected_sha256": {
+            "type": "string",
+            "description": "Optional pinned content hash (e.g. GameAssembly SHA256)."
+          }
+        }
+      }
+    }
+  }
+}

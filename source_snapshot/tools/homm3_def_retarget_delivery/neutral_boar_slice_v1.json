@@ -1,0 +1,31 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "neutral_boar_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/neutral_boar_slice_v1",
+  "note": "Neutral Boar (CBOAR.DEF): Meshy mesh (orc rider on a boar), hand-keyed rider on the procedural stronghold_quadruped boar; mace relocated into the left hand. No mocap capture fits a mounted rider. Jitter pass 2026-09-27: silhouetteRefine removed (per-frame dx/dy silhouette offsets read as whole-body jumps), re-shipped in place. | look-only re-freeze on the ground-stamped canonical (fleet_rebuild ground_glb apply; coordinator item 3) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_boar 0.6577. | 2026-10-11 authenticity pass lane A: DEF g05 death - boar rears on its hind legs then falls over on its side Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_boar 0.6577. | boar-death-reroll-515ad7b5a2 Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_boar 0.6577.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_boar",
+      "gameSid": "h3_boar",
+      "bundleName": "custom_units_neutral_h3_boar",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "f1460983996bc80915cf000d6191d236b42948fc0a85d5455ef3145ee0c7cbfc",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "d7041234474ff688c524a0eba10c0ada54f24b31a11312940de5e8ed2efee267",
+        "idleRetimedGlbSha256": "24c67f558afeb6730a21465fcb2acb5fa776530c45cbb2829ae2efb89c8df53b",
+        "vfxManifestSha256": "db95c304c9ebafa634fdb41039fa31e6b731c596c9941e088462d55917784f51",
+        "specSha256": "cae82c105594528254db78701a58a760171f16c72301244f11b155fefd0194a3",
+        "basecolorSha256": "5b70b2bc30b02b49cdefa59a2d0dc1a63e82eec3fef1c402bb33821d759d45a9"
+      }
+    }
+  ]
+}

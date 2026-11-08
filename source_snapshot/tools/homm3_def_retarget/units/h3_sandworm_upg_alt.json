@@ -1,0 +1,103 @@
+{
+ "unit": "h3_sandworm_upg_alt",
+ "joints": {
+  "Hips": [
+   -0.3,
+   -0.32,
+   0.82
+  ],
+  "Spine": [
+   -0.3,
+   -0.1,
+   1.0
+  ],
+  "Spine1": [
+   -0.3,
+   0.05,
+   1.15
+  ],
+  "Spine2": [
+   -0.3,
+   0.0,
+   1.3
+  ],
+  "Neck": [
+   -0.3,
+   -0.3,
+   1.43
+  ],
+  "Head": [
+   -0.3,
+   -0.52,
+   1.47
+  ],
+  "HeadTop_End": [
+   -0.3,
+   -0.82,
+   1.42
+  ]
+ },
+ "grounding": false,
+ "tail": {
+  "segments": 12,
+  "belowHips": 0.05,
+  "neckRadius": 0.18,
+  "handsAboveZ": 9.0,
+  "torsoRadius": 0.18,
+  "amplitude": 0.15,
+  "wavelength": 0.8,
+  "behind": [
+   0,
+   1,
+   0
+  ],
+  "groundZ": 0.35
+ },
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "roll": 20
+  }
+ },
+ "extensions": [
+  "cove_serpent"
+ ],
+ "coveSlump": {
+  "start": 2,
+  "deg": 60,
+  "pivotZ": 0.2
+ },
+ "coveLunge": {
+  "deg": 45,
+  "peak": 0.7,
+  "width": 0.35,
+  "pivotZ": 0.5
+ },
+ "glbPatch": {
+  "reason": "authenticity: DEF g12 attack - the sandworm rears back, then throws its front body out nearly level at the target with the maw leading and draws back up (the shipped clip only ducked the head into its coil); front-body weights re-solved so the lunge passes the CS gate",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_sandworm_upg_alt_sandworm_attack_weights.json",
+    "sha256": "21d78706db78bf6634ea901a4f796b6162c38806d17adc82f5ad2d63994c5601",
+    "note": "sandworm lunge: front-body weights re-solved (wsolve, GPU)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_sandworm_upg_alt_pose_rot.json",
+    "sha256": "1becdc321487b7fb64fc9b0e9c0a5939c014f88ad8061a22879564c0b8f71fad",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_sandworm_upg_alt_pose_rot.json",
+    "sha256": "1becdc321487b7fb64fc9b0e9c0a5939c014f88ad8061a22879564c0b8f71fad",
+    "regrid": true
+   }
+  ]
+ }
+}

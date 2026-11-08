@@ -1,0 +1,117 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_giant",
+ "status": "look",
+ "notes": "tower rollout: lightning sword arcs ripped from the DEF (Titan recipe). Mouseover blade crackle (g01) is on the blade the mesh draws; not a layer",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "bolt_flash",
+   "treatment": "dynamic",
+   "notes": "the lightning sword swing lights the sword arm"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "strike_arc",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "lumaSparse",
+     "minLuma": 170,
+     "blueOverRed": -5
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "bolt_flash",
+    "provenance": "roster g12 attack_front lightning sword swing arc f1-6; the Titan recipe (lumaSparse 170, blueOverRed -5): defEffects keeps 28-127 px of a 500-1300 px arc because the blade's white-blue is idle body paint"
+   },
+   {
+    "id": "bolt_flash_light",
+    "type": "effectLight",
+    "lightId": "bolt_flash",
+    "carrier": "strike_arc",
+    "anchor": {
+     "bone": "RightHand",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.85,
+     0.92,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.401,
+      1.723,
+      0.594,
+      0.315,
+      0.255,
+      0.068
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "defence_arc",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_Defence": {
+      "defGroup": 4,
+      "frames": [
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "lumaSparse",
+     "minLuma": 170,
+     "blueOverRed": -5
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "roster g04 defence blade crackle f2-6 (lumaSparse, Titan recipe)"
+   }
+  ]
+ }
+}

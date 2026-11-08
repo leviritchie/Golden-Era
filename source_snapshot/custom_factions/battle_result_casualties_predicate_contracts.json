@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom reward-economy law profiles that require battle result casualty context. This records post-battle casualty/result semantics only; it does not prove battle result event ordering, casualty ownership, low-loss thresholds, reward commit, Avenger mark persistence, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresBattleResultCasualtiesProfiles": true,
+    "rewardEconomyFamilyOnly": true,
+    "battleResultMustBeCommittedPostBattleOutcome": true,
+    "victoryAnimationOrRewardRowSubstituteForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedEffectKeyPrefixes": [
+    "fortress.",
+    "rampart."
+  ],
+  "requiredRuntimeProof": [
+    "committed battle result event proof",
+    "winner and loser side proof",
+    "friendly and enemy casualty count proof",
+    "permanent casualty versus temporary loss proof",
+    "low-loss threshold calculation proof",
+    "reward commit ordering proof",
+    "idempotent per-battle reward application proof"
+  ],
+  "contracts": {
+    "fortress.defensive-win-swamp-structure-income": {
+      "casualtyKinds": [
+        "reward-economy-defensive-win-casualty-context",
+        "committed-post-battle-result-casualties"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "battle victory animation counted as casualty result",
+        "battle start or end notification counted as committed result",
+        "reward row counted without battle result proof",
+        "loser row counted without winner side proof",
+        "temporary summoned loss counted as permanent casualty",
+        "swamp or structure theme counted without battle result proof"
+      ],
+      "notes": "Fortress defensive-win economy requires committed post-battle result casualties with winner/loser and casualty proof; victory animation or swamp structure theme is not enough."
+    },
+    "rampart.cleanse-regeneration-cycle": {
+      "casualtyKinds": [
+        "reward-economy-low-loss-cycle",
+        "committed-post-battle-result-casualties"
+      ],
+      "companionPredicates": [
+        "RequiresAvengerMark"
+      ],
+      "forbiddenSubstitutes": [
+        "battle victory animation counted as casualty result",
+        "battle start or end notification counted as committed result",
+        "reward row counted without battle result proof",
+        "low-loss assumed without casualty count proof",
+        "temporary summoned loss counted as permanent casualty",
+        "Avenger mark counted without casualty result proof"
+      ],
+      "notes": "Rampart cleanse regeneration cycle requires committed post-battle result casualties, low-loss calculation, and separate Avenger mark proof where used."
+    },
+    "rampart.low-loss-avenger-tithe": {
+      "casualtyKinds": [
+        "reward-economy-low-loss-avenger-tithe",
+        "committed-post-battle-result-casualties"
+      ],
+      "companionPredicates": [
+        "RequiresAvengerMark"
+      ],
+      "forbiddenSubstitutes": [
+        "battle victory animation counted as casualty result",
+        "battle start or end notification counted as committed result",
+        "reward row counted without battle result proof",
+        "low-loss assumed without casualty count proof",
+        "temporary summoned loss counted as permanent casualty",
+        "Avenger mark counted without casualty result proof"
+      ],
+      "notes": "Rampart low-loss Avenger tithe requires committed post-battle result casualties, low-loss calculation, and separate Avenger mark proof where used."
+    }
+  }
+}

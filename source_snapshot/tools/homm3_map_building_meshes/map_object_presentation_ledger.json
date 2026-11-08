@@ -1,0 +1,1359 @@
+{
+ "schema": "homm3_map_object_presentation_ledger.v1",
+ "owner": "docs/homm3_map_object_animation_audit.md (Not presented)",
+ "note": "One row per HoMM3 object id that a translated map draws nothing for (or draws the wrong thing for). The census (map_object_presentation.py census) finds the draw-nothing ids; tools/validate_map_object_presentation_contract.py fails the build when a census id has no row here. Causes: dropped_in_raw_translation = the substitution map returns no Olden Era SID, so nothing is emitted and only the invisible homm3_pathing_blocker gap fill seals the HoMM3 non-visit cells (visit cell open, function gone); wrong_native_standin = emitted as an unrelated native object; partial_standin = part of the object is emitted, the building is not; removed_after_substitution = a mapped object deleted by a later pass. Statuses: fix_in_source_pending_regeneration (the source rule is fixed and names expectedSid; the translated maps still need regenerating), delivered (the census shows it drawn), decision_needed (no native object with the same behaviour; options listed), accepted_not_drawn (deliberate, reason given). Native evidence: Core.zip DB/objects_logic (source/static).",
+ "rows": [
+  {
+   "objectId": 99,
+   "name": "Trading post",
+   "defs": [
+    "avxpost0.def",
+    "avxpstr0.def"
+   ],
+   "cause": "wrong_native_standin",
+   "status": "delivered",
+   "evidence": "SIGN_OR_SIGNPOST_TEMPLATE_IDS listed 99 as a signpost, so every trading post became walkable grass/flowers/mushrooms (rule signpost_to_pathable_scenery).",
+   "expectedSid": "market",
+   "expectedRule": "trading_post_to_market",
+   "fix": "native market (Core objects_logic/markets: the resource exchange). Same role; restores the HoMM3 blocked building and its trade.",
+   "deliveredSids": {
+    "market": 80
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 221,
+   "name": "Trading post (snow, HotA)",
+   "defs": [
+    "avxpssn.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping",
+   "expectedSid": "market",
+   "expectedRule": "trading_post_snow_to_market",
+   "fix": "native market, as 99.",
+   "deliveredSids": {
+    "market": 7
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 25,
+   "name": "Dragon Utopia",
+   "defs": [
+    "avsutop0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping although Core has the same named guarded bank",
+   "fix": "native dragon_utopia (guarded_res_banks: black dragon guards, 25-30k gold + items; HoMM3: dragon guards, 20-50k gold + 1-4 artifacts).",
+   "deliveredSids": {
+    "dragon_utopia": 25
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 33,
+   "name": "Garrison",
+   "defs": [
+    "avcgar10.def",
+    "avcgar20.def"
+   ],
+   "cause": "partial_standin",
+   "status": "accepted_not_drawn",
+   "evidence": "garrison_to_exact_neutral_stack: the guards are emitted as random-squad on the gate cell; the walls are invisible gap-fill blockers; no building is drawn.",
+   "nativeCandidates": [
+    {
+     "sid": "remote_foothold",
+     "verdict": "behaviour differs: Core objects_logic/garrisons/remote_foothold is a 3x3 visited building (viewRadius 6, no guard army, no pass-through gate); a HoMM3 garrison is an owned pass-through gate holding an army. Using it would change passability and interaction."
+    }
+   ],
+   "visualBillboard": {
+    "sids": [
+     "homm3_objbb_avcgar10",
+     "homm3_objbb_avcgar20"
+    ],
+    "placed": 102,
+    "unplaced": 30,
+    "unplacedBy": {
+     "every_cell_is_a_native_gate": 30
+    },
+    "host": "inert homm3_objbb_<def> Interact (seer-hut shell, one blocked cell, no GATE, no objects_logic) on one of the object's own HoMM3 blocked cells",
+    "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; PNGs staged in the plugin tree; not installed, runtime unproven)"
+   },
+   "decision": "visual-only HoMM3 DEF billboard accepted by the owner 2026-09-26; no function",
+   "reason": "Guards emitted as random-squad on the gate cell (partial stand-in, unchanged). 102 of 132 placements drawn as a visual-only DEF billboard; an unplaced placement had no usable HoMM3 blocked cell: the Olden Era GATE area of a nearby native pickup, chest, squad or artifact covers it (the row projection folds neighbouring HoMM3 rows together), overlapping HoMM3 scenery already stands there, or blocking it would leave an adjacent GATE/marker under two open approaches. Blocking another object's GATE would break that object, so these stay undrawn (per-placement cells in install_manifest.json objectBillboards.unplaced)"
+  },
+  {
+   "objectId": 219,
+   "name": "Garrison (vertical, incl. anti-magic)",
+   "defs": [
+    "avcvgarm.def",
+    "avcvgr.def"
+   ],
+   "cause": "partial_standin",
+   "status": "accepted_not_drawn",
+   "evidence": "as 33",
+   "nativeCandidates": [
+    {
+     "sid": "remote_foothold",
+     "verdict": "as 33"
+    }
+   ],
+   "visualBillboard": {
+    "sids": [
+     "homm3_objbb_avcvgarm",
+     "homm3_objbb_avcvgr"
+    ],
+    "placed": 39,
+    "unplaced": 12,
+    "unplacedBy": {
+     "every_cell_is_a_native_gate": 12
+    },
+    "host": "inert homm3_objbb_<def> Interact (seer-hut shell, one blocked cell, no GATE, no objects_logic) on one of the object's own HoMM3 blocked cells",
+    "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; PNGs staged in the plugin tree; not installed, runtime unproven)"
+   },
+   "decision": "visual-only HoMM3 DEF billboard accepted by the owner 2026-09-26; no function",
+   "reason": "Guards emitted as random-squad on the gate cell (partial stand-in, unchanged). 39 of 51 placements drawn as a visual-only DEF billboard; an unplaced placement had no usable HoMM3 blocked cell: the Olden Era GATE area of a nearby native pickup, chest, squad or artifact covers it (the row projection folds neighbouring HoMM3 rows together), overlapping HoMM3 scenery already stands there, or blocking it would leave an adjacent GATE/marker under two open approaches. Blocking another object's GATE would break that object, so these stay undrawn (per-placement cells in install_manifest.json objectBillboards.unplaced)"
+  },
+  {
+   "objectId": 24,
+   "name": "Derelict ship",
+   "defs": [
+    "avadlic0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "accepted_not_drawn",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3 creature bank on water, boarded from a boat)",
+   "nativeCandidates": [
+    {
+     "sid": "guarded_res_banks (e.g. abandoned_mansion)",
+     "verdict": "land buildings; no native bank is placed on water or visited from a boat"
+    }
+   ],
+   "visualBillboard": {
+    "sids": [
+     "homm3_objbb_avadlic0"
+    ],
+    "placed": 37,
+    "unplaced": 5,
+    "unplacedBy": {
+     "every_cell_is_a_native_gate": 5
+    },
+    "host": "inert homm3_objbb_<def> Interact (seer-hut shell, one blocked cell, no GATE, no objects_logic) on one of the object's own HoMM3 blocked cells",
+    "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; PNGs staged in the plugin tree; not installed, runtime unproven)"
+   },
+   "decision": "visual-only HoMM3 DEF billboard accepted by the owner 2026-09-26; no function",
+   "reason": "37 of 42 placements drawn as a visual-only DEF billboard; an unplaced placement had no usable HoMM3 blocked cell: the Olden Era GATE area of a nearby native pickup, chest, squad or artifact covers it (the row projection folds neighbouring HoMM3 rows together), overlapping HoMM3 scenery already stands there, or blocking it would leave an adjacent GATE/marker under two open approaches. Blocking another object's GATE would break that object, so these stay undrawn (per-placement cells in install_manifest.json objectBillboards.unplaced)"
+  },
+  {
+   "objectId": 85,
+   "name": "Shipwreck",
+   "defs": [
+    "avawre20.def",
+    "avawrek0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "accepted_not_drawn",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3 creature bank on the shore)",
+   "nativeCandidates": [
+    {
+     "sid": "guarded_res_banks",
+     "verdict": "role matches (guarded, gold + artifact) but guards and rewards are OE numbers; shore footprint unproven"
+    }
+   ],
+   "visualBillboard": {
+    "sids": [
+     "homm3_objbb_avawre20",
+     "homm3_objbb_avawrek0"
+    ],
+    "placed": 91,
+    "unplaced": 21,
+    "unplacedBy": {
+     "every_cell_is_a_native_gate": 20,
+     "every_cell_gate_or_overlapping_homm3_scenery": 1
+    },
+    "host": "inert homm3_objbb_<def> Interact (seer-hut shell, one blocked cell, no GATE, no objects_logic) on one of the object's own HoMM3 blocked cells",
+    "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; PNGs staged in the plugin tree; not installed, runtime unproven)"
+   },
+   "decision": "visual-only HoMM3 DEF billboard accepted by the owner 2026-09-26; no function",
+   "reason": "91 of 112 placements drawn as a visual-only DEF billboard; an unplaced placement had no usable HoMM3 blocked cell: the Olden Era GATE area of a nearby native pickup, chest, squad or artifact covers it (the row projection folds neighbouring HoMM3 rows together), overlapping HoMM3 scenery already stands there, or blocking it would leave an adjacent GATE/marker under two open approaches. Blocking another object's GATE would break that object, so these stay undrawn (per-placement cells in install_manifest.json objectBillboards.unplaced)"
+  },
+  {
+   "objectId": 84,
+   "name": "Crypt (graveyard)",
+   "defs": [
+    "avxgyds0.def",
+    "avxgyne0.def",
+    "avxgysn0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3 creature bank: undead guards, gold + artifact)",
+   "nativeCandidates": [
+    {
+     "sid": "overgrown_grave",
+     "verdict": "closest: guarded, gold 3000/6000 + rare item; guards 80-96 animated armor against HoMM3's skeletons/zombies/wights/vampires, so fight difficulty and reward change"
+    },
+    {
+     "sid": "heros_crypt",
+     "verdict": "unguarded item + debuff: a Warrior's Tomb, not a Crypt"
+    }
+   ],
+   "deliveredSids": {
+    "overgrown_grave": 100
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 13,
+   "name": "Cartographer",
+   "defs": [
+    "avxmaps0.def",
+    "avxmapu0.def",
+    "avxmapw0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: pay 1000 gold, reveal all land / water / underground)",
+   "nativeCandidates": [
+    {
+     "sid": "wind_rose",
+     "verdict": "free SideFogOfWarRevealing 1000 (whole map): no cost, not per terrain class"
+    },
+    {
+     "sid": "watchtower",
+     "verdict": "free reveal radius 15"
+    }
+   ],
+   "deliveredSids": {
+    "watchtower": 35
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 15,
+   "name": "Cover of Darkness",
+   "defs": [
+    "avxcovr0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "accepted_not_drawn",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: re-shrouds an area for other players)",
+   "nativeCandidates": [],
+   "visualBillboard": {
+    "sids": [
+     "homm3_objbb_avxcovr0"
+    ],
+    "placed": 28,
+    "unplaced": 7,
+    "unplacedBy": {
+     "every_cell_is_a_native_gate": 5,
+     "every_cell_gate_or_overlapping_homm3_scenery": 2
+    },
+    "host": "inert homm3_objbb_<def> Interact (seer-hut shell, one blocked cell, no GATE, no objects_logic) on one of the object's own HoMM3 blocked cells",
+    "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; PNGs staged in the plugin tree; not installed, runtime unproven)"
+   },
+   "decision": "visual-only HoMM3 DEF billboard accepted by the owner 2026-09-26; no function",
+   "reason": "28 of 35 placements drawn as a visual-only DEF billboard; an unplaced placement had no usable HoMM3 blocked cell: the Olden Era GATE area of a nearby native pickup, chest, squad or artifact covers it (the row projection folds neighbouring HoMM3 rows together), overlapping HoMM3 scenery already stands there, or blocking it would leave an adjacent GATE/marker under two open approaches. Blocking another object's GATE would break that object, so these stay undrawn (per-placement cells in install_manifest.json objectBillboards.unplaced)"
+  },
+  {
+   "objectId": 48,
+   "name": "Magic Spring",
+   "defs": [
+    "avxmags0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: doubles max spell points, once a week)",
+   "nativeCandidates": [
+    {
+     "sid": "mana_well",
+     "verdict": "ManaPercentSettingReward 1 = restore to 100%, unlimited visits; the existing crystal->mana_well rule accepts that gap"
+    }
+   ],
+   "deliveredSids": {
+    "mana_well": 36
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 52,
+   "name": "Mermaids",
+   "defs": [
+    "avxmerm0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "accepted_not_drawn",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: +1 luck next battle, visited from a boat)",
+   "nativeCandidates": [],
+   "visualBillboard": {
+    "sids": [
+     "homm3_objbb_avxmerm0"
+    ],
+    "placed": 20,
+    "unplaced": 1,
+    "unplacedBy": {
+     "every_cell_is_a_native_gate": 1
+    },
+    "host": "inert homm3_objbb_<def> Interact (seer-hut shell, one blocked cell, no GATE, no objects_logic) on one of the object's own HoMM3 blocked cells",
+    "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; PNGs staged in the plugin tree; not installed, runtime unproven)"
+   },
+   "decision": "visual-only HoMM3 DEF billboard accepted by the owner 2026-09-26; no function",
+   "reason": "20 of 21 placements drawn as a visual-only DEF billboard; an unplaced placement had no usable HoMM3 blocked cell: the Olden Era GATE area of a nearby native pickup, chest, squad or artifact covers it (the row projection folds neighbouring HoMM3 rows together), overlapping HoMM3 scenery already stands there, or blocking it would leave an adjacent GATE/marker under two open approaches. Blocking another object's GATE would break that object, so these stay undrawn (per-placement cells in install_manifest.json objectBillboards.unplaced)"
+  },
+  {
+   "objectId": 92,
+   "name": "Sirens",
+   "defs": [
+    "avxsirn0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "accepted_not_drawn",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: lose 30% of each stack for experience, visited from a boat)",
+   "nativeCandidates": [
+    {
+     "sid": "sacrificial_shrine",
+     "verdict": "player chooses what to sacrifice (coefExpUnit 5), land building: different interaction"
+    }
+   ],
+   "visualBillboard": {
+    "sids": [
+     "homm3_objbb_avxsirn0"
+    ],
+    "placed": 17,
+    "unplaced": 2,
+    "unplacedBy": {
+     "every_cell_is_a_native_gate": 2
+    },
+    "host": "inert homm3_objbb_<def> Interact (seer-hut shell, one blocked cell, no GATE, no objects_logic) on one of the object's own HoMM3 blocked cells",
+    "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; PNGs staged in the plugin tree; not installed, runtime unproven)"
+   },
+   "decision": "visual-only HoMM3 DEF billboard accepted by the owner 2026-09-26; no function",
+   "reason": "17 of 19 placements drawn as a visual-only DEF billboard; an unplaced placement had no usable HoMM3 blocked cell: the Olden Era GATE area of a nearby native pickup, chest, squad or artifact covers it (the row projection folds neighbouring HoMM3 rows together), overlapping HoMM3 scenery already stands there, or blocking it would leave an adjacent GATE/marker under two open approaches. Blocking another object's GATE would break that object, so these stay undrawn (per-placement cells in install_manifest.json objectBillboards.unplaced)"
+  },
+  {
+   "objectId": 43,
+   "name": "One-way monolith entrance",
+   "defs": [
+    "avxmn1b0.def",
+    "avxmn1r0.def",
+    "avxmn1y0.def",
+    "avxmn5i0.def",
+    "avxmn6i0.def",
+    "avxmn7i0.def",
+    "avxmn8i0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "accepted_not_drawn",
+   "evidence": "payloadless_scenery_requires_explicit_mapping; two-way monoliths (45) already map to native portal_N",
+   "nativeCandidates": [
+    {
+     "sid": "portal_N",
+     "verdict": "Core portals are two-way; a one-way entrance/exit pair would become a return route (behaviour change)"
+    }
+   ],
+   "visualBillboard": {
+    "sids": [
+     "homm3_objbb_avxmn1b0",
+     "homm3_objbb_avxmn1r0",
+     "homm3_objbb_avxmn1y0",
+     "homm3_objbb_avxmn5i0",
+     "homm3_objbb_avxmn6i0",
+     "homm3_objbb_avxmn8i0"
+    ],
+    "placed": 24,
+    "unplaced": 48,
+    "unplacedBy": {
+     "every_cell_is_a_native_gate": 30,
+     "remaining_cells_would_seal_an_adjacent_gate_or_marker": 15,
+     "every_cell_gate_or_overlapping_homm3_scenery": 3
+    },
+    "host": "inert homm3_objbb_<def> Interact (seer-hut shell, one blocked cell, no GATE, no objects_logic) on one of the object's own HoMM3 blocked cells",
+    "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; PNGs staged in the plugin tree; not installed, runtime unproven)"
+   },
+   "decision": "visual-only HoMM3 DEF billboard accepted by the owner 2026-09-26; no function",
+   "reason": "24 of 72 placements drawn as a visual-only DEF billboard; an unplaced placement had no usable HoMM3 blocked cell: the Olden Era GATE area of a nearby native pickup, chest, squad or artifact covers it (the row projection folds neighbouring HoMM3 rows together), overlapping HoMM3 scenery already stands there, or blocking it would leave an adjacent GATE/marker under two open approaches. Blocking another object's GATE would break that object, so these stay undrawn (per-placement cells in install_manifest.json objectBillboards.unplaced)"
+  },
+  {
+   "objectId": 44,
+   "name": "One-way monolith exit",
+   "defs": [
+    "avxmn5o0.def",
+    "avxmn6o0.def",
+    "avxmn7o0.def",
+    "avxmn8o0.def",
+    "avxmx1b0.def",
+    "avxmx1r0.def",
+    "avxmx1y0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "accepted_not_drawn",
+   "evidence": "as 43",
+   "nativeCandidates": [
+    {
+     "sid": "portal_N",
+     "verdict": "as 43"
+    }
+   ],
+   "visualBillboard": {
+    "sids": [
+     "homm3_objbb_avxmn5o0",
+     "homm3_objbb_avxmn6o0",
+     "homm3_objbb_avxmn8o0",
+     "homm3_objbb_avxmx1b0",
+     "homm3_objbb_avxmx1r0",
+     "homm3_objbb_avxmx1y0"
+    ],
+    "placed": 28,
+    "unplaced": 37,
+    "unplacedBy": {
+     "remaining_cells_would_seal_an_adjacent_gate_or_marker": 20,
+     "every_cell_is_a_native_gate": 16,
+     "every_cell_gate_or_overlapping_homm3_scenery": 1
+    },
+    "host": "inert homm3_objbb_<def> Interact (seer-hut shell, one blocked cell, no GATE, no objects_logic) on one of the object's own HoMM3 blocked cells",
+    "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; PNGs staged in the plugin tree; not installed, runtime unproven)"
+   },
+   "decision": "visual-only HoMM3 DEF billboard accepted by the owner 2026-09-26; no function",
+   "reason": "28 of 65 placements drawn as a visual-only DEF billboard; an unplaced placement had no usable HoMM3 blocked cell: the Olden Era GATE area of a nearby native pickup, chest, squad or artifact covers it (the row projection folds neighbouring HoMM3 rows together), overlapping HoMM3 scenery already stands there, or blocking it would leave an adjacent GATE/marker under two open approaches. Blocking another object's GATE would break that object, so these stay undrawn (per-placement cells in install_manifest.json objectBillboards.unplaced)"
+  },
+  {
+   "objectId": 45,
+   "name": "Two-way monolith (avxmn4b0)",
+   "defs": [
+    "avxmn4b0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "monolith_two_way_requires_exact_animation: MONOLITH_TWO_WAY_ANIMATION_EXACT_MAP has no AVXmn4b0 entry (2 placements, 1 map)",
+   "nativeCandidates": [
+    {
+     "sid": "portal_N",
+     "verdict": "same role; needs a free colour group"
+    }
+   ],
+   "deliveredSids": {
+    "portal_1": 57,
+    "portal_2": 41,
+    "portal_3": 40,
+    "portal_4": 19,
+    "portal_5": 8,
+    "portal_1_2": 8,
+    "portal_2_2": 2
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 106,
+   "name": "War Machine Factory",
+   "defs": [
+    "avgsieg0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "accepted_not_drawn",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: buy ballista / first aid tent / ammo cart)",
+   "nativeCandidates": [
+    {
+     "sid": "forge",
+     "verdict": "item market, not war machines"
+    }
+   ],
+   "visualBillboard": {
+    "sids": [
+     "homm3_objbb_avgsieg0"
+    ],
+    "placed": 75,
+    "unplaced": 46,
+    "unplacedBy": {
+     "every_cell_is_a_native_gate": 45,
+     "every_cell_gate_or_overlapping_homm3_scenery": 1
+    },
+    "host": "inert homm3_objbb_<def> Interact (seer-hut shell, one blocked cell, no GATE, no objects_logic) on one of the object's own HoMM3 blocked cells",
+    "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; PNGs staged in the plugin tree; not installed, runtime unproven)"
+   },
+   "decision": "visual-only HoMM3 DEF billboard accepted by the owner 2026-09-26; no function",
+   "reason": "75 of 121 placements drawn as a visual-only DEF billboard; an unplaced placement had no usable HoMM3 blocked cell: the Olden Era GATE area of a nearby native pickup, chest, squad or artifact covers it (the row projection folds neighbouring HoMM3 rows together), overlapping HoMM3 scenery already stands there, or blocking it would leave an adjacent GATE/marker under two open approaches. Blocking another object's GATE would break that object, so these stay undrawn (per-placement cells in install_manifest.json objectBillboards.unplaced)"
+  },
+  {
+   "objectId": 225,
+   "name": "Favorable Winds (HotA)",
+   "defs": [
+    "avxfw0.def",
+    "avxfw2.def",
+    "avxfw3.def",
+    "avxfw4.def",
+    "avxfw5.def",
+    "avxfw6.def",
+    "avxfw7.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "decision_needed",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HotA sea terrain overlay: boat movement bonus)",
+   "nativeCandidates": [],
+   "options": [
+    "visual-only overlay (vanilla-style effect lane)"
+   ]
+  },
+  {
+   "objectId": 226,
+   "name": "Fiery Fields (HotA)",
+   "defs": [
+    "avxff0.def",
+    "avxff1.def",
+    "avxff2.def",
+    "avxff3.def",
+    "avxff4.def",
+    "avxff5.def",
+    "avxff6.def",
+    "avxff7.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HotA magic-terrain overlay: fire spells in battle)",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "fx_map_fire": 56
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 230,
+   "name": "Magic Plains (HotA)",
+   "defs": [
+    "avxmp1.def",
+    "avxmp2.def",
+    "avxmp3.def",
+    "avxmp4.def",
+    "avxmp5.def",
+    "avxmp6.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HotA magic-terrain overlay)",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "fx_fireflies_yellow": 18
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 143,
+   "name": "River / lava / mud delta",
+   "defs": [
+    "clrdelt1.def",
+    "clrdelt2.def",
+    "clrdelt3.def",
+    "clrdelt4.def",
+    "icedelt1.def",
+    "lavdelt1.def",
+    "lavdelt2.def",
+    "lavdelt3.def",
+    "lavdelt4.def",
+    "muddelt1.def",
+    "muddelt2.def",
+    "muddelt3.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "decision_needed",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (decoration: river mouth)",
+   "nativeCandidates": [],
+   "options": [
+    "visual-only decoration",
+    "leave not drawn"
+   ]
+  },
+  {
+   "objectId": 7,
+   "name": "Black Market",
+   "defs": [
+    "avxmktb0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: sells 7 artifacts)",
+   "nativeCandidates": [
+    {
+     "sid": "forge",
+     "verdict": "item market (Core item_markets/forge, 2x price, 2/2/1/1 items per rarity): same role, different stock and prices"
+    }
+   ],
+   "deliveredSids": {
+    "forge": 46
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 9,
+   "name": "Border Guard",
+   "defs": [
+    "avxbor00.def",
+    "avxbor10.def",
+    "avxbor20.def",
+    "avxbor30.def",
+    "avxbor40.def",
+    "avxbor50.def",
+    "avxbor60.def",
+    "avxbor70.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping: the guard cell is its visit cell, so the gap fill leaves the passage open (HoMM3 keeps it shut until the key is held)",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "campaign_FX_block": 145
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 10,
+   "name": "Keymaster's Tent",
+   "defs": [
+    "avxkey00.def",
+    "avxkey10.def",
+    "avxkey20.def",
+    "avxkey30.def",
+    "avxkey40.def",
+    "avxkey50.def",
+    "avxkey60.def",
+    "avxkey70.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "accepted_not_drawn",
+   "evidence": "payloadless_scenery_requires_explicit_mapping",
+   "nativeCandidates": [],
+   "reason": "Function delivered by the border key-gate zone marker on the tent's visit cell (Dialog + CounterSet <mission>_border_key_<colour>, raw_translation/border_guard_gates.py). Visual: the avxkey<c>0 DEF drawn as a billboard on an inert host at the tent's body cell (the marker stays on the walkable visit cell). 91 of 157 placements drawn as a visual-only DEF billboard; an unplaced placement had no usable HoMM3 blocked cell: the Olden Era GATE area of a nearby native pickup, chest, squad or artifact covers it (the row projection folds neighbouring HoMM3 rows together), overlapping HoMM3 scenery already stands there, or blocking it would leave an adjacent GATE/marker under two open approaches. Blocking another object's GATE would break that object, so these stay undrawn (per-placement cells in install_manifest.json objectBillboards.unplaced)",
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)",
+   "visualBillboard": {
+    "sids": [
+     "homm3_objbb_avxkey00",
+     "homm3_objbb_avxkey10",
+     "homm3_objbb_avxkey20",
+     "homm3_objbb_avxkey30",
+     "homm3_objbb_avxkey40",
+     "homm3_objbb_avxkey50",
+     "homm3_objbb_avxkey60",
+     "homm3_objbb_avxkey70"
+    ],
+    "placed": 91,
+    "unplaced": 66,
+    "unplacedBy": {
+     "every_cell_is_a_native_gate": 34,
+     "every_cell_gate_or_overlapping_homm3_scenery": 32
+    },
+    "host": "inert homm3_objbb_<def> Interact (seer-hut shell, one blocked cell, no GATE, no objects_logic) on one of the object's own HoMM3 blocked cells",
+    "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; PNGs staged in the plugin tree; not installed, runtime unproven)"
+   },
+   "decision": "visual-only HoMM3 DEF billboard accepted by the owner 2026-09-26; no function"
+  },
+  {
+   "objectId": 22,
+   "name": "Corpse",
+   "defs": [
+    "avxskds0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: one-time, 20% artifact)",
+   "nativeCandidates": [
+    {
+     "sid": "abandoned_corpse",
+     "verdict": "Core resource_banks/abandoned_corpse: same concept, OE reward table"
+    }
+   ],
+   "deliveredSids": {
+    "abandoned_corpse": 106
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 56,
+   "name": "Oasis",
+   "defs": [
+    "avxosis0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: +movement, +1 morale)",
+   "nativeCandidates": [
+    {
+     "sid": "fountain",
+     "verdict": "Core fountain = +40 movement points, no morale"
+    }
+   ],
+   "deliveredSids": {
+    "fountain": 6
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 57,
+   "name": "Obelisk",
+   "defs": [
+    "avxoblg.def",
+    "avxoblw.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "accepted_not_drawn",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: puzzle-map piece)",
+   "nativeCandidates": [],
+   "visualBillboard": {
+    "sids": [
+     "homm3_objbb_avxoblg"
+    ],
+    "placed": 1,
+    "unplaced": 6,
+    "unplacedBy": {
+     "every_cell_is_a_native_gate": 4,
+     "remaining_cells_would_seal_an_adjacent_gate_or_marker": 2
+    },
+    "host": "inert homm3_objbb_<def> Interact (seer-hut shell, one blocked cell, no GATE, no objects_logic) on one of the object's own HoMM3 blocked cells",
+    "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; PNGs staged in the plugin tree; not installed, runtime unproven)"
+   },
+   "decision": "visual-only HoMM3 DEF billboard accepted by the owner 2026-09-26; no function",
+   "reason": "1 of 7 placements drawn as a visual-only DEF billboard; an unplaced placement had no usable HoMM3 blocked cell: the Olden Era GATE area of a nearby native pickup, chest, squad or artifact covers it (the row projection folds neighbouring HoMM3 rows together), overlapping HoMM3 scenery already stands there, or blocking it would leave an adjacent GATE/marker under two open approaches. Blocking another object's GATE would break that object, so these stay undrawn (per-placement cells in install_manifest.json objectBillboards.unplaced)"
+  },
+  {
+   "objectId": 63,
+   "name": "Pyramid",
+   "defs": [
+    "avxprmd0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "accepted_not_drawn",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: guarded, teaches a level-5 spell)",
+   "nativeCandidates": [],
+   "visualBillboard": {
+    "sids": [
+     "homm3_objbb_avxprmd0"
+    ],
+    "placed": 13,
+    "unplaced": 9,
+    "unplacedBy": {
+     "every_cell_is_a_native_gate": 5,
+     "every_cell_gate_or_overlapping_homm3_scenery": 4
+    },
+    "host": "inert homm3_objbb_<def> Interact (seer-hut shell, one blocked cell, no GATE, no objects_logic) on one of the object's own HoMM3 blocked cells",
+    "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; PNGs staged in the plugin tree; not installed, runtime unproven)"
+   },
+   "decision": "visual-only HoMM3 DEF billboard accepted by the owner 2026-09-26; no function",
+   "reason": "13 of 22 placements drawn as a visual-only DEF billboard; an unplaced placement had no usable HoMM3 blocked cell: the Olden Era GATE area of a nearby native pickup, chest, squad or artifact covers it (the row projection folds neighbouring HoMM3 rows together), overlapping HoMM3 scenery already stands there, or blocking it would leave an adjacent GATE/marker under two open approaches. Blocking another object's GATE would break that object, so these stay undrawn (per-placement cells in install_manifest.json objectBillboards.unplaced)"
+  },
+  {
+   "objectId": 105,
+   "name": "Wagon",
+   "defs": [
+    "avtwagn0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: one-time artifact or resources)",
+   "nativeCandidates": [
+    {
+     "sid": "peasant_cart",
+     "verdict": "Core resource_banks/peasant_cart: a cart pickup, OE reward table"
+    }
+   ],
+   "deliveredSids": {
+    "peasant_cart": 67
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 108,
+   "name": "Warrior's Tomb",
+   "defs": [
+    "avxtomb0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: artifact, -3 morale to the looter)",
+   "nativeCandidates": [
+    {
+     "sid": "heros_crypt",
+     "verdict": "Core heros_crypt: one-time random item + random debuff: the same bargain"
+    }
+   ],
+   "deliveredSids": {
+    "heros_crypt": 83
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 110,
+   "name": "Watering Hole",
+   "defs": [
+    "avxwtrh0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: +movement, +1 morale)",
+   "nativeCandidates": [
+    {
+     "sid": "fountain",
+     "verdict": "+40 movement points, no morale"
+    }
+   ],
+   "deliveredSids": {
+    "fountain": 36
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 213,
+   "name": "Freelancer's Guild",
+   "defs": [
+    "avxfgld.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (HoMM3: sell creatures for resources)",
+   "nativeCandidates": [
+    {
+     "sid": "unit_trade_lab_*",
+     "verdict": "not the same function: Core unit_res_trade_labs trade units for units/resources on fixed native recipes; HoMM3's guild buys any creature for resources. Mapping would change play."
+    }
+   ],
+   "deliveredSids": {
+    "unit_trade_lab_kitten_horn": 35
+   },
+   "decision": "unit_trade_lab_kitten_horn accepted by the owner 2026-09-26 as a behaviour change",
+   "behaviourDifference": "HoMM3's Freelancer's Guild buys any creature for resources. The native unit_trade_lab_kitten_horn (Core objects_logic/unit_res_trade_labs/unit_res_trade_lab.json) is a 3x3 building that hires kitten_horn units, 1 unit for 1 crystal: a trade building in the same place, not the same trade.",
+   "proofTier": "generated artifact (substitution maps rebuilt and all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 117,
+   "name": "Canyon / gully decoration",
+   "defs": [
+    "avlglly0.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "grass_stones_1": 24,
+    "dirt_stones_1": 3
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 155,
+   "name": "Trees / rough decoration",
+   "defs": [
+    "avlplm10.def",
+    "avlplm20.def",
+    "avlplm30.def",
+    "avlplm40.def",
+    "avlplm50.def",
+    "avlroug0.def",
+    "avlroug1.def",
+    "avlroug2.def",
+    "avlswmp0.def",
+    "avlswmp1.def",
+    "avlswmp2.def",
+    "avlswmp3.def",
+    "avlswmp4.def",
+    "avlswmp5.def",
+    "avlswmp6.def",
+    "avlswmp7.def",
+    "avlwlw10.def",
+    "avlwlw20.def",
+    "avlwlw30.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "terrain_biome_template_155_requires_animation_role",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "tree_dirt_2": 293,
+    "tree_dirt_3": 290,
+    "tree_dirt_1": 282,
+    "tree_dirt_4": 267,
+    "grass_desert_1": 100,
+    "grass_1": 84,
+    "water_reed_1": 74,
+    "pinetree_2": 60
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 199,
+   "name": "HotA terrain decorations (avlswtr*, avltrro*)",
+   "defs": [
+    "avlswt00.def",
+    "avlswt01.def",
+    "avlswt02.def",
+    "avlswt03.def",
+    "avlswt04.def",
+    "avlswt05.def",
+    "avlswt06.def",
+    "avlswt07.def",
+    "avlswt08.def",
+    "avlswt09.def",
+    "avlswt10.def",
+    "avlswt11.def",
+    "avlswt12.def",
+    "avlswt13.def",
+    "avlswt14.def",
+    "avlswt15.def",
+    "avlswt16.def",
+    "avlswt17.def",
+    "avlswt18.def",
+    "avlswt19.def",
+    "avlswtr0.def",
+    "avlswtr3.def",
+    "avlswtr4.def",
+    "avlswtr5.def",
+    "avlswtr6.def",
+    "avlswtr7.def",
+    "avlswtr8.def",
+    "avlswtr9.def",
+    "avltro00.def",
+    "avltro01.def",
+    "avltro02.def",
+    "avltro03.def",
+    "avltro04.def",
+    "avltro05.def",
+    "avltro06.def",
+    "avltro07.def",
+    "avltro08.def",
+    "avltro09.def",
+    "avltro10.def",
+    "avltro11.def",
+    "avltro12.def",
+    "avltrro0.def",
+    "avltrro1.def",
+    "avltrro2.def",
+    "avltrro3.def",
+    "avltrro4.def",
+    "avltrro5.def",
+    "avltrro6.def",
+    "avltrro7.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping; the largest gap: 10696 placements in 61 maps",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "pinetree_4": 618,
+    "pinetree_3": 599,
+    "pinetree_2": 588,
+    "pinetree_1": 556,
+    "tree_dead_2": 523,
+    "water_reed_1": 501,
+    "tree_dead_1": 493,
+    "tree_dead_3": 491
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 206,
+   "name": "HotA desert decorations (avlxds*)",
+   "defs": [
+    "avlxds01.def",
+    "avlxds02.def",
+    "avlxds03.def",
+    "avlxds04.def",
+    "avlxds05.def",
+    "avlxds06.def",
+    "avlxds07.def",
+    "avlxds08.def",
+    "avlxds09.def",
+    "avlxds10.def",
+    "avlxds11.def",
+    "avlxds12.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "desert_stones_1": 460,
+    "grass_stones_1": 240,
+    "water_reed_1": 220,
+    "rocks_1": 87,
+    "dead_stones_1": 78,
+    "lava_stones_1": 10,
+    "snow_stones_1": 6
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 207,
+   "name": "HotA dirt decorations (avlxdt*)",
+   "defs": [
+    "avlxdt00.def",
+    "avlxdt01.def",
+    "avlxdt02.def",
+    "avlxdt03.def",
+    "avlxdt04.def",
+    "avlxdt05.def",
+    "avlxdt06.def",
+    "avlxdt07.def",
+    "avlxdt08.def",
+    "avlxdt09.def",
+    "avlxdt10.def",
+    "avlxdt11.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "dirt_strange_flower": 662,
+    "grass_1": 610,
+    "water_reed_1": 98,
+    "grass_death_1": 30,
+    "grass_snow_1": 10,
+    "grass_desert_1": 5,
+    "mountain_dirt_small_2": 2,
+    "mountain_dirt_small_1": 2
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 208,
+   "name": "HotA grass decorations (avlxgr*)",
+   "defs": [
+    "avlxgr01.def",
+    "avlxgr02.def",
+    "avlxgr05.def",
+    "avlxgr06.def",
+    "avlxgr07.def",
+    "avlxgr08.def",
+    "avlxgr09.def",
+    "avlxgr10.def",
+    "avlxgr11.def",
+    "avlxgr12.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "grass_1": 1615,
+    "dirt_strange_flower": 195,
+    "grass_death_1": 71,
+    "water_reed_1": 43,
+    "grass_desert_1": 4,
+    "mountain_dirt_small_2": 1,
+    "grass_snow_1": 1
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 209,
+   "name": "HotA rough decorations (avlxro*)",
+   "defs": [
+    "avlxro01.def",
+    "avlxro02.def",
+    "avlxro03.def",
+    "avlxro04.def",
+    "avlxro05.def",
+    "avlxro06.def",
+    "avlxro07.def",
+    "avlxro08.def",
+    "avlxro09.def",
+    "avlxro10.def",
+    "avlxro11.def",
+    "avlxro12.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "grass_stones_1": 1040,
+    "rocks_1": 225,
+    "water_reed_1": 159,
+    "desert_stones_1": 26,
+    "dead_stones_1": 17,
+    "lava_stones_1": 13
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 210,
+   "name": "HotA subterranean decorations (avlxsu*)",
+   "defs": [
+    "avlxsu01.def",
+    "avlxsu02.def",
+    "avlxsu03.def",
+    "avlxsu04.def",
+    "avlxsu05.def",
+    "avlxsu06.def",
+    "avlxsu07.def",
+    "avlxsu08.def",
+    "avlxsu09.def",
+    "avlxsu10.def",
+    "avlxsu11.def",
+    "avlxsu12.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "rocks_1": 756,
+    "grass_stones_1": 19,
+    "dead_stones_1": 3,
+    "desert_stones_1": 2,
+    "water_reed_1": 1
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 211,
+   "name": "HotA swamp decorations (avlxsw*)",
+   "defs": [
+    "avlxsw01.def",
+    "avlxsw02.def",
+    "avlxsw03.def",
+    "avlxsw04.def",
+    "avlxsw05.def",
+    "avlxsw06.def",
+    "avlxsw07.def",
+    "avlxsw08.def",
+    "avlxsw09.def",
+    "avlxsw10.def",
+    "avlxsw11.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "grass_death_1": 515,
+    "grass_1": 193,
+    "water_reed_1": 182,
+    "dirt_strange_flower": 85,
+    "grass_desert_1": 16
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 223,
+   "name": "Cursed Ground (HotA)",
+   "defs": [
+    "avxcg1.def",
+    "avxcg2.def",
+    "avxcg3.def",
+    "avxcg4.def",
+    "avxcg5.def",
+    "avxcg6.def",
+    "avxcg7.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (magic-terrain overlay)",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "dead_stones_1": 27,
+    "dead_stones_2": 20
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 224,
+   "name": "Evil Fog (HotA)",
+   "defs": [
+    "avxef0.def",
+    "avxef1.def",
+    "avxef2.def",
+    "avxef3.def",
+    "avxef4.def",
+    "avxef5.def",
+    "avxef6.def",
+    "avxef7.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (magic-terrain overlay)",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "fx_fog": 71
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 227,
+   "name": "Holy Ground (HotA)",
+   "defs": [
+    "avxhg0.def",
+    "avxhg1.def",
+    "avxhg2.def",
+    "avxhg3.def",
+    "avxhg4.def",
+    "avxhg5.def",
+    "avxhg6.def",
+    "avxhg7.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (magic-terrain overlay)",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "flowers_2": 68,
+    "flowers_1": 28
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 228,
+   "name": "Lucid Pools (HotA)",
+   "defs": [
+    "avxlp0.def",
+    "avxlp2.def",
+    "avxlp3.def",
+    "avxlp5.def",
+    "avxlp6.def",
+    "avxlp7.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (magic-terrain overlay)",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "fx_fireflies_blue": 25
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 229,
+   "name": "Magic Clouds (HotA)",
+   "defs": [
+    "avxmc0.def",
+    "avxmc1.def",
+    "avxmc2.def",
+    "avxmc3.def",
+    "avxmc4.def",
+    "avxmc5.def",
+    "avxmc6.def",
+    "avxmc7.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (magic-terrain overlay)",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "fx_fog": 64
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 231,
+   "name": "Rocklands (HotA)",
+   "defs": [
+    "avxrk0.def",
+    "avxrk1.def",
+    "avxrk2.def",
+    "avxrk3.def",
+    "avxrk4.def",
+    "avxrk5.def",
+    "avxrk6.def"
+   ],
+   "cause": "dropped_in_raw_translation",
+   "status": "delivered",
+   "evidence": "payloadless_scenery_requires_explicit_mapping (magic-terrain overlay)",
+   "nativeCandidates": [],
+   "deliveredSids": {
+    "dirt_stones_2": 49,
+    "dirt_stones_1": 35
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)"
+  },
+  {
+   "objectId": 21,
+   "name": "Crystal (mapped to mana_well)",
+   "defs": [
+    "avxcrsd0.def"
+   ],
+   "cause": "removed_after_substitution",
+   "status": "accepted_not_drawn",
+   "reason": "3 placement(s) in 3 mission(s) removed by the approach-clearing passes (approach_cleared, missing_from_emit); that policy is owned by those passes"
+  },
+  {
+   "objectId": 46,
+   "name": "Plains shrine (mapped to altar_of_magic_1)",
+   "defs": [
+    "avxplns0.def"
+   ],
+   "cause": "removed_after_substitution",
+   "status": "delivered",
+   "deliveredSids": {
+    "altar_of_magic_1": 251
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)",
+   "note": "no placement is removed by the approach-clearing pass since the 2026-09-26 regeneration"
+  },
+  {
+   "objectId": 53,
+   "name": "Mine (sawmill)",
+   "defs": [
+    "avmsawg0.def"
+   ],
+   "cause": "removed_after_substitution",
+   "status": "delivered",
+   "deliveredSids": {
+    "homm3_xfp_f_fa465879e7ee": 602,
+    "homm3_xfp_f_bfa8ea778eb8": 471,
+    "homm3_xfp_f_6a0c9b76d48c": 411,
+    "homm3_xfp_f_7fc8d72c5521": 293,
+    "homm3_xfp_f_ff00eb55e5b7": 283,
+    "homm3_xfp_f_6aed617db045": 277,
+    "homm3_xfp_f_fd3281f9553f": 71,
+    "homm3_xfp_f_1802eb6dbde5": 50
+   },
+   "proofTier": "generated artifact (all 87 maps regenerated 2026-09-26; not installed, runtime unproven)",
+   "note": "no placement is removed by the approach-clearing pass since the 2026-09-26 regeneration"
+  },
+  {
+   "objectId": 76,
+   "name": "Random resource",
+   "defs": [
+    "avtrndm0.def"
+   ],
+   "cause": "removed_after_substitution",
+   "status": "accepted_not_drawn",
+   "reason": "1 placement(s) in 1 mission(s) removed by the approach-clearing passes (approach_cleared); that policy is owned by those passes"
+  },
+  {
+   "objectId": 79,
+   "name": "Resource",
+   "defs": [
+    "avtcrys0.def",
+    "avtgems0.def",
+    "avtgold0.def",
+    "avtmerc0.def",
+    "avtore0.def",
+    "avtsulf0.def"
+   ],
+   "cause": "removed_after_substitution",
+   "status": "accepted_not_drawn",
+   "reason": "8 placement(s) in 5 mission(s) removed by the approach-clearing passes (approach_cleared); that policy is owned by those passes"
+  },
+  {
+   "objectId": 101,
+   "name": "Treasure chest",
+   "defs": [
+    "avtchst0.def"
+   ],
+   "cause": "removed_after_substitution",
+   "status": "accepted_not_drawn",
+   "reason": "4 placement(s) in 3 mission(s) removed by the approach-clearing passes (approach_cleared); that policy is owned by those passes"
+  },
+  {
+   "objectId": 12,
+   "name": "Campfire (mapped to camp_fire)",
+   "defs": [
+    "adcfra.def",
+    "avxcfds0.def"
+   ],
+   "cause": "removed_after_substitution",
+   "status": "accepted_not_drawn",
+   "reason": "2 placements (farming_towns 0:23:1, grave_robber 1:32:11) removed by gate_face_rotation's gate-approach non-keeper clear, which owns that policy; first seen when the 2026-09-26 per-layer envelope fix stopped clipping native footprints on two-layer maps"
+  }
+ ]
+}

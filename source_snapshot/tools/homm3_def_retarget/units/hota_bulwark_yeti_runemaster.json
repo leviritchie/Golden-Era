@@ -1,0 +1,282 @@
+{
+ "unit": "hota_bulwark_yeti_runemaster",
+ "joints": {
+  "Hips": [
+   0.05,
+   0.3,
+   0.66
+  ],
+  "Spine": [
+   0.05,
+   0.17,
+   0.84
+  ],
+  "Spine1": [
+   0.05,
+   0.04,
+   0.98
+  ],
+  "Spine2": [
+   0.06,
+   -0.08,
+   1.06
+  ],
+  "Neck": [
+   0.07,
+   -0.2,
+   1.13
+  ],
+  "Head": [
+   0.06,
+   -0.25,
+   1.18
+  ],
+  "HeadTop_End": [
+   0.05,
+   -0.35,
+   1.42
+  ],
+  "LeftShoulder": [
+   0.18,
+   -0.1,
+   1.05
+  ],
+  "LeftArm": [
+   0.4,
+   -0.12,
+   1.0
+  ],
+  "LeftForeArm": [
+   0.5,
+   -0.15,
+   0.6
+  ],
+  "LeftHand": [
+   0.48,
+   -0.25,
+   0.2
+  ],
+  "LeftHand_End": [
+   0.48,
+   -0.3,
+   0.03
+  ],
+  "RightShoulder": [
+   -0.08,
+   -0.1,
+   1.05
+  ],
+  "RightArm": [
+   -0.3,
+   -0.12,
+   1.0
+  ],
+  "RightForeArm": [
+   -0.42,
+   -0.06,
+   0.93
+  ],
+  "RightHand": [
+   -0.53,
+   -0.1,
+   1.0
+  ],
+  "RightHand_End": [
+   -0.53,
+   -0.1,
+   1.12
+  ],
+  "LeftUpLeg": [
+   0.22,
+   0.3,
+   0.62
+  ],
+  "LeftLeg": [
+   0.42,
+   0.15,
+   0.38
+  ],
+  "LeftFoot": [
+   0.45,
+   0.33,
+   0.12
+  ],
+  "LeftToeBase": [
+   0.45,
+   0.22,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.45,
+   0.1,
+   0.02
+  ],
+  "RightUpLeg": [
+   -0.12,
+   0.3,
+   0.62
+  ],
+  "RightLeg": [
+   -0.27,
+   0.15,
+   0.38
+  ],
+  "RightFoot": [
+   -0.22,
+   0.36,
+   0.12
+  ],
+  "RightToeBase": [
+   -0.22,
+   0.25,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.22,
+   0.14,
+   0.02
+  ]
+ },
+ "props": [
+  {
+   "name": "mace",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.51,
+      -0.08,
+      -0.03
+     ],
+     [
+      -0.52,
+      -0.12,
+      1.25
+     ]
+    ]
+   ],
+   "radius": 0.07
+  },
+  {
+   "name": "macehead",
+   "bone": "RightHand",
+   "box": [
+    [
+     -0.66,
+     -0.43,
+     1.26
+    ],
+    [
+     -0.37,
+     0.13,
+     1.73
+    ]
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "dy": 30,
+   "roll": 20
+  },
+  "propAim": [
+   "RightHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.13
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.95,
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.95,
+   "keepDist": 0.13
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "glbPatch": {
+  "reason": "the DEF yeti raises the club straight up overhead at f3 of AttackFront and slams it to the ground in front at f5-f6; the club arm and hand now raise and swing it instead of holding it low across the body (lane B 2026-10-11)",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_yeti_runemaster_arm_weights.json",
+    "sha256": "3b0727cebced50d15ce0728d94a81ed646d28b650deeb0e4f43833f79d847595",
+    "note": "lane B 2026-10-11: shoulder/arm skin weights re-solved on the edges the AttackFront overhead club raise tears (wsolve --newonly, GPU)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_yeti_runemaster_club_overhead_slam_rot.json",
+    "regrid": true,
+    "sha256": "02698214284c22abcf0bc2cebd839d9eda4f93bae68066fdd45b0121d56dc82c"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_yeti_runemaster_club_overhead_slam_rot.json",
+    "regrid": true,
+    "sha256": "02698214284c22abcf0bc2cebd839d9eda4f93bae68066fdd45b0121d56dc82c"
+   }
+  ]
+ }
+}

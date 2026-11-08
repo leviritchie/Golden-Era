@@ -1,0 +1,165 @@
+{
+ "unit": "h3_astral_elemental",
+ "strideExempt": "legless body: the HoMM3 astral elemental floats on a vortex/wave/energy base with no legs; the rig has no leg chain",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.0,
+   0.75
+  ],
+  "Spine": [
+   0.0,
+   0.0,
+   0.9
+  ],
+  "Spine1": [
+   0.0,
+   0.0,
+   1.05
+  ],
+  "Spine2": [
+   0.0,
+   0.0,
+   1.2
+  ],
+  "Neck": [
+   0.0,
+   0.0,
+   1.33
+  ],
+  "Head": [
+   0.0,
+   0.0,
+   1.45
+  ],
+  "HeadTop_End": [
+   0.0,
+   0.0,
+   1.8
+  ],
+  "LeftShoulder": [
+   0.06,
+   0.0,
+   1.3
+  ],
+  "LeftArm": [
+   0.12,
+   0.0,
+   1.3
+  ],
+  "LeftForeArm": [
+   0.2,
+   -0.02,
+   1.18
+  ],
+  "LeftHand": [
+   0.23,
+   -0.04,
+   1.04
+  ],
+  "LeftHand_End": [
+   0.25,
+   -0.05,
+   0.94
+  ],
+  "RightShoulder": [
+   -0.06,
+   0.0,
+   1.3
+  ],
+  "RightArm": [
+   -0.12,
+   0.0,
+   1.3
+  ],
+  "RightForeArm": [
+   -0.2,
+   -0.02,
+   1.18
+  ],
+  "RightHand": [
+   -0.23,
+   -0.04,
+   1.04
+  ],
+  "RightHand_End": [
+   -0.25,
+   -0.05,
+   0.94
+  ]
+ },
+ "grounding": false,
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ]
+ },
+ "shrinkOut": {
+  "start": 3,
+  "power": 1.0
+ },
+ "extensions": [
+  "conflux_weights",
+  "conflux_tilt",
+  "element_motion"
+ ],
+ "conflux": {
+  "fillUnweighted": true,
+  "maxBodyTilt": 75.0,
+  "maxBodyTiltClips": {
+   "Defence": 5.0
+  },
+  "tiltAxis": "head",
+  "armFalloff": {
+   "width": 0.06,
+   "maxDist": [
+    0.06,
+    0.13
+   ],
+   "chain": [
+    "Arm",
+    "ForeArm",
+    "Hand"
+   ],
+   "torso": [
+    "Hips",
+    "Spine",
+    "Spine1",
+    "Spine2"
+   ]
+  }
+ },
+ "elementMotion": {
+  "mode": "shimmer",
+  "period": 8
+ },
+ "armRigReason": "2026-10-12 lane A: the HoMM3 astral elemental's AttackFront throws both clawed hands up and out of the cloak's shoulders; the rig had no arm chain and the closed cloak has no arm geometry under it, so arm bones run from the shoulders down the cloak's front edges to mid-thigh (Hand 1.04, Hand_End 0.94), with arm weight faded out between 6 and 13 cm from the bones (conflux armFalloff), so the raised arms lift the cloak's upper panels wide enough to read at game distance without dragging the whole cloak (send-back: the first, shorter chain to z 1.08 within 9 cm read as too subtle)",
+ "glbPatch": {
+  "reason": "DEF g12 AttackFront: both clawed hands are thrown up and out above the shoulders (f2-f6), lifting the cloak's upper panels wide with the chest square to the viewer, instead of staying tucked at the chest",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_astral_elemental_sleeve_weights.json",
+    "sha256": "fa1e32256695bf341275ebed36c873687723fd6ffd32184b4e3bd92a7d46d399",
+    "note": "sleeve/robe weight re-solve"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_astral_elemental_pose_rot.json",
+    "sha256": "1ff4658006c5b1e5104c2e95831e6ff017dca500de58fadfbba1bf2a5a419819",
+    "regrid": true
+   }
+  ]
+ },
+ "correctiveSmooth": {
+  "excludeBones": [
+   "LeftForeArm",
+   "LeftHand",
+   "RightForeArm",
+   "RightHand"
+  ],
+  "note": "2026-10-12 lane A send-back: the cloak corners hang on the forearm/hand chain; corrective smooth re-flattened the AttackFront arms-up lift of those corners back into the cloak (the raise vanished on the re-bake), so they take skin only"
+ }
+}

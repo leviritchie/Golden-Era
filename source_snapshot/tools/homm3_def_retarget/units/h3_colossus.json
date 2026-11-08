@@ -1,0 +1,205 @@
+{
+ "unit": "h3_colossus",
+ "joints": {
+  "Hips": [
+   0.003,
+   0.087,
+   0.889
+  ],
+  "Spine": [
+   0.003,
+   0.11,
+   0.973
+  ],
+  "Spine1": [
+   0.003,
+   0.133,
+   1.057
+  ],
+  "Spine2": [
+   0.003,
+   0.158,
+   1.151
+  ],
+  "Neck": [
+   0.003,
+   0.178,
+   1.224
+  ],
+  "Head": [
+   0.003,
+   0.108,
+   1.343
+  ],
+  "HeadTop_End": [
+   -0.01,
+   0.122,
+   1.616
+  ],
+  "LeftShoulder": [
+   0.066,
+   0.087,
+   1.28
+  ],
+  "LeftArm": [
+   0.185,
+   0.157,
+   1.245
+  ],
+  "LeftForeArm": [
+   0.269,
+   0.052,
+   1.036
+  ],
+  "LeftHand": [
+   0.248,
+   -0.045,
+   1.029
+  ],
+  "LeftHand_End": [
+   0.229,
+   -0.133,
+   1.022
+  ],
+  "RightShoulder": [
+   -0.066,
+   0.087,
+   1.28
+  ],
+  "RightArm": [
+   -0.178,
+   0.157,
+   1.245
+  ],
+  "RightForeArm": [
+   -0.255,
+   0.094,
+   1.015
+  ],
+  "RightHand": [
+   -0.22,
+   0.024,
+   0.966
+  ],
+  "RightHand_End": [
+   -0.186,
+   -0.044,
+   0.918
+  ],
+  "LeftUpLeg": [
+   0.108,
+   0.094,
+   0.763
+  ],
+  "LeftLeg": [
+   0.136,
+   0.08,
+   0.427
+  ],
+  "LeftFoot": [
+   0.15,
+   0.115,
+   0.05
+  ],
+  "LeftToeBase": [
+   0.185,
+   0.024,
+   -0.02
+  ],
+  "LeftToe_End": [
+   0.213,
+   -0.073,
+   -0.02
+  ],
+  "RightUpLeg": [
+   -0.101,
+   0.094,
+   0.763
+  ],
+  "RightLeg": [
+   -0.115,
+   0.122,
+   0.413
+  ],
+  "RightFoot": [
+   -0.143,
+   0.248,
+   0.05
+  ],
+  "RightToeBase": [
+   -0.143,
+   0.15,
+   -0.02
+  ],
+  "RightToe_End": [
+   -0.143,
+   0.038,
+   -0.02
+  ]
+ },
+ "props": [
+  {
+   "name": "bolt",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.1,
+      -0.12,
+      0.78
+     ],
+     [
+      0.08,
+      -0.3,
+      1.65
+     ]
+    ]
+   ],
+   "radius": 0.065
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "borrowClips": {
+  "Idle": "h3_giant_upg"
+ },
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ]
+ },
+ "glbPatch": {
+  "reason": "authenticity lane-A 2026-10-10 (v2): DEF Death flings the arms up and stays upright as the knees buckle (f2), drops into a true kneel with the knees folded on the floor and the arms raised (f3-f5), then topples back into a heap (f6-f8); the capture tipped back as a straight-legged plank from f2. keyRotations (half offset, applied twice): Hips held toward their f1 world rotation, thighs forward-down and shins folded back under the body with the feet flat (f2-f5, so the toes do not dig below the floor and lift the kneel), thighs up and shins down for the heap (f6-f8, half weight). stretchRelax on Death strain-limits the knee and hip creases the fold used to tear (v1 had to stop short of the kneel). Death only; teardiag PASS 1239 -> 759.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_colossus_death_rot.json",
+    "sha256": "2b98a8123c4a692e103cdeb64647d3a70ba7335164daba73f427caff660523be",
+    "regrid": true,
+    "note": "Death kneel + heap (1/2)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_colossus_death_rot.json",
+    "sha256": "2b98a8123c4a692e103cdeb64647d3a70ba7335164daba73f427caff660523be",
+    "regrid": true,
+    "note": "(2/2)"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "knee/hip crease strain limit"
+   }
+  ]
+ }
+}

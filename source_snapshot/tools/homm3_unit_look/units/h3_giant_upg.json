@@ -1,0 +1,228 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_giant_upg",
+ "status": "look",
+ "notes": "Titan (CGTITA.DEF). Ported from tools/homm3_vfx/titan_prebake.py (v6m classes), titan_vfx_textures.py (A flipbooks) and titan_light_lab.py (hand point light). The DEF idle is flat, so no steady glow is baked; both bolt lights are dynamic. 2026-10-10 authenticity lane-A: the blue (bolt) class targets the DEF body pixels of its own hue window (pale blue-white bolt, ~3.7k px over the fit views). With defTarget 'effect' it had 0 DEF samples (the fit views carry no fx pixels), fell back to the whole-body target and graded the Meshy blue bolt to gold-brown.",
+ "lighting": {
+  "mode": "v6m",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {
+   "classes": [
+    {
+     "name": "gold",
+     "chroma": [
+      7,
+      15
+     ],
+     "hue": [
+      45,
+      55,
+      100,
+      115
+     ],
+     "shadingPower": 2.0,
+     "topSheen": 1.5
+    },
+    {
+     "name": "red",
+     "chroma": [
+      14,
+      24
+     ],
+     "hue": [
+      330,
+      345,
+      38,
+      50
+     ],
+     "shadingPower": 1.0
+    },
+    {
+     "name": "blue",
+     "chroma": [
+      6,
+      12
+     ],
+     "hue": [
+      185,
+      200,
+      280,
+      300
+     ],
+     "shadingPower": 1.0
+    }
+   ],
+   "restClass": "grey",
+   "restShadingPower": 1.2
+  },
+  "bakedGlow": [],
+  "metal": {
+   "mask": {
+    "source": "meshyMetallic",
+    "metallic": [
+     0.45,
+     0.8
+    ]
+   },
+   "defRegion": {
+    "class": "gold",
+    "close": 2
+   },
+   "normalDetail": 0.5,
+   "notes": "Meshy metallicRoughness B channel (bimodal; 96.5% of gold-class texels metal). Reflection fitted to the DEF gold region (metal lab, _metal_lab/h3_giant_upg)."
+  }
+ },
+ "lights": [
+  {
+   "id": "bolt_flash",
+   "treatment": "dynamic",
+   "notes": "strike flare on the sword arm (DEF body mean-L rise peaks at attack f3)"
+  },
+  {
+   "id": "bolt_throw",
+   "treatment": "dynamic",
+   "notes": "overhead bolt in the left hand while shooting"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "strike_arc",
+    "type": "defFlipbook",
+    "provenance": "titan_vfx_textures.py approach A (attack)",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "lumaSparse",
+     "minLuma": 170,
+     "blueOverRed": -5
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "point": "head"
+    },
+    "texelsPerDefPx": 1,
+    "light": "bolt_flash"
+   },
+   {
+    "id": "throw_bolt",
+    "type": "defFlipbook",
+    "provenance": "titan_vfx_textures.py approach A (shoot)",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "lumaSparse",
+     "minLuma": 170,
+     "blueOverRed": -5
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "point": "head"
+    },
+    "texelsPerDefPx": 1,
+    "light": "bolt_throw"
+   },
+   {
+    "id": "strike_light",
+    "type": "effectLight",
+    "lightId": "bolt_flash",
+    "carrier": "strike_arc",
+    "anchor": {
+     "bone": "RightHand",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.45
+    },
+    "rgb": [
+     1.0,
+     0.96,
+     0.86
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.187,
+      0.896,
+      0.356,
+      0.054,
+      0.107,
+      0.02
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "throw_light",
+    "type": "effectLight",
+    "lightId": "bolt_throw",
+    "carrier": "throw_bolt",
+    "anchor": {
+     "bone": "LeftHand",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.45
+    },
+    "rgb": [
+     1.0,
+     0.96,
+     0.86
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_ShootFront": [
+      0.0,
+      0.0,
+      0.0,
+      0.071,
+      0.309,
+      0.082,
+      0.047
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "missile_launch",
+    "type": "event",
+    "clip": "Unit_ShootFront",
+    "defFrame": 6,
+    "action": "missile",
+    "missile": {
+     "def": "CPRGTIX.DEF",
+     "selectBy": "angle",
+     "speedDefPxPerS": 1250
+    },
+    "provenance": "CRANIM attackClimaxFrame 6; CPRGTIX shared with the storm elemental"
+   }
+  ]
+ }
+}

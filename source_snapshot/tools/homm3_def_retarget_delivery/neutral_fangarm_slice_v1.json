@@ -1,0 +1,31 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "neutral_fangarm_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/neutral_fangarm_slice_v1",
+  "note": "Neutral fangarm own model (gargoyle wing template, 60 deg sine flap in Move). Deploy by the unit agent with user-approved install lane. Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_fangarm 0.6647. | look B (vanilla philosophy finish, finish.py; look.py --stages finish,apply), animation unchanged Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_fangarm 0.6647. | authenticity lane A 2026-10-11: limb_cut surgery (left claw hand off the left thigh) + left-arm source-skin transfer and gate-driven weight re-solve; removes the Death f1-f3 floating claw shard and lets the left arm reach in AttackFront Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_fangarm 0.2565. | fangarm-heap-8317147be6 Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_fangarm 0.2565.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_fangarm",
+      "gameSid": "h3_fangarm",
+      "bundleName": "custom_units_neutral_h3_fangarm",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "cc9046178b18da4963c05aefd8622d2e00fd54caf239ce892f0e0a103224f88d",
+      "identityReview": "cc9046178b18da4963c05aefd8622d2e00fd54caf239ce892f0e0a103224f88d",
+      "frozen": {
+        "lookDeliveredGlbSha256": "e06bda9f64cc369ba45e45e1888b3785249c2ba10e0d0f7faa5b028e1591a201",
+        "idleRetimedGlbSha256": "410706583382d2bc1e39c0d890363152bacad8ce8548abae2b778e6b8de15bee",
+        "vfxManifestSha256": "7ce9bc01434b292cb57cb52b2a4d831521182bd4b00d4324f83560555ab7613f",
+        "specSha256": "eb0067e31eed3318dc0fd5667d86e39bf4de2a36a6343836f1f3b00e3b517e5f",
+        "basecolorSha256": "6741a6836545f72b7798ef04c1432c2411ea28ceb200ef7ca1fa369ee265924f"
+      }
+    }
+  ]
+}

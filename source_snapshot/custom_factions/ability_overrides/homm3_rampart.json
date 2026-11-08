@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_rampart",
+  "unitOverrides": {
+    "h3_centaur": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "rampart.centaur_line",
+      "decisionTest": "Centaur defines the tier baseline for rampart; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_centaur_captain": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "rampart.centaur_line",
+      "decisionTest": "Centaur Captain should be chosen over Centaur Ranger when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_centaur_ranger_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "rampart.centaur_line",
+      "decisionTest": "Centaur Ranger should be chosen over Centaur Captain when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_dwarf": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "rampart.dwarf_line",
+      "decisionTest": "Dwarf defines the tier baseline for rampart; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_battle_dwarf": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "rampart.dwarf_line",
+      "decisionTest": "Battle Dwarf should be chosen over Dwarf Battlerager when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_dwarf_battlerager_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "rampart.dwarf_line",
+      "decisionTest": "Dwarf Battlerager should be chosen over Battle Dwarf when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_wood_elf": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "rampart.wood_elf_line",
+      "decisionTest": "Wood Elf defines the tier baseline for rampart; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_grand_elf": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "rampart.wood_elf_line",
+      "decisionTest": "Grand Elf should be chosen over Elf Wardancer when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_elf_wardancer_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "rampart.wood_elf_line",
+      "decisionTest": "Elf Wardancer should be chosen over Grand Elf when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_pegasus": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "rampart.pegasus_line",
+      "decisionTest": "Pegasus defines the tier baseline for rampart; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_silver_pegasus": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "rampart.pegasus_line",
+      "decisionTest": "Silver Pegasus should be chosen over Gold Pegasus when its standard role is the better answer for the current army, matchup, or build timing. June 25 balance pass preserves the generated Misfortune action and adds this branch action instead of replacing it.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:1",
+          "slotKind": "abilities",
+          "index": 1,
+          "enabled": true,
+          "nameKey": "h3_silver_pegasus_redesign_ability_name",
+          "descriptionKey": "h3_silver_pegasus_redesign_ability_description",
+          "nameText": "Rivulet Retreat",
+          "descriptionText": "Spend 1 Focus to move to a free hex within 4 hexes.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 1,
+          "turnBehavior": "ends",
+          "energyLevel": 1,
+          "cooldown": 1,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "aqualotl_upg:abilities:1",
+          "effectKind": "unit-special",
+          "effectLabel": "Rivulet Retreat",
+          "effectPayload": {},
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass. June 25 balance pass moves this branch action to abilities:1 so the generated Misfortune action remains abilities:0."
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_gold_pegasus_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "rampart.pegasus_line",
+      "decisionTest": "Gold Pegasus should be chosen over Silver Pegasus when its alternate role creates a better army, matchup, or build-timing decision. June 25 balance pass preserves the generated Misfortune action and adds this branch action instead of replacing it.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:1",
+          "slotKind": "abilities",
+          "index": 1,
+          "enabled": true,
+          "nameKey": "h3_gold_pegasus_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_gold_pegasus_upg_alt_redesign_ability_description",
+          "nameText": "Hourglass",
+          "descriptionText": "Spend 3 Focus to prevent the enemy hero from using active abilities until the end of the round.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 3,
+          "cooldown": 3,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "succubus_upg:abilities:1",
+          "effectKind": "unit-special",
+          "effectLabel": "Hourglass",
+          "effectPayload": {},
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass. June 25 balance pass moves this branch action to abilities:1 so the generated Misfortune action remains abilities:0."
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_dendroid_guard": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "rampart.dendroid_guard_line",
+      "decisionTest": "Dendroid Guard defines the tier baseline for rampart; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_dendroid_soldier": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "rampart.dendroid_guard_line",
+      "decisionTest": "Dendroid Soldier should be chosen over Dendroid Shaman when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_dendroid_shaman_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "rampart.dendroid_guard_line",
+      "decisionTest": "Dendroid Shaman should be chosen over Dendroid Soldier when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_unicorn": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "rampart.unicorn_line",
+      "decisionTest": "Unicorn defines the tier baseline for rampart; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_war_unicorn": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "rampart.unicorn_line",
+      "decisionTest": "War Unicorn should be chosen over Pristine Unicorn when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_pristine_unicorn_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "rampart.unicorn_line",
+      "decisionTest": "Pristine Unicorn should be chosen over War Unicorn when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_pristine_unicorn_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_pristine_unicorn_upg_alt_redesign_ability_description",
+          "nameText": "Radiant Armor",
+          "descriptionText": "Spend 3 Focus to reduce incoming damage to an allied stack by 25% for 1 round.",
+          "iconKey": "sub_skill_faction_homm3_ability_radiant_armor",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 3,
+          "cooldown": 3,
+          "rank": 4,
+          "charges": "",
+          "effectKey": "day_12_magic_radiant_armor:level:2",
+          "effectKind": "spell-effect",
+          "effectLabel": "Radiant Armor",
+          "effectPayload": {
+            "spellSid": "day_12_magic_radiant_armor",
+            "spellTier": 4,
+            "spellLevel": 2,
+            "dealerIndex": 1,
+            "duration": 1,
+            "buffSid": "magic_radiant_armor_effect_1"
+          },
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass.",
+          "spellSid": "day_12_magic_radiant_armor",
+          "spellTier": 4,
+          "spellLevel": 2,
+          "dealerIndex": 1,
+          "duration": 1,
+          "buffSid": "magic_radiant_armor_effect_1"
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_green_dragon": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "rampart.green_dragon_line",
+      "decisionTest": "Green Dragon defines the tier baseline for rampart; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_gold_dragon": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "rampart.green_dragon_line",
+      "decisionTest": "Gold Dragon should be chosen over Diamond Dragon when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_diamond_dragon_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "rampart.green_dragon_line",
+      "decisionTest": "Diamond Dragon should be chosen over Gold Dragon when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    }
+  }
+}

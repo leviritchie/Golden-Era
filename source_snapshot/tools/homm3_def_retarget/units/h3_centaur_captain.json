@@ -1,0 +1,518 @@
+{
+ "unit": "h3_centaur_captain",
+ "joints": {
+  "Hips": [
+   0,
+   0.28,
+   0.66
+  ],
+  "Spine": [
+   0,
+   0.0,
+   0.66
+  ],
+  "Spine1": [
+   0,
+   -0.3,
+   0.86
+  ],
+  "Spine2": [
+   0,
+   -0.29,
+   1.09
+  ],
+  "Neck": [
+   0,
+   -0.28,
+   1.19
+  ],
+  "Head": [
+   0,
+   -0.3,
+   1.26
+  ],
+  "HeadTop_End": [
+   0,
+   -0.32,
+   1.46
+  ],
+  "LeftShoulder": [
+   0.169,
+   -0.337,
+   1.119
+  ],
+  "LeftArm": [
+   0.248,
+   -0.423,
+   0.986
+  ],
+  "LeftForeArm": [
+   0.056,
+   -0.536,
+   1.072
+  ],
+  "LeftHand": [
+   0.002,
+   -0.556,
+   1.112
+  ],
+  "LeftHand_End": [
+   -0.066,
+   -0.582,
+   1.164
+  ],
+  "RightShoulder": [
+   -0.164,
+   -0.304,
+   1.112
+  ],
+  "RightArm": [
+   -0.237,
+   -0.271,
+   0.933
+  ],
+  "RightForeArm": [
+   -0.15,
+   -0.45,
+   0.84
+  ],
+  "RightHand": [
+   -0.104,
+   -0.483,
+   0.833
+  ],
+  "RightHand_End": [
+   -0.031,
+   -0.535,
+   0.823
+  ],
+  "LeftUpLeg": [
+   0.1,
+   0.25,
+   0.6
+  ],
+  "LeftLeg": [
+   0.1,
+   0.33,
+   0.28
+  ],
+  "LeftFoot": [
+   0.1,
+   0.22,
+   0.12
+  ],
+  "LeftToeBase": [
+   0.1,
+   0.2,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.1,
+   0.16,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.1,
+   0.3,
+   0.6
+  ],
+  "RightLeg": [
+   -0.1,
+   0.4,
+   0.28
+  ],
+  "RightFoot": [
+   -0.1,
+   0.45,
+   0.12
+  ],
+  "RightToeBase": [
+   -0.1,
+   0.44,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.1,
+   0.4,
+   0.0
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped"
+ ],
+ "props": [
+  {
+   "name": "glaiveShaft",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.225,
+      -0.36,
+      0.39
+     ],
+     [
+      0.09,
+      -0.65,
+      1.44
+     ]
+    ],
+    [
+     [
+      0.09,
+      -0.65,
+      1.44
+     ],
+     [
+      0.17,
+      -0.72,
+      1.72
+     ]
+    ]
+   ],
+   "radius": 0.035
+  },
+  {
+   "name": "glaiveHead",
+   "bone": "RightHand",
+   "box": [
+    [
+     -0.07,
+     -0.79,
+     1.2
+    ],
+    [
+     0.22,
+     -0.49,
+     1.74
+    ]
+   ]
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "quadruped": {
+  "staticCapture": false,
+  "reset": [
+   "Hips",
+   "Spine",
+   "LeftUpLeg",
+   "LeftLeg",
+   "LeftFoot",
+   "LeftToeBase",
+   "RightUpLeg",
+   "RightLeg",
+   "RightFoot",
+   "RightToeBase"
+  ],
+  "chains": [
+   {
+    "prefix": "QFL",
+    "points": [
+     [
+      0.07,
+      -0.3,
+      0.5
+     ],
+     [
+      0.07,
+      -0.33,
+      0.25
+     ],
+     [
+      0.07,
+      -0.35,
+      0.1
+     ],
+     [
+      0.07,
+      -0.37,
+      0.0
+     ]
+    ],
+    "region": {
+     "box": [
+      [
+       0.0,
+       -0.47,
+       0.0
+      ],
+      [
+       0.22,
+       -0.08,
+       0.46
+      ]
+     ]
+    },
+    "parent": "Spine",
+    "rootBlend": 0.5
+   },
+   {
+    "prefix": "QFR",
+    "points": [
+     [
+      -0.07,
+      -0.2,
+      0.5
+     ],
+     [
+      -0.07,
+      -0.2,
+      0.25
+     ],
+     [
+      -0.07,
+      -0.17,
+      0.1
+     ],
+     [
+      -0.07,
+      -0.15,
+      0.0
+     ]
+    ],
+    "region": {
+     "box": [
+      [
+       -0.17,
+       -0.3,
+       0.0
+      ],
+      [
+       0.03,
+       0.05,
+       0.46
+      ]
+     ]
+    },
+    "parent": "Spine",
+    "rootBlend": 0.5
+   }
+  ],
+  "legs": [
+   {
+    "bones": [
+     "QFL_00",
+     "QFL_01",
+     "QFL_02"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "QFR_00",
+     "QFR_01",
+     "QFR_02"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "tail": {
+   "points": [
+    [
+     0,
+     0.42,
+     0.78
+    ],
+    [
+     0,
+     0.56,
+     0.62
+    ],
+    [
+     0,
+     0.62,
+     0.38
+    ],
+    [
+     0,
+     0.66,
+     0.12
+    ]
+   ],
+   "region": {
+    "box": [
+     [
+      -0.15,
+      0.5,
+      0.0
+     ],
+     [
+      0.15,
+      0.8,
+      0.86
+     ]
+    ],
+    "exclude": [
+     {
+      "box": [
+       [
+        -0.15,
+        0.5,
+        0.3
+       ],
+       [
+        -0.06,
+        0.8,
+        0.86
+       ]
+      ]
+     },
+     {
+      "box": [
+       [
+        0.06,
+        0.5,
+        0.3
+       ],
+       [
+        0.15,
+        0.8,
+        0.86
+       ]
+      ]
+     },
+     {
+      "segments": [
+       [
+        [
+         -0.1,
+         0.4,
+         0.3
+        ],
+        [
+         -0.1,
+         0.47,
+         0.12
+        ]
+       ],
+       [
+        [
+         -0.1,
+         0.47,
+         0.12
+        ],
+        [
+         -0.09,
+         0.55,
+         0.0
+        ]
+       ]
+      ],
+      "radius": 0.08
+     }
+    ]
+   },
+   "rootBlend": 0.6
+  },
+  "nod": {
+   "bones": [],
+   "deg": 0
+  },
+  "fit": {
+   "pitch": [
+    0,
+    10
+   ],
+   "fold": 25,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "QFL_00",
+     "QFL_01"
+    ],
+    [
+     "QFR_00",
+     "QFR_01"
+    ]
+   ],
+   "dx": [
+    -4,
+    4
+   ],
+   "groundClips": [
+    "Idle",
+    "Mouseover",
+    "Hitted",
+    "Defence",
+    "AttackFront",
+    "ShootFront"
+   ],
+   "note": "2026-10-09 user send-back (full-body rotation cheating part-body moves): the silhouette fit may only rear the body up to 10 deg about the hind feet (was -15..50: a 15 deg nose-down dive in the AttackFront lunge, 30-50 deg in Death while the DEF stands), may not slide it (dx +-4 px, was a 17 px Defence slide), keeps standing clips on their floor, and the Death roll starts at the collapse (sideRampFrames 3 rolled 18-52 deg from f3). The motion moves into the torso, arms, forelegs and hind legs (glbPatch keys).",
+   "pitchClips": {
+    "Defence": [
+     0,
+     0
+    ]
+   }
+  },
+  "settle": {
+   "clips": [
+    "Death"
+   ],
+   "bones": [
+    "Spine1",
+    "Spine2",
+    "Neck",
+    "Head"
+   ],
+   "reach": 0.6
+  }
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "glbPatch": {
+  "reason": "2026-10-09 authenticity send-back fix 1 (lane A, Rampart): the user rejected whole-body rotation doing part-body moves. The quadruped fit is narrowed (pitch 0..10 about the hind feet, Defence 0, dx +-4 px, standing clips on the floor, Death roll only at the collapse) and the keys carry no Hips or horse-Spine rotation. AttackFront/ShootFront: the rear is the forelegs tucked at the knee (QF_00 -45, QF_01 +70 at f2-f3) with the torso arched back; the lunge is Spine1/Spine2 (up to 25/12 deg) over a planted horse. Hitted: torso thrown back and twisted, head back. Death: hind legs buckle and the forelegs give (Hips sinks 0.05 H, f3-f5) with both arms raised, then the base side fall at f6. Defence: torso and neck turn (Spine1 25-30 deg) over a level horse. Gate 15 -> 15 edges over 2x.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_captain_pose_rot.json",
+    "sha256": "dc41e166291d4be6344d922e95e267381b4dc9d052c20cccdcecd6ea05cf64ee",
+    "regrid": true,
+    "note": "motion-intent key poses (apose)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_captain_pose_rot2.json",
+    "sha256": "bcc535b3385c7aad666b467a01405d2b78447a07e9efb9ab75db4d3bd0b8ea42",
+    "regrid": true,
+    "note": "second half of the >115 deg turns"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_captain_pose_tr.json",
+    "sha256": "b80b004f749cff5c6cad93139609d644dd699f0bc96a2cb72d29455239173e25",
+    "regrid": true,
+    "note": "Hips translation keys"
+   }
+  ]
+ }
+}

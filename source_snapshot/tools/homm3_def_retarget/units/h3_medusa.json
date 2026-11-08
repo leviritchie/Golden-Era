@@ -1,0 +1,287 @@
+{
+ "unit": "h3_medusa",
+ "strideExempt": "legless body: serpent tail, no legs; the rig has no leg chain",
+ "joints": {
+  "Hips": [
+   -0.1,
+   -0.29,
+   0.99
+  ],
+  "Spine": [
+   -0.1,
+   -0.278,
+   1.058
+  ],
+  "Spine1": [
+   -0.101,
+   -0.268,
+   1.129
+  ],
+  "Spine2": [
+   -0.103,
+   -0.257,
+   1.209
+  ],
+  "Neck": [
+   -0.105,
+   -0.25,
+   1.28
+  ],
+  "Head": [
+   -0.1,
+   -0.25,
+   1.38
+  ],
+  "HeadTop_End": [
+   -0.08,
+   -0.3,
+   1.65
+  ],
+  "LeftShoulder": [
+   -0.02,
+   -0.25,
+   1.27
+  ],
+  "LeftArm": [
+   0.08,
+   -0.24,
+   1.28
+  ],
+  "LeftForeArm": [
+   0.13,
+   -0.14,
+   1.06
+  ],
+  "LeftHand": [
+   0.14,
+   -0.42,
+   0.99
+  ],
+  "LeftHand_End": [
+   0.13,
+   -0.52,
+   0.99
+  ],
+  "RightShoulder": [
+   -0.18,
+   -0.25,
+   1.27
+  ],
+  "RightArm": [
+   -0.27,
+   -0.24,
+   1.26
+  ],
+  "RightForeArm": [
+   -0.33,
+   -0.22,
+   1.03
+  ],
+  "RightHand": [
+   -0.22,
+   -0.47,
+   0.915
+  ],
+  "RightHand_End": [
+   -0.16,
+   -0.54,
+   0.885
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "dungeon_fixweights",
+  "dungeon_slump",
+  "floater_fix"
+ ],
+ "props": [
+  {
+   "name": "bow",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      -0.03,
+      -0.49,
+      0.915
+     ],
+     [
+      0.0,
+      -0.49,
+      0.92
+     ]
+    ],
+    [
+     [
+      0.0,
+      -0.49,
+      0.92
+     ],
+     [
+      0.13,
+      -0.47,
+      0.99
+     ]
+    ],
+    [
+     [
+      0.13,
+      -0.47,
+      0.99
+     ],
+     [
+      0.27,
+      -0.45,
+      1.12
+     ]
+    ],
+    [
+     [
+      0.27,
+      -0.45,
+      1.12
+     ],
+     [
+      0.34,
+      -0.38,
+      1.25
+     ]
+    ],
+    [
+     [
+      0.34,
+      -0.38,
+      1.25
+     ],
+     [
+      0.5,
+      -0.4,
+      1.45
+     ]
+    ]
+   ],
+   "radius": 0.05,
+   "exclude": [
+    {
+     "sphere": [
+      [
+       -0.17,
+       -0.5,
+       0.9
+      ],
+      0.08
+     ]
+    }
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "roll": 20
+  },
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "tail": {
+  "segments": 12,
+  "amplitude": 0.2,
+  "wavelength": 0.75,
+  "handsAboveZ": 0.85,
+  "handsRadius": 0.3,
+  "excludeNearHands": 0.05,
+  "behind": [
+   0.0,
+   1.0,
+   0.0
+  ],
+  "behindReason": "Model-space trail axis: the body faces -Y (capture forward ~ -Y; the frozen idle faces glTF +Z under the facing contract), so the Move tail trails +Y, straight opposite travel. The earlier [-0.893, 0.416, 0] was -right of the sprite camera (screen-left in the DEF 2D view), which in 3D put the Move tail ~65 deg off the travel axis (same defect as the nagas, 0699b5d146). The look stamp's frontResolved +y is lighting.front 'auto' reading the Head-Hips lean, not the facing."
+ },
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "slump": {
+  "clip": "Death",
+  "frames": 2,
+  "angle": 65,
+  "dir": [
+   0.4,
+   -0.9,
+   0.0
+  ]
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-10 authenticity: DEF AttackFront gaze - the torso leans 18 deg forward from the lower spine with Spine1/Spine2 kept straight and the neck/head holding their f0 world orientation, so the face juts toward the target f2-f8 instead of the body sagging back; stretchRelax evens the waist/neck crease; Death re-authored to the DEF (the capture arched her over sideways): f3-f6 the torso rises upright with both arms raised overhead, f6-f7 the hips drop as the upright coil column folds down onto a spiral pile (Tail_00..Tail_04 aimed along it, Tail_05 and the planted coil kept) and the torso falls forward onto it, a low heap",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_medusa_attack_gaze_rot.json",
+    "sha256": "3a8667587844e3ad12245cf8929ebd6e8836278fee6e88226b48495deab3a3f1"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_medusa_death_reauthor_tr.json",
+    "sha256": "f6906ba2b34742d6ca460758f990704a7c3e071f704d0374861cd21126c9f212"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_medusa_death_reauthor_rot.json",
+    "sha256": "be4f9773182232b299c5b57d09cac274fac92f689362c3ea3df3cb32e6cc15fe"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_medusa_death_reauthor_rot.json",
+    "sha256": "be4f9773182232b299c5b57d09cac274fac92f689362c3ea3df3cb32e6cc15fe"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "waist/neck crease of the gaze lean"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "shoulder/waist crease of the raised arms and the forward collapse"
+   }
+  ]
+ },
+ "floaterFix": {
+  "k": 8,
+  "maxVerts": 200,
+  "pieces": [
+   {
+    "point": [
+     -0.11332,
+     -0.49923,
+     0.93183
+    ],
+    "from": "RightHand",
+    "note": "2026-10-10 lane B: 46-vert cut island by the right hand split between RightHand and Hips weights (tears 7.3 cm in ShootFront f5, 7.8 cm in the AttackFront gaze lean f3; a dark shard beside the waist): bound to RightHand (the k-mean took 25% LeftHand from the bow grip and tore 19 cm in Death f6)",
+    "bone": "RightHand"
+   }
+  ],
+  "stage": "before_keys"
+ }
+}

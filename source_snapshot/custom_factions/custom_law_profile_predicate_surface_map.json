@@ -1,0 +1,713 @@
+{
+    "schemaVersion":  1,
+    "purpose":  "Maps source-prepared custom law profile predicates to gameplay surface evidence matrix entries. This is static traceability only and does not authorize gameplay.",
+    "validationState":  "Source-prepared; generated profile predicates must appear here with explicit mapped/partial/missing/rejected status.",
+    "policy":  {
+                   "noFallbacks":  true,
+                   "missingPredicatesMustBeExplicit":  true,
+                   "surfaceIdsMustExistInGameplayMatrix":  true,
+                   "runtimeProofStillRequiredForGameplay":  true
+               },
+    "predicates":  {
+                       "RequiresAstrologyProgressMutation":  {
+                                                                 "status":  "partial",
+                                                                 "surfaceIds":  [
+                                                                                    "sessionState.calendarAndNewDayFlags",
+                                                                                    "lawState.dataFractionLawRows",
+                                                                                    "contracts.astrologyProgressMutationPredicates"
+                                                                                ],
+                                                                 "notes":  "custom_factions/astrology_progress_mutation_predicate_contracts.json covers every RequiresAstrologyProgressMutation effectKey and requires native Astrology progress mutation rather than generic daily reward, calendar text, law-row presence, UI preview, spell-cast, corpse-count, or Warcry substitutes. Calendar/day law state exists, but native progress read/write, day or battle timing, companion event correlation, duplicate prevention, law-owner/progress-recipient correlation, and UI synchronization remain runtime-gated. Contract-backed matrix surface: contracts.astrologyProgressMutationPredicates."
+                                                             },
+                       "RequiresAvengerMark":  {
+                                                   "status":  "partial",
+                                                   "surfaceIds":  [
+                                                                      "heroAbility.heroAbilityLevelRows",
+                                                                      "abilityConfig.unitAbilityDefinitions",
+                                                                      "contracts.avengerMarkPredicates"
+                                                                  ],
+                                                   "notes":  "custom_factions/avenger_mark_predicate_contracts.json covers every RequiresAvengerMark effectKey and forbids faction-match or parallel-registry substitutes; native Avenger identity/configuration surfaces exist, but real active mark state, owner correlation, and lifecycle remain runtime-unproven. Contract-backed matrix surface: contracts.avengerMarkPredicates."
+                                               },
+                       "RequiresBattleResultCasualties":  {
+                                                              "status":  "partial",
+                                                              "surfaceIds":  [
+                                                                                 "battleOutcome.resultAndLoserRows",
+                                                                                 "corpseDeath.staticDeathCorpseSignals",
+                                                                                 "contracts.battleResultCasualtiesPredicates"
+                                                                             ],
+                                                              "notes":  "custom_factions/battle_result_casualties_predicate_contracts.json covers every RequiresBattleResultCasualties effectKey and requires committed post-battle result casualties rather than victory animations, start/end notifications, reward rows, temporary summoned losses, loser-row-only inference, low-loss assumptions, or Avenger-only substitutes. Battle outcome/corpse signals exist, but committed result event, winner/loser side, friendly/enemy casualty counts, permanent casualty discrimination, low-loss threshold calculation, reward commit ordering, and per-battle idempotence remain runtime-gated. Contract-backed matrix surface: contracts.battleResultCasualtiesPredicates."
+                                                          },
+                       "RequiresBattleStartOrRoundEvent":  {
+                                                               "status":  "partial",
+                                                               "surfaceIds":  [
+                                                                                  "battleLifecycle.baseEventBoundary",
+                                                                                  "battleLifecycle.battleLogicCoreState",
+                                                                                  "contracts.battleLifecyclePredicates"
+                                                                              ],
+                                                               "notes":  "custom_factions/battle_lifecycle_predicate_contracts.json covers every RequiresBattleStartOrRoundEvent effectKey and forbids generic battle-event, round-as-day, unit-turn-as-battle-start, and passive substitute hooks; lifecycle surfaces exist, but battle-start/round/unit-turn ordering, adventure-day idempotence, active law owner/rank in lifecycle context, and cleanup remain runtime-gated. Contract-backed matrix surface: contracts.battleLifecyclePredicates."
+                                                           },
+                       "RequiresBuildingAllowlist":  {
+                                                         "status":  "mapped",
+                                                         "surfaceIds":  [
+                                                                            "configTaxonomy.buildingConfigTaxonomy",
+                                                                            "construction.buildingLookup",
+                                                                            "contracts.buildingAllowlistPredicates"
+                                                                        ],
+                                                         "notes":  "custom_factions/building_allowlist_predicate_contracts.json covers every RequiresBuildingAllowlist effectKey using exact construction building category contracts and explicit missingGroups; this maps static building allowlists only, while construction commit ordering, displayed/charged cost parity, city owner correlation, building data lookup at runtime, and idempotence remain runtime-gated. Contract-backed matrix surface: contracts.buildingAllowlistPredicates."
+                                                     },
+                       "RequiresCaptureOrOwnershipTransfer":  {
+                                                                  "status":  "partial",
+                                                                  "surfaceIds":  [
+                                                                                     "adventureObject.objectRootCollections",
+                                                                                     "heroOwnership.sideCoreState",
+                                                                                     "contracts.constructionEconomyStatePredicates"
+                                                                                 ],
+                                                                  "notes":  "Contracted in construction_economy_state_predicate_contracts.json. Ownership surfaces exist, but gameplay remains blocked until a committed capture/ownership transition is distinguished from static owner reads, mine ticks, previews, and combat-only events."
+                                                              },
+                       "RequiresCaptureToken":  {
+                                                    "status":  "partial",
+                                                    "surfaceIds":  [
+                                                                       "adventureObject.objectRootCollections",
+                                                                       "objectProperty.propertyRowsAndActions",
+                                                                       "contracts.constructionEconomyStatePredicates"
+                                                                   ],
+                                                    "notes":  "Contracted in construction_economy_state_predicate_contracts.json. Object/property surfaces can classify capture-token candidates, but gameplay remains blocked until side-scoped token creation, committed construction consumption, and preview/cancel exclusion are runtime-proven."
+                                                },
+                       "RequiresCastGateOverride":  {
+                                                        "status":  "partial",
+                                                        "surfaceIds":  [
+                                                                           "spellCooldown.castGateAndUiSync",
+                                                                           "spellbook.castMagicEventPayloads",
+                                                                           "contracts.towerSpellStatePredicates"
+                                                                       ],
+                                                        "notes":  "Contracted in tower_spell_state_predicate_contracts.json. Cast-gate candidates remain context only; gameplay remains blocked until committed cast-gate override, overclock credit consumption, successful cast, cooldown gate, UI synchronization, and preview/cancel exclusion are runtime-proven."
+                                                    },
+                       "RequiresCommittedRewardIdentity":  {
+                                                               "status":  "partial",
+                                                               "surfaceIds":  [
+                                                                                  "rewardResult.applyRewardSet",
+                                                                                  "rewardResult.queueAndResourceMutation",
+                                                                                  "contracts.committedRewardIdentityPredicates"
+                                                                              ],
+                                                               "notes":  "custom_factions/committed_reward_identity_predicate_contracts.json covers every RequiresCommittedRewardIdentity effectKey and requires committed reward source identity rather than resource mutation alone, reward previews/offers, any combat victory, object categories without reward commit proof, or chest choices without selected reward proof. Reward apply/mutation surfaces exist, but committed reward selection/grant event, reward source object or battle result identity, reward recipient side, resource mutation correlation, law-owner/reward-recipient correlation, capture/combat/chest discrimination, duplicate prevention, and preview exclusion remain runtime-gated. Contract-backed matrix surface: contracts.committedRewardIdentityPredicates."
+                                                           },
+                       "RequiresConstructClassifier":  {
+                                                           "status":  "partial",
+                                                           "surfaceIds":  [
+                                                                              "unitIdentity.configFactionTier",
+                                                                              "abilityConfig.unitAbilityDefinitions",
+                                                                              "contracts.constructClassifierPredicates"
+                                                                          ],
+                                                           "notes":  "custom_factions/construct_classifier_predicate_contracts.json covers every RequiresConstructClassifier effectKey and anchors Tower-only construct classification to custom_factions/homm3_tower.json Gargoyle/Golem unit lines plus custom_factions/unit_family_tags.json construct=yes facts; it forbids Tower faction membership, donor Human identity, SID substring inference, display-name inference, and generic non-living substitutes. Configured unit identity can classify constructs, but live battle stack SID, hero party SID, consuming-hook reachability, spell-cast owner correlation, temporary summon/duplicate handling, readiness timing, and idempotent effect application remain runtime-gated. Contract-backed matrix surface: contracts.constructClassifierPredicates."
+                                                       },
+                       "RequiresCooldownMutation":  {
+                                                        "status":  "partial",
+                                                        "surfaceIds":  [
+                                                                           "spellCooldown.effectiveCooldownRead",
+                                                                           "spellCooldown.absoluteSetter",
+                                                                           "contracts.towerSpellStatePredicates"
+                                                                       ],
+                                                        "notes":  "Contracted in tower_spell_state_predicate_contracts.json. Cooldown reads/decrement candidates remain context only, and the eew.bdmh(Int32) absolute setter hypothesis remains rejected; gameplay remains blocked until safe stored cooldown mutation, UI synchronization, and ordering are runtime-proven."
+                                                    },
+                       "RequiresCorpseConsumption":  {
+                                                         "status":  "partial",
+                                                         "surfaceIds":  [
+                                                                            "corpseDeath.staticDeathCorpseSignals",
+                                                                            "necromancy.necromancyConfigAndHeroFlags",
+                                                                            "contracts.necropolisCorpseStatePredicates"
+                                                                        ],
+                                                         "notes":  "Contracted in necropolis_corpse_state_predicate_contracts.json. Static corpse/necromancy signals are context only; gameplay remains blocked until committed corpse consumption, spell classification correlation, owner correlation, and duplicate/preview exclusion are runtime-proven."
+                                                     },
+                       "RequiresCorpseCount":  {
+                                                   "status":  "partial",
+                                                   "surfaceIds":  [
+                                                                      "corpseDeath.staticDeathCorpseSignals",
+                                                                      "battleOutcome.resultAndLoserRows",
+                                                                      "contracts.necropolisCorpseStatePredicates"
+                                                                  ],
+                                                   "notes":  "Contracted in necropolis_corpse_state_predicate_contracts.json. Corpse count must come from a logical battle/site/side-scoped source; gameplay remains blocked until count timing, ownership policy, temporary mana cleanup, and idempotence are runtime-proven."
+                                               },
+                       "RequiresCorpseOrBattleSiteData":  {
+                                                              "status":  "partial",
+                                                              "surfaceIds":  [
+                                                                                 "corpseDeath.staticDeathCorpseSignals",
+                                                                                 "objectProperty.propertyRowsAndActions",
+                                                                                 "contracts.necropolisCorpseStatePredicates"
+                                                                             ],
+                                                              "notes":  "Contracted in necropolis_corpse_state_predicate_contracts.json. Reveal target classification must use exact object allowlists or proven corpse/battle-site state; gameplay remains blocked until target identity, radius origin, owner correlation, and fog mutation ordering are runtime-proven."
+                                                          },
+                       "RequiresCorpseOrCasualtyContext":  {
+                                                               "status":  "partial",
+                                                               "surfaceIds":  [
+                                                                                  "corpseDeath.staticDeathCorpseSignals",
+                                                                                  "battleOutcome.resultAndLoserRows",
+                                                                                  "contracts.corpseOrCasualtyContextPredicates"
+                                                                              ],
+                                                               "notes":  "custom_factions/corpse_casualty_context_predicate_contracts.json covers every RequiresCorpseOrCasualtyContext effectKey and anchors Necropolis-only undead identity to custom_factions/homm3_necropolis.json unit lines plus custom_factions/unit_family_tags.json undead=yes facts; it explicitly does not treat undead identity as corpse availability and forbids generic death events, temporary summoned losses, SID substring inference, display-name corpse inference, and spell text/cast substitutes. Casualty context surfaces exist, but battle casualty result, corpse availability/site proof, ownership, permanent casualty discrimination, corpse accounting idempotence, consumption ordering, and law-owner correlation remain runtime-gated. Contract-backed matrix surface: contracts.corpseOrCasualtyContextPredicates."
+                                                           },
+                       "RequiresCorpseOrRaiseConsumption":  {
+                                                                "status":  "partial",
+                                                                "surfaceIds":  [
+                                                                                   "corpseDeath.staticDeathCorpseSignals",
+                                                                                   "necromancy.necromancyConfigAndHeroFlags",
+                                                                                   "contracts.necropolisCorpseStatePredicates"
+                                                                               ],
+                                                                "notes":  "Contracted in necropolis_corpse_state_predicate_contracts.json. Raise/corpse consumption requires a committed event, not spell capability or calendar refresh; gameplay remains blocked until raise/corpse event timing, owner correlation, and idempotence are runtime-proven."
+                                                            },
+                       "RequiresCorpseOrUndeadContext":  {
+                                                             "status":  "partial",
+                                                             "surfaceIds":  [
+                                                                                "corpseDeath.staticDeathCorpseSignals",
+                                                                                "unitIdentity.configFactionTier",
+                                                                                "contracts.corpseOrUndeadContextPredicates"
+                                                                            ],
+                                                             "notes":  "custom_factions/corpse_undead_context_predicate_contracts.json covers every RequiresCorpseOrUndeadContext effectKey and requires Necropolis corpse or undead context without treating undead identity as active corpse availability. Undead classification and corpse signals exist, but undead unit identity when used, corpse availability/value when used, enemy-side dread target proof, law-owner/affected-side correlation, friendly undead morale bonus exclusion, morale package/trigger ordering, and corpse-context cleanup/idempotence remain runtime-gated. Contract-backed matrix surface: contracts.corpseOrUndeadContextPredicates."
+                                                         },
+                       "RequiresDamageTakenEvent":  {
+                                                        "status":  "partial",
+                                                        "surfaceIds":  [
+                                                                           "committedDamage.unitDamageApply",
+                                                                           "eventPayload.damageAndObjectLifecyclePayloads",
+                                                                           "contracts.damageTakenEventPredicates"
+                                                                       ],
+                                                        "notes":  "custom_factions/damage_taken_event_predicate_contracts.json covers every RequiresDamageTakenEvent effectKey and requires positive committed damage to the receiving unit stack; it forbids attempted attacks, blocked/zero damage, animations, damage-plan previews, attacker-damage-only inference, kill-only substitutes, status-only substitutes, rage/warcry substitutes, and tempo triggers without committed damage proof. Damage event payload exists, but positive final damage value, receiver unit identity, side correlation, post-mitigation ordering, death/kill ordering, non-damage animation exclusion, and per-hit idempotence remain runtime-gated. Contract-backed matrix surface: contracts.damageTakenEventPredicates."
+                                                    },
+                       "RequiresDeathworksCredit":  {
+                                                        "status":  "partial",
+                                                        "surfaceIds":  [
+                                                                           "necromancy.necromancyConfigAndHeroFlags",
+                                                                           "corpseDeath.staticDeathCorpseSignals",
+                                                                           "contracts.constructionEconomyStatePredicates"
+                                                                       ],
+                                                        "notes":  "Contracted in construction_economy_state_predicate_contracts.json. Corpse/necromancy signals are context only; gameplay remains blocked until an explicit side-scoped Deathworks credit ledger, source correlation, consumption, and cleanup are runtime-proven."
+                                                    },
+                       "RequiresDebuffedAttacker":  {
+                                                        "status":  "partial",
+                                                        "surfaceIds":  [
+                                                                           "buffStatus.buffDebuffSidSurfaces",
+                                                                           "committedDamage.buffDebuffApplyQuery",
+                                                                           "contracts.fortressStatusContextPredicates"
+                                                                       ],
+                                                        "notes":  "Source contract requires a live negative-status query on the attacker for Hidebound Drill; status taxonomy classification alone, target debuffs, positive statuses, damage events without attacker status proof, SID/localized text inference, and Fortress membership are forbidden substitutes. Runtime proof is still required for attacker identity, status state, outgoing committed damage ordering, and owner correlation. Contract-backed matrix surface: contracts.fortressStatusContextPredicates."
+                                                    },
+                       "RequiresDisplayedAndChargedCostParity":  {
+                                                                     "status":  "partial",
+                                                                     "surfaceIds":  [
+                                                                                        "construction.displayedCost",
+                                                                                        "construction.chargedCostAndCommit",
+                                                                                        "contracts.displayedAndChargedCostParityPredicates"
+                                                                                    ],
+                                                                     "notes":  "custom_factions/construction_cost_parity_predicate_contracts.json covers every RequiresDisplayedAndChargedCostParity effectKey and forbids UI-only, charged-only, generic discount/surcharge, extra-slot-as-discount, and normal-slot/workshop-slot substitutes; displayed and charged cost surfaces exist, but hook ordering, affordability parity, resource mutation, build commit, idempotence, and city owner/law-owner correlation remain runtime-gated. Contract-backed matrix surface: contracts.displayedAndChargedCostParityPredicates."
+                                                                 },
+                       "RequiresDynamicElementalFamily":  {
+                                                              "status":  "partial",
+                                                              "surfaceIds":  [
+                                                                                 "unitIdentity.configFactionTier",
+                                                                                 "magicRules.magicConfigBattleWorldRows",
+                                                                                 "contracts.dynamicElementalFamilyPredicates"
+                                                                             ],
+                                                              "notes":  "Source contract requires explicit selected/dominant elemental family derived from authored Conflux elemental-family mapping; static magicSchoolSet rows, Conflux membership, any-elemental counts without dominance, spell school alone, Pixie/Firebird, and SID substring inference are forbidden substitutes. Runtime proof is still required for live family selection, spell-school correlation, owner correlation, ordering, and idempotence. Contract-backed matrix surface: contracts.dynamicElementalFamilyPredicates."
+                                                          },
+                       "RequiresElementalBuildingMapping":  {
+                                                                "status":  "partial",
+                                                                "surfaceIds":  [
+                                                                                   "configTaxonomy.buildingConfigTaxonomy",
+                                                                                   "configTaxonomy.objectConfigTaxonomy",
+                                                                                   "contracts.confluxElementalConsumerPredicates"
+                                                                               ],
+                                                                "notes":  "Source contract requires exact elemental-building group mapping from construction building category contracts; Conflux town membership, building names/icons, elemental-themed mechanics without currentRows contract, unit elemental family, building allowlist alone, and construction UI preview are forbidden substitutes. Runtime proof is still required for city/building payload, commit ordering, owner correlation, and extra-build idempotence. Contract-backed matrix surface: contracts.confluxElementalConsumerPredicates."
+                                                            },
+                       "RequiresElementalFamily":  {
+                                                       "status":  "partial",
+                                                       "surfaceIds":  [
+                                                                          "unitIdentity.configFactionTier",
+                                                                          "contracts.confluxElementalConsumerPredicates"
+                                                                      ],
+                                                       "notes":  "Source contract requires exact authored Conflux elemental-family identity for the relevant unit; Conflux membership, any-elemental counts without family identity, Pixie/Firebird, SID substring inference, spell school, and building elemental category are forbidden substitutes. Runtime proof is still required for battle unit SID, selected family, damage ordering, and owner correlation. Contract-backed matrix surface: contracts.confluxElementalConsumerPredicates."
+                                                   },
+                       "RequiresElementalFamilyMapping":  {
+                                                              "status":  "partial",
+                                                              "surfaceIds":  [
+                                                                                 "unitIdentity.configFactionTier",
+                                                                                 "magicRules.magicConfigBattleWorldRows",
+                                                                                 "contracts.elementalFamilyMappingPredicates"
+                                                                             ],
+                                                              "notes":  "custom_factions/elemental_family_mapping_predicate_contracts.json covers every RequiresElementalFamilyMapping effectKey and anchors explicit Conflux elemental family mapping to custom_factions/homm3_conflux.json air/water/fire/earth/psychic lines plus custom_factions/unit_family_tags.json elemental=yes facts; it excludes Pixie and Firebird and forbids Conflux membership, any-elemental counts, SID substring inference, spell-school-only inference, day-phase-only inference, and elemental-themed object substitutes. Unit/spell/object elemental mapping is source-prepared, but active family selection, live stack/party SID, spell/object/day-phase correlation, law-owner correlation, and idempotent family-specific effect application remain runtime-gated. Contract-backed matrix surface: contracts.elementalFamilyMappingPredicates."
+                                                          },
+                       "RequiresElementalFamilyMix":  {
+                                                          "status":  "partial",
+                                                          "surfaceIds":  [
+                                                                             "unitIdentity.configFactionTier",
+                                                                             "partySquad.heroPartyUnits",
+                                                                             "contracts.elementalFamilyMixPredicates"
+                                                                         ],
+                                                          "notes":  "custom_factions/elemental_family_mix_predicate_contracts.json covers every RequiresElementalFamilyMix effectKey and requires at least two distinct authored elemental families from custom_factions/unit_family_tags.json; it forbids generic elemental counts, same-family duplicates, Conflux membership substitutes, SID substring inference, display-name inference, and temporary summon shortcuts. Party composition and family classification exist, but live party/battle stack identity, distinct family discriminator, summon exclusion, owner correlation, snapshot timing, and idempotent reward/trigger application remain runtime-gated. Contract-backed matrix surface: contracts.elementalFamilyMixPredicates."
+                                                      },
+                       "RequiresEnemyHeroPositions":  {
+                                                          "status":  "partial",
+                                                          "surfaceIds":  [
+                                                                             "heroIdentity.heroCoreData",
+                                                                             "adventureObject.objectRootCollections",
+                                                                             "contracts.enemyHeroPositionsPredicates"
+                                                                         ],
+                                                          "notes":  "custom_factions/enemy_hero_positions_predicate_contracts.json covers every RequiresEnemyHeroPositions effectKey and requires current enemy hero identity and map position rather than generic adventure objects, owned-structure proximity, Avenger mark state, fog reveal targets, stale last-known object positions, or friendly/neutral heroes. Hero data/object collections exist, but enemy hero object identity, current map position, enemy side versus observing side, law-owner/observing-side correlation, target coordinates, companion owned-structure or Avenger conditions, fog reveal ordering, and per-scan idempotence remain runtime-gated. Contract-backed matrix surface: contracts.enemyHeroPositionsPredicates."
+                                                      },
+                       "RequiresEnemyMoralePenalty":  {
+                                                          "status":  "partial",
+                                                          "surfaceIds":  [
+                                                                             "luckMorale.distributionConfigs",
+                                                                             "morale.rollClassification",
+                                                                             "contracts.enemyMoralePenaltyPredicates"
+                                                                         ],
+                                                          "notes":  "custom_factions/enemy_morale_penalty_predicate_contracts.json covers every RequiresEnemyMoralePenalty effectKey and requires enemy morale failure or enemy morale penalty semantics rather than friendly morale bonuses, morale animations without roll proof, negative status application alone, law-owner unit morale, or generic morale packages. Morale configs/roll surfaces exist, but enemy morale value reads, enemy failure/penalty application, enemy side versus law-owner side correlation, affected enemy stack identity, debuff/dread effect ordering, and per-roll/package idempotence remain runtime-gated. Contract-backed matrix surface: contracts.enemyMoralePenaltyPredicates."
+                                                      },
+                       "RequiresEnemySlowPoisonMireState":  {
+                                                                "status":  "partial",
+                                                                "surfaceIds":  [
+                                                                                   "buffStatus.buffDebuffSidSurfaces",
+                                                                                   "buffStatus.buffConfigDefinitions",
+                                                                                   "contracts.fortressStatusContextPredicates"
+                                                                               ],
+                                                                "notes":  "Source contract requires live enemy poison, slow/movement-restriction, or separately proven mire state for Bog Hex; taxonomy-only classification, friendly status, generic negative status, swamp flavor/law-name mire inference, cooldown rows without enemy state proof, and SID/localized text inference are forbidden substitutes. Runtime proof is still required for enemy-side correlation, live status/state query, cooldown ordering, and idempotence. Contract-backed matrix surface: contracts.fortressStatusContextPredicates."
+                                                            },
+                       "RequiresExistingMapObjectClasses":  {
+                                                                "status":  "mapped",
+                                                                "surfaceIds":  [
+                                                                                   "configTaxonomy.objectConfigTaxonomy",
+                                                                                   "adventureObject.objectRootCollections",
+                                                                                   "contracts.visionMapEdgePredicates"
+                                                                               ],
+                                                                "notes":  "Contracted in vision_map_edge_predicate_contracts.json. Static object taxonomy is context only; gameplay remains blocked until existing runtime object identity, exact allowlist/class proof, coordinates, reveal-side correlation, and fabricated teleport/ocean/gate mechanic exclusion are runtime-proven."
+                                                            },
+                       "RequiresFirstVolley":  {
+                                                   "status":  "partial",
+                                                   "surfaceIds":  [
+                                                                      "battleAction.actionClassification",
+                                                                      "battleLifecycle.battleLogicCoreState",
+                                                                      "contracts.tempoEventPredicates"
+                                                                  ],
+                                                   "notes":  "Contracted in tempo_event_predicate_contracts.json. Battle action/lifecycle surfaces are context only; gameplay remains blocked until first qualifying committed Cove gunpowder/pirate volley, actor identity, Focus/reload companion correlation, first-state consumption, and passive all-ranged substitute exclusion are runtime-proven."
+                                               },
+                       "RequiresFocusCredit":  {
+                                                   "status":  "partial",
+                                                   "surfaceIds":  [
+                                                                      "energy.heroEnergyPools",
+                                                                      "eventPayload.sideEnergyStartOutcomePayloads",
+                                                                      "contracts.coveGunpowderFocusPredicates"
+                                                                  ],
+                                                   "notes":  "Source contract requires committed Focus credit semantics for Storm Charts; hero energy pool existence, Focus UI values, spell-cast-only evidence, gunpowder support classifiers, and side energy payloads without recipient/order proof are forbidden substitutes. Runtime proof is still required for recipient identity, ordering, and idempotence. Contract-backed matrix surface: contracts.coveGunpowderFocusPredicates."
+                                               },
+                       "RequiresFocusEvent":  {
+                                                  "status":  "partial",
+                                                  "surfaceIds":  [
+                                                                     "energy.heroEnergyPools",
+                                                                     "eventPayload.sideEnergyStartOutcomePayloads",
+                                                                     "contracts.tempoEventPredicates"
+                                                                 ],
+                                                  "notes":  "Contracted in tempo_event_predicate_contracts.json. Energy and side-payload surfaces are context only; gameplay remains blocked until committed Focus generation/spend or Focus-consuming Pirate/Cannon attack, recipient/owner correlation, Storm Omens timing, and UI/energy-pool substitute exclusion are runtime-proven."
+                                              },
+                       "RequiresFocusOrReload":  {
+                                                     "status":  "partial",
+                                                     "surfaceIds":  [
+                                                                        "energy.heroEnergyPools",
+                                                                        "abilityConfig.unitAbilityDefinitions",
+                                                                        "contracts.coveGunpowderFocusPredicates"
+                                                                    ],
+                                                     "notes":  "Source contract treats Focus/reload as event identity for Gun Decks and Boarding Parties; energy pool existence, ability config existence, ranged attacks, turn starts, and gunpowder classifiers are forbidden substitutes. Runtime proof is still required for committed Focus or exact reload ability/event identity. Contract-backed matrix surface: contracts.coveGunpowderFocusPredicates."
+                                                 },
+                       "RequiresFogRevealMutation":  {
+                                                         "status":  "partial",
+                                                         "surfaceIds":  [
+                                                                            "vision.nativeRevealMutation",
+                                                                            "vision.objectDescriptorFactories",
+                                                                            "contracts.fogRevealMutationPredicates"
+                                                                        ],
+                                                         "notes":  "custom_factions/fog_reveal_mutation_predicate_contracts.json covers every RequiresFogRevealMutation effectKey and forbids UI-only, minimap-only, object-creation, generic terrain/object, inferred-mark, created-gate, and global-reveal substitutes; descriptor/reveal candidates exist, but native fog write, player-side ownership, map refresh, target coordinate extraction, radius/target boundaries, idempotence, and law-owner/reveal-side correlation remain runtime-gated. Contract-backed matrix surface: contracts.fogRevealMutationPredicates."
+                                                     },
+                       "RequiresForwardMovementOrKill":  {
+                                                             "status":  "partial",
+                                                             "surfaceIds":  [
+                                                                                "adventureMovement.heroNodeAndMovePoints",
+                                                                                "eventPayload.damageAndObjectLifecyclePayloads",
+                                                                                "contracts.forwardMovementKillPredicates"
+                                                                            ],
+                                                             "notes":  "Source contract requires either proven forward battle movement relative to the opposing side or a committed kill by the acting stack; any movement, attack action without coordinate delta, kill previews/lethal estimates, damage without victim death, negative status, and Stronghold membership are forbidden substitutes. Runtime proof is still required for coordinates, direction, kill commit, target correlation, and idempotence. Contract-backed matrix surface: contracts.forwardMovementKillPredicates."
+                                                         },
+                       "RequiresGarrisonSacrifice":  {
+                                                         "status":  "partial",
+                                                         "surfaceIds":  [
+                                                                            "partySquad.heroPartyUnits",
+                                                                            "heroOwnership.cityHeroSlots",
+                                                                            "contracts.constructionEconomyStatePredicates"
+                                                                        ],
+                                                         "notes":  "Contracted in construction_economy_state_predicate_contracts.json. Garrison/party surfaces exist, but gameplay remains blocked until deterministic unit-removal sacrifice, threshold calculation, cancellation behavior, and construction commit ordering are runtime-proven."
+                                                     },
+                       "RequiresGatedIdentity":  {
+                                                     "status":  "partial",
+                                                     "surfaceIds":  [
+                                                                        "teleportation.portalAndTownGateState",
+                                                                        "unitIdentity.battleUnitLogicConfigBridge",
+                                                                        "contracts.infernoGatedEntryPredicates"
+                                                                    ],
+                                                     "notes":  "Contracted in inferno_gated_entry_predicate_contracts.json. Gating identity is source-prepared only; gameplay remains blocked until Gating spawn/entry transaction identity, acting gated stack identity, permanent recruited unit exclusion, law-owner correlation, committed damage ordering, and idempotence are runtime-proven."
+                                                 },
+                       "RequiresGatedOrSacrificeIdentity":  {
+                                                                "status":  "partial",
+                                                                "surfaceIds":  [
+                                                                                   "teleportation.portalAndTownGateState",
+                                                                                   "partySquad.heroPartyUnits",
+                                                                                   "contracts.infernoGatedIdentityPredicates"
+                                                                               ],
+                                                                "notes":  "Source contract requires exact gated temporary-loss or sacrifice transaction identity for Frenzy; ordinary permanent casualties, generic kill/loss events, gatedOrSummoned unit tags, summoned-unit existence without transaction proof, Inferno membership, and fire damage/spells are forbidden substitutes. Runtime proof is still required for transaction identity, owner correlation, permanent-casualty exclusion, and idempotence. Contract-backed matrix surface: contracts.infernoGatedIdentityPredicates."
+                                                            },
+                       "RequiresGatedOrTeleportedIdentity":  {
+                                                                 "status":  "partial",
+                                                                 "surfaceIds":  [
+                                                                                    "teleportation.portalAndTownGateState",
+                                                                                    "battleAction.actionClassification",
+                                                                                    "contracts.infernoGatedIdentityPredicates"
+                                                                                ],
+                                                                 "notes":  "Source contract requires exact gated-entry or teleport movement identity for Hellpack Assault; ordinary movement, generic adjacency, gatedOrSummoned unit tags, Inferno membership, teleport-themed spell text, and geometry alone are forbidden substitutes. Runtime proof is still required for movement event identity, acting stack identity, owner correlation, and post-movement adjacency ordering. Contract-backed matrix surface: contracts.infernoGatedIdentityPredicates."
+                                                             },
+                       "RequiresGatingSacrificeOrSummon":  {
+                                                               "status":  "partial",
+                                                               "surfaceIds":  [
+                                                                                  "teleportation.portalAndTownGateState",
+                                                                                  "partySquad.heroPartyUnits",
+                                                                                  "contracts.gatingSacrificeOrSummonPredicates"
+                                                                              ],
+                                                               "notes":  "custom_factions/gating_sacrifice_summon_predicate_contracts.json covers every RequiresGatingSacrificeOrSummon effectKey and requires real Inferno gating, sacrifice, or summon transaction identity rather than generic spell casts, static Primal access, fire damage markers, battle/calendar ticks, ordinary permanent casualties, or summoned-unit existence without entry transaction proof. Teleport/party surfaces exist, but native gating entry or summon transaction, sacrifice transaction, created/lost unit identity, temporary summon versus permanent recruited unit discrimination, owner-side correlation, trigger ordering, and per-transaction idempotence remain runtime-gated. Contract-backed matrix surface: contracts.gatingSacrificeOrSummonPredicates."
+                                                           },
+                       "RequiresGeometryPredicate":  {
+                                                         "status":  "partial",
+                                                         "surfaceIds":  [
+                                                                            "battleAction.formationGeometry",
+                                                                            "battleActor.fieldObjectAndUnitIdentity",
+                                                                            "contracts.geometryPredicates"
+                                                                        ],
+                                                         "notes":  "custom_factions/geometry_predicate_contracts.json covers every RequiresGeometryPredicate effectKey and forbids generic adjacency/position substitutions; geometry surfaces exist, but current action actor/target hexes, adjacency/line/range predicates, multi-target discrimination, melee-vs-ranged classification, and law-owner idempotence remain runtime-unproven. Contract-backed matrix surface: contracts.geometryPredicates."
+                                                     },
+                       "RequiresGunpowderDealer":  {
+                                                       "status":  "partial",
+                                                       "surfaceIds":  [
+                                                                          "unitIdentity.configFactionTier",
+                                                                          "abilityConfig.unitAbilityDefinitions",
+                                                                          "contracts.coveBurningAshDealerPredicates"
+                                                                      ],
+                                                       "notes":  "Source contract allows exact authored unit_family_tags.gunpowder=yes facts for Burning Ash; gunpowder SID/display-name inference, Cove membership, shooter role, law name/icon, and damage events without attacker SID classifier proof are forbidden substitutes. Runtime proof is still required for attacker battle SID correlation and committed damage ordering. Contract-backed matrix surface: contracts.coveBurningAshDealerPredicates."
+                                                   },
+                       "RequiresGunpowderOrPirate":  {
+                                                         "status":  "partial",
+                                                         "surfaceIds":  [
+                                                                            "unitIdentity.configFactionTier",
+                                                                            "contracts.coveGunpowderFocusPredicates"
+                                                                        ],
+                                                         "notes":  "Source contract allows current authored gunpowder=yes unit facts for Cove gunpowder lines and forbids pirate name/SID inference, Cove faction membership, shooter role, law name/icon, or unresolved battle payloads as substitutes. Runtime proof is still required for battle unit SID correlation. Contract-backed matrix surface: contracts.coveGunpowderFocusPredicates."
+                                                     },
+                       "RequiresGunpowderOrRangedSupport":  {
+                                                                "status":  "partial",
+                                                                "surfaceIds":  [
+                                                                                   "unitIdentity.configFactionTier",
+                                                                                   "battleAction.unitRoleClassifier",
+                                                                                   "contracts.coveGunpowderFocusPredicates"
+                                                                               ],
+                                                                "notes":  "Source contract requires exact gunpowder or ranged-support semantics for Storm Charts; Space/Arcane access, generic support spells, Cove faction membership, shooter-without-gunpowder, and spell-cast-only substitutes are forbidden. Runtime proof is still required for supporting unit/side correlation and spell-cast ordering. Contract-backed matrix surface: contracts.coveGunpowderFocusPredicates."
+                                                            },
+                       "RequiresHeroSpellCast":  {
+                                                     "status":  "partial",
+                                                     "surfaceIds":  [
+                                                                        "spellbook.castMagicEventPayloads",
+                                                                        "eventPayload.castAbilityAndMagicPayloads",
+                                                                        "contracts.heroSpellCastPredicates"
+                                                                    ],
+                                                     "notes":  "custom_factions/hero_spell_cast_predicate_contracts.json covers every RequiresHeroSpellCast effectKey and requires successful committed Tower hero spell-cast identity rather than spellbook open/preview states, unit ability casts, static spellbook ownership, construct identity, or cooldown previews/calculations. Spell-cast payload surfaces exist, but committed hero cast event, casting hero identity, law-owner/caster-side correlation, spellbook UI exclusion, unit ability exclusion, target/affected-stack correlation, battle timing/cleanup, and per-cast idempotence remain runtime-gated. Contract-backed matrix surface: contracts.heroSpellCastPredicates."
+                                                 },
+                       "RequiresHeroSpellPower":  {
+                                                      "status":  "partial",
+                                                      "surfaceIds":  [
+                                                                         "battleActor.sideContextAndHeroStats",
+                                                                         "heroSkill.heroStatNativeFeatureFlags",
+                                                                         "contracts.combatScalarStatePredicates"
+                                                                     ],
+                                                      "notes":  "Contracted in combat_scalar_state_predicate_contracts.json. Hero stat surfaces are context only; gameplay remains blocked until defending hero spell-power value, counterattack formula injection point, battle owner correlation, and UI/static-stat exclusion are runtime-proven."
+                                                  },
+                       "RequiresIsolatedTarget":  {
+                                                      "status":  "partial",
+                                                      "surfaceIds":  [
+                                                                         "battleAction.formationGeometry",
+                                                                         "battleActor.fieldObjectAndUnitIdentity",
+                                                                         "contracts.dungeonTargetStatePredicates"
+                                                                     ],
+                                                      "notes":  "Source contract requires current-board target isolation geometry for Predator\u0027s Instruction; non-adjacent shortcutting without full neighbor scan, debuffed targets, global enemy count, attacker isolation, damage-only evidence, and Dungeon membership are forbidden substitutes. Runtime proof is still required for target identity, coordinates, neighbor scan semantics, damage ordering, and owner correlation. Contract-backed matrix surface: contracts.dungeonTargetStatePredicates."
+                                                  },
+                       "RequiresKillOrLossEvent":  {
+                                                       "status":  "partial",
+                                                       "surfaceIds":  [
+                                                                          "eventPayload.damageAndObjectLifecyclePayloads",
+                                                                          "battleOutcome.resultAndLoserRows",
+                                                                          "contracts.killLossEventPredicates"
+                                                                      ],
+                                                       "notes":  "custom_factions/kill_loss_event_predicate_contracts.json covers every RequiresKillOrLossEvent effectKey and preserves kill/loss/plunder/sacrifice/gated-loss/low-loss distinctions; event surfaces exist, but semantic event classification, owner correlation, idempotence, and post-death ordering remain runtime-unproven. Contract-backed matrix surface: contracts.killLossEventPredicates."
+                                                   },
+                       "RequiresLivingEnemyPredicate":  {
+                                                            "status":  "partial",
+                                                            "surfaceIds":  [
+                                                                               "unitIdentity.configFactionTier",
+                                                                               "battleActor.fieldObjectAndUnitIdentity",
+                                                                               "contracts.livingEnemyPredicates"
+                                                                           ],
+                                                            "notes":  "Source contract requires an affected enemy target whose battle unit SID resolves to authored living=yes facts; non-undead inference, enemy side alone, Necropolis undead identity, SID/display-name text, negative status, and corpse/casualty context are forbidden substitutes. Runtime proof is still required for battle SID, enemy side, affected stack, negative-status target, and law-owner correlation. Contract-backed matrix surface: contracts.livingEnemyPredicates."
+                                                        },
+                       "RequiresMovementStormSeaClassification":  {
+                                                                      "status":  "mapped",
+                                                                      "surfaceIds":  [
+                                                                                         "magicRules.magicConfigBattleWorldRows",
+                                                                                         "spellbook.heroAndDataMagicCollections",
+                                                                                         "contracts.spellClassificationPredicates"
+                                                                                     ],
+                                                                      "notes":  "Explicit spell taxonomy contract covers movement, storm, and sea/tide battle spell seeds; sea/tide means Doreath\u0027s Tide spell flavor/effect, not ocean travel mechanics. Contract-backed matrix surface: contracts.spellClassificationPredicates."
+                                                                  },
+                       "RequiresNativeSchoolVerification":  {
+                                                                "status":  "mapped",
+                                                                "surfaceIds":  [
+                                                                                   "magicRules.schoolSidCostCounterSets",
+                                                                                   "spellbook.heroAndDataMagicCollections",
+                                                                                   "contracts.nativeSchoolVerificationPredicates"
+                                                                               ],
+                                                                "notes":  "custom_factions/native_school_verification_predicate_contracts.json covers every RequiresNativeSchoolVerification effectKey by exact inventory NativeSchoolName/NativeAccessShape rows and paired spell-low/spell-high handlers; this maps static native-school row verification only, while spellbook access mutation, UI synchronization, cast-gate ordering, hero spellbook/source collection proof, and runtime add-on owner correlation remain runtime-gated. Contract-backed matrix surface: contracts.nativeSchoolVerificationPredicates."
+                                                            },
+                       "RequiresNativeTerrainOrAdjacency":  {
+                                                                "status":  "partial",
+                                                                "surfaceIds":  [
+                                                                                   "biome.nativeBiomeClassification",
+                                                                                   "battleAction.formationGeometry",
+                                                                                   "contracts.nativeTerrainAdjacencyPredicates"
+                                                                               ],
+                                                                "notes":  "Source contract requires exact native terrain or battle adjacency semantics for Bog Witchcraft; Primal access, poison/slow status, generic geometry, biome display text, and spell-cast events are forbidden substitutes. Runtime proof is still required for context, coordinates, timing, and law-owner correlation. Contract-backed matrix surface: contracts.nativeTerrainAdjacencyPredicates."
+                                                            },
+                       "RequiresNegativeStatusPredicate":  {
+                                                               "status":  "partial",
+                                                               "surfaceIds":  [
+                                                                                  "buffStatus.buffDebuffSidSurfaces",
+                                                                                  "buffStatus.buffConfigDefinitions",
+                                                                                  "contracts.negativeStatusPredicates"
+                                                                              ],
+                                                               "notes":  "custom_factions/negative_status_predicate_contracts.json covers every RequiresNegativeStatusPredicate effectKey using exact status taxonomy groups/tags and forbids generic any-debuff, SID-substring, icon, and localized-text substitutes; this maps static negative-status classification only, while live receiver/dealer status queries, owner/source correlation, timing/duration, and formation action payload correlation remain runtime-gated. Contract-backed matrix surface: contracts.negativeStatusPredicates."
+                                                           },
+                       "RequiresNeutralThreatData":  {
+                                                         "status":  "partial",
+                                                         "surfaceIds":  [
+                                                                            "partySquad.neutralSquadRows",
+                                                                            "diplomacy.neutralNegotiationConfig",
+                                                                            "contracts.neutralThreatDataPredicates"
+                                                                        ],
+                                                         "notes":  "custom_factions/neutral_threat_data_predicate_contracts.json covers every RequiresNeutralThreatData effectKey and requires native neutral stack threat, strength, intention, or disposition data rather than localized threat text, object category allowlists, fog reveal targets, tooltip UI without native data, creature-bank/treasure themes, or weak/high-value labels inferred without native strength values. Neutral squad/config surfaces exist, but neutral stack identity, native threat/strength/intention reads, hero proximity or area-scan context, law-owner/observing-side correlation, read-only preview versus fog reveal mutation boundaries, localized text exclusion, and per-scan idempotence remain runtime-gated. Contract-backed matrix surface: contracts.neutralThreatDataPredicates."
+                                                     },
+                       "RequiresNightCurseClassification":  {
+                                                                "status":  "mapped",
+                                                                "surfaceIds":  [
+                                                                                   "magicRules.magicConfigBattleWorldRows",
+                                                                                   "spellbook.heroAndDataMagicCollections",
+                                                                                   "contracts.spellClassificationPredicates"
+                                                                               ],
+                                                                "notes":  "Explicit spell taxonomy contract covers Night curse, disable, decay, anti-heal, slow/control, and death seeds. Contract-backed matrix surface: contracts.spellClassificationPredicates."
+                                                            },
+                       "RequiresObjectSidOrCategoryAllowlist":  {
+                                                                    "status":  "mapped",
+                                                                    "surfaceIds":  [
+                                                                                       "configTaxonomy.objectConfigTaxonomy",
+                                                                                       "adventureObject.objectRootCollections",
+                                                                                       "contracts.objectAllowlistPredicates"
+                                                                                   ],
+                                                                    "notes":  "custom_factions/object_allowlist_predicate_contracts.json covers every RequiresObjectSidOrCategoryAllowlist effectKey and forbids generic object-category, localized-text, icon/art, ocean-travel, and fabricated-teleport substitutes; this maps static object allowlists only, while adventure object runtime identity, owner/side correlation, fog reveal mutation, map refresh, and idempotence remain runtime-gated. Contract-backed matrix surface: contracts.objectAllowlistPredicates."
+                                                                },
+                       "RequiresOpposingLawOwner":  {
+                                                        "status":  "partial",
+                                                        "surfaceIds":  [
+                                                                           "heroOwnership.sideCoreState",
+                                                                           "battleActor.sideContextAndHeroStats",
+                                                                           "contracts.opposingLawOwnerPredicates"
+                                                                       ],
+                                                        "notes":  "custom_factions/opposing_law_owner_predicate_contracts.json covers every RequiresOpposingLawOwner effectKey and requires active opposing law-owner identity rather than triggering unit ownership, friendly law ownership, positive morale candidates, generic battle side, or enemy morale failure without opposing owner proof. Hero ownership/battle side surfaces exist, but triggering unit side, opposing side law owner, active opposing law/rank, enemy morale failure or dread target, law-owner versus affected-side correlation, positive-candidate exclusion, and per-trigger idempotence remain runtime-gated. Contract-backed matrix surface: contracts.opposingLawOwnerPredicates."
+                                                    },
+                       "RequiresOverclockCredit":  {
+                                                       "status":  "partial",
+                                                       "surfaceIds":  [
+                                                                          "energy.heroEnergyPools",
+                                                                          "spellCooldown.effectiveCooldownRead",
+                                                                          "contracts.towerSpellStatePredicates"
+                                                                      ],
+                                                       "notes":  "Contracted in tower_spell_state_predicate_contracts.json. Energy/cooldown surfaces are context only; gameplay remains blocked until an explicit hero/side-scoped overclock credit ledger, creation/consumption timing, owner correlation, and leak prevention are runtime-proven."
+                                                   },
+                       "RequiresOwnedStructureRadius":  {
+                                                            "status":  "partial",
+                                                            "surfaceIds":  [
+                                                                               "heroOwnership.sideCoreState",
+                                                                               "adventureObject.objectRootCollections",
+                                                                               "contracts.ownedStructureRadiusPredicates"
+                                                                           ],
+                                                            "notes":  "custom_factions/owned_structure_radius_predicate_contracts.json covers every RequiresOwnedStructureRadius effectKey and anchors owned structure origins to enabled custom faction manifests where identity.citySid matches coreOverlay.directCityMapObject and coreOverlay.directDwellingPrefix is exact; it forbids donor city substitutes, display-name inference, SID substring inference, proximity without owner proof, and target scans without radius proof. Ownership/object surfaces exist, but runtime adventure object SID, structure owner side, law-owner correlation, structure coordinates, radius distance metric, target coordinate/filter proof, and idempotent radius scan/reveal application remain runtime-gated. Contract-backed matrix surface: contracts.ownedStructureRadiusPredicates."
+                                                        },
+                       "RequiresPersistentMatureDwellingState":  {
+                                                                     "status":  "partial",
+                                                                     "surfaceIds":  [
+                                                                                        "townBuilding.buildingCatalogAndDailyCount",
+                                                                                        "construction.chargedCostAndCommit",
+                                                                                        "contracts.constructionEconomyStatePredicates"
+                                                                                    ],
+                                                                     "notes":  "Contracted in construction_economy_state_predicate_contracts.json. Construction/building surfaces can host the state, but gameplay remains blocked until persistent city/dwelling maturation lifecycle and owner correlation are runtime-proven."
+                                                                 },
+                       "RequiresPoisonSlowMovementRestriction":  {
+                                                                     "status":  "partial",
+                                                                     "surfaceIds":  [
+                                                                                        "buffStatus.buffDebuffSidSurfaces",
+                                                                                        "magicRules.magicConfigBattleWorldRows",
+                                                                                        "contracts.poisonSlowMovementRestrictionPredicates"
+                                                                                    ],
+                                                                     "notes":  "Source contract requires exact poison, slow, or movement-restriction semantics for Bog Witchcraft; generic negative status, Primal access, taxonomy-only classification, SID/display-text inference, terrain/adjacency, and spell-cast-only substitutes are forbidden. Runtime proof is still required for live target status or committed spell-effect ordering plus owner/target correlation. Contract-backed matrix surface: contracts.poisonSlowMovementRestrictionPredicates."
+                                                                 },
+                       "RequiresPositiveMoraleValue":  {
+                                                           "status":  "partial",
+                                                           "surfaceIds":  [
+                                                                              "luckMorale.distributionConfigs",
+                                                                              "morale.rollClassification",
+                                                                              "contracts.combatScalarStatePredicates"
+                                                                          ],
+                                                           "notes":  "Contracted in combat_scalar_state_predicate_contracts.json. Morale config/roll surfaces are context only; gameplay remains blocked until current positive morale value, affected damage calculation, law-owner correlation, and morale animation/trigger exclusion are runtime-proven."
+                                                       },
+                       "RequiresProtectOrPreserveEvent":  {
+                                                              "status":  "mapped",
+                                                              "surfaceIds":  [
+                                                                                 "buffStatus.buffDebuffSidSurfaces",
+                                                                                 "spellbook.castMagicEventPayloads",
+                                                                                 "contracts.protectPreserveEventPredicates"
+                                                                             ],
+                                                              "notes":  "Explicit spell/status taxonomy covers protection, preserve, heal, cleanse, and negative-immunity classifications; actual protect/preserve event ordering remains runtime-gated. Contract-backed matrix surface: contracts.protectPreserveEventPredicates."
+                                                          },
+                       "RequiresRareResourceBalance":  {
+                                                           "status":  "partial",
+                                                           "surfaceIds":  [
+                                                                              "economy.resourceDataPrimitives",
+                                                                              "economy.sideResourceHeap",
+                                                                              "contracts.constructionEconomyStatePredicates"
+                                                                          ],
+                                                           "notes":  "Contracted in construction_economy_state_predicate_contracts.json. Resource primitives exist, but gameplay remains blocked until exact rare-resource classification, side heap read/write, committed reward timing, and capped conversion idempotence are runtime-proven."
+                                                       },
+                       "RequiresReadOnlyTooltipPreview":  {
+                                                              "status":  "mapped",
+                                                              "surfaceIds":  [
+                                                                                 "ui.spellbookVisualOnlyBoundary",
+                                                                                 "damageForecast.damageEventAndUiParams",
+                                                                                 "contracts.visionMapEdgePredicates"
+                                                                             ],
+                                                              "notes":  "Contracted in vision_map_edge_predicate_contracts.json. Tooltip/UI surfaces are non-gameplay; preview remains read-only and blocked from gameplay promotion until native neutral data backing, neutral stack identity, observing-side correlation, and mutation exclusion are runtime-proven."
+                                                          },
+                       "RequiresRoadTerrain":  {
+                                                   "status":  "partial",
+                                                   "surfaceIds":  [
+                                                                      "adventureMovement.heroNodeAndMovePoints",
+                                                                      "biome.nativeBiomeClassification",
+                                                                      "contracts.visionMapEdgePredicates"
+                                                                  ],
+                                                   "notes":  "Contracted in vision_map_edge_predicate_contracts.json. Terrain/movement surfaces are context only; gameplay remains blocked until native road terrain/flag read, current hero coordinate correlation, law-owner side correlation, fog mutation ordering, and always-on-radius exclusion are runtime-proven."
+                                               },
+                       "RequiresSacrificeOrTemporaryLoss":  {
+                                                                "status":  "partial",
+                                                                "surfaceIds":  [
+                                                                                   "partySquad.heroPartyUnits",
+                                                                                   "battleOutcome.resultAndLoserRows",
+                                                                                   "contracts.sacrificeOrTemporaryLossPredicates"
+                                                                               ],
+                                                                "notes":  "custom_factions/sacrifice_temporary_loss_predicate_contracts.json covers every RequiresSacrificeOrTemporaryLoss effectKey and requires committed Inferno sacrifice or temporary summoned/gated loss identity rather than ordinary permanent casualties, generic kill/loss events, summoned-unit existence without loss transaction, fire spell casts, or reward rows without loss proof. Party/battle outcome surfaces exist, but sacrifice transaction, gated or summoned temporary loss, permanent casualty versus temporary loss discrimination, law-owner/loss-owner side correlation, reward/cooldown trigger ordering, per-loss idempotence, and ordinary casualty exclusion remain runtime-gated. Contract-backed matrix surface: contracts.sacrificeOrTemporaryLossPredicates."
+                                                            },
+                       "RequiresSeparateMagicDamageSurface":  {
+                                                                  "status":  "partial",
+                                                                  "surfaceIds":  [
+                                                                                     "magicRules.magicConfigBattleWorldRows",
+                                                                                     "committedDamage.unitDamageApply",
+                                                                                     "contracts.combatScalarStatePredicates"
+                                                                                 ],
+                                                                  "notes":  "Contracted in combat_scalar_state_predicate_contracts.json. Magic config and damage apply surfaces are context only; gameplay remains blocked until a distinct magic damage component, attribution/resistance semantics, physical-folding exclusion, and final ordering are runtime-proven."
+                                                              },
+                       "RequiresSpellbookReuseState":  {
+                                                           "status":  "partial",
+                                                           "surfaceIds":  [
+                                                                              "spellbook.heroAndDataMagicCollections",
+                                                                              "ui.spellbookVisualOnlyBoundary",
+                                                                              "contracts.towerSpellStatePredicates"
+                                                                          ],
+                                                           "notes":  "Contracted in tower_spell_state_predicate_contracts.json. Spellbook collections/native school access are context only; gameplay remains blocked until committed prepared-state creation, successful spell-cast correlation, reuse consumption, UI exclusion, and cleanup are runtime-proven."
+                                                       },
+                       "RequiresSpellCastEvent":  {
+                                                      "status":  "partial",
+                                                      "surfaceIds":  [
+                                                                         "spellbook.castMagicEventPayloads",
+                                                                         "eventPayload.castAbilityAndMagicPayloads",
+                                                                         "contracts.spellCastEventPredicates"
+                                                                     ],
+                                                      "notes":  "custom_factions/spell_cast_event_predicate_contracts.json covers every RequiresSpellCastEvent effectKey and forbids generic any-spell, preview, or open-spellbook substitutions; spell-cast payload surfaces exist, but successful cast commit, caster law-owner correlation, target/effect correlation, cast-to-cooldown ordering, and spellbook UI synchronization remain runtime-unproven. Contract-backed matrix surface: contracts.spellCastEventPredicates."
+                                                  },
+                       "RequiresSpellSchoolOrSidClass":  {
+                                                             "status":  "mapped",
+                                                             "surfaceIds":  [
+                                                                                "magicRules.schoolSidCostCounterSets",
+                                                                                "magicRules.magicConfigBattleWorldRows",
+                                                                                "contracts.spellSchoolSidPredicates"
+                                                                            ],
+                                                             "notes":  "custom_factions/spell_school_sid_predicate_contracts.json covers every RequiresSpellSchoolOrSidClass effectKey using exact spell taxonomy groups/tags and forbids generic school, SID-substring, and UI-preview substitutes; this maps static classification only, while cooldown mutation, cast-gate behavior, spell pool identity, caster law-owner correlation, and UI synchronization remain governed by separate runtime-gated predicates. Contract-backed matrix surface: contracts.spellSchoolSidPredicates."
+                                                         },
+                       "RequiresStatusDurationMutation":  {
+                                                              "status":  "partial",
+                                                              "surfaceIds":  [
+                                                                                 "buffStatus.buffDebuffSidSurfaces",
+                                                                                 "committedDamage.buffDebuffApplyQuery",
+                                                                                 "contracts.statusDurationMutationPredicates"
+                                                                             ],
+                                                              "notes":  "custom_factions/status_duration_mutation_predicate_contracts.json covers every RequiresStatusDurationMutation effectKey and requires native status instance duration read/write or extension semantics rather than status taxonomy classification, status application alone, battle-start timing, spell text, fire/gating companions, cleanse events, or positive status names without live instance proof. Status query surfaces and explicit status taxonomy exist, but native status instance identity, duration read/write, owner/affected-stack correlation, source law-owner side correlation, battle-start or unit-turn timing, cleanup/expiration ordering, and per-status idempotence remain runtime-gated. Contract-backed matrix surface: contracts.statusDurationMutationPredicates."
+                                                          },
+                       "RequiresSupportBlessingClassification":  {
+                                                                     "status":  "mapped",
+                                                                     "surfaceIds":  [
+                                                                                        "magicRules.magicConfigBattleWorldRows",
+                                                                                        "spellbook.heroAndDataMagicCollections",
+                                                                                        "contracts.spellClassificationPredicates"
+                                                                                    ],
+                                                                     "notes":  "Explicit spell taxonomy contract covers Daylight support/blessing/heal/cleanse/protection/defense/initiative seeds; morale-specific support remains an explicit taxonomy gap. Contract-backed matrix surface: contracts.spellClassificationPredicates."
+                                                                 },
+                       "RequiresTargetOutnumbered":  {
+                                                         "status":  "partial",
+                                                         "surfaceIds":  [
+                                                                            "battleAction.formationGeometry",
+                                                                            "partySquad.heroPartyUnits",
+                                                                            "contracts.dungeonTargetStatePredicates"
+                                                                        ],
+                                                         "notes":  "Source contract requires live numeric stack-size comparison for the current target in Outnumber; smaller army, lower tier, damaged stack, global unit counts, surrounded geometry, and counterattack events without target stack count proof are forbidden substitutes. Runtime proof is still required for stack identities, count comparison timing, doctrine/counterattack correlation, and owner correlation. Contract-backed matrix surface: contracts.dungeonTargetStatePredicates."
+                                                     },
+                       "RequiresWarcryExecution":  {
+                                                       "status":  "partial",
+                                                       "surfaceIds":  [
+                                                                          "heroAbility.heroAbilityLevelRows",
+                                                                          "abilityConfig.unitAbilityDefinitions",
+                                                                          "contracts.warcryExecutionPredicates"
+                                                                      ],
+                                                       "notes":  "custom_factions/warcry_execution_predicate_contracts.json covers every RequiresWarcryExecution effectKey and anchors Stronghold-only usage to custom_factions/homm3_stronghold.json skill_faction_homm3_stronghold; it forbids spell-cast, hero-ability-level, battle/round-start, morale-trigger, cooldown-preview, magic-school-access, generic-ability, and static-skill-ownership substitutes. Native Warcry execution event, executing hero owner/side, Warcry identity, success versus preview/failure, cooldown ordering, battle timing, and idempotent reward/tempo application remain runtime-gated. Contract-backed matrix surface: contracts.warcryExecutionPredicates."
+                                                   },
+                       "RequiresWarcryOrRageEvent":  {
+                                                         "status":  "partial",
+                                                         "surfaceIds":  [
+                                                                            "heroAbility.heroAbilityLevelRows",
+                                                                            "morale.actionQueueMutation",
+                                                                            "contracts.tempoEventPredicates"
+                                                                        ],
+                                                         "notes":  "Contracted in tempo_event_predicate_contracts.json. Warcry config and morale surfaces are context only; gameplay remains blocked until committed Warcry execution or explicit Rage tempo event, damage/kill companion ordering, owner correlation, safe buff timing, and morale/static-skill substitute exclusion are runtime-proven."
+                                                     },
+                       "RequiresWoundedUnit":  {
+                                                   "status":  "partial",
+                                                   "surfaceIds":  [
+                                                                      "committedDamage.unitDamageApply",
+                                                                      "battleActor.fieldObjectAndUnitIdentity",
+                                                                      "contracts.combatScalarStatePredicates"
+                                                                  ],
+                                                   "notes":  "Contracted in combat_scalar_state_predicate_contracts.json. Damage events are context only; gameplay remains blocked until current health/max-health wounded threshold, safe speed refresh timing, cleanup, and stale snapshot exclusion are runtime-proven."
+                                               }
+                   }
+}

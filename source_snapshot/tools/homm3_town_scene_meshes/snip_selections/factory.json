@@ -1,0 +1,580 @@
+{
+ "schema": "town_full3d_snip.v1",
+ "faction": "factory",
+ "seed": "fa_v4",
+ "candidate": "fa_v6_snip",
+ "reviewer": "Claude (LLM) looking at the round-0 moderngl renders of the reachable sweep poses",
+ "rules": [
+  {
+   "id": "curtain_fade_sweep_left",
+   "round": 1,
+   "pose": "sweep_left",
+   "region": "all",
+   "groups": [
+    "terrain",
+    "env"
+   ],
+   "minAniso": 6,
+   "minRestRatio": 1.01,
+   "maxRestPx": 0,
+   "action": "fade",
+   "note": "round 0 review: every terrain/backdrop depth-step curtain (the canyon rims top right, the wedges behind the mid-ground mesas, the tails behind the dwellings) reads as hard directional streaks; blurred, the same curtains read as haze/shadowed rock. Removing them opens sky holes in the canyon floor, so fade, not remove."
+  },
+  {
+   "id": "curtain_fade_sweep_right",
+   "round": 1,
+   "pose": "sweep_right",
+   "region": "all",
+   "groups": [
+    "terrain",
+    "env"
+   ],
+   "minAniso": 6,
+   "minRestRatio": 1.01,
+   "maxRestPx": 0,
+   "action": "fade",
+   "note": "round 0 review: every terrain/backdrop depth-step curtain (the canyon rims top right, the wedges behind the mid-ground mesas, the tails behind the dwellings) reads as hard directional streaks; blurred, the same curtains read as haze/shadowed rock. Removing them opens sky holes in the canyon floor, so fade, not remove."
+  },
+  {
+   "id": "curtain_fade_sweep_high",
+   "round": 1,
+   "pose": "sweep_high",
+   "region": "all",
+   "groups": [
+    "terrain",
+    "env"
+   ],
+   "minAniso": 6,
+   "minRestRatio": 1.01,
+   "maxRestPx": 0,
+   "action": "fade",
+   "note": "round 0 review: every terrain/backdrop depth-step curtain (the canyon rims top right, the wedges behind the mid-ground mesas, the tails behind the dwellings) reads as hard directional streaks; blurred, the same curtains read as haze/shadowed rock. Removing them opens sky holes in the canyon floor, so fade, not remove."
+  },
+  {
+   "id": "tower_tbfaholy_sweep_left_r1",
+   "round": 1,
+   "pose": "sweep_left",
+   "region": [
+    1170,
+    0,
+    1340,
+    420
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the elevator tower (a see-through lattice at rest) turns into a 120-170 px wide opaque striped slab: the worst artefact at every sweep. Fading keeps the stripes (one texel per face) and clamping leaves a slab; removing its edge-on faces leaves the lattice's own front faces over the canyon."
+  },
+  {
+   "id": "tower_tbfaholy_sweep_right_r1",
+   "round": 1,
+   "pose": "sweep_right",
+   "region": [
+    1060,
+    0,
+    1220,
+    400
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the elevator tower (a see-through lattice at rest) turns into a 120-170 px wide opaque striped slab: the worst artefact at every sweep. Fading keeps the stripes (one texel per face) and clamping leaves a slab; removing its edge-on faces leaves the lattice's own front faces over the canyon."
+  },
+  {
+   "id": "tower_tbfaholy_sweep_high_r1",
+   "round": 1,
+   "pose": "sweep_high",
+   "region": [
+    1080,
+    60,
+    1200,
+    400
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the elevator tower (a see-through lattice at rest) turns into a 120-170 px wide opaque striped slab: the worst artefact at every sweep. Fading keeps the stripes (one texel per face) and clamping leaves a slab; removing its edge-on faces leaves the lattice's own front faces over the canyon."
+  },
+  {
+   "id": "slab_left_dome_sweep_left_r1",
+   "round": 1,
+   "pose": "sweep_left",
+   "region": [
+    180,
+    90,
+    320,
+    300
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "left-edge domed building (sweep_left): a dark vertical slab of side wall hangs off its right side."
+  },
+  {
+   "id": "slab_mid_right_sweep_right_r1",
+   "round": 1,
+   "pose": "sweep_right",
+   "region": [
+    1180,
+    480,
+    1340,
+    720
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the mid-right factory building: a dark smeared side wall to the right of its chimneys."
+  },
+  {
+   "id": "slab_mid_right_sweep_high_r1",
+   "round": 1,
+   "pose": "sweep_high",
+   "region": [
+    1150,
+    480,
+    1260,
+    700
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the mid-right factory building: a dark smeared side wall to the right of its chimneys."
+  },
+  {
+   "id": "tower_tbfaholy_sweep_left_r2",
+   "round": 2,
+   "pose": "sweep_left",
+   "region": [
+    1170,
+    0,
+    1340,
+    420
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the elevator tower (a see-through lattice at rest) turns into a 120-170 px wide opaque striped slab: the worst artefact at every sweep. Fading keeps the stripes (one texel per face) and clamping leaves a slab; removing its edge-on faces leaves the lattice's own front faces over the canyon. (re-run: removal reveals the next edge-on layer)"
+  },
+  {
+   "id": "tower_tbfaholy_sweep_right_r2",
+   "round": 2,
+   "pose": "sweep_right",
+   "region": [
+    1060,
+    0,
+    1220,
+    400
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the elevator tower (a see-through lattice at rest) turns into a 120-170 px wide opaque striped slab: the worst artefact at every sweep. Fading keeps the stripes (one texel per face) and clamping leaves a slab; removing its edge-on faces leaves the lattice's own front faces over the canyon. (re-run: removal reveals the next edge-on layer)"
+  },
+  {
+   "id": "tower_tbfaholy_sweep_high_r2",
+   "round": 2,
+   "pose": "sweep_high",
+   "region": [
+    1080,
+    60,
+    1200,
+    400
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the elevator tower (a see-through lattice at rest) turns into a 120-170 px wide opaque striped slab: the worst artefact at every sweep. Fading keeps the stripes (one texel per face) and clamping leaves a slab; removing its edge-on faces leaves the lattice's own front faces over the canyon. (re-run: removal reveals the next edge-on layer)"
+  },
+  {
+   "id": "slab_left_dome_sweep_left_r2",
+   "round": 2,
+   "pose": "sweep_left",
+   "region": [
+    180,
+    90,
+    320,
+    300
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "left-edge domed building (sweep_left): a dark vertical slab of side wall hangs off its right side. (re-run: removal reveals the next edge-on layer)"
+  },
+  {
+   "id": "slab_mid_right_sweep_right_r2",
+   "round": 2,
+   "pose": "sweep_right",
+   "region": [
+    1180,
+    480,
+    1340,
+    720
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the mid-right factory building: a dark smeared side wall to the right of its chimneys. (re-run: removal reveals the next edge-on layer)"
+  },
+  {
+   "id": "slab_mid_right_sweep_high_r2",
+   "round": 2,
+   "pose": "sweep_high",
+   "region": [
+    1150,
+    480,
+    1260,
+    700
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the mid-right factory building: a dark smeared side wall to the right of its chimneys. (re-run: removal reveals the next edge-on layer)"
+  },
+  {
+   "id": "tower_tbfaholy_sweep_left_r3",
+   "round": 3,
+   "pose": "sweep_left",
+   "region": [
+    1170,
+    0,
+    1340,
+    420
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the elevator tower (a see-through lattice at rest) turns into a 120-170 px wide opaque striped slab: the worst artefact at every sweep. Fading keeps the stripes (one texel per face) and clamping leaves a slab; removing its edge-on faces leaves the lattice's own front faces over the canyon. (re-run: removal reveals the next edge-on layer)"
+  },
+  {
+   "id": "tower_tbfaholy_sweep_right_r3",
+   "round": 3,
+   "pose": "sweep_right",
+   "region": [
+    1060,
+    0,
+    1220,
+    400
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the elevator tower (a see-through lattice at rest) turns into a 120-170 px wide opaque striped slab: the worst artefact at every sweep. Fading keeps the stripes (one texel per face) and clamping leaves a slab; removing its edge-on faces leaves the lattice's own front faces over the canyon. (re-run: removal reveals the next edge-on layer)"
+  },
+  {
+   "id": "tower_tbfaholy_sweep_high_r3",
+   "round": 3,
+   "pose": "sweep_high",
+   "region": [
+    1080,
+    60,
+    1200,
+    400
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the elevator tower (a see-through lattice at rest) turns into a 120-170 px wide opaque striped slab: the worst artefact at every sweep. Fading keeps the stripes (one texel per face) and clamping leaves a slab; removing its edge-on faces leaves the lattice's own front faces over the canyon. (re-run: removal reveals the next edge-on layer)"
+  },
+  {
+   "id": "slab_left_dome_sweep_left_r3",
+   "round": 3,
+   "pose": "sweep_left",
+   "region": [
+    180,
+    90,
+    320,
+    300
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "left-edge domed building (sweep_left): a dark vertical slab of side wall hangs off its right side. (re-run: removal reveals the next edge-on layer)"
+  },
+  {
+   "id": "slab_mid_right_sweep_right_r3",
+   "round": 3,
+   "pose": "sweep_right",
+   "region": [
+    1180,
+    480,
+    1340,
+    720
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the mid-right factory building: a dark smeared side wall to the right of its chimneys. (re-run: removal reveals the next edge-on layer)"
+  },
+  {
+   "id": "slab_mid_right_sweep_high_r3",
+   "round": 3,
+   "pose": "sweep_high",
+   "region": [
+    1150,
+    480,
+    1260,
+    700
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "the mid-right factory building: a dark smeared side wall to the right of its chimneys. (re-run: removal reveals the next edge-on layer)"
+  },
+  {
+   "id": "curtain_fade_sweep_left_r2",
+   "round": 2,
+   "pose": "sweep_left",
+   "region": "all",
+   "groups": [
+    "terrain",
+    "env"
+   ],
+   "minAniso": 6,
+   "minRestRatio": 1.01,
+   "maxRestPx": 1,
+   "action": "fade",
+   "note": "round 1 review: the canyon rims top right (sweep_right x 950-1900, y 20-450) still streak; the curtains left are slivers that own rest pixels, which the round-1 guard (0 px) kept. Measured operating points (rest px > 8 levels vs fa_v4): maxRestPx 0 -> 283, 1 -> 447, 4 -> 10266, 16 -> 17313 (softened 1-px rim lines, visible at 2x). 1 kept: it softens part of the rims at a near-identical rest frame."
+  },
+  {
+   "id": "curtain_fade_sweep_right_r2",
+   "round": 2,
+   "pose": "sweep_right",
+   "region": "all",
+   "groups": [
+    "terrain",
+    "env"
+   ],
+   "minAniso": 6,
+   "minRestRatio": 1.01,
+   "maxRestPx": 1,
+   "action": "fade",
+   "note": "round 1 review: the canyon rims top right (sweep_right x 950-1900, y 20-450) still streak; the curtains left are slivers that own rest pixels, which the round-1 guard (0 px) kept. Measured operating points (rest px > 8 levels vs fa_v4): maxRestPx 0 -> 283, 1 -> 447, 4 -> 10266, 16 -> 17313 (softened 1-px rim lines, visible at 2x). 1 kept: it softens part of the rims at a near-identical rest frame."
+  },
+  {
+   "id": "curtain_fade_sweep_high_r2",
+   "round": 2,
+   "pose": "sweep_high",
+   "region": "all",
+   "groups": [
+    "terrain",
+    "env"
+   ],
+   "minAniso": 6,
+   "minRestRatio": 1.01,
+   "maxRestPx": 1,
+   "action": "fade",
+   "note": "round 1 review: the canyon rims top right (sweep_right x 950-1900, y 20-450) still streak; the curtains left are slivers that own rest pixels, which the round-1 guard (0 px) kept. Measured operating points (rest px > 8 levels vs fa_v4): maxRestPx 0 -> 283, 1 -> 447, 4 -> 10266, 16 -> 17313 (softened 1-px rim lines, visible at 2x). 1 kept: it softens part of the rims at a near-identical rest frame."
+  },
+  {
+   "id": "dwelling_tails_sweep_left_r2",
+   "round": 2,
+   "pose": "sweep_left",
+   "region": [
+    0,
+    380,
+    1150,
+    820
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 6,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "round 1 review: the small dwellings in the mid/foreground band trail diagonal smeared roof/wall shards (sweep_right x 300-560 y 620-820 is the worst)."
+  },
+  {
+   "id": "dwelling_tails_sweep_right_r2",
+   "round": 2,
+   "pose": "sweep_right",
+   "region": [
+    250,
+    420,
+    1100,
+    900
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 6,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "round 1 review: the small dwellings in the mid/foreground band trail diagonal smeared roof/wall shards (sweep_right x 300-560 y 620-820 is the worst)."
+  },
+  {
+   "id": "dwelling_tails_sweep_high_r2",
+   "round": 2,
+   "pose": "sweep_high",
+   "region": [
+    300,
+    420,
+    1100,
+    860
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 6,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "round 1 review: the small dwellings in the mid/foreground band trail diagonal smeared roof/wall shards (sweep_right x 300-560 y 620-820 is the worst)."
+  },
+  {
+   "id": "slab_left_dome_sweep_high_r1",
+   "round": 1,
+   "pose": "sweep_high",
+   "region": [
+    0,
+    40,
+    70,
+    320
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "final review (sweep_high): the same left-edge domed building shows a pale yellow side-wall slab at the frame's left edge."
+  },
+  {
+   "id": "slab_left_dome_sweep_high_r2",
+   "round": 2,
+   "pose": "sweep_high",
+   "region": [
+    0,
+    40,
+    70,
+    320
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "final review (sweep_high): the same left-edge domed building shows a pale yellow side-wall slab at the frame's left edge."
+  },
+  {
+   "id": "slab_left_dome_sweep_high_r3",
+   "round": 3,
+   "pose": "sweep_high",
+   "region": [
+    0,
+    40,
+    70,
+    320
+   ],
+   "groups": [
+    "buildings"
+   ],
+   "minAniso": 0,
+   "minRestRatio": 1.0,
+   "maxRestCos": 0.15,
+   "maxRestPx": 0,
+   "action": "remove",
+   "note": "final review (sweep_high): the same left-edge domed building shows a pale yellow side-wall slab at the frame's left edge."
+  }
+ ],
+ "stopNote": "stopped after the final look: what remains at the sweeps is terrain rim streaks owned by slivers that are visible at rest (fading them costs ~10k-17k softened rest px), the dwellings' remaining roof shards, the lattice tower's sheared front faces and the blurry magnified foreground sand; a further snip round would either cost the rest frame or open sky holes (clamp measured: 23k-46k terrain->sky px)."
+}

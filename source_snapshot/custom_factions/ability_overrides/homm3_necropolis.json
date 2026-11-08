@@ -1,0 +1,530 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_necropolis",
+  "unitOverrides": {
+    "h3_skeleton": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "necropolis.skeleton_line",
+      "decisionTest": "Skeleton defines the tier baseline for necropolis; upgrades should create a meaningful standard-versus-alternate decision from this role."
+    },
+    "h3_skeleton_upg": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "necropolis.skeleton_line",
+      "decisionTest": "Skeleton Warrior should be chosen over Skeleton Archer when its standard role is the better answer for the current army, matchup, or build timing."
+    },
+    "h3_skeleton_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "necropolis.skeleton_line",
+      "decisionTest": "Skeleton Archer should be chosen over Skeleton Warrior when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_walking_dead": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_walking_dead_attack_defense_debuff_name",
+          "descriptionKey": "h3_walking_dead_attack_defense_debuff_description",
+          "nameText": "Shambling Grasp",
+          "descriptionText": "Spend 2 Focus in melee range to initially reduce an enemy's Attack and Defense by 3. Duration: 1 round.",
+          "iconKey": "magic_shorten_shadow_effect_icon",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 1,
+          "turnBehavior": "ends",
+          "attackType": "melee",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "necropolis.walking_dead_line",
+      "decisionTest": "Walking Dead defines the tier baseline for necropolis; upgrades should create a meaningful standard-versus-alternate decision from this role."
+    },
+    "h3_walking_dead_upg": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_common_ability_attack_defense_debuff_name",
+          "descriptionKey": "h3_common_ability_attack_defense_debuff_description",
+          "nameText": "Zombie Clutch",
+          "descriptionText": "Spend 1 Focus in melee range to initially reduce an enemy's Attack and Defense by 3. Duration: 2 rounds.",
+          "iconKey": "sub_skill_faction_homm3_ability_zombie_clutch",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 1,
+          "turnBehavior": "ends",
+          "attackType": "melee",
+          "energyLevel": 1,
+          "cooldown": 1,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "lesser_eldritch_ability_1_name",
+          "effectKind": "localized-ability",
+          "effectLabel": "Summoning Rite: Ra’Shoth",
+          "effectPayload": {
+            "name": "lesser_eldritch_ability_1_name",
+            "abilityType": "Ability_type_special",
+            "description": "lesser_eldritch_ability_1_description",
+            "excaptionInTooltip": "description_effect_undead_embodiment_construct_immunities",
+            "animationIndex": 2
+          },
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "necropolis.walking_dead_line",
+      "decisionTest": "Zombie should be chosen over Rot Zombie when its standard role is the better answer for the current army, matchup, or build timing."
+    },
+    "h3_walking_dead_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_common_ability_disrupting_ray_name",
+          "descriptionKey": "h3_common_ability_disrupting_ray_description",
+          "nameText": "Rotting Ray",
+          "descriptionText": "Spend 1 Focus without ending the turn to permanently reduce the target's Defense by 1.",
+          "iconKey": "sub_skill_faction_homm3_ability_rotting_ray",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 1,
+          "turnBehavior": "free",
+          "attackType": "melee",
+          "energyLevel": 1,
+          "cooldown": 1,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": "Retains the native Disrupting Ray defense reduction; runtime behavior unproven."
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "necropolis.walking_dead_line",
+      "decisionTest": "Rot Zombie should be chosen over Zombie when its alternate role creates a better army, matchup, or build-timing decision."
+    },
+    "h3_wight": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "passives:2",
+          "slotKind": "passives",
+          "index": 2,
+          "enabled": true,
+          "nameKey": "h3_common_passive_regeneration_name",
+          "descriptionKey": "h3_common_passive_regeneration_description",
+          "nameText": "Regeneration",
+          "descriptionText": "Restores health at the start of the unit's turn.",
+          "iconKey": "magic_healing_water_effect_icon",
+          "abilityType": "",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 0,
+          "cooldown": 0,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        },
+        {
+          "key": "passives:0",
+          "slotKind": "passives",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_common_melee_attack_name",
+          "descriptionKey": "h3_common_melee_attack_description",
+          "nameText": "Melee Attack",
+          "descriptionText": "Attacks an adjacent enemy unit.",
+          "iconKey": "sub_skill_assault_1_icon",
+          "abilityType": "",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 0,
+          "cooldown": 0,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "necropolis.wight_line",
+      "decisionTest": "Wight defines the tier baseline for necropolis; upgrades should create a meaningful standard-versus-alternate decision from this role."
+    },
+    "h3_wight_upg": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "passives:2",
+          "slotKind": "passives",
+          "index": 2,
+          "enabled": true,
+          "nameKey": "h3_common_passive_regeneration_name",
+          "descriptionKey": "h3_common_passive_regeneration_description",
+          "nameText": "Regeneration",
+          "descriptionText": "Restores health at the start of the unit's turn.",
+          "iconKey": "magic_healing_water_effect_icon",
+          "abilityType": "",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 0,
+          "cooldown": 0,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        },
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_common_ability_mana_transfer_name",
+          "descriptionKey": "h3_common_ability_mana_transfer_description",
+          "nameText": "Mana Channel",
+          "descriptionText": "Spend 2 Focus to transfer 2-6 mana from the enemy hero to your hero.",
+          "iconKey": "sub_skill_faction_unfrozen_2_ability",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "necropolis.wight_line",
+      "decisionTest": "Wraith should be chosen over Banshee when its standard role is the better answer for the current army, matchup, or build timing."
+    },
+    "h3_wight_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "passives:2",
+          "slotKind": "passives",
+          "index": 2,
+          "enabled": true,
+          "nameKey": "h3_common_passive_regeneration_name",
+          "descriptionKey": "h3_common_passive_regeneration_description",
+          "nameText": "Regeneration",
+          "descriptionText": "Restores health at the start of the unit's turn.",
+          "iconKey": "magic_healing_water_effect_icon",
+          "abilityType": "",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 0,
+          "cooldown": 0,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "",
+          "effectKind": "",
+          "effectLabel": "",
+          "effectPayload": {},
+          "notes": ""
+        },
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "night_6_magic_deaths_grip_name",
+          "descriptionKey": "night_6_magic_deaths_grip_description",
+          "nameText": "Psychic Scream",
+          "descriptionText": "Spend 2 Focus without ending the turn to deal 40 pure damage plus 8 per stack.",
+          "iconKey": "sub_skill_faction_homm3_ability_psychic_scream",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "free",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "night_6_magic_deaths_grip:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Umbral Grip L1",
+          "effectPayload": {
+            "spellSid": "night_6_magic_deaths_grip",
+            "spellTier": 2,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "buffSid": "",
+            "duration": null,
+            "nameKey": "night_6_magic_deaths_grip_name",
+            "descriptionKey": "night_6_magic_deaths_grip_description",
+            "icon": "sub_skill_faction_homm3_ability_psychic_scream",
+            "school": "night",
+            "dealer": {
+              "tags": [
+                "absolute_damage"
+              ],
+              "castTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "enemy",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "affectTargetParams": {
+                "targetTags": [
+                  "unit"
+                ],
+                "castTarget_": "enemy",
+                "targetCondition_": "alive",
+                "selection": "object"
+              },
+              "attackPatternSid": "attack_single_x100",
+              "damageTarget_": "enemy",
+              "damageType_": "absolute",
+              "minBaseDmg": 40,
+              "maxBaseDmg": 40,
+              "minStackDmg": 8,
+              "maxStackDmg": 8
+            }
+          },
+          "notes": ""
+        }
+      ],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "necropolis.wight_line",
+      "decisionTest": "Banshee should be chosen over Wraith when its alternate role creates a better army, matchup, or build-timing decision."
+    },
+    "h3_vampire": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "necropolis.vampire_line",
+      "decisionTest": "Vampire defines the tier baseline for necropolis; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_vampire_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "necropolis.vampire_line",
+      "decisionTest": "Vampire Lord should be chosen over Vampire Prince when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_vampire_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "necropolis.vampire_line",
+      "decisionTest": "Vampire Prince should be chosen over Vampire Lord when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_lich": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "necropolis.lich_line",
+      "decisionTest": "Lich defines the tier baseline for necropolis; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_lich_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "necropolis.lich_line",
+      "decisionTest": "Power Lich should be chosen over Lich Master when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_lich_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "necropolis.lich_line",
+      "decisionTest": "Lich Master should be chosen over Power Lich when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_black_knight": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "necropolis.black_knight_line",
+      "decisionTest": "Black Knight defines the tier baseline for necropolis; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_black_knight_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "necropolis.black_knight_line",
+      "decisionTest": "Dread Knight should be chosen over Dreadtaur when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_black_knight_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "necropolis.black_knight_line",
+      "decisionTest": "Dreadtaur should be chosen over Dread Knight when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_black_knight_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_black_knight_upg_alt_redesign_ability_description",
+          "nameText": "Vulnerability",
+          "descriptionText": "Spend 2 Focus to make an enemy take 30% more damage for 1 round.",
+          "iconKey": "sub_skill_faction_homm3_ability_vulnerability",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 4,
+          "charges": "",
+          "effectKey": "night_11_magic_vulnerability:level:2",
+          "effectKind": "spell-effect",
+          "effectLabel": "Vulnerability",
+          "effectPayload": {
+            "spellSid": "night_11_magic_vulnerability",
+            "spellTier": 4,
+            "spellLevel": 2,
+            "dealerIndex": 1,
+            "duration": 1,
+            "buffSid": "magic_vulnerability_effect_1"
+          },
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass.",
+          "spellSid": "night_11_magic_vulnerability",
+          "spellTier": 4,
+          "spellLevel": 2,
+          "dealerIndex": 1,
+          "duration": 1,
+          "buffSid": "magic_vulnerability_effect_1"
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_bone_dragon": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "necropolis.bone_dragon_line",
+      "decisionTest": "Bone Dragon defines the tier baseline for necropolis; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_bone_dragon_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "necropolis.bone_dragon_line",
+      "decisionTest": "Ghost Dragon should be chosen over Spectral Dragon when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_bone_dragon_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "necropolis.bone_dragon_line",
+      "decisionTest": "Spectral Dragon should be chosen over Ghost Dragon when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_bone_dragon_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_bone_dragon_upg_alt_redesign_ability_description",
+          "nameText": "Naira's Kiss",
+          "descriptionText": "Spend 2 Focus to mark an enemy for 1 round; when it acts, it takes 200 pure damage plus 15 per stack.",
+          "iconKey": "sub_skill_faction_homm3_ability_nairas_kiss",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 5,
+          "charges": "",
+          "effectKey": "night_14_magic_nairas_kiss:level:2",
+          "effectKind": "spell-effect",
+          "effectLabel": "Naira's Kiss",
+          "effectPayload": {
+            "spellSid": "night_14_magic_nairas_kiss",
+            "spellTier": 5,
+            "spellLevel": 2,
+            "dealerIndex": 1,
+            "duration": 1,
+            "buffSid": "magic_nairas_kiss_effect_1"
+          },
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass.",
+          "spellSid": "night_14_magic_nairas_kiss",
+          "spellTier": 5,
+          "spellLevel": 2,
+          "dealerIndex": 1,
+          "duration": 1,
+          "buffSid": "magic_nairas_kiss_effect_1"
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_golem_upg",
+ "status": "look",
+ "notes": "pilot: metallic construct",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": [],
+  "metal": {
+   "mask": {
+    "source": "meshyMetallic",
+    "metallic": [
+     0.45,
+     0.8
+    ]
+   },
+   "defRegion": {
+    "projected": true,
+    "erode": 2,
+    "close": 2
+   },
+   "normalDetail": 0.5,
+   "notes": "Meshy metallicRoughness B channel; DEF region = the DEF body under the mesh's projected metal mask (roster rollout 2026-09-25). 2026-10-10 lane-A: erode 1 -> 2 (fleet rebuild for the authenticity pass measured region L-hist 3.92 -> 3.95 at erode 1, a fail; the 1-px silhouette slop of the projected mask let background-edge pixels into the region; erode 2: 4.69 -> 4.49)."
+  }
+ },
+ "lights": [],
+ "vfx": {
+  "layers": []
+ }
+}

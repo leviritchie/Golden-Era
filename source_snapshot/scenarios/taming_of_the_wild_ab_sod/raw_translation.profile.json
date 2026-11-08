@@ -1,0 +1,62 @@
+{
+  "schema": "homm3.olden_layered_atlas_scenario_profile.v1",
+  "scenarioId": "taming_of_the_wild_ab_sod",
+  "mapSid": "h3_stronghold_taming_of_the_wild_raw_translation",
+  "title": "Taming of the wild - Raw Translation",
+  "description": "Parallel Taming of the wild emit-only raw_translation map (same pipeline class as Homecoming). Runtime gameplay remains user-unvalidated.",
+  "artifactRoot": "artifacts/campaign_port_poc/ab_sod_campaigns/taming_of_the_wild",
+  "outputSubdir": "raw_translation_map",
+  "inputs": {
+    "alignment": "artifacts/campaign_port_poc/ab_sod_campaigns/taming_of_the_wild/olden_storage_alignment/taming_of_the_wild.olden_storage_alignment.json",
+    "substitutionMap": "artifacts/campaign_port_poc/ab_sod_campaigns/taming_of_the_wild/entity_substitutions/taming_of_the_wild.olden_entity_substitution_map.json",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "coreCatalog": "artifacts/campaign_port_poc/olden_entity_catalog/olden_core_map_valid_entity_catalog.json",
+    "templateMap": "V:\\SteamLibrary\\steamapps\\common\\Heroes of Might and Magic Olden Era - Golden Era\\HeroesOldenEra_Data\\StreamingAssets\\maps\\Thirst_for_Power.map"
+  },
+  "sourceEnvelope": {
+    "width": 72,
+    "height": 72
+  },
+  "layers": {
+    "layerIds": [
+      0,
+      1
+    ],
+    "undergroundLayers": [
+      1
+    ]
+  },
+  "spawn": {
+    "factionSid": "homm3_stronghold",
+    "heroSid": "homm3_stronghold_hero_17",
+    "playersCount": 1
+  },
+  "startHeroContract": {
+    "sourceLayer": 0,
+    "heroType": 104,
+    "owner": 0,
+    "payloadKind": "hero_or_prison",
+    "templateAnimation": "ah13_e.def",
+    "templateObjectId": 34,
+    "sourceKey": "0:9:63",
+    "sourceIndex": 67
+  },
+  "pathability": {
+    "surfaceGapFill": false,
+    "emitCoreOverlay": true
+  },
+  "knownGaps": [
+    "AB/SoD StoryHub raw_translation first pass; videos deferred; runtime unvalidated.",
+    "Campaign-unique heroes may map lossily via h3m_hero_sid."
+  ],
+  "runtimeScriptComment": "taming_of_the_wild raw-translation runtime script generated from campaign alignment story.",
+  "coreOverlay": {
+    "mode": "emit_fresh"
+  },
+  "validation": {
+    "expectedSourceLayerEntityCounts": {
+      "0": 1547,
+      "1": 53
+    }
+  }
+}

@@ -1,0 +1,1666 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_necropolis",
+  "heroOverrides": {
+    "homm3_necropolis_hero_1": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Death Knight",
+      "startSquad": [
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_walking_dead",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_resistance",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Straker",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_1",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_1_source_h3_walking_dead_specialist",
+        "nameText": "Walking Dead Specialist",
+        "descriptionText": "Walking Dead creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_walking_dead",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_walking_dead",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_walking_dead",
+              "h3_walking_dead_upg",
+              "h3_walking_dead_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_walking_dead",
+              "h3_walking_dead_upg",
+              "h3_walking_dead_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_walking_dead",
+              "h3_walking_dead_upg",
+              "h3_walking_dead_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_walking_dead",
+              "h3_walking_dead_upg",
+              "h3_walking_dead_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_walking_dead",
+              "h3_walking_dead_upg",
+              "h3_walking_dead_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_walking_dead"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_2": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Death Knight",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_siege",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Vokial",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_2",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_2_source_h3_vampire_specialist",
+        "nameText": "Vampire Specialist",
+        "descriptionText": "Vampire creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_vampire",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_vampire",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_vampire",
+              "h3_vampire_upg",
+              "h3_vampire_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_vampire",
+              "h3_vampire_upg",
+              "h3_vampire_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_vampire",
+              "h3_vampire_upg",
+              "h3_vampire_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_vampire",
+              "h3_vampire_upg",
+              "h3_vampire_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_vampire",
+              "h3_vampire_upg",
+              "h3_vampire_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_vampire"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_3": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Death Knight",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_enlightenment",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Moandor",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_3",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_3_source_h3_lich_specialist",
+        "nameText": "Lich Specialist",
+        "descriptionText": "Lich creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_lich",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_lich",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_lich",
+              "h3_lich_upg",
+              "h3_lich_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_lich",
+              "h3_lich_upg",
+              "h3_lich_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_lich",
+              "h3_lich_upg",
+              "h3_lich_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_lich",
+              "h3_lich_upg",
+              "h3_lich_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_lich",
+              "h3_lich_upg",
+              "h3_lich_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_lich"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_4": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Death Knight",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_tactics",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Charna",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_4",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_4_source_h3_wight_specialist",
+        "nameText": "Wight Specialist",
+        "descriptionText": "Wight creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_wight",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_wight",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wight",
+              "h3_wight_upg",
+              "h3_wight_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wight",
+              "h3_wight_upg",
+              "h3_wight_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wight",
+              "h3_wight_upg",
+              "h3_wight_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wight",
+              "h3_wight_upg",
+              "h3_wight_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wight",
+              "h3_wight_upg",
+              "h3_wight_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_wight"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_5": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Death Knight",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Tamika",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_5",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_5_source_h3_black_knight_specialist",
+        "nameText": "Black Knight Specialist",
+        "descriptionText": "Black Knight creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_black_knight",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_black_knight",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_black_knight",
+              "h3_black_knight_upg",
+              "h3_black_knight_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_black_knight",
+              "h3_black_knight_upg",
+              "h3_black_knight_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_black_knight",
+              "h3_black_knight_upg",
+              "h3_black_knight_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_black_knight",
+              "h3_black_knight_upg",
+              "h3_black_knight_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_black_knight",
+              "h3_black_knight_upg",
+              "h3_black_knight_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_black_knight"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_6": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Death Knight",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [],
+      "nameText": "Isra",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_6",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_6_source_necromancy_specialist",
+        "nameText": "Necromancy",
+        "descriptionText": "Represents a HoMM3 Necromancy specialist under the current post-battle Skeleton recovery design.",
+        "iconKey": "night_3_magic_enlarge_shadow",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "maxHealth",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 4
+            }
+          },
+          {
+            "type": "unitStat",
+            "parameters": [
+              "initiative",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 8
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:necromancy"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_7": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Death Knight",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Clavius",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_7",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_7_source_gold_specialist",
+        "nameText": "Gold",
+        "descriptionText": "Generates additional gold each day.",
+        "iconKey": "skill_economy",
+        "bonuses": [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              "350"
+            ],
+            "upgrade": {
+              "increment": 50,
+              "levelStep": 5
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:gold"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_8": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Death Knight",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_protection",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Galthran",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_8",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_8_source_h3_skeleton_specialist",
+        "nameText": "Skeleton Specialist",
+        "descriptionText": "Skeleton creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_skeleton",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_skeleton",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_skeleton",
+              "h3_skeleton_upg",
+              "h3_skeleton_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_skeleton",
+              "h3_skeleton_upg",
+              "h3_skeleton_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_skeleton",
+              "h3_skeleton_upg",
+              "h3_skeleton_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_skeleton",
+              "h3_skeleton_upg",
+              "h3_skeleton_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_skeleton",
+              "h3_skeleton_upg",
+              "h3_skeleton_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_skeleton"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_9": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Necromancer",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Septienna",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_9",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_9_olden_era_masterful_night_7_magic_fatal_decay",
+        "nameText": "Masterful Fatal Decay",
+        "descriptionText": "Starts with Masterful Fatal Decay. It casts as one tier stronger. This version lasts 5 additional rounds.",
+        "iconKey": "night_7_magic_fatal_decay",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "night_7_magic_fatal_decay",
+              "night_7_magic_fatal_decay_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:night_7_magic_fatal_decay",
+        "masterfulSpellBaseSid": "night_7_magic_fatal_decay",
+        "masterfulSpellSpecialSid": "night_7_magic_fatal_decay_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_10": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Necromancer",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Aislinn",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_10",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_10_olden_era_masterful_space_13_magic_black_hole",
+        "nameText": "Masterful Black Hole",
+        "descriptionText": "Starts with Masterful Black Hole. It casts as one tier stronger.",
+        "iconKey": "space_13_magic_black_hole",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "space_13_magic_black_hole",
+              "space_13_magic_black_hole_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:space_13_magic_black_hole",
+        "masterfulSpellBaseSid": "space_13_magic_black_hole",
+        "masterfulSpellSpecialSid": "space_13_magic_black_hole_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_11": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Necromancer",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_sorcery",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Sandro",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_11",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_11_source_sorcery_specialist",
+        "nameText": "Sorcery",
+        "descriptionText": "Increases spell damage and weakens enemy spell pressure as the hero gains levels.",
+        "iconKey": "skill_sorcery",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicAttackPerBonus",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          },
+          {
+            "type": "heroStatBattle",
+            "receiverAllegiance": "enemy",
+            "parameters": [
+              "magicAttackPerBonus",
+              "-0.10"
+            ],
+            "upgrade": {
+              "increment": -0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:sorcery"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_12": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Necromancer",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_mastery",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Nimbus",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_12",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_12_source_eagleEye_specialist",
+        "nameText": "Eagle Eye",
+        "descriptionText": "Improves spell pressure and magical awareness in combat.",
+        "iconKey": "skill_scouting",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicAttackPerBonus",
+              "0.06"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "viewRadius",
+              "1"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:eagleEye"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_13": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Necromancer",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Thant",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_13",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_13_olden_era_masterful_space_12_magic_rewind",
+        "nameText": "Masterful Rewind Life",
+        "descriptionText": "Starts with Masterful Rewind Life. It casts as one tier stronger.",
+        "iconKey": "space_12_magic_rewind",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "space_12_magic_rewind",
+              "space_12_magic_rewind_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:space_12_magic_rewind",
+        "masterfulSpellBaseSid": "space_12_magic_rewind",
+        "masterfulSpellSpecialSid": "space_12_magic_rewind_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_14": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Necromancer",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_enlightenment",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Xsi",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_14",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_14_source_stone_specialist",
+        "nameText": "Stone",
+        "descriptionText": "Generates additional stone each day.",
+        "iconKey": "skill_economy",
+        "bonuses": [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "stone",
+              "1"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 7
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:stone"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_15": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Necromancer",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [],
+      "nameText": "Vidomina",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_15",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_15_source_necromancy_specialist",
+        "nameText": "Necromancy",
+        "descriptionText": "Represents a HoMM3 Necromancy specialist under the current post-battle Skeleton recovery design.",
+        "iconKey": "night_3_magic_enlarge_shadow",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "maxHealth",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 4
+            }
+          },
+          {
+            "type": "unitStat",
+            "parameters": [
+              "initiative",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 8
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:necromancy"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_16": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Necromancer",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Nagash",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_16",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_16_source_mysticism_specialist",
+        "nameText": "Mysticism",
+        "descriptionText": "Increases the hero's mana reserves and allows one additional spell use each round.",
+        "iconKey": "skill_wisdom",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "manaBonusPercent",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.05,
+              "levelStep": 5
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicUsageLimitBonus",
+              "1"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:mysticism"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_necropolis_hero_17": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Death Knight",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_sorcery",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Finneas",
+      "descriptionText": "Finneas Vilmar rose quickly through the Necromancer ranks after King Gryphonheart's death. Ambitious and ruthless, he seeks to claim Deyja's throne for himself.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_17",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_17_source_h3_lich_specialist",
+        "nameText": "Liches",
+        "descriptionText": "Improves Liches and their upgrades in the hero's army.",
+        "iconKey": "h3_lich",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_lich",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_lich",
+              "h3_lich_upg",
+              "h3_lich_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_lich",
+              "h3_lich_upg",
+              "h3_lich_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_lich",
+              "h3_lich_upg",
+              "h3_lich_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_lich",
+              "h3_lich_upg",
+              "h3_lich_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_lich",
+              "h3_lich_upg",
+              "h3_lich_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_lich"
+      },
+      "notes": "Campaign hero Finneas; creature specialty from homm3_necropolis_hero_3."
+    },
+    "homm3_necropolis_hero_18": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Death Knight",
+      "startSquad": [
+        {
+          "sid": "h3_skeleton",
+          "min": 20,
+          "max": 30
+        },
+        {
+          "sid": "h3_walking_dead",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_wight",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_skeleton",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Haart Lich",
+      "descriptionText": "Once a living knight of Erathia, Lord Haart was transformed into a lich after his betrayal. Now bound to undeath, he serves necromantic masters with cold precision.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_necropolis_18",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_necropolis_hero_18_source_h3_black_knight_specialist",
+        "nameText": "Black Knights",
+        "descriptionText": "Improves Black Knights and their upgrades in the hero's army.",
+        "iconKey": "h3_black_knight",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_black_knight",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_black_knight",
+              "h3_black_knight_upg",
+              "h3_black_knight_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_black_knight",
+              "h3_black_knight_upg",
+              "h3_black_knight_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_black_knight",
+              "h3_black_knight_upg",
+              "h3_black_knight_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_black_knight",
+              "h3_black_knight_upg",
+              "h3_black_knight_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_black_knight",
+              "h3_black_knight_upg",
+              "h3_black_knight_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_black_knight"
+      },
+      "notes": "Campaign hero Haart Lich; creature specialty from homm3_necropolis_hero_5."
+    }
+  }
+}

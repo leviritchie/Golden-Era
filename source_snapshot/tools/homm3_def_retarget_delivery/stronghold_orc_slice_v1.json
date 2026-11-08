@@ -1,0 +1,31 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "stronghold_orc_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/stronghold_orc_slice_v1",
+  "note": "float64 CS bake v3 + cs_rekey re-freeze 2026-09-30 (docs/homm3_cs_bake_float64.md) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_orc 0.1418. | look B (vanilla philosophy finish, finish.py; look.py --stages finish,apply), animation unchanged Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_orc 0.1418. | authenticity lane B 2026-10-11: Death leap with both arms flung overhead Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_orc 0.1418.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_orc",
+      "gameSid": "h3_orc",
+      "bundleName": "custom_units_h3_orc",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "4d4e8258c2fa9b66a89540de884e9aa515fae9ac9086b9b9bccc8a9d12344390",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "7b09a3a7613f3afdbb432f86b59a4c05b7e9fc6214c72ad22063c5fa1b70d86c",
+        "idleRetimedGlbSha256": "9b7758e91c61d8f1b0010e904bcc56f7212448e2f18016050d3b01caa0e42d96",
+        "vfxManifestSha256": "2c8b52f4ed4ea7e431f87c2ed533f02212547e4d060fd8c52bd8fb2ba103adcb",
+        "specSha256": "403ab4bf6873cd995e571d2f6140558693ac6e9908f56807c796c30439158fa8",
+        "basecolorSha256": "08bf689f27fd62c7c38158dedafc1ddfc5698b8db230940b3db7876a879cd5b0"
+      }
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+{
+ "unit": "h3_fargazer",
+ "joints": {
+  "Hips": [
+   0,
+   0,
+   0.98
+  ],
+  "Spine": [
+   0,
+   0,
+   1.12
+  ],
+  "Spine1": [
+   0,
+   0,
+   1.22
+  ],
+  "Spine2": [
+   0,
+   0,
+   1.32
+  ],
+  "Neck": [
+   0,
+   0,
+   1.4
+  ],
+  "Head": [
+   0,
+   0,
+   1.45
+  ],
+  "HeadTop_End": [
+   0,
+   0,
+   1.72
+  ],
+  "LeftUpLeg": [
+   0.1,
+   0,
+   0.97
+  ],
+  "LeftLeg": [
+   0.15,
+   0,
+   0.65
+  ],
+  "LeftFoot": [
+   0.2,
+   0,
+   0.3
+  ],
+  "LeftToeBase": [
+   0.22,
+   -0.05,
+   0.1
+  ],
+  "LeftToe_End": [
+   0.25,
+   -0.15,
+   0.02
+  ],
+  "RightUpLeg": [
+   -0.1,
+   0,
+   0.97
+  ],
+  "RightLeg": [
+   -0.15,
+   0,
+   0.65
+  ],
+  "RightFoot": [
+   -0.2,
+   0,
+   0.3
+  ],
+  "RightToeBase": [
+   -0.22,
+   -0.05,
+   0.1
+  ],
+  "RightToe_End": [
+   -0.25,
+   -0.15,
+   0.02
+  ]
+ },
+ "extensions": [
+  "dungeon_fixweights",
+  "dungeon_yawclamp",
+  "dungeon_drop"
+ ],
+ "props": [
+  {
+   "name": "body",
+   "bone": "Spine2",
+   "box": [
+    [
+     -0.6,
+     -0.5,
+     0.99
+    ],
+    [
+     0.6,
+     0.5,
+     1.85
+    ]
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 30,
+   "dy": 30,
+   "roll": 30
+  }
+ },
+ "tiltClamp": 25,
+ "yawClamp": 20,
+ "deathDrop": {
+  "frames": 1,
+  "hipsZ": 0.35,
+  "splay": 10
+ },
+ "strideExempt": "levitates in HoMM3 (the DEF eye drifts with its tentacles hanging; the Move floor sits 0.07 H above the Idle floor): the UpLeg chains are tentacles, and planting them would walk a floating eye (pre-stride slip 1.38)",
+ "strideExemptLegs": [
+  "LeftUpLeg",
+  "RightUpLeg"
+ ],
+ "groundContact": {
+  "exempt": "levitates: its lowest point is hanging tentacles, not a ground contact (strideExempt levitates; DEF shadow sits below the body); grounding would pin the tentacle tips to the floor (measured Defence Hips -0.124 at entry on the grounded candidate); user-approved exception 2026-09-28"
+ },
+ "glbPatch": {
+  "reason": "2026-10-11 lane B authenticity (gaze): the DEF fargazer keeps its central eye on the enemy in every clip, but the capture spun the eye body (Spine2) up to 90-120 deg sideways (Move keys 3-11, MoveStart/MoveEnd/Mouseover +70..+95, AttackFront -120 mid-beam, Death -45), so the eye turned away for whole stretches. Per key, Spine2 is turned about world Y so its forward yaw stays within +-15 deg (small sway kept; pitch untouched); tentacles unchanged. Split keyRotations, regridded on Spine2.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_fargazer_gaze_yaw_rot.json",
+    "regrid": true,
+    "sha256": "c488424b590874a62ae8b0e859df95aac8f3bdba7b7005adb8345f92cbc32d28"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_fargazer_gaze_yaw_rot.json",
+    "regrid": true,
+    "sha256": "c488424b590874a62ae8b0e859df95aac8f3bdba7b7005adb8345f92cbc32d28"
+   }
+  ]
+ }
+}

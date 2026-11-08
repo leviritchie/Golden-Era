@@ -1,0 +1,170 @@
+{
+ "unit": "h3_evil_eye",
+ "joints": {
+  "Hips": [
+   0,
+   0,
+   1.02
+  ],
+  "Spine": [
+   0,
+   0,
+   1.12
+  ],
+  "Spine1": [
+   0,
+   0,
+   1.22
+  ],
+  "Spine2": [
+   0,
+   0,
+   1.32
+  ],
+  "Neck": [
+   0,
+   0,
+   1.4
+  ],
+  "Head": [
+   0,
+   0,
+   1.45
+  ],
+  "HeadTop_End": [
+   0,
+   0,
+   1.72
+  ],
+  "LeftUpLeg": [
+   0.1,
+   0,
+   1.0
+  ],
+  "LeftLeg": [
+   0.15,
+   0,
+   0.65
+  ],
+  "LeftFoot": [
+   0.2,
+   0,
+   0.3
+  ],
+  "LeftToeBase": [
+   0.22,
+   -0.05,
+   0.1
+  ],
+  "LeftToe_End": [
+   0.25,
+   -0.15,
+   0.02
+  ],
+  "RightUpLeg": [
+   -0.1,
+   0,
+   1.0
+  ],
+  "RightLeg": [
+   -0.15,
+   0,
+   0.65
+  ],
+  "RightFoot": [
+   -0.2,
+   0,
+   0.3
+  ],
+  "RightToeBase": [
+   -0.22,
+   -0.05,
+   0.1
+  ],
+  "RightToe_End": [
+   -0.25,
+   -0.15,
+   0.02
+  ]
+ },
+ "extensions": [
+  "dungeon_fixweights",
+  "dungeon_yawclamp",
+  "dungeon_drop"
+ ],
+ "props": [
+  {
+   "name": "body",
+   "bone": "Spine2",
+   "box": [
+    [
+     -0.6,
+     -0.5,
+     1.04
+    ],
+    [
+     0.6,
+     0.5,
+     1.85
+    ]
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 30,
+   "dy": 30,
+   "roll": 30
+  }
+ },
+ "tiltClamp": 25,
+ "yawClamp": 20,
+ "deathDrop": {
+  "frames": 1,
+  "hipsZ": 0.35,
+  "splay": 10
+ },
+ "strideExempt": "levitates in HoMM3 (the DEF eye drifts with its tentacles hanging; no foot plants): the UpLeg chains are tentacles, and planting them would walk a floating eye (pre-stride slip 2.43, ratio 0.52 measured on tentacle tips)",
+ "strideExemptLegs": [
+  "LeftUpLeg",
+  "RightUpLeg"
+ ],
+ "groundContact": {
+  "exempt": "levitates: its lowest point is hanging tentacles, not a ground contact (strideExempt levitates; DEF shadow sits below the body); grounding would pin the tentacle tips to the floor (measured Defence Hips -0.133 at entry on the grounded candidate); user-approved exception 2026-09-28"
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-10 authenticity: gaze - the DEF eye keeps its great eye on the enemy while it drifts; the capture spun the eye body (Spine2) up to 110 deg in Move and turned it 37 deg away in Defence f6-f7. Spine2 holds 85% of its f0 world orientation through Move (residual <=16 deg), the tentacle root (Hips) half (51 -> 25 deg), Defence f5-f8 70%; the tentacles keep their own flail; floaters (2026-10-10 coordinator send-back): rigid trunk - Hips/Spine/Spine1 follow the eye body so the tentacle-root rings stay welded to it (medium 8.6 cm Hitted f3 / 6.7 cm Move f7 -> none medium)",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_evil_eye_gaze_rot.json",
+    "sha256": "c05498765d21ed3e18155273326a3436efb682bea5a9c82d138d9964dcd3a902"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_evil_eye_gaze_rot.json",
+    "sha256": "c05498765d21ed3e18155273326a3436efb682bea5a9c82d138d9964dcd3a902"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_evil_eye_trunk_tr.json",
+    "sha256": "58fbfbf34ffeabcd1eb63f771ecb8fa18600333d5f5fcb92eeb5ad611001b790"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_evil_eye_trunk_rot.json",
+    "sha256": "58d942cd254df2bd09f59fcda038b90aadbf681429ae9f61403bd4165822359d"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_evil_eye_trunk_rot.json",
+    "sha256": "58d942cd254df2bd09f59fcda038b90aadbf681429ae9f61403bd4165822359d"
+   }
+  ]
+ }
+}

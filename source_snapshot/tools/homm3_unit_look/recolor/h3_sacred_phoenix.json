@@ -1,0 +1,52 @@
+{
+  "schema": "homm3_unit_recolor.v1",
+  "unit": "h3_sacred_phoenix",
+  "gameSid": "h3_firebird_upg_alt",
+  "reason": "2026-10-12 user: \"sacred phoenix needs to be a recolor of firebird + effects, just like phoenix is\". The unit ships h3_firebird's frozen mesh, rig and clips (conflux_slice_v1) with the sacred phoenix DEF palette (lvl7Alt: pale white-gold body, gold wings); its fire comes from the vanilla-style spec.",
+  "source": {
+    "selection": "conflux_slice_v1",
+    "labSid": "h3_firebird"
+  },
+  "def": {
+    "source": "CPHX",
+    "sourceUnit": "h3_phoenix",
+    "target": "lvl7Alt",
+    "note": "lvl7Alt is a pixel-for-pixel palette swap of CPHX (same frame list, same opaque px); CFBIRD's frame list differs (no 01_08), so the pairs are CPHX -> lvl7Alt. sourceStats texture: the firebird texels give the source statistics, the pairs select the target pixels."
+  },
+  "sourceClasses": {
+    "default": "fire",
+    "rules": [
+      {"class": "dark", "L_lt": 14}
+    ]
+  },
+  "targetClasses": {
+    "default": "gold",
+    "rules": [
+      {"class": "dark", "L_lt": 14}
+    ]
+  },
+  "boneGroups": {
+    "wing": ["LeftWing", "RightWing", "WingL_00", "WingL_01", "WingL_02", "WingL_03", "WingR_00", "WingR_01", "WingR_02", "WingR_03"],
+    "head": ["Head", "Neck"]
+  },
+  "restGroup": "body",
+  "regions": {
+    "golden": {"C": [200, 201], "h": [0, 1]},
+    "eye": {"b_lt": -200, "C_gt": 500, "groups": ["head"]},
+    "beak": {"groups": ["head"], "z": [100, 101]},
+    "body": [
+      {"region": "wing", "groups": ["wing"]},
+      {"region": "head", "groups": ["head"]},
+      {"region": "body", "groups": ["body"]}
+    ]
+  },
+  "transfer": {
+    "wing": [["fire"], ["gold"]],
+    "head": [["fire"], ["gold"]],
+    "body": [["fire"], ["gold"]]
+  },
+  "zClamp": 2.5,
+  "keepDark": {"L": [8, 14], "C": [6, 12]},
+  "minPairs": 200,
+  "sourceStats": "texture"
+}

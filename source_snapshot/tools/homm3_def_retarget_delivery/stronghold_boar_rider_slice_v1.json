@@ -1,0 +1,31 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "stronghold_boar_rider_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/stronghold_boar_rider_slice_v1",
+  "note": "Separate selection for toa_boar_rider (game sid h3_wolf_rider_upg_alt), whose installed bundle is the idle-only Wolf Raider stopgap with no Unit_AttackFront (attack_slot_remap_cohorts.json pendingFleetBuild). Built from retarget unit h3_boar_rider (fleet_census.SOURCE_UNIT) after fleet_rebuild.py 2026-09-29 (ground stage + rawAccepted look re-earned). Kept out of stronghold_slice_v1 so that held slice is not changed. Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: toa_boar_rider 0.4147. | lane D 2026-10-11: hand_c1 limb cut (fist+mace off the mane) + fist/mane skin split; DEF g12 mace swing glbPatch; strideMatch k0.7 Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: toa_boar_rider 0.4599.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "toa_boar_rider",
+      "gameSid": "h3_wolf_rider_upg_alt",
+      "bundleName": "custom_units_toa_boar_rider",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "db09c859a0530be7f3a5584d6a2284fe7db204f68c1fbc023871a6c532e8462a",
+      "identityReview": "db09c859a0530be7f3a5584d6a2284fe7db204f68c1fbc023871a6c532e8462a",
+      "frozen": {
+        "lookDeliveredGlbSha256": "ca07fc43c017ce2951c634f3ab08eece954b0e2f138940e41a745fe24a4ca260",
+        "idleRetimedGlbSha256": "97ea4a245f5ea91fa344013f6cf7babc2977486901994282941c30ccdab2836c",
+        "vfxManifestSha256": "b5e670c0bf46df53cf308ff7b35aa5ca510d5b2c810a26e9c3e1995dcb3f43c3",
+        "specSha256": "1c69e0659de033569f375ba9ae6b2abf3ee1bd86e975bd784cf8d2ecba921cd2",
+        "basecolorSha256": "8aedb28dd7a925ebb56a2714f325a3bfc2c28cfde9b23cb6776b3b60bc030e0f"
+      }
+    }
+  ]
+}

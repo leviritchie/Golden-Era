@@ -1,0 +1,110 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_gold_dragon",
+ "status": "look",
+ "notes": "rampart rollout: dragon with the DEF's own golden fire breath as a region-cut file-mask flipbook (defEffects keeps only the outer specks: the breath is drawn in the body's own colours) and its fitted dynamic light",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": [],
+  "defSegmenter": {
+   "module": "tools/homm3_unit_look/units/masks/dragon_wing_segment.py",
+   "function": "segment_gold_dragon"
+  },
+  "regions": [
+   {
+    "name": "wing",
+    "mask": {
+     "bones": [
+      "WingL_*",
+      "WingR_*",
+      "LeftWing",
+      "RightWing"
+     ]
+    },
+    "target": "defPalette",
+    "defRegion": "wing",
+    "knobs": {
+     "skyCompensation": true
+    },
+    "notes": "2026-09-28: the wing bones' texels take the DEF membrane+rib palette by rank: pale lavender-blue membrane between gold ribs, as the DEF draws it (user decision 2026-09-28: follow the DEF). Kept on the 2026-09-28 Meshy-7 regen (identity_regen/h3_gold_dragon, small swept-back wings, even lavender membranes): the region is in use (metrics.json lighting.regions.wing: texSamples, defPixels) and the look stays well under the raw bake's body L-hist with it."
+   }
+  ]
+ },
+ "lights": [
+  {
+   "id": "breath_glow",
+   "treatment": "dynamic",
+   "notes": "breath lights the head and forelimbs"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "breath",
+    "type": "defFlipbook",
+    "provenance": "roster inventory rampart: g12 attack_front f3-6 (breath); mask by tools/homm3_unit_look/units/masks/rampart_effect_masks.py",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_gold_dragon/breath"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "breath_glow",
+    "render": "unitPlane",
+    "notes": "render unitPlane: directional pieces (thrown/jetting forward) turn with the unit (vfx_depth.py)."
+   },
+   {
+    "id": "breath_light",
+    "type": "effectLight",
+    "lightId": "breath_glow",
+    "carrier": "breath",
+    "anchor": {
+     "bone": "Head",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.82,
+     0.4
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.22,
+      0.035,
+      0.0,
+      0.011,
+      0.099
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

@@ -1,0 +1,116 @@
+{
+    "schemaVersion":  1,
+    "purpose":  "Source-authored predicate contract for custom law profiles that depend on Rampart Avenger mark state. Native/status marker routes were runtime-falsified, so this pass uses custom battle-local Avenger mark state as the explicit source of truth. This is still runtime-unproven for gameplay until the relevant hooks prove mark lifecycle and owner correlation.",
+    "validationState":  "source-prepared-runtime-unproven",
+    "policy":  {
+                   "effectKeysMustMatchRequiresAvengerMarkProfiles":  true,
+                   "rampartOnly":  true,
+                   "forbidFactionMatchInference":  true,
+                   "runtimeProofStillRequiredForGameplay":  true,
+                   "allowCustomBattleLocalMarkRegistry":  true
+               },
+    "nativeIdentityEvidence":  {
+                                   "factionManifest":  "custom_factions/homm3_rampart.json",
+                                   "manifestSkillField":  "skillsAndLaws.skillName",
+                                   "expectedSkillName":  "Avenger",
+                                   "targetSpec":  "custom_factions/custom_law_targets.json"
+                               },
+    "requiredRuntimeProof":  [
+                                 "custom battle-local Avenger mark state proof",
+                                 "marked target identity proof",
+                                 "mark owner/faction correlation proof",
+                                 "mark lifecycle/cleanup proof"
+                             ],
+    "contracts":  {
+                      "rampart.avenger-marked-counterattack-damage":  {
+                                                                          "usage":  "counterattack-target-filter",
+                                                                          "forbiddenSubstitutes":  [
+                                                                                                       "enemy belongs to non-Rampart faction",
+                                                                                                       "target was damaged by a Rampart unit",
+                                                                                                       "faction-match inference without custom Avenger mark state"
+                                                                                                   ],
+                                                                          "notes":  "Counterattack damage scaling may only use a proven custom battle-local Avenger mark on the original attacker/target. Runtime-unproven until hook evidence proves lifecycle and owner correlation."
+                                                                      },
+                      "rampart.avenger-marked-enemy-trail":  {
+                                                                 "usage":  "adventure-vision-target-filter",
+                                                                 "forbiddenSubstitutes":  [
+                                                                                              "nearest enemy hero",
+                                                                                              "last enemy seen by Rampart",
+                                                                                              "faction-match inference without custom Avenger mark state"
+                                                                                          ],
+                                                                 "notes":  "Vision reveal may only point at a proven custom battle-local Avenger-marked enemy or a native favored-enemy state proven equivalent. Runtime-unproven until hook evidence proves lifecycle and owner correlation."
+                                                             },
+                      "rampart.avenger-vulnerability":  {
+                                                            "usage":  "damage-target-vulnerability-trigger",
+                                                            "forbiddenSubstitutes":  [
+                                                                                         "target faction matchup",
+                                                                                         "target currently debuffed",
+                                                                                         "faction-match inference without custom Avenger mark state"
+                                                                                     ],
+                                                            "notes":  "Vulnerability behavior uses custom battle-local Avenger mark state: first Rampart hit marks the receiver, and later Rampart hits against marked receivers may apply the rank damage scalar. Runtime-unproven until committed-damage hook evidence proves lifecycle and owner correlation."
+                                                        },
+                      "rampart.cleanse-regeneration-cycle":  {
+                                                                 "usage":  "reward-calendar-condition",
+                                                                 "forbiddenSubstitutes":  [
+                                                                                              "low-loss battle alone unless separately contracted",
+                                                                                              "Rampart participated in battle",
+                                                                                              "faction-match inference without custom Avenger mark state"
+                                                                                          ],
+                                                                 "notes":  "Calendar reward condition may use Avenger only when a custom battle-local mark interaction is proven and correlated to the reward source. Runtime-unproven until hook evidence proves lifecycle and owner correlation."
+                                                             },
+                      "rampart.low-loss-avenger-tithe":  {
+                                                             "usage":  "gold-reward-condition",
+                                                             "forbiddenSubstitutes":  [
+                                                                                          "low-loss battle alone unless separately contracted",
+                                                                                          "Rampart participated in battle",
+                                                                                          "faction-match inference without custom Avenger mark state"
+                                                                                      ],
+                                                             "notes":  "Gold reward condition may use Avenger only when a custom battle-local mark interaction is proven and correlated to the committed reward. Runtime-unproven until hook evidence proves lifecycle and owner correlation."
+                                                         },
+                      "rampart.nature-protection-cooldown":  {
+                                                                 "usage":  "cooldown-credit-condition",
+                                                                 "forbiddenSubstitutes":  [
+                                                                                              "any Nature spell cast",
+                                                                                              "any protection status",
+                                                                                              "faction-match inference without custom Avenger mark state"
+                                                                                          ],
+                                                                 "notes":  "Cooldown credit may use Avenger only when custom battle-local mark interaction is proven in the spell/cooldown context. Runtime-unproven until hook evidence proves lifecycle and owner correlation."
+                                                             },
+                      "rampart.primal-protection-avenger":  {
+                                                                "usage":  "spell-school-runtime-addon-condition",
+                                                                "forbiddenSubstitutes":  [
+                                                                                             "native Primal school access",
+                                                                                             "any protection spell cast",
+                                                                                             "faction-match inference without custom Avenger mark state"
+                                                                                         ],
+                                                                "notes":  "Spell-school add-on effects may use Avenger only when custom battle-local mark state is proven in the relevant spell/battle context. Runtime-unproven until hook evidence proves lifecycle and owner correlation."
+                                                            },
+                      "rampart.protect-preserve-avenger-momentum":  {
+                                                                        "usage":  "morale-trigger-condition",
+                                                                        "forbiddenSubstitutes":  [
+                                                                                                     "positive morale roll alone",
+                                                                                                     "enemy killed by Rampart",
+                                                                                                     "faction-match inference without custom Avenger mark state"
+                                                                                                 ],
+                                                                        "notes":  "Morale momentum may use Avenger only when custom battle-local mark interaction is proven in the morale/action context. Runtime-unproven until hook evidence proves lifecycle and owner correlation."
+                                                                    },
+                      "rampart.protect-preserve-avenger-package":  {
+                                                                       "usage":  "morale-package-condition",
+                                                                       "forbiddenSubstitutes":  [
+                                                                                                    "flat Rampart morale",
+                                                                                                    "enemy killed by Rampart",
+                                                                                                    "faction-match inference without custom Avenger mark state"
+                                                                                                ],
+                                                                       "notes":  "Morale package additions may use Avenger only when custom battle-local mark interaction is proven and not replaced by generic morale. Runtime-unproven until hook evidence proves lifecycle and owner correlation."
+                                                                   },
+                      "rampart.protect-shooter-avenger-mark":  {
+                                                                   "usage":  "formation-target-filter",
+                                                                   "forbiddenSubstitutes":  [
+                                                                                                "any enemy adjacent to shooter",
+                                                                                                "any enemy in shooter range",
+                                                                                                "faction-match inference without custom Avenger mark state"
+                                                                                            ],
+                                                                   "notes":  "Formation benefits may use Avenger only when the target is proven custom battle-local-marked in the action payload. Runtime-unproven until hook evidence proves lifecycle and owner correlation."
+                                                               }
+                  }
+}

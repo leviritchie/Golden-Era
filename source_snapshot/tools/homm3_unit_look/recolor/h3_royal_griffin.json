@@ -1,0 +1,225 @@
+{
+  "schema": "homm3_unit_recolor.v1",
+  "unit": "h3_royal_griffin",
+  "gameSid": "h3_griffin_upg",
+  "reason": "2026-10-08 user: royal/battle are recolors of h3_griffin (\"the regular griffin just looks so much better ... just recolor them and use those as the royal and battle meshes\")",
+  "source": {
+    "selection": "castle_griffin_slice_v1",
+    "labSid": "h3_griffin"
+  },
+  "def": {
+    "source": "CGRIFF",
+    "target": "CRGRIF"
+  },
+  "sourceClasses": {
+    "default": "brown",
+    "rules": [
+      {
+        "class": "dark",
+        "L_lt": 6
+      },
+      {
+        "class": "blue",
+        "b_lt": -5,
+        "C_ge": 8
+      },
+      {
+        "class": "golden",
+        "C_ge": 18,
+        "h_ge": 80
+      },
+      {
+        "class": "grey",
+        "C_lt": 12
+      }
+    ]
+  },
+  "targetClasses": {
+    "default": "tan",
+    "rules": [
+      {
+        "class": "dark",
+        "L_lt": 6
+      },
+      {
+        "class": "eye",
+        "a_lt": -6,
+        "C_ge": 8,
+        "b_lt": 30
+      },
+      {
+        "class": "feather",
+        "C_lt": 10
+      },
+      {
+        "class": "yellow",
+        "h_ge": 86,
+        "C_ge": 25
+      }
+    ]
+  },
+  "targetRelabel": [
+    {
+      "from": [
+        "tan"
+      ],
+      "near": "eye",
+      "radiusPx": 22,
+      "class": "beak",
+      "C_ge": 18
+    }
+  ],
+  "boneGroups": {
+    "wing": [
+      "LeftWing",
+      "RightWing"
+    ],
+    "arm": [
+      "LeftArm",
+      "LeftForeArm",
+      "LeftHand",
+      "RightArm",
+      "RightForeArm",
+      "RightHand"
+    ],
+    "head": [
+      "Head",
+      "Neck"
+    ],
+    "chest": [
+      "Spine2",
+      "LeftShoulder",
+      "RightShoulder"
+    ]
+  },
+  "restGroup": "lion",
+  "regions": {
+    "golden": {
+      "C": [
+        12,
+        22
+      ],
+      "h": [
+        74,
+        84
+      ]
+    },
+    "eye": {
+      "b_lt": -5,
+      "C_gt": 8,
+      "groups": [
+        "head"
+      ]
+    },
+    "beak": {
+      "groups": [
+        "head"
+      ],
+      "z": [
+        0.38,
+        0.42
+      ]
+    },
+    "body": [
+      {
+        "region": "wing",
+        "groups": [
+          "wing"
+        ]
+      },
+      {
+        "region": "foreleg",
+        "groups": [
+          "arm"
+        ]
+      },
+      {
+        "region": "eagle",
+        "groups": [
+          "head",
+          "chest"
+        ]
+      },
+      {
+        "region": "eagle",
+        "groups": [
+          "lion"
+        ],
+        "golden": "only"
+      },
+      {
+        "region": "lion",
+        "groups": [
+          "lion"
+        ],
+        "golden": "not"
+      }
+    ]
+  },
+  "transfer": {
+    "wing": [
+      [
+        "grey",
+        "brown"
+      ],
+      [
+        "feather"
+      ]
+    ],
+    "eagle": [
+      [
+        "golden"
+      ],
+      [
+        "feather"
+      ]
+    ],
+    "foreleg": [
+      [
+        "golden"
+      ],
+      [
+        "yellow"
+      ]
+    ],
+    "lion": [
+      [
+        "brown"
+      ],
+      [
+        "tan"
+      ]
+    ],
+    "beak": [
+      [
+        "golden",
+        "brown",
+        "grey"
+      ],
+      [
+        "beak"
+      ]
+    ],
+    "eye": [
+      [
+        "blue"
+      ],
+      [
+        "eye"
+      ]
+    ]
+  },
+  "zClamp": 2.5,
+  "keepDark": {
+    "L": [
+      6,
+      12
+    ],
+    "C": [
+      5,
+      10
+    ]
+  },
+  "minPairs": 200,
+  "sourceStats": "texture"
+}

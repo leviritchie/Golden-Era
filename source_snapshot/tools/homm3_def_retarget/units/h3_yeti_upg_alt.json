@@ -1,0 +1,297 @@
+{
+ "unit": "h3_yeti_upg_alt",
+ "joints": {
+  "Hips": [
+   0.05,
+   0.3,
+   0.66
+  ],
+  "Spine": [
+   0.05,
+   0.17,
+   0.84
+  ],
+  "Spine1": [
+   0.05,
+   0.04,
+   0.98
+  ],
+  "Spine2": [
+   0.06,
+   -0.08,
+   1.06
+  ],
+  "Neck": [
+   0.07,
+   -0.2,
+   1.13
+  ],
+  "Head": [
+   0.08,
+   -0.27,
+   1.17
+  ],
+  "HeadTop_End": [
+   0.1,
+   -0.35,
+   1.45
+  ],
+  "LeftShoulder": [
+   0.18,
+   -0.1,
+   1.05
+  ],
+  "LeftArm": [
+   0.4,
+   -0.12,
+   1.0
+  ],
+  "LeftForeArm": [
+   0.5,
+   -0.15,
+   0.6
+  ],
+  "LeftHand": [
+   0.48,
+   -0.25,
+   0.2
+  ],
+  "LeftHand_End": [
+   0.48,
+   -0.3,
+   0.03
+  ],
+  "RightShoulder": [
+   -0.08,
+   -0.1,
+   1.05
+  ],
+  "RightArm": [
+   -0.3,
+   -0.12,
+   1.0
+  ],
+  "RightForeArm": [
+   -0.4,
+   -0.18,
+   0.95
+  ],
+  "RightHand": [
+   -0.5,
+   -0.27,
+   1.02
+  ],
+  "RightHand_End": [
+   -0.5,
+   -0.28,
+   1.15
+  ],
+  "LeftUpLeg": [
+   0.22,
+   0.3,
+   0.62
+  ],
+  "LeftLeg": [
+   0.42,
+   0.15,
+   0.38
+  ],
+  "LeftFoot": [
+   0.45,
+   0.33,
+   0.12
+  ],
+  "LeftToeBase": [
+   0.45,
+   0.22,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.45,
+   0.1,
+   0.02
+  ],
+  "RightUpLeg": [
+   -0.12,
+   0.3,
+   0.62
+  ],
+  "RightLeg": [
+   -0.27,
+   0.15,
+   0.38
+  ],
+  "RightFoot": [
+   -0.22,
+   0.36,
+   0.12
+  ],
+  "RightToeBase": [
+   -0.22,
+   0.25,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.22,
+   0.14,
+   0.02
+  ]
+ },
+ "props": [
+  {
+   "name": "club",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.49,
+      -0.29,
+      -0.03
+     ],
+     [
+      -0.49,
+      -0.29,
+      1.25
+     ]
+    ],
+    [
+     [
+      -0.49,
+      -0.29,
+      1.2
+     ],
+     [
+      -0.47,
+      -0.27,
+      1.8
+     ]
+    ]
+   ],
+   "radius": 0.09
+  },
+  {
+   "name": "clubhead",
+   "bone": "RightHand",
+   "sphere": [
+    [
+     -0.5,
+     -0.28,
+     1.46
+    ],
+    0.24
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "dy": 30,
+   "roll": 20
+  },
+  "propAim": [
+   "RightHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.13
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.95,
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.95,
+   "keepDist": 0.13
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "strideMatch": {
+  "foreLegs": [
+   "LeftArm",
+   "RightArm"
+  ],
+  "reason": "2026-09-30: the yeti knuckle-walks (rest Hand joints at z 0.20, feet 0.12); the source Move's hands hang to the floor, but grounded_chains leaves arm chains unplanted, so ground_glb refused the Move (P2: planted LeftUpLeg sole lifted +0.054 H at key 16, lowest other point LeftHand-owned). Same class as h3_mighty_gorgon: declare the arms as forelegs."
+ },
+ "glbPatch": {
+  "reason": "the DEF yeti raises the club straight up overhead at f3 of AttackFront and slams it to the ground in front at f5-f6; the club arm and hand now raise and swing it instead of holding it low across the body (lane B 2026-10-11)",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_yeti_upg_alt_arm_weights.json",
+    "sha256": "2cca938bcd19148db59c4a3c324b641dab5abfcf3ad5d565c2de3dc798be3071",
+    "note": "lane B 2026-10-11: shoulder/arm skin weights re-solved on the edges the AttackFront overhead club raise tears (wsolve --newonly, GPU)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_yeti_upg_alt_club_overhead_slam_rot.json",
+    "regrid": true,
+    "sha256": "f941a222a9f8e2234f0f5dafbbd1864dc16366092f589c2c997c00b457c0c1ef"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_yeti_upg_alt_club_overhead_slam_rot.json",
+    "regrid": true,
+    "sha256": "f941a222a9f8e2234f0f5dafbbd1864dc16366092f589c2c997c00b457c0c1ef"
+   }
+  ]
+ }
+}

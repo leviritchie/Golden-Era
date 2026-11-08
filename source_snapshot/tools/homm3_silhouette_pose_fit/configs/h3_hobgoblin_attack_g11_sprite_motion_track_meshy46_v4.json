@@ -1,0 +1,61 @@
+{
+  "unitSid": "h3_hobgoblin",
+  "clipId": "attack_g11",
+  "fps": 12,
+  "masterGlb": "artifacts/hobgoblin_attack_pose_pipeline/master/Meshy_AI_Character_output_4.glb",
+  "outputDir": "artifacts/hobgoblin_attack_pose_pipeline/out_sprite_motion_track_g11_meshy46_v4/fit_check",
+  "boneRoles": "tools/homm3_silhouette_pose_fit/bone_roles_unirig_hobgoblin_meshy46.json",
+  "cullDefSoftShadows": true,
+  "camera": {
+    "axis": "iso",
+    "isoAzimuthDeg": 40.0,
+    "isoElevationDeg": 30.0,
+    "distance": 3.0,
+    "orthoScale": 2.6,
+    "rootYawDeg": 0.0
+  },
+  "frames": [
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_00.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_01.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_02.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_03.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_04.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_05.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_06.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_07.png"}
+  ],
+  "method_kind": "keypoints",
+  "method": "sprite_motion_track_clamp_meshy46_v4",
+  "poseSource": "sprite_landmarks",
+  "optimizeBones": [
+    "Bone_001",
+    "Bone_003",
+    "Bone_002",
+    "Bone_015",
+    "Bone_014",
+    "Bone_026",
+    "Bone_025",
+    "Bone_037",
+    "Bone_036",
+    "Bone_035",
+    "Bone_034",
+    "Bone_033",
+    "Bone_032",
+    "Bone_031",
+    "Bone_030",
+    "Bone_029"
+  ],
+  "keypointOptimizer": {
+    "boundRad": 0.95,
+    "restWeight": 0.04,
+    "motionWeight": 0.22,
+    "maxStepRad": 0.70,
+    "localRestarts": true,
+    "identityFrame0": false,
+    "maxiter": 200,
+    "maxfev": 700,
+    "restarts": 5,
+    "seed": 7
+  },
+  "notes": "Sprite motion-track clamp on Meshy v4 (Downloads Meshy_AI_Character_output (3).glb → master/Meshy_AI_Character_output_4.glb). UniRig 46-bone roles. Track GT from out_sprite_motion_track_g11/track/keypoints.json. No imagegen."
+}

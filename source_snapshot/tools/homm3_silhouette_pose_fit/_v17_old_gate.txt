@@ -1,0 +1,12 @@
+    if str(spec["unit_class"]) == "flyer":
+        # profile_init knobs are not always echoed into clipResult config; verify via notes knobs.
+        knobs = hybrid_kwargs(unit_class="flyer")
+        if not bool(knobs.get("profile_init_enabled")):
+            raise RuntimeError(f"{label}: flyer hybrid requires profile_init_enabled")
+        if float(knobs.get("profile_init_roll_range_deg") or 0.0) < 80.0:
+            raise RuntimeError(f"{label}: flyer profile_init_roll_range_deg must be >=80")
+        facing_w = knobs.get("profile_init_facing_weight")
+        if facing_w is None or float(facing_w) != 0.0:
+            raise RuntimeError(f"{label}: flyer profile_init_facing_weight must be 0.0")
+        if str(knobs.get("profile_init_rank_metric") or "") != "iou":
+            raise RuntimeError(f"{label}: flyer profile_init_rank_metric must be 'iou'")

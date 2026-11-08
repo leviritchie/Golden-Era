@@ -1,0 +1,33 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "neutral_faerie_dragon_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/neutral_faerie_dragon_slice_v1",
+  "note": "Neutral faerie dragon: Meshy-7 mesh (already upright on its haunches); hand-keyed body (no capture, azure poses re-based on the sit rest, level breath lunge) with wing_chain straight insect-wing panels (no fan, fold/droop never animated), keyed beat, wing-only fit on hitted/defence/attack/death; faces -60 fleet bind; all 9 clips | look-only re-freeze on the ground-stamped canonical (fleet_rebuild ground_glb apply; coordinator item 3) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_faerie_dragon 0.0782. | vanilla-style VFX promotion 2026-10-12 lane E (user-approved lab previews) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_faerie_dragon 0.0782.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_faerie_dragon",
+      "gameSid": "h3_faerie_dragon",
+      "bundleName": "custom_units_neutral_h3_faerie_dragon",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "e3161ac3345b56a8a403a41563c38d336cf2309dc6145625121752f7b129ce6f",
+      "identityReview": "none",
+      "vfxAuthority": "vanilla_style",
+      "vanillaStyleSpec": "tools/homm3_vfx/vanilla_style/units/h3_faerie_dragon.json",
+      "frozen": {
+        "lookDeliveredGlbSha256": "a5d3d042c7c541af1f6f779e06449ca1a60c5994ee23cc4a4e019ef8c8857c85",
+        "idleRetimedGlbSha256": "aa09f7e330ef44b871ab6e2ea891d1475babc700a8abb5d7e6c74e7ebed5b5e7",
+        "vfxManifestSha256": "c79d8f09a22ecbb03ee7672a2acc2af0b30267c949e6a5e26ea8cafe058c40ec",
+        "specSha256": "99f8c8353f6b05e8211074dca0cfd819e58fc1d09cd11e8be598225406863953",
+        "basecolorSha256": "4c42a7a90304baaed48a6535ee2cf1dec3d02e0b937cc81386bf1fa247e53fed"
+      }
+    }
+  ]
+}

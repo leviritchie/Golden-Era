@@ -1,0 +1,224 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "New Beginning continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub gem; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_18_sod_rampart_gem",
+    "campaignTitle": "New Beginning",
+    "campaignEntry": "Gem.h3c",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "missionConfigPrefix": "homm3_sod_rampart",
+    "defaultSpawn": {
+      "factionSid": "homm3_rampart",
+      "heroSid": "homm3_rampart_hero_12"
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart).",
+    "regionPixels": {
+      "clearing_the_border": [
+        80.0,
+        220.0
+      ],
+      "after_the_amulet": [
+        320.0,
+        220.0
+      ],
+      "retrieving_the_cowl": [
+        560.0,
+        220.0
+      ],
+      "driving_for_the_boots": [
+        800.0,
+        220.0
+      ]
+    },
+    "missionSpawns": {
+      "clearing_the_border": {
+        "heroSid": "homm3_rampart_hero_12",
+        "factionSid": "homm3_rampart"
+      },
+      "after_the_amulet": {
+        "heroSid": "homm3_rampart_hero_12",
+        "factionSid": "homm3_rampart"
+      },
+      "retrieving_the_cowl": {
+        "heroSid": "homm3_rampart_hero_12",
+        "factionSid": "homm3_rampart"
+      },
+      "driving_for_the_boots": {
+        "heroSid": "homm3_rampart_hero_12",
+        "factionSid": "homm3_rampart"
+      }
+    }
+  },
+  "storyHubMapSidOverrides": {
+    "clearing_the_border": "h3_rampart_clearing_the_border_raw_translation",
+    "after_the_amulet": "h3_rampart_after_the_amulet_raw_translation",
+    "retrieving_the_cowl": "h3_rampart_retrieving_the_cowl_raw_translation",
+    "driving_for_the_boots": "h3_rampart_driving_for_the_boots_raw_translation",
+    "choiceReason": "New Beginning missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "clearing_the_border",
+      "toMissionId": "after_the_amulet",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 10,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=10 for clearing_the_border (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_rampart_clearing_the_border_raw_translation",
+        "to": "h3_rampart_after_the_amulet_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "after_the_amulet",
+      "toMissionId": "retrieving_the_cowl",
+      "sourceBlockIndex": 2,
+      "nextBlockIndex": 3,
+      "levelCap": 15,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=15 for after_the_amulet (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_rampart_after_the_amulet_raw_translation",
+        "to": "h3_rampart_retrieving_the_cowl_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "retrieving_the_cowl",
+      "toMissionId": "driving_for_the_boots",
+      "sourceBlockIndex": 3,
+      "nextBlockIndex": 4,
+      "levelCap": 20,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=20 for retrieving_the_cowl (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_rampart_retrieving_the_cowl_raw_translation",
+        "to": "h3_rampart_driving_for_the_boots_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "clearing_the_border",
+    "after_the_amulet",
+    "retrieving_the_cowl",
+    "driving_for_the_boots"
+  ],
+  "missionTitles": {
+    "clearing_the_border": "Clearing the Border",
+    "after_the_amulet": "After the Amulet",
+    "retrieving_the_cowl": "Retrieving the Cowl",
+    "driving_for_the_boots": "Driving for the Boots"
+  },
+  "missionDescriptions": {
+    "clearing_the_border": "Defeat all your enemies to win the scenario. However, if Gem is defeated in combat, the scenario is lost. Gem is limited to level 10 but will carry her experience, skill...",
+    "after_the_amulet": "Acquire the Amulet of the Undertaker to win the scenario. However, if Gem or Clancy are defeated in combat, the scenario is lost. Your heroes are limited to level 15, bu...",
+    "retrieving_the_cowl": "Bring the Vampire's Cowl to the town of Leafhall to win the scenario. However, if Gem or Clancy are defeated in combat or you lose the Cowl, the scenario is lost. Your h...",
+    "driving_for_the_boots": "Take the Dead Man's Boots to Gem's starting town to win the campaign. However, if Gem or Clancy are defeated in battle or you lose the boots, the scenario is lost. Your..."
+  },
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Dedicated AB/SoD MapImage bake",
+    "Town growth / negative resource timed-event fidelity"
+  ],
+  "videoContract": {
+    "status": "mission_clips_wired_hub_still_only",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": null,
+    "hubFirstShowOmitReason": "RoE parity: hub hover strip is selection-still only; mission pins PlayVideo when composed MP4 meets contract.",
+    "requireComposedAudio": true,
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "requiredMp4RelativeToStreamingAssets": null,
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_18_sod_rampart_gem/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "stillArtifact": "artifacts/campaign_port_poc/ab_sod_campaigns/storyhub_visual/gem_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.35,
+      "focusY": 0.45,
+      "cropReason": "Green-cloaked heroine at the candlelit meeting table",
+      "cropsCatalog": "scenarios/ab_sod_campaigns/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "clearing_the_border": "H3x2_NBa",
+      "after_the_amulet": "H3x2_NBb",
+      "retrieving_the_cowl": "H3x2_NBc",
+      "driving_for_the_boots": "H3x2_NBd"
+    },
+    "actionOrder": "PlayVideo (when composed MP4 ready) then OpenMissionsPrologue on each mission pin; hub firstShowActions stay empty",
+    "failClosed": "gem hub firstShowActions must stay empty (hubFirstShowPlayVideo=false). Mission PlayVideo requires StreamingAssets/video/{{clip}}.mp4 + softsub sidecar meeting compose contract; otherwise omit PlayVideo and keep prologue."
+  }
+}

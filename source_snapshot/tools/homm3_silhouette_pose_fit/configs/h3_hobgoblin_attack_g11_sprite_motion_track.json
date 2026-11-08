@@ -1,0 +1,63 @@
+{
+  "unitSid": "h3_hobgoblin",
+  "clipId": "attack_g11",
+  "fps": 12,
+  "masterGlb": "artifacts/hobgoblin_attack_pose_pipeline/master/hobgoblin_apose_mace_attach.glb",
+  "outputDir": "artifacts/hobgoblin_attack_pose_pipeline/out_sprite_motion_track_g11/fit_check",
+  "boneRoles": "artifacts/hobgoblin_attack_pose_pipeline/out_attack_g11_bone_overlay_apose_mace/bone_roles_grip_no_hip_yaw.json",
+  "cullDefSoftShadows": true,
+  "camera": {
+    "axis": "iso",
+    "isoAzimuthDeg": 40.0,
+    "isoElevationDeg": 30.0,
+    "distance": 3.0,
+    "orthoScale": 2.6,
+    "rootYawDeg": 0.0
+  },
+  "frames": [
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_00.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_01.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_02.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_03.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_04.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_05.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_06.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11_nn_upscale/frame_07.png"}
+  ],
+  "method_kind": "keypoints",
+  "method": "sprite_motion_track_clamp",
+  "poseSource": "sprite_landmarks",
+  "optimizeBones": [
+    "Hips",
+    "Spine02",
+    "Spine01",
+    "Spine",
+    "neck",
+    "Head",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+    "LeftUpLeg",
+    "LeftLeg",
+    "RightUpLeg",
+    "RightLeg"
+  ],
+  "keypointOptimizer": {
+    "boundRad": 0.95,
+    "restWeight": 0.04,
+    "motionWeight": 0.22,
+    "maxStepRad": 0.70,
+    "localRestarts": true,
+    "identityFrame0": false,
+    "maxiter": 200,
+    "maxfev": 700,
+    "restarts": 5,
+    "seed": 7
+  },
+  "notes": "A-pose Mixamo keypoint fit clamped to LK+NCC tracks from editable frame-0 seed on NN-upscaled DEF sprites. No imagegen. Pose authority is track/keypoints.json."
+}

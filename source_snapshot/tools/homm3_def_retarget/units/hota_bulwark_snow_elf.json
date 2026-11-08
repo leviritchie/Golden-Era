@@ -1,0 +1,338 @@
+{
+ "unit": "hota_bulwark_snow_elf",
+ "joints": {
+  "Hips": [
+   0.01,
+   0.094,
+   0.778
+  ],
+  "Spine": [
+   0.016,
+   0.086,
+   0.928
+  ],
+  "Spine1": [
+   0.021,
+   0.077,
+   1.078
+  ],
+  "Spine2": [
+   0.027,
+   0.067,
+   1.246
+  ],
+  "Neck": [
+   0.031,
+   0.059,
+   1.378
+  ],
+  "Head": [
+   0.024,
+   0.08,
+   1.364
+  ],
+  "HeadTop_End": [
+   -0.017,
+   0.108,
+   1.588
+  ],
+  "LeftShoulder": [
+   0.045,
+   0.136,
+   1.253
+  ],
+  "LeftArm": [
+   0.122,
+   0.185,
+   1.225
+  ],
+  "LeftForeArm": [
+   0.185,
+   0.29,
+   1.008
+  ],
+  "LeftHand": [
+   0.311,
+   0.164,
+   1.008
+  ],
+  "LeftHand_End": [
+   0.374,
+   0.1,
+   1.008
+  ],
+  "RightShoulder": [
+   -0.052,
+   0.087,
+   1.253
+  ],
+  "RightArm": [
+   -0.136,
+   0.08,
+   1.211
+  ],
+  "RightForeArm": [
+   -0.22,
+   -0.031,
+   0.987
+  ],
+  "RightHand": [
+   -0.115,
+   -0.15,
+   0.883
+  ],
+  "RightHand_End": [
+   -0.066,
+   -0.206,
+   0.833
+  ],
+  "LeftUpLeg": [
+   0.087,
+   0.15,
+   0.778
+  ],
+  "LeftLeg": [
+   0.234,
+   0.115,
+   0.415
+  ],
+  "LeftFoot": [
+   0.22,
+   0.178,
+   0.094
+  ],
+  "LeftToeBase": [
+   0.311,
+   0.143,
+   -0.025
+  ],
+  "LeftToe_End": [
+   0.339,
+   0.129,
+   0.017
+  ],
+  "RightUpLeg": [
+   -0.066,
+   0.045,
+   0.778
+  ],
+  "RightLeg": [
+   -0.115,
+   0.038,
+   0.387
+  ],
+  "RightFoot": [
+   -0.234,
+   0.143,
+   0.094
+  ],
+  "RightToeBase": [
+   -0.234,
+   0.052,
+   -0.025
+  ],
+  "RightToe_End": [
+   -0.22,
+   0.024,
+   0.017
+  ]
+ },
+ "props": [
+  {
+   "name": "spear",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.345,
+      0.15,
+      -0.02
+     ],
+     [
+      0.305,
+      0.09,
+      0.98
+     ]
+    ],
+    [
+     [
+      0.305,
+      0.09,
+      0.98
+     ],
+     [
+      0.3,
+      0.05,
+      1.75
+     ]
+    ]
+   ],
+   "radius": 0.035
+  },
+  {
+   "name": "bundle",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.46,
+      -0.18,
+      0.36
+     ],
+     [
+      0.2,
+      -0.08,
+      1.4
+     ]
+    ],
+    [
+     [
+      -0.3,
+      -0.2,
+      0.4
+     ],
+     [
+      0.33,
+      -0.09,
+      1.12
+     ]
+    ],
+    [
+     [
+      -0.4,
+      -0.14,
+      0.3
+     ],
+     [
+      0.1,
+      -0.1,
+      1.33
+     ]
+    ]
+   ],
+   "radius": 0.07,
+   "exclude": [
+    {
+     "box": [
+      [
+       -0.2,
+       -0.055,
+       0.8
+      ],
+      [
+       0.25,
+       0.4,
+       1.45
+      ]
+     ]
+    },
+    {
+     "sphere": [
+      [
+       -0.21,
+       -0.04,
+       0.98
+      ],
+      0.09
+     ]
+    }
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.1
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.1
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.1
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.0,
+   "keepDist": 0.1
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.0,
+   "keepDist": 0.1
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: ShootFront cocks the javelin level over the shoulder, hand above and behind the head (f1-f3), and throws it forward tip-first at f4, like the DEF, instead of swinging it on a diagonal",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_snow_elf_arm_weights.json",
+    "sha256": "38d64d8de84a49f8cee1054c5ed588f2216a1096ed2841a5ca5a7952db9834b4",
+    "note": "lane B 2026-10-11: shoulder/torso skin weights re-solved on the edges the ShootFront javelin cock-and-throw tears (wsolve --newonly, GPU)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_snow_elf_javelin_cock_throw_rot.json",
+    "regrid": true,
+    "sha256": "5d4050bf0da434176cee461ae454c0a23a66eca38d6172b6a93648385ba18ed2"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_snow_elf_javelin_cock_throw_rot.json",
+    "regrid": true,
+    "sha256": "5d4050bf0da434176cee461ae454c0a23a66eca38d6172b6a93648385ba18ed2"
+   }
+  ]
+ }
+}

@@ -1,0 +1,903 @@
+{
+  "lawOverrides": {
+    "fraction_law_homm3_rampart_13": {
+      "enabled": true,
+      "nameText": "Avenger's Reprisal",
+      "descriptionText": "Friendly creatures' counterattacks deal 50% more damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "counter_attack",
+                "0.50"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_captain",
+                "h3_centaur_ranger_upg_alt",
+                "h3_dwarf",
+                "h3_battle_dwarf",
+                "h3_dwarf_battlerager_upg_alt",
+                "h3_wood_elf",
+                "h3_grand_elf",
+                "h3_elf_wardancer_upg_alt",
+                "h3_pegasus",
+                "h3_silver_pegasus",
+                "h3_gold_pegasus_upg_alt",
+                "h3_dendroid_guard",
+                "h3_dendroid_soldier",
+                "h3_dendroid_shaman_upg_alt",
+                "h3_unicorn",
+                "h3_war_unicorn",
+                "h3_pristine_unicorn_upg_alt",
+                "h3_green_dragon",
+                "h3_gold_dragon",
+                "h3_diamond_dragon_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Retribution (schools/life/retribution.jpg). Runtime icon key: fraction_law_homm3_rampart_13_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Retribution",
+      "homm4IconPath": "schools/life/retribution.jpg",
+      "iconKey": "fraction_law_homm3_rampart_13_icon"
+    },
+    "fraction_law_homm3_rampart_15": {
+      "enabled": true,
+      "nameText": "Druidic Ward",
+      "descriptionText": "Negative effects on Rampart creatures last 1 fewer round.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inComingDebuffDuration",
+                "-1"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_upg",
+                "h3_centaur_upg_alt",
+                "h3_dwarf",
+                "h3_dwarf_upg",
+                "h3_dwarf_upg_alt",
+                "h3_wood_elf",
+                "h3_wood_elf_upg",
+                "h3_wood_elf_upg_alt",
+                "h3_pegasus",
+                "h3_pegasus_upg",
+                "h3_pegasus_upg_alt",
+                "h3_dendroid_guard",
+                "h3_dendroid_guard_upg",
+                "h3_dendroid_guard_upg_alt",
+                "h3_unicorn",
+                "h3_unicorn_upg",
+                "h3_unicorn_upg_alt",
+                "h3_green_dragon",
+                "h3_green_dragon_upg",
+                "h3_green_dragon_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "HOMM4 art-source candidate: Nature ward (schools/life/nature_ward.jpg). Runtime icon key: fraction_law_homm3_rampart_15_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Nature ward",
+      "homm4IconPath": "schools/life/nature_ward.jpg",
+      "iconKey": "fraction_law_homm3_rampart_15_icon"
+    },
+    "fraction_law_homm3_rampart_18": {
+      "enabled": true,
+      "nameText": "Hunter Pairs",
+      "descriptionText": "Friendly creatures deal 10% more melee damage and take 10% less melee damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "melee_attack",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_captain",
+                "h3_centaur_ranger_upg_alt",
+                "h3_dwarf",
+                "h3_battle_dwarf",
+                "h3_dwarf_battlerager_upg_alt",
+                "h3_wood_elf",
+                "h3_grand_elf",
+                "h3_elf_wardancer_upg_alt",
+                "h3_pegasus",
+                "h3_silver_pegasus",
+                "h3_gold_pegasus_upg_alt",
+                "h3_dendroid_guard",
+                "h3_dendroid_soldier",
+                "h3_dendroid_shaman_upg_alt",
+                "h3_unicorn",
+                "h3_war_unicorn",
+                "h3_pristine_unicorn_upg_alt",
+                "h3_green_dragon",
+                "h3_gold_dragon",
+                "h3_diamond_dragon_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "melee_attack",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_captain",
+                "h3_centaur_ranger_upg_alt",
+                "h3_dwarf",
+                "h3_battle_dwarf",
+                "h3_dwarf_battlerager_upg_alt",
+                "h3_wood_elf",
+                "h3_grand_elf",
+                "h3_elf_wardancer_upg_alt",
+                "h3_pegasus",
+                "h3_silver_pegasus",
+                "h3_gold_pegasus_upg_alt",
+                "h3_dendroid_guard",
+                "h3_dendroid_soldier",
+                "h3_dendroid_shaman_upg_alt",
+                "h3_unicorn",
+                "h3_war_unicorn",
+                "h3_pristine_unicorn_upg_alt",
+                "h3_green_dragon",
+                "h3_gold_dragon",
+                "h3_diamond_dragon_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Creature portrait law icon pass: uses h3_grand_elf.png for this creature-function law under runtime icon key fraction_law_homm3_rampart_18_icon. Static/deploy proven only; law-tree visual smoke still required.",
+      "homm4IconLabel": "Defender",
+      "homm4IconPath": "schools/life/defender.jpg",
+      "iconKey": "fraction_law_homm3_rampart_18_icon",
+      "portraitIconSid": "h3_grand_elf"
+    },
+    "fraction_law_homm3_rampart_19": {
+      "enabled": true,
+      "nameText": "Hunter Crossfire",
+      "descriptionText": "Friendly creatures deal 5%/10% more ranged damage and take 5%/10% less ranged damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "shoot_attack",
+                "0.05"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_captain",
+                "h3_centaur_ranger_upg_alt",
+                "h3_dwarf",
+                "h3_battle_dwarf",
+                "h3_dwarf_battlerager_upg_alt",
+                "h3_wood_elf",
+                "h3_grand_elf",
+                "h3_elf_wardancer_upg_alt",
+                "h3_pegasus",
+                "h3_silver_pegasus",
+                "h3_gold_pegasus_upg_alt",
+                "h3_dendroid_guard",
+                "h3_dendroid_soldier",
+                "h3_dendroid_shaman_upg_alt",
+                "h3_unicorn",
+                "h3_war_unicorn",
+                "h3_pristine_unicorn_upg_alt",
+                "h3_green_dragon",
+                "h3_gold_dragon",
+                "h3_diamond_dragon_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "shoot_attack",
+                "-0.05"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_captain",
+                "h3_centaur_ranger_upg_alt",
+                "h3_dwarf",
+                "h3_battle_dwarf",
+                "h3_dwarf_battlerager_upg_alt",
+                "h3_wood_elf",
+                "h3_grand_elf",
+                "h3_elf_wardancer_upg_alt",
+                "h3_pegasus",
+                "h3_silver_pegasus",
+                "h3_gold_pegasus_upg_alt",
+                "h3_dendroid_guard",
+                "h3_dendroid_soldier",
+                "h3_dendroid_shaman_upg_alt",
+                "h3_unicorn",
+                "h3_war_unicorn",
+                "h3_pristine_unicorn_upg_alt",
+                "h3_green_dragon",
+                "h3_gold_dragon",
+                "h3_diamond_dragon_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "shoot_attack",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_captain",
+                "h3_centaur_ranger_upg_alt",
+                "h3_dwarf",
+                "h3_battle_dwarf",
+                "h3_dwarf_battlerager_upg_alt",
+                "h3_wood_elf",
+                "h3_grand_elf",
+                "h3_elf_wardancer_upg_alt",
+                "h3_pegasus",
+                "h3_silver_pegasus",
+                "h3_gold_pegasus_upg_alt",
+                "h3_dendroid_guard",
+                "h3_dendroid_soldier",
+                "h3_dendroid_shaman_upg_alt",
+                "h3_unicorn",
+                "h3_war_unicorn",
+                "h3_pristine_unicorn_upg_alt",
+                "h3_green_dragon",
+                "h3_gold_dragon",
+                "h3_diamond_dragon_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "shoot_attack",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_captain",
+                "h3_centaur_ranger_upg_alt",
+                "h3_dwarf",
+                "h3_battle_dwarf",
+                "h3_dwarf_battlerager_upg_alt",
+                "h3_wood_elf",
+                "h3_grand_elf",
+                "h3_elf_wardancer_upg_alt",
+                "h3_pegasus",
+                "h3_silver_pegasus",
+                "h3_gold_pegasus_upg_alt",
+                "h3_dendroid_guard",
+                "h3_dendroid_soldier",
+                "h3_dendroid_shaman_upg_alt",
+                "h3_unicorn",
+                "h3_war_unicorn",
+                "h3_pristine_unicorn_upg_alt",
+                "h3_green_dragon",
+                "h3_gold_dragon",
+                "h3_diamond_dragon_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Mass precision (schools/order/mass_precision.jpg). Runtime icon key: fraction_law_homm3_rampart_19_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Mass precision",
+      "homm4IconPath": "schools/order/mass_precision.jpg",
+      "iconKey": "fraction_law_homm3_rampart_19_icon"
+    },
+    "fraction_law_homm3_rampart_2": {
+      "enabled": true,
+      "nameText": "Avenger's Trail",
+      "descriptionText": "Heroes gain +2/+4 Sight radius by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "viewRadius",
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "viewRadius",
+                "4"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Canonical shared-law icon pass: plain hero Sight laws use the same vanilla scouting icon across custom factions. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_2_icon"
+    },
+    "fraction_law_homm3_rampart_21": {
+      "enabled": true,
+      "nameText": "Preservation Tithe",
+      "descriptionText": "Gold income from your sources increases by +10% by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "resPercentIncrementSet",
+                "gold",
+                "0.10"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Fortune (schools/nature/fortune.jpg). Runtime icon key: fraction_law_homm3_rampart_21_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Fortune",
+      "homm4IconPath": "schools/nature/fortune.jpg",
+      "iconKey": "fraction_law_homm3_rampart_21_icon"
+    },
+    "fraction_law_homm3_rampart_25": {
+      "enabled": true,
+      "nameText": "Defender's Exultation",
+      "descriptionText": "Morale trigger chance for friendly creatures increases by +1%/+2%/+3% per Morale point by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.01"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_captain",
+                "h3_centaur_ranger_upg_alt",
+                "h3_dwarf",
+                "h3_battle_dwarf",
+                "h3_dwarf_battlerager_upg_alt",
+                "h3_wood_elf",
+                "h3_grand_elf",
+                "h3_elf_wardancer_upg_alt",
+                "h3_pegasus",
+                "h3_silver_pegasus",
+                "h3_gold_pegasus_upg_alt",
+                "h3_dendroid_guard",
+                "h3_dendroid_soldier",
+                "h3_dendroid_shaman_upg_alt",
+                "h3_unicorn",
+                "h3_war_unicorn",
+                "h3_pristine_unicorn_upg_alt",
+                "h3_green_dragon",
+                "h3_gold_dragon",
+                "h3_diamond_dragon_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.02"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_captain",
+                "h3_centaur_ranger_upg_alt",
+                "h3_dwarf",
+                "h3_battle_dwarf",
+                "h3_dwarf_battlerager_upg_alt",
+                "h3_wood_elf",
+                "h3_grand_elf",
+                "h3_elf_wardancer_upg_alt",
+                "h3_pegasus",
+                "h3_silver_pegasus",
+                "h3_gold_pegasus_upg_alt",
+                "h3_dendroid_guard",
+                "h3_dendroid_soldier",
+                "h3_dendroid_shaman_upg_alt",
+                "h3_unicorn",
+                "h3_war_unicorn",
+                "h3_pristine_unicorn_upg_alt",
+                "h3_green_dragon",
+                "h3_gold_dragon",
+                "h3_diamond_dragon_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.03"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_captain",
+                "h3_centaur_ranger_upg_alt",
+                "h3_dwarf",
+                "h3_battle_dwarf",
+                "h3_dwarf_battlerager_upg_alt",
+                "h3_wood_elf",
+                "h3_grand_elf",
+                "h3_elf_wardancer_upg_alt",
+                "h3_pegasus",
+                "h3_silver_pegasus",
+                "h3_gold_pegasus_upg_alt",
+                "h3_dendroid_guard",
+                "h3_dendroid_soldier",
+                "h3_dendroid_shaman_upg_alt",
+                "h3_unicorn",
+                "h3_war_unicorn",
+                "h3_pristine_unicorn_upg_alt",
+                "h3_green_dragon",
+                "h3_gold_dragon",
+                "h3_diamond_dragon_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_25_icon"
+    },
+    "fraction_law_homm3_rampart_27": {
+      "enabled": true,
+      "nameText": "Avenger's Trail",
+      "descriptionText": "Enemy hero information is revealed.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "enableEnemyHeroInfo",
+                "true"
+              ],
+              "fraction": "homm3_rampart"
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "HOMM4 art-source candidate: Summon phoenix (schools/nature/summon_phoenix.jpg). Runtime icon key: fraction_law_homm3_rampart_27_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Summon phoenix",
+      "homm4IconPath": "schools/nature/summon_phoenix.jpg",
+      "iconKey": "fraction_law_homm3_rampart_27_icon"
+    },
+    "fraction_law_homm3_rampart_28": {
+      "enabled": true,
+      "nameText": "Living Groves",
+      "descriptionText": "Your towns gain an additional daily construction allowance.",
+      "parametersPerLevel": [
+        {
+          "cost": 6,
+          "bonuses": [
+            {
+              "type": "constructionDailyLimit",
+              "parameters": [
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_28_icon"
+    },
+    "fraction_law_homm3_rampart_33": {
+      "enabled": true,
+      "nameText": "Living Groves",
+      "descriptionText": "Creature growth in Rampart dwellings increases by 10%/20%.",
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "barrackUnitsIncrementPer",
+              "parameters": [
+                "all",
+                "0.10"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "barrackUnitsIncrementPer",
+              "parameters": [
+                "all",
+                "0.20"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "Mechanic-aligned icon contract: dwelling growth uses a vanilla creature-growth icon instead of an Astrology production icon. Candidate/deploy validation pending.",
+      "iconKey": "fraction_law_nature_16_icon"
+    },
+    "fraction_law_homm3_rampart_34": {
+      "enabled": true,
+      "nameText": "Avenger's Patience",
+      "descriptionText": "Positive effects on friendly creatures last +1 additional rounds by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inComingBuffDuration",
+                "1"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_captain",
+                "h3_centaur_ranger_upg_alt",
+                "h3_dwarf",
+                "h3_battle_dwarf",
+                "h3_dwarf_battlerager_upg_alt",
+                "h3_wood_elf",
+                "h3_grand_elf",
+                "h3_elf_wardancer_upg_alt",
+                "h3_pegasus",
+                "h3_silver_pegasus",
+                "h3_gold_pegasus_upg_alt",
+                "h3_dendroid_guard",
+                "h3_dendroid_soldier",
+                "h3_dendroid_shaman_upg_alt",
+                "h3_unicorn",
+                "h3_war_unicorn",
+                "h3_pristine_unicorn_upg_alt",
+                "h3_green_dragon",
+                "h3_gold_dragon",
+                "h3_diamond_dragon_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "homm4IconLabel": "Magic leech",
+      "homm4IconPath": "schools/death/magic_leech.jpg",
+      "iconNotes": "HOMM4 art-source candidate: Magic leech (schools/death/magic_leech.jpg). Runtime icon key: fraction_law_homm3_rampart_34_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "iconKey": "fraction_law_homm3_rampart_34_icon"
+    },
+    "fraction_law_homm3_rampart_6": {
+      "enabled": true,
+      "nameText": "Hunter Precision",
+      "descriptionText": "Centaur, Wood Elf, and Pegasus lines gain +1%/+2%/+3% critical chance.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "critChanceModifier",
+                "0.01"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_upg",
+                "h3_centaur_upg_alt",
+                "h3_wood_elf",
+                "h3_wood_elf_upg",
+                "h3_wood_elf_upg_alt",
+                "h3_pegasus",
+                "h3_pegasus_upg",
+                "h3_pegasus_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "critChanceModifier",
+                "0.02"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_upg",
+                "h3_centaur_upg_alt",
+                "h3_wood_elf",
+                "h3_wood_elf_upg",
+                "h3_wood_elf_upg_alt",
+                "h3_pegasus",
+                "h3_pegasus_upg",
+                "h3_pegasus_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "critChanceModifier",
+                "0.03"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_upg",
+                "h3_centaur_upg_alt",
+                "h3_wood_elf",
+                "h3_wood_elf_upg",
+                "h3_wood_elf_upg_alt",
+                "h3_pegasus",
+                "h3_pegasus_upg",
+                "h3_pegasus_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "HOMM4 art-source candidate: Precision (schools/order/precision.jpg). Runtime icon key: fraction_law_homm3_rampart_6_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Precision",
+      "homm4IconPath": "schools/order/precision.jpg",
+      "iconKey": "fraction_law_homm3_rampart_6_icon"
+    },
+    "fraction_law_homm3_rampart_4": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_4_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_4_icon"
+    },
+    "fraction_law_homm3_rampart_5": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_5_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_5_icon"
+    },
+    "fraction_law_homm3_rampart_10": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_10_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_10_icon"
+    },
+    "fraction_law_homm3_rampart_11": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_11_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_11_icon"
+    },
+    "fraction_law_homm3_rampart_14": {
+      "iconNotes": "Canonical resource icon pass: mining laws use the vanilla icon matching the produced special resource instead of donor-faction inheritance. Static/deploy validation pending.",
+      "iconKey": "fraction_law_nature_14_icon"
+    },
+    "fraction_law_homm3_rampart_16": {
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_16_icon"
+    },
+    "fraction_law_homm3_rampart_17": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_17_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_17_icon"
+    },
+    "fraction_law_homm3_rampart_20": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_20_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_20_icon"
+    },
+    "fraction_law_homm3_rampart_22": {
+      "iconNotes": "Canonical shared-law icon pass: hero Morale laws use the same vanilla morale icon across custom factions. Static/deploy validation pending.",
+      "enabled": true,
+      "nameText": "Defender's Grace",
+      "descriptionText": "Heroes gain +1/+2 Morale by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "moral",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "moral",
+                "2"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconKey": "fraction_law_human_22_icon"
+    },
+    "fraction_law_homm3_rampart_23": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_23_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_23_icon"
+    },
+    "fraction_law_homm3_rampart_24": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_24_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_24_icon"
+    },
+    "fraction_law_homm3_rampart_26": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_26_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_26_icon"
+    },
+    "fraction_law_homm3_rampart_30": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_30_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_30_icon"
+    },
+    "fraction_law_homm3_rampart_31": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_31_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_nature_31_icon"
+    },
+    "fraction_law_homm3_rampart_1": {
+      "iconKey": "fraction_law_human_1_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_rampart_3": {
+      "iconKey": "fraction_law_human_3_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_rampart_7": {
+      "iconKey": "fraction_law_human_7_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_rampart_8": {
+      "iconKey": "fraction_law_human_8_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_rampart_9": {
+      "iconKey": "fraction_law_human_9_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_rampart_12": {
+      "iconKey": "fraction_law_human_12_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_rampart_29": {
+      "iconKey": "fraction_law_human_29_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_rampart_32": {
+      "enabled": true,
+      "nameText": "Native Mastery",
+      "descriptionText": "Friendly units gain Speed and Initiative.",
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "speed",
+                "1"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_captain",
+                "h3_centaur_ranger_upg_alt",
+                "h3_dwarf",
+                "h3_battle_dwarf",
+                "h3_dwarf_battlerager_upg_alt",
+                "h3_wood_elf",
+                "h3_grand_elf",
+                "h3_elf_wardancer_upg_alt",
+                "h3_pegasus",
+                "h3_silver_pegasus",
+                "h3_gold_pegasus_upg_alt",
+                "h3_dendroid_guard",
+                "h3_dendroid_soldier",
+                "h3_dendroid_shaman_upg_alt",
+                "h3_unicorn",
+                "h3_war_unicorn",
+                "h3_pristine_unicorn_upg_alt",
+                "h3_green_dragon",
+                "h3_gold_dragon",
+                "h3_diamond_dragon_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "initiative",
+                "1"
+              ],
+              "receivers": [
+                "h3_centaur",
+                "h3_centaur_captain",
+                "h3_centaur_ranger_upg_alt",
+                "h3_dwarf",
+                "h3_battle_dwarf",
+                "h3_dwarf_battlerager_upg_alt",
+                "h3_wood_elf",
+                "h3_grand_elf",
+                "h3_elf_wardancer_upg_alt",
+                "h3_pegasus",
+                "h3_silver_pegasus",
+                "h3_gold_pegasus_upg_alt",
+                "h3_dendroid_guard",
+                "h3_dendroid_soldier",
+                "h3_dendroid_shaman_upg_alt",
+                "h3_unicorn",
+                "h3_war_unicorn",
+                "h3_pristine_unicorn_upg_alt",
+                "h3_green_dragon",
+                "h3_gold_dragon",
+                "h3_diamond_dragon_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Canonical shared-law icon pass: Native Mastery uses the same vanilla icon across custom factions. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_32_icon"
+    }
+  }
+}

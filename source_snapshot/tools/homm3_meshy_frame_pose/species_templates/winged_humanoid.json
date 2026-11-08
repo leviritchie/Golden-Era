@@ -1,0 +1,69 @@
+{
+  "schema": "owned_bind_species_template.v1",
+  "species": "winged_humanoid",
+  "unitClass": "angel",
+  "parts": ["body", "wing_left", "wing_right", "sword"],
+  "minShare": { "body": 0.35, "wing_left": 0.08, "wing_right": 0.08, "sword": 0.002 },
+  "audit": {
+    "rotateBone": "RightArm",
+    "stillPart": "wing_left",
+    "stillQuantileAxis": 2,
+    "stillQuantile": 0.70,
+    "stillMoveMax": 0.03
+  },
+  "bones": [
+    { "name": "Hips", "parent": null, "part": "body", "head": { "mode": "aabb", "u": [0.50, 0.50, 0.42] } },
+    { "name": "Spine", "parent": "Hips", "part": "body", "head": { "mode": "aabb", "u": [0.50, 0.50, 0.52] } },
+    { "name": "Spine1", "parent": "Spine", "part": "body", "head": { "mode": "aabb", "u": [0.50, 0.50, 0.62] } },
+    { "name": "Spine2", "parent": "Spine1", "part": "body", "head": { "mode": "aabb", "u": [0.50, 0.50, 0.72] } },
+    { "name": "Neck", "parent": "Spine2", "part": "body", "head": { "mode": "aabb", "u": [0.50, 0.52, 0.86] } },
+    { "name": "Head", "parent": "Neck", "part": "body", "head": { "mode": "aabb", "u": [0.50, 0.54, 0.94] } },
+
+    { "name": "LeftShoulder", "parent": "Spine2", "part": "body", "head": { "mode": "aabb", "u": [0.32, 0.52, 0.78] } },
+    { "name": "LeftArm", "parent": "LeftShoulder", "part": "body", "head": { "mode": "aabb", "u": [0.22, 0.50, 0.68] } },
+    { "name": "LeftForeArm", "parent": "LeftArm", "part": "body", "head": { "mode": "aabb", "u": [0.16, 0.48, 0.56] } },
+    { "name": "LeftHand", "parent": "LeftForeArm", "part": "body", "head": { "mode": "aabb", "u": [0.12, 0.46, 0.46] } },
+
+    { "name": "RightShoulder", "parent": "Spine2", "part": "body", "head": { "mode": "aabb", "u": [0.68, 0.52, 0.78] } },
+    { "name": "RightArm", "parent": "RightShoulder", "part": "body", "head": { "mode": "aabb", "u": [0.78, 0.50, 0.68] } },
+    { "name": "RightForeArm", "parent": "RightArm", "part": "body", "head": { "mode": "aabb", "u": [0.84, 0.48, 0.56] } },
+    { "name": "RightHand", "parent": "RightForeArm", "part": "body", "head": { "mode": "aabb", "u": [0.88, 0.46, 0.46] } },
+
+    { "name": "LeftUpLeg", "parent": "Hips", "part": "body", "head": { "mode": "aabb", "u": [0.42, 0.48, 0.38] } },
+    { "name": "LeftLeg", "parent": "LeftUpLeg", "part": "body", "head": { "mode": "aabb", "u": [0.42, 0.46, 0.20] } },
+    { "name": "LeftFoot", "parent": "LeftLeg", "part": "body", "head": { "mode": "aabb", "u": [0.42, 0.52, 0.04] } },
+    { "name": "RightUpLeg", "parent": "Hips", "part": "body", "head": { "mode": "aabb", "u": [0.58, 0.48, 0.38] } },
+    { "name": "RightLeg", "parent": "RightUpLeg", "part": "body", "head": { "mode": "aabb", "u": [0.58, 0.46, 0.20] } },
+    { "name": "RightFoot", "parent": "RightLeg", "part": "body", "head": { "mode": "aabb", "u": [0.58, 0.52, 0.04] } },
+
+    { "name": "Hem0", "parent": "Hips", "part": "body", "head": { "mode": "aabb", "u": [0.50, 0.42, 0.34] } },
+    { "name": "Hem1", "parent": "Hem0", "part": "body", "head": { "mode": "aabb", "u": [0.50, 0.40, 0.22] } },
+    { "name": "Hem2", "parent": "Hem1", "part": "body", "head": { "mode": "aabb", "u": [0.50, 0.38, 0.10] } },
+
+    { "name": "LeftWing0", "parent": "Spine2", "part": "wing_left", "head": { "mode": "aabb", "u": [0.82, 0.50, 0.55] } },
+    { "name": "LeftWing1", "parent": "LeftWing0", "part": "wing_left", "head": { "mode": "aabb", "u": [0.62, 0.50, 0.62] } },
+    { "name": "LeftWing2", "parent": "LeftWing1", "part": "wing_left", "head": { "mode": "aabb", "u": [0.38, 0.50, 0.70] } },
+    { "name": "LeftWing3", "parent": "LeftWing2", "part": "wing_left", "head": { "mode": "aabb", "u": [0.12, 0.50, 0.78] } },
+
+    { "name": "RightWing0", "parent": "Spine2", "part": "wing_right", "head": { "mode": "aabb", "u": [0.18, 0.50, 0.55] } },
+    { "name": "RightWing1", "parent": "RightWing0", "part": "wing_right", "head": { "mode": "aabb", "u": [0.38, 0.50, 0.62] } },
+    { "name": "RightWing2", "parent": "RightWing1", "part": "wing_right", "head": { "mode": "aabb", "u": [0.62, 0.50, 0.70] } },
+    { "name": "RightWing3", "parent": "RightWing2", "part": "wing_right", "head": { "mode": "aabb", "u": [0.88, 0.50, 0.78] } },
+
+    { "name": "Weapon", "parent": "RightHand", "part": "sword", "head": { "mode": "aabb", "u": [0.50, 0.50, 0.72] } },
+    { "name": "WeaponTip", "parent": "Weapon", "part": "sword", "head": { "mode": "aabb", "u": [0.50, 0.50, 0.06] } }
+  ],
+  "skinWalls": {
+    "body": [
+      "Hips", "Spine", "Spine1", "Spine2", "Neck", "Head",
+      "LeftShoulder", "LeftArm", "LeftForeArm", "LeftHand",
+      "RightShoulder", "RightArm", "RightForeArm", "RightHand",
+      "LeftUpLeg", "LeftLeg", "LeftFoot",
+      "RightUpLeg", "RightLeg", "RightFoot",
+      "Hem0", "Hem1", "Hem2"
+    ],
+    "wing_left": ["LeftWing0", "LeftWing1", "LeftWing2", "LeftWing3"],
+    "wing_right": ["RightWing0", "RightWing1", "RightWing2", "RightWing3"],
+    "sword": ["Weapon", "WeaponTip"]
+  }
+}

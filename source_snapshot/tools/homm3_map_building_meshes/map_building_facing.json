@@ -1,0 +1,395 @@
+{
+  "schema": "homm3_map_building_facing.v1",
+  "note": "Which glTF axis carries each Meshy model's front (the side drawn facing the viewer in the HoMM3 art: entrance, road, visit tile). Runtime Homm3MapBuildingMeshBundle.OrientToBillboardArtAndSeat turns every prefab by BillboardFrontYawDegrees=180, which is right for a +Z front; a -Z front needs catalog artYawDegrees=180, a +X front 90, a -X front -90 (glTFast negates X on import). build_homm3_map_building_meshes_bundle.py stamps artYawDegrees from this file; validate_map_building_mesh_contract.py fails if the catalog disagrees, if an entry is missing here, or if a local model.glb no longer has the recorded byte size (a regenerated model must be re-inspected: render the +Z and -Z views beside source_00_00.png).",
+  "inspected": "2026-09-27: elevated +Z/-Z ortho renders of all 96 model.glb beside source_00_00.png",
+  "models": {
+    "map_mesh_homm3_bulwark_city__avcbulz0": {
+      "frontAxis": "+Z",
+      "glbBytes": 11465424
+    },
+    "map_mesh_homm3_bulwark_dwellings__avgagrl0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9935168
+    },
+    "map_mesh_homm3_bulwark_dwellings__avgjotn0": {
+      "frontAxis": "+Z",
+      "glbBytes": 10649072
+    },
+    "map_mesh_homm3_bulwark_dwellings__avgkbl01": {
+      "frontAxis": "+Z",
+      "glbBytes": 19786496
+    },
+    "map_mesh_homm3_bulwark_dwellings__avgmmth0": {
+      "frontAxis": "+Z",
+      "glbBytes": 8985796
+    },
+    "map_mesh_homm3_bulwark_dwellings__avgshmn0": {
+      "frontAxis": "+Z",
+      "glbBytes": 6986444
+    },
+    "map_mesh_homm3_bulwark_dwellings__avgvori0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9381152
+    },
+    "map_mesh_homm3_bulwark_dwellings__avgyeti0": {
+      "frontAxis": "+Z",
+      "glbBytes": 8155100
+    },
+    "map_mesh_homm3_castle_city__capitol": {
+      "frontAxis": "-Z",
+      "glbBytes": 30538456,
+      "evidence": "Meshy-7 regen (2026-09-11): banners, road, flanking pillars and the portcullis gate are on glTF -Z; +Z shows the rear hall's large arched window. The pre-Meshy-7 model had them on +Z."
+    },
+    "map_mesh_homm3_castle_dwellings__avgangl0": {
+      "frontAxis": "+Z",
+      "glbBytes": 8130264
+    },
+    "map_mesh_homm3_castle_dwellings__avgcavl0": {
+      "frontAxis": "+Z",
+      "glbBytes": 7283132
+    },
+    "map_mesh_homm3_castle_dwellings__avgcros0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9728028
+    },
+    "map_mesh_homm3_castle_dwellings__avggrff0": {
+      "frontAxis": "+Z",
+      "glbBytes": 11689188
+    },
+    "map_mesh_homm3_castle_dwellings__avgmonk0": {
+      "frontAxis": "+Z",
+      "glbBytes": 7862588
+    },
+    "map_mesh_homm3_castle_dwellings__avgpike0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9680780
+    },
+    "map_mesh_homm3_castle_dwellings__avgswor0": {
+      "frontAxis": "+Z",
+      "glbBytes": 8910520
+    },
+    "map_mesh_homm3_conflux_city__capitol": {
+      "frontAxis": "+Z",
+      "glbBytes": 10113500
+    },
+    "map_mesh_homm3_conflux_dwellings__avgair0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9534108
+    },
+    "map_mesh_homm3_conflux_dwellings__avgelp": {
+      "frontAxis": "+Z",
+      "glbBytes": 6792656
+    },
+    "map_mesh_homm3_conflux_dwellings__avgerth0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9098412
+    },
+    "map_mesh_homm3_conflux_dwellings__avgfbrd": {
+      "frontAxis": "+Z",
+      "glbBytes": 9465676
+    },
+    "map_mesh_homm3_conflux_dwellings__avgfire0": {
+      "frontAxis": "+Z",
+      "glbBytes": 10454824
+    },
+    "map_mesh_homm3_conflux_dwellings__avgpixie": {
+      "frontAxis": "+Z",
+      "glbBytes": 10452608
+    },
+    "map_mesh_homm3_conflux_dwellings__avgwatr0": {
+      "frontAxis": "+Z",
+      "glbBytes": 11224520
+    },
+    "map_mesh_homm3_cove_city__avccovz0": {
+      "frontAxis": "+Z",
+      "glbBytes": 36210088,
+      "evidence": "2026-10-03 second Meshy 7.1 regen from a Lanczos-only upscale of the original HoMM3 sprite (the painted master was an AI repaint that hallucinated a thatched palisade): +Z elevated render shows the gate with the two skull flags, the path with its two posts and the stone keep with wooden hoardings flanked by two towers, as in the sprite; -Z is the plain back of the keep."
+    },
+    "map_mesh_homm3_cove_dwellings__fortnix": {
+      "frontAxis": "+Z",
+      "glbBytes": 10227028
+    },
+    "map_mesh_homm3_cove_dwellings__fregat": {
+      "frontAxis": "+Z",
+      "glbBytes": 10321624
+    },
+    "map_mesh_homm3_cove_dwellings__hasphtpl": {
+      "frontAxis": "+Z",
+      "glbBytes": 10880844
+    },
+    "map_mesh_homm3_cove_dwellings__nestas": {
+      "frontAxis": "+Z",
+      "glbBytes": 10482892
+    },
+    "map_mesh_homm3_cove_dwellings__nimphfo": {
+      "frontAxis": "+Z",
+      "glbBytes": 8932968
+    },
+    "map_mesh_homm3_cove_dwellings__swshcamp": {
+      "frontAxis": "+Z",
+      "glbBytes": 10131776
+    },
+    "map_mesh_homm3_cove_dwellings__towerza": {
+      "frontAxis": "+Z",
+      "glbBytes": 9901512
+    },
+    "map_mesh_homm3_dungeon_city__capitol": {
+      "frontAxis": "+Z",
+      "glbBytes": 11712908
+    },
+    "map_mesh_homm3_dungeon_dwellings__avgbhld0": {
+      "frontAxis": "+Z",
+      "glbBytes": 7947504
+    },
+    "map_mesh_homm3_dungeon_dwellings__avgharp0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9662616
+    },
+    "map_mesh_homm3_dungeon_dwellings__avgmant0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9216568
+    },
+    "map_mesh_homm3_dungeon_dwellings__avgmdsa0": {
+      "frontAxis": "+Z",
+      "glbBytes": 8955852
+    },
+    "map_mesh_homm3_dungeon_dwellings__avgmino0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9245372
+    },
+    "map_mesh_homm3_dungeon_dwellings__avgrdrg0": {
+      "frontAxis": "+Z",
+      "glbBytes": 14296464
+    },
+    "map_mesh_homm3_dungeon_dwellings__avgtrog0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9054340
+    },
+    "map_mesh_homm3_factory_city__avcfacz0": {
+      "frontAxis": "+Z",
+      "glbBytes": 28733116
+    },
+    "map_mesh_homm3_factory_dwellings__avg2half": {
+      "frontAxis": "+Z",
+      "glbBytes": 10547404
+    },
+    "map_mesh_homm3_factory_dwellings__avgarma": {
+      "frontAxis": "+Z",
+      "glbBytes": 23739732
+    },
+    "map_mesh_homm3_factory_dwellings__avgauto": {
+      "frontAxis": "+Z",
+      "glbBytes": 24790120
+    },
+    "map_mesh_homm3_factory_dwellings__avgcoatl": {
+      "frontAxis": "+Z",
+      "glbBytes": 7581924
+    },
+    "map_mesh_homm3_factory_dwellings__avgguns": {
+      "frontAxis": "+Z",
+      "glbBytes": 9305864
+    },
+    "map_mesh_homm3_factory_dwellings__avgmecha": {
+      "frontAxis": "+Z",
+      "glbBytes": 25782992
+    },
+    "map_mesh_homm3_factory_dwellings__avgworm": {
+      "frontAxis": "+Z",
+      "glbBytes": 21018800
+    },
+    "map_mesh_homm3_fortress_city__capitol": {
+      "frontAxis": "+Z",
+      "glbBytes": 28463288
+    },
+    "map_mesh_homm3_fortress_dwellings__avgbasl0": {
+      "frontAxis": "+Z",
+      "glbBytes": 6653688
+    },
+    "map_mesh_homm3_fortress_dwellings__avgdfly0": {
+      "frontAxis": "+Z",
+      "glbBytes": 10186560
+    },
+    "map_mesh_homm3_fortress_dwellings__avggnll0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9506324
+    },
+    "map_mesh_homm3_fortress_dwellings__avggorg0": {
+      "frontAxis": "+Z",
+      "glbBytes": 7723428
+    },
+    "map_mesh_homm3_fortress_dwellings__avghydr0": {
+      "frontAxis": "+Z",
+      "glbBytes": 10195612
+    },
+    "map_mesh_homm3_fortress_dwellings__avglzrd0": {
+      "frontAxis": "+Z",
+      "glbBytes": 5778028
+    },
+    "map_mesh_homm3_fortress_dwellings__avgwyvn0": {
+      "frontAxis": "+Z",
+      "glbBytes": 7742932
+    },
+    "map_mesh_homm3_inferno_city__capitol": {
+      "frontAxis": "+Z",
+      "glbBytes": 27446532
+    },
+    "map_mesh_homm3_inferno_dwellings__avgdemn0": {
+      "frontAxis": "+Z",
+      "glbBytes": 8597692
+    },
+    "map_mesh_homm3_inferno_dwellings__avgdevl0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9761772
+    },
+    "map_mesh_homm3_inferno_dwellings__avgefre0": {
+      "frontAxis": "+Z",
+      "glbBytes": 21810756
+    },
+    "map_mesh_homm3_inferno_dwellings__avggogs0": {
+      "frontAxis": "+Z",
+      "glbBytes": 27927720
+    },
+    "map_mesh_homm3_inferno_dwellings__avghell0": {
+      "frontAxis": "+Z",
+      "glbBytes": 8260096
+    },
+    "map_mesh_homm3_inferno_dwellings__avgimp0": {
+      "frontAxis": "+Z",
+      "glbBytes": 21443356
+    },
+    "map_mesh_homm3_inferno_dwellings__avgpit0": {
+      "frontAxis": "+Z",
+      "glbBytes": 19018304
+    },
+    "map_mesh_homm3_necropolis_city__capitol": {
+      "frontAxis": "+X",
+      "glbBytes": 32574384,
+      "evidence": "2026-10-03 azimuth sweep (elevated ortho, glTF az 0..120 beside source_00_00.png): the road, gate arch and the curved rampart on the viewer's left line up with the sprite at glTF +X (az 75-90); +Z shows the road running off to the right and the rampart at the back. Recorded +Z on 2026-09-27 because the census only offered +Z/-Z; the town stood 90 deg turned in the user's last playthrough (reported 2026-10-03)."
+    },
+    "map_mesh_homm3_necropolis_dwellings__avgbkni0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9533480
+    },
+    "map_mesh_homm3_necropolis_dwellings__avgbone0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9344792
+    },
+    "map_mesh_homm3_necropolis_dwellings__avglich0": {
+      "frontAxis": "+Z",
+      "glbBytes": 12232752
+    },
+    "map_mesh_homm3_necropolis_dwellings__avgskel0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9315460
+    },
+    "map_mesh_homm3_necropolis_dwellings__avgvamp0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9457564
+    },
+    "map_mesh_homm3_necropolis_dwellings__avgwght0": {
+      "frontAxis": "+Z",
+      "glbBytes": 10694976
+    },
+    "map_mesh_homm3_necropolis_dwellings__avgzomb0": {
+      "frontAxis": "+Z",
+      "glbBytes": 8517804
+    },
+    "map_mesh_homm3_rampart_city__capitol": {
+      "frontAxis": "+Z",
+      "glbBytes": 28386064
+    },
+    "map_mesh_homm3_rampart_dwellings__avgcent0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9908352
+    },
+    "map_mesh_homm3_rampart_dwellings__avgdwrf0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9174380
+    },
+    "map_mesh_homm3_rampart_dwellings__avgelf0": {
+      "frontAxis": "+Z",
+      "glbBytes": 10033464
+    },
+    "map_mesh_homm3_rampart_dwellings__avggdrg0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9393600
+    },
+    "map_mesh_homm3_rampart_dwellings__avgpega0": {
+      "frontAxis": "+Z",
+      "glbBytes": 10299460
+    },
+    "map_mesh_homm3_rampart_dwellings__avgtree0": {
+      "frontAxis": "+Z",
+      "glbBytes": 11103772
+    },
+    "map_mesh_homm3_rampart_dwellings__avgunic0": {
+      "frontAxis": "+Z",
+      "glbBytes": 11505724
+    },
+    "map_mesh_homm3_stronghold_city__avcstrc0": {
+      "frontAxis": "-Z",
+      "glbBytes": 29207088,
+      "evidence": "Meshy-7 regen (2026-09-11): the gate with its road and pillars is on glTF -Z; +Z is a blank curtain wall."
+    },
+    "map_mesh_homm3_stronghold_dwellings__avgbhmt0": {
+      "frontAxis": "+Z",
+      "glbBytes": 31513908
+    },
+    "map_mesh_homm3_stronghold_dwellings__avgcycl0": {
+      "frontAxis": "+Z",
+      "glbBytes": 10653552
+    },
+    "map_mesh_homm3_stronghold_dwellings__avggobl0": {
+      "frontAxis": "+Z",
+      "glbBytes": 11510952
+    },
+    "map_mesh_homm3_stronghold_dwellings__avgogre0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9958276
+    },
+    "map_mesh_homm3_stronghold_dwellings__avgorcg0": {
+      "frontAxis": "+Z",
+      "glbBytes": 12171252
+    },
+    "map_mesh_homm3_stronghold_dwellings__avgrocs0": {
+      "frontAxis": "+Z",
+      "glbBytes": 9485972
+    },
+    "map_mesh_homm3_stronghold_dwellings__avgwolf0": {
+      "frontAxis": "+Z",
+      "glbBytes": 10789664
+    },
+    "map_mesh_homm3_tower_city__capitol": {
+      "frontAxis": "+Z",
+      "glbBytes": 12074712
+    },
+    "map_mesh_homm3_tower_dwellings__avggarg0": {
+      "frontAxis": "+Z",
+      "glbBytes": 11212976
+    },
+    "map_mesh_homm3_tower_dwellings__avggeni0": {
+      "frontAxis": "+Z",
+      "glbBytes": 11130004
+    },
+    "map_mesh_homm3_tower_dwellings__avggolm0": {
+      "frontAxis": "+Z",
+      "glbBytes": 10657604
+    },
+    "map_mesh_homm3_tower_dwellings__avggrem0": {
+      "frontAxis": "+Z",
+      "glbBytes": 10015940
+    },
+    "map_mesh_homm3_tower_dwellings__avgmage0": {
+      "frontAxis": "+Z",
+      "glbBytes": 11449048
+    },
+    "map_mesh_homm3_tower_dwellings__avgnaga0": {
+      "frontAxis": "+Z",
+      "glbBytes": 10909072
+    },
+    "map_mesh_homm3_tower_dwellings__avgtitn0": {
+      "frontAxis": "+Z",
+      "glbBytes": 7824248
+    }
+  }
+}

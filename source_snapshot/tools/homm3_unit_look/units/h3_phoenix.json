@@ -1,0 +1,518 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_phoenix",
+ "status": "look",
+ "notes": "Phoenix fire (docs/homm3_vfx_experiments.md 'Phoenix fire'; lab tools/homm3_vfx/phoenix_fire_lab.py). DEF motion: the body texture boils in place (31-42% of body px change per frame, velocity 0), flames are redrawn every frame at 12 fps with no travel, the hot core is mostly steady. Body: a `fire` defPalette region (texture: Lab chroma rule; DEF: body luma >= 100) whose colours are the DEF's own fire palette ranked by the fire_boil scores (luminance + steady chest core + boil noise); the dark rest (beak, talons, feather strokes) keeps the v7c grade. Self-lit read: body_fire is a floor light (Hex/Lit has no emission; the lab showed a baked glow cannot do it). Loops add procedural fire_tongues (lab C6; prefab not built). Attack / hit / death are DEF-ripped flipbooks from region-segmented file masks (tools/homm3_vfx/phoenix_fire_masks.py; the roster colour rule cannot see fire on a fire body).",
+ "lighting": {
+  "mode": "v7c",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": [],
+  "defSegmenter": {
+   "module": "tools/homm3_vfx/phoenix_fire_masks.py",
+   "function": "def_regions"
+  },
+  "regions": [
+   {
+    "name": "fire",
+    "mask": {
+     "maskPath": "tools/homm3_unit_look/units/masks/h3_phoenix/fire_region_uv.png"
+    },
+    "target": "defPalette",
+    "defRegion": "fire",
+    "knobs": {
+     "skyCompensation": true
+    }
+   }
+  ],
+  "notes": "No bakedGlow: the lab's baked lift bought almost nothing under Hex/Lit (L-hist 11.6 -> 11.0, hot core 0); the hot core now comes from the DEF palette's white-hot end placed on the chest by the scores' steady core term, and the self-lit brightness from the body_fire floor."
+ },
+ "lights": [
+  {
+   "id": "body_fire",
+   "treatment": "dynamic",
+   "notes": "always-on body fire: per-clip floor (the grade is fitted under it) + authored hit flash and death flare; goes out on death frame 3"
+  },
+  {
+   "id": "breath_glow",
+   "treatment": "dynamic",
+   "notes": "attack: the jet lights the head and chest; fitted rise"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "fire_boil",
+    "type": "uvAtlas",
+    "regions": [
+     "fire"
+    ],
+    "source": {
+     "scores": "artifacts/homm3_vfx_experiments/phoenix/scores/fire_boil_scores.npz",
+     "generator": "tools/homm3_vfx/phoenix_fire_scores.py"
+    },
+    "gutterPx": 32,
+    "clips": {
+     "Unit_Idle": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "Unit_Move": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_MoveStart": [
+      0,
+      1,
+      2
+     ],
+     "Unit_MoveEnd": [
+      2,
+      1,
+      0
+     ],
+     "Unit_Mouseover": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      3,
+      2,
+      1,
+      0
+     ],
+     "Unit_Defence": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      3,
+      2,
+      1,
+      0
+     ],
+     "Unit_Hitted": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_AttackFront": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      4,
+      5,
+      4,
+      5,
+      6,
+      7
+     ],
+     "Unit_Death": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ]
+    },
+    "provenance": "phoenix_fire_scores.py: 8 cells of rank(luminance + 0.6 chest core + beta * boil noise), beta 0.90 bisected so the simulated per-cell change of the fire texels under the DEF palette is the DEF idle body change 0.347; a new cell per new DEF frame, repeated DEF frames reuse the cell (mouseover/defence are DEF 5-frame ping-pongs, move_end is move_start reversed)"
+   },
+   {
+    "id": "fire_volume",
+    "type": "volumetricFire",
+    "source": {
+     "def": "CPHX.DEF",
+     "defGroup": 2,
+     "frames": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "fireMask": {
+      "minLuma": 100,
+      "minWarmth": 40
+     }
+    },
+    "emitter": {
+     "excludeBones": [
+      "*Leg",
+      "*Foot",
+      "*ToeBase"
+     ]
+    },
+    "systems": {
+     "tongues": {
+      "windows": 24,
+      "cellPx": [
+       16,
+       40
+      ],
+      "baseAt": 0.8,
+      "coverage": 1.5,
+      "lifetimeDefFrames": [
+       4,
+       8
+      ],
+      "riseDefPxPerFrame": 1.0,
+      "heightRange": [
+       0.35,
+       1.0
+      ],
+      "minUp": 0.0
+     },
+     "body": {
+      "windows": 24,
+      "cellPx": [
+       12,
+       22
+      ],
+      "coverage": 0.35,
+      "lifetimeDefFrames": [
+       3,
+       6
+      ],
+      "riseDefPxPerFrame": 0.5,
+      "heightRange": [
+       0.25,
+       1.0
+      ]
+     },
+     "embers": {
+      "perSecond": 24,
+      "lifetimeDefFrames": [
+       6,
+       12
+      ],
+      "riseDefPxPerFrame": 3.0,
+      "heightRange": [
+       0.5,
+       1.0
+      ]
+     }
+    },
+    "anchor": {
+     "bone": "Spine2"
+    },
+    "light": "body_fire",
+    "clips": {
+     "Unit_Idle": 1.0,
+     "Unit_Move": 1.0,
+     "Unit_MoveStart": 1.0,
+     "Unit_MoveEnd": 1.0,
+     "Unit_Mouseover": 1.0,
+     "Unit_Defence": 1.0,
+     "Unit_Hitted": 1.0,
+     "Unit_AttackFront": 1.0,
+     "Unit_Death": [
+      1.0,
+      1.0,
+      1.0,
+      0.4,
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "provenance": "volfire.py: CPHX.DEF idle (g2, 8 frames) cut into fixed windows, each an 8-frame flipbook of the DEF's own flicker at that spot (crest tongues + body boil) + detached DEF ember specks; replaces the unbuilt fire_tongues prefab (lab C6)",
+    "notes": "Emitted from the whole skinned body minus the legs (by joint name, not the old mesh's UVs, so it carries to the firebird-based rebuild) as camera-facing unlit billboards (view-independent volume): tongues from the upper 65% (normal up >= 0), body boil from the upper 75%, embers from the upper half. Death: burns on keys 0-2, fades on 3, no births from 4, cleared at 5 with hide_body (death_burn / death_ash flipbooks take over).",
+    "clearAt": {
+     "Unit_Death": 5
+    }
+   },
+   {
+    "id": "body_fire_light",
+    "type": "effectLight",
+    "lightId": "body_fire",
+    "carrier": "fire_volume",
+    "anchor": {
+     "bone": "Spine2",
+     "towardCameraU": 0.45
+    },
+    "rgb": [
+     1.0,
+     0.72,
+     0.36
+    ],
+    "range": 3.0,
+    "floor": {
+     "Unit_Idle": 0.8,
+     "Unit_Mouseover": 0.8,
+     "Unit_Defence": 0.8,
+     "Unit_Move": 0.3,
+     "Unit_MoveStart": 0.3,
+     "Unit_MoveEnd": 0.3,
+     "Unit_Hitted": 0.45,
+     "Unit_AttackFront": 0.8
+    },
+    "intensity": {
+     "Unit_Hitted": [
+      1.3,
+      1.25,
+      0.65,
+      0.55,
+      0.45,
+      0.45
+     ],
+     "Unit_Death": [
+      2.1,
+      1.5,
+      0.45,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "authored",
+    "notes": "Floors from the lab's per-frame absolute fit (idle 0.67-0.98 -> 0.8, move 0.23-0.35 -> 0.3, hit tail 0.44-0.47 -> 0.45); the hit flash (DEF core 20% on frames 0-1) and death flare (white-hot 0-1, burning 2, dark 3+) are authored on the lab's curves because the runner's fitted rise is measured over the clip's first key, which is where both flashes are. Death has no floor: the fire goes out."
+   },
+   {
+    "id": "breath",
+    "type": "defFlipbook",
+    "def": "CPHX.DEF",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_phoenix/breath"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": [
+      276,
+      214
+     ],
+     "boneTip": true
+    },
+    "texelsPerDefPx": 1,
+    "light": "breath_glow",
+    "provenance": "phoenix_fire_masks.py (phoenix_fire_lab.breath_mask): frame 3 flame+ember in front of 62% of the body width; frames 4-11 everything opaque in front of the beak (DEF x >= 276, y >= 190 until x >= 320); frames 4-9 alternate 4/5 three times (the DEF's 2-frame 6 Hz flicker), 10 = the jet detached, 11 = remnants",
+    "notes": "defOrigin is the DEF jet root (x 276, mean y 214), pinned to the Head bone tail: the mesh does not lunge (its beak stays near DEF (237-250, 150-155) while the sprite's head drops to y ~214), so the jet leaves the mesh beak rather than the sprite's beak position. The detached jet (10-11) keeps its DEF offset from that root."
+   },
+   {
+    "id": "breath_glow_light",
+    "type": "effectLight",
+    "lightId": "breath_glow",
+    "carrier": "breath",
+    "anchor": {
+     "bone": "Head",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.45
+    },
+    "rgb": [
+     1.0,
+     0.72,
+     0.36
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.029,
+      0.023,
+      0.0,
+      0.089,
+      0.0,
+      0.073,
+      0.0,
+      0.073,
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted",
+    "notes": "Rise over body_fire's attack floor; the runner rewrites the curve. Carried from frame 0 (liveness) though the breath draws from 3."
+   },
+   {
+    "id": "hit_sparks",
+    "type": "defFlipbook",
+    "def": "CPHX.DEF",
+    "clips": {
+     "Unit_Hitted": {
+      "defGroup": 3,
+      "frames": [
+       2,
+       3,
+       4,
+       5
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_phoenix/hit_sparks"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine2",
+     "defOrigin": {
+      "Unit_Hitted": [
+       [
+        201,
+        206
+       ],
+       [
+        191,
+        205
+       ],
+       [
+        194,
+        205
+       ],
+       [
+        203,
+        210
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "phoenix_fire_masks.py: DEF g3 detached embers (229 -> 835 px, flung outward); origin = the DEF body centroid of each frame"
+   },
+   {
+    "id": "death_burn",
+    "type": "defFlipbook",
+    "def": "CPHX.DEF",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_phoenix/death_burn"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": {
+      "Unit_Death": [
+       [
+        212,
+        202
+       ],
+       [
+        209,
+        191
+       ],
+       [
+        212,
+        180
+       ],
+       [
+        210,
+        186
+       ],
+       [
+        214,
+        233
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "phoenix_fire_masks.py: DEF g5 frames 0-3 crest tips + flame + embers (white-hot flare, wings burning), frame 4 the whole frame off the mesh (the pillar of fire, 53% above the body); origin = the DEF body centroid of each frame"
+   },
+   {
+    "id": "death_ash",
+    "type": "defFlipbook",
+    "def": "CPHX.DEF",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_phoenix/death_ash"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "Root",
+     "defOrigin": [
+      224,
+      268
+     ]
+    },
+    "render": "billboard",
+    "texelsPerDefPx": 1,
+    "provenance": "phoenix_fire_masks.py: DEF g5 frames 5-6, the whole frame (the ash pile); origin = the SpriteCam's projection of the world origin (spritecam offset 224.25, 267.65), so the pile sits where the DEF draws it",
+    "notes": "Billboard, not groundPlane: the pile is a side-view mound (height 30-40 px), not a flat pool; laid on the ground it would foreshorten to a smear."
+   },
+   {
+    "id": "hide_body",
+    "type": "event",
+    "clip": "Unit_Death",
+    "defFrame": 5,
+    "action": "hideMesh",
+    "notes": "All unit SkinnedMeshRenderers (body + h3_phoenix_Rubble): the ash flipbook replaces the unit."
+   }
+  ],
+  "notes": "Rebirth is not in CPHX.DEF (no group; c09spf0 is a summon portal). Not covered here."
+ }
+}

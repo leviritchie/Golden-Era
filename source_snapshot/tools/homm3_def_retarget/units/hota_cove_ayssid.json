@@ -1,0 +1,877 @@
+{
+ "unit": "hota_cove_ayssid",
+ "joints": {
+  "Hips": [
+   -0.01,
+   -0.213,
+   0.538
+  ],
+  "Spine": [
+   -0.009,
+   -0.248,
+   0.609
+  ],
+  "Spine1": [
+   -0.007,
+   -0.283,
+   0.681
+  ],
+  "LeftUpLeg": [
+   0.15,
+   -0.22,
+   0.405
+  ],
+  "LeftLeg": [
+   0.171,
+   -0.241,
+   0.28
+  ],
+  "LeftFoot": [
+   0.171,
+   -0.29,
+   0.161
+  ],
+  "LeftToeBase": [
+   0.164,
+   -0.443,
+   0.14
+  ],
+  "LeftToe_End": [
+   0.136,
+   -0.638,
+   0.098
+  ],
+  "Spine2": [
+   0,
+   -0.33,
+   0.8
+  ],
+  "Neck": [
+   0,
+   -0.4,
+   0.95
+  ],
+  "Head": [
+   0,
+   -0.5,
+   1.25
+  ],
+  "HeadTop_End": [
+   0,
+   -0.72,
+   1.36
+  ],
+  "RightUpLeg": [
+   -0.15,
+   -0.22,
+   0.405
+  ],
+  "RightLeg": [
+   -0.171,
+   -0.241,
+   0.28
+  ],
+  "RightFoot": [
+   -0.171,
+   -0.29,
+   0.161
+  ],
+  "RightToeBase": [
+   -0.164,
+   -0.443,
+   0.14
+  ],
+  "RightToe_End": [
+   -0.136,
+   -0.638,
+   0.098
+  ]
+ },
+ "wingMaxDeg": 0,
+ "wings": [
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.15,
+    -0.3,
+    1.0
+   ],
+   "tail": [
+    0.3,
+    0.2,
+    0.8
+   ],
+   "sign": -1,
+   "region": {
+    "box": [
+     [
+      0.13,
+      -0.33,
+      0.3
+     ],
+     [
+      0.42,
+      0.56,
+      1.5
+     ]
+    ],
+    "exclude": [
+     {
+      "box": [
+       [
+        0.0,
+        -0.8,
+        0.0
+       ],
+       [
+        0.45,
+        -0.03,
+        0.5
+       ]
+      ]
+     },
+     {
+      "box": [
+       [
+        0.0,
+        -0.5,
+        0.0
+       ],
+       [
+        0.16,
+        0.1,
+        1.1
+       ]
+      ]
+     },
+     {
+      "box": [
+       [
+        0,
+        0.2,
+        1.05
+       ],
+       [
+        0.22,
+        0.7,
+        1.6
+       ]
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.15,
+    -0.3,
+    1.0
+   ],
+   "tail": [
+    -0.3,
+    0.2,
+    0.8
+   ],
+   "sign": 1,
+   "region": {
+    "box": [
+     [
+      -0.42,
+      -0.33,
+      0.3
+     ],
+     [
+      -0.13,
+      0.56,
+      1.5
+     ]
+    ],
+    "exclude": [
+     {
+      "box": [
+       [
+        -0.45,
+        -0.8,
+        0.0
+       ],
+       [
+        -0.0,
+        -0.03,
+        0.5
+       ]
+      ]
+     },
+     {
+      "box": [
+       [
+        -0.16,
+        -0.5,
+        0.0
+       ],
+       [
+        -0.0,
+        0.1,
+        1.1
+       ]
+      ]
+     },
+     {
+      "box": [
+       [
+        -0.22,
+        0.2,
+        1.05
+       ],
+       [
+        0,
+        0.7,
+        1.6
+       ]
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 40,
+   "dy": 60
+  }
+ },
+ "extensions": [
+  "rampart_quadruped",
+  "cove_tailtrail",
+  "wing_chain",
+  "flight_life",
+  "limb_split"
+ ],
+ "wingChain": {
+  "wings": [
+   {
+    "bone": "LeftWing",
+    "side": 1
+   },
+   {
+    "bone": "RightWing",
+    "side": -1
+   }
+  ],
+  "adoptWeights": "nearest",
+  "anim": {
+   "MoveStart": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       0.6
+      ],
+      [
+       1,
+       1
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       30
+      ],
+      [
+       1,
+       45
+      ]
+     ]
+    }
+   },
+   "Move": {
+    "open": 1,
+    "flap": {
+     "sin": 50,
+     "phase": 90
+    },
+    "fold": {
+     "sin": 50,
+     "phase": 180,
+     "half": "pos"
+    },
+    "droop": {
+     "sin": 30,
+     "phase": 180,
+     "half": "pos"
+    }
+   },
+   "MoveEnd": {
+    "open": {
+     "keys": [
+      [
+       0,
+       1
+      ],
+      [
+       0.5,
+       0.6
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       45
+      ],
+      [
+       0.5,
+       15
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       0.4
+      ],
+      [
+       0.6,
+       0.3
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.15,
+       0.5
+      ],
+      [
+       0.3,
+       1
+      ],
+      [
+       0.75,
+       0.9
+      ],
+      [
+       1,
+       0.1
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       25
+      ],
+      [
+       0.75,
+       15
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Death": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0.3
+      ],
+      [
+       0.15,
+       0.9
+      ],
+      [
+       0.45,
+       1
+      ],
+      [
+       0.7,
+       0.6
+      ],
+      [
+       1,
+       0.2
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       40
+      ],
+      [
+       0.45,
+       60
+      ],
+      [
+       0.7,
+       30
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "flap",
+    "open",
+    "fold",
+    "droop",
+    "sweep"
+   ],
+   "offsets": [
+    "dx",
+    "dy"
+   ],
+   "clips": [
+    "MoveStart",
+    "MoveEnd",
+    "Hitted",
+    "AttackFront",
+    "Death",
+    "Defence"
+   ],
+   "bounce": 4,
+   "penalty": 0.0008,
+   "smooth": 0.0008
+  },
+  "steady": {
+   "Move": 1.0,
+   "MoveStart": 0.5,
+   "MoveEnd": 0.5
+  },
+  "bodyTurn": {
+   "fit": [
+    "Move"
+   ],
+   "rampIn": {
+    "MoveStart": "Move"
+   },
+   "rampOut": {
+    "MoveEnd": "Move"
+   },
+   "limits": {
+    "yaw": [
+     0,
+     0
+    ],
+    "pitch": [
+     0,
+     0
+    ],
+    "roll": [
+     0,
+     0
+    ]
+   },
+   "params": [
+    "dx",
+    "dy"
+   ],
+   "note": "2026-10-01 user: 'very awkward flight animation'. The free fit yawed the flying body 50.5 deg to lengthen its sprite silhouette, so the delivered Move flew crabwise 52-64 deg off its heading and MoveStart/MoveEnd swung the body 50 deg in one STEP key. Attitude held level (dx/dy only), as the 2026-09-29 griffin/dragon FP pass."
+  },
+  "land": [
+   "MoveEnd"
+  ]
+ },
+ "wingChainReason": "2026-09-27 workerB: the rigid wing bones never beat (Move wingSwing ~0.6 deg); silhouetteRefine faked it by rolling the whole body (toy ratio 57-81x) and the corrective bake blew up (morph 0.76). Articulated chain per ext/wing_chain.py as the griffins. Keys read off the DEF plates (stormbird/ayssid/halcyon share one DEF animation): Move is one flap per 10-frame clip, up on frames 9-0-1, down on 4-6, wing edge-on (folded) on the upstroke 7-8 -> flap sin 50 phase 90, fold/droop on the rising half; MoveStart/End spread and fold over 2 frames; AttackFront spreads wide on 2-6; Death opens then collapses; Defence (wings cloaked forward) is left to the fit.",
+ "deliveryDensify": {
+  "clips": [
+   "MoveStart",
+   "Move",
+   "MoveEnd"
+  ],
+  "keysPerSpan": 3
+ },
+ "quadruped": {
+  "tail": {
+   "points": [
+    [
+     0,
+     0.0,
+     0.3
+    ],
+    [
+     0,
+     0.15,
+     0.24
+    ],
+    [
+     0,
+     0.32,
+     0.26
+    ],
+    [
+     0,
+     0.46,
+     0.38
+    ],
+    [
+     0,
+     0.5,
+     0.6
+    ],
+    [
+     0,
+     0.47,
+     0.85
+    ],
+    [
+     0,
+     0.4,
+     1.08
+    ],
+    [
+     0,
+     0.34,
+     1.3
+    ]
+   ],
+   "region": {
+    "segments": [
+     [
+      [
+       0,
+       0.0,
+       0.3
+      ],
+      [
+       0,
+       0.15,
+       0.24
+      ]
+     ],
+     [
+      [
+       0,
+       0.15,
+       0.24
+      ],
+      [
+       0,
+       0.32,
+       0.26
+      ]
+     ],
+     [
+      [
+       0,
+       0.32,
+       0.26
+      ],
+      [
+       0,
+       0.46,
+       0.38
+      ]
+     ],
+     [
+      [
+       0,
+       0.46,
+       0.38
+      ],
+      [
+       0,
+       0.5,
+       0.6
+      ]
+     ],
+     [
+      [
+       0,
+       0.5,
+       0.6
+      ],
+      [
+       0,
+       0.47,
+       0.85
+      ]
+     ],
+     [
+      [
+       0,
+       0.47,
+       0.85
+      ],
+      [
+       0,
+       0.4,
+       1.08
+      ]
+     ],
+     [
+      [
+       0,
+       0.4,
+       1.08
+      ],
+      [
+       0,
+       0.34,
+       1.3
+      ]
+     ]
+    ],
+    "radius": 0.11,
+    "exclude": [
+     {
+      "box": [
+       [
+        -0.4,
+        -0.9,
+        0.0
+       ],
+       [
+        0.4,
+        0.0,
+        1.95
+       ]
+      ]
+     }
+    ]
+   },
+   "parent": "Hips",
+   "rootBlend": 1.0,
+   "sway": 6,
+   "lift": 4,
+   "moveSway": 10
+  },
+  "resetClips": {
+   "MoveStart": [
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "LeftToeBase",
+    "LeftToe_End",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "RightToeBase",
+    "RightToe_End"
+   ],
+   "Move": [
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "LeftToeBase",
+    "LeftToe_End",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "RightToeBase",
+    "RightToe_End"
+   ],
+   "MoveEnd": [
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot",
+    "LeftToeBase",
+    "LeftToe_End",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "RightToeBase",
+    "RightToe_End"
+   ]
+  }
+ },
+ "coveTailTrail": {
+  "prefix": "QTail",
+  "clips": {
+   "Move": 1.0,
+   "MoveStart": [
+    0.3,
+    0.9
+   ],
+   "MoveEnd": [
+    0.9,
+    0.3
+   ],
+   "Death": [
+    0.2,
+    1.0
+   ]
+  },
+  "dipDeg": 8,
+  "waveDeg": 6
+ },
+ "coveTailTrailReason": "2026-09-27 workerD: DEF-vs-build clip sheet showed the Move body curled into a ball with the tail hanging forward while the DEF streams it straight back (same DEF animation as the stormbird). Ported the stormbird's fix: an 8-bone QTail chain along this mesh's own tail centreline (points read off a |x|<0.07 mid-slice of the smartrigged mesh, region r 0.11, body in front of y=0.0 excluded) and ext/cove_tailtrail.py with the stormbird's clip weights. Death [0.2,1.0] added after the first tail build: its sheet still curled the dying body into a ring while the DEF falls stretched with the tail back (g05 f2-7).",
+ "flightLife": {
+  "moves": [
+   {
+    "clips": [
+     "MoveStart",
+     "Move",
+     "MoveEnd"
+    ],
+    "bone": "LeftUpLeg",
+    "axis": "lat",
+    "deg": 10,
+    "phase": 45,
+    "offset": 0
+   },
+   {
+    "clips": [
+     "MoveStart",
+     "Move",
+     "MoveEnd"
+    ],
+    "bone": "RightUpLeg",
+    "axis": "lat",
+    "deg": 10,
+    "phase": 75,
+    "offset": 0
+   },
+   {
+    "clips": [
+     "MoveStart",
+     "Move",
+     "MoveEnd"
+    ],
+    "bone": "LeftLeg",
+    "axis": "lat",
+    "deg": -8,
+    "phase": 90,
+    "offset": 0
+   },
+   {
+    "clips": [
+     "MoveStart",
+     "Move",
+     "MoveEnd"
+    ],
+    "bone": "RightLeg",
+    "axis": "lat",
+    "deg": -8,
+    "phase": 120,
+    "offset": 0
+   }
+  ]
+ },
+ "limbSplit": [
+  {
+   "bones": [
+    "LeftWing",
+    "WingL_00",
+    "WingL_01",
+    "WingL_02",
+    "WingL_03"
+   ],
+   "box": [
+    [
+     0.08,
+     -0.4,
+     0.0
+    ],
+    [
+     0.42,
+     0.6,
+     1.6
+    ]
+   ],
+   "islandMax": 120,
+   "reason": "lane C 2026-10-12 wing surgery: the folded wing is the flank's own skin (its root loops mate unshared with body holes, and two small flank patches carry wing weight while two wing patches carry body weight); islands rule: a loose patch whose surroundings are the other side joins that side, so the spread wing leaves no flank patch behind and takes no body patch with it"
+  },
+  {
+   "bones": [
+    "RightWing",
+    "WingR_00",
+    "WingR_01",
+    "WingR_02",
+    "WingR_03"
+   ],
+   "box": [
+    [
+     -0.42,
+     -0.4,
+     0.0
+    ],
+    [
+     -0.08,
+     0.6,
+     1.6
+    ]
+   ],
+   "islandMax": 120,
+   "reason": "lane C 2026-10-12 wing surgery: the folded wing is the flank's own skin (its root loops mate unshared with body holes, and two small flank patches carry wing weight while two wing patches carry body weight); islands rule (right side)"
+  }
+ ],
+ "glbPatch": {
+  "reason": "lane C 2026-10-12 authenticity: the DEF ayssid raises its wings high and back at Mouseover and flings them wide open on AttackFront; ours kept the wings folded along the flanks (thin sticks)",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_ayssid_spread_rot.json",
+    "sha256": "9908de78efc3815f4e9be10f8ae1ae4f8fcbf538a06c15f5c8e9e13f08ac8a8b",
+    "regrid": true,
+    "note": "rigid WingL/R_00 world turns (split: the table is applied twice): Mouseover pitch 80 back-up + roll 25 out (f1-f9), AttackFront pitch 55 + roll 50 (f1-f7); the folded wing is its own sheet, so the whole membrane opens with no new tears"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_ayssid_spread_rot.json",
+    "sha256": "9908de78efc3815f4e9be10f8ae1ae4f8fcbf538a06c15f5c8e9e13f08ac8a8b",
+    "regrid": true,
+    "note": "rigid WingL/R_00 world turns (split: the table is applied twice): Mouseover pitch 80 back-up + roll 25 out (f1-f9), AttackFront pitch 55 + roll 50 (f1-f7); the folded wing is its own sheet, so the whole membrane opens with no new tears"
+   }
+  ]
+ }
+}

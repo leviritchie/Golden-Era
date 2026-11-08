@@ -1,0 +1,1591 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_castle",
+  "heroOverrides": {
+    "homm3_castle_hero_1": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Knight",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Orrin",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_1",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_1_source_archery_specialist",
+        "nameText": "Archery",
+        "descriptionText": "Improves ranged and shooting attack damage for the hero's army.",
+        "iconKey": "skill_assault",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "range_attack",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          },
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "shoot_attack",
+              "0.10"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:archery"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_2": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Knight",
+      "startSquad": [
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_archer",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Valeska",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_2",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_2_source_h3_archer_specialist",
+        "nameText": "Archer Specialist",
+        "descriptionText": "Archer creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_archer",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_archer",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_archer",
+              "h3_archer_upg",
+              "h3_archer_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_archer",
+              "h3_archer_upg",
+              "h3_archer_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_archer",
+              "h3_archer_upg",
+              "h3_archer_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_archer",
+              "h3_archer_upg",
+              "h3_archer_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_archer",
+              "h3_archer_upg",
+              "h3_archer_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_archer"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_3": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Knight",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Edric",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_3",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_3_source_h3_griffin_specialist",
+        "nameText": "Griffin Specialist",
+        "descriptionText": "Griffin creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_griffin",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_griffin",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_griffin",
+              "h3_griffin_upg",
+              "h3_griffin_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_griffin",
+              "h3_griffin_upg",
+              "h3_griffin_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_griffin",
+              "h3_griffin_upg",
+              "h3_griffin_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_griffin",
+              "h3_griffin_upg",
+              "h3_griffin_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_griffin",
+              "h3_griffin_upg",
+              "h3_griffin_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_griffin"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_4": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Knight",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Sylvia",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_4",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_4_source_navigation_specialist",
+        "nameText": "Navigation",
+        "descriptionText": "Increases adventure movement and view radius as the hero gains levels.",
+        "iconKey": "skill_logistic",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "movementPerBonus",
+              "0.04"
+            ],
+            "upgrade": {
+              "increment": 0.02,
+              "levelStep": 6
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "viewRadius",
+              "1"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:navigation"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_5": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Knight",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Lord Haart",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_5",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_5_source_estates_specialist",
+        "nameText": "Estates",
+        "descriptionText": "Generates additional gold each day, increasing as the hero gains levels.",
+        "iconKey": "skill_economy",
+        "bonuses": [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              "500"
+            ],
+            "upgrade": {
+              "increment": 100,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:estates"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_6": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Knight",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Sorsha",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_6",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_6_source_h3_swordsman_specialist",
+        "nameText": "Swordsman Specialist",
+        "descriptionText": "Swordsman creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_swordsman",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_swordsman",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_swordsman"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_7": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Knight",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Christian",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_7",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_7_source_ballista_specialist",
+        "nameText": "Ballista",
+        "descriptionText": "Improves Heroic Strike at battle start and as the hero gains levels.",
+        "iconKey": "skill_battlemage",
+        "bonuses": [
+          {
+            "type": "battleSubskillBonus",
+            "parameters": [
+              "hero_ability",
+              "specializations_skill_warrior_ability_base_bonus"
+            ]
+          },
+          {
+            "activationLevel": 5,
+            "type": "battleSubskillBonus",
+            "parameters": [
+              "hero_ability",
+              "specializations_skill_warrior_ability_level_bonus"
+            ]
+          },
+          {
+            "activationLevel": 10,
+            "type": "battleSubskillBonus",
+            "parameters": [
+              "hero_ability",
+              "specializations_skill_warrior_ability_level_bonus"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:ballista"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_8": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Knight",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Tyris",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_8",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_8_source_h3_cavalier_specialist",
+        "nameText": "Cavalier Specialist",
+        "descriptionText": "Cavalier creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_cavalier",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_cavalier",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_cavalier",
+              "h3_cavalier_upg",
+              "h3_cavalier_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_cavalier",
+              "h3_cavalier_upg",
+              "h3_cavalier_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_cavalier",
+              "h3_cavalier_upg",
+              "h3_cavalier_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_cavalier",
+              "h3_cavalier_upg",
+              "h3_cavalier_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_cavalier",
+              "h3_cavalier_upg",
+              "h3_cavalier_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_cavalier"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_9": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Cleric",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Rion",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_9",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_9_olden_era_masterful_day_1_magic_healing_water",
+        "nameText": "Masterful Healing Water",
+        "descriptionText": "Starts with Masterful Healing Water. It casts as one tier stronger.",
+        "iconKey": "day_1_magic_healing_water",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "day_1_magic_healing_water",
+              "day_1_magic_healing_water_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "skill:firstAid",
+        "masterfulSpellBaseSid": "day_1_magic_healing_water",
+        "masterfulSpellSpecialSid": "day_1_magic_healing_water_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_10": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Cleric",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Adela",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_10",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_10_olden_era_masterful_day_2_magic_sharp_edge",
+        "nameText": "Masterful Blessing",
+        "descriptionText": "Starts with Masterful Blessing. It casts as one tier stronger.",
+        "iconKey": "day_2_magic_sharp_edge",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "day_2_magic_sharp_edge",
+              "day_2_magic_sharp_edge_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:day_2_magic_sharp_edge",
+        "masterfulSpellBaseSid": "day_2_magic_sharp_edge",
+        "masterfulSpellSpecialSid": "day_2_magic_sharp_edge_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_11": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Cleric",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Cuthbert",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_11",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_11_olden_era_masterful_night_1_magic_unnatural_calm",
+        "nameText": "Masterful Unnatural Calm",
+        "descriptionText": "Starts with Masterful Unnatural Calm. It casts as one tier stronger.",
+        "iconKey": "night_1_magic_unnatural_calm",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "night_1_magic_unnatural_calm",
+              "night_1_magic_unnatural_calm_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:night_1_magic_unnatural_calm",
+        "masterfulSpellBaseSid": "night_1_magic_unnatural_calm",
+        "masterfulSpellSpecialSid": "night_1_magic_unnatural_calm_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_12": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Cleric",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Adelaide",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_12",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_12_olden_era_masterful_primal_13_magic_avalanche",
+        "nameText": "Masterful Circle of Winter",
+        "descriptionText": "Starts with Masterful Circle of Winter. It casts as one tier stronger.",
+        "iconKey": "primal_13_magic_avalanche",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "primal_13_magic_avalanche",
+              "primal_13_magic_avalanche_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:primal_13_magic_avalanche",
+        "masterfulSpellBaseSid": "primal_13_magic_avalanche",
+        "masterfulSpellSpecialSid": "primal_13_magic_avalanche_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_13": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Cleric",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Ingham",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_13",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_13_source_h3_monk_specialist",
+        "nameText": "Monk Specialist",
+        "descriptionText": "Monk creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_monk",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_monk",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_monk",
+              "h3_monk_upg",
+              "h3_monk_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_monk",
+              "h3_monk_upg",
+              "h3_monk_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_monk",
+              "h3_monk_upg",
+              "h3_monk_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_monk",
+              "h3_monk_upg",
+              "h3_monk_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_monk",
+              "h3_monk_upg",
+              "h3_monk_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_monk"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_14": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Cleric",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Sanya",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_14",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_14_source_eagleEye_specialist",
+        "nameText": "Eagle Eye",
+        "descriptionText": "Improves spell pressure and magical awareness in combat.",
+        "iconKey": "skill_scouting",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicAttackPerBonus",
+              "0.06"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "viewRadius",
+              "1"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:eagleEye"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_15": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Cleric",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Loynis",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_15",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_15_olden_era_masterful_space_14_magic_doreaths_tide",
+        "nameText": "Masterful Doreath's Tide",
+        "descriptionText": "Starts with Masterful Doreath's Tide. It casts as one tier stronger.",
+        "iconKey": "space_14_magic_doreaths_tide",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "space_14_magic_doreaths_tide",
+              "space_14_magic_doreaths_tide_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:space_14_magic_doreaths_tide",
+        "masterfulSpellBaseSid": "space_14_magic_doreaths_tide",
+        "masterfulSpellSpecialSid": "space_14_magic_doreaths_tide_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_16": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Cleric",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Caitlin",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_16",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_16_source_gold_specialist",
+        "nameText": "Gold",
+        "descriptionText": "Generates additional gold each day.",
+        "iconKey": "skill_economy",
+        "bonuses": [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              "350"
+            ],
+            "upgrade": {
+              "increment": 50,
+              "levelStep": 5
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:gold"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_castle_hero_17": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Knight",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Catherine",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_17",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_17_source_h3_swordsman_specialist",
+        "nameText": "Swordsmen",
+        "descriptionText": "Improves Swordsmen and their upgrades in the hero's army.",
+        "iconKey": "h3_swordsman",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_swordsman",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_swordsman"
+      },
+      "notes": "Campaign hero Catherine; creature specialty from homm3_castle_hero_6."
+    },
+    "homm3_castle_hero_18": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Knight",
+      "startSquad": [
+        {
+          "sid": "h3_pikeman",
+          "min": 10,
+          "max": 20
+        },
+        {
+          "sid": "h3_archer",
+          "min": 4,
+          "max": 7
+        },
+        {
+          "sid": "h3_griffin",
+          "min": 2,
+          "max": 3
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_pikeman",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Roland",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_castle_18",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_castle_hero_18_source_h3_swordsman_specialist",
+        "nameText": "Swordsmen",
+        "descriptionText": "Improves Swordsmen and their upgrades in the hero's army.",
+        "iconKey": "h3_swordsman",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_swordsman",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_swordsman",
+              "h3_swordsman_upg",
+              "h3_swordsman_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_swordsman"
+      },
+      "notes": "Campaign hero Roland; creature specialty from homm3_castle_hero_6."
+    }
+  }
+}

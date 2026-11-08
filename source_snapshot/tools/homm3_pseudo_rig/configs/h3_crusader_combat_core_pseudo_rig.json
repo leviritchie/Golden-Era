@@ -1,0 +1,576 @@
+{
+  "schema": "homm3_pseudo_rig_fit_job.v1",
+  "unitSid": "h3_crusader",
+  "clipId": "combat_core",
+  "fps": 12,
+  "masterGlb": "artifacts/crusader_pose_pipeline/pseudo_rig/owned_bind/crusader_pseudo_master.glb",
+  "handleCatalog": "artifacts/crusader_pose_pipeline/pseudo_rig/owned_bind/handle_catalog.json",
+  "outputDir": "artifacts/crusader_pose_pipeline/pseudo_rig/out_fit",
+  "exportDir": "artifacts/crusader_pose_pipeline/pseudo_rig/export",
+  "cullDefSoftShadows": true,
+  "spriteAlphaThreshold": 8,
+  "targetPadFrac": 0.08,
+  "optimizeBones": [
+    "deform_000",
+    "deform_001",
+    "deform_002",
+    "deform_003",
+    "deform_004",
+    "deform_005",
+    "deform_006",
+    "deform_007",
+    "deform_008",
+    "deform_009",
+    "deform_010",
+    "deform_011",
+    "deform_012",
+    "deform_013",
+    "deform_014",
+    "deform_015",
+    "deform_016",
+    "deform_017",
+    "deform_018",
+    "deform_019",
+    "deform_020",
+    "deform_021",
+    "deform_022",
+    "deform_023",
+    "deform_024",
+    "deform_025",
+    "deform_026",
+    "deform_027",
+    "deform_028",
+    "deform_029",
+    "deform_030",
+    "deform_031",
+    "deform_032",
+    "deform_033",
+    "deform_034",
+    "deform_035",
+    "deform_036",
+    "deform_037",
+    "deform_038",
+    "deform_039",
+    "deform_040",
+    "deform_041",
+    "deform_042",
+    "deform_043",
+    "deform_044",
+    "deform_045",
+    "deform_046",
+    "deform_047"
+  ],
+  "camera": {
+    "axis": "iso",
+    "isoAzimuthDeg": 40.0,
+    "isoElevationDeg": 30.0,
+    "distance": 3.0,
+    "orthoScale": 4.2,
+    "rootYawDeg": 0.0,
+    "lookAtZ": 0.75,
+    "isoZOffset": 0.35
+  },
+  "render": {
+    "width": 288,
+    "height": 256
+  },
+  "loss": {
+    "lambdaNeighbor": 0.15,
+    "lambdaDeform": 0.08,
+    "lambdaStretch": 0.05,
+    "handleNeighborK": 4
+  },
+  "dof": {
+    "planeTranslateBound": 0.35,
+    "depthTranslateBound": 0.06,
+    "rotateBoundRad": 0.61
+  },
+  "optimizer": {
+    "method": "nelder",
+    "deMaxiter": 2,
+    "popsize": 4,
+    "blockSize": 4,
+    "randomProbesPerBlock": 16,
+    "simplexBoundFrac": 0.35,
+    "polishIters": 96,
+    "stageBPasses": 1,
+    "stageBPolishIters": 48,
+    "seed": 0
+  },
+  "clips": [
+    {
+      "actionName": "Idle",
+      "clipId": "idle_g2",
+      "cyclic": true,
+      "frameCount": 8
+    },
+    {
+      "actionName": "Move",
+      "clipId": "move_g0",
+      "cyclic": true,
+      "frameCount": 8
+    },
+    {
+      "actionName": "AttackFront",
+      "clipId": "attack_front_g12",
+      "cyclic": false,
+      "frameCount": 7
+    },
+    {
+      "actionName": "AttackUp",
+      "clipId": "attack_up_g11",
+      "cyclic": false,
+      "frameCount": 7
+    },
+    {
+      "actionName": "AttackDown",
+      "clipId": "attack_down_g13",
+      "cyclic": false,
+      "frameCount": 7
+    },
+    {
+      "actionName": "Hit",
+      "clipId": "hit_g3",
+      "cyclic": false,
+      "frameCount": 6
+    },
+    {
+      "actionName": "Defend",
+      "clipId": "defend_g4",
+      "cyclic": false,
+      "frameCount": 11
+    },
+    {
+      "actionName": "Death",
+      "clipId": "death_g5",
+      "cyclic": false,
+      "frameCount": 6
+    }
+  ],
+  "frames": [
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/02_00.png",
+      "clipId": "idle_g2",
+      "actionName": "Idle",
+      "clipFrame": 0,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/02_01.png",
+      "clipId": "idle_g2",
+      "actionName": "Idle",
+      "clipFrame": 1,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/02_02.png",
+      "clipId": "idle_g2",
+      "actionName": "Idle",
+      "clipFrame": 2,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/02_03.png",
+      "clipId": "idle_g2",
+      "actionName": "Idle",
+      "clipFrame": 3,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/02_04.png",
+      "clipId": "idle_g2",
+      "actionName": "Idle",
+      "clipFrame": 4,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/02_05.png",
+      "clipId": "idle_g2",
+      "actionName": "Idle",
+      "clipFrame": 5,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/02_06.png",
+      "clipId": "idle_g2",
+      "actionName": "Idle",
+      "clipFrame": 6,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/02_07.png",
+      "clipId": "idle_g2",
+      "actionName": "Idle",
+      "clipFrame": 7,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_00.png",
+      "clipId": "move_g0",
+      "actionName": "Move",
+      "clipFrame": 0,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_01.png",
+      "clipId": "move_g0",
+      "actionName": "Move",
+      "clipFrame": 1,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_02.png",
+      "clipId": "move_g0",
+      "actionName": "Move",
+      "clipFrame": 2,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_03.png",
+      "clipId": "move_g0",
+      "actionName": "Move",
+      "clipFrame": 3,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_04.png",
+      "clipId": "move_g0",
+      "actionName": "Move",
+      "clipFrame": 4,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_05.png",
+      "clipId": "move_g0",
+      "actionName": "Move",
+      "clipFrame": 5,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_06.png",
+      "clipId": "move_g0",
+      "actionName": "Move",
+      "clipFrame": 6,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_07.png",
+      "clipId": "move_g0",
+      "actionName": "Move",
+      "clipFrame": 7,
+      "cyclic": true
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/12_00.png",
+      "clipId": "attack_front_g12",
+      "actionName": "AttackFront",
+      "clipFrame": 0,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/12_01.png",
+      "clipId": "attack_front_g12",
+      "actionName": "AttackFront",
+      "clipFrame": 1,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/12_02.png",
+      "clipId": "attack_front_g12",
+      "actionName": "AttackFront",
+      "clipFrame": 2,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/12_03.png",
+      "clipId": "attack_front_g12",
+      "actionName": "AttackFront",
+      "clipFrame": 3,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/12_04.png",
+      "clipId": "attack_front_g12",
+      "actionName": "AttackFront",
+      "clipFrame": 4,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/12_05.png",
+      "clipId": "attack_front_g12",
+      "actionName": "AttackFront",
+      "clipFrame": 5,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale/12_06.png",
+      "clipId": "attack_front_g12",
+      "actionName": "AttackFront",
+      "clipFrame": 6,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g11_attack_up/frame_00.png",
+      "clipId": "attack_up_g11",
+      "actionName": "AttackUp",
+      "clipFrame": 0,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g11_attack_up/frame_01.png",
+      "clipId": "attack_up_g11",
+      "actionName": "AttackUp",
+      "clipFrame": 1,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g11_attack_up/frame_02.png",
+      "clipId": "attack_up_g11",
+      "actionName": "AttackUp",
+      "clipFrame": 2,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g11_attack_up/frame_03.png",
+      "clipId": "attack_up_g11",
+      "actionName": "AttackUp",
+      "clipFrame": 3,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g11_attack_up/frame_04.png",
+      "clipId": "attack_up_g11",
+      "actionName": "AttackUp",
+      "clipFrame": 4,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g11_attack_up/frame_05.png",
+      "clipId": "attack_up_g11",
+      "actionName": "AttackUp",
+      "clipFrame": 5,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g11_attack_up/frame_06.png",
+      "clipId": "attack_up_g11",
+      "actionName": "AttackUp",
+      "clipFrame": 6,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g13_attack_down/frame_00.png",
+      "clipId": "attack_down_g13",
+      "actionName": "AttackDown",
+      "clipFrame": 0,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g13_attack_down/frame_01.png",
+      "clipId": "attack_down_g13",
+      "actionName": "AttackDown",
+      "clipFrame": 1,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g13_attack_down/frame_02.png",
+      "clipId": "attack_down_g13",
+      "actionName": "AttackDown",
+      "clipFrame": 2,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g13_attack_down/frame_03.png",
+      "clipId": "attack_down_g13",
+      "actionName": "AttackDown",
+      "clipFrame": 3,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g13_attack_down/frame_04.png",
+      "clipId": "attack_down_g13",
+      "actionName": "AttackDown",
+      "clipFrame": 4,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g13_attack_down/frame_05.png",
+      "clipId": "attack_down_g13",
+      "actionName": "AttackDown",
+      "clipFrame": 5,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g13_attack_down/frame_06.png",
+      "clipId": "attack_down_g13",
+      "actionName": "AttackDown",
+      "clipFrame": 6,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g03_hitted/frame_00.png",
+      "clipId": "hit_g3",
+      "actionName": "Hit",
+      "clipFrame": 0,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g03_hitted/frame_01.png",
+      "clipId": "hit_g3",
+      "actionName": "Hit",
+      "clipFrame": 1,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g03_hitted/frame_02.png",
+      "clipId": "hit_g3",
+      "actionName": "Hit",
+      "clipFrame": 2,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g03_hitted/frame_03.png",
+      "clipId": "hit_g3",
+      "actionName": "Hit",
+      "clipFrame": 3,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g03_hitted/frame_04.png",
+      "clipId": "hit_g3",
+      "actionName": "Hit",
+      "clipFrame": 4,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g03_hitted/frame_05.png",
+      "clipId": "hit_g3",
+      "actionName": "Hit",
+      "clipFrame": 5,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g04_defence/frame_00.png",
+      "clipId": "defend_g4",
+      "actionName": "Defend",
+      "clipFrame": 0,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g04_defence/frame_01.png",
+      "clipId": "defend_g4",
+      "actionName": "Defend",
+      "clipFrame": 1,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g04_defence/frame_02.png",
+      "clipId": "defend_g4",
+      "actionName": "Defend",
+      "clipFrame": 2,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g04_defence/frame_03.png",
+      "clipId": "defend_g4",
+      "actionName": "Defend",
+      "clipFrame": 3,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g04_defence/frame_04.png",
+      "clipId": "defend_g4",
+      "actionName": "Defend",
+      "clipFrame": 4,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g04_defence/frame_05.png",
+      "clipId": "defend_g4",
+      "actionName": "Defend",
+      "clipFrame": 5,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g04_defence/frame_06.png",
+      "clipId": "defend_g4",
+      "actionName": "Defend",
+      "clipFrame": 6,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g04_defence/frame_07.png",
+      "clipId": "defend_g4",
+      "actionName": "Defend",
+      "clipFrame": 7,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g04_defence/frame_08.png",
+      "clipId": "defend_g4",
+      "actionName": "Defend",
+      "clipFrame": 8,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g04_defence/frame_09.png",
+      "clipId": "defend_g4",
+      "actionName": "Defend",
+      "clipFrame": 9,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g04_defence/frame_10.png",
+      "clipId": "defend_g4",
+      "actionName": "Defend",
+      "clipFrame": 10,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g05_death/frame_00.png",
+      "clipId": "death_g5",
+      "actionName": "Death",
+      "clipFrame": 0,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g05_death/frame_01.png",
+      "clipId": "death_g5",
+      "actionName": "Death",
+      "clipFrame": 1,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g05_death/frame_02.png",
+      "clipId": "death_g5",
+      "actionName": "Death",
+      "clipFrame": 2,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g05_death/frame_03.png",
+      "clipId": "death_g5",
+      "actionName": "Death",
+      "clipFrame": 3,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g05_death/frame_04.png",
+      "clipId": "death_g5",
+      "actionName": "Death",
+      "clipFrame": 4,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g05_death/frame_05.png",
+      "clipId": "death_g5",
+      "actionName": "Death",
+      "clipFrame": 5,
+      "cyclic": false
+    }
+  ],
+  "method_kind": "silhouette",
+  "method": "pseudo_rig_multi_pose_alpha",
+  "poseSolver": "pseudo_handle_tr",
+  "proof": "generated-artifact validated \u2014 pseudo-rig silhouette fit; not OE runtime"
+}

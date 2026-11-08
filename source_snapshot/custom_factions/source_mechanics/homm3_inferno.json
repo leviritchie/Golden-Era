@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_inferno",
+  "sourceDoc": "docs/custom_faction_recommendations.md and docs/custom_faction_technical_implementation_proposals.md",
+  "mechanics": [
+    {
+      "id": "inferno.castle_gate",
+      "surface": "building",
+      "sourceName": "Castle Gate",
+      "status": "substituted",
+      "reason": "Inter-town travel requires a traced map/city teleport route; current text must not imply it works.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "teleport",
+        "travel between towns",
+        "Castle Gate"
+      ],
+      "currentRows": [
+        "Build_Treasury"
+      ],
+      "playerTextTokens": [
+        "Homm3Inferno_Build_Treasury_description",
+        "Homm3Inferno_Build_Treasury_name",
+        "Homm3Inferno_Build_Treasury_narrativeDescription"
+      ]
+    },
+    {
+      "id": "inferno.order_of_fire",
+      "surface": "building",
+      "sourceName": "Order of Fire",
+      "status": "substituted",
+      "reason": "Current implementation should remain native stat/skill shaped until exact school behavior is traced.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Bank"
+      ],
+      "forbiddenPlayerText": [
+        "Fire Magic school"
+      ]
+    },
+    {
+      "id": "inferno.brimstone_stormclouds",
+      "surface": "building",
+      "sourceName": "Brimstone Stormclouds",
+      "status": "substituted",
+      "reason": "HotA fire-spell amplification has no proven city field; current row uses native gold income (Brimstone Tolls) and must not claim fire-spell damage.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "Fire spells",
+        "extra damage",
+        "Brimstone Stormclouds"
+      ],
+      "currentRows": [
+        "Build_Resource_Depot_level_2"
+      ],
+      "playerTextTokens": [
+        "Homm3Inferno_Build_Resource_Depot_level_2_description",
+        "Homm3Inferno_Build_Resource_Depot_level_2_name",
+        "Homm3Inferno_Build_Resource_Depot_level_2_narrativeDescription"
+      ]
+    },
+    {
+      "id": "inferno.birthing_pools",
+      "surface": "building",
+      "sourceName": "Birthing Pools",
+      "status": "exact",
+      "reason": "Generated city row grants +8 weekly growth to the Imp line.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot"
+      ],
+      "playerTextTokens": [
+        "Homm3Inferno_Build_Resource_Depot_description",
+        "Homm3Inferno_Build_Resource_Depot_name",
+        "Homm3Inferno_Build_Resource_Depot_narrativeDescription"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
+    },
+    {
+      "id": "inferno.deity_of_fire",
+      "surface": "building",
+      "sourceName": "Deity of Fire",
+      "status": "substituted",
+      "reason": "Grail/fire spell source behavior needs a verified spellbook/combat route.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "all Fire spells",
+        "Deity of Fire"
+      ],
+      "currentRows": [
+        "Build_Eternal_Flame"
+      ],
+      "playerTextTokens": [
+        "Homm3Inferno_Build_Eternal_Flame_description",
+        "Homm3Inferno_Build_Eternal_Flame_name",
+        "Homm3Inferno_Build_Eternal_Flame_narrativeDescription"
+      ]
+    },
+    {
+      "id": "inferno.gating",
+      "surface": "faction_skill",
+      "sourceName": "Gating",
+      "status": "substituted",
+      "reason": "Current skill design directly spawns temporary Inferno units from hero actions with Spell Power count scaling.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "skill_faction_homm3_inferno"
+      ],
+      "forbiddenPlayerText": [
+        "Hive",
+        "egg obstacle",
+        "current-army HP"
+      ]
+    }
+  ]
+}

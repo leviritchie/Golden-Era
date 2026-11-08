@@ -1,0 +1,222 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_frost_elemental",
+ "status": "look",
+ "notes": "conflux rollout: frost elemental. The shot's sparkle stars are ripped from the DEF (defEffects electric/water + detached). The DEF throws them from arms the mesh does not raise, so the cells are placed where the DEF draws them: cut around the Head joint's projected pixel and pinned there (explicit defOrigin).",
+ "lighting": {
+  "mode": "v7c",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "sparkle_flash",
+   "treatment": "dynamic",
+   "notes": "the sparkle release lights the arms and face"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "element_flow",
+    "type": "uvAtlas",
+    "provenance": "element_flow_scores.py mode crystal: 8 cells per 8-frame cycle, in phase with the retarget's element_motion keys; brightness-modulated look texture",
+    "modulate": {
+     "gain": 0.6
+    },
+    "clips": {
+     "Unit_Idle": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "Unit_MoveStart": [
+      0,
+      1
+     ],
+     "Unit_Move": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "Unit_MoveEnd": [
+      0,
+      1,
+      2
+     ],
+     "Unit_Mouseover": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "Unit_Hitted": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "Unit_Defence": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2
+     ],
+     "Unit_AttackFront": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0
+     ],
+     "Unit_ShootFront": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "Unit_Death": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    "source": {
+     "scores": "artifacts/homm3_vfx_experiments/element_flow/h3_frost_elemental_scores.npz",
+     "generator": "tools/homm3_vfx/element_flow_scores.py"
+    },
+    "gutterPx": 16
+   },
+   {
+    "id": "shoot_sparkle",
+    "type": "defFlipbook",
+    "provenance": "roster inventory conflux: g15 shoot_front breath/spit (water/ice) f3-6",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       3,
+       4,
+       5,
+       6,
+       7
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric",
+      "water"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 2
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": {
+      "Unit_ShootFront": [
+       [
+        247,
+        186
+       ],
+       [
+        247,
+        186
+       ],
+       [
+        247,
+        186
+       ],
+       [
+        245,
+        188
+       ],
+       [
+        244,
+        189
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "sparkle_flash"
+   },
+   {
+    "id": "sparkle_flash_light",
+    "type": "effectLight",
+    "lightId": "sparkle_flash",
+    "carrier": "shoot_sparkle",
+    "anchor": {
+     "bone": "Head",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.8,
+     0.9,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_ShootFront": [
+      0.0,
+      0.075,
+      0.187,
+      1.236,
+      1.031,
+      0.329,
+      0.129,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

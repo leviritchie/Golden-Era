@@ -1,0 +1,122 @@
+﻿{
+    "schemaVersion":  1,
+    "purpose":  "Source-authored predicate contract for custom formation law profiles that depend on negative status predicates. This is static status classification evidence only; it does not prove live buff queries, attacker/receiver correlation, status duration, or authorize gameplay mutation.",
+    "validationState":  "source-prepared-runtime-unproven",
+    "policy":  {
+                   "effectKeysMustMatchRequiresNegativeStatusPredicateProfiles":  true,
+                   "mustReferenceStatusTaxonomyContracts":  true,
+                   "genericAnyDebuffForbidden":  true,
+                   "sidSubstringInferenceForbidden":  true,
+                   "meleeAndRangedFormationRowsMustShareExactEffectKeySemantics":  true,
+                   "runtimeProofStillRequiredForGameplay":  true
+               },
+    "requiredStaticEvidence":  [
+                                   "custom_factions/status_taxonomy_contracts.json",
+                                   "exact vanilla status SID evidence through status taxonomy tags",
+                                   "effect-key-specific required tag list",
+                                   "effect-key-specific companion predicate list"
+                               ],
+    "requiredRuntimeProof":  [
+                                 "live receiver status query proof",
+                                 "live attacker/dealer status query proof when used",
+                                 "status owner/source correlation proof",
+                                 "status timing/duration proof",
+                                 "formation action payload correlation proof"
+                             ],
+    "contracts":  {
+                      "dungeon.boxed-disabled-flanked-bonus":  {
+                                                                   "statusGroups":  [
+                                                                                        "negativeStatusPredicate"
+                                                                                    ],
+                                                                   "requiredTags":  [
+                                                                                        "negative",
+                                                                                        "disable",
+                                                                                        "curse",
+                                                                                        "control",
+                                                                                        "counterattack_block"
+                                                                                    ],
+                                                                   "companionPredicates":  [
+                                                                                               "RequiresGeometryPredicate"
+                                                                                           ],
+                                                                   "forbiddenSubstitutes":  [
+                                                                                                "any debuff",
+                                                                                                "any negative-looking icon",
+                                                                                                "status SID substring contains curse",
+                                                                                                "target flanked without status when status branch is used",
+                                                                                                "localized status text parsing"
+                                                                                            ],
+                                                                   "notes":  "Dungeon formation status predicate must use exact negative/disable/curse/control taxonomy and keep boxed/flanked geometry separate."
+                                                               },
+                      "fortress.slow-poison-defensive-line":  {
+                                                                  "statusGroups":  [
+                                                                                       "negativeStatusPredicate",
+                                                                                       "poisonSlowMovementRestriction"
+                                                                                   ],
+                                                                  "requiredTags":  [
+                                                                                       "negative",
+                                                                                       "poison",
+                                                                                       "slow",
+                                                                                       "movement_restriction",
+                                                                                       "control"
+                                                                                   ],
+                                                                  "companionPredicates":  [
+                                                                                              "RequiresGeometryPredicate"
+                                                                                          ],
+                                                                  "forbiddenSubstitutes":  [
+                                                                                               "any debuff",
+                                                                                               "any poison-colored icon",
+                                                                                               "status SID substring contains slow",
+                                                                                               "defensive line without slowed or poisoned pressure when status branch is used",
+                                                                                               "localized status text parsing"
+                                                                                           ],
+                                                                  "notes":  "Fortress formation status predicate must use exact poison/slow/movement-restriction taxonomy and keep defensive geometry separate."
+                                                              },
+                      "necropolis.living-enemy-death-pressure":  {
+                                                                     "statusGroups":  [
+                                                                                          "negativeStatusPredicate"
+                                                                                      ],
+                                                                     "requiredTags":  [
+                                                                                          "negative",
+                                                                                          "decay",
+                                                                                          "anti_heal",
+                                                                                          "max_hp_down",
+                                                                                          "damage_over_time",
+                                                                                          "wound"
+                                                                                      ],
+                                                                     "companionPredicates":  [
+                                                                                                 "RequiresLivingEnemyPredicate"
+                                                                                             ],
+                                                                     "forbiddenSubstitutes":  [
+                                                                                                  "any debuff",
+                                                                                                  "any undead or corpse icon",
+                                                                                                  "status SID substring contains death",
+                                                                                                  "undead target treated as living enemy",
+                                                                                                  "localized status text parsing"
+                                                                                              ],
+                                                                     "notes":  "Necropolis formation status predicate must use exact decay/anti-heal/max-HP-down taxonomy and keep living-enemy classification separate."
+                                                                 },
+                      "stronghold.forward-move-kill-armor-pressure":  {
+                                                                          "statusGroups":  [
+                                                                                               "negativeStatusPredicate"
+                                                                                           ],
+                                                                          "requiredTags":  [
+                                                                                               "negative",
+                                                                                               "defense_down",
+                                                                                               "damage_taken_up",
+                                                                                               "attack_down",
+                                                                                               "wound"
+                                                                                           ],
+                                                                          "companionPredicates":  [
+                                                                                                      "RequiresForwardMovementOrKill"
+                                                                                                  ],
+                                                                          "forbiddenSubstitutes":  [
+                                                                                                       "any debuff",
+                                                                                                       "any armor-looking icon",
+                                                                                                       "status SID substring contains armor",
+                                                                                                       "forward movement without pressure status when status branch is used",
+                                                                                                       "localized status text parsing"
+                                                                                                   ],
+                                                                          "notes":  "Stronghold formation status predicate must use exact armor/pressure-style negative taxonomy and keep movement/kill tempo separate."
+                                                                      }
+                  }
+}

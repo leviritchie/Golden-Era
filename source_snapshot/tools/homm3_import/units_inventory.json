@@ -1,0 +1,3381 @@
+{
+  "formatVersion": 1,
+  "description": "Lane B: HoMM3 \u2192 defextract staging. Paths are relative to repo root unless absolute. Do not mix with esquire lane.",
+  "homm3LodRoot": "HoMM 3 Complete/Data",
+  "fallbackLodRoot": "vcmi/Data",
+  "unityLabRoot": "Assets/CustomUnits/homm3_lab",
+  "units": [
+    {
+      "unitSid": "sample_creature",
+      "comment": "Example row \u2014 replace battleLodEntry with a real H3sprite.lod DEF name or use battleDefPath for a loose .def file.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "cpkman.def",
+      "battleExtractBasename": "creature",
+      "mapDefPath": "",
+      "mapExtractBasename": "creature_map",
+      "meshKey": "Humans/1Prefabs/esquire",
+      "mapMeshKey": "Humans/1Prefabs/esquire_map",
+      "jsonPathRewrite": {
+        "fromDirPrefix": "cpkman.dir/",
+        "toDirPrefix": "creature.dir/"
+      }
+    },
+    {
+      "unitSid": "temple_griffon",
+      "sndBattlePrefix": "GRIF",
+      "comment": "HoMM3 battle Griffin (CGRIFF). SND keys GRIFMOVE/GRIFATTK/GRIFWNCE/GRIFKILL.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CGRIFF.DEF",
+      "battleExtractBasename": "CGRIFF",
+      "mapDefPath": ""
+    },
+    {
+      "unitSid": "h3_goblin",
+      "sndBattlePrefix": "GBLN",
+      "comment": "Stronghold bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CGOBLI.def",
+      "battleExtractBasename": "CGOBLI",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/stronghold/adventureMap/creatures/AVWgobl0.def",
+      "mapExtractBasename": "AVWgobl0"
+    },
+    {
+      "unitSid": "h3_hobgoblin",
+      "sndBattlePrefix": "HGOB",
+      "comment": "Stronghold bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CHGOBL.def",
+      "battleExtractBasename": "CHGOBL",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/stronghold/adventureMap/creatures/AVWgobx0.def",
+      "mapExtractBasename": "AVWgobx0"
+    },
+    {
+      "unitSid": "h3_wolf_rider",
+      "sndBattlePrefix": "BDRF",
+      "comment": "Stronghold bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CBWLFR.def",
+      "battleExtractBasename": "CBWLFR",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/stronghold/adventureMap/creatures/AVWwolf0.def",
+      "mapExtractBasename": "AVWwolf0"
+    },
+    {
+      "unitSid": "h3_wolf_raider",
+      "sndBattlePrefix": "BDRF",
+      "comment": "Stronghold bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CUWLFR.def",
+      "battleExtractBasename": "CUWLFR",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/stronghold/adventureMap/creatures/AVWwolx0.def",
+      "mapExtractBasename": "AVWwolx0"
+    },
+    {
+      "unitSid": "h3_orc",
+      "sndBattlePrefix": "OORC",
+      "comment": "Stronghold bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CORC.def",
+      "battleExtractBasename": "CORC",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/stronghold/adventureMap/creatures/AVWorc0.def",
+      "mapExtractBasename": "AVWorc0"
+    },
+    {
+      "unitSid": "h3_orc_chieftain",
+      "sndBattlePrefix": "ORCC",
+      "comment": "Stronghold bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CORCCH.def",
+      "battleExtractBasename": "CORCCH",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/stronghold/adventureMap/creatures/AVWorcx0.def",
+      "mapExtractBasename": "AVWorcx0"
+    },
+    {
+      "unitSid": "h3_ogre",
+      "sndBattlePrefix": "OGRE",
+      "comment": "Stronghold bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "COGRE.def",
+      "battleExtractBasename": "COGRE",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/stronghold/adventureMap/creatures/AVWogre0.def",
+      "mapExtractBasename": "AVWogre0"
+    },
+    {
+      "unitSid": "h3_ogre_mage",
+      "sndBattlePrefix": "OGRM",
+      "comment": "Stronghold bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF. Battle DEF is COGMAG.def (Ogre Mage); COGRE.def is the Ogre (was wrongly used until 2026-09-27).",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "COGMAG.def",
+      "battleExtractBasename": "COGMAG",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/stronghold/adventureMap/creatures/AVWogrx0.def",
+      "mapExtractBasename": "AVWogrx0"
+    },
+    {
+      "unitSid": "h3_roc",
+      "sndBattlePrefix": "ROCC",
+      "comment": "Stronghold bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CROC.def",
+      "battleExtractBasename": "CROC",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/stronghold/adventureMap/creatures/AVWroc0.def",
+      "mapExtractBasename": "AVWroc0"
+    },
+    {
+      "unitSid": "h3_thunderbird",
+      "sndBattlePrefix": "TBRD",
+      "comment": "Stronghold bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CTBIRD.def",
+      "battleExtractBasename": "CTBIRD",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/stronghold/adventureMap/creatures/AVWrocx0.def",
+      "mapExtractBasename": "AVWrocx0"
+    },
+    {
+      "unitSid": "h3_cyclops",
+      "sndBattlePrefix": "CYCL",
+      "comment": "Stronghold bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CCYCLR.def",
+      "battleExtractBasename": "CCYCLR",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/stronghold/adventureMap/creatures/AVWcycl0.def",
+      "mapExtractBasename": "AVWcycl0"
+    },
+    {
+      "unitSid": "h3_cyclops_king",
+      "sndBattlePrefix": "CCYC",
+      "comment": "Stronghold bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CcyclLor.def",
+      "battleExtractBasename": "CcyclLor",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/stronghold/adventureMap/creatures/AVWcycx0.def",
+      "mapExtractBasename": "AVWcycx0"
+    },
+    {
+      "unitSid": "h3_behemoth",
+      "sndBattlePrefix": "YBMH",
+      "comment": "Stronghold bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CYBEHE.def",
+      "battleExtractBasename": "CYBEHE",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/stronghold/adventureMap/creatures/AVWbhmt0.def",
+      "mapExtractBasename": "AVWbhmt0"
+    },
+    {
+      "unitSid": "h3_ancient_behemoth",
+      "sndBattlePrefix": "BMTH",
+      "comment": "Stronghold bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CABEHE.def",
+      "battleExtractBasename": "CABEHE",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/stronghold/adventureMap/creatures/AVWbhmx0.def",
+      "mapExtractBasename": "AVWbhmx0"
+    },
+    {
+      "unitSid": "toa_goblin_trapper",
+      "sndBattlePrefix": "HGOB",
+      "comment": "Tears of Ashan Stronghold alternate visual: toa_goblin_trapper.",
+      "battleExtractBasename": "lvl1alt",
+      "mapExtractBasename": "lvl1alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "mapZipMember": "sprites/creatures/stronghold/map/lvl1Alt.def",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/stronghold/battle/lvl1Alt.def"
+    },
+    {
+      "unitSid": "toa_boar_rider",
+      "sndBattlePrefix": "BOAR",
+      "comment": "Tears of Ashan Stronghold alternate visual: toa_boar_rider. ToA has no Stronghold battle DEF for tier 2; use core neutral Boar battle DEF.",
+      "battleExtractBasename": "cboar",
+      "mapExtractBasename": "cboar",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "mapZipMember": "sprites/creatures/stronghold/map/lvl2Alt.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "Cboar.def"
+    },
+    {
+      "unitSid": "toa_orc_berserker",
+      "sndBattlePrefix": "ORCC",
+      "comment": "Tears of Ashan Stronghold alternate visual: toa_orc_berserker.",
+      "battleExtractBasename": "lvl3alt",
+      "mapExtractBasename": "lvl3alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "mapZipMember": "sprites/creatures/stronghold/map/lvl3Alt.def",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/stronghold/battle/lvl3Alt.def"
+    },
+    {
+      "unitSid": "toa_ogre_brute",
+      "sndBattlePrefix": "OGRM",
+      "comment": "Tears of Ashan Stronghold alternate visual: toa_ogre_brute.",
+      "battleExtractBasename": "lvl4alt",
+      "mapExtractBasename": "lvl4alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "mapZipMember": "sprites/creatures/stronghold/map/lvl4Alt.def",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/stronghold/battle/lvl4Alt.def"
+    },
+    {
+      "unitSid": "toa_shahrokh",
+      "sndBattlePrefix": "TBRD",
+      "comment": "Tears of Ashan Stronghold alternate visual: toa_shahrokh.",
+      "battleExtractBasename": "lvl5alt",
+      "mapExtractBasename": "lvl5alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "mapZipMember": "sprites/creatures/stronghold/map/lvl5Alt.def",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/stronghold/battle/lvl5Alt.def"
+    },
+    {
+      "unitSid": "toa_blood_eyed_cyclops",
+      "sndBattlePrefix": "CCYC",
+      "comment": "Tears of Ashan Stronghold alternate visual: toa_blood_eyed_cyclops.",
+      "battleExtractBasename": "lvl6alt",
+      "mapExtractBasename": "lvl6alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "mapZipMember": "sprites/creatures/stronghold/map/lvl6Alt.def",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/stronghold/battle/lvl6Alt.def"
+    },
+    {
+      "unitSid": "toa_ghost_behemoth",
+      "sndBattlePrefix": "BMTH",
+      "comment": "Tears of Ashan Stronghold alternate visual: toa_ghost_behemoth.",
+      "battleExtractBasename": "lvl7alt",
+      "mapExtractBasename": "lvl7alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "mapZipMember": "sprites/creatures/stronghold/map/lvl7Alt.def",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/stronghold/battle/lvl7Alt.def"
+    },
+    {
+      "unitSid": "h3_gremlin",
+      "comment": "Tower bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CGREMA",
+      "mapExtractBasename": "AVWgrem0",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CGREMA.def",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/tower/adventureMap/creatures/AVWgrem0.def",
+      "sndBattlePrefix": "AGRM"
+    },
+    {
+      "unitSid": "h3_gremlin_upg",
+      "comment": "Tower bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CGREMM",
+      "mapExtractBasename": "AVWgrex0",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CGREMM.def",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/tower/adventureMap/creatures/AVWgrex0.def",
+      "sndBattlePrefix": "MGRM"
+    },
+    {
+      "unitSid": "h3_gremlin_mechanic",
+      "comment": "Tower bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl1Alt",
+      "mapExtractBasename": "lvl1Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/tower/battle/lvl1Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/tower/battle/lvl1Alt",
+      "mapJsonZipMember": "sprites/creatures/tower/map/lvl1Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/tower/map/lvl1Alt",
+      "sndBattlePrefix": "AAGL"
+    },
+    {
+      "unitSid": "h3_gargoyle",
+      "comment": "Tower bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CGARGO",
+      "mapExtractBasename": "AVWgarg0",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CGARGO.def",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/tower/adventureMap/creatures/AVWgarg0.def",
+      "sndBattlePrefix": "SGRG"
+    },
+    {
+      "unitSid": "h3_gargoyle_upg",
+      "comment": "Tower bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "COGARG",
+      "mapExtractBasename": "AVWgarx0",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "COGARG.def",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/tower/adventureMap/creatures/AVWgarx0.def",
+      "sndBattlePrefix": "OGRG"
+    },
+    {
+      "unitSid": "h3_elemental_gargoyle",
+      "comment": "Tower bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl2Alt",
+      "mapExtractBasename": "lvl2Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/tower/battle/lvl2Alt.def",
+      "mapJsonZipMember": "sprites/creatures/tower/map/lvl2Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/tower/map/lvl2Alt",
+      "sndBattlePrefix": "OGRG"
+    },
+    {
+      "unitSid": "h3_golem",
+      "comment": "Tower bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CSGOLE",
+      "mapExtractBasename": "AVWgolx0",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CSGOLE.def",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/tower/adventureMap/creatures/AVWgolx0.def",
+      "sndBattlePrefix": "SGLM"
+    },
+    {
+      "unitSid": "h3_golem_upg",
+      "comment": "Tower bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CIGOLE",
+      "mapExtractBasename": "AVWgolm0",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CIGOLE.def",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/tower/adventureMap/creatures/AVWgolm0.def",
+      "sndBattlePrefix": "IGLM"
+    },
+    {
+      "unitSid": "h3_magnetic_golem",
+      "comment": "Tower bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl3Alt",
+      "mapExtractBasename": "lvl3Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/tower/battle/lvl3Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/tower/battle/lvl3Alt",
+      "sndBattlePrefix": "SGLM",
+      "mapZipMember": "sprites/creatures/tower/map/lvl3Alt.def"
+    },
+    {
+      "unitSid": "h3_mage",
+      "comment": "Tower bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CMAGE",
+      "mapExtractBasename": "AVWmage0",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CMAGE.def",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/tower/adventureMap/creatures/AVWmage0.def",
+      "sndBattlePrefix": "MAGE"
+    },
+    {
+      "unitSid": "h3_mage_upg",
+      "comment": "Tower bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CAMAGE",
+      "mapExtractBasename": "AVWmagx0",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CAMAGE.def",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/tower/adventureMap/creatures/AVWmagx0.def",
+      "sndBattlePrefix": "AMAG"
+    },
+    {
+      "unitSid": "h3_battle_mage",
+      "comment": "Tower bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl4Alt",
+      "mapExtractBasename": "lvl4Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/tower/battle/lvl4Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/tower/battle/lvl4Alt",
+      "mapJsonZipMember": "sprites/creatures/tower/map/lvl4Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/tower/map/lvl4Alt",
+      "sndBattlePrefix": "AMAG"
+    },
+    {
+      "unitSid": "h3_genie",
+      "comment": "Tower bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CGENIE",
+      "mapExtractBasename": "AVWgeni0",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CGENIE.def",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/tower/adventureMap/creatures/AVWgeni0.def",
+      "sndBattlePrefix": "GENI"
+    },
+    {
+      "unitSid": "h3_genie_upg",
+      "comment": "Tower bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF. Battle DEF is CSULTA.def (Master Genie); CGENIE.def is the Genie (was wrongly used until 2026-09-27).",
+      "battleExtractBasename": "CSULTA",
+      "mapExtractBasename": "AVWgenx0",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CSULTA.def",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/tower/adventureMap/creatures/AVWgenx0.def",
+      "sndBattlePrefix": "CALF"
+    },
+    {
+      "unitSid": "h3_genie_vizier",
+      "comment": "Tower bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl5Alt",
+      "mapExtractBasename": "lvl5Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/tower/battle/lvl5Alt.def",
+      "mapZipMember": "sprites/creatures/tower/map/lvl5Alt.def",
+      "sndBattlePrefix": "CALF"
+    },
+    {
+      "unitSid": "h3_naga",
+      "comment": "Tower bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CNAGA",
+      "mapExtractBasename": "AVWnaga0",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CNAGA.def",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/tower/adventureMap/creatures/AVWnaga0.def",
+      "sndBattlePrefix": "NGRD"
+    },
+    {
+      "unitSid": "h3_naga_upg",
+      "comment": "Tower bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CNAGAG",
+      "mapExtractBasename": "AVWnagx0",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CNAGAG.def",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/tower/adventureMap/creatures/AVWnagx0.def",
+      "sndBattlePrefix": "NGRD"
+    },
+    {
+      "unitSid": "h3_naga_rani",
+      "comment": "Tower bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl6Alt",
+      "mapExtractBasename": "lvl6Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/tower/battle/lvl6Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/tower/battle/lvl6Alt",
+      "mapJsonZipMember": "sprites/creatures/tower/map/lvl6Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/tower/map/lvl6Alt",
+      "sndBattlePrefix": "NGRD"
+    },
+    {
+      "unitSid": "h3_giant",
+      "comment": "Tower bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CLTITA",
+      "mapExtractBasename": "AVWtitx0",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CLTITA.def",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/tower/adventureMap/creatures/AVWtitx0.def",
+      "sndBattlePrefix": "GTIT"
+    },
+    {
+      "unitSid": "h3_giant_upg",
+      "comment": "Tower bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CGTITA",
+      "mapExtractBasename": "AVWtitn0",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CGTITA.def",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/tower/adventureMap/creatures/AVWtitn0.def",
+      "sndBattlePrefix": "LTIT"
+    },
+    {
+      "unitSid": "h3_colossus",
+      "comment": "Tower bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl7Alt",
+      "mapExtractBasename": "lvl7Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/tower/battle/lvl7Alt.def",
+      "mapZipMember": "sprites/creatures/tower/map/lvl7Alt.def",
+      "sndBattlePrefix": "GTIT"
+    },
+    {
+      "unitSid": "h3_gnoll_shaman",
+      "comment": "Fortress bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl1Alt",
+      "mapExtractBasename": "lvl1Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "mapZipMember": "sprites/creatures/fortress/map/lvl1Alt.def",
+      "battleZipMember": "sprites/creatures/fortress/battle/lvl1Alt.def",
+      "sndBattlePrefix": "GNLM"
+    },
+    {
+      "unitSid": "h3_lizard_assassin",
+      "comment": "Fortress bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl2Alt",
+      "mapExtractBasename": "lvl2Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "mapJsonZipMember": "sprites/creatures/fortress/map/lvl2Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/fortress/map/lvl2Alt",
+      "battleJsonZipMember": "sprites/creatures/fortress/battle/lvl2Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/fortress/battle/lvl2Alt",
+      "sndBattlePrefix": "ALIZ"
+    },
+    {
+      "unitSid": "h3_damsel_fly",
+      "comment": "Fortress bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl3Alt",
+      "mapExtractBasename": "lvl3Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "mapJsonZipMember": "sprites/creatures/fortress/map/lvl3Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/fortress/map/lvl3Alt",
+      "battleJsonZipMember": "sprites/creatures/fortress/battle/lvl3Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/fortress/battle/lvl3Alt",
+      "sndBattlePrefix": "FDFL"
+    },
+    {
+      "unitSid": "h3_basilisk_flamespitter",
+      "comment": "Fortress bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl4Alt",
+      "mapExtractBasename": "lvl4Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "mapJsonZipMember": "sprites/creatures/fortress/map/lvl4Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/fortress/map/lvl4Alt",
+      "battleJsonZipMember": "sprites/creatures/fortress/battle/lvl4Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/fortress/battle/lvl4Alt",
+      "sndBattlePrefix": "GBAS"
+    },
+    {
+      "unitSid": "h3_corrosive_gorgon",
+      "comment": "Fortress bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl5Alt",
+      "mapExtractBasename": "lvl5Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "mapJsonZipMember": "sprites/creatures/fortress/map/lvl5Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/fortress/map/lvl5Alt",
+      "battleJsonZipMember": "sprites/creatures/fortress/battle/lvl5Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/fortress/battle/lvl5Alt",
+      "sndBattlePrefix": "BGOR"
+    },
+    {
+      "unitSid": "h3_paokai",
+      "comment": "Fortress bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl6Alt",
+      "mapExtractBasename": "lvl6Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "mapJsonZipMember": "sprites/creatures/fortress/map/lvl6Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/fortress/map/lvl6Alt",
+      "battleJsonZipMember": "sprites/creatures/fortress/battle/lvl6Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/fortress/battle/lvl6Alt",
+      "sndBattlePrefix": "WYVM"
+    },
+    {
+      "unitSid": "h3_ruinous_hydra",
+      "comment": "Fortress bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl7Alt",
+      "mapExtractBasename": "lvl7Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "mapJsonZipMember": "sprites/creatures/fortress/map/lvl7Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/fortress/map/lvl7Alt",
+      "battleJsonZipMember": "sprites/creatures/fortress/battle/lvl7Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/fortress/battle/lvl7Alt",
+      "sndBattlePrefix": "CHYD"
+    },
+    {
+      "unitSid": "h3_pikeman",
+      "comment": "Castle bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CPKMAN",
+      "mapExtractBasename": "AvWPike",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/castle/adventureMap/creatures/AvWPike.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CPKMAN.def",
+      "sndBattlePrefix": "PIKE"
+    },
+    {
+      "unitSid": "h3_halberdier",
+      "comment": "Castle bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CHALBD",
+      "mapExtractBasename": "AVWpikx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/castle/adventureMap/creatures/AVWpikx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CHALBD.def",
+      "sndBattlePrefix": "HALB"
+    },
+    {
+      "unitSid": "h3_archer",
+      "comment": "Castle bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CLCBOW",
+      "mapExtractBasename": "AvWLCrs",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/castle/adventureMap/creatures/AvWLCrs.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CLCBOW.def",
+      "sndBattlePrefix": "LCRS"
+    },
+    {
+      "unitSid": "h3_marksman",
+      "comment": "Castle bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CHCBOW",
+      "mapExtractBasename": "AvWHCrs",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/castle/adventureMap/creatures/AvWHCrs.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CHCBOW.def",
+      "sndBattlePrefix": "HCRS"
+    },
+    {
+      "unitSid": "h3_griffin",
+      "comment": "Castle bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CGRIFF",
+      "mapExtractBasename": "AvWGrif",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/castle/adventureMap/creatures/AvWGrif.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CGRIFF.def",
+      "sndBattlePrefix": "GRIF"
+    },
+    {
+      "unitSid": "h3_royal_griffin",
+      "comment": "Castle bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CRGRIF",
+      "mapExtractBasename": "AVWgrix0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/castle/adventureMap/creatures/AVWgrix0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CRGRIF.def",
+      "sndBattlePrefix": "RGRF"
+    },
+    {
+      "unitSid": "h3_swordsman",
+      "comment": "Castle bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CSWORD",
+      "mapExtractBasename": "AVWswrd0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/castle/adventureMap/creatures/AVWswrd0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CSWORD.def",
+      "sndBattlePrefix": "SWRD"
+    },
+    {
+      "unitSid": "h3_crusader",
+      "comment": "Castle bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CCRUSD",
+      "mapExtractBasename": "AVWswrx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/castle/adventureMap/creatures/AVWswrx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CCRUSD.def",
+      "sndBattlePrefix": "CRUS"
+    },
+    {
+      "unitSid": "h3_monk",
+      "comment": "Castle bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CMONKK",
+      "mapExtractBasename": "AvWMonk",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/castle/adventureMap/creatures/AvWMonk.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CMONKK.def",
+      "sndBattlePrefix": "MONK"
+    },
+    {
+      "unitSid": "h3_zealot",
+      "comment": "Castle bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CZEALT",
+      "mapExtractBasename": "AVWmonx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/castle/adventureMap/creatures/AVWmonx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CZEALT.def",
+      "sndBattlePrefix": "ZELT"
+    },
+    {
+      "unitSid": "h3_cavalier",
+      "comment": "Castle bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CCAVLR",
+      "mapExtractBasename": "AVWcvlr0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/castle/adventureMap/creatures/AVWcvlr0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CCAVLR.def",
+      "sndBattlePrefix": "CAVA"
+    },
+    {
+      "unitSid": "h3_champion",
+      "comment": "Castle bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CCHAMP",
+      "mapExtractBasename": "AVWcvlx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/castle/adventureMap/creatures/AVWcvlx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CCHAMP.def",
+      "sndBattlePrefix": "CHMP"
+    },
+    {
+      "unitSid": "h3_angel",
+      "comment": "Castle bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CANGEL",
+      "mapExtractBasename": "AvWAngl",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/castle/adventureMap/creatures/AvWAngl.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CANGEL.def",
+      "sndBattlePrefix": "ANGL"
+    },
+    {
+      "unitSid": "h3_archangel",
+      "comment": "Castle bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CRANGL",
+      "mapExtractBasename": "AvWArch",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/castle/adventureMap/creatures/AvWArch.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CRANGL.def",
+      "sndBattlePrefix": "AAGL"
+    },
+    {
+      "unitSid": "h3_centaur",
+      "comment": "Rampart bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CCENTR",
+      "mapExtractBasename": "AVWcent0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/rampart/adventureMap/creatures/AVWcent0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CCENTR.def",
+      "sndBattlePrefix": "CNTR"
+    },
+    {
+      "unitSid": "h3_centaur_captain",
+      "comment": "Rampart bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CECENT",
+      "mapExtractBasename": "AVWcenx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/rampart/adventureMap/creatures/AVWcenx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CECENT.def",
+      "sndBattlePrefix": "ECNT"
+    },
+    {
+      "unitSid": "h3_dwarf",
+      "comment": "Rampart bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CDWARF",
+      "mapExtractBasename": "AVWdwrf0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/rampart/adventureMap/creatures/AVWdwrf0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CDWARF.def",
+      "sndBattlePrefix": "DWRF"
+    },
+    {
+      "unitSid": "h3_battle_dwarf",
+      "comment": "Rampart bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CBDWAR",
+      "mapExtractBasename": "AVWdwrx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/rampart/adventureMap/creatures/AVWdwrx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CBDWAR.def",
+      "sndBattlePrefix": "BDRF"
+    },
+    {
+      "unitSid": "h3_wood_elf",
+      "comment": "Rampart bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CELF",
+      "mapExtractBasename": "avwelfw0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/rampart/adventureMap/creatures/avwelfw0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CELF.def",
+      "sndBattlePrefix": "WELF"
+    },
+    {
+      "unitSid": "h3_grand_elf",
+      "comment": "Rampart bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CGRELF",
+      "mapExtractBasename": "AVWelfx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/rampart/adventureMap/creatures/AVWelfx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CGRELF.def",
+      "sndBattlePrefix": "GELF"
+    },
+    {
+      "unitSid": "h3_pegasus",
+      "comment": "Rampart bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CPEGAS",
+      "mapExtractBasename": "AVWpega0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/rampart/adventureMap/creatures/AVWpega0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CPEGAS.def",
+      "sndBattlePrefix": "PEGA"
+    },
+    {
+      "unitSid": "h3_silver_pegasus",
+      "comment": "Rampart bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CAPEGS",
+      "mapExtractBasename": "AVWpegx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/rampart/adventureMap/creatures/AVWpegx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CAPEGS.def",
+      "sndBattlePrefix": "APEG"
+    },
+    {
+      "unitSid": "h3_dendroid_guard",
+      "comment": "Rampart bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CTREE",
+      "mapExtractBasename": "AVWtree0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/rampart/adventureMap/creatures/AVWtree0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CTREE.def",
+      "sndBattlePrefix": "TREE"
+    },
+    {
+      "unitSid": "h3_dendroid_soldier",
+      "comment": "Rampart bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CBTREE",
+      "mapExtractBasename": "AVWTREX0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/rampart/adventureMap/creatures/AVWTREX0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CBTREE.def",
+      "sndBattlePrefix": "BTRE"
+    },
+    {
+      "unitSid": "h3_unicorn",
+      "comment": "Rampart bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CUNICO",
+      "mapExtractBasename": "AVWunic0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/rampart/adventureMap/creatures/AVWunic0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CUNICO.def",
+      "sndBattlePrefix": "UNIC"
+    },
+    {
+      "unitSid": "h3_war_unicorn",
+      "comment": "Rampart bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CWUNIC",
+      "mapExtractBasename": "AVWunix0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/rampart/adventureMap/creatures/AVWunix0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CWUNIC.def",
+      "sndBattlePrefix": "WUNC"
+    },
+    {
+      "unitSid": "h3_green_dragon",
+      "comment": "Rampart bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CGDRAG",
+      "mapExtractBasename": "AVWdrag0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/rampart/adventureMap/creatures/AVWdrag0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CGDRAG.def",
+      "sndBattlePrefix": "GRDR"
+    },
+    {
+      "unitSid": "h3_gold_dragon",
+      "comment": "Rampart bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CDDRAG",
+      "mapExtractBasename": "AVWdrax0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/rampart/adventureMap/creatures/AVWdrax0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CDDRAG.def",
+      "sndBattlePrefix": "GODR"
+    },
+    {
+      "unitSid": "h3_imp",
+      "comment": "Inferno bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CIMP",
+      "mapExtractBasename": "AVWimp0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/inferno/adventureMap/creatures/AVWimp0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CIMP.def",
+      "sndBattlePrefix": "IMPP"
+    },
+    {
+      "unitSid": "h3_familiar",
+      "comment": "Inferno bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CFAMIL",
+      "mapExtractBasename": "AVWimpx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/inferno/adventureMap/creatures/AVWimpx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CFAMIL.def",
+      "sndBattlePrefix": "FMLR"
+    },
+    {
+      "unitSid": "h3_gog",
+      "comment": "Inferno bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CGOG",
+      "mapExtractBasename": "avwgog0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/inferno/adventureMap/creatures/avwgog0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CGOG.def",
+      "sndBattlePrefix": "GOGG"
+    },
+    {
+      "unitSid": "h3_magog",
+      "comment": "Inferno bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CMAGOG",
+      "mapExtractBasename": "avwgogx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/inferno/adventureMap/creatures/avwgogx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CMAGOG.def",
+      "sndBattlePrefix": "MGOG"
+    },
+    {
+      "unitSid": "h3_hell_hound",
+      "comment": "Inferno bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CHHOUN",
+      "mapExtractBasename": "AVWhoun0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/inferno/adventureMap/creatures/AVWhoun0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CHHOUN.def",
+      "sndBattlePrefix": "HHND"
+    },
+    {
+      "unitSid": "h3_cerberus",
+      "comment": "Inferno bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CCERBU",
+      "mapExtractBasename": "AVWhoux0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/inferno/adventureMap/creatures/AVWhoux0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CCERBU.def",
+      "sndBattlePrefix": "CERB"
+    },
+    {
+      "unitSid": "h3_demon",
+      "comment": "Inferno bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "COHDEM",
+      "mapExtractBasename": "AVWdemn0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/inferno/adventureMap/creatures/AVWdemn0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "COHDEM.def",
+      "sndBattlePrefix": "DHDM"
+    },
+    {
+      "unitSid": "h3_horned_demon",
+      "comment": "Inferno bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CTHDEM",
+      "mapExtractBasename": "AVWdemx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/inferno/adventureMap/creatures/AVWdemx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CTHDEM.def",
+      "sndBattlePrefix": "DHDM"
+    },
+    {
+      "unitSid": "h3_pit_fiend",
+      "comment": "Inferno bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CPFIEN",
+      "mapExtractBasename": "AVWpitf0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/inferno/adventureMap/creatures/AVWpitf0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CPFIEN.def",
+      "sndBattlePrefix": "PFND"
+    },
+    {
+      "unitSid": "h3_pit_lord",
+      "comment": "Inferno bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CPFOE",
+      "mapExtractBasename": "AVWpitx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/inferno/adventureMap/creatures/AVWpitx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CPFOE.def",
+      "sndBattlePrefix": "PFOE"
+    },
+    {
+      "unitSid": "h3_efreeti",
+      "comment": "Inferno bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CEFREE",
+      "mapExtractBasename": "AVWefre0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/inferno/adventureMap/creatures/AVWefre0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CEFREE.def",
+      "sndBattlePrefix": "EFRT"
+    },
+    {
+      "unitSid": "h3_efreet_sultan",
+      "comment": "Inferno bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CEFRES",
+      "mapExtractBasename": "AVWefrx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/inferno/adventureMap/creatures/AVWefrx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CEFRES.def",
+      "sndBattlePrefix": "ESUL"
+    },
+    {
+      "unitSid": "h3_devil",
+      "comment": "Inferno bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CDEVIL",
+      "mapExtractBasename": "AVWdevl0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/inferno/adventureMap/creatures/AVWdevl0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CDEVIL.def",
+      "sndBattlePrefix": "DEVL"
+    },
+    {
+      "unitSid": "h3_arch_devil",
+      "comment": "Inferno bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CADEVL",
+      "mapExtractBasename": "AVWdevx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/inferno/adventureMap/creatures/AVWdevx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CADEVL.def",
+      "sndBattlePrefix": "ADVL"
+    },
+    {
+      "unitSid": "h3_skeleton",
+      "comment": "Necropolis bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CSKELE",
+      "mapExtractBasename": "AVWskel0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/necropolis/adventureMap/creatures/AVWskel0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CSKELE.def",
+      "sndBattlePrefix": "SKEL"
+    },
+    {
+      "unitSid": "h3_skeleton_warrior",
+      "comment": "Necropolis bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CWSKEL",
+      "mapExtractBasename": "AVWSKEX0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/necropolis/adventureMap/creatures/AVWSKEX0.DEF",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CWSKEL.def",
+      "sndBattlePrefix": "SKLW"
+    },
+    {
+      "unitSid": "h3_walking_dead",
+      "comment": "Necropolis bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CZOMBI",
+      "mapExtractBasename": "AVWzomb0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/necropolis/adventureMap/creatures/AVWzomb0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CZOMBI.def",
+      "sndBattlePrefix": "ZOMB"
+    },
+    {
+      "unitSid": "h3_zombie",
+      "comment": "Necropolis bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CZOMLO",
+      "mapExtractBasename": "AVWzomx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/necropolis/adventureMap/creatures/AVWzomx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CZOMLO.def",
+      "sndBattlePrefix": "ZMBL"
+    },
+    {
+      "unitSid": "h3_wight",
+      "comment": "Necropolis bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CWIGHT",
+      "mapExtractBasename": "AvWWigh",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/necropolis/adventureMap/creatures/AvWWigh.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CWIGHT.def",
+      "sndBattlePrefix": "WGHT"
+    },
+    {
+      "unitSid": "h3_wraith",
+      "comment": "Necropolis bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CWRAIT",
+      "mapExtractBasename": "AVWwigx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/necropolis/adventureMap/creatures/AVWwigx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CWRAIT.def",
+      "sndBattlePrefix": "WRTH"
+    },
+    {
+      "unitSid": "h3_vampire",
+      "comment": "Necropolis bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CVAMP",
+      "mapExtractBasename": "AVWvamp0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/necropolis/adventureMap/creatures/AVWvamp0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CVAMP.def",
+      "sndBattlePrefix": "VAMP"
+    },
+    {
+      "unitSid": "h3_vampire_lord",
+      "comment": "Necropolis bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CNOSFE",
+      "mapExtractBasename": "AVWvamx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/necropolis/adventureMap/creatures/AVWvamx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CNOSFE.def",
+      "sndBattlePrefix": "NOSF"
+    },
+    {
+      "unitSid": "h3_lich",
+      "comment": "Necropolis bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CLICH",
+      "mapExtractBasename": "AVWlich0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/necropolis/adventureMap/creatures/AVWlich0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CLICH.def",
+      "sndBattlePrefix": "LICH"
+    },
+    {
+      "unitSid": "h3_power_lich",
+      "comment": "Necropolis bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CPLICH",
+      "mapExtractBasename": "avwlicx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/necropolis/adventureMap/creatures/avwlicx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CPLICH.def",
+      "sndBattlePrefix": "PLCH"
+    },
+    {
+      "unitSid": "h3_black_knight",
+      "comment": "Necropolis bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CBKNIG",
+      "mapExtractBasename": "AVWbkni0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/necropolis/adventureMap/creatures/AVWbkni0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CBKNIG.def",
+      "sndBattlePrefix": "BKNT"
+    },
+    {
+      "unitSid": "h3_dread_knight",
+      "comment": "Necropolis bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CBLORD",
+      "mapExtractBasename": "AVWbknx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/necropolis/adventureMap/creatures/AVWbknx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CBLORD.def",
+      "sndBattlePrefix": "BLRD"
+    },
+    {
+      "unitSid": "h3_bone_dragon",
+      "comment": "Necropolis bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CNDRGN",
+      "mapExtractBasename": "AVWbone0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/necropolis/adventureMap/creatures/AVWbone0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CNDRGN.def",
+      "sndBattlePrefix": "BODR"
+    },
+    {
+      "unitSid": "h3_ghost_dragon",
+      "comment": "Necropolis bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CHDRGN",
+      "mapExtractBasename": "AVWbonx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/necropolis/adventureMap/creatures/AVWbonx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CHDRGN.def",
+      "sndBattlePrefix": "GHDR"
+    },
+    {
+      "unitSid": "h3_troglodyte",
+      "comment": "Dungeon bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CTROGL",
+      "mapExtractBasename": "AVWtrog0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/dungeon/adventureMap/creatures/AVWtrog0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CTROGL.def",
+      "sndBattlePrefix": "TROG"
+    },
+    {
+      "unitSid": "h3_infernal_troglodyte",
+      "comment": "Dungeon bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CITROG",
+      "mapExtractBasename": "AvWInfr",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/dungeon/adventureMap/creatures/AvWInfr.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CITROG.def",
+      "sndBattlePrefix": "ITRG"
+    },
+    {
+      "unitSid": "h3_harpy",
+      "comment": "Dungeon bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CHARPY",
+      "mapExtractBasename": "AVWharp0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/dungeon/adventureMap/creatures/AVWharp0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CHARPY.def",
+      "sndBattlePrefix": "HARP"
+    },
+    {
+      "unitSid": "h3_harpy_hag",
+      "comment": "Dungeon bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CHARPH",
+      "mapExtractBasename": "AVWharx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/dungeon/adventureMap/creatures/AVWharx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CHARPH.def",
+      "sndBattlePrefix": "HHAG"
+    },
+    {
+      "unitSid": "h3_beholder",
+      "comment": "Dungeon bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CBEHOL",
+      "mapExtractBasename": "AVWbehl0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/dungeon/adventureMap/creatures/AVWbehl0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CBEHOL.def",
+      "sndBattlePrefix": "BHDR"
+    },
+    {
+      "unitSid": "h3_evil_eye",
+      "comment": "Dungeon bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CEVEYE",
+      "mapExtractBasename": "AVWbehx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/dungeon/adventureMap/creatures/AVWbehx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CEVEYE.def",
+      "sndBattlePrefix": "EVLI"
+    },
+    {
+      "unitSid": "h3_medusa",
+      "comment": "Dungeon bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CMEDUS",
+      "mapExtractBasename": "AvWMeds",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/dungeon/adventureMap/creatures/AvWMeds.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CMEDUS.def",
+      "sndBattlePrefix": "MEDU"
+    },
+    {
+      "unitSid": "h3_medusa_queen",
+      "comment": "Dungeon bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CMEDUQ",
+      "mapExtractBasename": "AVWmedx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/dungeon/adventureMap/creatures/AVWmedx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CMEDUQ.def",
+      "sndBattlePrefix": "MEDQ"
+    },
+    {
+      "unitSid": "h3_minotaur",
+      "comment": "Dungeon bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CMINOT",
+      "mapExtractBasename": "AvWMino",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/dungeon/adventureMap/creatures/AvWMino.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CMINOT.def",
+      "sndBattlePrefix": "MINO"
+    },
+    {
+      "unitSid": "h3_minotaur_king",
+      "comment": "Dungeon bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CMINOK",
+      "mapExtractBasename": "AVWminx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/dungeon/adventureMap/creatures/AVWminx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CMINOK.def",
+      "sndBattlePrefix": "MINK"
+    },
+    {
+      "unitSid": "h3_manticore",
+      "comment": "Dungeon bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CMCORE",
+      "mapExtractBasename": "AVWmant0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/dungeon/adventureMap/creatures/AVWmant0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CMCORE.def",
+      "sndBattlePrefix": "MANT"
+    },
+    {
+      "unitSid": "h3_scorpicore",
+      "comment": "Dungeon bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CCMCOR",
+      "mapExtractBasename": "AVWmanx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/dungeon/adventureMap/creatures/AVWmanx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CCMCOR.def",
+      "sndBattlePrefix": "SCRP"
+    },
+    {
+      "unitSid": "h3_red_dragon",
+      "comment": "Dungeon bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CRDRGN",
+      "mapExtractBasename": "AvWRDrg",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/dungeon/adventureMap/creatures/AvWRDrg.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CRDRGN.def",
+      "sndBattlePrefix": "RDDR"
+    },
+    {
+      "unitSid": "h3_black_dragon",
+      "comment": "Dungeon bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CBDRGN",
+      "mapExtractBasename": "AVWddrx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/dungeon/adventureMap/creatures/AVWddrx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CBDRGN.def",
+      "sndBattlePrefix": "BKDR"
+    },
+    {
+      "unitSid": "h3_gnoll",
+      "comment": "Fortress bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CGNOLL",
+      "mapExtractBasename": "AVWgnll0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/fortress/adventureMap/creatures/AVWgnll0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CGNOLL.def",
+      "sndBattlePrefix": "GNOL"
+    },
+    {
+      "unitSid": "h3_gnoll_marauder",
+      "comment": "Fortress bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CGNOLM",
+      "mapExtractBasename": "AVWgnlx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/fortress/adventureMap/creatures/AVWgnlx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CGNOLM.def",
+      "sndBattlePrefix": "GNLM"
+    },
+    {
+      "unitSid": "h3_lizardman",
+      "comment": "Fortress bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CPLIZA",
+      "mapExtractBasename": "AvWLizr",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/fortress/adventureMap/creatures/AvWLizr.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CPLIZA.def",
+      "sndBattlePrefix": "PLIZ"
+    },
+    {
+      "unitSid": "h3_lizard_warrior",
+      "comment": "Fortress bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CALIZA",
+      "mapExtractBasename": "AVWlizx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/fortress/adventureMap/creatures/AVWlizx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CALIZA.def",
+      "sndBattlePrefix": "ALIZ"
+    },
+    {
+      "unitSid": "h3_serpent_fly",
+      "comment": "Fortress bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CDRFLY",
+      "mapExtractBasename": "AvWDfly",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/fortress/adventureMap/creatures/AvWDfly.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CDRFLY.def",
+      "sndBattlePrefix": "DFLY"
+    },
+    {
+      "unitSid": "h3_dragon_fly",
+      "comment": "Fortress bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CDRFIR",
+      "mapExtractBasename": "AvWDfir",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/fortress/adventureMap/creatures/AvWDfir.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CDRFIR.def",
+      "sndBattlePrefix": "FDFL"
+    },
+    {
+      "unitSid": "h3_basilisk",
+      "comment": "Fortress bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CBASIL",
+      "mapExtractBasename": "AvWBasl",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/fortress/adventureMap/creatures/AvWBasl.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CBASIL.def",
+      "sndBattlePrefix": "BASL"
+    },
+    {
+      "unitSid": "h3_greater_basilisk",
+      "comment": "Fortress bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CGBASI",
+      "mapExtractBasename": "AvWGBas",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/fortress/adventureMap/creatures/AvWGBas.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CGBASI.def",
+      "sndBattlePrefix": "GBAS"
+    },
+    {
+      "unitSid": "h3_gorgon",
+      "comment": "Fortress bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CCGORG",
+      "mapExtractBasename": "AvWGorg",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/fortress/adventureMap/creatures/AvWGorg.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CCGORG.def",
+      "sndBattlePrefix": "CGOR"
+    },
+    {
+      "unitSid": "h3_mighty_gorgon",
+      "comment": "Fortress bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CBGOG",
+      "mapExtractBasename": "AVWgorx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/fortress/adventureMap/creatures/AVWgorx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CBGOG.def",
+      "sndBattlePrefix": "BGOR"
+    },
+    {
+      "unitSid": "h3_wyvern",
+      "comment": "Fortress bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CWYVER",
+      "mapExtractBasename": "AvWWyvr",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/fortress/adventureMap/creatures/AvWWyvr.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CWYVER.def",
+      "sndBattlePrefix": "WYVN"
+    },
+    {
+      "unitSid": "h3_wyvern_monarch",
+      "comment": "Fortress bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CWYVMN",
+      "mapExtractBasename": "AVWwyvx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/fortress/adventureMap/creatures/AVWwyvx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CWYVMN.def",
+      "sndBattlePrefix": "WYVM"
+    },
+    {
+      "unitSid": "h3_hydra",
+      "comment": "Fortress bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CHYDRA",
+      "mapExtractBasename": "AvWHydr",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/fortress/adventureMap/creatures/AvWHydr.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CHYDRA.def",
+      "sndBattlePrefix": "HYDR"
+    },
+    {
+      "unitSid": "h3_chaos_hydra",
+      "comment": "Fortress bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CCHYDR",
+      "mapExtractBasename": "AVWhydx0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/fortress/adventureMap/creatures/AVWhydx0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CCHYDR.def",
+      "sndBattlePrefix": "CHYD"
+    },
+    {
+      "unitSid": "h3_pixie",
+      "comment": "Conflux bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CPIXIE",
+      "mapExtractBasename": "AVWpixie",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/conflux/adventureMap/creatures/AVWpixie.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CPIXIE.def",
+      "sndBattlePrefix": "PIXI"
+    },
+    {
+      "unitSid": "h3_sprite",
+      "comment": "Conflux bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CSPRITE",
+      "mapExtractBasename": "AVWsprit",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/conflux/adventureMap/creatures/AVWsprit.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CSPRITE.def",
+      "sndBattlePrefix": "SPRT"
+    },
+    {
+      "unitSid": "h3_air_elemental",
+      "comment": "Conflux bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CAELEM",
+      "mapExtractBasename": "avwelma0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/conflux/adventureMap/creatures/avwelma0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CAELEM.def",
+      "sndBattlePrefix": "AELM"
+    },
+    {
+      "unitSid": "h3_storm_elemental",
+      "comment": "Conflux bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CSTORM",
+      "mapExtractBasename": "avwstorm",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/conflux/adventureMap/creatures/avwstorm.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CSTORM.def",
+      "sndBattlePrefix": "STOR"
+    },
+    {
+      "unitSid": "h3_water_elemental",
+      "comment": "Conflux bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CWELEM",
+      "mapExtractBasename": "AVWelmw0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/conflux/adventureMap/creatures/AVWelmw0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CWELEM.def",
+      "sndBattlePrefix": "WELM"
+    },
+    {
+      "unitSid": "h3_ice_elemental",
+      "comment": "Conflux bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CICEE",
+      "mapExtractBasename": "AVWicee",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/conflux/adventureMap/creatures/AVWicee.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CICEE.def",
+      "sndBattlePrefix": "ICEL"
+    },
+    {
+      "unitSid": "h3_fire_elemental",
+      "comment": "Conflux bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CFELEM",
+      "mapExtractBasename": "AVWelmf0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/conflux/adventureMap/creatures/AVWelmf0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CFELEM.def",
+      "sndBattlePrefix": "FELM"
+    },
+    {
+      "unitSid": "h3_energy_elemental",
+      "comment": "Conflux bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CNRG",
+      "mapExtractBasename": "avwnrg",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/conflux/adventureMap/creatures/avwnrg.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CNRG.def",
+      "sndBattlePrefix": "ENER"
+    },
+    {
+      "unitSid": "h3_earth_elemental",
+      "comment": "Conflux bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CEELEM",
+      "mapExtractBasename": "AVWelme0",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/conflux/adventureMap/creatures/AVWelme0.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CEELEM.def",
+      "sndBattlePrefix": "EELM"
+    },
+    {
+      "unitSid": "h3_magma_elemental",
+      "comment": "Conflux bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CSTONE",
+      "mapExtractBasename": "avwstone",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/conflux/adventureMap/creatures/avwstone.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CSTONE.def",
+      "sndBattlePrefix": "MAGM"
+    },
+    {
+      "unitSid": "h3_psychic_elemental",
+      "comment": "Conflux bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CPSYEL",
+      "mapExtractBasename": "AVWpsye",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/conflux/adventureMap/creatures/AVWpsye.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CPSYEL.def",
+      "sndBattlePrefix": "PSYC"
+    },
+    {
+      "unitSid": "h3_magic_elemental",
+      "comment": "Conflux bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CMAGEL",
+      "mapExtractBasename": "AVWmagel",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/conflux/adventureMap/creatures/AVWmagel.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CMAGEL.def",
+      "sndBattlePrefix": "MGEL"
+    },
+    {
+      "unitSid": "h3_firebird",
+      "comment": "Conflux bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CFBIRD",
+      "mapExtractBasename": "AVWfbird",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/conflux/adventureMap/creatures/AVWfbird.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CFBIRD.def",
+      "sndBattlePrefix": "FIRB"
+    },
+    {
+      "unitSid": "h3_phoenix",
+      "comment": "Conflux bundle placeholder prepared from HoMM3 battle DEF + HotA adventure-map DEF.",
+      "battleExtractBasename": "CPHX",
+      "mapExtractBasename": "AVWphx",
+      "mapDefPath": "vcmi/Mods/hota/mods/newGraphics/Content/sprites/hota/conflux/adventureMap/creatures/AVWphx.def",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CPHX.def",
+      "sndBattlePrefix": "PHOE"
+    },
+    {
+      "unitSid": "h3_cannon",
+      "comment": "Cove cannon bundle prepared from HotA cannon source pack.",
+      "battleExtractBasename": "SMCANNON",
+      "mapExtractBasename": "cannonMap",
+      "mapDefPath": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/cannon/homm3_cove/sprites/hota/map/cannonMap.def",
+      "battleDefPath": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/cannon/homm3_cove/sprites/hota/battle/SMCANNON.DEF"
+    },
+    {
+      "unitSid": "hota_cove_nymph",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "CNIMPH",
+      "mapExtractBasename": "AVWNIMPH",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWNIMPH.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CNIMPH.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nymph/NIMPMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nymph/NIMPATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nymph/NIMPWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nymph/NIMPKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_oceanid",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "COCEANID",
+      "mapExtractBasename": "AVWOCEAN",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWOCEAN.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/COCEANID.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nymph/NIMPMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nymph/NIMPATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nymph/NIMPWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nymph/NIMPKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_crew_mate",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "CSEADOG",
+      "mapExtractBasename": "AVWSEADG",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWSEADG.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CSEADOG.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/crewmate/SAYLMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/crewmate/SAYLATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/crewmate/SAYLWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/crewmate/SAYLKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_seaman",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "CSWASH",
+      "mapExtractBasename": "AVWSWASH",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWSWASH.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CSWASH.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/crewmate/SAYLMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/crewmate/SAYLATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/crewmate/SAYLWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/crewmate/SAYLKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_pirate",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "CPIRATE",
+      "mapExtractBasename": "AVWPIRAT",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWPIRAT.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CPIRATE.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/pirate/PIRTMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/pirate/PIRTATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/pirate/PIRTWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/pirate/PIRTKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_corsair",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "CCORSAIR",
+      "mapExtractBasename": "AVWCORSA",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWCORSA.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CCORSAIR.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/pirate/PIRTMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/pirate/PIRTATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/pirate/PIRTWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/pirate/PIRTKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_sea_dog",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "CPR3UP",
+      "mapExtractBasename": "AVWPR3UP",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWPR3UP.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CPR3UP.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/pirate/PIRTMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/pirate/PIRTATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/pirate/PIRTWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/pirate/PIRTKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_stormbird",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "CASSID",
+      "mapExtractBasename": "AVWASSUP",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWASSUP.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CASSID.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/stormbird/ASSIMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/stormbird/ASSIATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/stormbird/ASSIWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/stormbird/ASSIKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_ayssid",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "CASSIDUP",
+      "mapExtractBasename": "AVWASSID",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWASSID.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CASSIDUP.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/stormbird/ASSIMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/stormbird/ASSIATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/stormbird/ASSIWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/stormbird/ASSIKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_sea_witch",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "CPRIEST",
+      "mapExtractBasename": "AVWPRIES",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWPRIES.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CPRIEST.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaWitch/SORCMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaWitch/SORCATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaWitch/SORCWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaWitch/SORCKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_sorceress",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "CSORCSS",
+      "mapExtractBasename": "AVWSORCS",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWSORCS.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CSORCSS.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaWitch/SORCMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaWitch/SORCATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaWitch/SORCWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaWitch/SORCKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_nix",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "CNIX",
+      "mapExtractBasename": "AVWNIX",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWNIX.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CNIX.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nix/NIXXMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nix/NIXXATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nix/NIXXWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nix/NIXXKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_nix_warrior",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "CNIXWARR",
+      "mapExtractBasename": "AVWNIXUP",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWNIXUP.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CNIXWARR.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nix/NIXXMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nix/NIXXATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nix/NIXXWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nix/NIXXKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_sea_serpent",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "CSERPENT",
+      "mapExtractBasename": "AVWSERPE",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWSERPE.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CSERPENT.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaserpent/ASPIMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaserpent/ASPIATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaserpent/ASPIWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaserpent/ASPIKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_haspid",
+      "comment": "Cove bundle placeholder prepared from HotA Cove loose DEFs.",
+      "battleExtractBasename": "CHASPID",
+      "mapExtractBasename": "AVWHASPI",
+      "mapDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/adventureMap/AVWHASPI.def",
+      "battleDefPath": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CHASPID.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaserpent/ASPIMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaserpent/ASPIATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaserpent/ASPIWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaserpent/ASPIKILL.wav"
+      }
+    },
+    {
+      "unitSid": "h3_glaivier",
+      "comment": "Castle bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl1Alt",
+      "mapExtractBasename": "lvl1Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/castle/battle/lvl1Alt.def",
+      "mapZipMember": "sprites/creatures/castle/map/lvl1Alt.def",
+      "sndBattlePrefix": "HALB"
+    },
+    {
+      "unitSid": "h3_crossbowman",
+      "comment": "Castle bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl2Alt",
+      "mapExtractBasename": "lvl2Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/castle/battle/lvl2Alt.def",
+      "mapZipMember": "sprites/creatures/castle/map/lvl2Alt.def",
+      "sndBattlePrefix": "HCRS"
+    },
+    {
+      "unitSid": "h3_battle_griffin",
+      "comment": "Castle bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl3Alt",
+      "mapExtractBasename": "lvl3Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/castle/battle/lvl3Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/castle/battle/lvl3Alt",
+      "mapJsonZipMember": "sprites/creatures/castle/map/lvl3Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/castle/map/lvl3Alt",
+      "sndBattlePrefix": "RGRF"
+    },
+    {
+      "unitSid": "h3_guardsman",
+      "comment": "Castle bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl4Alt",
+      "mapExtractBasename": "lvl4Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/castle/battle/lvl4Alt.def",
+      "mapJsonZipMember": "sprites/creatures/castle/map/lvl4Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/castle/map/lvl4Alt",
+      "sndBattlePrefix": "CRUS"
+    },
+    {
+      "unitSid": "h3_priest",
+      "comment": "Castle bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl5Alt",
+      "mapExtractBasename": "lvl5Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/castle/battle/lvl5Alt.def",
+      "mapZipMember": "sprites/creatures/castle/map/lvl5Alt.def",
+      "sndBattlePrefix": "ZELT"
+    },
+    {
+      "unitSid": "h3_justiciar",
+      "comment": "Castle bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl6Alt",
+      "mapExtractBasename": "lvl6Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/castle/battle/lvl6Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/castle/battle/lvl6Alt",
+      "mapJsonZipMember": "sprites/creatures/castle/map/lvl6Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/castle/map/lvl6Alt",
+      "sndBattlePrefix": "CHMP"
+    },
+    {
+      "unitSid": "h3_seraph",
+      "comment": "Castle bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl7Alt",
+      "mapExtractBasename": "lvl7Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/castle/battle/lvl7Alt.def",
+      "mapZipMember": "sprites/creatures/castle/map/lvl7Alt.def",
+      "sndBattlePrefix": "AAGL"
+    },
+    {
+      "unitSid": "h3_vermin",
+      "comment": "Inferno bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl1Alt",
+      "mapExtractBasename": "lvl1Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/inferno/battle/lvl1Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/inferno/battle/lvl1Alt",
+      "mapZipMember": "sprites/creatures/inferno/map/lvl1Alt.def",
+      "sndBattlePrefix": "FMLR"
+    },
+    {
+      "unitSid": "h3_amalek",
+      "comment": "Inferno bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl2Alt",
+      "mapExtractBasename": "lvl2Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/inferno/battle/lvl2Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/inferno/battle/lvl2Alt",
+      "mapZipMember": "sprites/creatures/inferno/map/lvl2Alt.def",
+      "sndBattlePrefix": "MGOG"
+    },
+    {
+      "unitSid": "h3_fire_hound",
+      "comment": "Inferno bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl3Alt",
+      "mapExtractBasename": "lvl3Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/inferno/battle/lvl3Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/inferno/battle/lvl3Alt",
+      "mapJsonZipMember": "sprites/creatures/inferno/map/lvl3Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/inferno/map/lvl3Alt",
+      "sndBattlePrefix": "CERB"
+    },
+    {
+      "unitSid": "h3_gore_demon",
+      "comment": "Inferno bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl4Alt",
+      "mapExtractBasename": "lvl4Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/inferno/battle/lvl4Alt.def",
+      "mapZipMember": "sprites/creatures/inferno/map/lvl4Alt.def",
+      "sndBattlePrefix": "DHDM"
+    },
+    {
+      "unitSid": "h3_pit_spawn",
+      "comment": "Inferno bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl5Alt",
+      "mapExtractBasename": "lvl5Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/inferno/battle/lvl5Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/inferno/battle/lvl5Alt",
+      "mapJsonZipMember": "sprites/creatures/inferno/map/lvl5Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/inferno/map/lvl5Alt",
+      "sndBattlePrefix": "PFOE"
+    },
+    {
+      "unitSid": "h3_efreet_sufi",
+      "comment": "Inferno bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl6Alt",
+      "mapExtractBasename": "lvl6Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/inferno/battle/lvl6Alt.def",
+      "mapZipMember": "sprites/creatures/inferno/map/lvl6Alt.def",
+      "sndBattlePrefix": "ESUL"
+    },
+    {
+      "unitSid": "h3_arch_demon",
+      "comment": "Inferno bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl7Alt",
+      "mapExtractBasename": "lvl7Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/inferno/battle/lvl7Alt.def",
+      "mapZipMember": "sprites/creatures/inferno/map/lvl7Alt.def",
+      "sndBattlePrefix": "ADVL"
+    },
+    {
+      "unitSid": "h3_skeleton_archer",
+      "comment": "Necropolis bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl1Alt",
+      "mapExtractBasename": "lvl1Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/necropolis/battle/lvl1Alt.def",
+      "mapZipMember": "sprites/creatures/necropolis/map/lvl1Alt.def",
+      "sndBattlePrefix": "SKLW"
+    },
+    {
+      "unitSid": "h3_rot_zombie",
+      "comment": "Necropolis bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl2Alt",
+      "mapExtractBasename": "lvl2Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/necropolis/battle/lvl2Alt.def",
+      "mapZipMember": "sprites/creatures/necropolis/map/lvl2Alt.def",
+      "sndBattlePrefix": "ZMBL"
+    },
+    {
+      "unitSid": "h3_banshee",
+      "comment": "Necropolis bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl3Alt",
+      "mapExtractBasename": "lvl3Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/necropolis/battle/lvl3Alt.def",
+      "mapZipMember": "sprites/creatures/necropolis/map/lvl3Alt.def",
+      "sndBattlePrefix": "WRTH"
+    },
+    {
+      "unitSid": "h3_vampire_prince",
+      "comment": "Necropolis bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl4Alt",
+      "mapExtractBasename": "lvl4Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/necropolis/battle/lvl4Alt.def",
+      "mapZipMember": "sprites/creatures/necropolis/map/lvl4Alt.def",
+      "sndBattlePrefix": "NOSF"
+    },
+    {
+      "unitSid": "h3_lich_master",
+      "comment": "Necropolis bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl5Alt",
+      "mapExtractBasename": "lvl5Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/necropolis/battle/lvl5Alt.def",
+      "mapZipMember": "sprites/creatures/necropolis/map/lvl5Alt.def",
+      "sndBattlePrefix": "PLCH"
+    },
+    {
+      "unitSid": "h3_dreadtaur",
+      "comment": "Necropolis bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl6Alt",
+      "mapExtractBasename": "lvl6Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/necropolis/battle/lvl6Alt.def",
+      "mapZipMember": "sprites/creatures/necropolis/map/lvl6Alt.def",
+      "sndBattlePrefix": "BLRD"
+    },
+    {
+      "unitSid": "h3_spectral_dragon",
+      "comment": "Necropolis bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl7Alt",
+      "mapExtractBasename": "lvl7Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/necropolis/battle/lvl7Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/necropolis/battle/lvl7Alt",
+      "mapJsonZipMember": "sprites/creatures/necropolis/map/lvl7Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/necropolis/map/lvl7Alt",
+      "sndBattlePrefix": "GHDR"
+    },
+    {
+      "unitSid": "h3_chthonian",
+      "comment": "Dungeon bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl1Alt",
+      "mapExtractBasename": "lvl1Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/dungeon/battle/lvl1Alt.def",
+      "mapZipMember": "sprites/creatures/dungeon/map/lvl1Alt.def",
+      "sndBattlePrefix": "ITRG"
+    },
+    {
+      "unitSid": "h3_fury",
+      "comment": "Dungeon bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl2Alt",
+      "mapExtractBasename": "lvl2Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/dungeon/battle/lvl2Alt.def",
+      "mapZipMember": "sprites/creatures/dungeon/map/lvl2Alt.def",
+      "sndBattlePrefix": "HHAG"
+    },
+    {
+      "unitSid": "h3_fargazer",
+      "comment": "Dungeon bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl3Alt",
+      "mapExtractBasename": "lvl3Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/dungeon/battle/lvl3Alt.def",
+      "mapZipMember": "sprites/creatures/dungeon/map/lvl3Alt.def",
+      "sndBattlePrefix": "EVLI"
+    },
+    {
+      "unitSid": "h3_medusa_warrior",
+      "comment": "Dungeon bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl4Alt",
+      "mapExtractBasename": "lvl4Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/dungeon/battle/lvl4Alt.def",
+      "mapZipMember": "sprites/creatures/dungeon/map/lvl4Alt.def",
+      "sndBattlePrefix": "MEDQ"
+    },
+    {
+      "unitSid": "h3_minotaur_taskmaster",
+      "comment": "Dungeon bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl5Alt",
+      "mapExtractBasename": "lvl5Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/dungeon/battle/lvl5Alt.def",
+      "mapZipMember": "sprites/creatures/dungeon/map/lvl5Alt.def",
+      "sndBattlePrefix": "MINK"
+    },
+    {
+      "unitSid": "h3_chimera",
+      "comment": "Dungeon bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl6Alt",
+      "mapExtractBasename": "lvl6Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/dungeon/battle/lvl6Alt.def",
+      "mapZipMember": "sprites/creatures/dungeon/map/lvl6Alt.def",
+      "sndBattlePrefix": "SCRP"
+    },
+    {
+      "unitSid": "h3_shadow_dragon",
+      "comment": "Dungeon bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl7Alt",
+      "mapExtractBasename": "lvl7Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/dungeon/battle/lvl7Alt.def",
+      "mapZipMember": "sprites/creatures/dungeon/map/lvl7Alt.def",
+      "sndBattlePrefix": "BKDR"
+    },
+    {
+      "unitSid": "h3_centaur_ranger",
+      "comment": "Rampart bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl1Alt",
+      "mapExtractBasename": "lvl1Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/rampart/battle/lvl1Alt.def",
+      "mapZipMember": "sprites/creatures/rampart/map/lvl1Alt.def",
+      "sndBattlePrefix": "ECNT"
+    },
+    {
+      "unitSid": "h3_dwarf_battlerager",
+      "comment": "Rampart bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl2Alt",
+      "mapExtractBasename": "lvl2Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/rampart/battle/lvl2Alt.def",
+      "mapZipMember": "sprites/creatures/rampart/map/lvl2Alt.def",
+      "sndBattlePrefix": "BDRF"
+    },
+    {
+      "unitSid": "h3_elf_wardancer",
+      "comment": "Rampart bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl3Alt",
+      "mapExtractBasename": "lvl3Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/rampart/battle/lvl3Alt.def",
+      "mapZipMember": "sprites/creatures/rampart/map/lvl3Alt.def",
+      "sndBattlePrefix": "GELF"
+    },
+    {
+      "unitSid": "h3_gold_pegasus",
+      "comment": "Rampart bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl4Alt",
+      "mapExtractBasename": "lvl4Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/rampart/battle/lvl4Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/rampart/battle/lvl4Alt",
+      "mapJsonZipMember": "sprites/creatures/rampart/map/lvl4Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/rampart/map/lvl4Alt",
+      "sndBattlePrefix": "APEG"
+    },
+    {
+      "unitSid": "h3_dendroid_shaman",
+      "comment": "Rampart bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl5Alt",
+      "mapExtractBasename": "lvl5Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/rampart/battle/lvl5Alt.def",
+      "mapZipMember": "sprites/creatures/rampart/map/lvl5Alt.def",
+      "sndBattlePrefix": "BTRE"
+    },
+    {
+      "unitSid": "h3_pristine_unicorn",
+      "comment": "Rampart bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl6Alt",
+      "mapExtractBasename": "lvl6Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/rampart/battle/lvl6Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/rampart/battle/lvl6Alt",
+      "mapJsonZipMember": "sprites/creatures/rampart/map/lvl6Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/rampart/map/lvl6Alt",
+      "sndBattlePrefix": "WUNC"
+    },
+    {
+      "unitSid": "h3_diamond_dragon",
+      "comment": "Rampart bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl7Alt",
+      "mapExtractBasename": "lvl7Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/rampart/battle/lvl7Alt.def",
+      "mapZipMember": "sprites/creatures/rampart/map/lvl7Alt.def",
+      "sndBattlePrefix": "GODR"
+    },
+    {
+      "unitSid": "h3_faerie",
+      "comment": "Conflux bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl1Alt",
+      "mapExtractBasename": "lvl1Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/conflux/battle/lvl1Alt.def",
+      "mapZipMember": "sprites/creatures/conflux/map/lvl1Alt.def",
+      "sndBattlePrefix": "SPRT"
+    },
+    {
+      "unitSid": "h3_hurricane_elemental",
+      "comment": "Conflux bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl2Alt",
+      "mapExtractBasename": "lvl2Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/conflux/battle/lvl2Alt.def",
+      "mapZipMember": "sprites/creatures/conflux/map/lvl2Alt.def",
+      "sndBattlePrefix": "STOR"
+    },
+    {
+      "unitSid": "h3_frost_elemental",
+      "comment": "Conflux bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl3Alt",
+      "mapExtractBasename": "lvl3Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/conflux/battle/lvl3Alt.def",
+      "mapZipMember": "sprites/creatures/conflux/map/lvl3Alt.def",
+      "sndBattlePrefix": "ICEL"
+    },
+    {
+      "unitSid": "h3_plasma_elemental",
+      "comment": "Conflux bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl4Alt",
+      "mapExtractBasename": "lvl4Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/conflux/battle/lvl4Alt.def",
+      "mapZipMember": "sprites/creatures/conflux/map/lvl4Alt.def",
+      "sndBattlePrefix": "FELM"
+    },
+    {
+      "unitSid": "h3_lava_elemental",
+      "comment": "Conflux bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl5Alt",
+      "mapExtractBasename": "lvl5Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/conflux/battle/lvl5Alt.def",
+      "mapZipMember": "sprites/creatures/conflux/map/lvl5Alt.def",
+      "sndBattlePrefix": "MAGM"
+    },
+    {
+      "unitSid": "h3_astral_elemental",
+      "comment": "Conflux bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl6Alt",
+      "mapExtractBasename": "lvl6Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/conflux/battle/lvl6Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/conflux/battle/lvl6Alt",
+      "mapJsonZipMember": "sprites/creatures/conflux/map/lvl6Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/conflux/map/lvl6Alt",
+      "sndBattlePrefix": "MGEL"
+    },
+    {
+      "unitSid": "h3_sacred_phoenix",
+      "comment": "Conflux bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl7Alt",
+      "mapExtractBasename": "lvl7Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/conflux/battle/lvl7Alt.def",
+      "mapZipMember": "sprites/creatures/conflux/map/lvl7Alt.def",
+      "sndBattlePrefix": "PHOE"
+    },
+    {
+      "unitSid": "hota_cove_nereid",
+      "comment": "Cove bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl1Alt",
+      "mapExtractBasename": "lvl1Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/cove/battle/lvl1Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/cove/battle/lvl1Alt",
+      "mapJsonZipMember": "sprites/creatures/cove/map/lvl1Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/cove/map/lvl1Alt",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nymph/NIMPMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nymph/NIMPATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nymph/NIMPWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nymph/NIMPKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_swashbuckler",
+      "comment": "Cove bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl2Alt",
+      "mapExtractBasename": "lvl2Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/cove/battle/lvl2Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/cove/battle/lvl2Alt",
+      "mapJsonZipMember": "sprites/creatures/cove/map/lvl2Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/cove/map/lvl2Alt",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/crewmate/SAYLMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/crewmate/SAYLATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/crewmate/SAYLWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/crewmate/SAYLKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_halcyon",
+      "comment": "Cove bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl4Alt",
+      "mapExtractBasename": "lvl4Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/cove/battle/lvl4Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/cove/battle/lvl4Alt",
+      "mapJsonZipMember": "sprites/creatures/cove/map/lvl4Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/cove/map/lvl4Alt",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/stormbird/ASSIMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/stormbird/ASSIATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/stormbird/ASSIWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/stormbird/ASSIKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_tidecaller",
+      "comment": "Cove bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl5Alt",
+      "mapExtractBasename": "lvl5Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/cove/battle/lvl5Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/cove/battle/lvl5Alt",
+      "mapJsonZipMember": "sprites/creatures/cove/map/lvl5Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/cove/map/lvl5Alt",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaWitch/SORCMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaWitch/SORCATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaWitch/SORCWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaWitch/SORCKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_nix_praetorian",
+      "comment": "Cove bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl6Alt",
+      "mapExtractBasename": "lvl6Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipMember": "sprites/creatures/cove/battle/lvl6Alt.def",
+      "mapZipMember": "sprites/creatures/cove/map/lvl6Alt.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nix/NIXXMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nix/NIXXATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nix/NIXXWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/nix/NIXXKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_cove_abyss_serpent",
+      "comment": "Cove bundle placeholder prepared from Tears of Ashan content.zip.",
+      "battleExtractBasename": "lvl7Alt",
+      "mapExtractBasename": "lvl7Alt",
+      "mapZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleZipPath": "vcmi/Mods/tears-of-ashan/content.zip",
+      "battleJsonZipMember": "sprites/creatures/cove/battle/lvl7Alt.json",
+      "battleJsonDirPrefix": "sprites/creatures/cove/battle/lvl7Alt",
+      "mapJsonZipMember": "sprites/creatures/cove/map/lvl7Alt.json",
+      "mapJsonDirPrefix": "sprites/creatures/cove/map/lvl7Alt",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaserpent/ASPIMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaserpent/ASPIATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaserpent/ASPIWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/cove/Content/sounds/hota/cove/creatures/seaserpent/ASPIKILL.wav"
+      }
+    },
+    {
+      "unitSid": "h3_fangarm",
+      "comment": "Neutral unit prepared from HotA neutralCreatures content.zip.",
+      "battleExtractBasename": "CFANGARM",
+      "mapExtractBasename": "AVWfngrm",
+      "mapZipPath": "vcmi/Mods/hota/mods/neutralCreatures/content.zip",
+      "mapZipMember": "sprites/hota/creatures/adventureMap/AVWfngrm.def",
+      "battleZipPath": "vcmi/Mods/hota/mods/neutralCreatures/content.zip",
+      "battleZipMember": "sprites/hota/creatures/battle/CFANGARM.DEF",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/fangarm/FNGRMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/fangarm/FNGRATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/fangarm/FNGRWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/fangarm/FNGRKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_halfling",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "CHalf",
+      "mapExtractBasename": "AVWhalf",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CHalf.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWhalf.def",
+      "sndBattlePrefix": "HALF"
+    },
+    {
+      "unitSid": "hota_factory_halfling_grenadier",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "CHALFB",
+      "mapExtractBasename": "AVWhbom",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CHALFB.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWhbom.def",
+      "sndBattlePrefix": "HALF"
+    },
+    {
+      "unitSid": "hota_factory_mechanic",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "CMECHAN",
+      "mapExtractBasename": "AVWmech",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CMECHAN.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWmech.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/mechanic/MECHMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/mechanic/MECHATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/mechanic/MECHWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/mechanic/MECHKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_engineer",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "CENGINE",
+      "mapExtractBasename": "AVWengn",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CENGINE.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWengn.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/mechanic/MECHMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/mechanic/MECHATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/mechanic/MECHWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/mechanic/MECHKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_armadillo",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "CARMADL",
+      "mapExtractBasename": "AVWalmd",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CARMADL.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWalmd.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/armadillo/ARMAMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/armadillo/ARMAATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/armadillo/ARMAWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/armadillo/ARMAKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_bellwether_armadillo",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "CBLWARM",
+      "mapExtractBasename": "AVWalmb",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CBLWARM.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWalmb.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/armadillo/ARMAMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/armadillo/ARMAATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/armadillo/ARMAWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/armadillo/ARMAKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_automaton",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "CAUTO2",
+      "mapExtractBasename": "AVWauto",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CAUTO2.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWauto.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/automaton/AUTOMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/automaton/AUTOATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/automaton/AUTOWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/automaton/AUTOKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_sentinel_automaton",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "CHAUTO2",
+      "mapExtractBasename": "AVWauth",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CHAUTO2.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWauth.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/automaton/AUTOMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/automaton/AUTOATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/automaton/AUTOWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/automaton/AUTOKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_sandworm",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "CSANDWX",
+      "mapExtractBasename": "AVWworm",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleJsonZipMember": "sprites/hota/factory/creatures/battle/CSANDWX.json",
+      "battleJsonDirPrefix": "sprites/hota/factory/creatures/battle/CSANDWX",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWworm.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_olgoi_khorkhoi",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "COLGOIX",
+      "mapExtractBasename": "AVWolgo",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleJsonZipMember": "sprites/hota/factory/creatures/battle/COLGOIX.json",
+      "battleJsonDirPrefix": "sprites/hota/factory/creatures/battle/COLGOIX",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWolgo.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_gunslinger",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "CGNSLING",
+      "mapExtractBasename": "AVWguns",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CGNSLING.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWguns.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/gunslinger/GUNSMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/gunslinger/GUNSATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/gunslinger/GUNSWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/gunslinger/GUNSKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_bounty_hunter",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "CBOUNTHT",
+      "mapExtractBasename": "AVWbhun",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CBOUNTHT.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWbhun.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/gunslinger/GUNSMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/gunslinger/GUNSATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/gunslinger/GUNSWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/gunslinger/GUNSKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_couatl",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "COUATL",
+      "mapExtractBasename": "AVWcoat",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleZipMember": "sprites/hota/factory/creatures/battle/COUATL.def",
+      "mapJsonZipMember": "sprites/hota/factory/creatures/adventureMap/AVWcoat.json",
+      "mapJsonDirPrefix": "sprites/hota/factory/creatures/adventureMap/AVWcoat",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/couatl/COTLMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/couatl/COTLATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/couatl/COTLWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/couatl/COTLKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_crimson_couatl",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "COUATR",
+      "mapExtractBasename": "AVWradc",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleZipMember": "sprites/hota/factory/creatures/battle/COUATR.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWradc.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/crimsonCouatl/CCOTMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/crimsonCouatl/CCOTATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/crimsonCouatl/CCOTWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/crimsonCouatl/CCOTKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_dreadnought",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "CDREAD",
+      "mapExtractBasename": "AvWdred",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleJsonZipMember": "sprites/hota/factory/creatures/battle/CDREAD.json",
+      "battleJsonDirPrefix": "sprites/hota/factory/creatures/battle/CDREAD",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AvWdred.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/dreadnought/DREDMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/dreadnought/DREDATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/dreadnought/DREDWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/dreadnought/DREDKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_juggernaut",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "CJUGGER",
+      "mapExtractBasename": "AvWjugg",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleJsonZipMember": "sprites/hota/factory/creatures/battle/CJUGGER.json",
+      "battleJsonDirPrefix": "sprites/hota/factory/creatures/battle/CJUGGER",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AvWjugg.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/dreadnought/DREDMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/dreadnought/DREDATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/dreadnought/DREDWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/dreadnought/DREDKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_factory_sandworm_larva",
+      "comment": "Factory unit prepared from HotA Factory content.zip.",
+      "battleExtractBasename": "CLARVA",
+      "mapExtractBasename": "AVWworm",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CLARVA.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWworm.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_bulwark_kobold",
+      "comment": "Bulwark unit prepared from HotA Bulwark content.zip.",
+      "battleExtractBasename": "CKOBOLD",
+      "mapExtractBasename": "AVWKOBOL",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CKOBOLD.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWKOBOL.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/kobold/KOBLMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/kobold/KOBLATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/kobold/KOBLWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/kobold/KOBLKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_bulwark_kobold_foreman",
+      "comment": "Bulwark unit prepared from HotA Bulwark content.zip.",
+      "battleExtractBasename": "CFKOBLD",
+      "mapExtractBasename": "AVWFKOBL",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CFKOBLD.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWFKOBL.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/kobold/KOBLMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/kobold/KOBLATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/kobold/KOBLWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/kobold/KOBLKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_bulwark_mountain_ram",
+      "comment": "Bulwark unit prepared from HotA Bulwark content.zip.",
+      "battleExtractBasename": "CMTRAM",
+      "mapExtractBasename": "AVWMTRAM",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CMTRAM.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWMTRAM.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mountainRam/MRAMMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mountainRam/MRAMATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mountainRam/MRAMWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mountainRam/MRAMKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_bulwark_argali",
+      "comment": "Bulwark unit prepared from HotA Bulwark content.zip.",
+      "battleExtractBasename": "CARHAR",
+      "mapExtractBasename": "AVWARGAL",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CARHAR.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWARGAL.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mountainRam/MRAMMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mountainRam/MRAMATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mountainRam/MRAMWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mountainRam/MRAMKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_bulwark_snow_elf",
+      "comment": "Bulwark unit prepared from HotA Bulwark content.zip.",
+      "battleExtractBasename": "CSELF",
+      "mapExtractBasename": "AVWSNELF",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CSELF.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWSNELF.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/snowElf/VORIMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/snowElf/VORIATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/snowElf/VORIWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/snowElf/VORIKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_bulwark_steel_elf",
+      "comment": "Bulwark unit prepared from HotA Bulwark content.zip.",
+      "battleExtractBasename": "CSTLF",
+      "mapExtractBasename": "AVWSTELF",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CSTLF.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWSTELF.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/steelElf/VORSMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/steelElf/VORSATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/steelElf/VORSWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/steelElf/VORSKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_bulwark_yeti",
+      "comment": "Bulwark unit prepared from HotA Bulwark content.zip.",
+      "battleExtractBasename": "CYETI",
+      "mapExtractBasename": "AVWYETI",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CYETI.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWYETI.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/yeti/YETIMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/yeti/YETIATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/yeti/YETIWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/yeti/YETIKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_bulwark_yeti_runemaster",
+      "comment": "Bulwark unit prepared from HotA Bulwark content.zip.",
+      "battleExtractBasename": "CMSPIR",
+      "mapExtractBasename": "AVWMSPRT",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CMSPIR.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWMSPRT.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/yeti/YETIMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/yeti/YETIATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/yeti/YETIWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/yeti/YETIKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_bulwark_shaman",
+      "comment": "Bulwark unit prepared from HotA Bulwark content.zip.",
+      "battleExtractBasename": "CSHAMN",
+      "mapExtractBasename": "AVWSHAMN",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CSHAMN.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWSHAMN.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/shaman/SHAMMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/shaman/SHAMATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/shaman/SHAMWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/shaman/SHAMKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_bulwark_great_shaman",
+      "comment": "Bulwark unit prepared from HotA Bulwark content.zip.",
+      "battleExtractBasename": "CGSHMN",
+      "mapExtractBasename": "AVWGSHMN",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CGSHMN.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWGSHMN.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/shaman/SHAMMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/shaman/SHAMATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/shaman/SHAMWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/shaman/SHAMKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_bulwark_mammoth",
+      "comment": "Bulwark unit prepared from HotA Bulwark content.zip.",
+      "battleExtractBasename": "CMAMMTH",
+      "mapExtractBasename": "AVWMAMTH",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CMAMMTH.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWMAMTH.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mammoth/MAMNMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mammoth/MAMNATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mammoth/MAMNWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mammoth/MAMNKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_bulwark_war_mammoth",
+      "comment": "Bulwark unit prepared from HotA Bulwark content.zip.",
+      "battleExtractBasename": "CWMMTH",
+      "mapExtractBasename": "AVWWMAMT",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CWMMTH.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWWMAMT.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/warMammoth/WMAMMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/warMammoth/WMAMATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/warMammoth/WMAMWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/warMammoth/WMAMKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_bulwark_jotunn",
+      "comment": "Bulwark unit prepared from HotA Bulwark content.zip.",
+      "battleExtractBasename": "CJOTUN",
+      "mapExtractBasename": "AVWJOTUN",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CJOTUN.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWJOTUN.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/jotunn/JOTNMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/jotunn/JOTNATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/jotunn/JOTNWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/jotunn/JOTNKILL.wav"
+      }
+    },
+    {
+      "unitSid": "hota_bulwark_jotunn_warlord",
+      "comment": "Bulwark unit prepared from HotA Bulwark content.zip.",
+      "battleExtractBasename": "CWJOTN",
+      "mapExtractBasename": "AVWJOTNW",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CWJOTN.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWJOTNW.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/jotunnWarlord/JOTWMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/jotunnWarlord/JOTWATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/jotunnWarlord/JOTWWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/jotunnWarlord/JOTWKILL.wav"
+      }
+    },
+    {
+      "unitSid": "h3_satyr",
+      "comment": "Neutral unit prepared from HotA neutralCreatures content.zip.",
+      "battleExtractBasename": "CSATYR",
+      "mapExtractBasename": "AvWSatyr",
+      "battleZipPath": "vcmi/Mods/hota/mods/neutralCreatures/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/neutralCreatures/content.zip",
+      "battleZipMember": "sprites/hota/creatures/battle/CSATYR.def",
+      "mapZipMember": "sprites/hota/creatures/adventureMap/AvWSatyr.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/satyr/SATYMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/satyr/SATYATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/satyr/SATYWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/satyr/SATYKILL.wav"
+      }
+    },
+    {
+      "unitSid": "h3_leprechaun",
+      "comment": "Neutral unit prepared from HotA neutralCreatures content.zip.",
+      "battleExtractBasename": "CLEPRCHN",
+      "mapExtractBasename": "AVWlepr",
+      "battleZipPath": "vcmi/Mods/hota/mods/neutralCreatures/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/neutralCreatures/content.zip",
+      "battleZipMember": "sprites/hota/creatures/battle/CLEPRCHN.def",
+      "mapZipMember": "sprites/hota/creatures/adventureMap/AVWlepr.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/leprechaun/LEPRMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/leprechaun/LEPRATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/leprechaun/LEPRWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/leprechaun/LEPRKILL.wav"
+      }
+    },
+    {
+      "unitSid": "h3_steel_golem",
+      "comment": "Neutral unit prepared from HotA neutralCreatures content.zip.",
+      "battleExtractBasename": "cstlgole",
+      "mapExtractBasename": "avwslgl0",
+      "battleZipPath": "vcmi/Mods/hota/mods/neutralCreatures/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/neutralCreatures/content.zip",
+      "battleZipMember": "sprites/hota/creatures/battle/cstlgole.def",
+      "mapZipMember": "sprites/hota/creatures/adventureMap/avwslgl0.def",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/steelGolem/SLGLMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/steelGolem/SLGLATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/steelGolem/SLGLWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sounds/hota/creatures/steelGolem/SLGLKILL.wav"
+      }
+    },
+    {
+      "unitSid": "h3_sandworm_upg_alt",
+      "comment": "Factory alt upgrade baked with material_class_hs from hota_factory_olgoi_khorkhoi (option B: Glassworm).",
+      "battleExtractBasename": "COLGOIX",
+      "mapExtractBasename": "AVWolgo",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/sandworm/WORMKILL.wav"
+      },
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_factory_olgoi_khorkhoi",
+        "optionId": "B",
+        "displayName": "Glassworm",
+        "battleSourceKind": "json_png"
+      },
+      "battleJsonZipMember": "sprites/hota/factory/creatures/battle/COLGOIX.json",
+      "battleJsonDirPrefix": "sprites/hota/factory/creatures/battle/COLGOIX",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWolgo.def"
+    },
+    {
+      "unitSid": "h3_dreadnought_upg_alt",
+      "comment": "Factory alt upgrade baked with material_class_hs from hota_factory_juggernaut (option A: Ironclad).",
+      "battleExtractBasename": "CJUGGER",
+      "mapExtractBasename": "AvWjugg",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/dreadnought/DREDMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/dreadnought/DREDATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/dreadnought/DREDWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/dreadnought/DREDKILL.wav"
+      },
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_factory_juggernaut",
+        "optionId": "A",
+        "displayName": "Ironclad",
+        "battleSourceKind": "json_png"
+      },
+      "battleJsonZipMember": "sprites/hota/factory/creatures/battle/CJUGGER.json",
+      "battleJsonDirPrefix": "sprites/hota/factory/creatures/battle/CJUGGER",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AvWjugg.def"
+    },
+    {
+      "unitSid": "h3_halfling_upg_alt",
+      "comment": "Factory alt upgrade baked with material_class_hs from hota_factory_halfling_grenadier (option C: Firebug).",
+      "battleExtractBasename": "CHALFB",
+      "mapExtractBasename": "AVWhbom",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "sndBattlePrefix": "HALF",
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_factory_halfling_grenadier",
+        "optionId": "C",
+        "displayName": "Firebug",
+        "battleSourceKind": "def"
+      },
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CHALFB.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWhbom.def"
+    },
+    {
+      "unitSid": "h3_mechanic_upg_alt",
+      "comment": "Factory alt upgrade baked with material_class_hs from hota_factory_engineer (option B: Tinker).",
+      "battleExtractBasename": "CENGINE",
+      "mapExtractBasename": "AVWengn",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/mechanic/MECHMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/mechanic/MECHATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/mechanic/MECHWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/mechanic/MECHKILL.wav"
+      },
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_factory_engineer",
+        "optionId": "B",
+        "displayName": "Tinker",
+        "battleSourceKind": "def"
+      },
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CENGINE.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWengn.def"
+    },
+    {
+      "unitSid": "h3_armadillo_upg_alt",
+      "comment": "Factory alt upgrade baked with material_class_hs from hota_factory_bellwether_armadillo (option A: Plated Armadillo).",
+      "battleExtractBasename": "CBLWARM",
+      "mapExtractBasename": "AVWalmb",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/armadillo/ARMAMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/armadillo/ARMAATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/armadillo/ARMAWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/armadillo/ARMAKILL.wav"
+      },
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_factory_bellwether_armadillo",
+        "optionId": "A",
+        "displayName": "Plated Armadillo",
+        "battleSourceKind": "def"
+      },
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CBLWARM.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWalmb.def"
+    },
+    {
+      "unitSid": "h3_automaton_upg_alt",
+      "comment": "Factory alt upgrade baked with material_class_hs from hota_factory_sentinel_automaton (option C: Clockwork Automaton).",
+      "battleExtractBasename": "CHAUTO2",
+      "mapExtractBasename": "AVWauth",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/automaton/AUTOMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/automaton/AUTOATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/automaton/AUTOWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/automaton/AUTOKILL.wav"
+      },
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_factory_sentinel_automaton",
+        "optionId": "C",
+        "displayName": "Clockwork Automaton",
+        "battleSourceKind": "def"
+      },
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CHAUTO2.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWauth.def"
+    },
+    {
+      "unitSid": "h3_gunslinger_upg_alt",
+      "comment": "Factory alt upgrade baked with material_class_hs from hota_factory_bounty_hunter (option B: Marshal).",
+      "battleExtractBasename": "CBOUNTHT",
+      "mapExtractBasename": "AVWbhun",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/gunslinger/GUNSMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/gunslinger/GUNSATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/gunslinger/GUNSWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/gunslinger/GUNSKILL.wav"
+      },
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_factory_bounty_hunter",
+        "optionId": "B",
+        "displayName": "Marshal",
+        "battleSourceKind": "def"
+      },
+      "battleZipMember": "sprites/hota/factory/creatures/battle/CBOUNTHT.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWbhun.def"
+    },
+    {
+      "unitSid": "h3_couatl_upg_alt",
+      "comment": "Factory alt upgrade baked with material_class_hs from hota_factory_crimson_couatl (option B: Jade Coatl).",
+      "battleExtractBasename": "COUATR",
+      "mapExtractBasename": "AVWradc",
+      "battleZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/factory/content.zip",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/crimsonCouatl/CCOTMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/crimsonCouatl/CCOTATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/crimsonCouatl/CCOTWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/factory/content.zip!sounds/hota/factory/creatures/crimsonCouatl/CCOTKILL.wav"
+      },
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_factory_crimson_couatl",
+        "optionId": "B",
+        "displayName": "Jade Coatl",
+        "battleSourceKind": "def"
+      },
+      "battleZipMember": "sprites/hota/factory/creatures/battle/COUATR.def",
+      "mapZipMember": "sprites/hota/factory/creatures/adventureMap/AVWradc.def"
+    },
+    {
+      "unitSid": "h3_kobold_upg_alt",
+      "comment": "Bulwark alt upgrade baked with material_class_hs from hota_bulwark_kobold_foreman (option D: Kobold Runebearer).",
+      "battleExtractBasename": "CFKOBLD",
+      "mapExtractBasename": "AVWFKOBL",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/kobold/KOBLMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/kobold/KOBLATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/kobold/KOBLWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/kobold/KOBLKILL.wav"
+      },
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_bulwark_kobold_foreman",
+        "optionId": "D",
+        "displayName": "Kobold Runebearer",
+        "battleSourceKind": "def"
+      },
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CFKOBLD.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWFKOBL.def"
+    },
+    {
+      "unitSid": "h3_mountain_ram_upg_alt",
+      "comment": "Bulwark alt upgrade baked with material_class_hs from hota_bulwark_argali (option D: Aurora Ram).",
+      "battleExtractBasename": "CARHAR",
+      "mapExtractBasename": "AVWARGAL",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mountainRam/MRAMMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mountainRam/MRAMATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mountainRam/MRAMWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/mountainRam/MRAMKILL.wav"
+      },
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_bulwark_argali",
+        "optionId": "D",
+        "displayName": "Aurora Ram",
+        "battleSourceKind": "def"
+      },
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CARHAR.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWARGAL.def"
+    },
+    {
+      "unitSid": "h3_snow_elf_upg_alt",
+      "comment": "Bulwark alt upgrade baked with material_class_hs from hota_bulwark_steel_elf (option C: Pine Elf).",
+      "battleExtractBasename": "CSTLF",
+      "mapExtractBasename": "AVWSTELF",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/steelElf/VORSMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/steelElf/VORSATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/steelElf/VORSWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/steelElf/VORSKILL.wav"
+      },
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_bulwark_steel_elf",
+        "optionId": "C",
+        "displayName": "Pine Elf",
+        "battleSourceKind": "def"
+      },
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CSTLF.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWSTELF.def"
+    },
+    {
+      "unitSid": "h3_yeti_upg_alt",
+      "comment": "Bulwark alt upgrade baked with material_class_hs from hota_bulwark_yeti_runemaster (option A: Yeti Stormcaller).",
+      "battleExtractBasename": "CMSPIR",
+      "mapExtractBasename": "AVWMSPRT",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/yeti/YETIMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/yeti/YETIATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/yeti/YETIWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/yeti/YETIKILL.wav"
+      },
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_bulwark_yeti_runemaster",
+        "optionId": "A",
+        "displayName": "Yeti Stormcaller",
+        "battleSourceKind": "def"
+      },
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CMSPIR.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWMSPRT.def"
+    },
+    {
+      "unitSid": "h3_shaman_upg_alt",
+      "comment": "Bulwark alt upgrade baked with material_class_hs from hota_bulwark_great_shaman (option B: Frost Speaker).",
+      "battleExtractBasename": "CGSHMN",
+      "mapExtractBasename": "AVWGSHMN",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/shaman/SHAMMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/shaman/SHAMATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/shaman/SHAMWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/shaman/SHAMKILL.wav"
+      },
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_bulwark_great_shaman",
+        "optionId": "B",
+        "displayName": "Frost Speaker",
+        "battleSourceKind": "def"
+      },
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CGSHMN.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWGSHMN.def"
+    },
+    {
+      "unitSid": "h3_mammoth_upg_alt",
+      "comment": "Bulwark alt upgrade baked with material_class_hs from hota_bulwark_war_mammoth (option A: Tundra Mammoth).",
+      "battleExtractBasename": "CWMMTH",
+      "mapExtractBasename": "AVWWMAMT",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/warMammoth/WMAMMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/warMammoth/WMAMATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/warMammoth/WMAMWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/warMammoth/WMAMKILL.wav"
+      },
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_bulwark_war_mammoth",
+        "optionId": "A",
+        "displayName": "Tundra Mammoth",
+        "battleSourceKind": "def"
+      },
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CWMMTH.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWWMAMT.def"
+    },
+    {
+      "unitSid": "h3_jotunn_upg_alt",
+      "comment": "Bulwark alt upgrade baked with material_class_hs from hota_bulwark_jotunn_warlord (option A: Jotun Frostlord).",
+      "battleExtractBasename": "CWJOTN",
+      "mapExtractBasename": "AVWJOTNW",
+      "battleZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "mapZipPath": "vcmi/Mods/hota/mods/bulwark/content.zip",
+      "soundPaths": {
+        "move": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/jotunnWarlord/JOTWMOVE.wav",
+        "attack": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/jotunnWarlord/JOTWATTK.wav",
+        "wince": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/jotunnWarlord/JOTWWNCE.wav",
+        "killed": "vcmi/Mods/hota/mods/bulwark/content.zip!sounds/hota/bulwark/creatures/jotunnWarlord/JOTWKILL.wav"
+      },
+      "altBake": {
+        "strategy": "material_class_hs",
+        "fromLabSid": "hota_bulwark_jotunn_warlord",
+        "optionId": "A",
+        "displayName": "Jotun Frostlord",
+        "battleSourceKind": "def"
+      },
+      "battleZipMember": "sprites/hota/bulwark/creatures/battle/CWJOTN.def",
+      "mapZipMember": "sprites/hota/bulwark/creatures/adventureMap/AVWJOTNW.def"
+    },
+    {
+      "unitSid": "h3_peasant",
+      "sndBattlePrefix": "PSNT",
+      "comment": "Classic SoD/AB neutral prepared from H3sprite.lod for the homm3_neutral catalog.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "Cpeas.def",
+      "battleExtractBasename": "Cpeas",
+      "mapLod": "H3sprite.lod",
+      "mapLodEntry": "AVWpeas.def",
+      "mapExtractBasename": "AVWpeas"
+    },
+    {
+      "unitSid": "h3_neutral_halfling",
+      "sndBattlePrefix": "HALF",
+      "comment": "Classic SoD/AB neutral prepared from H3sprite.lod for the homm3_neutral catalog.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CHalf.def",
+      "battleExtractBasename": "CHalf",
+      "mapLod": "H3sprite.lod",
+      "mapLodEntry": "AVWhalf.def",
+      "mapExtractBasename": "AVWhalf"
+    },
+    {
+      "unitSid": "h3_boar",
+      "sndBattlePrefix": "BOAR",
+      "comment": "Classic SoD/AB neutral prepared from H3sprite.lod for the homm3_neutral catalog.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "Cboar.def",
+      "battleExtractBasename": "Cboar",
+      "mapLod": "H3sprite.lod",
+      "mapLodEntry": "AVWboar.def",
+      "mapExtractBasename": "AVWboar"
+    },
+    {
+      "unitSid": "h3_rogue",
+      "sndBattlePrefix": "ROGU",
+      "comment": "Classic SoD/AB neutral prepared from H3sprite.lod for the homm3_neutral catalog.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "Crogue.def",
+      "battleExtractBasename": "Crogue",
+      "mapLod": "H3sprite.lod",
+      "mapLodEntry": "AVWrog.def",
+      "mapExtractBasename": "AVWrog"
+    },
+    {
+      "unitSid": "h3_nomad",
+      "sndBattlePrefix": "NMAD",
+      "comment": "Classic SoD/AB neutral prepared from H3sprite.lod for the homm3_neutral catalog.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "Cnomad.def",
+      "battleExtractBasename": "Cnomad",
+      "mapLod": "H3sprite.lod",
+      "mapLodEntry": "AVWnomd.def",
+      "mapExtractBasename": "AVWnomd"
+    },
+    {
+      "unitSid": "h3_mummy",
+      "sndBattlePrefix": "MUMY",
+      "comment": "Classic SoD/AB neutral prepared from H3sprite.lod for the homm3_neutral catalog.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "Cmummy.def",
+      "battleExtractBasename": "Cmummy",
+      "mapLod": "H3sprite.lod",
+      "mapLodEntry": "AVWmumy.def",
+      "mapExtractBasename": "AVWmumy"
+    },
+    {
+      "unitSid": "h3_troll",
+      "sndBattlePrefix": "TRLL",
+      "comment": "Classic SoD/AB neutral prepared from H3sprite.lod for the homm3_neutral catalog. Map DEF absent in LOD; keep donor mapMesh until a map sprite is authored.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "Ctroll.def",
+      "battleExtractBasename": "Ctroll"
+    },
+    {
+      "unitSid": "h3_enchanter",
+      "sndBattlePrefix": "ENCH",
+      "comment": "Classic SoD/AB neutral prepared from H3sprite.lod for the homm3_neutral catalog.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "Cench.def",
+      "battleExtractBasename": "Cench",
+      "mapLod": "H3sprite.lod",
+      "mapLodEntry": "AVWench.def",
+      "mapExtractBasename": "AVWench"
+    },
+    {
+      "unitSid": "h3_sharpshooter",
+      "sndBattlePrefix": "GELF",
+      "sndNote": "HoMM3 ships no SHRP* clips in Heroes3.snd/H3ab_ahd.snd/HotA.snd; borrows Grand Elf (GELF), same substitute as h3_elf_wardancer.",
+      "comment": "Classic SoD/AB neutral prepared from H3sprite.lod for the homm3_neutral catalog.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "Csharp.def",
+      "battleExtractBasename": "Csharp",
+      "mapLod": "H3sprite.lod",
+      "mapLodEntry": "AVWsharp.def",
+      "mapExtractBasename": "AVWsharp"
+    },
+    {
+      "unitSid": "h3_azure_dragon",
+      "sndBattlePrefix": "AZUR",
+      "comment": "Classic SoD/AB neutral prepared from H3sprite.lod for the homm3_neutral catalog.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CaDrgn.def",
+      "battleExtractBasename": "CaDrgn",
+      "mapLod": "H3sprite.lod",
+      "mapLodEntry": "AVWazure.def",
+      "mapExtractBasename": "AVWazure"
+    },
+    {
+      "unitSid": "h3_crystal_dragon",
+      "sndBattlePrefix": "CRYS",
+      "comment": "Classic SoD/AB neutral prepared from H3sprite.lod for the homm3_neutral catalog. Map DEF absent in LOD; keep donor mapMesh until a map sprite is authored.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "Ccdrgn.def",
+      "battleExtractBasename": "Ccdrgn"
+    },
+    {
+      "unitSid": "h3_faerie_dragon",
+      "sndBattlePrefix": "FAER",
+      "comment": "Classic SoD/AB neutral prepared from H3sprite.lod for the homm3_neutral catalog. Map DEF absent in LOD; keep donor mapMesh until a map sprite is authored.",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "Cfdrgn.def",
+      "battleExtractBasename": "Cfdrgn"
+    },
+    {
+      "unitSid": "h3_rust_dragon",
+      "sndBattlePrefix": "RUST",
+      "comment": "Classic SoD/AB neutral prepared from H3sprite.lod for the homm3_neutral catalog. Battle DEF is CRsDgn.def (Rust Dragon); CRDRGN.def is the Red Dragon (was wrongly used until 2026-09-26).",
+      "battleLod": "H3sprite.lod",
+      "battleLodEntry": "CRsDgn.def",
+      "battleExtractBasename": "CRsDgn",
+      "mapLod": "H3sprite.lod",
+      "mapLodEntry": "AVWrust.def",
+      "mapExtractBasename": "AVWrust"
+    }
+  ]
+}

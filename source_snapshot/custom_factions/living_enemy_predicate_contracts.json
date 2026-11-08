@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require a living enemy target predicate. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresLivingEnemyPredicateProfiles": true,
+    "necropolisOnly": true,
+    "formationFamilyOnly": true,
+    "livingUsesAuthoredUnitFactsOnly": true,
+    "undeadOppositeMustNotBeUsedAsEnemyProof": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": ["homm3_necropolis"],
+  "allowedFamily": "Formation",
+  "requiredRuntimeProof": [
+    "battle unit SID to authored living classifier correlation proof",
+    "target side is enemy of law-owner side proof",
+    "target stack identity proof",
+    "living target is affected stack proof",
+    "negative status application target correlation proof",
+    "law-owner side correlation proof",
+    "idempotent per-action application proof"
+  ],
+  "contracts": {
+    "necropolis.living-enemy-death-pressure": {
+      "requiredStaticFacts": ["unit_family_tags.living=yes"],
+      "companionPredicates": ["RequiresNegativeStatusPredicate"],
+      "forbiddenSubstitutes": [
+        "non-undead counted as living enemy without authored living fact",
+        "enemy side counted as living enemy without unit SID proof",
+        "Necropolis law-owner undead identity counted as living enemy proof",
+        "display name or SID substring counted as living classifier",
+        "negative status predicate counted as living enemy predicate",
+        "dead/corpse/casualty context counted as living enemy target"
+      ],
+      "notes": "Death March requires a live enemy target whose battle unit SID resolves to an authored living=yes fact. Static living tags prepare the classifier, but gameplay still requires enemy-side, target-stack, negative-status target, and law-owner correlation proof."
+    }
+  }
+}

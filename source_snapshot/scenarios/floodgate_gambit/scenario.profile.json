@@ -1,0 +1,30 @@
+﻿{
+  "schema": "homm3.olden_custom_scenario_profile.v1",
+  "id": "floodgate_gambit",
+  "mapSid": "h3_floodgate_gambit",
+  "title": "The Floodgate Gambit",
+  "tagline": "Recover the seals. Outsmart the dead. Hold the gates.",
+  "playerMode": "single_player",
+  "playerFaction": "homm3_castle",
+  "playerHero": "homm3_castle_hero_3",
+  "enemyFaction": "homm3_necropolis",
+  "victoryMode": "capture_citadel",
+  "objectives": [
+    "Recover three river seals",
+    "Break the sluice wardens (optional)",
+    "Capture Floodgate Citadel"
+  ],
+  "events": [
+    "Day 1 briefing and resources",
+    "Three one-shot seal events with rewards",
+    "Periodic barge supply deliveries",
+    "Guarded griffin encounter",
+    "Lord Varaxis pre-battle speech",
+    "Citadel capture victory sequence"
+  ],
+  "builder": "experiments/campaign_port_poc/build_floodgate_gambit_scenario.py",
+  "installer": "tools/install_floodgate_gambit_scenario.py",
+  "validator": "tools/validate_floodgate_gambit_scenario_contract.py",
+  "artifactRoot": "artifacts/campaign_port_poc/floodgate_gambit",
+  "proofBoundary": "source/static + generated artifact; runtime load and gameplay remain unvalidated"
+}

@@ -1,0 +1,317 @@
+{
+ "unit": "h3_infernal_troglodyte",
+ "joints": {
+  "Hips": [
+   -0.05,
+   0.15,
+   0.7
+  ],
+  "Spine": [
+   -0.05,
+   0.1,
+   0.8
+  ],
+  "Spine1": [
+   -0.05,
+   0.02,
+   0.92
+  ],
+  "Spine2": [
+   -0.05,
+   -0.06,
+   1.02
+  ],
+  "Neck": [
+   -0.05,
+   -0.14,
+   1.06
+  ],
+  "Head": [
+   -0.05,
+   -0.22,
+   1.02
+  ],
+  "HeadTop_End": [
+   -0.05,
+   -0.52,
+   1.0
+  ],
+  "LeftShoulder": [
+   0.0,
+   -0.1,
+   1.05
+  ],
+  "LeftArm": [
+   0.2,
+   -0.12,
+   1.0
+  ],
+  "LeftForeArm": [
+   0.28,
+   -0.08,
+   0.8
+  ],
+  "LeftHand": [
+   0.35,
+   -0.14,
+   0.6
+  ],
+  "LeftHand_End": [
+   0.38,
+   -0.15,
+   0.5
+  ],
+  "RightShoulder": [
+   -0.1,
+   -0.1,
+   1.05
+  ],
+  "RightArm": [
+   -0.28,
+   -0.12,
+   1.0
+  ],
+  "RightForeArm": [
+   -0.4,
+   -0.05,
+   0.8
+  ],
+  "RightHand": [
+   -0.46,
+   -0.14,
+   0.48
+  ],
+  "RightHand_End": [
+   -0.48,
+   -0.15,
+   0.36
+  ],
+  "RightUpLeg": [
+   -0.221,
+   0.158,
+   0.687
+  ],
+  "RightLeg": [
+   -0.274,
+   -0.028,
+   0.455
+  ],
+  "RightFoot": [
+   -0.227,
+   0.138,
+   0.116
+  ],
+  "RightToeBase": [
+   -0.307,
+   -0.048,
+   0.09
+  ],
+  "RightToe_End": [
+   -0.347,
+   -0.141,
+   0.063
+  ],
+  "LeftUpLeg": [
+   0.221,
+   0.158,
+   0.687
+  ],
+  "LeftLeg": [
+   0.274,
+   -0.028,
+   0.455
+  ],
+  "LeftFoot": [
+   0.227,
+   0.138,
+   0.116
+  ],
+  "LeftToeBase": [
+   0.307,
+   -0.048,
+   0.09
+  ],
+  "LeftToe_End": [
+   0.347,
+   -0.141,
+   0.063
+  ]
+ },
+ "props": [
+  {
+   "name": "spear",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.438,
+      -0.023,
+      -0.01
+     ],
+     [
+      0.443,
+      -0.031,
+      1.15
+     ]
+    ],
+    [
+     [
+      0.443,
+      -0.031,
+      1.15
+     ],
+     [
+      0.445,
+      -0.035,
+      1.76
+     ]
+    ]
+   ],
+   "radius": 0.1
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "dy": 20,
+   "roll": 20
+  },
+  "propAim": [
+   "LeftHand"
+  ],
+  "propAimDepth": "imagePlane",
+  "propAimRange": 25,
+  "propAimReason": "2026-09-30 in-game report: troglodyte-line spears flail back and forth. The free propAim tilt toward/away from the sprite camera is unobservable in a silhouette and flipped sign frame to frame (h3_troglodyte idle aim2 53/51/53/-41 -> 77.6 deg spear step on the loop seam; attack 94.7 deg, hitted 105 deg). imagePlane lays the spear into the image plane (the DEF draws it at full length) and fits only the on-screen swing, within propAimRange deg of the capture's hand pose (a wider swing chases the spear's tip/butt mirror line)."
+ },
+ "extensions": [
+  "dungeon_fixweights",
+  "fortress_rig",
+  "floater_fix"
+ ],
+ "strideMatch": {
+  "maxDrop": 0.25,
+  "reason": "Default 0.15 passes on a thin jitter margin (p90 0.304 of 0.35, cadence 1.6 cap); 0.20 still 0.308. Scratch sweep (worker A, 2026-09-27) on the pre-stride GLB: 0.25 slip 0.098 ratio 1.033 cadence 1.0 jitter 0.096: the reach removes the cadence that caused the jitter."
+ },
+ "propFloor": {
+  "bone": "LeftHand",
+  "prop": "spear",
+  "clips": [
+   "AttackFront",
+   "Death",
+   "Defence",
+   "Hitted",
+   "Idle",
+   "Mouseover",
+   "Move"
+  ],
+  "reason": "2026-09-30 propAimDepth imagePlane rebuild: the spear, now held at full length in the image plane instead of foreshortened toward the camera, puts its butt through the floor (Move 0.255 below the Idle floor, Death 0.182, AttackFront 0.099 world units); ground_glb refused to lift the whole body for it (the planted Move soles would float). The DEF stands the butt on the floor. Every clip is listed; a clip whose spear stays above the floor is left alone."
+ },
+ "fortress": {
+  "chains": [
+   {
+    "name": "Tail",
+    "parent": "Hips",
+    "points": [
+     [
+      -0.055,
+      0.42,
+      0.63
+     ],
+     [
+      -0.06,
+      0.422,
+      0.529
+     ],
+     [
+      -0.057,
+      0.4,
+      0.433
+     ],
+     [
+      -0.058,
+      0.378,
+      0.32
+     ],
+     [
+      -0.056,
+      0.368,
+      0.228
+     ],
+     [
+      -0.055,
+      0.423,
+      0.114
+     ],
+     [
+      -0.054,
+      0.477,
+      0.03
+     ],
+     [
+      -0.053,
+      0.52,
+      0.008
+     ]
+    ],
+    "radius": 0.1,
+    "rootBlend": 0.1,
+    "ratio": 1.0,
+    "geodesic": 0.6
+   }
+  ],
+  "chainsReason": "2026-09-30: the floor-resting tail was a rigid Hips prop (box), so it dipped with the pelvis that the stride-matched Move drops for the smaller imagePlane body and went through the floor (ground_glb then lifted the swing foot past its tolerance / floated the plant). A Hips-parented tail chain with surface (geodesic 0.6) ownership, as h3_kobold_upg_alt and the Fortress tails; centreline traced over the welded surface from the tail's floor end. stride_match_glb's tail_clearance then curls Tail_00 up onto the Idle floor where the Move dips it."
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-10 authenticity (DEF spear): AttackFront thrust - spear lowers to horizontal f1-f6 and rises f7-f9, Spine1 leans 14 deg and the arm reaches at f5 (was a vertical spear through the whole attack); Hitted spear upright tipping back; Death f0-f3 spear upright before the fall; Defence spear vertical -> raised -> down-forward -> forward-horizontal -> raised (was flat/tipped down). Offsets split in two ops (120 deg cap)",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_infernal_troglodyte_spear_rot.json",
+    "sha256": "28a7f2a45a5d2840803c1670ff72cbf1fb6c6047c40326f8944ce7918c0e277f"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_infernal_troglodyte_spear_rot.json",
+    "sha256": "28a7f2a45a5d2840803c1670ff72cbf1fb6c6047c40326f8944ce7918c0e277f",
+    "note": "second half of the split offset"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "waist crease of the thrust lean"
+   }
+  ]
+ },
+ "floaterFix": {
+  "k": 8,
+  "maxVerts": 400,
+  "pieces": [
+   {
+    "point": [
+     0.36191,
+     -0.07263,
+     0.75039
+    ],
+    "from": "LeftHand",
+    "weights": "vertex",
+    "note": "2026-10-10 lane B: 4-vert forearm sliver the region cut onto LeftHand; opened 7 cm in AttackFront f4 once the spear thrust turns the hand: nearest forearm surface weights"
+   }
+  ]
+ }
+}

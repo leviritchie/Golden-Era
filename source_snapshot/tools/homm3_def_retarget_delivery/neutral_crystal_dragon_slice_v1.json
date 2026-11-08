@@ -1,0 +1,34 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "neutral_crystal_dragon_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/neutral_crystal_dragon_slice_v1",
+  "note": "Neutral crystal dragon: hand-keyed body (no capture) with a fortress_rig tail chain keyed per clip and a crystal shatter death; current mesh kept; faces -60 fleet bind; all 9 clips | look-only re-freeze on the ground-stamped canonical (fleet_rebuild ground_glb apply; coordinator item 3) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_crystal_dragon 0.2121. | Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_crystal_dragon 0.2147.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_crystal_dragon",
+      "gameSid": "h3_crystal_dragon",
+      "bundleName": "custom_units_neutral_h3_crystal_dragon",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "70f3b5e2a50c8e865732434784126635dc453fc3d6afecff6ac1910caa6c47e0",
+      "identityReview": "none",
+      "mergeMeshes": {
+        "h3_crystal_dragon_Rubble": "the death shatter's rubble mesh (build_unit.py shatter) is merged into the body primitive at prepare (merge_rubble_glb.py): one SkinnedMeshRenderer, the Chunk bones already in its bone list, zero offsets for every corrective morph, so the death breaks into falling chunks in game instead of vanishing"
+      },
+      "frozen": {
+        "lookDeliveredGlbSha256": "102f6cbdf99f8c68222652969ae81e0194b0c31cf18a8446a00b21731d294210",
+        "idleRetimedGlbSha256": "ec75d69e59d7cc2e3da1c22642ad99cdf061a7c232b2040773e970447cdab28d",
+        "vfxManifestSha256": "609116f986e7d55c6c3abd70ce40dadd8a7d6c391c1593842e0cc67cb6ddc79c",
+        "specSha256": "3e9d0d6696b1d627a5e2a39c0ac72c893a4c2c4316758211dd8af433f45bcc54",
+        "basecolorSha256": "2eb02d2f3d85ca8d80a1d94e21470f129cdd367173f2e6f93bfa2f9835f830d4"
+      }
+    }
+  ]
+}

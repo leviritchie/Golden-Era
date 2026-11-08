@@ -1,0 +1,256 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "Birth of a Barbarian continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub yog; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_17_sod_stronghold_yog",
+    "campaignTitle": "Birth of a Barbarian",
+    "campaignEntry": "Yog.h3c",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "missionConfigPrefix": "homm3_sod_stronghold",
+    "defaultSpawn": {
+      "factionSid": "homm3_stronghold",
+      "heroSid": "homm3_stronghold_hero_5"
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart).",
+    "regionPixels": {
+      "on_the_run": [
+        80.0,
+        220.0
+      ],
+      "the_meeting": [
+        260.0,
+        220.0
+      ],
+      "a_tough_start": [
+        440.0,
+        220.0
+      ],
+      "falor_and_terwen": [
+        620.0,
+        220.0
+      ],
+      "returning_to_bracada": [
+        800.0,
+        220.0
+      ]
+    },
+    "missionSpawns": {
+      "on_the_run": {
+        "heroSid": "homm3_stronghold_hero_5",
+        "factionSid": "homm3_stronghold"
+      },
+      "the_meeting": {
+        "heroSid": "homm3_stronghold_hero_5",
+        "factionSid": "homm3_stronghold"
+      },
+      "a_tough_start": {
+        "heroSid": "homm3_stronghold_hero_5",
+        "factionSid": "homm3_stronghold"
+      },
+      "falor_and_terwen": {
+        "heroSid": "homm3_stronghold_hero_5",
+        "factionSid": "homm3_stronghold"
+      },
+      "returning_to_bracada": {
+        "heroSid": "homm3_stronghold_hero_5",
+        "factionSid": "homm3_stronghold"
+      }
+    }
+  },
+  "storyHubMapSidOverrides": {
+    "on_the_run": "h3_stronghold_on_the_run_raw_translation",
+    "the_meeting": "h3_stronghold_the_meeting_raw_translation",
+    "a_tough_start": "h3_stronghold_a_tough_start_raw_translation",
+    "falor_and_terwen": "h3_stronghold_falor_and_terwen_raw_translation",
+    "returning_to_bracada": "h3_stronghold_returning_to_bracada_raw_translation",
+    "choiceReason": "Birth of a Barbarian missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "on_the_run",
+      "toMissionId": "the_meeting",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 9,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=9 for on_the_run (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_stronghold_on_the_run_raw_translation",
+        "to": "h3_stronghold_the_meeting_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "the_meeting",
+      "toMissionId": "a_tough_start",
+      "sourceBlockIndex": 2,
+      "nextBlockIndex": 3,
+      "levelCap": 15,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=15 for the_meeting (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_stronghold_the_meeting_raw_translation",
+        "to": "h3_stronghold_a_tough_start_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "a_tough_start",
+      "toMissionId": "falor_and_terwen",
+      "sourceBlockIndex": 3,
+      "nextBlockIndex": 4,
+      "levelCap": 18,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=18 for a_tough_start (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_stronghold_a_tough_start_raw_translation",
+        "to": "h3_stronghold_falor_and_terwen_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "falor_and_terwen",
+      "toMissionId": "returning_to_bracada",
+      "sourceBlockIndex": 4,
+      "nextBlockIndex": 5,
+      "levelCap": 21,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=21 for falor_and_terwen (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_stronghold_falor_and_terwen_raw_translation",
+        "to": "h3_stronghold_returning_to_bracada_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "on_the_run",
+    "the_meeting",
+    "a_tough_start",
+    "falor_and_terwen",
+    "returning_to_bracada"
+  ],
+  "missionTitles": {
+    "on_the_run": "On the Run",
+    "the_meeting": "The Meeting",
+    "a_tough_start": "A Tough Start",
+    "falor_and_terwen": "Falor and Terwen",
+    "returning_to_bracada": "Returning to Bracada"
+  },
+  "missionDescriptions": {
+    "on_the_run": "Escape from Bracada and capture the Krewlodian town of Groa to win the scenario. However, if Yog is defeated in combat or fails to capture Groa in 5 months, the scenario...",
+    "the_meeting": "Get Yog to Ulgak, the capital of Krewlod, to offer his services to Duke Winston Boragus and win the scenario. However, if Yog is defeated in combat, the scenario is lost...",
+    "a_tough_start": "Take the Sandals of the Saint and the Armor of Wonder to Alendora to win the scenario. However, if Yog is defeated in combat or you lose either component of the Angelic...",
+    "falor_and_terwen": "Yog must deliver the Celestial Necklace of Bliss and Lion's Shield of Courage to Falor and Terwen to win the scenario. However, if Yog is defeated in combat or loses eit...",
+    "returning_to_bracada": "Yog must deliver the Heavenly Helm of Enlightenment and Sword of Judgment to Beleg and Orruk to win the campaign. However, if Yog is defeated in combat or loses any arti..."
+  },
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Dedicated AB/SoD MapImage bake",
+    "Town growth / negative resource timed-event fidelity"
+  ],
+  "videoContract": {
+    "status": "mission_clips_wired_hub_still_only",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": null,
+    "hubFirstShowOmitReason": "RoE parity: hub hover strip is selection-still only; mission pins PlayVideo when composed MP4 meets contract.",
+    "requireComposedAudio": true,
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "requiredMp4RelativeToStreamingAssets": null,
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_17_sod_stronghold_yog/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "stillArtifact": "artifacts/campaign_port_poc/ab_sod_campaigns/storyhub_visual/yog_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.28,
+      "focusY": 0.45,
+      "cropReason": "Hooded figure overlooking the snowy mountain valley",
+      "cropsCatalog": "scenarios/ab_sod_campaigns/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "on_the_run": "H3x2_BBa",
+      "the_meeting": "H3x2_BBb",
+      "a_tough_start": "H3x2_BBc",
+      "falor_and_terwen": "H3x2_BBd",
+      "returning_to_bracada": "H3x2_BBe"
+    },
+    "actionOrder": "PlayVideo (when composed MP4 ready) then OpenMissionsPrologue on each mission pin; hub firstShowActions stay empty",
+    "failClosed": "yog hub firstShowActions must stay empty (hubFirstShowPlayVideo=false). Mission PlayVideo requires StreamingAssets/video/{{clip}}.mp4 + softsub sidecar meeting compose contract; otherwise omit PlayVideo and keep prologue."
+  }
+}

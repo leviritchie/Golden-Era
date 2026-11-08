@@ -1,0 +1,134 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_automaton_upg_alt",
+ "status": "look",
+ "notes": "factory: automaton. Death is the DEF self-destruct fireball ripped whole (committed file mask, factory_fx_masks.py explode rule): burst pixels on f2-3, the full DEF frame from f4, where a hideMesh event hides the hull and the wreck (the DEF draws nothing on f11). Mouseover vent steam ripped with the steam rule.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "self_destruct",
+   "treatment": "dynamic",
+   "notes": "the fireball; authored, because the hull is hidden from f4 so a DEF body rise cannot be fitted"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "death_explosion",
+    "type": "defFlipbook",
+    "provenance": "roster inventory factory: g05 death detached particles f2-10 (auto rip saw specks; the whole fireball is the effect)",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_automaton_upg_alt/death_explosion"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "Hips",
+     "defOrigin": [
+      214,
+      229
+     ]
+    },
+    "texelsPerDefPx": 1,
+    "light": "self_destruct",
+    "notes": "origin = centroid of the intact hull on g05 f1 [214, 229], pinned to Hips on every key"
+   },
+   {
+    "id": "hide_hull",
+    "type": "event",
+    "clip": "Unit_Death",
+    "defFrame": 4,
+    "action": "hideMesh"
+   },
+   {
+    "id": "self_destruct_light",
+    "type": "effectLight",
+    "lightId": "self_destruct",
+    "carrier": "death_explosion",
+    "anchor": {
+     "bone": "Hips",
+     "towardLayerCentroid": 0.0,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.66,
+     0.38
+    ],
+    "range": 4.0,
+    "intensity": {
+     "Unit_Death": [
+      0,
+      0,
+      1.0,
+      2.0,
+      3.0,
+      3.0,
+      2.4,
+      1.6,
+      0.6,
+      0.2,
+      0,
+      0
+     ]
+    },
+    "intensitySource": "authored"
+   },
+   {
+    "id": "vent_steam",
+    "type": "defFlipbook",
+    "provenance": "roster inventory factory: g01 mouseover smoke/dust f7-8 (steam rule adds the attached puffs f4-6)",
+    "clips": {
+     "Unit_Mouseover": {
+      "defGroup": 1,
+      "frames": [
+       4,
+       5,
+       6,
+       7,
+       8
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_automaton_upg_alt/vent_steam"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftUpLeg",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1
+   }
+  ]
+ }
+}

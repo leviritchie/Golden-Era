@@ -1,0 +1,87 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_dendroid_shaman",
+ "status": "look",
+ "notes": "rampart rollout: shoot_front lightning ripped from the DEF (defEffects electric) with its dynamic light",
+ "lighting": {
+  "mode": "v6m",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "bolt_flash",
+   "treatment": "dynamic",
+   "notes": "the lightning lights the casting arm and crown"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "lightning",
+    "type": "defFlipbook",
+    "provenance": "roster inventory rampart: g15 shoot_front lightning/bolt (white-blue) f2-4",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric"
+     ],
+     "includeDetached": false,
+     "minComponentPx": 12
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "bolt_flash"
+   },
+   {
+    "id": "bolt_flash_light",
+    "type": "effectLight",
+    "lightId": "bolt_flash",
+    "carrier": "lightning",
+    "anchor": {
+     "bone": "LeftHand",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.8,
+     0.9,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_ShootFront": [
+      0.0,
+      0.139,
+      0.779,
+      1.905,
+      3.463,
+      2.147,
+      0.657,
+      0.195
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

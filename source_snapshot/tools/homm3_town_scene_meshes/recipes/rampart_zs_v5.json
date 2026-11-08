@@ -1,0 +1,66 @@
+{
+  "schema": "town_full3d_recipe.v2",
+  "faction": "rampart",
+  "seed": "body_v2_gc",
+  "candidate": "zs_v5",
+  "note": "rampart zs_v2 (2026-10-02 night): recipe v2 (castle_zs_v7 shape: drop/card/flap/planar, every build state, ground contact, unseen-face, rest-paint). Seed props_gc_v1 = rx_layer_card_bgrp (the installed rx_layer_card_dfix, bundle 91947b09, plus the body_v2 residual; the installed candidate's staged assets are no longer on disk) with props fixed by town_t2_props: boulders 4, 10 and later 5, 9 re-placed and 11, 13, 15, 19 dropped (ground contact 0.4-1.2 m, no rest-preserving anchor); fir 2 re-placed, fir 7 and oak 8 dropped (props check per build state: 2048-3027 px at rest). Supersedes zs_v1 (v1 schema, failed on periphery only from the since-fixed prune bug). fromPreLdi false. v3: + sprite ground decals (rest-paint start/full/anim failures were all bottom-edge Mesh_Terrain under building sprites tbrmdw_0, tbrmdw_0_2, tbrmmark, tbrmhal3, tbrmext0). v4: + certificate.extraPoses from zs_v3's final failures (start-state bldg_residual behind up to 424 px at loop_120 / free *_restRotation_high / transitions 010-025, 059-075; unseen-face up to 87 px at loop_084/096/264). v5: seed body_v2_gc = props_gc_v1 + a fresh residual body_v2 redepth (seed rx_layer_card) with current tool code; validator OK on the seed (props_gc_v1 failed seams_v2 on tbrmdw_0 22/1951, and zs_v4 on tbrmdw_0/hal2/mage/tvrn).",
+  "ldi": {
+    "pieces": [
+      "Mesh_Terrain"
+    ],
+    "cut": "zone",
+    "backRule": "vlb",
+    "vlbK": 2.0,
+    "keepRounds": 0,
+    "reachLoop": 12,
+    "fromPreLdi": false
+  },
+  "backstop": {
+    "K": 2.0,
+    "stepPx": 4,
+    "groundSrcM": 1.0
+  },
+  "repair": {
+    "rules": [
+      "drop",
+      "card",
+      "flap",
+      "planar"
+    ],
+    "rounds": 8
+  },
+  "certificate": {
+    "loop": 12,
+    "extraPoses": [
+      "loop_048",
+      "loop_060",
+      "loop_084",
+      "loop_096",
+      "loop_120",
+      "loop_132",
+      "loop_156",
+      "loop_168",
+      "loop_192",
+      "loop_204",
+      "loop_240",
+      "loop_264",
+      "loop_276",
+      "loop_312",
+      "loop_348",
+      "free_catmullRom_restRotation_high",
+      "free_polygon_restRotation_high",
+      "free_polygon_lookAt_right",
+      "transition_010",
+      "transition_012",
+      "transition_015",
+      "transition_017",
+      "transition_019",
+      "transition_022",
+      "transition_060",
+      "transition_066",
+      "transition_067",
+      "transition_071"
+    ]
+  },
+  "decal": {}
+}

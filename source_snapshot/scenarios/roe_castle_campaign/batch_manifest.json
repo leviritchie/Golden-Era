@@ -1,0 +1,246 @@
+{
+  "schema": "homm3.olden_campaign_batch_manifest.v1",
+  "title": "Restoration of Erathia — Castle campaign Good1+Good2 maps",
+  "description": "Batch raw_translation generation for Good1 (Long Live the Queen) missions 1–3 and Good2 (Liberation) missions 1–4. mapSid values are the SIDs the StoryHub continuity installer ships. Runtime gameplay remains user-unvalidated.",
+  "templateMap": "V:/SteamLibrary/steamapps/common/Heroes of Might and Magic Olden Era - Golden Era/HeroesOldenEra_Data/StreamingAssets/maps/Thirst_for_Power.map",
+  "coreCatalog": "artifacts/campaign_port_poc/olden_entity_catalog/olden_core_map_valid_entity_catalog.json",
+  "defaultSpawn": {
+    "factionSid": "homm3_castle",
+    "heroSid": "homm3_castle_hero_7",
+    "playersCount": 1
+  },
+  "missions": [
+    {
+      "missionId": "homecoming",
+      "scenarioId": "homecoming_roe_castle",
+      "campaignEntry": "Good1.h3c",
+      "blockIndex": 1,
+      "campaignTitle": "Long Live the Queen",
+      "artifactRoot": "artifacts/campaign_port_poc/homecoming_poc",
+      "mapSid": "h3_roe_castle_homecoming_raw_translation",
+      "title": "Homecoming - Raw Translation",
+      "layerIds": [
+        0,
+        1
+      ],
+      "undergroundLayers": [
+        1
+      ],
+      "pathability": {
+        "surfaceGapFill": false,
+        "emitCoreOverlay": false
+      },
+      "startHeroContract": {
+        "sourceLayer": 0,
+        "heroType": 6,
+        "owner": 0,
+        "payloadKind": "hero_or_prison",
+        "templateAnimation": "ah00_e.def",
+        "templateObjectId": 34
+      },
+      "featuredCities": [
+        {
+          "sourceKey": "1:35:35",
+          "objectId": 1454,
+          "name": "Terraneus",
+          "replacementSid": "homm3_landon_dungeon_city",
+          "factionSid": "homm3_dungeon",
+          "customCityName": "Terraneus"
+        }
+      ],
+      "validation": {
+        "expectedSourceLayerEntityCounts": {
+          "0": 1453,
+          "1": 400
+        }
+      },
+      "rawTranslation": {
+        "_overrideRationale": {
+          "playersCount": "Homecoming is the only Good1/Good2 mission with two AI colors on the map (Castle AI + Dungeon AI), so it cannot use the batch defaultSpawn playersCount 1.",
+          "knownGaps": "Both surviving gaps are mission-specific facts a reader cannot derive from the shared defaults: the three-way owner split and the Terraneus/Xyron faction handling."
+        },
+        "playersCount": 3,
+        "knownGaps": [
+          "meta.spawns: human owner 1 + Castle AI owner 3 + Dungeon AI owner 4 (playersCount 3). Terraneus+Xyron split onto owner 4; Bot fractionSid follows Terraneus (homm3_dungeon). Xyron stays Inferno in propHeroes; Homm3CampaignSpawnParityHook fills empty Bot campaignSpawns.heroSid so the hero spawns without painting Terraneus Inferno.",
+          "Do not reintroduce single-hero heroCountMax=1 or homecoming_campaign_buildings_ban on Homecoming towns; both were single-layer-lane behavior."
+        ]
+      }
+    },
+    {
+      "missionId": "guardian_angels",
+      "scenarioId": "guardian_angels_roe_castle",
+      "campaignEntry": "Good1.h3c",
+      "blockIndex": 2,
+      "campaignTitle": "Long Live the Queen",
+      "artifactRoot": "artifacts/campaign_port_poc/roe_castle_campaign/guardian_angels",
+      "mapSid": "h3_roe_castle_guardian_angels_raw_translation",
+      "title": "Guardian Angels - Raw Translation",
+      "layerIds": [
+        0,
+        1
+      ],
+      "undergroundLayers": [
+        1
+      ],
+      "pathability": {
+        "surfaceGapFill": false,
+        "emitCoreOverlay": false
+      }
+    },
+    {
+      "missionId": "griffin_cliff",
+      "scenarioId": "griffin_cliff_roe_castle",
+      "campaignEntry": "Good1.h3c",
+      "blockIndex": 3,
+      "campaignTitle": "Long Live the Queen",
+      "artifactRoot": "artifacts/campaign_port_poc/roe_castle_campaign/griffin_cliff",
+      "mapSid": "h3_roe_castle_griffin_cliff_raw_translation",
+      "title": "Griffin Cliff - Raw Translation",
+      "layerIds": [
+        0,
+        1
+      ],
+      "undergroundLayers": [
+        1
+      ],
+      "pathability": {
+        "surfaceGapFill": false,
+        "emitCoreOverlay": false
+      },
+      "rawTranslation": {
+        "victoryContract": {
+          "type": "TAKEDWELLINGS",
+          "allowNormalVictory": false,
+          "sourceKeys": [
+            "0:17:2",
+            "0:32:2",
+            "0:38:3",
+            "0:4:3",
+            "0:59:3",
+            "0:68:3",
+            "0:43:2"
+          ],
+          "expectedEmittedSid": "homm3_landon_barracks_castle_3"
+        }
+      }
+    },
+    {
+      "missionId": "steadwick_liberation",
+      "scenarioId": "steadwick_liberation_roe_castle",
+      "campaignEntry": "Good2.h3c",
+      "blockIndex": 1,
+      "campaignTitle": "Liberation",
+      "artifactRoot": "artifacts/campaign_port_poc/roe_castle_campaign/steadwick_liberation",
+      "mapSid": "h3_roe_castle_steadwick_liberation_raw_translation",
+      "title": "Steadwick's Liberation - Raw Translation",
+      "layerIds": [
+        0,
+        1
+      ],
+      "undergroundLayers": [
+        1
+      ],
+      "pathability": {
+        "surfaceGapFill": false,
+        "emitCoreOverlay": false
+      },
+      "startHeroContract": {
+        "sourceLayer": 0,
+        "heroType": 6,
+        "owner": 0,
+        "payloadKind": "hero_or_prison",
+        "templateAnimation": "ah00_e.def",
+        "templateObjectId": 34,
+        "sourceKey": "0:51:85",
+        "sourceIndex": 205
+      }
+    },
+    {
+      "missionId": "deal_with_the_devil",
+      "scenarioId": "deal_with_the_devil_roe_castle",
+      "campaignEntry": "Good2.h3c",
+      "blockIndex": 2,
+      "campaignTitle": "Liberation",
+      "artifactRoot": "artifacts/campaign_port_poc/roe_castle_campaign/deal_with_the_devil",
+      "mapSid": "h3_roe_castle_deal_with_the_devil_raw_translation",
+      "title": "Deal With the Devil - Raw Translation",
+      "layerIds": [
+        0
+      ],
+      "undergroundLayers": [],
+      "pathability": {
+        "surfaceGapFill": false,
+        "emitCoreOverlay": false
+      },
+      "startHeroContract": {
+        "sourceLayer": 0,
+        "heroType": 6,
+        "owner": 0,
+        "payloadKind": "hero_or_prison",
+        "templateAnimation": "ah00_e.def",
+        "templateObjectId": 34,
+        "sourceKey": "0:20:52",
+        "_note": "No player hero on map; raw_translation synthesizes campaign-granted start at this owner-0 castle."
+      }
+    },
+    {
+      "missionId": "neutral_affairs",
+      "scenarioId": "neutral_affairs_roe_castle",
+      "campaignEntry": "Good2.h3c",
+      "blockIndex": 3,
+      "campaignTitle": "Liberation",
+      "artifactRoot": "artifacts/campaign_port_poc/roe_castle_campaign/neutral_affairs",
+      "mapSid": "h3_roe_castle_neutral_affairs_raw_translation",
+      "title": "Neutral Affairs - Raw Translation",
+      "layerIds": [
+        0
+      ],
+      "undergroundLayers": [],
+      "pathability": {
+        "surfaceGapFill": false,
+        "emitCoreOverlay": false
+      },
+      "startHeroContract": {
+        "sourceLayer": 0,
+        "heroType": 6,
+        "owner": 0,
+        "payloadKind": "hero_or_prison",
+        "templateAnimation": "ah00_e.def",
+        "templateObjectId": 34,
+        "sourceKey": "0:43:6",
+        "_note": "No player hero on map; raw_translation synthesizes campaign-granted start at westernmost owner-0 castle."
+      }
+    },
+    {
+      "missionId": "tunnels_and_troglodytes",
+      "scenarioId": "tunnels_and_troglodytes_roe_castle",
+      "campaignEntry": "Good2.h3c",
+      "blockIndex": 4,
+      "campaignTitle": "Liberation",
+      "artifactRoot": "artifacts/campaign_port_poc/roe_castle_campaign/tunnels_and_troglodytes",
+      "mapSid": "h3_roe_castle_tunnels_and_troglodytes_raw_translation",
+      "title": "Tunnels and Troglodytes - Raw Translation",
+      "layerIds": [
+        0,
+        1
+      ],
+      "undergroundLayers": [
+        1
+      ],
+      "pathability": {
+        "surfaceGapFill": false,
+        "emitCoreOverlay": false
+      },
+      "startHeroContract": {
+        "sourceLayer": 0,
+        "heroType": 6,
+        "owner": 0,
+        "payloadKind": "hero_or_prison",
+        "templateAnimation": "ah00_e.def",
+        "templateObjectId": 34,
+        "sourceKey": "0:13:36",
+        "sourceIndex": 2386
+      }
+    }
+  ]
+}

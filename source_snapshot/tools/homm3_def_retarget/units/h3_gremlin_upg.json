@@ -1,0 +1,249 @@
+{
+ "joints": {
+  "Hips": [
+   0.0,
+   0.06,
+   0.72
+  ],
+  "Spine": [
+   0.0,
+   0.06,
+   0.84
+  ],
+  "Spine1": [
+   0.0,
+   0.06,
+   0.97
+  ],
+  "Spine2": [
+   -0.02,
+   0.05,
+   1.12
+  ],
+  "Neck": [
+   -0.05,
+   0.0,
+   1.27
+  ],
+  "Head": [
+   -0.07,
+   -0.1,
+   1.36
+  ],
+  "HeadTop_End": [
+   -0.07,
+   -0.1,
+   1.62
+  ],
+  "RightShoulder": [
+   -0.06,
+   0.03,
+   1.24
+  ],
+  "RightArm": [
+   -0.22,
+   0.02,
+   1.24
+  ],
+  "RightForeArm": [
+   -0.33,
+   0.05,
+   1.0
+  ],
+  "RightHand": [
+   -0.38,
+   -0.18,
+   1.07
+  ],
+  "RightHand_End": [
+   -0.39,
+   -0.28,
+   1.08
+  ],
+  "LeftShoulder": [
+   0.04,
+   0.03,
+   1.24
+  ],
+  "LeftArm": [
+   0.2,
+   0.02,
+   1.24
+  ],
+  "LeftForeArm": [
+   0.33,
+   0.02,
+   0.95
+  ],
+  "LeftHand": [
+   0.33,
+   -0.3,
+   0.72
+  ],
+  "LeftHand_End": [
+   0.33,
+   -0.45,
+   0.7
+  ],
+  "RightUpLeg": [
+   -0.1,
+   0.06,
+   0.66
+  ],
+  "RightLeg": [
+   -0.14,
+   0.02,
+   0.36
+  ],
+  "RightFoot": [
+   -0.16,
+   0.0,
+   0.08
+  ],
+  "RightToeBase": [
+   -0.17,
+   -0.15,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.17,
+   -0.22,
+   0.03
+  ],
+  "LeftUpLeg": [
+   0.1,
+   0.06,
+   0.66
+  ],
+  "LeftLeg": [
+   0.14,
+   0.02,
+   0.36
+  ],
+  "LeftFoot": [
+   0.16,
+   0.0,
+   0.08
+  ],
+  "LeftToeBase": [
+   0.17,
+   -0.15,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.17,
+   -0.22,
+   0.03
+  ]
+ },
+ "flail": {
+  "chainTop": [
+   -0.39,
+   -0.28,
+   1.16
+  ],
+  "grip": [
+   -0.39,
+   -0.28,
+   1.06
+  ],
+  "chain": [
+   [
+    -0.39,
+    -0.28,
+    0.86
+   ],
+   [
+    -0.38,
+    -0.28,
+    0.48
+   ]
+  ],
+  "ball": [
+   -0.365,
+   -0.265,
+   0.246
+  ],
+  "ballR": 0.248,
+  "radius": 0.06,
+  "radiusBelowGrip": 0.09,
+  "ballFit": {
+   "centre": [
+    -0.365,
+    -0.265,
+    0.246
+   ],
+   "R": 0.223,
+   "note": "ownership radius = fitted surface radius + 0.025 so the whole shell is inside"
+  },
+  "slack": {
+   "Death": 5,
+   "Defence": [
+    3,
+    8,
+    "near"
+   ]
+  }
+ },
+ "sleeve": {
+  "x": 0.24,
+  "zMin": 0.55,
+  "zMax": 1.15
+ },
+ "bootTop": 0.12,
+ "skirtLegShare": 0.3,
+ "ballSeed": [
+  190,
+  258
+ ],
+ "unit": "h3_gremlin_upg",
+ "propFloor": {
+  "bone": "FlailBall",
+  "prop": "flail ball",
+  "clips": [
+   "Move"
+  ],
+  "reason": "2026-10-10 lane A: the flail ball (rigid on the chain end) dips through the floor on 4 Move keys after emphasis; tilting it about the chain end keeps it on the floor (the ground stage's Move lift itself came from the Hips entry, fixed in glbPatch)"
+ },
+ "glbPatch": {
+  "reason": "2026-10-10 lane A, Move stride plant (ground_glb planted-sole refusal, rule 2026-09-28 postdates the 09-24 build): Move's Hips enter 0.075 H below Idle, past the gate's DEF Hips band (0.067), so the closed-loop joint entry lifted the whole body +0.008 and the swing-off soles (0.033-0.040 H) went past GROUND_TOL. The Hips are raised 0.0145 with the legs IK'd back to the planted ankles (Move closer to the DEF's Hips height, no whole-body offset needed). The robe's front hem (Hips + LeftToeBase mixed weights) tore at the raised Hips (+6 edges past 2x), so 30% of its toe weight moves to the shin (keep 0.7, hem verts only, the foot and sole untouched): dry-run stretch 5160 -> 5136, stride, prop floor, CS re-key and ground all pass",
+  "ops": [
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftToeBase"
+    ],
+    "to": "LeftLeg",
+    "region": [
+     {
+      "axis": "z",
+      "below": 0.75,
+      "ramp": 0.05
+     }
+    ],
+    "onlyWith": {
+     "bones": [
+      "Hips"
+     ],
+     "atLeast": 0.05
+    },
+    "keep": 0.7,
+    "note": "robe hem only (verts also carrying Hips >= 0.05, never the foot/sole): 30% of the toe weight to the shin"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gremlin_upg_move_raise_rot.json",
+    "sha256": "1c86e318ea538dd8cc109e5df65a2ca77d3184bb3f02f457a8000be50b75e960",
+    "regrid": true,
+    "note": "Move: legs IK'd back to their planted ankles under the raised Hips"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gremlin_upg_move_raise_tr.json",
+    "sha256": "71b236cc191752fe58b964229053f5c59b0ab816729eb4bc99ca92873a080bfe",
+    "regrid": true,
+    "note": "Move: Hips +0.0145 (0.0085 H) on every key"
+   }
+  ]
+ }
+}

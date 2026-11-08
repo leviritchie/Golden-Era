@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_stronghold",
+  "sourceDoc": "docs/custom_faction_recommendations.md and docs/custom_faction_technical_implementation_proposals.md",
+  "mechanics": [
+    {
+      "id": "stronghold.hall_of_valhalla",
+      "surface": "building",
+      "sourceName": "Hall of Valhalla",
+      "status": "exact",
+      "reason": "Generated Stronghold city data already owns the proven Offense-training row.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Gymnasium"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "stronghold.mess_hall",
+      "surface": "building",
+      "sourceName": "Mess Hall",
+      "status": "exact",
+      "reason": "Generated Stronghold city data already owns the proven Goblin-line growth row.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Lyceum"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "stronghold.resource_silo",
+      "surface": "building",
+      "sourceName": "Resource Silo",
+      "status": "exact",
+      "reason": "Generated Stronghold city data owns fixed rare-resource income.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "stronghold.escape_tunnel",
+      "surface": "building",
+      "sourceName": "Escape Tunnel",
+      "status": "substituted",
+      "reason": "Town siege escape behavior has no proven Olden Era route.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "Escape Tunnel",
+        "escape siege"
+      ],
+      "currentRows": [
+        "Build_Spy_Network"
+      ],
+      "playerTextTokens": [
+        "Homm3Stronghold_Build_Spy_Network_description",
+        "Homm3Stronghold_Build_Spy_Network_name",
+        "Homm3Stronghold_Build_Spy_Network_narrativeDescription"
+      ]
+    },
+    {
+      "id": "stronghold.freelancers_guild",
+      "surface": "building",
+      "sourceName": "Freelancer's Guild",
+      "status": "substituted",
+      "reason": "Creature-to-resource conversion has no proven custom city route.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "Freelancer",
+        "exchange creatures"
+      ],
+      "currentRows": [
+        "Build_Bank"
+      ],
+      "playerTextTokens": [
+        "Homm3Stronghold_Build_Bank_description",
+        "Homm3Stronghold_Build_Bank_name",
+        "Homm3Stronghold_Build_Bank_narrativeDescription"
+      ]
+    }
+  ]
+}

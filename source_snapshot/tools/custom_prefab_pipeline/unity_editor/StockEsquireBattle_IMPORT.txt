@@ -1,0 +1,41 @@
+Copy into oldenera_factions: Assets/CustomUnits/esquire/Reference/StockEsquireBattle.controller (+ any dependent clips the ripper emits).
+
+Unity path after copy: see Reference/README.txt in that folder.
+
+-------------------------------------------------------------------------------
+Headless first (AssetStudio.CLI — no AnimatorController on Olden Era demo)
+
+  Prereq: tools\AssetStudioCLI\bootstrap.cmd then build_asset_map.cmd (for map Load tries).
+
+  Run: tools\AssetStudioCLI\try_export_stock_esquire_animator_headless.cmd
+
+  Output: tools\reference\assetstudio_esquire_headless_export\level1\<try_id>\
+
+  On Olden Era Demo (CLI v2.4.1): AnimatorController / RuntimeAnimatorController + Convert
+  produce "Nothing exported". If everything is empty, use AssetRipper (below) or AssetStudio.GUI.
+
+  Optional slow pass: try_export_stock_esquire_animator_headless.cmd --full
+
+-------------------------------------------------------------------------------
+Headless: AssetRipper (Unity project export + local HTTP API)
+
+  One command (bootstrap + export + copy into oldenera_factions Reference):
+    tools\AssetRipper\pipeline_esquire_reference_headless.cmd
+  Optional: set RUN_UNITY=1 to also run custom_prefab_pipeline\build_esquire_bundle.cmd
+
+  Manual steps / details: tools\AssetRipper\README.txt
+
+  Upstream: https://github.com/AssetRipper/AssetRipper
+
+-------------------------------------------------------------------------------
+GUI (AssetStudio.GUI)
+
+  Export stock esquire battle AnimatorController + referenced AnimationClips from HeroesOE_Data
+  as Unity format; save as StockEsquireBattle.controller under Reference/.
+
+-------------------------------------------------------------------------------
+
+Without StockEsquireBattle.controller, Rebuild Esquire Battle Billboard Animator will error (fail-fast for parity).
+
+Optional: Assets/CustomUnits/esquire/Reference/.gitignore in oldenera_factions ignores exported
+.controller/.anim so only README.txt is tracked.

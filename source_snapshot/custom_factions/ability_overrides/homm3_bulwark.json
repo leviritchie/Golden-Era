@@ -1,0 +1,642 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_bulwark",
+  "unitOverrides": {
+    "h3_kobold": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "bulwark.kobold_line",
+      "decisionTest": "Kobold is the tier-one baseline. HotA gold-per-day mining is adventure-map only and is not a battle Focus action."
+    },
+    "h3_kobold_foreman": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Foreman Cadence",
+          "descriptionText": "Spend 2 Focus to brace an allied stack with Radiant Armor, reducing damage taken for 1 round.",
+          "iconKey": "day_12_magic_radiant_armor",
+          "abilityType": "Ability_type_buff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "day_12_magic_radiant_armor:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Foreman Cadence",
+          "effectPayload": {
+            "spellSid": "day_12_magic_radiant_armor",
+            "spellLevel": 1,
+            "targetMode": "ally",
+            "fixedDuration": 1
+          },
+          "notes": "Native Radiant Armor ally brace with exact one-round duration. Runtime behavior unproven."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "bulwark.kobold_line",
+      "decisionTest": "Kobold Foreman keeps Foreman Cadence Focus (Radiant Armor ally brace). HotA gold-per-day mining stays adventure-map only."
+    },
+    "h3_kobold_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Rune Brand",
+          "descriptionText": "Spend 2 Focus to brand this stack with Radiant Armor, reducing damage taken for 1 round.",
+          "iconKey": "day_12_magic_radiant_armor",
+          "abilityType": "Ability_type_buff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "day_12_magic_radiant_armor:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Rune Brand",
+          "effectPayload": {
+            "spellSid": "day_12_magic_radiant_armor",
+            "spellLevel": 1,
+            "targetMode": "self",
+            "fixedDuration": 1
+          },
+          "notes": "Native Radiant Armor self brand. Extra Rune Level gains are owned by Homm3BulwarkRunesRuntime once Runes is proven."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "bulwark.kobold_line",
+      "decisionTest": "Kobold Runebearer Rune Brand is the Runes-synergy alternate instead of Factory Trap Jaws."
+    },
+    "h3_mountain_ram": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "bulwark.mountain_ram_line",
+      "decisionTest": "Mountain Ram is the tier-two baseline with no HotA battle special."
+    },
+    "h3_argali": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Frost Fracture",
+          "descriptionText": "Spend 1 Focus to lower an enemy's Attack and Defense for 1 round.",
+          "iconKey": "day_5_magic_shorten_shadow",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "free",
+          "energyLevel": 1,
+          "cooldown": 2,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "day_5_magic_shorten_shadow:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Frost Fracture",
+          "effectPayload": {
+            "spellSid": "day_5_magic_shorten_shadow",
+            "spellLevel": 1,
+            "targetMode": "enemy",
+            "fixedDuration": 1
+          },
+          "notes": "Native Shorten Shadow enemy debuff with exact one-round duration."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "bulwark.mountain_ram_line",
+      "decisionTest": "Argali keeps ice damage and Ice Bolt effect immunity. Frost Fracture uses Shorten Shadow Focus; adjacent spell-damage aura remains a future additive passive."
+    },
+    "h3_mountain_ram_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Aurora Bound",
+          "descriptionText": "Spend 1 Focus to blink this stack to a free hex within 4 hexes.",
+          "iconKey": "space_6_magic_blink",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 1,
+          "cooldown": 2,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "space_6_magic_blink:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Aurora Bound",
+          "effectPayload": {
+            "spellSid": "space_6_magic_blink",
+            "spellLevel": 1,
+            "targetMode": "self",
+            "orderedDistance": 4
+          },
+          "notes": "Native Blink self teleport with orderedDistance 4."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "bulwark.mountain_ram_line",
+      "decisionTest": "Aurora Ram uses self Blink mobility instead of Factory Bellwether 1-hex enemy teleport."
+    },
+    "h3_snow_elf": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "bulwark.snow_elf_line",
+      "decisionTest": "Snow Elf is the shooter baseline with no melee penalty; HotA has no Focus active on this base."
+    },
+    "h3_steel_elf": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Frost Needle",
+          "descriptionText": "Spend 2 Focus to strike an enemy with Ice Bolt.",
+          "iconKey": "primal_6_magic_ice_bolt",
+          "abilityType": "Ability_type_attack",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "primal_6_magic_ice_bolt:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Frost Needle",
+          "effectPayload": {
+            "spellSid": "primal_6_magic_ice_bolt",
+            "spellLevel": 1,
+            "targetMode": "enemy"
+          },
+          "notes": "Native Ice Bolt level-one damage and Initiative reduction."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "bulwark.snow_elf_line",
+      "decisionTest": "Steel Elf keeps shooter + no melee penalty + Free Shooting (adjacent-block immunity only). Frost Needle is native Ice Bolt."
+    },
+    "h3_snow_elf_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Cold Shackles",
+          "descriptionText": "Spend 2 Focus to prevent an enemy from counterattacking for 1 round.",
+          "iconKey": "space_7_magic_shackles",
+          "abilityType": "Ability_type_debuff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "space_7_magic_shackles:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Cold Shackles",
+          "effectPayload": {
+            "spellSid": "space_7_magic_shackles",
+            "spellLevel": 1,
+            "targetMode": "enemy",
+            "fixedDuration": 1
+          },
+          "notes": "Native Shackles with exact one-round duration. After-shot frost weaken remains additive."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "bulwark.snow_elf_line",
+      "decisionTest": "Pine Elf Cold Shackles is the control alternate; Free Shooting is adjacent-block immunity only."
+    },
+    "h3_yeti": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "bulwark.yeti_line",
+      "decisionTest": "Yeti is the tier-four baseline. HotA one-round negative recovery remains a future additive passive."
+    },
+    "h3_yeti_runemaster": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Rune Surge",
+          "descriptionText": "Spend 2 Focus once per battle to dispel all negative effects from this stack and fully restore its health.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "sentinel:abilities:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Rune Surge",
+          "effectPayload": {},
+          "notes": "Native Sentinel Arina's Way (dispel negatives + full restore, once per battle). Closest Core substitute for Yeti recovery.",
+          "attackType": "cast"
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "bulwark.yeti_line",
+      "decisionTest": "Yeti Runemaster Rune Surge uses Sentinel Arina's Way; Possesses Runes remains Runes-runtime owned."
+    },
+    "h3_yeti_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Storm Frost",
+          "descriptionText": "Spend 2 Focus without ending the turn to strike an enemy with Ice Bolt.",
+          "iconKey": "primal_6_magic_ice_bolt",
+          "abilityType": "Ability_type_attack",
+          "animationIndex": 2,
+          "turnBehavior": "free",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "primal_6_magic_ice_bolt:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Storm Frost",
+          "effectPayload": {
+            "spellSid": "primal_6_magic_ice_bolt",
+            "spellLevel": 1,
+            "targetMode": "enemy"
+          },
+          "notes": "Native Ice Bolt free cast for Bulwark identity."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "bulwark.yeti_line",
+      "decisionTest": "Yeti Stormcaller is the free frost-strike alternate instead of Thunderbolt."
+    },
+    "h3_shaman": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Air Ward",
+          "descriptionText": "Spend 2 Focus to shield an allied stack with Optical Illusion, reducing Ranged Damage taken for 1 round.",
+          "iconKey": "space_4_magic_optical_illusion",
+          "abilityType": "Ability_type_buff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "space_4_magic_optical_illusion:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Air Ward",
+          "effectPayload": {
+            "spellSid": "space_4_magic_optical_illusion",
+            "spellLevel": 1,
+            "targetMode": "ally",
+            "fixedDuration": 1
+          },
+          "notes": "Native Optical Illusion ally brace with exact one-round duration."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "bulwark.shaman_line",
+      "decisionTest": "Shaman casts Air Ward (Optical Illusion) to match HotA Air Shield spellcaster identity."
+    },
+    "h3_great_shaman": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Air Ward",
+          "descriptionText": "Spend 2 Focus to shield an allied stack with Optical Illusion, reducing Ranged Damage taken for 1 round.",
+          "iconKey": "space_4_magic_optical_illusion",
+          "abilityType": "Ability_type_buff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "space_4_magic_optical_illusion:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Air Ward",
+          "effectPayload": {
+            "spellSid": "space_4_magic_optical_illusion",
+            "spellLevel": 1,
+            "targetMode": "ally",
+            "fixedDuration": 1
+          },
+          "notes": "Native Optical Illusion ally brace with exact one-round duration."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "bulwark.shaman_line",
+      "decisionTest": "Great Shaman Air Ward remaps HotA Air Shield to Optical Illusion."
+    },
+    "h3_shaman_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Freezing Hex",
+          "descriptionText": "Spend 2 Focus to strike an enemy with Ice Bolt.",
+          "iconKey": "primal_6_magic_ice_bolt",
+          "abilityType": "Ability_type_attack",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "primal_6_magic_ice_bolt:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Freezing Hex",
+          "effectPayload": {
+            "spellSid": "primal_6_magic_ice_bolt",
+            "spellLevel": 1,
+            "targetMode": "enemy"
+          },
+          "notes": "Native Ice Bolt Focus. Freezing Shot after-shot mutator remains additive."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "bulwark.shaman_line",
+      "decisionTest": "Frost Speaker keeps Freezing Hex Ice Bolt Focus; Freezing Shot after-shot mutator is additive."
+    },
+    "h3_mammoth": {
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "bulwark.mammoth_line",
+      "decisionTest": "Mammoth is the tier-six baseline with no HotA battle special."
+    },
+    "h3_war_mammoth": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Tusker Guard",
+          "descriptionText": "Spend 2 Focus to brace this stack with Radiant Armor, reducing damage taken for 1 round.",
+          "iconKey": "day_12_magic_radiant_armor",
+          "abilityType": "Ability_type_buff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "day_12_magic_radiant_armor:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Tusker Guard",
+          "effectPayload": {
+            "spellSid": "day_12_magic_radiant_armor",
+            "spellLevel": 1,
+            "targetMode": "self",
+            "fixedDuration": 1
+          },
+          "notes": "Native Radiant Armor self brace with exact one-round duration."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "bulwark.mammoth_line",
+      "decisionTest": "War Mammoth Tusker Guard uses Radiant Armor Focus; HotA Defend Defense multiplier remains additive."
+    },
+    "h3_mammoth_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Frost Wall",
+          "descriptionText": "Spend 2 Focus to shroud this stack with Optical Illusion, reducing Ranged Damage taken for 1 round.",
+          "iconKey": "space_4_magic_optical_illusion",
+          "abilityType": "Ability_type_buff",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 3,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "space_4_magic_optical_illusion:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Frost Wall",
+          "effectPayload": {
+            "spellSid": "space_4_magic_optical_illusion",
+            "spellLevel": 1,
+            "targetMode": "self",
+            "fixedDuration": 1
+          },
+          "notes": "Native Optical Illusion self brace with exact one-round duration."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "bulwark.mammoth_line",
+      "decisionTest": "Tundra Mammoth Frost Wall replaces Factory Taunt with Optical Illusion self mist brace."
+    },
+    "h3_jotunn": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Clan Warp",
+          "descriptionText": "Spend 2 Focus once per battle to move an allied non-self creature to a free hex within 4 hexes.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 2,
+          "charges": 1,
+          "effectKey": "arbitrator:abilities:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Clan Warp",
+          "effectPayload": {},
+          "notes": "Native Arbitrator ally teleport. charges=1 mirrors HotA once-per-combat. Flyer Speed aura is Frostbound Skies runtime.",
+          "attackType": "cast"
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "base-line",
+      "sourceMechanicId": "bulwark.jotunn_line",
+      "decisionTest": "Jotunn Clan Warp remaps HotA ally teleport (once per combat) via Arbitrator ally teleport with 1 charge."
+    },
+    "h3_jotunn_warlord": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Clan Warp",
+          "descriptionText": "Spend 2 Focus to move an allied non-self creature to a free hex within 4 hexes.",
+          "iconKey": "",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 2,
+          "charges": "",
+          "effectKey": "arbitrator:abilities:0",
+          "effectKind": "unit-special",
+          "effectLabel": "Clan Warp",
+          "effectPayload": {},
+          "notes": "Native Arbitrator ally teleport with no charge cap. Flyer Speed aura is Frostbound Skies runtime.",
+          "attackType": "cast"
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "bulwark.jotunn_line",
+      "decisionTest": "Jotunn Warlord keeps unlimited Clan Warp with no charge cap."
+    },
+    "h3_jotunn_upg_alt": {
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "",
+          "descriptionKey": "",
+          "nameText": "Avalanche",
+          "descriptionText": "Spend 3 Focus to strike the battlefield with Circle of Winter.",
+          "iconKey": "primal_13_magic_avalanche",
+          "abilityType": "Ability_type_attack",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 3,
+          "cooldown": 3,
+          "rank": 3,
+          "charges": "",
+          "effectKey": "primal_13_magic_avalanche:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Avalanche",
+          "effectPayload": {
+            "spellSid": "primal_13_magic_avalanche",
+            "spellLevel": 1
+          },
+          "notes": "Native Circle of Winter / Avalanche circular damage and push."
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false,
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "bulwark.jotunn_line",
+      "decisionTest": "Jotun Frostlord Avalanche is the frost AoE alternate instead of Chain Lightning."
+    }
+  }
+}

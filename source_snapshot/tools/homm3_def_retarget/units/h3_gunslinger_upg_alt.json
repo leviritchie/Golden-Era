@@ -1,0 +1,273 @@
+{
+ "unit": "h3_gunslinger_upg_alt",
+ "joints": {
+  "Hips": [
+   -0.018,
+   0.037,
+   0.78
+  ],
+  "Spine": [
+   -0.018,
+   0.032,
+   0.896
+  ],
+  "Spine1": [
+   -0.018,
+   0.027,
+   1.013
+  ],
+  "Spine2": [
+   -0.018,
+   0.022,
+   1.143
+  ],
+  "Neck": [
+   -0.018,
+   0.017,
+   1.245
+  ],
+  "Head": [
+   -0.018,
+   0.05,
+   1.292
+  ],
+  "HeadTop_End": [
+   -0.018,
+   0.077,
+   1.564
+  ],
+  "LeftShoulder": [
+   0.028,
+   0.017,
+   1.225
+  ],
+  "LeftArm": [
+   0.168,
+   0.05,
+   1.199
+  ],
+  "LeftForeArm": [
+   0.254,
+   0.024,
+   1.006
+  ],
+  "LeftHand": [
+   0.274,
+   -0.169,
+   1.059
+  ],
+  "LeftHand_End": [
+   0.283,
+   -0.255,
+   1.083
+  ],
+  "RightShoulder": [
+   -0.065,
+   0.017,
+   1.225
+  ],
+  "RightArm": [
+   -0.204,
+   0.064,
+   1.199
+  ],
+  "RightForeArm": [
+   -0.271,
+   0.104,
+   0.993
+  ],
+  "RightHand": [
+   -0.337,
+   0.004,
+   0.833
+  ],
+  "RightHand_End": [
+   -0.367,
+   -0.041,
+   0.761
+  ],
+  "LeftUpLeg": [
+   0.101,
+   0.004,
+   0.78
+  ],
+  "LeftLeg": [
+   0.154,
+   -0.062,
+   0.448
+  ],
+  "LeftFoot": [
+   0.168,
+   0.03,
+   0.163
+  ],
+  "LeftToeBase": [
+   0.227,
+   -0.069,
+   0.043
+  ],
+  "LeftToe_End": [
+   0.267,
+   -0.175,
+   0.017
+  ],
+  "RightUpLeg": [
+   -0.144,
+   0.004,
+   0.78
+  ],
+  "RightLeg": [
+   -0.198,
+   -0.009,
+   0.442
+  ],
+  "RightFoot": [
+   -0.204,
+   0.137,
+   0.163
+  ],
+  "RightToeBase": [
+   -0.271,
+   0.037,
+   0.043
+  ],
+  "RightToe_End": [
+   -0.324,
+   -0.069,
+   0.017
+  ]
+ },
+ "props": [
+  {
+   "name": "rifle",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.33,
+      -0.44,
+      1.08
+     ],
+     [
+      -0.02,
+      0.44,
+      1.67
+     ]
+    ]
+   ],
+   "radius": 0.06
+  },
+  {
+   "name": "butt",
+   "bone": "LeftHand",
+   "box": [
+    [
+     0.22,
+     -0.45,
+     0.99
+    ],
+    [
+     0.39,
+     -0.29,
+     1.2
+    ]
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.12
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.9,
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.9,
+   "keepDist": 0.12
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "glbPatch": {
+  "reason": "authenticity: DEF g15 shoot, g12 attack, g05 death - shoot: the gunslinger raises the rifle muzzle-up (f1-f2), then levels it at the target from the left shoulder and sights down it (f3-f7) instead of holding it upright behind his head while looking away; attack: draws the rifle back level at head height (f2-f4) and lunges a level bayonet thrust at chest height (f5-f7), head on the target; death: the right hand lies on the floor instead of the forearm standing straight up at rest. Both arms IK'd to stock/barrel grips with the rifle turned level (propturn), neck/head held toward the target, split over two keyRotations passes; arm/shoulder weights re-solved (accumulating wsolve, GPU) for the gate",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gunslinger_upg_alt_rifle_weights.json",
+    "sha256": "24ef8776eaff4056f42c3ba49b0ea50be141214c64aab12a6b96ff9d63540143",
+    "note": "gunslinger_upg_alt rifle aim + thrust + death arm: arm/shoulder weights re-solved (wsolve, GPU)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gunslinger_upg_alt_pose_rot.json",
+    "sha256": "f522b652d82792f0f5e8f0b6bf066dedbb8b33836d7e341b6d259e312e73933d",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gunslinger_upg_alt_pose_rot.json",
+    "sha256": "f522b652d82792f0f5e8f0b6bf066dedbb8b33836d7e341b6d259e312e73933d",
+    "regrid": true
+   }
+  ]
+ }
+}

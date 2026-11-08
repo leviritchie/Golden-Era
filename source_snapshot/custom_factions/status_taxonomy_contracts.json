@@ -1,0 +1,1011 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored status taxonomy seed for custom faction law predicates. This is classification only; it does not authorize buff/status mutation or runtime gameplay.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "noFallbacks": true,
+    "noSidSubstringInference": true,
+    "statusesMustHaveExactVanillaTextEvidence": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedTags": [
+    "ability_block",
+    "anti_heal",
+    "attack_down",
+    "attack_up",
+    "burn",
+    "cleanse",
+    "control",
+    "counterattack_block",
+    "curse",
+    "damage_boost",
+    "damage_down",
+    "damage_over_time",
+    "damage_reduction",
+    "damage_taken_up",
+    "decay",
+    "defense_down",
+    "defense_up",
+    "disable",
+    "focus_block",
+    "focus_tax",
+    "heal",
+    "initiative",
+    "initiative_down",
+    "luck_down",
+    "luck_up",
+    "mark",
+    "max_hp_down",
+    "morale_down",
+    "morale_up",
+    "movement_boost",
+    "movement_restriction",
+    "negative",
+    "negative_immunity",
+    "poison",
+    "positive",
+    "preserve",
+    "protection",
+    "ranged_block",
+    "ranged_support",
+    "skip_turn",
+    "sleep_immunity",
+    "slow",
+    "speed",
+    "spell_immunity",
+    "temporary_stack",
+    "tide",
+    "wound"
+  ],
+  "predicateGroups": {
+    "negativeStatusPredicate": {
+      "status": "mapped",
+      "coveredTags": [
+        "negative"
+      ],
+      "missingTags": [],
+      "notes": "Exact vanilla magic/unit status text IDs cover negative status classification; runtime query/application remains unproven."
+    },
+    "poisonSlowMovementRestriction": {
+      "status": "mapped",
+      "coveredTags": [
+        "poison",
+        "slow",
+        "movement_restriction",
+        "control"
+      ],
+      "missingTags": [],
+      "notes": "Exact vanilla status IDs cover poison plus slow/movement restriction/control statuses; runtime query/application remains unproven."
+    },
+    "protectOrPreserveEvent": {
+      "status": "mapped",
+      "coveredTags": [
+        "protection",
+        "preserve",
+        "heal",
+        "cleanse",
+        "negative_immunity"
+      ],
+      "missingTags": [],
+      "notes": "Exact vanilla status IDs cover protection/preserve/heal/cleanse effects; actual protect/preserve event ordering remains runtime-gated."
+    },
+    "enemySlowPoisonMireState": {
+      "status": "partial",
+      "coveredTags": [
+        "poison",
+        "slow",
+        "movement_restriction"
+      ],
+      "missingTags": [
+        "mire"
+      ],
+      "notes": "Poison and slow/movement-restriction statuses are explicit; mire remains unclassified terrain/state evidence."
+    }
+  },
+  "statuses": {
+    "healing_water_effect_special_1": {
+      "tags": [
+        "positive",
+        "heal",
+        "cleanse",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:358"
+      ],
+      "notes": "Restores HP and removes or reduces negative effects."
+    },
+    "healing_water_effect_special": {
+      "tags": [
+        "positive",
+        "heal",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:360"
+      ],
+      "notes": "Restores HP each round."
+    },
+    "magic_carapace_effect": {
+      "tags": [
+        "positive",
+        "protection",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:366"
+      ],
+      "notes": "Negates next damage instance."
+    },
+    "magic_carapace_effect_description_1": {
+      "tags": [
+        "positive",
+        "protection",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:367"
+      ],
+      "notes": "Negates next two damage instances."
+    },
+    "magic_carapace_effect_description_special": {
+      "tags": [
+        "positive",
+        "protection",
+        "preserve",
+        "negative_immunity"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:369"
+      ],
+      "notes": "Negative-effect immunity plus next damage negation."
+    },
+    "magic_carapace_effect_description_1_special": {
+      "tags": [
+        "positive",
+        "protection",
+        "preserve",
+        "negative_immunity"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:368"
+      ],
+      "notes": "Negative-effect immunity plus two damage negations."
+    },
+    "magic_radiant_armor_effect": {
+      "tags": [
+        "positive",
+        "protection",
+        "damage_reduction",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:400"
+      ],
+      "notes": "Reduces all-source damage taken."
+    },
+    "magic_primordial_purity_effect": {
+      "tags": [
+        "positive",
+        "protection",
+        "spell_immunity",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:399"
+      ],
+      "notes": "Spell immunity and cannot be dispelled."
+    },
+    "magic_thick_hide_effect": {
+      "tags": [
+        "positive",
+        "protection",
+        "damage_reduction",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:414"
+      ],
+      "notes": "Reduces melee damage taken."
+    },
+    "magic_optical_illusion_effect": {
+      "tags": [
+        "positive",
+        "protection",
+        "damage_reduction",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:398"
+      ],
+      "notes": "Reduces ranged damage taken."
+    },
+    "magic_haste_effect": {
+      "tags": [
+        "positive",
+        "speed",
+        "movement_boost"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:384"
+      ],
+      "notes": "Speed increase."
+    },
+    "magic_doreaths_tide_ally_effect": {
+      "tags": [
+        "positive",
+        "speed",
+        "initiative",
+        "movement_boost",
+        "tide"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:375"
+      ],
+      "notes": "Friendly speed and initiative increase."
+    },
+    "magic_arinas_hymn_effect": {
+      "tags": [
+        "positive",
+        "speed",
+        "initiative",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:363"
+      ],
+      "notes": "Speed/initiative/max HP or initiative/max HP support."
+    },
+    "magic_holy_arms_effect": {
+      "tags": [
+        "positive",
+        "heal",
+        "damage_boost",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:387"
+      ],
+      "notes": "Pure damage with self-heal."
+    },
+    "magic_sharp_edge_effect": {
+      "tags": [
+        "positive",
+        "damage_boost"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:406"
+      ],
+      "notes": "Basic attack damage increase."
+    },
+    "magic_favorable_wind_effect": {
+      "tags": [
+        "positive",
+        "damage_boost",
+        "ranged_support"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:383"
+      ],
+      "notes": "Ranged and Long Reach damage increase."
+    },
+    "magic_web_effect": {
+      "tags": [
+        "negative",
+        "slow",
+        "movement_restriction",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:424"
+      ],
+      "notes": "Speed reduction."
+    },
+    "magic_web_effect_description_special": {
+      "tags": [
+        "negative",
+        "slow",
+        "movement_restriction",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:425"
+      ],
+      "notes": "Speed reduction that cannot be dispelled."
+    },
+    "magic_doreaths_tide_enemy_effect": {
+      "tags": [
+        "negative",
+        "slow",
+        "movement_restriction",
+        "initiative_down",
+        "tide",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:376"
+      ],
+      "notes": "Enemy speed and initiative reduction."
+    },
+    "magic_ice_bolt_effect": {
+      "tags": [
+        "negative",
+        "initiative_down",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:388"
+      ],
+      "notes": "Initiative reduction."
+    },
+    "magic_avalanche_effect": {
+      "tags": [
+        "negative",
+        "initiative_down",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:365"
+      ],
+      "notes": "Initiative reduction."
+    },
+    "magic_nairas_kiss_effect": {
+      "tags": [
+        "negative",
+        "mark",
+        "damage_over_time"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:395"
+      ],
+      "notes": "Marked target takes magic damage when acting."
+    },
+    "magic_nairas_kiss_effect_description_1": {
+      "tags": [
+        "negative",
+        "mark",
+        "damage_over_time",
+        "slow",
+        "movement_restriction",
+        "initiative_down"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:396"
+      ],
+      "notes": "Marked action damage plus speed/initiative loss."
+    },
+    "magic_nairas_kiss_effect_description_2": {
+      "tags": [
+        "negative",
+        "slow",
+        "movement_restriction",
+        "initiative_down"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:397"
+      ],
+      "notes": "Speed and initiative reduction."
+    },
+    "magic_fatal_decay_effect_description_1": {
+      "tags": [
+        "negative",
+        "anti_heal",
+        "decay"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:380"
+      ],
+      "notes": "Cannot restore HP."
+    },
+    "magic_fatal_decay_effect_description_2": {
+      "tags": [
+        "negative",
+        "anti_heal",
+        "decay",
+        "max_hp_down"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:381"
+      ],
+      "notes": "Cannot restore HP and max HP reduction."
+    },
+    "magic_fatal_decay_effect_description_3": {
+      "tags": [
+        "negative",
+        "anti_heal",
+        "decay",
+        "max_hp_down"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:382"
+      ],
+      "notes": "Cannot restore HP, max HP reduction, cannot be dispelled."
+    },
+    "magic_despair_effect_1": {
+      "tags": [
+        "negative",
+        "morale_down",
+        "luck_down",
+        "curse"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:372"
+      ],
+      "notes": "Morale and Luck set to 0."
+    },
+    "magic_despair_effect_2": {
+      "tags": [
+        "negative",
+        "focus_block",
+        "curse"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:373"
+      ],
+      "notes": "Blocks Focus generation from dealing/receiving damage."
+    },
+    "magic_despair_effect_3": {
+      "tags": [
+        "negative",
+        "curse",
+        "damage_over_time"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:374"
+      ],
+      "notes": "Cursed pure damage each round."
+    },
+    "magic_shorten_shadow_effect": {
+      "tags": [
+        "negative",
+        "attack_down",
+        "defense_down",
+        "curse"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:408"
+      ],
+      "notes": "Attack and Defense reduction."
+    },
+    "magic_unnatural_calm_effect": {
+      "tags": [
+        "negative",
+        "damage_down",
+        "curse"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:418"
+      ],
+      "notes": "Basic attack damage reduction."
+    },
+    "magic_unnatural_calm_effect_description_special": {
+      "tags": [
+        "negative",
+        "damage_down",
+        "curse"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:419"
+      ],
+      "notes": "Basic attack damage reduction and always minimum damage."
+    },
+    "magic_vulnerability_effect": {
+      "tags": [
+        "negative",
+        "damage_taken_up",
+        "curse"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:422"
+      ],
+      "notes": "Increased all-source damage taken."
+    },
+    "magic_vulnerability_effect_description_special": {
+      "tags": [
+        "negative",
+        "damage_taken_up",
+        "curse"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:423"
+      ],
+      "notes": "Increased damage taken and always maximum damage."
+    },
+    "magic_decimate_effect": {
+      "tags": [
+        "negative",
+        "damage_taken_up"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:371"
+      ],
+      "notes": "Takes increased damage from Guillotine; stacks."
+    },
+    "magic_shackles_effect": {
+      "tags": [
+        "negative",
+        "counterattack_block",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:403"
+      ],
+      "notes": "Cannot counterattack."
+    },
+    "magic_silence_effect": {
+      "tags": [
+        "negative",
+        "ability_block",
+        "focus_block",
+        "disable",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:409"
+      ],
+      "notes": "Cannot use abilities or generate Focus."
+    },
+    "magic_sleep_effect": {
+      "tags": [
+        "negative",
+        "disable",
+        "skip_turn",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:410"
+      ],
+      "notes": "Cannot take actions and skips turn."
+    },
+    "magic_sleep_effect_description_1": {
+      "tags": [
+        "negative",
+        "disable",
+        "skip_turn",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:411"
+      ],
+      "notes": "Cannot act, skips turn, duration reduced on damage."
+    },
+    "magic_sleep_ignore_effect": {
+      "tags": [
+        "positive",
+        "protection",
+        "sleep_immunity",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:412"
+      ],
+      "notes": "Cannot fall asleep."
+    },
+    "magic_trap_snare_effect": {
+      "tags": [
+        "negative",
+        "disable",
+        "skip_turn",
+        "movement_restriction",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:415"
+      ],
+      "notes": "Cannot act and skips a turn."
+    },
+    "magic_twilight_effect": {
+      "tags": [
+        "negative",
+        "ranged_block",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:416"
+      ],
+      "notes": "Cannot use Ranged attacks."
+    },
+    "magic_twilight_effect_description_1": {
+      "tags": [
+        "negative",
+        "ranged_block",
+        "damage_down",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:417"
+      ],
+      "notes": "Cannot use Ranged attacks and reduced melee damage."
+    },
+    "magic_mirror_copy_effect": {
+      "tags": [
+        "negative",
+        "temporary_stack",
+        "damage_down",
+        "damage_taken_up"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:394"
+      ],
+      "notes": "Copy takes increased damage and deals reduced damage."
+    },
+    "frog_poison": {
+      "tags": [
+        "negative",
+        "poison",
+        "damage_over_time"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:462"
+      ],
+      "notes": "Poisoned: magic damage each round."
+    },
+    "graverobber_poison": {
+      "tags": [
+        "negative",
+        "poison",
+        "damage_over_time"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:469"
+      ],
+      "notes": "Poisoned: magic damage each round."
+    },
+    "flicker_curse": {
+      "tags": [
+        "negative",
+        "curse",
+        "damage_over_time"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:457"
+      ],
+      "notes": "Cursed pure damage each round."
+    },
+    "unfrozen_cultist_curse": {
+      "tags": [
+        "negative",
+        "curse",
+        "damage_over_time"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:510"
+      ],
+      "notes": "Cursed pure damage each round."
+    },
+    "dragon_hunter_blood": {
+      "tags": [
+        "negative",
+        "wound",
+        "damage_over_time"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:446"
+      ],
+      "notes": "Wounded damage each round."
+    },
+    "pet_blood": {
+      "tags": [
+        "negative",
+        "wound",
+        "damage_over_time"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:492"
+      ],
+      "notes": "Wounded damage each round."
+    },
+    "phoenix_ignition": {
+      "tags": [
+        "negative",
+        "burn",
+        "damage_over_time"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:495"
+      ],
+      "notes": "Burning magic damage each round."
+    },
+    "druid_bees": {
+      "tags": [
+        "negative",
+        "damage_over_time"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:448"
+      ],
+      "notes": "Bees damage each round."
+    },
+    "blade_dancer_debuff": {
+      "tags": [
+        "negative",
+        "defense_down"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:442"
+      ],
+      "notes": "Defense reduction."
+    },
+    "druid_debuff": {
+      "tags": [
+        "negative",
+        "defense_down"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:450"
+      ],
+      "notes": "Defense nullified."
+    },
+    "frog_debuff": {
+      "tags": [
+        "negative",
+        "max_hp_down"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:461"
+      ],
+      "notes": "Maximum HP reduction."
+    },
+    "frostworm_rider_debuff": {
+      "tags": [
+        "negative",
+        "damage_taken_up"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:463"
+      ],
+      "notes": "Increased magic damage taken."
+    },
+    "graverobber_debuff": {
+      "tags": [
+        "negative",
+        "damage_taken_up"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:468"
+      ],
+      "notes": "Always takes maximum damage."
+    },
+    "hive_queen_debuff_parasite": {
+      "tags": [
+        "negative",
+        "slow",
+        "movement_restriction",
+        "initiative_down"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:473"
+      ],
+      "notes": "Speed and initiative reduction."
+    },
+    "hydra_debuff": {
+      "tags": [
+        "negative",
+        "damage_down"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:474"
+      ],
+      "notes": "Damage reduction."
+    },
+    "lich_debuff": {
+      "tags": [
+        "negative",
+        "anti_heal",
+        "decay"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:482"
+      ],
+      "notes": "Cannot restore HP or be revived."
+    },
+    "medusa_debuff": {
+      "tags": [
+        "negative",
+        "initiative_down"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:487"
+      ],
+      "notes": "Initiative reduction."
+    },
+    "medusa_stone": {
+      "tags": [
+        "negative",
+        "damage_taken_up",
+        "disable",
+        "skip_turn",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:488"
+      ],
+      "notes": "Increased damage taken and skips own turn."
+    },
+    "pet_debuff": {
+      "tags": [
+        "negative",
+        "defense_down"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:494"
+      ],
+      "notes": "Defense reduction."
+    },
+    "succubus_debuff_1": {
+      "tags": [
+        "negative",
+        "ability_block",
+        "disable",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:504"
+      ],
+      "notes": "Cannot use abilities."
+    },
+    "succubus_debuff_2": {
+      "tags": [
+        "negative",
+        "focus_tax",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:505"
+      ],
+      "notes": "Abilities cost extra Focus."
+    },
+    "succubus_debuff_3": {
+      "tags": [
+        "negative",
+        "focus_block",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:506"
+      ],
+      "notes": "Cannot generate Focus."
+    },
+    "trogl_debuff": {
+      "tags": [
+        "negative",
+        "damage_taken_up"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:509"
+      ],
+      "notes": "Increased damage taken."
+    },
+    "unfrozen_cultist_debuff_1": {
+      "tags": [
+        "negative",
+        "initiative_down"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:511"
+      ],
+      "notes": "Initiative reduction."
+    },
+    "unfrozen_cultist_debuff_2": {
+      "tags": [
+        "negative",
+        "slow",
+        "movement_restriction"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:512"
+      ],
+      "notes": "Speed reduction."
+    },
+    "sentinel_buff_2": {
+      "tags": [
+        "positive",
+        "protection",
+        "spell_immunity",
+        "negative_immunity",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:503"
+      ],
+      "notes": "Magic damage and negative effect immunity."
+    },
+    "druid_buff": {
+      "tags": [
+        "positive",
+        "protection",
+        "spell_immunity",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:449"
+      ],
+      "notes": "Magic damage immunity."
+    },
+    "dragon_hunter_buff": {
+      "tags": [
+        "positive",
+        "protection",
+        "spell_immunity",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:447"
+      ],
+      "notes": "Spell immunity."
+    },
+    "jaw_buff_2": {
+      "tags": [
+        "positive",
+        "protection",
+        "damage_reduction",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:479"
+      ],
+      "notes": "Damage taken reduction."
+    },
+    "qilin_selfbuff": {
+      "tags": [
+        "positive",
+        "protection",
+        "damage_reduction",
+        "movement_boost"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:500"
+      ],
+      "notes": "Damage reduction and ignores obstacles."
+    },
+    "lightweaver_buff_1": {
+      "tags": [
+        "positive",
+        "attack_up",
+        "defense_up",
+        "speed",
+        "initiative",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:484"
+      ],
+      "notes": "Attack/Defense and Speed/Initiative increase."
+    },
+    "inquisitor_selfbuff_1": {
+      "tags": [
+        "positive",
+        "defense_up",
+        "speed",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:477"
+      ],
+      "notes": "Defense and Speed increase."
+    },
+    "kitten_horn_buff": {
+      "tags": [
+        "positive",
+        "morale_up",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:481"
+      ],
+      "notes": "Morale increase."
+    },
+    "inquisitor_buff": {
+      "tags": [
+        "positive",
+        "morale_up",
+        "luck_up",
+        "preserve"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md:476"
+      ],
+      "notes": "Morale and Luck increase."
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "hota_factory_couatl",
+ "status": "look",
+ "notes": "factory: couatl. Loose feathers the DEF sheds on hit (and on death, where the inventory finds them) ripped as detached defEffects particles; they are feathers, not light, so no effectLight. The mouseover/cast green-violet shimmer is on-body tint (inventory: animated texture, not a flipbook) and is not a layer yet.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "hit_feathers",
+    "type": "defFlipbook",
+    "provenance": "roster inventory factory: g03 hitted detached particles f2-4 (feathers)",
+    "clips": {
+     "Unit_Hitted": {
+      "defGroup": 3,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire",
+      "magic",
+      "water"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 6
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1
+   }
+  ]
+ }
+}

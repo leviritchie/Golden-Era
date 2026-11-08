@@ -1,0 +1,165 @@
+{
+ "unit": "h3_storm_elemental",
+ "strideExempt": "legless body: the HoMM3 storm elemental floats on a vortex/wave/energy base with no legs; the rig has no leg chain",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.05,
+   0.98
+  ],
+  "Spine": [
+   0.0,
+   0.06,
+   1.07
+  ],
+  "Spine1": [
+   0.0,
+   0.07,
+   1.18
+  ],
+  "Spine2": [
+   0.0,
+   0.07,
+   1.32
+  ],
+  "Neck": [
+   0.0,
+   0.02,
+   1.57
+  ],
+  "Head": [
+   0.0,
+   -0.05,
+   1.64
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.07,
+   1.9
+  ],
+  "LeftShoulder": [
+   0.07,
+   0.05,
+   1.5
+  ],
+  "RightShoulder": [
+   -0.07,
+   0.05,
+   1.5
+  ],
+  "LeftArm": [
+   0.29,
+   0.05,
+   1.47
+  ],
+  "RightArm": [
+   -0.29,
+   0.05,
+   1.47
+  ],
+  "LeftForeArm": [
+   0.44,
+   -0.02,
+   1.3
+  ],
+  "RightForeArm": [
+   -0.44,
+   -0.02,
+   1.3
+  ],
+  "LeftHand": [
+   0.58,
+   -0.15,
+   1.17
+  ],
+  "RightHand": [
+   -0.58,
+   -0.15,
+   1.17
+  ],
+  "LeftHand_End": [
+   0.68,
+   -0.24,
+   1.14
+  ],
+  "RightHand_End": [
+   -0.68,
+   -0.24,
+   1.14
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ]
+ },
+ "shrinkOut": {
+  "start": 4,
+  "power": 1.2
+ },
+ "extensions": [
+  "conflux_weights",
+  "conflux_tilt",
+  "element_motion",
+  "conflux_weights"
+ ],
+ "conflux": {
+  "fillUnweighted": true,
+  "maxBodyTilt": 60.0,
+  "armFalloff": {
+   "width": 0.16,
+   "maxDist": [
+    0.25,
+    0.45
+   ]
+  }
+ },
+ "elementMotion": {
+  "mode": "vortex",
+  "period": 10,
+  "jitter": {
+   "deg": 1.5,
+   "step": 1,
+   "bones": [
+    "Spine1",
+    "Spine2",
+    "Neck",
+    "Head"
+   ]
+  },
+  "flow": {
+   "pulseFromDef": 0.5
+  }
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: AttackFront throws both arms straight up overhead (f1) like the DEF before the forward lightning thrust, instead of holding them out at shoulder height",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_storm_elemental_arm_weights.json",
+    "sha256": "a7cbad1f99497dd1a7f7ae5666c362fa135110b87e84c043d6fc799f7d566cb6",
+    "note": "lane B 2026-10-11: shoulder/arm weights re-solved (GPU, seeded on the edges the patch tears) so the overhead wind-up does not tear"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_storm_elemental_attack_arms_overhead_rot.json",
+    "regrid": true,
+    "sha256": "d3ed0e3ac7653f274574ee50d4babff7f5759acaf515b8af468848a46bd3747e"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_storm_elemental_attack_arms_overhead_rot.json",
+    "regrid": true,
+    "sha256": "d3ed0e3ac7653f274574ee50d4babff7f5759acaf515b8af468848a46bd3747e"
+   }
+  ]
+ }
+}

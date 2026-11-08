@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://olden-era.local/schemas/queue_item.schema.json",
+  "title": "OldenCsRecoveryQueueItem",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "method_id",
+    "domain",
+    "partition",
+    "stage",
+    "evidence_refs",
+    "proof_status",
+    "claim"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "method_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable unique id: DeclaringType::name(paramTypes) with .ctor for constructors."
+    },
+    "domain": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Logical domain partition owner, e.g. Hex.Session.Battle or edb."
+    },
+    "partition": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Claim partition key; usually domain or domain/TypeName."
+    },
+    "stage": {
+      "type": "string",
+      "enum": ["lift", "rename", "oracle_capture", "equiv_test", "promote", "blocked"]
+    },
+    "type_name": {
+      "type": "string"
+    },
+    "method_name": {
+      "type": "string"
+    },
+    "signature": {
+      "type": "string"
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "path"],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "diffable_cs",
+              "isil",
+              "address_map",
+              "mono_semantic_map",
+              "il2cpp_dump",
+              "oracle_trace",
+              "proof_ledger",
+              "other"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean",
+            "default": true
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "proof_status": {
+      "description": "Null until first proof transition; then one of the ledger vocabulary values.",
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "string",
+          "enum": [
+            "static-lifted",
+            "renamed-proposed",
+            "renamed-accepted",
+            "identity-bridged",
+            "oracle-captured",
+            "equivalence-proven",
+            "blocked"
+          ]
+        }
+      ]
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["holder", "role", "claimed_at", "lease_expires_at"],
+      "properties": {
+        "holder": {
+          "type": ["string", "null"]
+        },
+        "role": {
+          "type": ["string", "null"],
+          "enum": [
+            null,
+            "dumper",
+            "lifter",
+            "renamer",
+            "oracle_capturer",
+            "equiv_tester",
+            "promoter",
+            "auditor"
+          ]
+        },
+        "claimed_at": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "lease_expires_at": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        }
+      }
+    },
+    "blocked_reason": {
+      "type": ["string", "null"]
+    },
+    "source_line": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

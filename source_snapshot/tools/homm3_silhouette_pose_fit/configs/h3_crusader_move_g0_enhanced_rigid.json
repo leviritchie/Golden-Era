@@ -1,0 +1,70 @@
+{
+  "unitSid": "h3_crusader",
+  "clipId": "move_g0_enhanced_rigid",
+  "fps": 12,
+  "masterGlb": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/owned_bind/crusader_enhanced_rigid.glb",
+  "outputDir": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/out_fit_enhanced_rigid/g00_move_pilot",
+  "boneRoles": "V:/Games/Olden Era Playtest Tweak/tools/homm3_silhouette_pose_fit/bone_roles_crusader_owned.json",
+  "ownershipRules": "V:/Games/Olden Era Playtest Tweak/tools/homm3_meshy_frame_pose/ownership_rules_h3_crusader.json",
+  "cullDefSoftShadows": true,
+  "camera": {
+    "axis": "iso",
+    "isoAzimuthDeg": 40.0,
+    "isoElevationDeg": 30.0,
+    "distance": 3.0,
+    "orthoScale": 4.2,
+    "rootYawDeg": 0.0
+  },
+  "frames": [
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_00.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_01.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_02.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_03.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_04.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_05.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_06.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_07.png"
+    }
+  ],
+  "method_kind": "keypoints",
+  "method": "sprite_landmarks_reprojection",
+  "poseSource": "sprite_landmarks",
+  "poseSolver": "fixed_length_ik",
+  "fixedLengthIk": {
+    "frame0CameraRegister": true,
+    "groundAnchor": {
+      "mode": "lowest_foot",
+      "bones": [
+        "LeftFoot",
+        "RightFoot",
+        "LeftToeBase",
+        "RightToeBase"
+      ]
+    }
+  },
+  "absoluteRefine": {
+    "enabled": false
+  },
+  "absoluteMatch": {
+    "paletteNormalize": true,
+    "alphaThr": 8.0,
+    "failClosedMaxChromaMae": 18.0,
+    "failClosedMaxRgbMae": 45.0
+  },
+  "notes": "Rigid+flex-band skin (91% single-bone). Rotate-only fixed-length IK toward authored landmarks."
+}

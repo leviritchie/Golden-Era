@@ -1,0 +1,141 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom vision law profiles that depend on adventure object SID or category allowlists. This is static object classification evidence only; it does not prove fog reveal mutation, owned-structure radius, neutral threat data, enemy hero position, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresObjectSidOrCategoryAllowlistProfiles": true,
+    "genericObjectCategoryInferenceForbidden": true,
+    "localizedTextParsingForbidden": true,
+    "visualArtInferenceForbidden": true,
+    "nonexistentMechanicsMustRemainForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredStaticEvidence": [
+    "exact object SID allowlist or explicit object category allowlist",
+    "effect-key-specific forbidden substitute list",
+    "companion predicate list for reveal radius, threat, corpse, elemental, or existing-class semantics"
+  ],
+  "requiredRuntimeProof": [
+    "adventure object runtime identity proof",
+    "object owner/side correlation proof where owned structure is used",
+    "fog reveal mutation proof",
+    "map refresh proof",
+    "vision idempotence proof"
+  ],
+  "contracts": {
+    "conflux.elemental-site-reveal": {
+      "objectKinds": [
+        "elemental-site",
+        "elemental-family-mapped-object"
+      ],
+      "companionPredicates": [
+        "RequiresElementalFamilyMapping",
+        "RequiresFogRevealMutation"
+      ],
+      "forbiddenSubstitutes": [
+        "any Conflux-themed object",
+        "any Primal-themed object name",
+        "object icon or art inference",
+        "localized object text parsing",
+        "army elemental family without object mapping"
+      ],
+      "notes": "Conflux vision allowlist must use exact object SID/category evidence plus explicit elemental-family mapping."
+    },
+    "cove.structure-scout-treasure-banks": {
+      "objectKinds": [
+        "treasure-cache",
+        "pirate-hideout",
+        "creature-bank",
+        "high-value-neutral-camp"
+      ],
+      "companionPredicates": [
+        "RequiresFogRevealMutation",
+        "RequiresNeutralThreatData",
+        "RequiresOwnedStructureRadius"
+      ],
+      "forbiddenSubstitutes": [
+        "any Cove-themed object",
+        "any ocean or ship travel mechanic",
+        "object icon or art inference",
+        "localized object text parsing",
+        "neutral camp value inferred from display text"
+      ],
+      "notes": "Cove vision allowlist must use exact treasure/bank/camp object classification and must not introduce ocean travel mechanics."
+    },
+    "inferno.existing-gate-site-reveal": {
+      "objectKinds": [
+        "existing-gate-site",
+        "existing-infernal-map-object-class"
+      ],
+      "companionPredicates": [
+        "RequiresExistingMapObjectClasses",
+        "RequiresFogRevealMutation"
+      ],
+      "forbiddenSubstitutes": [
+        "fabricated teleport target",
+        "any Inferno-themed object",
+        "object icon or art inference",
+        "localized object text parsing",
+        "ocean or teleport travel mechanic"
+      ],
+      "notes": "Inferno vision allowlist must use existing map object classes only and must not fabricate teleport mechanics."
+    },
+    "necropolis.corpse-site-undead-reveal": {
+      "objectKinds": [
+        "corpse-site",
+        "battle-site",
+        "undead-site"
+      ],
+      "companionPredicates": [
+        "RequiresCorpseOrBattleSiteData",
+        "RequiresFogRevealMutation",
+        "RequiresOwnedStructureRadius"
+      ],
+      "forbiddenSubstitutes": [
+        "visual corpse inference",
+        "any Necropolis-themed object",
+        "object icon or art inference",
+        "localized object text parsing",
+        "corpse count without object data"
+      ],
+      "notes": "Necropolis vision allowlist must use logical corpse/battle-site data or exact object allowlists, not visual corpse inference."
+    },
+    "stronghold.weak-neutral-stack-scouting": {
+      "objectKinds": [
+        "neutral-stack",
+        "weak-neutral-threat-band"
+      ],
+      "companionPredicates": [
+        "RequiresFogRevealMutation",
+        "RequiresNeutralThreatData"
+      ],
+      "forbiddenSubstitutes": [
+        "localized threat text parsing",
+        "any neutral object",
+        "object icon or art inference",
+        "stack weakness inferred from display color",
+        "generic creature-bank reveal"
+      ],
+      "notes": "Stronghold vision allowlist must use native neutral strength/intention data and must not parse localized threat text."
+    },
+    "tower.structure-artifact-regional-reveal": {
+      "objectKinds": [
+        "artifact",
+        "artifact-category",
+        "structure-driven-region-target"
+      ],
+      "companionPredicates": [
+        "RequiresFogRevealMutation",
+        "RequiresOwnedStructureRadius"
+      ],
+      "forbiddenSubstitutes": [
+        "any Tower-themed object",
+        "any pickup object",
+        "object icon or art inference",
+        "localized object text parsing",
+        "region reveal without owned-structure source"
+      ],
+      "notes": "Tower vision allowlist must use exact artifact SID/category classification and structure-driven region context."
+    }
+  }
+}

@@ -1,0 +1,679 @@
+{
+  "lawOverrides": {
+    "fraction_law_homm3_castle_13": {
+      "enabled": true,
+      "nameText": "Royal Retaliation",
+      "descriptionText": "Castle creatures gain 1 additional counterattack charge.",
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "numCounters",
+                "1"
+              ],
+              "receivers": [
+                "h3_pikeman",
+                "h3_pikeman_upg",
+                "h3_pikeman_upg_alt",
+                "h3_archer",
+                "h3_archer_upg",
+                "h3_archer_upg_alt",
+                "h3_griffin",
+                "h3_griffin_upg",
+                "h3_griffin_upg_alt",
+                "h3_swordsman",
+                "h3_swordsman_upg",
+                "h3_swordsman_upg_alt",
+                "h3_monk",
+                "h3_monk_upg",
+                "h3_monk_upg_alt",
+                "h3_cavalier",
+                "h3_cavalier_upg",
+                "h3_cavalier_upg_alt",
+                "h3_angel",
+                "h3_angel_upg",
+                "h3_angel_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconKey": "fraction_law_human_13_icon",
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_13_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required."
+    },
+    "fraction_law_homm3_castle_15": {
+      "enabled": true,
+      "nameText": "Daylight Liturgy",
+      "descriptionText": "Heroes can learn tier 1 Day spells.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "magicSchoolSet",
+                "day",
+                "0",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconKey": "fraction_law_human_15_icon",
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_15_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required."
+    },
+    "fraction_law_homm3_castle_18": {
+      "enabled": true,
+      "nameText": "Line Doctrine",
+      "descriptionText": "Friendly creatures deal 5%/10% more melee damage and take 5%/10% less melee damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "melee_attack",
+                "0.05"
+              ],
+              "receivers": [
+                "h3_pikeman",
+                "h3_archer",
+                "h3_griffin",
+                "h3_swordsman",
+                "h3_monk",
+                "h3_cavalier",
+                "h3_angel"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "melee_attack",
+                "-0.05"
+              ],
+              "receivers": [
+                "h3_pikeman",
+                "h3_archer",
+                "h3_griffin",
+                "h3_swordsman",
+                "h3_monk",
+                "h3_cavalier",
+                "h3_angel"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "melee_attack",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_pikeman",
+                "h3_archer",
+                "h3_griffin",
+                "h3_swordsman",
+                "h3_monk",
+                "h3_cavalier",
+                "h3_angel"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "melee_attack",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_pikeman",
+                "h3_archer",
+                "h3_griffin",
+                "h3_swordsman",
+                "h3_monk",
+                "h3_cavalier",
+                "h3_angel"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconKey": "fraction_law_human_18_icon",
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_18_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required."
+    },
+    "fraction_law_homm3_castle_19": {
+      "enabled": true,
+      "nameText": "Volley Doctrine",
+      "descriptionText": "Friendly creatures deal 5%/10% more ranged damage and take 5%/10% less ranged damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "shoot_attack",
+                "0.05"
+              ],
+              "receivers": [
+                "h3_pikeman",
+                "h3_archer",
+                "h3_griffin",
+                "h3_swordsman",
+                "h3_monk",
+                "h3_cavalier",
+                "h3_angel"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "shoot_attack",
+                "-0.05"
+              ],
+              "receivers": [
+                "h3_pikeman",
+                "h3_archer",
+                "h3_griffin",
+                "h3_swordsman",
+                "h3_monk",
+                "h3_cavalier",
+                "h3_angel"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "shoot_attack",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_pikeman",
+                "h3_archer",
+                "h3_griffin",
+                "h3_swordsman",
+                "h3_monk",
+                "h3_cavalier",
+                "h3_angel"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "shoot_attack",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_pikeman",
+                "h3_archer",
+                "h3_griffin",
+                "h3_swordsman",
+                "h3_monk",
+                "h3_cavalier",
+                "h3_angel"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconKey": "fraction_law_human_19_icon",
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_19_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required."
+    },
+    "fraction_law_homm3_castle_2": {
+      "enabled": true,
+      "nameText": "Road Wardens",
+      "descriptionText": "Heroes gain +2/+4 Sight radius by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "viewRadius",
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "viewRadius",
+                "4"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconKey": "fraction_law_human_2_icon",
+      "iconNotes": "Canonical shared-law icon pass: plain hero Sight laws use the same vanilla scouting icon across custom factions. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_21": {
+      "enabled": true,
+      "nameText": "Prosperous Holdings",
+      "descriptionText": "Gold income from your sources increases by +10%/+20% by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "resPercentIncrementSet",
+                "gold",
+                "0.10"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "resPercentIncrementSet",
+                "gold",
+                "0.20"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconKey": "fraction_law_human_21_icon",
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_21_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required."
+    },
+    "fraction_law_homm3_castle_22": {
+      "enabled": true,
+      "nameText": "Righteous Zeal",
+      "descriptionText": "Heroes gain +1/+2 Morale by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "moral",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "moral",
+                "2"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconKey": "fraction_law_human_22_icon",
+      "iconNotes": "Canonical shared-law icon pass: hero Morale laws use the same vanilla morale icon across custom factions. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_25": {
+      "enabled": true,
+      "nameText": "Encouragement",
+      "descriptionText": "Morale trigger chance for friendly creatures increases by +1%/+2%/+3% per Morale point by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.01"
+              ],
+              "receivers": [
+                "h3_pikeman",
+                "h3_archer",
+                "h3_griffin",
+                "h3_swordsman",
+                "h3_monk",
+                "h3_cavalier",
+                "h3_angel"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.02"
+              ],
+              "receivers": [
+                "h3_pikeman",
+                "h3_archer",
+                "h3_griffin",
+                "h3_swordsman",
+                "h3_monk",
+                "h3_cavalier",
+                "h3_angel"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.03"
+              ],
+              "receivers": [
+                "h3_pikeman",
+                "h3_archer",
+                "h3_griffin",
+                "h3_swordsman",
+                "h3_monk",
+                "h3_cavalier",
+                "h3_angel"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconKey": "fraction_law_human_25_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_27": {
+      "enabled": true,
+      "nameText": "High Daylight",
+      "descriptionText": "Heroes can learn any tier of Day spells.",
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "magicSchoolSet",
+                "day",
+                "5",
+                "0"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconKey": "fraction_law_human_27_icon",
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_27_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required."
+    },
+    "fraction_law_homm3_castle_28": {
+      "enabled": true,
+      "nameText": "Mason's Charter",
+      "descriptionText": "Buildings cost 20%/40% less Ore.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "constructionDiscount",
+              "parameters": [
+                "ore",
+                "-0.20"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "constructionDiscount",
+              "parameters": [
+                "ore",
+                "-0.40"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconKey": "fraction_law_human_28_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_33": {
+      "enabled": true,
+      "nameText": "Chapel Calendar",
+      "descriptionText": "Produces 250/500/750 Astrology points daily by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "250"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "500"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "750"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconKey": "fraction_law_human_34_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_34": {
+      "enabled": true,
+      "nameText": "Liturgical Rhythm",
+      "descriptionText": "Positive effects on friendly creatures last +1/+2 additional rounds by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inComingBuffDuration",
+                "1"
+              ],
+              "receivers": [
+                "h3_pikeman",
+                "h3_pikeman_upg",
+                "h3_pikeman_upg_alt",
+                "h3_archer",
+                "h3_archer_upg",
+                "h3_archer_upg_alt",
+                "h3_griffin",
+                "h3_griffin_upg",
+                "h3_griffin_upg_alt",
+                "h3_swordsman",
+                "h3_swordsman_upg",
+                "h3_swordsman_upg_alt",
+                "h3_monk",
+                "h3_monk_upg",
+                "h3_monk_upg_alt",
+                "h3_cavalier",
+                "h3_cavalier_upg",
+                "h3_cavalier_upg_alt",
+                "h3_angel",
+                "h3_angel_upg",
+                "h3_angel_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inComingBuffDuration",
+                "2"
+              ],
+              "receivers": [
+                "h3_pikeman",
+                "h3_pikeman_upg",
+                "h3_pikeman_upg_alt",
+                "h3_archer",
+                "h3_archer_upg",
+                "h3_archer_upg_alt",
+                "h3_griffin",
+                "h3_griffin_upg",
+                "h3_griffin_upg_alt",
+                "h3_swordsman",
+                "h3_swordsman_upg",
+                "h3_swordsman_upg_alt",
+                "h3_monk",
+                "h3_monk_upg",
+                "h3_monk_upg_alt",
+                "h3_cavalier",
+                "h3_cavalier_upg",
+                "h3_cavalier_upg_alt",
+                "h3_angel",
+                "h3_angel_upg",
+                "h3_angel_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconKey": "fraction_law_human_5_icon",
+      "iconNotes": "Mechanic-aligned icon contract: buff-duration laws use the vanilla positive-effect duration icon instead of the Astrology production icon. Candidate/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_6": {
+      "enabled": true,
+      "nameText": "Battle Readiness",
+      "descriptionText": "Your heroes start each battle with 1 additional Focus Charge.",
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "startEnergyLevelsBonus",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "homm4IconLabel": "Mirth",
+      "homm4IconPath": "schools/life/mirth.jpg",
+      "iconNotes": "HOMM4 art-source candidate: Mirth (schools/life/mirth.jpg). Runtime icon key: fraction_law_homm3_castle_6_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "iconKey": "fraction_law_homm3_castle_6_icon"
+    },
+    "fraction_law_homm3_castle_1": {
+      "iconKey": "fraction_law_human_1_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_3": {
+      "iconKey": "fraction_law_human_3_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_7": {
+      "iconKey": "fraction_law_human_7_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_8": {
+      "iconKey": "fraction_law_human_8_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_9": {
+      "iconKey": "fraction_law_human_9_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_12": {
+      "iconKey": "fraction_law_human_12_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_16": {
+      "iconKey": "fraction_law_human_16_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_29": {
+      "iconKey": "fraction_law_human_29_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_32": {
+      "iconKey": "fraction_law_human_32_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_castle_14": {
+      "iconKey": "fraction_law_human_14_icon",
+      "iconNotes": "Canonical resource icon pass: mining laws use the vanilla icon matching the produced special resource instead of donor-faction inheritance. Static/deploy validation pending."
+    }
+  }
+}

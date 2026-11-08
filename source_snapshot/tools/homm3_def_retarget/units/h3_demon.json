@@ -1,0 +1,317 @@
+{
+ "unit": "h3_demon",
+ "joints": {
+  "Hips": [
+   0.01,
+   0.094,
+   0.777
+  ],
+  "Spine": [
+   0.012,
+   0.056,
+   0.901
+  ],
+  "Spine1": [
+   0.014,
+   0.017,
+   1.025
+  ],
+  "Spine2": [
+   0.016,
+   -0.026,
+   1.164
+  ],
+  "Neck": [
+   0.017,
+   -0.059,
+   1.273
+  ],
+  "Head": [
+   0.01,
+   -0.108,
+   1.273
+  ],
+  "HeadTop_End": [
+   0.01,
+   -0.094,
+   1.553
+  ],
+  "LeftShoulder": [
+   0.052,
+   0.031,
+   1.189
+  ],
+  "LeftArm": [
+   0.206,
+   0.066,
+   1.175
+  ],
+  "LeftForeArm": [
+   0.283,
+   0.178,
+   0.987
+  ],
+  "LeftHand": [
+   0.262,
+   -0.003,
+   0.826
+  ],
+  "LeftHand_End": [
+   0.254,
+   -0.071,
+   0.767
+  ],
+  "RightShoulder": [
+   -0.024,
+   0.031,
+   1.189
+  ],
+  "RightArm": [
+   -0.178,
+   0.066,
+   1.175
+  ],
+  "RightForeArm": [
+   -0.283,
+   0.101,
+   0.98
+  ],
+  "RightHand": [
+   -0.276,
+   -0.073,
+   0.812
+  ],
+  "RightHand_End": [
+   -0.273,
+   -0.138,
+   0.75
+  ],
+  "LeftUpLeg": [
+   0.094,
+   0.094,
+   0.777
+  ],
+  "LeftLeg": [
+   0.178,
+   -0.024,
+   0.463
+  ],
+  "LeftFoot": [
+   0.213,
+   0.08,
+   0.058
+  ],
+  "LeftToeBase": [
+   0.234,
+   0.01,
+   -0.019
+  ],
+  "LeftToe_End": [
+   0.255,
+   -0.059,
+   -0.096
+  ],
+  "RightUpLeg": [
+   -0.073,
+   0.094,
+   0.777
+  ],
+  "RightLeg": [
+   -0.136,
+   -0.017,
+   0.463
+  ],
+  "RightFoot": [
+   -0.164,
+   0.143,
+   0.058
+  ],
+  "RightToeBase": [
+   -0.178,
+   0.066,
+   -0.005
+  ],
+  "RightToe_End": [
+   -0.192,
+   -0.01,
+   -0.068
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "strideMatch": {
+  "maxDrop": 0.3,
+  "reason": "Default 0.15 passes only on thin margins (slip 0.649 of 0.686, ratio 1.343 of 1.4, cadence at the 1.6 cap). Scratch sweep (worker A, 2026-09-27) on the pre-stride GLB: 0.20 slip 0.565 ratio 1.136; 0.25 slip 0.523 ratio 1.081; 0.30 slip 0.364 ratio 1.108 cadence 1.0 jitter 0.06 (0.20 at default). 0.30 is the first drop that clears slip with margin and leaves the cadence cap."
+ },
+ "props": [
+  {
+   "name": "tail",
+   "bone": "Hips",
+   "segments": [
+    [
+     [
+      -0.012,
+      0.222,
+      0.878
+     ],
+     [
+      -0.017,
+      0.244,
+      0.809
+     ]
+    ],
+    [
+     [
+      -0.017,
+      0.244,
+      0.809
+     ],
+     [
+      -0.027,
+      0.272,
+      0.739
+     ]
+    ],
+    [
+     [
+      -0.027,
+      0.272,
+      0.739
+     ],
+     [
+      0.01,
+      0.293,
+      0.656
+     ]
+    ],
+    [
+     [
+      0.01,
+      0.293,
+      0.656
+     ],
+     [
+      -0.015,
+      0.313,
+      0.587
+     ]
+    ],
+    [
+     [
+      -0.015,
+      0.313,
+      0.587
+     ],
+     [
+      -0.058,
+      0.325,
+      0.517
+     ]
+    ],
+    [
+     [
+      -0.058,
+      0.325,
+      0.517
+     ],
+     [
+      -0.088,
+      0.326,
+      0.444
+     ]
+    ],
+    [
+     [
+      -0.088,
+      0.326,
+      0.444
+     ],
+     [
+      -0.128,
+      0.313,
+      0.354
+     ]
+    ],
+    [
+     [
+      -0.128,
+      0.313,
+      0.354
+     ],
+     [
+      -0.159,
+      0.302,
+      0.309
+     ]
+    ]
+   ],
+   "radius": 0.06,
+   "exclude": [
+    {
+     "sphere": [
+      [
+       -0.054,
+       0.206,
+       0.823
+      ],
+      0.035
+     ]
+    }
+   ],
+   "note": "2026-10-10 lane-A: traced tail centreline (Blender axes); the tail hung rigid, its lower half skinned to the right shin (fused limb); inferno_whipchain re-skins it onto Tail_00..09."
+  }
+ ],
+ "whipChain": {
+  "parent": "Hips",
+  "prop": "tail",
+  "prefix": "Tail",
+  "bones": 10,
+  "grip": 0.04,
+  "gripBlend": 0.06,
+  "radius": 0.06
+ },
+ "extensions": [
+  "inferno_whipchain"
+ ],
+ "glbPatch": {
+  "reason": "h3_demon DEF fidelity (lane-A authenticity 2026-10-10): AttackFront g12 horn charge (body level, head down, horn forward, arms swept back f3-f5); Death g05 arms thrown up f2-f3 then a hunched seated heap f5-f8 (hips held upright, thighs folded, arms down, f8 collapsing forward) where the capture fell backward and sprawled legs-up. keyRotations x2 (split table) + Death stretchRelax (ratio 1.7, 1000 it, smooth 0.4) for the deep hip/knee fold; teardiag PASS. || tail: 2026-10-10 authenticity (lane A): tail whip-chain keys (h3_demon_tail_rot.json x2) - DEF Move trail at knee height with a travelling flick, AttackFront swings low then hooks the tip up behind, Defence curls it up behind, Death flings and curls it, then rests it just off the floor in the heap (the rigid tail lifted the heap 10-13 cm through grounding)",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_demon_charge_rot.json",
+    "sha256": "1b9ce41e2b184b047e511741ec8ebad332bb9e151f6a4bdea567be46c2c62029",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_demon_charge_rot.json",
+    "sha256": "1b9ce41e2b184b047e511741ec8ebad332bb9e151f6a4bdea567be46c2c62029",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_demon_tail_rot.json",
+    "sha256": "60e4caa990b43644156ae9ada3640b093e51644b3d0dc68c323af2255c1d6110",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_demon_tail_rot.json",
+    "sha256": "60e4caa990b43644156ae9ada3640b093e51644b3d0dc68c323af2255c1d6110",
+    "regrid": true
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.7,
+    "iterations": 1000,
+    "smooth": 0.4
+   }
+  ]
+ }
+}

@@ -1,0 +1,95 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "bulwark_upg_alt_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/bulwark_upg_alt_slice_v1",
+  "note": "float64 CS bake v3 + cs_rekey re-freeze 2026-10-01 (docs/homm3_cs_bake_float64.md) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_shaman_upg_alt 0.2797, h3_kobold_upg_alt 0.4968. Carried over unchanged: h3_jotunn_upg_alt. Previous freeze note (4e7a393b1c^): Bulwark upgrade-alt units as their own sub-slice (as castle_griffin_slice_v1 / stronghold_orc_slice_v1) so the 17-unit bulwark_slice_v1 is not rebuilt. h3_jotunn_upg_alt: glbPatch hem -> same-side foot via fleet_rebuild --from-base, gateFaults 7 -> 0. h3_kobold_upg_alt: Hips-parented tail chain, full chain, ground faults 18 -> 0, stride slip 0.531 -> 0.275. h3_shaman_upg_alt: right-leg joints re-seated + foot_sole, full chain, ground faults 6 -> 0, stride slip 0.366 -> 0.393 (ratio 1.05). 2026-10-01 re-freeze: h3_jotunn_upg_alt (frost_breath, death_frost) and h3_shaman_upg_alt (staff_bolt) promoted to vanilla-style effects so no row ships a DEF flipbook (validate_no_def_flipbook); canonical GLBs unchanged. Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_jotunn_upg_alt 0.3009, h3_kobold_upg_alt 0.4968, h3_shaman_upg_alt 0.2797. | float64 CS bake v3 + cs_rekey re-freeze 2026-10-01 (docs/homm3_cs_bake_float64.md) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_jotunn_upg_alt 0.3834. Carried over unchanged: h3_kobold_upg_alt, h3_shaman_upg_alt. | look B (vanilla philosophy finish, finish.py; look.py --stages finish,apply), animation unchanged Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_jotunn_upg_alt 0.3834, h3_kobold_upg_alt 0.4968, h3_shaman_upg_alt 0.2797. | lane B bulwark batch 1: AttackFront pick overhead at f3 Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_kobold_upg_alt 0.4968. Carried over unchanged: h3_jotunn_upg_alt, h3_shaman_upg_alt. | lane B 2026-10-11 authenticity batch 2: mountain ram upg_alt Defence duck + Death topple; mammoth upg_alt brought in (user-approved via coordinator): AttackFront head throw, Death roll-over Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_mountain_ram_upg_alt 0.0905, h3_mammoth_upg_alt 0.1453. Carried over unchanged: h3_jotunn_upg_alt, h3_kobold_upg_alt, h3_shaman_upg_alt. | lane B batch 4: h3_jotunn_upg_alt axe overhead chop + hem weights (run 494) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_jotunn_upg_alt 0.3834. Carried over unchanged: h3_kobold_upg_alt, h3_shaman_upg_alt, h3_mountain_ram_upg_alt, h3_mammoth_upg_alt. | lane C: trunk rig_chain (Trunk_00..05) lift/reach on Mouseover + AttackFront Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_mammoth_upg_alt 0.1453. Carried over unchanged: h3_jotunn_upg_alt, h3_kobold_upg_alt, h3_shaman_upg_alt, h3_mountain_ram_upg_alt. | lane C 2026-10-12: shaman_upg_alt staff hand cut from the robe (limb_split) + DEF ShootFront staff raise/thrust Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_shaman_upg_alt 0.1639. Carried over unchanged: h3_jotunn_upg_alt, h3_kobold_upg_alt, h3_mountain_ram_upg_alt, h3_mammoth_upg_alt.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_jotunn_upg_alt",
+      "gameSid": "h3_jotunn_upg_alt",
+      "bundleName": "custom_units_bulwark_h3_jotunn_upg_alt",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "7e7c6295fa1c63d31d8f4969ab9a563d4a52fbe25cf8497ede8f411478576360",
+      "identityReview": "none",
+      "vfxAuthority": "vanilla_style",
+      "vanillaStyleSpec": "tools/homm3_vfx/vanilla_style/units/h3_jotunn_upg_alt.json",
+      "frozen": {
+        "lookDeliveredGlbSha256": "72154d962cae20b288946768cea489264edb582737a5c42e2dfecb73f3be063b",
+        "idleRetimedGlbSha256": "669c82f62d8cd4ddee9743226d3707577a329d902e2b9d2a5e752468b6ad7ca7",
+        "vfxManifestSha256": "35e0ae6b4e98a40962e0ff1a685b1c56739a5f72e88d4e8fc0218baf66bb7b3e",
+        "specSha256": "5fa795a5cbbaa35ca0a007c46e4a7f4aba270accb3b0405951065be1af092b40",
+        "basecolorSha256": "90f11f657ad7d7456f78c0b6a57de6642c77d9b1497501f7843eaa4b6529293f"
+      }
+    },
+    {
+      "labSid": "h3_kobold_upg_alt",
+      "gameSid": "h3_kobold_upg_alt",
+      "bundleName": "custom_units_bulwark_h3_kobold_upg_alt",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "ee8c1be2a8b1de78d9d04969bfe44b7f81d516ee5667a02c0ee59bcef74b4c96",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "292a4238d7e7e0c5b4285c2ef2a5b983e5788c91c2a3776bb038299ad135e0b3",
+        "idleRetimedGlbSha256": "0be6806214f9b36948ad83db441e8815893c89297f8bb05445d534d83896dec9",
+        "vfxManifestSha256": "953c92c10231a5c5723420c4f525b63fbe9ec0c600d780498f3f8db70829ee64",
+        "specSha256": "15bc2cd5f7b17df1477a3ede4893e4c7b3018a12f540e0163e8a5b6088b65943",
+        "basecolorSha256": "ba169b899de7db14d44f404f3d4c11286c8dca0e256036ee4ec10b393205b61a"
+      }
+    },
+    {
+      "labSid": "h3_shaman_upg_alt",
+      "gameSid": "h3_shaman_upg_alt",
+      "bundleName": "custom_units_bulwark_h3_shaman_upg_alt",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "8088f1a82c8f0de2df28a5f2e528eb13130af999144743d41e5d27792f175828",
+      "identityReview": "none",
+      "vfxAuthority": "vanilla_style",
+      "vanillaStyleSpec": "tools/homm3_vfx/vanilla_style/units/h3_shaman_upg_alt.json",
+      "frozen": {
+        "lookDeliveredGlbSha256": "35e5fa12e1e337157d785bc3aa45cb05aa52b98e96362afccf99bda647b8b2a9",
+        "idleRetimedGlbSha256": "55d0e58951ae1da12715aa1a9ce6c062423dbf1d1348bd570a5e47cd1fc16dc6",
+        "vfxManifestSha256": "3952339cdb21cf12113fafacaef9c5a3bef686b57a23f323bb368c3a318f59f7",
+        "specSha256": "446df8792bfb8c11096846194cc2c88f7c838bf6031b21bc4962fc440ae6507e",
+        "basecolorSha256": "dc3854e1bcab9b9889343eb71401be5ab78cd99c12ff15a0fed07dc883893c8d"
+      }
+    },
+    {
+      "labSid": "h3_mountain_ram_upg_alt",
+      "gameSid": "h3_mountain_ram_upg_alt",
+      "bundleName": "custom_units_bulwark_h3_mountain_ram_upg_alt",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "7eb293a12e9bcac61192c08ac8ccf3b21b78cbe4d70f194dee1d37fbfb5b3cf1",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "25c0d39362d5c9be480702bd76297a76bdd8d29a874c9299dacf2882bb770bde",
+        "idleRetimedGlbSha256": "5971408ec5ff2f018c93297697d9e8117895f215ea2148e764487c31165688b2",
+        "vfxManifestSha256": "361f3dca0ea78d877eb7cc9c094a0050edc9f5872ccbb988e3013d3041431e36",
+        "specSha256": "aeb6e2e8fc4bab2967d483356d3011626dda6232ac2265586a64ba05e8d17b49",
+        "basecolorSha256": "f44e0ced83d7dee592b6dd261d34772b819dcc9cb31345a4d671ab4abd7db414"
+      }
+    },
+    {
+      "labSid": "h3_mammoth_upg_alt",
+      "gameSid": "h3_mammoth_upg_alt",
+      "bundleName": "custom_units_bulwark_h3_mammoth_upg_alt",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "681ae3d708c079200b33223970faf4b5f826b790b8af1271e9d8fec14cdb703d",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "acadf66332d20a9a3003d6d4695a244b51586a592664ef30e3918bc4ad28f08d",
+        "idleRetimedGlbSha256": "fc1e78961144645423f07107b3ede9a37744f228d64ca474ba0a7ec6d6af5d0d",
+        "vfxManifestSha256": "e2fc33d5dedffb3bba4f98034349ade1be3ca5c5d04065020de81bf962c07845",
+        "specSha256": "07da4380a36f27aafb21ddaf5dc8409d68d03819f9e8e32fa0af090511cb6b59",
+        "basecolorSha256": "a50ab4aa684a629cc8b1f2d3631417bf81def53849117d3fa1693816ff4eb145"
+      }
+    }
+  ]
+}

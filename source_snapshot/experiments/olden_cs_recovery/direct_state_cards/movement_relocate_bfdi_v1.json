@@ -1,0 +1,125 @@
+{
+  "adapter_binding": {
+    "gameplay_gated": false,
+    "gateway_methods": [
+      "TryCommitUnitHexMove"
+    ],
+    "notes": "M6 focused_live_positive satisfied 2026-07-20 (proof_ledger/entries/ds_m6_movement_teleport_live_positive.json). MovementTeleport ungated via MovementTeleportLivePositiveProven. Reuses movement.commit.bfdi_v1 commit triad via the same journaled NativeCombatWriteGateway.TryCommitUnitHexMove → UnitData.bfdi path. Role clarifies non-push hex relocate (explicitDestinationHex). Not a second occupancy model. MovementPull stays CapLog-unsupported.",
+    "operations": [
+      "MovementTeleport"
+    ]
+  },
+  "banned_surfaces": [
+    {
+      "reason": "lastCorpse; M1 banned as occupancy — relocate reuses same ban",
+      "surface": "Hex.bcxo / cfqf as Unit occupancy commit store"
+    },
+    {
+      "reason": "View hub; commit publish remains eda via M1 card",
+      "surface": "edb.* as movement commit publish"
+    },
+    {
+      "reason": "Prefer single journaled UnitData.bfdi via TryCommitUnitHexMove",
+      "surface": "helper+_cfqf dual-write as production MovementTeleport"
+    },
+    {
+      "reason": "M6 binds MovementTeleport to movement.commit.bfdi_v1 — no new commit owner",
+      "surface": "invented second occupancy / relocate write body"
+    }
+  ],
+  "card_id": "movement.relocate.bfdi_v1",
+  "family": "movement",
+  "gamesymbols_export": {
+    "exported": true,
+    "exported_at": "2026-07-20T19:00:00Z",
+    "reason": "No new GameSymbols rows. Proven commit/occupancy surfaces already exported via movement.commit.bfdi_v1 (MovementCommitOwnerMembers / FieldObjectDataHexMembers / HexFieldObjectsMutatorMembers). Relocate reuses that export.",
+    "symbols": [
+      "UnitData.set_hex",
+      "FieldObjectData.set_hex",
+      "RemoveObject",
+      "AddFieldObject"
+    ],
+    "target": "GameSymbols.DirectStateLaws"
+  },
+  "live_methods": [
+    {
+      "blocked_reason": null,
+      "method_id": "Hex.Session.Battle.UnitData::bfdi(Hex)",
+      "mono_alias": "UnitData.set_hex",
+      "role": "commit_owner",
+      "rva": "0x2078360",
+      "status": "equivalence-proven"
+    },
+    {
+      "blocked_reason": null,
+      "method_id": "edf::bcuo(Hex)",
+      "mono_alias": "FieldObjectData.set_hex",
+      "role": "occupancy_mutator",
+      "rva": "0x1F055B0",
+      "status": "equivalence-proven"
+    },
+    {
+      "blocked_reason": null,
+      "method_id": "Hex.Session.Battle.Hex::bcyn(FieldObject)",
+      "mono_alias": "RemoveObject",
+      "role": "occupancy_mutator",
+      "rva": "0x1F33CB0",
+      "status": "equivalence-proven"
+    },
+    {
+      "blocked_reason": null,
+      "method_id": "Hex.Session.Battle.Hex::bcyl(FieldObject)",
+      "mono_alias": "AddFieldObject",
+      "role": "occupancy_mutator",
+      "rva": "0x1F33BA0",
+      "status": "equivalence-proven"
+    }
+  ],
+  "milestone_id": "ds_m6_teleport_relocate",
+  "milestone_ledger_path": "experiments/olden_cs_recovery/proof_ledger/milestones/ds_m6_teleport_relocate.ledger.json",
+  "mono_aliases": [
+    "UnitData.set_hex",
+    "FieldObjectData.set_hex",
+    "RemoveObject",
+    "AddFieldObject"
+  ],
+  "notes": "Bar C fail-closed. M6 generalizes M1 commit card to non-push hex relocate (MovementTeleport). live_methods are the proven M1 commit triad — reuse, not a second occupancy model. Gateway already shares TryCommitUnitHexMove with MovementPush. Primary oracle: field-delta + focused live-positive dual-readback (helper hex + fieldObjects) on a non-adjacent relocate before ungating. MovementPull unsupported until dest recipe proven.",
+  "ordered_stores": [
+    {
+      "notes": "Same store as movement.commit.bfdi_v1 — relocate is non-push dest input only",
+      "offset_or_member": "edf+0x10",
+      "role": "helper_hex"
+    },
+    {
+      "notes": "Same bcyn/bcyl triad inside edf.bcuo — not a second occupancy model",
+      "offset_or_member": "Hex.fieldObjects (+0x28)",
+      "role": "list_occupancy"
+    }
+  ],
+  "pin_table_path": "experiments/direct_state_movement_trace/mono_live_pin_table.md",
+  "proof_status": "equivalence-proven",
+  "publish": {
+    "call_chain": [
+      "eep.bdhw",
+      "eda.bcim",
+      "eda.cfia"
+    ],
+    "english_name": "OnUnitEndedMovement",
+    "english_name_strength": "ordinal-inferred",
+    "field": "cfia",
+    "hub_type": "eda",
+    "kind": "hub_field",
+    "notes": "Publish chain identical to movement.commit.bfdi_v1 via bfdi. English name ordinal-inferred.",
+    "offset": "+0xC0"
+  },
+  "role": "commit_owner",
+  "schema_version": 1,
+  "title": "M6 — MovementTeleport / non-push hex relocate (reuses bfdi_v1)",
+  "ungate_requires": [
+    "focused_live_positive",
+    "field_delta_oracle_bar_c",
+    "fieldObjects_and_helper_hex_dual_readback",
+    "movement_commit_bfdi_v1"
+  ],
+  "updated_at": "2026-07-20T19:05:00Z"
+}

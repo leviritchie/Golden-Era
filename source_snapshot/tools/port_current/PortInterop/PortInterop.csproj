@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Offline Il2CppInterop generator + interop indexer for the port-to-current-build pipeline.
+    See tools/port_current/README.md. It compiles against the BepInEx be.755 core DLLs of a
+    BepInEx install (read-only). Pass -p:BepInExCore=<...\BepInEx\core\> to build; there is no default,
+    so a build without it fails instead of silently binding a different BepInEx.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RollForward>LatestMajor</RollForward>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+  <Target Name="RequireBepInExCore" BeforeTargets="ResolveAssemblyReferences">
+    <Error Condition="'$(BepInExCore)' == ''" Text="Set -p:BepInExCore=&lt;BepInEx be.755 core dir with trailing slash&gt;." />
+    <Error Condition="'$(BepInExCore)' != '' And !Exists('$(BepInExCore)Il2CppInterop.Generator.dll')" Text="BepInExCore '$(BepInExCore)' has no Il2CppInterop.Generator.dll." />
+  </Target>
+  <ItemGroup>
+    <Reference Include="$(BepInExCore)Cpp2IL.Core.dll" />
+    <Reference Include="$(BepInExCore)LibCpp2IL.dll" />
+    <Reference Include="$(BepInExCore)Il2CppInterop.Generator.dll" />
+    <Reference Include="$(BepInExCore)Il2CppInterop.Common.dll" />
+    <Reference Include="$(BepInExCore)AsmResolver.dll" />
+    <Reference Include="$(BepInExCore)AsmResolver.DotNet.dll" />
+    <Reference Include="$(BepInExCore)AsmResolver.PE.dll" />
+    <Reference Include="$(BepInExCore)AsmResolver.PE.File.dll" />
+    <Reference Include="$(BepInExCore)Mono.Cecil.dll" />
+    <Reference Include="$(BepInExCore)Disarm.dll" />
+    <Reference Include="$(BepInExCore)Iced.dll" />
+    <Reference Include="$(BepInExCore)Gee.External.Capstone.dll" />
+    <Reference Include="$(BepInExCore)StableNameDotNet.dll" />
+    <Reference Include="$(BepInExCore)AssetRipper.CIL.dll" />
+    <Reference Include="$(BepInExCore)AssetRipper.Primitives.dll" />
+    <Reference Include="$(BepInExCore)WasmDisassembler.dll" />
+    <Reference Include="$(BepInExCore)SemanticVersioning.dll" />
+    <Reference Include="$(BepInExCore)MonoMod.Utils.dll" />
+    <Reference Include="$(BepInExCore)MonoMod.Backports.dll" />
+    <Reference Include="$(BepInExCore)MonoMod.ILHelpers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+  </ItemGroup>
+</Project>

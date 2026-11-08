@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require dynamic Conflux elemental family selection. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresDynamicElementalFamilyProfiles": true,
+    "confluxOnly": true,
+    "spellSchoolFamilyOnly": true,
+    "dynamicSelectionMustUseExplicitElementalFamilyMap": true,
+    "staticSchoolProxySubstituteForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": ["homm3_conflux"],
+  "allowedFamily": "SpellSchool",
+  "requiredStaticEvidence": {
+    "elementalFamilyMappingContract": "custom_factions/elemental_family_mapping_predicate_contracts.json",
+    "unitFamilyTagsPath": "custom_factions/unit_family_tags.json",
+    "requiredFact": "elemental=yes",
+    "requiredFamilies": ["air", "water", "fire", "earth", "psychic"]
+  },
+  "requiredRuntimeProof": [
+    "dominant elemental family computation proof",
+    "live army or battle stack unit SID proof",
+    "elemental family to spell school selection proof",
+    "spell cast owner and law-owner correlation proof",
+    "static magicSchoolSet proxy exclusion proof",
+    "spellbook access or cooldown ordering proof",
+    "idempotent dynamic family application proof"
+  ],
+  "contracts": {
+    "conflux.dynamic-elemental-school": {
+      "dynamicFamilyKinds": ["dominant-army-elemental-family", "explicit-conflux-elemental-family-map"],
+      "companionPredicates": ["RequiresSpellCastEvent"],
+      "forbiddenSubstitutes": [
+        "static magicSchoolSet row counted as dynamic elemental family",
+        "Conflux faction membership counted as dynamic elemental family",
+        "any elemental unit counted without family dominance computation",
+        "spell school counted without selected elemental family correlation",
+        "Pixie or Firebird counted as elemental family source",
+        "SID substring elemental inference"
+      ],
+      "notes": "Elemental Wheel requires an explicit selected/dominant elemental family derived from authored Conflux elemental-family mapping. Static school rows can be visible proxies only; gameplay still requires live family selection, spell-school correlation, owner correlation, ordering, and idempotence proof."
+    }
+  }
+}

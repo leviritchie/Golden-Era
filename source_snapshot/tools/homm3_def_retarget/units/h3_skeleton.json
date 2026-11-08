@@ -1,0 +1,250 @@
+{
+ "unit": "h3_skeleton",
+ "joints": {
+  "Hips": [
+   0.045,
+   0.227,
+   0.887
+  ],
+  "Spine": [
+   0.045,
+   0.147,
+   1.039
+  ],
+  "Spine1": [
+   0.045,
+   0.066,
+   1.191
+  ],
+  "Spine2": [
+   0.045,
+   -0.024,
+   1.362
+  ],
+  "Neck": [
+   0.045,
+   -0.094,
+   1.496
+  ],
+  "Head": [
+   0.045,
+   -0.1,
+   1.5
+  ],
+  "HeadTop_End": [
+   0.045,
+   -0.14,
+   1.7
+  ],
+  "LeftShoulder": [
+   0.08,
+   -0.038,
+   1.405
+  ],
+  "LeftArm": [
+   0.206,
+   -0.059,
+   1.356
+  ],
+  "LeftForeArm": [
+   0.332,
+   0.199,
+   1.167
+  ],
+  "LeftHand": [
+   0.213,
+   -0.017,
+   0.992
+  ],
+  "LeftHand_End": [
+   0.178,
+   -0.082,
+   0.94
+  ],
+  "RightShoulder": [
+   -0.03,
+   -0.03,
+   1.42
+  ],
+  "RightArm": [
+   -0.136,
+   0.003,
+   1.426
+  ],
+  "RightForeArm": [
+   -0.241,
+   0.297,
+   1.293
+  ],
+  "RightHand": [
+   -0.297,
+   0.325,
+   1.006
+  ],
+  "RightHand_End": [
+   -0.314,
+   0.334,
+   0.918
+  ],
+  "LeftUpLeg": [
+   0.157,
+   0.206,
+   0.887
+  ],
+  "LeftLeg": [
+   0.122,
+   -0.08,
+   0.516
+  ],
+  "LeftFoot": [
+   0.115,
+   -0.059,
+   0.055
+  ],
+  "LeftToeBase": [
+   0.143,
+   -0.234,
+   -0.036
+  ],
+  "LeftToe_End": [
+   0.115,
+   -0.318,
+   0.006
+  ],
+  "RightUpLeg": [
+   -0.066,
+   0.241,
+   0.887
+  ],
+  "RightLeg": [
+   -0.094,
+   0.185,
+   0.418
+  ],
+  "RightFoot": [
+   -0.136,
+   0.472,
+   0.062
+  ],
+  "RightToeBase": [
+   -0.136,
+   0.297,
+   -0.036
+  ],
+  "RightToe_End": [
+   -0.108,
+   0.213,
+   -0.008
+  ]
+ },
+ "props": [
+  {
+   "name": "sword",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.3,
+      0.36,
+      1.12
+     ],
+     [
+      -0.297,
+      0.325,
+      1.0
+     ]
+    ],
+    [
+     [
+      -0.297,
+      0.325,
+      1.0
+     ],
+     [
+      -0.129,
+      -0.5,
+      0.215
+     ]
+    ]
+   ],
+   "radius": 0.06
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 50,
+   "dy": 30
+  }
+ },
+ "shatter": {
+  "start": 3,
+  "chunks": 45,
+  "burst": 0.3,
+  "up": 0.2,
+  "spin": 4,
+  "solid": true
+ },
+ "propAimResidual": {
+  "bones": [
+   "RightHand"
+  ]
+ },
+ "bonePile": {
+  "spread": 0.8,
+  "heapHeight": 0.22,
+  "tumble": 80,
+  "standProp": {
+   "segment": [
+    [
+     -0.297,
+     0.325,
+     1.0
+    ],
+    [
+     -0.129,
+     -0.5,
+     0.215
+    ]
+   ],
+   "radius": 0.08,
+   "at": [
+    -0.15,
+    -0.1
+   ],
+   "lean": 12
+  }
+ },
+ "extensions": [
+  "necropolis_propaim",
+  "necropolis_bonepile"
+ ],
+ "glbPatch": {
+  "reason": "authenticity lane-A (necropolis) 2026-10-10: keyRotations (half offset, applied twice) from the DEF beats: Idle sword arm holds its f0 hang (it swung the blade up level f2-f4); Hitted doubles over (spine/hips crouch) and flings the sword back behind f1-f2, recovers with the blade level forward f3 (was an upright flinch with a raised hand); Defence holds the blade vertical in front f3-f7 (it dropped point-down); AttackFront winds the blade up and back overhead f0-f2 and thrusts it level at the enemy with the arm extended f3; Death buckles into a kneel f1-f2 (was a straight-legged stand) and keyTranslations squash the shatter rubble at the break frame f3-f4 so the bones crumple down from the kneel into the heap.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_skeleton_pose_rot.json",
+    "sha256": "4962f16bae4156fbc50ae0b1d42480a15e0027abbdbd8d79af7f0fe88b48fff1"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_skeleton_pose_rot.json",
+    "sha256": "4962f16bae4156fbc50ae0b1d42480a15e0027abbdbd8d79af7f0fe88b48fff1"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_skeleton_pose_tr.json",
+    "sha256": "2d9ed0ec6c10baad0b97cee8411bc8ac19c63643e34643383fdb909b3dab54dc"
+   }
+  ]
+ }
+}

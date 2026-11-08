@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_fortress",
+  "sourceDoc": "docs/custom_faction_recommendations.md and docs/custom_faction_technical_implementation_proposals.md",
+  "mechanics": [
+    {
+      "id": "fortress.cage_of_warlords",
+      "surface": "building",
+      "sourceName": "Cage of Warlords",
+      "status": "substituted",
+      "reason": "Generated city row uses the proven hero Defense bonus path.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Bank"
+      ],
+      "forbiddenPlayerText": [
+        "permanent Defense once"
+      ]
+    },
+    {
+      "id": "fortress.field_infirmary",
+      "surface": "building",
+      "sourceName": "Field Infirmary",
+      "status": "substituted",
+      "reason": "Generated city row uses a modest Knowledge bonus because war-machine purchase support is untraced.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Treasury"
+      ],
+      "forbiddenPlayerText": [
+        "First Aid Tent",
+        "war machine"
+      ]
+    },
+    {
+      "id": "fortress.glyphs_of_fear",
+      "surface": "building",
+      "sourceName": "Glyphs of Fear",
+      "status": "substituted",
+      "reason": "Generated city row uses a native Morale bonus as a source-safe substitute.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Mother_Nature"
+      ],
+      "forbiddenPlayerText": [
+        "fear aura",
+        "enemy morale"
+      ]
+    },
+    {
+      "id": "fortress.hydra_marsh",
+      "surface": "building",
+      "sourceName": "Hydra Marsh",
+      "status": "substituted",
+      "reason": "Generated city row grants Hydra-line weekly growth in the former special-building slot.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Mycelium_Roots"
+      ],
+      "forbiddenPlayerText": [
+        "Blood Obelisk",
+        "exact source building"
+      ]
+    },
+    {
+      "id": "fortress.captains_quarters",
+      "surface": "building",
+      "sourceName": "Captain's Quarters",
+      "status": "exact",
+      "reason": "Generated city row grants +6 weekly growth to the Gnoll line.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot_level_2"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "fortress.hunting_grounds",
+      "surface": "faction_skill",
+      "sourceName": "Hunting Grounds",
+      "status": "substituted",
+      "reason": "Replaces Swamp Tactics. Battle wins fill a per-hero Trophy meter (cap 8/7/6 by rank) stored as native UntilNextWeek hero buffs homm3_fortress_trophies_{rank}_{n}; each buff carries the creeping enemy Initiative/Speed penalty, and filling the meter restocks this week's visited OnStartWeek event banks once (Homm3FortressHuntingGroundsHook). Skill ranks keep only the runtime-owned load shape plus Fortress subskills.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "skill_faction_homm3_fortress"
+      ],
+      "forbiddenPlayerText": [
+        "Swamp Tactics"
+      ],
+      "validationOwner": "validate_custom_faction_skill_row"
+    }
+  ]
+}

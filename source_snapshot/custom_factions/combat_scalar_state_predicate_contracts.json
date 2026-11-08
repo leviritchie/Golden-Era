@@ -1,0 +1,126 @@
+﻿{
+  "schemaVersion": 1,
+  "policy": {
+    "contractsMustMatchExactPredicateProfiles": true,
+    "combatScalarPredicatesAreNotAdjacentEventProof": true,
+    "heroSpellPowerRequiresDefendingHeroStatRead": true,
+    "positiveMoraleRequiresCurrentPositiveMoraleValue": true,
+    "woundedUnitRequiresLiveHealthThreshold": true,
+    "separateMagicDamageRequiresDistinctDamageComponent": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredRuntimeProof": [
+    "active law-owner side correlation proof",
+    "battle unit identity proof",
+    "hero stat owner and timing proof",
+    "current positive morale value proof",
+    "live health and max-health threshold proof",
+    "separate magic damage component proof",
+    "physical damage folding exclusion proof",
+    "post-mitigation damage ordering proof",
+    "turn-order or stat refresh safety proof",
+    "idempotent per-hit or per-refresh application proof"
+  ],
+  "contracts": {
+    "RequiresHeroSpellPower": {
+      "requiredEffectKeys": [
+        "tower.spell-power-as-counterattack-attack"
+      ],
+      "allowedFactions": [
+        "homm3_tower"
+      ],
+      "allowedFamilies": [
+        "CounterattackDoctrine"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must read the defending Tower hero's current spell power from the battle-authoritative hero stat source.",
+        "Spell power must be correlated to the defending side, counterattacking stack, active Tower law owner, and the counterattack damage formula injection point.",
+        "Static hero skill flags, spell-school access, or spell-cast events are only context and cannot stand in for the current spell power value."
+      ],
+      "forbiddenSubstitutes": [
+        "hero skill flag counted as hero spell power value",
+        "spell school access counted as hero spell power value",
+        "spell cast event counted as hero spell power value",
+        "attacking hero stat counted for defender reactive ward",
+        "Tower faction membership counted as spell power",
+        "counterattack event counted without defending hero stat proof",
+        "UI hero stat text counted without battle-authoritative stat source"
+      ]
+    },
+    "RequiresPositiveMoraleValue": {
+      "requiredEffectKeys": [
+        "castle.damage-per-positive-morale"
+      ],
+      "allowedFactions": [
+        "homm3_castle"
+      ],
+      "allowedFamilies": [
+        "TrainingDamage"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must read the current positive morale value for the Castle law-owner side or affected attacking stack at final damage calculation time.",
+        "Only positive morale magnitude may scale damage; the law must not mutate morale, consume morale rolls, or trigger from morale animations.",
+        "Morale value, affected attacker, damage calculation, and active Castle law owner must correlate before any damage scalar is applied."
+      ],
+      "forbiddenSubstitutes": [
+        "morale roll animation counted as positive morale value",
+        "morale trigger counted as positive morale value",
+        "morale distribution config counted as current morale value",
+        "luck value counted as morale value",
+        "non-positive morale counted as positive morale value",
+        "Castle faction membership counted as positive morale",
+        "damage event counted without current morale read proof"
+      ]
+    },
+    "RequiresWoundedUnit": {
+      "requiredEffectKeys": [
+        "stronghold.wounded-speed"
+      ],
+      "allowedFactions": [
+        "homm3_stronghold"
+      ],
+      "allowedFamilies": [
+        "TrainingDamage"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must identify a live wounded Stronghold unit from authoritative current health and max-health or equivalent threshold state.",
+        "Wounded state must be evaluated at a safe turn-order or round-refresh point before speed is mutated or refreshed.",
+        "Unit identity, wounded threshold, speed mutation target, and active Stronghold law owner must correlate, with cleanup when no longer wounded."
+      ],
+      "forbiddenSubstitutes": [
+        "damage taken event counted as wounded state without current health proof",
+        "low stack count counted as wounded health",
+        "dead or dying unit counted as wounded unit",
+        "damage animation counted as wounded state",
+        "Stronghold faction membership counted as wounded state",
+        "speed buff applied without turn-order refresh proof",
+        "stale health snapshot counted after heal or death cleanup"
+      ]
+    },
+    "RequiresSeparateMagicDamageSurface": {
+      "requiredEffectKeys": [
+        "conflux.extra-magic-damage-counterattack"
+      ],
+      "allowedFactions": [
+        "homm3_conflux"
+      ],
+      "allowedFamilies": [
+        "CounterattackDoctrine"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must prove a separate magic damage component or equivalent native magic-damage mutation surface for Conflux Elemental Backlash.",
+        "The magic component must be distinct from physical counterattack damage and must preserve resistance, immunity, damage type, and attribution semantics.",
+        "Counterattacking unit, target, magic damage component, active Conflux law owner, and final damage ordering must correlate before gameplay mutation."
+      ],
+      "forbiddenSubstitutes": [
+        "physical counterattack damage scalar counted as separate magic damage",
+        "folding magic damage into physical damage without explicit design compromise",
+        "spell school classification counted as magic damage surface",
+        "magic config row counted without runtime damage component proof",
+        "Conflux faction membership counted as magic damage surface",
+        "damage animation counted as magic damage component",
+        "counterattack event counted without separate damage attribution proof"
+      ]
+    }
+  }
+}

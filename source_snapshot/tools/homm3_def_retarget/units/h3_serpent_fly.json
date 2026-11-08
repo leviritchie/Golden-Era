@@ -1,0 +1,790 @@
+{
+ "unit": "h3_serpent_fly",
+ "joints": {
+  "Hips": [
+   0.004,
+   0.2,
+   1.28
+  ],
+  "Spine": [
+   0.004,
+   0.14,
+   1.27
+  ],
+  "Spine1": [
+   0.004,
+   0.09,
+   1.265
+  ],
+  "Spine2": [
+   0.004,
+   0.03,
+   1.258
+  ],
+  "Neck": [
+   0.004,
+   -0.06,
+   1.223
+  ],
+  "Head": [
+   0.004,
+   -0.231,
+   1.123
+  ],
+  "HeadTop_End": [
+   0.004,
+   -0.45,
+   0.9
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "fortress_rig"
+ ],
+ "fortress": {
+  "procedural": true,
+  "chains": [
+   {
+    "name": "Body",
+    "parent": "Hips",
+    "points": [
+     [
+      0.037,
+      0.257,
+      1.254
+     ],
+     [
+      0.004,
+      0.345,
+      1.13
+     ],
+     [
+      0.004,
+      0.366,
+      1.045
+     ],
+     [
+      0.004,
+      0.345,
+      0.938
+     ],
+     [
+      0.004,
+      0.217,
+      0.825
+     ],
+     [
+      0.004,
+      0.068,
+      0.725
+     ],
+     [
+      0.004,
+      -0.082,
+      0.619
+     ],
+     [
+      0.026,
+      -0.198,
+      0.47
+     ],
+     [
+      0.009,
+      -0.185,
+      0.32
+     ],
+     [
+      0.012,
+      -0.072,
+      0.242
+     ],
+     [
+      0.013,
+      0.116,
+      0.227
+     ],
+     [
+      0.001,
+      0.316,
+      0.197
+     ],
+     [
+      0.001,
+      0.403,
+      0.081
+     ],
+     [
+      0.004,
+      0.47,
+      0.01
+     ]
+    ],
+    "radius": 0.16,
+    "rootBlend": 0.08,
+    "ratio": 1.0
+   },
+   {
+    "name": "WingAL",
+    "parent": "Spine",
+    "points": [
+     [
+      0.089,
+      0.139,
+      1.322
+     ],
+     [
+      0.323,
+      0.089,
+      1.543
+     ],
+     [
+      0.551,
+      0.103,
+      1.699
+     ]
+    ],
+    "radius": 0.3,
+    "rootBlend": 0.04,
+    "ratio": 1.5
+   },
+   {
+    "name": "WingBL",
+    "parent": "Spine",
+    "points": [
+     [
+      0.103,
+      0.203,
+      1.315
+     ],
+     [
+      0.288,
+      0.245,
+      1.422
+     ],
+     [
+      0.444,
+      0.288,
+      1.521
+     ]
+    ],
+    "radius": 0.3,
+    "rootBlend": 0.04,
+    "ratio": 1.5
+   },
+   {
+    "name": "WingAR",
+    "parent": "Spine",
+    "points": [
+     [
+      -0.089,
+      0.139,
+      1.322
+     ],
+     [
+      -0.316,
+      0.139,
+      1.543
+     ],
+     [
+      -0.558,
+      0.181,
+      1.713
+     ]
+    ],
+    "radius": 0.3,
+    "rootBlend": 0.04,
+    "ratio": 1.5
+   },
+   {
+    "name": "WingBR",
+    "parent": "Spine",
+    "points": [
+     [
+      -0.096,
+      0.224,
+      1.315
+     ],
+     [
+      -0.274,
+      0.295,
+      1.422
+     ],
+     [
+      -0.416,
+      0.38,
+      1.507
+     ]
+    ],
+    "radius": 0.3,
+    "rootBlend": 0.04,
+    "ratio": 1.5
+   }
+  ],
+  "params": {
+   "neckDown": {
+    "type": "rot",
+    "bones": [
+     [
+      "Neck",
+      0.6
+     ],
+     [
+      "Head",
+      0.4
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     -45,
+     45
+    ],
+    "step": 10
+   },
+   "spinePitch": {
+    "type": "rot",
+    "bones": [
+     [
+      "Spine",
+      0.35
+     ],
+     [
+      "Spine1",
+      0.35
+     ],
+     [
+      "Spine2",
+      0.3
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     -30,
+     30
+    ],
+    "step": 8
+   },
+   "sideRoll": {
+    "type": "rot",
+    "bones": [
+     [
+      "Hips",
+      1.0
+     ]
+    ],
+    "axis": [
+     0,
+     1,
+     0
+    ],
+    "limit": [
+     -110,
+     110
+    ],
+    "step": 20
+   },
+   "fl": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "fr": {
+    "type": "rot",
+    "bones": [
+     [
+      "RightArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "hl": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftUpLeg",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "hr": {
+    "type": "rot",
+    "bones": [
+     [
+      "RightUpLeg",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "flk": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftForeArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "frk": {
+    "type": "rot",
+    "bones": [
+     [
+      "RightForeArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "hlk": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftLeg",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "hrk": {
+    "type": "rot",
+    "bones": [
+     [
+      "RightLeg",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "frontReach": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftArm",
+      1
+     ],
+     [
+      "RightArm",
+      1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     -70,
+     40
+    ],
+    "step": 12
+   },
+   "legFold": {
+    "type": "rot",
+    "bones": [
+     [
+      "LeftArm",
+      -0.5
+     ],
+     [
+      "RightArm",
+      -0.5
+     ],
+     [
+      "LeftForeArm",
+      1
+     ],
+     [
+      "RightForeArm",
+      1
+     ],
+     [
+      "LeftUpLeg",
+      0.6
+     ],
+     [
+      "RightUpLeg",
+      0.6
+     ],
+     [
+      "LeftLeg",
+      -1
+     ],
+     [
+      "RightLeg",
+      -1
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     0,
+     70
+    ],
+    "step": 15
+   },
+   "BodyCurl": {
+    "type": "chain",
+    "chain": "Body",
+    "mode": "curl",
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "limit": [
+     -70,
+     70
+    ],
+    "step": 15
+   },
+   "BodySide": {
+    "type": "chain",
+    "chain": "Body",
+    "mode": "curl",
+    "axis": [
+     0,
+     0,
+     1
+    ],
+    "limit": [
+     -50,
+     50
+    ],
+    "step": 12
+   },
+   "BodyStraight": {
+    "type": "chain",
+    "chain": "Body",
+    "mode": "straight",
+    "dir": [
+     0,
+     1,
+     -0.35
+    ],
+    "limit": [
+     0,
+     1
+    ],
+    "step": 0.25
+   },
+   "BodyWave": {
+    "type": "chain",
+    "chain": "Body",
+    "mode": "wave",
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "phaseParam": "BodyPhase",
+    "wavelength": 8,
+    "limit": [
+     -30,
+     30
+    ]
+   },
+   "BodyPhase": {
+    "type": "rot",
+    "bones": [],
+    "axis": [
+     1,
+     0,
+     0
+    ]
+   },
+   "wingFlap": {
+    "type": "rot",
+    "bones": [
+     [
+      "WingAL_00",
+      -1
+     ],
+     [
+      "WingBL_00",
+      -1
+     ],
+     [
+      "WingAR_00",
+      1
+     ],
+     [
+      "WingBR_00",
+      1
+     ]
+    ],
+    "axis": [
+     0,
+     1,
+     0
+    ],
+    "limit": [
+     -60,
+     60
+    ]
+   }
+  },
+  "anim": {
+   "*": {
+    "BodyPhase": {
+     "ramp": 360
+    }
+   },
+   "Idle": {
+    "BodyWave": {
+     "offset": 6
+    },
+    "lift": {
+     "sin": 0.025
+    },
+    "wingFlap": {
+     "sin": 36,
+     "cycles": 1,
+     "phase": 120,
+     "reason": "DEF-matched wing cycle (F:/claude_scratch/workerB/def_<unit>.png, def_sf_other.png): the DEF draws ONE slow beat per clip (Idle: up on frames 0 and 5, level 1-4; Move: down on 0/5, up on 2-3; Mouseover/Defence/AttackFront start up), not a per-frame buzz; the old alt 28 (+/- every DEF frame, 6 Hz) read as jitter 0.93 with a 45 deg range"
+    }
+   },
+   "Move": {
+    "BodyWave": {
+     "offset": 10
+    },
+    "BodyStraight": {
+     "offset": 0.6
+    },
+    "wingFlap": {
+     "sin": 36,
+     "cycles": 1,
+     "phase": -60
+    }
+   },
+   "MoveStart": {
+    "BodyStraight": {
+     "offset": 0.3
+    },
+    "wingFlap": {
+     "sin": 36,
+     "cycles": 1,
+     "phase": 90
+    }
+   },
+   "MoveEnd": {
+    "BodyStraight": {
+     "offset": 0.3
+    },
+    "wingFlap": {
+     "sin": 36,
+     "cycles": 1,
+     "phase": 90
+    }
+   },
+   "AttackFront": {
+    "neckDown": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.35,
+       -15
+      ],
+      [
+       0.6,
+       20
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "wingFlap": {
+     "sin": 36,
+     "cycles": 1,
+     "phase": 90
+    }
+   },
+   "Mouseover": {
+    "wingFlap": {
+     "sin": 36,
+     "cycles": 1,
+     "phase": 90
+    }
+   },
+   "Hitted": {
+    "wingFlap": {
+     "sin": 36,
+     "cycles": 1,
+     "phase": 90
+    }
+   },
+   "Defence": {
+    "wingFlap": {
+     "sin": 36,
+     "cycles": 1,
+     "phase": 90
+    }
+   },
+   "Death": {
+    "wingFlap": {
+     "sin": 36,
+     "cycles": 1,
+     "phase": 90
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "dx",
+    "dy",
+    "roll",
+    "neckDown",
+    "BodyCurl",
+    "BodySide",
+    "BodyStraight"
+   ],
+   "clips": {
+    "Death": [
+     "sideRoll"
+    ]
+   },
+   "limits": {
+    "dx": [
+     -80,
+     80
+    ],
+    "dy": [
+     -120,
+     120
+    ],
+    "roll": [
+     -45,
+     45
+    ]
+   },
+   "penalty": 0.0004,
+   "smooth": 0.0006,
+   "camYawSearch": [
+    0,
+    -15,
+    -30,
+    -45,
+    -60,
+    -75,
+    -90
+   ],
+   "scan": {
+    "roll": [
+     -45,
+     -30,
+     -15,
+     0,
+     15,
+     30,
+     45
+    ],
+    "TailStraight": [
+     0,
+     0.5,
+     1
+    ],
+    "BodyStraight": [
+     0,
+     0.5,
+     1
+    ],
+    "sideRoll": [
+     -90,
+     -45,
+     0,
+     45,
+     90
+    ]
+   }
+  },
+  "fillUnweighted": true,
+  "postReweight": []
+ },
+ "glbPatch": {
+  "reason": "DEF g12 attack: the serpent fly uncoils and lunges flat at the target (f3-f4), tail trailing straight behind, head forward at the target, then coils back (f5-f6); the capture lunged into depth with the head turned away from the target and the tail hanging",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_serpent_fly_thorax_weights.json",
+    "sha256": "7fb3c53f918983756c5a9e8e2732ef2d2a3b3d56392abc47eaec893baf47c47a",
+    "note": "thorax weight re-solve so the head turning to the target does not tear (wsolve.py)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_serpent_fly_pose_rot.json",
+    "sha256": "045a988557f739c596f446a04b9fc8003d36aa71c59f86de6fb4201405b35989",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_serpent_fly_pose_rot.json",
+    "sha256": "045a988557f739c596f446a04b9fc8003d36aa71c59f86de6fb4201405b35989",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_serpent_fly_pose_tr.json",
+    "sha256": "c518fbf948b14915bbf2eed88ab5c37aa4173c4218946c48e5468a5ee53396e0"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_serpent_fly_pose_tr.json",
+    "sha256": "c518fbf948b14915bbf2eed88ab5c37aa4173c4218946c48e5468a5ee53396e0"
+   }
+  ]
+ }
+}

@@ -1,0 +1,2441 @@
+{
+ "schema": "homm3_flier_table.v1",
+ "tool": "tools/homm3_def_retarget_delivery/build_homm3_flier_table.py",
+ "rule": "flier = the creature animating the unit's battle DEF has a FLYING bonus in its own definition",
+ "proof": "source/static: VCMI core + mod creature configs joined by DEF path",
+ "inputs": {
+  "inventory": "684a335772eb9142cd324f2f72b14c26f924ee2b9b8337a5b0f3c1072fd2e3d8",
+  "configs": {
+   "V:/Games/vcmi/config/creatures/castle.json": "6bb28aea3020963e72d32fe10e44d7361b0045fb8ba00e0a7aafc39fd95d60a0",
+   "V:/Games/vcmi/config/creatures/conflux.json": "41a555221ba20399fbf2975f2f8b37d82924aaceed1fcad3ad2767aa56abceae",
+   "V:/Games/vcmi/config/creatures/dungeon.json": "c929bf0e2038188125495a09474fe6ec6ac22a3b59d9dc47c9acc7d4572c303c",
+   "V:/Games/vcmi/config/creatures/fortress.json": "fa798a6662fbe12066ecf12471c4f895b5fb3e27e49fec3a09b2138b5b9dd4e4",
+   "V:/Games/vcmi/config/creatures/inferno.json": "89c41cba9810a24ae45eeafa4a4323cd5982b8dc5fb6c60311c44d6ae49a81d4",
+   "V:/Games/vcmi/config/creatures/necropolis.json": "cc6ce9b01aefd5b9979a70601e591a30d8113254d2ff8cf6592f2da21dd7329c",
+   "V:/Games/vcmi/config/creatures/neutral.json": "72dac40b7d9ded214ebdd28af02244a58ad066307b8d38cd3e14ab8d26084daf",
+   "V:/Games/vcmi/config/creatures/rampart.json": "d95863e66fe37d1437f2d471ca6680ce438baee22a4a3d9615f6e10e489a728a",
+   "V:/Games/vcmi/config/creatures/special.json": "5dff411d124fa6a06437fab2196c52901b4dc39ae8d566ebcb075c676ed03cdc",
+   "V:/Games/vcmi/config/creatures/stronghold.json": "bc4659533044903ca1ee9f9f6c92290f02e49e1b95407a6435371e264f5cb548",
+   "V:/Games/vcmi/config/creatures/tower.json": "9e6d37ecf289418866a75504d5b63d545117663d04594aa7772bec8115d9a227",
+   "vcmi/Mods/third-upgrades/content/config/creatures/castle/castle.json": "9c6577fc64758025fda744ac10fa4934d305345a5acc1df67c4c332cf1c58cdb",
+   "vcmi/Mods/third-upgrades/content/config/creatures/castle/lvl1Upg2.json": "4dfd36b735f13274886f3730ba7508895aa5372cdaecb6d069e603cccd9bf4b1",
+   "vcmi/Mods/third-upgrades/content/config/creatures/castle/lvl2Upg2.json": "e752fc648d06391661459f326b49320be814b6e8ae1343e138283e61d06651c2",
+   "vcmi/Mods/third-upgrades/content/config/creatures/castle/lvl3Upg2.json": "585ec07b29e98060aad12e8fde1f8507ae63311d2c6c3b0da41d73cfffda053d",
+   "vcmi/Mods/third-upgrades/content/config/creatures/castle/lvl4Upg2.json": "a74e3ca79fe8da3d590c811f34992ad458cd483e9321909391f44a8fc37551c9",
+   "vcmi/Mods/third-upgrades/content/config/creatures/castle/lvl5Upg2.json": "a4d1703523f28d5c988d0f3ee2f0a1319a3375cc227eb0ee1ba7eb2df7ad991b",
+   "vcmi/Mods/third-upgrades/content/config/creatures/castle/lvl6Upg2.json": "2ff364be03be5a073ac96141bde8c839d77cc173ca2b5362a24f3ec64b8427de",
+   "vcmi/Mods/third-upgrades/content/config/creatures/castle/lvl7Upg2.json": "7383a04a32229f261de8639a19ec12beb6f20d59a9fde8943aa03fdc16a2140b",
+   "vcmi/Mods/third-upgrades/content/config/creatures/conflux/conflux.json": "11dffc4fab8f80f57026a1c62fab6334a53e5d1df68b7246ff8c9070479151b5",
+   "vcmi/Mods/third-upgrades/content/config/creatures/conflux/lvl1Upg2.json": "2504847254e128ba9e41801f688f217ee94c871b41d437bb6084f2a19c9e682f",
+   "vcmi/Mods/third-upgrades/content/config/creatures/conflux/lvl2Upg2.json": "a479ca1be1e7a486602eeee4f7754c1d12b073dbcae18e3ae5af39eb62134b8e",
+   "vcmi/Mods/third-upgrades/content/config/creatures/conflux/lvl3Upg2.json": "a48bca698a5d57abb44a349106dd0df3ad7f46361a8da13db96da03852839814",
+   "vcmi/Mods/third-upgrades/content/config/creatures/conflux/lvl4Upg2.json": "d33821c84d76a8a0f1e184fab1866230bb13afd10f9187335937500232b9a10c",
+   "vcmi/Mods/third-upgrades/content/config/creatures/conflux/lvl5Upg2.json": "a5b30ebe7e0ccf6734e4ee81eafc07db1e3f53cf22641fc45880e08f4c119afe",
+   "vcmi/Mods/third-upgrades/content/config/creatures/conflux/lvl6Upg2.json": "6e8c74c6cfc001e3fb2c0b4f117acf156eaf0a4dc29f1b5e869a8fc0f0c51dc8",
+   "vcmi/Mods/third-upgrades/content/config/creatures/conflux/lvl7Upg2.json": "b0e88d845b646951fa1ecac2656a18906375d9769dd53a85e45f7e5fe36a3537",
+   "vcmi/Mods/third-upgrades/content/config/creatures/dungeon/dungeon.json": "1dc691af32862d9d5d44fa1814d5286693b2585b6a7d58c78e1775fa0fa2d501",
+   "vcmi/Mods/third-upgrades/content/config/creatures/dungeon/lvl1Upg2.json": "f026a23d96a6d7186654e9151adb2a73c7392edea25e9f8872d11313e79b47c6",
+   "vcmi/Mods/third-upgrades/content/config/creatures/dungeon/lvl2Upg2.json": "5e2afdb2aee3dd1c7417a13711f388aa80a197d1dfa7c41dcbee78f9063faca4",
+   "vcmi/Mods/third-upgrades/content/config/creatures/dungeon/lvl3Upg2.json": "114a5256bfbc2f888b42b8a9daf047d879d87b71a39284e57cb766e6c52ded6a",
+   "vcmi/Mods/third-upgrades/content/config/creatures/dungeon/lvl4Upg2.json": "08a23e9ba1397aa8fbd93121eae91d0d0c81574386169b08d9d694c5e855d975",
+   "vcmi/Mods/third-upgrades/content/config/creatures/dungeon/lvl5Upg2.json": "2426ad3fe3b51b61e7a692bc82610afdbc8a1d80b231c2e29d455c3c914b33fd",
+   "vcmi/Mods/third-upgrades/content/config/creatures/dungeon/lvl6Upg2.json": "01ff8bf7749cab446048a1d5afaa619fa7d458d8b5d68c1a032c3de6e68f20e5",
+   "vcmi/Mods/third-upgrades/content/config/creatures/dungeon/lvl7Upg2.json": "1f39bb042b3fcf1de7a235d16d939b4900a2acaed72de089d5f2807cf7aea6c7",
+   "vcmi/Mods/third-upgrades/content/config/creatures/fortress/fortress.json": "2b44d394f2cf3eb289640c7f7b114a2c11223979e7075aade755f51331e2f89b",
+   "vcmi/Mods/third-upgrades/content/config/creatures/fortress/lvl1Upg2.json": "bc8ff49120645e52ffa8b5185da4732c2033fd772c12696c9589dbfa5f4d7b8a",
+   "vcmi/Mods/third-upgrades/content/config/creatures/fortress/lvl2Upg2.json": "7ee2311221a7be9c99ebbca976adcf3746238a9eb6a64d59e7e21be03679a340",
+   "vcmi/Mods/third-upgrades/content/config/creatures/fortress/lvl3Upg2.json": "5e76c7d4a0ada33a5ef8cabde10d1ae932c59be0079045d37671ca163eecaa9b",
+   "vcmi/Mods/third-upgrades/content/config/creatures/fortress/lvl4Upg2.json": "35c2349881d6e79f9b8a819e125d755ecd8a2aa12f198484abae3c24149bcfb5",
+   "vcmi/Mods/third-upgrades/content/config/creatures/fortress/lvl5Upg2.json": "0715acd886aa2bae7c5d55c2e7b77365c24189289121293084a052a994d57c63",
+   "vcmi/Mods/third-upgrades/content/config/creatures/fortress/lvl6Upg2.json": "3065ad08c32fd1b8b7950a26c89cfc8269a0edd59c5d8a0c9720f97b9337ead0",
+   "vcmi/Mods/third-upgrades/content/config/creatures/fortress/lvl7Upg2.json": "08aad1e5cb3cf016e06bbf24c97dd6b8c8af5209e55866747c182edc0bf8e350",
+   "vcmi/Mods/third-upgrades/content/config/creatures/inferno/inferno.json": "762bc4e8c62368c1c07b7fd0f1ee935824df40d9d65f292d2280b5fe28aeb28b",
+   "vcmi/Mods/third-upgrades/content/config/creatures/inferno/lvl1Upg2.json": "4d34492bd83a0406be33e2539a4818c7e39348ff7d5c5577cea3cabbafc1a50d",
+   "vcmi/Mods/third-upgrades/content/config/creatures/inferno/lvl2Upg2.json": "759ffd76936659751ec69b1bc83cecd7a8bda72cd0c8f6882053d8ee4ceb53f9",
+   "vcmi/Mods/third-upgrades/content/config/creatures/inferno/lvl3Upg2.json": "b4062d55617bc8f9b73270031b6cab96de3ce7cd3c7100dc4442872437b6dbf4",
+   "vcmi/Mods/third-upgrades/content/config/creatures/inferno/lvl4Upg2.json": "965f9d5ce7529e73044fb13acb8d3c395c2388a30635cb3be4776b6d08bfde3c",
+   "vcmi/Mods/third-upgrades/content/config/creatures/inferno/lvl5Upg2.json": "6fce48daab8fc80b07a8355cdf8bc8d7ef51afa7fda33c93a6a9ad89ed725571",
+   "vcmi/Mods/third-upgrades/content/config/creatures/inferno/lvl6Upg2.json": "188774b840925fa10e9eeccc04ac031481ef5ef280e0dac50f885dfe56918f82",
+   "vcmi/Mods/third-upgrades/content/config/creatures/inferno/lvl7Upg2.json": "c489a7258679cc44f40ddce4c8d048ed58c481e42c155b128a3e7a7ff618661c",
+   "vcmi/Mods/third-upgrades/content/config/creatures/necropolis/lvl1Upg2.json": "07dca8eac6d68d8459a6b8a15c1d9ec5f68355bb8050dd41760525f89529aabb",
+   "vcmi/Mods/third-upgrades/content/config/creatures/necropolis/lvl2Upg2.json": "035c94ee9c4f80b85175ce48869d30efaf52e60185b5c858d0776375575e1437",
+   "vcmi/Mods/third-upgrades/content/config/creatures/necropolis/lvl3Upg2.json": "9b6d3a0d16c00b1df2c00e9549a9940f41cb1f0340800e1f338f8126449f3b5d",
+   "vcmi/Mods/third-upgrades/content/config/creatures/necropolis/lvl4Upg2.json": "b0655bd8e2651d9ae3efa3c64508623dde9bc7c111cfab1dac1cc69efa227a4f",
+   "vcmi/Mods/third-upgrades/content/config/creatures/necropolis/lvl5Upg2.json": "a3f785ac8fe4ea557a9140118d6d90c974a227412fb3bea33c4d3616caba7fd3",
+   "vcmi/Mods/third-upgrades/content/config/creatures/necropolis/lvl6Upg2.json": "39e01210769a9699c51a0973dcdeed6f6313948d53ee3af5ec0bbfe6b9c24379",
+   "vcmi/Mods/third-upgrades/content/config/creatures/necropolis/lvl7Upg2.json": "3126b10a5c90cfb92ac9c5d714e8789a42a4fbe2393741b44cd12e3ef80bea11",
+   "vcmi/Mods/third-upgrades/content/config/creatures/necropolis/necropolis.json": "8075a88dfac1669581cfaf6355f5e017b5e5b38cdd0c096f5b0ddf5172ee71c4",
+   "vcmi/Mods/third-upgrades/content/config/creatures/rampart/lvl1Upg2.json": "d414284e2ffbd40238631640804acf34e05f67c2626397aaedc59d0756433771",
+   "vcmi/Mods/third-upgrades/content/config/creatures/rampart/lvl2Upg2.json": "e9340d80a3b0a632245a9dab569027627844d37921ab2db6994e8764b4593d37",
+   "vcmi/Mods/third-upgrades/content/config/creatures/rampart/lvl3Upg2.json": "ccbdf414d268dcadc1a7833912fc7ed29c44832f43dd3772d7d13f8d1172882e",
+   "vcmi/Mods/third-upgrades/content/config/creatures/rampart/lvl4Upg2.json": "e80cd50b8c3af749ef0711f1cc20c922807c1b1993d1df292aa8f9289da984e9",
+   "vcmi/Mods/third-upgrades/content/config/creatures/rampart/lvl5Upg2.json": "8ef28663114603a738318b150301b53636937e993168f5ea5c070f7e5295e0af",
+   "vcmi/Mods/third-upgrades/content/config/creatures/rampart/lvl6Upg2.json": "88c9ec40695d82b513e06e6d34c13678724ee4ee094ac15db267d37b44e58a7c",
+   "vcmi/Mods/third-upgrades/content/config/creatures/rampart/lvl7Upg2.json": "6647066e627ab46220d3f5c096817c654f402095b77a0a8077873c90349e93c4",
+   "vcmi/Mods/third-upgrades/content/config/creatures/rampart/rampart.json": "580a74c4461020f51e5298a803f4d91636274dc707d39c25c101cdfd1f200660",
+   "vcmi/Mods/third-upgrades/content/config/creatures/stronghold/lvl1Upg2.json": "f490f84954c39d4063274356a69af1846f20a58f5fa2d778a992ab8e46215c32",
+   "vcmi/Mods/third-upgrades/content/config/creatures/stronghold/lvl2Upg2.json": "5b5bd81b83b256b782f8feee939cd6251485a846c0e6fecf8e3594a4b58e800d",
+   "vcmi/Mods/third-upgrades/content/config/creatures/stronghold/lvl3Upg2.json": "fec311492083e4d8300ac3e95c822c6bb4b00be4da4fae6db5a6f710f1b1c883",
+   "vcmi/Mods/third-upgrades/content/config/creatures/stronghold/lvl4Upg2.json": "9a1f0dbe44299c2b9e3da203a20675092068c6e092dc54384386eb51255e6e5e",
+   "vcmi/Mods/third-upgrades/content/config/creatures/stronghold/lvl5Upg2.json": "40d6b15321781ee3484126e5fdd38ce6f17b7c54cc73b2dd7763d0bc8b8808e4",
+   "vcmi/Mods/third-upgrades/content/config/creatures/stronghold/lvl6Upg2.json": "428761ff625b97ad3a69c4a4fa9bd738b1d22823c350d0c7a5474b661eb2f3b3",
+   "vcmi/Mods/third-upgrades/content/config/creatures/stronghold/lvl7Upg2.json": "b161ae501a8369bb8e86d5a8212a44c03e325cdb394e49be9fc8b36319f04a4d",
+   "vcmi/Mods/third-upgrades/content/config/creatures/stronghold/stronghold.json": "f91be61a937bdb7c52552963ca5613ca345628a5b38ebe5946911bdcb296a374",
+   "vcmi/Mods/third-upgrades/content/config/creatures/tower/lvl1Upg2.json": "7e6be6be6f95ea37d79e86b1c7bb5353e07aeb80d60c0fc7adadb4ab88dd02a1",
+   "vcmi/Mods/third-upgrades/content/config/creatures/tower/lvl2Upg2.json": "b067c006ee64fef77c4d7811dcee4137131779e4d6a0566dc3fda082a88e9808",
+   "vcmi/Mods/third-upgrades/content/config/creatures/tower/lvl3Upg2.json": "da5d1d1a28bc97792592f2af159f2bf01491b568548e080b72802d37f96b9406",
+   "vcmi/Mods/third-upgrades/content/config/creatures/tower/lvl4Upg2.json": "e34a5ebae696dbe412cf43817765dc8bb7a00f50c8399c6e1d9507b4902bc0b0",
+   "vcmi/Mods/third-upgrades/content/config/creatures/tower/lvl5Upg2.json": "4238e94afe67a0bc302f9bcec8e1101dbba9692245d28917f8fd57ae5c8679d1",
+   "vcmi/Mods/third-upgrades/content/config/creatures/tower/lvl6Upg2.json": "dbe9b6c6e7c35be57e9d3a03a51a076da8ae54f9575a5bb69c4e5b5e0c0c2183",
+   "vcmi/Mods/third-upgrades/content/config/creatures/tower/lvl7Upg2.json": "2dd232ad2ad7c4c8c1a43daf8d4c6ee80b9f64cae03a08af00b835f76f54b7e0",
+   "vcmi/Mods/third-upgrades/content/config/creatures/tower/tower.json": "bdcb24209585c96cb21a24ff33a8c385398ee95d6dab2e8a45afca06083e3faf",
+   "vcmi/Mods/third-upgrades/Mods/new-creatures/content/config/banks/dreadTower.json": "ca893740c2c820ef47d1c3e3b321448bc93fdc26c927fe3ab497f9ba31c59512",
+   "vcmi/Mods/third-upgrades/Mods/new-creatures/content/config/creatures/deathKnight.json": "24dd766a7116bfbdcf185162548d85a5aa5d90cd95b696ac75af8f214f0336b6",
+   "vcmi/Mods/third-upgrades/Mods/new-creatures/content/config/creatures/deathKnightUp.json": "ab58b6b259a62437356030aac1031abc6614039b3600d1fa57fb4e8bac65c411",
+   "vcmi/Mods/third-upgrades/Mods/new-creatures/content/config/dwellings/corruptedCathedral.json": "15b2966860a1eb442be2dce187638b1208cfdca804336a5b48f6c3354418ec0b",
+   "vcmi/Mods/third-upgrades/Mods/tow-comp/content/config/creatures/castle/royalPaladin.json": "68c2ebddcddd9fb51b1947896664ff14c5c57dca3c9a9ddf0bde0001f4376c3d",
+   "vcmi/Mods/third-upgrades/Mods/tow-comp/content/config/creatures/conflux/nobleTriton.json": "7c33ba6725c7bd403457ef3642156f1768f2feb31c8efd9fdde6a84b7e1c2720",
+   "vcmi/Mods/third-upgrades/Mods/tow-comp/content/config/creatures/dungeon/illithilich.json": "0266194c2cca0963a9eeb1fe3e363c9ba0fa24fa5395aa95ab2a1f29a9b5d0d1",
+   "vcmi/Mods/third-upgrades/Mods/tow-comp/content/config/creatures/fortress/trollHexer.json": "563707d39d0f1c3a2a918c4ad5d683620c883a13f88639791fa572973389a418",
+   "vcmi/Mods/third-upgrades/Mods/tow-comp/content/config/creatures/inferno/tempter.json": "465746b7f921e2cd41f91e4e0697dff428882962de4d10e8c4fb9d4ec93878e8",
+   "vcmi/Mods/third-upgrades/Mods/tow-comp/content/config/creatures/necropolis/spiritWerewolf.json": "649d9bf5d92a8a94389f5765fc8f8fadbe6d1ad23885ba5006bc675c2d25fd21",
+   "vcmi/Mods/third-upgrades/Mods/tow-comp/content/config/creatures/rampart/forestDryad.json": "c29597b59957b48da79e4bde48f88a477b15ab53b96c9474de6eddd929c7d998",
+   "vcmi/Mods/third-upgrades/Mods/tow-comp/content/config/creatures/stronghold/darkQuetzalcouatl.json": "544082b2830ace7a01040b551b1388227a06dd0399c79d4d2cfdecd30c4d4e2f",
+   "vcmi/Mods/third-upgrades/Mods/tow-comp/content/config/creatures/tower/silverDragonGolem.json": "8da8541802057507ce3a10e90127a781d405f7af7af3ce22903ed5c21c2148f5",
+   "vcmi/Mods/third-upgrades/Mods/wog-comp/content/config/creatures/centaurArcher.json": "17645e07a7004d3a7dfda22b872ffb3cf3bb2fbde1d29f66e061d40999ef3d83",
+   "vcmi/Mods/hota/mods/bulwark/content.zip": "7ec5e79bc9d984b742f5a21c7170a3b0c8190a8bc3f5c796b83f1915efd35509",
+   "vcmi/Mods/hota/mods/cannon/Content/config/hotaCannon/cannonCreature.json": "ea0421b8fd301de0deba87739f6b7bfbb7caa3e620f0fa93245bcbe22033ce15",
+   "vcmi/Mods/hota/mods/confluxVaultofAshes/content.zip": "98a5c4da5a444efb87a772cfa0d73e47a613d3caa2531725fe8523b66ea11716",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/ayssid.json": "da28d7f826c5c06013e9bead3a777782407cc54f39ae2e01add37912bcec4026",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/corsair.json": "b7dda46d9294529facf97d10a772eae9c942895f4d1f25e215e77346e08bf70a",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/crewmate.json": "cd3660460fdd6746dcde9380e6cf40b86fc5dd4bd90ccaf0cfc74f24c138c46b",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/haspid.json": "ed90b5d4d7bc3e453f43a06a8ff13216f879b6519dbdcda47c3c4f016c37d598",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/nix.json": "f9801cdfdd18452c97450ee5b97e0b3ceb058c80a6b3b3634f8059455577c2bc",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/nixWarrior.json": "9e94a78f7facd412db9124646d082bf88e9b2c5869c8818bf07de2f9b7c7ef3a",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/nymph.json": "269da53ed7c54d4f7d595fe9291a91c08a6b7aa1b3d120f1f7bafd7c45a4c278",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/oceanid.json": "0a5e29d466e65c9de838c02bd889960a80878673f51a46604745572496aa2097",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/pirate.json": "021b2b09f4600b42434a3d05ae5025f7890feb342c79cdf3cf397e2058620a43",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/seaWitch.json": "75e259cfa067067e39d748120cdbb8461a8a5cc3f1c079529674500eea57979e",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/seadog.json": "24e75932b53fbaa599efa026b9670c7d063a61046677839f8d26db699afe76af",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/seaman.json": "9dcf6ca86353e941f7278f7d2183788cab51595c8657c81d3cef18c810099e99",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/seaserpent.json": "46307af0e5feb898d21a6ae565cbf36c8786241f405b952b4b0ab967e7faa6c5",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/sorceress.json": "c8b7da0e1493d28302716ac71937412ad181c2c6fe5ae8f99a4a51449c91b9a8",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/stackExperience.json": "69b988e669e1b2f72edaf6e99863bf63c69623ea3cab809bcdebd5b33d2e70d8",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/stormbird.json": "fdafb5715bf2935823f2ba93b83d65aff9c2df41cfb8b1207626b206176fcf87",
+   "vcmi/Mods/hota/mods/cove/Content/config/hota/cove/creatures/wiki.json": "89975e28eee5b3033f5a3eebbadc5f1926fe320e457c6aae2fda02578dd42027",
+   "vcmi/Mods/hota/mods/factory/content.zip": "d4327927083c5d9d744c8aaeea94028564204b03891140e6c79977400e922353",
+   "vcmi/Mods/hota/mods/gameBalance/mods/creatures/content.zip": "2ed41040b4e2b03812ba7b728ffaf74259586d0c633b599b52ca4870bd04fd99",
+   "vcmi/Mods/hota/mods/gameBalance/mods/objects/content.zip": "4d6329f98e2bffd082c89e472f6ab21e59dea91ed9797efa29082236e704ba18",
+   "vcmi/Mods/hota/mods/heroes3DataPatch/content.zip": "fa394172ca1bab09c418699ff40ff8e3646b9772bae7d1f1d344a419625e5480",
+   "vcmi/Mods/hota/mods/neutralCreatures/content.zip": "ff1c8d7d66320f9601931cf9cd1d93ac1495d74222998cb8ee967dbd61b46850",
+   "vcmi/Mods/hota/mods/newGraphics/Content/config/hota/newGraphics/castle/newCreatureAnimations.json": "86adb6b019c0ee0f1c64d53c1b157a258f0698b680846559e2d2a82b10849a30",
+   "vcmi/Mods/hota/mods/newGraphics/Content/config/hota/newGraphics/conflux/newCreatureAnimations.json": "7cbcaf2fef875d02331275649f74b1ca9493d586b5c2d0f34923a65d36f3dd84",
+   "vcmi/Mods/hota/mods/newGraphics/Content/config/hota/newGraphics/dungeon/newCreatureAnimations.json": "43d1a01713e75f40aa4070aaac30f5de4ac2f180f0fa9351c771a1fc5e75f997",
+   "vcmi/Mods/hota/mods/newGraphics/Content/config/hota/newGraphics/fortress/newCreatureAnimations.json": "5ea05709626b8f5bb6090e57e90de700e4c7a991b03aca03501bc7d36994239c",
+   "vcmi/Mods/hota/mods/newGraphics/Content/config/hota/newGraphics/inferno/newCreatureAnimations.json": "5a6c3cfb16acb810eadedd0bf7565d8553a3df115d4c9dd7c1987247ca3229a7",
+   "vcmi/Mods/hota/mods/newGraphics/Content/config/hota/newGraphics/necropolis/newCreatureAnimations.json": "10d6924556439b8e8b8e4eb6ce0c2a4507aec7aaa80a829f4582c87736d567d4",
+   "vcmi/Mods/hota/mods/newGraphics/Content/config/hota/newGraphics/neutrals/newCreatureAnimations.json": "baa766c83be69badc6d7e31407a620a2196135a81692768eb4e4819b474f1f04",
+   "vcmi/Mods/hota/mods/newGraphics/Content/config/hota/newGraphics/rampart/newCreatureAnimations.json": "02f19a4ae275da5e33ec7b9d71a357731fe449958f24a99566cd02eb31ff2e77",
+   "vcmi/Mods/hota/mods/newGraphics/Content/config/hota/newGraphics/stronghold/newCreatureAnimations.json": "70dedb0cfa255dc248b5061e4211ef4a14204959df6480398d81622e1caf0f0b",
+   "vcmi/Mods/hota/mods/newGraphics/Content/config/hota/newGraphics/tower/newCreatureAnimations.json": "e4974e7ee6a99b81748dcedbdf683fd16833d2bd4737c78634316d5c81bdb368",
+   "vcmi/Mods/tears-of-ashan/content.zip": "336861fe300ffe54da5d6080d3abc99a947b3ca02a82abbb158433d5fc70c6e3",
+   "vcmi/Mods/tears-of-ashan/mods/toa-ashan-sounds/content.zip": "dc90d87dd57f62ee4ff7fd23ce0fd26e9887189cf83437acd2df6213c250cc46"
+  }
+ },
+ "counts": {
+  "units": 277,
+  "fliers": 81,
+  "walkers": 196,
+  "unresolved": 0
+ },
+ "unresolved": [],
+ "units": {
+  "h3_air_elemental": {
+   "def": "H3sprite.lod:CAELEM.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:airElemental"
+   ]
+  },
+  "h3_amalek": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/inferno/battle/lvl2Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:amalekAU"
+   ]
+  },
+  "h3_ancient_behemoth": {
+   "def": "H3sprite.lod:CABEHE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:ancientBehemoth"
+   ]
+  },
+  "h3_angel": {
+   "def": "H3sprite.lod:CANGEL.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:angel"
+   ]
+  },
+  "h3_arch_demon": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/inferno/battle/lvl7Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:archDemonAU"
+   ],
+   "flyingSubtypes": [
+    "movementTeleporting"
+   ]
+  },
+  "h3_arch_devil": {
+   "def": "H3sprite.lod:CADEVL.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:archDevil"
+   ],
+   "flyingSubtypes": [
+    "movementTeleporting"
+   ]
+  },
+  "h3_archangel": {
+   "def": "H3sprite.lod:CRANGL.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:archangel"
+   ]
+  },
+  "h3_archer": {
+   "def": "H3sprite.lod:CLCBOW.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:archer",
+    "core:arrowTower"
+   ]
+  },
+  "h3_armadillo_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CBLWARM.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:bellwetherArmadillo"
+   ]
+  },
+  "h3_astral_elemental": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/conflux/battle/lvl6Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:astralElementalAU"
+   ]
+  },
+  "h3_automaton_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CHAUTO2.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:sentinelAutomaton"
+   ]
+  },
+  "h3_azure_dragon": {
+   "def": "H3sprite.lod:CaDrgn.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:azureDragon"
+   ]
+  },
+  "h3_banshee": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/necropolis/battle/lvl3Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:bansheeAU"
+   ]
+  },
+  "h3_basilisk": {
+   "def": "H3sprite.lod:CBASIL.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:basilisk"
+   ]
+  },
+  "h3_basilisk_flamespitter": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/fortress/battle/lvl4Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:basiliskFlamespitterAU"
+   ]
+  },
+  "h3_battle_dwarf": {
+   "def": "H3sprite.lod:CBDWAR.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:battleDwarf"
+   ]
+  },
+  "h3_battle_griffin": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/castle/battle/lvl3Alt.json",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:battleGriffinAU"
+   ]
+  },
+  "h3_battle_mage": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/tower/battle/lvl4Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:battleMageAU"
+   ]
+  },
+  "h3_behemoth": {
+   "def": "H3sprite.lod:CYBEHE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:behemoth"
+   ]
+  },
+  "h3_beholder": {
+   "def": "H3sprite.lod:CBEHOL.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:beholder"
+   ]
+  },
+  "h3_black_dragon": {
+   "def": "H3sprite.lod:CBDRGN.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:blackDragon"
+   ]
+  },
+  "h3_black_knight": {
+   "def": "H3sprite.lod:CBKNIG.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:blackKnight"
+   ]
+  },
+  "h3_boar": {
+   "def": "H3sprite.lod:Cboar.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:boar"
+   ]
+  },
+  "h3_boar_rider": {
+   "def": null,
+   "flier": false,
+   "status": "manual",
+   "evidence": "retarget lab unit without an inventory row: the Stronghold boar rider (orc on a boar, stronghold_quadruped rig), the same creature as inventory row toa_boar_rider, which matches core:boar (no FLYING); a boar walks"
+  },
+  "h3_bone_dragon": {
+   "def": "H3sprite.lod:CNDRGN.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:boneDragon"
+   ]
+  },
+  "h3_cannon": {
+   "def": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/cannon/homm3_cove/sprites/hota/battle/SMCANNON.DEF",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:cannon"
+   ]
+  },
+  "h3_cavalier": {
+   "def": "H3sprite.lod:CCAVLR.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:cavalier"
+   ]
+  },
+  "h3_centaur": {
+   "def": "H3sprite.lod:CCENTR.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:centaur"
+   ]
+  },
+  "h3_centaur_captain": {
+   "def": "H3sprite.lod:CECENT.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:centaurCaptain"
+   ]
+  },
+  "h3_centaur_ranger": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/rampart/battle/lvl1Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:centaurRangerAU"
+   ]
+  },
+  "h3_cerberus": {
+   "def": "H3sprite.lod:CCERBU.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:cerberus"
+   ]
+  },
+  "h3_champion": {
+   "def": "H3sprite.lod:CCHAMP.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:champion"
+   ]
+  },
+  "h3_chaos_hydra": {
+   "def": "H3sprite.lod:CCHYDR.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:chaosHydra"
+   ]
+  },
+  "h3_chimera": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/dungeon/battle/lvl6Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:chimeraAU"
+   ],
+   "flyingSubtypes": [
+    "movementFlying"
+   ]
+  },
+  "h3_chthonian": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/dungeon/battle/lvl1Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:chthonianAU"
+   ],
+   "flyingSubtypes": [
+    "movementTeleporting"
+   ]
+  },
+  "h3_colossus": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/tower/battle/lvl7Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:colossusAU"
+   ]
+  },
+  "h3_corrosive_gorgon": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/fortress/battle/lvl5Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:corrosiveGorgonAU"
+   ]
+  },
+  "h3_couatl_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/COUATR.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "hota:crimsonCouatl"
+   ]
+  },
+  "h3_crossbowman": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/castle/battle/lvl2Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:crossbowmanAU"
+   ]
+  },
+  "h3_crusader": {
+   "def": "H3sprite.lod:CCRUSD.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:crusader"
+   ]
+  },
+  "h3_crystal_dragon": {
+   "def": "H3sprite.lod:Ccdrgn.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:crystalDragon"
+   ]
+  },
+  "h3_cyclops": {
+   "def": "H3sprite.lod:CCYCLR.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:cyclop"
+   ]
+  },
+  "h3_cyclops_king": {
+   "def": "H3sprite.lod:CcyclLor.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:cyclopKing"
+   ]
+  },
+  "h3_damsel_fly": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/fortress/battle/lvl3Alt.json",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:damselFlyAU"
+   ]
+  },
+  "h3_demon": {
+   "def": "H3sprite.lod:COHDEM.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:demon"
+   ]
+  },
+  "h3_dendroid_guard": {
+   "def": "H3sprite.lod:CTREE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:dendroidGuard"
+   ]
+  },
+  "h3_dendroid_shaman": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/rampart/battle/lvl5Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:dendroidShamanAU"
+   ]
+  },
+  "h3_dendroid_soldier": {
+   "def": "H3sprite.lod:CBTREE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:dendroidSoldier"
+   ]
+  },
+  "h3_devil": {
+   "def": "H3sprite.lod:CDEVIL.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:devil"
+   ],
+   "flyingSubtypes": [
+    "movementTeleporting"
+   ]
+  },
+  "h3_diamond_dragon": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/rampart/battle/lvl7Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:diamondDragonAU"
+   ],
+   "flyingSubtypes": [
+    "movementFlying"
+   ]
+  },
+  "h3_dragon_fly": {
+   "def": "H3sprite.lod:CDRFIR.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:fireDragonFly"
+   ]
+  },
+  "h3_dread_knight": {
+   "def": "H3sprite.lod:CBLORD.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:dreadKnight"
+   ]
+  },
+  "h3_dreadnought_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CJUGGER.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:hotaJuggernaut"
+   ]
+  },
+  "h3_dreadtaur": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/necropolis/battle/lvl6Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:dreadtaurAU"
+   ]
+  },
+  "h3_dwarf": {
+   "def": "H3sprite.lod:CDWARF.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:dwarf"
+   ]
+  },
+  "h3_dwarf_battlerager": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/rampart/battle/lvl2Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:dwarfBattleragerAU"
+   ]
+  },
+  "h3_earth_elemental": {
+   "def": "H3sprite.lod:CEELEM.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:earthElemental"
+   ]
+  },
+  "h3_efreet_sufi": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/inferno/battle/lvl6Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:efreetSufiAU"
+   ],
+   "flyingSubtypes": [
+    "movementFlying"
+   ]
+  },
+  "h3_efreet_sultan": {
+   "def": "H3sprite.lod:CEFRES.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:efreetSultan"
+   ]
+  },
+  "h3_efreeti": {
+   "def": "H3sprite.lod:CEFREE.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:efreet"
+   ]
+  },
+  "h3_elemental_gargoyle": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/tower/battle/lvl2Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:elementalGargoyleAU"
+   ]
+  },
+  "h3_elf_wardancer": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/rampart/battle/lvl3Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:elfWardancerAU"
+   ]
+  },
+  "h3_enchanter": {
+   "def": "H3sprite.lod:Cench.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:enchanter"
+   ]
+  },
+  "h3_energy_elemental": {
+   "def": "H3sprite.lod:CNRG.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:energyElemental"
+   ]
+  },
+  "h3_evil_eye": {
+   "def": "H3sprite.lod:CEVEYE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:evilEye"
+   ]
+  },
+  "h3_faerie": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/conflux/battle/lvl1Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:faerieAU"
+   ],
+   "flyingSubtypes": [
+    "movementFlying"
+   ]
+  },
+  "h3_faerie_dragon": {
+   "def": "H3sprite.lod:Cfdrgn.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:fairieDragon"
+   ]
+  },
+  "h3_familiar": {
+   "def": "H3sprite.lod:CFAMIL.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:familiar"
+   ]
+  },
+  "h3_fangarm": {
+   "def": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sprites/hota/creatures/battle/CFANGARM.DEF",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "hota:fangarm"
+   ]
+  },
+  "h3_fargazer": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/dungeon/battle/lvl3Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:fargazerAU"
+   ]
+  },
+  "h3_fire_elemental": {
+   "def": "H3sprite.lod:CFELEM.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:fireElemental"
+   ]
+  },
+  "h3_fire_hound": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/inferno/battle/lvl3Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:fireHoundAU"
+   ]
+  },
+  "h3_firebird": {
+   "def": "H3sprite.lod:CFBIRD.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:firebird"
+   ]
+  },
+  "h3_frost_elemental": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/conflux/battle/lvl3Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:frostElementalAU"
+   ]
+  },
+  "h3_fury": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/dungeon/battle/lvl2Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:furyAU"
+   ]
+  },
+  "h3_gargoyle": {
+   "def": "H3sprite.lod:CGARGO.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:stoneGargoyle"
+   ]
+  },
+  "h3_gargoyle_upg": {
+   "def": "H3sprite.lod:COGARG.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:obsidianGargoyle"
+   ]
+  },
+  "h3_genie": {
+   "def": "H3sprite.lod:CGENIE.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:genie"
+   ]
+  },
+  "h3_genie_upg": {
+   "def": "H3sprite.lod:CSULTA.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:masterGenie"
+   ]
+  },
+  "h3_genie_vizier": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/tower/battle/lvl5Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:genieVizierAU"
+   ],
+   "flyingSubtypes": [
+    "movementFlying"
+   ]
+  },
+  "h3_ghost_dragon": {
+   "def": "H3sprite.lod:CHDRGN.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:ghostDragon"
+   ]
+  },
+  "h3_giant": {
+   "def": "H3sprite.lod:CLTITA.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:giant"
+   ]
+  },
+  "h3_giant_upg": {
+   "def": "H3sprite.lod:CGTITA.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:titan"
+   ]
+  },
+  "h3_glaivier": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/castle/battle/lvl1Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:glaivierAU"
+   ]
+  },
+  "h3_gnoll": {
+   "def": "H3sprite.lod:CGNOLL.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:gnoll"
+   ]
+  },
+  "h3_gnoll_marauder": {
+   "def": "H3sprite.lod:CGNOLM.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:gnollMarauder"
+   ]
+  },
+  "h3_gnoll_shaman": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/fortress/battle/lvl1Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:gnollShamanAU"
+   ]
+  },
+  "h3_goblin": {
+   "def": "H3sprite.lod:CGOBLI.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:goblin"
+   ]
+  },
+  "h3_gog": {
+   "def": "H3sprite.lod:CGOG.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:gog"
+   ]
+  },
+  "h3_gold_dragon": {
+   "def": "H3sprite.lod:CDDRAG.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:goldDragon"
+   ]
+  },
+  "h3_gold_pegasus": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/rampart/battle/lvl4Alt.json",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:goldPegasusAU"
+   ]
+  },
+  "h3_golem": {
+   "def": "H3sprite.lod:CSGOLE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:ironGolem"
+   ]
+  },
+  "h3_golem_upg": {
+   "def": "H3sprite.lod:CIGOLE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:stoneGolem"
+   ]
+  },
+  "h3_gore_demon": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/inferno/battle/lvl4Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:goreDemonAU"
+   ]
+  },
+  "h3_gorgon": {
+   "def": "H3sprite.lod:CCGORG.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:gorgon"
+   ]
+  },
+  "h3_grand_elf": {
+   "def": "H3sprite.lod:CGRELF.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:grandElf"
+   ]
+  },
+  "h3_greater_basilisk": {
+   "def": "H3sprite.lod:CGBASI.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:greaterBasilisk"
+   ]
+  },
+  "h3_green_dragon": {
+   "def": "H3sprite.lod:CGDRAG.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:greenDragon"
+   ]
+  },
+  "h3_gremlin": {
+   "def": "H3sprite.lod:CGREMA.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:gremlin"
+   ]
+  },
+  "h3_gremlin_mechanic": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/tower/battle/lvl1Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:gremlinMechanicAU"
+   ]
+  },
+  "h3_gremlin_upg": {
+   "def": "H3sprite.lod:CGREMM.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:masterGremlin"
+   ]
+  },
+  "h3_griffin": {
+   "def": "H3sprite.lod:CGRIFF.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:griffin"
+   ]
+  },
+  "h3_guardsman": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/castle/battle/lvl4Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:guardsmanAU"
+   ]
+  },
+  "h3_gunslinger_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CBOUNTHT.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:bountyHunter"
+   ]
+  },
+  "h3_halberdier": {
+   "def": "H3sprite.lod:CHALBD.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:halberdier"
+   ]
+  },
+  "h3_halfling_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CHALFB.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:halflingGrenadier"
+   ]
+  },
+  "h3_harpy": {
+   "def": "H3sprite.lod:CHARPY.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:harpy"
+   ]
+  },
+  "h3_harpy_hag": {
+   "def": "H3sprite.lod:CHARPH.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:harpyHag"
+   ]
+  },
+  "h3_hell_hound": {
+   "def": "H3sprite.lod:CHHOUN.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:hellHound"
+   ]
+  },
+  "h3_hobgoblin": {
+   "def": "H3sprite.lod:CHGOBL.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:hobgoblin"
+   ]
+  },
+  "h3_horned_demon": {
+   "def": "H3sprite.lod:CTHDEM.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:hornedDemon"
+   ]
+  },
+  "h3_hurricane_elemental": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/conflux/battle/lvl2Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:hurricaneElementalAU"
+   ],
+   "flyingSubtypes": [
+    "movementFlying"
+   ]
+  },
+  "h3_hydra": {
+   "def": "H3sprite.lod:CHYDRA.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:hydra"
+   ]
+  },
+  "h3_ice_elemental": {
+   "def": "H3sprite.lod:CICEE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:iceElemental"
+   ]
+  },
+  "h3_imp": {
+   "def": "H3sprite.lod:CIMP.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:imp"
+   ]
+  },
+  "h3_infernal_troglodyte": {
+   "def": "H3sprite.lod:CITROG.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:infernalTroglodyte"
+   ]
+  },
+  "h3_jotunn_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CWJOTN.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:jotunnWarlord"
+   ]
+  },
+  "h3_justiciar": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/castle/battle/lvl6Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:justiciarAU"
+   ]
+  },
+  "h3_kobold_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CFKOBLD.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:koboldForeman"
+   ]
+  },
+  "h3_lava_elemental": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/conflux/battle/lvl5Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:lavaElementalAU"
+   ]
+  },
+  "h3_leprechaun": {
+   "def": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sprites/hota/creatures/battle/CLEPRCHN.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:leprechaun"
+   ]
+  },
+  "h3_lich": {
+   "def": "H3sprite.lod:CLICH.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:lich"
+   ]
+  },
+  "h3_lich_master": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/necropolis/battle/lvl5Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:lichMasterAU"
+   ]
+  },
+  "h3_lizard_assassin": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/fortress/battle/lvl2Alt.json",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:lizardAssassinAU"
+   ],
+   "flyingSubtypes": [
+    "movementTeleporting"
+   ]
+  },
+  "h3_lizard_warrior": {
+   "def": "H3sprite.lod:CALIZA.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:lizardWarrior"
+   ]
+  },
+  "h3_lizardman": {
+   "def": "H3sprite.lod:CPLIZA.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:lizardman"
+   ]
+  },
+  "h3_mage": {
+   "def": "H3sprite.lod:CMAGE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:mage"
+   ]
+  },
+  "h3_mage_upg": {
+   "def": "H3sprite.lod:CAMAGE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:archMage"
+   ]
+  },
+  "h3_magic_elemental": {
+   "def": "H3sprite.lod:CMAGEL.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:magicElemental"
+   ]
+  },
+  "h3_magma_elemental": {
+   "def": "H3sprite.lod:CSTONE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:magmaElemental"
+   ]
+  },
+  "h3_magnetic_golem": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/tower/battle/lvl3Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:magneticGolemAU"
+   ]
+  },
+  "h3_magog": {
+   "def": "H3sprite.lod:CMAGOG.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:magog"
+   ]
+  },
+  "h3_mammoth_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CWMMTH.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:warMammoth"
+   ]
+  },
+  "h3_manticore": {
+   "def": "H3sprite.lod:CMCORE.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:manticore"
+   ]
+  },
+  "h3_marksman": {
+   "def": "H3sprite.lod:CHCBOW.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:marksman"
+   ]
+  },
+  "h3_mechanic_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CENGINE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:hotaEngineer"
+   ]
+  },
+  "h3_medusa": {
+   "def": "H3sprite.lod:CMEDUS.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:medusa"
+   ]
+  },
+  "h3_medusa_queen": {
+   "def": "H3sprite.lod:CMEDUQ.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:medusaQueen"
+   ]
+  },
+  "h3_medusa_warrior": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/dungeon/battle/lvl4Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:medusaWarriorAU"
+   ]
+  },
+  "h3_mighty_gorgon": {
+   "def": "H3sprite.lod:CBGOG.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:mightyGorgon"
+   ]
+  },
+  "h3_minotaur": {
+   "def": "H3sprite.lod:CMINOT.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:minotaur"
+   ]
+  },
+  "h3_minotaur_king": {
+   "def": "H3sprite.lod:CMINOK.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:minotaurKing"
+   ]
+  },
+  "h3_minotaur_taskmaster": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/dungeon/battle/lvl5Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:minotaurTaskmasterAU"
+   ]
+  },
+  "h3_monk": {
+   "def": "H3sprite.lod:CMONKK.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:monk"
+   ]
+  },
+  "h3_mountain_ram_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CARHAR.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:argali"
+   ]
+  },
+  "h3_mummy": {
+   "def": "H3sprite.lod:Cmummy.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:mummy"
+   ]
+  },
+  "h3_naga": {
+   "def": "H3sprite.lod:CNAGA.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:naga"
+   ]
+  },
+  "h3_naga_rani": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/tower/battle/lvl6Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:nagaRaniAU"
+   ]
+  },
+  "h3_naga_upg": {
+   "def": "H3sprite.lod:CNAGAG.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:nagaQueen"
+   ]
+  },
+  "h3_neutral_halfling": {
+   "def": "H3sprite.lod:CHalf.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:halfling"
+   ]
+  },
+  "h3_nomad": {
+   "def": "H3sprite.lod:Cnomad.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:nomad"
+   ]
+  },
+  "h3_ogre": {
+   "def": "H3sprite.lod:COGRE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:ogre"
+   ]
+  },
+  "h3_ogre_mage": {
+   "def": "H3sprite.lod:COGMAG.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:ogreMage"
+   ]
+  },
+  "h3_orc": {
+   "def": "H3sprite.lod:CORC.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:orc"
+   ]
+  },
+  "h3_orc_chieftain": {
+   "def": "H3sprite.lod:CORCCH.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:orcChieftain"
+   ]
+  },
+  "h3_paokai": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/fortress/battle/lvl6Alt.json",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:paokaiAU"
+   ],
+   "flyingSubtypes": [
+    "movementFlying"
+   ]
+  },
+  "h3_peasant": {
+   "def": "H3sprite.lod:Cpeas.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:peasant"
+   ]
+  },
+  "h3_pegasus": {
+   "def": "H3sprite.lod:CPEGAS.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:pegasus"
+   ]
+  },
+  "h3_phoenix": {
+   "def": "H3sprite.lod:CPHX.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:phoenix"
+   ]
+  },
+  "h3_pikeman": {
+   "def": "H3sprite.lod:CPKMAN.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:pikeman"
+   ]
+  },
+  "h3_pit_fiend": {
+   "def": "H3sprite.lod:CPFIEN.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:pitFiend"
+   ]
+  },
+  "h3_pit_lord": {
+   "def": "H3sprite.lod:CPFOE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:pitLord"
+   ]
+  },
+  "h3_pit_spawn": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/inferno/battle/lvl5Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:pitSpawnAU"
+   ]
+  },
+  "h3_pixie": {
+   "def": "H3sprite.lod:CPIXIE.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:pixie"
+   ]
+  },
+  "h3_plasma_elemental": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/conflux/battle/lvl4Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:plasmaElementalAU"
+   ]
+  },
+  "h3_power_lich": {
+   "def": "H3sprite.lod:CPLICH.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:powerLich"
+   ]
+  },
+  "h3_priest": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/castle/battle/lvl5Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:priestAU"
+   ]
+  },
+  "h3_pristine_unicorn": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/rampart/battle/lvl6Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:pristineUnicornAU"
+   ]
+  },
+  "h3_psychic_elemental": {
+   "def": "H3sprite.lod:CPSYEL.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:psychicElemental"
+   ]
+  },
+  "h3_red_dragon": {
+   "def": "H3sprite.lod:CRDRGN.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:redDragon"
+   ]
+  },
+  "h3_roc": {
+   "def": "H3sprite.lod:CROC.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:roc"
+   ]
+  },
+  "h3_rogue": {
+   "def": "H3sprite.lod:Crogue.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:rogue"
+   ]
+  },
+  "h3_rot_zombie": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/necropolis/battle/lvl2Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:rotZombieAU"
+   ]
+  },
+  "h3_royal_griffin": {
+   "def": "H3sprite.lod:CRGRIF.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:royalGriffin"
+   ]
+  },
+  "h3_ruinous_hydra": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/fortress/battle/lvl7Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:ruinousHydraAU"
+   ]
+  },
+  "h3_rust_dragon": {
+   "def": "H3sprite.lod:CRsDgn.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:rustDragon"
+   ]
+  },
+  "h3_sacred_phoenix": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/conflux/battle/lvl7Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:sacredPhoenixAU"
+   ]
+  },
+  "h3_sandworm_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/COLGOIX.json",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "hota:olgoiKhorkhoi"
+   ],
+   "flyingSubtypes": [
+    "movementTeleporting"
+   ]
+  },
+  "h3_satyr": {
+   "def": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sprites/hota/creatures/battle/CSATYR.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:satyr"
+   ]
+  },
+  "h3_scorpicore": {
+   "def": "H3sprite.lod:CCMCOR.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:scorpicore"
+   ]
+  },
+  "h3_seraph": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/castle/battle/lvl7Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:seraphAU"
+   ]
+  },
+  "h3_serpent_fly": {
+   "def": "H3sprite.lod:CDRFLY.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:serpentFly"
+   ]
+  },
+  "h3_shadow_dragon": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/dungeon/battle/lvl7Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:shadowDragonAU"
+   ],
+   "flyingSubtypes": [
+    "movementFlying"
+   ]
+  },
+  "h3_shaman_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CGSHMN.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:greatShaman"
+   ]
+  },
+  "h3_sharpshooter": {
+   "def": "H3sprite.lod:Csharp.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:sharpshooter"
+   ]
+  },
+  "h3_silver_pegasus": {
+   "def": "H3sprite.lod:CAPEGS.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:silverPegasus"
+   ]
+  },
+  "h3_skeleton": {
+   "def": "H3sprite.lod:CSKELE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:skeleton"
+   ]
+  },
+  "h3_skeleton_archer": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/necropolis/battle/lvl1Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:skeletonArcherAU"
+   ]
+  },
+  "h3_skeleton_warrior": {
+   "def": "H3sprite.lod:CWSKEL.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:skeletonWarrior"
+   ]
+  },
+  "h3_snow_elf_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CSTLF.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:steelElf"
+   ]
+  },
+  "h3_spectral_dragon": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/necropolis/battle/lvl7Alt.json",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:spectralDragonAU"
+   ],
+   "flyingSubtypes": [
+    "movementFlying"
+   ]
+  },
+  "h3_sprite": {
+   "def": "H3sprite.lod:CSPRITE.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:sprite"
+   ]
+  },
+  "h3_steel_golem": {
+   "def": "vcmi/Mods/hota/mods/neutralCreatures/content.zip!sprites/hota/creatures/battle/cstlgole.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:steelGolem"
+   ]
+  },
+  "h3_storm_elemental": {
+   "def": "H3sprite.lod:CSTORM.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:stormElemental"
+   ]
+  },
+  "h3_swordsman": {
+   "def": "H3sprite.lod:CSWORD.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:swordsman"
+   ]
+  },
+  "h3_thunderbird": {
+   "def": "H3sprite.lod:CTBIRD.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:thunderbird"
+   ]
+  },
+  "h3_troglodyte": {
+   "def": "H3sprite.lod:CTROGL.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:troglodyte"
+   ]
+  },
+  "h3_troll": {
+   "def": "H3sprite.lod:Ctroll.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:troll"
+   ]
+  },
+  "h3_unicorn": {
+   "def": "H3sprite.lod:CUNICO.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:unicorn"
+   ]
+  },
+  "h3_vampire": {
+   "def": "H3sprite.lod:CVAMP.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:vampire"
+   ]
+  },
+  "h3_vampire_lord": {
+   "def": "H3sprite.lod:CNOSFE.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:vampireLord"
+   ]
+  },
+  "h3_vampire_prince": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/necropolis/battle/lvl4Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:vampirePrinceAU"
+   ],
+   "flyingSubtypes": [
+    "movementFlying"
+   ]
+  },
+  "h3_vermin": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/inferno/battle/lvl1Alt.json",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:verminAU"
+   ],
+   "flyingSubtypes": [
+    "movementFlying"
+   ]
+  },
+  "h3_walking_dead": {
+   "def": "H3sprite.lod:CZOMBI.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:walkingDead"
+   ]
+  },
+  "h3_war_unicorn": {
+   "def": "H3sprite.lod:CWUNIC.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:warUnicorn"
+   ]
+  },
+  "h3_water_elemental": {
+   "def": "H3sprite.lod:CWELEM.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:waterElemental"
+   ]
+  },
+  "h3_wight": {
+   "def": "H3sprite.lod:CWIGHT.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:wight"
+   ]
+  },
+  "h3_wolf_raider": {
+   "def": "H3sprite.lod:CUWLFR.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:hobgoblinWolfRider"
+   ]
+  },
+  "h3_wolf_rider": {
+   "def": "H3sprite.lod:CBWLFR.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:goblinWolfRider"
+   ]
+  },
+  "h3_wood_elf": {
+   "def": "H3sprite.lod:CELF.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:woodElf"
+   ]
+  },
+  "h3_wraith": {
+   "def": "H3sprite.lod:CWRAIT.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:wraith"
+   ]
+  },
+  "h3_wyvern": {
+   "def": "H3sprite.lod:CWYVER.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:wyvern"
+   ]
+  },
+  "h3_wyvern_monarch": {
+   "def": "H3sprite.lod:CWYVMN.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:wyvernMonarch"
+   ]
+  },
+  "h3_yeti_upg_alt": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CMSPIR.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:yetiRunemaster"
+   ]
+  },
+  "h3_zealot": {
+   "def": "H3sprite.lod:CZEALT.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:zealot"
+   ]
+  },
+  "h3_zombie": {
+   "def": "H3sprite.lod:CZOMLO.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:zombieLord"
+   ]
+  },
+  "hota_bulwark_argali": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CARHAR.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:argali"
+   ]
+  },
+  "hota_bulwark_great_shaman": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CGSHMN.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:greatShaman"
+   ]
+  },
+  "hota_bulwark_jotunn": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CJOTUN.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:jotunn"
+   ]
+  },
+  "hota_bulwark_jotunn_warlord": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CWJOTN.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:jotunnWarlord"
+   ]
+  },
+  "hota_bulwark_kobold": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CKOBOLD.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:kobold"
+   ]
+  },
+  "hota_bulwark_kobold_foreman": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CFKOBLD.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:koboldForeman"
+   ]
+  },
+  "hota_bulwark_mammoth": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CMAMMTH.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:mammoth"
+   ]
+  },
+  "hota_bulwark_mountain_ram": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CMTRAM.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:mountainRam"
+   ]
+  },
+  "hota_bulwark_shaman": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CSHAMN.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:shaman"
+   ]
+  },
+  "hota_bulwark_snow_elf": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CSELF.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:snowElf"
+   ]
+  },
+  "hota_bulwark_steel_elf": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CSTLF.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:steelElf"
+   ]
+  },
+  "hota_bulwark_war_mammoth": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CWMMTH.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:warMammoth"
+   ]
+  },
+  "hota_bulwark_yeti": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CYETI.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:yeti"
+   ]
+  },
+  "hota_bulwark_yeti_runemaster": {
+   "def": "vcmi/Mods/hota/mods/bulwark/content.zip!sprites/hota/bulwark/creatures/battle/CMSPIR.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:yetiRunemaster"
+   ]
+  },
+  "hota_cove_abyss_serpent": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/cove/battle/lvl7Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:abyssSerpentAU"
+   ]
+  },
+  "hota_cove_ayssid": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CASSIDUP.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "hota:ayssid"
+   ]
+  },
+  "hota_cove_corsair": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CCORSAIR.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:corsair"
+   ]
+  },
+  "hota_cove_crew_mate": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CSEADOG.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:crewmate"
+   ]
+  },
+  "hota_cove_halcyon": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/cove/battle/lvl4Alt.json",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:halcyonAU"
+   ]
+  },
+  "hota_cove_haspid": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CHASPID.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:haspid"
+   ]
+  },
+  "hota_cove_nereid": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/cove/battle/lvl1Alt.json",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:nereidAU"
+   ],
+   "flyingSubtypes": [
+    "movementTeleporting"
+   ]
+  },
+  "hota_cove_nix": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CNIX.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:nix"
+   ]
+  },
+  "hota_cove_nix_praetorian": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/cove/battle/lvl6Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:nixPraetorianAU"
+   ]
+  },
+  "hota_cove_nix_warrior": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CNIXWARR.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:nixWarrior"
+   ]
+  },
+  "hota_cove_nymph": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CNIMPH.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "hota:nymph"
+   ],
+   "flyingSubtypes": [
+    "movementTeleporting"
+   ]
+  },
+  "hota_cove_oceanid": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/COCEANID.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "hota:oceanid"
+   ],
+   "flyingSubtypes": [
+    "movementTeleporting"
+   ]
+  },
+  "hota_cove_pirate": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CPIRATE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:pirate"
+   ]
+  },
+  "hota_cove_sea_dog": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CPR3UP.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:seadog"
+   ]
+  },
+  "hota_cove_sea_serpent": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CSERPENT.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:seaserpent"
+   ]
+  },
+  "hota_cove_sea_witch": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CPRIEST.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:seaWitch"
+   ]
+  },
+  "hota_cove_seaman": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CSWASH.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:seaman"
+   ]
+  },
+  "hota_cove_sorceress": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CSORCSS.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:sorceress"
+   ]
+  },
+  "hota_cove_stormbird": {
+   "def": "vcmi/Mods/hota/mods/cove/Content/sprites/hota/cove/creatures/battle/CASSID.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "hota:stormbird"
+   ]
+  },
+  "hota_cove_swashbuckler": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/cove/battle/lvl2Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:swashbucklerAU"
+   ]
+  },
+  "hota_cove_tidecaller": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/cove/battle/lvl5Alt.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:tidecallerAU"
+   ]
+  },
+  "hota_factory_armadillo": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CARMADL.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:armadillo"
+   ]
+  },
+  "hota_factory_automaton": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CAUTO2.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:automaton"
+   ]
+  },
+  "hota_factory_bellwether_armadillo": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CBLWARM.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:bellwetherArmadillo"
+   ]
+  },
+  "hota_factory_bounty_hunter": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CBOUNTHT.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:bountyHunter"
+   ]
+  },
+  "hota_factory_couatl": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/COUATL.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "hota:hotaCouatl"
+   ]
+  },
+  "hota_factory_crimson_couatl": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/COUATR.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "hota:crimsonCouatl"
+   ]
+  },
+  "hota_factory_dreadnought": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CDREAD.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:hotaDreadnought"
+   ]
+  },
+  "hota_factory_engineer": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CENGINE.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:hotaEngineer"
+   ]
+  },
+  "hota_factory_gunslinger": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CGNSLING.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:gunslinger"
+   ]
+  },
+  "hota_factory_halfling": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CHalf.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:halfling"
+   ]
+  },
+  "hota_factory_halfling_grenadier": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CHALFB.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:halflingGrenadier"
+   ]
+  },
+  "hota_factory_juggernaut": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CJUGGER.json",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:hotaJuggernaut"
+   ]
+  },
+  "hota_factory_mechanic": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CMECHAN.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:hotaMechanic"
+   ]
+  },
+  "hota_factory_olgoi_khorkhoi": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/COLGOIX.json",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "hota:olgoiKhorkhoi"
+   ],
+   "flyingSubtypes": [
+    "movementTeleporting"
+   ]
+  },
+  "hota_factory_sandworm": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CSANDWX.json",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "hota:sandworm"
+   ],
+   "flyingSubtypes": [
+    "movementTeleporting"
+   ]
+  },
+  "hota_factory_sandworm_larva": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CLARVA.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:sandwormLarva"
+   ]
+  },
+  "hota_factory_sentinel_automaton": {
+   "def": "vcmi/Mods/hota/mods/factory/content.zip!sprites/hota/factory/creatures/battle/CHAUTO2.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "hota:sentinelAutomaton"
+   ]
+  },
+  "sample_creature": {
+   "def": "H3sprite.lod:cpkman.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:pikeman"
+   ]
+  },
+  "temple_griffon": {
+   "def": "H3sprite.lod:CGRIFF.DEF",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "core:griffin"
+   ]
+  },
+  "toa_blood_eyed_cyclops": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/stronghold/battle/lvl6Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:bloodEyedCyclopsAU"
+   ]
+  },
+  "toa_boar_rider": {
+   "def": "H3sprite.lod:Cboar.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "core:boar"
+   ]
+  },
+  "toa_ghost_behemoth": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/stronghold/battle/lvl7Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:ghostBehemothAU"
+   ],
+   "flyingSubtypes": [
+    "movementFlying"
+   ]
+  },
+  "toa_goblin_trapper": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/stronghold/battle/lvl1Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:goblinTrapperAU"
+   ]
+  },
+  "toa_ogre_brute": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/stronghold/battle/lvl4Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:ogreBruteAU"
+   ]
+  },
+  "toa_orc_berserker": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/stronghold/battle/lvl3Alt.def",
+   "flier": false,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:orcBerserkerAU"
+   ]
+  },
+  "toa_shahrokh": {
+   "def": "vcmi/Mods/tears-of-ashan/content.zip!sprites/creatures/stronghold/battle/lvl5Alt.def",
+   "flier": true,
+   "status": "matched",
+   "creatures": [
+    "tears-of-ashan:shahrokhAU"
+   ],
+   "flyingSubtypes": [
+    "movementFlying"
+   ]
+  }
+ }
+}

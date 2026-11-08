@@ -1,0 +1,31 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "neutral_sharpshooter_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/neutral_sharpshooter_slice_v1",
+  "note": "Neutral sharpshooter: Meshy-7 mesh; hand-keyed body (no capture exists for CSHARP and no shipped capture has its actions) with the longbow rigid on the left hand, cape held on hips/spine and arms split from the cape (fortress_rig reweight + armSplit); faces -60 fleet bind; all 10 clips | look-only re-freeze on the ground-stamped canonical (fleet_rebuild ground_glb apply; coordinator item 3) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_sharpshooter 0.4081. | Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_sharpshooter 0.4081.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_sharpshooter",
+      "gameSid": "h3_sharpshooter",
+      "bundleName": "custom_units_neutral_h3_sharpshooter",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "fb4fd51bdd0a9bf198a03d7c4739ec9f986a7047ab280d78605fac7fc4ab492f",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "e4c2485218b2f6272c14380579286e3b4b4b22cd32bc6ba417566485cab6d1fd",
+        "idleRetimedGlbSha256": "2117c1038c656ff65278f56a06d0f4c8c0359a36ea6555a3f7c9a28fbacff32c",
+        "vfxManifestSha256": "874f575478add17b0b0acafd6ffd5112ef3ca556d90f3a9025fb4ab2e1ab35c9",
+        "specSha256": "9f3999422d57cb2e7ee55968ef6e0544133cf5ef7366b93116c6a4a1b6fb8ef7",
+        "basecolorSha256": "c992d0e56ae1944a3d8471a9ce36dd083542e542e3a438794f3c9a98f77a4936"
+      }
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "unitSid": "h3_hobgoblin",
+  "clipId": "attack_g11",
+  "fps": 12,
+  "masterGlb": "artifacts/hobgoblin_attack_pose_pipeline/master/hobgoblin_apose_mace_attach.glb",
+  "outputDir": "artifacts/hobgoblin_attack_pose_pipeline/out_attack_g11_dwpose_painted_apose_mace",
+  "boneRoles": "artifacts/hobgoblin_attack_pose_pipeline/out_apose_mace_attach/bone_roles_apose_mace.json",
+  "cullDefSoftShadows": true,
+  "camera": {
+    "axis": "iso",
+    "isoAzimuthDeg": 40.0,
+    "isoElevationDeg": 30.0,
+    "distance": 3.0,
+    "orthoScale": 2.6,
+    "rootYawDeg": 0.0
+  },
+  "frames": [
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_00.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_01.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_02.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_03.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_04.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_05.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_06.png"},
+    {"path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames_painted_g11/frame_07.png"}
+  ],
+  "method_kind": "keypoints",
+  "method": "dwpose_reprojection",
+  "dwpose": {
+    "longEdges": [1024, 1280],
+    "backgrounds": [[0, 0, 0], [32, 32, 32], [180, 180, 180]],
+    "minMeanBodyScore": 0.14,
+    "minVisibleJoints": 8,
+    "scoreThr": 0.18,
+    "requireVerticalLegs": false
+  },
+  "temporalSmooth": {
+    "enabled": true,
+    "method": "score_weighted_gaussian",
+    "window": 5,
+    "sigma": 1.25,
+    "scorePower": 1.0
+  },
+  "optimizeBones": [
+    "Hips",
+    "Spine02",
+    "Spine01",
+    "Spine",
+    "neck",
+    "Head",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+    "LeftUpLeg",
+    "LeftLeg",
+    "RightUpLeg",
+    "RightLeg"
+  ],
+  "keypointOptimizer": {
+    "boundRad": 0.95,
+    "restWeight": 0.06,
+    "motionWeight": 0.18,
+    "maxStepRad": 0.7,
+    "localRestarts": true,
+    "identityFrame0": true,
+    "maxiter": 180,
+    "maxfev": 650,
+    "restarts": 5,
+    "seed": 7
+  },
+  "notes": "Correct AI hook: Meshy A-pose+mace Mixamo master driven by DWPose on painted g11 frames (not AABB joints from per-frame Meshy meshes)."
+}

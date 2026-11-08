@@ -1,0 +1,218 @@
+﻿{
+    "schemaVersion":  1,
+    "purpose":  "Source-authored predicate contract for custom law profiles that depend on spell school, exact spell SID, or spell taxonomy classification. This is classification evidence only; it does not prove cooldown mutation, cast-gate behavior, spellbook UI sync, spell target identity, or successful cast ordering.",
+    "validationState":  "source-prepared-runtime-unproven",
+    "policy":  {
+                   "effectKeysMustMatchRequiresSpellSchoolOrSidClassProfiles":  true,
+                   "genericSchoolMatchForbidden":  true,
+                   "sidSubstringInferenceForbidden":  true,
+                   "classificationMustUseSpellTaxonomyContracts":  true,
+                   "companionPredicateGapsRemainExplicit":  true,
+                   "runtimeProofStillRequiredForGameplay":  true
+               },
+    "requiredStaticEvidence":  [
+                                   "custom_factions/spell_taxonomy_contracts.json",
+                                   "exact spell SID evidence or exact taxonomy predicate group",
+                                   "effect-key-specific included tag list",
+                                   "effect-key-specific forbidden substitute list"
+                               ],
+    "requiredRuntimeProof":  [
+                                 "spell pool identity proof",
+                                 "spell cooldown read/mutation ordering proof",
+                                 "cast-gate and UI synchronization proof",
+                                 "caster law-owner correlation proof when classification is used in runtime"
+                             ],
+    "contracts":  {
+                      "castle.daylight-support-cooldown":  {
+                                                               "classificationGroups":  [
+                                                                                            "supportBlessingClassification"
+                                                                                        ],
+                                                               "requiredTags":  [
+                                                                                    "daylight",
+                                                                                    "support",
+                                                                                    "blessing",
+                                                                                    "cleanse",
+                                                                                    "heal",
+                                                                                    "defense",
+                                                                                    "protection"
+                                                                                ],
+                                                               "companionPredicates":  [
+                                                                                           "RequiresSupportBlessingClassification"
+                                                                                       ],
+                                                               "forbiddenSubstitutes":  [
+                                                                                            "any Day school spell",
+                                                                                            "any positive buff",
+                                                                                            "spell SID substring contains support",
+                                                                                            "cooldown preview"
+                                                                                        ],
+                                                               "notes":  "Castle cooldown classification must use exact support/blessing taxonomy; morale-specific support remains tracked by the companion predicate."
+                                                           },
+                      "conflux.elemental-family-cooldown":  {
+                                                                "classificationGroups":  [
+
+                                                                                         ],
+                                                                "requiredTags":  [
+                                                                                     "fire",
+                                                                                     "storm",
+                                                                                     "sea",
+                                                                                     "primal",
+                                                                                     "area",
+                                                                                     "damage"
+                                                                                 ],
+                                                                "companionPredicates":  [
+                                                                                            "RequiresElementalFamilyMapping"
+                                                                                        ],
+                                                                "forbiddenSubstitutes":  [
+                                                                                             "any Primal spell",
+                                                                                             "elemental name substring",
+                                                                                             "static army faction as elemental family",
+                                                                                             "cooldown preview"
+                                                                                         ],
+                                                                "notes":  "Conflux cooldown classification can use exact elemental spell tags only when paired with explicit elemental-family mapping."
+                                                            },
+                      "cove.movement-storm-sea-cooldown":  {
+                                                               "classificationGroups":  [
+                                                                                            "movementStormSeaClassification"
+                                                                                        ],
+                                                               "requiredTags":  [
+                                                                                    "control",
+                                                                                    "movement",
+                                                                                    "sea",
+                                                                                    "slow",
+                                                                                    "storm",
+                                                                                    "tide"
+                                                                                ],
+                                                               "companionPredicates":  [
+                                                                                           "RequiresMovementStormSeaClassification"
+                                                                                       ],
+                                                               "forbiddenSubstitutes":  [
+                                                                                            "any ranged spell",
+                                                                                            "any Space spell",
+                                                                                            "ocean travel mechanic",
+                                                                                            "spell SID substring contains sea",
+                                                                                            "cooldown preview"
+                                                                                        ],
+                                                               "notes":  "Cove cooldown classification must use exact movement/storm/sea-tide spell taxonomy and must not imply ocean travel mechanics."
+                                                           },
+                      "dungeon.night-curse-kill-cooldown":  {
+                                                                "classificationGroups":  [
+                                                                                             "nightCurseClassification"
+                                                                                         ],
+                                                                "requiredTags":  [
+                                                                                     "anti_heal",
+                                                                                     "control",
+                                                                                     "curse",
+                                                                                     "death",
+                                                                                     "decay",
+                                                                                     "disable",
+                                                                                     "night",
+                                                                                     "slow"
+                                                                                 ],
+                                                                "companionPredicates":  [
+                                                                                            "RequiresNightCurseClassification"
+                                                                                        ],
+                                                                "forbiddenSubstitutes":  [
+                                                                                             "any Night spell",
+                                                                                             "any negative status",
+                                                                                             "spell SID substring contains curse",
+                                                                                             "enemy kill without debuff/disable correlation",
+                                                                                             "cooldown preview"
+                                                                                         ],
+                                                                "notes":  "Dungeon cooldown classification must use exact Night curse/disable/decay tags and still requires kill/debuff correlation outside this contract."
+                                                            },
+                      "inferno.fire-gating-sacrifice-cooldown":  {
+                                                                     "classificationGroups":  [
+                                                                                                  "fireGatingSummonClassification"
+                                                                                              ],
+                                                                     "requiredTags":  [
+                                                                                          "fire",
+                                                                                          "summon",
+                                                                                          "primal"
+                                                                                      ],
+                                                                     "companionPredicates":  [
+                                                                                                 "RequiresSacrificeOrTemporaryLoss"
+                                                                                             ],
+                                                                     "forbiddenSubstitutes":  [
+                                                                                                  "any Primal spell",
+                                                                                                  "any damage spell",
+                                                                                                  "gating inferred from summon tag alone",
+                                                                                                  "spell SID substring contains fire",
+                                                                                                  "cooldown preview"
+                                                                                              ],
+                                                                     "notes":  "Inferno cooldown classification can use exact fire/summon tags, but gating and sacrifice identity remain companion runtime predicates."
+                                                                 },
+                      "necropolis.raise-drain-curse-corpse-cooldown":  {
+                                                                           "classificationGroups":  [
+                                                                                                        "nightCurseClassification"
+                                                                                                    ],
+                                                                           "requiredTags":  [
+                                                                                                "night",
+                                                                                                "curse",
+                                                                                                "death",
+                                                                                                "decay",
+                                                                                                "anti_heal"
+                                                                                            ],
+                                                                           "companionPredicates":  [
+                                                                                                       "RequiresCorpseConsumption"
+                                                                                                   ],
+                                                                           "forbiddenSubstitutes":  [
+                                                                                                        "any Night spell",
+                                                                                                        "any corpse count",
+                                                                                                        "raise/drain inferred from law name",
+                                                                                                        "spell SID substring contains corpse",
+                                                                                                        "cooldown preview"
+                                                                                                    ],
+                                                                           "notes":  "Necropolis cooldown classification can use exact Night/death/curse tags; corpse consumption and raise/drain semantics remain separate proof requirements."
+                                                                       },
+                      "rampart.nature-protection-cooldown":  {
+                                                                 "classificationGroups":  [
+                                                                                              "supportBlessingClassification"
+                                                                                          ],
+                                                                 "requiredTags":  [
+                                                                                      "primal",
+                                                                                      "protection",
+                                                                                      "cleanse",
+                                                                                      "heal",
+                                                                                      "defense",
+                                                                                      "support"
+                                                                                  ],
+                                                                 "companionPredicates":  [
+                                                                                             "RequiresAvengerMark"
+                                                                                         ],
+                                                                 "forbiddenSubstitutes":  [
+                                                                                              "any Primal spell",
+                                                                                              "any positive buff",
+                                                                                              "restoration inferred from law name",
+                                                                                              "parallel custom Avenger mark registry",
+                                                                                              "cooldown preview",
+                                                                                              "spell SID substring contains nature"
+                                                                                          ],
+                                                                 "notes":  "Rampart cooldown classification must use exact protection/cleanse/restoration-adjacent taxonomy; Avenger interactions remain companion predicates."
+                                                             },
+                      "tower.overclock-cooldown-and-cast-gate":  {
+                                                                     "classificationGroups":  [
+
+                                                                                              ],
+                                                                     "requiredTags":  [
+                                                                                          "space",
+                                                                                          "primal",
+                                                                                          "support",
+                                                                                          "damage",
+                                                                                          "area"
+                                                                                      ],
+                                                                     "companionPredicates":  [
+                                                                                                 "RequiresCastGateOverride",
+                                                                                                 "RequiresOverclockCredit"
+                                                                                             ],
+                                                                     "forbiddenSubstitutes":  [
+                                                                                                  "any Tower hero spell",
+                                                                                                  "any one-cooldown spell",
+                                                                                                  "spellbook open state",
+                                                                                                  "cooldown decrement alone",
+                                                                                                  "cooldown preview",
+                                                                                                  "spell SID substring contains overclock"
+                                                                                              ],
+                                                                     "notes":  "Tower overclock classification must use explicit spell tags or exact allowlists; overclock storage and cast-gate override remain separate runtime predicates."
+                                                                 }
+                  }
+}

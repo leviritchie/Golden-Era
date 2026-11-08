@@ -1,0 +1,49 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require Necropolis corpse or undead context without treating undead identity as active corpse availability. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresCorpseOrUndeadContextProfiles": true,
+    "necropolisOnly": true,
+    "moraleFamilyOnly": true,
+    "undeadIdentityIsNotCorpseAvailability": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedEffectKeyPrefixes": ["necropolis."],
+  "allowedFamilies": ["MoralePackage", "MoraleTrigger"],
+  "requiredRuntimeProof": [
+    "undead unit identity proof when undead context is used",
+    "corpse availability or corpse value proof when corpse context is used",
+    "enemy-side dread target proof",
+    "law-owner and affected-side correlation proof",
+    "friendly undead morale bonus exclusion proof",
+    "morale package or trigger ordering proof",
+    "corpse context cleanup or idempotence proof"
+  ],
+  "contracts": {
+    "necropolis.enemy-dread-corpse-package": {
+      "contextKinds": ["enemy-dread-corpse-or-undead-context", "morale-package-context"],
+      "companionPredicates": ["RequiresEnemyMoralePenalty"],
+      "forbiddenSubstitutes": [
+        "undead classification counted as corpse availability",
+        "friendly undead morale bonus counted as dread pressure",
+        "generic death event counted as corpse context",
+        "enemy morale penalty counted without corpse or undead context",
+        "display name or SID substring counted as corpse context"
+      ],
+      "notes": "Requires Necropolis corpse or undead context before Dread morale package behavior can pressure enemies; undead identity alone is not corpse availability and friendly undead morale bonuses are forbidden."
+    },
+    "necropolis.enemy-dread-and-corpse-value": {
+      "contextKinds": ["enemy-dread-corpse-or-undead-context", "morale-trigger-context"],
+      "companionPredicates": ["RequiresOpposingLawOwner"],
+      "forbiddenSubstitutes": [
+        "undead classification counted as corpse availability",
+        "friendly undead morale bonus counted as dread pressure",
+        "generic death event counted as corpse context",
+        "enemy morale penalty counted without corpse or undead context",
+        "display name or SID substring counted as corpse context"
+      ],
+      "notes": "Requires Necropolis corpse or undead context before Dread morale trigger value can apply to enemies; opposing owner proof is companion evidence, not corpse context."
+    }
+  }
+}

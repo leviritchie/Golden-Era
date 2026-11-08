@@ -1,0 +1,70 @@
+{
+  "unitSid": "h3_crusader",
+  "clipId": "move_g0_fixed_length_plant_only",
+  "fps": 12,
+  "masterGlb": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/out_meshy_t2_idle_f0/rigged/idle_f0_rigged_meshy6_bridgefix_hand.glb",
+  "outputDir": "V:\\Games\\Olden Era Playtest Tweak\\artifacts\\crusader_pose_pipeline\\out_fit\\g00_move_fixed_length_plant_only",
+  "boneRoles": "V:/Games/Olden Era Playtest Tweak/tools/homm3_silhouette_pose_fit/bone_roles_crusader_meshy_t2.json",
+  "cullDefSoftShadows": true,
+  "camera": {
+    "axis": "iso",
+    "isoAzimuthDeg": 40.0,
+    "isoElevationDeg": 30.0,
+    "distance": 3.0,
+    "orthoScale": 4.2,
+    "rootYawDeg": 0.0
+  },
+  "frames": [
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_00.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_01.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_02.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_03.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_04.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_05.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_06.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_07.png"
+    }
+  ],
+  "method_kind": "keypoints",
+  "method": "sprite_landmarks_reprojection",
+  "poseSource": "sprite_landmarks",
+  "poseSolver": "fixed_length_ik",
+  "fixedLengthIk": {
+    "frame0CameraRegister": true,
+    "groundAnchor": {
+      "mode": "lowest_foot",
+      "bones": [
+        "LeftFoot",
+        "RightFoot",
+        "LeftToeBase",
+        "RightToeBase"
+      ]
+    },
+    "postSmoothSigma": 0.0
+  },
+  "absoluteRefine": {
+    "enabled": false
+  },
+  "absoluteMatch": {
+    "paletteNormalize": true,
+    "alphaThr": 8.0,
+    "failClosedMaxChromaMae": 18.0,
+    "failClosedMaxRgbMae": 45.0
+  },
+  "notes": "plant-only diagnostic: lowest_foot + head/arm refine, no euler smooth"
+}

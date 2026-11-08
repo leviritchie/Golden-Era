@@ -1,0 +1,208 @@
+{
+  "unitSid": "h3_crusader",
+  "clipId": "move_g0_authored_minimal",
+  "fps": 12,
+  "masterGlb": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/out_meshy_t2_idle_f0/rigged/idle_f0_rigged_meshy6_bridgefix_hand.glb",
+  "outputDir": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/out_fit/g00_move_authored_minimal",
+  "boneRoles": "V:/Games/Olden Era Playtest Tweak/tools/homm3_silhouette_pose_fit/bone_roles_crusader_meshy_t2_minimal_follow.json",
+  "cullDefSoftShadows": true,
+  "camera": {
+    "axis": "iso",
+    "isoAzimuthDeg": 40.0,
+    "isoElevationDeg": 30.0,
+    "distance": 3.0,
+    "orthoScale": 4.2,
+    "rootYawDeg": 0.0
+  },
+  "frames": [
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_00.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_01.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_02.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_03.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_04.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_05.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_06.png"
+    },
+    {
+      "path": "V:/Games/Olden Era Playtest Tweak/artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g00_move/frame_07.png"
+    }
+  ],
+  "method_kind": "keypoints",
+  "method": "sprite_visual_match_contract",
+  "poseSource": "sprite_landmarks",
+  "poseSolver": "marker_ik",
+  "markerIk": {
+    "identityFrame0": false,
+    "frame0RootAlign": true,
+    "frame0CameraRegister": false,
+    "lockGrabVertsAfterFrame0": true,
+    "tipPickMode": "farthest_from_hand",
+    "midlineBias": {
+      "enabled": false
+    },
+    "boneEulerAxesSchedule": [
+      {
+        "frameFrom": 0,
+        "frameTo": 7,
+        "path": "tools/homm3_silhouette_pose_fit/bone_dofs_crusader_move_g0_authored_minimal.json"
+      }
+    ],
+    "armChain": [
+      "RightShoulder",
+      "RightArm",
+      "RightForeArm",
+      "RightHand"
+    ],
+    "minSkinWeight": 0.2,
+    "preferPrevVertSlackPx": 24.0,
+    "skinBoneExtras": {
+      "WeaponTip": [
+        "RightHand",
+        "RightForeArm"
+      ],
+      "RWrist": [
+        "RightHand",
+        "RightForeArm"
+      ],
+      "LWrist": [
+        "LeftHand",
+        "LeftForeArm",
+        "LeftArm"
+      ],
+      "RAnkle": [
+        "RightFoot",
+        "RightLeg"
+      ],
+      "LAnkle": [
+        "LeftFoot",
+        "LeftLeg"
+      ],
+      "RKnee": [
+        "RightLeg",
+        "RightUpLeg"
+      ],
+      "LKnee": [
+        "LeftLeg",
+        "LeftUpLeg"
+      ]
+    },
+    "seed": 11,
+    "optimizeBones": [
+      "Hips",
+      "Spine02",
+      "Spine01",
+      "Spine",
+      "neck",
+      "Head",
+      "RightShoulder",
+      "RightArm",
+      "RightForeArm",
+      "RightHand",
+      "LeftShoulder",
+      "LeftArm",
+      "LeftForeArm",
+      "LeftHand",
+      "RightUpLeg",
+      "RightLeg",
+      "RightFoot",
+      "LeftUpLeg",
+      "LeftLeg",
+      "LeftFoot"
+    ],
+    "markers": [
+      "WeaponTip",
+      "RWrist",
+      "RElbow",
+      "RShoulder",
+      "LWrist",
+      "LElbow",
+      "LShoulder",
+      "Nose",
+      "Neck",
+      "MidHip",
+      "RHip",
+      "RKnee",
+      "RAnkle",
+      "LHip",
+      "LKnee",
+      "LAnkle"
+    ],
+    "rootTranslate": true,
+    "rootTranslateBound": 1.5,
+    "boundRad": 2.5,
+    "armBoundRad": 2.8,
+    "spineBoundRad": 2.0,
+    "maxSteps": 80,
+    "plateauSteps": 12,
+    "damping": 0.12,
+    "eps": 0.015,
+    "lossFloorPx": 1.0,
+    "joltFrac": 0.25,
+    "joltGrow": 1.15,
+    "joltFracMax": 0.9,
+    "ccdTipIterations": 64,
+    "ccdAngCapHi": 1.2,
+    "ccdAngCapLo": 0.6,
+    "tipWeightBoost": 1.0,
+    "restWeight": 0.01,
+    "motionWeight": 0.04,
+    "skipFullBodyIfTipErrorPx": 999.0,
+    "ccdBodyGuardPx": 999.0,
+    "bodyGuardSlackPx": 999.0,
+    "bodyGuardAbsCeilPx": 999.0,
+    "torsoMinDot": -1.0,
+    "bodyLandmarkBoost": 1.0,
+    "maxStepRad": 0.0,
+    "groundAnchor": {
+      "mode": "off"
+    },
+    "collisionBias": {
+      "enabled": false
+    }
+  },
+  "optimizeBones": [
+    "Hips",
+    "Spine02",
+    "Spine01",
+    "Spine",
+    "neck",
+    "Head",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot"
+  ],
+  "absoluteRefine": {
+    "enabled": false
+  },
+  "absoluteMatch": {
+    "paletteNormalize": true,
+    "alphaThr": 8.0,
+    "failClosedMaxChromaMae": 18.0,
+    "failClosedMaxRgbMae": 45.0
+  },
+  "notes": "Minimal marker-IK follow of eye-authored walk landmarks: open Euler DOFs, no plant, no collisionBias, no tip/body guards, equal landmark weights."
+}

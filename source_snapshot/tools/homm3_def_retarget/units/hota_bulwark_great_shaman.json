@@ -1,0 +1,299 @@
+{
+ "unit": "hota_bulwark_great_shaman",
+ "joints": {
+  "Hips": [
+   -0.024,
+   0.024,
+   0.68
+  ],
+  "Spine": [
+   -0.024,
+   0.007,
+   0.768
+  ],
+  "Spine1": [
+   -0.024,
+   -0.01,
+   0.9
+  ],
+  "Spine2": [
+   -0.024,
+   -0.03,
+   1.05
+  ],
+  "Neck": [
+   -0.024,
+   -0.045,
+   1.15
+  ],
+  "Head": [
+   -0.024,
+   -0.052,
+   1.232
+  ],
+  "HeadTop_End": [
+   -0.038,
+   -0.213,
+   1.365
+  ],
+  "LeftShoulder": [
+   0.032,
+   -0.027,
+   1.176
+  ],
+  "LeftArm": [
+   0.164,
+   -0.024,
+   1.156
+  ],
+  "LeftForeArm": [
+   0.22,
+   0.038,
+   0.918
+  ],
+  "LeftHand": [
+   0.213,
+   -0.15,
+   0.764
+  ],
+  "LeftHand_End": [
+   0.185,
+   -0.227,
+   0.834
+  ],
+  "RightShoulder": [
+   -0.081,
+   -0.003,
+   1.169
+  ],
+  "RightArm": [
+   -0.213,
+   0.024,
+   1.149
+  ],
+  "RightForeArm": [
+   -0.318,
+   0.017,
+   0.883
+  ],
+  "RightHand": [
+   -0.304,
+   -0.157,
+   0.68
+  ],
+  "RightHand_End": [
+   -0.3,
+   -0.16,
+   0.57
+  ],
+  "LeftUpLeg": [
+   0.101,
+   -0.031,
+   0.68
+  ],
+  "LeftLeg": [
+   0.115,
+   -0.164,
+   0.429
+  ],
+  "LeftFoot": [
+   0.157,
+   -0.052,
+   0.142
+  ],
+  "LeftToeBase": [
+   0.164,
+   -0.052,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.192,
+   -0.115,
+   0.002
+  ],
+  "RightUpLeg": [
+   -0.157,
+   0.024,
+   0.68
+  ],
+  "RightLeg": [
+   -0.185,
+   -0.017,
+   0.429
+  ],
+  "RightFoot": [
+   -0.199,
+   0.157,
+   0.156
+  ],
+  "RightToeBase": [
+   -0.199,
+   0.178,
+   0.051
+  ],
+  "RightToe_End": [
+   -0.213,
+   0.15,
+   0.044
+  ]
+ },
+ "props": [
+  {
+   "name": "staff",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.12,
+      -0.33,
+      0.97
+     ],
+     [
+      0.41,
+      0.42,
+      0.18
+     ]
+    ]
+   ],
+   "radius": 0.045
+  },
+  {
+   "name": "staffball",
+   "bone": "LeftHand",
+   "sphere": [
+    [
+     0.12,
+     -0.3,
+     0.95
+    ],
+    0.09
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.1
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.1
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.1
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.05,
+   "keepDist": 0.1
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.05,
+   "keepDist": 0.1
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "skirtLegShare": 0.35,
+ "bootTop": 0.12,
+ "sourceMesh": "artifacts/homm3_mesh_surgery/hota_bulwark_great_shaman_arm_c2.glb",
+ "meshSurgeryReason": "2026-10-11 lane B (standing mesh-surgery approval): the Meshy mesh welds the staff arm's sleeve and hand onto the robe at the left hip (33 bridge faces between the source forearm/hand chain Bone_029..Bone_025 and the hips/spine/left-thigh bones), so the DEF g12/g15 staff raise and forward thrust dragged the robe out with the sleeve (gate +323 edges past 2x, mostly Hips<->LeftForeArm). limb_cut_surgery.py splits the bridge by majority and duplicates the 20 shared vertices (sleeve copies drop the body bones, robe originals drop the arm bones); every original vertex is byte-identical, same mesh at rest. Second cut arm_c2 (from arm_c1, limb_cut_surgery.py --mixed-from, box below the shoulder z 0.5-0.9): the sleeve's inner side still hung onto the torso/robe through a strip of mixed-weight vertices that the first cut's pure-class rule did not see, so the overhead staff raise dragged the robe up with it (Hips<->LeftForeArm, robe Hips-Hips); 24 more bridge faces split, 18 vertices duplicated, originals byte-identical.",
+ "glbPatch": {
+  "reason": "2026-10-11 lane B: the DEF great shaman raises the staff orb-up overhead (lightning) at AttackFront f1-f3 and drives the orb forward at the target f4-f6; in ShootFront the orb goes overhead f2-f3 and points level at the target f4-f5. The capture kept the orb low by the hand with the shaft poking forward. After the second limb cut (arm_c2: the sleeve off the robe) the staff arm itself is aimed per key (LeftArm/LeftForeArm) and the staff hand turned on top (LeftHand, orb at -PCA). Weights: the sleeve/robe/shoulder band re-solved against every gated pose (lane B wsolve, --newonly then --keepsw; setWeights, weld groups identical) so the raise no longer drags the robe; the robe at the left hip where the staff hand rests in the bind pose gives its stray hand/forearm share to the hips (moveWeights). The old single robe-vertex pin indexed the pre-cut base and is replaced by the re-solve.",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_great_shaman_arm_weights.json",
+    "sha256": "4fb5ae467bb4564eedcbe2132cd6fc217e66ab3e8785b1f81b10f9ec08c451f2",
+    "note": "sleeve/robe/shoulder band re-solved for the staff-arm raise (lane B wsolve against every gated pose; weld groups identical)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_great_shaman_staff_arm_raise_rot.json",
+    "regrid": true,
+    "sha256": "e35aaf7f8f14811fddaa7bbbb9b067bca984d1cb2cf6e0390833d7c633e39f98"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_great_shaman_staff_arm_raise_rot.json",
+    "regrid": true,
+    "sha256": "e35aaf7f8f14811fddaa7bbbb9b067bca984d1cb2cf6e0390833d7c633e39f98"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftHand",
+     "LeftForeArm"
+    ],
+    "to": "Hips",
+    "space": "blender",
+    "region": [
+     {
+      "axis": "z",
+      "below": 0.85,
+      "ramp": 0.05
+     }
+    ],
+    "onlyWith": {
+     "bones": [
+      "Hips",
+      "LeftUpLeg",
+      "Spine"
+     ],
+     "atLeast": 0.5
+    },
+    "keep": 0.0,
+    "note": "robe at the left hip where the staff hand rests in the bind pose: its stray hand/forearm share rides the hips so the staff swing no longer drags the robe"
+   }
+  ]
+ }
+}

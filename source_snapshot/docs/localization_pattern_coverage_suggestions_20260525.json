@@ -1,0 +1,387 @@
+{
+  "source": {
+    "archive": "V:\\SteamLibrary\\steamapps\\common\\Heroes of Might and Magic Olden Era - Golden Era\\HeroesOldenEra_Data\\StreamingAssets\\Core.zip",
+    "scope": [
+      "Lang/english/texts/cities.json",
+      "Lang/english/texts/mapObjects.json",
+      "Lang/english/texts/heroInfo.json",
+      "Lang/english/texts/heroSkills.json",
+      "Lang/english/texts/unitsAbility.json"
+    ]
+  },
+  "suggestions": [
+    {
+      "file": "Lang/english/texts/cities.json",
+      "priority": 1,
+      "regex": "^Allows visiting heroes to learn(?: level (?<spell_level>[1-5]))? spells(?: from this town)?\\.$",
+      "namedCaptures": {
+        "spell_level": "Optional spell tier for Magic Guild rows"
+      },
+      "examples": [
+        "Allows visiting heroes to learn spells from this town.",
+        "Allows visiting heroes to learn level 1 spells."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/cities.json",
+      "priority": 2,
+      "regex": "^(?<town_label>Village Hall|Town Hall|City Hall|Fort|Citadel|Castle|Tavern|Marketplace|Treasury|Resource Silo|Mage Guild(?: Level [1-5])?)$",
+      "namedCaptures": {
+        "town_label": "Repeated city structure label"
+      },
+      "examples": [
+        "Town Hall",
+        "Mage Guild Level 5",
+        "Resource Silo"
+      ]
+    },
+    {
+      "file": "Lang/english/texts/cities.json",
+      "priority": 2,
+      "regex": "^The (?<fortification>Fort|Citadel|Castle) improves town defenses and creature growth\\.$",
+      "namedCaptures": {
+        "fortification": "Fortification tier name"
+      },
+      "examples": [
+        "The Fort improves town defenses and creature growth.",
+        "The Castle improves town defenses and creature growth."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/cities.json",
+      "priority": 3,
+      "regex": "^Adds (?<wall_upgrade>basic town defenses and enables higher creature growth|two towers to the battlements that shoot at attackers during sieges|one more grand tower to the battlements that shoots at attackers during sieges and spikes by the walls)(?:\\. City dwellings produce \\+\\{0\\}% units\\.)?$",
+      "namedCaptures": {
+        "wall_upgrade": "Wall upgrade text family"
+      },
+      "examples": [
+        "Adds basic town defenses and enables higher creature growth.",
+        "Adds two towers to the battlements that shoot at attackers during sieges. City dwellings produce +{0}% units.",
+        "Adds one more grand tower to the battlements that shoots at attackers during sieges and spikes by the walls. City dwellings produce +{0}% units."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/cities.json",
+      "priority": 3,
+      "regex": "^Grants the city (?<gold>\\{0\\}) Gold(?: and (?<law_points>\\{1\\}) Law points)? daily(?:\\. \\+(?<hero_cap>\\{2\\}) hero cap\\.)?$",
+      "namedCaptures": {
+        "gold": "Gold placeholder",
+        "law_points": "Optional law-point placeholder",
+        "hero_cap": "Optional hero-cap placeholder"
+      },
+      "examples": [
+        "Grants the city {0} Gold daily.",
+        "Grants the city {0} Gold and {1} Law points daily. +{2} hero cap."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/mapObjects.json",
+      "priority": 1,
+      "regex": "^An external dwelling that provides (?<unit>[A-Za-z ]+) recruits for (?<faction>[A-Za-z ]+) \\(HoMM3\\) armies\\.$",
+      "namedCaptures": {
+        "unit": "Dwelling creature name",
+        "faction": "HoMM3 faction name"
+      },
+      "examples": [
+        "An external dwelling that provides Gremlin recruits for Tower (HoMM3) armies.",
+        "An external dwelling that provides Wolf Rider recruits for Stronghold (HoMM3) armies."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/mapObjects.json",
+      "priority": 2,
+      "regex": "^Once per game, grants a random small reward\\.$",
+      "namedCaptures": {},
+      "examples": [
+        "Once per game, grants a random small reward."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/mapObjects.json",
+      "priority": 2,
+      "regex": "^–(?<amount>\\{0\\}) (?<effect>Attack and Defense|Spell Power and Knowledge|to sight radius|level\\(s\\) to all of the hero’s spells|Morale and Luck|% mana refilled at the beginning of each day|% Movement points)\\.$",
+      "namedCaptures": {
+        "amount": "Shared debuff placeholder",
+        "effect": "Crypt debuff effect family"
+      },
+      "examples": [
+        "–{0} Attack and Defense.",
+        "–{0}% Movement points.",
+        "–{0} level(s) to all of the hero’s spells."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/mapObjects.json",
+      "priority": 4,
+      "regex": "^The hero can fly\\. Movement costs (?<amount>\\{0\\})% points less\\.$",
+      "namedCaptures": {
+        "amount": "Movement-cost placeholder"
+      },
+      "examples": [
+        "The hero can fly. Movement costs {0}% points less."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/heroInfo.json",
+      "priority": 1,
+      "regex": "^(?<specialization>Logistics|Pathfinding|Armorer|Mysticism|Sorcery|Leadership|Fortune|Estates|Ballista|Wish to Learn|Charismatic|Wealthy|Arcane Dominion|Four-Leaf Horseshoe|Cleric|Knight|Druid|Necromancer|Overlord|Warlock|Beastmaster|Witch|Wizard|Alchemist|Navigator|Captain|Demoniac|Heretic|Elementalist|Planeswalker|Battle Mage)$",
+      "namedCaptures": {
+        "specialization": "Hero specialization or class label"
+      },
+      "examples": [
+        "Logistics",
+        "Armorer",
+        "Battle Mage"
+      ]
+    },
+    {
+      "file": "Lang/english/texts/heroInfo.json",
+      "priority": 1,
+      "regex": "^Adventure movement is \\+(?<base>\\d+)% starting at hero level (?<start>\\d+), then \\+(?<step>\\d+)% every (?<interval>\\d+) hero levels\\. Road movement is \\+(?<road>\\d+(?:\\.\\d+)?)%\\.$",
+      "namedCaptures": {
+        "base": "Initial movement bonus",
+        "start": "Level where the scaling starts",
+        "step": "Per-interval movement bonus",
+        "interval": "Scaling interval",
+        "road": "Road movement bonus"
+      },
+      "examples": [
+        "Adventure movement is +5% starting at hero level 8, then +5% every 8 hero levels. Road movement is +33.3%."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/heroInfo.json",
+      "priority": 2,
+      "regex": "^View radius is \\+(?<base>\\d+), plus \\+(?<step>\\d+) every (?<interval>\\d+) hero levels\\. Rough-terrain movement penalty modifier is -100%\\.$",
+      "namedCaptures": {
+        "base": "Base view-radius bonus",
+        "step": "Per-interval view-radius bonus",
+        "interval": "Scaling interval"
+      },
+      "examples": [
+        "View radius is +1, plus +1 every 5 hero levels. Rough-terrain movement penalty modifier is -100%."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/heroInfo.json",
+      "priority": 2,
+      "regex": "^Army (?<stat>Luck|Morale) is \\+(?<base>\\d+)\\. Friendly units have \\+(?<bonus>\\d+)% (?<bonus_type>critical chance|additional action chance), plus \\+(?<step>\\d+)% every (?<interval>\\d+) hero levels\\.$",
+      "namedCaptures": {
+        "stat": "Army-wide hero stat",
+        "base": "Base stat bonus",
+        "bonus": "Scaled friendly-unit bonus",
+        "bonus_type": "Bonus type",
+        "step": "Per-interval bonus",
+        "interval": "Scaling interval"
+      },
+      "examples": [
+        "Army Luck is +1. Friendly units have +2% critical chance, plus +1% every 4 hero levels.",
+        "Army Morale is +1. Friendly units have +2% additional action chance, plus +1% every 4 hero levels."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/heroInfo.json",
+      "priority": 2,
+      "regex": "^Hero spell damage is \\+(?<hero_bonus>\\d+)%, plus \\+(?<hero_step>\\d+)% every (?<hero_interval>\\d+) hero levels\\. Enemy hero spell damage is -(?<enemy_bonus>\\d+)%, plus -(?<enemy_step>\\d+)% every (?<enemy_interval>\\d+) hero levels\\.$",
+      "namedCaptures": {
+        "hero_bonus": "Friendly hero bonus",
+        "hero_step": "Friendly step bonus",
+        "hero_interval": "Friendly scaling interval",
+        "enemy_bonus": "Enemy hero penalty",
+        "enemy_step": "Enemy step penalty",
+        "enemy_interval": "Enemy scaling interval"
+      },
+      "examples": [
+        "Hero spell damage is +10%, plus +1% every 2 hero levels. Enemy hero spell damage is -10%, plus -1% every 2 hero levels."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/heroInfo.json",
+      "priority": 3,
+      "regex": "^Maximum Mana is \\+(?<bonus>\\d+)%, plus \\+(?<step>\\d+)% every (?<interval>\\d+) hero levels\\. Spell uses per round are \\+(?<spell_uses>\\d+)\\.$",
+      "namedCaptures": {
+        "bonus": "Mana bonus",
+        "step": "Per-interval mana bonus",
+        "interval": "Scaling interval",
+        "spell_uses": "Spell-use bonus"
+      },
+      "examples": [
+        "Maximum Mana is +10%, plus +5% every 5 hero levels. Spell uses per round are +1."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/heroSkills.json",
+      "priority": 1,
+      "regex": "^(?<rank>Basic|Advanced|Expert|Master|Grandmaster) (?<law_name>.+)$",
+      "namedCaptures": {
+        "rank": "Law tier",
+        "law_name": "Law or faction-skill name"
+      },
+      "examples": [
+        "Basic Necromancy",
+        "Advanced Necromancy",
+        "Grandmaster Summon Swarm"
+      ]
+    },
+    {
+      "file": "Lang/english/texts/heroSkills.json",
+      "priority": 1,
+      "regex": "^Friendly (?<faction>[A-Za-z ]+) creatures deal \\+(?<bonus>\\{0\\})% and take –(?<bonus_take>\\{0\\})% Damage on Native Terrain\\.$",
+      "namedCaptures": {
+        "faction": "Faction name",
+        "bonus": "Offense bonus placeholder",
+        "bonus_take": "Defense bonus placeholder"
+      },
+      "examples": [
+        "Friendly Necropolis creatures deal +{0}% and take –{0}% Damage on Native Terrain.",
+        "Friendly Schism creatures deal +{0}% and take –{0}% Damage on Native Terrain."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/heroSkills.json",
+      "priority": 2,
+      "regex": "^When selecting a Stance, the hero’s corresponding attribute increases by \\{0\\}% until the end of the battle\\.$",
+      "namedCaptures": {},
+      "examples": [
+        "When selecting a Stance, the hero’s corresponding attribute increases by {0}% until the end of the battle."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/heroSkills.json",
+      "priority": 2,
+      "regex": "^Generates (?<amount>\\{0\\}) Focus Charge\\(s\\) at the start of every battle\\.$",
+      "namedCaptures": {
+        "amount": "Focus-charge placeholder"
+      },
+      "examples": [
+        "Generates {0} Focus Charge(s) at the start of every battle."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/heroSkills.json",
+      "priority": 2,
+      "regex": "^(?<faction>[A-Za-z]+) (?<role>Cleric|Knight|Druid|Necromancer|Overlord|Warlock|Beastmaster|Witch|Wizard|Alchemist|Navigator|Captain|Demoniac|Heretic|Elementalist|Planeswalker) subclass(?: using (?<identity>[A-Za-z]+) identity and icons)?\\.$",
+      "namedCaptures": {
+        "faction": "Faction name",
+        "role": "Subclass role",
+        "identity": "Optional identity used in the description"
+      },
+      "examples": [
+        "Castle Knight subclass using Castle identity and icons.",
+        "Tower Wizard subclass.",
+        "Dungeon Warlock subclass."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/unitsAbility.json",
+      "priority": 1,
+      "regex": "^(?<ability>Flying|Flight)(?: movement)?\\.$",
+      "namedCaptures": {
+        "ability": "Movement label"
+      },
+      "examples": [
+        "Flying movement.",
+        "Flying.",
+        "Flight."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/unitsAbility.json",
+      "priority": 1,
+      "regex": "^Spend(?: (?<focus>\\d+))? Focus to (?<effect>.+?)\\.$",
+      "namedCaptures": {
+        "focus": "Optional Focus cost",
+        "effect": "Ability effect clause"
+      },
+      "examples": [
+        "Spend 2 Focus to attack and blind an enemy for 2 rounds.",
+        "Spend Focus to apply a native Attack and Defense debuff.",
+        "Spend Focus to channel mana through a native creature mana mechanic."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/unitsAbility.json",
+      "priority": 2,
+      "regex": "^Can only attack adjacent enemies\\. (?<retaliation>Provokes counterattacks\\.|<b>Enemies do not counterattack\\.<\\/b>)$",
+      "namedCaptures": {
+        "retaliation": "Retaliation behavior"
+      },
+      "examples": [
+        "Can only attack adjacent enemies. Provokes counterattacks.",
+        "Can only attack adjacent enemies. <b>Enemies do not counterattack.</b>"
+      ]
+    },
+    {
+      "file": "Lang/english/texts/unitsAbility.json",
+      "priority": 2,
+      "regex": "^Returns to original position after attacking(?:, dealing –(?<damage>\\{0\\})% Damage)?\\.$",
+      "namedCaptures": {
+        "damage": "Optional damage penalty placeholder"
+      },
+      "examples": [
+        "Returns to original position after attacking.",
+        "Returns to original position after attacking, dealing –{0}% Damage."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/unitsAbility.json",
+      "priority": 2,
+      "regex": "^Deals (?<damage>\\{0\\}) Damage to the target enemy\\.$",
+      "namedCaptures": {
+        "damage": "Damage placeholder"
+      },
+      "examples": [
+        "Deals {0} Damage to the target enemy."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/unitsAbility.json",
+      "priority": 3,
+      "regex": "^A heavy ranged attack\\.$",
+      "namedCaptures": {},
+      "examples": [
+        "A heavy ranged attack."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/unitsAbility.json",
+      "priority": 3,
+      "regex": "^Ranged attacks deal full damage at any range\\.$",
+      "namedCaptures": {},
+      "examples": [
+        "Ranged attacks deal full damage at any range."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/unitsAbility.json",
+      "priority": 3,
+      "regex": "^Ignores (?<ignore_percent>40|60|80)% of the target's Defense when attacking\\.$",
+      "namedCaptures": {
+        "ignore_percent": "Defense ignore percentage"
+      },
+      "examples": [
+        "Ignores 40% of the target's Defense when attacking.",
+        "Ignores 60% of the target's Defense when attacking.",
+        "Ignores 80% of the target's Defense when attacking."
+      ]
+    },
+    {
+      "file": "Lang/english/texts/unitsAbility.json",
+      "priority": 4,
+      "regex": "^\\[\\s*(?<formula>.+?)\\s*\\]$",
+      "namedCaptures": {
+        "formula": "Bracketed combat formula text"
+      },
+      "examples": [
+        "[ {0} + {1}% × (hero’s Level – 1) ]",
+        "[ {0} × amount of units ]",
+        "[ {0} + {1} × amount of units ]"
+      ]
+    }
+  ],
+  "limitations": [
+    "These suggestions were derived from the current live English Core.zip only, so any patch or overlay regeneration should revalidate the text families and counts.",
+    "The list intentionally favors high-reuse families in the requested files and does not exhaustively cover every singleton English string.",
+    "The live archive exposes hero specialization content through heroInfo.json rather than a separate heroesSpecialist.json file, so those rows are covered here by heroInfo patterns."
+  ]
+}

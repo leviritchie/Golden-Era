@@ -1,0 +1,52 @@
+{
+  "unitSid": "h3_hobgoblin",
+  "clipId": "attack_g11",
+  "fps": 12,
+  "method": "silhouette_iou_rest_regularized",
+  "masterGlb": "artifacts/hobgoblin_attack_pose_pipeline/master/Meshy_AI_Character_output.glb",
+  "outputDir": "artifacts/hobgoblin_attack_pose_pipeline/out_attack_g11_silhouette_rest",
+  "camera": {
+    "axis": "-X",
+    "distance": 3.0,
+    "height": 0.85,
+    "orthoScale": 2.6,
+    "rootYawDeg": 0.0
+  },
+  "render": {
+    "width": 192,
+    "height": 170
+  },
+  "optimizeBones": [
+    "Bone_003",
+    "Bone_002",
+    "Bone_006",
+    "Bone_033",
+    "Bone_032",
+    "Bone_031",
+    "Bone_030",
+    "Bone_029",
+    "Bone_028",
+    "Bone_027",
+    "Bone_026"
+  ],
+  "optimizer": {
+    "method": "hybrid",
+    "boundRad": 0.96,
+    "restWeight": 0.15,
+    "deMaxiter": 5,
+    "popsize": 18,
+    "polishIters": 40,
+    "seed": 7
+  },
+  "frames": [
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_00.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_01.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_02.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_03.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_04.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_05.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_06.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_07.png" }
+  ],
+  "notes": "CHGOBL g11 silhouette-IoU with soft rest regularizer (restWeight=0.15). Pilot to judge whether rest pull kills spinning/contort minima."
+}

@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "policy": {
+    "contractsMustMatchExactPredicateProfiles": true,
+    "towerOnly": true,
+    "spellStatePredicatesAreNotCooldownProof": true,
+    "castGateRequiresCommittedCastGateAndUiSyncProof": true,
+    "cooldownMutationMustNotUseRejectedAbsoluteSetter": true,
+    "overclockCreditRequiresExplicitSideScopedLedger": true,
+    "spellbookReuseRequiresCommittedPreparedState": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "rejectedHypotheses": [
+    "eew.bdmh(Int32) absolute cooldown setter",
+    "spellbook open or preview counted as cast gate override",
+    "hero energy pool existence counted as overclock credit",
+    "spellbook collection membership counted as prepared reuse state"
+  ],
+  "requiredRuntimeProof": [
+    "active Tower law-owner side correlation proof",
+    "successful committed spell cast proof",
+    "spell cooldown read timing proof",
+    "safe cooldown decrement or mutation proof that does not use the rejected absolute setter",
+    "cast gate override proof for otherwise blocked one-cooldown spells",
+    "spellbook UI synchronization proof after cast-gate or cooldown mutation",
+    "side-scoped overclock credit ledger read/write proof",
+    "prepared spellbook reuse state creation and consumption proof",
+    "spellbook preview/open/cancel exclusion proof",
+    "idempotent per-cast or per-day application proof"
+  ],
+  "contracts": {
+    "RequiresCastGateOverride": {
+      "requiredEffectKeys": [
+        "tower.overclock-cooldown-and-cast-gate"
+      ],
+      "allowedFactions": [
+        "homm3_tower"
+      ],
+      "allowedFamilies": [
+        "SpellCooldown"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must prove a committed Tower cast gate override that allows a spell which would otherwise be blocked by cooldown state.",
+        "The override must be correlated to an exact allowed spell classification, an available overclock credit, the casting hero, and the active Tower law owner.",
+        "Spellbook UI state, cooldown gate state, credit consumption, and successful cast commit must remain synchronized and idempotent."
+      ],
+      "forbiddenSubstitutes": [
+        "spellbook open counted as cast gate override",
+        "spellbook preview counted as cast gate override",
+        "cooldown read counted as cast gate override",
+        "cooldown preview counted as committed cast permission",
+        "Tower faction membership counted as cast gate override",
+        "spell classification counted without overclock credit and gate proof",
+        "failed cast or cancelled cast counted as gate override"
+      ]
+    },
+    "RequiresCooldownMutation": {
+      "requiredEffectKeys": [
+        "tower.cooldown-construct-calculus-calendar"
+      ],
+      "allowedFactions": [
+        "homm3_tower"
+      ],
+      "allowedFamilies": [
+        "Calendar"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must prove a safe committed cooldown mutation or decrement for the intended Tower spell/caster context.",
+        "The mutation must be correlated to Celestial Calculus timing, construct/spell-cast companion predicates, and the active Tower law owner.",
+        "The implementation must not use the rejected eew.bdmh(Int32) absolute setter hypothesis and must prove UI and stored cooldown synchronization."
+      ],
+      "forbiddenSubstitutes": [
+        "eew.bdmh(Int32) absolute cooldown setter",
+        "cooldown read counted as cooldown mutation",
+        "cooldown preview counted as committed cooldown mutation",
+        "spellbook preview counted as cooldown mutation",
+        "Tower faction membership counted as cooldown mutation",
+        "spell cast event counted without cooldown state change",
+        "construct classifier counted as cooldown mutation",
+        "calendar day refresh counted without mutation target proof",
+        "UI cooldown text counted without stored cooldown mutation proof"
+      ]
+    },
+    "RequiresOverclockCredit": {
+      "requiredEffectKeys": [
+        "tower.overclock-cooldown-and-cast-gate"
+      ],
+      "allowedFactions": [
+        "homm3_tower"
+      ],
+      "allowedFamilies": [
+        "SpellCooldown"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must use an explicit side-scoped or hero-scoped overclock credit ledger created by the intended Tower law packet event.",
+        "Credit creation, availability check, consumption, spell identity, casting hero, and active Tower law owner must correlate before cast-gate override or cooldown reduction.",
+        "The ledger must be idempotent and must not leak across heroes, sides, battles, days, or spellbook preview paths."
+      ],
+      "forbiddenSubstitutes": [
+        "hero energy pool existence counted as overclock credit",
+        "Focus or generic energy counted as overclock credit",
+        "cooldown value of one counted as available credit",
+        "Tower faction membership counted as overclock credit",
+        "spell classification counted as credit",
+        "spellbook preview counted as credit consumption",
+        "global overclock flag without hero or side correlation"
+      ]
+    },
+    "RequiresSpellbookReuseState": {
+      "requiredEffectKeys": [
+        "tower.prepared-spellbook-reuse"
+      ],
+      "allowedFactions": [
+        "homm3_tower"
+      ],
+      "allowedFamilies": [
+        "SpellSchool"
+      ],
+      "requiredRuntimeSemantics": [
+        "The predicate must prove a committed prepared spellbook reuse state for the Tower caster and exact spell or school context.",
+        "Prepared state creation, successful spell cast, reuse consumption, spellbook contents, and active Tower law owner must correlate before a second-use benefit is allowed.",
+        "Spellbook open, preview, native school access, and static spell collection membership are context only and cannot create or consume prepared reuse state."
+      ],
+      "forbiddenSubstitutes": [
+        "spellbook open counted as prepared reuse state",
+        "spellbook preview counted as prepared reuse state",
+        "spellbook collection membership counted as prepared reuse state",
+        "native school access counted as prepared reuse state",
+        "spell cast event counted without prepared state creation or consumption",
+        "Tower faction membership counted as prepared reuse state",
+        "UI selected spell counted without committed cast proof"
+      ]
+    }
+  }
+}

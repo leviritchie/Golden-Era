@@ -1,0 +1,276 @@
+{
+ "unit": "hota_bulwark_mountain_ram",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.55,
+   0.85
+  ],
+  "Spine": [
+   0.0,
+   0.35,
+   0.87
+  ],
+  "Spine1": [
+   0.0,
+   0.15,
+   0.88
+  ],
+  "Spine2": [
+   0.0,
+   -0.05,
+   0.9
+  ],
+  "Neck": [
+   0.0,
+   -0.2,
+   1.05
+  ],
+  "Head": [
+   0.0,
+   -0.45,
+   1.35
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.78,
+   1.18
+  ],
+  "LeftShoulder": [
+   0.07,
+   -0.1,
+   0.95
+  ],
+  "LeftArm": [
+   0.18,
+   -0.12,
+   0.7
+  ],
+  "LeftForeArm": [
+   0.19,
+   -0.13,
+   0.4
+  ],
+  "LeftHand": [
+   0.2,
+   -0.1,
+   0.12
+  ],
+  "LeftHand_End": [
+   0.2,
+   -0.16,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.07,
+   -0.1,
+   0.95
+  ],
+  "RightArm": [
+   -0.18,
+   -0.12,
+   0.7
+  ],
+  "RightForeArm": [
+   -0.19,
+   -0.13,
+   0.4
+  ],
+  "RightHand": [
+   -0.2,
+   -0.1,
+   0.12
+  ],
+  "RightHand_End": [
+   -0.2,
+   -0.16,
+   0.0
+  ],
+  "LeftUpLeg": [
+   0.19,
+   0.55,
+   0.8
+  ],
+  "LeftLeg": [
+   0.2,
+   0.62,
+   0.5
+  ],
+  "LeftFoot": [
+   0.21,
+   0.53,
+   0.15
+  ],
+  "LeftToeBase": [
+   0.22,
+   0.52,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.22,
+   0.46,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.19,
+   0.6,
+   0.8
+  ],
+  "RightLeg": [
+   -0.21,
+   0.7,
+   0.5
+  ],
+  "RightFoot": [
+   -0.22,
+   0.67,
+   0.15
+  ],
+  "RightToeBase": [
+   -0.22,
+   0.67,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.22,
+   0.61,
+   0.0
+  ]
+ },
+ "props": [
+  {
+   "name": "hornL",
+   "bone": "Head",
+   "box": [
+    [
+     0.1,
+     -0.75,
+     1.28
+    ],
+    [
+     0.5,
+     0.45,
+     1.8
+    ]
+   ]
+  },
+  {
+   "name": "hornR",
+   "bone": "Head",
+   "box": [
+    [
+     -0.5,
+     -0.75,
+     1.28
+    ],
+    [
+     -0.1,
+     0.45,
+     1.8
+    ]
+   ]
+  }
+ ],
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped"
+ ],
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    -20,
+    70
+   ],
+   "fold": 70,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ]
+  }
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "strideMatch": {
+  "maxDrop": 0.3,
+  "reason": "short-reach walker (legs near straight at the source Move): default 0.15: jitter p90 0.37 (the missing reach spent as cadence 1.6); 0.25: jitter 0.32 (thin); 0.30: slip 0.105 ratio 1.062 cadence 1.19 jitter 0.26 (workerB scratch trials 2026-09-27)"
+ },
+ "glbPatch": {
+  "reason": "authenticity lane B 2026-10-11: AttackFront forelegs tucked while rearing; Defence ducks the horns forward; Death topples over f4-f5 instead of popping flat at f6",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_mountain_ram_rear_duck_fall_tr.json",
+    "regrid": true,
+    "sha256": "0d016144d23710d44792f1999d45ad6a15ae0372cbacd364883160bba91e6f53"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_mountain_ram_rear_duck_fall_rot.json",
+    "regrid": true,
+    "sha256": "9eadf90b8fd55e4fb9b8a1a6c67b0453d710ccd62fb25aa4fa2ad36744bb097b"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_mountain_ram_rear_duck_fall_rot.json",
+    "regrid": true,
+    "sha256": "9eadf90b8fd55e4fb9b8a1a6c67b0453d710ccd62fb25aa4fa2ad36744bb097b"
+   }
+  ]
+ }
+}

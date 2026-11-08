@@ -1,0 +1,267 @@
+{
+ "joints": {
+  "Hips": [
+   0,
+   0.05,
+   0.72
+  ],
+  "Spine": [
+   0,
+   0.05,
+   0.84
+  ],
+  "Spine1": [
+   0,
+   0.05,
+   0.96
+  ],
+  "Spine2": [
+   0,
+   0.04,
+   1.1
+  ],
+  "Neck": [
+   0,
+   0.02,
+   1.24
+  ],
+  "Head": [
+   0.0,
+   -0.02,
+   1.33
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.02,
+   1.6
+  ],
+  "RightShoulder": [
+   -0.05,
+   0.03,
+   1.18
+  ],
+  "RightArm": [
+   -0.2,
+   0.03,
+   1.18
+  ],
+  "RightForeArm": [
+   -0.3,
+   0.05,
+   0.95
+  ],
+  "RightHand": [
+   -0.24,
+   -0.06,
+   0.9
+  ],
+  "RightHand_End": [
+   -0.23,
+   -0.14,
+   0.88
+  ],
+  "LeftShoulder": [
+   0.05,
+   0.03,
+   1.18
+  ],
+  "LeftArm": [
+   0.2,
+   0.03,
+   1.18
+  ],
+  "LeftForeArm": [
+   0.34,
+   0.05,
+   0.9
+  ],
+  "LeftHand": [
+   0.38,
+   -0.01,
+   0.76
+  ],
+  "LeftHand_End": [
+   0.4,
+   -0.05,
+   0.66
+  ],
+  "RightUpLeg": [
+   -0.1,
+   0.05,
+   0.66
+  ],
+  "RightLeg": [
+   -0.14,
+   0.03,
+   0.36
+  ],
+  "RightFoot": [
+   -0.16,
+   0.02,
+   0.07
+  ],
+  "RightToeBase": [
+   -0.17,
+   -0.12,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.17,
+   -0.18,
+   0.02
+  ],
+  "LeftUpLeg": [
+   0.1,
+   0.05,
+   0.66
+  ],
+  "LeftLeg": [
+   0.14,
+   0.03,
+   0.36
+  ],
+  "LeftFoot": [
+   0.16,
+   0.02,
+   0.07
+  ],
+  "LeftToeBase": [
+   0.17,
+   -0.12,
+   0.02
+  ],
+  "LeftToe_End": [
+   0.17,
+   -0.18,
+   0.02
+  ]
+ },
+ "flail": {
+  "chainTop": [
+   -0.22,
+   -0.06,
+   1.07
+  ],
+  "grip": [
+   -0.23,
+   -0.12,
+   0.9
+  ],
+  "chain": [
+   [
+    -0.24,
+    -0.24,
+    0.66
+   ],
+   [
+    -0.25,
+    -0.33,
+    0.42
+   ]
+  ],
+  "ball": [
+   -0.262,
+   -0.379,
+   0.217
+  ],
+  "ballR": 0.234,
+  "radius": 0.06,
+  "radiusBelowGrip": 0.08,
+  "ballFit": {
+   "centre": [
+    -0.262,
+    -0.379,
+    0.217
+   ],
+   "R": 0.209,
+   "note": "ownership radius = fitted surface radius + 0.025 so the whole shell is inside"
+  }
+ },
+ "sleeve": {
+  "x": 0.26,
+  "zMin": 0.55,
+  "zMax": 1.12
+ },
+ "bootTop": 0.12,
+ "skirtLegShare": 0.3,
+ "ballSeed": [
+  192,
+  256
+ ],
+ "unit": "h3_gremlin_mechanic",
+ "strideMatch": {
+  "maxDrop": 0.35,
+  "reason": "DEF Move keeps the legs near straight: default 0.15 leaves ratio 2.02 (slip 0.52) at cadence 1.6, and 0.20 still fails the ratio (1.42). Scratch sweep (worker A, 2026-09-27) on the pre-stride GLB: maxDrop 0.25 slip 0.099, ratio 1.080, cadence 1.44, jitter 0.20. Smallest tested drop that passes. | worker C 2026-09-28: after 794015d6f6 planted feet stand on the Idle floor and the post-commit rebuild failed stride at maxDrop 0.25 (see worker C pass table); maxDrop 0.25 -> 0.35 (cap). Measured: 0.25 slip 0.349 ratio 1.614 (FAIL); 0.30 slip 0.2936 ratio 1.5733 (FAIL); 0.35 slip 0.1822 ratio 1.3339 cadence 1.6 jitter 0.132 (PASS, thin: ratio 1.33/1.4 with drop and cadence both at their caps; the robe hides the crouch on the sheet)."
+ },
+ "extensions": [
+  "tower_handsep"
+ ],
+ "armStrip": [
+  {
+   "chain": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "center": [
+    0.21,
+    0.19,
+    0.77
+   ],
+   "radius": 0.15,
+   "armKeep": 0.8
+  },
+  {
+   "chain": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "center": [
+    -0.19,
+    0.11,
+    0.83
+   ],
+   "radius": 0.13,
+   "armKeep": 0.8
+  }
+ ],
+ "armStripReason": "authenticity lane-A 2026-10-10: bone heat welded the back of each sleeve to the robe behind it (vertices half forearm, half Hips/Spine/UpLeg), so raising the free arm (Hitted fling, Death) ripped the robe back (+280 torn edges). Inside these spheres (Blender axes) robe vertices with under 0.8 arm share lose the arm chain and the sleeve/robe contact is split open.",
+ "glbPatch": {
+  "reason": "authenticity lane-A 2026-10-10: DEF Death swings the ball overhead and crumples into a heap under it; Hitted flings the free arm up over the head. Death keeps the v1 legs-down crumple (no backward roll) and now pitches the Hips back at f3-f4 so the body lies flat instead of standing as a long diagonal tip, with the knees folded under (f3-f4) and the ball arm thrown out (f2-f5). Hitted: LeftArm/LeftForeArm fling up over the head (f2-f6) instead of hanging low. keyRotations half offset applied twice + Hips keyTranslations; stretchRelax on Hitted/Death strain-limits the sleeve on the new armStrip base. f5-f8 (v3): Hips and Spine held to their f4 lying-flat world rotation with the knees folded, so the body settles into the DEF's low heap under the ball instead of flipping head-down with the legs up (the old f5 tall blob). teardiag PASS 2049 -> 1664.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gremlin_mechanic_tiparm_rot.json",
+    "sha256": "a8def39cd6ea69ed87f655d40079d4382180bea220913b0543794a0fed11b37b",
+    "regrid": true,
+    "note": "Death tip + Hitted arm (1/2)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gremlin_mechanic_tiparm_rot.json",
+    "sha256": "a8def39cd6ea69ed87f655d40079d4382180bea220913b0543794a0fed11b37b",
+    "regrid": true,
+    "note": "(2/2)"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gremlin_mechanic_tiparm_tr.json",
+    "sha256": "17d847cbed338e6297b675a0e78a2c86e47b707db53d4308509dc4f506f0d1d3",
+    "regrid": true,
+    "note": "Death crouch sink"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Hitted",
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08
+   }
+  ]
+ }
+}

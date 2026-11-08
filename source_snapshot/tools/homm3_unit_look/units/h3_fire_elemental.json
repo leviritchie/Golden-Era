@@ -1,0 +1,290 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_fire_elemental",
+ "status": "look",
+ "notes": "pilot: elemental (self-lit fire body). The body fire is a dynamic light with a steady floor (effectLight.floor) because Hex/Lit has no emission and a bakedGlow lift cannot make a self-lit body; the grade is fitted with the light held at its floor. The attack's fire burst is ripped from the DEF (defEffects fire).",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "body_fire",
+   "treatment": "dynamic",
+   "notes": "always-on body fire: floor in every clip, fitted rise on the attack burst"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "element_flow",
+    "type": "uvAtlas",
+    "provenance": "element_flow_scores.py mode roil: 6 cells per 6-frame cycle, in phase with the retarget's element_motion keys; brightness-modulated look texture",
+    "modulate": {
+     "gain": 0.5
+    },
+    "clips": {
+     "Unit_Idle": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_MoveStart": [
+      0,
+      1,
+      2
+     ],
+     "Unit_Move": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_MoveEnd": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      0
+     ],
+     "Unit_Mouseover": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      0
+     ],
+     "Unit_Hitted": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_Defence": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      0
+     ],
+     "Unit_AttackFront": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      0,
+      1,
+      2
+     ],
+     "Unit_Death": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      0,
+      1,
+      2
+     ]
+    },
+    "source": {
+     "scores": "artifacts/homm3_vfx_experiments/element_flow/h3_fire_elemental_scores.npz",
+     "generator": "tools/homm3_vfx/element_flow_scores.py"
+    },
+    "gutterPx": 16
+   },
+   {
+    "id": "fire_volume",
+    "type": "volumetricFire",
+    "source": {
+     "def": "CFELEM.DEF",
+     "defGroup": 2,
+     "frames": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "fireMask": {
+      "minLuma": 90,
+      "minWarmth": 40
+     }
+    },
+    "emitter": {
+     "excludeBones": [
+      "*Foot",
+      "*ToeBase"
+     ]
+    },
+    "systems": {
+     "tongues": {
+      "windows": 24,
+      "cellPx": [
+       10,
+       24
+      ],
+      "baseAt": 0.75,
+      "coverage": 0.6,
+      "heightRange": [
+       0.55,
+       1.0
+      ],
+      "minUp": -0.2,
+      "lifetimeDefFrames": [
+       3,
+       6
+      ],
+      "riseDefPxPerFrame": 1.0
+     },
+     "body": {
+      "windows": 24,
+      "cellPx": [
+       8,
+       14
+      ],
+      "coverage": 0.2,
+      "lifetimeDefFrames": [
+       3,
+       6
+      ],
+      "riseDefPxPerFrame": 0.5
+     }
+    },
+    "anchor": {
+     "bone": "Spine2"
+    },
+    "clips": {
+     "Unit_Idle": 1.0,
+     "Unit_MoveStart": 1.0,
+     "Unit_Move": 1.0,
+     "Unit_MoveEnd": 1.0,
+     "Unit_Mouseover": 1.0,
+     "Unit_Hitted": 1.0,
+     "Unit_Defence": 1.0,
+     "Unit_AttackFront": 1.0,
+     "Unit_Death": [
+      1.0,
+      1.0,
+      0.8,
+      0.6,
+      0.4,
+      0.2,
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "provenance": "volfire.py: CFELEM.DEF idle (g2, 6 frames): crest windows from the flame aura over the head and shoulders + small body-boil windows + detached ember specks",
+    "notes": "Second volumetricFire unit (Unity preview only). Whole body emits; tongues only from the upper 45%. Does not carry body_fire (that stays on punch_fire). Recalibrated for the regenerated body-of-fire mesh (4fbbceaf6e), which already carries flame-tongue geometry: tongues 1.2 -> 0.6, body 0.3 -> 0.2 (lab calibration: renderedFire vs defFire, see calibration.json)."
+   },
+   {
+    "id": "punch_fire",
+    "type": "defFlipbook",
+    "provenance": "DEF group 12 (attack): the flame jet thrown from the outstretched fist f3-11, cut with a committed reach file mask (masks/conflux_fx_masks.py); defEffects saw only specks (fire on a fire body)",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_fire_elemental/punch_fire"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "body_fire",
+    "notes": "conflux rollout: replaces the pilot's defEffects specks with the whole jet. The mesh never extends the arm, so the jet's DEF body contact (the fist) is pinned to the mesh's RightHand (defOrigin auto) to keep it attached rather than floating at the DEF position."
+   },
+   {
+    "id": "body_fire_light",
+    "type": "effectLight",
+    "lightId": "body_fire",
+    "carrier": "punch_fire",
+    "anchor": {
+     "bone": "Spine2",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 1.5
+    },
+    "rgb": [
+     1.0,
+     0.62,
+     0.3
+    ],
+    "range": 6.0,
+    "floor": 1.5,
+    "intensity": {
+     "Unit_AttackFront": [
+      1.5,
+      1.592,
+      1.613,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.788,
+      1.766,
+      1.5
+     ]
+    },
+    "intensitySource": "fitted",
+    "notes": "floor 0.6 authored (the phoenix lab's idle floor range 0.67-0.98 on a similar body); the AttackFront curve is fitted on top of it"
+   }
+  ]
+ }
+}

@@ -1,0 +1,88 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "hota_factory_gunslinger",
+ "status": "look",
+ "notes": "factory: rifleman. Muzzle flash ripped from the DEF (defEffects fire) with a fitted flash light. The death group throws hat and rifle as detached sprites; not ripped, because the mesh keeps both props (a flipbook would draw them twice).",
+ "lighting": {
+  "mode": "v6m",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "muzzle_flash",
+   "treatment": "dynamic",
+   "notes": "the shot lights the front of the coat for one frame"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "muzzle_flash",
+    "type": "defFlipbook",
+    "def": "CGNSLING.DEF",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 12
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto",
+     "boneTip": true
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "roster inventory factory: g15 shoot_front fire/flame (def_effect_ripper)",
+    "light": "muzzle_flash"
+   },
+   {
+    "id": "muzzle_flash_light",
+    "type": "effectLight",
+    "lightId": "muzzle_flash",
+    "carrier": "muzzle_flash",
+    "anchor": {
+     "bone": "RightHand",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.85,
+     0.55
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_ShootFront": [
+      0.0,
+      0.046,
+      0.062,
+      0.052,
+      1.882,
+      0.048,
+      0.02,
+      0.082,
+      0.017
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

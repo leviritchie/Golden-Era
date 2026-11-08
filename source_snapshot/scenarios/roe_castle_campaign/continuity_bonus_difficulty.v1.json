@@ -1,0 +1,258 @@
+{
+  "schema": "homm3.olden_campaign_continuity_bonus_difficulty.v1",
+  "campaignId": "roe_castle_good1",
+  "proofBoundary": "source/static + generated-artifact when weave regenerates; runtime StoryHub selection user-unvalidated",
+  "oldenNativeSurfaces": {
+    "difficultyUi": {
+      "type": "Hex.StoryHub.UI.BhDifficulties",
+      "config": "Mission.difficultiesParameters[] + MissionVariant.difficulties[]",
+      "labels": "Lang/english/texts/campaign.json campaign_difficulty_name_1..5",
+      "labelValues": ["Easy", "Normal", "Difficult", "Expert", "Impossible"],
+      "campaignInfoField": "CampaignInfo.campaignDifficulty_ (Hex.StoryHub.DB.Config.Difficulty)"
+    },
+    "bonusUi": {
+      "type": "Hex.StoryHub.UI.BhMissionChoices / BhMissionChoice",
+      "config": "Mission.variants[] (EChoiceType.WithVariants when variants.Length >= 2)",
+      "note": "Native shipped hubs use variants for alternate maps/factions, not HoMM3 starting-bonus catalogs. Same-mapSid multi-variant is a plausible reuse but bonus *effects* must use Difficulty.economic / heroesArmies / item grants."
+    },
+    "bonusEffectSurfaces": {
+      "resources": "Difficulty.economic.playerStartResources (Side.bghv SETs ResHeap from DifficultyResources; not additive)",
+      "creatures": "Difficulty.heroesArmies → czr.vhk Array.Clear then apply Unit[] (REPLACES map spawn army; unsafe additive bonus on baked Homecoming armies)",
+      "itemsOrWarMachines": "No StoryHubAction / ENodeActionType grants artifacts or war machines at mission start (LockHero/UnlockHero/SetCounter/PlayVideo/OpenDialog only)"
+    }
+  },
+  "homm3Difficulty": {
+    "levels": ["Easy", "Normal", "Hard", "Expert"],
+    "oldenMapping": {
+      "0": {"oldenIndex": 0, "oldenLabel": "Easy", "isAvailable": true},
+      "1": {"oldenIndex": 1, "oldenLabel": "Normal", "isAvailable": true},
+      "2": {"oldenIndex": 2, "oldenLabel": "Difficult", "isAvailable": true},
+      "3": {"oldenIndex": 3, "oldenLabel": "Expert", "isAvailable": true}
+    },
+    "oldenImpossibleIndex4": {
+      "isAvailable": false,
+      "reason": "HoMM3 RoE campaigns expose four difficulties; keep Olden Impossible locked like mainStory Start Phase"
+    },
+    "scalingModel": "campaigns/mainStory/missions/Start Phase/Campaign_Start_Phase_Mission_1.json difficulties[] (neutral/guard/exp multipliers + AI resource/tempStacks tags); starting resources from DB/difficulties_lobby_solo.json economic",
+    "implementedInWeave": true
+  },
+  "startingResources": {
+    "source": "Golden Era Core.zip DB/difficulties_lobby_solo.json economic (solo PvE); lobby names easy|normal|hard|impossible mapped to campaign indices 0-3 (Expert label)",
+    "homm3Intent": "Player starts richer on Easy and poorer on Expert; AI starts weaker on Easy and stronger on Expert (HoMM3 campaign difficulty handicap shape, via Olden native tables)",
+    "delivery": "Difficulty.economic.playerStartResources / aiStartResources on MissionVariant.difficulties[] (Side.bghv SET at mission start; not additive)",
+    "proofBoundary": "source/static + generated-artifact when weave regenerates; runtime grant user-unvalidated",
+    "implementedInWeave": true,
+    "rows": [
+      {
+        "index": 0,
+        "oldenLabel": "Easy",
+        "lobbySoloName": "easy",
+        "playerStartResources": {
+          "gold": 25000,
+          "wood": 30,
+          "ore": 30,
+          "gemstones": 20,
+          "crystals": 20,
+          "mercury": 20,
+          "alchemicalDust": 250
+        },
+        "aiStartResources": {
+          "gold": 10000,
+          "wood": 10,
+          "ore": 10,
+          "gemstones": 5,
+          "crystals": 5,
+          "mercury": 5,
+          "alchemicalDust": 50
+        }
+      },
+      {
+        "index": 1,
+        "oldenLabel": "Normal",
+        "lobbySoloName": "normal",
+        "playerStartResources": {
+          "gold": 20000,
+          "wood": 20,
+          "ore": 20,
+          "gemstones": 15,
+          "crystals": 15,
+          "mercury": 15,
+          "alchemicalDust": 150
+        },
+        "aiStartResources": {
+          "gold": 15000,
+          "wood": 15,
+          "ore": 15,
+          "gemstones": 5,
+          "crystals": 5,
+          "mercury": 5,
+          "alchemicalDust": 100
+        }
+      },
+      {
+        "index": 2,
+        "oldenLabel": "Difficult",
+        "lobbySoloName": "hard",
+        "playerStartResources": {
+          "gold": 15000,
+          "wood": 15,
+          "ore": 15,
+          "gemstones": 10,
+          "crystals": 10,
+          "mercury": 10,
+          "alchemicalDust": 100
+        },
+        "aiStartResources": {
+          "gold": 20000,
+          "wood": 20,
+          "ore": 20,
+          "gemstones": 10,
+          "crystals": 10,
+          "mercury": 10,
+          "alchemicalDust": 150
+        }
+      },
+      {
+        "index": 3,
+        "oldenLabel": "Expert",
+        "lobbySoloName": "impossible",
+        "playerStartResources": {
+          "gold": 10000,
+          "wood": 10,
+          "ore": 10,
+          "gemstones": 5,
+          "crystals": 5,
+          "mercury": 5,
+          "alchemicalDust": 50
+        },
+        "aiStartResources": {
+          "gold": 30000,
+          "wood": 25,
+          "ore": 25,
+          "gemstones": 15,
+          "crystals": 15,
+          "mercury": 15,
+          "alchemicalDust": 200
+        }
+      }
+    ]
+  },
+  "homm3StartingBonuses": {
+    "delivery": {
+      "surface": "questscript_start_turn_day1_dialog_answers_mapactions",
+      "module": "experiments/campaign_port_poc/campaign_starting_bonus.py",
+      "decoder": "experiments/campaign_port_poc/h3c_starting_bonuses.py",
+      "spellMechanicsMap": "experiments/campaign_port_poc/h3_spell_to_oe_magic.py",
+      "note": "H3C START_BONUS catalogs drive Day-1 Core Dialog answers. Grants: GiveRes / GiveUnitHero / GiveItemHero / GiveStatsHero / AddSpellHero / UnlockBuildingCity. SPELL_SCROLL uses mechanics-matched OE scroll items (Prayer → Arina's Touch). Options that cannot map natively are omitted and the remaining choices are still emitted. StoryHub variants remain fail-closed.",
+      "proofBoundary": "source/static + generated-artifact; runtime choice/grant user-unvalidated",
+      "omittedBonusPolicy": "skip_unmapped_options_keep_remaining_choices",
+      "knownOmittedKinds": [
+        "SECONDARY_SKILL: no stock dialog AddSkillHero",
+        "BUILDING ship/horde: no UnlockBuildingCity mapping"
+      ]
+    },
+    "homecoming": {
+      "options": [
+        {
+          "id": "rare_resources",
+          "homm3": "5 mercury + 5 sulfur + 5 crystal + 5 gems",
+          "oldenStatus": "day1_dialog_h3c",
+          "oldenPath": "Dialog answers → GiveRes mercury/dust/crystals/gemstones=5 (dust = sulfur proxy)",
+          "gaps": ["Olden has no sulfur resource; dust is an explicit proxy", "runtime grant unvalidated"]
+        },
+        {
+          "id": "pikemen_14",
+          "homm3": "14 Pikemen",
+          "oldenStatus": "day1_dialog_h3c",
+          "oldenPath": "GiveUnitHero h3_pikeman ×14 to spawn.heroSid",
+          "gaps": ["runtime grant unvalidated"]
+        },
+        {
+          "id": "first_aid_tent",
+          "homm3": "First Aid Tent",
+          "oldenStatus": "day1_dialog_h3c",
+          "oldenPath": "GiveItemHero homm3_artifact_006_first_aid_tent to spawn.heroSid",
+          "gaps": ["runtime grant unvalidated"]
+        }
+      ]
+    },
+    "razor_claw": {
+      "options": [
+        {
+          "id": "cyclops_5",
+          "homm3": "5 Cyclops",
+          "oldenStatus": "day1_dialog_h3c",
+          "oldenPath": "GiveUnitHero h3_cyclops ×5 to spawn.heroSid (Kilgor)",
+          "gaps": ["runtime grant unvalidated"]
+        },
+        {
+          "id": "behemoth_1",
+          "homm3": "1 Behemoth",
+          "oldenStatus": "day1_dialog_h3c",
+          "oldenPath": "GiveUnitHero h3_behemoth ×1 to spawn.heroSid",
+          "gaps": ["runtime grant unvalidated"]
+        },
+        {
+          "id": "rocs_4",
+          "homm3": "4 Rocs",
+          "oldenStatus": "day1_dialog_h3c",
+          "oldenPath": "GiveUnitHero h3_roc ×4 to spawn.heroSid",
+          "gaps": ["runtime grant unvalidated"]
+        }
+      ]
+    },
+    "guardian_angels": {
+      "options": [
+        {
+          "id": "angel_1",
+          "homm3": "1 Angel",
+          "oldenStatus": "day1_dialog_h3c",
+          "oldenPath": "GiveUnitHero h3_angel ×1",
+          "gaps": ["runtime grant unvalidated; regenerate mission map to ship dialog"]
+        },
+        {
+          "id": "zealots_3",
+          "homm3": "3 Zealots",
+          "oldenStatus": "day1_dialog_h3c",
+          "oldenPath": "GiveUnitHero h3_monk_upg ×3",
+          "gaps": ["runtime grant unvalidated; regenerate mission map to ship dialog"]
+        },
+        {
+          "id": "prayer_scroll",
+          "homm3": "Prayer Scroll",
+          "oldenStatus": "day1_dialog_h3c",
+          "oldenPath": "GiveItemHero magic_scroll_artifact_day_9_magic_arinas_hymn (mechanics: mass Speed/Initiative buff stand-in for Prayer)",
+          "gaps": ["runtime grant unvalidated; regenerate mission map to ship dialog"]
+        }
+      ]
+    },
+    "griffin_cliff": {
+      "options": [
+        {
+          "id": "golden_bow",
+          "homm3": "Golden Bow",
+          "oldenStatus": "day1_dialog_h3c",
+          "oldenPath": "GiveItemHero homm3_artifact_091_golden_bow",
+          "gaps": ["runtime grant unvalidated; regenerate mission map to ship dialog"]
+        },
+        {
+          "id": "lions_shield",
+          "homm3": "Lion's Shield of Courage",
+          "oldenStatus": "day1_dialog_h3c",
+          "oldenPath": "GiveItemHero homm3_artifact_034_lions_shield_of_courage",
+          "gaps": ["runtime grant unvalidated; regenerate mission map to ship dialog"]
+        },
+        {
+          "id": "endless_sack_of_gold",
+          "homm3": "Endless Sack of Gold",
+          "oldenStatus": "day1_dialog_h3c",
+          "oldenPath": "GiveItemHero homm3_artifact_115_endless_sack_of_gold",
+          "gaps": ["runtime grant unvalidated; regenerate mission map to ship dialog"]
+        }
+      ]
+    },
+    "implementedInWeave": false,
+    "implementedInDay1Dialog": "H3C-derived for all batch missions with at least one mappable START_BONUS option; unmapped options are omitted",
+    "failClosedRule": "Do not ship BhMissionChoices variants that claim HoMM3 bonuses without an applied Difficulty/item effect. Difficulty selection remains the only StoryHub selection surface. Day-1 Dialog bonuses are a separate QuestScript surface. Unmapped SECONDARY_SKILL / ship / horde options are omitted from the choice list rather than blocking the mission."
+  }
+}

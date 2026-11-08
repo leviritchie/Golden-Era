@@ -1,0 +1,49 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require an opposing law-owner relationship. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresOpposingLawOwnerProfiles": true,
+    "moraleTriggerFamilyOnly": true,
+    "opposingLawOwnerRequired": true,
+    "unitOwnedMoraleGateSubstituteForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": ["homm3_dungeon", "homm3_necropolis"],
+  "allowedFamily": "MoraleTrigger",
+  "requiredRuntimeProof": [
+    "triggering unit side proof",
+    "opposing side law owner proof",
+    "active opposing law and rank proof",
+    "enemy morale failure or dread target proof",
+    "law-owner versus affected-side correlation proof",
+    "positive friendly morale candidate exclusion proof",
+    "idempotent per-trigger application proof"
+  ],
+  "contracts": {
+    "dungeon.enemy-morale-failure-exploit": {
+      "ownerKinds": ["opposing-law-owner-for-enemy-failure", "negative-candidate-only"],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "triggering unit owner counted as opposing law owner",
+        "friendly law owner counted for enemy failure trigger",
+        "positive morale candidate counted for opposing law owner",
+        "generic battle side counted without active law proof",
+        "enemy morale failure counted without opposing law owner proof"
+      ],
+      "notes": "Requires active opposing Dungeon law-owner proof before Terror Exploitation can react to enemy morale failure; unit-owned morale gates and positive candidates are forbidden substitutes."
+    },
+    "necropolis.enemy-dread-and-corpse-value": {
+      "ownerKinds": ["opposing-law-owner-for-enemy-dread", "negative-candidate-only"],
+      "companionPredicates": ["RequiresCorpseOrUndeadContext"],
+      "forbiddenSubstitutes": [
+        "triggering unit owner counted as opposing law owner",
+        "friendly law owner counted for enemy failure trigger",
+        "positive morale candidate counted for opposing law owner",
+        "generic battle side counted without active law proof",
+        "enemy morale failure counted without opposing law owner proof"
+      ],
+      "notes": "Requires active opposing Necropolis law-owner proof before Dread trigger value can apply to enemy-side dread/corpse context; corpse context is companion evidence only."
+    }
+  }
+}

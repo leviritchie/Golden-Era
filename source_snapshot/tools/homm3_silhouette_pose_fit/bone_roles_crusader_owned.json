@@ -1,0 +1,59 @@
+{
+  "rigFamily": "hand_owned_mixamo_like",
+  "unitSid": "h3_crusader",
+  "masterGlb": "artifacts/crusader_pose_pipeline/owned_bind/crusader_master_rigid_components.glb",
+  "notes": "Owned Crusader bind. Head owns helmet crown; RightWeaponTip owns blade end. No Meshy/Mixamo transition groups are authoritative.",
+  "joints": {
+    "Nose": "Head",
+    "Neck": "neck",
+    "RShoulder": "RightArm",
+    "RElbow": "RightForeArm",
+    "RWrist": "RightHand",
+    "WeaponTip": "RightWeaponTip",
+    "LShoulder": "LeftArm",
+    "LElbow": "LeftForeArm",
+    "LWrist": "LeftHand",
+    "MidHip": "Hips",
+    "RHip": "RightUpLeg",
+    "RKnee": "RightLeg",
+    "RAnkle": "RightFoot",
+    "LHip": "LeftUpLeg",
+    "LKnee": "LeftLeg",
+    "LAnkle": "LeftFoot"
+  },
+  "jointSites": {
+    "Nose": {
+      "mode": "farthest_skinned_vert",
+      "skinBones": ["Head"],
+      "minWeight": 0.35,
+      "fromBone": "neck",
+      "cacheBone": "Head",
+      "why": "Our Head bone owns the helmet crown in the rest bind."
+    },
+    "WeaponTip": {
+      "mode": "bone",
+      "bone": "RightWeaponTip",
+      "end": "head",
+      "why": "Our dedicated weapon-tip bone head is placed on the raised strike-side blade end."
+    }
+  },
+  "jointWeights": {
+    "Nose": 1.0,
+    "Neck": 1.0,
+    "MidHip": 0.9,
+    "RShoulder": 1.8,
+    "RElbow": 2.4,
+    "RWrist": 2.8,
+    "WeaponTip": 2.2,
+    "LShoulder": 1.0,
+    "LElbow": 1.0,
+    "LWrist": 1.4,
+    "RHip": 1.2,
+    "RKnee": 1.4,
+    "LHip": 1.2,
+    "LKnee": 1.4
+  },
+  "primaryJoints": ["Nose", "Neck", "MidHip", "RShoulder", "RElbow", "RWrist", "WeaponTip", "LShoulder", "LElbow", "LWrist", "RHip", "RKnee", "LHip", "LKnee"],
+  "optimizeBones": ["Hips", "Spine02", "Spine01", "Spine", "neck", "Head", "RightShoulder", "RightArm", "RightForeArm", "RightHand", "LeftShoulder", "LeftArm", "LeftForeArm", "LeftHand", "RightUpLeg", "RightLeg", "RightFoot", "LeftUpLeg", "LeftLeg", "LeftFoot"],
+  "lockedBones": ["RightWeaponTip", "head_end"]
+}

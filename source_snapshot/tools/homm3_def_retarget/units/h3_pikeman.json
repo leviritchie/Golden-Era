@@ -1,0 +1,213 @@
+{
+ "unit": "h3_pikeman",
+ "joints": {
+  "Hips": [
+   0.038,
+   0.22,
+   0.638
+  ],
+  "Spine": [
+   0.042,
+   0.231,
+   0.72
+  ],
+  "Spine1": [
+   0.045,
+   0.241,
+   0.802
+  ],
+  "Spine2": [
+   0.049,
+   0.253,
+   0.894
+  ],
+  "Neck": [
+   0.052,
+   0.262,
+   0.966
+  ],
+  "Head": [
+   0.038,
+   0.185,
+   1.106
+  ],
+  "HeadTop_End": [
+   0.066,
+   0.171,
+   1.315
+  ],
+  "LeftShoulder": [
+   0.073,
+   0.143,
+   1.015
+  ],
+  "LeftArm": [
+   0.199,
+   0.178,
+   1.043
+  ],
+  "LeftForeArm": [
+   0.262,
+   0.052,
+   0.931
+  ],
+  "LeftHand": [
+   0.122,
+   -0.052,
+   0.98
+  ],
+  "LeftHand_End": [
+   0.053,
+   -0.104,
+   1.004
+  ],
+  "RightShoulder": [
+   -0.101,
+   0.192,
+   1.029
+  ],
+  "RightArm": [
+   -0.157,
+   0.213,
+   0.861
+  ],
+  "RightForeArm": [
+   -0.164,
+   0.094,
+   0.721
+  ],
+  "RightHand": [
+   -0.164,
+   0.08,
+   0.707
+  ],
+  "RightHand_End": [
+   -0.164,
+   0.017,
+   0.644
+  ],
+  "LeftUpLeg": [
+   0.108,
+   0.213,
+   0.638
+  ],
+  "LeftLeg": [
+   0.164,
+   0.164,
+   0.302
+  ],
+  "LeftFoot": [
+   0.213,
+   0.22,
+   0.03
+  ],
+  "LeftToeBase": [
+   0.241,
+   0.143,
+   -0.026
+  ],
+  "LeftToe_End": [
+   0.269,
+   0.066,
+   -0.082
+  ],
+  "RightUpLeg": [
+   -0.031,
+   0.213,
+   0.638
+  ],
+  "RightLeg": [
+   -0.094,
+   0.164,
+   0.302
+  ],
+  "RightFoot": [
+   -0.143,
+   0.22,
+   0.03
+  ],
+  "RightToeBase": [
+   -0.171,
+   0.143,
+   -0.026
+  ],
+  "RightToe_End": [
+   -0.199,
+   0.066,
+   -0.082
+  ]
+ },
+ "props": [
+  {
+   "name": "pike",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.29,
+      0.195,
+      0.219
+     ],
+     [
+      0.244,
+      -0.309,
+      1.697
+     ]
+    ]
+   ],
+   "radius": 0.03
+  },
+  {
+   "name": "pikehook",
+   "bone": "RightHand",
+   "sphere": [
+    [
+     0.14,
+     -0.23,
+     1.36
+    ],
+    0.08
+   ]
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "castle_refine"
+ ],
+ "castleRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ],
+  "aimRange": 120,
+  "aimSlide": 0.3,
+  "aimFromRest": true
+ },
+ "glbPatch": {
+  "reason": "authenticity pass (lane B): AttackFront and Hitted re-authored by motion intent against the DEF. AttackFront lowers the pike level at the waist and draws it back (f1-f2), lunges on the left leg and drives it straight at the enemy (full extension f5) with the left hand reaching onto the shaft, withdraws and recovers upright; the base flipped the pike upright and stabbed it into the ground. Hitted throws him back off balance (chest arched from the upper back, head back, hips back, knees give) with the free left arm flung out and the pike held upright at his side instead of flipping back over his head. Rig, not move cuts: the arch is carried by Spine1/Spine2, the gaze correction is split Neck/Head, the free elbow keeps its bind bend, so the hip, neck and inner-elbow creases stay closed. Tear gate over master targets 856 -> 848, worst edge unchanged (5.858).",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_pikeman_pose_rot.json",
+    "sha256": "ac1fc3d05534ec13a327ea5bdfd9b3760b2ae11f23a3a7075d9afd0e1de365f5",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_pikeman_pose_rot2.json",
+    "sha256": "de64788f872fa560dd6bc7e285379b45385f649533ff75e98128b403380ba0b8",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_pikeman_pose_tr.json",
+    "sha256": "0bb53b0754014fa9b0d070a3d9cca5cc00c1e26d20e63935621c0a0617c87578",
+    "regrid": true
+   }
+  ]
+ }
+}

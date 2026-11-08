@@ -1,0 +1,204 @@
+{
+ "unit": "h3_earth_elemental",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.02,
+   0.82
+  ],
+  "Spine": [
+   -0.014,
+   0.011,
+   0.95
+  ],
+  "Spine1": [
+   0.0,
+   0.02,
+   1.08
+  ],
+  "Spine2": [
+   0.0,
+   0.03,
+   1.2
+  ],
+  "Neck": [
+   0.0,
+   0.03,
+   1.36
+  ],
+  "Head": [
+   0.0,
+   -0.04,
+   1.47
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.08,
+   1.7
+  ],
+  "LeftShoulder": [
+   0.1,
+   0.05,
+   1.3
+  ],
+  "RightShoulder": [
+   -0.1,
+   0.05,
+   1.3
+  ],
+  "LeftArm": [
+   0.27,
+   0.05,
+   1.3
+  ],
+  "RightArm": [
+   -0.27,
+   0.05,
+   1.3
+  ],
+  "LeftForeArm": [
+   0.332,
+   0.017,
+   1.03
+  ],
+  "RightForeArm": [
+   -0.336,
+   0.042,
+   1.03
+  ],
+  "LeftHand": [
+   0.272,
+   -0.17,
+   0.964
+  ],
+  "RightHand": [
+   -0.252,
+   -0.17,
+   0.968
+  ],
+  "LeftHand_End": [
+   0.15,
+   -0.27,
+   0.98
+  ],
+  "RightHand_End": [
+   -0.15,
+   -0.27,
+   0.98
+  ],
+  "LeftUpLeg": [
+   0.15,
+   0.02,
+   0.78
+  ],
+  "RightUpLeg": [
+   -0.15,
+   0.02,
+   0.78
+  ],
+  "LeftLeg": [
+   0.174,
+   0.004,
+   0.45
+  ],
+  "RightLeg": [
+   -0.181,
+   -0.003,
+   0.45
+  ],
+  "LeftFoot": [
+   0.191,
+   -0.009,
+   0.13
+  ],
+  "RightFoot": [
+   -0.192,
+   -0.013,
+   0.13
+  ],
+  "LeftToeBase": [
+   0.2,
+   -0.15,
+   0.04
+  ],
+  "RightToeBase": [
+   -0.2,
+   -0.15,
+   0.04
+  ],
+  "LeftToe_End": [
+   0.22,
+   -0.26,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.22,
+   -0.26,
+   0.02
+  ]
+ },
+ "extensions": [
+  "conflux_weights",
+  "conflux_rubble",
+  "conflux_leash",
+  "element_motion",
+  "foot_sole"
+ ],
+ "conflux": {
+  "legTop": [
+   0.78,
+   0.92
+  ],
+  "rubbleSettle": {
+   "gather": 0.35,
+   "power": 0.8
+  },
+  "handStrip": {},
+  "fillUnweighted": true,
+  "limbLeash": {
+   "bones": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "maxDist": 0.15,
+   "boneMaxDist": {
+    "LeftHand": 0.1,
+    "RightHand": 0.1
+   },
+   "nearestOnly": true,
+   "maxDistAll": 0.35,
+   "partition": [
+    "LeftUpLeg",
+    "RightUpLeg",
+    "Hips",
+    "Spine",
+    "Spine1"
+   ],
+   "handSplit": true
+  }
+ },
+ "smoothPasses": 3,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "armCut": {
+  "maxDist": 0.14
+ },
+ "shatter": {
+  "start": 2,
+  "chunks": 40,
+  "burst": 0.4,
+  "up": 0.5,
+  "spin": 6
+ },
+ "elementMotion": {
+  "mode": "grind",
+  "period": 8
+ }
+}

@@ -1,0 +1,2873 @@
+{
+  "schemaVersion": 1,
+  "status": "source-validated/build-proven/runtime-unvalidated HoMM3 custom unit balance implementation contract; runtime proof pending after deploy",
+  "sourceDoc": "docs/homm3_custom_unit_balance_recommendations_20260625.md",
+  "entries": [
+    {
+      "unitSid": "h3_pikeman",
+      "factionSid": "homm3_castle",
+      "tier": 1,
+      "unitName": "Pikeman",
+      "recommendation": "No material change. It is a clean Tier 1 body at `SV 80`, `60g`, and should remain a simple defensive identity seed.",
+      "implementationTarget": "no new mechanic: preserve current melee_attack spear baseline.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_pikeman_upg",
+      "factionSid": "homm3_castle",
+      "tier": 1,
+      "unitName": "Halberdier",
+      "recommendation": "No material change. It is a fair reliability upgrade with better offense, speed, and a narrow active.",
+      "implementationTarget": "active card: keep Halberd Hook as the single disciplined-reach action; reuse the current active row shape without adding control.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_pikeman_upg_alt",
+      "factionSid": "homm3_castle",
+      "tier": 1,
+      "unitName": "Glaivier",
+      "recommendation": "Keep the defensive stat split, but ensure its active remains narrow and defensive. Same `SV/cost` as Halberdier is acceptable only because it gives up offense and speed.",
+      "implementationTarget": "active/passive card: replace broad offense with a Shield Wall-style basic-attack damage reduction passive using the existing Castle Shield Wall law modifier family.",
+      "mechanicOverrides": {
+        "statModifiers": [
+          {
+            "set": "inDmgMods",
+            "tag": "basic_attack",
+            "value": -0.1
+          }
+        ],
+        "viewPassives": [
+          {
+            "name": "h3_balance_passive_basic_guard_name",
+            "description": "h3_balance_passive_basic_guard_description",
+            "icon": "sub_skill_faction_homm3_castle_elite_strategem_shield_wall"
+          }
+        ]
+      }
+    },
+    {
+      "unitSid": "h3_archer",
+      "factionSid": "homm3_castle",
+      "tier": 2,
+      "unitName": "Archer",
+      "recommendation": "Fix by raising damage from `2-3` to `2-4`. Tier 2 should teach Castle ranged pressure before upgrades.",
+      "implementationTarget": "no new mechanic: preserve ranged_attack baseline; implement only the damage correction.",
+      "statOverrides": {
+        "damageMin": 2,
+        "damageMax": 4
+      }
+    },
+    {
+      "unitSid": "h3_archer_upg",
+      "factionSid": "homm3_castle",
+      "tier": 2,
+      "unitName": "Marksman",
+      "recommendation": "No material stat change. Double Shot with low per-shot damage gives a readable standard upgrade.",
+      "implementationTarget": "passive card: preserve Double Shot as the standard-upgrade rule; reuse the existing Double Shot card/effect family.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_archer_upg_alt",
+      "factionSid": "homm3_castle",
+      "tier": 2,
+      "unitName": "Crossbowman",
+      "recommendation": "Fix the sidegrade by reducing initiative/speed from `7/7` to `5/5` while keeping `3-5` damage, Sharpshooter, and Fine Bolts. It is currently a strict combat-stat upgrade over Marksman.",
+      "implementationTarget": "attack/passive card: make Fine Bolts the slow armor-piercing branch by reusing the existing Piercing Shot/Fine Bolts ranged attack family, with lower speed than Marksman.",
+      "statOverrides": {
+        "initiative": 5,
+        "speed": 5
+      }
+    },
+    {
+      "unitSid": "h3_griffin",
+      "factionSid": "homm3_castle",
+      "tier": 3,
+      "unitName": "Griffin",
+      "recommendation": "Fix `squadValue` to `320`. `SV 351` is high for a thin flyer/retaliation package.",
+      "implementationTarget": "no new mechanic: preserve Flying and Alert as the row package; set `SV 320`.",
+      "statOverrides": {
+        "squadValue": 320
+      }
+    },
+    {
+      "unitSid": "h3_griffin_upg",
+      "factionSid": "homm3_castle",
+      "tier": 3,
+      "unitName": "Royal Griffin",
+      "recommendation": "Fix `SV` toward `325-350` and make retaliation reliability the visible budget center. `SV 448` reads like Tier 4 without Tier 4 rule density.",
+      "implementationTarget": "passive card: make Alert II retaliation reliability the visible standard-upgrade rule using the existing Alert/retaliation card family.",
+      "statOverrides": {
+        "squadValue": 340
+      }
+    },
+    {
+      "unitSid": "h3_griffin_upg_alt",
+      "factionSid": "homm3_castle",
+      "tier": 3,
+      "unitName": "Battle Griffin",
+      "recommendation": "Fix `SV` similarly and keep it as the lower-defense double-strike branch. The sidegrade concept is valid, but current valuation is too high.",
+      "implementationTarget": "attack pattern: make Double Strike the alternate's kind difference using the existing Double Strike family, with lower defense than Royal Griffin.",
+      "statOverrides": {
+        "squadValue": 335
+      }
+    },
+    {
+      "unitSid": "h3_swordsman",
+      "factionSid": "homm3_castle",
+      "tier": 4,
+      "unitName": "Swordsman",
+      "recommendation": "Add the Shield Wall-style guard passive named in the implementation target. Tier 4 is the midgame pivot; `mechanicCount 3` is too thin.",
+      "implementationTarget": "passive card: add a Shield Wall-style basic-attack damage reduction passive using the existing Castle Shield Wall law modifier family.",
+      "mechanicOverrides": {
+        "statModifiers": [
+          {
+            "set": "inDmgMods",
+            "tag": "basic_attack",
+            "value": -0.1
+          }
+        ],
+        "viewPassives": [
+          {
+            "name": "h3_balance_passive_basic_guard_name",
+            "description": "h3_balance_passive_basic_guard_description",
+            "icon": "sub_skill_faction_homm3_castle_elite_strategem_shield_wall"
+          }
+        ]
+      }
+    },
+    {
+      "unitSid": "h3_swordsman_upg",
+      "factionSid": "homm3_castle",
+      "tier": 4,
+      "unitName": "Crusader",
+      "recommendation": "No raw stat increase. Keep Double Strike as the standard upgrade's center and make sure it is card-visible.",
+      "implementationTarget": "passive card: preserve Double Strike as the sole main rule using the existing Double Strike family.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_swordsman_upg_alt",
+      "factionSid": "homm3_castle",
+      "tier": 4,
+      "unitName": "Guardsman",
+      "recommendation": "Fix the sidegrade by setting damage to `6-9` and letting guard/cover carry the alternate role. Current HP/defense/damage can read like a direct durability winner over Crusader.",
+      "implementationTarget": "passive card: make guard identity a Shield Wall-style basic-attack damage reduction passive, with lower damage than Crusader.",
+      "statOverrides": {
+        "damageMin": 6,
+        "damageMax": 9
+      },
+      "mechanicOverrides": {
+        "statModifiers": [
+          {
+            "set": "inDmgMods",
+            "tag": "basic_attack",
+            "value": -0.1
+          }
+        ],
+        "viewPassives": [
+          {
+            "name": "h3_balance_passive_basic_guard_name",
+            "description": "h3_balance_passive_basic_guard_description",
+            "icon": "sub_skill_faction_homm3_castle_elite_strategem_shield_wall"
+          }
+        ]
+      }
+    },
+    {
+      "unitSid": "h3_monk",
+      "factionSid": "homm3_castle",
+      "tier": 5,
+      "unitName": "Monk",
+      "recommendation": "Add identity by raising HP toward `40` and adding a visible ranged-support hook. Current `30 HP`, low rule density, and no support text read closer to Tier 4 than Tier 5.",
+      "implementationTarget": "passive card: add a Coordinated Volley-style ranged damage support passive using the existing Castle Coordinated Volley subskill modifier family.",
+      "mechanicOverrides": {
+        "statModifiers": [
+          {
+            "set": "outDmgMods",
+            "tag": "shoot_attack",
+            "value": 0.1
+          }
+        ],
+        "viewPassives": [
+          {
+            "name": "h3_balance_passive_ranged_support_name",
+            "description": "h3_balance_passive_ranged_support_description",
+            "icon": "sub_skill_faction_homm3_castle_elite_strategem_coordinated_volley"
+          }
+        ]
+      },
+      "statOverrides": {
+        "hp": 40
+      }
+    },
+    {
+      "unitSid": "h3_monk_upg",
+      "factionSid": "homm3_castle",
+      "tier": 5,
+      "unitName": "Zealot",
+      "recommendation": "Add a visible Coordinated Volley-style ranged rule and enough durability to compete with Priest as the ranged-support upgrade rather than a strictly frailer shooter.",
+      "implementationTarget": "passive card: use the Coordinated Volley modifier family as the standard upgrade's ranged-support rule; avoid raw damage inflation.",
+      "mechanicOverrides": {
+        "statModifiers": [
+          {
+            "set": "outDmgMods",
+            "tag": "shoot_attack",
+            "value": 0.1
+          }
+        ],
+        "viewPassives": [
+          {
+            "name": "h3_balance_passive_ranged_support_name",
+            "description": "h3_balance_passive_ranged_support_description",
+            "icon": "sub_skill_faction_homm3_castle_elite_strategem_coordinated_volley"
+          }
+        ]
+      },
+      "statOverrides": {
+        "hp": 35
+      }
+    },
+    {
+      "unitSid": "h3_monk_upg_alt",
+      "factionSid": "homm3_castle",
+      "tier": 5,
+      "unitName": "Priest",
+      "recommendation": "Fix valuation by setting `SV` to `850` while keeping `550g`, better HP/defense, Sharpshooter, and Bless, but remove Duelist and avoid making Priest faster than Zealot.",
+      "implementationTarget": "active card: keep Blessing as a limited support action using the existing Blessing/Bless-style effect family, with Sharpshooter but no Duelist and no extra ranged damage rule.",
+      "statOverrides": {
+        "defence": 10,
+        "initiative": 7,
+        "speed": 7,
+        "squadValue": 850,
+        "cost": {
+          "gold": 450
+        },
+        "hp": 35
+      },
+      "mechanicOverrides": {
+        "removeViewPassives": [
+          "base_passive_duelist_name"
+        ]
+      }
+    },
+    {
+      "unitSid": "h3_cavalier",
+      "factionSid": "homm3_castle",
+      "tier": 6,
+      "unitName": "Cavalier",
+      "recommendation": "Add anchor quality by raising attack/defense toward `17/17` while keeping charge as the visible identity. `15/15` is below Tier 6 anchor expectations.",
+      "implementationTarget": "attack pattern: keep Jousting Charge as the anchor mechanic using the current charge attack family.",
+      "statOverrides": {
+        "offence": 17,
+        "defence": 17
+      }
+    },
+    {
+      "unitSid": "h3_cavalier_upg",
+      "factionSid": "homm3_castle",
+      "tier": 6,
+      "unitName": "Champion",
+      "recommendation": "Add anchor quality by targeting about `19/18` offense/defense, with speed as the standard upgrade's advantage. The upgrade jump is too thin for Tier 6.",
+      "implementationTarget": "attack pattern: make Rapid Assault the standard branch by reusing the current charge/assault action family after stat correction.",
+      "statOverrides": {
+        "offence": 19,
+        "defence": 18
+      }
+    },
+    {
+      "unitSid": "h3_cavalier_upg_alt",
+      "factionSid": "homm3_castle",
+      "tier": 6,
+      "unitName": "Justiciar",
+      "recommendation": "Keep lower speed, raise defense/control visibility, and make Command Fear explicit. It should be the defensive/control sidegrade, not just a slower Champion.",
+      "implementationTarget": "active card: make Command Fear the alternate's role using the existing Command Fear action family, with lower speed than Champion.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_angel",
+      "factionSid": "homm3_castle",
+      "tier": 7,
+      "unitName": "Angel",
+      "recommendation": "Add allied basic-attack protection and cap speed at `11`. `SV 5019` is fine, but `mechanicCount 4` is low for a capstone.",
+      "implementationTarget": "passive card: add card-visible allied basic-attack damage reduction using the existing Castle Shield Wall law modifier family.",
+      "statOverrides": {
+        "speed": 11
+      },
+      "implementationStatus": {
+        "kind": "blockedNativeContract",
+        "reason": "Allied protection aura semantics are not implemented by unit-local inDmgMods; blocked until a validator-backed native/runtime aura contract proves side, receiver, lifecycle, and idempotence."
+      }
+    },
+    {
+      "unitSid": "h3_angel_upg",
+      "factionSid": "homm3_castle",
+      "tier": 7,
+      "unitName": "Archangel",
+      "recommendation": "Fix by reducing speed into the Tier 7 band, roughly initiative `14-16` and speed `11`, and bring `SV` below the vanilla ceiling. Rewind Life should be the budget center, not `18/18` mobility.",
+      "implementationTarget": "active card: make Rewind Life the budget center using the current Rewind Life active row; reduce mobility around that action.",
+      "statOverrides": {
+        "initiative": 15,
+        "speed": 11,
+        "squadValue": 7600
+      }
+    },
+    {
+      "unitSid": "h3_angel_upg_alt",
+      "factionSid": "homm3_castle",
+      "tier": 7,
+      "unitName": "Seraph",
+      "recommendation": "Apply the same mobility and `SV` correction, then define it as the support/prayer branch. Same `SV/cost` as Archangel is acceptable only if the support tradeoff is clear.",
+      "implementationTarget": "active/aura card: make Reality Distortion the support branch using the current Reality Distortion row, not extra speed.",
+      "statOverrides": {
+        "hp": 220,
+        "initiative": 15,
+        "speed": 12,
+        "squadValue": 7600,
+        "cost": {
+          "gold": 5000,
+          "gemstones": 3
+        }
+      }
+    },
+    {
+      "unitSid": "h3_centaur",
+      "factionSid": "homm3_rampart",
+      "tier": 1,
+      "unitName": "Centaur",
+      "recommendation": "No material change. `SV 100`, `70g`, and `6/6` tempo are high but readable as a fast Tier 1 seed.",
+      "implementationTarget": "no new mechanic: preserve current fast melee_attack scout role; no Avenger-specific effect.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_centaur_captain",
+      "factionSid": "homm3_rampart",
+      "tier": 1,
+      "unitName": "Centaur Captain",
+      "recommendation": "Fix by reducing initiative/speed from `8/8` to `6/6` and normalizing `SV` near `120`. It currently exceeds Tier 1 tempo.",
+      "implementationTarget": "no new mechanic: preserve reliable melee upgrade after speed/SV normalization.",
+      "statOverrides": {
+        "initiative": 6,
+        "speed": 6,
+        "squadValue": 120
+      }
+    },
+    {
+      "unitSid": "h3_centaur_ranger_upg_alt",
+      "factionSid": "homm3_rampart",
+      "tier": 1,
+      "unitName": "Centaur Ranger",
+      "recommendation": "Fix urgently as a ranged sidegrade: correct to ranged AI, target `SV 110-120`, and keep speed no higher than `6`. `SV 1366` at `90g` is a severe valuation anomaly.",
+      "implementationTarget": "AI tag plus attack card: set `ai=range_type` and ranged_attack behavior, then reuse Sharpshooter/ranged_attack style data as the low-speed ranged sidegrade.",
+      "statOverrides": {
+        "speed": 6,
+        "squadValue": 115
+      },
+      "mechanicOverrides": {
+        "forceAi": "range_type"
+      }
+    },
+    {
+      "unitSid": "h3_dwarf",
+      "factionSid": "homm3_rampart",
+      "tier": 2,
+      "unitName": "Dwarf",
+      "recommendation": "Add the guard passive named in the implementation target; keep the slow speed. HP and Shield Set fit, but Tier 2 needs a clearer tactical choice.",
+      "implementationTarget": "passive card: add a Shield Wall-style basic-attack damage reduction passive using the existing damage-reduction modifier family.",
+      "mechanicOverrides": {
+        "statModifiers": [
+          {
+            "set": "inDmgMods",
+            "tag": "basic_attack",
+            "value": -0.1
+          }
+        ],
+        "viewPassives": [
+          {
+            "name": "h3_balance_passive_basic_guard_name",
+            "description": "h3_balance_passive_basic_guard_description",
+            "icon": "sub_skill_faction_homm3_castle_elite_strategem_shield_wall"
+          }
+        ]
+      }
+    },
+    {
+      "unitSid": "h3_battle_dwarf",
+      "factionSid": "homm3_rampart",
+      "tier": 2,
+      "unitName": "Battle Dwarf",
+      "recommendation": "Fix by normalizing `SV` to `190`; do not solve the mismatch by raising cost. The `SV` correction is cleaner.",
+      "implementationTarget": "passive card: make Runic Guard the standard upgrade's visible guard rule using the current Runic Guard card/effect family.",
+      "statOverrides": {
+        "squadValue": 190
+      }
+    },
+    {
+      "unitSid": "h3_dwarf_battlerager_upg_alt",
+      "factionSid": "homm3_rampart",
+      "tier": 2,
+      "unitName": "Dwarf Battlerager",
+      "recommendation": "Fix valuation by targeting `SV 170-180` and giving it a visible aggressive reprisal rule. `SV 87` at `150g` is below base value despite better combat stats.",
+      "implementationTarget": "passive card: add an Avenger-mark payoff passive using the existing Avenger Mark damage-taken modifier family, with lower defense than Battle Dwarf.",
+      "statOverrides": {
+        "squadValue": 175
+      }
+    },
+    {
+      "unitSid": "h3_wood_elf",
+      "factionSid": "homm3_rampart",
+      "tier": 3,
+      "unitName": "Wood Elf",
+      "recommendation": "No material stat change. `SV 234`, `200g`, ranged role, and fragile HP fit Tier 3 baseline pressure.",
+      "implementationTarget": "no new mechanic: preserve base ranged_attack pressure; do not apply Avenger marks from the unit row.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_grand_elf",
+      "factionSid": "homm3_rampart",
+      "tier": 3,
+      "unitName": "Grand Elf",
+      "recommendation": "Cap `SV` at the Tier 3 ceiling. Double Shot at `SV 331` is slightly over band. Cost raise withdrawn 2026-10-01: it priced the base above its own upgrade, so upgrading paid the player gold; gold is pinned at the HoMM3 `225`.",
+      "implementationTarget": "passive card: preserve Double Shot as the standard upgrade's rule using the existing Double Shot family.",
+      "statOverrides": {
+        "cost": {
+          "gold": 225
+        }
+      }
+    },
+    {
+      "unitSid": "h3_elf_wardancer_upg_alt",
+      "factionSid": "homm3_rampart",
+      "tier": 3,
+      "unitName": "Elf Wardancer",
+      "recommendation": "Fix by normalizing `SV` to roughly `260-290` and pricing near Grand Elf. The ranged-to-melee trade is valid, but `SV 52` is impossible for fast double-strike melee.",
+      "implementationTarget": "attack pattern: make melee Double Strike the alternate's kind difference using the existing Double Strike family; loss of range remains the drawback.",
+      "statOverrides": {
+        "squadValue": 260
+      }
+    },
+    {
+      "unitSid": "h3_pegasus",
+      "factionSid": "homm3_rampart",
+      "tier": 4,
+      "unitName": "Pegasus",
+      "recommendation": "Add the Misfortune anti-caster rule named in the implementation target. Tier 4 wants an engine. Cost raise withdrawn 2026-10-01: it priced the base above its own upgrade, so upgrading paid the player gold; gold is pinned at the HoMM3 `250`.",
+      "implementationTarget": "passive/aura card: add Misfortune pressure using the current Misfortune card/effect family.",
+      "statOverrides": {
+        "cost": {
+          "gold": 250
+        }
+      }
+    },
+    {
+      "unitSid": "h3_silver_pegasus",
+      "factionSid": "homm3_rampart",
+      "tier": 4,
+      "unitName": "Silver Pegasus",
+      "recommendation": "Fix speed by reducing to `8`, while keeping high initiative. `12/12` mobility is overloaded for Tier 4.",
+      "implementationTarget": "active/passive card: make Rivulet Retreat plus Misfortune the reliable anti-caster branch using the current Rivulet Retreat and Misfortune rows; normalize speed.",
+      "evidenceChecks": {
+        "viewAbilities": [
+          "h3_silver_pegasus_misfortune_name",
+          "h3_silver_pegasus_redesign_ability_name"
+        ]
+      }
+    },
+    {
+      "unitSid": "h3_gold_pegasus_upg_alt",
+      "factionSid": "homm3_rampart",
+      "tier": 4,
+      "unitName": "Gold Pegasus",
+      "recommendation": "Fix `SV` to about `500-550` and reduce speed to about `8`, keeping no-retaliation plus Misfortune as the alternate. `SV 178` at `350g` is a severe low-value anomaly.",
+      "implementationTarget": "active/passive card: use Hourglass plus Misfortune/no-retaliation as the control branch using current Hourglass and no-retaliation families.",
+      "statOverrides": {
+        "speed": 8,
+        "squadValue": 525
+      },
+      "evidenceChecks": {
+        "viewAbilities": [
+          "h3_gold_pegasus_upg_alt_misfortune_name",
+          "h3_gold_pegasus_upg_alt_redesign_ability_name"
+        ]
+      }
+    },
+    {
+      "unitSid": "h3_dendroid_guard",
+      "factionSid": "homm3_rampart",
+      "tier": 5,
+      "unitName": "Dendroid Guard",
+      "recommendation": "Add identity by raising offense toward `12` and making Binding prominent. Slow tank is right, but `mechanicCount 3` and offense 9 are too low for Tier 5 specialist power.",
+      "implementationTarget": "passive card: foreground Binding as the zone-control passive using the existing Binding card/effect family.",
+      "statOverrides": {
+        "offence": 12
+      }
+    },
+    {
+      "unitSid": "h3_dendroid_soldier",
+      "factionSid": "homm3_rampart",
+      "tier": 5,
+      "unitName": "Dendroid Soldier",
+      "recommendation": "Add the stronger Binding rule named in the implementation target and raise offense to `12`. `SV 803` is plausible but the row is mostly stats.",
+      "implementationTarget": "passive card: strengthen Binding reliability using the existing Binding family; do not add speed.",
+      "statOverrides": {
+        "offence": 12
+      }
+    },
+    {
+      "unitSid": "h3_dendroid_shaman_upg_alt",
+      "factionSid": "homm3_rampart",
+      "tier": 5,
+      "unitName": "Dendroid Shaman",
+      "recommendation": "Fix `SV` to `775` and frame the active as Rampart regrowth/support rather than generic resurrection. `SV 302` at `550g` with active and defense gains is a cost/value anomaly.",
+      "implementationTarget": "active card: use the existing Animate Dead active family and localize it as regrowth support.",
+      "statOverrides": {
+        "squadValue": 775
+      }
+    },
+    {
+      "unitSid": "h3_unicorn",
+      "factionSid": "homm3_rampart",
+      "tier": 6,
+      "unitName": "Unicorn",
+      "recommendation": "Add visible aura/resistance and raise defense toward `18`. It is priced as a Tier 6 anchor but has only `15/14` offense/defense and low rule density.",
+      "implementationTarget": "active/passive card: use Blinding Strike plus a Shield Wall-style protection aura as the anchor package, reusing current Blind and damage-reduction families.",
+      "statOverrides": {
+        "defence": 18
+      },
+      "implementationStatus": {
+        "kind": "blockedNativeContract",
+        "reason": "Allied protection aura semantics are not implemented by unit-local inDmgMods; blocked until a validator-backed native/runtime aura contract proves side, receiver, lifecycle, and idempotence."
+      }
+    },
+    {
+      "unitSid": "h3_war_unicorn",
+      "factionSid": "homm3_rampart",
+      "tier": 6,
+      "unitName": "War Unicorn",
+      "recommendation": "Add anchor quality by raising defense toward `18` and making Blind plus aura the standard package.",
+      "implementationTarget": "active/passive card: make Blinding Strike the standard control rule using the existing Blind/Blinding Strike family.",
+      "statOverrides": {
+        "defence": 18
+      }
+    },
+    {
+      "unitSid": "h3_pristine_unicorn_upg_alt",
+      "factionSid": "homm3_rampart",
+      "tier": 6,
+      "unitName": "Pristine Unicorn",
+      "recommendation": "Fix the sidegrade by lowering speed to `7` while keeping stronger defense and stronger control. It is nearly a direct upgrade over War Unicorn for only `+100g`.",
+      "implementationTarget": "active/passive card: make Radiant Armor the slower control-tank branch using the current Radiant Armor row plus Blind family.",
+      "statOverrides": {
+        "speed": 7
+      }
+    },
+    {
+      "unitSid": "h3_green_dragon",
+      "factionSid": "homm3_rampart",
+      "tier": 7,
+      "unitName": "Green Dragon",
+      "recommendation": "Add capstone quality by raising offense/defense to `22/20`; keep Dragonbreath Strike and Magic Immunity as the visible package. Breath and immunity are good, but the row is thin.",
+      "implementationTarget": "attack/passive card: preserve Dragonbreath Strike and Magic Immunity as the base capstone package using existing dragonbreath/immunity families.",
+      "statOverrides": {
+        "defence": 20,
+        "offence": 22
+      }
+    },
+    {
+      "unitSid": "h3_gold_dragon",
+      "factionSid": "homm3_rampart",
+      "tier": 7,
+      "unitName": "Gold Dragon",
+      "recommendation": "Fix by reducing speed to `11`, keeping high initiative, and bringing `SV` under the Tier 7 ceiling.",
+      "implementationTarget": "passive card: preserve stronger Magic Immunity as the standard upgrade's rule using existing Magic Immunity family; fix speed/SV.",
+      "statOverrides": {
+        "speed": 11,
+        "squadValue": 7600
+      }
+    },
+    {
+      "unitSid": "h3_diamond_dragon_upg_alt",
+      "factionSid": "homm3_rampart",
+      "tier": 7,
+      "unitName": "Diamond Dragon",
+      "recommendation": "Keep the offensive alternate idea, reduce speed to `11`, and add the marked-quarry breath rule named in the implementation target. The HP/defense-for-attack trade is valid, but it still needs a faction thesis.",
+      "implementationTarget": "attack/passive card: add Avenger-mark payoff to Dragonbreath Strike using the existing Avenger Mark damage-taken modifier family, with speed capped.",
+      "statOverrides": {
+        "speed": 11
+      }
+    },
+    {
+      "unitSid": "h3_gremlin",
+      "factionSid": "homm3_tower",
+      "tier": 1,
+      "unitName": "Gremlin",
+      "recommendation": "Fix lightly by raising HP from `4` to `6` and gold from `30` to `35`.",
+      "implementationTarget": "no new mechanic: implement HP/gold normalization only.",
+      "statOverrides": {
+        "hp": 6,
+        "cost": {
+          "gold": 35
+        }
+      }
+    },
+    {
+      "unitSid": "h3_gremlin_upg",
+      "factionSid": "homm3_tower",
+      "tier": 1,
+      "unitName": "Master Gremlin",
+      "recommendation": "Keep ranged role and raise HP to `6` so 4 HP is not carrying the entire drawback.",
+      "implementationTarget": "attack card: preserve ranged_attack as the upgrade's role; raise HP only for band compliance.",
+      "statOverrides": {
+        "hp": 6
+      }
+    },
+    {
+      "unitSid": "h3_gremlin_upg_alt",
+      "factionSid": "homm3_tower",
+      "tier": 1,
+      "unitName": "Gremlin Mechanic",
+      "recommendation": "Fix tier breadth by reducing from two actives to one visible Repair support active. Tier 1 should have one narrow hook.",
+      "implementationTarget": "active card: keep one Repair action using the existing Repair active family; remove any second Tier 1 active.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_gargoyle",
+      "factionSid": "homm3_tower",
+      "tier": 2,
+      "unitName": "Stone Gargoyle",
+      "recommendation": "Add the construct passive named in the implementation target; stats are mostly fine.",
+      "implementationTarget": "passive card: add Construct behavior using existing construct immunity/resistance patterns from Golem rows.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_gargoyle_upg",
+      "factionSid": "homm3_tower",
+      "tier": 2,
+      "unitName": "Obsidian Gargoyle",
+      "recommendation": "Fix by reducing speed/initiative from `9` to `7`. Flying speed 9 exceeds Tier 2.",
+      "implementationTarget": "passive card: use a lower-rank Magic Immunity family as the anti-magic shell; reduce speed to pay for it.",
+      "statOverrides": {
+        "initiative": 7,
+        "speed": 7
+      }
+    },
+    {
+      "unitSid": "h3_gargoyle_upg_alt",
+      "factionSid": "homm3_tower",
+      "tier": 2,
+      "unitName": "Elemental Gargoyle",
+      "recommendation": "Fix by trimming HP/defense to `18/7`; keep it slower than Obsidian.",
+      "implementationTarget": "passive card: reuse lower-rank Magic Immunity as the anti-magic shell; trim HP/defense.",
+      "statOverrides": {
+        "defence": 7,
+        "hp": 18
+      }
+    },
+    {
+      "unitSid": "h3_golem",
+      "factionSid": "homm3_tower",
+      "tier": 3,
+      "unitName": "Stone Golem",
+      "recommendation": "Keep current rule density. Cost raise withdrawn 2026-10-01: it priced the base above its own upgrade, so upgrading paid the player gold; gold is pinned at the HoMM3 `150`.",
+      "implementationTarget": "passive card: preserve Repair plus construct resistance using existing Golem Repair/resistance families; correct gold cost.",
+      "statOverrides": {
+        "cost": {
+          "gold": 150
+        }
+      }
+    },
+    {
+      "unitSid": "h3_golem_upg",
+      "factionSid": "homm3_tower",
+      "tier": 3,
+      "unitName": "Iron Golem",
+      "recommendation": "Fix by lowering `SV` to `330`. `SV 412` exceeds Tier 3 at only `200g`.",
+      "implementationTarget": "passive card: make stronger construct resistance the standard upgrade using current Golem resistance rows; correct SV/cost.",
+      "statOverrides": {
+        "squadValue": 330
+      }
+    },
+    {
+      "unitSid": "h3_golem_upg_alt",
+      "factionSid": "homm3_tower",
+      "tier": 3,
+      "unitName": "Magnetic Golem",
+      "recommendation": "Fix by lowering defense to `11`; keep `SV` near Iron after the control branch is costed.",
+      "implementationTarget": "active/passive card: use Web as the ranged-disruption sidegrade by reusing the current Web card/effect family.",
+      "statOverrides": {
+        "defence": 11
+      }
+    },
+    {
+      "unitSid": "h3_mage",
+      "factionSid": "homm3_tower",
+      "tier": 4,
+      "unitName": "Mage",
+      "recommendation": "Add the visible Silence caster action named in the implementation target. Tier 4 wants a midgame engine.",
+      "implementationTarget": "active card: add Silence as the caster action by reusing the existing Silence active family.",
+      "evidenceChecks": {
+        "viewAbilities": [
+          "h3_mage_silence_ability_name"
+        ]
+      }
+    },
+    {
+      "unitSid": "h3_mage_upg",
+      "factionSid": "homm3_tower",
+      "tier": 4,
+      "unitName": "Arch Mage",
+      "recommendation": "Add cheaper spell-action reliability and keep `SV` at the Tier 4 ceiling.",
+      "implementationTarget": "active/passive card: make the Mage spell action lower cost using the existing Bottomless Knowledge/Focused Study cost-reduction family.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_mage_upg_alt",
+      "factionSid": "homm3_tower",
+      "tier": 4,
+      "unitName": "Battle Mage",
+      "recommendation": "Keep as combat pivot, reduce `SV` to `650`, and let the active define the cost.",
+      "implementationTarget": "active card: use Silence as the combat pivot by reusing the current Silence active family.",
+      "statOverrides": {
+        "squadValue": 650,
+        "cost": {
+          "gold": 450
+        }
+      }
+    },
+    {
+      "unitSid": "h3_genie",
+      "factionSid": "homm3_tower",
+      "tier": 5,
+      "unitName": "Genie",
+      "recommendation": "Add specialist power by raising HP to `45` and adding the visible support action named in the implementation target.",
+      "implementationTarget": "active card: use Command Reposition as the specialist support action by reusing the current Command Reposition family.",
+      "statOverrides": {
+        "hp": 45
+      }
+    },
+    {
+      "unitSid": "h3_genie_upg",
+      "factionSid": "homm3_tower",
+      "tier": 5,
+      "unitName": "Master Genie",
+      "recommendation": "Fix speed by reducing initiative/speed from `11/11` to about `8/8`, then add a caster-support rule.",
+      "implementationTarget": "active/passive card: use Refract and Reflect as the standard branch by reusing the current Refract and Reflect family.",
+      "statOverrides": {
+        "initiative": 8,
+        "speed": 8
+      }
+    },
+    {
+      "unitSid": "h3_genie_upg_alt",
+      "factionSid": "homm3_tower",
+      "tier": 5,
+      "unitName": "Genie Vizier",
+      "recommendation": "Fix sidegrade by making it slower and support-oriented; avoid Master Genie plus bulk/offense.",
+      "implementationTarget": "active card: use Command Switch Places as the sidegrade action by reusing the current Command Switch Places family.",
+      "statOverrides": {
+        "cost": {
+          "gold": 600
+        },
+        "hp": 38,
+        "offence": 11,
+        "initiative": 7,
+        "speed": 7,
+        "squadValue": 900
+      }
+    },
+    {
+      "unitSid": "h3_naga",
+      "factionSid": "homm3_tower",
+      "tier": 6,
+      "unitName": "Naga",
+      "recommendation": "Add visible no-retaliation/guard identity and raise offense/defense to Tier 6 floors.",
+      "implementationTarget": "passive card: add no-retaliation using the existing base_passive_noncounter family.",
+      "statOverrides": {
+        "offence": 17,
+        "defence": 17
+      }
+    },
+    {
+      "unitSid": "h3_naga_upg",
+      "factionSid": "homm3_tower",
+      "tier": 6,
+      "unitName": "Naga Queen",
+      "recommendation": "Fix `SV` below the Tier 6 ceiling after adding the anchor rule. Current high `SV` is not backed by card depth.",
+      "implementationTarget": "passive card: make no-retaliation damage reliability the standard branch using the existing no-counter melee family.",
+      "statOverrides": {
+        "squadValue": 2600
+      }
+    },
+    {
+      "unitSid": "h3_naga_upg_alt",
+      "factionSid": "homm3_tower",
+      "tier": 6,
+      "unitName": "Naga Rani",
+      "recommendation": "Fix sidegrade/value coherence by lowering `SV` below Queen and giving it the distinct defensive role named in the implementation target. Same cost but higher `SV` than Queen is hard to justify.",
+      "implementationTarget": "passive/attack card: make Dragonbreath Strike the defensive sidegrade's kind difference using the existing Dragonbreath Strike family.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_giant",
+      "factionSid": "homm3_tower",
+      "tier": 7,
+      "unitName": "Giant",
+      "recommendation": "Add the capstone-seed Judgement rule named in the implementation target. `SV 3718` is fine but the row is thin.",
+      "implementationTarget": "active/passive card: add lower-rank Judgement setup by reusing the current Judgement family.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_giant_upg",
+      "factionSid": "homm3_tower",
+      "tier": 7,
+      "unitName": "Titan",
+      "recommendation": "Keep premium ranged identity, but add visible lightning/Focus action and avoid further stat inflation.",
+      "implementationTarget": "attack/active card: use ranged_attack plus Judgement/lightning-style active schema already present on Giant/Colossus rows.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_giant_upg_alt",
+      "factionSid": "homm3_tower",
+      "tier": 7,
+      "unitName": "Colossus",
+      "recommendation": "Fix sidegrade by reducing HP/speed/`SV` and making it a true melee siege branch with a major range drawback. It is almost strictly better than Titan except defense/range.",
+      "implementationTarget": "attack pattern: make Judgement the melee/siege branch using the current Judgement family and remove Titan-equivalent range advantage.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_imp",
+      "factionSid": "homm3_inferno",
+      "tier": 1,
+      "unitName": "Imp",
+      "recommendation": "No material change. It is a fragile, cheap Gating body and should stay simple.",
+      "implementationTarget": "no new mechanic: preserve cheap temporary Gate Imp body; avoid permanent combat utility.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_imp_upg",
+      "factionSid": "homm3_inferno",
+      "tier": 1,
+      "unitName": "Familiar",
+      "recommendation": "Fix by capping initiative/speed from `7/7` to `6/6`. Energize is a valid Tier 1 upgrade hook, but mobility exceeds band.",
+      "implementationTarget": "active/passive card: keep Energize as the Focus-support hook using the current Energize row; cap speed.",
+      "statOverrides": {
+        "initiative": 6,
+        "speed": 6
+      }
+    },
+    {
+      "unitSid": "h3_imp_upg_alt",
+      "factionSid": "homm3_inferno",
+      "tier": 1,
+      "unitName": "Vermin",
+      "recommendation": "Fix by removing Swift Strike and capping initiative/speed at `6/6`, while keeping Familiar's Gift and Flying.",
+      "implementationTarget": "active/passive card: keep Familiar's Gift as the sidegrade using the current Familiar's Gift row and remove Swift Strike overlap.",
+      "statOverrides": {
+        "initiative": 6,
+        "speed": 6,
+        "cost": {
+          "gold": 60
+        }
+      }
+    },
+    {
+      "unitSid": "h3_gog",
+      "factionSid": "homm3_inferno",
+      "tier": 2,
+      "unitName": "Gog",
+      "recommendation": "No material change. `SV 159` is high but workable because it is slow and low-damage.",
+      "implementationTarget": "no new mechanic: preserve slow ranged Gating target role.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_gog_upg",
+      "factionSid": "homm3_inferno",
+      "tier": 2,
+      "unitName": "Magog",
+      "recommendation": "Fix by lowering `SV` toward `185-195` if Magma Shot stays unchanged. `SV 240` is above Tier 2.",
+      "implementationTarget": "active/attack card: keep Magma Shot as the heavier blast branch using the current Magma Shot row; correct SV.",
+      "statOverrides": {
+        "squadValue": 190
+      }
+    },
+    {
+      "unitSid": "h3_gog_upg_alt",
+      "factionSid": "homm3_inferno",
+      "tier": 2,
+      "unitName": "Amalek",
+      "recommendation": "Fix by raising `SV` toward `175-185`. Same cost as Magog with better bulk should not sit at `SV 123`.",
+      "implementationTarget": "active/attack card: keep Hellfire Burst as the defensive Focus-efficient shooter action using the current Hellfire Burst row; raise SV.",
+      "statOverrides": {
+        "squadValue": 180
+      }
+    },
+    {
+      "unitSid": "h3_hell_hound",
+      "factionSid": "homm3_inferno",
+      "tier": 3,
+      "unitName": "Hell Hound",
+      "recommendation": "Fix by reducing offense from `10` to `8-9` and bringing `SV` back inside Tier 3.",
+      "implementationTarget": "no new mechanic: preserve speed-pressure melee seed after offense/SV normalization.",
+      "statOverrides": {
+        "offence": 10
+      }
+    },
+    {
+      "unitSid": "h3_hell_hound_upg",
+      "factionSid": "homm3_inferno",
+      "tier": 3,
+      "unitName": "Cerberus",
+      "recommendation": "Fix `SV` into the upper Tier 3 range and trim one defensive point while keeping no-retaliation plus breath/reach.",
+      "implementationTarget": "attack pattern: use Dragonbreath Strike and Swift Strike/no-retaliation families as the standard anti-retaliation branch; trim defense.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_hell_hound_upg_alt",
+      "factionSid": "homm3_inferno",
+      "tier": 3,
+      "unitName": "Fire Hound",
+      "recommendation": "Fix `SV` near Cerberus and clarify its alternate attack as a fire/breath rule on the card.",
+      "implementationTarget": "attack pattern: use Dragonbreath Strike as the fire-breath branch without no-retaliation overlap.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_demon",
+      "factionSid": "homm3_inferno",
+      "tier": 4,
+      "unitName": "Demon",
+      "recommendation": "Add the low-cost attack/defense debuff named in the implementation target while keeping stats modest. Tier 4 needs a pivot.",
+      "implementationTarget": "active/passive card: add Sapping Strike-style attack/defense drain using the current Sapping Strike family at base strength.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_demon_upg",
+      "factionSid": "homm3_inferno",
+      "tier": 4,
+      "unitName": "Horned Demon",
+      "recommendation": "Add the barrier rule named in the implementation target instead of only HP/speed.",
+      "implementationTarget": "passive card: add Shielded Arrival-style barrier using the existing Inferno Shielded Arrival subskill barrier family.",
+      "implementationStatus": {
+        "kind": "blockedNativeContract",
+        "reason": "The recommendation names a stateful, aura, scaling, or owner-correlated mechanic that is blocked until a dedicated validator-backed native/runtime contract proves the behavior."
+      }
+    },
+    {
+      "unitSid": "h3_demon_upg_alt",
+      "factionSid": "homm3_inferno",
+      "tier": 4,
+      "unitName": "Gore Demon",
+      "recommendation": "Fix urgently by reducing `SV` from `2250` to roughly `600-650` and keeping Sapping Strike.",
+      "implementationTarget": "attack/passive card: keep Sapping Strike as the faster lower-HP debuff sidegrade using the current Sapping Strike family.",
+      "statOverrides": {
+        "squadValue": 600,
+        "cost": {
+          "gold": 270
+        }
+      }
+    },
+    {
+      "unitSid": "h3_pit_fiend",
+      "factionSid": "homm3_inferno",
+      "tier": 5,
+      "unitName": "Pit Fiend",
+      "recommendation": "Add the Infernal Conversion specialist hook named in the implementation target before increasing stats.",
+      "implementationTarget": "active/passive card: add Infernal Conversion by reusing the existing Animate Dead active schema but localizing/framing it as demon raising.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_pit_fiend_upg",
+      "factionSid": "homm3_inferno",
+      "tier": 5,
+      "unitName": "Pit Lord",
+      "recommendation": "Keep revive-style mechanics, but present it as Infernal Conversion rather than generic Animate Dead.",
+      "implementationTarget": "active card: keep Animate Dead mechanics but rename/frame as Infernal Conversion using the existing Animate Dead active family.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_pit_fiend_upg_alt",
+      "factionSid": "homm3_inferno",
+      "tier": 5,
+      "unitName": "Pit Spawn",
+      "recommendation": "Fix urgently by reducing `SV` from `5568` to roughly `1200-1300` and preserving the +speed/-defense sidegrade.",
+      "implementationTarget": "active/passive card: keep aggressive Infernal Conversion using the Animate Dead family, with lower defense and corrected SV.",
+      "statOverrides": {
+        "squadValue": 1200
+      }
+    },
+    {
+      "unitSid": "h3_efreeti",
+      "factionSid": "homm3_inferno",
+      "tier": 6,
+      "unitName": "Efreeti",
+      "recommendation": "Add visible Fire Immunity plus retaliation damage across the line. It is a Tier 6 fire anchor, not just a flyer.",
+      "implementationTarget": "passive card: add Fire Immunity using existing immunity data shape and implement Fire Shield as Vengeance/retaliation-damage family reuse.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_efreeti_upg",
+      "factionSid": "homm3_inferno",
+      "tier": 6,
+      "unitName": "Efreet Sultan",
+      "recommendation": "Fix by capping initiative/speed around `10/10` after adding the fire package. `13/13` is above Tier 6.",
+      "implementationTarget": "passive/active card: make Fire Shield retaliation the standard branch using Vengeance/retaliation-damage family after speed normalization.",
+      "statOverrides": {
+        "initiative": 10,
+        "speed": 10
+      }
+    },
+    {
+      "unitSid": "h3_efreeti_upg_alt",
+      "factionSid": "homm3_inferno",
+      "tier": 6,
+      "unitName": "Efreet Sufi",
+      "recommendation": "Fix `SV` to roughly `1700-1900` and cap initiative/speed around `10/10`, keeping Vengeance as the sidegrade hook. `SV 327` is impossible for a `1200g` Tier 6 flyer.",
+      "implementationTarget": "active/passive card: keep Vengeance as the spell/debuff sidegrade using the current Vengeance row; correct SV and speed.",
+      "statOverrides": {
+        "initiative": 10,
+        "speed": 10,
+        "squadValue": 1800,
+        "cost": {
+          "gold": 1100
+        }
+      }
+    },
+    {
+      "unitSid": "h3_devil",
+      "factionSid": "homm3_inferno",
+      "tier": 7,
+      "unitName": "Devil",
+      "recommendation": "Add one visible Gating-command active. `SV 5101` is plausible, but `mechanicCount 2` is too thin for a capstone.",
+      "implementationTarget": "active card: add Gating command using existing Gating focus-action schema to shield temporary gated stacks via Shielded Arrival barrier family.",
+      "implementationStatus": {
+        "kind": "blockedNativeContract",
+        "reason": "The recommendation names a stateful, aura, scaling, or owner-correlated mechanic that is blocked until a dedicated validator-backed native/runtime contract proves the behavior."
+      }
+    },
+    {
+      "unitSid": "h3_devil_upg",
+      "factionSid": "homm3_inferno",
+      "tier": 7,
+      "unitName": "Arch Devil",
+      "recommendation": "Fix by reducing speed to about `11-12` and adding stronger Gating-command efficiency. Speed 17 plus Blink is excessive.",
+      "implementationTarget": "active card: improve Gating command efficiency using the existing Efficient Gate subskill cost-reduction family.",
+      "statOverrides": {
+        "speed": 11
+      }
+    },
+    {
+      "unitSid": "h3_devil_upg_alt",
+      "factionSid": "homm3_inferno",
+      "tier": 7,
+      "unitName": "Arch Demon",
+      "recommendation": "Fix by raising `SV` into Tier 7 midrange and reducing speed to `9-10`, making it the tank branch. `SV 1242` at `5000g` is a severe valuation anomaly.",
+      "implementationTarget": "passive/active card: make gate-anchor barrier using the existing Shielded Arrival barrier family; correct SV upward and speed downward.",
+      "statOverrides": {
+        "speed": 9,
+        "squadValue": 5600,
+        "cost": {
+          "mercury": 2,
+          "gold": 4500
+        }
+      }
+    },
+    {
+      "unitSid": "h3_skeleton",
+      "factionSid": "homm3_necropolis",
+      "tier": 1,
+      "unitName": "Skeleton",
+      "recommendation": "No material change. It is the clean Necromancy conversion baseline.",
+      "implementationTarget": "no new mechanic: preserve base Necromancy output; do not add combat utility to raised mass.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_skeleton_upg",
+      "factionSid": "homm3_necropolis",
+      "tier": 1,
+      "unitName": "Skeleton Warrior",
+      "recommendation": "No material change. It is a reasonable tougher Warrior Levy output.",
+      "implementationTarget": "no new mechanic: preserve Warrior Levy durable raised output.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_skeleton_upg_alt",
+      "factionSid": "homm3_necropolis",
+      "tier": 1,
+      "unitName": "Skeleton Archer",
+      "recommendation": "Fix by raising `SV` to about `90-100` while keeping Sharpshooter. Ranged Sharpshooter at `SV 38` is undervalued, especially if Grave Archers can raise it.",
+      "implementationTarget": "attack card: keep ranged_attack plus Sharpshooter as Grave Archers output, but raise SV.",
+      "statOverrides": {
+        "squadValue": 95
+      }
+    },
+    {
+      "unitSid": "h3_walking_dead",
+      "factionSid": "homm3_necropolis",
+      "tier": 2,
+      "unitName": "Walking Dead",
+      "recommendation": "No material change. Slow movement pays for Shambling Grasp and fits Tier 2 control.",
+      "implementationTarget": "active/passive card: preserve Shambling Grasp as the slow control rule using current Shambling Grasp family.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_walking_dead_upg",
+      "factionSid": "homm3_necropolis",
+      "tier": 2,
+      "unitName": "Zombie",
+      "recommendation": "No material change. HP and Zombie Clutch make a clean reliability upgrade.",
+      "implementationTarget": "active/passive card: preserve Zombie Clutch as the reliable tarpit upgrade using current Zombie Clutch family.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_walking_dead_upg_alt",
+      "factionSid": "homm3_necropolis",
+      "tier": 2,
+      "unitName": "Rot Zombie",
+      "recommendation": "Fix by retuning to `SV 180-190` and about `150g`, keeping Rotting Ray. `SV 353` is above Tier 2 for same-cost Zombie.",
+      "implementationTarget": "active card: keep Rotting Ray as the decay debuff branch using current Rotting Ray family.",
+      "statOverrides": {
+        "squadValue": 185,
+        "cost": {
+          "gold": 125
+        }
+      }
+    },
+    {
+      "unitSid": "h3_wight",
+      "factionSid": "homm3_necropolis",
+      "tier": 3,
+      "unitName": "Wight",
+      "recommendation": "No material change. Flying plus regeneration gives a local board rule at Tier 3.",
+      "implementationTarget": "passive card: preserve Flying plus Regeneration using existing Flying/Regeneration families.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_wight_upg",
+      "factionSid": "homm3_necropolis",
+      "tier": 3,
+      "unitName": "Wraith",
+      "recommendation": "No material change. `SV 315` is high but legal, and Mana Channel gives a role.",
+      "implementationTarget": "active/passive card: keep Mana Channel as support upgrade using current Mana Channel family; do not alter Necromancy output.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_wight_upg_alt",
+      "factionSid": "homm3_necropolis",
+      "tier": 3,
+      "unitName": "Banshee",
+      "recommendation": "Fix by raising `SV` to about `300-330`. Better HP/offense, speed, regeneration, flight, and Psychic Scream should not sit at `SV 114`.",
+      "implementationTarget": "active card: keep Psychic Scream as premium control action using current Psychic Scream family; correct SV.",
+      "statOverrides": {
+        "cost": {
+          "gold": 230
+        },
+        "hp": 18,
+        "offence": 7
+      }
+    },
+    {
+      "unitSid": "h3_vampire",
+      "factionSid": "homm3_necropolis",
+      "tier": 4,
+      "unitName": "Vampire",
+      "recommendation": "No material change. Flying no-retaliation at `SV 555` is high but acceptable, and the base does not yet claim full sustain.",
+      "implementationTarget": "no new mechanic: preserve flying no-retaliation mobility seed without adding Vampirism.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_vampire_upg",
+      "factionSid": "homm3_necropolis",
+      "tier": 4,
+      "unitName": "Vampire Lord",
+      "recommendation": "Fix lightly by reducing initiative/speed from `9/9` to `8/8` and keeping Vampirism.",
+      "implementationTarget": "passive card: keep Vampirism as sustain branch using current Vampirism family; correct speed.",
+      "statOverrides": {
+        "initiative": 8,
+        "speed": 8
+      }
+    },
+    {
+      "unitSid": "h3_vampire_upg_alt",
+      "factionSid": "homm3_necropolis",
+      "tier": 4,
+      "unitName": "Vampire Prince",
+      "recommendation": "Fix sidegrade by removing Vampirism, keeping Blinding Strike, and retuning `SV` near Vampire Lord. Current same-cost Prince has +speed, an active, and `SV 3276`.",
+      "implementationTarget": "active/passive card: keep Blinding Strike as control branch using current Blind/Blinding Strike family and remove Vampirism.",
+      "statOverrides": {
+        "initiative": 7,
+        "speed": 7,
+        "defence": 9,
+        "squadValue": 1100,
+        "cost": {
+          "gold": 500
+        }
+      }
+    },
+    {
+      "unitSid": "h3_lich",
+      "factionSid": "homm3_necropolis",
+      "tier": 5,
+      "unitName": "Lich",
+      "recommendation": "No material change. Ranged Area Strike at `SV 848` fits Tier 5 specialist power despite low HP.",
+      "implementationTarget": "attack pattern: preserve ranged Area Strike using existing Area Strike family; no summon active.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_lich_upg",
+      "factionSid": "homm3_necropolis",
+      "tier": 5,
+      "unitName": "Power Lich",
+      "recommendation": "No material change. `SV 1079` and `600g` are coherent for the reliable damage upgrade.",
+      "implementationTarget": "attack pattern: keep stronger Area Strike reliability using existing Area Strike family.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_lich_upg_alt",
+      "factionSid": "homm3_necropolis",
+      "tier": 5,
+      "unitName": "Lich Master",
+      "recommendation": "Fix sidegrade by removing Area Strike, keeping Sharpshooter plus Animate Dead, and retuning `SV` around `900-1000`. Same cost with speed, Sharpshooter, Area Strike, and Animate Dead is too much.",
+      "implementationTarget": "active/attack card: use Animate Dead plus Sharpshooter as single-target reanimator branch and remove Area Strike overlap.",
+      "statOverrides": {
+        "offence": 11,
+        "initiative": 7,
+        "speed": 7,
+        "cost": {
+          "gold": 600
+        }
+      }
+    },
+    {
+      "unitSid": "h3_black_knight",
+      "factionSid": "homm3_necropolis",
+      "tier": 6,
+      "unitName": "Black Knight",
+      "recommendation": "No material change. HP, `SV`, and Curse make it a workable Tier 6 anchor despite low raw offense/defense.",
+      "implementationTarget": "active/passive card: preserve Curse using current Curse family as the anchor rule.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_black_knight_upg",
+      "factionSid": "homm3_necropolis",
+      "tier": 6,
+      "unitName": "Dread Knight",
+      "recommendation": "No material change. `SV 2382` is near the ceiling but Dread Curse and `18/18` defenses justify a premium upgrade.",
+      "implementationTarget": "active/passive card: preserve Dread Curse using current Dread Curse family as standard anchor rule.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_black_knight_upg_alt",
+      "factionSid": "homm3_necropolis",
+      "tier": 6,
+      "unitName": "Dreadtaur",
+      "recommendation": "Fix by raising `SV` to about `2100-2300` while keeping lower defense than Dread Knight. Same cost, higher offense, and Vulnerability should not be only `SV 1530`.",
+      "implementationTarget": "active/passive card: keep Vulnerability as damage-amplifier sidegrade using current Vulnerability family; correct SV.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_bone_dragon",
+      "factionSid": "homm3_necropolis",
+      "tier": 7,
+      "unitName": "Bone Dragon",
+      "recommendation": "Add a visible dread/aura rule and raise defense toward Tier 7 floor. It is budget-friendly, but needs a clearer capstone thesis.",
+      "implementationTarget": "aura/passive card: add Soul Reaper-style morale/luck pressure using existing Necropolis Soul Reaper subskill modifier family.",
+      "implementationStatus": {
+        "kind": "blockedNativeContract",
+        "reason": "The recommendation names a stateful, aura, scaling, or owner-correlated mechanic that is blocked until a dedicated validator-backed native/runtime contract proves the behavior."
+      }
+    },
+    {
+      "unitSid": "h3_bone_dragon_upg",
+      "factionSid": "homm3_necropolis",
+      "tier": 7,
+      "unitName": "Ghost Dragon",
+      "recommendation": "Fix mobility by lowering initiative/speed from `14/14` to about `11/11` and clarify Ghost Dragon as the evasive curse-dragon branch.",
+      "implementationTarget": "active/passive card: make Aging Curse/Ghostly Curse the evasive curse-dragon rule using current Aging/Ghostly Curse rows after mobility correction.",
+      "statOverrides": {
+        "defence": 18,
+        "initiative": 11,
+        "speed": 11
+      }
+    },
+    {
+      "unitSid": "h3_bone_dragon_upg_alt",
+      "factionSid": "homm3_necropolis",
+      "tier": 7,
+      "unitName": "Spectral Dragon",
+      "recommendation": "Fix sidegrade by making Spectral Dragon the slower durable Naira's Kiss branch instead of a near-direct Ghost Dragon upgrade.",
+      "implementationTarget": "active/passive card: keep Naira's Kiss as death-mark finisher using current Naira's Kiss family, with lower speed/initiative and no offence premium over Ghost Dragon.",
+      "statOverrides": {
+        "offence": 19,
+        "defence": 21,
+        "initiative": 10,
+        "speed": 10,
+        "squadValue": 5700,
+        "cost": {
+          "mercury": 1,
+          "gold": 3000
+        }
+      }
+    },
+    {
+      "unitSid": "h3_troglodyte",
+      "factionSid": "homm3_dungeon",
+      "tier": 1,
+      "unitName": "Troglodyte",
+      "recommendation": "Fix lightly by raising HP from `5` to `6`; keep cost/value near current.",
+      "implementationTarget": "no new mechanic: implement only HP normalization; preserve cheap Dungeon melee baseline.",
+      "statOverrides": {
+        "hp": 6
+      }
+    },
+    {
+      "unitSid": "h3_troglodyte_upg",
+      "factionSid": "homm3_dungeon",
+      "tier": 1,
+      "unitName": "Infernal Troglodyte",
+      "recommendation": "No material change. Stats and `SV 84` fit Tier 1 upgrade space.",
+      "implementationTarget": "no new mechanic: preserve reliable upgrade stats; no active added.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_troglodyte_upg_alt",
+      "factionSid": "homm3_dungeon",
+      "tier": 1,
+      "unitName": "Chthonian",
+      "recommendation": "Fix valuation by raising `SV` to `80`. It costs more than Infernal Troglodyte while valued below base.",
+      "implementationTarget": "active/passive card: use the Blink family for ambush mobility; correct SV.",
+      "statOverrides": {
+        "squadValue": 80,
+        "cost": {
+          "gold": 65
+        }
+      }
+    },
+    {
+      "unitSid": "h3_harpy",
+      "factionSid": "homm3_dungeon",
+      "tier": 2,
+      "unitName": "Harpy",
+      "recommendation": "Fix lightly by lowering `SV` to `140`.",
+      "implementationTarget": "attack pattern: preserve hit-and-run/return-after-attack behavior using current Harpy attack family; correct SV/cost.",
+      "statOverrides": {
+        "squadValue": 140
+      }
+    },
+    {
+      "unitSid": "h3_harpy_upg",
+      "factionSid": "homm3_dungeon",
+      "tier": 2,
+      "unitName": "Harpy Hag",
+      "recommendation": "Fix by reducing speed from `9` toward `7-8` and bringing `SV 238` back into the high Tier 2 band.",
+      "implementationTarget": "attack pattern: make return-after-attack reliability the standard branch using current Harpy family; cap speed.",
+      "statOverrides": {
+        "speed": 10
+      }
+    },
+    {
+      "unitSid": "h3_harpy_upg_alt",
+      "factionSid": "homm3_dungeon",
+      "tier": 2,
+      "unitName": "Fury",
+      "recommendation": "Fix by raising `SV` to `180`. Same `170g` price but much lower `SV` is misleading.",
+      "implementationTarget": "attack/passive card: make aggressive strike pressure using the Double Strike family, with lower defense and corrected SV.",
+      "statOverrides": {
+        "squadValue": 180
+      }
+    },
+    {
+      "unitSid": "h3_beholder",
+      "factionSid": "homm3_dungeon",
+      "tier": 3,
+      "unitName": "Beholder",
+      "recommendation": "Fix by reducing `SV 336` to `315`.",
+      "implementationTarget": "active/passive card: add gaze debuff using the existing Disrupting Ray defense-reduction family.",
+      "statOverrides": {
+        "squadValue": 315
+      }
+    },
+    {
+      "unitSid": "h3_beholder_upg",
+      "factionSid": "homm3_dungeon",
+      "tier": 3,
+      "unitName": "Evil Eye",
+      "recommendation": "Fix similarly by keeping Evil Eye as the more reliable offensive shooter after adding card-visible control.",
+      "implementationTarget": "active/passive card: make Disrupting Ray gaze debuff more reliable using the existing Disrupting Ray defense-reduction family; do not add raw bulk.",
+      "statOverrides": {
+        "damageMin": 4,
+        "damageMax": 5
+      }
+    },
+    {
+      "unitSid": "h3_beholder_upg_alt",
+      "factionSid": "homm3_dungeon",
+      "tier": 3,
+      "unitName": "Fargazer",
+      "recommendation": "Fix sidegrade by reducing speed and tightening stat spread while keeping the explicit long-gaze Sharpshooter role. It should not read as a premium upgrade over Evil Eye.",
+      "implementationTarget": "active/passive card: use the Vulnerability family as the long-gaze alternate, with lower tempo and less reliable raw damage.",
+      "statOverrides": {
+        "hp": 25,
+        "offence": 9,
+        "defence": 9,
+        "damageMin": 3,
+        "damageMax": 6,
+        "speed": 7,
+        "initiative": 7,
+        "squadValue": 410,
+        "cost": {
+          "gold": 280
+        }
+      }
+    },
+    {
+      "unitSid": "h3_medusa",
+      "factionSid": "homm3_dungeon",
+      "tier": 4,
+      "unitName": "Medusa",
+      "recommendation": "Fix by raising HP to `30` and offense/defense to Tier 4 floors.",
+      "implementationTarget": "active/passive card: make petrify/control using the Blind family as the Tier 4 engine.",
+      "statOverrides": {
+        "hp": 30,
+        "offence": 10,
+        "defence": 10
+      }
+    },
+    {
+      "unitSid": "h3_medusa_upg",
+      "factionSid": "homm3_dungeon",
+      "tier": 4,
+      "unitName": "Medusa Queen",
+      "recommendation": "Add the visible petrify/control rule named in the implementation target and move cost to `400`.",
+      "implementationTarget": "active/passive card: make petrify/control more reliable using the existing Blind/Web family as standard upgrade.",
+      "statOverrides": {
+        "cost": {
+          "gold": 400
+        }
+      }
+    },
+    {
+      "unitSid": "h3_medusa_upg_alt",
+      "factionSid": "homm3_dungeon",
+      "tier": 4,
+      "unitName": "Medusa Warrior",
+      "recommendation": "Fix by lowering `SV` to `625`. It exceeds the Tier 4 ceiling at only `360g`.",
+      "implementationTarget": "attack pattern: make melee pivot using the Swift Strike family and remove ranged/control quality.",
+      "statOverrides": {
+        "squadValue": 625,
+        "cost": {
+          "gold": 400
+        }
+      }
+    },
+    {
+      "unitSid": "h3_minotaur",
+      "factionSid": "homm3_dungeon",
+      "tier": 5,
+      "unitName": "Minotaur",
+      "recommendation": "Add the morale-stability rule named in the implementation target; current stat/cost shape can stay.",
+      "implementationTarget": "passive card: add Bravery-style morale stability using the existing Warcries morale modifier family.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_minotaur_upg",
+      "factionSid": "homm3_dungeon",
+      "tier": 5,
+      "unitName": "Minotaur King",
+      "recommendation": "Add the Command Fear specialist rule named in the implementation target, and keep Minotaur King as the elite duelist branch with a slightly stronger damage line.",
+      "implementationTarget": "active/passive card: add Command Fear reliability using the existing Command Fear family.",
+      "statOverrides": {
+        "damageMin": 13,
+        "damageMax": 21
+      }
+    },
+    {
+      "unitSid": "h3_minotaur_upg_alt",
+      "factionSid": "homm3_dungeon",
+      "tier": 5,
+      "unitName": "Minotaur Taskmaster",
+      "recommendation": "Fix valuation by raising `SV` to `1100`, then make support visible while pulling Taskmaster back from direct stat superiority over Minotaur King.",
+      "implementationTarget": "active/aura card: add morale discipline using existing Warcries morale modifier family, localized as command support; correct SV and trade raw duelist stats for durability/support.",
+      "statOverrides": {
+        "offence": 14,
+        "defence": 14,
+        "initiative": 7,
+        "speed": 7,
+        "squadValue": 1100,
+        "cost": {
+          "gold": 575
+        }
+      }
+    },
+    {
+      "unitSid": "h3_manticore",
+      "factionSid": "homm3_dungeon",
+      "tier": 6,
+      "unitName": "Manticore",
+      "recommendation": "Add anchor quality by raising offense/defense toward Tier 6 floors and adding visible poison/sting pressure.",
+      "implementationTarget": "active/passive card: add poison/sting pressure using the existing poison debuff effect family from Fortress rows.",
+      "statOverrides": {
+        "offence": 17,
+        "defence": 17
+      }
+    },
+    {
+      "unitSid": "h3_manticore_upg",
+      "factionSid": "homm3_dungeon",
+      "tier": 6,
+      "unitName": "Scorpicore",
+      "recommendation": "Fix by reducing speed from `11` to `10`.",
+      "implementationTarget": "active/passive card: make poison/sting more reliable using the existing poison/debuff family; cap speed.",
+      "statOverrides": {
+        "speed": 10
+      }
+    },
+    {
+      "unitSid": "h3_manticore_upg_alt",
+      "factionSid": "homm3_dungeon",
+      "tier": 6,
+      "unitName": "Chimera",
+      "recommendation": "Fix urgently by raising `SV` into Tier 6 range and adding the visible multi-threat rules named in the implementation target. `SV 326` is below Tier 6 minimum by a massive margin.",
+      "implementationTarget": "attack/passive card: add Dragonbreath Strike plus Command Fear-style terror pressure using existing Dragonbreath/Command Fear families; correct SV.",
+      "statOverrides": {
+        "cost": {
+          "gold": 1050
+        }
+      }
+    },
+    {
+      "unitSid": "h3_red_dragon",
+      "factionSid": "homm3_dungeon",
+      "tier": 7,
+      "unitName": "Red Dragon",
+      "recommendation": "Add capstone quality by raising offense/defense to Tier 7 floors and adding visible capstone rules.",
+      "implementationTarget": "attack/passive card: use Dragonbreath Strike plus Magic Immunity family as the base dragon package.",
+      "statOverrides": {
+        "offence": 20,
+        "defence": 20
+      }
+    },
+    {
+      "unitSid": "h3_red_dragon_upg",
+      "factionSid": "homm3_dungeon",
+      "tier": 7,
+      "unitName": "Black Dragon",
+      "recommendation": "Fix by bringing speed down to `11` and `SV` below the Tier 7 ceiling.",
+      "implementationTarget": "passive card: make Magic Immunity plus Dragonbreath Strike the durable thesis using existing immunity/breath families; correct speed.",
+      "statOverrides": {
+        "squadValue": 7600
+      }
+    },
+    {
+      "unitSid": "h3_red_dragon_upg_alt",
+      "factionSid": "homm3_dungeon",
+      "tier": 7,
+      "unitName": "Shadow Dragon",
+      "recommendation": "Keep as alternate, but reduce speed from `16` and add visible shadow/fear identity.",
+      "implementationTarget": "active/passive card: add Command Fear using the existing Command Fear family; avoid hidden Dominion coupling.",
+      "statOverrides": {
+        "defence": 20,
+        "damageMax": 45,
+        "initiative": 14,
+        "speed": 14,
+        "squadValue": 7200,
+        "cost": {
+          "mercury": 2,
+          "gold": 4000
+        }
+      }
+    },
+    {
+      "unitSid": "h3_goblin",
+      "factionSid": "homm3_stronghold",
+      "tier": 1,
+      "unitName": "Goblin",
+      "recommendation": "No material change, with optional HP normalization to `6`. It is a fair cheap Tier 1 seed.",
+      "implementationTarget": "no new mechanic: preserve cheap Warcries beneficiary; HP normalization is the only allowed change.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_goblin_upg",
+      "factionSid": "homm3_stronghold",
+      "tier": 1,
+      "unitName": "Hobgoblin",
+      "recommendation": "Fix by reducing speed from `7` to `6`.",
+      "implementationTarget": "no new mechanic: preserve fast reliable upgrade after speed/cost correction.",
+      "statOverrides": {
+        "speed": 6
+      }
+    },
+    {
+      "unitSid": "h3_goblin_upg_alt",
+      "factionSid": "homm3_stronghold",
+      "tier": 1,
+      "unitName": "Goblin Trapper",
+      "recommendation": "Fix sidegrade value by raising `SV` to `80`. It has an active and better defense but only `SV 52`.",
+      "implementationTarget": "active card: keep trap/control setup by reusing the Web immobilize family as the timing-window action.",
+      "statOverrides": {
+        "squadValue": 80,
+        "cost": {
+          "gold": 50
+        }
+      }
+    },
+    {
+      "unitSid": "h3_wolf_rider",
+      "factionSid": "homm3_stronghold",
+      "tier": 2,
+      "unitName": "Wolf Rider",
+      "recommendation": "Add the charge pressure rule named in the implementation target. Tier 2 should present a tactical verb.",
+      "implementationTarget": "attack/passive card: add charge pressure using the existing Jousting Charge family at low rank.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_wolf_rider_upg",
+      "factionSid": "homm3_stronghold",
+      "tier": 2,
+      "unitName": "Wolf Raider",
+      "recommendation": "Fix by reducing speed from `8` to `7` and bringing `SV 203` below the Tier 2 ceiling.",
+      "implementationTarget": "attack/passive card: make charge/pack pressure more reliable using the existing Jousting Charge family; cap speed.",
+      "statOverrides": {
+        "speed": 7
+      }
+    },
+    {
+      "unitSid": "h3_wolf_rider_upg_alt",
+      "factionSid": "homm3_stronghold",
+      "tier": 2,
+      "unitName": "Boar Rider",
+      "recommendation": "Fix sidegrade by lowering speed to `6`. Same `SV/gold` with more HP/offense/max damage is too close to better.",
+      "implementationTarget": "attack pattern: make bruiser charge using Jousting Charge/Cavalry Press family, with lower speed than Wolf Raider.",
+      "statOverrides": {
+        "speed": 6
+      }
+    },
+    {
+      "unitSid": "h3_orc",
+      "factionSid": "homm3_stronghold",
+      "tier": 3,
+      "unitName": "Orc",
+      "recommendation": "Fix lightly by raising defense to `6`.",
+      "implementationTarget": "no new mechanic: preserve basic ranged pressure; implement only defense/damage correction.",
+      "statOverrides": {
+        "defence": 6
+      }
+    },
+    {
+      "unitSid": "h3_orc_upg",
+      "factionSid": "homm3_stronghold",
+      "tier": 3,
+      "unitName": "Orc Chieftain",
+      "recommendation": "Fix lightly by raising defense to `6` and keeping value near current.",
+      "implementationTarget": "passive/attack card: add command-shot support using Coordinated Volley-style ranged damage modifier family, localized for Stronghold.",
+      "statOverrides": {
+        "defence": 6
+      },
+      "mechanicOverrides": {
+        "statModifiers": [
+          {
+            "set": "outDmgMods",
+            "tag": "shoot_attack",
+            "value": 0.1
+          }
+        ],
+        "viewPassives": [
+          {
+            "name": "h3_balance_passive_command_shot_name",
+            "description": "h3_balance_passive_command_shot_description",
+            "icon": "sub_skill_siege_1_icon"
+          }
+        ]
+      }
+    },
+    {
+      "unitSid": "h3_orc_upg_alt",
+      "factionSid": "homm3_stronghold",
+      "tier": 3,
+      "unitName": "Orc Berserker",
+      "recommendation": "Fix valuation by raising `SV` to `255` and adding the visible berserk drawback named in the implementation target.",
+      "implementationTarget": "attack/passive card: add berserk drawback using a self-Vulnerability defense-reduction family while increasing aggression; correct SV.",
+      "statOverrides": {
+        "squadValue": 255,
+        "cost": {
+          "gold": 165
+        }
+      }
+    },
+    {
+      "unitSid": "h3_ogre",
+      "factionSid": "homm3_stronghold",
+      "tier": 4,
+      "unitName": "Ogre",
+      "recommendation": "Add the tank rule named in the implementation target. Tier 4 needs a midgame pivot.",
+      "implementationTarget": "passive card: add tank rule using Shield Wall/Thick Hides basic-attack damage reduction family.",
+      "mechanicOverrides": {
+        "statModifiers": [
+          {
+            "set": "inDmgMods",
+            "tag": "basic_attack",
+            "value": -0.1
+          }
+        ],
+        "viewPassives": [
+          {
+            "name": "h3_balance_passive_basic_guard_name",
+            "description": "h3_balance_passive_basic_guard_description",
+            "icon": "sub_skill_faction_homm3_castle_elite_strategem_shield_wall"
+          }
+        ]
+      }
+    },
+    {
+      "unitSid": "h3_ogre_upg",
+      "factionSid": "homm3_stronghold",
+      "tier": 4,
+      "unitName": "Ogre Mage",
+      "recommendation": "Fix by lowering `SV` slightly below the Tier 4 ceiling.",
+      "implementationTarget": "active card: add visible Warcry support using existing Warcries morale/luck/initiative modifier family, without auto-triggering hero Warcries.",
+      "implementationStatus": {
+        "kind": "blockedNativeContract",
+        "reason": "The recommendation names a stateful, aura, scaling, or owner-correlated mechanic that is blocked until a dedicated validator-backed native/runtime contract proves the behavior."
+      }
+    },
+    {
+      "unitSid": "h3_ogre_upg_alt",
+      "factionSid": "homm3_stronghold",
+      "tier": 4,
+      "unitName": "Ogre Brute",
+      "recommendation": "Fix by raising defense to `10` and adding the exposed-offense drawback named in the implementation target.",
+      "implementationTarget": "attack/passive card: make physical branch with self-Vulnerability drawback using the Vulnerability family; pair it with the defense raise.",
+      "statOverrides": {
+        "defence": 10
+      }
+    },
+    {
+      "unitSid": "h3_roc",
+      "factionSid": "homm3_stronghold",
+      "tier": 5,
+      "unitName": "Roc",
+      "recommendation": "Add the lightning identity named in the implementation target and raise defense to `12`.",
+      "implementationTarget": "active/passive card: add lightning strike using Judgement/lightning-style active schema from Tower giant rows.",
+      "statOverrides": {
+        "defence": 12
+      }
+    },
+    {
+      "unitSid": "h3_roc_upg",
+      "factionSid": "homm3_stronghold",
+      "tier": 5,
+      "unitName": "Thunderbird",
+      "recommendation": "Fix by reducing speed from `11` to `8`.",
+      "implementationTarget": "active card: make lightning strike the standard branch using Judgement/lightning active schema; reduce speed.",
+      "statOverrides": {
+        "speed": 8
+      }
+    },
+    {
+      "unitSid": "h3_roc_upg_alt",
+      "factionSid": "homm3_stronghold",
+      "tier": 5,
+      "unitName": "Shahrokh",
+      "recommendation": "Fix by reducing speed to `8` and sharpening the offensive sidegrade.",
+      "implementationTarget": "attack/passive card: add Fortune Cry-style luck/crit pressure using existing Warcries luck modifier family; cap speed.",
+      "statOverrides": {
+        "speed": 8
+      }
+    },
+    {
+      "unitSid": "h3_cyclops",
+      "factionSid": "homm3_stronghold",
+      "tier": 6,
+      "unitName": "Cyclops",
+      "recommendation": "Add anchor quality by raising HP to at least `75` and adding visible siege/area pressure.",
+      "implementationTarget": "attack pattern: add area shot using the existing Area Strike attack-pattern family as siege pressure.",
+      "statOverrides": {
+        "hp": 75
+      }
+    },
+    {
+      "unitSid": "h3_cyclops_upg",
+      "factionSid": "homm3_stronghold",
+      "tier": 6,
+      "unitName": "Cyclops King",
+      "recommendation": "Raise anchor stats and add the visible ranged/siege rule named in the implementation target.",
+      "implementationTarget": "attack pattern: make area shot more reliable using Area Strike family as standard upgrade.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_cyclops_upg_alt",
+      "factionSid": "homm3_stronghold",
+      "tier": 6,
+      "unitName": "Blood-Eyed Cyclops",
+      "recommendation": "Fix valuation/cost by lowering `SV` to `1600`; cost should not be below Cyclops King if value stays higher.",
+      "implementationTarget": "active/passive card: add fear/control artillery using the Command Fear family; align cost/SV.",
+      "statOverrides": {
+        "squadValue": 1600,
+        "cost": {
+          "gold": 1100
+        }
+      }
+    },
+    {
+      "unitSid": "h3_behemoth",
+      "factionSid": "homm3_stronghold",
+      "tier": 7,
+      "unitName": "Behemoth",
+      "recommendation": "Add capstone quality by raising offense/defense to Tier 7 floors and making armor shred visibly carry the budget.",
+      "implementationTarget": "passive/attack card: make armor shred using Disrupting Ray/Vulnerability defense-reduction family as capstone thesis.",
+      "statOverrides": {
+        "offence": 20,
+        "defence": 20
+      }
+    },
+    {
+      "unitSid": "h3_behemoth_upg",
+      "factionSid": "homm3_stronghold",
+      "tier": 7,
+      "unitName": "Ancient Behemoth",
+      "recommendation": "Add dense visible capstone mechanics and raise offense/defense to at least `22/20`.",
+      "implementationTarget": "passive/attack card: strengthen armor shred using the existing Disrupting Ray/Vulnerability family as standard upgrade.",
+      "statOverrides": {
+        "offence": 22,
+        "defence": 20
+      }
+    },
+    {
+      "unitSid": "h3_behemoth_upg_alt",
+      "factionSid": "homm3_stronghold",
+      "tier": 7,
+      "unitName": "Ghost Behemoth",
+      "recommendation": "Fix sidegrade by lowering `SV` to `6800` and adding the spectral drawback/control package named in the implementation target.",
+      "implementationTarget": "passive/active card: add Blink using the existing Blink family, with HP/defense drawback.",
+      "statOverrides": {
+        "squadValue": 6800,
+        "cost": {
+          "crystals": 1,
+          "gold": 3000
+        }
+      }
+    },
+    {
+      "unitSid": "h3_gnoll",
+      "factionSid": "homm3_fortress",
+      "tier": 1,
+      "unitName": "Gnoll",
+      "recommendation": "No material change. `SV 56`, `50g`, 6 HP, and slow tempo fit Tier 1.",
+      "implementationTarget": "no new mechanic: preserve simple slow swamp infantry baseline.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_gnoll_upg",
+      "factionSid": "homm3_fortress",
+      "tier": 1,
+      "unitName": "Gnoll Marauder",
+      "recommendation": "No material change. `SV 90` and +1 offense/defense are a clean upgrade.",
+      "implementationTarget": "no new mechanic: preserve reliable bruiser upgrade after SV/cost cleanup.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_gnoll_upg_alt",
+      "factionSid": "homm3_fortress",
+      "tier": 1,
+      "unitName": "Gnoll Shaman",
+      "recommendation": "Fix sidegrade by lowering defense from `7` to `5` and targeting `SV 90`. Same cost as Marauder plus an active and higher defense is too close to better.",
+      "implementationTarget": "active card: keep one swamp debuff action using Swamp Tactics speed/initiative penalty family, with lower defense.",
+      "statOverrides": {
+        "defence": 5
+      }
+    },
+    {
+      "unitSid": "h3_lizardman",
+      "factionSid": "homm3_fortress",
+      "tier": 2,
+      "unitName": "Lizardman",
+      "recommendation": "Fix by lowering defense from `6` to `4` and targeting `SV 130`. Ranged safety plus 14 HP is already strong.",
+      "implementationTarget": "attack card: preserve ranged skirmisher role and apply defense/SV correction; no extra tempo mechanic.",
+      "statOverrides": {
+        "defence": 4,
+        "squadValue": 130
+      }
+    },
+    {
+      "unitSid": "h3_lizardman_upg",
+      "factionSid": "homm3_fortress",
+      "tier": 2,
+      "unitName": "Lizard Warrior",
+      "recommendation": "Fix by lowering defense from `8` to `6`, targeting `SV 185`, and giving the standard shooter a more reliable damage line than the poison branch.",
+      "implementationTarget": "attack/passive card: make reliable shooter behavior using ranged_attack/Sharpshooter family after defense/SV correction.",
+      "statOverrides": {
+        "defence": 6,
+        "damageMin": 3,
+        "damageMax": 5,
+        "squadValue": 185
+      }
+    },
+    {
+      "unitSid": "h3_lizardman_upg_alt",
+      "factionSid": "homm3_fortress",
+      "tier": 2,
+      "unitName": "Lizard Assassin",
+      "recommendation": "Fix by lowering speed from `8` to `6`, initiative from `8` to `7`, targeting `SV 190`, and making Poison Shot carry the branch while the body stays fragile.",
+      "implementationTarget": "active/attack card: make poison shot using the poison/debuff family and cap speed to avoid stacking with Bog Ambush.",
+      "statOverrides": {
+        "hp": 12,
+        "defence": 5,
+        "damageMin": 2,
+        "damageMax": 4,
+        "speed": 6,
+        "initiative": 7,
+        "squadValue": 190,
+        "cost": {
+          "gold": 140
+        }
+      }
+    },
+    {
+      "unitSid": "h3_serpent_fly",
+      "factionSid": "homm3_fortress",
+      "tier": 3,
+      "unitName": "Serpent Fly",
+      "recommendation": "No material change. High `SV` is acceptable for low-damage fast disruption.",
+      "implementationTarget": "active/passive card: preserve fast disruption using Swamp Tactics-style initiative/speed debuff family on hit.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_serpent_fly_upg",
+      "factionSid": "homm3_fortress",
+      "tier": 3,
+      "unitName": "Dragon Fly",
+      "recommendation": "Fix by reducing speed/initiative from `13/13` to `11/11`. It should disrupt, not create an unchecked tempo spike.",
+      "implementationTarget": "active/passive card: make debuff sting more reliable using the existing Swamp Tactics-style initiative/speed debuff family; reduce extreme speed.",
+      "statOverrides": {
+        "initiative": 11,
+        "speed": 11
+      }
+    },
+    {
+      "unitSid": "h3_serpent_fly_upg_alt",
+      "factionSid": "homm3_fortress",
+      "tier": 3,
+      "unitName": "Damsel Fly",
+      "recommendation": "No material change. It trades defense for offense and already sits at `11/11`.",
+      "implementationTarget": "attack/passive card: make offense-over-defense disruption using the existing Swamp Tactics-style debuff sting family, without extra speed.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_basilisk",
+      "factionSid": "homm3_fortress",
+      "tier": 4,
+      "unitName": "Basilisk",
+      "recommendation": "Add one visible control passive and keep `SV` near current. Tier 4 needs a midgame engine.",
+      "implementationTarget": "active/passive card: add petrifying bite using the Blind family as the Tier 4 engine.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_basilisk_upg",
+      "factionSid": "homm3_fortress",
+      "tier": 4,
+      "unitName": "Greater Basilisk",
+      "recommendation": "Fix by targeting `SV 650` and adding a defensive control passive. `SV 714` is over band while mechanics are thin.",
+      "implementationTarget": "active/passive card: make lockdown more reliable using the existing Blind/Web family; correct SV.",
+      "statOverrides": {
+        "squadValue": 650
+      }
+    },
+    {
+      "unitSid": "h3_basilisk_upg_alt",
+      "factionSid": "homm3_fortress",
+      "tier": 4,
+      "unitName": "Basilisk Flamespitter",
+      "recommendation": "Fix by targeting `SV 650`, keeping offense, and adding one visible fire/breath active.",
+      "implementationTarget": "active/attack card: add fire breath using Dragonbreath Strike family as the offensive sidegrade.",
+      "statOverrides": {
+        "squadValue": 650
+      }
+    },
+    {
+      "unitSid": "h3_gorgon",
+      "factionSid": "homm3_fortress",
+      "tier": 5,
+      "unitName": "Gorgon",
+      "recommendation": "Add specialist identity by raising offense from `10` to `12` and adding visible execute pressure.",
+      "implementationTarget": "active/passive card: add execute pressure using the existing Glaivier Execute family.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_gorgon_upg",
+      "factionSid": "homm3_fortress",
+      "tier": 5,
+      "unitName": "Mighty Gorgon",
+      "recommendation": "Add the reliable version of Death Stare and keep tank stats.",
+      "implementationTarget": "active/passive card: make Execute-style pressure more reliable using the existing Glaivier Execute family.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_gorgon_upg_alt",
+      "factionSid": "homm3_fortress",
+      "tier": 5,
+      "unitName": "Corrosive Gorgon",
+      "recommendation": "No material stat change; ensure corrosion is explicit on the card.",
+      "implementationTarget": "active/passive card: make corrosion explicit using Disrupting Ray/Vulnerability defense-reduction family.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_wyvern",
+      "factionSid": "homm3_fortress",
+      "tier": 6,
+      "unitName": "Wyvern",
+      "recommendation": "Fix by raising HP to `80`, offense to `19`, defense to `18`, and adding visible poison.",
+      "implementationTarget": "active/passive card: add poison on hit using existing poison/debuff effect family.",
+      "statOverrides": {
+        "hp": 80,
+        "defence": 18,
+        "offence": 19
+      }
+    },
+    {
+      "unitSid": "h3_wyvern_upg",
+      "factionSid": "homm3_fortress",
+      "tier": 6,
+      "unitName": "Wyvern Monarch",
+      "recommendation": "Fix by lowering speed from `11` to `10`, raising defense to `18`, and keeping damage.",
+      "implementationTarget": "active/passive card: make poison higher-rank using the existing poison/debuff family after speed correction.",
+      "statOverrides": {
+        "defence": 18,
+        "speed": 10
+      }
+    },
+    {
+      "unitSid": "h3_wyvern_upg_alt",
+      "factionSid": "homm3_fortress",
+      "tier": 6,
+      "unitName": "Paokai",
+      "recommendation": "Fix by raising HP to `100`, offense/defense to `19/18`, keeping lower direct damage, and making its active explicit as area/swallow pressure.",
+      "implementationTarget": "attack/active card: make area pressure using the Area Strike attack-pattern family, with lower direct damage.",
+      "statOverrides": {
+        "hp": 100,
+        "defence": 18,
+        "offence": 19,
+        "cost": {
+          "gold": 1100
+        }
+      }
+    },
+    {
+      "unitSid": "h3_hydra",
+      "factionSid": "homm3_fortress",
+      "tier": 7,
+      "unitName": "Hydra",
+      "recommendation": "Add one visible capstone control passive and keep the slow profile.",
+      "implementationTarget": "attack/passive card: foreground all-adjacent attack and no-retaliation using existing Dragonbreath/area and no-counter families.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_hydra_upg",
+      "factionSid": "homm3_fortress",
+      "tier": 7,
+      "unitName": "Chaos Hydra",
+      "recommendation": "Add identity by raising offense to `22` and adding one defensive capstone passive.",
+      "implementationTarget": "attack/passive card: make all-adjacent/no-retaliation more reliable using existing Dragonbreath/Area Strike and no-counter families.",
+      "statOverrides": {
+        "offence": 22
+      }
+    },
+    {
+      "unitSid": "h3_hydra_upg_alt",
+      "factionSid": "homm3_fortress",
+      "tier": 7,
+      "unitName": "Ruinous Hydra",
+      "recommendation": "Add the ruin rider named in the implementation target, keep the lower-HP/higher-speed split intact, and set `SV` to `6800`.",
+      "implementationTarget": "active/passive card: add ruin rider using Disrupting Ray/Vulnerability defense-reduction family while preserving lower HP/higher speed split.",
+      "statOverrides": {
+        "squadValue": 6800,
+        "cost": {
+          "gold": 3500,
+          "mercury": 1
+        }
+      }
+    },
+    {
+      "unitSid": "h3_nymph",
+      "factionSid": "homm3_cove",
+      "tier": 1,
+      "unitName": "Nymph",
+      "recommendation": "No material change. `SV 57` and `35g` are acceptable for a fragile mobility seed.",
+      "implementationTarget": "no new mechanic: preserve fragile water scout baseline.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_oceanid",
+      "factionSid": "homm3_cove",
+      "tier": 1,
+      "unitName": "Oceanid",
+      "recommendation": "Fix by lowering speed/initiative from `8/8` to `6/6`. Treasure Hunting already supports map tempo.",
+      "implementationTarget": "no new mechanic: preserve water mobility after speed normalization; no map-tempo combat rule.",
+      "statOverrides": {
+        "speed": 6,
+        "initiative": 6
+      }
+    },
+    {
+      "unitSid": "h3_nymph_upg_alt",
+      "factionSid": "homm3_cove",
+      "tier": 1,
+      "unitName": "Nereid",
+      "recommendation": "Fix by setting speed/initiative to `6/6`, gold to `90`, and `SV` near `120`. `SV 178` at `45g` is above Tier 1 budget.",
+      "implementationTarget": "active card: keep one Healing Water-style support action using existing healing/support spell-effect family; correct speed and cost.",
+      "statOverrides": {
+        "speed": 6,
+        "initiative": 6,
+        "cost": {
+          "gold": 90
+        },
+        "squadValue": 120
+      }
+    },
+    {
+      "unitSid": "h3_crew_mate",
+      "factionSid": "homm3_cove",
+      "tier": 2,
+      "unitName": "Crew Mate",
+      "recommendation": "Add the boarding setup rule named in the implementation target while keeping stats.",
+      "implementationTarget": "passive/attack card: add boarding setup using the no-counter family as Tier 2 tactical verb.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_seaman",
+      "factionSid": "homm3_cove",
+      "tier": 2,
+      "unitName": "Seaman",
+      "recommendation": "Add a reliable upgrade passive and keep `SV` near `174`.",
+      "implementationTarget": "passive card: make boarding reliability using the existing no-counter/retaliation modifier family as standard branch.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_crew_mate_upg_alt",
+      "factionSid": "homm3_cove",
+      "tier": 2,
+      "unitName": "Swashbuckler",
+      "recommendation": "Fix valuation by setting defense to `6` and targeting `SV 155`. `SV 87` at `150g` is too low for its stats.",
+      "implementationTarget": "attack/passive card: make Duelist riposte the sidegrade using the existing Duelist family, with lower damage.",
+      "statOverrides": {
+        "defence": 6,
+        "squadValue": 155
+      }
+    },
+    {
+      "unitSid": "h3_pirate",
+      "factionSid": "homm3_cove",
+      "tier": 3,
+      "unitName": "Pirate",
+      "recommendation": "Add the opportunistic ranged rule named in the implementation target and keep `SV` at current. Tier 3 wants a local board rule.",
+      "implementationTarget": "attack/passive card: add opportunistic shot using the Piercing Shot family as the Tier 3 board rule.",
+      "mechanicOverrides": {
+        "statModifiers": [
+          {
+            "set": "outDmgMods",
+            "tag": "shoot_attack",
+            "value": 0.1
+          }
+        ],
+        "viewPassives": [
+          {
+            "name": "h3_balance_passive_piercing_shot_name",
+            "description": "h3_balance_passive_piercing_shot_description",
+            "icon": "crossbowman_buff_icon"
+          }
+        ]
+      }
+    },
+    {
+      "unitSid": "h3_corsair",
+      "factionSid": "homm3_cove",
+      "tier": 3,
+      "unitName": "Corsair",
+      "recommendation": "Fix by targeting `SV 325` and adding a reliable shooter passive. `SV 336` slightly exceeds the ceiling without enough visible mechanics.",
+      "implementationTarget": "attack/passive card: make shooter reliability using Sharpshooter/Piercing Shot family as standard upgrade.",
+      "mechanicOverrides": {
+        "statModifiers": [
+          {
+            "set": "outDmgMods",
+            "tag": "shoot_attack",
+            "value": 0.1
+          }
+        ],
+        "viewPassives": [
+          {
+            "name": "h3_balance_passive_piercing_shot_name",
+            "description": "h3_balance_passive_piercing_shot_description",
+            "icon": "crossbowman_buff_icon"
+          }
+        ]
+      },
+      "statOverrides": {
+        "squadValue": 325
+      }
+    },
+    {
+      "unitSid": "h3_sea_dog",
+      "factionSid": "homm3_cove",
+      "tier": 3,
+      "unitName": "Sea Dog",
+      "recommendation": "Fix sidegrade by lowering defense from `11` to `7` and targeting `SV 330`. Current stats make it near-strict over Corsair.",
+      "implementationTarget": "attack/active card: make premium shot action using Piercing Shot/Fine Bolts family and lower defense so it is not Corsair plus stats.",
+      "statOverrides": {
+        "defence": 7
+      }
+    },
+    {
+      "unitSid": "h3_stormbird",
+      "factionSid": "homm3_cove",
+      "tier": 4,
+      "unitName": "Stormbird",
+      "recommendation": "Fix by lowering speed from `9` to `8` and adding one visible storm utility rule.",
+      "implementationTarget": "active/passive card: add storm utility using the Judgement/lightning family as Tier 4 engine.",
+      "statOverrides": {
+        "speed": 8
+      }
+    },
+    {
+      "unitSid": "h3_ayssid",
+      "factionSid": "homm3_cove",
+      "tier": 4,
+      "unitName": "Ayssid",
+      "recommendation": "Fix by lowering speed from `11` to `8` and making Ferocity explicit.",
+      "implementationTarget": "passive card: make Ferocity explicit as Swift Strike family after kill/condition; normalize speed.",
+      "statOverrides": {
+        "speed": 8
+      }
+    },
+    {
+      "unitSid": "h3_stormbird_upg_alt",
+      "factionSid": "homm3_cove",
+      "tier": 4,
+      "unitName": "Halcyon",
+      "recommendation": "Fix by setting speed/initiative to about `8/9` and targeting `SV 520`. Current `SV 326` is low for its cost, bulk, and active.",
+      "implementationTarget": "active/passive card: make storm-control using the Misfortune family; correct SV.",
+      "statOverrides": {
+        "speed": 8,
+        "initiative": 9,
+        "squadValue": 520
+      }
+    },
+    {
+      "unitSid": "h3_sea_witch",
+      "factionSid": "homm3_cove",
+      "tier": 5,
+      "unitName": "Sea Witch",
+      "recommendation": "Add specialist identity by raising HP to `45` and adding a visible Disrupting Ray-style active.",
+      "implementationTarget": "active card: add Disrupting Ray-style defense reduction using existing Disrupting Ray family.",
+      "statOverrides": {
+        "hp": 45
+      }
+    },
+    {
+      "unitSid": "h3_sorceress",
+      "factionSid": "homm3_cove",
+      "tier": 5,
+      "unitName": "Sorceress",
+      "recommendation": "Fix by raising HP to `45`, defense to `11`, and adding a reliable caster upgrade rule.",
+      "implementationTarget": "active card: make Disrupting Ray higher-rank using the existing Disrupting Ray defense-reduction family.",
+      "statOverrides": {
+        "hp": 45,
+        "defence": 11
+      }
+    },
+    {
+      "unitSid": "h3_sea_witch_upg_alt",
+      "factionSid": "homm3_cove",
+      "tier": 5,
+      "unitName": "Tidecaller",
+      "recommendation": "Fix by raising HP to `45`, targeting `SV 800`, and making Summon Fangarms a visible limited active.",
+      "implementationTarget": "active card: use the existing temporary-stack summon active schema, fixed to Fangarm as the summoned unit, with a validator-backed contract before implementation.",
+      "statOverrides": {
+        "hp": 45,
+        "squadValue": 800
+      }
+    },
+    {
+      "unitSid": "h3_nix",
+      "factionSid": "homm3_cove",
+      "tier": 6,
+      "unitName": "Nix",
+      "recommendation": "Add anchor quality by raising HP to `90`, defense to `18`, and adding visible bind/guard identity.",
+      "implementationTarget": "passive card: add bind/guard using the Binding family as Tier 6 blocker rule.",
+      "statOverrides": {
+        "hp": 90,
+        "defence": 18
+      }
+    },
+    {
+      "unitSid": "h3_nix_warrior",
+      "factionSid": "homm3_cove",
+      "tier": 6,
+      "unitName": "Nix Warrior",
+      "recommendation": "Add anchor quality by raising HP to `100`, defense to `20`, and keeping `SV` near `1719`.",
+      "implementationTarget": "passive card: make bind/guard more reliable using the Binding family as standard branch.",
+      "statOverrides": {
+        "hp": 100,
+        "defence": 20
+      }
+    },
+    {
+      "unitSid": "h3_nix_upg_alt",
+      "factionSid": "homm3_cove",
+      "tier": 6,
+      "unitName": "Nix Praetorian",
+      "recommendation": "Fix urgently by setting HP to `90`, defense to `15`, keeping speed/offense/damage as the aggressive branch, and targeting `SV 1800`. Current `SV 552` is the largest Cove valuation anomaly.",
+      "implementationTarget": "attack/passive card: make aggressive bind/armor-break using Binding plus Vulnerability family, with lower defense and corrected SV.",
+      "statOverrides": {
+        "hp": 90,
+        "defence": 15,
+        "squadValue": 1800
+      }
+    },
+    {
+      "unitSid": "h3_sea_serpent",
+      "factionSid": "homm3_cove",
+      "tier": 7,
+      "unitName": "Sea Serpent",
+      "recommendation": "Add capstone quality by raising defense to `20`, HP to `200`, and adding one visible sea-control passive.",
+      "implementationTarget": "passive/attack card: add coil/drag control using the Binding family as base capstone rule.",
+      "statOverrides": {
+        "defence": 20,
+        "hp": 200
+      }
+    },
+    {
+      "unitSid": "h3_haspid",
+      "factionSid": "homm3_cove",
+      "tier": 7,
+      "unitName": "Haspid",
+      "recommendation": "Fix by lowering speed from `12` to `11` and implementing Revenge as an explicit visible rule.",
+      "implementationTarget": "passive card: implement Revenge explicitly using existing Revenge/Vengeance retaliation-payoff family; cap speed.",
+      "statOverrides": {
+        "speed": 11
+      }
+    },
+    {
+      "unitSid": "h3_sea_serpent_upg_alt",
+      "factionSid": "homm3_cove",
+      "tier": 7,
+      "unitName": "Abyss Serpent",
+      "recommendation": "Fix by lowering speed/initiative to `10/10`, targeting `SV 5000`, and making Skeleton Transformer behavior explicit on the card. Current `SV 2377` is incoherent beside Haspid.",
+      "implementationTarget": "active/passive card: make Skeleton Transformer explicit using existing Skeleton Transformer/Animate Dead conversion family; lower mobility/SV.",
+      "statOverrides": {
+        "speed": 10,
+        "initiative": 10,
+        "squadValue": 5000
+      }
+    },
+    {
+      "unitSid": "h3_pixie",
+      "factionSid": "homm3_conflux",
+      "tier": 1,
+      "unitName": "Pixie",
+      "recommendation": "Fix by raising HP to `6`. Cost raise withdrawn 2026-10-01: it priced the base above its own upgrade, so upgrading paid the player gold; gold is pinned at the HoMM3 `25`.",
+      "implementationTarget": "no new mechanic: preserve fragile elemental scout baseline after gold/HP/speed correction.",
+      "statOverrides": {
+        "cost": {
+          "gold": 25
+        },
+        "hp": 6
+      }
+    },
+    {
+      "unitSid": "h3_pixie_upg",
+      "factionSid": "homm3_conflux",
+      "tier": 1,
+      "unitName": "Sprite",
+      "recommendation": "Fix by reducing speed/initiative from `9/9` to `7/7`.",
+      "implementationTarget": "passive/attack card: keep no-retaliation harass using existing no-counter family; cap speed.",
+      "statOverrides": {
+        "initiative": 7,
+        "speed": 7
+      }
+    },
+    {
+      "unitSid": "h3_pixie_upg_alt",
+      "factionSid": "homm3_conflux",
+      "tier": 1,
+      "unitName": "Faerie",
+      "recommendation": "Fix by reducing `SV` to `115` and removing one mobility feature. Flight, high speed, active utility, and high `SV` together overload Tier 1.",
+      "implementationTarget": "active card: keep one energy transfer action using the existing Energize family; remove one mobility feature.",
+      "statOverrides": {
+        "squadValue": 90,
+        "cost": {
+          "gold": 30
+        },
+        "hp": 3,
+        "defence": 2,
+        "initiative": 6,
+        "speed": 6
+      }
+    },
+    {
+      "unitSid": "h3_air_elemental",
+      "factionSid": "homm3_conflux",
+      "tier": 2,
+      "unitName": "Air Elemental",
+      "recommendation": "Fix by retuning to Tier 2: HP `16-18`, offense/defense around `6-7`, `SV 150-190`, and gold `170-210`.",
+      "implementationTarget": "active/attack card: add ranged gust by reusing the Rivulet Retreat active schema with Summon Elementals Focus scaling.",
+      "statOverrides": {
+        "hp": 17,
+        "offence": 6,
+        "defence": 6,
+        "squadValue": 170,
+        "cost": {
+          "gold": 190
+        }
+      }
+    },
+    {
+      "unitSid": "h3_air_elemental_upg",
+      "factionSid": "homm3_conflux",
+      "tier": 2,
+      "unitName": "Storm Elemental",
+      "recommendation": "Fix similarly, making it reliability rather than a hidden tier jump. `SV 486` is far beyond Tier 2.",
+      "implementationTarget": "active/attack card: make lightning shot using Judgement/lightning-style active schema with Summon Elementals scaling.",
+      "statOverrides": {
+        "squadValue": 190
+      }
+    },
+    {
+      "unitSid": "h3_air_elemental_upg_alt",
+      "factionSid": "homm3_conflux",
+      "tier": 2,
+      "unitName": "Hurricane Elemental",
+      "recommendation": "Fix by raising `SV` to match flying/ranged/speed. `SV 123` is low for its reach.",
+      "implementationTarget": "active/passive card: make evasive pushback using the Rivulet Retreat active schema, with lower speed.",
+      "statOverrides": {
+        "cost": {
+          "gold": 275
+        }
+      }
+    },
+    {
+      "unitSid": "h3_water_elemental",
+      "factionSid": "homm3_conflux",
+      "tier": 3,
+      "unitName": "Water Elemental",
+      "recommendation": "Add the local board-control rule named in the implementation target.",
+      "implementationTarget": "active/passive card: add water shield using Healing Water/Radiant Armor-style protection family as local board control.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_water_elemental_upg",
+      "factionSid": "homm3_conflux",
+      "tier": 3,
+      "unitName": "Ice Elemental",
+      "recommendation": "Fix by lowering `SV` to `340` and making the active the clear upgrade value.",
+      "implementationTarget": "active/passive card: make chill control using Swamp Tactics-style speed/initiative debuff family as standard branch.",
+      "statOverrides": {
+        "squadValue": 340
+      }
+    },
+    {
+      "unitSid": "h3_water_elemental_upg_alt",
+      "factionSid": "homm3_conflux",
+      "tier": 3,
+      "unitName": "Frost Elemental",
+      "recommendation": "Fix by reducing `SV` hard, adding the visible freeze rule named in the implementation target, and raising cost.",
+      "implementationTarget": "active/passive card: make freeze/control using the Blind family as alternate role and trade away speed.",
+      "statOverrides": {
+        "cost": {
+          "gold": 375
+        }
+      }
+    },
+    {
+      "unitSid": "h3_fire_elemental",
+      "factionSid": "homm3_conflux",
+      "tier": 4,
+      "unitName": "Fire Elemental",
+      "recommendation": "Add fire retaliation damage and raise damage to the Tier 4 floor.",
+      "implementationTarget": "passive card: add fire retaliation damage using the existing Vengeance/retaliation-damage family as Tier 4 engine.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_fire_elemental_upg",
+      "factionSid": "homm3_conflux",
+      "tier": 4,
+      "unitName": "Energy Elemental",
+      "recommendation": "Keep Energy as the fast tempo upgrade when Plasma carries the stronger Chain Lightning-style package without a visible Focus-cost offset.",
+      "implementationTarget": "active card: add Focus-powered energy strike using existing Focus action damage-dealer schema from Summon Elementals; use the faster combat statline when Plasma is the stronger spell branch.",
+      "statOverrides": {
+        "hp": 35,
+        "offence": 12,
+        "defence": 12,
+        "damageMin": 6,
+        "damageMax": 12,
+        "speed": 9,
+        "initiative": 9
+      }
+    },
+    {
+      "unitSid": "h3_fire_elemental_upg_alt",
+      "factionSid": "homm3_conflux",
+      "tier": 4,
+      "unitName": "Plasma Elemental",
+      "recommendation": "Fix sidegrade/`SV` by keeping Plasma above Fire/Energy in value for Chain Lightning, but swap it onto the weaker combat statline because Chain Lightning is substantially stronger than Jumpstart without a visible Focus-cost offset.",
+      "implementationTarget": "active/attack card: make burst damage using the existing Summon Elementals Focus action damage-dealer schema, with weaker body stats and corrected SV.",
+      "statOverrides": {
+        "hp": 35,
+        "offence": 12,
+        "defence": 8,
+        "damageMin": 4,
+        "damageMax": 6,
+        "speed": 7,
+        "initiative": 8,
+        "squadValue": 520,
+        "cost": {
+          "gold": 400
+        }
+      }
+    },
+    {
+      "unitSid": "h3_earth_elemental",
+      "factionSid": "homm3_conflux",
+      "tier": 5,
+      "unitName": "Earth Elemental",
+      "recommendation": "Fix by raising HP to `60`, defense to `14`, and visible mechanics to Tier 5 density.",
+      "implementationTarget": "passive card: add earthwall cover using Shield Wall/basic-attack damage reduction family as Tier 5 specialist rule.",
+      "statOverrides": {
+        "hp": 60,
+        "defence": 14
+      },
+      "mechanicOverrides": {
+        "statModifiers": [
+          {
+            "set": "inDmgMods",
+            "tag": "basic_attack",
+            "value": -0.1
+          }
+        ],
+        "viewPassives": [
+          {
+            "name": "h3_balance_passive_basic_guard_name",
+            "description": "h3_balance_passive_basic_guard_description",
+            "icon": "sub_skill_faction_homm3_castle_elite_strategem_shield_wall"
+          }
+        ]
+      }
+    },
+    {
+      "unitSid": "h3_earth_elemental_upg",
+      "factionSid": "homm3_conflux",
+      "tier": 5,
+      "unitName": "Magma Elemental",
+      "recommendation": "Add durability and a visible fire-earth specialist rule while keeping Magma as the steadier standard upgrade instead of a weaker pre-Lava body.",
+      "implementationTarget": "passive/attack card: add molten retaliation using Vengeance/retaliation-damage family as standard branch; statline should sit between Earth and Lava rather than being eclipsed by Lava.",
+      "statOverrides": {
+        "hp": 45,
+        "offence": 12,
+        "defence": 11,
+        "damageMin": 7,
+        "damageMax": 11
+      }
+    },
+    {
+      "unitSid": "h3_earth_elemental_upg_alt",
+      "factionSid": "homm3_conflux",
+      "tier": 5,
+      "unitName": "Lava Elemental",
+      "recommendation": "Fix urgently by lowering `SV` from `2351` to `1150` and making Lava the slow durable branch rather than a broadly stronger Magma.",
+      "implementationTarget": "attack/passive card: make lava burst using the Dragonbreath Strike family, with explicit speed/initiative loss and corrected SV.",
+      "statOverrides": {
+        "hp": 50,
+        "offence": 12,
+        "defence": 15,
+        "damageMin": 8,
+        "damageMax": 13,
+        "speed": 5,
+        "initiative": 5,
+        "squadValue": 1150,
+        "cost": {
+          "gold": 500
+        }
+      }
+    },
+    {
+      "unitSid": "h3_psychic_elemental",
+      "factionSid": "homm3_conflux",
+      "tier": 6,
+      "unitName": "Psychic Elemental",
+      "recommendation": "Fix by raising gold to at least `800` and adding anchor-level visible control.",
+      "implementationTarget": "active/passive card: add mind shock using the Psychic Scream family as Tier 6 anchor rule.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_psychic_elemental_upg",
+      "factionSid": "homm3_conflux",
+      "tier": 6,
+      "unitName": "Magic Elemental",
+      "recommendation": "Add Magic Immunity and a Spell Power-scaling Focus action, then raise offense/defense to Tier 6 floors.",
+      "implementationTarget": "active/passive card: add Magic Immunity plus one Spell Power-scaling Focus damage action using the existing Summon Elementals Focus action family.",
+      "statOverrides": {
+        "offence": 17,
+        "defence": 17
+      },
+      "implementationStatus": {
+        "kind": "blockedNativeContract",
+        "reason": "The recommendation names a stateful, aura, scaling, or owner-correlated mechanic that is blocked until a dedicated validator-backed native/runtime contract proves the behavior."
+      }
+    },
+    {
+      "unitSid": "h3_psychic_elemental_upg_alt",
+      "factionSid": "homm3_conflux",
+      "tier": 6,
+      "unitName": "Astral Elemental",
+      "recommendation": "Fix by reducing `SV/cost` and adding the premium planar-control action named in the implementation target.",
+      "implementationTarget": "active card: add planar displacement using Command Reposition/Switch Places family as premium sidegrade.",
+      "statOverrides": {
+        "cost": {
+          "gold": 800
+        }
+      }
+    },
+    {
+      "unitSid": "h3_firebird",
+      "factionSid": "homm3_conflux",
+      "tier": 7,
+      "unitName": "Firebird",
+      "recommendation": "Fix by capping speed/initiative near `11-12` and adding a visible fire capstone rule.",
+      "implementationTarget": "passive/attack card: add flame sweep using Dragonbreath Strike/Area Strike family as base capstone mechanic after speed correction.",
+      "implementationStatus": {
+        "kind": "preservedCurrent",
+        "reason": "The generated candidate Core already carries the requested current unit identity or active/passive package; this contract row preserves it explicitly."
+      }
+    },
+    {
+      "unitSid": "h3_firebird_upg",
+      "factionSid": "homm3_conflux",
+      "tier": 7,
+      "unitName": "Phoenix",
+      "recommendation": "Fix by reducing speed/initiative to `12/12`, because Summon Elementals already grants Phoenix-line scaling.",
+      "implementationTarget": "passive card: reuse the native Grove Flaming Phoenix rebirth mechanic through the existing phoenix-heart resurrection scaffold; do not invent a separate Rewind Life action.",
+      "statOverrides": {
+        "initiative": 12,
+        "speed": 12
+      },
+      "evidenceChecks": {
+        "phoenixRebirth": true
+      }
+    },
+    {
+      "unitSid": "h3_firebird_upg_alt",
+      "factionSid": "homm3_conflux",
+      "tier": 7,
+      "unitName": "Sacred Phoenix",
+      "recommendation": "Fix sidegrade by reducing speed to `11` and making it the slower defensive recovery branch. It is broadly stronger than Phoenix while still very fast.",
+      "implementationTarget": "passive card: reuse the native Grove Flaming Phoenix rebirth mechanic through the existing phoenix-heart resurrection scaffold; keep the defensive branch slower instead of adding a separate Rewind Life action.",
+      "statOverrides": {
+        "speed": 11,
+        "cost": {
+          "mercury": 1,
+          "gold": 2000
+        },
+        "hp": 200,
+        "offence": 20,
+        "damageMax": 40,
+        "initiative": 11,
+        "squadValue": 6500
+      },
+      "evidenceChecks": {
+        "phoenixRebirth": true
+      },
+      "mechanicOverrides": {
+        "statModifiers": [
+          {
+            "set": "inDmgMods",
+            "tag": "basic_attack",
+            "value": -0.1
+          }
+        ],
+        "viewPassives": [
+          {
+            "name": "h3_balance_passive_basic_guard_name",
+            "description": "h3_balance_passive_basic_guard_description",
+            "icon": "sub_skill_faction_homm3_castle_elite_strategem_shield_wall"
+          }
+        ]
+      }
+    },
+    {
+      "unitSid": "h3_fangarm",
+      "factionSid": "neutral",
+      "tier": 5,
+      "unitName": "Fangarm",
+      "recommendation": "Add identity by making Hypnotic Strike the clear encounter-piece budget center. `SV 929` and `600g` are plausible for a neutral, but `mechanicCount 3` and `8-12` damage make it feel thin for Tier 5.",
+      "implementationTarget": "active card: make Hypnotic Strike the encounter mechanic using the current Hypnotic Strike/Berserk control family; do not tie it to a faction skill.",
+      "evidenceChecks": {
+        "viewAbilities": [
+          "h3_fangarm_hypnotic_strike_name"
+        ],
+        "logicAbilityBuffs": [
+          {
+            "buff": "magic_berserker_effect_0_no_damage",
+            "duration": 1,
+            "mechanic": "berserk"
+          }
+        ]
+      }
+    }
+  ]
+}

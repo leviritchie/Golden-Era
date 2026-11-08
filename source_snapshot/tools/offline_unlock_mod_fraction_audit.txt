@@ -1,0 +1,22 @@
+OfflineUnlockMod — faction handling audit (grep ModActions/Plugin.cs + related *.cs)
+
+Summary
+-------
+- No switch/case over the six shipped faction ids.
+- Fraction-specific UI in this mod is limited to:
+  - GetCityBackdropPath: nature -> Grove PNG; release-enabled HoMM3 factions -> required
+    homm3_runtime_assets/.../<faction>/mockups/... town mockup. Missing payloads fail closed instead of using shared art.
+  • IsCityInteriorSceneName: city* / *city* / *homm3_* in scene name (0.1.93+ single homm3_ check).
+- Quick-start / random faction resolution uses data.json availableFractions + hero pools from
+  Core.zip (LoadHeroesByFraction regex) — not a hardcoded enum; custom fractions work if
+  DB/heroes & data.json list them.
+- Homm3Import* paths key off homm3_import.json ResManager paths and unit sids, not ObjCity
+  fraction id (can still affect map/battle when those paths are used).
+- Session debug ShapeEntityValueTokens includes "homm3_" substring to flag mod-related strings
+  in shape scans (0.1.93+).
+
+Gaps / notes
+------------
+- Third-party / game DLLs are not in this repo; any fixed six-faction logic there would not
+  appear in this scan.
+- _decompiled_shipped/ copies are not authoritative; prefer live Plugin.cs.

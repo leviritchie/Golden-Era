@@ -1,0 +1,657 @@
+{
+  "lawOverrides": {
+    "fraction_law_homm3_stronghold_13": {
+      "enabled": true,
+      "nameText": "Blood Feud",
+      "descriptionText": "Friendly creatures' counterattacks deal 50% more damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "counter_attack",
+                "0.50"
+              ],
+              "receivers": [
+                "h3_goblin",
+                "h3_wolf_rider",
+                "h3_orc",
+                "h3_ogre",
+                "h3_roc",
+                "h3_cyclops",
+                "h3_behemoth"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Bloodfrenzy (schools/chaos/bloodfrenzy.jpg). Runtime icon key: fraction_law_homm3_stronghold_13_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Bloodfrenzy",
+      "homm4IconPath": "schools/chaos/bloodfrenzy.jpg",
+      "iconKey": "fraction_law_homm3_stronghold_13_icon"
+    },
+    "fraction_law_homm3_stronghold_18": {
+      "enabled": true,
+      "nameText": "Warband Crush",
+      "descriptionText": "Friendly creatures deal 5%/10% more melee damage and take 5%/10% less melee damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "melee_attack",
+                "0.05"
+              ],
+              "receivers": [
+                "h3_goblin",
+                "h3_wolf_rider",
+                "h3_orc",
+                "h3_ogre",
+                "h3_roc",
+                "h3_cyclops",
+                "h3_behemoth"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "melee_attack",
+                "-0.05"
+              ],
+              "receivers": [
+                "h3_goblin",
+                "h3_wolf_rider",
+                "h3_orc",
+                "h3_ogre",
+                "h3_roc",
+                "h3_cyclops",
+                "h3_behemoth"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "melee_attack",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_goblin",
+                "h3_wolf_rider",
+                "h3_orc",
+                "h3_ogre",
+                "h3_roc",
+                "h3_cyclops",
+                "h3_behemoth"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "melee_attack",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_goblin",
+                "h3_wolf_rider",
+                "h3_orc",
+                "h3_ogre",
+                "h3_roc",
+                "h3_cyclops",
+                "h3_behemoth"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Mass slayer (schools/chaos/mass_slayer.jpg). Runtime icon key: fraction_law_homm3_stronghold_18_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Mass slayer",
+      "homm4IconPath": "schools/chaos/mass_slayer.jpg",
+      "iconKey": "fraction_law_homm3_stronghold_18_icon"
+    },
+    "fraction_law_homm3_stronghold_19": {
+      "enabled": true,
+      "nameText": "Rage Momentum",
+      "descriptionText": "Friendly creatures deal 10% more ranged damage and take 10% less ranged damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "shoot_attack",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_goblin",
+                "h3_wolf_rider",
+                "h3_orc",
+                "h3_ogre",
+                "h3_roc",
+                "h3_cyclops",
+                "h3_behemoth"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "shoot_attack",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_goblin",
+                "h3_wolf_rider",
+                "h3_orc",
+                "h3_ogre",
+                "h3_roc",
+                "h3_cyclops",
+                "h3_behemoth"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Slayer (schools/chaos/slayer.jpg). Runtime icon key: fraction_law_homm3_stronghold_19_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Slayer",
+      "homm4IconPath": "schools/chaos/slayer.jpg",
+      "iconKey": "fraction_law_homm3_stronghold_19_icon"
+    },
+    "fraction_law_homm3_stronghold_2": {
+      "enabled": true,
+      "nameText": "War Beacons",
+      "descriptionText": "External buildings and structures you control reveal a wider area.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideObjectViewRadius",
+              "parameters": [
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideObjectViewRadius",
+              "parameters": [
+                "4"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideObjectViewRadius",
+              "parameters": [
+                "6"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "Canonical shared-law icon pass: plain hero Sight laws use the same vanilla scouting icon across custom factions. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_2_icon"
+    },
+    "fraction_law_homm3_stronghold_21": {
+      "enabled": true,
+      "nameText": "Spoils Ledger",
+      "descriptionText": "Gold income from your sources increases by +10% by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "resPercentIncrementSet",
+                "gold",
+                "0.10"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Fortune (schools/nature/fortune.jpg). Runtime icon key: fraction_law_homm3_stronghold_21_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Fortune",
+      "homm4IconPath": "schools/nature/fortune.jpg",
+      "iconKey": "fraction_law_homm3_stronghold_21_icon"
+    },
+    "fraction_law_homm3_stronghold_22": {
+      "enabled": true,
+      "nameText": "Battle Rage",
+      "descriptionText": "Heroes gain +1/+2 Morale by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "moral",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "moral",
+                "2"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Canonical shared-law icon pass: hero Morale laws use the same vanilla morale icon across custom factions. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_22_icon"
+    },
+    "fraction_law_homm3_stronghold_28": {
+      "enabled": true,
+      "nameText": "Warcamp Raising",
+      "descriptionText": "Your towns gain an additional daily construction allowance.",
+      "parametersPerLevel": [
+        {
+          "cost": 5,
+          "bonuses": [
+            {
+              "type": "constructionDailyLimit",
+              "parameters": [
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_28_icon"
+    },
+    "fraction_law_homm3_stronghold_33": {
+      "enabled": true,
+      "nameText": "War Festival",
+      "descriptionText": "Produces 250/500/750 Astrology points daily by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "250"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "500"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "750"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_34_icon"
+    },
+    "fraction_law_homm3_stronghold_34": {
+      "enabled": true,
+      "nameText": "Spellbreaker Chants",
+      "descriptionText": "Enemy heroes have longer spell cooldowns in battle.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStatBattle",
+              "parameters": [
+                "magicCdBonus",
+                "1"
+              ],
+              "receiverAllegiance": "enemy"
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "homm4IconLabel": "Unholy song",
+      "homm4IconPath": "schools/death/unholy_song.jpg",
+      "iconNotes": "HOMM4 art-source candidate: Unholy song (schools/death/unholy_song.jpg). Runtime icon key: fraction_law_homm3_stronghold_34_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "iconKey": "fraction_law_homm3_stronghold_34_icon"
+    },
+    "fraction_law_homm3_stronghold_6": {
+      "enabled": true,
+      "nameText": "Berserker Charge",
+      "descriptionText": "Stronghold creatures gain +1 Speed.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "speed",
+                "1"
+              ],
+              "receivers": [
+                "h3_goblin",
+                "h3_goblin_upg",
+                "h3_goblin_upg_alt",
+                "h3_wolf_rider",
+                "h3_wolf_rider_upg",
+                "h3_wolf_rider_upg_alt",
+                "h3_orc",
+                "h3_orc_upg",
+                "h3_orc_upg_alt",
+                "h3_ogre",
+                "h3_ogre_upg",
+                "h3_ogre_upg_alt",
+                "h3_roc",
+                "h3_roc_upg",
+                "h3_roc_upg_alt",
+                "h3_cyclops",
+                "h3_cyclops_upg",
+                "h3_cyclops_upg_alt",
+                "h3_behemoth",
+                "h3_behemoth_upg",
+                "h3_behemoth_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "Creature portrait law icon pass: uses h3_orc_upg.png for this creature-function law under runtime icon key fraction_law_homm3_stronghold_6_icon. Static/deploy proven only; law-tree visual smoke still required.",
+      "homm4IconLabel": "Haste",
+      "homm4IconPath": "schools/chaos/haste.jpg",
+      "iconKey": "fraction_law_homm3_stronghold_6_icon",
+      "portraitIconSid": "h3_orc_upg"
+    },
+    "fraction_law_homm3_stronghold_4": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_4_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_4_icon"
+    },
+    "fraction_law_homm3_stronghold_5": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_5_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_5_icon"
+    },
+    "fraction_law_homm3_stronghold_10": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_10_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_10_icon"
+    },
+    "fraction_law_homm3_stronghold_11": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_11_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_11_icon"
+    },
+    "fraction_law_homm3_stronghold_14": {
+      "iconNotes": "Canonical resource icon pass: mining laws use the vanilla icon matching the produced special resource instead of donor-faction inheritance. Static/deploy validation pending.",
+      "iconKey": "fraction_law_nature_14_icon"
+    },
+    "fraction_law_homm3_stronghold_15": {
+      "iconNotes": "HOMM4 art-source candidate: Magic mirror (schools/chaos/magic_mirror.jpg). Runtime icon key: fraction_law_homm3_stronghold_15_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "enabled": true,
+      "nameText": "Warcry Lore",
+      "descriptionText": "Heroes can learn tier 1 Day spells.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "magicSchoolSet",
+                "day",
+                "0",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "homm4IconLabel": "Magic mirror",
+      "homm4IconPath": "schools/chaos/magic_mirror.jpg",
+      "iconKey": "fraction_law_homm3_stronghold_15_icon"
+    },
+    "fraction_law_homm3_stronghold_17": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_17_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_17_icon"
+    },
+    "fraction_law_homm3_stronghold_20": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_20_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_20_icon"
+    },
+    "fraction_law_homm3_stronghold_23": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_23_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_23_icon"
+    },
+    "fraction_law_homm3_stronghold_24": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_24_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_24_icon"
+    },
+    "fraction_law_homm3_stronghold_25": {
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "enabled": true,
+      "nameText": "Raucous Rage",
+      "descriptionText": "Morale trigger chance for friendly creatures increases by +1%/+2%/+3% per Morale point by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.01"
+              ],
+              "receivers": [
+                "h3_goblin",
+                "h3_wolf_rider",
+                "h3_orc",
+                "h3_ogre",
+                "h3_roc",
+                "h3_cyclops",
+                "h3_behemoth"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.02"
+              ],
+              "receivers": [
+                "h3_goblin",
+                "h3_wolf_rider",
+                "h3_orc",
+                "h3_ogre",
+                "h3_roc",
+                "h3_cyclops",
+                "h3_behemoth"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.03"
+              ],
+              "receivers": [
+                "h3_goblin",
+                "h3_wolf_rider",
+                "h3_orc",
+                "h3_ogre",
+                "h3_roc",
+                "h3_cyclops",
+                "h3_behemoth"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconKey": "fraction_law_human_25_icon"
+    },
+    "fraction_law_homm3_stronghold_26": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_26_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_26_icon"
+    },
+    "fraction_law_homm3_stronghold_27": {
+      "iconNotes": "HOMM4 art-source candidate: Mass first strike (schools/chaos/mass_first_strike.jpg). Runtime icon key: fraction_law_homm3_stronghold_27_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "enabled": true,
+      "nameText": "High Warcry Lore",
+      "descriptionText": "Heroes can learn any tier of Day spells.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "magicSchoolSet",
+                "day",
+                "5",
+                "0"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "homm4IconLabel": "Mass first strike",
+      "homm4IconPath": "schools/chaos/mass_first_strike.jpg",
+      "iconKey": "fraction_law_homm3_stronghold_27_icon"
+    },
+    "fraction_law_homm3_stronghold_30": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_30_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_30_icon"
+    },
+    "fraction_law_homm3_stronghold_31": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_31_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_31_icon",
+      "enabled": true,
+      "nameText": "Goblin Mob Rule",
+      "descriptionText": "Goblin line creatures always deal their maximum damage.",
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "unitBoolStat",
+              "parameters": [
+                "alwaysMaxDmg",
+                "true"
+              ],
+              "receivers": [
+                "h3_goblin",
+                "h3_goblin_upg",
+                "h3_goblin_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending."
+    },
+    "fraction_law_homm3_stronghold_32": {
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_32_icon"
+    },
+    "fraction_law_homm3_stronghold_1": {
+      "iconKey": "fraction_law_human_1_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_stronghold_3": {
+      "iconKey": "fraction_law_human_3_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_stronghold_7": {
+      "iconKey": "fraction_law_human_7_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_stronghold_8": {
+      "iconKey": "fraction_law_human_8_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_stronghold_9": {
+      "iconKey": "fraction_law_human_9_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_stronghold_12": {
+      "iconKey": "fraction_law_human_12_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_stronghold_16": {
+      "iconKey": "fraction_law_human_16_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_stronghold_29": {
+      "iconKey": "fraction_law_human_29_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    }
+  }
+}

@@ -1,0 +1,480 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "Unholy Alliance continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub final; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_20_sod_necropolis_final",
+    "campaignTitle": "Unholy Alliance",
+    "campaignEntry": "Final.h3c",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "missionConfigPrefix": "homm3_sod_necropolis",
+    "defaultSpawn": {
+      "factionSid": "homm3_stronghold",
+      "heroSid": "homm3_stronghold_hero_5"
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart).",
+    "regionPixels": {
+      "harvest": [
+        80.0,
+        220.0
+      ],
+      "gathering_the_legion": [
+        145.45454545454544,
+        220.0
+      ],
+      "search_for_a_killer": [
+        210.9090909090909,
+        220.0
+      ],
+      "final_peace": [
+        276.3636363636364,
+        220.0
+      ],
+      "secrets_revealed": [
+        341.8181818181818,
+        220.0
+      ],
+      "agents_of_vengeance": [
+        407.27272727272725,
+        220.0
+      ],
+      "wrath_of_sandro": [
+        472.7272727272727,
+        220.0
+      ],
+      "invasion": [
+        538.1818181818182,
+        220.0
+      ],
+      "to_strive_to_seek": [
+        603.6363636363636,
+        220.0
+      ],
+      "barbarian_brothers": [
+        669.0909090909091,
+        220.0
+      ],
+      "union": [
+        734.5454545454545,
+        220.0
+      ],
+      "fall_of_sandro": [
+        800.0,
+        220.0
+      ]
+    },
+    "missionSpawns": {
+      "harvest": {
+        "heroSid": "homm3_stronghold_hero_5",
+        "factionSid": "homm3_stronghold"
+      },
+      "gathering_the_legion": {
+        "heroSid": "homm3_stronghold_hero_1",
+        "factionSid": "homm3_stronghold"
+      },
+      "search_for_a_killer": {
+        "heroSid": "homm3_rampart_hero_17",
+        "factionSid": "homm3_rampart"
+      },
+      "final_peace": {
+        "heroSid": "homm3_rampart_hero_12",
+        "factionSid": "homm3_rampart"
+      },
+      "secrets_revealed": {
+        "heroSid": "homm3_stronghold_hero_5",
+        "factionSid": "homm3_stronghold"
+      },
+      "agents_of_vengeance": {
+        "heroSid": "homm3_rampart_hero_12",
+        "factionSid": "homm3_rampart"
+      },
+      "wrath_of_sandro": {
+        "heroSid": "homm3_necropolis_hero_11",
+        "factionSid": "homm3_necropolis"
+      },
+      "invasion": {
+        "heroSid": "homm3_necropolis_hero_11",
+        "factionSid": "homm3_necropolis"
+      },
+      "to_strive_to_seek": {
+        "heroSid": "homm3_rampart_hero_12",
+        "factionSid": "homm3_rampart"
+      },
+      "barbarian_brothers": {
+        "heroSid": "homm3_stronghold_hero_5",
+        "factionSid": "homm3_stronghold"
+      },
+      "union": {
+        "heroSid": "homm3_rampart_hero_12",
+        "factionSid": "homm3_rampart"
+      },
+      "fall_of_sandro": {
+        "heroSid": "homm3_rampart_hero_12",
+        "factionSid": "homm3_rampart"
+      }
+    }
+  },
+  "storyHubMapSidOverrides": {
+    "harvest": "h3_necropolis_harvest_raw_translation",
+    "gathering_the_legion": "h3_necropolis_gathering_the_legion_raw_translation",
+    "search_for_a_killer": "h3_necropolis_search_for_a_killer_raw_translation",
+    "final_peace": "h3_necropolis_final_peace_raw_translation",
+    "secrets_revealed": "h3_necropolis_secrets_revealed_raw_translation",
+    "agents_of_vengeance": "h3_necropolis_agents_of_vengeance_raw_translation",
+    "wrath_of_sandro": "h3_necropolis_wrath_of_sandro_raw_translation",
+    "invasion": "h3_necropolis_invasion_raw_translation",
+    "to_strive_to_seek": "h3_necropolis_to_strive_to_seek_raw_translation",
+    "barbarian_brothers": "h3_necropolis_barbarian_brothers_raw_translation",
+    "union": "h3_necropolis_union_raw_translation",
+    "fall_of_sandro": "h3_necropolis_fall_of_sandro_raw_translation",
+    "choiceReason": "Unholy Alliance missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "harvest",
+      "toMissionId": "gathering_the_legion",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 30,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=30 for harvest (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_harvest_raw_translation",
+        "to": "h3_necropolis_gathering_the_legion_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "gathering_the_legion",
+      "toMissionId": "search_for_a_killer",
+      "sourceBlockIndex": 2,
+      "nextBlockIndex": 3,
+      "levelCap": 30,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=30 for gathering_the_legion (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_gathering_the_legion_raw_translation",
+        "to": "h3_necropolis_search_for_a_killer_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "search_for_a_killer",
+      "toMissionId": "final_peace",
+      "sourceBlockIndex": 3,
+      "nextBlockIndex": 4,
+      "levelCap": 30,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=30 for search_for_a_killer (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_search_for_a_killer_raw_translation",
+        "to": "h3_necropolis_final_peace_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "final_peace",
+      "toMissionId": "secrets_revealed",
+      "sourceBlockIndex": 4,
+      "nextBlockIndex": 5,
+      "levelCap": 30,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=30 for final_peace (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_final_peace_raw_translation",
+        "to": "h3_necropolis_secrets_revealed_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "secrets_revealed",
+      "toMissionId": "agents_of_vengeance",
+      "sourceBlockIndex": 5,
+      "nextBlockIndex": 6,
+      "levelCap": 33,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=33 for secrets_revealed (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_secrets_revealed_raw_translation",
+        "to": "h3_necropolis_agents_of_vengeance_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "agents_of_vengeance",
+      "toMissionId": "wrath_of_sandro",
+      "sourceBlockIndex": 6,
+      "nextBlockIndex": 7,
+      "levelCap": 33,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=33 for agents_of_vengeance (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_agents_of_vengeance_raw_translation",
+        "to": "h3_necropolis_wrath_of_sandro_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "wrath_of_sandro",
+      "toMissionId": "invasion",
+      "sourceBlockIndex": 7,
+      "nextBlockIndex": 8,
+      "levelCap": 40,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=40 for wrath_of_sandro (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_wrath_of_sandro_raw_translation",
+        "to": "h3_necropolis_invasion_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "invasion",
+      "toMissionId": "to_strive_to_seek",
+      "sourceBlockIndex": 8,
+      "nextBlockIndex": 9,
+      "levelCap": 40,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=40 for invasion (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_invasion_raw_translation",
+        "to": "h3_necropolis_to_strive_to_seek_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "to_strive_to_seek",
+      "toMissionId": "barbarian_brothers",
+      "sourceBlockIndex": 9,
+      "nextBlockIndex": 10,
+      "levelCap": 37,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=37 for to_strive_to_seek (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_to_strive_to_seek_raw_translation",
+        "to": "h3_necropolis_barbarian_brothers_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "barbarian_brothers",
+      "toMissionId": "union",
+      "sourceBlockIndex": 10,
+      "nextBlockIndex": 11,
+      "levelCap": 37,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=37 for barbarian_brothers (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_barbarian_brothers_raw_translation",
+        "to": "h3_necropolis_union_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "union",
+      "toMissionId": "fall_of_sandro",
+      "sourceBlockIndex": 11,
+      "nextBlockIndex": 12,
+      "levelCap": 40,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=40 for union (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_union_raw_translation",
+        "to": "h3_necropolis_fall_of_sandro_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "harvest",
+    "gathering_the_legion",
+    "search_for_a_killer",
+    "final_peace",
+    "secrets_revealed",
+    "agents_of_vengeance",
+    "wrath_of_sandro",
+    "invasion",
+    "to_strive_to_seek",
+    "barbarian_brothers",
+    "union",
+    "fall_of_sandro"
+  ],
+  "missionTitles": {
+    "harvest": "Harvest",
+    "gathering_the_legion": "Gathering the Legion",
+    "search_for_a_killer": "Search for a Killer",
+    "final_peace": "Final Peace",
+    "secrets_revealed": "Secrets Revealed",
+    "agents_of_vengeance": "Agents of Vengeance",
+    "wrath_of_sandro": "Wrath of Sandro",
+    "invasion": "Invasion",
+    "to_strive_to_seek": "To Strive, To Seek",
+    "barbarian_brothers": "Barbarian Brothers",
+    "union": "Union",
+    "fall_of_sandro": "Fall of Sandro"
+  },
+  "missionDescriptions": {
+    "harvest": "Yog must defeat the Necromancers creating havoc in this part of Erathia to win the scenario. However, if Yog is defeated in combat, the scenario is lost. Yog is limited...",
+    "gathering_the_legion": "Crag Hack must find all the pieces of Legion and return them to the town of Hartferd to win the scenario. However, if Crag Hack is defeated in combat, the scenario is lo...",
+    "search_for_a_killer": "Defeat all the Necromancers in the area to win the scenario. However, if Gelu is defeated in combat, the scenario is lost. Gelu is limited to level 30 but will carry his...",
+    "final_peace": "You must kill Lord Fayette to win the scenario. However, if Gem is defeated in combat, the scenario is lost. Gem is limited to level 30 but will carry her experience, sk...",
+    "secrets_revealed": "Yog and Crag Hack must defeat the Necromancers to win the scenario. However, if either hero is defeated in combat, the scenario is lost. Yog and Crag Hack are limited to...",
+    "agents_of_vengeance": "You must capture Castle Crypthome to win the scenario. However, if Gem or Gelu is defeated in combat, the scenario is lost. The heroes are limited to level 33 but will c...",
+    "wrath_of_sandro": "Wipe out all invading forces to win the scenario. However, if Sandro is defeated in combat, the scenario is lost. Sandro is limited to level 40 but will carry his experi...",
+    "invasion": "Defeat the Rangers and Barbarians against Sandro and his forces of undead to win the scenario. However, if Sandro is defeated in combat, the scenario is lost. Sandro is...",
+    "to_strive_to_seek": "Gem and Gelu must find the Sandals of the Saint, Helm of Heavenly Enlightenment and the Necklace of Celestial Bliss to win the scenario. However, if either hero is defea...",
+    "barbarian_brothers": "Crag Hack and Yog must find the Sword of Judgment, Armor of Wonder, and Lions Shield of Courage to win the scenario. However, if either hero is defeated in combat, the s...",
+    "union": "Defeat all of the Necromancers in the area and create the Angelic Alliance to win the scenario. However, if Gem, Gelu, Crag Hack or Yog are defeated in combat, the scena...",
+    "fall_of_sandro": "Defeat Sandro and all his minions to win the campaign. However, if any of your four heroes are defeated in combat or you fail to defeat Sandro's forces in four months, t..."
+  },
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Dedicated AB/SoD MapImage bake",
+    "Town growth / negative resource timed-event fidelity"
+  ],
+  "videoContract": {
+    "status": "mission_clips_wired_hub_still_only",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": null,
+    "hubFirstShowOmitReason": "RoE parity: hub hover strip is selection-still only; mission pins PlayVideo when composed MP4 meets contract.",
+    "requireComposedAudio": true,
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "requiredMp4RelativeToStreamingAssets": null,
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_20_sod_necropolis_final/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "stillArtifact": "artifacts/campaign_port_poc/ab_sod_campaigns/storyhub_visual/final_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.55,
+      "focusY": 0.42,
+      "cropReason": "Necropolis castle with spectral blue dragon over the right wall",
+      "cropsCatalog": "scenarios/ab_sod_campaigns/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "harvest": "H3x2_UAa",
+      "gathering_the_legion": "H3x2_UAb",
+      "search_for_a_killer": "H3x2_UAc",
+      "final_peace": "H3x2_UAd",
+      "secrets_revealed": "H3x2_UAe",
+      "agents_of_vengeance": "H3x2_UAf",
+      "wrath_of_sandro": "H3x2_UAg",
+      "invasion": "H3x2_UAh",
+      "to_strive_to_seek": "H3x2_UAi",
+      "barbarian_brothers": "H3x2_UAj",
+      "union": "H3x2_UAk",
+      "fall_of_sandro": "H3x2_UAl"
+    },
+    "actionOrder": "PlayVideo (when composed MP4 ready) then OpenMissionsPrologue on each mission pin; hub firstShowActions stay empty",
+    "failClosed": "final hub firstShowActions must stay empty (hubFirstShowPlayVideo=false). Mission PlayVideo requires StreamingAssets/video/{{clip}}.mp4 + softsub sidecar meeting compose contract; otherwise omit PlayVideo and keep prologue."
+  }
+}

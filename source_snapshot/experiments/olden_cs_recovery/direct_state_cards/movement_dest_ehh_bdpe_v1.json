@@ -1,0 +1,131 @@
+{
+  "adapter_binding": {
+    "gameplay_gated": true,
+    "gateway_methods": [],
+    "notes": "Dest-recipe INPUT only. Do not treat as commit owner. MovementPush stays gated until M3 focused_live_positive on bfdi path.",
+    "operations": [
+      "MovementPush"
+    ]
+  },
+  "banned_surfaces": [
+    {
+      "reason": "Dest compute + enqueue only; position store is bfdi",
+      "surface": "ehh.bdpe as commit owner"
+    },
+    {
+      "reason": "M1 banned; lastCorpse",
+      "surface": "Hex.bcxo / cfqf as occupancy"
+    },
+    {
+      "reason": "M1 banned; Logic publish is eda",
+      "surface": "edb.* as movement publish"
+    }
+  ],
+  "card_id": "movement.dest.ehh_bdpe_v1",
+  "family": "movement",
+  "gamesymbols_export": {
+    "exported": true,
+    "exported_at": "2026-07-20T17:59:22Z",
+    "reason": "Exported proven dest-recipe surfaces only into GameSymbols.DirectStateLaws (MechPushUnitInitMembers/HexIsLockedForSideMembers/HexDistanceMembers). Blocked bdpe/een remain non-exported. MovementPush stays gated. Role=dest_recipe only.",
+    "symbols": [
+      "MechPushUnit.Init",
+      "IsLockedForSide",
+      "HexDistance"
+    ],
+    "target": "GameSymbols.DirectStateLaws"
+  },
+  "live_methods": [
+    {
+      "blocked_reason": null,
+      "method_id": "ehh::Init(string[])",
+      "mono_alias": "MechPushUnit.Init",
+      "role": "dest_recipe",
+      "rva": "0x1FD4740",
+      "status": "equivalence-proven"
+    },
+    {
+      "blocked_reason": "blocked: plant_incomplete \u2014 ehh.bdpe requires eab/eac/InCastArgs/FieldObject/eaa battle plant for dest-list/enqueue call-trace; refuse fabricated ApplyForReceiver oracle. Capstone+pin-table Init/bool recipe remain; commit ownership stays on bfdi.",
+      "method_id": "ehh::bdpe(eab,eac,InCastArgs,FieldObject,eaa)",
+      "mono_alias": "MechPushUnit.ApplyForReceiver",
+      "role": "dest_recipe",
+      "rva": "0x1FD4AC0",
+      "status": "blocked"
+    },
+    {
+      "blocked_reason": null,
+      "method_id": "Hex.Session.Battle.Hex::bcyf(int,bool b =,ETargetAllegiance c =)",
+      "mono_alias": "IsLockedForSide",
+      "role": "dest_recipe",
+      "rva": "0x1F334B0",
+      "status": "equivalence-proven"
+    },
+    {
+      "blocked_reason": "blocked: plant_incomplete \u2014 een.bdep requires populated Hex[] grid (cfty); refuse fabricated neighbour call-trace. Identity+pin-table rename remain; DestRecipe role only.",
+      "method_id": "een::bdep(int)",
+      "mono_alias": "NeighbourByIndex",
+      "role": "dest_recipe",
+      "rva": "0x1F3D1B0",
+      "status": "blocked"
+    },
+    {
+      "blocked_reason": "blocked: plant_incomplete \u2014 een.bdeo requires populated Hex[] grid (cfty); refuse fabricated coord\u2192hex call-trace. Identity+pin-table rename remain; DestRecipe role only.",
+      "method_id": "een::bdeo(float,float)",
+      "mono_alias": "HexAtCoords",
+      "role": "dest_recipe",
+      "rva": "0x1F3D0E0",
+      "status": "blocked"
+    },
+    {
+      "blocked_reason": null,
+      "method_id": "eeu::bdke(Hex,Hex)",
+      "mono_alias": "HexDistance",
+      "role": "dest_recipe",
+      "rva": "0x1F772B0",
+      "status": "equivalence-proven"
+    }
+  ],
+  "milestone_id": "ds_m2_movement_dest",
+  "milestone_ledger_path": "experiments/olden_cs_recovery/proof_ledger/milestones/ds_m2_movement_dest.ledger.json",
+  "mono_aliases": [
+    "MechPushUnit.Init",
+    "MechPushUnit.ApplyForReceiver",
+    "IsLockedForSide",
+    "NeighbourByIndex",
+    "HexAtCoords",
+    "HexDistance"
+  ],
+  "notes": "Bar C fail-closed. Role=dest_recipe only \u2014 commit ownership stays on movement.commit.bfdi_v1. ehh.bdpe + een helpers remain plant-incomplete. Production Shoulder Check uses explicit interim dest policy interim_axial_away_bcyf_fieldobjects_v1 (axial opposite via neighbour fields + Hex.bcyf/fieldObjects legality) documented in proof_ledger/entries/ds_shoulder_check_product_wiring_20260720.json \u2014 not silent guessing and not commit ownership. Primary oracle for full bdpe remains call-trace when a battle plant exists.",
+  "ordered_stores": [
+    {
+      "notes": "Init store; bdpe direction scale \u22121.0 vs +1.0",
+      "offset_or_member": "ehh.cgfy (+0x28)",
+      "role": "pushInwards"
+    },
+    {
+      "notes": "Init store; with pushInwards@dist==1 \u2192 unitsToRemove",
+      "offset_or_member": "ehh.cgfz (+0x29)",
+      "role": "skipCenter"
+    }
+  ],
+  "pin_table_path": "experiments/direct_state_movement_trace/mono_live_pin_table.md",
+  "proof_status": "equivalence-proven",
+  "publish": {
+    "call_chain": [],
+    "english_name": null,
+    "english_name_strength": null,
+    "field": null,
+    "hub_type": null,
+    "kind": "none",
+    "notes": "Dest recipe does not publish; commit publish remains eda.cfia via bfdi/bdhw.",
+    "offset": null
+  },
+  "role": "dest_recipe",
+  "schema_version": 1,
+  "title": "M2 \u2014 MovementPush dest / apply recipe (adapter INPUT only)",
+  "ungate_requires": [
+    "focused_live_positive",
+    "call_trace_oracle_bar_c",
+    "movement_commit_bfdi_v1"
+  ],
+  "updated_at": "2026-07-20T17:59:22Z"
+}

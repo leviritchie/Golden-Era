@@ -1,0 +1,235 @@
+{
+ "unit": "h3_energy_elemental",
+ "joints": {
+  "Hips": [
+   0.017,
+   0.038,
+   0.863
+  ],
+  "Spine": [
+   0.017,
+   0.03,
+   0.968
+  ],
+  "Spine1": [
+   0.017,
+   0.021,
+   1.073
+  ],
+  "Spine2": [
+   0.017,
+   0.011,
+   1.191
+  ],
+  "Neck": [
+   0.017,
+   0.003,
+   1.283
+  ],
+  "Head": [
+   0.017,
+   -0.003,
+   1.409
+  ],
+  "HeadTop_End": [
+   0.017,
+   -0.08,
+   1.661
+  ],
+  "LeftShoulder": [
+   0.038,
+   -0.052,
+   1.304
+  ],
+  "LeftArm": [
+   0.192,
+   0.01,
+   1.332
+  ],
+  "LeftForeArm": [
+   0.248,
+   0.094,
+   1.129
+  ],
+  "LeftHand": [
+   0.255,
+   -0.108,
+   0.961
+  ],
+  "LeftHand_End": [
+   0.258,
+   -0.178,
+   0.904
+  ],
+  "RightShoulder": [
+   -0.01,
+   -0.045,
+   1.304
+  ],
+  "RightArm": [
+   -0.157,
+   0.031,
+   1.332
+  ],
+  "RightForeArm": [
+   -0.192,
+   0.164,
+   1.157
+  ],
+  "RightHand": [
+   -0.262,
+   0.087,
+   0.933
+  ],
+  "RightHand_End": [
+   -0.288,
+   0.059,
+   0.852
+  ],
+  "LeftUpLeg": [
+   0.101,
+   0.024,
+   0.849
+  ],
+  "LeftLeg": [
+   0.115,
+   -0.143,
+   0.437
+  ],
+  "LeftFoot": [
+   0.136,
+   -0.087,
+   0.059
+  ],
+  "LeftToeBase": [
+   0.143,
+   -0.22,
+   -0.018
+  ],
+  "LeftToe_End": [
+   0.157,
+   -0.276,
+   -0.018
+  ],
+  "RightUpLeg": [
+   -0.073,
+   0.052,
+   0.856
+  ],
+  "RightLeg": [
+   -0.087,
+   0.038,
+   0.416
+  ],
+  "RightFoot": [
+   -0.052,
+   0.213,
+   0.073
+  ],
+  "RightToeBase": [
+   -0.059,
+   0.094,
+   -0.018
+  ],
+  "RightToe_End": [
+   -0.059,
+   0.038,
+   -0.018
+  ]
+ },
+ "extensions": [
+  "conflux_weights",
+  "conflux_shrink",
+  "conflux_rubble",
+  "conflux_leash",
+  "element_motion"
+ ],
+ "conflux": {
+  "armFalloff": {
+   "width": 0.04
+  },
+  "clipShrink": {
+   "Move": [
+    1,
+    1,
+    0.6,
+    0.45,
+    0.35,
+    0.2,
+    0.08
+   ],
+   "MoveEnd": [
+    0.08,
+    0.2,
+    0.35,
+    0.45,
+    0.7
+   ]
+  },
+  "rubbleSettle": {
+   "gather": 0.5,
+   "power": 0.8
+  },
+  "fillUnweighted": true,
+  "limbLeash": {
+   "bones": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "maxDist": 0.15,
+   "boneMaxDist": {
+    "LeftHand": 0.08,
+    "RightHand": 0.08
+   },
+   "nearestOnly": true,
+   "maxDistAll": 0.35,
+   "partition": [
+    "LeftUpLeg",
+    "RightUpLeg",
+    "Hips",
+    "Spine",
+    "Spine1"
+   ],
+   "handSplit": true
+  }
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "shatter": {
+  "start": 5,
+  "chunks": 50,
+  "burst": 0.3,
+  "up": 0.3,
+  "spin": 5,
+  "solid": true
+ },
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "elementMotion": {
+  "mode": "crackle",
+  "period": 7,
+  "flow": {
+   "pulseFromDef": 0.6
+  }
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: Defence thrusts the lead arm straight out at the enemy (f2-f9) like the DEF instead of punching the fist up overhead",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_energy_elemental_defence_arm_thrust_rot.json",
+    "regrid": true,
+    "sha256": "ee145eb49e97faf9eea17b7fe0b411e168bf19e877623a33e2864dc58dad0706"
+   }
+  ]
+ },
+ "shatterReason": "authenticity lane-B 2026-10-11: the deferred rubble (deferMeshes) was not drawn in game, so the Death ended in a vanish; solid chunks + the rubbleSettle heap on the ground (h3_behemoth / h3_vampire / h3_fire_hound recipe), so the conflux_slice_v1 row can move to mergeMeshes."
+}

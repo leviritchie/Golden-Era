@@ -1,0 +1,274 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_seraph",
+ "status": "look",
+ "notes": "castle faction rollout",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "sword_trail_fire",
+   "treatment": "dynamic",
+   "notes": "flaming sword lights the body"
+  },
+  {
+   "id": "sword_trail_shoot_fire",
+   "treatment": "dynamic",
+   "notes": "flaming sword lights the body"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "sword_trail",
+    "type": "defFlipbook",
+    "provenance": "castle rollout: DEF g12 frames 2-4 fire",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 12
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "sword_trail_fire",
+    "notes": "Flaming sword sweep trail (the on-body orange of f0-1 is lighting: the fire light)."
+   },
+   {
+    "id": "sword_trail_fire_light",
+    "type": "effectLight",
+    "lightId": "sword_trail_fire",
+    "carrier": "sword_trail",
+    "anchor": {
+     "bone": "RightHand",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.7,
+     0.35
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "sword_trail_shoot",
+    "type": "defFlipbook",
+    "provenance": "castle rollout: DEF g15 frames 2-4 fire",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 12
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "sword_trail_shoot_fire",
+    "notes": "Flaming sword sweep trail (the on-body orange of f0-1 is lighting: the fire light)."
+   },
+   {
+    "id": "sword_trail_shoot_fire_light",
+    "type": "effectLight",
+    "lightId": "sword_trail_shoot_fire",
+    "carrier": "sword_trail_shoot",
+    "anchor": {
+     "bone": "RightHand",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.7,
+     0.35
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_ShootFront": [
+      0.0,
+      0.102,
+      0.0,
+      0.129,
+      0.101,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "hit_feathers",
+    "type": "defFlipbook",
+    "provenance": "castle rollout: DEF g03 frames 0-4 electric",
+    "clips": {
+     "Unit_Hitted": {
+      "defGroup": 3,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 5
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Hips",
+     "defOrigin": {
+      "Unit_Hitted": [
+       [
+        205,
+        215
+       ],
+       [
+        204,
+        212
+       ],
+       [
+        202,
+        201
+       ],
+       [
+        224,
+        196
+       ],
+       [
+        236,
+        206
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "Loose feathers; defOrigin = DEF body centroid per frame pinned to the anchor bone, so the feathers keep their DEF offset from the body."
+   },
+   {
+    "id": "death_feathers",
+    "type": "defFlipbook",
+    "provenance": "castle rollout: DEF g05 frames 0-5 electric",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 5
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Hips",
+     "defOrigin": {
+      "Unit_Death": [
+       [
+        205,
+        215
+       ],
+       [
+        204,
+        212
+       ],
+       [
+        207,
+        206
+       ],
+       [
+        210,
+        204
+       ],
+       [
+        214,
+        201
+       ],
+       [
+        217,
+        213
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "Loose feathers; defOrigin = DEF body centroid per frame."
+   }
+  ]
+ }
+}

@@ -1,0 +1,173 @@
+{
+ "unit": "h3_wight",
+ "joints": {
+  "Hips": [
+   0.003,
+   0.066,
+   0.923
+  ],
+  "Spine": [
+   0.003,
+   0.065,
+   1.019
+  ],
+  "Spine1": [
+   0.003,
+   0.063,
+   1.116
+  ],
+  "Spine2": [
+   0.003,
+   0.061,
+   1.223
+  ],
+  "Neck": [
+   0.003,
+   0.059,
+   1.308
+  ],
+  "Head": [
+   0.003,
+   0.066,
+   1.413
+  ],
+  "HeadTop_End": [
+   0.0,
+   0.0,
+   1.72
+  ],
+  "LeftShoulder": [
+   0.059,
+   0.066,
+   1.399
+  ],
+  "LeftArm": [
+   0.164,
+   0.066,
+   1.364
+  ],
+  "LeftForeArm": [
+   0.248,
+   0.087,
+   1.189
+  ],
+  "LeftHand": [
+   0.178,
+   -0.129,
+   1.175
+  ],
+  "LeftHand_End": [
+   0.151,
+   -0.215,
+   1.169
+  ],
+  "RightShoulder": [
+   -0.052,
+   0.066,
+   1.399
+  ],
+  "RightArm": [
+   -0.157,
+   0.066,
+   1.364
+  ],
+  "RightForeArm": [
+   -0.234,
+   0.087,
+   1.196
+  ],
+  "RightHand": [
+   -0.178,
+   -0.122,
+   1.168
+  ],
+  "RightHand_End": [
+   -0.155,
+   -0.209,
+   1.156
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 60,
+   "dy": 60,
+   "roll": 90
+  }
+ },
+ "shatter": {
+  "start": 6,
+  "chunks": 40,
+  "solid": true
+ },
+ "bonePile": {
+  "spread": 0.7,
+  "heapHeight": 0.18,
+  "tumble": 70
+ },
+ "extensions": [
+  "castle_armsep",
+  "necropolis_bonepile"
+ ],
+ "armSep": [
+  {
+   "armBones": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "shell": {
+    "share": 0.4,
+    "minVerts": 400
+   },
+   "low": 0.6,
+   "top": 1.32,
+   "ramp": 0.08,
+   "side": "left",
+   "note": "wight sleeves: bone heat fused the hanging sleeve to the robe (Hips/Spine weights), so the overhead Death raise tore it; shell-mode cut frees the sleeve (2026-10-10)"
+  },
+  {
+   "armBones": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "shell": {
+    "share": 0.4,
+    "minVerts": 400
+   },
+   "low": 0.6,
+   "top": 1.32,
+   "ramp": 0.08,
+   "side": "right",
+   "note": "wight sleeves: bone heat fused the hanging sleeve to the robe (Hips/Spine weights), so the overhead Death raise tore it; shell-mode cut frees the sleeve (2026-10-10)"
+  }
+ ],
+ "glbPatch": {
+  "reason": "authenticity lane-A (necropolis) 2026-10-10: keyRotations (half offset, applied twice) from the DEF g05 death: after the tip-over the wight rights itself f4-f5 and hovers upright with both claws raised straight up before the shatter drops it into the rag heap (the capture pitched it head-down to the floor); shatter.solid caps the rubble chunks.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_wight_pose_rot.json",
+    "sha256": "de2f5911c8efd3d442c5be15c436d555cd56428ecab07ab588de91a72c34ecb9",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_wight_pose_rot.json",
+    "sha256": "de2f5911c8efd3d442c5be15c436d555cd56428ecab07ab588de91a72c34ecb9",
+    "regrid": true
+   }
+  ]
+ }
+}

@@ -1,0 +1,66 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require Inferno gating, sacrifice, or summon transaction identity. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresGatingSacrificeOrSummonProfiles": true,
+    "infernoOnly": true,
+    "transactionIdentityRequired": true,
+    "genericSpellOrSchoolSubstituteForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedEffectKeyPrefixes": [
+    "inferno."
+  ],
+  "allowedFamilies": [
+    "Calendar",
+    "SpellSchool"
+  ],
+  "requiredRuntimeProof": [
+    "native gating entry or summon transaction proof",
+    "sacrifice transaction proof when sacrifice is accepted by the law",
+    "created or lost unit identity proof",
+    "temporary summon versus permanent recruited unit discriminator proof",
+    "law-owner and transaction-owner side correlation proof",
+    "spell cast or calendar trigger ordering proof",
+    "idempotent per-transaction application proof"
+  ],
+  "contracts": {
+    "inferno.fire-gated-sign-calendar": {
+      "transactionKinds": [
+        "gating-sacrifice-or-summon-identity",
+        "first-fire-damage-marker-companion-only"
+      ],
+      "companionPredicates": [
+        "RequiresSpellCastEvent",
+        "RequiresStatusDurationMutation"
+      ],
+      "forbiddenSubstitutes": [
+        "generic spell cast counted as gating/sacrifice/summon transaction",
+        "fire damage marker counted as summon or sacrifice",
+        "battle start or calendar tick counted as transaction identity",
+        "ordinary permanent casualty counted as temporary summoned loss",
+        "summoned unit existence without entry transaction proof"
+      ],
+      "notes": "Requires real Inferno gating, sacrifice, or summon transaction identity before the calendar law can use first-fire or gated-sign behavior; spell casts and fire markers are companion evidence only."
+    },
+    "inferno.primal-fire-gating-charge": {
+      "transactionKinds": [
+        "gating-sacrifice-or-summon-identity",
+        "fire-or-summon-spell-companion-only"
+      ],
+      "companionPredicates": [
+        "RequiresNativeSchoolVerification",
+        "RequiresSpellCastEvent"
+      ],
+      "forbiddenSubstitutes": [
+        "generic spell cast counted as gating/sacrifice/summon transaction",
+        "static Primal school access counted as gated identity",
+        "fire damage marker counted as summon or sacrifice",
+        "ordinary permanent casualty counted as temporary summoned loss",
+        "summoned unit existence without entry transaction proof"
+      ],
+      "notes": "Requires real Inferno gating, sacrifice, or summon transaction identity before Hellfire Gatecraft can award runtime charges; native Primal access and spell casts are not the transaction proof."
+    }
+  }
+}

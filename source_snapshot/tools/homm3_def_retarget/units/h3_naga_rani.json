@@ -1,0 +1,247 @@
+{
+ "unit": "h3_naga_rani",
+ "strideExempt": "legless body: serpent tail, no legs; the rig has no leg chain",
+ "joints": {
+  "Hips": [
+   -0.018,
+   -0.207,
+   0.91
+  ],
+  "Spine": [
+   -0.018,
+   -0.193,
+   0.975
+  ],
+  "Spine1": [
+   -0.018,
+   -0.179,
+   1.039
+  ],
+  "Spine2": [
+   -0.018,
+   -0.163,
+   1.112
+  ],
+  "Neck": [
+   -0.018,
+   -0.151,
+   1.169
+  ],
+  "Head": [
+   -0.025,
+   -0.116,
+   1.344
+  ],
+  "HeadTop_End": [
+   -0.025,
+   -0.137,
+   1.757
+  ],
+  "LeftShoulder": [
+   0.095,
+   -0.193,
+   1.169
+  ],
+  "LeftArm": [
+   0.158,
+   -0.207,
+   0.959
+  ],
+  "LeftForeArm": [
+   0.277,
+   -0.207,
+   0.833
+  ],
+  "LeftHand": [
+   0.319,
+   -0.207,
+   0.77
+  ],
+  "LeftHand_End": [
+   0.361,
+   -0.207,
+   0.707
+  ],
+  "RightShoulder": [
+   -0.137,
+   -0.102,
+   1.162
+  ],
+  "RightArm": [
+   -0.151,
+   -0.074,
+   0.945
+  ],
+  "RightForeArm": [
+   -0.221,
+   0.039,
+   0.805
+  ],
+  "RightHand": [
+   -0.256,
+   0.081,
+   0.735
+  ],
+  "RightHand_End": [
+   -0.291,
+   0.123,
+   0.665
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "roll": 20
+  }
+ },
+ "tail": {
+  "segments": 12,
+  "amplitude": 0.2,
+  "wavelength": 0.75,
+  "behind": [
+   0.0,
+   1.0,
+   0.0
+  ],
+  "handsAboveZ": 0.62,
+  "handsRadius": 0.33,
+  "excludeMetal": true,
+  "excludeNearHands": 0.12,
+  "behindReason": "Model-space trail axis: the body faces -Y (look stamp frontResolved -y), so the Move tail trails +Y, straight opposite travel. The earlier [-0.893, 0.416, 0] was -right of the sprite camera (screen-left in the DEF 2D view), which in 3D put the Move tail 65 deg off the travel axis (in-game 2026-09-30: the tail went diagonal instead of dragging behind)."
+ },
+ "metalBlades": {
+  "minValue": 0.35,
+  "maxSat": 0.25,
+  "minExtent": 0.25
+ },
+ "extensions": [
+  "dungeon_slump",
+  "tower_handsep"
+ ],
+ "slump": {
+  "clip": "Death",
+  "frames": 2,
+  "angle": 65,
+  "dir": [
+   0.4,
+   -0.9,
+   0.0
+  ],
+  "reason": "Death rest: the DEF naga collapses flat onto her coil over the last Death frames (f5-f7 of 8), but the human capture keeps the torso upright, so the delivered Death ended as an upright slump (worker C sheets 2026-09-27: naga tips half over, naga_upg slumps, naga_rani stays upright). Same snake body plan as the Dungeon medusas (tail.behind identical), so the medusa slump knob is reused: dungeon_slump, last 2 Death frames, 65 deg forward."
+ },
+ "handSep": [
+  {
+   "hand": "RightHand",
+   "center": [
+    -0.29,
+    0.14,
+    0.62
+   ],
+   "radius": 0.16,
+   "bodyBones": [
+    "Hips",
+    "Spine",
+    "Tail"
+   ],
+   "splitAll": true
+  },
+  {
+   "hand": "RightHand",
+   "center": [
+    -0.2,
+    0.05,
+    0.68
+   ],
+   "radius": 0.15,
+   "seedRadius": 0.001,
+   "bodyBones": [
+    "Hips",
+    "Spine",
+    "Tail"
+   ]
+  },
+  {
+   "hand": "LeftHand",
+   "center": [
+    0.34,
+    -0.2,
+    0.71
+   ],
+   "radius": 0.12,
+   "bodyBones": [
+    "Hips",
+    "Spine",
+    "Tail"
+   ],
+   "splitAll": true
+  },
+  {
+   "hand": "LeftHand",
+   "center": [
+    0.2,
+    -0.12,
+    0.69
+   ],
+   "radius": 0.12,
+   "seedRadius": 0.001,
+   "bodyBones": [
+    "Hips",
+    "Spine",
+    "Tail"
+   ]
+  }
+ ],
+ "handSepReason": "authenticity lane-A2 2026-10-10 (coordinator: fix the mesh): both main hands rest on the hips and were fused to the hip/coil skin, so any arm motion tore RightHand/RightForeArm|Hips/Tail_00 edges and the hands had to be pinned to the hips (limbIK). Seeds on the mesh fingers below Hand_End (Blender coords); bodyBones gate because the skin is the body colour. Second RightHand entry (no seed) resolves the forearm lying along the waist (149 mixed arm/body vertices) wholly to one side so the contact is cut; hand flood radius 0.1 so the coil skin under the fingers is not flooded into the hand. Seedless LeftHand entry at the left waist contact; armStrip takes the residual heat arm weight off the coil/hip skin under the fingers (below Blender z 0.6 right / 0.69 left, arm share < 0.8) so the face split opens there. splitAll on both finger entries: the fingers are welded to coil skin they were never blended with (pure RightHand corners meeting pure Tail corners), which the reweight-only split left joined, so the CS bake dragged the fingers.",
+ "armStrip": [
+  {
+   "chain": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "belowZ": 0.6,
+   "armKeep": 0.8
+  },
+  {
+   "chain": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "belowZ": 0.69,
+   "armKeep": 0.8
+  }
+ ],
+ "glbPatch": {
+  "reason": "authenticity lane-A2 2026-10-10: (1) 638 tail-coil vertices (ground coil and tail tip) were skinned to LeftHand/LeftShoulder (and a few to the right arm), so coil chunks floated off with the arms in every moving clip; setWeights re-solves them harmonically from the surrounding tail skin over the non-arm bones. (2) DEF intent, now with free main arms (the handSep surgery cut the hands and forearms off the hips and the coil): Hitted knocked back, head thrown, all arms flung out; Death holds her f0 stance facing front (Hips position + rotation), arches back with the head thrown and thrashes side to side, arms flung up, then the existing collapse (f6-f7); AttackFront: arms spread in a rear-back windup (f1-f3), left blade thrust in the lunge (f4-f6, the right arm partly held so its blade does not stretch under the corrective smooth).",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_naga_rani_tail_weights.json",
+    "sha256": "38617e478c6d5edcd3fba67c0b87ee7aadf19370de8ea008945adf55862fc2f5"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_naga_rani_intent10_rot.json",
+    "sha256": "46d6410d605cad0cad5c76173783b808ca9a15e0c1e502d899cedf92a3565d53",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_naga_rani_intent10_rot.json",
+    "sha256": "46d6410d605cad0cad5c76173783b808ca9a15e0c1e502d899cedf92a3565d53",
+    "regrid": true
+   }
+  ]
+ }
+}

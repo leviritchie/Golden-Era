@@ -1,0 +1,86 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_sprite",
+ "status": "look",
+ "notes": "conflux rollout: T1 fairy. The attack's blue magic ball and radial spray at the outstretched hand are cut from the DEF with a committed burst file mask (masks/conflux_fx_masks.py); the ball is drawn in the dress/wing paint so defEffects keeps only specks. The ball's body contact (the DEF hand) is pinned to the mesh LeftHand (defOrigin auto), so it stays in the hand although the mesh does not reach as far as the DEF.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "burst_flash",
+   "treatment": "dynamic",
+   "notes": "the magic ball lights the arm and face"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "attack_burst",
+    "type": "defFlipbook",
+    "provenance": "roster inventory conflux: g12 attack_front magic ball f3-6 (+spray); burst mask",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_sprite/attack_burst"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "burst_flash"
+   },
+   {
+    "id": "burst_flash_light",
+    "type": "effectLight",
+    "lightId": "burst_flash",
+    "carrier": "attack_burst",
+    "anchor": {
+     "bone": "LeftHand",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.7,
+     0.8,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.23,
+      0.52,
+      1.162,
+      0.798,
+      0.953,
+      0.582,
+      0.314,
+      0.0,
+      0.014
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

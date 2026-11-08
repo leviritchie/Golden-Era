@@ -1,0 +1,104 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_wraith",
+ "status": "look",
+ "notes": "necropolis rollout; front -y explicit (no feet, head above hips: auto fails closed), as the wight pilot; check the battle facings sheet",
+ "lighting": {
+  "mode": "v7c",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "claw_slash",
+    "type": "defFlipbook",
+    "provenance": "necropolis rollout: DEF g12/g15 (attack) f0-4, the glowing hand (f0-1) and its white swipe trail (f2-4), luma >= 230 (absent from idle; defEffects drops it as relit bone colour). Same trail as the wight pilot.",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4
+      ]
+     },
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "lumaSparse",
+     "minLuma": 230
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": {
+      "Unit_AttackFront": [
+       [
+        191,
+        204
+       ],
+       [
+        189,
+        203
+       ],
+       [
+        201,
+        207
+       ],
+       [
+        210,
+        206
+       ],
+       [
+        218,
+        209
+       ]
+      ],
+      "Unit_ShootFront": [
+       [
+        191,
+        204
+       ],
+       [
+        188,
+        203
+       ],
+       [
+        200,
+        205
+       ],
+       [
+        210,
+        208
+       ],
+       [
+        213,
+        212
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "the trail sweeps across both hands and the hips, so it is pinned body-relative: each key's origin is the mesh Spine1 projected on that DEF frame"
+   }
+  ]
+ }
+}

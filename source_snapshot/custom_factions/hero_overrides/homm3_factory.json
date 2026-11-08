@@ -1,0 +1,1166 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_factory",
+  "heroOverrides": {
+    "homm3_factory_hero_1": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Mercenary",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Henrietta",
+      "descriptionText": "Even a humble halfling from the Eeofol backwoods is capable of a feat when an unprecedented calamity knocks at the door. The new world, devoid of thatched roofs, carrot beds, or the incessant grumbling of geezers, has changed Henrietta, and she is now ready to change it herself. Kreegan fire reduces her homeland to ashes and scorched her heart, but she used it to forge herself a steel will.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_1",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_1_source_h3_halfling_specialist",
+        "nameText": "Halfling Specialist",
+        "descriptionText": "Halflings and their upgrades gain weekly growth, Speed, and level-scaled Attack while Henrietta leads them.",
+        "iconKey": "h3_halfling",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_halfling",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_halfling",
+              "h3_halfling_grenadier",
+              "h3_halfling_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_halfling",
+              "h3_halfling_grenadier",
+              "h3_halfling_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_halfling"
+      },
+      "notes": "HotA Factory archive: exact three Halfling source army stacks and first source secondary skill Leadership; the faction skill is prepended by Core generation."
+    },
+    "homm3_factory_hero_2": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Mercenary",
+      "startSquad": [
+        {
+          "sid": "h3_mechanic",
+          "min": 7,
+          "max": 9
+        },
+        {
+          "sid": "h3_mechanic",
+          "min": 7,
+          "max": 9
+        },
+        {
+          "sid": "h3_mechanic",
+          "min": 7,
+          "max": 9
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_mechanic",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Sam",
+      "descriptionText": "Since ancient times, earth oil has wreaked havoc on the farmers of Jadame, erupting in fountains and laying waste to their crops and pastures. Sam, the daughter and apprentice of a skilled blacksmith, was the first to tame this black beast by forcing it into a pipe and making it heat her forge. Her inventions made earth oil into Burton's blood, food, and arms.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_2",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_2_source_h3_mechanic_specialist",
+        "nameText": "Mechanic Specialist",
+        "descriptionText": "Mechanics and their upgrades gain weekly growth, Speed, and level-scaled Attack while Sam leads them.",
+        "iconKey": "h3_mechanic",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_mechanic",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_mechanic",
+              "h3_engineer",
+              "h3_mechanic_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_mechanic",
+              "h3_engineer",
+              "h3_mechanic_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_mechanic"
+      },
+      "notes": "HotA Factory archive: exact three Mechanic source army stacks and first source secondary skill Offense."
+    },
+    "homm3_factory_hero_3": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Mercenary",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_mechanic",
+          "min": 7,
+          "max": 9
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Tancred",
+      "descriptionText": "Back in his alchemist days, Tancred discovered an ancient recipe for a concoction that exploded without the use of magic. To his great dismay, the crucial component - saltpeter - was nearly entirely absent from Antagarich. Only in Jadame did Tancred discover vast caves full of this rare element and perfect the design of the arquebus that hurls tiny bullets with this awesome power.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_3",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_3_source_h3_gunslinger_specialist",
+        "nameText": "Gunslinger Specialist",
+        "descriptionText": "Gunslingers and their upgrades gain weekly growth, Speed, and level-scaled Attack while Tancred leads them.",
+        "iconKey": "h3_gunslinger",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_gunslinger",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_gunslinger",
+              "h3_bounty_hunter",
+              "h3_gunslinger_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_gunslinger",
+              "h3_bounty_hunter",
+              "h3_gunslinger_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 6
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_gunslinger"
+      },
+      "notes": "HotA Factory archive: exact mixed source army and Advanced Archery mapped to Advanced Assault."
+    },
+    "homm3_factory_hero_4": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Mercenary",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_mechanic",
+          "min": 7,
+          "max": 9
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Melchior",
+      "descriptionText": "Melchior can see everything that is going on in the deepest recesses of someone else's mind. This secret talent provides a crucial advantage when assessing the foe's strength and intentions and convincing him to agree to terms. Any prince who enlists Melchior's services can be certain of never having to plead for a disgraceful peace.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_4",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_4_source_diplomacy_specialist",
+        "nameText": "Diplomacy",
+        "descriptionText": "Adapts Melchior's HotA Diplomacy specialty into stronger army morale command.",
+        "iconKey": "skill_trainer",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "moral",
+              "1"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 8
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:diplomacy"
+      },
+      "notes": "HotA Factory archive: exact mixed source army and first source secondary skill Leadership; Diplomacy is an explicit Olden Era substitution."
+    },
+    "homm3_factory_hero_5": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Mercenary",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_protection",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Floribert",
+      "descriptionText": "Floribert is regarded as one of Enroth's finest field surgeons, having introduced numerous new tools that speed up manipulations and therefore alleviate the suffering of the wounded. Floribert gets a steady supply of practicing material from his girlfriend Victoria's experiments.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_5",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_5_olden_era_masterful_day_1_magic_healing_water",
+        "nameText": "Masterful Healing Water",
+        "descriptionText": "Starts with Masterful Healing Water. It casts as one tier stronger.",
+        "iconKey": "day_1_magic_healing_water",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "day_1_magic_healing_water",
+              "day_1_magic_healing_water_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "skill:firstAid",
+        "masterfulSpellBaseSid": "day_1_magic_healing_water",
+        "masterfulSpellSpecialSid": "day_1_magic_healing_water_special"
+      },
+      "notes": "HotA Factory archive: Halfling, First Aid Tent, and Armadillo source army. The unsupported war-machine stack is recorded here rather than emitted as a creature; first source skill Armorer maps to Protection."
+    },
+    "homm3_factory_hero_6": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Mercenary",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_mechanic",
+          "min": 7,
+          "max": 9
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Wynona",
+      "descriptionText": "Jadamean dark elves' natural element is the towns and deserts they cross with their caravans. Wynona, however, had always preferred exploring the wilderness outside Alvar and the Murmurwoods, tracking animals and taking notes of their habits. She eventually became the foremost authority on Jadamean fauna, having learned a great deal from her flying, crawling, and hopping friends.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_6",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_6_source_scouting_specialist",
+        "nameText": "Scouting",
+        "descriptionText": "Reveals a wider adventure-map area and exposes enemy hero and army information.",
+        "iconKey": "skill_scouting",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "viewRadius",
+              "2"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 6
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "enableEnemyHeroInfo",
+              "true"
+            ]
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "enableSquadCounts",
+              "true"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:scouting"
+      },
+      "notes": "HotA Factory archive: exact mixed source army and first source skill Archery mapped to Assault."
+    },
+    "homm3_factory_hero_7": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Mercenary",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_mechanic",
+          "min": 7,
+          "max": 9
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Dury",
+      "descriptionText": "Dury spent the longest time in search for a magician who would not just promise to, but actually eliminate the repercussions of wounds she had sustained in dozens of clashes. One excellent blacksmith was able to forge a siertal plate to replace the part of her skull caved in by a wyvern's tail, and the mercenary now values fine armor far more than any magical malarkey.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_7",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_7_source_armorer_specialist",
+        "nameText": "Armorer",
+        "descriptionText": "Reduces basic-attack damage received by Dury's army.",
+        "iconKey": "skill_protection",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "inDmgMods",
+              "basic_attack",
+              "-0.10"
+            ],
+            "upgrade": {
+              "increment": -0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:armorer"
+      },
+      "notes": "HotA Factory archive: exact mixed source army and first source skill Offense mapped to Assault."
+    },
+    "homm3_factory_hero_8": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Mercenary",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_siege",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Morton",
+      "descriptionText": "Morton, a veteran of Goblin-Ogre Wars and one of the few who survived the assault on Gowdar Deep, vowed vengeance on the 'dirtskins' for the massacre that wiped his home off the face of Jadame. He gauges the quality of his ballistae by the number of ogres they can pierce with a single shot.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_8",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_8_source_ballista_specialist",
+        "nameText": "Ballista",
+        "descriptionText": "Adapts Morton's Ballista specialty into improved ranged and shooting damage.",
+        "iconKey": "skill_battlemage",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "range_attack",
+              "0.12"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          },
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "shoot_attack",
+              "0.12"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:ballista"
+      },
+      "notes": "HotA Factory archive: Halfling, Ballista, and Armadillo source army. The unsupported war-machine stack is recorded here rather than emitted as a creature; first source skill Artillery maps to Siege."
+    },
+    "homm3_factory_hero_9": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Artificer",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Celestine",
+      "descriptionText": "The AvLeean druid who had lost his grove traversed the wold, imparting knowledge on anyone who sought it. He left the secrets of natural magic and his daughter Mirlanda in Tatalia, whilst in Eeofol, Celestine was born, inheriting another facet of his talent. Her father taught her how to tame the most violent beasts, offering them friendship, rather than the Tatalian beastmasters' trademark ruthless treatment.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_9",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_9_source_h3_armadillo_specialist",
+        "nameText": "Armadillo Specialist",
+        "descriptionText": "Armadillos and their upgrades gain weekly growth, Speed, and level-scaled Defense while Celestine leads them.",
+        "iconKey": "h3_armadillo",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_armadillo",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_armadillo",
+              "h3_bellwether_armadillo",
+              "h3_armadillo_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_armadillo",
+              "h3_bellwether_armadillo",
+              "h3_armadillo_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_armadillo"
+      },
+      "notes": "HotA Factory archive: exact Halfling plus two Armadillo source stacks and first source skill Wisdom."
+    },
+    "homm3_factory_hero_10": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Artificer",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_automaton",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Todd",
+      "descriptionText": "Few Bracadan scientists have actually seen, let alone handled, a hammer or a furnace. Todd, however, had to learn how to use them, unable to convey his esoteric ideas to blacksmiths and coppersmiths. There was also a scarcity of instruments and materials vital to his research in Bracada; Todd journeyed halfway around the world in search of them before finding what he sought in Burton.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_10",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_10_source_h3_automaton_specialist",
+        "nameText": "Automaton Specialist",
+        "descriptionText": "Automatons and their upgrades gain weekly growth, Speed, and level-scaled Defense while Todd leads them.",
+        "iconKey": "h3_automaton",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_automaton",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_automaton",
+              "h3_sentinel_automaton",
+              "h3_automaton_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_automaton",
+              "h3_sentinel_automaton",
+              "h3_automaton_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 4
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_automaton"
+      },
+      "notes": "HotA Factory archive: exact Halfling, Automaton, and Armadillo source army and first source skill Wisdom."
+    },
+    "homm3_factory_hero_11": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Artificer",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_mechanic",
+          "min": 7,
+          "max": 9
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Agar",
+      "descriptionText": "Many thought that the warlock Agar was a madman, and then a dead man. While the latter has been proven incorrect, there is still no unanimity in Enroth's scientific community on the former. Indeed, Agar's creations are undeniably viable and functional - but could a scientist in his right mind think of instilling such nasty inclinations and proclivities in a living being?",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_11",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_11_source_h3_sandworm_specialist",
+        "nameText": "Sandworm Specialist",
+        "descriptionText": "Sandworms and their upgrades gain weekly growth, Speed, and level-scaled Attack while Agar leads them.",
+        "iconKey": "h3_sandworm",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_sandworm",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_sandworm",
+              "h3_olgoi_khorkhoi",
+              "h3_sandworm_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_sandworm",
+              "h3_olgoi_khorkhoi",
+              "h3_sandworm_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 5
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_sandworm"
+      },
+      "notes": "HotA Factory archive: exact mixed source army and Advanced Wisdom."
+    },
+    "homm3_factory_hero_12": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Artificer",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_mechanic",
+          "min": 7,
+          "max": 9
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Bertram",
+      "descriptionText": "Few dwarves are capable of not just making a fortune, but also of making it work. Bertram left his father's house as soon as his beard grew two fingers long. Wandering around Antbertramich, he grew fabulously rich through investing in alchemical and magical ventures. His gold paid for the embodiment of many ideas that today underpin Burton's power.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_12",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_12_source_gold_specialist",
+        "nameText": "Gold",
+        "descriptionText": "Generates additional gold each day.",
+        "iconKey": "skill_economy",
+        "bonuses": [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              "350"
+            ],
+            "upgrade": {
+              "increment": 50,
+              "levelStep": 5
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:gold"
+      },
+      "notes": "HotA Factory archive: exact mixed source army and first source skill Wisdom."
+    },
+    "homm3_factory_hero_13": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Artificer",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_mechanic",
+          "min": 7,
+          "max": 9
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Wrathmont",
+      "descriptionText": "Wrathmont's volatile temper got him into countless problems in his life, most notably during the carve-up of Archibald Ironfist's estate, when former colleagues banded together against the warlock, weary of his tantrums. Barely escaping them, Wrathmont fled Enroth. He spent years searching for and studying old stone tablets, learning to control his fury and stoke it in others instead.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_13",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_13_source_frenzy_specialist",
+        "nameText": "Frenzy",
+        "descriptionText": "Adapts Wrathmont's HotA Frenzy specialty into stronger basic-attack damage.",
+        "iconKey": "skill_sorcery",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "basic_attack",
+              "0.13"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "spell:frenzy"
+      },
+      "notes": "HotA Factory archive: exact mixed source army, first source skill Wisdom, and Frenzy starting spell; the specialization is an explicit Olden Era substitution."
+    },
+    "homm3_factory_hero_14": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Artificer",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_mechanic",
+          "min": 7,
+          "max": 9
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Ziph",
+      "descriptionText": "Ziph had long served as a maid to an old mage who looked down on her and her kin. The wizard had no idea that 'ziph' meant 'freedom' in Gremlish, much less did he suspect that she was listening in on his lectures. One day, Ziph crammed half of her master's lab into a magic bag, hid in a ship's hold, and fled Bracada for good.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_14",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_14_source_lightning_bolt_specialist",
+        "nameText": "Lightning Bolt",
+        "descriptionText": "Adapts Ziph's HotA Lightning Bolt specialty into increased spell pressure.",
+        "iconKey": "skill_sorcery",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicAttackPerBonus",
+              "0.14"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "spell:lightningBolt"
+      },
+      "notes": "HotA Factory archive: exact mixed source army, first source skill Wisdom, and Lightning Bolt starting spell; the specialization is an explicit Olden Era substitution."
+    },
+    "homm3_factory_hero_15": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Artificer",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_mechanic",
+          "min": 7,
+          "max": 9
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Victoria",
+      "descriptionText": "Higher magic can restore the dead, but can a simple infantryman who stepped on a landmine count on having someone work it on him? Victoria's fascination with such an insidious weapon did not earn her colleagues' respect, yet she committed her life to perfecting it. After meeting Floribert, the inventor found another use for her engineering knowledge, designing mechanical limbs for crippled warriors.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_15",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_15_source_land_mine_specialist",
+        "nameText": "Land Mine",
+        "descriptionText": "Adapts Victoria's HotA Land Mine specialty into extra starting Focus for spell placement.",
+        "iconKey": "skill_sorcery",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "startEnergyLevelsBonus",
+              "1"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 7
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "spell:landMine"
+      },
+      "notes": "HotA Factory archive: exact mixed source army, first source skill Wisdom, and Land Mine starting spell; the specialization is an explicit Olden Era substitution."
+    },
+    "homm3_factory_hero_16": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Artificer",
+      "startSquad": [
+        {
+          "sid": "h3_halfling",
+          "min": 15,
+          "max": 25
+        },
+        {
+          "sid": "h3_mechanic",
+          "min": 7,
+          "max": 9
+        },
+        {
+          "sid": "h3_armadillo",
+          "min": 4,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_halfling",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Eanswythe",
+      "descriptionText": "According to hearsay, it was Eanswythe who concocted the potion that poisoned Regna's first emperor Hareck before fleeing for Jadame. If that is indeed the case, then she must be at least 6 centuries old. Ordinary people don't live that long, and whoever his enigmatic crone is, everyone knows: she merely has to raise an eyebrow to make even those most formidable solders drop their swords and spears.",
+      "mottoText": "",
+      "iconKey": "hero_homm3_factory_16",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_factory_hero_16_source_weakness_specialist",
+        "nameText": "Weakness",
+        "descriptionText": "Adapts Eanswythe's HotA Weakness specialty into reduced enemy basic-attack damage.",
+        "iconKey": "skill_sorcery",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "receiverAllegiance": "enemy",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "basic_attack",
+              "-0.11"
+            ],
+            "upgrade": {
+              "increment": -0.01,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "spell:weakness"
+      },
+      "notes": "HotA Factory archive: exact mixed source army, first source skill Wisdom, and Weakness starting spell; the specialization is an explicit Olden Era substitution."
+    }
+  }
+}

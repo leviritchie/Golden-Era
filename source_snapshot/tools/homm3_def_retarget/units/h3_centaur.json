@@ -1,0 +1,476 @@
+{
+ "unit": "h3_centaur",
+ "joints": {
+  "Hips": [
+   0.05,
+   0.3,
+   0.76
+  ],
+  "Spine": [
+   0.05,
+   -0.05,
+   0.74
+  ],
+  "Spine1": [
+   0.05,
+   -0.4,
+   0.88
+  ],
+  "Spine2": [
+   0.05,
+   -0.44,
+   1.22
+  ],
+  "Neck": [
+   0.045,
+   -0.42,
+   1.4
+  ],
+  "Head": [
+   0.045,
+   -0.41,
+   1.47
+  ],
+  "HeadTop_End": [
+   0.045,
+   -0.41,
+   1.64
+  ],
+  "LeftShoulder": [
+   0.11,
+   -0.44,
+   1.36
+  ],
+  "LeftArm": [
+   0.22,
+   -0.45,
+   1.36
+  ],
+  "LeftForeArm": [
+   0.24,
+   -0.6,
+   1.3
+  ],
+  "LeftHand": [
+   0.05,
+   -0.7,
+   1.37
+  ],
+  "LeftHand_End": [
+   0.0,
+   -0.71,
+   1.38
+  ],
+  "RightShoulder": [
+   -0.02,
+   -0.44,
+   1.36
+  ],
+  "RightArm": [
+   -0.13,
+   -0.45,
+   1.36
+  ],
+  "RightForeArm": [
+   -0.2,
+   -0.53,
+   1.18
+  ],
+  "RightHand": [
+   -0.13,
+   -0.64,
+   1.1
+  ],
+  "RightHand_End": [
+   -0.1,
+   -0.68,
+   1.09
+  ],
+  "LeftUpLeg": [
+   0.14,
+   0.33,
+   0.66
+  ],
+  "LeftLeg": [
+   0.19,
+   0.36,
+   0.3
+  ],
+  "LeftFoot": [
+   0.21,
+   0.23,
+   0.08
+  ],
+  "LeftToeBase": [
+   0.21,
+   0.2,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.21,
+   0.16,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.04,
+   0.36,
+   0.66
+  ],
+  "RightLeg": [
+   -0.095,
+   0.5,
+   0.3
+  ],
+  "RightFoot": [
+   -0.1,
+   0.47,
+   0.08
+  ],
+  "RightToeBase": [
+   -0.1,
+   0.44,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.1,
+   0.4,
+   0.0
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped"
+ ],
+ "props": [
+  {
+   "name": "spearHead",
+   "bone": "RightHand",
+   "box": [
+    [
+     0.2,
+     -0.84,
+     1.68
+    ],
+    [
+     0.38,
+     -0.7,
+     1.92
+    ]
+   ]
+  },
+  {
+   "name": "spearShaft",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.36,
+      -0.562,
+      0.74
+     ],
+     [
+      0.25,
+      -0.76,
+      1.72
+     ]
+    ]
+   ],
+   "radius": 0.04
+  },
+  {
+   "name": "leftGrip",
+   "bone": "RightHand",
+   "sphere": [
+    [
+     0.03,
+     -0.7,
+     1.37
+    ],
+    0.08
+   ]
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "quadruped": {
+  "staticCapture": false,
+  "reset": [
+   "Hips",
+   "Spine",
+   "LeftUpLeg",
+   "LeftLeg",
+   "LeftFoot",
+   "LeftToeBase",
+   "RightUpLeg",
+   "RightLeg",
+   "RightFoot",
+   "RightToeBase"
+  ],
+  "chains": [
+   {
+    "prefix": "QFL",
+    "points": [
+     [
+      0.13,
+      -0.36,
+      0.55
+     ],
+     [
+      0.18,
+      -0.44,
+      0.3
+     ],
+     [
+      0.19,
+      -0.52,
+      0.07
+     ],
+     [
+      0.2,
+      -0.58,
+      0.0
+     ]
+    ],
+    "region": {
+     "box": [
+      [
+       0.07,
+       -0.66,
+       0.0
+      ],
+      [
+       0.28,
+       -0.3,
+       0.5
+      ]
+     ]
+    },
+    "parent": "Spine",
+    "rootBlend": 0.5
+   },
+   {
+    "prefix": "QFR",
+    "points": [
+     [
+      -0.05,
+      -0.3,
+      0.55
+     ],
+     [
+      -0.05,
+      -0.29,
+      0.3
+     ],
+     [
+      -0.066,
+      -0.3,
+      0.07
+     ],
+     [
+      -0.073,
+      -0.36,
+      0.0
+     ]
+    ],
+    "region": {
+     "box": [
+      [
+       -0.16,
+       -0.42,
+       0.0
+      ],
+      [
+       0.03,
+       -0.2,
+       0.5
+      ]
+     ]
+    },
+    "parent": "Spine",
+    "rootBlend": 0.5
+   }
+  ],
+  "legs": [
+   {
+    "bones": [
+     "QFL_00",
+     "QFL_01",
+     "QFL_02"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "QFR_00",
+     "QFR_01",
+     "QFR_02"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "tail": {
+   "points": [
+    [
+     0.06,
+     0.49,
+     0.87
+    ],
+    [
+     0.07,
+     0.6,
+     0.66
+    ],
+    [
+     0.07,
+     0.69,
+     0.48
+    ],
+    [
+     0.07,
+     0.76,
+     0.31
+    ]
+   ],
+   "region": {
+    "box": [
+     [
+      -0.01,
+      0.52,
+      0.26
+     ],
+     [
+      0.17,
+      0.83,
+      0.95
+     ]
+    ]
+   },
+   "rootBlend": 0.6
+  },
+  "nod": {
+   "bones": [],
+   "deg": 0
+  },
+  "fit": {
+   "pitch": [
+    -15,
+    50
+   ],
+   "fold": 25,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "QFL_00",
+     "QFL_01"
+    ],
+    [
+     "QFR_00",
+     "QFR_01"
+    ]
+   ]
+  },
+  "settle": {
+   "clips": [
+    "Death"
+   ],
+   "bones": [
+    "Spine1",
+    "Spine2",
+    "Neck",
+    "Head"
+   ],
+   "reach": 0.6
+  }
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "glbPatch": {
+  "reason": "2026-10-08 authenticity pass (lane B), Rampart: AttackFront and ShootFront re-authored by motion intent against the DEF. AttackFront: the base never struck (spear vertical through f4-f6); now the spear is cocked overhead tip-forward at f3, then the arm drives a down-forward stab with the torso lunging (f4-f5) and recovers level (f6-f7). ShootFront: the base wound the javelin tip-backward and released it across the body at the hip; now the tip stays forward through the wind-up, the arm drives the throw straight at the enemy (f4) and the torso bends through (f5). Head kept on the target (20 deg back at the cock, 25 deg down on the strike). Torso bend split Spine/Spine1 and no f3 arm hold, to keep the tear gate at 232 -> 232 (worst 8.997 unchanged). Hitted: the base kept the spear pointed forward through the hit; now the forearm and spear fly up and back as the torso is thrown back (f1-f2) and come forward again (f3-f4), as the DEF; gate 232 -> 228. Death: the base flopped onto its side in one frame at f3 (root jumping 0.29 H sideways and turning 60 deg), then propped the torso up with the spear raised; from the battle camera it read as a standing centaur. Now it rears through f2, the forelegs buckle at f3, the hindquarters drop at f4 and it lies collapsed belly-down f5-f7 as the DEF: legs folded under, root lowered to ground contact (belly 0.07 m), human torso slumped forward over the withers with the head down, spear angled to the ground. The fold tore the tail and rump (232 -> 688), because tail and rump-top verts carried 0.4 thigh weight. Two moveWeights ops hand that skin to Hips; gate 232 -> 179 (worst 8.997 unchanged).",
+  "ops": [
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftUpLeg",
+     "RightUpLeg"
+    ],
+    "to": "Hips",
+    "region": [
+     {
+      "axis": "y",
+      "above": 0.56,
+      "ramp": 0.06
+     }
+    ],
+    "note": "tail hair and rump behind the thighs (glTF z < -0.56; thigh skin ends at -0.54) carried 0.4 LeftUpLeg/RightUpLeg weight, so any thigh fold dragged the tail strands (Death belly-down fold tore 450 edges there)"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftUpLeg",
+     "RightUpLeg"
+    ],
+    "to": "Hips",
+    "region": [
+     {
+      "axis": "y",
+      "above": 0.47,
+      "ramp": 0.05
+     },
+     {
+      "axis": "z",
+      "above": 0.72,
+      "ramp": 0.05
+     }
+    ],
+    "note": "tail root on the rump top (glTF z < -0.47, height > 0.72): same thigh-weight leak"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_pose_rot.json",
+    "sha256": "8a854877b053938f5b091a2df16d7d36c321ad65877b24cc14961271e7fc2d93",
+    "regrid": true,
+    "note": "motion-intent key poses (apose d7)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_pose_rot2.json",
+    "sha256": "4f70596eddd13183836860cb02fbb6e6ccb955f5f50d80e29c7670884d5d5736",
+    "regrid": true,
+    "note": "second half of the >115 deg turns"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_pose_tr.json",
+    "sha256": "d329b219e613ed9e8cd0499b1e0b442258e0878b4727e4100060b26081e619e3",
+    "note": "Death root path: lowered to belly ground contact, kept in place"
+   }
+  ]
+ }
+}

@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mocap bind lab</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.1/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.1/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>Mocap bind lab</h1>
+      <p id="meta">The Unit list is creatures. Compare the left HoMM3 sprite to the 3D mesh. Change the skinning rules, then apply them to the current bind.</p>
+    </div>
+    <div class="actions">
+      <label>Unit
+        <select id="unitSelect"></select>
+      </label>
+      <label>Clip (motion only)
+        <select id="clipSelect"></select>
+      </label>
+      <button type="button" id="resetDeltaBtn">Reset bind shift</button>
+      <button type="button" class="primary" id="saveBtn">Save candidate</button>
+    </div>
+  </header>
+
+  <main>
+    <aside class="plate">
+      <h2>HoMM3 sprite</h2>
+      <div class="plate-stage">
+        <img id="spriteGif" alt="linked-master gif" draggable="false">
+      </div>
+      <p class="hint">Match this 2D reel to the 3D mesh. The still under it is front / side / top of the standing bones. Neither image is in-game proof.</p>
+      <img id="overlayImg" alt="bind skeleton overlay" class="overlay-still">
+    </aside>
+
+    <section class="stage">
+      <div class="viewport" id="viewport">
+        <div id="boneLabels" class="bone-labels"></div>
+      </div>
+      <div class="timeline">
+        <button type="button" id="toRestBtn">Frame 0</button>
+        <input id="frameSlider" type="range" min="0" max="0" value="0">
+        <button type="button" id="playBtn">Play</button>
+        <span id="frameLabel">f00</span>
+        <label class="check"><input type="checkbox" id="showBones" checked> Bones</label>
+        <label class="check"><input type="checkbox" id="showMesh" checked> Mesh</label>
+        <label class="check"><input type="checkbox" id="labelBones"> Bone names</label>
+        <label class="check">X-ray <input id="xray" type="range" min="0.12" max="1" step="0.02" value="1"></label>
+        <label>Shading
+          <select id="shading">
+            <option value="texture">Texture</option>
+            <option value="weights">Weights (selected bone)</option>
+            <option value="dominant">Weights (dominant bone)</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <aside class="side">
+      <p class="banner">This is a lab for automatic skinning given a bind. Shift or lengthen bones first, then change the rules and apply. Not allowed: rotate a bone into a new rest pose.</p>
+
+      <fieldset>
+        <legend>Mode</legend>
+        <label><input type="radio" name="mode" value="orbit" checked> Look / orbit</label>
+        <label><input type="radio" name="mode" value="shift"> Shift whole bind</label>
+        <label><input type="radio" name="mode" value="length"> Bone length</label>
+        <label><input type="radio" name="mode" value="paint"> Paint weight</label>
+        <label><input type="radio" name="mode" value="trim"> Trim connection</label>
+      </fieldset>
+
+      <fieldset id="skinLabPane">
+        <legend>Skinning rules</legend>
+        <p class="hint">These rules replace every vertex's weights from the current bind. Old paint is discarded. Straight-line is quick. Surface walk can take a minute — watch the bar. The walk stays on the mesh: a UV seam is the same surface, but empty space between two parts is not a path. “Ignore narrow contacts” still walks the mesh, but a short glue between two parts is not a valid path if a long way around still exists.</p>
+        <label>Preset
+          <select id="skinPreset">
+            <option value="lab_fast">Lab fast (Euclidean)</option>
+            <option value="surface_ignore_narrow">Surface, ignore narrow contacts</option>
+            <option value="pipeline_initializer">Pipeline initializer (every surface edge)</option>
+            <option value="custom">Custom</option>
+          </select>
+        </label>
+        <label>Distance
+          <select id="skinDistance">
+            <option value="euclidean">Straight-line to bone segment</option>
+            <option value="geodesic">Along the mesh surface</option>
+          </select>
+        </label>
+        <label>Bone ownership
+          <select id="skinOwnership">
+            <option value="outgoing">Outgoing (parent owns the bone to its children)</option>
+            <option value="incoming">Incoming (child owns the bone from its parent)</option>
+          </select>
+        </label>
+        <label id="skinSeedRow">Surface seeds
+          <select id="skinSeed">
+            <option value="largest_voronoi_component">Largest island of that bone</option>
+            <option value="euclidean_voronoi">Every nearest vertex</option>
+          </select>
+        </label>
+        <label id="skinWeldRow">Surface welds
+          <select id="skinWeld">
+            <option value="coincident_agreeing_normals">Touching verts, same facing</option>
+            <option value="coincident">All touching verts</option>
+            <option value="export_position">Exact exported positions</option>
+          </select>
+        </label>
+        <label id="skinConnectionRow">Surface connections
+          <select id="skinConnection">
+            <option value="all_edges">All surface edges</option>
+            <option value="drop_narrow_incidental">Ignore narrow incidental contacts</option>
+          </select>
+        </label>
+        <label id="skinCutRow">Widest glue to ignore <input id="skinCut" type="range" min="1" max="16" step="1" value="6"><span id="skinCutOut">6</span></label>
+        <label>Bones per vertex <input id="skinK" type="range" min="1" max="8" step="1" value="4"><span id="skinKOut">4</span></label>
+        <label>Falloff
+          <select id="skinFalloff">
+            <option value="inverse_square">Inverse square</option>
+            <option value="inverse">Inverse</option>
+            <option value="gaussian">Gaussian</option>
+          </select>
+        </label>
+        <label id="skinSigmaRow">Gaussian width <input id="skinSigma" type="range" min="0.01" max="0.4" step="0.005" value="0.05"><span id="skinSigmaOut">0.05</span></label>
+        <label>Max distance (0 = none) <input id="skinMaxDist" type="range" min="0" max="1" step="0.01" value="0"><span id="skinMaxDistOut">0.00</span></label>
+        <label>Exclude bones
+          <select id="skinExclude" multiple size="6"></select>
+        </label>
+        <button type="button" id="rewriteWeightsBtn">Apply skin rules</button>
+        <div id="skinProgress" hidden>
+          <div class="skin-bar"><div id="skinProgressFill"></div></div>
+          <span id="skinProgressLabel">0%</span>
+        </div>
+      </fieldset>
+
+      <div id="shiftPane">
+        <h2>Whole-skeleton shift</h2>
+        <p class="hint">Same knob as the pipeline: one yaw / pitch / roll, one scale, one slide. The mesh stays; the bones move.</p>
+        <label>Yaw <input id="yaw" type="range" min="-45" max="45" step="0.5" value="0"><span id="yawOut">0</span></label>
+        <label>Pitch <input id="pitch" type="range" min="-45" max="45" step="0.5" value="0"><span id="pitchOut">0</span></label>
+        <label>Roll <input id="roll" type="range" min="-45" max="45" step="0.5" value="0"><span id="rollOut">0</span></label>
+        <label>Scale <input id="scale" type="range" min="0.7" max="1.3" step="0.005" value="1"><span id="scaleOut">1.000</span></label>
+        <label>Slide X <input id="tx" type="range" min="-2" max="2" step="0.01" value="0"><span id="txOut">0.00</span></label>
+        <label>Slide Y <input id="ty" type="range" min="-2" max="2" step="0.01" value="0"><span id="tyOut">0.00</span></label>
+        <label>Slide Z <input id="tz" type="range" min="-2" max="2" step="0.01" value="0"><span id="tzOut">0.00</span></label>
+        <p class="hint">Seat: pick a bone, then click the mesh. The whole skeleton slides so that bone goes to the click. Rotation sliders stay.</p>
+        <label>Seat bone
+          <select id="seatBone"></select>
+        </label>
+      </div>
+
+      <div id="lengthPane" hidden>
+        <h2>Bone length</h2>
+        <p class="hint">This scales the bind-pose offset to the parent. Clip files only key rotations, so the same swings play on the longer or shorter bone. Hips has no offset — lengthen a child.</p>
+        <label>Bone
+          <select id="lengthBone"></select>
+        </label>
+        <label>Length <input id="boneLength" type="range" min="0.5" max="1.8" step="0.01" value="1"><span id="boneLengthOut">1.00</span></label>
+        <p id="lengthHint" class="hint"></p>
+        <label class="check"><input type="checkbox" id="lengthChildren"> Also scale child bones</label>
+        <label class="check"><input type="checkbox" id="weightsFollow"> Weights follow joint moves</label>
+        <p class="hint">Follow keeps each vertex's mass on the moved chain and slides that mass onto the new bone segments. It does not invent rest rotations.</p>
+        <button type="button" id="resetLengthsBtn">Reset all lengths</button>
+      </div>
+
+      <div id="paintPane" hidden>
+        <h2>Weight paint</h2>
+        <p class="hint">The mesh itself is the heat map: blue = this bone owns none, red = it owns the vertex. Texture is hidden in this mode. Drag to paint. Hold Alt to orbit.</p>
+        <label>Bone
+          <select id="paintBone"></select>
+        </label>
+        <fieldset>
+          <legend>Brush</legend>
+          <label><input type="radio" name="brush" value="add" checked> Add</label>
+          <label><input type="radio" name="brush" value="subtract"> Subtract</label>
+          <label><input type="radio" name="brush" value="replace"> Replace</label>
+          <label><input type="radio" name="brush" value="smooth"> Smooth</label>
+        </fieldset>
+        <label>Strength <input id="brushStrength" type="range" min="0.05" max="1" step="0.05" value="0.35"><span id="brushStrengthOut">0.35</span></label>
+        <label>Radius <input id="brushRadius" type="range" min="0.01" max="0.4" step="0.005" value="0.08"><span id="brushRadiusOut">0.08</span></label>
+        <label>Replace value <input id="paintValue" type="range" min="0" max="1" step="0.05" value="1"><span id="paintValueOut">1.00</span></label>
+        <label class="check"><input type="checkbox" id="mirrorPaint"> Mirror Left/Right Mixamo names</label>
+        <p class="legend">0 <span class="swatch"></span> 1</p>
+      </div>
+
+      <div id="trimPane" hidden>
+        <h2>Trim connection</h2>
+        <p class="hint">Click a vertex. Then click a bone name below to remove that bone from the vertex and renormalize.</p>
+        <div id="influenceList" class="chips">Click a vertex.</div>
+      </div>
+
+      <div id="pickInfo" class="pick"></div>
+      <p id="status" class="status"></p>
+    </aside>
+  </main>
+  <script type="module" src="/static/app.js"></script>
+</body>
+</html>

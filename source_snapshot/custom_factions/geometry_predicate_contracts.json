@@ -1,0 +1,94 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom law profiles that depend on battle geometry. This is planning evidence only; it does not prove live hex coordinates, adjacency, line/range predicates, action payload geometry, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresGeometryPredicateProfiles": true,
+    "genericPositionBonusForbidden": true,
+    "meleeAndRangedFormationRowsMustShareExactEffectKeySemantics": true,
+    "geometryMustBeCorrelatedToCurrentActionPayload": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredRuntimeProof": [
+    "current action actor hex proof",
+    "current action target hex proof",
+    "adjacency and line/range predicate proof",
+    "multi-target/area target discriminator proof",
+    "melee versus ranged action classifier proof",
+    "geometry-to-law-owner idempotence proof"
+  ],
+  "contracts": {
+    "dungeon.boxed-disabled-flanked-bonus": {
+      "geometryKinds": [
+        "boxed-target",
+        "flanked-target",
+        "disabled-target-position"
+      ],
+      "correlationRequired": [
+        "Dungeon law owner",
+        "current attacker/caster action payload",
+        "target unable-to-retaliate or negative-status predicate when used"
+      ],
+      "forbiddenSubstitutes": [
+        "any adjacent target",
+        "any debuffed target without geometry",
+        "global enemy surrounded count"
+      ],
+      "notes": "Dungeon Kill Corridors requires proving the target is boxed, flanked, disabled, or unable to retaliate in the current action geometry."
+    },
+    "fortress.slow-poison-defensive-line": {
+      "geometryKinds": [
+        "defensive-line",
+        "surrounded-friendly",
+        "slowed-or-poisoned-enemy-adjacent-pressure"
+      ],
+      "correlationRequired": [
+        "Fortress law owner",
+        "current incoming or defensive action payload",
+        "slow/poison/negative-status predicate when used"
+      ],
+      "forbiddenSubstitutes": [
+        "any adjacent target",
+        "any negative status without defensive geometry",
+        "global damage reduction"
+      ],
+      "notes": "Fortress Bog Line requires proving defensive geometry or slowed/poisoned enemy pressure in the current action context."
+    },
+    "inferno.gating-teleport-adjacency": {
+      "geometryKinds": [
+        "gated-entry-adjacency",
+        "teleport-entry-adjacency",
+        "fresh-entry-threat-radius"
+      ],
+      "correlationRequired": [
+        "Inferno law owner",
+        "gated or teleported unit identity",
+        "entry hex to target adjacency"
+      ],
+      "forbiddenSubstitutes": [
+        "any adjacent target",
+        "any summoned unit without entry hex proof",
+        "permanent recruited unit movement"
+      ],
+      "notes": "Inferno Hellpack Assault requires proving gated/teleported entry identity and entry-to-target adjacency."
+    },
+    "rampart.protect-shooter-avenger-mark": {
+      "geometryKinds": [
+        "adjacent-shooter-protector",
+        "protected-shooter-line",
+        "Avenger-marked-target-in-action"
+      ],
+      "correlationRequired": [
+        "Rampart law owner",
+        "friendly shooter and adjacent protector identity",
+        "native Avenger mark predicate when used"
+      ],
+      "forbiddenSubstitutes": [
+        "any adjacent friendly unit",
+        "any shooter in army",
+        "any enemy in range without Avenger/protection context"
+      ],
+      "notes": "Rampart Hunter Pairs requires proving shooter/protector adjacency or native Avenger-marked target geometry in the current action."
+    }
+  }
+}

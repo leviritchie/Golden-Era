@@ -1,0 +1,267 @@
+﻿{
+    "schemaVersion":  1,
+    "purpose":  "Source-authored predicate contract for custom law profiles that depend on spell-cast events. This is planning evidence only; it does not prove cast-gate ordering, successful-cast commit, caster identity, spell target identity, or authorize gameplay mutation.",
+    "validationState":  "source-prepared-runtime-unproven",
+    "policy":  {
+                   "effectKeysMustMatchRequiresSpellCastEventProfiles":  true,
+                   "genericAnySpellCastForbidden":  true,
+                   "successfulCastMustBeSeparatedFromPreviewOrFailedCast":  true,
+                   "heroCastMustBeSeparatedFromUnitAbilityCast":  true,
+                   "spellSchoolOrSidClassificationMustUseExactTaxonomy":  true,
+                   "runtimeProofStillRequiredForGameplay":  true
+               },
+    "requiredRuntimeProof":  [
+                                 "successful spell cast commit proof",
+                                 "failed/preview cast exclusion proof",
+                                 "caster law-owner correlation proof",
+                                 "spell SID or school identity proof",
+                                 "spell target/effect correlation proof",
+                                 "cast-to-cooldown ordering proof",
+                                 "spellbook UI synchronization proof when spellbook state is mutated"
+                             ],
+    "contracts":  {
+                      "castle.support-blessing-astrology-calendar":  {
+                                                                         "castKinds":  [
+                                                                                           "support-spell",
+                                                                                           "blessing-spell",
+                                                                                           "first-combat-blessing"
+                                                                                       ],
+                                                                         "correlationRequired":  [
+                                                                                                     "Castle law owner",
+                                                                                                     "support/blessing taxonomy",
+                                                                                                     "calendar/astrology law state"
+                                                                                                 ],
+                                                                         "forbiddenSubstitutes":  [
+                                                                                                      "any spell cast",
+                                                                                                      "any positive buff",
+                                                                                                      "spellbook preview"
+                                                                                                  ],
+                                                                         "notes":  "Castle calendar support requires proving successful support/blessing spell context before adding charges or first-combat blessing behavior."
+                                                                     },
+                      "conflux.dynamic-elemental-school":  {
+                                                               "castKinds":  [
+                                                                                 "elemental-school-spell",
+                                                                                 "dominant-elemental-family-spell"
+                                                                             ],
+                                                               "correlationRequired":  [
+                                                                                           "Conflux law owner",
+                                                                                           "dynamic elemental family state",
+                                                                                           "exact spell school or SID taxonomy"
+                                                                                       ],
+                                                               "forbiddenSubstitutes":  [
+                                                                                            "any spell cast",
+                                                                                            "static magicSchoolSet as gameplay truth",
+                                                                                            "elemental name substring",
+                                                                                            "spellbook preview"
+                                                                                        ],
+                                                               "notes":  "Conflux spell-school effects require proving successful cast identity against dynamic elemental family state."
+                                                           },
+                      "cove.space-arcane-gunpowder-support":  {
+                                                                  "castKinds":  [
+                                                                                    "Space spell",
+                                                                                    "Arcane spell",
+                                                                                    "gunpowder-support spell"
+                                                                                ],
+                                                                  "correlationRequired":  [
+                                                                                              "Cove law owner",
+                                                                                              "native Space/Arcane school verification",
+                                                                                              "gunpowder or Focus event context"
+                                                                                          ],
+                                                                  "forbiddenSubstitutes":  [
+                                                                                               "any spell cast",
+                                                                                               "any ranged attack",
+                                                                                               "school name guessed from law name",
+                                                                                               "spellbook preview"
+                                                                                           ],
+                                                                  "notes":  "Cove spell support requires proving successful cast identity and Cove gunpowder/Focus correlation."
+                                                              },
+                      "dungeon.first-night-spell-portent-calendar":  {
+                                                                         "castKinds":  [
+                                                                                           "first Night spell",
+                                                                                           "Night debuff spell"
+                                                                                       ],
+                                                                         "correlationRequired":  [
+                                                                                                     "Dungeon law owner",
+                                                                                                     "first matching spell per battle/day window",
+                                                                                                     "Night taxonomy"
+                                                                                                 ],
+                                                                         "forbiddenSubstitutes":  [
+                                                                                                      "any spell cast",
+                                                                                                      "any debuff",
+                                                                                                      "repeated Night casts without idempotence",
+                                                                                                      "spellbook preview"
+                                                                                                  ],
+                                                                         "notes":  "Dungeon portent requires proving first successful Night spell/debuff ordering before mark or scaling effects."
+                                                                     },
+                      "fortress.primal-slow-poison-extension":  {
+                                                                    "castKinds":  [
+                                                                                      "Primal spell",
+                                                                                      "poison spell",
+                                                                                      "slow or movement-restriction spell"
+                                                                                  ],
+                                                                    "correlationRequired":  [
+                                                                                                "Fortress law owner",
+                                                                                                "poison/slow/movement taxonomy",
+                                                                                                "terrain or adjacency predicate when used"
+                                                                                            ],
+                                                                    "forbiddenSubstitutes":  [
+                                                                                                 "any spell cast",
+                                                                                                 "any negative status",
+                                                                                                 "Primal access alone",
+                                                                                                 "spellbook preview"
+                                                                                             ],
+                                                                    "notes":  "Fortress extension requires proving successful poison/slow/movement-related spell or status application context."
+                                                                },
+                      "inferno.fire-gated-sign-calendar":  {
+                                                               "castKinds":  [
+                                                                                 "fire spell",
+                                                                                 "gating or summon spell",
+                                                                                 "first fire damage marker"
+                                                                             ],
+                                                               "correlationRequired":  [
+                                                                                           "Inferno law owner",
+                                                                                           "fire/summon/gating taxonomy",
+                                                                                           "gated or sacrificed unit identity when used"
+                                                                                       ],
+                                                               "forbiddenSubstitutes":  [
+                                                                                            "any spell cast",
+                                                                                            "any damage spell",
+                                                                                            "temporary summon counted as permanent unit",
+                                                                                            "spellbook preview"
+                                                                                        ],
+                                                               "notes":  "Inferno signs require proving successful fire/gating/summon spell context before calendar-side effects."
+                                                           },
+                      "inferno.primal-fire-gating-charge":  {
+                                                                "castKinds":  [
+                                                                                  "Primal fire spell",
+                                                                                  "summon spell",
+                                                                                  "gating spell"
+                                                                              ],
+                                                                "correlationRequired":  [
+                                                                                            "Inferno law owner",
+                                                                                            "native school verification",
+                                                                                            "sacrifice/gated/summoned loss identity"
+                                                                                        ],
+                                                                "forbiddenSubstitutes":  [
+                                                                                             "any spell cast",
+                                                                                             "Primal access alone",
+                                                                                             "any friendly loss",
+                                                                                             "spellbook preview"
+                                                                                         ],
+                                                                "notes":  "Inferno Gatecraft requires proving successful fire/summon/gating cast identity and loss identity before charges."
+                                                            },
+                      "necropolis.night-corpse-rite":  {
+                                                           "castKinds":  [
+                                                                             "Night spell",
+                                                                             "corpse-consuming spell",
+                                                                             "raise or necromancy-adjacent spell"
+                                                                         ],
+                                                           "correlationRequired":  [
+                                                                                       "Necropolis law owner",
+                                                                                       "corpse/casualty context",
+                                                                                       "Night taxonomy"
+                                                                                   ],
+                                                           "forbiddenSubstitutes":  [
+                                                                                        "any spell cast",
+                                                                                        "Night access alone",
+                                                                                        "corpse count without consumption context",
+                                                                                        "spellbook preview"
+                                                                                    ],
+                                                           "notes":  "Necropolis corpse rite requires proving successful Night/corpse-related spell context and corpse consumption/casualty correlation."
+                                                       },
+                      "rampart.primal-protection-avenger":  {
+                                                                "castKinds":  [
+                                                                                  "Primal protection spell",
+                                                                                  "cleanse spell",
+                                                                                  "regeneration or resistance spell"
+                                                                              ],
+                                                                "correlationRequired":  [
+                                                                                            "Rampart law owner",
+                                                                                            "protection/cleanse/regeneration taxonomy",
+                                                                                            "native Avenger mark state when used"
+                                                                                        ],
+                                                                "forbiddenSubstitutes":  [
+                                                                                             "any spell cast",
+                                                                                             "Primal access alone",
+                                                                                             "parallel custom Avenger mark registry",
+                                                                                             "spellbook preview"
+                                                                                         ],
+                                                                "notes":  "Rampart Druidic Oath requires proving successful protection-style spell context and real Avenger mark state for Avenger add-ons."
+                                                            },
+                      "tower.construct-readiness-after-spell":  {
+                                                                    "castKinds":  [
+                                                                                      "hero spell cast",
+                                                                                      "construct-readiness spell trigger"
+                                                                                  ],
+                                                                    "correlationRequired":  [
+                                                                                                "Tower law owner",
+                                                                                                "construct target or friendly construct group",
+                                                                                                "successful hero spell commit"
+                                                                                            ],
+                                                                    "forbiddenSubstitutes":  [
+                                                                                                 "any spell cast",
+                                                                                                 "unit ability cast",
+                                                                                                 "ordinary morale trigger",
+                                                                                                 "spellbook preview"
+                                                                                             ],
+                                                                    "notes":  "Tower morale trigger requires proving successful hero spellcast-to-construct readiness context."
+                                                                },
+                      "tower.construct-readiness-package":  {
+                                                                "castKinds":  [
+                                                                                  "hero spell cast",
+                                                                                  "construct-readiness spell trigger"
+                                                                              ],
+                                                                "correlationRequired":  [
+                                                                                            "Tower law owner",
+                                                                                            "construct target or friendly construct group",
+                                                                                            "morale package application window"
+                                                                                        ],
+                                                                "forbiddenSubstitutes":  [
+                                                                                             "any spell cast",
+                                                                                             "unit ability cast",
+                                                                                             "ordinary morale on morale-neutral constructs",
+                                                                                             "spellbook preview"
+                                                                                         ],
+                                                                "notes":  "Tower morale package requires proving spellcast-to-construct readiness rather than applying generic morale."
+                                                            },
+                      "tower.cooldown-construct-calculus-calendar":  {
+                                                                         "castKinds":  [
+                                                                                           "hero spell cast",
+                                                                                           "cooldown-affecting spell cast",
+                                                                                           "construct/artifice spell trigger"
+                                                                                       ],
+                                                                         "correlationRequired":  [
+                                                                                                     "Tower law owner",
+                                                                                                     "cooldown mutation context",
+                                                                                                     "construct/artifice target context"
+                                                                                                 ],
+                                                                         "forbiddenSubstitutes":  [
+                                                                                                      "any spell cast",
+                                                                                                      "day-start calculation alone",
+                                                                                                      "cooldown preview",
+                                                                                                      "spellbook preview"
+                                                                                                  ],
+                                                                         "notes":  "Tower calculus requires proving successful spellcast-to-cooldown or construct/artifice context before calendar charges."
+                                                                     },
+                      "tower.prepared-spellbook-reuse":  {
+                                                             "castKinds":  [
+                                                                               "prepared spell cast",
+                                                                               "spellbook reuse cast",
+                                                                               "native school verified cast"
+                                                                           ],
+                                                             "correlationRequired":  [
+                                                                                         "Tower law owner",
+                                                                                         "native school verification",
+                                                                                         "spellbook reuse/prepared state",
+                                                                                         "spellbook UI synchronization"
+                                                                                     ],
+                                                             "forbiddenSubstitutes":  [
+                                                                                          "any spell cast",
+                                                                                          "spellbook open/preview",
+                                                                                          "cooldown decrement alone",
+                                                                                          "spellbook preview"
+                                                                                      ],
+                                                             "notes":  "Tower prepared artifice requires proving successful prepared/reuse spell state and UI synchronization before gameplay."
+                                                         }
+                  }
+}

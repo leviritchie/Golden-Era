@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "olden-ai-driver://schemas/focus_snapshot.schema.json",
+  "title": "Olden AI Driver Focus Snapshot",
+  "description": "Screen-reader utterance surface. NVDA and AssistiveSupport consumers must use this (or hover with utterance), never screen_dump.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "speechSafe",
+    "utterance",
+    "context",
+    "hover",
+    "gaps"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "ai-driver.v1.focus-snapshot" },
+    "speechSafe": { "type": "boolean" },
+    "utterance": { "type": "string" },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["main_menu", "adventure_map", "town", "battle", "loading", "unknown"]
+        },
+        "hero": { "type": "string" },
+        "quest": { "type": "string" },
+        "dialogTitle": { "type": "string" },
+        "dialogBody": { "type": "string" }
+      }
+    },
+    "hover": { "type": "object" },
+    "gaps": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "message"],
+        "properties": {
+          "code": { "type": "string", "minLength": 1 },
+          "message": { "type": "string", "minLength": 1 },
+          "blocking": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

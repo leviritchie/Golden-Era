@@ -1,0 +1,20 @@
+        # Flyers: Move-local wide-roll profile_init on Move frames; then FREEZE root.
+        # v12 proved DINOv3 root-search undoes the flight roll (~camera_up -56 deg dive).
+        "root_search_enabled": (not flyer),
+        "root_rotation_axes": (
+            ("camera_forward",)
+            if flyer
+            else ("camera_forward", "camera_right", "camera_up")
+        ),
+        "root_rotation_camera_up_limit_deg": 45.0,
+        "root_rotation_first_frame_limit_deg": 30.0,
+        "root_rotation_per_frame_limit_deg": 30.0,
+        "root_rotation_defer_camera_up": (not flyer),
+        "profile_init_enabled": True,
+        "profile_init_camera_basis_mode": "upright_turntable",
+        "profile_init_yaw_step_deg": 10.0 if flyer else 15.0,
+        "profile_init_roll_range_deg": 90.0 if flyer else 8.0,
+        "profile_init_roll_step_deg": 15.0 if flyer else 8.0,
+        # Flyers: drop facing bias and rank by pure IoU (composite preferred dive cams).
+        "profile_init_facing_weight": 0.0 if flyer else None,
+        "profile_init_rank_metric": "iou" if flyer else None,

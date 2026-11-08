@@ -1,0 +1,786 @@
+{
+ "unit": "h3_cavalier",
+ "joints": {
+  "Hips": [
+   -0.12,
+   0.02,
+   0.9
+  ],
+  "Spine": [
+   -0.12,
+   0.02,
+   0.99
+  ],
+  "Spine1": [
+   -0.12,
+   0.02,
+   1.07
+  ],
+  "Spine2": [
+   -0.12,
+   0.02,
+   1.14
+  ],
+  "Neck": [
+   -0.12,
+   0.01,
+   1.23
+  ],
+  "Head": [
+   -0.12,
+   0.0,
+   1.29
+  ],
+  "HeadTop_End": [
+   -0.12,
+   0.0,
+   1.45
+  ],
+  "LeftShoulder": [
+   -0.05,
+   0.03,
+   1.2
+  ],
+  "LeftArm": [
+   0.08,
+   0.03,
+   1.18
+  ],
+  "LeftForeArm": [
+   0.15,
+   0.0,
+   1.02
+  ],
+  "LeftHand": [
+   0.16,
+   -0.13,
+   0.93
+  ],
+  "LeftHand_End": [
+   0.163,
+   -0.175,
+   0.9
+  ],
+  "RightShoulder": [
+   -0.15,
+   0.03,
+   1.2
+  ],
+  "RightArm": [
+   -0.28,
+   0.03,
+   1.18
+  ],
+  "RightForeArm": [
+   -0.3,
+   -0.05,
+   1.03
+  ],
+  "RightHand": [
+   -0.15,
+   -0.16,
+   1.05
+  ],
+  "RightHand_End": [
+   -0.1,
+   -0.18,
+   1.06
+  ]
+ },
+ "grounding": false,
+ "staticChains": [
+  {
+   "prefix": "HFR",
+   "points": [
+    [
+     -0.21,
+     -0.24,
+     0.62
+    ],
+    [
+     -0.197,
+     -0.242,
+     0.35
+    ],
+    [
+     -0.183,
+     -0.243,
+     0.15
+    ],
+    [
+     -0.17,
+     -0.245,
+     0.03
+    ]
+   ]
+  },
+  {
+   "prefix": "HFL",
+   "points": [
+    [
+     -0.02,
+     -0.29,
+     0.62
+    ],
+    [
+     -0.027,
+     -0.312,
+     0.35
+    ],
+    [
+     -0.033,
+     -0.333,
+     0.15
+    ],
+    [
+     -0.04,
+     -0.355,
+     0.03
+    ]
+   ]
+  },
+  {
+   "prefix": "HHL",
+   "points": [
+    [
+     -0.01,
+     0.35,
+     0.62
+    ],
+    [
+     -0.011,
+     0.316,
+     0.35
+    ],
+    [
+     -0.012,
+     0.281,
+     0.15
+    ],
+    [
+     -0.013,
+     0.247,
+     0.03
+    ]
+   ]
+  },
+  {
+   "prefix": "HHR",
+   "points": [
+    [
+     -0.2,
+     0.42,
+     0.62
+    ],
+    [
+     -0.195,
+     0.515,
+     0.35
+    ],
+    [
+     -0.187,
+     0.566,
+     0.15
+    ],
+    [
+     -0.197,
+     0.509,
+     0.03
+    ]
+   ]
+  },
+  {
+   "prefix": "HNeck",
+   "points": [
+    [
+     -0.12,
+     -0.2,
+     0.9
+    ],
+    [
+     -0.12,
+     -0.45,
+     1.1
+    ],
+    [
+     -0.12,
+     -0.62,
+     1.22
+    ],
+    [
+     -0.12,
+     -0.75,
+     0.88
+    ]
+   ]
+  },
+  {
+   "prefix": "HTail",
+   "points": [
+    [
+     -0.12,
+     0.53,
+     0.82
+    ],
+    [
+     -0.12,
+     0.65,
+     0.55
+    ],
+    [
+     -0.12,
+     0.72,
+     0.26
+    ]
+   ]
+  }
+ ],
+ "props": [
+  {
+   "name": "lance",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.16,
+      -0.12,
+      0.9
+     ],
+     [
+      0.424,
+      -0.647,
+      1.692
+     ]
+    ]
+   ],
+   "radius": 0.07
+  },
+  {
+   "name": "lancebase",
+   "bone": "LeftHand",
+   "sphere": [
+    [
+     0.18,
+     -0.21,
+     0.91
+    ],
+    0.045
+   ]
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "castle_mount",
+  "castle_handcut",
+  "castle_yaw",
+  "castle_refine",
+  "castle_riderthrow"
+ ],
+ "mount": {
+  "riderBox": [
+   [
+    -0.4,
+    -0.22,
+    0.85
+   ],
+   [
+    0.25,
+    0.25,
+    1.5
+   ]
+  ],
+  "riderDamp": 0.5,
+  "bob": 0.02,
+  "nod": 6,
+  "chains": {
+   "HFL": {
+    "phase": 0.0,
+    "swing": 22,
+    "flex": [
+     0,
+     35,
+     20
+    ]
+   },
+   "HHR": {
+    "phase": 0.0,
+    "swing": 22,
+    "flex": [
+     0,
+     35,
+     20
+    ]
+   },
+   "HFR": {
+    "phase": 0.5,
+    "swing": 22,
+    "flex": [
+     0,
+     35,
+     20
+    ]
+   },
+   "HHL": {
+    "phase": 0.5,
+    "swing": 22,
+    "flex": [
+     0,
+     35,
+     20
+    ]
+   },
+   "HNeck": {
+    "nod": true
+   }
+  },
+  "deathFall": {
+   "deg": 85,
+   "side": -1,
+   "pivotX": 0.37,
+   "start": 0.4,
+   "end": 0.66,
+   "riderHold": true,
+   "riderFlat": -30,
+   "lanceLie": [
+    "LeftHand",
+    [
+     0.16,
+     -0.12,
+     0.9
+    ],
+    [
+     0.41,
+     -0.62,
+     1.65
+    ]
+   ]
+  },
+  "frontSink": {
+   "start": 0.05,
+   "end": 0.45,
+   "pitch": 26,
+   "pivotY": 0.42,
+   "fore": [
+    -60,
+    130,
+    20
+   ],
+   "neck": -35,
+   "riderUpright": true
+  },
+  "riderTwist": {
+   "clip": "Hitted",
+   "deg": 90,
+   "bones": [
+    "Spine",
+    "Spine1",
+    "Spine2"
+   ],
+   "hold": 0.72,
+   "end": 0.86,
+   "keep": [
+    "LeftShoulder"
+   ]
+  },
+  "rigSegments": {
+   "legs": {
+    "chains": [
+     "HFL",
+     "HFR",
+     "HHL",
+     "HHR"
+    ],
+    "blend": 0.08,
+    "radius": 0.12,
+    "band": [
+     0.36,
+     0.5
+    ]
+   },
+   "throat": {
+    "min2": 0.02,
+    "min0": 0.05,
+    "grow": 4,
+    "power": 2,
+    "smooth": 20,
+    "headR": [
+     0.17,
+     0.27
+    ],
+    "headOwn": [
+     0.12,
+     0.2
+    ]
+   }
+  }
+ },
+ "castleRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 60,
+   "dy": 80,
+   "roll": 35
+  },
+  "clipParams": {
+   "MoveStart": [
+    "dx",
+    "dy",
+    "roll"
+   ],
+   "Defence": [
+    "dx",
+    "dy",
+    "roll"
+   ],
+   "AttackFront": [
+    "dx",
+    "dy",
+    "roll"
+   ],
+   "Death": [
+    "dx",
+    "dy"
+   ]
+  },
+  "propAim": [
+   "LeftHand"
+  ],
+  "aimRange": 60,
+  "aimFromRest": true
+ },
+ "yawDeg": 65,
+ "castleHandCut": {
+  "sides": [
+   "Right",
+   "Left"
+  ],
+  "handRadius": 0.1,
+  "foreRadius": 0.07,
+  "foreMinLum": 0.0,
+  "upperRadius": 0.15,
+  "upperMinArm": 0.4,
+  "perSide": {
+   "Right": {
+    "farStrip": {
+     "dist": 0.1,
+     "maxHeight": 0.97
+    }
+   }
+  }
+ },
+ "strideMatch": {
+  "pelvisHold": 0.02,
+  "trotPhase": 0.875,
+  "swingLift": 0.09,
+  "swingCurl": 45.0,
+  "reason": "authenticity 2026-10-08 (lane B): transferred from h3_champion (same HoMM3 animation set). authenticity 2026-10-07: the DEF Move carries the horse level and high on a diagonal trot (DEF f0/f4 one diagonal pair in swing). The default plant drop sank the body ~0.042 H and the fitted legs left HFL out of pair; hold the fitted pelvis height, step the diagonals half a cycle apart. Stride and cadence stay the lane default (1.42x unaided). Swing (rubric 3a, 2026-10-07): the DEF lifts each hoof high with the knee/hock folded and the fetlock curled back; swingLift raises the swing arc (the IK folds the knee/hock), swingCurl curls the fetlock back over the swing. Leg drive (rubric 3a, 2026-10-07): the plant's two-bone IK cannot place each leg segment like the DEF; legDeltas turns the HF/HH chain bones per DEF frame after the plant (swing phase only, so planted hooves do not skate), solved from the DEF keypoint tracks. Cavalier (authenticity 2026-10-08 lane B): the transferred champion legs on the cavalier's shorter-legged horse left required/actual stride 1.45 (freeze band 1.4) with pelvisHold 0; pelvisHold 0.02 lets the planted legs reach (1.37, slip 0.53), a 3 cm sink the level DEF trot still reads as level.",
+  "legDeltas": "tools/homm3_def_retarget_delivery/stride_leg_deltas/h3_champion.json"
+ },
+ "riderThrow": {
+  "seamSmooth": 2,
+  "note": "h3_cavalier (same DEF animation as h3_champion) Death f2-f7: the rider rises out of the saddle and falls clear of the horse, the lance drops. Geometry re-placed for the cavalier mesh; keys as h3_champion.",
+  "riderHips": {
+   "head": [
+    -0.12,
+    0.02,
+    0.99
+   ],
+   "tail": [
+    -0.12,
+    0.02,
+    1.07
+   ],
+   "boxes": [
+    [
+     [
+      0.02,
+      -0.19,
+      0.4
+     ],
+     [
+      0.29,
+      0.14,
+      1.05
+     ]
+    ],
+    [
+     [
+      -0.55,
+      -0.19,
+      0.4
+     ],
+     [
+      -0.28,
+      0.14,
+      1.05
+     ]
+    ],
+    [
+     [
+      -0.3,
+      -0.16,
+      0.96
+     ],
+     [
+      0.04,
+      0.16,
+      1.12
+     ]
+    ]
+   ]
+  },
+  "lance": {
+   "parent": "LeftHand",
+   "head": [
+    0.18,
+    -0.21,
+    0.91
+   ],
+   "tail": [
+    0.215,
+    -0.28,
+    1.01
+   ],
+   "segments": [
+    [
+     [
+      0.17,
+      -0.12,
+      0.9
+     ],
+     [
+      0.424,
+      -0.647,
+      1.692
+     ]
+    ]
+   ],
+   "radius": 0.07
+  },
+  "keys": {
+   "RiderHips": [
+    [
+     0.1,
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      0
+     ]
+    ],
+    [
+     0.3,
+     [
+      0,
+      0.02,
+      0.1
+     ],
+     [
+      6,
+      0,
+      0
+     ]
+    ],
+    [
+     0.55,
+     [
+      0,
+      0.05,
+      0.18
+     ],
+     [
+      0,
+      0,
+      0
+     ]
+    ],
+    [
+     0.8,
+     [
+      0,
+      0.1,
+      0.32
+     ],
+     [
+      -10,
+      0,
+      0
+     ]
+    ]
+   ],
+   "Lance": [
+    [
+     0.0,
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      0
+     ]
+    ],
+    [
+     0.14,
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      25,
+      0,
+      0
+     ]
+    ],
+    [
+     0.3,
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      50,
+      0,
+      0
+     ]
+    ],
+    [
+     0.56,
+     [
+      0,
+      0.1,
+      -0.12
+     ],
+     [
+      100,
+      0,
+      0
+     ]
+    ],
+    [
+     0.8,
+     [
+      0,
+      0.35,
+      -0.45
+     ],
+     [
+      0,
+      0,
+      0
+     ]
+    ]
+   ]
+  }
+ },
+ "sourceMesh": "artifacts/homm3_mesh_surgery/h3_cavalier_sliver.glb",
+ "correctiveSmooth": {
+  "excludeBones": [
+   "Lance"
+  ],
+  "note": "2026-10-08 authenticity: the corrective smooth dragged lance vertices into shards when the transferred lance-arm pose turns the hand; the rigid lance takes skin only"
+ },
+ "glbPatch": {
+  "reason": "2026-10-08 authenticity pass (lane B): the cavalier and champion DEFs are one HoMM3 animation set, so the champion's passed per-DEF-frame pose fit (commit 0c692ae845: head forward instead of chin-in, AttackFront rear then low long lunge with the lance couched, Death rider thrown on castle_riderthrow) is transferred as local rotation offsets plus root translations. Numpy patch lane. The table is resampled by normalized clip phase onto the cavalier's own key grids (Idle and Move run one key longer than the champion's). 2026-10-08 Move carriage (lane B check flags): the fitted Move reclined the rider about 20 deg with the head tipped back (looking at the sky, unlike the upright DEF rider); a stacked keyRotations table (h3_cavalier_head_rot.json) aims the Spine-Neck line back to the rider's Idle carriage and the head level looking ahead.",
+  "ops": [
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftHand"
+    ],
+    "to": "LeftForeArm",
+    "region": [
+     {
+      "axis": "x",
+      "above": 0.0,
+      "ramp": 0.01
+     },
+     {
+      "axis": "x",
+      "below": 0.11,
+      "ramp": 0.01
+     },
+     {
+      "axis": "y",
+      "above": 0.0,
+      "ramp": 0.01
+     },
+     {
+      "axis": "y",
+      "below": 0.11,
+      "ramp": 0.01
+     },
+     {
+      "axis": "z",
+      "above": 0.88,
+      "ramp": 0.01
+     },
+     {
+      "axis": "z",
+      "below": 0.98,
+      "ramp": 0.01
+     }
+    ],
+    "note": "LeftHand weight leaked onto the rider thigh/forearm skin behind the lance hand (glTF 0.05,0.93,-0.055); it stretched 3.9x when the transferred lance-arm pose turns the hand"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "Hips",
+     "RiderHips",
+     "LeftHand"
+    ],
+    "to": "Lance",
+    "region": [
+     {
+      "axis": "x",
+      "above": 0.18,
+      "ramp": 0.01
+     },
+     {
+      "axis": "z",
+      "above": 1.1,
+      "ramp": 0.01
+     }
+    ],
+    "note": "9 lance-shaft seam copies at glTF (0.22..0.30, 1.18..1.25, 0.31..0.41) carried Hips/RiderHips/LeftHand weight while their coincident twins are Lance; the shaft tore into floating shards (40 cm sliver to the hand) whenever the hand left rest; keep 0.005 leaves each copy its own weld key, so the CS weld topology (and cs_rekey parity) is unchanged",
+    "keep": 0.005
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cavalier_pose.json",
+    "sha256": "106fbe2e51af89402a03c26759c82aaaf6e99aa141948875f18962e4fb2ba128",
+    "regrid": true,
+    "note": "DEF pose fit (from h3_champion)"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cavalier_pose_tr.json",
+    "sha256": "745cd32c961e784a1446e3e44cbd53813834cc065f7f09c33191d9d5d4289851",
+    "note": "root path"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cavalier_head_rot.json",
+    "sha256": "eada5864a4a87d0bac8a5ede58c8db7e367b790fac283aab7abeb847ae2aee95",
+    "regrid": true,
+    "note": "Move carriage: rider torso back to the Idle Spine-Neck line and head level looking ahead, stacked on the DEF pose fit"
+   }
+  ]
+ }
+}

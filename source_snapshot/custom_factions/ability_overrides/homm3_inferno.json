@@ -1,0 +1,328 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_inferno",
+  "unitOverrides": {
+    "h3_imp": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "inferno.imp_line",
+      "decisionTest": "Imp defines the tier baseline for inferno; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_imp_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "inferno.imp_line",
+      "decisionTest": "Familiar should be chosen over Vermin when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_imp_upg_redesign_ability_name",
+          "descriptionKey": "h3_imp_upg_redesign_ability_description",
+          "nameText": "Energize",
+          "descriptionText": "Spend 1 Focus to give an allied stack +1 Focus.",
+          "iconKey": "sub_skill_faction_homm3_ability_energize",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 1,
+          "cooldown": 2,
+          "rank": 1,
+          "charges": "",
+          "effectKey": "space_3_magic_energyze:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Energize",
+          "effectPayload": {
+            "spellSid": "space_3_magic_energyze",
+            "spellTier": 1,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "targetMechanics": [
+              {
+                "mech": "add_energy",
+                "values": [
+                  "levels",
+                  "ally",
+                  "1",
+                  "0",
+                  "1"
+                ]
+              }
+            ]
+          },
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass.",
+          "spellSid": "space_3_magic_energyze",
+          "spellTier": 1,
+          "spellLevel": 1,
+          "dealerIndex": 0,
+          "targetMechanics": [
+            {
+              "mech": "add_energy",
+              "values": [
+                "levels",
+                "ally",
+                "1",
+                "0",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_imp_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "inferno.imp_line",
+      "decisionTest": "Vermin should be chosen over Familiar when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_gog": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "inferno.gog_line",
+      "decisionTest": "Gog defines the tier baseline for inferno; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_gog_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "inferno.gog_line",
+      "decisionTest": "Magog should be chosen over Amalek when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_gog_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "inferno.gog_line",
+      "decisionTest": "Amalek should be chosen over Magog when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_hell_hound": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "inferno.hell_hound_line",
+      "decisionTest": "Hell Hound defines the tier baseline for inferno; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_hell_hound_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "inferno.hell_hound_line",
+      "decisionTest": "Cerberus should be chosen over Fire Hound when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_hell_hound_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "inferno.hell_hound_line",
+      "decisionTest": "Fire Hound should be chosen over Cerberus when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_demon": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "inferno.demon_line",
+      "decisionTest": "Demon defines the tier baseline for inferno; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_demon_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "inferno.demon_line",
+      "decisionTest": "Horned Demon should be chosen over Gore Demon when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_demon_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "inferno.demon_line",
+      "decisionTest": "Gore Demon should be chosen over Horned Demon when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_pit_fiend": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "inferno.pit_fiend_line",
+      "decisionTest": "Pit Fiend defines the tier baseline for inferno; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_pit_fiend_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "inferno.pit_fiend_line",
+      "decisionTest": "Pit Lord should be chosen over Pit Spawn when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_pit_fiend_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "inferno.pit_fiend_line",
+      "decisionTest": "Pit Spawn should be chosen over Pit Lord when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_efreeti": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "inferno.efreeti_line",
+      "decisionTest": "Efreeti defines the tier baseline for inferno; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_efreeti_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "inferno.efreeti_line",
+      "decisionTest": "Efreet Sultan should be chosen over Efreet Sufi when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_efreeti_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "inferno.efreeti_line",
+      "decisionTest": "Efreet Sufi should be chosen over Efreet Sultan when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_efreeti_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_efreeti_upg_alt_redesign_ability_description",
+          "nameText": "Vengeance",
+          "descriptionText": "Spend 3 Focus to mark an allied stack for 3 rounds; melee attackers take 60 pure damage plus 15 per stack.",
+          "iconKey": "sub_skill_faction_homm3_ability_vengeance",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 3,
+          "cooldown": 3,
+          "rank": 4,
+          "charges": "",
+          "effectKey": "day_14_magic_vengeance:level:2",
+          "effectKind": "spell-effect",
+          "effectLabel": "Vengeance",
+          "effectPayload": {
+            "spellSid": "day_14_magic_vengeance",
+            "spellTier": 4,
+            "spellLevel": 2,
+            "dealerIndex": 1,
+            "duration": 3,
+            "buffSid": "magic_vengeance_effect_0"
+          },
+          "notes": "June 24 source-prepared HoMM3 unit active redesign; generated-Core/runtime proof pending until validators/build/runtime smoke pass.",
+          "spellSid": "day_14_magic_vengeance",
+          "spellTier": 4,
+          "spellLevel": 2,
+          "dealerIndex": 1,
+          "duration": 3,
+          "buffSid": "magic_vengeance_effect_0"
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    },
+    "h3_devil": {
+      "branchRole": "base-line",
+      "sourceMechanicId": "inferno.devil_line",
+      "decisionTest": "Devil defines the tier baseline for inferno; upgrades should create a meaningful standard-versus-alternate decision from this role.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_devil_upg": {
+      "branchRole": "standard-upgrade",
+      "sourceMechanicId": "inferno.devil_line",
+      "decisionTest": "Arch Devil should be chosen over Arch Demon when its standard role is the better answer for the current army, matchup, or build timing.",
+      "abilities": [],
+      "existingSpecials": [],
+      "replaceExistingAbilities": false,
+      "replaceExistingPassives": false
+    },
+    "h3_devil_upg_alt": {
+      "branchRole": "alternate-upgrade",
+      "sourceMechanicId": "inferno.devil_line",
+      "decisionTest": "Arch Demon should be chosen over Arch Devil when its alternate role creates a better army, matchup, or build-timing decision.",
+      "abilities": [],
+      "existingSpecials": [
+        {
+          "key": "abilities:0",
+          "slotKind": "abilities",
+          "index": 0,
+          "enabled": true,
+          "nameKey": "h3_devil_upg_alt_redesign_ability_name",
+          "descriptionKey": "h3_devil_upg_alt_redesign_ability_description",
+          "nameText": "Gate Anchor",
+          "descriptionText": "Spend 2 Focus to shield an allied stack with a 1-hit barrier for 1 round.",
+          "iconKey": "sub_skill_faction_homm3_inferno_gating_barrier",
+          "abilityType": "Ability_type_special",
+          "animationIndex": 2,
+          "turnBehavior": "ends",
+          "energyLevel": 2,
+          "cooldown": 2,
+          "rank": 5,
+          "charges": "",
+          "effectKey": "space_8_magic_carapace:level:1",
+          "effectKind": "spell-effect",
+          "effectLabel": "Gate Anchor",
+          "effectPayload": {
+            "spellSid": "space_8_magic_carapace",
+            "spellTier": 2,
+            "spellLevel": 1,
+            "dealerIndex": 0,
+            "duration": 1,
+            "buffSid": "magic_carapace_effect_0",
+            "buffCharges": 1
+          },
+          "notes": "Identical-kit purge: Arch Demon gate-anchor barrier using native Carapace envelope; Shielded Arrival family presentation.",
+          "spellSid": "space_8_magic_carapace",
+          "spellTier": 2,
+          "spellLevel": 1,
+          "dealerIndex": 0,
+          "duration": 1,
+          "buffSid": "magic_carapace_effect_0",
+          "buffCharges": 1
+        }
+      ],
+      "replaceExistingAbilities": true,
+      "replaceExistingPassives": false
+    }
+  }
+}

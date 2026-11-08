@@ -1,0 +1,54 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_pristine_unicorn",
+ "status": "look",
+ "notes": "rampart rollout: horn sparkle trail ripped from the DEF (defEffects electric + detached twinkles). Idle 'steady electric' in the inventory is the white coat (body paint), not a glow: no bakedGlow.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "horn_sparkle",
+    "type": "defFlipbook",
+    "provenance": "roster inventory rampart: g12 attack_front thrown lightning/bolt (white-blue) - the horn's twinkle trail",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 1
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1
+   }
+  ]
+ }
+}

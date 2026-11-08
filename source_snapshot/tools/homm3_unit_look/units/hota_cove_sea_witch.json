@@ -1,0 +1,318 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "hota_cove_sea_witch",
+ "status": "look",
+ "notes": "cove rollout: held blue orb (committed file mask, every clip) + the shoot charge-up swirl (file mask, f2-5) + the DEF bolt (defEffects electric, f6-7); the defence blue ward is a fitted dynamic light carried by the orb layer, not a flipbook (it is a tint over the whole body). Masks: tools/homm3_unit_look/units/masks/cove_masks.py.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {
+   "gradeWeights": [
+    1.0,
+    0.2,
+    0.2
+   ],
+   "gradeStarts": "wide"
+  },
+  "bakedGlow": [],
+  "notes": "front -y, 2026-09-27 workerD: regenerated mesh (correct identity) made auto front ambiguous (the boots point different ways); the unit faces -y like every DEF-retarget build (precheck idle0 facing yaw 0.0)."
+ },
+ "lights": [
+  {
+   "id": "bolt_flash",
+   "treatment": "dynamic",
+   "notes": "bolt release lights the raised arm"
+  },
+  {
+   "id": "ward_glow",
+   "treatment": "dynamic",
+   "notes": "defence g04 f4-10: the DEF washes the whole body blue"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "orb",
+    "type": "defFlipbook",
+    "def": "CPRIEST.DEF",
+    "provenance": "roster inventory cove: recurring ~5% water event in every group (the held orb); body paint to defEffects (calm-group vote), so a committed file mask (cove_masks.py rule orb)",
+    "clips": {
+     "Unit_Move": {
+      "defGroup": 0,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ]
+     },
+     "Unit_Mouseover": {
+      "defGroup": 1,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10
+      ]
+     },
+     "Unit_Idle": {
+      "defGroup": 2,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     "Unit_Hitted": {
+      "defGroup": 3,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5
+      ]
+     },
+     "Unit_Defence": {
+      "defGroup": 4,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14
+      ]
+     },
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9
+      ]
+     },
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8
+      ]
+     },
+     "Unit_MoveStart": {
+      "defGroup": 20,
+      "frames": [
+       0,
+       1
+      ]
+     },
+     "Unit_MoveEnd": {
+      "defGroup": 21,
+      "frames": [
+       0,
+       1
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/hota_cove_sea_witch/orb"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "ward_glow",
+    "notes": "empty cells on defence f3-11 (the orb is lost in the blue ward tint) and death f5-6 (the orb pops)"
+   },
+   {
+    "id": "charge",
+    "type": "defFlipbook",
+    "def": "CPRIEST.DEF",
+    "provenance": "DEF g15 shoot_front f2-5: pale-blue water swirl over the head and raised hand before the bolt (missed by defEffects: body-paint colours)",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       2,
+       3,
+       4,
+       5
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/hota_cove_sea_witch/charge"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1
+   },
+   {
+    "id": "bolt",
+    "type": "defFlipbook",
+    "def": "CPRIEST.DEF",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       6,
+       7
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric"
+     ],
+     "includeDetached": false,
+     "minComponentPx": 12
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "def_effect_ripper: explicit (g15 frames 6-7; f5 was a speck, now in charge)",
+    "light": "bolt_flash"
+   },
+   {
+    "id": "bolt_flash_light",
+    "type": "effectLight",
+    "lightId": "bolt_flash",
+    "carrier": "bolt",
+    "anchor": {
+     "bone": "RightHand",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.75,
+     0.85,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_ShootFront": [
+      0.0,
+      0.0,
+      0.075,
+      0.118,
+      0.185,
+      0.178,
+      0.0,
+      0.0,
+      0.004
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "ward_light",
+    "type": "effectLight",
+    "lightId": "ward_glow",
+    "carrier": "orb",
+    "anchor": {
+     "bone": "Spine1",
+     "towardLayerCentroid": 0.0,
+     "towardCameraU": 0.4
+    },
+    "rgb": [
+     0.35,
+     0.55,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_Defence": [
+      0.0,
+      0.0,
+      0.0,
+      0.066,
+      0.022,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.073,
+      0.097,
+      0.0,
+      0.0,
+      0.026
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

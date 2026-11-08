@@ -1,0 +1,274 @@
+{
+ "unit": "hota_factory_halfling_grenadier",
+ "joints": {
+  "Hips": [
+   0.024,
+   0.003,
+   0.7
+  ],
+  "Spine": [
+   0.026,
+   -0.016,
+   0.805
+  ],
+  "Spine1": [
+   0.028,
+   -0.035,
+   0.91
+  ],
+  "Spine2": [
+   0.03,
+   -0.056,
+   1.027
+  ],
+  "Neck": [
+   0.031,
+   -0.073,
+   1.119
+  ],
+  "Head": [
+   0.024,
+   -0.031,
+   1.322
+  ],
+  "HeadTop_End": [
+   0.01,
+   -0.15,
+   1.768
+  ],
+  "LeftShoulder": [
+   0.052,
+   -0.059,
+   1.252
+  ],
+  "LeftArm": [
+   0.269,
+   -0.003,
+   1.168
+  ],
+  "LeftForeArm": [
+   0.373,
+   -0.024,
+   0.98
+  ],
+  "LeftHand": [
+   0.429,
+   -0.171,
+   0.805
+  ],
+  "LeftHand_End": [
+   0.451,
+   -0.227,
+   0.738
+  ],
+  "RightShoulder": [
+   -0.003,
+   -0.059,
+   1.252
+  ],
+  "RightArm": [
+   -0.213,
+   0.045,
+   1.168
+  ],
+  "RightForeArm": [
+   -0.283,
+   0.136,
+   0.994
+  ],
+  "RightHand": [
+   -0.36,
+   0.164,
+   0.77
+  ],
+  "RightHand_End": [
+   -0.389,
+   0.175,
+   0.686
+  ],
+  "LeftUpLeg": [
+   0.164,
+   0.003,
+   0.721
+  ],
+  "LeftLeg": [
+   0.22,
+   -0.101,
+   0.414
+  ],
+  "LeftFoot": [
+   0.248,
+   0.01,
+   0.03
+  ],
+  "LeftToeBase": [
+   0.283,
+   -0.192,
+   0.002
+  ],
+  "LeftToe_End": [
+   0.297,
+   -0.29,
+   -0.04
+  ],
+  "RightUpLeg": [
+   -0.115,
+   0.003,
+   0.721
+  ],
+  "RightLeg": [
+   -0.192,
+   -0.024,
+   0.414
+  ],
+  "RightFoot": [
+   -0.213,
+   0.101,
+   0.03
+  ],
+  "RightToeBase": [
+   -0.241,
+   -0.108,
+   0.002
+  ],
+  "RightToe_End": [
+   -0.241,
+   -0.22,
+   -0.026
+  ]
+ },
+ "props": [
+  {
+   "name": "sling",
+   "bone": "RightHand",
+   "box": [
+    [
+     -0.47,
+     -0.1,
+     0.08
+    ],
+    [
+     -0.262,
+     0.32,
+     0.78
+    ]
+   ]
+  },
+  {
+   "name": "bag",
+   "bone": "Hips",
+   "box": [
+    [
+     0.25,
+     -0.3,
+     0.49
+    ],
+    [
+     0.47,
+     0.22,
+     0.77
+    ]
+   ],
+   "exclude": [
+    {
+     "sphere": [
+      [
+       0.45,
+       -0.23,
+       0.75
+      ],
+      0.075
+     ]
+    }
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.12
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.9,
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.9,
+   "keepDist": 0.12
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "strideMatch": {
+  "maxDrop": 0.3,
+  "reason": "short-reach walker (legs near straight at the source Move): default 0.15: slip 0.437 ratio 1.62; 0.25: ratio 1.287; 0.30: slip 0.283 ratio 1.088 (workerB scratch trials 2026-09-27)"
+ },
+ "glbPatch": {
+  "reason": "Move-pose fix for the ground stage (no animation change by eye): the source Move's Hips sit 0.086 H below Idle's, past the ground gate's first-frame Hips allowance (0.0699 H); the ground rule then lifted the whole Move loop +0.016 H and floated the stride-planted soles in the float phase (keys 18-24), refusing every rebuild (runs 485/487/640). Raising the Move Hips 0.03 (0.018 H) brings the first frame inside the allowance, so no entry lift is needed",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_halfling_grenadier_move_hips_tr.json",
+    "sha256": "20b1b35e68a434ac94363e32cedb3a825a854f2819dae37161c6a21dd12daef9",
+    "regrid": false
+   }
+  ]
+ }
+}

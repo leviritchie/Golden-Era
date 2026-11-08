@@ -1,0 +1,213 @@
+{
+ "unit": "hota_cove_seaman",
+ "joints": {
+  "Hips": [
+   0.049,
+   0.196,
+   0.893
+  ],
+  "Spine": [
+   0.049,
+   0.184,
+   0.975
+  ],
+  "Spine1": [
+   0.049,
+   0.173,
+   1.056
+  ],
+  "Spine2": [
+   0.049,
+   0.16,
+   1.147
+  ],
+  "Neck": [
+   0.049,
+   0.149,
+   1.219
+  ],
+  "Head": [
+   0.043,
+   0.156,
+   1.418
+  ],
+  "HeadTop_End": [
+   0.036,
+   0.056,
+   1.677
+  ],
+  "LeftShoulder": [
+   0.129,
+   0.129,
+   1.365
+  ],
+  "LeftArm": [
+   0.249,
+   0.169,
+   1.298
+  ],
+  "LeftForeArm": [
+   0.348,
+   0.202,
+   1.086
+  ],
+  "LeftHand": [
+   0.388,
+   0.09,
+   0.86
+  ],
+  "LeftHand_End": [
+   0.402,
+   0.05,
+   0.78
+  ],
+  "RightShoulder": [
+   -0.05,
+   0.149,
+   1.365
+  ],
+  "RightArm": [
+   -0.163,
+   0.242,
+   1.298
+  ],
+  "RightForeArm": [
+   -0.263,
+   0.309,
+   1.099
+  ],
+  "RightHand": [
+   -0.349,
+   0.156,
+   0.887
+  ],
+  "RightHand_End": [
+   -0.377,
+   0.106,
+   0.817
+  ],
+  "LeftUpLeg": [
+   0.142,
+   0.196,
+   0.893
+  ],
+  "LeftLeg": [
+   0.202,
+   0.043,
+   0.521
+  ],
+  "LeftFoot": [
+   0.315,
+   0.156,
+   0.129
+  ],
+  "LeftToeBase": [
+   0.362,
+   0.043,
+   0.023
+  ],
+  "LeftToe_End": [
+   0.415,
+   -0.05,
+   0.023
+  ],
+  "RightUpLeg": [
+   -0.05,
+   0.196,
+   0.893
+  ],
+  "RightLeg": [
+   -0.13,
+   0.163,
+   0.508
+  ],
+  "RightFoot": [
+   -0.176,
+   0.395,
+   0.143
+  ],
+  "RightToeBase": [
+   -0.249,
+   0.302,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.329,
+   0.209,
+   0.043
+  ]
+ },
+ "props": [
+  {
+   "name": "cutlass",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.39,
+      -0.06,
+      0.92
+     ],
+     [
+      -0.4,
+      -0.21,
+      1.07
+     ]
+    ],
+    [
+     [
+      -0.4,
+      -0.21,
+      1.07
+     ],
+     [
+      -0.415,
+      -0.34,
+      1.225
+     ]
+    ],
+    [
+     [
+      -0.415,
+      -0.34,
+      1.225
+     ],
+     [
+      -0.43,
+      -0.47,
+      1.44
+     ]
+    ]
+   ],
+   "radius": 0.045
+  },
+  {
+   "name": "guard",
+   "bone": "RightHand",
+   "sphere": [
+    [
+     -0.36,
+     0.08,
+     0.83
+    ],
+    0.09
+   ]
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ],
+  "propAimDepth": "imagePlane",
+  "propAimRange": 60,
+  "propAimReason": "2026-10-01 first build with the free propAim tilt: the capture's hand pose points the cutlass straight at the sprite camera (side view: blade horizontal forward), so Idle/Move/Mouseover show a foreshortened stub while the DEF draws the blade at full length raised across the body. imagePlane lays it into the image plane and fits only the on-screen swing, within 60 deg of the capture's hand pose. The plain lock runs the blade through the torso in Idle (the hand rests at the hip in the body plane; only the tip showed past the shoulder in the 768 px review), so propAimTilt 35 tips it toward the camera, in front of the body as the DEF draws it.",
+  "propAimTilt": 35
+ },
+ "configReason": "2026-10-01 first onboarding on the Meshy-retextured mesh (01a0f860, commit 7e110ee3d3) with its own real capture (crew mate clip layout). Joints = auto_joints seed off the smartrig skeleton, checked on a front/side overlay. Cutlass = 3 rigid RightHand segments fitted to the blade vertex slices plus the basket-guard sphere, as swashbuckler/crew mate."
+}

@@ -1,0 +1,251 @@
+{
+ "unit": "h3_glaivier",
+ "joints": {
+  "Hips": [
+   0.003,
+   0.038,
+   0.512
+  ],
+  "Spine": [
+   0.003,
+   0.049,
+   0.643
+  ],
+  "Spine1": [
+   0.003,
+   0.059,
+   0.774
+  ],
+  "Spine2": [
+   0.003,
+   0.071,
+   0.92
+  ],
+  "Neck": [
+   0.0,
+   0.07,
+   0.98
+  ],
+  "Head": [
+   0.0,
+   0.06,
+   1.05
+  ],
+  "HeadTop_End": [
+   0.0,
+   0.06,
+   1.26
+  ],
+  "LeftShoulder": [
+   0.05,
+   0.07,
+   0.93
+  ],
+  "LeftArm": [
+   0.15,
+   0.06,
+   0.92
+  ],
+  "LeftForeArm": [
+   0.2,
+   0.0,
+   0.78
+  ],
+  "LeftHand": [
+   0.1,
+   -0.09,
+   0.98
+  ],
+  "LeftHand_End": [
+   0.08,
+   -0.12,
+   1.04
+  ],
+  "RightShoulder": [
+   -0.031,
+   0.066,
+   0.924
+  ],
+  "RightArm": [
+   -0.15,
+   0.08,
+   0.917
+  ],
+  "RightForeArm": [
+   -0.192,
+   0.052,
+   0.721
+  ],
+  "RightHand": [
+   -0.122,
+   -0.101,
+   0.665
+  ],
+  "RightHand_End": [
+   -0.087,
+   -0.179,
+   0.637
+  ],
+  "LeftUpLeg": [
+   0.087,
+   0.038,
+   0.512
+  ],
+  "LeftLeg": [
+   0.122,
+   0.024,
+   0.274
+  ],
+  "LeftFoot": [
+   0.143,
+   0.066,
+   0.064
+  ],
+  "LeftToeBase": [
+   0.143,
+   -0.052,
+   -0.019
+  ],
+  "LeftToe_End": [
+   0.143,
+   -0.136,
+   0.008
+  ],
+  "RightUpLeg": [
+   -0.08,
+   0.038,
+   0.512
+  ],
+  "RightLeg": [
+   -0.115,
+   0.024,
+   0.274
+  ],
+  "RightFoot": [
+   -0.136,
+   0.066,
+   0.064
+  ],
+  "RightToeBase": [
+   -0.136,
+   -0.052,
+   -0.019
+  ],
+  "RightToe_End": [
+   -0.136,
+   -0.122,
+   0.022
+  ]
+ },
+ "props": [
+  {
+   "name": "shaft",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.25,
+      -0.11,
+      0.04
+     ],
+     [
+      0.245,
+      -0.103,
+      1.71
+     ]
+    ]
+   ],
+   "radius": 0.04
+  },
+  {
+   "name": "blade",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      0.15,
+      -0.19,
+      1.15
+     ],
+     [
+      0.25,
+      -0.21,
+      1.56
+     ]
+    ]
+   ],
+   "radius": 0.12,
+   "exclude": [
+    {
+     "sphere": [
+      [
+       0.09,
+       -0.08,
+       1.02
+      ],
+      0.08
+     ]
+    }
+   ]
+  },
+  {
+   "name": "backshield",
+   "bone": "Spine1",
+   "box": [
+    [
+     -0.26,
+     0.135,
+     0.45
+    ],
+    [
+     0.26,
+     0.26,
+     1.0
+    ]
+   ]
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "castle_handcut",
+  "castle_refine"
+ ],
+ "castleRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ],
+  "aimRange": 120,
+  "aimFromRest": true,
+  "aimSlide": 0.2
+ },
+ "castleHandCut": {
+  "sides": [
+   "Right",
+   "Left"
+  ],
+  "handRadius": 0.1,
+  "foreRadius": 0.07
+ },
+ "glbPatch": {
+  "reason": "authenticity pass (lane B): Hitted re-authored by motion intent against the DEF. The blow drives him down into a flinch: knees buckle, chest curls and the head ducks at f1-f2, knocked half a step back, and he recovers upright by f4-f5 (the base barely moved). The right knee is held to a half bend, with the right leg stepping back, because a full bend tears the hard back-of-knee crease; tear gate over master targets 734 -> 734, worst edge unchanged (8.243).",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_glaivier_pose_rot.json",
+    "sha256": "a42aa5796cc4cec12ed05996d6e3a2d27756970bc8990f589c9f5cc08545322d",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_glaivier_pose_tr.json",
+    "sha256": "21eb5d70b15c6fe503e97c266f56b3106d6756937ecbb37ce4f2f9be55e0c20b",
+    "regrid": true
+   }
+  ]
+ }
+}

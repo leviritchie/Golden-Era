@@ -1,0 +1,181 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_colossus",
+ "status": "look",
+ "notes": "tower rollout: lightning sword arcs ripped from the DEF (committed file masks). The orange crest 'fire' in the roster is the plume's own paint seen at new angles, not an effect",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "bolt_flash",
+   "treatment": "dynamic",
+   "notes": "sword lightning on the strike"
+  },
+  {
+   "id": "shoot_flash",
+   "treatment": "dynamic",
+   "notes": "sword lightning on the shot"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "strike_arc",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_colossus/strike_arc"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "bolt_flash",
+    "provenance": "roster g12 attack_front sword lightning f1-6; tower_fx_masks.colossus_lightning (warm pink-white arc; the Titan's blue-leaning rule finds 18-38 px)"
+   },
+   {
+    "id": "bolt_flash_light",
+    "type": "effectLight",
+    "lightId": "bolt_flash",
+    "carrier": "strike_arc",
+    "anchor": {
+     "bone": "RightHand",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.9,
+     0.86
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.092,
+      1.009,
+      0.059,
+      0.0,
+      0.117,
+      0.041
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "defence_arc",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_Defence": {
+      "defGroup": 4,
+      "frames": [
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_colossus/defence_arc"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "roster g04 defence crackle f2-6; tower_fx_masks.colossus_lightning"
+   },
+   {
+    "id": "shoot_arc",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_colossus/shoot_arc"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "shoot_flash",
+    "provenance": "roster g15 shoot_front sword crackle f1-6; tower_fx_masks.colossus_lightning"
+   },
+   {
+    "id": "shoot_flash_light",
+    "type": "effectLight",
+    "lightId": "shoot_flash",
+    "carrier": "shoot_arc",
+    "anchor": {
+     "bone": "RightHand",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.9,
+     0.86
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_ShootFront": [
+      0.0,
+      0.242,
+      0.217,
+      0.077,
+      0.045,
+      0.058,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

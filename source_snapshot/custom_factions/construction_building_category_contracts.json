@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "status": "source-authored-construction-building-category-contracts",
+  "purpose": "Auditable static building category contracts for no-compromise custom construction laws.",
+  "validationState": "Static/source-authored only. Contracts are joined to exact custom_factions/source_mechanics currentRows; they are not runtime proof that a BuildingData payload reaches a construction hook with the same SID.",
+  "rules": [
+    "Every concrete row mapping must reference an exact source_mechanics id and one of that mechanic's exact currentRows.",
+    "Every profile eligible group token must either have at least one concrete row mapping or an explicit missingGroups explanation.",
+    "Do not infer categories from donor city identity, display text, icon art, scene object names, or broad faction assumptions.",
+    "No building category fact may feed promoted gameplay until construction commit ordering, charged/displayed cost parity, city owner resolution, and packet gameplayAllowed are proven."
+  ],
+  "contracts": {
+    "homm3_conflux": {
+      "profileEligibleGroup": "elemental-building",
+      "groups": {
+        "elemental-building": [
+          {
+            "sourceMechanicId": "conflux.garden_of_life",
+            "currentRow": "Build_Mother_Nature",
+            "evidence": "Exact Conflux source mechanic for Garden of Life."
+          },
+          {
+            "sourceMechanicId": "conflux.vault_of_ashes",
+            "currentRow": "Build_Resource_Depot_level_2",
+            "evidence": "Exact Conflux source mechanic for Vault of Ashes."
+          },
+          {
+            "sourceMechanicId": "conflux.elemental_conflux",
+            "currentRow": "Build_Mycelium_Roots",
+            "evidence": "Exact Conflux source mechanic for Elemental Conflux."
+          }
+        ]
+      },
+      "missingGroups": {}
+    },
+    "homm3_cove": {
+      "profileEligibleGroup": "market,tavern,cannon,pirate-infrastructure",
+      "groups": {
+        "market": [
+          {
+            "sourceMechanicId": "cove.shipyard",
+            "currentRow": "Build_Artifact_Market",
+            "evidence": "Current Cove Shipyard substitute row is a proven exact currentRows contract, though ship/water behavior remains forbidden."
+          }
+        ],
+        "tavern": [
+          {
+            "sourceMechanicId": "cove.pub",
+            "currentRow": "Build_Resource_Depot_level_2",
+            "evidence": "Exact Cove Pub currentRows contract."
+          }
+        ],
+        "pirate-infrastructure": [
+          {
+            "sourceMechanicId": "cove.gunpowder_warehouse",
+            "currentRow": "Build_Treasury",
+            "evidence": "Current Cove Gunpowder Warehouse substitute row is the exact pirate/gunpowder infrastructure contract."
+          }
+        ]
+      },
+      "missingGroups": {
+        "cannon": "No exact Cannon-yard building row is currently present in source_mechanics/currentRows."
+      }
+    },
+    "homm3_dungeon": {
+      "profileEligibleGroup": "dungeon-dwelling-build-or-upgrade",
+      "groups": {
+        "dungeon-dwelling-build-or-upgrade": []
+      },
+      "missingGroups": {
+        "dungeon-dwelling-build-or-upgrade": "Current source_mechanics documents special buildings only; dwelling build/upgrade row classification needs generated Core row evidence."
+      }
+    },
+    "homm3_fortress": {
+      "profileEligibleGroup": "fortification,defensive-support",
+      "groups": {
+        "fortification": [
+          {
+            "sourceMechanicId": "fortress.cage_of_warlords",
+            "currentRow": "Build_Bank",
+            "evidence": "Fortress Cage of Warlords is the exact defensive stat-support source mechanic."
+          },
+          {
+            "sourceMechanicId": "fortress.hydra_marsh",
+            "currentRow": "Build_Mycelium_Roots",
+            "evidence": "Fortress Hydra Marsh is the exact defensive marsh/support source mechanic."
+          }
+        ],
+        "defensive-support": [
+          {
+            "sourceMechanicId": "fortress.field_infirmary",
+            "currentRow": "Build_Treasury",
+            "evidence": "Fortress Field Infirmary is the exact support source mechanic."
+          },
+          {
+            "sourceMechanicId": "fortress.glyphs_of_fear",
+            "currentRow": "Build_Mother_Nature",
+            "evidence": "Fortress Glyphs of Fear is the exact defensive pressure source mechanic."
+          },
+          {
+            "sourceMechanicId": "fortress.captains_quarters",
+            "currentRow": "Build_Resource_Depot_level_2",
+            "evidence": "Fortress Captain's Quarters is the exact command/support source mechanic."
+          }
+        ]
+      },
+      "missingGroups": {}
+    },
+    "homm3_necropolis": {
+      "profileEligibleGroup": "dwelling,converter",
+      "groups": {
+        "dwelling": [
+          {
+            "sourceMechanicId": "necropolis.unearthed_graves",
+            "currentRow": "Build_Resource_Depot_level_2",
+            "evidence": "Necropolis Unearthed Graves is the exact skeleton growth/deathworks source mechanic."
+          }
+        ],
+        "converter": [
+          {
+            "sourceMechanicId": "necropolis.skeleton_converter",
+            "currentRow": "Build_Skeleton_Converter",
+            "evidence": "Necropolis Skeleton Converter is the exact converter source mechanic."
+          }
+        ]
+      },
+      "missingGroups": {}
+    },
+    "homm3_rampart": {
+      "profileEligibleGroup": "matured-dwelling-upgrade",
+      "groups": {
+        "matured-dwelling-upgrade": [
+          {
+            "sourceMechanicId": "rampart.dendroid_saplings",
+            "currentRow": "Build_Mycelium_Roots",
+            "evidence": "Rampart Dendroid Saplings is the exact living/dwelling growth source mechanic."
+          }
+        ]
+      },
+      "missingGroups": {}
+    },
+    "homm3_stronghold": {
+      "profileEligibleGroup": "military",
+      "groups": {
+        "military": [
+          {
+            "sourceMechanicId": "stronghold.hall_of_valhalla",
+            "currentRow": "Build_Gymnasium",
+            "evidence": "Stronghold Hall of Valhalla is the exact military stat source mechanic."
+          },
+          {
+            "sourceMechanicId": "stronghold.mess_hall",
+            "currentRow": "Build_Lyceum",
+            "evidence": "Stronghold Mess Hall is the exact army support source mechanic."
+          },
+          {
+            "sourceMechanicId": "stronghold.freelancers_guild",
+            "currentRow": "Build_Bank",
+            "evidence": "Stronghold Freelancer's Guild is the exact mercenary/military economy source mechanic."
+          }
+        ]
+      },
+      "missingGroups": {}
+    },
+    "homm3_tower": {
+      "profileEligibleGroup": "magical,construct",
+      "groups": {
+        "magical": [
+          {
+            "sourceMechanicId": "tower.library",
+            "currentRow": "Build_Intelligence_Academy",
+            "evidence": "Tower Library is the exact magical spell-support source mechanic."
+          },
+          {
+            "sourceMechanicId": "tower.skyship_beacon",
+            "currentRow": "Build_Golden_Calf",
+            "evidence": "Tower Skyship Beacon is the exact magical/unique support source mechanic."
+          }
+        ],
+        "construct": [
+          {
+            "sourceMechanicId": "tower.sculptors_wings",
+            "currentRow": "Build_Resource_Depot_level_2",
+            "evidence": "Tower Sculptor's Wings is the exact construct growth source mechanic."
+          },
+          {
+            "sourceMechanicId": "tower.workshop_yard",
+            "currentRow": "Build_Training_Range",
+            "evidence": "Tower Workshop Yard is the exact workshop/construct support source mechanic."
+          }
+        ]
+      },
+      "missingGroups": {}
+    }
+  }
+}

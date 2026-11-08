@@ -1,0 +1,187 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_air_elemental",
+ "status": "look",
+ "notes": "conflux rollout: air elemental. The attack's branching bolt is cut from the DEF with a committed thin-structure file mask (masks/conflux_fx_masks.py), because the bolt is drawn in the body's own white-cyan and defEffects keeps only specks of it. The bolt's root at the DEF fist (pixel [240, 184], taken from the frame where the trunk is drawn) is pinned to the mesh LeftHand on every key (explicit defOrigin), so the bolt leaves the mesh's hand although the mesh does not lunge like the DEF; the shoot bolts (if any) keep the DEF placement (explicit defOrigin = projected Spine2). rows [-60,60] drops the tornado-base streaks that the f4-5 mask links to the bolt. Mode v6m (try-modes: fx 3.71 vs v7c 4.08; v7c washes the head white, v6m keeps the DEF cyan; v6m gamma bound hits at 0.4 = wants brighter, flagged).",
+ "lighting": {
+  "mode": "v6m",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "bolt_flash",
+   "treatment": "dynamic",
+   "notes": "the thrown bolt lights the arms and chest"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "element_flow",
+    "type": "uvAtlas",
+    "provenance": "element_flow_scores.py mode vortex: 6 cells per 6-frame cycle, in phase with the retarget's element_motion keys; brightness-modulated look texture",
+    "modulate": {
+     "gain": 0.45
+    },
+    "clips": {
+     "Unit_Idle": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_MoveStart": [
+      0
+     ],
+     "Unit_Move": [
+      0,
+      1,
+      3,
+      4
+     ],
+     "Unit_MoveEnd": [
+      0
+     ],
+     "Unit_Mouseover": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_Hitted": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      0
+     ],
+     "Unit_Defence": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "Unit_AttackFront": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      0
+     ],
+     "Unit_Death": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    "source": {
+     "scores": "artifacts/homm3_vfx_experiments/element_flow/h3_air_elemental_scores.npz",
+     "generator": "tools/homm3_vfx/element_flow_scores.py"
+    },
+    "gutterPx": 16
+   },
+   {
+    "id": "attack_bolt",
+    "type": "defFlipbook",
+    "provenance": "roster inventory conflux: g12 attack_front lightning/bolt (white-blue) f2-6; cut by thin-structure mask",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       3,
+       4,
+       5
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_air_elemental/attack_bolt",
+     "rows": [
+      -60,
+      60
+     ]
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": {
+      "Unit_AttackFront": [
+       [
+        240,
+        184
+       ],
+       [
+        240,
+        184
+       ],
+       [
+        240,
+        184
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "bolt_flash"
+   },
+   {
+    "id": "bolt_flash_light",
+    "type": "effectLight",
+    "lightId": "bolt_flash",
+    "carrier": "attack_bolt",
+    "anchor": {
+     "bone": "LeftHand",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.8,
+     0.92,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.068,
+      0.152,
+      0.171,
+      0.053,
+      0.002,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

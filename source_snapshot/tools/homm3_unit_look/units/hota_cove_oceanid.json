@@ -1,0 +1,376 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "hota_cove_oceanid",
+ "status": "look",
+ "notes": "Oceanid (HotA Cove). Ported from tools/homm3_vfx/oceanid_look_lab.py (lab v2, docs/homm3_vfx_experiments.md 'Oceanid flowing water'). Water = two defPalette regions (column, foam: UV masks rasterised by the lab from the Tail_* skin + the foam-flare rule, committed next to the spec) rank-mapped onto the DEF's own water colours; the rest (body) keeps v7c fitted on the body only. The flow atlas is graded by the runner from the lab's un-lit scores.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": [],
+  "notes": "front -y checked on the prebake sprite views (upright units refuse auto). Lab region fit for comparison (look_meta.json): body grade [0.8131, 0.5182, 0.7762, 1.1839, 0.9069, 0.0241]; water s 1.096, sky alpha 0.035, palette gamma 0.873.",
+  "defSegmenter": {
+   "module": "tools/homm3_vfx/oceanid_water_motion.py",
+   "function": "segment"
+  },
+  "regions": [
+   {
+    "name": "column",
+    "mask": {
+     "maskPath": "tools/homm3_unit_look/units/masks/hota_cove_oceanid/regions/column.png"
+    },
+    "target": "defPalette",
+    "defRegion": "column",
+    "knobs": {
+     "skyCompensation": true
+    }
+   },
+   {
+    "name": "foam",
+    "mask": {
+     "maskPath": "tools/homm3_unit_look/units/masks/hota_cove_oceanid/regions/foam.png"
+    },
+    "target": "defPalette",
+    "defRegion": "foam",
+    "knobs": {
+     "skyCompensation": true
+    }
+   }
+  ]
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "water_flow",
+    "type": "uvAtlas",
+    "provenance": "oceanid_corkscrew_scores.py: 8 cells, the column pattern (helical ridges with the whirl's handedness, broad sheets, a static mesh-curvature term, a small boil share, crest-locked highlights) rotates CCW about the column axis 15 deg per 12 fps frame (3 angular repeats, 360/3 per 8-frame loop), matching the retarget's cove_corkscrew whirl; foam turns with it (whirlpool) with a larger boil share. Supersedes lab F2 (straight-down scroll).",
+    "clips": {
+     "Unit_Idle": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "Unit_Mouseover": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2
+     ],
+     "Unit_MoveStart": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "Unit_MoveEnd": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "Unit_Hitted": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_Defence": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0,
+      1
+     ],
+     "Unit_AttackFront": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ],
+     "Unit_Death": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      0
+     ]
+    },
+    "notes": "Cells advance monotonically in every clip: the DEF's Mouseover/Defence frames ping-pong, which would run the water backwards. Clip transitions pop the phase (no cross-clip continuity in per-clip curves).",
+    "regions": [
+     "column",
+     "foam"
+    ],
+    "source": {
+     "scores": "artifacts/homm3_vfx_experiments/oceanid/look/corkscrew_scores.npz",
+     "generator": "tools/homm3_vfx/oceanid_corkscrew_scores.py"
+    },
+    "gutterPx": 32
+   },
+   {
+    "id": "hit_spray",
+    "type": "defFlipbook",
+    "provenance": "DEF group 03 frames 2-3: spray thrown left on being hit",
+    "clips": {
+     "Unit_Hitted": {
+      "defGroup": 3,
+      "frames": [
+       2,
+       3
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "water"
+     ],
+     "includeDetached": true
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Root",
+     "point": "head",
+     "defOrigin": [
+      193.79,
+      266.47
+     ]
+    },
+    "texelsPerDefPx": 1,
+    "notes": "defOrigin = the Root pixel (SpriteCam origin), so the DEF placement is kept exactly; 'auto' would pin the thrown/detached pixels' body contact onto the ground origin."
+   },
+   {
+    "id": "attack_blob",
+    "type": "defFlipbook",
+    "provenance": "DEF group 12 frames 4-6: water blob thrown right",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "water"
+     ],
+     "includeDetached": true
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Root",
+     "point": "head",
+     "defOrigin": [
+      193.79,
+      266.47
+     ]
+    },
+    "texelsPerDefPx": 1,
+    "notes": "defOrigin = the Root pixel (SpriteCam origin), so the DEF placement is kept exactly; 'auto' would pin the thrown/detached pixels' body contact onto the ground origin."
+   },
+   {
+    "id": "death_spray",
+    "type": "defFlipbook",
+    "provenance": "DEF group 05 frames 1-3: spray as the column collapses",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       1,
+       2,
+       3
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "water"
+     ],
+     "includeDetached": true
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Root",
+     "point": "head",
+     "defOrigin": [
+      193.79,
+      266.47
+     ]
+    },
+    "texelsPerDefPx": 1,
+    "notes": "defOrigin = the Root pixel (SpriteCam origin), so the DEF placement is kept exactly; 'auto' would pin the thrown/detached pixels' body contact onto the ground origin."
+   },
+   {
+    "id": "death_puddle",
+    "type": "defFlipbook",
+    "provenance": "DEF group 05: the puddle the column collapses into (ground band -16..+14 px around the Root pixel, outside the mesh silhouette, not gold)",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "lumaSparse",
+     "minLuma": 0,
+     "blueOverRed": 0,
+     "rows": [
+      -16,
+      14
+     ]
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Root",
+     "point": "head",
+     "defOrigin": [
+      193.79,
+      266.47
+     ]
+    },
+    "texelsPerDefPx": 1,
+    "notes": "ground band [-16, 14) DEF px around the Root pixel, opaque, blue-leaning (drops the gold), outside the mesh silhouette; replaces the lab's committed file masks.",
+    "render": "groundPlane"
+   },
+   {
+    "id": "move_puddle",
+    "type": "defFlipbook",
+    "provenance": "DEF groups 20/21: sink into a puddle on MoveStart and rise out of it on MoveEnd",
+    "clips": {
+     "Unit_MoveStart": {
+      "defGroup": 20,
+      "frames": [
+       0,
+       1,
+       2,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12
+      ]
+     },
+     "Unit_MoveEnd": {
+      "defGroup": 21,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "lumaSparse",
+     "minLuma": 0,
+     "blueOverRed": 0,
+     "rows": [
+      -16,
+      14
+     ]
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Root",
+     "point": "head",
+     "defOrigin": [
+      193.79,
+      266.47
+     ]
+    },
+    "texelsPerDefPx": 1,
+    "notes": "ground band [-16, 14) DEF px around the Root pixel, opaque, blue-leaning (drops the gold), outside the mesh silhouette; replaces the lab's committed file masks.",
+    "render": "groundPlane"
+   }
+  ]
+ }
+}

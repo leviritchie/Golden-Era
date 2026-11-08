@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://olden-era.local/schemas/proof_ledger_entry.schema.json",
+  "title": "OldenCsRecoveryProofLedgerEntry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "method_id",
+    "status",
+    "updated_at",
+    "evidence_refs"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "method_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "static-lifted",
+        "renamed-proposed",
+        "renamed-accepted",
+        "identity-bridged",
+        "oracle-captured",
+        "equivalence-proven",
+        "blocked"
+      ]
+    },
+    "previous_status": {
+      "type": ["string", "null"]
+    },
+    "blocked_reason": {
+      "type": ["string", "null"]
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "path"],
+        "properties": {
+          "kind": { "type": "string" },
+          "path": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

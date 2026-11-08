@@ -1,0 +1,224 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "Dragon Slayer continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub slayer; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_11_ab_tower_slayer",
+    "campaignTitle": "Dragon Slayer",
+    "campaignEntry": "slayer.h3c",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "missionConfigPrefix": "homm3_ab_tower",
+    "defaultSpawn": {
+      "factionSid": "homm3_tower",
+      "heroSid": "homm3_tower_hero_17"
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart).",
+    "regionPixels": {
+      "rust_dragons": [
+        80.0,
+        220.0
+      ],
+      "faerie_dragons": [
+        320.0,
+        220.0
+      ],
+      "azure_dragons": [
+        560.0,
+        220.0
+      ],
+      "crystal_dragons": [
+        800.0,
+        220.0
+      ]
+    },
+    "missionSpawns": {
+      "crystal_dragons": {
+        "heroSid": "homm3_tower_hero_17",
+        "factionSid": "homm3_tower"
+      },
+      "rust_dragons": {
+        "heroSid": "homm3_tower_hero_17",
+        "factionSid": "homm3_tower"
+      },
+      "faerie_dragons": {
+        "heroSid": "homm3_tower_hero_17",
+        "factionSid": "homm3_tower"
+      },
+      "azure_dragons": {
+        "heroSid": "homm3_tower_hero_17",
+        "factionSid": "homm3_tower"
+      }
+    }
+  },
+  "storyHubMapSidOverrides": {
+    "rust_dragons": "h3_tower_rust_dragons_raw_translation",
+    "faerie_dragons": "h3_tower_faerie_dragons_raw_translation",
+    "azure_dragons": "h3_tower_azure_dragons_raw_translation",
+    "crystal_dragons": "h3_tower_crystal_dragons_raw_translation",
+    "choiceReason": "Dragon Slayer missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "crystal_dragons",
+      "toMissionId": "rust_dragons",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 8,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=8 for crystal_dragons (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_tower_crystal_dragons_raw_translation",
+        "to": "h3_tower_rust_dragons_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "rust_dragons",
+      "toMissionId": "faerie_dragons",
+      "sourceBlockIndex": 2,
+      "nextBlockIndex": 3,
+      "levelCap": 24,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=24 for rust_dragons (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_tower_rust_dragons_raw_translation",
+        "to": "h3_tower_faerie_dragons_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "faerie_dragons",
+      "toMissionId": "azure_dragons",
+      "sourceBlockIndex": 3,
+      "nextBlockIndex": 4,
+      "levelCap": 24,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=24 for faerie_dragons (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_tower_faerie_dragons_raw_translation",
+        "to": "h3_tower_azure_dragons_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "crystal_dragons",
+    "rust_dragons",
+    "faerie_dragons",
+    "azure_dragons"
+  ],
+  "missionTitles": {
+    "rust_dragons": "Rust Dragons",
+    "faerie_dragons": "Faerie Dragons",
+    "azure_dragons": "Azure Dragons",
+    "crystal_dragons": "Crystal Dragons"
+  },
+  "missionDescriptions": {
+    "rust_dragons": "Rust dragons have invaded the area, halting mine production. Flag all of the mines within six months, but do not lose the Dragon Slayer or your cause will be lost. Draco...",
+    "faerie_dragons": "You have six months to find and defeat the Faerie Dragons to cleanse this territory. If Dracon dies, the quest is over. Dracon, his skills, spells and Experience up to l...",
+    "azure_dragons": "Defeat the great Azure Dragons within six months for eternal fame. Once you have slain this ancient beast you will have proven yourself to be a Dragon Slayer extraordina...",
+    "crystal_dragons": "To pass the test you must kill the Crystal Dragon. Fail to kill the dragon within two months and you will not become a Dragon Slayer. Dracon, his skills, spells, experie..."
+  },
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Dedicated AB/SoD MapImage bake",
+    "Town growth / negative resource timed-event fidelity"
+  ],
+  "videoContract": {
+    "status": "mission_clips_wired_hub_still_only",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": null,
+    "hubFirstShowOmitReason": "RoE parity: hub hover strip is selection-still only; mission pins PlayVideo when composed MP4 meets contract.",
+    "requireComposedAudio": true,
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "requiredMp4RelativeToStreamingAssets": null,
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_11_ab_tower_slayer/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "stillArtifact": "artifacts/campaign_port_poc/ab_sod_campaigns/storyhub_visual/slayer_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.68,
+      "focusY": 0.45,
+      "cropReason": "Crystal dragon head and talons on the snow mound",
+      "cropsCatalog": "scenarios/ab_sod_campaigns/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "rust_dragons": "H3ABds2",
+      "faerie_dragons": "H3ABds3",
+      "azure_dragons": "H3ABds4",
+      "crystal_dragons": "H3ABds1"
+    },
+    "actionOrder": "PlayVideo (when composed MP4 ready) then OpenMissionsPrologue on each mission pin; hub firstShowActions stay empty",
+    "failClosed": "slayer hub firstShowActions must stay empty (hubFirstShowPlayVideo=false). Mission PlayVideo requires StreamingAssets/video/{{clip}}.mp4 + softsub sidecar meeting compose contract; otherwise omit PlayVideo and keep prologue."
+  }
+}

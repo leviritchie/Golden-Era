@@ -1,0 +1,61 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_genie_vizier",
+ "status": "look",
+ "notes": "tower rollout: death star flash ripped from the DEF (whole frames, mesh hidden). Idle body sparkle flicker (roster: self-electric/magic) is not a layer: needs a uvAtlas scores generator. front -y explicit: no feet (smoke tail), auto is ambiguous",
+ "lighting": {
+  "mode": "v7c",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "death_flash",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_genie_vizier/death_flash"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Root",
+     "defOrigin": [
+      204,
+      267
+     ]
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "DEF g05 f2-7 whole frame: the vizier bursts into a white-cyan star flash and leaves a pool with the scimitar; tower_fx_masks.whole_frame",
+    "notes": "defOrigin [204,267] = the mesh Root projected (stationary on every death key), so the DEF frame lands where the sprite draws it"
+   },
+   {
+    "id": "death_hide",
+    "type": "event",
+    "clip": "Unit_Death",
+    "defFrame": 2,
+    "action": "hideMesh",
+    "provenance": "DEF g05 f2: the star flash replaces the body (the mesh only shrinks)"
+   }
+  ]
+ }
+}

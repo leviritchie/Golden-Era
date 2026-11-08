@@ -1,0 +1,38 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contract for custom law predicates that depend on protect or preserve event semantics. This is static status/spell classification evidence only and does not authorize morale package gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "contractsMustMatchExactPredicateProfiles": true,
+    "statusTaxonomyGroupMustExist": true,
+    "coveredTagsMustMatchTaxonomyGroup": true,
+    "actualEventOrderingStillRuntimeGated": true,
+    "avengerAndKillLossRemainCompanionPredicates": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "contracts": {
+    "RequiresProtectOrPreserveEvent": {
+      "requiredEffectKeys": ["rampart.protect-preserve-avenger-package"],
+      "allowedFamilies": ["MoralePackage"],
+      "taxonomyGroup": "protectOrPreserveEvent",
+      "requiredCoveredTags": ["protection", "preserve", "heal", "cleanse", "negative_immunity"],
+      "requiredMissingTags": [],
+      "companionPredicates": ["RequiresAvengerMark", "RequiresKillOrLossEvent"],
+      "forbiddenSubstitutes": [
+        "any positive status counted as protect or preserve event",
+        "protection or preserve status taxonomy counted as event ordering proof",
+        "healing spell cast counted as protected ally event without receiver proof",
+        "Rampart faction membership counted as protect or preserve event",
+        "Avenger mark or kill event counted as protect/preserve event without companion proof"
+      ],
+      "notes": "Defender's Grace can use exact protection/preserve/heal/cleanse/negative-immunity taxonomy as static classification evidence only. Actual protect-adjacent ally or preserve event ordering, Avenger mark identity, kill/loss correlation, owner correlation, and idempotence remain runtime-gated."
+    }
+  },
+  "requiredRuntimeProof": [
+    "protect or preserve event identity proof",
+    "protected or preserved ally receiver proof",
+    "event ordering relative to kill/loss and Avenger mark proof",
+    "law-owner side correlation proof",
+    "morale package idempotence proof"
+  ]
+}

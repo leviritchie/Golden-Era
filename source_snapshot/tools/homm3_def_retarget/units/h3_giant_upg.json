@@ -1,0 +1,225 @@
+{
+ "unit": "h3_giant_upg",
+ "joints": {
+  "Hips": [
+   -0.01,
+   0.045,
+   0.756
+  ],
+  "Spine": [
+   -0.01,
+   0.049,
+   0.889
+  ],
+  "Spine1": [
+   -0.01,
+   0.052,
+   1.022
+  ],
+  "Spine2": [
+   -0.01,
+   0.056,
+   1.171
+  ],
+  "Neck": [
+   -0.01,
+   0.059,
+   1.287
+  ],
+  "Head": [
+   -0.01,
+   0.066,
+   1.357
+  ],
+  "HeadTop_End": [
+   0.003,
+   0.157,
+   1.714
+  ],
+  "LeftShoulder": [
+   0.024,
+   0.066,
+   1.294
+  ],
+  "LeftArm": [
+   0.192,
+   0.094,
+   1.259
+  ],
+  "LeftForeArm": [
+   0.276,
+   0.066,
+   1.022
+  ],
+  "LeftHand": [
+   0.227,
+   -0.157,
+   1.029
+  ],
+  "LeftHand_End": [
+   0.208,
+   -0.245,
+   1.032
+  ],
+  "RightShoulder": [
+   -0.052,
+   0.066,
+   1.294
+  ],
+  "RightArm": [
+   -0.22,
+   0.094,
+   1.259
+  ],
+  "RightForeArm": [
+   -0.283,
+   0.08,
+   1.008
+  ],
+  "RightHand": [
+   -0.178,
+   -0.094,
+   0.931
+  ],
+  "RightHand_End": [
+   -0.135,
+   -0.167,
+   0.899
+  ],
+  "LeftUpLeg": [
+   0.094,
+   0.059,
+   0.715
+  ],
+  "LeftLeg": [
+   0.136,
+   0.038,
+   0.4
+  ],
+  "LeftFoot": [
+   0.164,
+   0.129,
+   0.044
+  ],
+  "LeftToeBase": [
+   0.206,
+   0.059,
+   -0.012
+  ],
+  "LeftToe_End": [
+   0.234,
+   -0.038,
+   0.002
+  ],
+  "RightUpLeg": [
+   -0.108,
+   0.024,
+   0.715
+  ],
+  "RightLeg": [
+   -0.129,
+   0.073,
+   0.386
+  ],
+  "RightFoot": [
+   -0.164,
+   0.234,
+   0.044
+  ],
+  "RightToeBase": [
+   -0.164,
+   0.157,
+   -0.005
+  ],
+  "RightToe_End": [
+   -0.15,
+   0.031,
+   -0.005
+  ]
+ },
+ "props": [
+  {
+   "name": "bolt",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.11,
+      -0.12,
+      0.86
+     ],
+     [
+      0.25,
+      -0.22,
+      1.62
+     ]
+    ]
+   ],
+   "radius": 0.1,
+   "minBlueOverRed": 0.06
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ],
+  "propAimDepth": "imagePlane",
+  "propAimRange": 60
+ },
+ "glbPatch": {
+  "reason": "2026-10-10 authenticity lane-A: Idle bolt held steady diagonal-up like the DEF (no hanging/loop pop); AttackFront f1 hand raised to helmet height with the bolt upright, f4 deep forward hunch through the spine (slight knee crouch); Death bolt laid on the ground f6-f8 with both arms tucked to the chest in the final slump. Rotation table applied twice (split), Hips translations once. 2026-10-11 lane-C: Death collapses into the DEF compact heap through knees, hips, spine and neck (heap D3 body tables, applied twice like the bolt table, Hips translations once; arm tucks kept), with stretchRelax on Unit_Death so the deep hip/knee flexion passes the unchanged tear gate.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_giant_upg_bolt_rot.json",
+    "sha256": "7193cc5b17e21172943f172f6ec89de932bf593b7930e00e40b6997ba7ae2c9b",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_giant_upg_bolt_rot.json",
+    "sha256": "7193cc5b17e21172943f172f6ec89de932bf593b7930e00e40b6997ba7ae2c9b",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_giant_upg_bolt_tr.json",
+    "sha256": "0d612591b5a8e7439735aa77ae2081ff40a49277d8f4dc7a5556847c5174a8ea",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_giant_upg_heapD3_body_rot.json",
+    "sha256": "621171249c17f5779f19a8af4a212dad41326f846703d5e901c4a287169b2bdc",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_giant_upg_heapD3_body_rot.json",
+    "sha256": "621171249c17f5779f19a8af4a212dad41326f846703d5e901c4a287169b2bdc",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_giant_upg_heapD3_body_tr.json",
+    "sha256": "33ebde3ce1e7319412562b499ff44feed072aa393ecc56fb9f54257443db05b9",
+    "regrid": true
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.7,
+    "iterations": 1000,
+    "smooth": 0.4
+   }
+  ]
+ }
+}

@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom law profiles that depend on kill, loss, sacrifice, plunder, or low-loss event correlation. This is planning evidence only; it does not prove death/casualty event ordering or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresKillOrLossEventProfiles": true,
+    "genericKillCounterForbidden": true,
+    "friendlyLossMustBeSeparatedFromEnemyKill": true,
+    "temporaryGatedLossMustBeSeparatedFromPermanentCasualty": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredRuntimeProof": [
+    "kill event semantic proof",
+    "friendly loss event semantic proof",
+    "temporary gated loss versus permanent casualty discriminator proof",
+    "killer/victim owner correlation proof",
+    "event-to-law-owner idempotence proof",
+    "post-death action ordering proof"
+  ],
+  "contracts": {
+    "cove.crew-momentum": {
+      "eventKinds": [
+        "enemy-kill",
+        "plunder-or-reward",
+        "cannon-hit",
+        "survive-ranged-fire"
+      ],
+      "correlationRequired": [
+        "Cove law owner",
+        "event source family",
+        "single morale trigger window"
+      ],
+      "forbiddenSubstitutes": [
+        "any battle kill",
+        "any reward pickup",
+        "any ranged attack"
+      ],
+      "notes": "Cove morale momentum requires event-specific correlation before applying morale, Focus, or speed."
+    },
+    "cove.kill-plunder-cannon-momentum-package": {
+      "eventKinds": [
+        "enemy-kill",
+        "plunder-or-reward",
+        "cannon-hit",
+        "survive-ranged-fire"
+      ],
+      "correlationRequired": [
+        "Cove law owner",
+        "event source family",
+        "morale package application window"
+      ],
+      "forbiddenSubstitutes": [
+        "any battle kill",
+        "any reward pickup",
+        "any ranged attack"
+      ],
+      "notes": "Cove morale package requires proving the same specific momentum events as the trigger profile, not generic kill/loss state."
+    },
+    "inferno.death-sacrifice-gated-loss-momentum": {
+      "eventKinds": [
+        "friendly-permanent-loss",
+        "sacrifice",
+        "temporary-gated-loss"
+      ],
+      "correlationRequired": [
+        "Inferno law owner",
+        "source loss type",
+        "permanent versus temporary unit discriminator"
+      ],
+      "forbiddenSubstitutes": [
+        "any battle kill",
+        "enemy kill",
+        "any friendly unit disappearance",
+        "temporary gated loss counted as permanent casualty"
+      ],
+      "notes": "Inferno morale trigger requires proving the loss/sacrifice/gated-loss identity before granting momentum."
+    },
+    "inferno.death-sacrifice-gating-momentum-package": {
+      "eventKinds": [
+        "friendly-permanent-loss",
+        "sacrifice",
+        "temporary-gated-loss"
+      ],
+      "correlationRequired": [
+        "Inferno law owner",
+        "source loss type",
+        "permanent versus temporary unit discriminator",
+        "morale package application window"
+      ],
+      "forbiddenSubstitutes": [
+        "any battle kill",
+        "enemy kill",
+        "any friendly unit disappearance",
+        "temporary gated loss counted as permanent casualty"
+      ],
+      "notes": "Inferno morale package requires proving permanent casualties, sacrifices, and temporary gated losses as distinct event types."
+    },
+    "rampart.protect-preserve-avenger-momentum": {
+      "eventKinds": [
+        "favored-or-avenger-marked-enemy-kill",
+        "low-loss-battle",
+        "protect-or-preserve-event"
+      ],
+      "correlationRequired": [
+        "Rampart law owner",
+        "Avenger/protection predicate when used",
+        "low-loss result when used"
+      ],
+      "forbiddenSubstitutes": [
+        "any enemy kill",
+        "generic low casualty count without committed battle result",
+        "Rampart participation alone"
+      ],
+      "notes": "Rampart morale momentum requires preservation or native Avenger/protection context, not generic kills."
+    },
+    "rampart.protect-preserve-avenger-package": {
+      "eventKinds": [
+        "favored-or-avenger-marked-enemy-kill",
+        "low-loss-battle",
+        "protect-or-preserve-event"
+      ],
+      "correlationRequired": [
+        "Rampart law owner",
+        "Avenger/protection predicate when used",
+        "low-loss result when used",
+        "morale package application window"
+      ],
+      "forbiddenSubstitutes": [
+        "any enemy kill",
+        "generic low casualty count without committed battle result",
+        "Rampart participation alone"
+      ],
+      "notes": "Rampart morale package requires proving Defender's Grace event semantics and cannot collapse into flat morale."
+    },
+    "stronghold.damage-kill-tempo": {
+      "eventKinds": [
+        "damage-taken",
+        "enemy-kill",
+        "rage-or-warcry-event"
+      ],
+      "correlationRequired": [
+        "Stronghold law owner",
+        "acting/wounded stack identity",
+        "safe turn-order mutation window"
+      ],
+      "forbiddenSubstitutes": [
+        "any battle kill",
+        "global Stronghold damage taken",
+        "turn-order mutation during unresolved action"
+      ],
+      "notes": "Stronghold morale trigger requires kill tempo or damage-taken correlation before speed/damage tempo effects."
+    },
+    "stronghold.damage-kill-rage-package": {
+      "eventKinds": [
+        "damage-taken",
+        "enemy-kill",
+        "rage-or-warcry-event"
+      ],
+      "correlationRequired": [
+        "Stronghold law owner",
+        "acting/wounded stack identity",
+        "morale package application window",
+        "safe turn-order mutation window"
+      ],
+      "forbiddenSubstitutes": [
+        "any battle kill",
+        "global Stronghold damage taken",
+        "turn-order mutation during unresolved action"
+      ],
+      "notes": "Stronghold morale package can use rage/kill tempo only after the source event and safe application timing are proven."
+    }
+  }
+}

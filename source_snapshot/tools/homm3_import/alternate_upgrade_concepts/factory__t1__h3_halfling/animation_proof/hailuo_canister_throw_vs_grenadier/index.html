@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hailuo 24-frame canister throw vs Grenadier attack</title>
+<style>
+:root {
+  --bg: #12141a;
+  --panel: #1b1f29;
+  --ink: #e8eaf0;
+  --muted: #9aa3b5;
+  --line: #2c3344;
+  --accent: #d4a017;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 14px/1.45 "Segoe UI", system-ui, sans-serif;
+}
+header {
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid var(--line);
+  background: #161922;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+h1 { margin: 0 0 6px; font-size: 20px; font-weight: 650; }
+.sub { margin: 0; color: var(--muted); max-width: 980px; }
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+  margin-top: 12px;
+}
+.controls button, .controls select, .controls input[type="range"] {
+  height: 32px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  border-radius: 6px;
+  padding: 0 10px;
+}
+.controls button { cursor: pointer; min-width: 40px; }
+.controls button:hover { border-color: var(--accent); }
+.controls label { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+#frameLabel { color: var(--accent); font-variant-numeric: tabular-nums; min-width: 7.5rem; }
+main { padding: 18px 22px 28px; }
+.pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 900px) { .pair { grid-template-columns: 1fr; } }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.card header {
+  position: static;
+  padding: 12px 14px;
+  background: transparent;
+  border-bottom: 1px solid var(--line);
+}
+.card h2 { margin: 0; font-size: 15px; }
+.card .meta { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+.stage {
+  height: 420px;
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(45deg, #252a36 25%, transparent 25%),
+    linear-gradient(-45deg, #252a36 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #252a36 75%),
+    linear-gradient(-45deg, transparent 75%, #252a36 75%);
+  background-size: 24px 24px;
+  background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+  background-color: #1a1e28;
+}
+.stage.black { background: #050607; }
+.stage.white { background: #f3f4f7; }
+.stage.gray { background: #6b7280; }
+canvas {
+  max-width: 94%;
+  max-height: 390px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+.strip {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  padding: 8px;
+  border-top: 1px solid var(--line);
+  background: #141821;
+}
+.strip button {
+  flex: 0 0 auto;
+  width: 54px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: #0e1118;
+  cursor: pointer;
+}
+.strip button.active { border-color: var(--accent); }
+.strip img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.sheets {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 900px) { .sheets { grid-template-columns: 1fr; } }
+.sheets figure {
+  margin: 0;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.sheets figcaption {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+}
+.sheets img { display: block; width: 100%; height: auto; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Hailuo canister throw vs Halfling Grenadier attack</h1>
+  <p class="sub">
+    Left: native HoMM3 HotA grenadier attack group 15 (24 frames @ 12 FPS, 450×400).
+    Right: Hailuo video sampled to 24 frames, white keyed, fitted to the same canvas.
+    Playback is locked to the same frame clock.
+  </p>
+  <div class="controls">
+    <button id="play" type="button">Pause</button>
+    <button id="prev" type="button">&lsaquo;</button>
+    <button id="next" type="button">&rsaquo;</button>
+    <label>FPS <input id="fps" type="range" min="4" max="24" value="12"><span id="fpsLabel">12</span></label>
+    <label>Background
+      <select id="bg">
+        <option value="">checker</option>
+        <option value="black">black</option>
+        <option value="gray">gray</option>
+        <option value="white">white</option>
+      </select>
+    </label>
+    <label>Grenadier scale
+      <select id="grenScale">
+        <option value="1">1×</option>
+        <option value="2" selected>2×</option>
+        <option value="3">3×</option>
+      </select>
+    </label>
+    <span id="frameLabel">Frame 01 / 24</span>
+  </div>
+</header>
+<main>
+  <div class="pair">
+    <article class="card" id="cardGren">
+      <header>
+        <h2>Halfling Grenadier (source DEF)</h2>
+        <p class="meta">source_frames / group 15 · 450×400 RGBA</p>
+      </header>
+      <div class="stage"><canvas id="cvGren" width="450" height="400"></canvas></div>
+      <div class="strip" id="stripGren"></div>
+    </article>
+    <article class="card" id="cardHailuo">
+      <header>
+        <h2>Hailuo GenAI canister throw</h2>
+        <p class="meta">24 sampled frames from hailuo MP4 · keyed + fitted 450×400</p>
+      </header>
+      <div class="stage"><canvas id="cvHailuo" width="450" height="400"></canvas></div>
+      <div class="strip" id="stripHailuo"></div>
+    </article>
+  </div>
+  <div class="sheets">
+    <figure>
+      <figcaption>Grenadier contact sheet</figcaption>
+      <img src="grenadier_contact_sheet.png" alt="Grenadier 24-frame contact sheet">
+    </figure>
+    <figure>
+      <figcaption>Hailuo contact sheet</figcaption>
+      <img src="hailuo_contact_sheet.png" alt="Hailuo 24-frame contact sheet">
+    </figure>
+  </div>
+</main>
+<script>
+const FRAME_COUNT = 24;
+const grenadier = Array.from({length: FRAME_COUNT}, (_, i) => `grenadier_frames/frame_${String(i).padStart(2,"0")}.png`);
+const hailuo = Array.from({length: FRAME_COUNT}, (_, i) => `hailuo_frames/frame_${String(i).padStart(2,"0")}.png`);
+
+const cache = new Map();
+function load(src) {
+  if (!cache.has(src)) {
+    const img = new Image();
+    img.src = src;
+    cache.set(src, img);
+  }
+  return cache.get(src);
+}
+grenadier.forEach(load);
+hailuo.forEach(load);
+
+const playBtn = document.getElementById("play");
+const fpsSlider = document.getElementById("fps");
+const fpsLabel = document.getElementById("fpsLabel");
+const frameLabel = document.getElementById("frameLabel");
+const bg = document.getElementById("bg");
+const grenScale = document.getElementById("grenScale");
+const cvGren = document.getElementById("cvGren");
+const cvHailuo = document.getElementById("cvHailuo");
+const stripGren = document.getElementById("stripGren");
+const stripHailuo = document.getElementById("stripHailuo");
+
+let frame = 0;
+let playing = true;
+let last = 0;
+
+function buildStrip(el, frames) {
+  el.innerHTML = "";
+  frames.forEach((src, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.title = `Frame ${i}`;
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = `frame ${i}`;
+    btn.appendChild(img);
+    btn.onclick = () => { frame = i; draw(); };
+    el.appendChild(btn);
+  });
+}
+buildStrip(stripGren, grenadier);
+buildStrip(stripHailuo, hailuo);
+
+function drawCanvas(canvas, img, scale) {
+  if (!img.complete || !img.naturalWidth) return;
+  const w = img.naturalWidth * scale;
+  const h = img.naturalHeight * scale;
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+  ctx.clearRect(0, 0, w, h);
+  ctx.drawImage(img, 0, 0, w, h);
+}
+
+function draw() {
+  const g = load(grenadier[frame]);
+  const h = load(hailuo[frame]);
+  drawCanvas(cvGren, g, Number(grenScale.value));
+  drawCanvas(cvHailuo, h, 1);
+  frameLabel.textContent = `Frame ${String(frame + 1).padStart(2, "0")} / ${FRAME_COUNT}`;
+  [...stripGren.children].forEach((b, i) => b.classList.toggle("active", i === frame));
+  [...stripHailuo.children].forEach((b, i) => b.classList.toggle("active", i === frame));
+  document.querySelectorAll(".stage").forEach((s) => {
+    s.className = "stage" + (bg.value ? " " + bg.value : "");
+  });
+}
+
+function tick(ts) {
+  const fps = Number(fpsSlider.value);
+  if (playing && ts - last >= 1000 / fps) {
+    frame = (frame + 1) % FRAME_COUNT;
+    last = ts;
+    draw();
+  }
+  requestAnimationFrame(tick);
+}
+
+playBtn.onclick = () => {
+  playing = !playing;
+  playBtn.textContent = playing ? "Pause" : "Play";
+};
+document.getElementById("prev").onclick = () => {
+  frame = (frame + FRAME_COUNT - 1) % FRAME_COUNT;
+  draw();
+};
+document.getElementById("next").onclick = () => {
+  frame = (frame + 1) % FRAME_COUNT;
+  draw();
+};
+fpsSlider.oninput = () => { fpsLabel.textContent = fpsSlider.value; };
+bg.onchange = draw;
+grenScale.onchange = draw;
+
+draw();
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "mummy_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/mummy_slice_v1",
+  "note": "Neutral h3_mummy gets its own model (it had borrowed the walking dead on the map and the vanilla graverobber in battle). Meshy mesh artifacts/meshy_downloads/meshy7_missing/h3_mummy/mesh.glb, hand-keyed (no mocap capture on this machine: the MocapAnything vendor tree is absent), fused lower legs so every clip keeps the feet together. The unit look carries no effect layers (empty vfx manifest), so the plan has no quads, lights or uvAtlas; albedo is the look basecolor. Jitter pass 2026-09-27: silhouetteRefine removed (per-frame dx/dy silhouette offsets read as whole-body jumps), re-shipped in place. | 2026-10-01 re-freeze: stride_match knee/pelvis clearance (39f4af4d83) + propFloor staff tilt (body clearance leaves the propFloor prop to that stage); Move slip 0.818 -> gate pass Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_mummy 0.104. | look B (vanilla philosophy finish, finish.py; look.py --stages finish,apply), animation unchanged Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_mummy 0.104. | 2026-10-11 authenticity pass lane A: DEF g12 attack - staff levelled two-handed and thrust at the target (f1-f5) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_mummy 0.104.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_mummy",
+      "gameSid": "h3_mummy",
+      "bundleName": "custom_units_neutral_h3_mummy",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "8483f40fc969c5f67e03bec348198cc467761da5257b14e78650ad0103420b9c",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "a306bf79298931fa5a0ceb7ebad16db992f4e497226b5abb8c8c5baf54e8c6db",
+        "idleRetimedGlbSha256": "7fd211e972654e7e4ad77327e9ed29e798c2def1773e943a38e1ae04f1d97a93",
+        "vfxManifestSha256": "6a734bee5ce85c9a9898daddd829855e41a7b05f20165fbea04c57830d809df0",
+        "specSha256": "2e4d605a158e71e0d9a09db985136f0bd51acca07b253945b08993fd91674003",
+        "basecolorSha256": "ca3d6fb2408d7a16d508f7b6a1b15f05544d32826c13e1e53adc418624e5a89e"
+      }
+    }
+  ]
+}

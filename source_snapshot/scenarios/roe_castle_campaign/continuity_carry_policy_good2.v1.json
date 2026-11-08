@@ -1,0 +1,166 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "RoE Castle Good2 (Liberation) continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub good2; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_02_roe_castle_good2",
+    "campaignTitle": "Liberation",
+    "campaignEntry": "Good2.h3c",
+    "batchManifest": "scenarios/roe_castle_campaign/batch_manifest.json",
+    "defaultSpawn": {
+      "factionSid": "homm3_castle",
+      "heroSid": "homm3_castle_hero_7"
+    },
+    "missionSpawns": {
+      "steadwick_liberation": {
+        "heroSid": "homm3_castle_hero_7",
+        "factionSid": "homm3_castle"
+      },
+      "deal_with_the_devil": {
+        "heroSid": "homm3_castle_hero_7",
+        "factionSid": "homm3_castle"
+      },
+      "neutral_affairs": {
+        "heroSid": "homm3_castle_hero_7",
+        "factionSid": "homm3_castle"
+      },
+      "tunnels_and_troglodytes": {
+        "heroSid": "homm3_castle_hero_7",
+        "factionSid": "homm3_castle"
+      }
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart)."
+  },
+  "storyHubMapSidOverrides": {
+    "steadwick_liberation": "h3_roe_castle_steadwick_liberation_raw_translation",
+    "deal_with_the_devil": "h3_roe_castle_deal_with_the_devil_raw_translation",
+    "neutral_affairs": "h3_roe_castle_neutral_affairs_raw_translation",
+    "tunnels_and_troglodytes": "h3_roe_castle_tunnels_and_troglodytes_raw_translation",
+    "choiceReason": "Liberation missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "steadwick_liberation",
+      "toMissionId": "deal_with_the_devil",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 0,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=0 for steadwick_liberation (unlimited); no scenario hero level restriction.",
+      "mapSids": {
+        "from": "h3_roe_castle_steadwick_liberation_raw_translation",
+        "to": "h3_roe_castle_deal_with_the_devil_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "steadwick_liberation",
+    "deal_with_the_devil",
+    "neutral_affairs",
+    "tunnels_and_troglodytes"
+  ],
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Quest artifact carry from Steadwick Seer into Deal With the Devil"
+  ],
+  "videoContract": {
+    "status": "mission_clips_via_native_playvideo_serial_queue_hub_hover_strip_omitted",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": "Cgood2",
+    "hubFirstShowOmitReason": "Cgood2 is a silent ~5s hover-menu strip with no HEROES3CD narration; refuse shipping it as a finished hub intro. Mission pins use composed Good2a–d cutscenes.",
+    "requiredMp4RelativeToStreamingAssets": "video/Cgood2.mp4",
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_02_roe_castle_good2/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "sourceMp4RelativeToStreamingAssets": "video/Cgood2.mp4",
+      "stillArtifact": "artifacts/campaign_port_poc/roe_castle_campaign/storyhub_visual/Cgood2_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.78,
+      "focusY": 0.5,
+      "cropReason": "Purple-robed figure at the base of the carved cliff statue",
+      "cropsCatalog": "scenarios/roe_castle_campaign/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "steadwick_liberation": "Good2a",
+      "deal_with_the_devil": "Good2b",
+      "neutral_affairs": "Good2c",
+      "tunnels_and_troglodytes": "Good2d"
+    },
+    "actionOrder": "PlayVideo then OpenMissionsPrologue on each mission pin interactionActions (native StoryHub serial queue; does not mask load time)",
+    "hdEditionSources": [
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Cgood2.ogv",
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Good2a.ogv",
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Good2b.ogv",
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Good2c.ogv",
+      "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/VIDEO/Good2d.ogv"
+    ],
+    "transcodeRequirement": "Mission clips: compose via tools/bake_roe_castle_campaign_videos.py --all-missions (loop HD VIDEO OGV until HEROES3CD.SND narration ends, softsubs *.mp4.json + cinematic.json). Do not treat plain --transcode hover-strip letterboxes as finished cutscenes.",
+    "composeRecipe": "experiments/campaign_port_poc/campaign_video_compose.py",
+    "narrationSnd": "V:/SteamLibrary/steamapps/common/Heroes of Might & Magic III - HD Edition/data/LOC/EN/HEROES3CD.SND",
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "minComposedDurationSec": 18,
+    "requireComposedAudio": true,
+    "failClosed": "Good2 hub firstShowActions must stay empty (no Cgood2 PlayVideo). Per-mission pin PlayVideo emits only when the matching composed MP4 exists under StreamingAssets/video, probes >=1280x720, has audio, and duration covers CD narration; missing/undersized/silent/short MP4 omits that PlayVideo."
+  }
+}

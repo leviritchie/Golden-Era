@@ -1,0 +1,251 @@
+{
+ "unit": "h3_walking_dead",
+ "joints": {
+  "Hips": [
+   -0.038,
+   0.129,
+   0.889
+  ],
+  "Spine": [
+   -0.028,
+   0.075,
+   1.032
+  ],
+  "Spine1": [
+   -0.017,
+   0.021,
+   1.175
+  ],
+  "Spine2": [
+   -0.006,
+   -0.04,
+   1.335
+  ],
+  "Neck": [
+   0.0,
+   -0.07,
+   1.45
+  ],
+  "Head": [
+   0.0,
+   -0.09,
+   1.52
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.1,
+   1.72
+  ],
+  "LeftShoulder": [
+   0.073,
+   -0.031,
+   1.405
+  ],
+  "LeftArm": [
+   0.199,
+   -0.024,
+   1.364
+  ],
+  "LeftForeArm": [
+   0.29,
+   0.073,
+   1.119
+  ],
+  "LeftHand": [
+   0.255,
+   -0.024,
+   0.896
+  ],
+  "LeftHand_End": [
+   0.242,
+   -0.06,
+   0.814
+  ],
+  "RightShoulder": [
+   -0.045,
+   -0.01,
+   1.419
+  ],
+  "RightArm": [
+   -0.157,
+   0.045,
+   1.433
+  ],
+  "RightForeArm": [
+   -0.227,
+   0.136,
+   1.238
+  ],
+  "RightHand": [
+   -0.269,
+   0.136,
+   1.035
+  ],
+  "RightHand_End": [
+   -0.287,
+   0.136,
+   0.947
+  ],
+  "LeftUpLeg": [
+   0.08,
+   0.143,
+   0.875
+  ],
+  "LeftLeg": [
+   0.171,
+   -0.045,
+   0.505
+  ],
+  "LeftFoot": [
+   0.185,
+   -0.003,
+   0.093
+  ],
+  "LeftToeBase": [
+   0.22,
+   -0.164,
+   0.002
+  ],
+  "LeftToe_End": [
+   0.22,
+   -0.206,
+   0.058
+  ],
+  "RightUpLeg": [
+   -0.157,
+   0.108,
+   0.91
+  ],
+  "RightLeg": [
+   -0.213,
+   0.017,
+   0.484
+  ],
+  "RightFoot": [
+   -0.157,
+   0.283,
+   0.142
+  ],
+  "RightToeBase": [
+   -0.171,
+   0.157,
+   -0.032
+  ],
+  "RightToe_End": [
+   -0.171,
+   0.101,
+   0.009
+  ]
+ },
+ "props": [
+  {
+   "name": "cleaver_handle",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.25,
+      0.0,
+      0.84
+     ],
+     [
+      0.19,
+      -0.3,
+      1.17
+     ]
+    ]
+   ],
+   "radius": 0.04
+  },
+  {
+   "name": "cleaver_blade",
+   "bone": "LeftHand",
+   "box": [
+    [
+     0.12,
+     -0.52,
+     1.06
+    ],
+    [
+     0.3,
+     -0.14,
+     1.52
+    ]
+   ]
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 50,
+   "dy": 30
+  }
+ },
+ "propAimResidual": {
+  "bones": [
+   "LeftHand"
+  ]
+ },
+ "extensions": [
+  "necropolis_propaim"
+ ],
+ "glbPatch": {
+  "reason": "authenticity lane-A (necropolis) 2026-10-10: keyRotations (half offset, applied twice) from the DEF beats (g03 hitted, g05 death): Hitted flings the free right arm straight out sideways at full DEF amplitude f2-f4 while the cleaver goes up (it hung limp); Death ends slumped with both arms folded down along the body and the cleaver flat on the floor f5-f8 (both hands and the cleaver were left raised into the air). Weights pass 2026-10-10 (the fling had been held to ~50% because it tore the Spine/RightArm skin): diffuseWeights over the shoulder/armpit band (z > 1.0) of the spine, shoulder and upper-arm bones, and stretchRelax on Hitted/Death/Defence/AttackFront strain-limits the chronic shoulder/armpit stretch; gate 2735 -> 1735 edges past 2x, worst 10.53 -> 8.98.",
+  "ops": [
+   {
+    "op": "diffuseWeights",
+    "bones": [
+     "Spine",
+     "Spine1",
+     "Spine2",
+     "LeftShoulder",
+     "LeftArm",
+     "RightShoulder",
+     "RightArm"
+    ],
+    "iterations": 20,
+    "alpha": 0.5,
+    "region": [
+     {
+      "axis": "z",
+      "above": 1.0,
+      "ramp": 0.08
+     }
+    ]
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_walking_dead_pose_rot.json",
+    "sha256": "b0424b2e93cdd7c993ef00748d4d7afe7e11955760c90ac0d1a365685403710d",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_walking_dead_pose_rot.json",
+    "sha256": "b0424b2e93cdd7c993ef00748d4d7afe7e11955760c90ac0d1a365685403710d",
+    "regrid": true
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Hitted",
+     "Unit_Death",
+     "Unit_Defence",
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.7,
+    "iterations": 1000,
+    "smooth": 0.4,
+    "maxMove": 0.05
+   }
+  ]
+ }
+}

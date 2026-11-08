@@ -1,0 +1,207 @@
+{
+ "unit": "hota_factory_dreadnought",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.0,
+   0.62
+  ],
+  "Spine": [
+   0.0,
+   0.0,
+   0.8
+  ],
+  "Spine1": [
+   0.0,
+   0.0,
+   0.98
+  ],
+  "Spine2": [
+   0.0,
+   0.0,
+   1.15
+  ],
+  "Neck": [
+   0.0,
+   -0.05,
+   1.3
+  ],
+  "Head": [
+   0.0,
+   -0.08,
+   1.38
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.1,
+   1.58
+  ],
+  "LeftShoulder": [
+   0.15,
+   0.0,
+   1.3
+  ],
+  "LeftArm": [
+   0.52,
+   0.0,
+   1.3
+  ],
+  "LeftForeArm": [
+   0.54,
+   -0.03,
+   1.02
+  ],
+  "LeftHand": [
+   0.54,
+   -0.05,
+   0.78
+  ],
+  "LeftHand_End": [
+   0.54,
+   -0.07,
+   0.66
+  ],
+  "LeftUpLeg": [
+   0.2,
+   0.0,
+   0.6
+  ],
+  "LeftLeg": [
+   0.2,
+   -0.03,
+   0.33
+  ],
+  "LeftFoot": [
+   0.2,
+   0.0,
+   0.1
+  ],
+  "LeftToeBase": [
+   0.2,
+   -0.2,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.2,
+   -0.33,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.15,
+   0.0,
+   1.3
+  ],
+  "RightArm": [
+   -0.52,
+   0.0,
+   1.3
+  ],
+  "RightForeArm": [
+   -0.54,
+   -0.03,
+   1.02
+  ],
+  "RightHand": [
+   -0.54,
+   -0.05,
+   0.78
+  ],
+  "RightHand_End": [
+   -0.54,
+   -0.07,
+   0.66
+  ],
+  "RightUpLeg": [
+   -0.2,
+   0.0,
+   0.6
+  ],
+  "RightLeg": [
+   -0.2,
+   -0.03,
+   0.33
+  ],
+  "RightFoot": [
+   -0.2,
+   0.0,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.2,
+   -0.2,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.2,
+   -0.33,
+   0.0
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.13
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.2,
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.2,
+   "keepDist": 0.13
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ]
+}

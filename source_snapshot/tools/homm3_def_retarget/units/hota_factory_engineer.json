@@ -1,0 +1,315 @@
+{
+ "unit": "hota_factory_engineer",
+ "joints": {
+  "Hips": [
+   0.045,
+   0.129,
+   0.861
+  ],
+  "Spine": [
+   0.044,
+   0.133,
+   0.969
+  ],
+  "Spine1": [
+   0.042,
+   0.136,
+   1.078
+  ],
+  "Spine2": [
+   0.04,
+   0.14,
+   1.199
+  ],
+  "Neck": [
+   0.038,
+   0.143,
+   1.294
+  ],
+  "Head": [
+   0.024,
+   0.143,
+   1.399
+  ],
+  "HeadTop_End": [
+   0.031,
+   0.122,
+   1.756
+  ],
+  "LeftShoulder": [
+   0.087,
+   0.136,
+   1.378
+  ],
+  "LeftArm": [
+   0.199,
+   0.143,
+   1.357
+  ],
+  "LeftForeArm": [
+   0.248,
+   0.031,
+   1.112
+  ],
+  "LeftHand": [
+   0.031,
+   -0.024,
+   1.126
+  ],
+  "LeftHand_End": [
+   -0.056,
+   -0.047,
+   1.132
+  ],
+  "RightShoulder": [
+   -0.08,
+   0.05,
+   1.33
+  ],
+  "RightArm": [
+   -0.18,
+   0.05,
+   1.3
+  ],
+  "RightForeArm": [
+   -0.25,
+   0.0,
+   1.08
+  ],
+  "RightHand": [
+   -0.13,
+   -0.1,
+   0.97
+  ],
+  "RightHand_End": [
+   -0.08,
+   -0.14,
+   0.95
+  ],
+  "LeftUpLeg": [
+   0.15,
+   0.164,
+   0.812
+  ],
+  "LeftLeg": [
+   0.276,
+   0.059,
+   0.42
+  ],
+  "LeftFoot": [
+   0.262,
+   0.234,
+   0.113
+  ],
+  "LeftToeBase": [
+   0.332,
+   0.136,
+   0.001
+  ],
+  "LeftToe_End": [
+   0.402,
+   -0.003,
+   -0.013
+  ],
+  "RightUpLeg": [
+   -0.059,
+   0.122,
+   0.812
+  ],
+  "RightLeg": [
+   -0.08,
+   0.045,
+   0.378
+  ],
+  "RightFoot": [
+   -0.164,
+   0.283,
+   0.113
+  ],
+  "RightToeBase": [
+   -0.185,
+   0.157,
+   0.001
+  ],
+  "RightToe_End": [
+   -0.185,
+   0.017,
+   -0.027
+  ]
+ },
+ "props": [
+  {
+   "name": "gun",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      -0.13,
+      -0.07,
+      1.15
+     ],
+     [
+      0.25,
+      -0.42,
+      0.68
+     ]
+    ]
+   ],
+   "radius": 0.1
+  },
+  {
+   "name": "nozzle",
+   "bone": "LeftHand",
+   "box": [
+    [
+     0.08,
+     -0.55,
+     0.5
+    ],
+    [
+     0.42,
+     -0.26,
+     0.9
+    ]
+   ]
+  },
+  {
+   "name": "pack",
+   "bone": "Spine2",
+   "box": [
+    [
+     -0.3,
+     0.2,
+     1.0
+    ],
+    [
+     0.3,
+     0.5,
+     1.5
+    ]
+   ]
+  },
+  {
+   "name": "hose",
+   "bone": "Spine1",
+   "box": [
+    [
+     -0.6,
+     -0.25,
+     0.3
+    ],
+    [
+     -0.29,
+     0.6,
+     1.3
+    ]
+   ]
+  },
+  {
+   "name": "hoseLow",
+   "bone": "Spine1",
+   "box": [
+    [
+     -0.6,
+     -0.1,
+     0.3
+    ],
+    [
+     -0.17,
+     0.6,
+     0.85
+    ]
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.12
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.0,
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.0,
+   "keepDist": 0.12
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "glbPatch": {
+  "reason": "authenticity: DEF g12 attack - the engineer holds the flamethrower level at hip height and sprays straight at the target (f1-f7); the capture twisted away at f3-f4 and pointed the nozzle down/back at the ground. Left (gun) arm IK to a hip-height grip and the gun turned level forward (propturn), split over two keyRotations passes",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_engineer_pose_rot.json",
+    "sha256": "bc8b7d23a2bda0da647cfbc4f2abacd52fac4e32e0f2804f73a07000875c3c8a",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_engineer_pose_rot.json",
+    "sha256": "bc8b7d23a2bda0da647cfbc4f2abacd52fac4e32e0f2804f73a07000875c3c8a",
+    "regrid": true
+   }
+  ]
+ }
+}

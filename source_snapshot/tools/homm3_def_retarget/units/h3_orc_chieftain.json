@@ -1,0 +1,279 @@
+{
+ "unit": "h3_orc_chieftain",
+ "joints": {
+  "Hips": [
+   0.017,
+   0.045,
+   0.708
+  ],
+  "Spine": [
+   0.016,
+   0.026,
+   0.79
+  ],
+  "Spine1": [
+   0.014,
+   0.007,
+   0.873
+  ],
+  "Spine2": [
+   0.012,
+   -0.015,
+   0.965
+  ],
+  "Neck": [
+   0.01,
+   -0.031,
+   1.037
+  ],
+  "Head": [
+   0.017,
+   -0.031,
+   1.17
+  ],
+  "HeadTop_End": [
+   0.017,
+   -0.08,
+   1.582
+  ],
+  "LeftShoulder": [
+   0.143,
+   -0.024,
+   1.149
+  ],
+  "LeftArm": [
+   0.283,
+   0.003,
+   1.121
+  ],
+  "LeftForeArm": [
+   0.374,
+   0.136,
+   0.904
+  ],
+  "LeftHand": [
+   0.381,
+   0.073,
+   0.638
+  ],
+  "LeftHand_End": [
+   0.383,
+   0.053,
+   0.551
+  ],
+  "RightShoulder": [
+   -0.094,
+   -0.003,
+   1.149
+  ],
+  "RightArm": [
+   -0.22,
+   0.059,
+   1.114
+  ],
+  "RightForeArm": [
+   -0.346,
+   0.22,
+   0.96
+  ],
+  "RightHand": [
+   -0.388,
+   0.122,
+   0.701
+  ],
+  "RightHand_End": [
+   -0.401,
+   0.091,
+   0.618
+  ],
+  "LeftUpLeg": [
+   0.178,
+   0.059,
+   0.652
+  ],
+  "LeftLeg": [
+   0.234,
+   -0.115,
+   0.338
+  ],
+  "LeftFoot": [
+   0.234,
+   0.003,
+   0.1
+  ],
+  "LeftToeBase": [
+   0.276,
+   -0.192,
+   0.044
+  ],
+  "LeftToe_End": [
+   0.318,
+   -0.346,
+   0.03
+  ],
+  "RightUpLeg": [
+   -0.15,
+   0.059,
+   0.652
+  ],
+  "RightLeg": [
+   -0.185,
+   0.045,
+   0.296
+  ],
+  "RightFoot": [
+   -0.185,
+   0.255,
+   0.093
+  ],
+  "RightToeBase": [
+   -0.234,
+   0.08,
+   0.023
+  ],
+  "RightToe_End": [
+   -0.276,
+   -0.045,
+   -0.004
+  ]
+ },
+ "extensions": [
+  "stronghold_propbone",
+  "stronghold_rip"
+ ],
+ "propBones": [
+  {
+   "name": "Axe",
+   "parent": "RightHand",
+   "head": [
+    -0.37,
+    0.05,
+    0.7
+   ],
+   "tail": [
+    -0.15,
+    -0.29,
+    0.97
+   ],
+   "regions": [
+    {
+     "segments": [
+      [
+       [
+        -0.4,
+        0.1,
+        0.62
+       ],
+       [
+        -0.18,
+        -0.25,
+        0.98
+       ]
+      ]
+     ],
+     "radius": 0.045,
+     "color": {
+      "expr": "r-b",
+      "min": 0.06
+     },
+     "coreRadius": 0.02
+    },
+    {
+     "box": [
+      [
+       -0.25,
+       -0.43,
+       0.78
+      ],
+      [
+       -0.06,
+       -0.2,
+       1.1
+      ]
+     ]
+    }
+   ],
+   "hide": [
+    {
+     "clip": "ShootFront",
+     "from": 3
+    }
+   ]
+  }
+ ],
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "Axe"
+  ]
+ },
+ "rips": [
+  {
+   "name": "lhand_thigh",
+   "a": [
+    "LeftHand",
+    "LeftForeArm"
+   ],
+   "b": [
+    "LeftUpLeg",
+    "LeftLeg",
+    "Hips",
+    "Spine"
+   ],
+   "box": [
+    [
+     0.15,
+     -1,
+     0.15
+    ],
+    [
+     1,
+     1,
+     0.9
+    ]
+   ]
+  }
+ ],
+ "glbPatch": {
+  "reason": "authenticity lane B 2026-10-11: Death leap upright with both axes flung overhead before the heap (DEF g05)",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_orc_chieftain_death_leap_tr.json",
+    "regrid": true,
+    "sha256": "4a33da9f126d451842ac7592e9ece71889123612767f83710a11ced1aa8b94ee"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_orc_chieftain_death_leap_rot.json",
+    "regrid": true,
+    "sha256": "5e851edfa6a5bc4d9137b07459970acd8d62c4dccce2eaec3fe660c1e83a3a4d"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_orc_chieftain_death_leap_rot.json",
+    "regrid": true,
+    "sha256": "5e851edfa6a5bc4d9137b07459970acd8d62c4dccce2eaec3fe660c1e83a3a4d"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "crease of the re-posed joints"
+   }
+  ]
+ }
+}

@@ -1,0 +1,41 @@
+{
+ "schema": "town_full3d_recipe.v2",
+ "faction": "castle",
+ "seed": "carve_v2",
+ "candidate": "zs_v7",
+ "note": "zs_v7 (2026-10-01): zs_v6's recipe on seed carve_v2 = carve_v1's chain (nfix3_cloth unlayered + carve delta + Mesh_Houses from the foot-checked placement) with props 0 and 3 re-placed: the houses stage's props re-check (every build state) failed them, shrub 0 in front of the refitted longhouse 3 (2555 px at rest) and shrub 3 over the painted cottages with the tavern unbuilt (2924 px). The gate adds the rest-paint term (rest albedo vs the HoMM3 painting, every build state).",
+ "ldi": {
+  "pieces": [
+   "Mesh_Terrain"
+  ],
+  "cut": "zone",
+  "backRule": "vlb",
+  "vlbK": 2.0,
+  "keepRounds": 0,
+  "reachLoop": 12,
+  "fromPreLdi": false
+ },
+ "backstop": {
+  "K": 2.0,
+  "stepPx": 4,
+  "groundSrcM": 1.0
+ },
+ "repair": {
+  "rules": [
+   "drop",
+   "card",
+   "flap",
+   "planar"
+  ],
+  "rounds": 8
+ },
+ "certificate": {
+  "loop": 12,
+  "extraPoses": [
+   "loop_060",
+   "loop_096",
+   "loop_240",
+   "loop_336"
+  ]
+ }
+}

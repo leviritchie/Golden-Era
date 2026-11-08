@@ -1,0 +1,617 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Generated/runtime candidate coverage report for packet-linked gameplay surfaces.",
+  "generationBoundary": "Static planning only. Candidate presence is not runtime proof or hook safety proof.",
+  "implementationRelevantSurfaceCount": 37,
+  "coverageCounts": {
+    "runtime-candidate": 32,
+    "no-generated-or-dossier-candidate": 4,
+    "live-metadata-proven": 1
+  },
+  "surfaces": [
+    {
+      "surfaceId": "adventureObject.objectRootCollections",
+      "domain": "adventure-object",
+      "status": "proven-static",
+      "packets": [
+        "vision",
+        "reward-result",
+        "battle-action",
+        "construction"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 1,
+      "dossierStatuses": [],
+      "nextProofAction": "Use DataObject as the canonical adventure object row; prove view/object/hook correlation before object-specific law behavior.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "battleAction.actionClassification",
+      "domain": "battle-action",
+      "status": "partial",
+      "packets": [
+        "battle-action"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 1,
+      "dossierStatuses": [
+        "built"
+      ],
+      "nextProofAction": "Trace controlled melee, ranged, and first-round actions with actor, targets, attacked hexes, and round state.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "battleAction.battleLifecycleState",
+      "domain": "battle-action",
+      "status": "candidate",
+      "packets": [
+        "battle-action",
+        "morale",
+        "spell-cooldown",
+        "counterattack"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 2,
+      "dossierStatuses": [
+        "built",
+        "built"
+      ],
+      "nextProofAction": "Grow this surface after packet-critical action and morale traces are narrowed.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "battleAction.formationGeometry",
+      "domain": "battle-action",
+      "status": "partial",
+      "packets": [
+        "battle-action"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 1,
+      "dossierStatuses": [
+        "built"
+      ],
+      "nextProofAction": "Probe committed action payload only after action classification is narrowed.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "battleAction.unitRoleClassifier",
+      "domain": "battle-action",
+      "status": "candidate",
+      "packets": [
+        "battle-action"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 4,
+      "dossierStatuses": [
+        "built",
+        "built",
+        "built",
+        "declaration-only"
+      ],
+      "nextProofAction": "Statically map Unit/TransferUnit -> UnitLogicConfig -> default attack AbilityLogicConfig -> EAttackType and CastDealerConfig, then prove against one known shooter and one known melee unit at runtime.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "battleActor.battleObjectToTransferSideAlias",
+      "domain": "battle-actor",
+      "status": "partial",
+      "packets": [
+        "counterattack",
+        "morale",
+        "battle-action"
+      ],
+      "coverageLevel": "no-generated-or-dossier-candidate",
+      "runtimeCandidateCount": 0,
+      "dossierStatuses": [],
+      "nextProofAction": "Runtime pilot must log object-to-battle-side success or exact-stage failure separately for counterattack FieldObject and morale Unit payloads.",
+      "boundary": "No runtime candidate is attached; use dossier coverage to resolve exact generated/runtime identity before implementation."
+    },
+    {
+      "surfaceId": "battleActor.transferSideToDataSideRuntimeMap",
+      "domain": "battle-actor",
+      "status": "runtime-unproven",
+      "packets": [
+        "counterattack",
+        "morale",
+        "battle-action"
+      ],
+      "coverageLevel": "no-generated-or-dossier-candidate",
+      "runtimeCandidateCount": 0,
+      "dossierStatuses": [],
+      "nextProofAction": "Use decomp and/or live bridge to identify the current TransferSide-to-Data.Side link, then runtime-pilot with a log that distinguishes side-index read failure from Data.Side lookup failure.",
+      "boundary": "No runtime candidate is attached; use dossier coverage to resolve exact generated/runtime identity before implementation."
+    },
+    {
+      "surfaceId": "battleLifecycle.baseEventBoundary",
+      "domain": "battle-lifecycle",
+      "status": "partial",
+      "packets": [
+        "battle-action",
+        "committed-damage",
+        "counterattack",
+        "morale"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 1,
+      "dossierStatuses": [
+        "built"
+      ],
+      "nextProofAction": "Use exact event payloads like ObjectTookDamageEventArgs and CastAbilityEventArgs; never broad-patch dispatch families.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "buffStatus.buffDebuffSidSurfaces",
+      "domain": "buff-status",
+      "status": "candidate",
+      "packets": [
+        "committed-damage",
+        "counterattack",
+        "morale",
+        "battle-action"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 4,
+      "dossierStatuses": [
+        "declaration-only",
+        "declaration-only",
+        "declaration-only",
+        "declaration-only"
+      ],
+      "nextProofAction": "Resolve each dzv method with live bridge before enabling any status mutation law.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "committedDamage.buffDebuffApplyQuery",
+      "domain": "committed-damage",
+      "status": "partial",
+      "packets": [
+        "committed-damage",
+        "battle-action",
+        "counterattack",
+        "morale"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 4,
+      "dossierStatuses": [
+        "declaration-only",
+        "declaration-only",
+        "declaration-only",
+        "declaration-only"
+      ],
+      "nextProofAction": "Run a combat/status pilot and require exact buff/debuff diagnostic traces that identify receiver, SID, duration/stacking, source side, and ordering relative to committed damage before any status mutation law is enabled.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "committedDamage.unitDamageApply",
+      "domain": "committed-damage",
+      "status": "proven-live-metadata",
+      "packets": [
+        "committed-damage"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 1,
+      "dossierStatuses": [],
+      "nextProofAction": "Trace before/after health, final damage, death cleanup, dealer identity, receiver identity, and active law/rank in one combat.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "construction.buildingLookup",
+      "domain": "construction",
+      "status": "proven-live-metadata",
+      "packets": [
+        "construction"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 1,
+      "dossierStatuses": [],
+      "nextProofAction": "Correlate lookup result with displayed cost, eligibility, charged resources, and committed building state.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "construction.chargedCostAndCommit",
+      "domain": "construction",
+      "status": "partial",
+      "packets": [
+        "construction"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 3,
+      "dossierStatuses": [
+        "built",
+        "built",
+        "built"
+      ],
+      "nextProofAction": "Trace one build click from eligibility check through resource subtraction and final constructed state.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "construction.displayedCost",
+      "domain": "construction",
+      "status": "partial",
+      "packets": [
+        "construction"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 2,
+      "dossierStatuses": [
+        "built",
+        "built"
+      ],
+      "nextProofAction": "Avoid broad UI tracing; design a narrow committed-build correlation probe first.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "corpseDeath.staticDeathCorpseSignals",
+      "domain": "corpse-death",
+      "status": "partial",
+      "packets": [
+        "committed-damage",
+        "battle-action"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 2,
+      "dossierStatuses": [
+        "built",
+        "built"
+      ],
+      "nextProofAction": "Search for corpse/death cleanup consumers from UnitLogicConfig.leaveCorpse and ObjectTookDamageEventArgs before implementing corpse economy laws.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "counterattack.listenerCandidates",
+      "domain": "counterattack",
+      "status": "partial",
+      "packets": [
+        "counterattack"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 5,
+      "dossierStatuses": [
+        "built",
+        "built",
+        "built"
+      ],
+      "nextProofAction": "Trace a controlled normal attack/counterattack sequence with ability type, actor, target, and damage correlation.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "economy.resourceDataPrimitives",
+      "domain": "economy",
+      "status": "proven-static",
+      "packets": [
+        "reward-result",
+        "construction"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 4,
+      "dossierStatuses": [],
+      "nextProofAction": "Use these only behind a committed reward/build source proof; never grant resources from a raw Resource mutation trace alone.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "economy.sideResourceHeap",
+      "domain": "economy",
+      "status": "proven-static",
+      "packets": [
+        "reward-result",
+        "construction"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 1,
+      "dossierStatuses": [],
+      "nextProofAction": "Correlate active law owner side with Side.res before any custom economy grant.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "lawState.battlePacketActiveLawRankContext",
+      "domain": "law-state",
+      "status": "partial",
+      "packets": [
+        "counterattack",
+        "morale",
+        "battle-action"
+      ],
+      "coverageLevel": "no-generated-or-dossier-candidate",
+      "runtimeCandidateCount": 0,
+      "dossierStatuses": [],
+      "nextProofAction": "Runtime pilot must show Data.Side, faction SID, law SID/index, and rank in the same counterattack/morale/battle-action event before mutation is trusted.",
+      "boundary": "No runtime candidate is attached; use dossier coverage to resolve exact generated/runtime identity before implementation."
+    },
+    {
+      "surfaceId": "lawState.logicFractionLawQueries",
+      "domain": "law-state",
+      "status": "runtime-proven",
+      "packets": [
+        "vision",
+        "committed-damage",
+        "construction",
+        "spell-cooldown",
+        "counterattack",
+        "reward-result",
+        "morale",
+        "battle-action"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 5,
+      "dossierStatuses": [],
+      "nextProofAction": "Use a legal native law state: either inspect a player-selected law from the law tree, or launch a scenario/profile that grants law points and apply through native UI/Logic.FractionLaws with xpk=true. Do not force xpl when xpk=false.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "lawState.packetMutationConsumesActiveRank",
+      "domain": "law-state",
+      "status": "runtime-unproven",
+      "packets": [
+        "counterattack",
+        "morale",
+        "battle-action"
+      ],
+      "coverageLevel": "no-generated-or-dossier-candidate",
+      "runtimeCandidateCount": 0,
+      "dossierStatuses": [],
+      "nextProofAction": "Runtime pilot must show one mutation log for each enabled battle packet family with same-event owner/rank/effect fields.",
+      "boundary": "No runtime candidate is attached; use dossier coverage to resolve exact generated/runtime identity before implementation."
+    },
+    {
+      "surfaceId": "morale.actionQueueMutation",
+      "domain": "morale",
+      "status": "missing",
+      "packets": [
+        "morale"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 2,
+      "dossierStatuses": [
+        "built",
+        "built"
+      ],
+      "nextProofAction": "Use decomp semantic index around morale action follow-up before adding runtime diagnostics.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "morale.eventDispatch",
+      "domain": "morale",
+      "status": "proven-static",
+      "packets": [
+        "morale"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 2,
+      "dossierStatuses": [],
+      "nextProofAction": "At runtime, trace bdhu/grw with eda.bcih/edb.bcsp/bcsq and visible morale UI/action timing in the same combat.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "morale.rollClassification",
+      "domain": "morale",
+      "status": "partial",
+      "packets": [
+        "morale"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 2,
+      "dossierStatuses": [
+        "built",
+        "built"
+      ],
+      "nextProofAction": "Trace a visible morale trigger with actor identity, phase, queued action change, and active law/rank.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "rewardConfig.rewardRowsAndConfig",
+      "domain": "reward-config",
+      "status": "proven-static",
+      "packets": [
+        "reward-result",
+        "vision",
+        "battle-action"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 2,
+      "dossierStatuses": [],
+      "nextProofAction": "Use reward rows for classification only until the committed apply/selection path is proven for each reward type.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "rewardResult.applyRewardSet",
+      "domain": "reward-result",
+      "status": "partial",
+      "packets": [
+        "reward-result"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 1,
+      "dossierStatuses": [
+        "built"
+      ],
+      "nextProofAction": "Rebuild the reward apply method dossier and bridge payload before using this as a gameplay hook.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "rewardResult.queueAndResourceMutation",
+      "domain": "reward-result",
+      "status": "partial",
+      "packets": [
+        "reward-result"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 1,
+      "dossierStatuses": [
+        "built"
+      ],
+      "nextProofAction": "Correlate chest choice, reward-set apply, resource mutation, hero identity, and one-shot idempotence.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "spellCooldown.castGateAndUiSync",
+      "domain": "spell-cooldown",
+      "status": "partial",
+      "packets": [
+        "spell-cooldown"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 8,
+      "dossierStatuses": [
+        "built",
+        "built",
+        "built",
+        "built",
+        "built",
+        "built"
+      ],
+      "nextProofAction": "Pilot an actual spell cast; prior pilot did not include one.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "spellCooldown.effectiveCooldownRead",
+      "domain": "spell-cooldown",
+      "status": "proven-live-metadata",
+      "packets": [
+        "spell-cooldown"
+      ],
+      "coverageLevel": "live-metadata-proven",
+      "runtimeCandidateCount": 0,
+      "dossierStatuses": [],
+      "nextProofAction": "Pilot a spell cast with spell pool, cast gate, post-cast cooldown, and spellbook UI traces enabled.",
+      "boundary": "No runtime candidate is attached; use dossier coverage to resolve exact generated/runtime identity before implementation."
+    },
+    {
+      "surfaceId": "spellbook.castMagicEventPayloads",
+      "domain": "spellbook",
+      "status": "partial",
+      "packets": [
+        "spell-cooldown",
+        "battle-action"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 4,
+      "dossierStatuses": [
+        "built",
+        "built",
+        "built",
+        "built"
+      ],
+      "nextProofAction": "Build dossiers for CastMagicEventArgs/ChangeMagicEventArgs call sites, then runtime-pilot one spell cast with cooldown and event traces together.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "spellbook.heroAndDataMagicCollections",
+      "domain": "spellbook",
+      "status": "proven-static",
+      "packets": [
+        "spell-cooldown"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 5,
+      "dossierStatuses": [],
+      "nextProofAction": "During a spell-cast pilot, correlate casting hero identity to HeroMagics/DataMagics/MagicData and then to cooldown gate methods.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "townBuilding.buildingCatalogAndDailyCount",
+      "domain": "town-building",
+      "status": "proven-static",
+      "packets": [
+        "construction"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 1,
+      "dossierStatuses": [],
+      "nextProofAction": "Correlate construction UI city, BuildingData.bgck, Side.res charge, and todaysConstructionsCount during one successful building purchase.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "townService.magicManaIntelConverterRoots",
+      "domain": "town-service",
+      "status": "partial",
+      "packets": [
+        "construction",
+        "spell-cooldown",
+        "vision",
+        "battle-action"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 4,
+      "dossierStatuses": [
+        "built",
+        "built",
+        "built",
+        "built"
+      ],
+      "nextProofAction": "Build focused dossiers from each subclass/config before designing laws around these services.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "townService.tavernAndPrisonHeroSources",
+      "domain": "town-service",
+      "status": "partial",
+      "packets": [
+        "construction",
+        "reward-result",
+        "vision"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 3,
+      "dossierStatuses": [
+        "built",
+        "built",
+        "built",
+        "built",
+        "built"
+      ],
+      "nextProofAction": "Search from tavern/prison interaction methods before implementing hero-hire or prison-rescue laws.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "ui.spellbookVisualOnlyBoundary",
+      "domain": "ui",
+      "status": "partial",
+      "packets": [
+        "spell-cooldown"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 3,
+      "dossierStatuses": [
+        "built",
+        "built",
+        "built"
+      ],
+      "nextProofAction": "Use spellbook UI only as a diagnostic correlation surface; gameplay changes must target spell data/cooldown/cast surfaces.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "vision.nativeRevealMutation",
+      "domain": "vision",
+      "status": "partial",
+      "packets": [
+        "vision"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 8,
+      "dossierStatuses": [
+        "built",
+        "built",
+        "built",
+        "built",
+        "built",
+        "declaration-only"
+      ],
+      "nextProofAction": "Probe one exact reveal mutation path with side-index logging and visible map refresh.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    },
+    {
+      "surfaceId": "vision.objectDescriptorFactories",
+      "domain": "vision",
+      "status": "proven-live-metadata",
+      "packets": [
+        "vision"
+      ],
+      "coverageLevel": "runtime-candidate",
+      "runtimeCandidateCount": 3,
+      "dossierStatuses": [],
+      "nextProofAction": "Use these identities only to narrow a live reveal mutation probe.",
+      "boundary": "Runtime candidates are static/generated candidates only; they still require bridge/native/runtime reconciliation."
+    }
+  ]
+}

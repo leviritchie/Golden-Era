@@ -1,0 +1,308 @@
+{
+ "unit": "toa_orc_berserker",
+ "joints": {
+  "Hips": [
+   0.003,
+   0.171,
+   0.609
+  ],
+  "Spine": [
+   0.012,
+   0.192,
+   0.69
+  ],
+  "Spine1": [
+   0.021,
+   0.213,
+   0.77
+  ],
+  "Spine2": [
+   0.031,
+   0.236,
+   0.86
+  ],
+  "Neck": [
+   0.038,
+   0.255,
+   0.93
+  ],
+  "Head": [
+   0.003,
+   0.108,
+   1.063
+  ],
+  "HeadTop_End": [
+   0.017,
+   -0.101,
+   1.503
+  ],
+  "LeftShoulder": [
+   0.101,
+   0.143,
+   1.007
+  ],
+  "LeftArm": [
+   0.206,
+   0.199,
+   1.014
+  ],
+  "LeftForeArm": [
+   0.324,
+   0.248,
+   0.84
+  ],
+  "LeftHand": [
+   0.35,
+   0.08,
+   0.62
+  ],
+  "LeftHand_End": [
+   0.32,
+   0.1,
+   0.42
+  ],
+  "RightShoulder": [
+   -0.094,
+   0.143,
+   1.007
+  ],
+  "RightArm": [
+   -0.199,
+   0.199,
+   1.014
+  ],
+  "RightForeArm": [
+   -0.324,
+   0.29,
+   0.861
+  ],
+  "RightHand": [
+   -0.35,
+   0.2,
+   0.62
+  ],
+  "RightHand_End": [
+   -0.32,
+   0.12,
+   0.42
+  ],
+  "LeftUpLeg": [
+   0.115,
+   0.171,
+   0.554
+  ],
+  "LeftLeg": [
+   0.213,
+   0.024,
+   0.316
+  ],
+  "LeftFoot": [
+   0.25,
+   0.13,
+   0.09
+  ],
+  "LeftToeBase": [
+   0.36,
+   -0.02,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.429,
+   -0.143,
+   0.023
+  ],
+  "RightUpLeg": [
+   -0.115,
+   0.171,
+   0.554
+  ],
+  "RightLeg": [
+   -0.234,
+   0.164,
+   0.281
+  ],
+  "RightFoot": [
+   -0.269,
+   0.26,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.317,
+   0.18,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.401,
+   0.066,
+   0.023
+  ]
+ },
+ "extensions": [
+  "stronghold_propbone",
+  "stronghold_rip"
+ ],
+ "propBones": [
+  {
+   "name": "Axe",
+   "parent": "RightHand",
+   "head": [
+    -0.31,
+    0.1,
+    0.46
+   ],
+   "tail": [
+    -0.28,
+    -0.34,
+    0.46
+   ],
+   "faceTest": "centroid",
+   "regions": [
+    {
+     "box": [
+      [
+       -0.37,
+       -0.45,
+       0.26
+      ],
+      [
+       -0.19,
+       -0.235,
+       0.66
+      ]
+     ]
+    },
+    {
+     "segments": [
+      [
+       [
+        -0.3,
+        -0.25,
+        0.46
+       ],
+       [
+        -0.3,
+        0.1,
+        0.45
+       ]
+      ]
+     ],
+     "radius": 0.035,
+     "color": {
+      "expr": "mx-mn",
+      "max": 0.1
+     },
+     "coreRadius": 0.015
+    }
+   ],
+   "hide": [
+    {
+     "clip": "ShootFront",
+     "from": 2,
+     "to": 6
+    }
+   ]
+  }
+ ],
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "Axe"
+  ]
+ },
+ "rips": [
+  {
+   "name": "rhand_skirt",
+   "a": [
+    "RightHand",
+    "RightForeArm"
+   ],
+   "b": [
+    "Hips",
+    "Spine",
+    "Spine1",
+    "RightUpLeg",
+    "RightLeg"
+   ],
+   "box": [
+    [
+     -1,
+     -1,
+     0.2
+    ],
+    [
+     -0.15,
+     1,
+     0.85
+    ]
+   ]
+  },
+  {
+   "name": "lhand_skirt",
+   "a": [
+    "LeftHand",
+    "LeftForeArm"
+   ],
+   "b": [
+    "Hips",
+    "Spine",
+    "Spine1",
+    "LeftUpLeg",
+    "LeftLeg"
+   ],
+   "box": [
+    [
+     0.15,
+     -1,
+     0.2
+    ],
+    [
+     1,
+     1,
+     0.85
+    ]
+   ]
+  }
+ ],
+ "glbPatch": {
+  "reason": "authenticity lane B 2026-10-11: Death - leap up with axe and fist raised (DEF f1), lifted lying back in the air (f2-f3) before landing; stretchRelax on Death for the re-posed creases",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/toa_orc_berserker_death_leap_tr.json",
+    "regrid": true,
+    "sha256": "c235e153ad1cff9b3c7cc152902a8d01feb816538ce68e3b42e58bd344fbf1f1"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/toa_orc_berserker_death_leap_rot.json",
+    "regrid": true,
+    "sha256": "d32107993a73bbd4e74b9b93cc9104ee2c01edd71c17532457e447a99e29dfcb"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/toa_orc_berserker_death_leap_rot.json",
+    "regrid": true,
+    "sha256": "d32107993a73bbd4e74b9b93cc9104ee2c01edd71c17532457e447a99e29dfcb"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "crease of the re-posed joints"
+   }
+  ]
+ }
+}

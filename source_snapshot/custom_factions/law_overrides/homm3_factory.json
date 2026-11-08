@@ -1,0 +1,108 @@
+{
+  "lawOverrides": {
+    "fraction_law_homm3_factory_1": {"iconKey": "fraction_law_human_1_icon"},
+    "fraction_law_homm3_factory_2": {"iconKey": "fraction_law_human_2_icon"},
+    "fraction_law_homm3_factory_3": {"iconKey": "fraction_law_human_3_icon"},
+    "fraction_law_homm3_factory_4": {"iconKey": "fraction_law_human_4_icon"},
+    "fraction_law_homm3_factory_6": {"iconKey": "fraction_law_human_6_icon"},
+    "fraction_law_homm3_factory_7": {"iconKey": "fraction_law_human_7_icon"},
+    "fraction_law_homm3_factory_8": {"iconKey": "fraction_law_human_8_icon"},
+    "fraction_law_homm3_factory_9": {"iconKey": "fraction_law_human_9_icon"},
+    "fraction_law_homm3_factory_10": {"iconKey": "fraction_law_human_10_icon"},
+    "fraction_law_homm3_factory_11": {"iconKey": "fraction_law_human_11_icon"},
+    "fraction_law_homm3_factory_12": {"iconKey": "fraction_law_human_12_icon"},
+    "fraction_law_homm3_factory_13": {"iconKey": "fraction_law_human_13_icon"},
+    "fraction_law_homm3_factory_14": {"iconKey": "fraction_law_human_14_icon"},
+    "fraction_law_homm3_factory_15": {"iconKey": "fraction_law_human_15_icon"},
+    "fraction_law_homm3_factory_16": {"iconKey": "fraction_law_human_16_icon"},
+    "fraction_law_homm3_factory_17": {"iconKey": "fraction_law_human_17_icon"},
+    "fraction_law_homm3_factory_18": {"iconKey": "fraction_law_human_18_icon"},
+    "fraction_law_homm3_factory_19": {"iconKey": "fraction_law_human_19_icon"},
+    "fraction_law_homm3_factory_21": {"iconKey": "fraction_law_human_21_icon"},
+    "fraction_law_homm3_factory_22": {"iconKey": "fraction_law_human_22_icon"},
+    "fraction_law_homm3_factory_23": {"iconKey": "fraction_law_human_23_icon"},
+    "fraction_law_homm3_factory_24": {"iconKey": "fraction_law_human_24_icon"},
+    "fraction_law_homm3_factory_25": {"iconKey": "fraction_law_human_25_icon"},
+    "fraction_law_homm3_factory_27": {"iconKey": "fraction_law_human_27_icon"},
+    "fraction_law_homm3_factory_28": {"iconKey": "fraction_law_human_28_icon"},
+    "fraction_law_homm3_factory_29": {"iconKey": "fraction_law_human_29_icon"},
+    "fraction_law_homm3_factory_30": {"iconKey": "fraction_law_human_30_icon"},
+    "fraction_law_homm3_factory_32": {"iconKey": "fraction_law_human_32_icon"},
+    "fraction_law_homm3_factory_33": {"iconKey": "fraction_law_human_33_icon"},
+    "fraction_law_homm3_factory_34": {"iconKey": "fraction_law_human_34_icon"},
+    "fraction_law_homm3_factory_5": {
+      "enabled": true,
+      "nameText": "Assembly Calibration",
+      "descriptionText": "Positive effects on friendly creatures last +1/+2 additional rounds by rank.",
+      "parametersPerLevel": [
+        {"cost": 3, "bonuses": [{"type": "unitStat", "parameters": ["inComingBuffDuration", "1"]}]},
+        {"cost": 3, "bonuses": [{"type": "unitStat", "parameters": ["inComingBuffDuration", "2"]}]}
+      ],
+      "iconKey": "fraction_law_human_5_icon",
+      "notes": "Olden Era integration law using an exact Core-native bonus shape. This is not claimed as a HotA-authentic Factory law; candidate, deploy, and runtime validation remain pending."
+    },
+    "fraction_law_homm3_factory_20": {
+      "enabled": true,
+      "nameText": "Ballistics Calibration",
+      "descriptionText": "Friendly creatures deal 5%/10% more ranged damage and take 5%/10% less ranged damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {"type": "unitStat", "parameters": ["modifierSet", "outDmgMods", "shoot_attack", "0.05"]},
+            {"type": "unitStat", "parameters": ["modifierSet", "inDmgMods", "shoot_attack", "-0.05"]}
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {"type": "unitStat", "parameters": ["modifierSet", "outDmgMods", "shoot_attack", "0.10"]},
+            {"type": "unitStat", "parameters": ["modifierSet", "inDmgMods", "shoot_attack", "-0.10"]}
+          ]
+        }
+      ],
+      "iconKey": "fraction_law_human_20_icon",
+      "notes": "Olden Era integration law using exact Core-native ranged modifier rows. This is not claimed as a HotA-authentic Factory law; candidate, deploy, and runtime validation remain pending."
+    },
+    "fraction_law_homm3_factory_26": {
+      "enabled": true,
+      "nameText": "Engineering Doctrine",
+      "descriptionText": "Friendly creatures gain 25% of their hero's Spell Power and Knowledge as Attack and Defense respectively.",
+      "parametersPerLevel": [
+        {
+          "cost": 6,
+          "bonuses": [
+            {"type": "unitStat", "parameters": ["heroSpellPowerModifier", "0.25"]},
+            {"type": "unitStat", "parameters": ["heroIntelligenceModifier", "0.25"]}
+          ]
+        }
+      ],
+      "iconKey": "fraction_law_human_26_icon",
+      "notes": "Olden Era integration law copied from exact Core-native modifier shapes. This is not claimed as a HotA-authentic Factory law; candidate, deploy, and runtime validation remain pending."
+    },
+    "fraction_law_homm3_factory_31": {
+      "enabled": true,
+      "nameText": "Industrial Rhythm",
+      "descriptionText": "Industrial Factory creatures generate 1 Focus Point at the beginning of their turn.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": ["energyPerRound", "1"],
+              "receivers": [
+                "h3_mechanic", "h3_engineer", "h3_mechanic_upg_alt",
+                "h3_automaton", "h3_sentinel_automaton", "h3_automaton_upg_alt",
+                "h3_gunslinger", "h3_bounty_hunter", "h3_gunslinger_upg_alt",
+                "h3_dreadnought", "h3_juggernaut", "h3_dreadnought_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "iconKey": "fraction_law_human_31_icon",
+      "notes": "Olden Era integration law using an exact Core-native energyPerRound row and manifest-owned Industrial receivers. This is not claimed as a HotA-authentic Factory law; candidate, deploy, and runtime validation remain pending."
+    }
+  }
+}

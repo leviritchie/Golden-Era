@@ -1,0 +1,665 @@
+{
+ "unit": "h3_fury",
+ "joints": {
+  "Hips": [
+   0.017,
+   0.024,
+   0.589
+  ],
+  "Spine": [
+   0.017,
+   -0.035,
+   0.677
+  ],
+  "Spine1": [
+   0.017,
+   -0.094,
+   0.764
+  ],
+  "Spine2": [
+   0.017,
+   -0.161,
+   0.861
+  ],
+  "Neck": [
+   0.017,
+   -0.213,
+   0.938
+  ],
+  "Head": [
+   0.017,
+   -0.255,
+   1.036
+  ],
+  "HeadTop_End": [
+   0.045,
+   -0.331,
+   1.461
+  ],
+  "LeftUpLeg": [
+   0.143,
+   0.024,
+   0.589
+  ],
+  "LeftLeg": [
+   0.206,
+   -0.157,
+   0.345
+  ],
+  "LeftFoot": [
+   0.171,
+   0.108,
+   0.233
+  ],
+  "LeftToeBase": [
+   0.171,
+   -0.01,
+   0.038
+  ],
+  "LeftToe_End": [
+   0.096,
+   -0.204,
+   -0.004
+  ],
+  "RightUpLeg": [
+   -0.108,
+   0.024,
+   0.589
+  ],
+  "RightLeg": [
+   -0.164,
+   -0.157,
+   0.345
+  ],
+  "RightFoot": [
+   -0.164,
+   0.108,
+   0.233
+  ],
+  "RightToeBase": [
+   -0.164,
+   -0.01,
+   0.038
+  ],
+  "RightToe_End": [
+   -0.15,
+   -0.206,
+   -0.004
+  ],
+  "LeftShoulder": [
+   0.05,
+   -0.08,
+   1.02
+  ],
+  "LeftArm": [
+   0.17,
+   -0.15,
+   1.0
+  ],
+  "LeftForeArm": [
+   0.25,
+   -0.18,
+   0.74
+  ],
+  "LeftHand": [
+   0.1,
+   -0.38,
+   0.64
+  ],
+  "LeftHand_End": [
+   0.04,
+   -0.44,
+   0.6
+  ],
+  "RightShoulder": [
+   -0.05,
+   -0.08,
+   1.02
+  ],
+  "RightArm": [
+   -0.17,
+   -0.15,
+   1.0
+  ],
+  "RightForeArm": [
+   -0.28,
+   -0.14,
+   0.76
+  ],
+  "RightHand": [
+   -0.21,
+   -0.19,
+   0.47
+  ],
+  "RightHand_End": [
+   -0.18,
+   -0.2,
+   0.4
+  ]
+ },
+ "extensions": [
+  "dungeon_fixweights",
+  "wing_chain"
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "wingMaxDeg": 0,
+ "wings": [
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.12,
+    0.15,
+    1.0
+   ],
+   "tail": [
+    -0.45,
+    0.1,
+    1.45
+   ],
+   "sign": 1,
+   "region": {
+    "box": [
+     [
+      -0.72,
+      -0.25,
+      0.6
+     ],
+     [
+      -0.13,
+      0.45,
+      1.75
+     ]
+    ],
+    "exclude": [
+     {
+      "box": [
+       [
+        -0.36,
+        -0.5,
+        0.4
+       ],
+       [
+        -0.08,
+        -0.02,
+        1.1
+       ]
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.12,
+    0.15,
+    1.0
+   ],
+   "tail": [
+    0.45,
+    0.1,
+    1.45
+   ],
+   "sign": -1,
+   "region": {
+    "box": [
+     [
+      0.13,
+      -0.25,
+      0.6
+     ],
+     [
+      0.72,
+      0.45,
+      1.75
+     ]
+    ],
+    "exclude": [
+     {
+      "box": [
+       [
+        0.08,
+        -0.5,
+        0.4
+       ],
+       [
+        0.36,
+        -0.02,
+        1.1
+       ]
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "wingChain": {
+  "wings": [
+   {
+    "bone": "LeftWing",
+    "side": 1
+   },
+   {
+    "bone": "RightWing",
+    "side": -1
+   }
+  ],
+  "anim": {
+   "Idle": {
+    "open": 0,
+    "fold": 10
+   },
+   "MoveStart": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       0.6
+      ],
+      [
+       1,
+       1
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.66,
+       65
+      ],
+      [
+       1,
+       100
+      ]
+     ]
+    }
+   },
+   "Move": {
+    "open": 1,
+    "flap": {
+     "sin": 60,
+     "phase": 90,
+     "offset": 40
+    },
+    "fold": {
+     "sin": 50,
+     "phase": -90,
+     "half": "pos"
+    },
+    "droop": {
+     "sin": 30,
+     "phase": -90,
+     "half": "pos"
+    }
+   },
+   "MoveEnd": {
+    "open": {
+     "keys": [
+      [
+       0,
+       1
+      ],
+      [
+       0.5,
+       0.5
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       100
+      ],
+      [
+       0.5,
+       40
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Mouseover": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       0.15
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       1
+      ],
+      [
+       0.5,
+       0.9
+      ],
+      [
+       0.83,
+       0.2
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       25
+      ],
+      [
+       0.6,
+       15
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Defence": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       0.7
+      ],
+      [
+       0.67,
+       0.7
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       35
+      ],
+      [
+       0.67,
+       35
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       0.8
+      ],
+      [
+       0.6,
+       1
+      ],
+      [
+       0.8,
+       0.7
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       30
+      ],
+      [
+       0.6,
+       10
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Death": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.25,
+       0.9
+      ],
+      [
+       0.5,
+       1
+      ],
+      [
+       0.75,
+       0.3
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.25,
+       30
+      ],
+      [
+       0.6,
+       10
+      ],
+      [
+       1,
+       -15
+      ]
+     ]
+    },
+    "droop": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.6,
+       0
+      ],
+      [
+       1,
+       40
+      ]
+     ]
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "flap",
+    "open",
+    "fold",
+    "droop",
+    "sweep"
+   ],
+   "penalty": 0.0008,
+   "smooth": 0.0008,
+   "offsets": [
+    "dx",
+    "dy"
+   ],
+   "clips": [
+    "MoveStart",
+    "Move",
+    "MoveEnd",
+    "Hitted",
+    "Defence",
+    "AttackFront",
+    "Death"
+   ],
+   "bounce": 4
+  },
+  "adoptWeights": "nearest",
+  "steady": {
+   "Move": 1.0,
+   "MoveStart": 0.5,
+   "MoveEnd": 0.5
+  },
+  "bodyTurn": {
+   "fit": [
+    "Move"
+   ],
+   "rampIn": {
+    "MoveStart": "Move"
+   },
+   "rampOut": {
+    "MoveEnd": "Move"
+   },
+   "params": [
+    "yaw",
+    "roll",
+    "dx",
+    "dy"
+   ],
+   "scanPitch": [
+    40
+   ],
+   "note": "2026-10-11 lane B, ported from h3_harpy/h3_harpy_hag wingChain flight: the DEF fury flies crouched forward (~40 deg) with big overhead wing beats; the capture kept her upright with the wings low and back (Move IoU 0.38). Pitch fixed at 40 deg forward, yaw/roll within 15 deg, offsets fitted; Move/MoveStart/MoveEnd wing params now fitted to the DEF.",
+   "scanYaw": [
+    -10,
+    0,
+    10
+   ],
+   "limits": {
+    "yaw": [
+     -15,
+     15
+    ],
+    "roll": [
+     -15,
+     15
+    ]
+   }
+  }
+ },
+ "glbPatch": {
+  "reason": "2026-10-11 lane B authenticity (DEF g00/g05), on top of the wingChain flight port: Move* - head lifted to look ahead (Neck aimed forward-up, Head pitched back 35 deg; the pitched flight body left her staring at the floor) and talons carried forward under the body (h3_harpy_hag flight legs), ramped over MoveStart/MoveEnd. Death - the capture ended standing with the wings spread; the DEF flares, then curls into a ball on the floor: keys 3-6 copied from key 1, Hips pitched 75 deg forward and dropped with leg IK, back rounded, head tucked, wings wrapped down around the body, arms in. keyTranslations + split keyRotations; stretchRelax on the re-posed clips.",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_fury_flight_death_tr.json",
+    "regrid": true,
+    "sha256": "04b97082b49b19b25910ab212844f0a084b3caf98b4a2aed29c11c8398111ac4"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_fury_flight_death_rot.json",
+    "regrid": true,
+    "sha256": "92ab442fbad890b9d80f6cf672c0eff8febf9d82312db7de8e2751ffb0bd0359"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_fury_flight_death_rot.json",
+    "regrid": true,
+    "sha256": "92ab442fbad890b9d80f6cf672c0eff8febf9d82312db7de8e2751ffb0bd0359"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death",
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "crease of the re-posed joints"
+   }
+  ]
+ }
+}

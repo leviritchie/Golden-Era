@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Offline host check for the generated current-build symbol scopes (GameSymbolsCurrent.g.cs).
+    Loads the built OfflineUnlockMod.dll in a plain .NET process - never the game.
+
+    Golden mode (3 args): recomputes GameSymbolScope.Hash - the plugin's own code - over every golden
+    value the plugin holds and compares it with the hash the Python generator baked in.
+      (from this directory) dotnet run -c Release, then the arguments after a double-dash separator:
+      <OfflineUnlockMod.dll> <GameSymbolsCurrent.g.cs> <GoldenEra>/BepInEx/core
+
+    Simulated-current mode (5 args): points BepInEx Paths.GameRootPath at a current-build mirror
+    (GameAssembly.dll is only hashed, read-only) and preloads the offline live interop, so every
+    generated static constructor runs its current-build branch and GameSymbolScope.VerifyType checks
+    the real live types. Prints the applied counts and every VERIFY-FAIL position.
+      ... <GoldenEra>/BepInEx/core <mirror root> artifacts/port_current/interop_live
+
+    Proof tier: generated artifact validated (offline host), not runtime.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,84 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require native neutral threat, strength, or intention data. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresNeutralThreatDataProfiles": true,
+    "visionFamilyOnly": true,
+    "neutralThreatMustComeFromNativeData": true,
+    "localizedTextParsingForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": [
+    "homm3_cove",
+    "homm3_dungeon",
+    "homm3_stronghold"
+  ],
+  "allowedFamily": "Vision",
+  "requiredRuntimeProof": [
+    "neutral stack object identity proof",
+    "native threat or strength value proof",
+    "native intention or join/fight disposition proof when intention is used",
+    "hero proximity or area-scan context proof",
+    "law-owner and observing-side correlation proof",
+    "read-only preview versus fog reveal mutation boundary proof",
+    "localized threat text exclusion proof",
+    "idempotent per-scan or per-preview application proof"
+  ],
+  "contracts": {
+    "cove.structure-scout-treasure-banks": {
+      "neutralDataKinds": [
+        "native-neutral-threat-or-value",
+        "high-value-neutral-camp-filter"
+      ],
+      "companionPredicates": [
+        "RequiresFogRevealMutation",
+        "RequiresObjectSidOrCategoryAllowlist",
+        "RequiresOwnedStructureRadius"
+      ],
+      "forbiddenSubstitutes": [
+        "localized threat text parsed as neutral threat data",
+        "object category allowlist counted as threat data",
+        "fog reveal target counted as threat data",
+        "creature-bank or treasure theme counted as neutral threat data",
+        "weak or high-value label inferred without native strength value"
+      ],
+      "notes": "Requires native neutral threat or value data before Sea Charts can classify high-value neutral camps; object allowlists, owned structures, and fog reveal are companion boundaries only."
+    },
+    "dungeon.neutral-intention-preview": {
+      "neutralDataKinds": [
+        "native-neutral-intention-or-disposition",
+        "read-only-preview-source-data"
+      ],
+      "companionPredicates": [
+        "RequiresReadOnlyTooltipPreview"
+      ],
+      "forbiddenSubstitutes": [
+        "localized threat text parsed as neutral threat data",
+        "object category allowlist counted as threat data",
+        "fog reveal target counted as threat data",
+        "read-only tooltip preview counted without native neutral data",
+        "weak or high-value label inferred without native strength value"
+      ],
+      "notes": "Requires native neutral intention, disposition, or Read-Minds-style source data before Deep Scouts can expose a read-only preview; tooltip UI alone is not the data source."
+    },
+    "stronghold.weak-neutral-stack-scouting": {
+      "neutralDataKinds": [
+        "native-neutral-threat-or-value",
+        "easy-or-very-easy-neutral-stack-filter"
+      ],
+      "companionPredicates": [
+        "RequiresFogRevealMutation",
+        "RequiresObjectSidOrCategoryAllowlist"
+      ],
+      "forbiddenSubstitutes": [
+        "localized threat text parsed as neutral threat data",
+        "object category allowlist counted as threat data",
+        "fog reveal target counted as threat data",
+        "creature-bank or treasure theme counted as neutral threat data",
+        "weak or high-value label inferred without native strength value"
+      ],
+      "notes": "Requires native neutral threat or strength data before War Scouts can classify easy or very-easy neutral stacks; object allowlists and fog reveal are companion boundaries only."
+    }
+  }
+}

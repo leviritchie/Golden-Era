@@ -1,0 +1,91 @@
+{
+  "schema": "homm3-mocap-structured-profile-v1",
+  "assetId": "h3_pikeman",
+  "displayName": "Pikeman",
+  "status": "authored",
+  "mesh": "artifacts/meshy_downloads/h3_pikeman_smartrigged.glb",
+  "meshSha256": "f6d79cfaaec3c849e4fe143207d95be839ca8be74d9a1c64e27da5f45b1ec3f2",
+  "sourceSelectionReason": "Explicit original source for current fitted skin: preserves original geometry, albedo and all twelve weight slots. Legacy bridgefix/rigidized sources remove topology and add an independent neutral root; they are not current preparation inputs.",
+  "donorRecipe": "mixamo-25-v1",
+  "geometryOwnership": {"path": "experiments/homm3_mocap_v2/profiles/ownership/h3_pikeman_v2.json", "sha256": "0a05e318e20faa1aed2f4c76f9dbe0c04fc536b0846902bfd0469467543e3d53"},
+  "anatomyEvidence": {
+    "method": "agent visual authorship from six true-camera Blender original-material views, source hierarchy and physical foot landmark projections",
+    "annotation": "artifacts/homm3_mocap_v2/pikeman_anatomy_v1/source_annotation.png",
+    "regionAnnotation": "artifacts/homm3_mocap_v2/pikeman_anatomy_v1/authored_region_annotation.png",
+    "annotationColourProof": "Diagnostic per-triangle colour and source-weight region labels only; not texture, lighting, or material fidelity proof",
+    "sourceBones": "artifacts/homm3_mocap_v2/pikeman_anatomy_v1/source_bones.json",
+    "axes": "Source upright +Y, face/toes forward +Z; anatomical left +X, right -X",
+    "leftArm": "20 inside left upper chest/collar area, not upper grip: front-only overlap was resolved by yaw060 depth and strongest source weight support. Keep LeftShoulder owner. Exact paired 20/19/18/17 replace donor-proportional resampling; 19 shoulder, 18 elbow, 17 wrist and 16 palm remain source-supported.",
+    "rightArm": "24 shoulder, 23 elbow, 22 wrist, 21 palm; lower grip. No separate right collarbone: an explicit relative_to_parent donor helper is anchored to fitted Spine2. RightArm/RightForeArm/RightHand use paired source landmarks 024/023/022, not donor-fraction resampling.",
+    "legs": "Paired source hips008/012 and knees007/011 agree with physical bends. Source feet006/010 and toes005/009 lie at or below sole, so six explicit source-space foot pivots replace them. Root reviewed physical_feet_000.png and physical_feet_060.png with exact positions in physical_foot_landmarks.json; this is bind anatomy approval, not motion acceptance.",
+    "review": "Root reviewed six bind views and anatomical assignments and authorized CPU preparation; this is anatomy review, not skin or contact acceptance",
+    "pike": "064 shaft and 063 upper shaft form a long prop chain parented to right palm 021; both hands touch the shaft in bind",
+    "limits": "Rigid pike follows lower right hand. Independent left-hand shaft contact is not enforced by this profile. Original finger weights may include prop contamination; fitted skin requires visual review."
+  },
+  "anatomySha256": "7ec59e35bd2029a32f67ee594f46f5eec1698cc8f8804d54241d3344787e9dd5",
+  "anatomy": {
+    "regionBones": {
+      "torso": ["Bone_000", "Bone_001", "Bone_004", "Bone_003", "Bone_002"],
+      "neck_head": ["Bone_015", "Bone_014", "Bone_013"],
+      "arm_left": ["Bone_020", "Bone_019", "Bone_018", "Bone_017", "Bone_016", "Bone_025", "Bone_026", "Bone_027", "Bone_028", "Bone_029", "Bone_030", "Bone_031", "Bone_032", "Bone_033", "Bone_034", "Bone_035", "Bone_036", "Bone_037", "Bone_038", "Bone_039", "Bone_040", "Bone_041", "Bone_042", "Bone_043"],
+      "arm_right": ["Bone_024", "Bone_023", "Bone_022", "Bone_021", "Bone_044", "Bone_045", "Bone_046", "Bone_047", "Bone_048", "Bone_049", "Bone_050", "Bone_051", "Bone_052", "Bone_053", "Bone_054", "Bone_055", "Bone_056", "Bone_057", "Bone_058", "Bone_059", "Bone_060", "Bone_061", "Bone_062"],
+      "leg_left": ["Bone_008", "Bone_007", "Bone_006", "Bone_005"],
+      "leg_right": ["Bone_012", "Bone_011", "Bone_010", "Bone_009"],
+      "weapon": ["Bone_064", "Bone_063"]
+    },
+    "sourceJointMap": {
+      "Bone_000": "mixamorig:Hips", "Bone_001": "mixamorig:Hips",
+      "Bone_004": "mixamorig:Spine", "Bone_003": "mixamorig:Spine1", "Bone_002": "mixamorig:Spine2",
+      "Bone_015": "mixamorig:Neck", "Bone_014": "mixamorig:Head", "Bone_013": "mixamorig:Head",
+      "Bone_020": "mixamorig:LeftShoulder", "Bone_019": "mixamorig:LeftArm", "Bone_018": "mixamorig:LeftForeArm",
+      "Bone_017": "mixamorig:LeftHand", "Bone_016": "mixamorig:LeftHand",
+      "Bone_025": "mixamorig:LeftHand", "Bone_026": "mixamorig:LeftHand", "Bone_027": "mixamorig:LeftHand",
+      "Bone_028": "mixamorig:LeftHand", "Bone_029": "mixamorig:LeftHand", "Bone_030": "mixamorig:LeftHand", "Bone_031": "mixamorig:LeftHand",
+      "Bone_032": "mixamorig:LeftHand", "Bone_033": "mixamorig:LeftHand", "Bone_034": "mixamorig:LeftHand", "Bone_035": "mixamorig:LeftHand",
+      "Bone_036": "mixamorig:LeftHand", "Bone_037": "mixamorig:LeftHand", "Bone_038": "mixamorig:LeftHand", "Bone_039": "mixamorig:LeftHand",
+      "Bone_040": "mixamorig:LeftHand", "Bone_041": "mixamorig:LeftHand", "Bone_042": "mixamorig:LeftHand", "Bone_043": "mixamorig:LeftHand",
+      "Bone_024": "mixamorig:RightArm", "Bone_023": "mixamorig:RightForeArm",
+      "Bone_022": "mixamorig:RightHand", "Bone_021": "mixamorig:RightHand",
+      "Bone_044": "mixamorig:RightHand", "Bone_045": "mixamorig:RightHand", "Bone_046": "mixamorig:RightHand",
+      "Bone_047": "mixamorig:RightHand", "Bone_048": "mixamorig:RightHand", "Bone_049": "mixamorig:RightHand", "Bone_050": "mixamorig:RightHand",
+      "Bone_051": "mixamorig:RightHand", "Bone_052": "mixamorig:RightHand", "Bone_053": "mixamorig:RightHand", "Bone_054": "mixamorig:RightHand",
+      "Bone_055": "mixamorig:RightHand", "Bone_056": "mixamorig:RightHand", "Bone_057": "mixamorig:RightHand", "Bone_058": "mixamorig:RightHand",
+      "Bone_059": "mixamorig:RightHand", "Bone_060": "mixamorig:RightHand", "Bone_061": "mixamorig:RightHand", "Bone_062": "mixamorig:RightHand",
+      "Bone_008": "mixamorig:LeftUpLeg", "Bone_007": "mixamorig:LeftLeg", "Bone_006": "mixamorig:LeftFoot", "Bone_005": "mixamorig:LeftToeBase",
+      "Bone_012": "mixamorig:RightUpLeg", "Bone_011": "mixamorig:RightLeg", "Bone_010": "mixamorig:RightFoot", "Bone_009": "mixamorig:RightToeBase",
+      "Bone_064": "mixamorig:RightHand", "Bone_063": "mixamorig:RightHand"
+    },
+    "hubs": {"mixamorig:Hips": "Bone_001", "mixamorig:Spine": "Bone_004", "mixamorig:Spine1": "Bone_003", "mixamorig:Spine2": "Bone_002"},
+    "chains": [
+      {"name": "neck", "kind": "polyline", "donor": ["mixamorig:Neck", "mixamorig:Head"], "evidence": ["Bone_015", "Bone_014"]},
+      {"name": "head_end", "kind": "relative_to_parent", "donor": ["mixamorig:HeadTop_End"], "anchor": "mixamorig:Head", "region": "neck_head", "helper": true},
+      {"name": "arm_left", "kind": "paired_landmarks", "donor": ["mixamorig:LeftShoulder", "mixamorig:LeftArm", "mixamorig:LeftForeArm", "mixamorig:LeftHand"], "evidence": ["Bone_020", "Bone_019", "Bone_018", "Bone_017"]},
+      {"name": "right_collarbone_helper", "kind": "relative_to_parent", "donor": ["mixamorig:RightShoulder"], "anchor": "mixamorig:Spine2", "region": "arm_right", "helper": true},
+      {"name": "arm_right", "kind": "paired_landmarks", "donor": ["mixamorig:RightArm", "mixamorig:RightForeArm", "mixamorig:RightHand"], "evidence": ["Bone_024", "Bone_023", "Bone_022"]},
+      {"name": "leg_left", "kind": "paired_landmarks", "donor": ["mixamorig:LeftUpLeg", "mixamorig:LeftLeg"], "evidence": ["Bone_008", "Bone_007"]},
+      {"name": "leg_right", "kind": "paired_landmarks", "donor": ["mixamorig:RightUpLeg", "mixamorig:RightLeg"], "evidence": ["Bone_012", "Bone_011"]},
+      {"name": "physical_feet", "kind": "authored_positions", "donor": ["mixamorig:LeftFoot", "mixamorig:LeftToeBase", "mixamorig:LeftToe_End", "mixamorig:RightFoot", "mixamorig:RightToeBase", "mixamorig:RightToe_End"], "positions": [[0.205, 0.115, -0.195], [0.225, 0.038, -0.100], [0.238, 0.028, -0.055], [-0.145, 0.115, -0.200], [-0.160, 0.038, -0.110], [-0.170, 0.028, -0.060]], "coordinateSpace": "target_mesh_space", "sourceMeshSha256": "f6d79cfaaec3c849e4fe143207d95be839ca8be74d9a1c64e27da5f45b1ec3f2", "evidence": "Root reviewed original-material orthographic front and side physical_feet_000/060.png: ankle inside lower boot above heel, toe base and end inside forefoot above unchanged sole. Exact coordinates in artifacts/homm3_mocap_v2/pikeman_original_blender_v1/physical_foot_landmarks.json. Source foot/toe bones at or below sole are not accepted as physical pivots."}
+    ],
+    "leftRightPairs": [
+      {"donor": ["mixamorig:LeftHand", "mixamorig:RightHand"], "evidence": ["Bone_017", "Bone_022"]},
+      {"donor": ["mixamorig:LeftFoot", "mixamorig:RightFoot"], "evidence": ["Bone_006", "Bone_010"]}
+    ],
+    "rigidAttachments": [{"region": "weapon", "donorJoints": ["mixamorig:RightHand"], "reason": "Original pike chain 064->063 is parented to lower right palm 021; single rigid owner avoids shaft articulation"}],
+    "requiredBranches": ["torso", "neck_head", "arm_left", "arm_right", "leg_left", "leg_right"],
+    "extraTargetBones": ["Bone_000", "Bone_013", "Bone_016", "Bone_021", "Bone_025", "Bone_026", "Bone_027", "Bone_028", "Bone_029", "Bone_030", "Bone_031", "Bone_032", "Bone_033", "Bone_034", "Bone_035", "Bone_036", "Bone_037", "Bone_038", "Bone_039", "Bone_040", "Bone_041", "Bone_042", "Bone_043", "Bone_044", "Bone_045", "Bone_046", "Bone_047", "Bone_048", "Bone_049", "Bone_050", "Bone_051", "Bone_052", "Bone_053", "Bone_054", "Bone_055", "Bone_056", "Bone_057", "Bone_058", "Bone_059", "Bone_060", "Bone_061", "Bone_062", "Bone_063", "Bone_064"],
+    "unsupportedRequiredArticulations": ["individual fingers collapse to hand joints; no independent finger mocap", "pike is rigid right-hand detail; separate left-hand shaft contact is not enforced"],
+    "actuation": [
+      ["shoulder_L", "mixamorig:LeftArm", "arm_left", "arm_right"],
+      ["forearm_L", "mixamorig:LeftForeArm", "arm_left", "arm_right"],
+      ["shoulder_R", "mixamorig:RightArm", "arm_right", "arm_left"],
+      ["forearm_R", "mixamorig:RightForeArm", "arm_right", "arm_left"],
+      ["thigh_L", "mixamorig:LeftUpLeg", "leg_left", "leg_right"],
+      ["thigh_R", "mixamorig:RightUpLeg", "leg_right", "leg_left"],
+      ["spine", "mixamorig:Spine1", "torso", "leg_right"]
+    ],
+    "wholeBodyHubs": ["mixamorig:Hips", "mixamorig:Spine2", "mixamorig:Head", "mixamorig:LeftShoulder", "mixamorig:RightShoulder", "mixamorig:LeftUpLeg", "mixamorig:RightUpLeg"],
+    "headBone": "Bone_014",
+    "neckBone": "Bone_015"
+  },
+  "proof": "Root reviewed original-material multi-view anatomy and corrected physical foot pivots. Earlier authored_mapped_v2 preparation and all_def_v1 fit are preserved; first fit rejected attachment, idle, clipping and animated-surface gates. Current anatomy revision awaits source-surface ownership review and fresh preparation; fitted skin, two-hand contact, motion, lighting and runtime remain unproven."
+}

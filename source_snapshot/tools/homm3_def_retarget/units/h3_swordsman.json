@@ -1,0 +1,376 @@
+{
+ "unit": "h3_swordsman",
+ "sourceMesh": "artifacts/homm3_mesh_surgery/h3_swordsman_sliver_s1.glb",
+ "joints": {
+  "Hips": [
+   0.066,
+   0.073,
+   0.777
+  ],
+  "Spine": [
+   0.065,
+   0.07,
+   0.863
+  ],
+  "Spine1": [
+   0.063,
+   0.066,
+   0.948
+  ],
+  "Spine2": [
+   0.061,
+   0.062,
+   1.044
+  ],
+  "Neck": [
+   0.059,
+   0.059,
+   1.12
+  ],
+  "Head": [
+   0.066,
+   0.101,
+   1.308
+  ],
+  "HeadTop_End": [
+   0.052,
+   0.01,
+   1.594
+  ],
+  "LeftShoulder": [
+   0.115,
+   0.115,
+   1.231
+  ],
+  "LeftArm": [
+   0.241,
+   0.108,
+   1.245
+  ],
+  "LeftForeArm": [
+   0.332,
+   0.038,
+   1.029
+  ],
+  "LeftHand": [
+   0.206,
+   -0.171,
+   0.98
+  ],
+  "LeftHand_End": [
+   0.161,
+   -0.247,
+   0.962
+  ],
+  "RightShoulder": [
+   0.01,
+   0.115,
+   1.231
+  ],
+  "RightArm": [
+   -0.115,
+   0.122,
+   1.231
+  ],
+  "RightForeArm": [
+   -0.199,
+   0.213,
+   1.015
+  ],
+  "RightHand": [
+   -0.297,
+   0.059,
+   0.868
+  ],
+  "RightHand_End": [
+   -0.334,
+   0.0,
+   0.812
+  ],
+  "LeftUpLeg": [
+   0.171,
+   0.073,
+   0.777
+  ],
+  "LeftLeg": [
+   0.213,
+   -0.101,
+   0.47
+  ],
+  "LeftFoot": [
+   0.241,
+   -0.01,
+   0.079
+  ],
+  "LeftToeBase": [
+   0.241,
+   -0.108,
+   -0.012
+  ],
+  "LeftToe_End": [
+   0.241,
+   -0.22,
+   -0.012
+  ],
+  "RightUpLeg": [
+   -0.038,
+   0.073,
+   0.777
+  ],
+  "RightLeg": [
+   -0.101,
+   0.038,
+   0.421
+  ],
+  "RightFoot": [
+   -0.143,
+   0.269,
+   0.079
+  ],
+  "RightToeBase": [
+   -0.171,
+   0.178,
+   -0.012
+  ],
+  "RightToe_End": [
+   -0.199,
+   0.08,
+   -0.012
+  ]
+ },
+ "props": [
+  {
+   "name": "sword",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.273,
+      -0.018,
+      0.811
+     ],
+     [
+      0.225,
+      -0.328,
+      1.6
+     ]
+    ]
+   ],
+   "radius": 0.045
+  },
+  {
+   "name": "fist",
+   "bone": "RightHand",
+   "sphere": [
+    [
+     -0.28,
+     -0.03,
+     0.86
+    ],
+    0.065
+   ]
+  },
+  {
+   "name": "guard",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.2,
+      -0.165,
+      0.925
+     ],
+     [
+      -0.215,
+      0.01,
+      1.02
+     ]
+    ]
+   ],
+   "radius": 0.03
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "castle_handcut",
+  "castle_refine",
+  "castle_islandbind"
+ ],
+ "castleRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ],
+  "aimRange": 120,
+  "aimFromRest": true
+ },
+ "castleHandCut": {
+  "sides": [
+   "Right",
+   "Left"
+  ],
+  "handRadius": 0.1,
+  "foreRadius": 0.07
+ },
+ "glbPatch": {
+  "reason": "authenticity pass (lane B): Defence re-authored by motion intent against the DEF. The sword comes up upright before the face (f1-f2), tilts up-and-forward into a high parry held in front of the head (f3-f7), returns upright (f8-f9) and settles to rest; the base swung it horizontally back over the right shoulder. Rig, not move cuts: the forearm turns across the face so the wrist keeps its grip angle instead of bending back (wrist crease closed). Tear gate over master targets 982 -> 977, worst edge unchanged (5.847). Hilt weights (2026-10-08 coordinator review): the sword's pommel and crossguard carried right-thigh/spine weight and floated off at the hip when the sword rose; both move to RightHand. Walk sword swing (2026-10-08 user report from in game: the walk moves the sword from the wrist, not the arm): Move is re-authored so the sword arm swings from the shoulder, forward with the blade up toward the enemy at f0-f2 and back past the hip with the blade trailing down at f3-f5, then forward again at f6-f7. The hand is locked to the forearm at one grip for the whole cycle (wrist rotation 0), where the base held the forearm still and flipped the blade at the wrist. MoveStart and MoveEnd blend the same grip and arm in and out. Mesh fixes, not move cuts: the lower-back RightArm weight moves to Spine1 (tear gate 953 -> 949 <= input 951, worst edge 5.847 -> 5.791), and 19 pommel verts lose their residual leg weight (cs_rekey parity on the Move targets 0.0202 H -> 0.0081 H; it was 0.0193 H before this change). 2026-10-08 check pass: head held steady at the walking carriage through MoveStart/Move/MoveEnd (was rolling side to side up to 18 deg each stride; the DEF head stays level).",
+  "ops": [
+   {
+    "op": "moveWeights",
+    "from": [
+     "RightUpLeg",
+     "Hips",
+     "Spine",
+     "Spine1",
+     "Spine2",
+     "Neck"
+    ],
+    "to": "RightHand",
+    "region": [
+     {
+      "axis": "x",
+      "below": -0.27,
+      "ramp": 0.005
+     },
+     {
+      "axis": "z",
+      "above": 0.72,
+      "ramp": 0.005
+     },
+     {
+      "axis": "z",
+      "below": 0.85,
+      "ramp": 0.005
+     }
+    ],
+    "note": "sword pommel (46 verts) carried RightUpLeg/Spine weight and stayed at the hip when the sword rose (Defence f3-f7 shards); moves to the sword hand"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "RightUpLeg",
+     "Hips",
+     "Spine",
+     "Spine1",
+     "Spine2",
+     "Neck"
+    ],
+    "to": "RightHand",
+    "region": [
+     {
+      "axis": "x",
+      "below": -0.125,
+      "ramp": 0.005
+     },
+     {
+      "axis": "z",
+      "above": 0.85,
+      "ramp": 0.005
+     },
+     {
+      "axis": "z",
+      "below": 1.12,
+      "ramp": 0.005
+     },
+     {
+      "axis": "y",
+      "below": 0.16,
+      "ramp": 0.005
+     }
+    ],
+    "note": "sword crossguard and quillons (127 verts) carried RightUpLeg/Spine/Neck weight and stayed behind as floating shards when the sword rose; moved whole to the sword hand (a box edge through the guard tore it: x<-0.17 961 edges, x<-0.125 keeps the gate at the unpatched count and cs_rekey parity in limits (x<-0.13 split a mixed guard vertex: parity 0.058 H))"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "RightArm"
+    ],
+    "to": "Spine1",
+    "region": [
+     {
+      "axis": "x",
+      "above": -0.15,
+      "ramp": 0.03
+     },
+     {
+      "axis": "y",
+      "above": 0.1,
+      "ramp": 0.02
+     },
+     {
+      "axis": "z",
+      "below": 1.12,
+      "ramp": 0.03
+     }
+    ],
+    "note": "lower-back skin (121 verts behind the spine, below the shoulder blades) carried up to 0.75 RightArm weight, so the arm swing in Move pulled the back and armpit edges past 2x; moves to Spine1"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftUpLeg",
+     "RightLeg"
+    ],
+    "to": "RightHand",
+    "region": [
+     {
+      "axis": "x",
+      "below": -0.29,
+      "ramp": 0.01
+     },
+     {
+      "axis": "z",
+      "above": 0.7,
+      "ramp": 0.01
+     },
+     {
+      "axis": "z",
+      "below": 0.8,
+      "ramp": 0.01
+     }
+    ],
+    "note": "sword pommel (19 verts) still carried 0.04-0.08 LeftUpLeg/RightLeg weight; with the arm swing in Move the leg pull put the numpy CS re-key parity over its limit (max 0.0202 H at the pommel); moves to the sword hand"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_swordsman_pose_rot.json",
+    "sha256": "6e50db09b6581afc5c5b96751353c339425ecf0585a5dd9fbbf9b7d5b97838d7",
+    "regrid": true
+   }
+  ]
+ },
+ "islandBinds": [
+  {
+   "table": "tools/homm3_def_retarget/island_binds/h3_swordsman_left_fist.json",
+   "bone": "LeftHand",
+   "adoptFrom": [
+    "LeftHand",
+    "LeftForeArm"
+   ],
+   "note": "left-fist chips (10 Spine islands) welded to the belt: adopt the weights of the fist surface they sit on"
+  },
+  {
+   "table": "tools/homm3_def_retarget/island_binds/h3_swordsman_left_fist_floaters.json",
+   "bone": "LeftHand",
+   "adoptFrom": [
+    "LeftHand",
+    "LeftForeArm"
+   ],
+   "note": "7 more fist chips (54 verts, Spine/LeftUpLeg blends welded to LeftHand fist islands) that still floated between fist and belt; forearm/sleeve welds left out"
+  },
+  {
+   "table": "tools/homm3_def_retarget/island_binds/h3_swordsman_right_hilt.json",
+   "bone": "RightHand",
+   "adoptFrom": [
+    "RightHand",
+    "RightForeArm"
+   ],
+   "stage": "before_keys",
+   "note": "right fist/hilt chips (Spine/RightArm blends welded to RightHand/RightForeArm islands) floating near the hilt in AttackFront f3-f5: adopt the hand surface weights; bound after castle_refine so the sword aim fit is unchanged"
+  }
+ ]
+}

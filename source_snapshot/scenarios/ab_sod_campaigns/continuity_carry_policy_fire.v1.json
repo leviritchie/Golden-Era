@@ -1,0 +1,193 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "Playing with Fire continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub fire; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_13_ab_fortress_fire",
+    "campaignTitle": "Playing with Fire",
+    "campaignEntry": "fire.h3c",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "missionConfigPrefix": "homm3_ab_fortress",
+    "defaultSpawn": {
+      "factionSid": "homm3_fortress",
+      "heroSid": "homm3_fortress_hero_17"
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart).",
+    "regionPixels": {
+      "farming_towns": [
+        80.0,
+        220.0
+      ],
+      "march_of_the_undead": [
+        440.0,
+        220.0
+      ],
+      "burning_of_tatalia": [
+        800.0,
+        220.0
+      ]
+    },
+    "factionSid": "homm3_fortress",
+    "missionSpawns": {
+      "farming_towns": {
+        "heroSid": "homm3_fortress_hero_17",
+        "factionSid": "homm3_fortress"
+      },
+      "march_of_the_undead": {
+        "heroSid": "homm3_fortress_hero_17",
+        "factionSid": "homm3_fortress"
+      },
+      "burning_of_tatalia": {
+        "heroSid": "homm3_fortress_hero_17",
+        "factionSid": "homm3_fortress"
+      }
+    }
+  },
+  "storyHubMapSidOverrides": {
+    "farming_towns": "h3_fortress_farming_towns_raw_translation",
+    "march_of_the_undead": "h3_fortress_march_of_the_undead_raw_translation",
+    "burning_of_tatalia": "h3_fortress_burning_of_tatalia_raw_translation",
+    "choiceReason": "Playing with Fire missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "farming_towns",
+      "toMissionId": "march_of_the_undead",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 12,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=12 for farming_towns (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_farming_towns_raw_translation",
+        "to": "h3_necropolis_march_of_the_undead_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "march_of_the_undead",
+      "toMissionId": "burning_of_tatalia",
+      "sourceBlockIndex": 2,
+      "nextBlockIndex": 3,
+      "levelCap": 32,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=32 for march_of_the_undead (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_march_of_the_undead_raw_translation",
+        "to": "h3_necropolis_burning_of_tatalia_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "farming_towns",
+    "march_of_the_undead",
+    "burning_of_tatalia"
+  ],
+  "missionTitles": {
+    "farming_towns": "Farming Towns",
+    "march_of_the_undead": "March of the Undead",
+    "burning_of_tatalia": "Burning of Tatalia"
+  },
+  "missionDescriptions": {
+    "farming_towns": "Establish a home base and then liberate the other towns on either side of the border. Destroy all of the undead in the area and defeat the Necromancers who are doing thi...",
+    "march_of_the_undead": "To win this scenario flag all creature generators within seven months. Beware, each are heavily guarded by hordes of undead. If you lose Adrienne then all is lost. Heroe...",
+    "burning_of_tatalia": "Defeat Lord Haart and all of his followers, freeing Tatalia from the bony grasp of deadly evil. If Adrienne dies, you will lose your war against this horrific evil. Seek..."
+  },
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Dedicated AB/SoD MapImage bake",
+    "Town growth / negative resource timed-event fidelity"
+  ],
+  "videoContract": {
+    "status": "mission_clips_wired_hub_still_only",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": null,
+    "hubFirstShowOmitReason": "RoE parity: hub hover strip is selection-still only; mission pins PlayVideo when composed MP4 meets contract.",
+    "requireComposedAudio": true,
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "requiredMp4RelativeToStreamingAssets": null,
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_13_ab_fortress_fire/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "stillArtifact": "artifacts/campaign_port_poc/ab_sod_campaigns/storyhub_visual/fire_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.32,
+      "focusY": 0.48,
+      "cropReason": "Family group in the ruined timber interior (Playing with Fire / C1pf2)",
+      "cropsCatalog": "scenarios/ab_sod_campaigns/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "farming_towns": "H3ABpf1",
+      "march_of_the_undead": "H3ABpf2",
+      "burning_of_tatalia": "H3ABpf3"
+    },
+    "actionOrder": "PlayVideo (when composed MP4 ready) then OpenMissionsPrologue on each mission pin; hub firstShowActions stay empty",
+    "failClosed": "fire hub firstShowActions must stay empty (hubFirstShowPlayVideo=false). Mission PlayVideo requires StreamingAssets/video/{{clip}}.mp4 + softsub sidecar meeting compose contract; otherwise omit PlayVideo and keep prologue."
+  }
+}

@@ -1,0 +1,407 @@
+{
+ "unit": "h3_wolf_rider",
+ "joints": {
+  "Hips": [
+   0,
+   0.15,
+   1.02
+  ],
+  "Spine": [
+   0,
+   0.13999999999999999,
+   1.12
+  ],
+  "Spine1": [
+   0,
+   0.13,
+   1.22
+  ],
+  "Spine2": [
+   0,
+   0.12,
+   1.33
+  ],
+  "Neck": [
+   0,
+   0.10999999999999999,
+   1.45
+  ],
+  "Head": [
+   0,
+   0.09999999999999999,
+   1.52
+  ],
+  "HeadTop_End": [
+   0,
+   0.07999999999999999,
+   1.7
+  ],
+  "RightShoulder": [
+   -0.05,
+   0.12,
+   1.42
+  ],
+  "RightArm": [
+   -0.16,
+   0.12,
+   1.4
+  ],
+  "RightForeArm": [
+   -0.28,
+   0.12,
+   1.22
+  ],
+  "RightHand": [
+   -0.34,
+   0.06,
+   1.02
+  ],
+  "RightHand_End": [
+   -0.34,
+   -0.03,
+   1.04
+  ],
+  "LeftShoulder": [
+   0.05,
+   0.12,
+   1.42
+  ],
+  "LeftArm": [
+   0.16,
+   0.12,
+   1.38
+  ],
+  "LeftForeArm": [
+   0.23,
+   0.09999999999999999,
+   1.2
+  ],
+  "LeftHand": [
+   0.22,
+   -0.1,
+   1.1
+  ],
+  "LeftHand_End": [
+   0.22,
+   -0.18,
+   1.08
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "stronghold_props",
+  "stronghold_quadruped",
+  "stronghold_quadruped_hips_parent",
+  "castle_yaw"
+ ],
+ "yawDeg": 40,
+ "colorProps": [
+  {
+   "name": "blade",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.35,
+      0.0,
+      1.1
+     ],
+     [
+      -0.34,
+      -0.22,
+      1.28
+     ]
+    ],
+    [
+     [
+      -0.34,
+      -0.22,
+      1.28
+     ],
+     [
+      -0.33,
+      -0.45,
+      1.46
+     ]
+    ]
+   ],
+   "radius": 0.09,
+   "color": {
+    "expr": "mx-mn",
+    "max": 0.12
+   },
+   "coreRadius": 0.02,
+   "minNeighbours": 1
+  },
+  {
+   "name": "hilt",
+   "bone": "RightHand",
+   "sphere": [
+    [
+     -0.35,
+     0.05,
+     1.0
+    ],
+    0.13
+   ],
+   "color": {
+    "expr": "r-b",
+    "min": 0.1
+   }
+  }
+ ],
+ "quadruped": {
+  "bones": {
+   "WolfBody": [
+    [
+     0,
+     0.65,
+     0.72
+    ],
+    [
+     0,
+     -0.35,
+     0.8
+    ],
+    "Root"
+   ],
+   "WolfNeck": [
+    [
+     0,
+     -0.35,
+     0.8
+    ],
+    [
+     0,
+     -0.65,
+     0.98
+    ],
+    "WolfBody"
+   ],
+   "WolfHead": [
+    [
+     0,
+     -0.65,
+     0.98
+    ],
+    [
+     0,
+     -1.0,
+     0.93
+    ],
+    "WolfNeck"
+   ],
+   "WolfTail": [
+    [
+     0,
+     0.85,
+     0.72
+    ],
+    [
+     0,
+     0.98,
+     0.35
+    ],
+    "WolfBody"
+   ]
+  },
+  "legs": {
+   "FL": {
+    "front": true,
+    "side": 1,
+    "points": [
+     [
+      0.18,
+      -0.2,
+      0.72
+     ],
+     [
+      0.2,
+      -0.16,
+      0.4
+     ],
+     [
+      0.21,
+      -0.22,
+      0.15
+     ],
+     [
+      0.21,
+      -0.46,
+      0.02
+     ]
+    ]
+   },
+   "FR": {
+    "front": true,
+    "side": -1,
+    "points": [
+     [
+      -0.18,
+      -0.2,
+      0.72
+     ],
+     [
+      -0.2,
+      -0.16,
+      0.4
+     ],
+     [
+      -0.21,
+      -0.22,
+      0.15
+     ],
+     [
+      -0.21,
+      -0.46,
+      0.02
+     ]
+    ]
+   },
+   "RL": {
+    "front": false,
+    "side": 1,
+    "points": [
+     [
+      0.17,
+      0.42,
+      0.72
+     ],
+     [
+      0.18,
+      0.52,
+      0.45
+     ],
+     [
+      0.19,
+      0.65,
+      0.22
+     ],
+     [
+      0.2,
+      0.5,
+      0.02
+     ]
+    ]
+   },
+   "RR": {
+    "front": false,
+    "side": -1,
+    "points": [
+     [
+      -0.17,
+      0.42,
+      0.72
+     ],
+     [
+      -0.18,
+      0.52,
+      0.45
+     ],
+     [
+      -0.19,
+      0.65,
+      0.22
+     ],
+     [
+      -0.2,
+      0.5,
+      0.02
+     ]
+    ]
+   }
+  },
+  "rider": {
+   "box": [
+    [
+     -0.45,
+     -0.12,
+     0.45
+    ],
+    [
+     0.45,
+     0.55,
+     1.8
+    ]
+   ],
+   "minZ": 1.12,
+   "minSat": 0.08,
+   "saddle": [
+    1.0,
+    1.1
+   ],
+   "free": [
+    {
+     "box": [
+      [
+       -0.5,
+       -0.15,
+       0.85
+      ],
+      [
+       -0.28,
+       0.25,
+       1.3
+      ]
+     ]
+    }
+   ]
+  },
+  "protect": [
+   "RightHand"
+  ],
+  "bodyRadius": 0.18
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 30,
+   "dy": 40,
+   "roll": 25
+  },
+  "propAim": [
+   "RightHand"
+  ]
+ },
+ "strideMatch": {
+  "maxDrop": 0.25,
+  "reason": "At the normalized 5.5 moveSpeed the forelegs stand nearly straight (shoulder 0.72 over wrist 0.15, leg 0.34 H), so at the default 0.15 drop FL reach caps the stance sweep at 0.09 H and forces cadence 1.32; the cycle fundamental then sits at 2.14 Hz and the gallop second harmonic (FR3 0.65 of its energy, RightForeArm 0.55) lands above the 4 Hz jitter cutoff (p90 0.60 > 0.35). maxDrop 0.25 lowers the cadence need to 1.15: jitter p90 0.17, slip 0.58, ratio 1.10, pelvis drop 0.084 H; fixes the cause (reach) rather than smoothing with highHarmonicKeep (2026-09-28)."
+ },
+ "glbPatch": {
+  "reason": "authenticity lane B 2026-10-11: AttackFront - sword raised overhead (DEF f1-f2), cut up-forward (f3) and thrust level at the target (f4-f5) along the rig's facing; stretchRelax on AttackFront for the re-posed creases",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_wolf_rider_sword_cut_thrust_rot.json",
+    "regrid": true,
+    "sha256": "b59ca3d302add022ba41d5188751fdd8919c434194b507a927cee19e49d19f10"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_wolf_rider_sword_cut_thrust_rot.json",
+    "regrid": true,
+    "sha256": "b59ca3d302add022ba41d5188751fdd8919c434194b507a927cee19e49d19f10"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "crease of the re-posed joints"
+   }
+  ]
+ }
+}

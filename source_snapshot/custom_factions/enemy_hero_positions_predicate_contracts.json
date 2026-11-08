@@ -1,0 +1,65 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require enemy hero position identity for reveal behavior. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresEnemyHeroPositionsProfiles": true,
+    "visionFamilyOnly": true,
+    "enemyHeroIdentityAndPositionRequired": true,
+    "genericObjectRevealSubstituteForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": [
+    "homm3_fortress",
+    "homm3_rampart"
+  ],
+  "allowedFamily": "Vision",
+  "requiredRuntimeProof": [
+    "enemy hero object identity proof",
+    "enemy hero map position proof",
+    "enemy side versus observing side proof",
+    "law-owner and observing-side correlation proof",
+    "visibility target coordinate proof",
+    "owned-structure or Avenger companion condition proof",
+    "fog reveal mutation ordering proof",
+    "idempotent per-scan reveal application proof"
+  ],
+  "contracts": {
+    "fortress.structure-reveal-enemy-heroes": {
+      "positionKinds": [
+        "nearby-enemy-hero-position",
+        "owned-structure-radius-companion-only"
+      ],
+      "companionPredicates": [
+        "RequiresFogRevealMutation",
+        "RequiresOwnedStructureRadius"
+      ],
+      "forbiddenSubstitutes": [
+        "generic adventure object counted as enemy hero",
+        "owned structure proximity counted as enemy hero position",
+        "fog reveal target counted without enemy hero identity",
+        "last known object position counted without current hero proof",
+        "friendly or neutral hero counted as enemy hero"
+      ],
+      "notes": "Requires current enemy hero identity and position before Marsh Sense can reveal nearby enemy heroes; owned structure radius and fog reveal are companion boundaries only."
+    },
+    "rampart.avenger-marked-enemy-trail": {
+      "positionKinds": [
+        "avenger-marked-enemy-hero-position",
+        "last-known-or-nearest-marked-enemy-companion-only"
+      ],
+      "companionPredicates": [
+        "RequiresAvengerMark",
+        "RequiresFogRevealMutation"
+      ],
+      "forbiddenSubstitutes": [
+        "generic adventure object counted as enemy hero",
+        "Avenger mark counted as enemy hero position",
+        "fog reveal target counted without enemy hero identity",
+        "last known object position counted without current hero proof",
+        "friendly or neutral hero counted as enemy hero"
+      ],
+      "notes": "Requires current enemy hero identity and position before Avenger's Trail can reveal marked enemy trails; Avenger mark and fog reveal are companion boundaries only."
+    }
+  }
+}

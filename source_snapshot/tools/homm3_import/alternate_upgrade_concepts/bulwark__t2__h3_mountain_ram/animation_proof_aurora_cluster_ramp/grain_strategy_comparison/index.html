@@ -1,0 +1,31 @@
+<!doctype html><html><head><meta charset='utf-8'>
+<title>Palette grain strategy comparison</title>
+<style>
+body{font:14px/1.45 Segoe UI,Arial,sans-serif;background:#0b0e12;color:#eef1f4;margin:0;padding:18px}
+table{border-collapse:collapse;width:100%;margin:12px 0 24px}
+th,td{border:1px solid #2c3540;padding:8px;text-align:left}
+th{background:#151a21}
+.best{outline:2px solid #e0b35a}
+img{image-rendering:pixelated;max-width:100%;background:#111}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.card{background:#151a21;border:1px solid #2c3540;border-radius:8px;padding:10px}
+.muted{color:#9aa3ad}
+</style></head><body>
+<h1>Palette grain strategies — Aurora Ram</h1>
+<p class='muted'>Source speckle=41.3571. Recommended (visible remap): <strong>linked_consensus</strong>. Lowest grain overall: <strong>linked_consensus</strong>. Primary recommendation prefers strategies with meanOpaqueRgbL1&gt;=20 (visible remap) then lowest grainRatio/abrupt jumps. Near-noop low-grain strategies are listed but not preferred for plated look. Evidence: generated comparison only.</p>
+<table><tr><th>Rank</th><th>Strategy</th><th>grainRatio</th><th>speckle</th><th>abrupt jumps</th><th>mean RGB L1</th><th>changed entries</th></tr>
+<tr class='best'><td>1</td><td>linked_consensus</td><td>0.1888</td><td>7.8101</td><td>0</td><td>223.3555</td><td>248</td></tr>
+<tr><td>2</td><td>soft_blend</td><td>0.359</td><td>14.8488</td><td>0</td><td>203.4608</td><td>244</td></tr>
+<tr><td>3</td><td>baseline</td><td>0.4379</td><td>18.1095</td><td>0</td><td>200.1033</td><td>244</td></tr>
+<tr><td>4</td><td>hue_shift_shell</td><td>0.9731</td><td>40.2445</td><td>0</td><td>25.9545</td><td>244</td></tr>
+<tr><td>5</td><td>hybrid_linked_hue</td><td>0.9731</td><td>40.2445</td><td>0</td><td>25.9545</td><td>244</td></tr>
+<tr><td>6</td><td>cluster_ramp</td><td>2.5939</td><td>107.2772</td><td>3</td><td>171.0582</td><td>244</td></tr>
+</table><div class='grid'>
+<div class='card'><strong>source</strong><br><img src='00_source_mid.png' alt='source'></div>
+<div class='card'><strong>linked_consensus</strong> (rank 1)<br><img src='linked_consensus/mid_pair.png' alt='linked_consensus'><br><img src='linked_consensus/attack.gif' alt='gif'></div>
+<div class='card'><strong>soft_blend</strong> (rank 2)<br><img src='soft_blend/mid_pair.png' alt='soft_blend'><br><img src='soft_blend/attack.gif' alt='gif'></div>
+<div class='card'><strong>baseline</strong> (rank 3)<br><img src='baseline/mid_pair.png' alt='baseline'><br><img src='baseline/attack.gif' alt='gif'></div>
+<div class='card'><strong>hue_shift_shell</strong> (rank 4)<br><img src='hue_shift_shell/mid_pair.png' alt='hue_shift_shell'><br><img src='hue_shift_shell/attack.gif' alt='gif'></div>
+<div class='card'><strong>hybrid_linked_hue</strong> (rank 5)<br><img src='hybrid_linked_hue/mid_pair.png' alt='hybrid_linked_hue'><br><img src='hybrid_linked_hue/attack.gif' alt='gif'></div>
+<div class='card'><strong>cluster_ramp</strong> (rank 6)<br><img src='cluster_ramp/mid_pair.png' alt='cluster_ramp'><br><img src='cluster_ramp/attack.gif' alt='gif'></div>
+</div></body></html>

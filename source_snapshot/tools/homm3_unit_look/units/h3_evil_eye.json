@@ -1,0 +1,91 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_evil_eye",
+ "status": "look",
+ "notes": "dungeon rollout: attack_front white forked discharge cut from the DEF by a committed file mask (dungeon_fx_masks.py lightning_mask; the roster inventory missed it: white strokes on a body with white eye-stalk tips), with its fitted dynamic light (the DEF flashes the body white at f3)",
+ "lighting": {
+  "mode": "v6m",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "bolt_flash",
+   "treatment": "dynamic",
+   "notes": "discharge flashes the body white"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "attack_bolt",
+    "type": "defFlipbook",
+    "provenance": "DEF CBEHOL-family g12 attack_front: white forked discharge around the tentacles, f0-6",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_evil_eye/attack_bolt"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": [
+      195,
+      195
+     ]
+    },
+    "texelsPerDefPx": 1,
+    "light": "bolt_flash",
+    "notes": "defOrigin = the DEF body centre (eroded-silhouette centroid, constant over g12); Spine1 is the joint the SpriteCam projects there (<=6 px on every frame, def_effects.BoneProjector). The discharge wraps the whole body, so the body centre pins it rather than any one contact point. render unitPlane: directional pieces (thrown/jetting forward) turn with the unit (vfx_depth.py).",
+    "render": "unitPlane"
+   },
+   {
+    "id": "bolt_flash_light",
+    "type": "effectLight",
+    "lightId": "bolt_flash",
+    "carrier": "attack_bolt",
+    "anchor": {
+     "bone": "Spine1",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.85,
+     0.9,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.0,
+      0.067,
+      0.589,
+      1.823,
+      0.023,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

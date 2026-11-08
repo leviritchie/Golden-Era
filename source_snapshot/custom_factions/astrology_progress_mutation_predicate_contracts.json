@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom calendar law profiles that require native Astrology progress mutation. This records astrology-progress semantics only; it does not prove day/new-round timing, native progress write, duplicate prevention, companion event correlation, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresAstrologyProgressMutationProfiles": true,
+    "calendarFamilyOnly": true,
+    "astrologyProgressMustNotBeSubstitutedByGenericReward": true,
+    "companionEventsDoNotProveProgressMutation": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedEffectKeyPrefixes": [
+    "castle.",
+    "necropolis.",
+    "stronghold."
+  ],
+  "requiredRuntimeProof": [
+    "native Astrology progress state read proof",
+    "native Astrology progress mutation proof",
+    "day or battle timing gate proof",
+    "companion event correlation proof",
+    "duplicate same-day or same-event prevention proof",
+    "law owner to progress recipient correlation proof",
+    "UI progress synchronization proof"
+  ],
+  "contracts": {
+    "castle.support-blessing-astrology-calendar": {
+      "astrologyKinds": [
+        "calendar-astrology-progress",
+        "support-or-blessing-spell-correlated-progress"
+      ],
+      "companionPredicates": [
+        "RequiresBattleStartOrRoundEvent",
+        "RequiresSpellCastEvent"
+      ],
+      "forbiddenSubstitutes": [
+        "daily resource reward counted as Astrology progress",
+        "calendar text counted as Astrology progress",
+        "spell cast counted as Astrology progress mutation",
+        "battle start counted as Astrology progress mutation",
+        "law row presence counted as Astrology progress mutation",
+        "UI progress preview counted as Astrology progress mutation"
+      ],
+      "notes": "Castle support/blessing astrology requires native Astrology progress mutation plus separate spell-cast and battle timing predicates; spell or battle events alone are not progress mutation."
+    },
+    "necropolis.corpse-raise-death-moon-calendar": {
+      "astrologyKinds": [
+        "calendar-astrology-progress",
+        "corpse-or-raise-correlated-progress"
+      ],
+      "companionPredicates": [
+        "RequiresCorpseOrRaiseConsumption"
+      ],
+      "forbiddenSubstitutes": [
+        "daily resource reward counted as Astrology progress",
+        "calendar text counted as Astrology progress",
+        "corpse count counted as Astrology progress mutation",
+        "raise spell text counted as Astrology progress mutation",
+        "law row presence counted as Astrology progress mutation",
+        "UI progress preview counted as Astrology progress mutation"
+      ],
+      "notes": "Necropolis corpse raise death moon calendar requires native Astrology progress mutation plus separate corpse/raise consumption proof; corpse state alone is not progress mutation."
+    },
+    "stronghold.warcry-festival-calendar": {
+      "astrologyKinds": [
+        "calendar-astrology-progress",
+        "warcry-correlated-progress"
+      ],
+      "companionPredicates": [
+        "RequiresBattleStartOrRoundEvent",
+        "RequiresWarcryExecution"
+      ],
+      "forbiddenSubstitutes": [
+        "daily resource reward counted as Astrology progress",
+        "calendar text counted as Astrology progress",
+        "Warcry execution counted as Astrology progress mutation",
+        "battle start counted as Astrology progress mutation",
+        "law row presence counted as Astrology progress mutation",
+        "UI progress preview counted as Astrology progress mutation"
+      ],
+      "notes": "Stronghold Warcry Festival calendar requires native Astrology progress mutation plus separate Warcry execution and battle timing predicates; Warcry execution alone is not progress mutation."
+    }
+  }
+}

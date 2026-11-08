@@ -1,0 +1,755 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "factionSid": "homm3_factory",
+    "citySid": "homm3_factory_city",
+    "displayNameToken": "homm3_factory_name",
+    "descriptionToken": "homm3_factory_desc",
+    "nativeBiome": "Foundry",
+    "donorFactionSid": "humans",
+    "donorCitySid": "human_city"
+  },
+  "coreOverlay": {
+    "factionJson": "DB/fractions/21_homm3_factory.json",
+    "cityLogic": "DB/objects_logic/cities/homm3_factory_city.json",
+    "lawsTable": "DB/fractions_laws/fractions_laws_table_homm3_factory.json",
+    "squadTree": "DB/squads/squads_homm3_factory/",
+    "heroSubClasses": "DB/heroes_sub_classes/sub_classes_homm3_factory.json",
+    "heroSpecializations": "DB/heroes_specializations/specializations_homm3_factory.json",
+    "directCityMapObject": "homm3_factory_city",
+    "directDwellingPrefix": "barracks_homm3_factory_"
+  },
+  "unitVariants": [
+    "",
+    "_upg",
+    "_upg_alt"
+  ],
+  "unitLines": [
+    {
+      "tier": 1,
+      "baseSid": "h3_halfling",
+      "variantSids": {
+        "": "h3_halfling",
+        "_upg": "h3_halfling_grenadier",
+        "_upg_alt": "h3_halfling_upg_alt"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "esquire",
+      "branchFamily": "natural",
+      "names": [
+        "Halfling",
+        "Halfling Grenadier",
+        "Firebug"
+      ],
+      "sourceConfig": [
+        "halfling",
+        "halflingGrenadier"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "HotA Halfling CRTRAITS row inherited by config/hota/factory/creatures/halfling.json",
+          "hp": 4,
+          "offence": 4,
+          "defence": 2,
+          "damageMin": 1,
+          "damageMax": 3,
+          "initiative": 5,
+          "speed": 5,
+          "shots": 24,
+          "squadValue": 75,
+          "cost": {
+            "gold": 40
+          }
+        },
+        "_upg": {
+          "source": "config/hota/factory/creatures/halflingGrenadier.json",
+          "hp": 4,
+          "offence": 5,
+          "defence": 2,
+          "damageMin": 2,
+          "damageMax": 3,
+          "initiative": 6,
+          "speed": 6,
+          "shots": 24,
+          "squadValue": 95,
+          "cost": {
+            "gold": 60
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Firebug deliberately inherits Halfling Grenadier source stats",
+          "hp": 4,
+          "offence": 5,
+          "defence": 2,
+          "damageMin": 2,
+          "damageMax": 3,
+          "initiative": 6,
+          "speed": 6,
+          "shots": 24,
+          "squadValue": 95,
+          "cost": {
+            "gold": 60
+          }
+        }
+      },
+      "mechanicsDebt": []
+    },
+    {
+      "tier": 2,
+      "baseSid": "h3_mechanic",
+      "variantSids": {
+        "": "h3_mechanic",
+        "_upg": "h3_engineer",
+        "_upg_alt": "h3_mechanic_upg_alt"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "crossbowman",
+      "branchFamily": "industrial",
+      "names": [
+        "Mechanic",
+        "Engineer",
+        "Tinker"
+      ],
+      "sourceConfig": [
+        "hotaMechanic",
+        "hotaEngineer"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "config/hota/factory/creatures/hotaMechanic.json",
+          "hp": 14,
+          "offence": 6,
+          "defence": 5,
+          "damageMin": 3,
+          "damageMax": 4,
+          "initiative": 6,
+          "speed": 6,
+          "squadValue": 186,
+          "cost": {
+            "gold": 140
+          }
+        },
+        "_upg": {
+          "source": "config/hota/factory/creatures/hotaEngineer.json",
+          "hp": 16,
+          "offence": 7,
+          "defence": 5,
+          "damageMin": 3,
+          "damageMax": 5,
+          "initiative": 7,
+          "speed": 7,
+          "squadValue": 278,
+          "cost": {
+            "gold": 170
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Tinker deliberately inherits Engineer source stats",
+          "hp": 16,
+          "offence": 7,
+          "defence": 5,
+          "damageMin": 3,
+          "damageMax": 5,
+          "initiative": 7,
+          "speed": 7,
+          "squadValue": 278,
+          "cost": {
+            "gold": 170
+          }
+        }
+      },
+      "mechanicsDebt": []
+    },
+    {
+      "tier": 3,
+      "baseSid": "h3_armadillo",
+      "variantSids": {
+        "": "h3_armadillo",
+        "_upg": "h3_bellwether_armadillo",
+        "_upg_alt": "h3_armadillo_upg_alt"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "griffin",
+      "branchFamily": "natural",
+      "names": [
+        "Armadillo",
+        "Bellwether Armadillo",
+        "Plated Armadillo"
+      ],
+      "sourceConfig": [
+        "armadillo",
+        "bellwetherArmadillo"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "config/hota/factory/creatures/armadillo.json",
+          "hp": 25,
+          "offence": 5,
+          "defence": 10,
+          "damageMin": 3,
+          "damageMax": 5,
+          "initiative": 4,
+          "speed": 4,
+          "squadValue": 198,
+          "cost": {
+            "gold": 200
+          }
+        },
+        "_upg": {
+          "source": "config/hota/factory/creatures/bellwetherArmadillo.json",
+          "hp": 25,
+          "offence": 6,
+          "defence": 11,
+          "damageMin": 3,
+          "damageMax": 5,
+          "initiative": 6,
+          "speed": 6,
+          "squadValue": 256,
+          "cost": {
+            "gold": 230
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Plated Armadillo deliberately inherits Bellwether Armadillo source stats",
+          "hp": 25,
+          "offence": 6,
+          "defence": 11,
+          "damageMin": 3,
+          "damageMax": 5,
+          "initiative": 6,
+          "speed": 6,
+          "squadValue": 256,
+          "cost": {
+            "gold": 230
+          }
+        }
+      },
+      "mechanicsDebt": [
+        "Bellwether Shoulder Check is a 1-hex teleport reshape (not HotA push-back); combat live-positive unproven.",
+        "Plated Taunting Plate is source/static from day_8_magic_taunt; combat live-positive unproven."
+      ]
+    },
+    {
+      "tier": 4,
+      "baseSid": "h3_automaton",
+      "variantSids": {
+        "": "h3_automaton",
+        "_upg": "h3_sentinel_automaton",
+        "_upg_alt": "h3_automaton_upg_alt"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "lightweaver",
+      "branchFamily": "industrial",
+      "names": [
+        "Automaton",
+        "Sentinel Automaton",
+        "Clockwork Automaton"
+      ],
+      "sourceConfig": [
+        "automaton",
+        "sentinelAutomaton"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "config/hota/factory/creatures/automaton.json",
+          "hp": 30,
+          "offence": 12,
+          "defence": 10,
+          "damageMin": 7,
+          "damageMax": 7,
+          "initiative": 8,
+          "speed": 8,
+          "squadValue": 574,
+          "cost": {
+            "gold": 350
+          }
+        },
+        "_upg": {
+          "source": "config/hota/factory/creatures/sentinelAutomaton.json",
+          "hp": 30,
+          "offence": 12,
+          "defence": 10,
+          "damageMin": 9,
+          "damageMax": 9,
+          "initiative": 9,
+          "speed": 9,
+          "squadValue": 709,
+          "cost": {
+            "gold": 450
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Clockwork Automaton deliberately inherits Sentinel Automaton source stats",
+          "hp": 30,
+          "offence": 12,
+          "defence": 10,
+          "damageMin": 9,
+          "damageMax": 9,
+          "initiative": 9,
+          "speed": 9,
+          "squadValue": 709,
+          "cost": {
+            "gold": 450
+          }
+        }
+      },
+      "mechanicsDebt": [
+        "Automaton/Sentinel Blow Up copies Core lava_larva destroy_self dealer; combat live-positive unproven.",
+        "Clockwork Wind-Up uses primal rampage spell-effect for extra attack; combat live-positive / buff-bind parity unproven."
+      ]
+    },
+    {
+      "tier": 5,
+      "baseSid": "h3_sandworm",
+      "variantSids": {
+        "": "h3_sandworm",
+        "_upg": "h3_olgoi_khorkhoi",
+        "_upg_alt": "h3_sandworm_upg_alt"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "sunlight_cavalry",
+      "branchFamily": "natural",
+      "names": [
+        "Sandworm",
+        "Olgoi-Khorkhoi",
+        "Glassworm"
+      ],
+      "sourceConfig": [
+        "sandworm",
+        "olgoiKhorkhoi"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "config/hota/factory/creatures/sandworm.json",
+          "hp": 50,
+          "offence": 13,
+          "defence": 12,
+          "damageMin": 12,
+          "damageMax": 16,
+          "initiative": 8,
+          "speed": 8,
+          "squadValue": 991,
+          "cost": {
+            "gold": 575
+          }
+        },
+        "_upg": {
+          "source": "config/hota/factory/creatures/olgoiKhorkhoi.json",
+          "hp": 60,
+          "offence": 15,
+          "defence": 12,
+          "damageMin": 12,
+          "damageMax": 16,
+          "initiative": 10,
+          "speed": 10,
+          "squadValue": 1220,
+          "cost": {
+            "gold": 650
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Glassworm deliberately inherits Olgoi-Khorkhoi source stats",
+          "hp": 60,
+          "offence": 15,
+          "defence": 12,
+          "damageMin": 12,
+          "damageMax": 16,
+          "initiative": 10,
+          "speed": 10,
+          "squadValue": 1220,
+          "cost": {
+            "gold": 650
+          }
+        }
+      },
+      "mechanicsDebt": [
+        "Olgoi Devour Corpses copies Core locust Harvest dealer; combat live-positive unproven.",
+        "HotA larva-support half of Locust Harvest remains deferred."
+      ]
+    },
+    {
+      "tier": 6,
+      "baseSid": "h3_gunslinger",
+      "variantSids": {
+        "": "h3_gunslinger",
+        "_upg": "h3_bounty_hunter",
+        "_upg_alt": "h3_gunslinger_upg_alt"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "inquisitor",
+      "branchFamily": "industrial",
+      "names": [
+        "Gunslinger",
+        "Bounty Hunter",
+        "Marshal"
+      ],
+      "sourceConfig": [
+        "gunslinger",
+        "bountyHunter"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "config/hota/factory/creatures/gunslinger.json",
+          "hp": 45,
+          "offence": 17,
+          "defence": 12,
+          "damageMin": 14,
+          "damageMax": 24,
+          "initiative": 7,
+          "speed": 7,
+          "shots": 16,
+          "squadValue": 1351,
+          "cost": {
+            "gold": 800
+          }
+        },
+        "_upg": {
+          "source": "config/hota/factory/creatures/bountyHunter.json",
+          "hp": 45,
+          "offence": 18,
+          "defence": 14,
+          "damageMin": 14,
+          "damageMax": 24,
+          "initiative": 8,
+          "speed": 8,
+          "shots": 24,
+          "squadValue": 1454,
+          "cost": {
+            "gold": 1100
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Marshal deliberately inherits Bounty Hunter source stats",
+          "hp": 45,
+          "offence": 18,
+          "defence": 14,
+          "damageMin": 14,
+          "damageMax": 24,
+          "initiative": 8,
+          "speed": 8,
+          "shots": 24,
+          "squadValue": 1454,
+          "cost": {
+            "gold": 1100
+          }
+        }
+      },
+      "mechanicsDebt": []
+    },
+    {
+      "tier": 7,
+      "baseSid": "h3_couatl",
+      "variantSids": {
+        "": "h3_couatl",
+        "_upg": "h3_crimson_couatl",
+        "_upg_alt": "h3_couatl_upg_alt"
+      },
+      "donorFactionSid": "humans",
+      "donorBaseSid": "angel",
+      "branchFamily": "natural",
+      "names": [
+        "Couatl",
+        "Crimson Couatl",
+        "Jade Coatl"
+      ],
+      "sourceConfig": [
+        "hotaCouatl",
+        "crimsonCouatl"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "config/hota/factory/creatures/hotaCouatl.json",
+          "hp": 160,
+          "offence": 17,
+          "defence": 17,
+          "damageMin": 25,
+          "damageMax": 45,
+          "initiative": 11,
+          "speed": 11,
+          "squadValue": 3574,
+          "cost": {
+            "gold": 2000
+          }
+        },
+        "_upg": {
+          "source": "config/hota/factory/creatures/crimsonCouatl.json",
+          "hp": 200,
+          "offence": 21,
+          "defence": 21,
+          "damageMin": 25,
+          "damageMax": 45,
+          "initiative": 15,
+          "speed": 15,
+          "squadValue": 5341,
+          "cost": {
+            "gold": 3500,
+            "crystals": 1
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Jade Coatl deliberately inherits Crimson Couatl source stats",
+          "hp": 200,
+          "offence": 21,
+          "defence": 21,
+          "damageMin": 25,
+          "damageMax": 45,
+          "initiative": 15,
+          "speed": 15,
+          "squadValue": 5341,
+          "cost": {
+            "gold": 3500,
+            "crystals": 1
+          }
+        }
+      },
+      "mechanicsDebt": []
+    }
+  ],
+  "additionalRecruitmentLines": [
+    {
+      "lineId": "dreadnought",
+      "tier": 7,
+      "baseSid": "h3_dreadnought",
+      "variantSids": {
+        "": "h3_dreadnought",
+        "_upg": "h3_juggernaut",
+        "_upg_alt": "h3_dreadnought_upg_alt"
+      },
+      "donorFactionSid": "dungeon",
+      "donorBaseSid": "hydra",
+      "recruitmentSlotSid": "Factory_Gantry",
+      "cityBuildingSid": "Build_Factory_Gantry",
+      "directDwellingSid": "barracks_homm3_factory_8",
+      "donorDwellingSid": "barracks_dungeon_7",
+      "dwellingBillboardImage": "AVGdread.dir/00_00.png",
+      "branchFamily": "industrial",
+      "names": [
+        "Dreadnought",
+        "Juggernaut",
+        "Ironclad"
+      ],
+      "sourceConfig": [
+        "hotaDreadnought",
+        "hotaJuggernaut"
+      ],
+      "sourceStats": {
+        "": {
+          "source": "config/hota/factory/creatures/hotaDreadnought.json",
+          "hp": 200,
+          "offence": 18,
+          "defence": 20,
+          "damageMin": 40,
+          "damageMax": 50,
+          "initiative": 6,
+          "speed": 6,
+          "squadValue": 3879,
+          "cost": {
+            "gold": 2200,
+            "crystals": 1
+          }
+        },
+        "_upg": {
+          "source": "config/hota/factory/creatures/hotaJuggernaut.json",
+          "hp": 300,
+          "offence": 23,
+          "defence": 23,
+          "damageMin": 40,
+          "damageMax": 50,
+          "initiative": 7,
+          "speed": 7,
+          "squadValue": 6433,
+          "cost": {
+            "gold": 3500,
+            "crystals": 2
+          }
+        },
+        "_upg_alt": {
+          "source": "Material-class Ironclad deliberately inherits Juggernaut source stats",
+          "hp": 300,
+          "offence": 23,
+          "defence": 23,
+          "damageMin": 40,
+          "damageMax": 50,
+          "initiative": 7,
+          "speed": 7,
+          "squadValue": 6433,
+          "cost": {
+            "gold": 3500,
+            "crystals": 2
+          }
+        }
+      },
+      "mechanicsDebt": [
+        "A stationary/bunker movement lock is not part of the current Ironclad kit configuration and has not been implemented or runtime-validated"
+      ]
+    }
+  ],
+  "recruitmentBaseSids": [
+    "h3_halfling",
+    "h3_mechanic",
+    "h3_armadillo",
+    "h3_automaton",
+    "h3_sandworm",
+    "h3_gunslinger",
+    "h3_couatl"
+  ],
+  "squadTree": {
+    "unitReplacements": {
+      "esquire": "h3_halfling",
+      "esquire_upg": "h3_halfling_grenadier",
+      "esquire_upg_alt": "h3_halfling_upg_alt",
+      "crossbowman": "h3_mechanic",
+      "crossbowman_upg": "h3_engineer",
+      "crossbowman_upg_alt": "h3_mechanic_upg_alt",
+      "griffin": "h3_armadillo",
+      "griffin_upg": "h3_bellwether_armadillo",
+      "griffin_upg_alt": "h3_armadillo_upg_alt",
+      "lightweaver": "h3_automaton",
+      "lightweaver_upg": "h3_sentinel_automaton",
+      "lightweaver_upg_alt": "h3_automaton_upg_alt",
+      "sunlight_cavalry": "h3_sandworm",
+      "sunlight_cavalry_upg": "h3_olgoi_khorkhoi",
+      "sunlight_cavalry_upg_alt": "h3_sandworm_upg_alt",
+      "inquisitor": "h3_gunslinger",
+      "inquisitor_upg": "h3_bounty_hunter",
+      "inquisitor_upg_alt": "h3_gunslinger_upg_alt",
+      "angel": "h3_couatl",
+      "angel_upg": "h3_crimson_couatl",
+      "angel_upg_alt": "h3_couatl_upg_alt"
+    }
+  },
+  "releaseScaffold": {
+    "biome": "Foundry",
+    "citySceneName": "cityFactory",
+    "factionIcon": "fraction_human",
+    "factionLawIcon": "homm3_factory_faction_banner",
+    "lawIcon": "homm3_factory_faction_banner"
+  },
+  "heroes": {
+    "count": 16,
+    "heroPrefix": "homm3_factory_hero_",
+    "iconPrefix": "hero_homm3_factory_",
+    "specializationsRequired": true,
+    "mightClassName": "Mercenary",
+    "magicClassName": "Artificer",
+    "specializationTitle": "Factory Commander",
+    "mightSpecializationDescription": "Adapts this Mercenary's exact HotA source specialty to an explicit Olden Era effect.",
+    "magicSpecializationDescription": "Adapts this Artificer's exact HotA source specialty to an explicit Olden Era effect.",
+    "sourceHeroConfigs": [
+      "henrietta",
+      "sam",
+      "tancred",
+      "melchior",
+      "floribert",
+      "wynona",
+      "dury",
+      "morton",
+      "celestine",
+      "todd",
+      "agar",
+      "bertram",
+      "wrathmont",
+      "ziph",
+      "victoria",
+      "eanswythe"
+    ],
+    "names": [
+      "Henrietta",
+      "Sam",
+      "Tancred",
+      "Melchior",
+      "Floribert",
+      "Wynona",
+      "Dury",
+      "Morton",
+      "Celestine",
+      "Todd",
+      "Agar",
+      "Bertram",
+      "Wrathmont",
+      "Ziph",
+      "Victoria",
+      "Eanswythe"
+    ]
+  },
+  "skillsAndLaws": {
+    "factionSkillSid": "skill_faction_homm3_factory",
+    "lawPrefix": "fraction_law_homm3_factory_",
+    "factionSkillName": "Split Assembly"
+  },
+  "searchTokens": [
+    "Homm3Factory",
+    "Split Assembly",
+    "Factory Gantry",
+    "h3_halfling_grenadier",
+    "h3_engineer",
+    "h3_bellwether_armadillo",
+    "h3_sentinel_automaton",
+    "h3_olgoi_khorkhoi",
+    "h3_bounty_hunter",
+    "h3_crimson_couatl",
+    "h3_juggernaut"
+  ],
+  "assets": {
+    "factionIcon": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/faction_icons/homm3_factory/Icon_Faction_Factory.png",
+    "factionCard": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_scene_refs/homm3_factory/Factory-in-background.png",
+    "cityIcon": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_hud_icons/homm3_factory/fort_available.png",
+    "cityBillboard": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/map_object_refs/homm3_factory_city/AVCfacZ0.dir/00_00.png",
+    "townSceneFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_scene_refs/homm3_factory/",
+    "buildingIconFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/town_scene_refs/homm3_factory/building_icons/",
+    "cityBillboardFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/map_object_refs/homm3_factory_city/",
+    "dwellingBillboardFolder": "Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/homm3_runtime_assets/map_object_refs/homm3_factory_dwellings/"
+  },
+  "sourceAssets": {
+    "primaryHotAArchive": "vcmi/Mods/hota/mods/factory/content.zip",
+    "primaryHotAArchiveSha256": "D4327927083C5D9D744C8AAEEA94028564204B03891140E6C79977400E922353",
+    "creatureConfigFolder": "config/hota/factory/creatures/",
+    "heroConfigFolder": "config/hota/factory/heroes/",
+    "townConfigFolder": "config/hota/factory/town/",
+    "townBackdrop": "Data/hota/factory/town-screen/TBFaBack.png",
+    "dwellingMapObjectOrder": [
+      "AVG2half.def",
+      "AVGmecha.def",
+      "AVGarma.def",
+      "AVGauto.def",
+      "AVGworm.def",
+      "AVGguns.def",
+      "AVGcoatl.def",
+      "AVGdread.def"
+    ]
+  },
+  "runtime": {
+    "customToDonorSource": "manifest",
+    "reverseDonorLookup": "context_required",
+    "allowGlobalDonorReverseLookup": false,
+    "displayName": "Factory",
+    "description": "Factory fields a split natural and industrial roster: beasts and living desert creatures on one path, engineered troops and war machines on the other. The Gantry supplies Dreadnoughts as a second tier-seven line.",
+    "cityMapBillboardHeight": 4.5,
+    "dwellingBillboardImages": [
+      "AVG2half.dir/00_00.png",
+      "AVGmecha.dir/00_00.png",
+      "AVGarma.dir/00_00.png",
+      "AVGauto.dir/00_00.png",
+      "AVGworm.dir/00_00.png",
+      "AVGguns.dir/00_00.png",
+      "AVGcoatl.dir/00_00.png"
+    ],
+    "dwellingDonorPrefixes": [
+      "barracks_human_"
+    ]
+  },
+  "validation": {
+    "status": "basic_enabled",
+    "runtimeMirrorRequired": true,
+    "coreOverlayEnabled": true,
+    "releasePromotionBlocked": false,
+    "allowedDebt": [
+      "Factory is source/static configured from the pinned HotA Factory archive and generated runtime-asset manifest. Generated Core, installed payload, startup smoke, runtime behavior, and user-visible gameplay remain separate proof boundaries.",
+      "HotA assigns Factory to Wasteland, but homm3_stronghold already owns that custom biome. Factory therefore owns Foundry (tile 29), a Sand presentation clone registered through the shared custom-biome pack; it must not share Stronghold's Wasteland ownership or fall back to built-in Sand.",
+      "The seven primary recruitment tiers terminate in Couatl. Dreadnought is intentionally a separate tier-seven Gantry line through Build_Factory_Gantry and barracks_homm3_factory_8 rather than replacing Couatl.",
+      "Material-class alternate upgrades deliberately inherit their corresponding HotA standard-upgrade stats until their own balance rows are authored; that inheritance is explicit in sourceStats rather than a generator fallback.",
+      "All donor combat abilities/passives are cleared by the Factory ability override contract and generic unit normalize path. Locked OE remaps that already map onto proven GENERIC_* / spell-effect shapes are wired in ability_overrides and apply_release_core_overlay.py: shooter roles, Mechanic/Engineer breath, Tinker Long Reach (no breath), Sandworm teleport + tier-3 magic immunity, Automaton/Dreadnought construct profile, Sentinel no-retaliation, Bounty Hunter unlimited retaliation, Couatl flight, Halfling Positive Luck floor, Gunslinger-line Parry + Countershot, Juggernaut Hydra-style Heat Stroke alternate, and the confirmed Focus kit (Field Drive Speed, Overclock Initiative, Ember Canister, Taunting Plate, Blow Up via lava_larva, Wind-Up via rampage, Devour Corpses via locust Harvest, Shatter, Suppressing Fire trap shape, Meditation/Jade Ward Carapace, Fortress Mode Carapace half). Remaining open work: combat live-positive proof for those Focus remaps; Locust larva support (deferred); no Ironclad immobility/bunker-lock mechanic is configured or promised, and live behavior remains unproven.",
+      "Split Assembly is the only Factory faction mechanic delivered by this milestone. Distinct Natural/Industrial line tiers, rank-scaled magnitudes, Expert fourth-tier Carapace/Field Triage, and overclock subskills require generated-Core validation and runtime proof."
+    ]
+  }
+}

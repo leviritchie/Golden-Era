@@ -1,0 +1,53 @@
+{
+  "unitSid": "h3_roc",
+  "species": "flyer",
+  "mesh": "artifacts/meshy_downloads/h3_roc_smartrigged.glb",
+  "proof": "groups authored from UniRig parent chains on this GLB; landmarks and ventral axis are anatomical roles for this mesh only, not Bone_* index guesses",
+  "landmarks": {
+    "tailTip": "Bone_012",
+    "headTip": "Bone_014",
+    "keel": "Bone_001"
+  },
+  "bindAxes": {
+    "ventral": [0.0, 0.0, 1.0],
+    "ventralProof": "idle_start_move_end round_00 profile_camera_fit.characterForward; pale chest faces +Z in bind"
+  },
+  "symmetry": {
+    "bilateralGroupPairs": [["wing_a", "wing_b"], ["leg_a", "leg_b"]],
+    "centralGroups": ["trunk", "neck_head", "tail"],
+    "centralJointAxes": ["x", "y"]
+  },
+  "groups": {
+    "trunk": {
+      "role": "body_root_and_keel",
+      "bonesDependencyOrder": ["Bone_000", "Bone_001", "Bone_003", "Bone_002"]
+    },
+    "wing_a": {
+      "role": "wing_chain_A_under_shoulder_pivot",
+      "bonesDependencyOrder": ["Bone_019", "Bone_018", "Bone_017"],
+      "note": "hybrid flyer scripts drive Bone_019 as one wing shoulder"
+    },
+    "wing_b": {
+      "role": "wing_chain_B_under_shoulder_pivot",
+      "bonesDependencyOrder": ["Bone_022", "Bone_021", "Bone_020"],
+      "note": "hybrid flyer scripts drive Bone_022 as the opposite wing shoulder"
+    },
+    "neck_head": {
+      "role": "cranial_chain_under_shoulder_pivot",
+      "bonesDependencyOrder": ["Bone_016", "Bone_015", "Bone_014"],
+      "note": "cervical chain under Bone_002; not leg indices"
+    },
+    "tail": {
+      "role": "caudal_chain",
+      "bonesDependencyOrder": ["Bone_013", "Bone_012"]
+    },
+    "leg_a": {
+      "role": "hindlimb_chain_A",
+      "bonesDependencyOrder": ["Bone_007", "Bone_006", "Bone_005", "Bone_004"]
+    },
+    "leg_b": {
+      "role": "hindlimb_chain_B",
+      "bonesDependencyOrder": ["Bone_011", "Bone_010", "Bone_009", "Bone_008"]
+    }
+  }
+}

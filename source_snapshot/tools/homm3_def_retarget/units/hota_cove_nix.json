@@ -1,0 +1,2847 @@
+{
+ "unit": "hota_cove_nix",
+ "extensions": [
+  "hand_keys",
+  "cove_reweight",
+  "rampart_quadruped",
+  "cove_tailyaw",
+  "cove_tailtrail",
+  "cove_rootkeys",
+  "idle_cycle"
+ ],
+ "joints": {
+  "Hips": [
+   0.07,
+   -0.36,
+   0.72
+  ],
+  "Spine": [
+   0.07,
+   -0.36,
+   0.84
+  ],
+  "Spine1": [
+   0.07,
+   -0.35,
+   0.96
+  ],
+  "Spine2": [
+   0.07,
+   -0.35,
+   1.08
+  ],
+  "Neck": [
+   0.07,
+   -0.4,
+   1.18
+  ],
+  "Head": [
+   0.07,
+   -0.45,
+   1.24
+  ],
+  "HeadTop_End": [
+   0.07,
+   -0.73,
+   1.22
+  ],
+  "LeftShoulder": [
+   0.12,
+   -0.35,
+   1.14
+  ],
+  "LeftArm": [
+   0.25,
+   -0.35,
+   1.12
+  ],
+  "LeftForeArm": [
+   0.36,
+   -0.38,
+   0.93
+  ],
+  "LeftHand": [
+   0.3,
+   -0.46,
+   0.84
+  ],
+  "LeftHand_End": [
+   0.26,
+   -0.5,
+   0.8
+  ],
+  "RightShoulder": [
+   0.02,
+   -0.35,
+   1.14
+  ],
+  "RightArm": [
+   -0.14,
+   -0.35,
+   1.12
+  ],
+  "RightForeArm": [
+   -0.27,
+   -0.38,
+   0.93
+  ],
+  "RightHand": [
+   -0.4,
+   -0.54,
+   0.88
+  ],
+  "RightHand_End": [
+   -0.46,
+   -0.57,
+   0.86
+  ],
+  "LeftUpLeg": [
+   0.15,
+   -0.36,
+   0.68
+  ],
+  "LeftLeg": [
+   0.25,
+   -0.39,
+   0.38
+  ],
+  "LeftFoot": [
+   0.3,
+   -0.38,
+   0.1
+  ],
+  "LeftToeBase": [
+   0.36,
+   -0.51,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.4,
+   -0.59,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.02,
+   -0.35,
+   0.68
+  ],
+  "RightLeg": [
+   -0.13,
+   -0.33,
+   0.38
+  ],
+  "RightFoot": [
+   -0.17,
+   -0.26,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.2,
+   -0.41,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.22,
+   -0.52,
+   0.0
+  ]
+ },
+ "props": [
+  {
+   "name": "spear",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.43,
+      -0.56,
+      -0.02
+     ],
+     [
+      -0.43,
+      -0.56,
+      1.92
+     ]
+    ]
+   ],
+   "radius": 0.04
+  },
+  {
+   "name": "spearguard",
+   "bone": "RightHand",
+   "sphere": [
+    [
+     -0.43,
+     -0.56,
+     1.4
+    ],
+    0.075
+   ]
+  }
+ ],
+ "bootTop": 0.38,
+ "skirtLegShare": 0.5,
+ "quadruped": {
+  "tail": {
+   "points": [
+    [
+     0,
+     -0.2,
+     0.56
+    ],
+    [
+     0,
+     -0.06,
+     0.45
+    ],
+    [
+     0,
+     0.06,
+     0.31
+    ],
+    [
+     0,
+     0.18,
+     0.19
+    ],
+    [
+     0,
+     0.32,
+     0.11
+    ],
+    [
+     0,
+     0.48,
+     0.065
+    ],
+    [
+     0,
+     0.63,
+     0.045
+    ],
+    [
+     -0.01,
+     0.78,
+     0.03
+    ]
+   ],
+   "region": {
+    "segments": [
+     [
+      [
+       0,
+       -0.2,
+       0.56
+      ],
+      [
+       0,
+       -0.06,
+       0.45
+      ]
+     ],
+     [
+      [
+       0,
+       -0.06,
+       0.45
+      ],
+      [
+       0,
+       0.06,
+       0.31
+      ]
+     ],
+     [
+      [
+       0,
+       0.06,
+       0.31
+      ],
+      [
+       0,
+       0.18,
+       0.19
+      ]
+     ],
+     [
+      [
+       0,
+       0.18,
+       0.19
+      ],
+      [
+       0,
+       0.32,
+       0.11
+      ]
+     ],
+     [
+      [
+       0,
+       0.32,
+       0.11
+      ],
+      [
+       0,
+       0.48,
+       0.065
+      ]
+     ],
+     [
+      [
+       0,
+       0.48,
+       0.065
+      ],
+      [
+       0,
+       0.63,
+       0.045
+      ]
+     ],
+     [
+      [
+       0,
+       0.63,
+       0.045
+      ],
+      [
+       -0.01,
+       0.78,
+       0.03
+      ]
+     ]
+    ],
+    "radius": 0.16,
+    "exclude": [
+     {
+      "box": [
+       [
+        -0.6,
+        -0.9,
+        0.0
+       ],
+       [
+        0.6,
+        -0.15,
+        1.5
+       ]
+      ]
+     }
+    ]
+   },
+   "parent": "Hips",
+   "rootBlend": 1.0,
+   "sway": 6,
+   "lift": 3,
+   "moveSway": 16
+  }
+ },
+ "coveTailYaw": {
+  "prefix": "QTail",
+  "deg": 25,
+  "bones": 3
+ },
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "roll"
+  ],
+  "limits": {
+   "dx": 8,
+   "roll": 6
+  }
+ },
+ "handKeys": {
+  "Idle": [
+   {
+    "f": 0,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 5,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      2,
+      0,
+      1
+     ],
+     "Head": [
+      -3,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      -4,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 9,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0.5,
+      0,
+      0.2
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Move": [
+   {
+    "f": 0,
+    "bones": {
+     "Spine": [
+      8.0,
+      0,
+      0
+     ],
+     "Spine1": [
+      4.0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      -0.0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0.0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      27.96117257901679,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0.0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0.0,
+      0,
+      0
+     ],
+     "RightArm": [
+      -20.0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -25.0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     -0.03
+    ]
+   },
+   {
+    "f": 1,
+    "bones": {
+     "Spine": [
+      8.0,
+      0,
+      0
+     ],
+     "Spine1": [
+      4.0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      -18.38477631085024,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      18.38477631085024,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      27.4583035027297,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0.0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      8.485281374238571,
+      0,
+      0
+     ],
+     "RightArm": [
+      -20.0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -25.0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     -0.021213203435596427
+    ]
+   },
+   {
+    "f": 2,
+    "bones": {
+     "Spine": [
+      8.0,
+      0,
+      0
+     ],
+     "Spine1": [
+      4.0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      -26.0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      26.0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      10.870732634300204,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0.0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      12.0,
+      0,
+      0
+     ],
+     "RightArm": [
+      -20.0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -25.0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     -1.8369701987210296e-18
+    ]
+   },
+   {
+    "f": 3,
+    "bones": {
+     "Spine": [
+      8.0,
+      0,
+      0
+     ],
+     "Spine1": [
+      4.0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      -18.38477631085024,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      18.38477631085024,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0.0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      12.084765978370543,
+      0,
+      0
+     ],
+     "LeftArm": [
+      8.485281374238571,
+      0,
+      0
+     ],
+     "RightArm": [
+      -20.0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -25.0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     -0.021213203435596423
+    ]
+   },
+   {
+    "f": 4,
+    "bones": {
+     "Spine": [
+      8.0,
+      0,
+      0
+     ],
+     "Spine1": [
+      4.0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      -3.184081677783118e-15,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      3.184081677783118e-15,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0.0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      27.961172579016793,
+      0,
+      0
+     ],
+     "LeftArm": [
+      1.4695761589768238e-15,
+      0,
+      0
+     ],
+     "RightArm": [
+      -20.0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -25.0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     -0.03
+    ]
+   },
+   {
+    "f": 5,
+    "bones": {
+     "Spine": [
+      8.0,
+      0,
+      0
+     ],
+     "Spine1": [
+      4.0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      18.384776310850235,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      -18.384776310850235,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0.0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      27.458303502729695,
+      0,
+      0
+     ],
+     "LeftArm": [
+      -8.48528137423857,
+      0,
+      0
+     ],
+     "RightArm": [
+      -20.0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -25.0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     -0.02121320343559643
+    ]
+   },
+   {
+    "f": 6,
+    "bones": {
+     "Spine": [
+      8.0,
+      0,
+      0
+     ],
+     "Spine1": [
+      4.0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      26.0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      -26.0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0.0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      10.870732634300207,
+      0,
+      0
+     ],
+     "LeftArm": [
+      -12.0,
+      0,
+      0
+     ],
+     "RightArm": [
+      -20.0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -25.0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     -5.510910596163089e-18
+    ]
+   },
+   {
+    "f": 7,
+    "bones": {
+     "Spine": [
+      8.0,
+      0,
+      0
+     ],
+     "Spine1": [
+      4.0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      18.38477631085024,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      -18.38477631085024,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      12.08476597837054,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0.0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      -8.485281374238571,
+      0,
+      0
+     ],
+     "RightArm": [
+      -20.0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -25.0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     -0.02121320343559642
+    ]
+   }
+  ],
+  "MoveStart": [
+   {
+    "f": 0,
+    "bones": {
+     "Spine": [
+      4,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      -10,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -12,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 1,
+    "bones": {
+     "Spine": [
+      8.0,
+      0,
+      0
+     ],
+     "Spine1": [
+      4.0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      -0.0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0.0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      27.96117257901679,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0.0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0.0,
+      0,
+      0
+     ],
+     "RightArm": [
+      -20.0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -25.0,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "MoveEnd": [
+   {
+    "f": 0,
+    "bones": {
+     "Spine": [
+      8.0,
+      0,
+      0
+     ],
+     "Spine1": [
+      4.0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      -0.0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0.0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      27.96117257901679,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0.0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0.0,
+      0,
+      0
+     ],
+     "RightArm": [
+      -20.0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -25.0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 1,
+    "bones": {
+     "Spine": [
+      4,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      -10,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -12,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Mouseover": [
+   {
+    "f": 0,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 3,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      8,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      12
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -8,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 6,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      8,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      12
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -8,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 9,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Hitted": [
+   {
+    "f": 0,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 2,
+    "bones": {
+     "Spine": [
+      -10,
+      0,
+      0
+     ],
+     "Spine1": [
+      -8,
+      0,
+      0
+     ],
+     "Head": [
+      -12,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      10,
+      0,
+      0
+     ],
+     "LeftArm": [
+      -20,
+      0,
+      -15
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 4,
+    "bones": {
+     "Spine": [
+      -6,
+      0,
+      0
+     ],
+     "Spine1": [
+      -4,
+      0,
+      0
+     ],
+     "Head": [
+      -6,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      -10,
+      0,
+      -8
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 7,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  ],
+  "Defence": [
+   {
+    "f": 0,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "f": 3,
+    "bones": {
+     "Spine": [
+      10,
+      0,
+      0
+     ],
+     "Spine1": [
+      6,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      -30,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -40,
+      0,
+      0
+     ],
+     "LeftArm": [
+      -25,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      -30,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      -20,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      -20,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      30,
+      0,
+      0
+     ],
+     "RightLeg": [
+      30,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     -0.06
+    ]
+   },
+   {
+    "f": 7,
+    "bones": {
+     "Spine": [
+      10,
+      0,
+      0
+     ],
+     "Spine1": [
+      6,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      -30,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -40,
+      0,
+      0
+     ],
+     "LeftArm": [
+      -25,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      -30,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      -20,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      -20,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      30,
+      0,
+      0
+     ],
+     "RightLeg": [
+      30,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     -0.06
+    ]
+   },
+   {
+    "f": 9,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "AttackFront": [
+   {
+    "f": 0,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "f": 2,
+    "bones": {
+     "Spine": [
+      -4,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      -20,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      -90,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0.05,
+     0
+    ]
+   },
+   {
+    "f": 4,
+    "bones": {
+     "Spine": [
+      14,
+      0,
+      0
+     ],
+     "Spine1": [
+      6,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      -45,
+      0,
+      -30
+     ],
+     "RightForeArm": [
+      -100,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      -25,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      15,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      20,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     -0.12,
+     -0.03
+    ]
+   },
+   {
+    "f": 5,
+    "bones": {
+     "Spine": [
+      14,
+      0,
+      0
+     ],
+     "Spine1": [
+      6,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      -45,
+      0,
+      -30
+     ],
+     "RightForeArm": [
+      -100,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      -25,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      15,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      20,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     -0.12,
+     -0.03
+    ]
+   },
+   {
+    "f": 7,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "Death": [
+   {
+    "f": 0,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "f": 1,
+    "bones": {
+     "Spine": [
+      -8,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      -10,
+      0,
+      0
+     ],
+     "RightArm": [
+      0,
+      0,
+      0
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      0,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      0,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      0,
+      0,
+      0
+     ],
+     "RightLeg": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   {
+    "f": 3,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      -30,
+      0,
+      20
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      -20,
+      0,
+      -20
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      25,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      -50,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      -50,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      70,
+      0,
+      0
+     ],
+     "RightLeg": [
+      70,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     0,
+     -0.25
+    ]
+   },
+   {
+    "f": 5,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      0,
+      0,
+      0
+     ],
+     "RightArm": [
+      -60,
+      0,
+      30
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      -60,
+      0,
+      -30
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      70,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      -40,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      -40,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      40,
+      0,
+      0
+     ],
+     "RightLeg": [
+      40,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     -0.2,
+     -0.5
+    ]
+   },
+   {
+    "f": 7,
+    "bones": {
+     "Spine": [
+      0,
+      0,
+      0
+     ],
+     "Spine1": [
+      0,
+      0,
+      0
+     ],
+     "Head": [
+      -20,
+      0,
+      0
+     ],
+     "RightArm": [
+      -95,
+      0,
+      25
+     ],
+     "RightForeArm": [
+      0,
+      0,
+      0
+     ],
+     "LeftArm": [
+      -95,
+      0,
+      -25
+     ],
+     "LeftForeArm": [
+      0,
+      0,
+      0
+     ],
+     "Hips": [
+      85,
+      0,
+      0
+     ],
+     "LeftUpLeg": [
+      -15,
+      0,
+      0
+     ],
+     "RightUpLeg": [
+      -15,
+      0,
+      0
+     ],
+     "LeftLeg": [
+      10,
+      0,
+      0
+     ],
+     "RightLeg": [
+      10,
+      0,
+      0
+     ]
+    },
+    "root": [
+     0,
+     -0.3,
+     -0.58
+    ]
+   }
+  ]
+ },
+ "coveReweight": [
+  {
+   "box": [
+    [
+     0.08,
+     -0.63,
+     0.45
+    ],
+    [
+     0.32,
+     -0.37,
+     0.77
+    ]
+   ],
+   "dropBones": [
+    "LeftHand",
+    "LeftForeArm"
+   ],
+   "fallback": "Hips",
+   "cut": true,
+   "cutAgainstDrop": 0.5
+  }
+ ],
+ "coveTailTrail": {
+  "prefix": "QTail",
+  "clips": {
+   "Death": [
+    0.0,
+    1.0
+   ]
+  },
+  "dipDeg": 12,
+  "waveDeg": 0,
+  "rootShare": 0.5
+ },
+ "idleCycle": {
+  "rot": [
+   {
+    "bones": [
+     [
+      "Neck",
+      0.5
+     ],
+     [
+      "Head",
+      0.5
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "peak": 8,
+    "shape": "sin",
+    "phase": 0
+   },
+   {
+    "bones": [
+     [
+      "Spine1",
+      0.5
+     ],
+     [
+      "Spine2",
+      0.5
+     ]
+    ],
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "peak": 4,
+    "shape": "sin",
+    "phase": 0
+   }
+  ],
+  "wave": [
+   {
+    "prefix": "QTail_",
+    "axis": [
+     1,
+     0,
+     0
+    ],
+    "amp": 3.5,
+    "wavelength": 8,
+    "grow": 2
+   },
+   {
+    "prefix": "QTail_",
+    "axis": [
+     0,
+     0,
+     1
+    ],
+    "amp": 5,
+    "wavelength": 8,
+    "grow": 2,
+    "phase": 90
+   }
+  ]
+ },
+ "propFloor": {
+  "bone": "RightHand",
+  "prop": "spear",
+  "clips": [
+   "Move"
+  ],
+  "reason": "The spear (rigid on RightHand) stands on the Idle floor, butt down; the stride plant pelvis drop (0.040 H) carries it up to 0.021 H through the floor in Move, and ground_glb then lifted the whole walk off the planted soles (LeftUpLeg / RightUpLeg to +0.045, 2026-09-28). Tilting it within its own lean plane (at most 6.0 deg, 21 of 37 keys) keeps the butt on the floor; Move grounds with no lift."
+ }
+}

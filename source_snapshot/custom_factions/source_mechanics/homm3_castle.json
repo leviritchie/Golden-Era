@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_castle",
+  "sourceDoc": "docs/custom_faction_recommendations.md and docs/custom_faction_technical_implementation_proposals.md",
+  "mechanics": [
+    {
+      "id": "castle.resource_silo",
+      "surface": "building",
+      "sourceName": "Resource Silo",
+      "status": "exact",
+      "reason": "Generated city row grants the HoMM3 Castle wood and ore daily income.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "castle.griffin_bastion",
+      "surface": "building",
+      "sourceName": "Griffin Bastion",
+      "status": "exact",
+      "reason": "Generated city row grants +3 weekly growth to the Griffin line.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot_level_2"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "castle.lighthouse",
+      "surface": "building",
+      "sourceName": "Lighthouse",
+      "status": "substituted",
+      "reason": "Olden Era has no proven water/shipyard city mechanic path for Castle in this port.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "ship",
+        "water movement",
+        "Lighthouse"
+      ],
+      "currentRows": [
+        "Build_Golden_Calf"
+      ],
+      "playerTextTokens": [
+        "Homm3Castle_Build_Golden_Calf_description",
+        "Homm3Castle_Build_Golden_Calf_name",
+        "Homm3Castle_Build_Golden_Calf_narrativeDescription"
+      ]
+    },
+    {
+      "id": "castle.stables",
+      "surface": "building",
+      "sourceName": "Stables",
+      "status": "substituted",
+      "reason": "Adventure-map movement and Cavalier upgrade source behavior need a traced city/session route before being promised.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "Cavalier",
+        "Champion upgrade",
+        "movement"
+      ],
+      "currentRows": [
+        "Build_Bank"
+      ],
+      "playerTextTokens": [
+        "Homm3Castle_Build_Bank_description",
+        "Homm3Castle_Build_Bank_name",
+        "Homm3Castle_Build_Bank_narrativeDescription"
+      ]
+    }
+  ]
+}

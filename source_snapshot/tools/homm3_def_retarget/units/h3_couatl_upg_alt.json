@@ -1,0 +1,473 @@
+{
+ "unit": "h3_couatl_upg_alt",
+ "joints": {
+  "Hips": [
+   0,
+   -0.05,
+   0.5
+  ],
+  "Spine": [
+   0,
+   -0.08,
+   0.65
+  ],
+  "Spine1": [
+   0,
+   -0.1,
+   0.8
+  ],
+  "Spine2": [
+   0,
+   -0.12,
+   0.95
+  ],
+  "Neck": [
+   0,
+   -0.18,
+   1.1
+  ],
+  "Head": [
+   0.0,
+   -0.2,
+   1.25
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.55,
+   1.2
+  ],
+  "LeftShoulder": [
+   0.08,
+   -0.1,
+   1.0
+  ],
+  "LeftArm": [
+   0.15,
+   -0.15,
+   0.97
+  ],
+  "LeftForeArm": [
+   0.17,
+   -0.25,
+   0.85
+  ],
+  "LeftHand": [
+   0.15,
+   -0.33,
+   0.92
+  ],
+  "LeftHand_End": [
+   0.14,
+   -0.4,
+   0.95
+  ],
+  "LeftUpLeg": [
+   0.15,
+   0.0,
+   0.45
+  ],
+  "LeftLeg": [
+   0.2,
+   -0.12,
+   0.28
+  ],
+  "LeftFoot": [
+   0.2,
+   0.05,
+   0.1
+  ],
+  "LeftToeBase": [
+   0.22,
+   -0.08,
+   0.02
+  ],
+  "LeftToe_End": [
+   0.23,
+   -0.2,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.08,
+   -0.1,
+   1.0
+  ],
+  "RightArm": [
+   -0.15,
+   -0.15,
+   0.97
+  ],
+  "RightForeArm": [
+   -0.17,
+   -0.25,
+   0.85
+  ],
+  "RightHand": [
+   -0.15,
+   -0.33,
+   0.92
+  ],
+  "RightHand_End": [
+   -0.14,
+   -0.4,
+   0.95
+  ],
+  "RightUpLeg": [
+   -0.15,
+   0.0,
+   0.45
+  ],
+  "RightLeg": [
+   -0.2,
+   -0.12,
+   0.28
+  ],
+  "RightFoot": [
+   -0.2,
+   0.05,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.22,
+   -0.08,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.23,
+   -0.2,
+   0.0
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "wingMaxDeg": 0,
+ "wings": [
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.18,
+    0.12,
+    1.15
+   ],
+   "tail": [
+    -0.45,
+    0.15,
+    1.5
+   ],
+   "sign": 1,
+   "region": {
+    "box": [
+     [
+      -0.75,
+      -0.3,
+      0.28
+     ],
+     [
+      -0.26,
+      0.4,
+      1.72
+     ]
+    ],
+    "exclude": [
+     {
+      "box": [
+       [
+        -0.4,
+        -1,
+        0
+       ],
+       [
+        -0.2,
+        -0.05,
+        1.15
+       ]
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.18,
+    0.12,
+    1.15
+   ],
+   "tail": [
+    0.45,
+    0.15,
+    1.5
+   ],
+   "sign": -1,
+   "region": {
+    "box": [
+     [
+      0.26,
+      -0.3,
+      0.28
+     ],
+     [
+      0.75,
+      0.4,
+      1.72
+     ]
+    ],
+    "exclude": [
+     {
+      "box": [
+       [
+        0.2,
+        -1,
+        0
+       ],
+       [
+        0.4,
+        -0.05,
+        1.15
+       ]
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 30,
+   "dy": 30
+  }
+ },
+ "extensions": [
+  "wing_chain"
+ ],
+ "wingChain": {
+  "wings": [
+   {
+    "bone": "LeftWing",
+    "side": 1
+   },
+   {
+    "bone": "RightWing",
+    "side": -1
+   }
+  ],
+  "adoptWeights": "nearest",
+  "anim": {
+   "MoveStart": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.15,
+       0.8
+      ],
+      [
+       0.4,
+       1
+      ],
+      [
+       1,
+       1
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.15,
+       50
+      ],
+      [
+       0.5,
+       -40
+      ],
+      [
+       0.75,
+       -10
+      ],
+      [
+       1,
+       45
+      ]
+     ]
+    }
+   },
+   "Move": {
+    "open": 1,
+    "flap": {
+     "sin": 50,
+     "phase": 90
+    },
+    "fold": {
+     "sin": 50,
+     "phase": 180,
+     "half": "pos"
+    },
+    "droop": {
+     "sin": 30,
+     "phase": 180,
+     "half": "pos"
+    }
+   },
+   "MoveEnd": {
+    "open": {
+     "keys": [
+      [
+       0,
+       1
+      ],
+      [
+       0.5,
+       0.8
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       45
+      ],
+      [
+       0.5,
+       40
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.4,
+       0.2
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.4,
+       0.3
+      ],
+      [
+       0.7,
+       0.3
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "flap",
+    "open",
+    "fold",
+    "droop",
+    "sweep"
+   ],
+   "offsets": [
+    "dx",
+    "dy"
+   ],
+   "clips": [
+    "MoveStart",
+    "MoveEnd",
+    "Hitted",
+    "AttackFront",
+    "Death",
+    "Defence"
+   ],
+   "bounce": 4,
+   "penalty": 0.0008,
+   "smooth": 0.0008
+  },
+  "steady": {
+   "Move": 1.0,
+   "MoveStart": 0.5,
+   "MoveEnd": 0.5
+  },
+  "bodyTurn": {
+   "fit": [
+    "Move"
+   ],
+   "rampIn": {
+    "MoveStart": "Move"
+   },
+   "rampOut": {
+    "MoveEnd": "Move"
+   }
+  }
+ },
+ "wingChainReason": "2026-09-27 workerB: rigid wing bones beat 11-27 deg while silhouetteRefine rolled the body (toy ratio 0.9-3.7) and the corrective bake blew up (morph 134-891). Articulated chain per ext/wing_chain.py (as the griffins / cove ayssid). Keys read off the couatl DEF plates: Move is one beat per 8-frame clip, up on 0-1 and 7, down on 3-5 -> flap sin 50 phase 90; MoveStart is a take-off (flung up on 1-2, down-sweep 4-6, raised by 9); MoveEnd raises then folds; Hitted and AttackFront keep the wings nearly closed.",
+ "deliveryDensify": {
+  "clips": [
+   "MoveStart",
+   "Move",
+   "MoveEnd"
+  ],
+  "keysPerSpan": 3
+ },
+ "glbPatch": {
+  "reason": "authenticity: DEF g12 attack - the couatl rears back, then pitches the torso forward and lunges the neck and head straight out at the target, jaws leading, then recoils (the shipped clip barely moved the head); neck/torso weights re-solved so the lunge passes the CS gate",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_couatl_upg_alt_couatl_attack_weights.json",
+    "sha256": "a543b93d54d455e4c088de109ec7fadc5bbcd15bb8d2555b46c13251576ff803",
+    "note": "couatl strike: neck/torso weights re-solved (accumulating wsolve, GPU) for the forward lunge"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_couatl_upg_alt_pose_rot.json",
+    "sha256": "e51de9e102fccaed067f22a2ea8c49d9f6c38f1d155c975b32ac6724902aec39",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_couatl_upg_alt_pose_rot.json",
+    "sha256": "e51de9e102fccaed067f22a2ea8c49d9f6c38f1d155c975b32ac6724902aec39",
+    "regrid": true
+   }
+  ]
+ }
+}

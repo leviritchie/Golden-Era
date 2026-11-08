@@ -1,0 +1,49 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require enemy morale penalty or enemy morale failure semantics. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresEnemyMoralePenaltyProfiles": true,
+    "moralePackageFamilyOnly": true,
+    "enemyMoralePenaltyRequired": true,
+    "friendlyMoraleBonusSubstituteForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": ["homm3_dungeon", "homm3_necropolis"],
+  "allowedFamily": "MoralePackage",
+  "requiredRuntimeProof": [
+    "enemy morale value read proof",
+    "enemy morale failure or penalty application proof",
+    "enemy side versus law-owner side correlation proof",
+    "friendly morale bonus exclusion proof",
+    "affected enemy stack identity proof",
+    "debuff or dread effect ordering proof",
+    "idempotent per-roll or per-package application proof"
+  ],
+  "contracts": {
+    "dungeon.enemy-failure-debuff-package": {
+      "moralePenaltyKinds": ["enemy-morale-failure-debuff-package", "friendly-morale-bonus-excluded"],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "friendly morale bonus counted as enemy morale penalty",
+        "morale animation counted without roll result proof",
+        "negative status application counted without enemy morale proof",
+        "law-owner unit morale counted instead of enemy side morale",
+        "generic morale package counted without enemy target proof"
+      ],
+      "notes": "Requires enemy morale failure or penalty proof before Terror Exploitation can apply debuff-package behavior; friendly morale bonuses and generic morale animations are forbidden substitutes."
+    },
+    "necropolis.enemy-dread-corpse-package": {
+      "moralePenaltyKinds": ["enemy-dread-morale-penalty-package", "friendly-undead-morale-bonus-excluded"],
+      "companionPredicates": ["RequiresCorpseOrUndeadContext"],
+      "forbiddenSubstitutes": [
+        "friendly morale bonus counted as enemy morale penalty",
+        "morale animation counted without roll result proof",
+        "negative status application counted without enemy morale proof",
+        "law-owner unit morale counted instead of enemy side morale",
+        "generic morale package counted without enemy target proof"
+      ],
+      "notes": "Requires enemy morale penalty or dread pressure proof before Necropolis Dread package behavior can apply; corpse/undead context is companion evidence only."
+    }
+  }
+}

@@ -1,0 +1,1461 @@
+{
+ "unit": "h3_gold_dragon",
+ "joints": {
+  "Hips": [
+   0,
+   -0.03,
+   0.45
+  ],
+  "Spine": [
+   0,
+   -0.17,
+   0.46
+  ],
+  "Spine1": [
+   0,
+   -0.31,
+   0.47
+  ],
+  "Spine2": [
+   0,
+   -0.44,
+   0.52
+  ],
+  "Neck": [
+   0,
+   -0.49,
+   0.74
+  ],
+  "Head": [
+   0,
+   -0.53,
+   1.03
+  ],
+  "HeadTop_End": [
+   0,
+   -0.93,
+   1.02
+  ],
+  "LeftShoulder": [
+   0.06,
+   -0.46,
+   0.56
+  ],
+  "RightShoulder": [
+   -0.06,
+   -0.46,
+   0.56
+  ],
+  "LeftArm": [
+   0.14,
+   -0.56,
+   0.45
+  ],
+  "RightArm": [
+   -0.14,
+   -0.56,
+   0.45
+  ],
+  "LeftForeArm": [
+   0.15,
+   -0.6,
+   0.27
+  ],
+  "RightForeArm": [
+   -0.15,
+   -0.6,
+   0.27
+  ],
+  "LeftHand": [
+   0.15,
+   -0.67,
+   0.08
+  ],
+  "RightHand": [
+   -0.15,
+   -0.67,
+   0.08
+  ],
+  "LeftHand_End": [
+   0.16,
+   -0.8300000000000001,
+   0.01
+  ],
+  "RightHand_End": [
+   -0.16,
+   -0.8300000000000001,
+   0.01
+  ],
+  "LeftUpLeg": [
+   0.13,
+   -0.05,
+   0.42
+  ],
+  "RightUpLeg": [
+   -0.13,
+   -0.05,
+   0.42
+  ],
+  "LeftLeg": [
+   0.2,
+   -0.31000000000000005,
+   0.3
+  ],
+  "RightLeg": [
+   -0.2,
+   -0.31000000000000005,
+   0.3
+  ],
+  "LeftFoot": [
+   0.22,
+   -0.14,
+   0.1
+  ],
+  "RightFoot": [
+   -0.22,
+   -0.14,
+   0.1
+  ],
+  "LeftToeBase": [
+   0.23,
+   -0.26,
+   0.03
+  ],
+  "RightToeBase": [
+   -0.23,
+   -0.26,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.24,
+   -0.38,
+   0.0
+  ],
+  "RightToe_End": [
+   -0.24,
+   -0.38,
+   0.0
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped_sit",
+  "rampart_quadruped",
+  "wing_chain",
+  "flight_life",
+  "wing_mesh_scale"
+ ],
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "tail": {
+   "points": [
+    [
+     0,
+     0.08,
+     0.35
+    ],
+    [
+     0,
+     0.28,
+     0.21
+    ],
+    [
+     0,
+     0.5,
+     0.17
+    ],
+    [
+     0,
+     0.7,
+     0.26
+    ],
+    [
+     0,
+     0.88,
+     0.45
+    ]
+   ],
+   "region": {
+    "box": [
+     [
+      -0.2,
+      0.12,
+      0.0
+     ],
+     [
+      0.2,
+      1.0,
+      0.66
+     ]
+    ]
+   },
+   "rootBlend": 0.6
+  },
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    0,
+    0
+   ],
+   "fold": 70,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ],
+   "yaw": 80,
+   "groundClips": [
+    "Idle",
+    "Mouseover",
+    "Hitted",
+    "Defence",
+    "AttackFront"
+   ],
+   "dyEase": {
+    "MoveEnd": "out",
+    "Death": "in"
+   }
+  }
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "wings": [
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.16,
+    -0.38,
+    0.74
+   ],
+   "tail": [
+    0.3,
+    -0.36,
+    1.02
+   ],
+   "sign": -1,
+   "region": {
+    "box": [
+     [
+      0.13,
+      -0.52,
+      0.56
+     ],
+     [
+      0.6,
+      0.6,
+      1.3
+     ]
+    ],
+    "exclude": [
+     {
+      "box": [
+       [
+        0.0,
+        -0.6,
+        0.0
+       ],
+       [
+        0.2,
+        0.15,
+        0.68
+       ]
+      ]
+     },
+     {
+      "box": [
+       [
+        0.0,
+        -1.0,
+        0.68
+       ],
+       [
+        0.185,
+        -0.4,
+        1.5
+       ]
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.16,
+    -0.38,
+    0.74
+   ],
+   "tail": [
+    -0.3,
+    -0.36,
+    1.02
+   ],
+   "sign": 1,
+   "region": {
+    "box": [
+     [
+      -0.6,
+      -0.52,
+      0.56
+     ],
+     [
+      -0.13,
+      0.6,
+      1.3
+     ]
+    ],
+    "exclude": [
+     {
+      "box": [
+       [
+        -0.2,
+        -0.6,
+        0.0
+       ],
+       [
+        -0.0,
+        0.15,
+        0.68
+       ]
+      ]
+     },
+     {
+      "box": [
+       [
+        -0.185,
+        -1.0,
+        0.68
+       ],
+       [
+        -0.0,
+        -0.4,
+        1.5
+       ]
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "wingMaxDeg": 0,
+ "wingMeshScale": {
+  "factor": 1.6,
+  "bodyGap": 0.03,
+  "ramp": 0.06,
+  "note": "2026-10-09 coordinator-approved x1.6 wing span (render proofs V:/olden_port_work/authenticity/wingscale/): membrane scaled about the shoulder, root-ramped so the body seam stays closed"
+ },
+ "wingChain": {
+  "wings": [
+   {
+    "bone": "LeftWing",
+    "side": 1
+   },
+   {
+    "bone": "RightWing",
+    "side": -1
+   }
+  ],
+  "adoptWeights": "nearest",
+  "anim": {
+   "MoveStart": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       0.5
+      ],
+      [
+       1,
+       1
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       20
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Move": {
+    "open": 1,
+    "flap": {
+     "sin": 55,
+     "phase": 90
+    },
+    "fold": {
+     "sin": 50,
+     "phase": 180,
+     "half": "pos"
+    },
+    "droop": {
+     "sin": 25,
+     "phase": 180
+    }
+   },
+   "MoveEnd": {
+    "open": {
+     "keys": [
+      [
+       0,
+       1
+      ],
+      [
+       0.4,
+       0.7
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.4,
+       20
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.25,
+       1
+      ],
+      [
+       0.55,
+       0.8
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.25,
+       25
+      ],
+      [
+       0.5,
+       15
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "fold": {
+     "keys": [
+      [
+       0,
+       14
+      ],
+      [
+       0.25,
+       0
+      ],
+      [
+       0.5,
+       4
+      ],
+      [
+       1,
+       14
+      ]
+     ]
+    }
+   },
+   "Defence": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0.6
+      ],
+      [
+       0.3,
+       0.8
+      ],
+      [
+       0.7,
+       0.5
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       -30
+      ],
+      [
+       0.3,
+       -20
+      ],
+      [
+       0.7,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.2,
+       0.8
+      ],
+      [
+       0.4,
+       1
+      ],
+      [
+       0.7,
+       1
+      ],
+      [
+       0.9,
+       0.4
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       -20
+      ],
+      [
+       0.6,
+       -30
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Death": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       1
+      ],
+      [
+       0.6,
+       0.8
+      ],
+      [
+       1,
+       0.5
+      ]
+     ]
+    }
+   },
+   "Idle": {
+    "flap": {
+     "sin": 18
+    },
+    "fold": {
+     "sin": 26,
+     "phase": 90
+    },
+    "droop": {
+     "sin": 12,
+     "phase": 180
+    }
+   },
+   "Mouseover": {
+    "flap": {
+     "sin": 18
+    },
+    "fold": {
+     "sin": 26,
+     "phase": 90
+    },
+    "droop": {
+     "sin": 12,
+     "phase": 180
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "flap",
+    "open",
+    "fold",
+    "droop",
+    "sweep"
+   ],
+   "offsets": [
+    "dx",
+    "dy"
+   ],
+   "clips": [
+    "MoveStart",
+    "MoveEnd",
+    "AttackFront",
+    "Death",
+    "Defence"
+   ],
+   "bounce": 4,
+   "penalty": 0.0008,
+   "smooth": 0.0008
+  },
+  "steady": {
+   "Move": 1.0,
+   "MoveStart": 0.5,
+   "MoveEnd": 0.5
+  },
+  "bodyTurn": {
+   "fit": [
+    "Move"
+   ],
+   "rampIn": {
+    "MoveStart": "Move"
+   },
+   "rampOut": {
+    "MoveEnd": "Move"
+   },
+   "keep": [
+    "QTail_00"
+   ],
+   "limits": {
+    "yaw": [
+     0,
+     0
+    ],
+    "pitch": [
+     0,
+     0
+    ],
+    "roll": [
+     0,
+     0
+    ]
+   },
+   "params": [
+    "dx",
+    "dy"
+   ],
+   "note": "2026-09-29 FP: attitude held level (dx/dy only). The free fit turned the flying body yaw -55.5 / roll 36 to lengthen its sprite silhouette; yaw pinned, it pitched to its limits (-35 / +10) for under +0.05 IoU. flight_life carries the flight pose (neck forward, legs tucked back) and the body motion."
+  },
+  "land": [
+   "MoveEnd"
+  ],
+  "hittedNote": "2026-09-29 FP: Hitted authored (not fitted): the wings flare partly open and raised (open 0.7, flap +25) at the jolt, then settle to the Idle rest fold; the body snap is flightLife Hitted."
+ },
+ "meshNote": "2026-09-28 Meshy-7 regen from the corrected reference (restyle/h3_gold_dragon/concept_edit_a2, lavender membranes -> identity_regen/h3_gold_dragon): heavy standing gold-bronze body, small swept-back wings folded along the back, even lavender membranes with no pale blue-grey islands (the 2026-09-27 spread-wing mesh is kept as identity_regen/h3_gold_dragon__spreadwing_20260927). Quadruped layout as the griffins: arms = front legs, legs = hind legs (knee forward, crouched), angel-style chain wingChain rooted at the shoulder; rampart_quadruped_sit pitches the idle chest-up like the DEF. Joints re-placed 2026-09-28 from point views and vertex slabs of the installed mesh (Blender coords, faces -Y; artifacts/claude_takeover_20260927/build_green/dragon_albedo/joints/).",
+ "quadrupedSit": {
+  "clips": [
+   "Idle",
+   "Mouseover",
+   "Hitted",
+   "Defence"
+  ],
+  "yaw": 80,
+  "keep": [
+   "QTail_00"
+  ],
+  "fixed": {
+   "pitch": 55,
+   "drop": 0.08
+  },
+  "easeOut": [
+   "MoveStart",
+   "Death"
+  ],
+  "easeIn": [
+   "MoveEnd"
+  ],
+  "bracket": [
+   "AttackFront"
+  ],
+  "counterPitch": {
+   "bone": "Neck",
+   "share": 1.0
+  }
+ },
+ "flightLife": {
+  "moves": [
+   {
+    "clips": [
+     "Move"
+    ],
+    "heave": 0.04,
+    "phase": 90
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "Hips",
+    "axis": "lat",
+    "deg": 8,
+    "phase": 0
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "Neck",
+    "axis": "lat",
+    "deg": -8,
+    "phase": 30,
+    "offset": 25
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "Head",
+    "axis": "lat",
+    "deg": 6,
+    "phase": 60,
+    "offset": -15
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "QTail_00",
+    "axis": "lat",
+    "deg": 10,
+    "phase": 60
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "QTail_02",
+    "axis": "lat",
+    "deg": 14,
+    "phase": 120
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "QTail_01",
+    "axis": "up",
+    "deg": 8,
+    "phase": 90
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "LeftUpLeg",
+    "axis": "lat",
+    "deg": 12,
+    "phase": 45,
+    "offset": 70
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "RightUpLeg",
+    "axis": "lat",
+    "deg": 12,
+    "phase": 75,
+    "offset": 70
+   },
+   {
+    "clips": [
+     "Defence"
+    ],
+    "bone": "Spine1",
+    "axis": "lat",
+    "deg": -6,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Defence"
+    ],
+    "bone": "Neck",
+    "axis": "lat",
+    "deg": 12,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Defence"
+    ],
+    "bone": "QTail_01",
+    "axis": "up",
+    "deg": -10,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "LeftArm",
+    "axis": "lat",
+    "deg": 8,
+    "phase": 20,
+    "offset": 45
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "RightArm",
+    "axis": "lat",
+    "deg": 8,
+    "phase": 50,
+    "offset": 45
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "Spine",
+    "axis": "lat",
+    "deg": 3,
+    "phase": 0
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "Spine1",
+    "axis": "lat",
+    "deg": 6,
+    "phase": 20
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "Neck",
+    "axis": "up",
+    "deg": 15,
+    "phase": 90
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "Neck",
+    "axis": "lat",
+    "deg": 7,
+    "phase": 0
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "Head",
+    "axis": "lat",
+    "deg": 9,
+    "phase": 0,
+    "cycles": 2
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "QTail_00",
+    "axis": "up",
+    "deg": 10,
+    "phase": 0
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "QTail_01",
+    "axis": "up",
+    "deg": 14,
+    "phase": 45
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "QTail_03",
+    "axis": "up",
+    "deg": 22,
+    "phase": 120
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "LeftArm",
+    "axis": "lat",
+    "deg": 4,
+    "phase": 180
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover"
+    ],
+    "bone": "RightArm",
+    "axis": "lat",
+    "deg": 4,
+    "phase": 0
+   },
+   {
+    "clips": [
+     "Hitted"
+    ],
+    "bone": "Spine1",
+    "axis": "lat",
+    "deg": -18,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Hitted"
+    ],
+    "bone": "Neck",
+    "axis": "lat",
+    "deg": -34,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Hitted"
+    ],
+    "bone": "Head",
+    "axis": "lat",
+    "deg": 12,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Hitted"
+    ],
+    "bone": "QTail_01",
+    "axis": "up",
+    "deg": 20,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "AttackFront"
+    ],
+    "bone": "QTail_01",
+    "axis": "up",
+    "deg": -14,
+    "phase": 0,
+    "cycles": 0.5
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "Hips",
+    "axis": "lat",
+    "deg": 0,
+    "offset": 12
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "Spine1",
+    "axis": "lat",
+    "deg": 0,
+    "offset": 18
+   },
+   {
+    "clips": [
+     "Move"
+    ],
+    "bone": "Head",
+    "axis": "lat",
+    "deg": 0,
+    "offset": -20
+   },
+   {
+    "clips": [
+     "AttackFront"
+    ],
+    "bone": "Spine",
+    "axis": "lat",
+    "keys": [
+     [
+      0,
+      0
+     ],
+     [
+      0.2,
+      -8
+     ],
+     [
+      0.4,
+      20
+     ],
+     [
+      0.6,
+      36
+     ],
+     [
+      0.75,
+      24
+     ],
+     [
+      0.9,
+      2
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   },
+   {
+    "clips": [
+     "AttackFront"
+    ],
+    "bone": "Neck",
+    "axis": "lat",
+    "keys": [
+     [
+      0,
+      0
+     ],
+     [
+      0.2,
+      -16
+     ],
+     [
+      0.4,
+      24
+     ],
+     [
+      0.65,
+      30
+     ],
+     [
+      0.85,
+      2
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   },
+   {
+    "clips": [
+     "AttackFront"
+    ],
+    "bone": "Head",
+    "axis": "lat",
+    "keys": [
+     [
+      0,
+      0
+     ],
+     [
+      0.2,
+      -8
+     ],
+     [
+      0.45,
+      -6
+     ],
+     [
+      0.65,
+      -10
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover",
+     "Hitted",
+     "Defence"
+    ],
+    "ease": {
+     "MoveStart": "out",
+     "MoveEnd": "in",
+     "Death": "out",
+     "AttackFront": "bracket"
+    },
+    "bone": "WingL_00",
+    "axis": "lat",
+    "deg": 0,
+    "offset": 50
+   },
+   {
+    "clips": [
+     "Hitted"
+    ],
+    "bone": "WingL_00",
+    "axis": "lat",
+    "keys": [
+     [
+      0,
+      0
+     ],
+     [
+      0.3,
+      60
+     ],
+     [
+      0.6,
+      40
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   },
+   {
+    "clips": [
+     "AttackFront"
+    ],
+    "bone": "WingL_00",
+    "axis": "lat",
+    "keys": [
+     [
+      0,
+      0
+     ],
+     [
+      0.2,
+      40
+     ],
+     [
+      0.5,
+      55
+     ],
+     [
+      0.75,
+      40
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   },
+   {
+    "clips": [
+     "Idle",
+     "Mouseover",
+     "Hitted",
+     "Defence"
+    ],
+    "ease": {
+     "MoveStart": "out",
+     "MoveEnd": "in",
+     "Death": "out",
+     "AttackFront": "bracket"
+    },
+    "bone": "WingR_00",
+    "axis": "lat",
+    "deg": 0,
+    "offset": 50
+   },
+   {
+    "clips": [
+     "Hitted"
+    ],
+    "bone": "WingR_00",
+    "axis": "lat",
+    "keys": [
+     [
+      0,
+      0
+     ],
+     [
+      0.3,
+      60
+     ],
+     [
+      0.6,
+      40
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   },
+   {
+    "clips": [
+     "AttackFront"
+    ],
+    "bone": "WingR_00",
+    "axis": "lat",
+    "keys": [
+     [
+      0,
+      0
+     ],
+     [
+      0.2,
+      40
+     ],
+     [
+      0.5,
+      55
+     ],
+     [
+      0.75,
+      40
+     ],
+     [
+      1,
+      0
+     ]
+    ]
+   }
+  ]
+ },
+ "deliveryDensify": {
+  "clips": [
+   "MoveStart",
+   "Move",
+   "MoveEnd"
+  ],
+  "keysPerSpan": 3
+ },
+ "flightLifeNote": "2026-09-29 FP (main review): every clip alive next to the gargoyle. Idle: spine breath (Spine 3 / Spine1 6), neck sway and nod, tail sway root-to-tip, wing flap 18 / fold 26 / droop 12. Hitted: body and neck snap back (-18 / -24, half-sine), head whip, tail flick. AttackFront: forward body lunge (Spine1 +12, Neck +14) on top of the DEF-fitted wings. 2026-09-29 FP v6 (main review, DEF-row sheets): Move flies level - mesh body axis hind->chest +31..+43 against the DEF's level glide, so Hips +12 / Spine1 +18 bend the chest forward and Head -20 keeps the snout level. AttackFront is an authored breath lunge in DEF timing (flightLife keys): Spine -8 at x 0.2 (draw back), +36 at 0.6 (chest and neck driven forward and down), Neck -16 -> +30, wings opening high (wingChain open keys, WingL/R_00 lift keys to +55). Hitted: the DEF flares both wings up and back and throws the head back - wing open 1 at x 0.25, WingL/R_00 lift keys to +60, Neck -34. Idle/Mouseover/Hitted/Defence hold the wings raised +50 (eased out/in of MoveStart/MoveEnd/Death, bracketing AttackFront); the DEF sits with them raised behind the back.",
+ "qualityNote": "2026-09-29 FP review (main, visual acceptance on the battle camera): AttackFront toyRatio ~1.06 is accepted by review, not by gate. The gate covers Unit_Move only. The authored forward lunge (flightLife AttackFront Spine1 +12 / Neck +14) reads as a committed lunge rather than a toy bounce, and the wings stay DEF-fitted (wingSwing 35.6). Do not 'fix' it by damping the lunge.",
+ "groundNote": "2026-09-29 FP (main review): absolute floor measured on the accepted build (feet and tail below z=0 in every ground clip: green Idle -0.106 of the height, gold -0.078, LeftFoot/RightFoot and QTail vertices). ground_check passes because it is relative to Idle key 0, which was itself sunk. quadruped.fit.groundClips pins the fit's dy (-7 px) to 0 in the ground clips. Tail: flightLife QTail_00 lat offset +15 in the ground clips lifts the tail root, because the sit's 'keep' tail drops with the rear and its curl went 0.09-0.11 of the height below z=0 (sink_probe 2026-09-29). dyEase MoveEnd out / Death in: the landing ends on the idle floor and Death enters from the stance (the free fit had griffin MoveEnd rise 7 -> 15 px and end 0.22 of the height up, then pop down into Idle). The QTail_00 lift is held in every clip (as the griffin line, 2026-09-29): lifting it only in the ground clips left MoveEnd's and Death's entry tail hanging lower than Idle's, which pushes their Hips step past the DEF allowance once ground_glb puts the lowest vertex on the floor; held everywhere, no clip boundary pops. 2026-09-29 FP v6 (gold only): the held QTail_00 +15 lift is removed. Bisected on V: builds (HEAD config grounds; HEAD + the held tail lift alone fails ground_glb apply with MoveEnd Hips +0.336 / MoveStart +0.106 against the DEF's 0.165 / 0.058, entryJoint infeasible), so on the gold mesh the lift moves the lowest vertex off the tail and the landing entry cannot meet both the feet and Hips bands. Green keeps it (grounds clean).",
+ "glbPatch": {
+  "reason": "2026-10-09 authenticity pass (lane B), Rampart. Death: the base popped from the f5 slump straight to a half-propped pose in one frame and left the head rolled onto its side; now the collapse arcs f4 -> f7 (f5 already partway down, slerp restart on the spine/neck/head chain) and ends belly-down (root lowered 0.19 H, inside the per-key translation guard), legs folded under, wings folded back, neck bowed 35 deg and head dropped 50 deg onto the ground, tail laid flat, as the DEF's heap. AttackFront: during the breath (f3-f6) the base dived the chest and ducked the head so the mouth hit the ground; now spine +20, neck +10, head +55 deg so the open mouth is levelled at the target. Wings: same whole-wing flares as the green dragon (Death f2-f4 swung high over the back before the fold, AttackFront f2-f6 raised and swept, Hitted near wing opened face-on). Mesh repairs (weights, not a smaller move): the neck-base dorsal spikes carried ~0.22 thigh weight and Spine2 weight inside the Neck mane, so leg folds and neck bows flung them off the back as floating pieces (also visible in the base AttackFront f4); their weight is handed to Spine2/Neck. The right arm aim was chosen to keep a corrective-morph sliver at the right shoulder closed. Tear gate 858 -> 858 (worst 4.01).",
+  "ops": [
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftUpLeg",
+     "RightUpLeg"
+    ],
+    "to": "Spine2",
+    "space": "blender",
+    "region": [
+     {
+      "axis": "z",
+      "above": 0.85,
+      "ramp": 0.05
+     }
+    ],
+    "note": "mesh repair: the neck-base dorsal spikes (~16 verts a side, rest height > 0.9) carry ~0.22 thigh weight, so any hind-leg fold flung them off the back; hand that thigh weight to Spine2"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "Spine2"
+    ],
+    "to": "Neck",
+    "space": "blender",
+    "region": [
+     {
+      "axis": "z",
+      "above": 0.93,
+      "ramp": 0.04
+     }
+    ],
+    "note": "mesh repair: the neck-base dorsal spikes sit in the Neck-weighted mane but are skinned to Spine2, so a neck bow left them standing in the air; hand their Spine2 weight to Neck"
+   },
+   {
+    "op": "moveWeights",
+    "from": [
+     "Spine2",
+     "Neck"
+    ],
+    "to": "RightShoulder",
+    "keep": 0.5,
+    "region": [
+     {
+      "axis": "x",
+      "above": -0.25,
+      "ramp": 0.03
+     },
+     {
+      "axis": "x",
+      "below": -0.04,
+      "ramp": 0.03
+     },
+     {
+      "axis": "y",
+      "above": -0.77,
+      "ramp": 0.03
+     },
+     {
+      "axis": "y",
+      "below": -0.57,
+      "ramp": 0.03
+     },
+     {
+      "axis": "z",
+      "above": 0.62,
+      "ramp": 0.03
+     },
+     {
+      "axis": "z",
+      "below": 0.82,
+      "ramp": 0.03
+     }
+    ],
+    "space": "blender",
+    "note": "wings x1.6 rebuild: the one-triangle UV sliver at the right shoulder base (verts 4647/4648/4649, welded) sat torn 2.2-3.0x in nearly every pose and the rebuilt Death f7 tipped the gate (859 -> 860); half the Spine2/Neck weight around it goes to RightShoulder (ramped box), so the sliver skins with the shoulder (gate 850 -> 838 on the rebuilt base, Idle 8 fewer torn edges)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gold_dragon_pose_rot.json",
+    "sha256": "da8fea3ac024ebe9e040370cb6c25ae47c7dd9d4e81bfb62fb44098775eab983",
+    "regrid": true,
+    "note": "motion-intent key poses (apose g3 + gen_w wing flare: Death arc collapse, AttackFront breath, wing flares; 2026-10-09 g4c: Death f5-f7 wings folded flat along the back (Wing?_00 + Wing?_02 aims) so the x1.6 wings stay inside the body/tail silhouette, Defence f0-f2 Wing?_00 lifted 16/12/6 deg so the tips clear the floor)"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gold_dragon_pose_tr.json",
+    "sha256": "fda069c447775f8dae9dc327abfe20980069f537a836a95677c722aa37fd639e",
+    "regrid": true,
+    "note": "Death root: arcs down from f4 and lies on the belly at f6-f7"
+   }
+  ]
+ }
+}

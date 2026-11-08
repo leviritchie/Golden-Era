@@ -1,0 +1,76 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_silver_pegasus",
+ "status": "look",
+ "notes": "rampart rollout",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": [],
+  "defSegmenter": {
+   "module": "tools/homm3_unit_look/units/masks/pegasus_segment.py",
+   "function": "segment_silver_pegasus"
+  },
+  "regions": [
+   {
+    "name": "coat",
+    "mask": {
+     "maskPath": "tools/homm3_unit_look/units/masks/h3_silver_pegasus/coat_pale.png"
+    },
+    "target": "defPalette",
+    "defRegion": "pale",
+    "knobs": {
+     "skyCompensation": true
+    },
+    "notes": "2026-10-09 lane B (user: black splotches over the pegasi in game): the unit-level v7c grade crushed the AO-occluded coat and feather texels to black (see pegasus_segment.py, armoured pegasi). The raw albedo's pale texels (sat < 0.20, value > 0.45), minus the wing-bone, gold-hued and warm texels (pegasus_segment.build_armoured_masks), take the CAPEGS white coat palette by rank, as h3_pegasus."
+   },
+   {
+    "name": "wing",
+    "mask": {
+     "bones": [
+      "WingL_*",
+      "WingR_*",
+      "LeftWing",
+      "RightWing"
+     ]
+    },
+    "target": "defPalette",
+    "defRegion": "wing",
+    "knobs": {
+     "skyCompensation": true
+    },
+    "notes": "2026-10-09 lane B: the feathers rank on their own onto the DEF's brightest, cooler pale pixels (h3_pegasus wing region); the other masks have the wing-bone texels cut out."
+   },
+   {
+    "name": "armour",
+    "mask": {
+     "maskPath": "tools/homm3_unit_look/units/masks/h3_silver_pegasus/armour_gold.png"
+    },
+    "target": "defPalette",
+    "defRegion": "armour",
+    "knobs": {
+     "skyCompensation": true
+    },
+    "notes": "2026-10-09 lane B (coordinator: keep the barding on its own DEF palette, gold not white): the raw gold-hued texels (hue 35-70, sat >= 0.20; the barding is the only gold material) take the gold trim (DEF 'armour' = the gold-hued pixels, closed; the dark checker it frames stays on the unit-level grade with the hooves and outline) by rank."
+   },
+   {
+    "name": "rider",
+    "mask": {
+     "maskPath": "tools/homm3_unit_look/units/masks/h3_silver_pegasus/rider_warm.png"
+    },
+    "target": "defPalette",
+    "defRegion": "rider",
+    "knobs": {
+     "skyCompensation": true
+    },
+    "notes": "2026-10-09 lane B: the warm raw texels that are not gold-hued (rider skin, hair, leather, the brown rear blanket) take the DEF rider's peach tan and dark leather by rank (h3_pegasus rider region)."
+   }
+  ]
+ },
+ "lights": [],
+ "vfx": {
+  "layers": []
+ }
+}

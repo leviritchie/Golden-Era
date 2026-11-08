@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_bulwark",
+  "sourceDoc": "vcmi/Mods/hota/mods/bulwark/content.zip::config/hota/bulwark/runes/runesSkill.json and https://h3hota.com/en/documentation#secondary-skills",
+  "mechanics": [
+    {
+      "id": "bulwark.runes",
+      "surface": "faction_skill",
+      "sourceName": "Runes",
+      "status": "runtime-pending",
+      "reason": "The Core incremental Rune Level buff rows and Homm3BulwarkRunesRuntime logic-hub owner are source-prepared. Rune Brand and Possesses Runes remain excluded. Documentation stays runtime-pending until installed gameplay proof and native buff/stat readback pass.",
+      "playerTextPolicy": "must_not_claim_current_behavior_until_promoted",
+      "changeDisposition": "Keep the Core row as a metadata scaffold with no xHomm3ImplementedMechanics claim. Promote to exact/current only after registered runtime and focused runtime proof exist.",
+      "forbiddenPlayerText": [
+        "currently active"
+      ],
+      "validationOwner": "validate_homm3_factory_bulwark_core_skill_contract"
+    },
+    {
+      "id": "bulwark.resource_silo",
+      "surface": "building",
+      "sourceName": "Resource Silo",
+      "status": "exact",
+      "reason": "Generated city row grants +1 wood and +1 ore per day.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
+    },
+    {
+      "id": "bulwark.hay_bins",
+      "surface": "building",
+      "sourceName": "Hay Bins",
+      "status": "exact",
+      "reason": "Generated city row grants +1 weekly growth to the Mammoth line.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot_level_2"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
+    },
+    {
+      "id": "bulwark.fair",
+      "surface": "building",
+      "sourceName": "Fair",
+      "status": "substituted",
+      "reason": "Marketplace-rate improvement has no proven city field; current row is native gold income (Trade Carnival).",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "market rate",
+        "two Marketplaces",
+        "Fairgrounds"
+      ],
+      "currentRows": [
+        "Build_Mother_Nature"
+      ],
+      "playerTextTokens": [
+        "Homm3Bulwark_Build_Mother_Nature_name",
+        "Homm3Bulwark_Build_Mother_Nature_description",
+        "Homm3Bulwark_Build_Mother_Nature_narrativeDescription"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
+    },
+    {
+      "id": "bulwark.focus_native_spell_dealers",
+      "surface": "unit_ability",
+      "sourceName": "Bulwark Focus native spell dealers",
+      "status": "substituted",
+      "reason": "All 16 Focus actives resolve native Core spell dealers or unit-special donors with only targetMode/orderedDistance/fixedDuration transforms. Combat feel remains unproven.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "runtime-pending",
+        "implementation",
+        "handwritten dealer"
+      ],
+      "currentRows": [
+        "ability_overrides/homm3_bulwark.json"
+      ],
+      "validationOwner": "validate_homm3_bulwark_ability_repair_contract"
+    },
+    {
+      "id": "bulwark.rune_surge_arinas_way",
+      "surface": "unit_ability",
+      "sourceName": "Rune Surge",
+      "status": "substituted",
+      "reason": "HotA Yeti recovery is approximated by Sentinel Arina's Way (dispel negatives + full restore, once per battle).",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "Inquisitor",
+        "movement-impairing only"
+      ],
+      "currentRows": [
+        "sentinel:abilities:0"
+      ],
+      "validationOwner": "validate_homm3_bulwark_ability_repair_contract"
+    },
+    {
+      "id": "bulwark.free_shooting",
+      "surface": "unit_passive",
+      "sourceName": "Free Shooting",
+      "status": "exact",
+      "reason": "Steel Elf and Pine Elf configure ignoreShootingBlock only; player text is Free Shooting (adjacent-block immunity), not full Sharpshooter range immunity.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "h3_steel_elf",
+        "h3_snow_elf_upg_alt"
+      ],
+      "validationOwner": "validate_homm3_bulwark_ability_repair_contract"
+    },
+    {
+      "id": "bulwark.argali_ice_immunity",
+      "surface": "unit_passive",
+      "sourceName": "Argali Ice Immunity",
+      "status": "exact",
+      "reason": "Argali and Mountain Ram alt block Ice Bolt/Avalanche damage tags and Ice Bolt effect tag (Initiative debuff).",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "h3_argali",
+        "h3_mountain_ram_upg_alt"
+      ],
+      "validationOwner": "validate_homm3_bulwark_ability_repair_contract"
+    },
+    {
+      "id": "bulwark.after_shot_ice",
+      "surface": "unit_passive",
+      "sourceName": "Freezing Shot / Frost Shot",
+      "status": "substituted",
+      "reason": "After-shot Ice Bolt initiative mark is generated on Frost Speaker and Pine Elf ranged attacks. Combat unproven.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "proven",
+        "runtime proven"
+      ],
+      "currentRows": [
+        "BULWARK_AFTER_SHOT_ICE_BY_SID"
+      ],
+      "validationOwner": "validate_homm3_bulwark_ability_repair_contract"
+    },
+    {
+      "id": "bulwark.jotunn_flyer_slow",
+      "surface": "runtime",
+      "sourceName": "Frostbound Skies",
+      "status": "runtime-pending",
+      "reason": "Owned by Homm3BulwarkUnitAbilityRuntime. Flyer classification uses Core stats.moveType==fly; speed-only faction buffs replace Naira's Kiss. Combat application remains unproven.",
+      "playerTextPolicy": "must_not_claim_current_behavior_until_promoted",
+      "changeDisposition": "Keep one runtime owner. Promote only after focused combat proof of flyer-only, magnitude, and exactly-once application.",
+      "forbiddenPlayerText": [
+        "currently reduces Initiative",
+        "Naira's Kiss"
+      ],
+      "validationOwner": "validate_homm3_bulwark_flyer_slow_runtime_contract"
+    },
+    {
+      "id": "bulwark.war_mammoth_defend_defense",
+      "surface": "unit_passive",
+      "sourceName": "War Mammoth Defend Defense",
+      "status": "absent",
+      "reason": "HotA Defend +100% Defense is deliberately absent until a proven Defend correlation owner exists; Tusker Guard Focus is the current brace.",
+      "playerTextPolicy": "must_not_claim_current_behavior_until_promoted",
+      "changeDisposition": "Do not advertise Defend Defense multiplier in player text.",
+      "forbiddenPlayerText": [
+        "+100% Defense",
+        "Defend doubles Defense"
+      ],
+      "validationOwner": "validate_homm3_bulwark_ability_repair_contract"
+    },
+    {
+      "id": "bulwark.yeti_recovery",
+      "surface": "unit_passive",
+      "sourceName": "Yeti one-round negative recovery",
+      "status": "absent",
+      "reason": "Passive HotA recovery is deliberately absent; Rune Surge Focus substitutes Arina's Way once per battle.",
+      "playerTextPolicy": "must_not_claim_current_behavior_until_promoted",
+      "changeDisposition": "Do not claim automatic one-round negative recovery on Yeti base.",
+      "forbiddenPlayerText": [
+        "automatically recovers",
+        "each round recovers"
+      ],
+      "validationOwner": "validate_homm3_bulwark_ability_repair_contract"
+    },
+    {
+      "id": "bulwark.argali_spell_amp_aura",
+      "surface": "unit_passive",
+      "sourceName": "Argali adjacent spell-damage aura",
+      "status": "absent",
+      "reason": "HotA adjacent spell-damage amplification remains deliberately absent pending a native-safe passive surface.",
+      "playerTextPolicy": "must_not_claim_current_behavior_until_promoted",
+      "changeDisposition": "Keep Frost Fracture Focus; do not claim adjacent spell amp.",
+      "forbiddenPlayerText": [
+        "adjacent spell damage",
+        "spell amplification aura"
+      ],
+      "validationOwner": "validate_homm3_bulwark_ability_repair_contract"
+    }
+  ]
+}

@@ -1,0 +1,220 @@
+{
+ "unit": "h3_vampire",
+ "joints": {
+  "Hips": [
+   0.003,
+   0.206,
+   0.965
+  ],
+  "Spine": [
+   0.009,
+   0.168,
+   1.068
+  ],
+  "Spine1": [
+   0.014,
+   0.129,
+   1.171
+  ],
+  "Spine2": [
+   0.02,
+   0.086,
+   1.287
+  ],
+  "Neck": [
+   0.024,
+   0.052,
+   1.377
+  ],
+  "Head": [
+   0.003,
+   0.0,
+   1.46
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.1,
+   1.7
+  ],
+  "LeftShoulder": [
+   0.066,
+   0.08,
+   1.412
+  ],
+  "LeftArm": [
+   0.192,
+   0.108,
+   1.391
+  ],
+  "LeftForeArm": [
+   0.283,
+   0.199,
+   1.175
+  ],
+  "LeftHand": [
+   0.227,
+   -0.073,
+   1.133
+  ],
+  "LeftHand_End": [
+   0.209,
+   -0.16,
+   1.119
+  ],
+  "RightShoulder": [
+   -0.059,
+   0.08,
+   1.412
+  ],
+  "RightArm": [
+   -0.185,
+   0.094,
+   1.384
+  ],
+  "RightForeArm": [
+   -0.283,
+   0.122,
+   1.161
+  ],
+  "RightHand": [
+   -0.269,
+   -0.157,
+   1.098
+  ],
+  "RightHand_End": [
+   -0.264,
+   -0.245,
+   1.078
+  ],
+  "LeftUpLeg": [
+   0.129,
+   0.241,
+   0.909
+  ],
+  "LeftLeg": [
+   0.178,
+   0.143,
+   0.512
+  ],
+  "LeftFoot": [
+   0.241,
+   0.199,
+   0.093
+  ],
+  "LeftToeBase": [
+   0.241,
+   0.024,
+   -0.019
+  ],
+  "LeftToe_End": [
+   0.269,
+   0.08,
+   0.037
+  ],
+  "RightUpLeg": [
+   -0.122,
+   0.241,
+   0.909
+  ],
+  "RightLeg": [
+   -0.171,
+   0.136,
+   0.512
+  ],
+  "RightFoot": [
+   -0.234,
+   0.199,
+   0.093
+  ],
+  "RightToeBase": [
+   -0.227,
+   0.024,
+   -0.019
+  ],
+  "RightToe_End": [
+   -0.255,
+   0.052,
+   0.009
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 50,
+   "dy": 30
+  }
+ },
+ "mistForm": {
+  "power": 1.2
+ },
+ "shatter": {
+  "start": 4,
+  "chunks": 45,
+  "solid": true
+ },
+ "bonePile": {
+  "spread": 0.8,
+  "heapHeight": 0.18,
+  "tumble": 80
+ },
+ "extensions": [
+  "necropolis_capturedonor",
+  "necropolis_mistform",
+  "necropolis_bonepile"
+ ],
+ "captureDonor": "h3_vampire_lord",
+ "gateExceptions": {
+  "ground": {
+   "MoveStart:Hips": {
+    "value": -0.131,
+    "reason": "joint entry infeasible: the feet and Hips bands do not meet at MoveStart entry (ground_glb rule record entryJoint infeasible, entry -0.1684); measured on the grounded candidate: MoveStart Hips steps -0.131 from Idle at entry (DEF allows 0.064). Replaces the stale MoveStart:enters +0.168 pin: the unit was grounded before 33fba4ab45 (a constant STEP track written as an N-key STEP track) and re-grounded under the fixed rule; user-approved exception 2026-09-28"
+   }
+  }
+ },
+ "glbPatch": {
+  "reason": "authenticity 2026-10-11: AttackFront lunge crouch + spine lean, Hitted arm flung wide, Death arms raised overhead upright before the solid shatter (DEF g12/g03/g05); shoulder/armpit weights re-solved for the raised arms",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_vampire_sleeve_weights.json",
+    "sha256": "df2a0a661e72df9bb51e7a5ab2e71be86a3eab2d98aee4629c1a2bb973dc844a",
+    "note": "vampire shoulders/armpits re-solved for the raised-arm Death and the AttackFront/Hitted arms"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_vampire_pose_rot.json",
+    "sha256": "8727c88bcb552e65584fb99e019eb73d8c5d0604cf614b6a207cba49212843ea",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_vampire_pose_rot.json",
+    "sha256": "8727c88bcb552e65584fb99e019eb73d8c5d0604cf614b6a207cba49212843ea",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_vampire_pose_tr.json",
+    "sha256": "e21eb87151eadf636fda7c454c0764683fd0419ecc6b3b9e5b5a1a791d0e1336"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.7,
+    "iterations": 1000,
+    "smooth": 0.4,
+    "maxMove": 0.05
+   }
+  ]
+ }
+}

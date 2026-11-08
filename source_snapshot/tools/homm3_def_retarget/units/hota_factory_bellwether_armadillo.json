@@ -1,0 +1,291 @@
+{
+ "unit": "hota_factory_bellwether_armadillo",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.65,
+   0.95
+  ],
+  "Spine": [
+   0.0,
+   0.3,
+   1.0
+  ],
+  "Spine1": [
+   0.0,
+   -0.05,
+   1.0
+  ],
+  "Spine2": [
+   0.0,
+   -0.5,
+   0.95
+  ],
+  "Neck": [
+   0.0,
+   -0.95,
+   0.8
+  ],
+  "Head": [
+   0.0,
+   -1.15,
+   0.7
+  ],
+  "HeadTop_End": [
+   0.0,
+   -1.52,
+   0.5
+  ],
+  "LeftShoulder": [
+   0.2,
+   -0.69,
+   0.85
+  ],
+  "LeftArm": [
+   0.42,
+   -0.69,
+   0.7
+  ],
+  "LeftForeArm": [
+   0.62,
+   -0.69,
+   0.42
+  ],
+  "LeftHand": [
+   0.69,
+   -0.69,
+   0.12
+  ],
+  "LeftHand_End": [
+   0.72,
+   -0.83,
+   0.0
+  ],
+  "LeftUpLeg": [
+   0.42,
+   0.69,
+   0.75
+  ],
+  "LeftLeg": [
+   0.63,
+   0.69,
+   0.42
+  ],
+  "LeftFoot": [
+   0.7,
+   0.69,
+   0.12
+  ],
+  "LeftToeBase": [
+   0.7,
+   0.61,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.73,
+   0.53,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.2,
+   -0.69,
+   0.85
+  ],
+  "RightArm": [
+   -0.42,
+   -0.69,
+   0.7
+  ],
+  "RightForeArm": [
+   -0.62,
+   -0.69,
+   0.42
+  ],
+  "RightHand": [
+   -0.69,
+   -0.69,
+   0.12
+  ],
+  "RightHand_End": [
+   -0.72,
+   -0.83,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.42,
+   0.69,
+   0.75
+  ],
+  "RightLeg": [
+   -0.63,
+   0.69,
+   0.42
+  ],
+  "RightFoot": [
+   -0.7,
+   0.69,
+   0.12
+  ],
+  "RightToeBase": [
+   -0.7,
+   0.61,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.73,
+   0.53,
+   0.0
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped"
+ ],
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    -20,
+    70
+   ],
+   "fold": 70,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ]
+  },
+  "tail": {
+   "points": [
+    [
+     0,
+     1.0,
+     0.75
+    ],
+    [
+     0,
+     1.2,
+     0.62
+    ],
+    [
+     0,
+     1.38,
+     0.48
+    ],
+    [
+     0,
+     1.53,
+     0.42
+    ]
+   ],
+   "region": {
+    "box": [
+     [
+      -0.35,
+      1.05,
+      0.0
+     ],
+     [
+      0.35,
+      1.6,
+      1.0
+     ]
+    ]
+   },
+   "rootBlend": 0.6
+  }
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "strideMatch": {
+  "maxDrop": 0.25,
+  "reason": "short-reach walker (legs near straight at the source Move): default 0.15: ratio 1.419; 0.25: slip 0.192 ratio 1.170 (0.35 ratio 1.45: forelegs enter the floor band) (workerB scratch trials 2026-09-27) | RE-TRIAL after 794015d6f6 (stride plants on the Idle floor), current GLB, workerB 2026-09-27 23:05: apply refuses at every maxDrop 0.16/0.20/0.25/0.30/0.35: planted [LeftArm, LeftUpLeg, RightArm, RightUpLeg] but only [LeftUpLeg, RightUpLeg] stay in the floor band (a planted foreleg chain leaves the floor); the numbers above are stale and no maxDrop in the gate's (0.15, 0.35] passes. Handed to the fleet agent (plant-set planning), value unchanged."
+ },
+ "glbPatch": {
+  "reason": "authenticity: DEF g12 attack - draw back with the head tucked, then lunge with the body surging forward and the snout driven at the target; DEF g05 death - slump in place belly-down, legs splayed, head drooping, instead of the capture's one-key snap onto its side with a sideways slide (hips pull-back capped at the keyTranslations limit); body/leg weights re-solved",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_bellwether_armadillo_bellwether_slump_weights.json",
+    "sha256": "a9139a99e0243b8092e9589ffa1c8e746c9eca001513ac0ad4d603c34abedb3b",
+    "note": "bellwether lunge + slump: body/leg weights re-solved (wsolve, GPU)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_bellwether_armadillo_pose_rot.json",
+    "sha256": "f4c04164ccac6cbe26515e9c91ad1249b47e02c68692d840f72d4a15c09ee9c4",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_bellwether_armadillo_pose_rot.json",
+    "sha256": "f4c04164ccac6cbe26515e9c91ad1249b47e02c68692d840f72d4a15c09ee9c4",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_bellwether_armadillo_pose_tr.json",
+    "sha256": "a7360c262d76c32ba977951ec5012679960206b416113b6b0f89152ef856bb5e"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_bellwether_armadillo_pose_tr.json",
+    "sha256": "a7360c262d76c32ba977951ec5012679960206b416113b6b0f89152ef856bb5e"
+   }
+  ]
+ }
+}

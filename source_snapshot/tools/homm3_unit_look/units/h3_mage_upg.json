@@ -1,0 +1,156 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_mage_upg",
+ "status": "look",
+ "notes": "tower rollout: attack fire + death orb/sparks ripped from the DEF (committed file masks). The staff orb's idle colour cycling (green/gold) is the mesh's own paint; not a layer",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {
+   "gradeWeights": [
+    1.0,
+    0.2,
+    0.2
+   ],
+   "gradeStarts": "wide",
+   "aoGamma": 0.3,
+   "cavityGamma": 0.4,
+   "skyFloor": 0.8,
+   "heightDepth": 0.0,
+   "detailAmount": 0.5
+  },
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "hand_fire",
+   "treatment": "dynamic",
+   "notes": "the fireball and burning staff head light the mage"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "attack_fire",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       3,
+       4,
+       5,
+       6,
+       7
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_mage_upg/attack_fire"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": {
+      "Unit_AttackFront": [
+       [
+        216,
+        211
+       ],
+       [
+        202,
+        204
+       ],
+       [
+        179,
+        203
+       ],
+       [
+        179,
+        208
+       ],
+       [
+        185,
+        213
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "hand_fire",
+    "provenance": "roster g12 attack_front fire f3-7 (hand fireball f3, then the staff head burns f4-7); tower_fx_masks.orb_blobs red",
+    "notes": "defOrigin = RightHand projected per key (DEF-exact placement)"
+   },
+   {
+    "id": "hand_fire_light",
+    "type": "effectLight",
+    "lightId": "hand_fire",
+    "carrier": "attack_fire",
+    "anchor": {
+     "bone": "RightHand",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.35,
+     0.25
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.0,
+      0.0,
+      0.119,
+      0.149,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "death_orb_sparks",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       1,
+       2,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_mage_upg/death_orb_sparks"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Root",
+     "defOrigin": [
+      196,
+      265
+     ]
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "roster g05 death: the staff orb flies up (f1-2), then magenta sparks rise (f4-6); tower_fx_masks.detached"
+   }
+  ]
+ }
+}

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require forward movement or committed kill semantics. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresForwardMovementOrKillProfiles": true,
+    "strongholdOnly": true,
+    "formationFamilyOnly": true,
+    "forwardMovementRequiresBoardDirectionProof": true,
+    "killRequiresCommittedKillProof": true,
+    "negativeStatusSubstituteForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": ["homm3_stronghold"],
+  "allowedFamily": "Formation",
+  "requiredRuntimeProof": [
+    "acting stack identity proof",
+    "law-owner side correlation proof",
+    "battle board coordinate before action proof",
+    "battle board coordinate after action proof",
+    "forward direction relative to opposing side proof",
+    "committed kill event proof",
+    "kill victim identity proof",
+    "negative status application target correlation proof",
+    "idempotent per-action application proof"
+  ],
+  "contracts": {
+    "stronghold.forward-move-kill-armor-pressure": {
+      "requiredEventKinds": ["forward battle movement", "committed kill by acting stack"],
+      "companionPredicates": ["RequiresNegativeStatusPredicate"],
+      "forbiddenSubstitutes": [
+        "any movement counted as forward movement",
+        "attack action counted as forward movement without coordinate delta proof",
+        "kill preview or lethal damage estimate counted as committed kill",
+        "damage event counted as kill without victim death proof",
+        "negative status predicate counted as forward movement or kill",
+        "Stronghold faction membership counted as forward pressure trigger"
+      ],
+      "notes": "Warband Crush requires either proven forward movement relative to the opposing side or a committed kill by the acting stack. Static battle-action surfaces can prepare diagnostics only; gameplay still requires coordinates, direction, kill commit, target correlation, and idempotence proof."
+    }
+  }
+}

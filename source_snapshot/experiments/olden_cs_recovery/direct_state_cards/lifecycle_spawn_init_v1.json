@@ -1,0 +1,96 @@
+{
+  "adapter_binding": {
+    "gameplay_gated": true,
+    "gateway_methods": [
+      "TryInitializeAndInsertObject"
+    ],
+    "notes": "Lifecycle spawn Init + occupancy enter only. Reuse movement.commit.bfdi_v1 for bcyl/bcyn fieldObjects. Collection insert is journaled IList \u2014 not invented native write body. Gameplay gated until focused_live_positive.",
+    "operations": [
+      "SummonCreate",
+      "CorpseRaise"
+    ]
+  },
+  "banned_surfaces": [
+    {
+      "reason": "lastCorpse; M1/M4 banned as occupancy",
+      "surface": "Hex.bcxo / cfqf as Unit occupancy commit store"
+    },
+    {
+      "reason": "View hub; Logic publish remains eda on movement path",
+      "surface": "edb.* as movement/spawn commit publish"
+    },
+    {
+      "reason": "Adapter collection insert is journaled managed IList; do not invent a DiffableCs method as insert owner",
+      "surface": "invented native list-insert write body"
+    }
+  ],
+  "card_id": "lifecycle.spawn.init_v1",
+  "family": "lifecycle",
+  "gamesymbols_export": {
+    "exported": true,
+    "exported_at": "2026-07-20T18:49:27Z",
+    "reason": "Proven surface Hex.bcyl already exported via movement.commit.bfdi_v1 (HexFieldObjectsMutatorMembers). Unit.Init blocked plant_incomplete \u2014 not exported. No new GameSymbols rows required.",
+    "symbols": [
+      "AddFieldObject"
+    ],
+    "target": "GameSymbols.DirectStateLaws"
+  },
+  "live_methods": [
+    {
+      "blocked_reason": "blocked: plant_incomplete \u2014 Unit.Init requires live eep/eir/Hex/configSid battle plant for field-delta; Capstone shows edf.bcuo occupancy enter call. Refuse fabricated Init oracle. Occupancy enter reuses M1 Hex.bcyl (already equivalence-proven).",
+      "method_id": "Hex.Session.Battle.Unit::Init(int,eep,eir,Hex,int,int,int,string,bool,bool)",
+      "mono_alias": "Unit.Init",
+      "role": "commit_owner",
+      "rva": "0x2064CB0",
+      "status": "blocked"
+    },
+    {
+      "blocked_reason": null,
+      "method_id": "Hex.Session.Battle.Hex::bcyl(FieldObject)",
+      "mono_alias": "AddFieldObject",
+      "role": "occupancy_mutator",
+      "rva": "0x1F33BA0",
+      "status": "equivalence-proven"
+    }
+  ],
+  "milestone_id": "ds_m5_lifecycle_spawn",
+  "milestone_ledger_path": "experiments/olden_cs_recovery/proof_ledger/milestones/ds_m5_lifecycle_spawn.ledger.json",
+  "mono_aliases": [
+    "Unit.Init",
+    "AddFieldObject"
+  ],
+  "notes": "Bar C fail-closed. Reuse M1 occupancy card for Hex.bcyl. Unit.Init is the spawn write body (Capstone shows edf.bcuo call). Collection insert stays journaled IList. Card promotes when every live_methods entry is equivalence-proven OR blocked-with-reason. Bounded: Unit.Init + reuse M1 Hex.bcyl occupancy enter. Collection insert stays journaled IList (gateway). No full Hex recovery. Promote only when every method_id is equivalence-proven or blocked-with-reason; bcyl already M1-proven.",
+  "ordered_stores": [
+    {
+      "notes": "Exact 10-arg Init; Capstone shows call into edf.bcuo for hex placement",
+      "offset_or_member": "Unit.Init identity + stacks/lifetime/summon flags",
+      "role": "spawn_init"
+    },
+    {
+      "notes": "Reuse M1 occupancy card \u2014 AddFieldObject enter only",
+      "offset_or_member": "Hex.fieldObjects (+0x28) via bcyl",
+      "role": "list_occupancy_enter"
+    }
+  ],
+  "pin_table_path": "experiments/direct_state_movement_trace/mono_live_pin_table.md",
+  "proof_status": "equivalence-proven",
+  "publish": {
+    "call_chain": [],
+    "english_name": null,
+    "english_name_strength": null,
+    "field": null,
+    "hub_type": null,
+    "kind": "none",
+    "notes": "M5 claims no new publish hub. Collection insert in adapters is journaled IList via NativeCombatWriteGateway.TryInitializeAndInsertObject \u2014 not a separate native write-body method.",
+    "offset": null
+  },
+  "role": "commit_owner",
+  "schema_version": 1,
+  "title": "M5 \u2014 Lifecycle spawn Init + occupancy enter",
+  "ungate_requires": [
+    "focused_live_positive",
+    "field_delta_oracle_bar_c",
+    "movement_commit_bfdi_v1"
+  ],
+  "updated_at": "2026-07-20T18:49:27Z"
+}

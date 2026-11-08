@@ -1,0 +1,158 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_vampire_lord",
+ "status": "look",
+ "notes": "necropolis rollout",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "bat_cloud",
+    "type": "defFlipbook",
+    "provenance": "DEF g20 move_start / g21 move_end: the white smoke column the vampire sinks into and the bat flies out of (defEffects counts smoke only when detached: 0 px). mask: tools/homm3_unit_look/units/masks/necropolis_masks.py bat_cloud (whole frame where the mesh has shrunk away, the cloud only where it stands)",
+    "clips": {
+     "Unit_MoveStart": {
+      "defGroup": 20,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4
+      ]
+     },
+     "Unit_MoveEnd": {
+      "defGroup": 21,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_vampire_lord/bat_cloud"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "Hips",
+     "defOrigin": {
+      "Unit_MoveStart": [
+       [
+        191,
+        220
+       ],
+       [
+        196,
+        212
+       ],
+       [
+        197,
+        199
+       ],
+       [
+        194,
+        212
+       ],
+       [
+        181,
+        212
+       ]
+      ],
+      "Unit_MoveEnd": [
+       [
+        207,
+        244
+       ],
+       [
+        181,
+        211
+       ],
+       [
+        198,
+        200
+       ],
+       [
+        196,
+        213
+       ],
+       [
+        193,
+        221
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "the def_retarget mesh scales away inside the cloud, so the DEF's own bat is the bat. Pinned body-relative: each key's origin is the mesh Hips projected on that DEF frame, so the cloud and bat keep their DEF placement"
+   },
+   {
+    "id": "death_dust",
+    "type": "defFlipbook",
+    "provenance": "roster inventory necropolis g05 death: the dust/sparkle the body dissolves into, frames 3-6",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "smoke",
+      "electric"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 1
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": {
+      "Unit_Death": [
+       [
+        191,
+        217
+       ],
+       [
+        196,
+        234
+       ],
+       [
+        196,
+        234
+       ],
+       [
+        196,
+        234
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "specks rise off the whole body: pinned body-relative (mesh Spine1 projected per DEF frame), not auto (auto picks the nearest speck)"
+   }
+  ]
+ }
+}

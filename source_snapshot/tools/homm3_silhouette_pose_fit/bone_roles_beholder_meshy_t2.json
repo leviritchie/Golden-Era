@@ -1,0 +1,96 @@
+{
+  "rigFamily": "meshy_autorig_mixamo",
+  "unitSid": "h3_beholder",
+  "masterGlb": "artifacts/beholder_pose_pipeline/out_meshy_t2_idle_f0/rigged/idle_f0_rigged.glb",
+  "notes": "Beholder starting Mixamo roles \u2014 NON-HUMANOID. Sprite marks first; expect heavy jointSites remap (eye=Nose, tentacles lack bones).",
+  "joints": {
+    "Nose": "Head",
+    "Neck": "neck",
+    "RShoulder": "RightArm",
+    "RElbow": "RightForeArm",
+    "RWrist": "RightHand",
+    "WeaponTip": "RightHand",
+    "LShoulder": "LeftArm",
+    "LElbow": "LeftForeArm",
+    "LWrist": "LeftHand",
+    "MidHip": "Hips",
+    "RHip": "RightUpLeg",
+    "RKnee": "RightLeg",
+    "RAnkle": "RightFoot",
+    "LHip": "LeftUpLeg",
+    "LKnee": "LeftLeg",
+    "LAnkle": "LeftFoot"
+  },
+  "jointSites": {
+    "Nose": {
+      "bone": "headfront",
+      "end": "head",
+      "why": "Large eye / face front provisional"
+    },
+    "WeaponTip": {
+      "mode": "farthest_skinned_vert",
+      "skinBones": [
+        "RightHand",
+        "LeftHand"
+      ],
+      "minWeight": 0.15,
+      "fromBone": "Head",
+      "why": "No weapon \u2014 tip unused or tentacle end; refine after marks"
+    }
+  },
+  "jointWeights": {
+    "Nose": 1.0,
+    "Neck": 1.0,
+    "MidHip": 0.9,
+    "RShoulder": 1.8,
+    "RElbow": 2.4,
+    "RWrist": 2.8,
+    "WeaponTip": 2.2,
+    "LShoulder": 1.0,
+    "LElbow": 1.0,
+    "LWrist": 1.4,
+    "RHip": 1.2,
+    "RKnee": 1.4,
+    "LHip": 1.2,
+    "LKnee": 1.4
+  },
+  "primaryJoints": [
+    "Nose",
+    "Neck",
+    "MidHip",
+    "RShoulder",
+    "RElbow",
+    "RWrist",
+    "WeaponTip",
+    "LShoulder",
+    "LElbow",
+    "LWrist",
+    "RHip",
+    "RKnee",
+    "LHip",
+    "LKnee"
+  ],
+  "optimizeBones": [
+    "Hips",
+    "Spine02",
+    "Spine01",
+    "Spine",
+    "neck",
+    "Head",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightUpLeg",
+    "RightLeg",
+    "RightFoot",
+    "LeftUpLeg",
+    "LeftLeg",
+    "LeftFoot"
+  ],
+  "lockedBones": []
+}

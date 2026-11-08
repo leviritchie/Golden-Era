@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 2,
+  "enabled": true,
+  "definitions": [
+    {
+      "mechanicId": "diagnostic.pikeman_first_damage",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_mechanic_unit_pilot.flag",
+      "adapterId": "damage",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "damageApplying",
+      "operation": {
+        "kind": "DamageFlatDelta",
+        "value": 1
+      }
+    },
+    {
+      "mechanicId": "diagnostic.castle_law_6_first_damage",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_mechanic_law_pilot.flag",
+      "adapterId": "damage",
+      "activation": {
+        "kind": "law",
+        "factionSid": "homm3_castle",
+        "lawIndex": 6
+      },
+      "trigger": "damageApplying",
+      "operation": {
+        "kind": "DamageFlatDelta",
+        "value": 1
+      }
+    },
+    {
+      "mechanicId": "diagnostic.pikeman_cast_chain",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_cast_pilot.flag",
+      "adapterId": "cast",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "castCommitted",
+      "operation": {
+        "kind": "CastChain",
+        "stringValue": "diagnostic_follow_up",
+        "abilityName": "*"
+      }
+    },
+    {
+      "mechanicId": "diagnostic.pikeman_focus",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_focus_pilot.flag",
+      "adapterId": "focus",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "castCommitted",
+      "operation": {
+        "kind": "FocusGrant",
+        "value": 1,
+        "abilityName": "*"
+      }
+    },
+    {
+      "mechanicId": "diagnostic.pikeman_cooldown",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_cooldown_pilot.flag",
+      "adapterId": "cooldown",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "castCommitted",
+      "operation": {
+        "kind": "CooldownSet",
+        "value": 0,
+        "abilityName": "*"
+      }
+    },
+    {
+      "mechanicId": "diagnostic.pikeman_status",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_status_pilot.flag",
+      "adapterId": "status",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "castCommitted",
+      "operation": {
+        "kind": "StatusApply",
+        "value": 2,
+        "stringValue": "diagnostic.direct_state_burn",
+        "abilityName": "*"
+      }
+    },
+    {
+      "mechanicId": "diagnostic.pikeman_movement",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_movement_pilot.flag",
+      "adapterId": "movement",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "damageApplied",
+      "operation": {
+        "kind": "MovementPush",
+        "value": 1,
+        "abilityName": "diagnostic.pikeman_movement"
+      },
+      "notes": "Fixture coverage only. Product shove is diagnostic.bellwether_shoulder_check."
+    },
+    {
+      "mechanicId": "diagnostic.bellwether_shoulder_check",
+      "enabled": false,
+      "diagnosticFlag": "homm3_runtime_movement_pilot.flag",
+      "adapterId": "movement",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_bellwether_armadillo"
+      },
+      "trigger": "damageApplied",
+      "operation": {
+        "kind": "MovementPush",
+        "value": 1,
+        "abilityName": "Shoulder Check"
+      },
+      "notes": "DISABLED 2026-07-20. Product Shoulder Check uses native push_unit (decomp egd\u2192ehh\u2192emz\u2192bfdi). Mid-damage journaled bfdi-only was store proof wrongly trusted as visible shove (S45). Keep off unless explicitly re-enabled for store diagnostics."
+    },
+    {
+      "mechanicId": "diagnostic.pikeman_summon",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_summon_pilot.flag",
+      "adapterId": "summon",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "castCommitted",
+      "operation": {
+        "kind": "SummonCreate",
+        "stringValue": "h3_pikeman",
+        "abilityName": "diagnostic.unplanted_summon"
+      },
+      "notes": "SummonCreate remains enabled for contract coverage but binds only to abilityName diagnostic.unplanted_summon. Cast dispatch fails closed (Unit.Init plant incomplete) instead of silently skipping; do not retarget to * until spawn Init is plant-complete."
+    },
+    {
+      "mechanicId": "diagnostic.pikeman_trap",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_trap_pilot.flag",
+      "adapterId": "trap",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "castCommitted",
+      "operation": {
+        "kind": "TrapSpawn",
+        "stringValue": "diagnostic.direct_state_trap",
+        "abilityName": "*"
+      }
+    },
+    {
+      "mechanicId": "diagnostic.pikeman_corpse",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_corpse_pilot.flag",
+      "adapterId": "corpse",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "objectDestroyed",
+      "operation": {
+        "kind": "CorpseCreate",
+        "value": 1
+      }
+    },
+    {
+      "mechanicId": "diagnostic.pikeman_nested_damage",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_nestedDamage_pilot.flag",
+      "adapterId": "nestedDamage",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "damageApplied",
+      "operation": {
+        "kind": "NestedReflection",
+        "value": 1
+      }
+    },
+    {
+      "mechanicId": "diagnostic.pikeman_kill",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_kill_pilot.flag",
+      "adapterId": "kill",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "objectDestroyed",
+      "operation": {
+        "kind": "KillConfirm"
+      }
+    },
+    {
+      "mechanicId": "diagnostic.pikeman_ally_death",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_allyDeath_pilot.flag",
+      "adapterId": "allyDeath",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "objectDestroyed",
+      "operation": {
+        "kind": "AllyDeathObserve"
+      }
+    },
+    {
+      "mechanicId": "diagnostic.pikeman_extra_action",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_actionQueue_pilot.flag",
+      "adapterId": "actionQueue",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "actionEnd",
+      "operation": {
+        "kind": "ActionQueueInsert",
+        "value": 1
+      }
+    },
+    {
+      "mechanicId": "diagnostic.pikeman_turn_order",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_turnOrder_pilot.flag",
+      "adapterId": "turnOrder",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "roundStart",
+      "operation": {
+        "kind": "TurnOrderReorder",
+        "value": 1
+      }
+    },
+    {
+      "mechanicId": "diagnostic.pikeman_aura",
+      "enabled": true,
+      "diagnosticFlag": "homm3_runtime_aura_pilot.flag",
+      "adapterId": "aura",
+      "activation": {
+        "kind": "unit",
+        "unitSid": "h3_pikeman"
+      },
+      "trigger": "unitInit",
+      "operation": {
+        "kind": "AuraDefine",
+        "value": 1,
+        "stringValue": "diagnostic.direct_state_aura"
+      }
+    }
+  ]
+}

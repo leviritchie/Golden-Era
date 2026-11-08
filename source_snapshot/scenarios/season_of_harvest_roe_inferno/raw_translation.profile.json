@@ -1,0 +1,61 @@
+{
+  "schema": "homm3.olden_layered_atlas_scenario_profile.v1",
+  "scenarioId": "season_of_harvest_roe_necropolis",
+  "mapSid": "h3_roe_necropolis_season_of_harvest_raw_translation",
+  "title": "Season of Harvest - Raw Translation",
+  "description": "Parallel Season of Harvest emit-only raw_translation map (same pipeline class as Homecoming). Runtime gameplay remains user-unvalidated.",
+  "artifactRoot": "artifacts/campaign_port_poc/roe_remaining_campaigns/season_of_harvest",
+  "outputSubdir": "raw_translation_map",
+  "inputs": {
+    "alignment": "artifacts/campaign_port_poc/roe_remaining_campaigns/season_of_harvest/olden_storage_alignment/season_of_harvest.olden_storage_alignment.json",
+    "substitutionMap": "artifacts/campaign_port_poc/roe_remaining_campaigns/season_of_harvest/entity_substitutions/season_of_harvest.olden_entity_substitution_map.json",
+    "coreCatalog": "artifacts/campaign_port_poc/olden_entity_catalog/olden_core_map_valid_entity_catalog.json",
+    "templateMap": "V:\\SteamLibrary\\steamapps\\common\\Heroes of Might and Magic Olden Era - Golden Era\\HeroesOldenEra_Data\\StreamingAssets\\maps\\Thirst_for_Power.map"
+  },
+  "sourceEnvelope": {
+    "width": 72,
+    "height": 72
+  },
+  "layers": {
+    "layerIds": [
+      0
+    ],
+    "undergroundLayers": []
+  },
+  "spawn": {
+    "factionSid": "homm3_necropolis",
+    "heroSid": "homm3_necropolis_hero_15",
+    "playersCount": 1
+  },
+  "startHeroContract": {
+    "sourceLayer": 0,
+    "heroType": 78,
+    "owner": 5,
+    "payloadKind": "hero_or_prison",
+    "templateAnimation": "ah09_e.def",
+    "templateObjectId": 34,
+    "sourceKey": "0:55:6",
+    "sourceIndex": 1674
+  },
+  "pathability": {
+    "surfaceGapFill": false,
+    "emitCoreOverlay": true
+  },
+  "knownGaps": [
+    "Raw translation parallel SID beside layered atlas; StoryHub should prefer this SID for playability.",
+    "emit_fresh core overlay by default (override only when inherit_single_layer_artifact is required).",
+    "UG tunnel clearance ON when underground layers exist (Chebyshev-2 rock→burrow shoulder).",
+    "Gate-face mirror rotation ON for eligible single-GATE footprints.",
+    "Pickup range fallback ON (pickup_gate_ring_nearby_range_fallback_v1).",
+    "Runtime clickability/pathing remain user-unvalidated."
+  ],
+  "runtimeScriptComment": "season_of_harvest raw-translation runtime script generated from campaign alignment story.",
+  "coreOverlay": {
+    "mode": "emit_fresh"
+  },
+  "validation": {
+    "expectedSourceLayerEntityCounts": {
+      "0": 1729
+    }
+  }
+}

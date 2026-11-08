@@ -1,0 +1,306 @@
+{
+ "schema": "game_symbols_current_scope_overrides.v1",
+ "buildId": "25061458",
+ "note": "Hand-curated current-build scopes the P1 remap cannot derive. Each entry names its evidence; tools/port_current/generate_current_symbol_scopes.py applies it and tools/validate_game_symbols_hint_contract.py (build-wired) fails when the generated scopes are stale. Evidence was produced with tools/port_current/symbol_remap/native_body.py NativeSide over artifacts/port_current/idx2_{golden,live}/gen/native_addresses.tsv and the matching GameAssembly.dll (golden D47706EB..., live BB4EA1F5...).",
+ "symbols": {
+  "ModBugReporting.ScreenStaticAutoSend": {
+   "split": true,
+   "goldenLiterals": [
+    "Method_Public_Static_Void_Boolean_0"
+   ],
+   "live": [
+    "Method_Public_Static_Void_0",
+    "Method_Public_Static_Void_1"
+   ],
+   "owners": [
+    "Hex.UI.Reports.BhBugReportScreen"
+   ],
+   "evidence": "Signature changed and split (remap: no same-signature member in its order gap). Golden BhBugReportScreen.Method_Public_Static_Void_Boolean_0 (token 100687699, native tjd, CallerCount 1, 13 xrefs) has a 47-instruction body that allocates the capture iterator +cpd, runs its .ctor and tail-jumps to the static coroutine queue et.Enqueue; the bool is not stored. Live 25061458 has two parameterless statics with that same body fingerprint (47 instructions, identical callee shapes, immediates and metadata-usage count; each CallerCount 1, 13 xrefs): Method_Public_Static_Void_0 (token 100687863, native tnu) allocates +cpk and Method_Public_Static_Void_1 (token 100687864, native tnv) allocates +cpl, and both tail-jump to et.Enqueue. The MoveNext of +cpk (token 100687888) and of +cpl (token 100687894) each yield WaitForEndOfFrame, then ScreenCapture.CaptureScreenshotAsTexture, Texture2D.ReadPixels/Apply, ImageConversion.EncodeToJPG, Logger2.LogHandler log capture and BhBugReportScreen's log-dictionary builder, then call Hex.SharedLibrary.HexAnalytics.SendReport directly and Debug.Log; they differ only in their encrypted-string helpers. Both are therefore desync auto-send launchers and both must be blocked. The other statics on the type do not send: Show opens the form, tny/tnz only read log files into the report dictionary, and the two static IEnumerator factories have CallerCount 0."
+  },
+  "TerrainMaterial.RendererPrepareMap": {
+   "goldenLiterals": [
+    "kwc",
+    "jmr",
+    "kvo",
+    "Method_Public_Void_Map_Boolean_Boolean_0",
+    "Method_Public_Void_Map_Boolean_Boolean_1"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    "Method_Public_Void_Map_Boolean_Boolean_0",
+    "Method_Public_Void_Map_Boolean_Boolean_1"
+   ],
+   "owners": [
+    "ObjectPublicInbtTeInbtCoReVebtInUnique"
+   ],
+   "evidence": "Remap refused it as 4 golden vs 2 live same-signature members because identical-code folding gives several metadata methods one native function. Golden renderer beh: Method_Public_Void_Map_Boolean_Boolean_0..3 (tokens 100672698/100672708/100672711/100672717, natives eng/igt/kwh/lsf) are all VA 0x1826C4DA0. Live renderer bei: Method_Public_Void_Map_Boolean_Boolean_0/_1 (tokens 100672711/100672721, natives ghh/kzr) are both VA 0x1827B0020, called directly from Map.okp. Both bodies are 51 instructions with the same shape: null-check the Map, read its width/height (golden Map.oga/ogb, live okh/oki), call the (int,int) sizer (golden kwo, live kzy), then call the first Map pass when the first bool is set (golden kwl, live kzv) and the texture-node upload when the second is set (golden kwm, live kzw). The golden literal _0 therefore names the same native code as live _0 and _1. The dead older natives kwc/jmr/kvo bind nothing."
+  },
+  "TerrainMaterial.RendererUploadTextureNodes": {
+   "goldenLiterals": [
+    "kwm",
+    "Method_Private_Void_Map_0"
+   ],
+   "live": [
+    null,
+    "Method_Private_Void_Map_1"
+   ],
+   "owners": [
+    "ObjectPublicInbtTeInbtCoReVebtInUnique"
+   ],
+   "evidence": "Golden Method_Private_Void_Map_0 (native kwm, VA 0x1826CAE40, 118 instructions) is the texture-node upload that PrepareMap (VA 0x1826C4DA0) calls under its second bool. The live PrepareMap (VA 0x1827B0020) calls live Method_Private_Void_Map_1 (native kzw, VA 0x1827B31D0, 118 instructions) at the same call position, and that is its only direct caller. Normalised bodies differ only in build-renamed callees (Map.oga/ogb/ogk -> okh/oki/okr) and one metadata reference. The live 118-instruction PDM copies (dw, myi, nko) have no callers."
+  },
+  "TerrainMaterial.RendererRebuildMaterialArrays": {
+   "goldenLiterals": [
+    "Method_Private_Void_PDM_5",
+    "nac",
+    "ivz",
+    "kwe",
+    "bbd",
+    "hpm",
+    "ne"
+   ],
+   "live": [
+    "Method_Private_Void_PDM_5",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "ObjectPublicInbtTeInbtCoReVebtInUnique"
+   ],
+   "evidence": "Golden binds Method_Private_Void_PDM_5 (native jwp, VA 0x1826C8E40): an uncalled 348-instruction copy of the packed-material builder kwj (Method_Private_Void_2, called from the .ctor and the public entry kkd). It differs from kwj only in the loop cap of min(SoTerrainMaterial.biomes.Count, cap): kwj 16, jwp 30 (the 30-slot builder of docs/offlineunlockmod_dll_provenance.md 2026-06-08). Live has the same builder kzt (Method_Private_Void_0, 348 instructions, called from the .ctor and the public entry kzs, cap 16) and uncalled copies car (Method_Private_Void_PDM_5, cap 65) and kas (Method_Private_Void_PDM_2, cap 63). Normalised bodies differ only in that cap and the renamed owner type. The plugin fails closed when the active biome count exceeds NativePackedMaterialSlotLimit (16) and expands packed state to 32. So every reachable count is below both golden jwp's cap and live car's cap, and live car behaves as golden jwp. It also keeps the interop name that RendererPackedBuildStatePrepMethodNames keys on. nac/ivz/kwe/bbd/hpm/ne are dead older natives."
+  },
+  "TerrainMaterial.RendererPackedBuildStatePrepMethodNames": {
+   "goldenLiterals": [
+    "Method_Private_Void_PDM_5"
+   ],
+   "live": [
+    "Method_Private_Void_PDM_5"
+   ],
+   "evidence": "Names the same method as TerrainMaterial.RendererRebuildMaterialArrays: golden jwp -> live car, both interop Method_Private_Void_PDM_5 on the terrain renderer. See that entry's evidence."
+  },
+  "TerrainSound.HeroBiomeBuildMap": {
+   "goldenLiterals": [
+    "bias",
+    "bhzp",
+    "Method_Public_Void_Map_0",
+    "Method_Public_Void_Map_PDM_0",
+    "Method_Public_Void_Map_PDM_1"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    "Method_Public_Void_Map_PDM_2",
+    null
+   ],
+   "owners": [
+    "ObjectPublicEHckMaItckEHckEHUnique"
+   ],
+   "evidence": "Golden hero-biome sound type ezc (ObjectPublicEHciMaItciEHciEHUnique) binds Method_Public_Void_Map_PDM_0 (native bicq, VA 0x1821F8710, 71 instructions: Map.oga/ogb, then the tile lookup ezc.bicr). Its copies njp (PDM_1) and omr (PDM_2) are byte-identical at their own VAs. None has a direct call or RIP-relative reference, so the method is reached indirectly, and golden hooks the in-order native bicq, which sits in the class's sequential obfuscator names bicq/bicr and ezd bics/bict. Live fav (ObjectPublicEHckMaItckEHckEHUnique) has the same order: bist/bisu and faw bisv/bisw. Live Method_Public_Void_Map_PDM_2 (native bist, VA 0x18229DEA0, 71 instructions) differs from golden bicq only in the renamed callees (Map.okh/oki, fav.bisu = golden bicr). Its random-named copies bdk/dzy/fqm/ihf (PDM_3/1/0/4) are distinct native functions and are not bound. The golden literals PDM_0/PDM_1 name random-named decoys on live, so they map to nothing."
+  },
+  "TerrainSound.AmbientBiomeBuild": {
+   "goldenLiterals": [
+    "Method_Private_Void_0",
+    "Method_Private_Void_PDM_0",
+    "Method_Private_Void_PDM_1",
+    "biav",
+    "bhzs",
+    "bict",
+    "Method_Public_Void_PDM_0"
+   ],
+   "live": [
+    "Method_Private_Void_0",
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "owners": [
+    "ObjectPublicPrckInSickEAMackEAckUnique"
+   ],
+   "evidence": "Golden ambient-biome sound type ezd binds Method_Private_Void_0 (native bict, VA 0x1821F9370, 99 instructions). It is called directly from GetSoundsVolume+0x61 and its copy iej+0x61. Its copies bin/guj (PDM_0/1) have no callers. Live faw (ObjectPublicPrckInSickEAMackEAckUnique) Method_Private_Void_0 (native bisw, VA 0x18229EC00, 99 instructions) is called directly from GetSoundsVolume+0x61 and its copies kid/nxh+0x61. Normalised bodies differ only in the renamed owner type and Map getters (oga/ogb/ohk/ohe -> okh/oki/olr/oll). Copies fsf/inf/mpf (PDM_2/1/0) have no callers and are not bound."
+  },
+  "SelectedUnitHud.HudEventBind": {
+   "goldenLiterals": [
+    "bejn",
+    "behr",
+    "begs",
+    "befw",
+    "beeu",
+    "begr",
+    "befv",
+    "beet",
+    "Method_Private_Void_Object_BattleEventArgs_0",
+    "Method_Private_Void_Object_BattleEventArgs_PDM_0"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Private_Void_Object_BattleEventArgs_PDM_0"
+   ],
+   "owners": [
+    "Hex.Session.Battle.BhSelectedUnitHud"
+   ],
+   "evidence": "Remap refused it as owner-ambiguous, because the generated literal is bound on 43 Golden Era types. The consumer resolves it on BhSelectedUnitHud only (a real-named type on both builds). Golden BhSelectedUnitHud.Method_Private_Void_Object_BattleEventArgs_PDM_0 (native bejn, VA 0x18203AE90, 347 instructions) is the unit event bind: it calls Unit.beyw and the UiAnimatorPrime In/Out, and calls the direct bind bejo (Method_Public_Void_Boolean_Unit_PDM_0) twice. Live BhSelectedUnitHud.Method_Private_Void_Object_BattleEventArgs_PDM_0 (native beyj, VA 0x1820D0A50, 347 instructions) has the same body. Normalised, it differs only in renamed callees and types (Unit.bfob, beyk = the scoped HudDirectBind, dzm.bbdm = the scoped ability manager, dzn[] = the scoped ability wrapper), the PrivateImplementationDetails class, and one field-offset pair (0x188/0x190 -> 0x178/0x180). The other (Object,BattleEventArgs) methods on the type are 25-instruction folded stubs (PDM_1/PDM_2) on both builds. Method_Private_Void_Object_BattleEventArgs_0 exists on neither build, and the short natives are dead older aliases."
+  },
+  "BattleUi.SelectedHudEventBind": {
+   "goldenLiterals": [
+    "bejn",
+    "behr",
+    "begs",
+    "beic",
+    "begr",
+    "beib",
+    "befv",
+    "beet",
+    "Method_Private_Void_Object_BattleEventArgs_0",
+    "Method_Private_Void_Object_BattleEventArgs_PDM_0"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Private_Void_Object_BattleEventArgs_PDM_0"
+   ],
+   "owners": [
+    "Hex.Session.Battle.BhSelectedUnitHud"
+   ],
+   "evidence": "Remap refused it as owner-ambiguous, because the generated literal is bound on 43 Golden Era types. The consumer resolves it on BhSelectedUnitHud only (a real-named type on both builds). Golden BhSelectedUnitHud.Method_Private_Void_Object_BattleEventArgs_PDM_0 (native bejn, VA 0x18203AE90, 347 instructions) is the unit event bind: it calls Unit.beyw and the UiAnimatorPrime In/Out, and calls the direct bind bejo (Method_Public_Void_Boolean_Unit_PDM_0) twice. Live BhSelectedUnitHud.Method_Private_Void_Object_BattleEventArgs_PDM_0 (native beyj, VA 0x1820D0A50, 347 instructions) has the same body. Normalised, it differs only in renamed callees and types (Unit.bfob, beyk = the scoped HudDirectBind, dzm.bbdm = the scoped ability manager, dzn[] = the scoped ability wrapper), the PrivateImplementationDetails class, and one field-offset pair (0x188/0x190 -> 0x178/0x180). The other (Object,BattleEventArgs) methods on the type are 25-instruction folded stubs (PDM_1/PDM_2) on both builds. Method_Private_Void_Object_BattleEventArgs_0 exists on neither build, and the short natives are dead older aliases."
+  },
+  "SelectedUnitHud.ControlsSelect": {
+   "goldenLiterals": [
+    "belt",
+    "bejx",
+    "beiy",
+    "beic",
+    "beix",
+    "beib",
+    "Method_Private_Void_ObjectPublicObceInBoInceAbObELInUnique_PDM_0"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Private_Void_ObjectPublicObcfInBoIncfAbObELInUnique_PDM_0"
+   ],
+   "owners": [
+    "Hex.Session.Battle.BhUnitControlsView"
+   ],
+   "evidence": "Remap refused it as owner-ambiguous (the literal binds on 2 Golden Era types); the consumer resolves it on BhUnitControlsView only. Golden BhUnitControlsView.Method_Private_Void_ObjectPublicObceInBoInceAbObELInUnique_PDM_0 (native belt, VA 0x182040D80, 166 instructions: Object.op_Equality/op_Inequality, BhAbilityViewBase.uhf/uhj) takes the ability wrapper dxy. Live BhUnitControlsView.Method_Private_Void_ObjectPublicObcfInBoIncfAbObELInUnique_PDM_0 (native bfau, VA 0x1820D6D10, 166 instructions) takes the scoped live wrapper dzn (ObjectPublicObcfInBoIncfAbObELInUnique). Normalised, it differs only in renamed callees (BhAbilityViewBase.uvq/uvv), the nested closure type ekt -> emj and metadata references. The only other method with that parameter is the 71-instruction PDM_1 on both builds (golden belw, live bfax), which is a different method (ratio 0.35)."
+  },
+  "SelectedUnitHud.ControlsHotkey": {
+   "goldenLiterals": [
+    "beme",
+    "bdrf",
+    "beki",
+    "bejj",
+    "beji",
+    "beim",
+    "Method_Private_Void_Object_HotkeyAbilityArgs_PDM_0"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Private_Void_Object_HotkeyAbilityArgs_PDM_0"
+   ],
+   "owners": [
+    "Hex.Session.Battle.BhUnitControlsView"
+   ],
+   "evidence": "Remap refused it as owner-ambiguous (2 Golden Era types); the consumer resolves it on BhUnitControlsView only. Golden Method_Private_Void_Object_HotkeyAbilityArgs_PDM_0 (native beme, VA 0x1820419D0, 44 instructions) calls BhUnitControlsView.belo, the ability click. Live Method_Private_Void_Object_HotkeyAbilityArgs_PDM_0 (native bfbf, VA 0x1820D7960, 44 instructions) calls bfap, which is the scoped SelectedUnitHud.ControlsClick. Normalised bodies differ only in that callee and metadata references. It is the only (Object,HotkeyAbilityArgs) method on the type on both builds."
+  },
+  "SelectedUnitHud.BasicCommandsWaitRefresh": {
+   "goldenLiterals": [
+    "Method_Public_Void_Unit_PDM_0"
+   ],
+   "live": [
+    "Method_Public_Void_Unit_PDM_0"
+   ],
+   "owners": [
+    "Hex.UI.BhUnitBasicCommands"
+   ],
+   "evidence": "Remap refused it as owner-dependent (the literal names different methods on 2 Golden Era types); the consumer resolves it on Hex.UI.BhUnitBasicCommands only. That type has exactly two (Unit) methods on both builds: golden PDM_0 smf / PDM_1 smg and live PDM_0 spj / PDM_1 spk, each 120 instructions. The pair differ from each other only in the button fields they touch (PDM_0: +0x28/+0x30/+0x38, PDM_1: +0x20/+0x40/+0x48). Live PDM_0 keeps golden PDM_0's offsets exactly and live PDM_1 keeps golden PDM_1's; the other differences are the renamed runtime-init helper and metadata references. So the interop names map to themselves and wait/skip are not swapped."
+  },
+  "SelectedUnitHud.BasicCommandsSkipRefresh": {
+   "goldenLiterals": [
+    "Method_Public_Void_Unit_PDM_1"
+   ],
+   "live": [
+    "Method_Public_Void_Unit_PDM_1"
+   ],
+   "owners": [
+    "Hex.UI.BhUnitBasicCommands"
+   ],
+   "evidence": "See SelectedUnitHud.BasicCommandsWaitRefresh: golden PDM_1 smg (fields +0x20/+0x40/+0x48) = live PDM_1 spk with the same offsets."
+  },
+  "SelectedUnitHud.AbilityBucket": {
+   "goldenLiterals": [
+    "baql",
+    "baox",
+    "jus",
+    "itp",
+    "mpy",
+    "bana",
+    "bama",
+    "baoa",
+    "banz",
+    "klu",
+    "ihh",
+    "fnd",
+    "fsk",
+    "bar",
+    "drf",
+    "Method_Public_Il2CppReferenceArray_1_ObjectPublicObceInBoInceAbObELInUnique_EAbilityType_0"
+   ],
+   "live": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    "Method_Public_Il2CppReferenceArray_1_ObjectPublicObcfInBoIncfAbObELInUnique_EAbilityType_0"
+   ],
+   "owners": [
+    "ObjectPublicObcfDiObcf2EAInBoInUnique"
+   ],
+   "evidence": "Remap refused it as 1 golden vs 2 live same-signature members; the live pair is the real method and a random-named copy. Golden ability manager dxx.Method_Public_Il2CppReferenceArray_1_ObjectPublicObceInBoInceAbObELInUnique_EAbilityType_0 (native baql, VA 0x182E9CAC0, 94 instructions) is the in-order bucket (baql/baqm/baqp/baqq/baqr). Live dzm.Method_Public_Il2CppReferenceArray_1_ObjectPublicObcfInBoIncfAbObELInUnique_EAbilityType_0 (native bbdm, VA 0x182FA9030, 94 instructions) is in the same in-order run (bbdm/bbdn/bbdq/bbdr/bbds). The live copy gjo (..._PDM_0) has a random name. The unit event bind calls this bucket twice on each build: golden BhSelectedUnitHud bejn calls dxx.baql, and live beyj calls dzm.bbdm at the same positions."
+  }
+ }
+}

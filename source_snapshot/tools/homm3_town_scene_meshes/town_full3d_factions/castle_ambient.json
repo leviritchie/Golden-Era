@@ -1,0 +1,926 @@
+{
+ "_comment": "Castle ambient life (town_full3d_ambient.py + castle_ambient_kinds.py; px = rest-frame px, ambient_sheet.jpg). A bright knightly kingdom: doves round the keep, griffins wheeling over their tower, pennants on the tower tops, the lighthouse beam sweeping, holy rays from the Portal of Glory and a halo on the Colossus, gleams on blade and domes, angel feathers, monastery candles and incense, the anvil's rhythm, arrows from the archers' tower, sword drill, jousting dust, market pigeons, the waterfall's spray, sun glitter on the lake, the mage guild's star rings, butterflies and swallows over the meadow. Shared smoke only on real chimneys and fires, each with its own tint and rhythm.",
+ "effects": [
+  {
+   "id": "forge_fire",
+   "layers": [
+    "tbcsblak"
+   ],
+   "kind": "glow",
+   "px": [
+    545,
+    615
+   ],
+   "size": 22,
+   "flicker": "fire",
+   "intensity": 0.5,
+   "snap": 24
+  },
+  {
+   "id": "anvil",
+   "layers": [
+    "tbcsblak"
+   ],
+   "kind": "anvil",
+   "px": [
+    548,
+    610
+   ],
+   "period": 1.3,
+   "sparks": 7,
+   "reach": 20,
+   "spark": 8,
+   "flash": 26,
+   "snap": 24
+  },
+  {
+   "id": "forge_smoke",
+   "layers": [
+    "tbcsblak"
+   ],
+   "kind": "smoke",
+   "px": [
+    628,
+    478
+   ],
+   "width": 9,
+   "rise": 100,
+   "period": 2.6,
+   "colour": [
+    0.34,
+    0.33,
+    0.33
+   ],
+   "density": 1.3,
+   "snap": 24
+  },
+  {
+   "id": "smithy_cottage_smoke",
+   "layers": [
+    "tbcsblak"
+   ],
+   "kind": "smoke",
+   "px": [
+    455,
+    540
+   ],
+   "width": 6,
+   "rise": 55,
+   "period": 4.4,
+   "colour": [
+    0.66,
+    0.64,
+    0.62
+   ],
+   "density": 0.8,
+   "snap": 24
+  },
+  {
+   "id": "tavern_hearth_smoke",
+   "layers": [
+    "tbcstvrn"
+   ],
+   "kind": "smoke",
+   "px": [
+    70,
+    455
+   ],
+   "width": 7,
+   "rise": 75,
+   "period": 3.5,
+   "colour": [
+    0.58,
+    0.53,
+    0.48
+   ],
+   "snap": 30
+  },
+  {
+   "id": "tavern_windows",
+   "layers": [
+    "tbcstvrn"
+   ],
+   "kind": "glow",
+   "px": [
+    120,
+    575
+   ],
+   "size": 16,
+   "flicker": "candle",
+   "colour": [
+    1.0,
+    0.7,
+    0.35
+   ],
+   "intensity": 0.4,
+   "snap": 24
+  },
+  {
+   "id": "hall_chimney",
+   "layers": [
+    "tbcshall",
+    "tbcshal2",
+    "tbcshal3"
+   ],
+   "kind": "smoke",
+   "px": [
+    110,
+    375
+   ],
+   "width": 7,
+   "rise": 85,
+   "period": 3.9,
+   "colour": [
+    0.7,
+    0.69,
+    0.68
+   ],
+   "density": 0.9,
+   "snap": 40
+  },
+  {
+   "id": "hall_windows",
+   "layers": [
+    "tbcshall",
+    "tbcshal2",
+    "tbcshal3"
+   ],
+   "kind": "glow",
+   "px": [
+    180,
+    520
+   ],
+   "size": 18,
+   "flicker": "candle",
+   "colour": [
+    1.0,
+    0.74,
+    0.4
+   ],
+   "intensity": 0.35,
+   "snap": 30
+  },
+  {
+   "id": "keep_doves",
+   "layers": [
+    "tbcscstl",
+    "tbcscas2",
+    "tbcscas3"
+   ],
+   "kind": "doves",
+   "px": [
+    1200,
+    120
+   ],
+   "radius": 75,
+   "count": 7,
+   "period": 8,
+   "span": 14,
+   "out": 0.08,
+   "snap": 40
+  },
+  {
+   "id": "keep_pennant_tall",
+   "layers": [
+    "tbcscas3"
+   ],
+   "kind": "pennant",
+   "px": [
+    1315,
+    74
+   ],
+   "pole": 22,
+   "flag": 29,
+   "period": 1.3,
+   "snap": 40
+  },
+  {
+   "id": "keep_pennant_left",
+   "layers": [
+    "tbcscas2",
+    "tbcscas3"
+   ],
+   "kind": "pennant",
+   "px": [
+    1149,
+    102
+   ],
+   "pole": 19,
+   "flag": 26,
+   "period": 1.5,
+   "colour": [
+    0.72,
+    0.6,
+    0.2
+   ],
+   "snap": 40
+  },
+  {
+   "id": "keep_gate_torch",
+   "layers": [
+    "tbcscstl",
+    "tbcscas2",
+    "tbcscas3"
+   ],
+   "kind": "glow",
+   "px": [
+    1175,
+    300
+   ],
+   "size": 12,
+   "flicker": "fire",
+   "intensity": 0.45,
+   "snap": 30
+  },
+  {
+   "id": "citadel_hearth",
+   "layers": [
+    "tbcscas2",
+    "tbcscas3"
+   ],
+   "kind": "smoke",
+   "px": [
+    1110,
+    215
+   ],
+   "width": 5,
+   "rise": 70,
+   "period": 4.6,
+   "colour": [
+    0.78,
+    0.77,
+    0.76
+   ],
+   "density": 0.7,
+   "snap": 30
+  },
+  {
+   "id": "lighthouse_beam",
+   "layers": [
+    "tbcsspec"
+   ],
+   "kind": "lighthouse_beam",
+   "px": [
+    1042,
+    172
+   ],
+   "length": 150,
+   "width": 34,
+   "period": 6,
+   "intensity": 0.32,
+   "snap": 20
+  },
+  {
+   "id": "colossus_halo",
+   "layers": [
+    "tbcsholy"
+   ],
+   "kind": "holy_rays",
+   "px": [
+    883,
+    214
+   ],
+   "aim": 0,
+   "spread": 180,
+   "count": 7,
+   "length": 44,
+   "width": 22,
+   "life": 6,
+   "turn": 4,
+   "intensity": 0.14,
+   "snap": 30
+  },
+  {
+   "id": "colossus_sword_gleam",
+   "layers": [
+    "tbcsholy"
+   ],
+   "kind": "gleam",
+   "px": [
+    835,
+    290
+   ],
+   "dir": [
+    -0.06,
+    -1
+   ],
+   "reach": 80,
+   "star": 14,
+   "period": 5.5,
+   "snap": 24
+  },
+  {
+   "id": "colossus_shield_gleam",
+   "layers": [
+    "tbcsholy"
+   ],
+   "kind": "gleam",
+   "px": [
+    895,
+    250
+   ],
+   "dir": [
+    0.3,
+    1
+   ],
+   "reach": 60,
+   "star": 12,
+   "period": 7.0,
+   "run": 0.18,
+   "colour": [
+    1.0,
+    0.9,
+    0.6
+   ],
+   "snap": 30
+  },
+  {
+   "id": "glory_rays",
+   "layers": [
+    "tbcsdw_6",
+    "tbcsdw_6_2"
+   ],
+   "kind": "holy_rays",
+   "px": [
+    815,
+    90
+   ],
+   "aim": 180,
+   "spread": 38,
+   "count": 7,
+   "length": 120,
+   "width": 40,
+   "life": 8,
+   "turn": 1.2,
+   "intensity": 0.14,
+   "snap": 40
+  },
+  {
+   "id": "glory_feathers",
+   "layers": [
+    "tbcsdw_6",
+    "tbcsdw_6_2"
+   ],
+   "kind": "feathers",
+   "px": [
+    815,
+    140
+   ],
+   "w": 220,
+   "h": 20,
+   "count": 8,
+   "feather": 13,
+   "fall": 7,
+   "life": 10,
+   "snap": 40
+  },
+  {
+   "id": "mage_star_rings",
+   "layers": [
+    "tbcsmage",
+    "tbcsmag2",
+    "tbcsmag3",
+    "tbcsmag4"
+   ],
+   "kind": "astral_ring",
+   "px": [
+    1360,
+    330
+   ],
+   "radius": 42,
+   "count": 6,
+   "period": 7,
+   "tilt": 22,
+   "spark": 4,
+   "snap": 60
+  },
+  {
+   "id": "mage_orbs",
+   "layers": [
+    "tbcsmage",
+    "tbcsmag2"
+   ],
+   "kind": "glow",
+   "px": [
+    1310,
+    390
+   ],
+   "size": 18,
+   "flicker": "breathe",
+   "period": 3.0,
+   "colour": [
+    0.6,
+    0.8,
+    1.0
+   ],
+   "intensity": 0.45,
+   "snap": 40
+  },
+  {
+   "id": "mage_dome_gleam",
+   "layers": [
+    "tbcsmag3",
+    "tbcsmag4"
+   ],
+   "kind": "gleam",
+   "px": [
+    1365,
+    195
+   ],
+   "dir": [
+    1,
+    0.15
+   ],
+   "reach": 36,
+   "star": 12,
+   "period": 6.0,
+   "colour": [
+    1.0,
+    0.85,
+    0.6
+   ],
+   "snap": 40
+  },
+  {
+   "id": "griffins",
+   "layers": [
+    "tbcsdw_2",
+    "tbcsdw_2_2"
+   ],
+   "kind": "griffins",
+   "px": [
+    225,
+    150
+   ],
+   "radius": 90,
+   "count": 2,
+   "period": 19,
+   "span": 34,
+   "out": 0.12,
+   "snap": 40,
+   "lift": 20
+  },
+  {
+   "id": "griffin_bastion_griffin",
+   "layers": [
+    "tbcshrd2"
+   ],
+   "kind": "griffins",
+   "px": [
+    225,
+    120
+   ],
+   "radius": 100,
+   "count": 1,
+   "period": 23,
+   "span": 36,
+   "out": 0.12,
+   "snap": 40,
+   "lift": 20
+  },
+  {
+   "id": "griffin_pennant",
+   "layers": [
+    "tbcsdw_2_2"
+   ],
+   "kind": "pennant",
+   "px": [
+    225,
+    72
+   ],
+   "pole": 20,
+   "flag": 27,
+   "period": 1.2,
+   "side": -1,
+   "snap": 40
+  },
+  {
+   "id": "griffin_gate_torch",
+   "layers": [
+    "tbcsdw_2",
+    "tbcsdw_2_2"
+   ],
+   "kind": "glow",
+   "px": [
+    250,
+    245
+   ],
+   "size": 14,
+   "flicker": "fire",
+   "intensity": 0.4,
+   "snap": 30
+  },
+  {
+   "id": "guardhouse_pennant",
+   "layers": [
+    "tbcsdw_0",
+    "tbcsdw_0_2"
+   ],
+   "kind": "pennant",
+   "px": [
+    586,
+    128
+   ],
+   "pole": 17,
+   "flag": 22,
+   "period": 1.4,
+   "colour": [
+    0.62,
+    0.12,
+    0.12
+   ],
+   "snap": 40
+  },
+  {
+   "id": "guardhouse_torch",
+   "layers": [
+    "tbcsdw_0",
+    "tbcsdw_0_2"
+   ],
+   "kind": "glow",
+   "px": [
+    612,
+    285
+   ],
+   "size": 12,
+   "flicker": "fire",
+   "intensity": 0.45,
+   "snap": 24
+  },
+  {
+   "id": "guardhouse_watchfire",
+   "layers": [
+    "tbcsdw_0",
+    "tbcsdw_0_2"
+   ],
+   "kind": "smoke",
+   "px": [
+    640,
+    180
+   ],
+   "width": 4,
+   "rise": 45,
+   "period": 2.4,
+   "colour": [
+    0.45,
+    0.44,
+    0.44
+   ],
+   "density": 0.8,
+   "snap": 30
+  },
+  {
+   "id": "archers_arrows",
+   "layers": [
+    "tbcsdw_1",
+    "tbcsdw_1_2"
+   ],
+   "kind": "arrows",
+   "px": [
+    735,
+    250
+   ],
+   "dir": [
+    -1,
+    0.2
+   ],
+   "reach": 110,
+   "count": 3,
+   "streak": 14,
+   "period": 3.5,
+   "snap": 30,
+   "thick": 3.5
+  },
+  {
+   "id": "archers_torch",
+   "layers": [
+    "tbcsdw_1",
+    "tbcsdw_1_2"
+   ],
+   "kind": "glow",
+   "px": [
+    732,
+    315
+   ],
+   "size": 12,
+   "flicker": "fire",
+   "intensity": 0.4,
+   "snap": 24
+  },
+  {
+   "id": "barracks_drill",
+   "layers": [
+    "tbcsdw_3",
+    "tbcsdw_3_2"
+   ],
+   "kind": "sword_clash",
+   "px": [
+    478,
+    285
+   ],
+   "period": 2.6,
+   "sparks": 4,
+   "spark": 5.5,
+   "spread": 8,
+   "snap": 24
+  },
+  {
+   "id": "monastery_candles",
+   "layers": [
+    "tbcsdw_4",
+    "tbcsdw_4_2"
+   ],
+   "kind": "candles",
+   "px": [
+    1130,
+    435
+   ],
+   "w": 90,
+   "h": 6,
+   "count": 6,
+   "flame": 7,
+   "snap": 24,
+   "intensity": 0.45
+  },
+  {
+   "id": "monastery_incense",
+   "layers": [
+    "tbcsdw_4",
+    "tbcsdw_4_2"
+   ],
+   "kind": "incense",
+   "px": [
+    1150,
+    392
+   ],
+   "width": 4,
+   "rise": 55,
+   "count": 6,
+   "life": 6,
+   "snap": 30
+  },
+  {
+   "id": "lists_joust",
+   "layers": [
+    "tbcsdw_5",
+    "tbcsdw_5_2"
+   ],
+   "kind": "joust_dust",
+   "px": [
+    575,
+    468
+   ],
+   "dir": [
+    1,
+    -0.06
+   ],
+   "reach": 200,
+   "puffs": 10,
+   "puff": 50,
+   "alpha": 0.8,
+   "period": 6,
+   "snap": 40
+  },
+  {
+   "id": "market_pigeons",
+   "layers": [
+    "tbcmark"
+   ],
+   "kind": "pigeons",
+   "px": [
+    1000,
+    560
+   ],
+   "dir": [
+    1,
+    -0.8
+   ],
+   "reach": 80,
+   "count": 6,
+   "span": 10,
+   "period": 6,
+   "snap": 40
+  },
+  {
+   "id": "market_cookfire",
+   "layers": [
+    "tbcmark"
+   ],
+   "kind": "smoke",
+   "px": [
+    1010,
+    575
+   ],
+   "width": 7,
+   "rise": 45,
+   "period": 2.8,
+   "colour": [
+    0.62,
+    0.62,
+    0.66
+   ],
+   "density": 1.0,
+   "snap": 30
+  },
+  {
+   "id": "market_lantern",
+   "layers": [
+    "tbcmark"
+   ],
+   "kind": "glow",
+   "px": [
+    880,
+    600
+   ],
+   "size": 12,
+   "flicker": "candle",
+   "intensity": 0.35,
+   "snap": 30
+  },
+  {
+   "id": "silo_gleam",
+   "layers": [
+    "tbcssilo"
+   ],
+   "kind": "gleam",
+   "px": [
+    915,
+    440
+   ],
+   "dir": [
+    1,
+    0.25
+   ],
+   "reach": 26,
+   "star": 10,
+   "period": 6.5,
+   "colour": [
+    1.0,
+    0.88,
+    0.5
+   ],
+   "snap": 24
+  },
+  {
+   "id": "lake_shimmer",
+   "layers": [
+    "tbcsdock"
+   ],
+   "kind": "lake_shimmer",
+   "px": [
+    960,
+    385
+   ],
+   "w": 150,
+   "h": 30,
+   "rate": 6,
+   "fleck": 10,
+   "drift": 3,
+   "snap": 30
+  },
+  {
+   "id": "dock_lantern",
+   "layers": [
+    "tbcsdock"
+   ],
+   "kind": "glow",
+   "px": [
+    1050,
+    400
+   ],
+   "size": 10,
+   "flicker": "candle",
+   "intensity": 0.35,
+   "snap": 30
+  },
+  {
+   "id": "falls_spray",
+   "layers": [
+    "environment"
+   ],
+   "kind": "falls_spray",
+   "px": [
+    108,
+    274
+   ],
+   "w": 26,
+   "rise": 28,
+   "puff": 28,
+   "alpha": 0.45,
+   "drops": 6,
+   "snap": 30
+  },
+  {
+   "id": "village_smoke_a",
+   "layers": [
+    "environment"
+   ],
+   "kind": "smoke",
+   "px": [
+    1260,
+    470
+   ],
+   "width": 6,
+   "rise": 60,
+   "period": 3.7,
+   "colour": [
+    0.6,
+    0.58,
+    0.56
+   ],
+   "snap": 30
+  },
+  {
+   "id": "village_smoke_b",
+   "layers": [
+    "environment"
+   ],
+   "kind": "smoke",
+   "px": [
+    1360,
+    505
+   ],
+   "width": 5,
+   "rise": 50,
+   "period": 4.3,
+   "colour": [
+    0.68,
+    0.66,
+    0.63
+   ],
+   "density": 0.8,
+   "snap": 30
+  },
+  {
+   "id": "valley_mist",
+   "layers": [
+    "environment"
+   ],
+   "kind": "mist",
+   "px": [
+    1650,
+    330
+   ],
+   "w": 400,
+   "h": 30,
+   "drift": 3,
+   "alpha": 0.25,
+   "count": 6,
+   "snap": 40
+  },
+  {
+   "id": "meadow_swallows",
+   "layers": [
+    "environment"
+   ],
+   "kind": "swallows",
+   "px": [
+    950,
+    715
+   ],
+   "w": 700,
+   "h": 30,
+   "count": 4,
+   "span": 9,
+   "speed": 80,
+   "snap": 40
+  },
+  {
+   "id": "meadow_butterflies_l",
+   "layers": [
+    "environment"
+   ],
+   "kind": "butterflies",
+   "px": [
+    480,
+    820
+   ],
+   "w": 400,
+   "h": 60,
+   "count": 5,
+   "span": 9,
+   "snap": 40
+  },
+  {
+   "id": "meadow_butterflies_r",
+   "layers": [
+    "environment"
+   ],
+   "kind": "butterflies",
+   "px": [
+    1450,
+    790
+   ],
+   "w": 400,
+   "h": 60,
+   "count": 5,
+   "span": 9,
+   "colour2": [
+    0.95,
+    0.75,
+    0.9
+   ],
+   "snap": 40
+  }
+ ]
+}

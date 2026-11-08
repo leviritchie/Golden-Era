@@ -1,0 +1,64 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_pegasus",
+ "status": "look",
+ "notes": "rampart rollout",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": [],
+  "defSegmenter": {
+   "module": "tools/homm3_unit_look/units/masks/pegasus_segment.py",
+   "function": "segment_pegasus"
+  },
+  "regions": [
+   {
+    "name": "coat",
+    "mask": {
+     "maskPath": "tools/homm3_unit_look/units/masks/h3_pegasus/coat_pale.png"
+    },
+    "target": "defPalette",
+    "defRegion": "pale",
+    "knobs": {
+     "skyCompensation": true
+    },
+    "notes": "2026-10-09 lane B (coordinator: fix the whole unit): the unit-level v7c grade (gamma pinned at its 0.5 bound) crushed the AO-occluded texels to black - 45% of the wing and 54% of the horse texel area under L 0.25 in the look basecolor, against 0% / 4% in the raw Meshy albedo - so the wings rendered dark grey with black blotches and the coat mottled. The raw albedo's pale texels (pegasus_segment.build_coat_mask; covers all wing area and 89% of the horse; the rider is weighted to the horse's Spine1, so no bone mask) take the DEF white coat+feather palette by rank (gold dragon pattern). The coat mask excludes the wing-bone texels (see the wing region). The rider and hooves stay on the unit-level grade, fitted only on the DEF rider/hoof pixels. 2026-10-09: the coat mask also excludes the rider region's warm texels (pegasus_segment.rider_texels), so the masks stay disjoint."
+   },
+   {
+    "name": "wing",
+    "mask": {
+     "bones": [
+      "WingL_*",
+      "WingR_*",
+      "LeftWing",
+      "RightWing"
+     ]
+    },
+    "target": "defPalette",
+    "defRegion": "wing",
+    "knobs": {
+     "skyCompensation": true
+    },
+    "notes": "2026-10-09 lane B: the feathers take the same DEF white coat+feather palette, ranked on their own. Ranked together with the coat (1st look rerun) the slightly darker raw feathers took the palette's shaded half and read brown-grey (offline estimate wing L p50 0.48 joint vs 0.67 alone, coat 0.67). The coat mask has the wing-bone texels cut out, so the two regions do not overlap (overlap splits each texel's weight under the 0.8 fit threshold). 2026-10-09 (coordinator: nudge the wing to at least the coat's level, the DEF wing is the brightest white with a cool lavender cast, no blowout): defRegion 'wing' = the DEF pale pixels in the top 60% by value, the cooler half of those by (r-b)/v (DEF L p50 ~0.80 vs all-pale 0.69, rgb ~0.85/0.80/0.77). The feathers rank onto that subset of the DEF's own palette, so they sit above the coat and never past the DEF's brightest white."
+   },
+   {
+    "name": "rider",
+    "mask": {
+     "maskPath": "tools/homm3_unit_look/units/masks/h3_pegasus/rider_warm.png"
+    },
+    "target": "defPalette",
+    "defRegion": "rider",
+    "knobs": {
+     "skyCompensation": true
+    },
+    "notes": "2026-10-09 lane B (coordinator: Rider* ranked on a DEF rider segment, peach tan with dark leather): the rider's skin, leather and hair texels (warm raw albedo, r-b >= 0.08 and chroma >= 0.10, minus wing-bone texels; pegasus_segment.build_rider_mask - a bone mask misses the rider legs, which are weighted to the horse's Spine1) take the DEF rider's colours by rank: DEF 'rider' = the warm, saturated non-pale pixels (r-b >= 0.08, r >= g, sat > 0.2, value > 0.08, pieces >= 20 px)."
+   }
+  ]
+ },
+ "lights": [],
+ "vfx": {
+  "layers": []
+ }
+}

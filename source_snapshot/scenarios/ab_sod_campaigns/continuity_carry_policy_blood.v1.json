@@ -1,0 +1,224 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "Dragon's Blood continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub blood; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_10_ab_dungeon_blood",
+    "campaignTitle": "Dragon's Blood",
+    "campaignEntry": "blood.h3c",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "missionConfigPrefix": "homm3_ab_dungeon",
+    "defaultSpawn": {
+      "factionSid": "homm3_dungeon",
+      "heroSid": "homm3_dungeon_hero_17"
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart).",
+    "regionPixels": {
+      "culling_the_weak": [
+        80.0,
+        220.0
+      ],
+      "savaging_the_scavengers": [
+        320.0,
+        220.0
+      ],
+      "blood_of_the_dragon_father": [
+        560.0,
+        220.0
+      ],
+      "blood_thirsty": [
+        800.0,
+        220.0
+      ]
+    },
+    "missionSpawns": {
+      "culling_the_weak": {
+        "heroSid": "homm3_dungeon_hero_17",
+        "factionSid": "homm3_dungeon"
+      },
+      "savaging_the_scavengers": {
+        "heroSid": "homm3_dungeon_hero_17",
+        "factionSid": "homm3_dungeon"
+      },
+      "blood_of_the_dragon_father": {
+        "heroSid": "homm3_dungeon_hero_17",
+        "factionSid": "homm3_dungeon"
+      },
+      "blood_thirsty": {
+        "heroSid": "homm3_dungeon_hero_17",
+        "factionSid": "homm3_dungeon"
+      }
+    }
+  },
+  "storyHubMapSidOverrides": {
+    "culling_the_weak": "h3_dungeon_culling_the_weak_raw_translation",
+    "savaging_the_scavengers": "h3_dungeon_savaging_the_scavengers_raw_translation",
+    "blood_of_the_dragon_father": "h3_dungeon_blood_of_the_dragon_father_raw_translation",
+    "blood_thirsty": "h3_dungeon_blood_thirsty_raw_translation",
+    "choiceReason": "Dragon's Blood missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "culling_the_weak",
+      "toMissionId": "savaging_the_scavengers",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 10,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=10 for culling_the_weak (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_dungeon_culling_the_weak_raw_translation",
+        "to": "h3_dungeon_savaging_the_scavengers_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "savaging_the_scavengers",
+      "toMissionId": "blood_of_the_dragon_father",
+      "sourceBlockIndex": 2,
+      "nextBlockIndex": 3,
+      "levelCap": 18,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=18 for savaging_the_scavengers (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_dungeon_savaging_the_scavengers_raw_translation",
+        "to": "h3_dungeon_blood_of_the_dragon_father_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "blood_of_the_dragon_father",
+      "toMissionId": "blood_thirsty",
+      "sourceBlockIndex": 3,
+      "nextBlockIndex": 4,
+      "levelCap": 0,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=0 for blood_of_the_dragon_father (unlimited); no scenario hero level restriction.",
+      "mapSids": {
+        "from": "h3_dungeon_blood_of_the_dragon_father_raw_translation",
+        "to": "h3_dungeon_blood_thirsty_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "culling_the_weak",
+    "savaging_the_scavengers",
+    "blood_of_the_dragon_father",
+    "blood_thirsty"
+  ],
+  "missionTitles": {
+    "culling_the_weak": "Culling the Weak",
+    "savaging_the_scavengers": "Savaging the Scavengers",
+    "blood_of_the_dragon_father": "Blood of the Dragon Father",
+    "blood_thirsty": "Blood Thirsty"
+  },
+  "missionDescriptions": {
+    "culling_the_weak": "Crush your enemies, but be careful not lose Mutare. Mutare will be limited to level ten, but will transfer to the next scenario. Gain the Charm of Mana from the Seer's H...",
+    "savaging_the_scavengers": "Obliterate your opponents, but once again do not lose the hero Mutare. To do so would mean instant destruction. Mutare will be limited to eighteenth level, but will carr...",
+    "blood_of_the_dragon_father": "Find the Vial of Dragon Blood before Ordwald or lose the race. Also, losing the hero Mutare means instant destruction. Mutare and two of her best heroes will be transfer...",
+    "blood_thirsty": "Once again you must crush your enemies before they crush you. If Mutare dies then all is lost. With your two best aides this will still be a difficult battle."
+  },
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Dedicated AB/SoD MapImage bake",
+    "Town growth / negative resource timed-event fidelity"
+  ],
+  "videoContract": {
+    "status": "mission_clips_wired_hub_still_only",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": null,
+    "hubFirstShowOmitReason": "RoE parity: hub hover strip is selection-still only; mission pins PlayVideo when composed MP4 meets contract.",
+    "requireComposedAudio": true,
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "requiredMp4RelativeToStreamingAssets": null,
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_10_ab_dungeon_blood/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "stillArtifact": "artifacts/campaign_port_poc/ab_sod_campaigns/storyhub_visual/blood_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.5,
+      "focusY": 0.45,
+      "cropReason": "Twin dragons coiled around the glowing blood vial",
+      "cropsCatalog": "scenarios/ab_sod_campaigns/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "culling_the_weak": "H3ABdb1",
+      "savaging_the_scavengers": "H3ABdb2",
+      "blood_of_the_dragon_father": "H3ABdb3",
+      "blood_thirsty": "H3ABdb4"
+    },
+    "actionOrder": "PlayVideo (when composed MP4 ready) then OpenMissionsPrologue on each mission pin; hub firstShowActions stay empty",
+    "failClosed": "blood hub firstShowActions must stay empty (hubFirstShowPlayVideo=false). Mission PlayVideo requires StreamingAssets/video/{{clip}}.mp4 + softsub sidecar meeting compose contract; otherwise omit PlayVideo and keep prologue."
+  }
+}

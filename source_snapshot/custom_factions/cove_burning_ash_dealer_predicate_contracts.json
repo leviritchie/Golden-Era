@@ -1,0 +1,49 @@
+{
+    "schemaVersion":  1,
+    "purpose":  "Source-authored contracts for Cove Burning Ash dealer predicates. This is static traceability only and does not authorize gameplay mutation.",
+    "validationState":  "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+    "policy":  {
+                   "contractsMustMatchExactPredicateProfiles":  true,
+                   "coveOnly":  true,
+                   "trainingDamageFamilyOnly":  true,
+                   "gunpowderUsesAuthoredUnitFactsOnly":  true,
+                   "cannonOrPirateDealerRequiresLiveDealerBridge":  false,
+                   "nameOrSidInferenceForbidden":  true,
+                   "runtimeProofStillRequiredForGameplay":  true,
+                   "customAshStateAvoidsNativeBuffMutation":  true
+               },
+    "allowedFactions":  [
+                            "homm3_cove"
+                        ],
+    "allowedFamily":  "TrainingDamage",
+    "contracts":  {
+                      "RequiresGunpowderDealer":  {
+                                                      "requiredEffectKeys":  [
+                                                                                 "cove.gunpowder-defense-debuff"
+                                                                             ],
+                                                      "requiredStaticFacts":  [
+                                                                                  "unit_family_tags.gunpowder=yes"
+                                                                              ],
+                                                      "companionPredicates":  [
+
+                                                                              ],
+                                                      "forbiddenSubstitutes":  [
+                                                                                   "unit SID or display name containing gunpowder counted as gunpowder dealer",
+                                                                                   "Cove faction membership counted as gunpowder dealer",
+                                                                                   "shooter role counted as gunpowder dealer",
+                                                                                   "law name or icon counted as gunpowder dealer",
+                                                                                   "damage event counted without attacker unit SID classifier proof"
+                                                                               ],
+                                                      "notes":  "Burning Ash uses exact authored gunpowder=yes unit facts and custom battle-local ash stacks. It intentionally avoids native defense debuff/buff mutation and does not require Cannon/Pirate-only identity until such a classifier exists."
+                                                  }
+                  },
+    "requiredRuntimeProof":  [
+                                 "attacker battle unit SID proof",
+                                 "attacker unit SID to authored gunpowder classifier proof",
+                                 "committed positive damage event proof",
+                                 "target stack identity proof",
+                                 "custom battle-local ash state proof",
+                                 "law-owner side correlation proof",
+                                 "idempotent per-hit application proof"
+                             ]
+}

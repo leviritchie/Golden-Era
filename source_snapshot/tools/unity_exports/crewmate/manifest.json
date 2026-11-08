@@ -1,0 +1,358 @@
+{
+  "formatVersion": 1,
+  "creatureId": "crewmate",
+  "displayName": {
+    "singular": "Crew Mate",
+    "plural": "Crew Mates"
+  },
+  "source": {
+    "vcmiConfig": "V:\\Games\\Olden Era Playtest Tweak\\vcmi\\Mods\\hota\\mods\\cove\\Content\\config\\hota\\cove\\creatures\\crewmate.json",
+    "battleAnimation": "hota/cove/creatures/battle/CSEADOG.def",
+    "adventureAnimation": "hota/cove/creatures/adventureMap/AVWSEADG.def",
+    "iconLarge": "hota/cove/creatures/iconsLarge/crewmate.png",
+    "iconSmall": "hota/cove/creatures/iconsSmall/crewmate.png",
+    "sound": {
+      "attack": "hota/cove/creatures/crewmate/SAYLATTK.wav",
+      "defend": "hota/cove/creatures/crewmate/SAYLDFND.wav",
+      "killed": "hota/cove/creatures/crewmate/SAYLKILL.wav",
+      "move": "hota/cove/creatures/crewmate/SAYLMOVE.wav",
+      "wince": "hota/cove/creatures/crewmate/SAYLWNCE.wav"
+    },
+    "timingHints": {
+      "attack": 1,
+      "idle": 10,
+      "walk": 0.87
+    },
+    "timeBetweenFidgets": 1
+  },
+  "stats": {
+    "level": 2,
+    "attack": 7,
+    "defense": 4,
+    "hitPoints": 15,
+    "speed": 5,
+    "damage": {
+      "min": 2,
+      "max": 4
+    },
+    "growth": 9,
+    "cost": {
+      "gold": 110
+    }
+  },
+  "canvas": {
+    "width": 450,
+    "height": 400
+  },
+  "unityHints": {
+    "renderMode": "camera_facing_billboard",
+    "defaultPrototypeAttack": "attack_front",
+    "pivot": "bottom_center",
+    "pixelsPerUnit": 100,
+    "filterMode": "point",
+    "materialHint": "Prototype: unlit transparent is fine. For Olden Era battle bundles (e.g. esquire swap), use MeshRenderer+quad with Hex/Lit or Sprites/Default — not SpriteRenderer; see custom_prefab_pipeline/ESQUIRE_STOCK_VISUAL_CONTRACT.md."
+  },
+  "prototypeClipMap": {
+    "idle": "idle",
+    "moveStart": "movement_start",
+    "moveLoop": "movement",
+    "moveEnd": "movement_end",
+    "hit": "hitted",
+    "defendHit": "defence",
+    "death": "death",
+    "attack": "attack_front"
+  },
+  "directionalVariants": {
+    "attack": [
+      "attack_up",
+      "attack_front",
+      "attack_down"
+    ]
+  },
+  "clips": [
+    {
+      "name": "movement",
+      "sourceGroup": 0,
+      "frameCount": 8,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": true,
+      "recommendedFps": 12,
+      "files": [
+        "clips\\movement\\000.png",
+        "clips\\movement\\001.png",
+        "clips\\movement\\002.png",
+        "clips\\movement\\003.png",
+        "clips\\movement\\004.png",
+        "clips\\movement\\005.png",
+        "clips\\movement\\006.png",
+        "clips\\movement\\007.png"
+      ]
+    },
+    {
+      "name": "mouse_over",
+      "sourceGroup": 1,
+      "frameCount": 9,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": true,
+      "recommendedFps": 8,
+      "files": [
+        "clips\\mouse_over\\000.png",
+        "clips\\mouse_over\\001.png",
+        "clips\\mouse_over\\002.png",
+        "clips\\mouse_over\\003.png",
+        "clips\\mouse_over\\004.png",
+        "clips\\mouse_over\\005.png",
+        "clips\\mouse_over\\006.png",
+        "clips\\mouse_over\\007.png",
+        "clips\\mouse_over\\008.png"
+      ]
+    },
+    {
+      "name": "idle",
+      "sourceGroup": 2,
+      "frameCount": 10,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": true,
+      "recommendedFps": 8,
+      "files": [
+        "clips\\idle\\000.png",
+        "clips\\idle\\001.png",
+        "clips\\idle\\002.png",
+        "clips\\idle\\003.png",
+        "clips\\idle\\004.png",
+        "clips\\idle\\005.png",
+        "clips\\idle\\006.png",
+        "clips\\idle\\007.png",
+        "clips\\idle\\008.png",
+        "clips\\idle\\009.png"
+      ]
+    },
+    {
+      "name": "hitted",
+      "sourceGroup": 3,
+      "frameCount": 7,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": false,
+      "recommendedFps": 12,
+      "files": [
+        "clips\\hitted\\000.png",
+        "clips\\hitted\\001.png",
+        "clips\\hitted\\002.png",
+        "clips\\hitted\\003.png",
+        "clips\\hitted\\004.png",
+        "clips\\hitted\\005.png",
+        "clips\\hitted\\006.png"
+      ]
+    },
+    {
+      "name": "defence",
+      "sourceGroup": 4,
+      "frameCount": 10,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": false,
+      "recommendedFps": 10,
+      "files": [
+        "clips\\defence\\000.png",
+        "clips\\defence\\001.png",
+        "clips\\defence\\002.png",
+        "clips\\defence\\003.png",
+        "clips\\defence\\004.png",
+        "clips\\defence\\005.png",
+        "clips\\defence\\006.png",
+        "clips\\defence\\007.png",
+        "clips\\defence\\008.png",
+        "clips\\defence\\009.png"
+      ]
+    },
+    {
+      "name": "death",
+      "sourceGroup": 5,
+      "frameCount": 6,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": false,
+      "recommendedFps": 10,
+      "files": [
+        "clips\\death\\000.png",
+        "clips\\death\\001.png",
+        "clips\\death\\002.png",
+        "clips\\death\\003.png",
+        "clips\\death\\004.png",
+        "clips\\death\\005.png"
+      ]
+    },
+    {
+      "name": "turn_left",
+      "sourceGroup": 7,
+      "frameCount": 2,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": false,
+      "recommendedFps": 10,
+      "files": [
+        "clips\\turn_left\\000.png",
+        "clips\\turn_left\\001.png"
+      ]
+    },
+    {
+      "name": "turn_right",
+      "sourceGroup": 8,
+      "frameCount": 2,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": false,
+      "recommendedFps": 10,
+      "files": [
+        "clips\\turn_right\\000.png",
+        "clips\\turn_right\\001.png"
+      ]
+    },
+    {
+      "name": "unused_h3_9",
+      "sourceGroup": 9,
+      "frameCount": 2,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": false,
+      "recommendedFps": 10,
+      "files": [
+        "clips\\unused_h3_9\\000.png",
+        "clips\\unused_h3_9\\001.png"
+      ]
+    },
+    {
+      "name": "unused_h3_10",
+      "sourceGroup": 10,
+      "frameCount": 2,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": false,
+      "recommendedFps": 10,
+      "files": [
+        "clips\\unused_h3_10\\000.png",
+        "clips\\unused_h3_10\\001.png"
+      ]
+    },
+    {
+      "name": "attack_up",
+      "sourceGroup": 11,
+      "frameCount": 7,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": false,
+      "recommendedFps": 12,
+      "files": [
+        "clips\\attack_up\\000.png",
+        "clips\\attack_up\\001.png",
+        "clips\\attack_up\\002.png",
+        "clips\\attack_up\\003.png",
+        "clips\\attack_up\\004.png",
+        "clips\\attack_up\\005.png",
+        "clips\\attack_up\\006.png"
+      ]
+    },
+    {
+      "name": "attack_front",
+      "sourceGroup": 12,
+      "frameCount": 7,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": false,
+      "recommendedFps": 12,
+      "files": [
+        "clips\\attack_front\\000.png",
+        "clips\\attack_front\\001.png",
+        "clips\\attack_front\\002.png",
+        "clips\\attack_front\\003.png",
+        "clips\\attack_front\\004.png",
+        "clips\\attack_front\\005.png",
+        "clips\\attack_front\\006.png"
+      ]
+    },
+    {
+      "name": "attack_down",
+      "sourceGroup": 13,
+      "frameCount": 7,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": false,
+      "recommendedFps": 12,
+      "files": [
+        "clips\\attack_down\\000.png",
+        "clips\\attack_down\\001.png",
+        "clips\\attack_down\\002.png",
+        "clips\\attack_down\\003.png",
+        "clips\\attack_down\\004.png",
+        "clips\\attack_down\\005.png",
+        "clips\\attack_down\\006.png"
+      ]
+    },
+    {
+      "name": "movement_start",
+      "sourceGroup": 20,
+      "frameCount": 2,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": false,
+      "recommendedFps": 12,
+      "files": [
+        "clips\\movement_start\\000.png",
+        "clips\\movement_start\\001.png"
+      ]
+    },
+    {
+      "name": "movement_end",
+      "sourceGroup": 21,
+      "frameCount": 2,
+      "frameSize": {
+        "width": 450,
+        "height": 400
+      },
+      "loop": false,
+      "recommendedFps": 12,
+      "files": [
+        "clips\\movement_end\\000.png",
+        "clips\\movement_end\\001.png"
+      ]
+    }
+  ],
+  "notes": [
+    "Use attack_front as the default melee attack for a single-facing prototype.",
+    "Keep the original full frame canvas to preserve footing and avoid animation jitter.",
+    "Movement, mouse_over, and idle are safe loop candidates; most other clips should play once.",
+    "VCMI timing hints are included, but melee attack timing still needs tuning inside Unity."
+  ]
+}

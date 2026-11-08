@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "status": "source-authored-role-contracts",
+  "purpose": "Auditable static source for custom unit shooter/melee role facts used by no-compromise faction laws.",
+  "validationState": "Static/source-authored only. These contracts are joined to exact ability_overrides sourceMechanicId and branchRole fields; they are not runtime proof that battle Unit payloads expose the same role.",
+  "rules": [
+    "Every contract key must match an exact sourceMechanicId in custom_factions/ability_overrides/homm3_*.json.",
+    "Line-level contracts apply to all units with that exact sourceMechanicId unless a branchRoles override for the exact branchRole is present.",
+    "Use unknown when the current source contract does not explicitly settle shooter or melee behavior.",
+    "Do not infer roles from donor unit identity, SID substring, icon, prefab, animation folder, or faction-wide assumptions.",
+    "No role fact may feed promoted gameplay until generated Core rows and in-context runtime diagnostics prove the same custom unit identity reaches the consuming hook."
+  ],
+  "lineContracts": {
+    "castle.archer_line": {
+      "shooter": "yes",
+      "melee": "no",
+      "evidence": "Castle source mechanic explicitly owns the Archer/Marksman/Crossbowman line."
+    },
+    "castle.monk_line": {
+      "shooter": "yes",
+      "melee": "no",
+      "evidence": "Castle source mechanic explicitly owns the Monk/Zealot/Priest ranged caster line."
+    },
+    "cove.pirate_line": {
+      "shooter": "yes",
+      "melee": "no",
+      "evidence": "Cove source mechanic explicitly owns the Pirate/Corsair gunpowder line."
+    },
+    "cove.gunpowder_warehouse_sea_dog": {
+      "shooter": "yes",
+      "melee": "no",
+      "evidence": "Cove source mechanic explicitly isolates Sea Dog as the Gunpowder Warehouse alternate."
+    },
+    "cove.sea_witch_line": {
+      "shooter": "yes",
+      "melee": "no",
+      "evidence": "Cove source mechanic explicitly owns the Sea Witch/Sorceress/Tidecaller ranged caster line."
+    },
+    "dungeon.beholder_line": {
+      "shooter": "yes",
+      "melee": "no",
+      "evidence": "Dungeon source mechanic explicitly owns the Beholder/Evil Eye/Fargazer line."
+    },
+    "dungeon.medusa_line": {
+      "shooter": "yes",
+      "melee": "no",
+      "evidence": "Dungeon source mechanic explicitly owns the Medusa/Medusa Queen/Medusa Warrior line."
+    },
+    "fortress.lizardman_line": {
+      "shooter": "yes",
+      "melee": "no",
+      "evidence": "Fortress source mechanic explicitly owns the Lizardman/Lizard Warrior/Lizard Assassin line."
+    },
+    "inferno.gog_line": {
+      "shooter": "yes",
+      "melee": "no",
+      "evidence": "Inferno source mechanic explicitly owns the Gog/Magog/Amalek line."
+    },
+    "necropolis.lich_line": {
+      "shooter": "yes",
+      "melee": "no",
+      "evidence": "Necropolis source mechanic explicitly owns the Lich/Power Lich/Lich Master line."
+    },
+    "necropolis.skeleton_line": {
+      "shooter": "no",
+      "melee": "yes",
+      "evidence": "Necropolis source mechanic owns the Skeleton line; only the alternate branch is authored as Skeleton Archer.",
+      "branchRoles": {
+        "alternate-upgrade": {
+          "shooter": "yes",
+          "melee": "no",
+          "evidence": "Alternate branch display contract is Skeleton Archer."
+        }
+      }
+    },
+    "rampart.wood_elf_line": {
+      "shooter": "yes",
+      "melee": "no",
+      "evidence": "Rampart source mechanic explicitly owns the Wood Elf/Grand Elf/Elf Wardancer line."
+    },
+    "stronghold.orc_line": {
+      "shooter": "yes",
+      "melee": "no",
+      "evidence": "Stronghold source mechanic explicitly owns the Orc/Orc Chieftain/Orc Berserker line."
+    },
+    "stronghold.cyclops_line": {
+      "shooter": "yes",
+      "melee": "no",
+      "evidence": "Stronghold source mechanic explicitly owns the Cyclops/Cyclops King/Blood-Eyed Cyclops line."
+    },
+    "tower.mage_line": {
+      "shooter": "yes",
+      "melee": "no",
+      "evidence": "Tower source mechanic explicitly owns the Mage/Arch Mage/Battle Mage line."
+    },
+    "tower.giant_titan_shooter_split": {
+      "shooter": "no",
+      "melee": "yes",
+      "evidence": "Tower source mechanic explicitly distinguishes the Titan shooter split by branchRole.",
+      "branchRoles": {
+        "standard-shooter": {
+          "shooter": "yes",
+          "melee": "no",
+          "evidence": "Exact branchRole standard-shooter."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,317 @@
+#!/usr/bin/env python3
+"""Eye-authored lizardman g03_hitted + g05_death landmarks (NN sprites)."""
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+from crusader_author_common import write_authored_clip
+
+ROOT = Path(r"V:/Games/Olden Era Playtest Tweak")
+ART = ROOT / "artifacts/lizardman_pose_pipeline"
+
+# 1090x1250 NN sprites. R*=char right (screen-left/near); L*=bow arm (screen-right).
+# Bow tip preferred for WeaponTip unless arrow tip reads clearer (f05 recover).
+
+G03_FRAMES_XY: list[dict[str, tuple[int, int]]] = [
+    {  # f00 first hit; R arm up; bow in L hand forward
+        "Nose": (795, 430),
+        "Neck": (710, 460),
+        "RShoulder": (600, 490),
+        "RElbow": (555, 560),
+        "RWrist": (600, 400),
+        "WeaponTip": (845, 380),
+        "LShoulder": (695, 475),
+        "LElbow": (765, 505),
+        "LWrist": (810, 525),
+        "MidHip": (567, 620),
+        "RHip": (610, 700),
+        "RKnee": (570, 830),
+        "RAnkle": (540, 1080),
+        "LHip": (710, 710),
+        "LKnee": (750, 870),
+        "LAnkle": (790, 1080),
+    },
+    {  # f01 deep recoil back-left; bow high; L leg kick
+        "Nose": (520, 340),
+        "Neck": (580, 380),
+        "RShoulder": (500, 420),
+        "RElbow": (440, 480),
+        "RWrist": (400, 430),
+        "WeaponTip": (850, 310),
+        "LShoulder": (660, 390),
+        "LElbow": (730, 350),
+        "LWrist": (770, 330),
+        "MidHip": (556, 620),
+        "RHip": (520, 660),
+        "RKnee": (500, 800),
+        "RAnkle": (480, 1080),
+        "LHip": (620, 640),
+        "LKnee": (720, 630),
+        "LAnkle": (820, 720),
+    },
+    {  # f02 peak recoil; head up; R arm back; bow tip upper-right
+        "Nose": (720, 310),
+        "Neck": (670, 360),
+        "RShoulder": (530, 400),
+        "RElbow": (480, 500),
+        "RWrist": (450, 590),
+        "WeaponTip": (860, 295),
+        "LShoulder": (680, 380),
+        "LElbow": (750, 420),
+        "LWrist": (790, 440),
+        "MidHip": (551, 630),
+        "RHip": (510, 660),
+        "RKnee": (480, 800),
+        "RAnkle": (460, 1080),
+        "LHip": (620, 650),
+        "LKnee": (680, 700),
+        "LAnkle": (740, 820),
+    },
+    {  # f03 stagger; R leg lifted; quiver/arrow tips screen-left
+        "Nose": (755, 430),
+        "Neck": (700, 470),
+        "RShoulder": (600, 500),
+        "RElbow": (580, 580),
+        "RWrist": (600, 640),
+        "WeaponTip": (320, 480),
+        "LShoulder": (680, 490),
+        "LElbow": (640, 520),
+        "LWrist": (590, 540),
+        "MidHip": (594, 630),
+        "RHip": (550, 680),
+        "RKnee": (420, 630),
+        "RAnkle": (350, 560),
+        "LHip": (700, 700),
+        "LKnee": (730, 850),
+        "LAnkle": (760, 1080),
+    },
+    {  # f04 slump; head down; quiver fletching left
+        "Nose": (775, 540),
+        "Neck": (700, 510),
+        "RShoulder": (590, 530),
+        "RElbow": (560, 610),
+        "RWrist": (580, 670),
+        "WeaponTip": (340, 540),
+        "LShoulder": (680, 520),
+        "LElbow": (630, 560),
+        "LWrist": (590, 590),
+        "MidHip": (596, 625),
+        "RHip": (560, 700),
+        "RKnee": (540, 850),
+        "RAnkle": (520, 1090),
+        "LHip": (690, 710),
+        "LKnee": (710, 880),
+        "LAnkle": (740, 1090),
+    },
+    {  # f05 recover; bow forward; arrow tip visible
+        "Nose": (770, 500),
+        "Neck": (700, 460),
+        "RShoulder": (600, 485),
+        "RElbow": (630, 555),
+        "RWrist": (660, 530),
+        "WeaponTip": (850, 480),
+        "LShoulder": (695, 475),
+        "LElbow": (750, 505),
+        "LWrist": (780, 525),
+        "MidHip": (614, 655),
+        "RHip": (580, 700),
+        "RKnee": (560, 830),
+        "RAnkle": (545, 1085),
+        "LHip": (710, 715),
+        "LKnee": (740, 860),
+        "LAnkle": (770, 1085),
+    },
+]
+
+G05_FRAMES_XY: list[dict[str, tuple[int, int]]] = [
+    {  # f00 death onset; bow in L hand
+        "Nose": (795, 430),
+        "Neck": (710, 460),
+        "RShoulder": (600, 490),
+        "RElbow": (575, 410),
+        "RWrist": (615, 360),
+        "WeaponTip": (845, 690),
+        "LShoulder": (695, 475),
+        "LElbow": (765, 505),
+        "LWrist": (810, 525),
+        "MidHip": (567, 620),
+        "RHip": (610, 700),
+        "RKnee": (570, 830),
+        "RAnkle": (540, 1080),
+        "LHip": (710, 710),
+        "LKnee": (750, 870),
+        "LAnkle": (790, 1080),
+    },
+    {  # f01 falling back-left
+        "Nose": (520, 340),
+        "Neck": (580, 380),
+        "RShoulder": (500, 420),
+        "RElbow": (440, 480),
+        "RWrist": (400, 430),
+        "WeaponTip": (850, 310),
+        "LShoulder": (660, 390),
+        "LElbow": (730, 350),
+        "LWrist": (770, 330),
+        "MidHip": (556, 620),
+        "RHip": (520, 660),
+        "RKnee": (560, 800),
+        "RAnkle": (590, 1080),
+        "LHip": (620, 640),
+        "LKnee": (720, 630),
+        "LAnkle": (820, 720),
+    },
+    {  # f02 head back; bow high; L arm empty raised
+        "Nose": (720, 310),
+        "Neck": (670, 360),
+        "RShoulder": (680, 380),
+        "RElbow": (750, 420),
+        "RWrist": (790, 440),
+        "WeaponTip": (870, 310),
+        "LShoulder": (520, 400),
+        "LElbow": (450, 360),
+        "LWrist": (390, 330),
+        "MidHip": (541, 605),
+        "RHip": (600, 650),
+        "RKnee": (680, 720),
+        "RAnkle": (760, 900),
+        "LHip": (500, 650),
+        "LKnee": (450, 780),
+        "LAnkle": (400, 950),
+    },
+    {  # f03 sprawled; R leg kicked up; bow in L hand
+        "Nose": (600, 260),
+        "Neck": (640, 320),
+        "RShoulder": (510, 360),
+        "RElbow": (440, 400),
+        "RWrist": (380, 370),
+        "WeaponTip": (875, 330),
+        "LShoulder": (690, 350),
+        "LElbow": (760, 390),
+        "LWrist": (800, 420),
+        "MidHip": (563, 645),
+        "RHip": (560, 680),
+        "RKnee": (440, 580),
+        "RAnkle": (380, 510),
+        "LHip": (680, 670),
+        "LKnee": (750, 760),
+        "LAnkle": (820, 900),
+    },
+    {  # f04 falling forward; back to camera; bow behind head
+        "Nose": (560, 520),
+        "Neck": (590, 480),
+        "RShoulder": (650, 440),
+        "RElbow": (700, 400),
+        "RWrist": (740, 380),
+        "WeaponTip": (820, 320),
+        "LShoulder": (520, 440),
+        "LElbow": (470, 400),
+        "LWrist": (420, 380),
+        "MidHip": (566, 690),
+        "RHip": (610, 720),
+        "RKnee": (640, 820),
+        "RAnkle": (660, 960),
+        "LHip": (520, 720),
+        "LKnee": (490, 820),
+        "LAnkle": (460, 960),
+    },
+    {  # f05 rear collapse; bow vertical; arms up
+        "Nose": (560, 380),
+        "Neck": (590, 420),
+        "RShoulder": (660, 440),
+        "RElbow": (720, 390),
+        "RWrist": (760, 350),
+        "WeaponTip": (810, 290),
+        "LShoulder": (520, 440),
+        "LElbow": (460, 390),
+        "LWrist": (420, 350),
+        "MidHip": (601, 675),
+        "RHip": (640, 720),
+        "RKnee": (670, 840),
+        "RAnkle": (690, 980),
+        "LHip": (560, 720),
+        "LKnee": (530, 840),
+        "LAnkle": (500, 980),
+    },
+    {  # f06 bow knocked away above; lying back
+        "Nose": (560, 420),
+        "Neck": (590, 460),
+        "RShoulder": (640, 480),
+        "RElbow": (680, 520),
+        "RWrist": (710, 560),
+        "WeaponTip": (820, 340),
+        "LShoulder": (520, 480),
+        "LElbow": (480, 520),
+        "LWrist": (450, 560),
+        "MidHip": (573, 730),
+        "RHip": (610, 780),
+        "RKnee": (640, 880),
+        "RAnkle": (660, 1000),
+        "LHip": (540, 780),
+        "LKnee": (510, 880),
+        "LAnkle": (480, 1000),
+    },
+    {  # f07 corpse flat; sprite low in frame; bow ground right
+        "Nose": (620, 640),
+        "Neck": (575, 680),
+        "RShoulder": (650, 660),
+        "RElbow": (700, 720),
+        "RWrist": (730, 760),
+        "WeaponTip": (750, 680),
+        "LShoulder": (520, 660),
+        "LElbow": (470, 720),
+        "LWrist": (440, 760),
+        "MidHip": (578, 730),
+        "RHip": (610, 800),
+        "RKnee": (640, 900),
+        "RAnkle": (660, 1000),
+        "LHip": (540, 800),
+        "LKnee": (510, 900),
+        "LAnkle": (490, 1000),
+    },
+]
+
+
+def _patch_unit_sid(keypoints_path: Path) -> None:
+    doc = json.loads(keypoints_path.read_text(encoding="utf-8"))
+    doc["unitSid"] = "h3_lizardman"
+    keypoints_path.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
+
+
+def main() -> int:
+    clips = [
+        (
+            "g03_hitted",
+            ART / "source_frames/nn_upscale_g03",
+            ART / "out_fit/g03_hitted_authored",
+            G03_FRAMES_XY,
+            "hit recoil f01-f02 bow high; f03 R leg lift + quiver arrow tips; "
+            "f04 slump; f05 arrow-tip recover",
+        ),
+        (
+            "g05_death",
+            ART / "source_frames/nn_upscale_g05",
+            ART / "out_fit/g05_death_authored",
+            G05_FRAMES_XY,
+            "death fall f02 L arm empty; f04-f05 rear collapse; f06 detached bow; "
+            "f07 corpse low-frame belly-up",
+        ),
+    ]
+    results = []
+    for clip_id, frames_dir, out_dir, frames_xy, notes in clips:
+        result = write_authored_clip(
+            clip_id=clip_id,
+            frames_dir=frames_dir,
+            out_dir=out_dir,
+            frames_xy=frames_xy,
+            notes=notes,
+        )
+        _patch_unit_sid(Path(result["keypoints"]))
+        result["unitSid"] = "h3_lizardman"
+        results.append(result)
+    print(json.dumps(results, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

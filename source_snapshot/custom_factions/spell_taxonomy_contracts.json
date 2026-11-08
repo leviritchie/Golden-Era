@@ -1,0 +1,562 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored spell taxonomy seed for custom faction law predicates. This is classification only; it does not authorize spellbook, cooldown, cast-gate, status, or UI mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "noFallbacks": true,
+    "noSidSubstringInference": true,
+    "spellsMustHaveExactEvidence": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedTags": [
+    "anti_heal",
+    "area",
+    "blessing",
+    "cleanse",
+    "control",
+    "curse",
+    "damage",
+    "daylight",
+    "death",
+    "decay",
+    "defense",
+    "disable",
+    "fire",
+    "heal",
+    "initiative",
+    "movement",
+    "night",
+    "primal",
+    "protection",
+    "sea",
+    "slow",
+    "space",
+    "storm",
+    "summon",
+    "support",
+    "tide"
+  ],
+  "predicateGroups": {
+    "supportBlessingClassification": {
+      "status": "partial",
+      "coveredTags": [
+        "blessing",
+        "cleanse",
+        "daylight",
+        "defense",
+        "heal",
+        "initiative",
+        "protection",
+        "support"
+      ],
+      "missingTags": [
+        "morale"
+      ],
+      "notes": "Seeded from exact authored spellSid evidence plus exact vanilla spell reference sections; morale-specific support spell coverage remains missing."
+    },
+    "movementStormSeaClassification": {
+      "status": "mapped",
+      "coveredTags": [
+        "control",
+        "movement",
+        "sea",
+        "slow",
+        "storm",
+        "tide"
+      ],
+      "missingTags": [],
+      "notes": "Movement, storm, and sea/tide battle spell seeds are exact. Sea/tide means Doreath's Tide spell flavor/effect only, not ocean travel mechanics."
+    },
+    "nightCurseClassification": {
+      "status": "mapped",
+      "coveredTags": [
+        "anti_heal",
+        "control",
+        "curse",
+        "death",
+        "decay",
+        "disable",
+        "night",
+        "slow"
+      ],
+      "missingTags": [],
+      "notes": "Night curse/disable/decay seeds are exact from vanilla spell reference sections."
+    },
+    "poisonSlowMovementRestriction": {
+      "status": "partial",
+      "coveredTags": [
+        "control",
+        "disable",
+        "movement",
+        "slow"
+      ],
+      "missingTags": [
+        "poison"
+      ],
+      "notes": "Slow and movement restriction spell seeds exist; poison remains status/unit-effect evidence, not spell taxonomy evidence."
+    },
+    "fireGatingSummonClassification": {
+      "status": "partial",
+      "coveredTags": [
+        "fire",
+        "summon"
+      ],
+      "missingTags": [
+        "gating"
+      ],
+      "notes": "Fire and summon-like spell seeds exist; gating identity remains a separate unit/status surface."
+    }
+  },
+  "spells": {
+    "day_3_magic_haste": {
+      "school": "day",
+      "tags": [
+        "daylight",
+        "support",
+        "blessing",
+        "movement"
+      ],
+      "evidence": [
+        "custom_factions/ability_overrides/homm3_conflux.json: unitOverrides.h3_air_elemental_upg_alt.existingSpecials[0].effectPayload.spellSid"
+      ],
+      "notes": "Haste is treated as support/blessing/movement for seed taxonomy only."
+    },
+    "night_6_magic_deaths_grip": {
+      "school": "night",
+      "tags": [
+        "night",
+        "curse",
+        "death",
+        "damage"
+      ],
+      "evidence": [
+        "custom_factions/ability_overrides/homm3_necropolis.json: unitOverrides.h3_wight_upg_alt.existingSpecials[1].effectPayload.spellSid"
+      ],
+      "notes": "Night death/curse seed; drain/corpse semantics remain unproven."
+    },
+    "primal_1_magic_thunderbolt": {
+      "school": "primal",
+      "tags": [
+        "primal",
+        "storm",
+        "damage"
+      ],
+      "evidence": [
+        "custom_factions/ability_overrides/homm3_conflux.json: unitOverrides.h3_air_elemental_upg.existingSpecials[0].effectPayload.spellSid"
+      ],
+      "notes": "Storm damage seed."
+    },
+    "primal_4_magic_fire_globe": {
+      "school": "primal",
+      "tags": [
+        "primal",
+        "fire",
+        "damage",
+        "area"
+      ],
+      "evidence": [
+        "custom_factions/ability_overrides/homm3_conflux.json: unitOverrides.h3_earth_elemental_upg.existingSpecials[0].effectPayload.spellSid"
+      ],
+      "notes": "Fire area damage seed."
+    },
+    "primal_7_magic_wall_of_flame": {
+      "school": "primal",
+      "tags": [
+        "primal",
+        "fire",
+        "summon",
+        "area"
+      ],
+      "evidence": [
+        "custom_factions/ability_overrides/homm3_conflux.json: unitOverrides.h3_earth_elemental_upg_alt.existingSpecials[0].effectPayload.spellSid"
+      ],
+      "notes": "Fire/summon-like area seed; native wall object semantics remain runtime-unproven."
+    },
+    "primal_12_magic_chain_lightning": {
+      "school": "primal",
+      "tags": [
+        "primal",
+        "storm",
+        "damage",
+        "area"
+      ],
+      "evidence": [
+        "custom_factions/ability_overrides/homm3_conflux.json: unitOverrides.h3_fire_elemental_upg_alt.existingSpecials[0].effectPayload.spellSid"
+      ],
+      "notes": "Storm chain damage seed."
+    },
+    "space_1_magic_early_start": {
+      "school": "space",
+      "tags": [
+        "space",
+        "support",
+        "movement"
+      ],
+      "evidence": [
+        "custom_factions/ability_overrides/homm3_conflux.json: unitOverrides.h3_fire_elemental_upg.existingSpecials[0].effectPayload.spellSid"
+      ],
+      "notes": "Space initiative/movement-support seed."
+    },
+    "space_6_magic_blink": {
+      "school": "space",
+      "tags": [
+        "space",
+        "movement",
+        "support"
+      ],
+      "evidence": [
+        "custom_factions/ability_overrides/homm3_dungeon.json: unitOverrides.h3_troglodyte_upg_alt.existingSpecials[0].effectPayload.spellSid"
+      ],
+      "notes": "Movement/teleport seed."
+    },
+    "space_11_magic_decimate": {
+      "school": "space",
+      "tags": [
+        "space",
+        "damage"
+      ],
+      "evidence": [
+        "custom_factions/ability_overrides/homm3_castle.json: unitOverrides.h3_pikeman_upg_alt.existingSpecials[0].effectPayload.spellSid"
+      ],
+      "notes": "Space damage seed; not currently used to satisfy a custom law predicate."
+    },
+    "day_1_magic_healing_water": {
+      "school": "day",
+      "tags": [
+        "daylight",
+        "support",
+        "heal"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Healing Water (`day_1_magic_healing_water`)"
+      ],
+      "notes": "Restores HP; masterful variant adds cleanse, but base spell is heal support only."
+    },
+    "day_1_magic_healing_water_special": {
+      "school": "day",
+      "tags": [
+        "daylight",
+        "support",
+        "heal",
+        "cleanse"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Masterful Healing Water (`day_1_magic_healing_water_special`)"
+      ],
+      "notes": "Restores HP and dispels all negative effects."
+    },
+    "day_2_magic_sharp_edge": {
+      "school": "day",
+      "tags": [
+        "daylight",
+        "support",
+        "blessing",
+        "damage"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Blessing (`day_2_magic_sharp_edge`)"
+      ],
+      "notes": "Friendly basic-attack damage blessing."
+    },
+    "day_4_magic_favorable_wind": {
+      "school": "day",
+      "tags": [
+        "daylight",
+        "support",
+        "blessing",
+        "damage"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Favorable Wind (`day_4_magic_favorable_wind`)"
+      ],
+      "notes": "Friendly ranged/long-reach damage support."
+    },
+    "day_7_magic_inner_light": {
+      "school": "day",
+      "tags": [
+        "daylight",
+        "support",
+        "cleanse"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Inner Light (`day_7_magic_inner_light`)"
+      ],
+      "notes": "Reduces duration of negative effects on friendly creatures."
+    },
+    "day_9_magic_arinas_hymn": {
+      "school": "day",
+      "tags": [
+        "daylight",
+        "support",
+        "blessing",
+        "initiative"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Arina's Touch (`day_9_magic_arinas_hymn`)"
+      ],
+      "notes": "Friendly initiative and max-HP support."
+    },
+    "day_12_magic_radiant_armor": {
+      "school": "day",
+      "tags": [
+        "daylight",
+        "support",
+        "blessing",
+        "protection",
+        "defense"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Radiant Armor (`day_12_magic_radiant_armor`)"
+      ],
+      "notes": "Friendly all-source damage reduction support."
+    },
+    "day_13_magic_holy_arms": {
+      "school": "day",
+      "tags": [
+        "daylight",
+        "support",
+        "blessing",
+        "heal",
+        "damage"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Heavenly Blades (`day_13_magic_holy_arms`)"
+      ],
+      "notes": "Friendly pure-damage and self-heal support."
+    },
+    "night_2_magic_web": {
+      "school": "night",
+      "tags": [
+        "night",
+        "curse",
+        "slow",
+        "movement",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Web (`night_2_magic_web`)"
+      ],
+      "notes": "Enemy speed reduction and Haste dispel."
+    },
+    "night_2_magic_web_special": {
+      "school": "night",
+      "tags": [
+        "night",
+        "curse",
+        "slow",
+        "movement",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Masterful Web (`night_2_magic_web_special`)"
+      ],
+      "notes": "Mass enemy speed reduction and Haste dispel."
+    },
+    "night_4_magic_despair": {
+      "school": "night",
+      "tags": [
+        "night",
+        "curse",
+        "damage"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Despair (`night_4_magic_despair`)"
+      ],
+      "notes": "Stacking enemy curse damage over time."
+    },
+    "night_7_magic_fatal_decay": {
+      "school": "night",
+      "tags": [
+        "night",
+        "curse",
+        "decay",
+        "anti_heal"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Fatal Decay (`night_7_magic_fatal_decay`)"
+      ],
+      "notes": "Prevents HP restoration and can reduce max/current HP; this is not poison."
+    },
+    "night_8_magic_sleep": {
+      "school": "night",
+      "tags": [
+        "night",
+        "curse",
+        "disable",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Sleep (`night_8_magic_sleep`)"
+      ],
+      "notes": "Prevents enemy actions until damage/expiration."
+    },
+    "night_10_magic_silence": {
+      "school": "night",
+      "tags": [
+        "night",
+        "curse",
+        "disable",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Silence (`night_10_magic_silence`)"
+      ],
+      "notes": "Prevents abilities and Focus generation."
+    },
+    "night_11_magic_vulnerability": {
+      "school": "night",
+      "tags": [
+        "night",
+        "curse",
+        "damage"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Vulnerability (`night_11_magic_vulnerability`)"
+      ],
+      "notes": "Makes enemies take increased damage."
+    },
+    "night_12_magic_summon_starchild": {
+      "school": "night",
+      "tags": [
+        "night",
+        "summon"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Summon Starchild (`night_12_magic_summon_starchild`)"
+      ],
+      "notes": "Summons temporary Starchild stacks."
+    },
+    "primal_2_magic_thick_hide": {
+      "school": "primal",
+      "tags": [
+        "primal",
+        "support",
+        "protection",
+        "defense"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Thick Hide (`primal_2_magic_thick_hide`)"
+      ],
+      "notes": "Friendly melee damage reduction support."
+    },
+    "primal_3_magic_wean": {
+      "school": "primal",
+      "tags": [
+        "primal",
+        "curse",
+        "cleanse"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Wean (`primal_3_magic_wean`)"
+      ],
+      "notes": "Reduces duration of positive effects on enemies."
+    },
+    "primal_6_magic_ice_bolt": {
+      "school": "primal",
+      "tags": [
+        "primal",
+        "damage",
+        "slow",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Ice Bolt (`primal_6_magic_ice_bolt`)"
+      ],
+      "notes": "Damage plus initiative reduction; slow/control seed, not speed slow."
+    },
+    "primal_10_magic_primordial_purity": {
+      "school": "primal",
+      "tags": [
+        "primal",
+        "protection",
+        "cleanse"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Anti-Magic (`primal_10_magic_primordial_purity`)"
+      ],
+      "notes": "Spell immunity/protection; also destroys summoned/temporary stacks."
+    },
+    "primal_15_magic_summon_primal_remnant": {
+      "school": "primal",
+      "tags": [
+        "primal",
+        "summon"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Summon Primal Remnant (`primal_15_magic_summon_primal_remnant`)"
+      ],
+      "notes": "Summons temporary Primal Remnant stacks."
+    },
+    "space_12_magic_rewind": {
+      "school": "space",
+      "tags": [
+        "space",
+        "support",
+        "heal"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Rewind Life (`space_12_magic_rewind`)"
+      ],
+      "notes": "Restores HP and can revive fallen units."
+    },
+    "space_14_magic_doreaths_tide": {
+      "school": "space",
+      "tags": [
+        "space",
+        "support",
+        "movement",
+        "slow",
+        "cleanse",
+        "sea",
+        "tide"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Doreath's Tide (`space_14_magic_doreaths_tide`)"
+      ],
+      "notes": "Battle tide spell: friendly speed/initiative, enemy speed/initiative loss, and movement-effect cleansing; does not imply ocean travel mechanics."
+    },
+    "space_15_magic_trap_snare": {
+      "school": "space",
+      "tags": [
+        "space",
+        "movement",
+        "disable",
+        "control"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Spatial Snare (`space_15_magic_trap_snare`)"
+      ],
+      "notes": "Movement trap halts movement, ends turn, and cancels next turn."
+    },
+    "neutral_magic_light_gate": {
+      "school": "neutral",
+      "tags": [
+        "movement"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Gate of Light (`neutral_magic_light_gate`)"
+      ],
+      "notes": "World portal movement; not a battle sea/ocean mechanic."
+    },
+    "neutral_magic_town_portal": {
+      "school": "neutral",
+      "tags": [
+        "movement"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Town Portal (`neutral_magic_town_portal`)"
+      ],
+      "notes": "World city teleport movement."
+    },
+    "neutral_magic_dimension_door": {
+      "school": "neutral",
+      "tags": [
+        "movement"
+      ],
+      "evidence": [
+        "docs/olden_era_vanilla_effect_text_reference.md: Dimension Door (`neutral_magic_dimension_door`)"
+      ],
+      "notes": "World map teleport movement."
+    }
+  }
+}

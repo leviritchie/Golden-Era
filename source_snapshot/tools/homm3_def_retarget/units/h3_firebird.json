@@ -1,0 +1,431 @@
+{
+ "unit": "h3_firebird",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.0,
+   0.6
+  ],
+  "Spine": [
+   0.0,
+   -0.07,
+   0.73
+  ],
+  "Spine1": [
+   0.0,
+   -0.13,
+   0.87
+  ],
+  "Spine2": [
+   0.0,
+   -0.17,
+   1.0
+  ],
+  "Neck": [
+   0.0,
+   -0.2,
+   1.13
+  ],
+  "Head": [
+   0.0,
+   -0.25,
+   1.3
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.5,
+   1.28
+  ],
+  "LeftUpLeg": [
+   0.1,
+   -0.08,
+   0.55
+  ],
+  "RightUpLeg": [
+   -0.1,
+   -0.08,
+   0.55
+  ],
+  "LeftLeg": [
+   0.1,
+   -0.14,
+   0.42
+  ],
+  "RightLeg": [
+   -0.1,
+   -0.14,
+   0.42
+  ],
+  "LeftFoot": [
+   0.1,
+   -0.2,
+   0.33
+  ],
+  "RightFoot": [
+   -0.1,
+   -0.2,
+   0.33
+  ],
+  "LeftToeBase": [
+   0.11,
+   -0.3,
+   0.27
+  ],
+  "RightToeBase": [
+   -0.11,
+   -0.3,
+   0.27
+  ],
+  "LeftToe_End": [
+   0.12,
+   -0.42,
+   0.24
+  ],
+  "RightToe_End": [
+   -0.12,
+   -0.42,
+   0.24
+  ]
+ },
+ "extensions": [
+  "conflux_weights",
+  "wing_chain",
+  "conflux_rubble"
+ ],
+ "conflux": {
+  "rubbleSettle": {
+   "gather": 0.5,
+   "power": 0.8
+  },
+  "fillUnweighted": true
+ },
+ "wingMaxDeg": 0,
+ "wings": [
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.18,
+    -0.05,
+    1.05
+   ],
+   "tail": [
+    -0.35,
+    0.1,
+    0.5
+   ],
+   "sign": 1,
+   "parent": "Spine2",
+   "region": {
+    "box": [
+     [
+      -0.6,
+      -0.3,
+      0.33
+     ],
+     [
+      -0.19,
+      0.7,
+      1.2
+     ]
+    ]
+   }
+  },
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.18,
+    -0.05,
+    1.05
+   ],
+   "tail": [
+    0.35,
+    0.1,
+    0.5
+   ],
+   "sign": -1,
+   "parent": "Spine2",
+   "region": {
+    "box": [
+     [
+      0.19,
+      -0.3,
+      0.33
+     ],
+     [
+      0.6,
+      0.7,
+      1.2
+     ]
+    ]
+   }
+  }
+ ],
+ "shatter": {
+  "start": 4,
+  "chunks": 45,
+  "burst": 0.3,
+  "up": 0.4,
+  "spin": 5,
+  "solid": true
+ },
+ "wingChain": {
+  "wings": [
+   {
+    "bone": "LeftWing",
+    "side": 1
+   },
+   {
+    "bone": "RightWing",
+    "side": -1
+   }
+  ],
+  "adoptWeights": "nearest",
+  "anim": {
+   "MoveStart": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       0.7
+      ],
+      [
+       1,
+       1
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       30
+      ],
+      [
+       1,
+       45
+      ]
+     ]
+    }
+   },
+   "Move": {
+    "open": 1,
+    "flap": {
+     "sin": 45,
+     "phase": 90
+    },
+    "fold": {
+     "sin": 45,
+     "phase": 180,
+     "half": "pos"
+    },
+    "droop": {
+     "sin": 25,
+     "phase": 180,
+     "half": "pos"
+    }
+   },
+   "MoveEnd": {
+    "open": {
+     "keys": [
+      [
+       0,
+       1
+      ],
+      [
+       0.5,
+       0.7
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       45
+      ],
+      [
+       0.5,
+       30
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.4,
+       0.6
+      ],
+      [
+       0.8,
+       0.6
+      ],
+      [
+       1,
+       0.3
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       0.5
+      ],
+      [
+       0.9,
+       0.5
+      ],
+      [
+       1,
+       0.2
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.3,
+       20
+      ],
+      [
+       1,
+       10
+      ]
+     ]
+    }
+   },
+   "Death": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.2,
+       1
+      ],
+      [
+       0.5,
+       1
+      ],
+      [
+       1,
+       0.6
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.2,
+       40
+      ],
+      [
+       0.5,
+       40
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "flap",
+    "open",
+    "fold",
+    "droop",
+    "sweep"
+   ],
+   "offsets": [
+    "dx",
+    "dy"
+   ],
+   "clips": [
+    "MoveStart",
+    "Move",
+    "MoveEnd",
+    "Hitted",
+    "AttackFront",
+    "Death"
+   ],
+   "bounce": 4,
+   "penalty": 0.0008,
+   "smooth": 0.0008
+  },
+  "steady": {
+   "Move": 1.0,
+   "MoveStart": 0.5,
+   "MoveEnd": 0.5
+  },
+  "bodyTurn": {
+   "fit": [
+    "Move"
+   ],
+   "rampIn": {
+    "MoveStart": "Move"
+   },
+   "rampOut": {
+    "MoveEnd": "Move"
+   }
+  }
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: AttackFront throws both wings up, wide and back while breathing fire like the DEF (f1-f10), feather planes facing out, instead of letting the left wing hang below the body",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_firebird_attack_wings_spread_rot.json",
+    "regrid": true,
+    "sha256": "1c248e280daa5e5019ac0f049bdd1d6d626da48f080ed4aeaecc942f51920742"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_firebird_attack_wings_spread_rot.json",
+    "regrid": true,
+    "sha256": "1c248e280daa5e5019ac0f049bdd1d6d626da48f080ed4aeaecc942f51920742"
+   }
+  ]
+ },
+ "shatterReason": "authenticity lane-B 2026-10-11: the deferred rubble (deferMeshes) was not drawn in game, so the Death ended in a vanish; solid chunks + the rubbleSettle heap on the ground (h3_behemoth / conflux elementals recipe), so the slice row can move to mergeMeshes."
+}

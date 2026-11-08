@@ -1,0 +1,166 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_mage",
+ "status": "look",
+ "notes": "tower rollout: shoot glow + death sparks ripped from the DEF (committed file masks)",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "shot_glow",
+   "treatment": "dynamic",
+   "notes": "green casting glow on the robe, face and hands"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "shoot_glow",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_mage/shoot_glow"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": {
+      "Unit_ShootFront": [
+       [
+        217,
+        211
+       ],
+       [
+        217,
+        209
+       ],
+       [
+        217,
+        210
+       ],
+       [
+        216,
+        210
+       ],
+       [
+        216,
+        211
+       ],
+       [
+        217,
+        211
+       ],
+       [
+        217,
+        209
+       ],
+       [
+        216,
+        208
+       ],
+       [
+        215,
+        209
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "shot_glow",
+    "provenance": "roster g15 shoot_front magic glow f2-10; tower_fx_masks.orb_blobs green (defEffects calls the green rim on-body tint, which it is: the mesh silhouette removes it and the fitted light carries it)",
+    "notes": "what is left after the silhouette is the staff-tip orb and the glow off the hands; defOrigin = LeftHand (the staff hand) projected per key, so the orb keeps its DEF place"
+   },
+   {
+    "id": "shot_glow_light",
+    "type": "effectLight",
+    "lightId": "shot_glow",
+    "carrier": "shoot_glow",
+    "anchor": {
+     "bone": "LeftHand",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.55,
+     1.0,
+     0.35
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_ShootFront": [
+      0.0,
+      0.0,
+      0.03,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.007,
+      0.017,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted",
+    "notes": "the DEF paints the robe front, face and hands green while casting; one point light between the hands"
+   },
+   {
+    "id": "death_sparks",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_mage/death_sparks"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Root",
+     "defOrigin": [
+      197,
+      265
+     ]
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "roster g05 death detached magenta sparks f4-6; tower_fx_masks.detached"
+   }
+  ]
+ }
+}

@@ -1,0 +1,259 @@
+{
+ "unit": "hota_factory_halfling",
+ "joints": {
+  "Hips": [
+   0.038,
+   0.01,
+   0.651
+  ],
+  "Spine": [
+   0.04,
+   0.023,
+   0.765
+  ],
+  "Spine1": [
+   0.042,
+   0.035,
+   0.878
+  ],
+  "Spine2": [
+   0.044,
+   0.049,
+   1.006
+  ],
+  "Neck": [
+   0.045,
+   0.059,
+   1.105
+  ],
+  "Head": [
+   0.038,
+   -0.003,
+   1.294
+  ],
+  "HeadTop_End": [
+   0.038,
+   -0.031,
+   1.748
+  ],
+  "LeftShoulder": [
+   0.08,
+   -0.073,
+   1.182
+  ],
+  "LeftArm": [
+   0.276,
+   -0.017,
+   1.147
+  ],
+  "LeftForeArm": [
+   0.402,
+   0.01,
+   0.973
+  ],
+  "LeftHand": [
+   0.437,
+   -0.15,
+   0.812
+  ],
+  "LeftHand_End": [
+   0.45,
+   -0.213,
+   0.749
+  ],
+  "RightShoulder": [
+   -0.017,
+   -0.073,
+   1.182
+  ],
+  "RightArm": [
+   -0.192,
+   0.052,
+   1.147
+  ],
+  "RightForeArm": [
+   -0.269,
+   0.171,
+   0.973
+  ],
+  "RightHand": [
+   -0.36,
+   0.157,
+   0.784
+  ],
+  "RightHand_End": [
+   -0.399,
+   0.151,
+   0.703
+  ],
+  "LeftUpLeg": [
+   0.185,
+   0.01,
+   0.651
+  ],
+  "LeftLeg": [
+   0.276,
+   -0.066,
+   0.372
+  ],
+  "LeftFoot": [
+   0.269,
+   0.024,
+   0.015
+  ],
+  "LeftToeBase": [
+   0.311,
+   -0.157,
+   0.008
+  ],
+  "LeftToe_End": [
+   0.353,
+   -0.255,
+   -0.02
+  ],
+  "RightUpLeg": [
+   -0.108,
+   0.01,
+   0.651
+  ],
+  "RightLeg": [
+   -0.185,
+   0.045,
+   0.372
+  ],
+  "RightFoot": [
+   -0.178,
+   0.136,
+   0.015
+  ],
+  "RightToeBase": [
+   -0.185,
+   -0.052,
+   0.008
+  ],
+  "RightToe_End": [
+   -0.171,
+   -0.15,
+   0.008
+  ]
+ },
+ "props": [
+  {
+   "name": "sling",
+   "bone": "RightHand",
+   "box": [
+    [
+     -0.47,
+     0.03,
+     0.1
+    ],
+    [
+     -0.265,
+     0.29,
+     0.76
+    ]
+   ]
+  },
+  {
+   "name": "bag",
+   "bone": "Hips",
+   "box": [
+    [
+     0.26,
+     -0.3,
+     0.44
+    ],
+    [
+     0.47,
+     0.22,
+     0.73
+    ]
+   ],
+   "exclude": [
+    {
+     "sphere": [
+      [
+       0.45,
+       -0.21,
+       0.76
+      ],
+      0.075
+     ]
+    }
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "RightHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.12
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.9,
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 0.9,
+   "keepDist": 0.12
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ]
+}

@@ -1,0 +1,62 @@
+{
+  "schema": "homm3.olden_layered_atlas_scenario_profile.v1",
+  "scenarioId": "razor_claw_ab_sod",
+  "mapSid": "h3_stronghold_razor_claw_raw_translation",
+  "title": "Razor Claw - Raw Translation",
+  "description": "Parallel Razor Claw emit-only raw_translation map (same pipeline class as Homecoming). Runtime gameplay remains user-unvalidated.",
+  "artifactRoot": "artifacts/campaign_port_poc/ab_sod_campaigns/razor_claw",
+  "outputSubdir": "raw_translation_map",
+  "inputs": {
+    "alignment": "artifacts/campaign_port_poc/ab_sod_campaigns/razor_claw/olden_storage_alignment/razor_claw.olden_storage_alignment.json",
+    "substitutionMap": "artifacts/campaign_port_poc/ab_sod_campaigns/razor_claw/entity_substitutions/razor_claw.olden_entity_substitution_map.json",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "coreCatalog": "artifacts/campaign_port_poc/olden_entity_catalog/olden_core_map_valid_entity_catalog.json",
+    "templateMap": "V:\\SteamLibrary\\steamapps\\common\\Heroes of Might and Magic Olden Era - Golden Era\\HeroesOldenEra_Data\\StreamingAssets\\maps\\Thirst_for_Power.map"
+  },
+  "sourceEnvelope": {
+    "width": 72,
+    "height": 72
+  },
+  "layers": {
+    "layerIds": [
+      0,
+      1
+    ],
+    "undergroundLayers": [
+      1
+    ]
+  },
+  "spawn": {
+    "factionSid": "homm3_stronghold",
+    "heroSid": "homm3_stronghold_hero_17",
+    "playersCount": 1
+  },
+  "startHeroContract": {
+    "sourceLayer": 0,
+    "heroType": 149,
+    "owner": 0,
+    "payloadKind": "hero_or_prison",
+    "templateAnimation": "ah12_e.def",
+    "templateObjectId": 34,
+    "sourceKey": "0:2:3",
+    "sourceIndex": 1484
+  },
+  "pathability": {
+    "surfaceGapFill": false,
+    "emitCoreOverlay": true
+  },
+  "knownGaps": [
+    "AB/SoD StoryHub raw_translation first pass; videos deferred; runtime unvalidated.",
+    "Campaign-unique heroes may map lossily via h3m_hero_sid."
+  ],
+  "runtimeScriptComment": "razor_claw raw-translation runtime script generated from campaign alignment story.",
+  "coreOverlay": {
+    "mode": "emit_fresh"
+  },
+  "validation": {
+    "expectedSourceLayerEntityCounts": {
+      "0": 1499,
+      "1": 23
+    }
+  }
+}

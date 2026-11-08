@@ -1,0 +1,304 @@
+{
+ "unit": "h3_mountain_ram_upg_alt",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.597,
+   0.95
+  ],
+  "Spine": [
+   0.0,
+   0.382,
+   0.972
+  ],
+  "Spine1": [
+   0.0,
+   0.166,
+   0.983
+  ],
+  "Spine2": [
+   0.0,
+   -0.049,
+   1.006
+  ],
+  "Neck": [
+   0.0,
+   -0.211,
+   1.173
+  ],
+  "Head": [
+   0.0,
+   -0.48,
+   1.508
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.836,
+   1.318
+  ],
+  "LeftShoulder": [
+   0.083,
+   -0.103,
+   1.061
+  ],
+  "LeftArm": [
+   0.182,
+   -0.16,
+   0.782
+  ],
+  "LeftForeArm": [
+   0.164,
+   -0.205,
+   0.447
+  ],
+  "LeftHand": [
+   0.176,
+   -0.172,
+   0.134
+  ],
+  "LeftHand_End": [
+   0.176,
+   -0.237,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.083,
+   -0.103,
+   1.061
+  ],
+  "RightArm": [
+   -0.166,
+   -0.097,
+   0.782
+  ],
+  "RightForeArm": [
+   -0.132,
+   -0.08,
+   0.447
+  ],
+  "RightHand": [
+   -0.144,
+   -0.047,
+   0.134
+  ],
+  "RightHand_End": [
+   -0.144,
+   -0.112,
+   0.0
+  ],
+  "LeftUpLeg": [
+   0.163,
+   0.554,
+   0.894
+  ],
+  "LeftLeg": [
+   0.112,
+   0.587,
+   0.559
+  ],
+  "LeftFoot": [
+   0.124,
+   0.49,
+   0.168
+  ],
+  "LeftToeBase": [
+   0.136,
+   0.479,
+   0.034
+  ],
+  "LeftToe_End": [
+   0.136,
+   0.414,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.159,
+   0.661,
+   0.894
+  ],
+  "RightLeg": [
+   -0.116,
+   0.778,
+   0.559
+  ],
+  "RightFoot": [
+   -0.128,
+   0.746,
+   0.168
+  ],
+  "RightToeBase": [
+   -0.128,
+   0.746,
+   0.034
+  ],
+  "RightToe_End": [
+   -0.128,
+   0.681,
+   0.0
+  ]
+ },
+ "props": [
+  {
+   "name": "hornL",
+   "bone": "Head",
+   "box": [
+    [
+     0.119,
+     -0.804,
+     1.43
+    ],
+    [
+     0.593,
+     0.49,
+     2.011
+    ]
+   ]
+  },
+  {
+   "name": "hornR",
+   "bone": "Head",
+   "box": [
+    [
+     -0.592,
+     -0.804,
+     1.43
+    ],
+    [
+     -0.118,
+     0.49,
+     2.011
+    ]
+   ]
+  },
+  {
+   "name": "hornLlow",
+   "bone": "Head",
+   "box": [
+    [
+     0.17,
+     -0.62,
+     1.15
+    ],
+    [
+     0.52,
+     -0.08,
+     1.45
+    ]
+   ]
+  },
+  {
+   "name": "hornRlow",
+   "bone": "Head",
+   "box": [
+    [
+     -0.52,
+     -0.62,
+     1.15
+    ],
+    [
+     -0.17,
+     -0.08,
+     1.45
+    ]
+   ]
+  }
+ ],
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped"
+ ],
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    -20,
+    70
+   ],
+   "fold": 70,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ]
+  }
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: Defence ducks the head so the horns point forward (spine + neck nod f1-f8); Death topples over through f3-f4 (blended toward the lying f5 pose, Hips carried sideways within the translation cap) instead of popping flat in one key",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mountain_ram_upg_alt_defence_duck_death_fall_tr.json",
+    "regrid": true,
+    "sha256": "1f1fd8cc092e306ab3596bf9ad1b2879ca62ba7f001ae0c90c1d03e0f46de595"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mountain_ram_upg_alt_defence_duck_death_fall_rot.json",
+    "regrid": true,
+    "sha256": "98688e9fea29f0fa6945062011054a3f502b0bfbf35628e089411c24ab82d9bd"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_mountain_ram_upg_alt_defence_duck_death_fall_rot.json",
+    "regrid": true,
+    "sha256": "98688e9fea29f0fa6945062011054a3f502b0bfbf35628e089411c24ab82d9bd"
+   }
+  ]
+ }
+}

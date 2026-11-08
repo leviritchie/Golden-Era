@@ -1,0 +1,106 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "hota_factory_crimson_couatl",
+ "status": "look",
+ "notes": "factory: couatl. Loose feathers the DEF sheds on hit (and on death, where the inventory finds them) ripped as detached defEffects particles; they are feathers, not light, so no effectLight. The mouseover/cast green-violet shimmer is on-body tint (inventory: animated texture, not a flipbook) and is not a layer yet.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "hit_feathers",
+    "type": "defFlipbook",
+    "provenance": "roster inventory factory: g03 hitted detached particles f2-4 (feathers)",
+    "clips": {
+     "Unit_Hitted": {
+      "defGroup": 3,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire",
+      "magic",
+      "water"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 6
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1
+   },
+   {
+    "id": "death_feathers",
+    "type": "defFlipbook",
+    "provenance": "roster inventory factory: g05 death detached particles f3-22 (feathers)",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9,
+       10,
+       11,
+       12,
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       19,
+       20,
+       21,
+       22,
+       23
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "fire",
+      "magic",
+      "water"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 6
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": true,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine1",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1
+   }
+  ]
+ }
+}

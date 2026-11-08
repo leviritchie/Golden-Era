@@ -1,0 +1,51 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "hota_bulwark_jotunn",
+ "status": "look",
+ "notes": "bulwark rollout pilot. g12 'held water/ice' candidate is the glowing ice-axe head itself (a held prop the mesh already draws, in a different pose): no flipbook, it would draw a second floating axe.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "death_frost",
+    "type": "defFlipbook",
+    "provenance": "roster inventory bulwark: g05 death lightning/bolt (white-blue) f5-8 (frost spark rising off the head); def_effect_ripper --auto",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       5,
+       6,
+       7,
+       8
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 12
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1
+   }
+  ]
+ }
+}

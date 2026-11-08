@@ -1,0 +1,86 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "conflux_light_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "supersededBy": "conflux_vanilla_style_slice_v1",
+  "supersededNote": "fire/storm effects moved to the vanilla-style layers (uvAtlas, flipbooks and steady lights refused by tools/validate_homm3_vanilla_style_fx_contract.py); the cove rows remain delivered by cove_slice_v1",
+  "out": "artifacts/homm3_def_retarget_delivery/conflux_light_slice_v1",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "hota_cove_oceanid",
+      "gameSid": "h3_oceanid",
+      "bundleName": "custom_units_cove_hota_cove_oceanid",
+      "albedo": "uvAtlas",
+      "sourceMeshSha256": "c78ea709fed30a8b3daa7920014214ba744b11a01375ae51efeeca148dd649a9",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "a3b70a3bc1903c88ffbd96d1d585cd2dcb5d3d97099ef002efce3cc6ef835768",
+        "idleRetimedGlbSha256": "1cb1cad8f5665ef2e30ae08fb8067c517162858608e3e61d766e53209b9d5c2c",
+        "vfxManifestSha256": "18603f5dcde80fe7fd785ac6738051f0772de82d122cf38d56f13276ca175ff4",
+        "specSha256": "9c754ee2478f526ae47ba877dbb64e0588e9c68219478d7c94494536a616a212",
+        "basecolorSha256": "de324c9ff727290974279cb81f65063ee20cd18ac82558bbbc5eabd8be27128d"
+      }
+    },
+    {
+      "labSid": "hota_cove_tidecaller",
+      "gameSid": "h3_sea_witch_upg_alt",
+      "bundleName": "custom_units_cove_hota_cove_tidecaller",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "dda1bede5260048b3a7d54c81917637556a0f95783cc554a9a03879798850516",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "35d6f4c6db54a935ebdcd1ccdf164b399eb69c44ece3780f215e7e2958dff65d",
+        "idleRetimedGlbSha256": "01129f0e48dfda492f253240ea7ade7b3e899e83c816aa6669295399037a65e2",
+        "vfxManifestSha256": "0bd7b71b316bb50bb36d82cfbf46181b92623771220f26d67b67841d3cf78336",
+        "specSha256": "d7d777259e1cf63ab3a9913be872dfad788e90cbf3c96396fefeb7ff7aebc13e",
+        "basecolorSha256": "2951f482f78d0a81a80096bea1ce2ba59bcad9a52e4d35de7ffc67d038dbccf1",
+        "lookStampSha256": "2e5128df9ec4dbe1439cc76bc87e474745899c5a79da3e3335fc945de8dfbc00"
+      }
+    },
+    {
+      "labSid": "h3_fire_elemental",
+      "gameSid": "h3_fire_elemental",
+      "bundleName": "custom_units_conflux_h3_fire_elemental",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "c4529f8561841f03d3c52d9f8507da08f4147bf2ff5d8bb0a6a81bf4fbbdcc02",
+      "identityReview": "c4529f8561841f03d3c52d9f8507da08f4147bf2ff5d8bb0a6a81bf4fbbdcc02",
+      "vfxAuthority": "vanilla_style",
+      "vanillaStyleSpec": "tools/homm3_vfx/vanilla_style/units/h3_fire_elemental.json",
+      "deferMeshes": {
+        "h3_fire_elemental_Rubble": "the death shatter's rubble mesh (build_unit.py shatter) is a second SkinnedMeshRenderer; this lane builds exactly one body SMR and the runtime's uvAtlas/Hex/Lit rebind assume one. Without it the body still collapses at the shatter frame, so the death ends in a vanish instead of falling chunks"
+      },
+      "frozen": {
+        "lookDeliveredGlbSha256": "f7b3996f14b60f83be1ed517a032c6bb841f3fa54b69779457d5a397ee9792e1",
+        "idleRetimedGlbSha256": "b7d73eea08e70e8f1bf2af76a6096c937a39c21901a75a500adf507b02bc7868",
+        "vfxManifestSha256": "1734e67a084b0a3ec4ce910ee924824cc3d98274654c981d324a0fedcdcd51fb",
+        "specSha256": "46079b4d33567e3c9f4cb78b5d5de713e5e9a2a097ad25be1173df957848de36",
+        "basecolorSha256": "91cf24e4092799b737266ccbd9efe6fdc41ef845b1fc22ac16a1f4e00cbebe02"
+      }
+    },
+    {
+      "labSid": "h3_storm_elemental",
+      "gameSid": "h3_air_elemental_upg",
+      "bundleName": "custom_units_conflux_h3_storm_elemental",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "c4a32dd4791153365d17f1ca01c8f6f7a7d013d30809e9ea8be648f005111da8",
+      "identityReview": "none",
+      "vfxAuthority": "vanilla_style",
+      "vanillaStyleSpec": "tools/homm3_vfx/vanilla_style/units/h3_storm_elemental.json",
+      "frozen": {
+        "lookDeliveredGlbSha256": "4ad5a773c2d9c9024ca319b1981e17294135143ad6be14a76775903b8b9b06d6",
+        "idleRetimedGlbSha256": "a4ff717069681c87d24074ba43a0bbc0d833038a25f8b41b1344deeba9c79682",
+        "vfxManifestSha256": "539db344e459452aa0f30fcf757510152b1cde87690ad52a4da5c630278177cf",
+        "specSha256": "5735dafb364e4ee95271f2cbf4746f5720bea036fa977a14ea6215590872dab2",
+        "basecolorSha256": "821bcf6bff3e7b534174679bff1c4f1f185359adcb8a47c25dcc32e0859c1bbf"
+      }
+    }
+  ],
+  "note": "look-only re-freeze of all four rows on their current canonicals: the slice's frozen inputs were missing; oceanid/tidecaller = cove_slice_v1 look B, storm = conflux_vanilla_style_slice_v1, fire elemental ground-stamped by fleet_rebuild 19:06 (Hitted sink fixed) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: hota_cove_oceanid 0.0507, hota_cove_tidecaller 0.1517, h3_fire_elemental 0.1974, h3_storm_elemental 0.266."
+}

@@ -1,0 +1,49 @@
+{
+ "schema": "town_full3d_recipe.v2",
+ "faction": "inferno",
+ "seed": "props_v2",
+ "candidate": "zs_v3",
+ "note": "inferno zs_v3 (2026-10-02): zs_v1's steps on current main plus backstop.groundFloor. zs_v2 (zs_v1 rebuilt, round 0, stopped) measured groundHoleGrowthPx start 479, full 8522; 97 % of the full-state hidden px are the background painting's sky behind a building (the ground-hole term's background frame, coordinator-approved general fix, excludes them where the pose's Sky_ covers them); the rest are real ground behind the ridge tops, 0-11 px under the coverage edge, where the Lipschitz sheet is pulled toward infinity next to the painting's sky: the floor fill (the painted floor plane as px squares behind every state's rest surface, 16 px band) holds them (debug on start sweep_left / loop_396: 458 / 479 -> 0 / 0). Seed props_v2 = the installed props_v1 with the Meshy crag dropped and pebbles piece 2 grounded (work/seed_slide_pebbles_2.json); the installed sky is kept (sky_cont_v1 is not part of this). backstop.K 1.5 as zs_v1 (K 2.0 failed on ground-hole growth). Run 2 (2026-10-02): the build gate passed, final failed (start: visible-behind 199 px at free_*_restRotation_high / loop_264 / loop_228, ground growth 120 at loop_060: fill squares the sky-side prune removed, because the prune only sees the build cams; full/anim: unseen 22 at transition_059). Tool fix: the prune keeps fill faces within the far cap of any certified camera, every fill texel gets content. extraPoses: final's failing poses, loop_060 / transition_011 as the fill's checks. Seed props_v2 marked meshy_t2 (mark-meshy). Run 3: build and final pass except 5 px of off-frame ground at loop_240 (q 0.1-2.4 px left of the rest frame); the fill now extends FLOOR_FILL_EXT_PX past the frame within the backstop margin; loop_240 added.",
+ "ldi": {
+  "pieces": [
+   "Mesh_Terrain"
+  ],
+  "cut": "zone",
+  "backRule": "vlb",
+  "vlbK": 2.0,
+  "keepRounds": 0,
+  "reachLoop": 12,
+  "fromPreLdi": false
+ },
+ "backstop": {
+  "K": 1.5,
+  "stepPx": 4,
+  "groundSrcM": 1.0,
+  "groundFloor": true
+ },
+ "repair": {
+  "rules": [
+   "drop",
+   "card",
+   "flap",
+   "planar"
+  ],
+  "rounds": 8
+ },
+ "certificate": {
+  "loop": 12,
+  "extraPoses": [
+   "loop_264",
+   "loop_228",
+   "free_catmullRom_restRotation_high",
+   "free_polygon_restRotation_high",
+   "transition_059",
+   "loop_276",
+   "loop_120",
+   "loop_132",
+   "loop_060",
+   "transition_011",
+   "loop_240"
+  ]
+ }
+}

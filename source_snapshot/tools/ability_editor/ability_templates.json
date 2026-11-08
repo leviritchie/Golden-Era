@@ -1,0 +1,308 @@
+{
+  "schemaVersion": 1,
+  "templates": [
+    {
+      "id": "copied_unit_special",
+      "label": "Copied Donor Unit Special",
+      "category": "Active",
+      "risk": "native-copy",
+      "summary": "Copies a selected native unit special, including alternate attacks such as Assassin Fighting Style: Hit and Run.",
+      "defaults": {
+        "nameToken": "{unitSid}_copied_special_name",
+        "descriptionToken": "{unitSid}_copied_special_description",
+        "displayName": "Copied Special",
+        "description": "Uses the selected donor unit special.",
+        "unitSpecialKey": "",
+        "sourceUnitSid": "",
+        "sourceSlotKind": "",
+        "sourceSlotIndex": 0,
+        "abilityType": "Ability_type_attack_mod",
+        "animationIndex": 1,
+        "turnBehavior": "ends",
+        "energyLevel": 0,
+        "cooldown": 0,
+        "rank": 1,
+        "iconKey": "",
+        "mechanicsDebt": ""
+      },
+      "logic": {
+        "xHomm3CopiedUnitSpecial": {
+          "unitSpecialKey": "{unitSpecialKey}",
+          "sourceUnitSid": "{sourceUnitSid}",
+          "sourceSlotKind": "{sourceSlotKind}",
+          "sourceSlotIndex": "{sourceSlotIndex}"
+        }
+      },
+      "view": {
+        "name": "{nameToken}",
+        "abilityType": "{abilityType}",
+        "description": "{descriptionToken}",
+        "animationIndex": "{animationIndex}",
+        "useExpandTooltip": "false"
+      }
+    },
+    {
+      "id": "focus_melee_buff",
+      "label": "Focus Melee Buff/Debuff",
+      "category": "Active",
+      "risk": "native-template",
+      "summary": "Melee action that deals normal damage and applies a native buff or debuff SID to the target.",
+      "defaults": {
+        "nameToken": "{unitSid}_focus_strike_name",
+        "descriptionToken": "{unitSid}_focus_strike_description",
+        "displayName": "Focus Strike",
+        "description": "Spend {energyLevel} Focus to strike an enemy and apply {buffSid}.",
+        "abilityType": "Ability_type_attack_mod",
+        "animationIndex": 1,
+        "turnBehavior": "free",
+        "energyLevel": 1,
+        "cooldown": 1,
+        "rank": 1,
+        "buffSid": "magic_shorten_shadow_effect_1",
+        "buffDuration": 1,
+        "iconKey": "",
+        "mechanicsDebt": ""
+      },
+      "logic": {
+        "attackType_": "melee",
+        "rank": "{rank}",
+        "selfMechanics": [],
+        "cd": "{cooldown}",
+        "actionCost": 0,
+        "energyLevel": "{energyLevel}",
+        "damageDealer": {
+          "tags": ["melee_attack", "normal_damage", "basic_attack", "ability", "debuff_ability"],
+          "attackPatternSid": "attack_single_x100",
+          "castTargetParams": {
+            "targetTags": ["unit", "attackable_object"],
+            "castTarget_": "enemy",
+            "targetCondition_": "alive",
+            "selection": "object"
+          },
+          "affectTargetParams": {
+            "targetTags": ["unit", "attackable_object"],
+            "castTarget_": "enemy",
+            "targetCondition_": "alive",
+            "selection": "object"
+          },
+          "damageTarget_": "enemy",
+          "damageType_": "normal",
+          "statDmgMult": 1.0,
+          "triggerCounter": true,
+          "targetMechanics": [
+            {
+              "mech": "buff",
+              "values": ["{buffSid}", "{buffDuration}"]
+            }
+          ]
+        }
+      },
+      "view": {
+        "name": "{nameToken}",
+        "abilityType": "{abilityType}",
+        "description": "{descriptionToken}",
+        "animationIndex": "{animationIndex}",
+        "useExpandTooltip": "false"
+      }
+    },
+    {
+      "id": "focus_ranged_shot",
+      "label": "Focus Ranged Shot",
+      "category": "Active",
+      "risk": "native-template",
+      "summary": "Ranged ability action using the normal ranged damage shape. Add a proven projectile key only after static/source validation.",
+      "defaults": {
+        "nameToken": "{unitSid}_focus_shot_name",
+        "descriptionToken": "{unitSid}_focus_shot_description",
+        "displayName": "Focus Shot",
+        "description": "Spend {energyLevel} Focus to fire a stronger shot.",
+        "abilityType": "Ability_type_attack_mod",
+        "animationIndex": 1,
+        "turnBehavior": "free",
+        "energyLevel": 2,
+        "cooldown": 2,
+        "rank": 2,
+        "statDmgMult": 1.2,
+        "projectile": "",
+        "projectileSpeed": 25,
+        "trajectory": "linear",
+        "iconKey": "",
+        "mechanicsDebt": ""
+      },
+      "logic": {
+        "attackType_": "shoot",
+        "rank": "{rank}",
+        "selfMechanics": [],
+        "cd": "{cooldown}",
+        "actionCost": 0,
+        "energyLevel": "{energyLevel}",
+        "damageDealer": {
+          "tags": ["shoot_attack", "normal_damage", "basic_attack", "ability"],
+          "attackPatternSid": "attack_single_x100",
+          "castTargetParams": {
+            "targetTags": ["unit", "attackable_object"],
+            "castTarget_": "enemy",
+            "targetCondition_": "alive",
+            "selection": "object"
+          },
+          "affectTargetParams": {
+            "targetTags": ["unit", "attackable_object"],
+            "castTarget_": "enemy",
+            "targetCondition_": "alive",
+            "selection": "object"
+          },
+          "damageTarget_": "enemy",
+          "damageType_": "normal",
+          "statDmgMult": "{statDmgMult}",
+          "triggerCounter": true,
+          "targetMechanics": []
+        },
+        "projectile": "{projectile}",
+        "projectileSpeed": "{projectileSpeed}",
+        "trajectory": "{trajectory}"
+      },
+      "view": {
+        "name": "{nameToken}",
+        "abilityType": "{abilityType}",
+        "description": "{descriptionToken}",
+        "animationIndex": "{animationIndex}",
+        "useExpandTooltip": "false"
+      }
+    },
+    {
+      "id": "repair_heal_percent",
+      "label": "Repair / Heal Percent",
+      "category": "Active",
+      "risk": "native-template",
+      "summary": "Ally-targeted native heal_percent action like Tower Gremlin Mechanic repair.",
+      "defaults": {
+        "nameToken": "{unitSid}_repair_name",
+        "descriptionToken": "{unitSid}_repair_description",
+        "displayName": "Repair",
+        "description": "Spend {energyLevel} Focus to restore health to an allied stack.",
+        "abilityType": "Ability_type_special",
+        "animationIndex": 2,
+        "turnBehavior": "free",
+        "energyLevel": 2,
+        "cooldown": 2,
+        "rank": 2,
+        "healPercent": "0.10",
+        "charges": 2,
+        "iconKey": "",
+        "mechanicsDebt": ""
+      },
+      "logic": {
+        "attackType_": "cast",
+        "rank": "{rank}",
+        "selfMechanics": [],
+        "cd": "{cooldown}",
+        "energyLevel": "{energyLevel}",
+        "damageDealer": {
+          "tags": ["ability", "heal_ability", "revive_ability", "charge_ability"],
+          "triggerCounter": false,
+          "attackPatternSid": "attack_single_x100",
+          "castTargetParams": {
+            "targetTags": ["unit"],
+            "castTarget_": "ally",
+            "targetCondition_": "alive",
+            "selection": "object"
+          },
+          "affectTargetParams": {
+            "targetTags": ["unit"],
+            "castTarget_": "ally",
+            "targetCondition_": "alive",
+            "selection": "object"
+          },
+          "damageTarget_": "none",
+          "damageType_": "none",
+          "targetMechanics": [
+            {
+              "mech": "heal_percent",
+              "values": ["with respawn", "max_unit", "{healPercent}", "0.00", "true"]
+            }
+          ]
+        },
+        "charges": "{charges}",
+        "actionCost": 0
+      },
+      "view": {
+        "name": "{nameToken}",
+        "abilityType": "{abilityType}",
+        "description": "{descriptionToken}",
+        "animationIndex": "{animationIndex}",
+        "useExpandTooltip": "false"
+      }
+    },
+    {
+      "id": "focus_spell_effect",
+      "label": "Focus Spell Effect",
+      "category": "Active",
+      "risk": "native-template",
+      "summary": "Creature action that applies a selected vanilla battle spell effect with chosen tier, level, duration, and effective spell power.",
+      "defaults": {
+        "nameToken": "{unitSid}_spell_effect_name",
+        "descriptionToken": "{unitSid}_spell_effect_description",
+        "displayName": "Spell Effect",
+        "description": "Spend {energyLevel} Focus to apply the selected spell effect.",
+        "abilityType": "Ability_type_special",
+        "animationIndex": 2,
+        "turnBehavior": "free",
+        "energyLevel": 2,
+        "cooldown": 2,
+        "rank": 2,
+        "spellEffectKey": "",
+        "spellSid": "",
+        "spellTier": 1,
+        "spellEffectLevel": 1,
+        "effectiveSpellPower": 0,
+        "effectDuration": 1,
+        "buffSid": "",
+        "iconKey": "",
+        "mechanicsDebt": ""
+      },
+      "logic": {
+        "attackType_": "cast",
+        "rank": "{rank}",
+        "selfMechanics": [],
+        "cd": "{cooldown}",
+        "energyLevel": "{energyLevel}",
+        "xHomm3SpellEffectSelection": {
+          "spellEffectKey": "{spellEffectKey}",
+          "spellSid": "{spellSid}",
+          "spellTier": "{spellTier}",
+          "spellEffectLevel": "{spellEffectLevel}",
+          "effectiveSpellPower": "{effectiveSpellPower}",
+          "effectDuration": "{effectDuration}",
+          "buffSid": "{buffSid}"
+        }
+      },
+      "view": {
+        "name": "{nameToken}",
+        "abilityType": "{abilityType}",
+        "description": "{descriptionToken}",
+        "animationIndex": "{animationIndex}",
+        "useExpandTooltip": "false"
+      }
+    },
+    {
+      "id": "passive_text_only",
+      "label": "Passive UI Text",
+      "category": "Passive",
+      "risk": "text-only",
+      "summary": "Adds only a visible passive description. Use this for already-existing behavior, never as a behavior placeholder.",
+      "defaults": {
+        "nameToken": "{unitSid}_passive_name",
+        "descriptionToken": "{unitSid}_passive_description",
+        "displayName": "Passive",
+        "description": "Describe only behavior that is actually implemented.",
+        "iconKey": "",
+        "mechanicsDebt": ""
+      },
+      "logicPassive": null,
+      "viewPassive": {
+        "name": "{nameToken}",
+        "description": "{descriptionToken}"
+      }
+    }
+  ]
+}

@@ -1,0 +1,603 @@
+{
+  "schemaVersion": 2,
+  "kind": "adapterManifest",
+  "adapters": [
+    {
+      "stableId": 1,
+      "adapterId": "damage",
+      "family": "damage",
+      "operations": [
+        "DamageFlatDelta"
+      ],
+      "fixtureFlag": "homm3_runtime_damage_pilot.flag",
+      "proofLabel": "damage.runtime-unvalidated",
+      "reconciliationPolicy": "preCommitScalar",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    },
+    {
+      "stableId": 2,
+      "adapterId": "cast",
+      "family": "cast",
+      "operations": [
+        "CastChain"
+      ],
+      "fixtureFlag": "homm3_runtime_cast_pilot.flag",
+      "proofLabel": "cast.runtime-unvalidated",
+      "reconciliationPolicy": "committedEventAndDeferredChildren",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    },
+    {
+      "stableId": 3,
+      "adapterId": "focus",
+      "family": "resource",
+      "operations": [
+        "FocusGrant",
+        "FocusSpend",
+        "FocusSet"
+      ],
+      "fixtureFlag": "homm3_runtime_focus_pilot.flag",
+      "proofLabel": "resource.runtime-unvalidated",
+      "reconciliationPolicy": "directStorageAndEnergyView",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    },
+    {
+      "stableId": 4,
+      "adapterId": "cooldown",
+      "family": "resource",
+      "operations": [
+        "CooldownSet",
+        "CooldownReduce",
+        "CooldownIncrease",
+        "CooldownCharges",
+        "CooldownCastCounter"
+      ],
+      "fixtureFlag": "homm3_runtime_cooldown_pilot.flag",
+      "proofLabel": "resource.runtime-unvalidated",
+      "reconciliationPolicy": "directStorageAndAbilityView",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    },
+    {
+      "stableId": 5,
+      "adapterId": "status",
+      "family": "status",
+      "operations": [
+        "StatusApply",
+        "StatusRefresh",
+        "StatusTick",
+        "StatusExpire",
+        "StatusRemove"
+      ],
+      "fixtureFlag": "homm3_runtime_status_pilot.flag",
+      "proofLabel": "status.runtime-unvalidated",
+      "reconciliationPolicy": "managerAuthoritativeNoNativeInventory",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    },
+    {
+      "stableId": 6,
+      "adapterId": "movement",
+      "family": "movement",
+      "operations": [
+        "MovementPush",
+        "MovementPull",
+        "MovementTeleport",
+        "MovementSetImmobile"
+      ],
+      "fixtureFlag": "homm3_runtime_movement_pilot.flag",
+      "proofLabel": "movement.runtime-unvalidated",
+      "reconciliationPolicy": "atomicOccupancyAndView",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    },
+    {
+      "stableId": 7,
+      "adapterId": "summon",
+      "family": "lifecycle",
+      "operations": [
+        "SummonCreate"
+      ],
+      "fixtureFlag": "homm3_runtime_summon_pilot.flag",
+      "proofLabel": "lifecycle.runtime-unvalidated",
+      "reconciliationPolicy": "battleSideOccupancyAndView",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    },
+    {
+      "stableId": 8,
+      "adapterId": "trap",
+      "family": "lifecycle",
+      "operations": [
+        "TrapSpawn",
+        "TrapTrigger",
+        "TrapDespawn"
+      ],
+      "fixtureFlag": "homm3_runtime_trap_pilot.flag",
+      "proofLabel": "lifecycle.runtime-unvalidated",
+      "reconciliationPolicy": "managerObjectAndOccupancy",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    },
+    {
+      "stableId": 9,
+      "adapterId": "corpse",
+      "family": "lifecycle",
+      "operations": [
+        "CorpseCreate",
+        "CorpseConsume"
+      ],
+      "fixtureFlag": "homm3_runtime_corpse_pilot.flag",
+      "proofLabel": "lifecycle.runtime-unvalidated",
+      "reconciliationPolicy": "managerAuthoritativeCorpse",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    },
+    {
+      "stableId": 10,
+      "adapterId": "nestedDamage",
+      "family": "nestedDamage",
+      "operations": [
+        "NestedReflection",
+        "NestedRedirection",
+        "NestedSplash"
+      ],
+      "fixtureFlag": "homm3_runtime_nestedDamage_pilot.flag",
+      "proofLabel": "nestedDamage.runtime-unvalidated",
+      "reconciliationPolicy": "preCommitRedirectAndPostCommitChildren",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    },
+    {
+      "stableId": 11,
+      "adapterId": "kill",
+      "family": "kill",
+      "operations": [
+        "KillConfirm"
+      ],
+      "fixtureFlag": "homm3_runtime_kill_pilot.flag",
+      "proofLabel": "kill.runtime-unvalidated",
+      "reconciliationPolicy": "committedDestructionAtMostOnce",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    },
+    {
+      "stableId": 12,
+      "adapterId": "allyDeath",
+      "family": "kill",
+      "operations": [
+        "AllyDeathObserve"
+      ],
+      "fixtureFlag": "homm3_runtime_allyDeath_pilot.flag",
+      "proofLabel": "kill.runtime-unvalidated",
+      "reconciliationPolicy": "committedDestructionAtMostOnce",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    },
+    {
+      "stableId": 13,
+      "adapterId": "actionQueue",
+      "family": "action",
+      "operations": [
+        "ActionQueueInsert",
+        "ActionQueueRemove"
+      ],
+      "fixtureFlag": "homm3_runtime_actionQueue_pilot.flag",
+      "proofLabel": "action.runtime-unvalidated",
+      "reconciliationPolicy": "authoritativeQueueAndDerivedView",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    },
+    {
+      "stableId": 14,
+      "adapterId": "turnOrder",
+      "family": "turnOrder",
+      "operations": [
+        "TurnOrderReorder"
+      ],
+      "fixtureFlag": "homm3_runtime_turnOrder_pilot.flag",
+      "proofLabel": "turnOrder.runtime-unvalidated",
+      "reconciliationPolicy": "authoritativeStableSplice",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    },
+    {
+      "stableId": 15,
+      "adapterId": "aura",
+      "family": "aura",
+      "operations": [
+        "AuraDefine",
+        "AuraRefresh",
+        "AuraRemove"
+      ],
+      "fixtureFlag": "homm3_runtime_aura_pilot.flag",
+      "proofLabel": "aura.runtime-unvalidated",
+      "reconciliationPolicy": "dirtyIdentityMembership",
+      "caps": {
+        "maxRootWork": 64,
+        "maxDepth": 8,
+        "maxJournalEntries": 64,
+        "maxFanout": 16,
+        "maxDirtyIdentities": 32,
+        "maxQueueSpan": 32
+      }
+    }
+  ],
+  "ingressWaveMap": {
+    "DamageApplying": [
+      "damage",
+      "nestedDamage"
+    ],
+    "DamageApplied": [
+      "movement",
+      "nestedDamage",
+      "kill"
+    ],
+    "CastCommitted": [
+      "cast",
+      "focus",
+      "cooldown",
+      "status",
+      "summon",
+      "trap"
+    ],
+    "MovementCommitted": [
+      "movement",
+      "trap",
+      "aura"
+    ],
+    "ObjectSpawned": [
+      "summon",
+      "trap",
+      "aura"
+    ],
+    "ObjectDestroyed": [
+      "kill",
+      "allyDeath",
+      "corpse",
+      "status",
+      "actionQueue",
+      "aura",
+      "summon",
+      "trap"
+    ],
+    "UnitInit": [
+      "damage",
+      "movement",
+      "summon",
+      "aura"
+    ],
+    "ActionStart": [
+      "actionQueue"
+    ],
+    "ActionEnd": [
+      "cast",
+      "nestedDamage",
+      "actionQueue",
+      "turnOrder"
+    ],
+    "RoundStart": [
+      "cooldown",
+      "status",
+      "turnOrder",
+      "aura"
+    ],
+    "RoundEnd": [
+      "status"
+    ],
+    "BattleResult": [
+      "damage",
+      "cast",
+      "focus",
+      "cooldown",
+      "status",
+      "movement",
+      "summon",
+      "trap",
+      "corpse",
+      "nestedDamage",
+      "kill",
+      "allyDeath",
+      "actionQueue",
+      "turnOrder",
+      "aura"
+    ]
+  },
+  "replayScenarios": {
+    "acceptByOperation": [
+      {
+        "operation": "DamageFlatDelta",
+        "adapterId": "damage",
+        "expect": "accept"
+      },
+      {
+        "operation": "CastChain",
+        "adapterId": "cast",
+        "expect": "accept"
+      },
+      {
+        "operation": "FocusGrant",
+        "adapterId": "focus",
+        "expect": "accept"
+      },
+      {
+        "operation": "FocusSpend",
+        "adapterId": "focus",
+        "expect": "accept"
+      },
+      {
+        "operation": "FocusSet",
+        "adapterId": "focus",
+        "expect": "accept"
+      },
+      {
+        "operation": "CooldownSet",
+        "adapterId": "cooldown",
+        "expect": "accept"
+      },
+      {
+        "operation": "CooldownReduce",
+        "adapterId": "cooldown",
+        "expect": "accept"
+      },
+      {
+        "operation": "CooldownIncrease",
+        "adapterId": "cooldown",
+        "expect": "accept"
+      },
+      {
+        "operation": "CooldownCharges",
+        "adapterId": "cooldown",
+        "expect": "accept"
+      },
+      {
+        "operation": "CooldownCastCounter",
+        "adapterId": "cooldown",
+        "expect": "accept"
+      },
+      {
+        "operation": "StatusApply",
+        "adapterId": "status",
+        "expect": "accept"
+      },
+      {
+        "operation": "StatusRefresh",
+        "adapterId": "status",
+        "expect": "accept"
+      },
+      {
+        "operation": "StatusTick",
+        "adapterId": "status",
+        "expect": "accept"
+      },
+      {
+        "operation": "StatusExpire",
+        "adapterId": "status",
+        "expect": "accept"
+      },
+      {
+        "operation": "StatusRemove",
+        "adapterId": "status",
+        "expect": "accept"
+      },
+      {
+        "operation": "MovementPush",
+        "adapterId": "movement",
+        "expect": "accept"
+      },
+      {
+        "operation": "MovementPull",
+        "adapterId": "movement",
+        "expect": "accept"
+      },
+      {
+        "operation": "MovementTeleport",
+        "adapterId": "movement",
+        "expect": "accept"
+      },
+      {
+        "operation": "MovementSetImmobile",
+        "adapterId": "movement",
+        "expect": "accept"
+      },
+      {
+        "operation": "SummonCreate",
+        "adapterId": "summon",
+        "expect": "accept"
+      },
+      {
+        "operation": "TrapSpawn",
+        "adapterId": "trap",
+        "expect": "accept"
+      },
+      {
+        "operation": "TrapTrigger",
+        "adapterId": "trap",
+        "expect": "accept"
+      },
+      {
+        "operation": "TrapDespawn",
+        "adapterId": "trap",
+        "expect": "accept"
+      },
+      {
+        "operation": "CorpseCreate",
+        "adapterId": "corpse",
+        "expect": "accept"
+      },
+      {
+        "operation": "CorpseConsume",
+        "adapterId": "corpse",
+        "expect": "accept"
+      },
+      {
+        "operation": "NestedReflection",
+        "adapterId": "nestedDamage",
+        "expect": "accept"
+      },
+      {
+        "operation": "NestedRedirection",
+        "adapterId": "nestedDamage",
+        "expect": "accept"
+      },
+      {
+        "operation": "NestedSplash",
+        "adapterId": "nestedDamage",
+        "expect": "accept"
+      },
+      {
+        "operation": "KillConfirm",
+        "adapterId": "kill",
+        "expect": "accept"
+      },
+      {
+        "operation": "AllyDeathObserve",
+        "adapterId": "allyDeath",
+        "expect": "accept"
+      },
+      {
+        "operation": "ActionQueueInsert",
+        "adapterId": "actionQueue",
+        "expect": "accept"
+      },
+      {
+        "operation": "ActionQueueRemove",
+        "adapterId": "actionQueue",
+        "expect": "accept"
+      },
+      {
+        "operation": "TurnOrderReorder",
+        "adapterId": "turnOrder",
+        "expect": "accept"
+      },
+      {
+        "operation": "AuraDefine",
+        "adapterId": "aura",
+        "expect": "accept"
+      },
+      {
+        "operation": "AuraRefresh",
+        "adapterId": "aura",
+        "expect": "accept"
+      },
+      {
+        "operation": "AuraRemove",
+        "adapterId": "aura",
+        "expect": "accept"
+      }
+    ],
+    "fixedCases": [
+      {
+        "scenarioId": "blocked.occupancy",
+        "expect": "blocked",
+        "kind": "occupancy"
+      },
+      {
+        "scenarioId": "blocked.queue_span",
+        "expect": "blocked",
+        "kind": "queue"
+      },
+      {
+        "scenarioId": "rollback.transaction",
+        "expect": "rollback",
+        "kind": "rollback"
+      },
+      {
+        "scenarioId": "fault.injection",
+        "expect": "fault",
+        "kind": "fault"
+      },
+      {
+        "scenarioId": "boundary.budget_depth",
+        "expect": "blocked",
+        "kind": "budget"
+      }
+    ]
+  }
+}

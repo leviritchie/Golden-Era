@@ -1,0 +1,53 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_damsel_fly",
+ "status": "look",
+ "notes": "fortress rollout: blue spark spit ripped from the DEF (defEffects water)",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "frost_spit",
+    "type": "defFlipbook",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "water"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 1
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "provenance": "roster inventory fortress: g12 attack_front water/ice sparks f3-6 (+f2 onset)",
+    "notes": "blue spark spray from the mouth; the inventory named Body_07, pinned to Head because the DEF sparks leave the mouth."
+   }
+  ]
+ }
+}

@@ -1,0 +1,219 @@
+{
+ "unit": "h3_fire_elemental",
+ "strideExempt": "floats in HoMM3 (no ground contact): its Move floor sits 0.30 H above the Idle floor",
+ "strideExemptLegs": [
+  "LeftUpLeg",
+  "RightUpLeg",
+  "LeftArm",
+  "RightArm"
+ ],
+ "joints": {
+  "Hips": [
+   0,
+   0.0,
+   0.86
+  ],
+  "Spine": [
+   0,
+   0.0,
+   0.96
+  ],
+  "Spine1": [
+   0,
+   -0.01,
+   1.07
+  ],
+  "Spine2": [
+   0,
+   0.0,
+   1.19
+  ],
+  "Neck": [
+   0,
+   0.0,
+   1.4
+  ],
+  "Head": [
+   0,
+   -0.03,
+   1.5
+  ],
+  "HeadTop_End": [
+   0,
+   -0.02,
+   1.7
+  ],
+  "LeftShoulder": [
+   0.08,
+   0.0,
+   1.36
+  ],
+  "LeftArm": [
+   0.27,
+   0.03,
+   1.33
+  ],
+  "LeftForeArm": [
+   0.4,
+   0.06,
+   1.05
+  ],
+  "LeftHand": [
+   0.47,
+   -0.01,
+   0.82
+  ],
+  "LeftHand_End": [
+   0.47,
+   -0.05,
+   0.7
+  ],
+  "RightShoulder": [
+   -0.08,
+   0.0,
+   1.36
+  ],
+  "RightArm": [
+   -0.27,
+   0.03,
+   1.33
+  ],
+  "RightForeArm": [
+   -0.4,
+   0.06,
+   1.05
+  ],
+  "RightHand": [
+   -0.47,
+   -0.01,
+   0.82
+  ],
+  "RightHand_End": [
+   -0.47,
+   -0.05,
+   0.7
+  ],
+  "LeftUpLeg": [
+   0.12,
+   0.0,
+   0.8
+  ],
+  "LeftLeg": [
+   0.17,
+   -0.01,
+   0.45
+  ],
+  "LeftFoot": [
+   0.21,
+   0.02,
+   0.1
+  ],
+  "LeftToeBase": [
+   0.24,
+   -0.12,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.26,
+   -0.22,
+   0.02
+  ],
+  "RightUpLeg": [
+   -0.12,
+   0.0,
+   0.8
+  ],
+  "RightLeg": [
+   -0.17,
+   -0.01,
+   0.45
+  ],
+  "RightFoot": [
+   -0.21,
+   0.02,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.24,
+   -0.12,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.26,
+   -0.22,
+   0.02
+  ]
+ },
+ "extensions": [
+  "conflux_weights",
+  "conflux_rubble",
+  "conflux_leash",
+  "element_motion"
+ ],
+ "conflux": {
+  "armFalloff": {
+   "width": 0.04
+  },
+  "rubbleSettle": {
+   "gather": 0.5,
+   "power": 0.8
+  },
+  "fillUnweighted": true,
+  "limbLeash": {
+   "bones": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "maxDist": 0.15,
+   "boneMaxDist": {
+    "LeftHand": 0.08,
+    "RightHand": 0.08
+   },
+   "nearestOnly": true,
+   "maxDistAll": 0.35,
+   "partition": [
+    "LeftUpLeg",
+    "RightUpLeg",
+    "Hips",
+    "Spine",
+    "Spine1"
+   ],
+   "handSplit": true
+  }
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ]
+ },
+ "shatter": {
+  "start": 5,
+  "chunks": 50,
+  "burst": 0.5,
+  "up": 0.6,
+  "spin": 6,
+  "solid": true
+ },
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "elementMotion": {
+  "mode": "roil",
+  "period": 6,
+  "flow": {
+   "gain": 0.5
+  }
+ },
+ "shatterReason": "authenticity lane-B 2026-10-11: the deferred rubble (deferMeshes) was not drawn in game, so the Death ended in a vanish; solid chunks + the rubbleSettle heap on the ground (h3_behemoth / conflux elementals recipe), so the slice row can move to mergeMeshes."
+}

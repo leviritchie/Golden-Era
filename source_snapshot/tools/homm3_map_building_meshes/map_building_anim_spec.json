@@ -1,0 +1,1045 @@
+{
+ "schema": "homm3_map_building_anim_spec.v1",
+ "note": "Rows delivered by tools/homm3_map_building_meshes/map_building_anim.py build: billboard composites (billboard_frames), rotors, keyed rigid parts cut from the shipped meshes (pendulum, articulated_rigid), and vanilla Olden Era map-object effects on anchors measured on the mesh (vanilla_style_effect; anchor px are front/top ortho views at width 512). HoMM3 sprite flipbooks are retired.",
+ "rows": [
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_neutral_dwellings/avghalf.dir/00_00.png",
+   "delivery": "billboard",
+   "lane": "billboard_frames"
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_factory_dwellings/AVGarma.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "rotor",
+   "blades": 4
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_tower_dwellings/avggrem0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "pendulum",
+   "note": "Mesh surgery on the shipped Meshy sculpt: the rod and bob are separate welded pieces, re-parented under a hinge just below the floor; no face is cut. Pivot, piece box and neck columns are front-ortho px at width 512, inspected on artifacts/map_building_anim/debug/avggrem0_front.png.",
+   "parts": [
+    {
+     "kind": "swing",
+     "pieceBoxOrtho": [
+      150,
+      553,
+      290,
+      860
+     ],
+     "neckOrtho": [
+      195,
+      235,
+      600
+     ],
+     "pivotOrtho": [
+      211,
+      556
+     ],
+     "axis": [
+      0.0,
+      0.0,
+      1.0
+     ],
+     "trackHue": "gold",
+     "defTrackBox": [
+      48,
+      58,
+      78,
+      86
+     ],
+     "defHinge": [
+      64,
+      57
+     ],
+     "planeProjection": 1.0,
+     "harmonics": 1
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_bulwark_dwellings/AVGkbl01.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "articulated_rigid",
+   "note": "Mesh surgery on the shipped Meshy sculpt: every welded piece above the turntable (mast, jib, counterweight, pulleys, stay and hoist ropes) slews about the mast's vertical centre line; the turntable and rock pile stay. The sculpt's jib points at the viewer (+Z, heading 90 deg); the DEF holds it 57 deg from screen right and swings it out parallel to the screen. The DEF's ore bucket has no geometry in the sculpt and is not added (no new geometry, no Meshy).",
+   "parts": [
+    {
+     "kind": "slew",
+     "pieceBoxOrtho": [
+      0,
+      0,
+      512,
+      172
+     ],
+     "pivotOrtho": [
+      233,
+      150
+     ],
+     "pivotModel": [
+      -0.0695,
+      0.143,
+      -0.053
+     ],
+     "axis": [
+      0.0,
+      1.0,
+      0.0
+     ],
+     "defTipWindow": [
+      62,
+      28,
+      94,
+      44
+     ],
+     "tipRunPx": 3,
+     "defMastX": 57.5,
+     "meshHeadingDeg": 90.0
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_tower_dwellings/avggolm0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "rotor",
+   "note": "Mesh surgery on the shipped Meshy sculpt. The DEF's riveted flywheel (rim ellipse ~9x18 px at (60,98), the -X face turned toward the viewer) is the sculpt's row of three riveted discs on the -X side; the DEF's small edge-on wheel at the right is the sculpt's pair of spiked wheels on the +X side. All five spin about -X at the DEF rate: luminance rivet tracking in the normalised ellipse gives 2 rivet pitches of ~33 deg per 10-frame cycle, counter-clockwise on screen (tools audit, docs/homm3_map_object_animation_audit.md), i.e. 6.6 deg per DEF frame. The DEF moves the rivets in bursts (two held frames per 5); the mesh spins at the mean rate. The spiked wheels' direction cannot be read from an edge-on sprite and is assumed to match. The steam from the stacks stays a vanilla_style_effect. The spiked wheels spin about their gold hub caps (hubModel), not their spiky outline's centre.",
+   "axis": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "defDegPerFrame": 6.6,
+   "wheels": [
+    {
+     "centreModel": [
+      -0.133,
+      -0.2485,
+      -0.1653
+     ],
+     "radius": 0.125,
+     "halfWidth": 0.05
+    },
+    {
+     "centreModel": [
+      -0.1306,
+      -0.2568,
+      0.0442
+     ],
+     "radius": 0.125,
+     "halfWidth": 0.05
+    },
+    {
+     "centreModel": [
+      -0.1194,
+      -0.2603,
+      0.2236
+     ],
+     "radius": 0.125,
+     "halfWidth": 0.05
+    },
+    {
+     "centreModel": [
+      0.33,
+      -0.4014,
+      -0.1465
+     ],
+     "radius": 0.135,
+     "halfWidth": 0.07,
+     "hubModel": [
+      0.33,
+      -0.4131,
+      -0.1489
+     ]
+    },
+    {
+     "centreModel": [
+      0.33,
+      -0.3975,
+      0.1396
+     ],
+     "radius": 0.135,
+     "halfWidth": 0.07,
+     "hubModel": [
+      0.33,
+      -0.411,
+      0.1335
+     ]
+    }
+   ],
+   "excludePieceCentres": [
+    [
+     -0.141,
+     -0.256,
+     -0.082
+    ],
+    [
+     -0.127,
+     -0.256,
+     0.139
+    ]
+   ],
+   "effects": [
+    {
+     "id": "steam0",
+     "kind": "smoke",
+     "preset": "smoke",
+     "anchor": {
+      "skylinePeakNear": 230,
+      "radiusPx": 25
+     },
+     "scale": 0.12
+    },
+    {
+     "id": "steam1",
+     "kind": "smoke",
+     "preset": "smoke",
+     "anchor": {
+      "skylinePeakNear": 295,
+      "radiusPx": 25
+     },
+     "scale": 0.12
+    },
+    {
+     "id": "steam2",
+     "kind": "smoke",
+     "preset": "smoke",
+     "anchor": {
+      "skylinePeakNear": 370,
+      "radiusPx": 25
+     },
+     "scale": 0.12
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_neutral_dwellings/avglprch.dir/00_00.png",
+   "delivery": "billboard",
+   "lane": "billboard_frames"
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_factory_dwellings/AVGauto.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "stripGeometryAboveEffect": true,
+   "note": "Three chimney plumes (vanilla fx_map_smoke); Meshy's frozen smoke cards above the stacks are stripped. Replaces the retired flipbook pilot.",
+   "effects": [
+    {
+     "id": "smoke0",
+     "kind": "smoke",
+     "preset": "smoke",
+     "anchor": {
+      "skylinePeakNear": 115,
+      "radiusPx": 45
+     },
+     "scale": 0.24
+    },
+    {
+     "id": "smoke1",
+     "kind": "smoke",
+     "preset": "smoke",
+     "anchor": {
+      "skylinePeakNear": 215,
+      "radiusPx": 45
+     },
+     "scale": 0.24
+    },
+    {
+     "id": "smoke2",
+     "kind": "smoke",
+     "preset": "smoke",
+     "anchor": {
+      "skylinePeakNear": 325,
+      "radiusPx": 45
+     },
+     "scale": 0.24
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_stronghold_dwellings/avgbhmt0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Cave-mouth fire (vanilla campfire) on the cave floor, behind the lip so the rock still occludes it. Replaces the retired flipbook pilot.",
+   "effects": [
+    {
+     "id": "fire0",
+     "kind": "fire",
+     "preset": "fire",
+     "anchor": {
+      "front": [
+       320,
+       330
+      ],
+      "depth": "front",
+      "offset": -0.08
+     },
+     "scale": 2.0
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_factory_dwellings/AVGmecha.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "stripGeometryAboveEffect": true,
+   "note": "Chimney smoke; the frozen smoke puffs Meshy sculpted above the stack are stripped.",
+   "effects": [
+    {
+     "id": "smoke0",
+     "kind": "smoke",
+     "preset": "smoke",
+     "anchor": {
+      "skylinePeakNear": 285,
+      "radiusPx": 30
+     },
+     "scale": 0.24
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_conflux_dwellings/AVGair0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Cloud vortex inside the dome (altar-of-magic vortex, recoloured pale sky blue).",
+   "effects": [
+    {
+     "id": "vortex0",
+     "kind": "glow_particles",
+     "preset": "vortex",
+     "anchor": {
+      "front": [
+       256,
+       130
+      ],
+      "depth": "center"
+     },
+     "recolor": [
+      0.75,
+      0.9,
+      1.0
+     ],
+     "scale": 0.8
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_conflux_dwellings/AVGelp.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Cloud swirl on the magic mirror face.",
+   "effects": [
+    {
+     "id": "swirl0",
+     "kind": "glow_pulse",
+     "preset": "vortex",
+     "anchor": {
+      "front": [
+       256,
+       210
+      ],
+      "depth": "front",
+      "offset": 0.01
+     },
+     "recolor": [
+      0.6,
+      0.8,
+      1.0
+     ],
+     "scale": 0.8
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_conflux_dwellings/AVGerth0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Bubbling mud pool: the fountain ring wave recoloured grey-brown.",
+   "effects": [
+    {
+     "id": "mud0",
+     "kind": "water",
+     "preset": "ripple",
+     "anchor": {
+      "top": [
+       256,
+       300
+      ]
+     },
+     "recolor": [
+      0.5,
+      0.42,
+      0.33
+     ],
+     "scale": 0.8
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_conflux_dwellings/AVGfbrd.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Fire vortex over the funnel (vortex recoloured orange) and embers down the funnel; the DEF's lightning arcs have no map-object source (magic/ Prefabs_vfx is not allowed on the map lane).",
+   "effects": [
+    {
+     "id": "vortex0",
+     "kind": "glow_particles",
+     "preset": "vortex",
+     "anchor": {
+      "front": [
+       256,
+       110
+      ],
+      "depth": "center"
+     },
+     "recolor": [
+      1.0,
+      0.5,
+      0.15
+     ],
+     "scale": 0.3
+    },
+    {
+     "id": "fire0",
+     "kind": "glow_particles",
+     "preset": "lava",
+     "anchor": {
+      "front": [
+       245,
+       400
+      ],
+      "depth": "center"
+     },
+     "scale": 0.07
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_conflux_dwellings/AVGfire0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Fire column rising from the floor of the dome (vanilla campfire). Supersedes the whole-prefab altar_of_fire_avgfire0 mesh-fx row.",
+   "effects": [
+    {
+     "id": "fire0",
+     "kind": "fire",
+     "preset": "fire",
+     "anchor": {
+      "front": [
+       265,
+       185
+      ],
+      "depth": "center"
+     },
+     "scale": 1.0
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_conflux_dwellings/AVGpixie.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Pond ripple under the house and a flickering window light.",
+   "effects": [
+    {
+     "id": "pond0",
+     "kind": "water",
+     "preset": "ripple",
+     "anchor": {
+      "top": [
+       255,
+       295
+      ]
+     },
+     "scale": 0.8
+    },
+    {
+     "id": "window0",
+     "kind": "glow_pulse",
+     "preset": "candle",
+     "anchor": {
+      "front": [
+       330,
+       260
+      ],
+      "depth": "front",
+      "offset": 0.03
+     },
+     "recolor": [
+      1.0,
+      0.62,
+      0.28
+     ],
+     "scale": 1.0
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_conflux_dwellings/AVGwatr0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Fountain jets and basin ring wave (vanilla fountain).",
+   "effects": [
+    {
+     "id": "fountain0",
+     "kind": "water",
+     "preset": "fountain",
+     "anchor": {
+      "top": [
+       256,
+       245
+      ]
+     },
+     "scale": 1.0
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_cove_dwellings/HASPHTPL.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Whirlpool in the basin: repeating ring waves on the water surface.",
+   "effects": [
+    {
+     "id": "whirl0",
+     "kind": "water",
+     "preset": "ripple",
+     "anchor": {
+      "top": [
+       256,
+       256
+      ],
+      "offset": 0.05
+     },
+     "scale": 1.8
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_cove_dwellings/NIMPHFO.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Spray and ring waves where the two small falls meet the channel.",
+   "effects": [
+    {
+     "id": "splash0",
+     "kind": "water",
+     "preset": "splash",
+     "anchor": {
+      "front": [
+       170,
+       335
+      ],
+      "depth": "front"
+     },
+     "scale": 1.0
+    },
+    {
+     "id": "splash1",
+     "kind": "water",
+     "preset": "splash",
+     "anchor": {
+      "front": [
+       340,
+       335
+      ],
+      "depth": "front"
+     },
+     "scale": 1.0
+    },
+    {
+     "id": "pool0",
+     "kind": "water",
+     "preset": "ripple",
+     "anchor": {
+      "front": [
+       256,
+       360
+      ],
+      "depth": "front"
+     },
+     "scale": 0.8
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_dungeon_dwellings/AVGrdrg0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Three gold glints on the hoard.",
+   "effects": [
+    {
+     "id": "glint0",
+     "kind": "glow_pulse",
+     "preset": "glints",
+     "anchor": {
+      "front": [
+       170,
+       90
+      ],
+      "depth": "front"
+     },
+     "recolor": [
+      1.0,
+      0.82,
+      0.4
+     ],
+     "scale": 1.0
+    },
+    {
+     "id": "glint1",
+     "kind": "glow_pulse",
+     "preset": "glints",
+     "anchor": {
+      "front": [
+       250,
+       110
+      ],
+      "depth": "front"
+     },
+     "recolor": [
+      1.0,
+      0.82,
+      0.4
+     ],
+     "scale": 1.0
+    },
+    {
+     "id": "glint2",
+     "kind": "glow_pulse",
+     "preset": "glints",
+     "anchor": {
+      "front": [
+       330,
+       60
+      ],
+      "depth": "front"
+     },
+     "recolor": [
+      1.0,
+      0.82,
+      0.4
+     ],
+     "scale": 1.0
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_factory_city/AVCfacZ0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Arched windows of the dome drum flicker (altar-of-magic candle glow, recoloured warm).",
+   "effects": [
+    {
+     "id": "window0",
+     "kind": "glow_pulse",
+     "preset": "candle",
+     "anchor": {
+      "front": [
+       145,
+       210
+      ],
+      "depth": "front",
+      "offset": 0.03
+     },
+     "recolor": [
+      1.0,
+      0.62,
+      0.28
+     ],
+     "scale": 2.0
+    },
+    {
+     "id": "window1",
+     "kind": "glow_pulse",
+     "preset": "candle",
+     "anchor": {
+      "front": [
+       300,
+       210
+      ],
+      "depth": "front",
+      "offset": 0.03
+     },
+     "recolor": [
+      1.0,
+      0.62,
+      0.28
+     ],
+     "scale": 2.0
+    },
+    {
+     "id": "window2",
+     "kind": "glow_pulse",
+     "preset": "candle",
+     "anchor": {
+      "front": [
+       225,
+       110
+      ],
+      "depth": "front",
+      "offset": 0.03
+     },
+     "recolor": [
+      1.0,
+      0.62,
+      0.28
+     ],
+     "scale": 2.0
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_factory_dwellings/AVGworm.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Green vent light pulsing on the dome.",
+   "effects": [
+    {
+     "id": "vent0",
+     "kind": "glow_pulse",
+     "preset": "candle",
+     "anchor": {
+      "top": [
+       256,
+       300
+      ]
+     },
+     "recolor": [
+      0.3,
+      1.0,
+      0.35
+     ],
+     "scale": 2.0
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_fortress_city/capitol.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Temple window and gate glow.",
+   "effects": [
+    {
+     "id": "window0",
+     "kind": "fire",
+     "preset": "candle",
+     "anchor": {
+      "front": [
+       222,
+       100
+      ],
+      "depth": "front",
+      "offset": 0.03
+     },
+     "recolor": [
+      1.0,
+      0.62,
+      0.28
+     ],
+     "scale": 2.0
+    },
+    {
+     "id": "door0",
+     "kind": "fire",
+     "preset": "candle",
+     "anchor": {
+      "front": [
+       222,
+       185
+      ],
+      "depth": "front",
+      "offset": 0.03
+     },
+     "recolor": [
+      1.0,
+      0.62,
+      0.28
+     ],
+     "scale": 2.0
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_fortress_dwellings/AVGdfly0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Red glowing tree-trunk hollows pulse.",
+   "effects": [
+    {
+     "id": "hollow0",
+     "kind": "glow_pulse",
+     "preset": "candle",
+     "anchor": {
+      "front": [
+       145,
+       320
+      ],
+      "depth": "front",
+      "offset": 0.03
+     },
+     "recolor": [
+      1.0,
+      0.25,
+      0.12
+     ],
+     "scale": 1.0
+    },
+    {
+     "id": "hollow1",
+     "kind": "glow_pulse",
+     "preset": "candle",
+     "anchor": {
+      "front": [
+       350,
+       245
+      ],
+      "depth": "front",
+      "offset": 0.03
+     },
+     "recolor": [
+      1.0,
+      0.25,
+      0.12
+     ],
+     "scale": 1.0
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_fortress_dwellings/AVGhydr0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Swamp water ripple (fountain ring wave, recoloured murky green).",
+   "effects": [
+    {
+     "id": "swamp0",
+     "kind": "water",
+     "preset": "ripple",
+     "anchor": {
+      "top": [
+       300,
+       260
+      ]
+     },
+     "recolor": [
+      0.45,
+      0.55,
+      0.35
+     ],
+     "scale": 0.783
+    },
+    {
+     "id": "swamp1",
+     "kind": "water",
+     "preset": "ripple",
+     "anchor": {
+      "top": [
+       300,
+       470
+      ]
+     },
+     "recolor": [
+      0.45,
+      0.55,
+      0.35
+     ],
+     "scale": 0.783
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_inferno_city/capitol.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Fire behind the central window: warm glow on the window and embers behind it.",
+   "effects": [
+    {
+     "id": "window0",
+     "kind": "fire",
+     "preset": "candle",
+     "anchor": {
+      "front": [
+       190,
+       170
+      ],
+      "depth": "front",
+      "offset": 0.03
+     },
+     "recolor": [
+      1.0,
+      0.45,
+      0.15
+     ],
+     "scale": 2.0
+    },
+    {
+     "id": "fire0",
+     "kind": "fire",
+     "preset": "lava",
+     "anchor": {
+      "front": [
+       190,
+       185
+      ],
+      "depth": "center"
+     },
+     "scale": 0.14
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_inferno_dwellings/avgefre0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Molten gold bed shimmering around the base (vanilla map fire without its ground crack).",
+   "effects": [
+    {
+     "id": "lava0",
+     "kind": "fire",
+     "preset": "lava",
+     "anchor": {
+      "front": [
+       90,
+       455
+      ],
+      "depth": "front"
+     },
+     "scale": 0.14
+    },
+    {
+     "id": "lava1",
+     "kind": "fire",
+     "preset": "lava",
+     "anchor": {
+      "front": [
+       420,
+       455
+      ],
+      "depth": "front"
+     },
+     "scale": 0.14
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_inferno_dwellings/avggogs0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Lava basin and the pour from the cauldron spout.",
+   "effects": [
+    {
+     "id": "basin0",
+     "kind": "fire",
+     "preset": "lava",
+     "anchor": {
+      "top": [
+       400,
+       160
+      ]
+     },
+     "scale": 0.14
+    },
+    {
+     "id": "pour0",
+     "kind": "fire",
+     "preset": "lava",
+     "anchor": {
+      "front": [
+       375,
+       200
+      ],
+      "depth": "front"
+     },
+     "scale": 0.14
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_inferno_dwellings/avgimp0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Fire in the arched crevice.",
+   "effects": [
+    {
+     "id": "fire0",
+     "kind": "fire",
+     "preset": "fire",
+     "anchor": {
+      "front": [
+       256,
+       650
+      ],
+      "depth": "center"
+     },
+     "scale": 1.5
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_inferno_dwellings/avgpit0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Lava pool and the fire ring in the gate.",
+   "effects": [
+    {
+     "id": "pool0",
+     "kind": "fire",
+     "preset": "lava",
+     "anchor": {
+      "top": [
+       256,
+       200
+      ]
+     },
+     "scale": 0.14
+    },
+    {
+     "id": "ring0",
+     "kind": "fire",
+     "preset": "fire",
+     "anchor": {
+      "front": [
+       400,
+       140
+      ],
+      "depth": "center"
+     },
+     "scale": 1.0
+    }
+   ]
+  },
+  {
+   "relativePng": "homm3_runtime_assets/map_object_refs/homm3_rampart_dwellings/AVGpega0.dir/00_00.png",
+   "delivery": "mesh",
+   "lane": "vanilla_style_effect",
+   "note": "Spray and ring waves at the foot of the waterfall.",
+   "effects": [
+    {
+     "id": "splash0",
+     "kind": "water",
+     "preset": "splash",
+     "anchor": {
+      "front": [
+       270,
+       650
+      ],
+      "depth": "front"
+     },
+     "scale": 1.0
+    },
+    {
+     "id": "pool0",
+     "kind": "water",
+     "preset": "ripple",
+     "anchor": {
+      "front": [
+       270,
+       665
+      ],
+      "depth": "front"
+     },
+     "scale": 0.8
+    }
+   ]
+  }
+ ]
+}

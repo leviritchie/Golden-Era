@@ -1,0 +1,76 @@
+{
+ "schema": "town_full3d_recipe.v2",
+ "faction": "bulwark",
+ "seed": "gc_v1",
+ "candidate": "zs_v3",
+ "note": "bulwark zs_v1 (2026-10-01, town agent): castle_zs_v6's recipe v2 on seed gc_v1 = the installed pb_v1 (Meshy T2 buildings, no props) with one near-field pebble removed (Mesh_Near_pebbles, 98 verts, 2.5 m over the ground after the LDI on the cut curtain; neither slide nor fill grounds it; work/dropped_pieces.json). It is not an LDI candidate, so the LDI runs here (fromPreLdi false). Build states use the grail alias (town_full3d_build_states.grail_aliased, ec44b0372f): the layer map's Build_Golden_Calf slot is the tree's Build_Spring_of_Life (Core data inconsistency reported, not edited). zs_v2: plus the sprite ground decals (\"decal\": {}). zs_v1 failed the rest-paint term on terrain in start (745 px, Mesh_Terrain/Back_Terrain at [1155,455]) and full (1686 px at [871,644], 1279 px at [1202,457], 712 px at [1186,221]), independent of the fx cap. zs_v3: knownGaps min_tbbucstl/min_tbbubl01 (approved by name 2026-10-02) and ldi keepRounds 2: zs_v2's ground-hole growth (133 px at loop_324, an undrawn slit at the Mesh_Terrain / Mesh_Back_Terrain cut seam near rest px [810-838, 508-532]) has no face for a repair rule; keep_holes keeps the smear tris seen through reveal holes so the rounds can certify them. certificate.extraPoses (2026-10-02, finish lane): every pose where the final certificate (loop 36, 157 poses x 32 states, measured per pose on the first zs_v3 bins 9a650faf5d74) found unseen-face (max 61 px, loop_132) or ground-hole growth (max 2 px, loop_024); no visible-behind; so the repair rounds certify them.",
+ "ldi": {
+  "pieces": [
+   "Mesh_Terrain"
+  ],
+  "cut": "zone",
+  "backRule": "vlb",
+  "vlbK": 2.0,
+  "keepRounds": 2,
+  "reachLoop": 12,
+  "fromPreLdi": false
+ },
+ "backstop": {
+  "K": 2.0,
+  "stepPx": 4,
+  "groundSrcM": 1.0
+ },
+ "repair": {
+  "rules": [
+   "drop",
+   "card",
+   "flap",
+   "planar"
+  ],
+  "rounds": 8
+ },
+ "certificate": {
+  "loop": 12,
+  "extraPoses": [
+   "free_polygon_lookAt_right",
+   "loop_024",
+   "loop_060",
+   "loop_084",
+   "loop_096",
+   "loop_120",
+   "loop_132",
+   "loop_156",
+   "loop_240",
+   "transition_028",
+   "transition_030",
+   "transition_040",
+   "transition_042",
+   "transition_045",
+   "transition_078",
+   "transition_090"
+  ]
+ },
+ "decal": {},
+ "restPaint": {
+  "fxShareOverride": {
+   "tbbumr01": {
+    "share": 0.4,
+    "why": "pyre layer: painting is mostly its own flame"
+   }
+  },
+  "knownGaps": [
+   {
+    "state": "min_tbbucstl",
+    "layer": "tbbucstl",
+    "maxPx": 1336,
+    "why": "Meshy T2 Castle tower crenels over painted sky; same gap installed in pb_v1"
+   },
+   {
+    "state": "min_tbbubl01",
+    "layer": "tbbucstl",
+    "maxPx": 1336,
+    "why": "Meshy T2 Castle tower crenels over painted sky; same gap installed in pb_v1"
+   }
+  ]
+ }
+}

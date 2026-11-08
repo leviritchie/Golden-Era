@@ -1,0 +1,381 @@
+{
+ "unit": "h3_dendroid_soldier",
+ "joints": {
+  "Hips": [
+   0,
+   0.05,
+   0.7
+  ],
+  "Spine": [
+   0,
+   0.05,
+   0.85
+  ],
+  "Spine1": [
+   0,
+   0.05,
+   0.98
+  ],
+  "Spine2": [
+   0,
+   0.05,
+   1.1
+  ],
+  "Neck": [
+   0,
+   0.02,
+   1.28
+  ],
+  "Head": [
+   0,
+   0.0,
+   1.36
+  ],
+  "HeadTop_End": [
+   0,
+   0.03,
+   1.62
+  ],
+  "LeftShoulder": [
+   0.06,
+   0.05,
+   1.2
+  ],
+  "LeftArm": [
+   0.2,
+   0.06,
+   1.18
+  ],
+  "LeftForeArm": [
+   0.26,
+   0.1,
+   0.87
+  ],
+  "LeftHand": [
+   0.29,
+   -0.04,
+   0.56
+  ],
+  "LeftHand_End": [
+   0.3,
+   -0.14,
+   0.38
+  ],
+  "RightShoulder": [
+   -0.06,
+   0.05,
+   1.2
+  ],
+  "RightArm": [
+   -0.2,
+   0.06,
+   1.18
+  ],
+  "RightForeArm": [
+   -0.26,
+   0.1,
+   0.87
+  ],
+  "RightHand": [
+   -0.29,
+   -0.06,
+   0.56
+  ],
+  "RightHand_End": [
+   -0.29,
+   -0.16,
+   0.38
+  ],
+  "LeftUpLeg": [
+   0.1,
+   0.05,
+   0.66
+  ],
+  "LeftLeg": [
+   0.13,
+   0.02,
+   0.4
+  ],
+  "LeftFoot": [
+   0.13,
+   0.05,
+   0.12
+  ],
+  "LeftToeBase": [
+   0.14,
+   -0.08,
+   0.02
+  ],
+  "LeftToe_End": [
+   0.14,
+   -0.2,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.1,
+   0.05,
+   0.66
+  ],
+  "RightLeg": [
+   -0.12,
+   0.06,
+   0.4
+  ],
+  "RightFoot": [
+   -0.14,
+   0.15,
+   0.12
+  ],
+  "RightToeBase": [
+   -0.15,
+   0.02,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.15,
+   -0.1,
+   0.0
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "sleeve": {
+  "x": 0.17,
+  "zMin": 0.6,
+  "zMax": 1.1
+ },
+ "armCut": {
+  "maxDist": 0.13
+ },
+ "shatter": {
+  "start": 3,
+  "chunks": 14,
+  "burst": 0.4,
+  "up": 0.6,
+  "spin": 5
+ },
+ "strideMatch": {
+  "maxDrop": 0.2,
+  "reason": "Left leg has no reach at the default 0.15 drop (cap 0): cadence needed 2.64, ratio 1.50 at the 1.6 cap. maxDrop 0.20 (smallest tried that passes): slip 0.08, ratio 1.07, cadence 1.35, jitter 0.04, pelvis drop 0.065 H (2026-09-27)."
+ },
+ "extensions": [
+  "castle_armsep",
+  "conflux_rubble"
+ ],
+ "armSep": [
+  {
+   "side": "left",
+   "armBones": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "axis": [
+    [
+     0.233,
+     -0.009000000000000001,
+     1.145
+    ],
+    [
+     0.219,
+     0.05499999999999999,
+     1.067
+    ],
+    [
+     0.221,
+     0.061,
+     0.988
+    ],
+    [
+     0.224,
+     0.165,
+     0.913
+    ],
+    [
+     0.235,
+     0.135,
+     0.831
+    ],
+    [
+     0.236,
+     0.081,
+     0.753
+    ],
+    [
+     0.239,
+     0.042,
+     0.672
+    ],
+    [
+     0.266,
+     -0.079,
+     0.58
+    ],
+    [
+     0.289,
+     -0.141,
+     0.511
+    ],
+    [
+     0.278,
+     -0.17,
+     0.428
+    ],
+    [
+     0.252,
+     -0.163,
+     0.351
+    ],
+    [
+     0.261,
+     -0.126,
+     0.3
+    ]
+   ],
+   "radius": [
+    0.11,
+    0.152,
+    0.122,
+    0.11,
+    0.089,
+    0.109,
+    0.061,
+    0.119,
+    0.15,
+    0.142,
+    0.129,
+    0.086
+   ],
+   "margin": 0.012,
+   "low": 0.12,
+   "top": 1.12,
+   "ramp": 0.04,
+   "bodyMaxX": 0.2,
+   "neutralDominant": [
+    "LeftHand"
+   ],
+   "bodyBehindY": -0.08,
+   "note": "soldier port of the guard v2 cut (axes from armaxis on the frozen input; mid-arm radius -0.02 per coordinator); cutcheck bridges 0/0, torso faces in ARM 135/27"
+  },
+  {
+   "side": "right",
+   "armBones": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "axis": [
+    [
+     -0.241,
+     -0.014,
+     1.141
+    ],
+    [
+     -0.217,
+     0.035,
+     1.066
+    ],
+    [
+     -0.218,
+     0.05299999999999999,
+     0.993
+    ],
+    [
+     -0.253,
+     0.106,
+     0.907
+    ],
+    [
+     -0.263,
+     0.12,
+     0.827
+    ],
+    [
+     -0.247,
+     0.082,
+     0.756
+    ],
+    [
+     -0.254,
+     -0.003,
+     0.667
+    ],
+    [
+     -0.26,
+     -0.141,
+     0.581
+    ],
+    [
+     -0.275,
+     -0.238,
+     0.512
+    ],
+    [
+     -0.246,
+     -0.251,
+     0.431
+    ],
+    [
+     -0.232,
+     -0.208,
+     0.349
+    ],
+    [
+     -0.236,
+     -0.154,
+     0.307
+    ]
+   ],
+   "radius": [
+    0.101,
+    0.146,
+    0.119,
+    0.066,
+    0.087,
+    0.093,
+    0.057,
+    0.15,
+    0.14,
+    0.147,
+    0.109,
+    0.05
+   ],
+   "margin": 0.012,
+   "low": 0.12,
+   "top": 1.12,
+   "ramp": 0.04,
+   "bodyMaxX": 0.2,
+   "neutralDominant": [
+    "RightHand"
+   ],
+   "bodyBehindY": -0.08,
+   "note": "soldier port of the guard v2 cut (axes from armaxis on the frozen input; mid-arm radius -0.02 per coordinator); cutcheck bridges 0/0, torso faces in ARM 135/27"
+  }
+ ],
+ "conflux": {
+  "rubbleSettle": {
+   "gather": 0.3,
+   "power": 0.5
+  }
+ },
+ "glbPatch": {
+  "reason": "AttackFront backhand club sweep per DEF (f1 gather, f2 both arms wide, f3-f4 sweep at the enemy with trunk turn and crouch); Defence left arm raised in front of the face as a shield f3-f7; Hitted arms flung wide f2-f5; Death f2 both arms up before the shatter. Port of the h3_dendroid_guard key spec.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_dendroid_soldier_pose_rot.json",
+    "sha256": "08af4d9bd8bf01d70827617d42feabf69dfd8c760173218f36261edb0d1c5fdd",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_dendroid_soldier_crouch_tr.json",
+    "sha256": "98755dcf13dca24bf2ae5c8742aa5e917f53b5ec5b44b802be01ac9adc3a8e79",
+    "regrid": true
+   }
+  ]
+ }
+}

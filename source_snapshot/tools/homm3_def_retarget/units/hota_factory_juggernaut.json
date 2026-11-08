@@ -1,0 +1,236 @@
+{
+ "unit": "hota_factory_juggernaut",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.0,
+   0.62
+  ],
+  "Spine": [
+   0.0,
+   0.0,
+   0.8
+  ],
+  "Spine1": [
+   0.0,
+   0.0,
+   0.98
+  ],
+  "Spine2": [
+   0.0,
+   0.0,
+   1.15
+  ],
+  "Neck": [
+   0.0,
+   -0.05,
+   1.3
+  ],
+  "Head": [
+   0.0,
+   -0.08,
+   1.38
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.1,
+   1.58
+  ],
+  "LeftShoulder": [
+   0.15,
+   0.0,
+   1.3
+  ],
+  "LeftArm": [
+   0.52,
+   0.0,
+   1.3
+  ],
+  "LeftForeArm": [
+   0.54,
+   -0.03,
+   1.02
+  ],
+  "LeftHand": [
+   0.54,
+   -0.05,
+   0.78
+  ],
+  "LeftHand_End": [
+   0.54,
+   -0.07,
+   0.66
+  ],
+  "LeftUpLeg": [
+   0.2,
+   0.0,
+   0.6
+  ],
+  "LeftLeg": [
+   0.2,
+   -0.03,
+   0.33
+  ],
+  "LeftFoot": [
+   0.2,
+   0.0,
+   0.1
+  ],
+  "LeftToeBase": [
+   0.2,
+   -0.2,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.2,
+   -0.33,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.15,
+   0.0,
+   1.3
+  ],
+  "RightArm": [
+   -0.52,
+   0.0,
+   1.3
+  ],
+  "RightForeArm": [
+   -0.54,
+   -0.03,
+   1.02
+  ],
+  "RightHand": [
+   -0.54,
+   -0.05,
+   0.78
+  ],
+  "RightHand_End": [
+   -0.54,
+   -0.07,
+   0.66
+  ],
+  "RightUpLeg": [
+   -0.2,
+   0.0,
+   0.6
+  ],
+  "RightLeg": [
+   -0.2,
+   -0.03,
+   0.33
+  ],
+  "RightFoot": [
+   -0.2,
+   0.0,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.2,
+   -0.2,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.2,
+   -0.33,
+   0.0
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.13
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.2,
+   "keepDist": 0.13
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.2,
+   "keepDist": 0.13
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "strideMatch": {
+  "maxDrop": 0.25,
+  "reason": "short-reach walker (legs near straight at the source Move): default 0.15: slip 0.397 ratio 1.91; 0.25: slip 0.086 ratio 1.062 cadence 1.07 (workerB scratch trials 2026-09-27)"
+ },
+ "sourceMesh": "artifacts/homm3_mesh_surgery/hota_factory_juggernaut_fist_c1.glb",
+ "meshSurgeryReason": "2026-10-11 lane A (standing mesh-surgery approval): the Meshy mesh welds the resting left fist onto the left thigh plate (92 bridge faces), so the DEF g12 forward punch tore a thigh-plate shard out with the fist (gate: worst edge stretch rose). limb_cut_surgery.py splits the bridge by majority and duplicates the 46 shared vertices (fist copies drop the leg bones, thigh originals drop the forearm/hand); every original vertex is byte-identical, same mesh at rest.",
+ "glbPatch": {
+  "reason": "DEF g12 attack: left-fist forward punch, torso squared to the target, right fist guards",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_juggernaut_juggernaut_punch.json",
+    "sha256": "d03c7cfa127a45d7e383974a3120f65ecfaf29de1c2fa7c5424faf95488f2822",
+    "note": "fist/thigh skin split after the fist_c1 cut + punch arm/torso weights re-solved"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_juggernaut_pose_rot.json",
+    "sha256": "2292702711903c451df79bd57e9c40fce0d0582399a51fbaecf5b8361bfc1994",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_juggernaut_pose_rot.json",
+    "sha256": "2292702711903c451df79bd57e9c40fce0d0582399a51fbaecf5b8361bfc1994",
+    "regrid": true
+   }
+  ]
+ }
+}

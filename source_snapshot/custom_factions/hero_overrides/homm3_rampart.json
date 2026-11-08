@@ -1,0 +1,1607 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_rampart",
+  "heroOverrides": {
+    "homm3_rampart_hero_1": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Ranger",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_leadership",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Mephala",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_1",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_1_source_armorer_specialist",
+        "nameText": "Armorer",
+        "descriptionText": "Reduces incoming basic and ranged attack damage for the hero's army.",
+        "iconKey": "skill_protection",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "inDmgMods",
+              "basic_attack",
+              "-0.10"
+            ],
+            "upgrade": {
+              "increment": -0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:armorer"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_2": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Ranger",
+      "startSquad": [
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_dwarf",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_luck",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Ufretin",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_2",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_2_source_h3_dwarf_specialist",
+        "nameText": "Dwarf Specialist",
+        "descriptionText": "Dwarf creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_dwarf",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_dwarf",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_dwarf",
+              "h3_dwarf_upg",
+              "h3_dwarf_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_dwarf",
+              "h3_dwarf_upg",
+              "h3_dwarf_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_dwarf",
+              "h3_dwarf_upg",
+              "h3_dwarf_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_dwarf",
+              "h3_dwarf_upg",
+              "h3_dwarf_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_dwarf",
+              "h3_dwarf_upg",
+              "h3_dwarf_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_dwarf"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_3": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Ranger",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Jenova",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_3",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_3_source_gold_specialist",
+        "nameText": "Gold",
+        "descriptionText": "Generates additional gold each day.",
+        "iconKey": "skill_economy",
+        "bonuses": [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              "350"
+            ],
+            "upgrade": {
+              "increment": 50,
+              "levelStep": 5
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:gold"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_4": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Ranger",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_diplomacy",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Ryland",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_4",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_4_source_h3_dendroid_guard_specialist",
+        "nameText": "Dendroid Guard Specialist",
+        "descriptionText": "Dendroid Guard creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_dendroid_guard",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_dendroid_guard",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_dendroid_guard",
+              "h3_dendroid_guard_upg",
+              "h3_dendroid_guard_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_dendroid_guard",
+              "h3_dendroid_guard_upg",
+              "h3_dendroid_guard_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_dendroid_guard",
+              "h3_dendroid_guard_upg",
+              "h3_dendroid_guard_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_dendroid_guard",
+              "h3_dendroid_guard_upg",
+              "h3_dendroid_guard_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_dendroid_guard",
+              "h3_dendroid_guard_upg",
+              "h3_dendroid_guard_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_dendroid_guard"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_5": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Ranger",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_resistance",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Thorgrim",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_5",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_5_source_resistance_specialist",
+        "nameText": "Resistance",
+        "descriptionText": "Reduces incoming spell damage for the hero's army.",
+        "iconKey": "skill_protection",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "inDmgMods",
+              "magic_damage",
+              "-0.10"
+            ],
+            "upgrade": {
+              "increment": -0.01,
+              "levelStep": 2
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:resistance"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_6": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Ranger",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Ivor",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_6",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_6_source_h3_wood_elf_specialist",
+        "nameText": "Wood Elf Specialist",
+        "descriptionText": "Wood Elf creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_wood_elf",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_wood_elf",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wood_elf",
+              "h3_wood_elf_upg",
+              "h3_wood_elf_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wood_elf",
+              "h3_wood_elf_upg",
+              "h3_wood_elf_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wood_elf",
+              "h3_wood_elf_upg",
+              "h3_wood_elf_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wood_elf",
+              "h3_wood_elf_upg",
+              "h3_wood_elf_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wood_elf",
+              "h3_wood_elf_upg",
+              "h3_wood_elf_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_wood_elf"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_7": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Ranger",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_logistic",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Clancy",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_7",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_7_source_h3_unicorn_specialist",
+        "nameText": "Unicorn Specialist",
+        "descriptionText": "Unicorn creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_unicorn",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_unicorn",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_unicorn",
+              "h3_unicorn_upg",
+              "h3_unicorn_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_unicorn",
+              "h3_unicorn_upg",
+              "h3_unicorn_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_unicorn",
+              "h3_unicorn_upg",
+              "h3_unicorn_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_unicorn",
+              "h3_unicorn_upg",
+              "h3_unicorn_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_unicorn",
+              "h3_unicorn_upg",
+              "h3_unicorn_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_unicorn"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_8": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Ranger",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Kyrre",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_8",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_8_source_logistics_specialist",
+        "nameText": "Logistics",
+        "descriptionText": "Increases movement on the adventure map and improves travel on roads.",
+        "iconKey": "skill_logistic",
+        "bonuses": [
+          {
+            "activationLevel": 8,
+            "type": "heroStat",
+            "parameters": [
+              "movementPerBonus",
+              "0.05"
+            ],
+            "upgrade": {
+              "increment": 0.05,
+              "levelStep": 8
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "roadPerBonus",
+              "0.33333334"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:logistics"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_9": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Druid",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Coronius",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_9",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_9_source_slayer_specialist",
+        "nameText": "Slayer",
+        "descriptionText": "Improves direct combat damage against hardened targets.",
+        "iconKey": "skill_assault",
+        "bonuses": [
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "basic_attack",
+              "0.06"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 4
+            }
+          },
+          {
+            "type": "unitStat",
+            "parameters": [
+              "modifierSet",
+              "outDmgMods",
+              "magic_damage",
+              "0.03"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 6
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:slayer"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_10": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Druid",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Uland",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_10",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_10_olden_era_masterful_day_1_magic_healing_water",
+        "nameText": "Masterful Healing Water",
+        "descriptionText": "Starts with Masterful Healing Water. It casts as one tier stronger.",
+        "iconKey": "day_1_magic_healing_water",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "day_1_magic_healing_water",
+              "day_1_magic_healing_water_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:day_1_magic_healing_water",
+        "masterfulSpellBaseSid": "day_1_magic_healing_water",
+        "masterfulSpellSpecialSid": "day_1_magic_healing_water_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_11": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Druid",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Elleshar",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_11",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_11_source_intelligence_specialist",
+        "nameText": "Intelligence",
+        "descriptionText": "Increases the hero's mana reserves and allows one additional spell use each round.",
+        "iconKey": "skill_wisdom",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "manaBonusPercent",
+              "0.20"
+            ],
+            "upgrade": {
+              "increment": 0.05,
+              "levelStep": 5
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicUsageLimitBonus",
+              "1"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:intelligence"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_12": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Druid",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Gem",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_12",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_12_olden_era_masterful_day_1_magic_healing_water",
+        "nameText": "Masterful Healing Water",
+        "descriptionText": "Starts with Masterful Healing Water. It casts as one tier stronger.",
+        "iconKey": "day_1_magic_healing_water",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "day_1_magic_healing_water",
+              "day_1_magic_healing_water_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "skill:firstAid",
+        "masterfulSpellBaseSid": "day_1_magic_healing_water",
+        "masterfulSpellSpecialSid": "day_1_magic_healing_water_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_13": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Druid",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Malcom",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_13",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_13_source_eagleEye_specialist",
+        "nameText": "Eagle Eye",
+        "descriptionText": "Improves spell pressure and magical awareness in combat.",
+        "iconKey": "skill_scouting",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "magicAttackPerBonus",
+              "0.06"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "heroStat",
+            "parameters": [
+              "viewRadius",
+              "1"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:eagleEye"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_14": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Druid",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Melodia",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_14",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_14_source_fortune_specialist",
+        "nameText": "Fortune",
+        "descriptionText": "Improves army Luck and increases the chance of critical hits as the hero gains levels.",
+        "iconKey": "skill_luck",
+        "bonuses": [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "luck",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "parameters": [
+              "critChanceModifier",
+              "0.02"
+            ],
+            "upgrade": {
+              "increment": 0.01,
+              "levelStep": 4
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "skill:fortune"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_15": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Druid",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Alagar",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_15",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_15_olden_era_masterful_primal_13_magic_avalanche",
+        "nameText": "Masterful Circle of Winter",
+        "descriptionText": "Starts with Masterful Circle of Winter. It casts as one tier stronger.",
+        "iconKey": "primal_13_magic_avalanche",
+        "bonuses": [
+          {
+            "type": "heroMagicReplace",
+            "parameters": [
+              "primal_13_magic_avalanche",
+              "primal_13_magic_avalanche_special"
+            ]
+          }
+        ],
+        "changeDisposition": "explicit_masterful_spell_variant",
+        "sourceSpecialtyKey": "spell:primal_13_magic_avalanche",
+        "masterfulSpellBaseSid": "primal_13_magic_avalanche",
+        "masterfulSpellSpecialSid": "primal_13_magic_avalanche_special"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_16": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Druid",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_wisdom",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Aeris",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_16",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_16_source_h3_pegasus_specialist",
+        "nameText": "Pegasus Specialist",
+        "descriptionText": "Pegasus creatures and their upgrades gain extra weekly growth, Speed, Initiative, Health, Attack, and Defense while this hero leads them.",
+        "iconKey": "h3_pegasus",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_pegasus",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_pegasus",
+              "h3_pegasus_upg",
+              "h3_pegasus_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_pegasus",
+              "h3_pegasus_upg",
+              "h3_pegasus_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_pegasus",
+              "h3_pegasus_upg",
+              "h3_pegasus_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_pegasus",
+              "h3_pegasus_upg",
+              "h3_pegasus_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_pegasus",
+              "h3_pegasus_upg",
+              "h3_pegasus_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_pegasus"
+      },
+      "notes": "Prefilled from local VCMI HoMM3 hero skills; army uses the checked HoMM3/HotA starter table in prefill_homm3_hero_overrides.py."
+    },
+    "homm3_rampart_hero_17": {
+      "enabled": true,
+      "classType": "might",
+      "className": "Ranger",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_assault",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Gelu",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_17",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_17_source_h3_wood_elf_specialist",
+        "nameText": "Sharpshooters",
+        "descriptionText": "Improves Sharpshooters and their upgrades in the hero's army.",
+        "iconKey": "h3_wood_elf",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_wood_elf",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wood_elf",
+              "h3_wood_elf_upg",
+              "h3_wood_elf_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wood_elf",
+              "h3_wood_elf_upg",
+              "h3_wood_elf_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wood_elf",
+              "h3_wood_elf_upg",
+              "h3_wood_elf_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wood_elf",
+              "h3_wood_elf_upg",
+              "h3_wood_elf_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_wood_elf",
+              "h3_wood_elf_upg",
+              "h3_wood_elf_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_wood_elf"
+      },
+      "notes": "Campaign hero Gelu; creature specialty from homm3_rampart_hero_6."
+    },
+    "homm3_rampart_hero_18": {
+      "enabled": true,
+      "classType": "magic",
+      "className": "Druid",
+      "startSquad": [
+        {
+          "sid": "h3_centaur",
+          "min": 12,
+          "max": 24
+        },
+        {
+          "sid": "h3_dwarf",
+          "min": 3,
+          "max": 5
+        },
+        {
+          "sid": "h3_wood_elf",
+          "min": 3,
+          "max": 6
+        }
+      ],
+      "startSquadAlt": [
+        {
+          "sid": "h3_centaur",
+          "min": 1,
+          "max": 1
+        }
+      ],
+      "startSkills": [
+        {
+          "sid": "skill_logistic",
+          "skillLevel": 1
+        }
+      ],
+      "nameText": "Ordwald",
+      "descriptionText": "",
+      "mottoText": "",
+      "iconKey": "hero_homm3_rampart_18",
+      "specialization": {
+        "mode": "changed",
+        "sourceSpecId": "homm3_rampart_hero_18_source_h3_unicorn_specialist",
+        "nameText": "Unicorns",
+        "descriptionText": "Improves Unicorns and their upgrades in the hero's army.",
+        "iconKey": "h3_unicorn",
+        "bonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_unicorn",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_unicorn",
+              "h3_unicorn_upg",
+              "h3_unicorn_upg_alt"
+            ],
+            "parameters": [
+              "speed",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_unicorn",
+              "h3_unicorn_upg",
+              "h3_unicorn_upg_alt"
+            ],
+            "parameters": [
+              "initiative",
+              "1"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_unicorn",
+              "h3_unicorn_upg",
+              "h3_unicorn_upg_alt"
+            ],
+            "parameters": [
+              "hpPerc",
+              "0.2"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_unicorn",
+              "h3_unicorn_upg",
+              "h3_unicorn_upg_alt"
+            ],
+            "parameters": [
+              "offence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          },
+          {
+            "type": "unitStat",
+            "receivers": [
+              "h3_unicorn",
+              "h3_unicorn_upg",
+              "h3_unicorn_upg_alt"
+            ],
+            "parameters": [
+              "defence",
+              "0"
+            ],
+            "upgrade": {
+              "increment": 1,
+              "levelStep": 3
+            }
+          }
+        ],
+        "changeDisposition": "explicit_changed_olden_era_specialist",
+        "sourceSpecialtyKey": "creature:h3_unicorn"
+      },
+      "notes": "Campaign hero Ordwald; creature specialty from homm3_rampart_hero_7."
+    }
+  }
+}

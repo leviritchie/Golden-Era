@@ -1,0 +1,86 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_minotaur_taskmaster",
+ "status": "look",
+ "notes": "dungeon rollout: shoot_front whip crack (white-lit horn streaks + star sparks) cut from the DEF by a committed file mask (dungeon_fx_masks.py whip_crack_mask); defEffects keeps 26/16 px of it",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "crack_flash",
+   "treatment": "dynamic",
+   "notes": "the crack's white flash over the head"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "whip_crack",
+    "type": "defFlipbook",
+    "provenance": "roster inventory dungeon: g15 shoot_front lightning/bolt (white-blue) f5-6 (measured wider: f3-7)",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       3,
+       4,
+       5,
+       6,
+       7
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_minotaur_taskmaster/whip_crack"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "crack_flash"
+   },
+   {
+    "id": "crack_flash_light",
+    "type": "effectLight",
+    "lightId": "crack_flash",
+    "carrier": "whip_crack",
+    "anchor": {
+     "bone": "Head",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.85,
+     0.9,
+     1.0
+    ],
+    "range": 2.5,
+    "intensity": {
+     "Unit_ShootFront": [
+      0.0,
+      0.015,
+      0.073,
+      0.033,
+      0.052,
+      0.041,
+      0.065,
+      0.112,
+      0.055
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

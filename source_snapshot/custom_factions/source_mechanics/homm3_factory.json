@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "factionSid": "homm3_factory",
+  "sourceDoc": "tools/homm3_import/faction_concepts/homm3_factory.json and the user-approved Olden Era split-path design",
+  "mechanics": [
+    {
+      "id": "factory.split_assembly",
+      "surface": "faction_skill",
+      "sourceName": "Split Assembly",
+      "status": "substituted",
+      "reason": "HotA Factory has no faction secondary skill. This Olden Era faction skill unlocks tiered Natural/Industrial army-wide bonuses from distinct recruit lines, scaled by skill rank, with Expert-only fourth-tier Carapace and Field Triage.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "skill_faction_homm3_factory"
+      ],
+      "forbiddenPlayerText": [
+        "Factory Tactics",
+        "generic faction training"
+      ]
+    },
+    {
+      "id": "factory.resource_silo",
+      "surface": "building",
+      "sourceName": "Resource Silo",
+      "status": "exact",
+      "reason": "Generated city row grants +1 crystal per day.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
+    },
+    {
+      "id": "factory.pen",
+      "surface": "building",
+      "sourceName": "Pen",
+      "status": "exact",
+      "reason": "Generated city row grants +3 weekly growth to the Armadillo line.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot_level_2"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
+    },
+    {
+      "id": "factory.mana_generator",
+      "surface": "building",
+      "sourceName": "Mana Generator",
+      "status": "substituted",
+      "reason": "Siege temporary mana has no proven Olden Era city field; current row is a native Knowledge visit bonus (Mana Dynamo).",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "siege mana",
+        "20 additional spell points",
+        "Mana Generator"
+      ],
+      "currentRows": [
+        "Build_Mother_Nature"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
+    }
+  ]
+}

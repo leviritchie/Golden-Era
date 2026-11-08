@@ -1,0 +1,240 @@
+{
+ "unit": "hota_cove_pirate",
+ "captureDonor": "hota_cove_corsair",
+ "extensions": [
+  "necropolis_capturedonor",
+  "cove_reweight"
+ ],
+ "joints": {
+  "Hips": [
+   0.0,
+   0.2,
+   0.86
+  ],
+  "Spine": [
+   0.0,
+   0.2,
+   0.98
+  ],
+  "Spine1": [
+   0.0,
+   0.2,
+   1.1
+  ],
+  "Spine2": [
+   0.0,
+   0.2,
+   1.22
+  ],
+  "Neck": [
+   0.0,
+   0.19,
+   1.41
+  ],
+  "Head": [
+   0.0,
+   0.17,
+   1.5
+  ],
+  "HeadTop_End": [
+   0.0,
+   0.15,
+   1.78
+  ],
+  "LeftShoulder": [
+   0.05,
+   0.2,
+   1.38
+  ],
+  "LeftArm": [
+   0.22,
+   0.2,
+   1.37
+  ],
+  "LeftForeArm": [
+   0.34,
+   0.08,
+   1.15
+  ],
+  "LeftHand": [
+   0.35,
+   -0.06,
+   1.42
+  ],
+  "LeftHand_End": [
+   0.34,
+   -0.06,
+   1.55
+  ],
+  "RightShoulder": [
+   -0.05,
+   0.2,
+   1.38
+  ],
+  "RightArm": [
+   -0.22,
+   0.2,
+   1.37
+  ],
+  "RightForeArm": [
+   -0.28,
+   0.26,
+   1.12
+  ],
+  "RightHand": [
+   -0.31,
+   0.3,
+   0.9
+  ],
+  "RightHand_End": [
+   -0.33,
+   0.25,
+   0.8
+  ],
+  "LeftUpLeg": [
+   0.1,
+   0.18,
+   0.84
+  ],
+  "LeftLeg": [
+   0.18,
+   0.09,
+   0.47
+  ],
+  "LeftFoot": [
+   0.265,
+   0.09,
+   0.1
+  ],
+  "LeftToeBase": [
+   0.3,
+   0.0,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.33,
+   -0.12,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.1,
+   0.22,
+   0.84
+  ],
+  "RightLeg": [
+   -0.17,
+   0.22,
+   0.47
+  ],
+  "RightFoot": [
+   -0.245,
+   0.28,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.28,
+   0.2,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.3,
+   0.1,
+   0.0
+  ]
+ },
+ "props": [
+  {
+   "name": "pistol",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.34,
+      -0.06,
+      1.47
+     ],
+     [
+      0.34,
+      -0.06,
+      1.9
+     ]
+    ]
+   ],
+   "radius": 0.035
+  },
+  {
+   "name": "cutlass",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.33,
+      0.24,
+      0.78
+     ],
+     [
+      -0.2,
+      -0.41,
+      0.32
+     ]
+    ]
+   ],
+   "radius": 0.03
+  },
+  {
+   "name": "guard",
+   "bone": "RightHand",
+   "sphere": [
+    [
+     -0.35,
+     0.3,
+     0.81
+    ],
+    0.08
+   ]
+  }
+ ],
+ "bootTop": 0.42,
+ "skirtLegShare": 0.6,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand",
+   "RightHand"
+  ]
+ },
+ "coveReweight": [
+  {
+   "box": [
+    [
+     -0.27,
+     0.0,
+     0.5
+    ],
+    [
+     -0.1,
+     0.45,
+     0.86
+    ]
+   ],
+   "dropBones": [
+    "RightHand",
+    "RightForeArm"
+   ],
+   "fallback": "RightUpLeg",
+   "skipRigid": true,
+   "cut": true,
+   "cutAgainstDrop": 0.5,
+   "smallIslandsTo": {
+    "bone": "RightHand",
+    "maxVerts": 80,
+    "maxRedShare": 0.2
+   }
+  }
+ ]
+}

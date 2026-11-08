@@ -1,0 +1,315 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_energy_elemental",
+ "status": "look",
+ "notes": "conflux rollout: energy elemental. The blue crackling arcs around the body (idle self-electric, every frame) and the attack's arc burst at the fists are cut from the DEF with a committed thin-structure file mask (masks/conflux_fx_masks.py); the arcs are body paint to defEffects. Cells are placed where the DEF draws them (explicit defOrigin = the Spine2 joint's projected pixel per key), because the retarget's pose differs from the DEF on these keys.",
+ "lighting": {
+  "mode": "v6m",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {
+   "fitFrames": [
+    0,
+    2,
+    4,
+    6
+   ],
+   "gradeWeights": [
+    1.0,
+    0.2,
+    0.2
+   ],
+   "gradeStarts": "wide"
+  },
+  "bakedGlow": [],
+  "defSegmenter": {
+   "module": "tools/homm3_unit_look/units/masks/conflux_segment.py",
+   "function": "segment_energy"
+  },
+  "regions": [
+   {
+    "name": "hue",
+    "mask": {
+     "maskPath": "tools/homm3_unit_look/units/masks/h3_energy_elemental/tex_hue.png"
+    },
+    "target": "defPalette",
+    "defRegion": "hue",
+    "knobs": {
+     "skyCompensation": true
+    }
+   }
+  ]
+ },
+ "lights": [
+  {
+   "id": "arc_flash",
+   "treatment": "dynamic",
+   "notes": "the attack's arc burst lights the fists and chest"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "element_flow",
+    "type": "uvAtlas",
+    "provenance": "element_flow_scores.py mode crackle: 7 cells per 7-frame cycle, in phase with the retarget's element_motion keys; brightness-modulated look texture",
+    "modulate": {
+     "gain": 0.45
+    },
+    "clips": {
+     "Unit_Idle": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "Unit_MoveStart": [
+      0,
+      1,
+      2
+     ],
+     "Unit_Move": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+     ],
+     "Unit_MoveEnd": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      0,
+      1
+     ],
+     "Unit_Mouseover": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_Hitted": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+     ],
+     "Unit_Defence": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      0,
+      1,
+      2,
+      3
+     ],
+     "Unit_AttackFront": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      0
+     ],
+     "Unit_Death": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      0,
+      1
+     ]
+    },
+    "source": {
+     "scores": "artifacts/homm3_vfx_experiments/element_flow/h3_energy_elemental_scores.npz",
+     "generator": "tools/homm3_vfx/element_flow_scores.py"
+    },
+    "gutterPx": 16
+   },
+   {
+    "id": "idle_arcs",
+    "type": "defFlipbook",
+    "provenance": "roster inventory conflux: idle self-electric (flicker); thin-structure mask",
+    "clips": {
+     "Unit_Idle": {
+      "defGroup": 2,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_energy_elemental/idle_arcs"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Hips",
+     "defOrigin": {
+      "Unit_Idle": [
+       [
+        196,
+        213
+       ],
+       [
+        196,
+        213
+       ],
+       [
+        196,
+        213
+       ],
+       [
+        196,
+        213
+       ],
+       [
+        196,
+        214
+       ],
+       [
+        196,
+        214
+       ],
+       [
+        196,
+        215
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1
+   },
+   {
+    "id": "attack_arcs",
+    "type": "defFlipbook",
+    "provenance": "roster inventory conflux: g12 attack_front arcs + burst f3-7; thin-structure mask",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_energy_elemental/attack_arcs"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Spine2",
+     "defOrigin": {
+      "Unit_AttackFront": [
+       [
+        195,
+        196
+       ],
+       [
+        192,
+        197
+       ],
+       [
+        191,
+        197
+       ],
+       [
+        193,
+        203
+       ],
+       [
+        196,
+        207
+       ],
+       [
+        197,
+        206
+       ],
+       [
+        197,
+        203
+       ],
+       [
+        198,
+        199
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "arc_flash"
+   },
+   {
+    "id": "arc_flash_light",
+    "type": "effectLight",
+    "lightId": "arc_flash",
+    "carrier": "attack_arcs",
+    "anchor": {
+     "bone": "Spine2",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.6,
+     0.7,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.097,
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

@@ -1,0 +1,749 @@
+{
+  "lawOverrides": {
+    "fraction_law_homm3_dungeon_13": {
+      "enabled": true,
+      "nameText": "Outnumber",
+      "descriptionText": "Friendly creatures' counterattacks deal 50% more damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "counter_attack",
+                "0.50"
+              ],
+              "receivers": [
+                "h3_troglodyte",
+                "h3_harpy",
+                "h3_beholder",
+                "h3_medusa",
+                "h3_minotaur",
+                "h3_manticore",
+                "h3_red_dragon"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Retribution (schools/life/retribution.jpg). Runtime icon key: fraction_law_homm3_dungeon_13_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Retribution",
+      "homm4IconPath": "schools/life/retribution.jpg",
+      "iconKey": "fraction_law_homm3_dungeon_13_icon"
+    },
+    "fraction_law_homm3_dungeon_15": {
+      "enabled": true,
+      "nameText": "Night Dominion",
+      "descriptionText": "Heroes can learn tier 1 Night spells.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "magicSchoolSet",
+                "night",
+                "0",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_15_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_15_icon"
+    },
+    "fraction_law_homm3_dungeon_18": {
+      "enabled": true,
+      "nameText": "Kill Corridors",
+      "descriptionText": "Friendly creatures deal 10% more melee damage and take 10% less melee damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "melee_attack",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_troglodyte",
+                "h3_harpy",
+                "h3_beholder",
+                "h3_medusa",
+                "h3_minotaur",
+                "h3_manticore",
+                "h3_red_dragon"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "melee_attack",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_troglodyte",
+                "h3_harpy",
+                "h3_beholder",
+                "h3_medusa",
+                "h3_minotaur",
+                "h3_manticore",
+                "h3_red_dragon"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Creature portrait law icon pass: uses h3_beholder.png for this creature-function law under runtime icon key fraction_law_homm3_dungeon_18_icon. Static/deploy proven only; law-tree visual smoke still required.",
+      "homm4IconLabel": "Precision",
+      "homm4IconPath": "schools/order/precision.jpg",
+      "iconKey": "fraction_law_homm3_dungeon_18_icon",
+      "portraitIconSid": "h3_beholder"
+    },
+    "fraction_law_homm3_dungeon_2": {
+      "enabled": true,
+      "nameText": "Deep Scouts",
+      "descriptionText": "Your heroes can see exact neutral squad counts.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "enableSquadCounts",
+                "true"
+              ],
+              "fraction": "homm3_dungeon"
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_2_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_2_icon"
+    },
+    "fraction_law_homm3_dungeon_21": {
+      "enabled": true,
+      "nameText": "Deep Tutors",
+      "descriptionText": "Your heroes gain 10%/20% more experience.",
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "expPerBonus",
+                "0.10"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "expPerBonus",
+                "0.20"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "HOMM4 art-source candidate: Fortune (schools/nature/fortune.jpg). Runtime icon key: fraction_law_homm3_dungeon_21_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Fortune",
+      "homm4IconPath": "schools/nature/fortune.jpg",
+      "iconKey": "fraction_law_homm3_dungeon_21_icon"
+    },
+    "fraction_law_homm3_dungeon_22": {
+      "enabled": true,
+      "nameText": "Terror Exploitation",
+      "descriptionText": "Heroes gain +1 Morale by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "moral",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Sorrow (schools/death/sorrow.jpg). Runtime icon key: fraction_law_homm3_dungeon_22_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Sorrow",
+      "homm4IconPath": "schools/death/sorrow.jpg",
+      "iconKey": "fraction_law_homm3_dungeon_22_icon"
+    },
+    "fraction_law_homm3_dungeon_27": {
+      "enabled": true,
+      "nameText": "High Night",
+      "descriptionText": "Heroes can learn any tier of Night spells.",
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "magicSchoolSet",
+                "night",
+                "5",
+                "0"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_27_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_27_icon"
+    },
+    "fraction_law_homm3_dungeon_28": {
+      "enabled": true,
+      "nameText": "Excavation Crews",
+      "descriptionText": "Your towns gain an additional daily construction allowance.",
+      "parametersPerLevel": [
+        {
+          "cost": 6,
+          "bonuses": [
+            {
+              "type": "constructionDailyLimit",
+              "parameters": [
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "constructionDailyLimit",
+              "parameters": [
+                "2"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_28_icon"
+    },
+    "fraction_law_homm3_dungeon_33": {
+      "enabled": true,
+      "nameText": "Deep Portents",
+      "descriptionText": "Produces 250/500/750 Astrology points daily by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "250"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "500"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "750"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_34_icon"
+    },
+    "fraction_law_homm3_dungeon_34": {
+      "enabled": true,
+      "nameText": "No Escape Below",
+      "descriptionText": "Enemy heroes cannot flee from battle.",
+      "parametersPerLevel": [
+        {
+          "cost": 6,
+          "bonuses": [
+            {
+              "type": "heroStatBattle",
+              "parameters": [
+                "enableBattleEscapeBan",
+                "true"
+              ],
+              "receiverAllegiance": "enemy"
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "homm4IconLabel": "Spell shackle",
+      "homm4IconPath": "schools/chaos/spell_shackle.jpg",
+      "iconNotes": "HOMM4 art-source candidate: Spell shackle (schools/chaos/spell_shackle.jpg). Runtime icon key: fraction_law_homm3_dungeon_34_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "iconKey": "fraction_law_homm3_dungeon_34_icon"
+    },
+    "fraction_law_homm3_dungeon_6": {
+      "enabled": true,
+      "nameText": "Predator's Instruction",
+      "descriptionText": "Friendly creatures deal +5%/+10% damage and take 5%/10% less damage; enemy creatures deal 5%/10% less damage and take 5%/10% more damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.05"
+              ],
+              "receivers": [
+                "h3_troglodyte",
+                "h3_troglodyte_upg",
+                "h3_troglodyte_upg_alt",
+                "h3_harpy",
+                "h3_harpy_upg",
+                "h3_harpy_upg_alt",
+                "h3_beholder",
+                "h3_beholder_upg",
+                "h3_beholder_upg_alt",
+                "h3_medusa",
+                "h3_medusa_upg",
+                "h3_medusa_upg_alt",
+                "h3_minotaur",
+                "h3_minotaur_upg",
+                "h3_minotaur_upg_alt",
+                "h3_manticore",
+                "h3_manticore_upg",
+                "h3_manticore_upg_alt",
+                "h3_red_dragon",
+                "h3_red_dragon_upg",
+                "h3_red_dragon_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "-0.05"
+              ],
+              "receivers": [
+                "h3_troglodyte",
+                "h3_troglodyte_upg",
+                "h3_troglodyte_upg_alt",
+                "h3_harpy",
+                "h3_harpy_upg",
+                "h3_harpy_upg_alt",
+                "h3_beholder",
+                "h3_beholder_upg",
+                "h3_beholder_upg_alt",
+                "h3_medusa",
+                "h3_medusa_upg",
+                "h3_medusa_upg_alt",
+                "h3_minotaur",
+                "h3_minotaur_upg",
+                "h3_minotaur_upg_alt",
+                "h3_manticore",
+                "h3_manticore_upg",
+                "h3_manticore_upg_alt",
+                "h3_red_dragon",
+                "h3_red_dragon_upg",
+                "h3_red_dragon_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "-0.05"
+              ],
+              "receiverAllegiance": "enemy"
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "0.05"
+              ],
+              "receiverAllegiance": "enemy"
+            }
+          ]
+        },
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_troglodyte",
+                "h3_troglodyte_upg",
+                "h3_troglodyte_upg_alt",
+                "h3_harpy",
+                "h3_harpy_upg",
+                "h3_harpy_upg_alt",
+                "h3_beholder",
+                "h3_beholder_upg",
+                "h3_beholder_upg_alt",
+                "h3_medusa",
+                "h3_medusa_upg",
+                "h3_medusa_upg_alt",
+                "h3_minotaur",
+                "h3_minotaur_upg",
+                "h3_minotaur_upg_alt",
+                "h3_manticore",
+                "h3_manticore_upg",
+                "h3_manticore_upg_alt",
+                "h3_red_dragon",
+                "h3_red_dragon_upg",
+                "h3_red_dragon_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_troglodyte",
+                "h3_troglodyte_upg",
+                "h3_troglodyte_upg_alt",
+                "h3_harpy",
+                "h3_harpy_upg",
+                "h3_harpy_upg_alt",
+                "h3_beholder",
+                "h3_beholder_upg",
+                "h3_beholder_upg_alt",
+                "h3_medusa",
+                "h3_medusa_upg",
+                "h3_medusa_upg_alt",
+                "h3_minotaur",
+                "h3_minotaur_upg",
+                "h3_minotaur_upg_alt",
+                "h3_manticore",
+                "h3_manticore_upg",
+                "h3_manticore_upg_alt",
+                "h3_red_dragon",
+                "h3_red_dragon_upg",
+                "h3_red_dragon_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "-0.10"
+              ],
+              "receiverAllegiance": "enemy"
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "0.10"
+              ],
+              "receiverAllegiance": "enemy"
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "HOMM4 art-source candidate: Cloud of confusion (schools/chaos/cloud_of_confusion.jpg). Runtime icon key: fraction_law_homm3_dungeon_6_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Cloud of confusion",
+      "homm4IconPath": "schools/chaos/cloud_of_confusion.jpg",
+      "iconKey": "fraction_law_homm3_dungeon_6_icon"
+    },
+    "fraction_law_homm3_dungeon_4": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_4_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_4_icon"
+    },
+    "fraction_law_homm3_dungeon_5": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_5_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_5_icon"
+    },
+    "fraction_law_homm3_dungeon_10": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_10_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_10_icon"
+    },
+    "fraction_law_homm3_dungeon_11": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_11_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_11_icon"
+    },
+    "fraction_law_homm3_dungeon_14": {
+      "iconNotes": "Canonical resource icon pass: mining laws use the vanilla icon matching the produced special resource instead of donor-faction inheritance. Static/deploy validation pending.",
+      "iconKey": "fraction_law_dungeon_14_icon"
+    },
+    "fraction_law_homm3_dungeon_17": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_17_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_17_icon"
+    },
+    "fraction_law_homm3_dungeon_19": {
+      "iconNotes": "HOMM4 art-source candidate: Mass precision (schools/order/mass_precision.jpg). Runtime icon key: fraction_law_homm3_dungeon_19_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "enabled": true,
+      "nameText": "Shadow Crossfire",
+      "descriptionText": "Friendly creatures deal 5%/10% more ranged damage and take 5%/10% less ranged damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "shoot_attack",
+                "0.05"
+              ],
+              "receivers": [
+                "h3_troglodyte",
+                "h3_harpy",
+                "h3_beholder",
+                "h3_medusa",
+                "h3_minotaur",
+                "h3_manticore",
+                "h3_red_dragon"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "shoot_attack",
+                "-0.05"
+              ],
+              "receivers": [
+                "h3_troglodyte",
+                "h3_harpy",
+                "h3_beholder",
+                "h3_medusa",
+                "h3_minotaur",
+                "h3_manticore",
+                "h3_red_dragon"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "shoot_attack",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_troglodyte",
+                "h3_harpy",
+                "h3_beholder",
+                "h3_medusa",
+                "h3_minotaur",
+                "h3_manticore",
+                "h3_red_dragon"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "shoot_attack",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_troglodyte",
+                "h3_harpy",
+                "h3_beholder",
+                "h3_medusa",
+                "h3_minotaur",
+                "h3_manticore",
+                "h3_red_dragon"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "homm4IconLabel": "Mass precision",
+      "homm4IconPath": "schools/order/mass_precision.jpg",
+      "iconKey": "fraction_law_homm3_dungeon_19_icon"
+    },
+    "fraction_law_homm3_dungeon_20": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_20_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_20_icon"
+    },
+    "fraction_law_homm3_dungeon_23": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_23_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_23_icon"
+    },
+    "fraction_law_homm3_dungeon_24": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_24_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_24_icon"
+    },
+    "fraction_law_homm3_dungeon_25": {
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "enabled": true,
+      "nameText": "Terror Parade",
+      "descriptionText": "Morale trigger chance for friendly creatures increases by +1%/+2%/+3% per Morale point by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.01"
+              ],
+              "receivers": [
+                "h3_troglodyte",
+                "h3_harpy",
+                "h3_beholder",
+                "h3_medusa",
+                "h3_minotaur",
+                "h3_manticore",
+                "h3_red_dragon"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.02"
+              ],
+              "receivers": [
+                "h3_troglodyte",
+                "h3_harpy",
+                "h3_beholder",
+                "h3_medusa",
+                "h3_minotaur",
+                "h3_manticore",
+                "h3_red_dragon"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.03"
+              ],
+              "receivers": [
+                "h3_troglodyte",
+                "h3_harpy",
+                "h3_beholder",
+                "h3_medusa",
+                "h3_minotaur",
+                "h3_manticore",
+                "h3_red_dragon"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconKey": "fraction_law_human_25_icon"
+    },
+    "fraction_law_homm3_dungeon_26": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_26_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_26_icon"
+    },
+    "fraction_law_homm3_dungeon_30": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_30_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_30_icon"
+    },
+    "fraction_law_homm3_dungeon_31": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_dungeon_31_icon from the dungeon faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_dungeon_31_icon"
+    },
+    "fraction_law_homm3_dungeon_32": {
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_32_icon"
+    },
+    "fraction_law_homm3_dungeon_1": {
+      "iconKey": "fraction_law_human_1_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_dungeon_3": {
+      "iconKey": "fraction_law_human_3_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_dungeon_7": {
+      "iconKey": "fraction_law_human_7_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_dungeon_8": {
+      "iconKey": "fraction_law_human_8_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_dungeon_9": {
+      "iconKey": "fraction_law_human_9_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_dungeon_12": {
+      "iconKey": "fraction_law_human_12_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_dungeon_16": {
+      "iconKey": "fraction_law_human_16_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_dungeon_29": {
+      "iconKey": "fraction_law_human_29_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    }
+  }
+}

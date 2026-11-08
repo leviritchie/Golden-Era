@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HoMM3 Custom Faction Editor</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <h1>Custom Faction Editor</h1>
+      <p>Reviewable unit ability and hero overrides for the release overlay pipeline.</p>
+    </div>
+    <button id="saveBtn" class="primary">Save Overrides</button>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <label>
+        Faction
+        <select id="factionSelect"></select>
+      </label>
+      <div class="mode-tabs">
+        <button id="unitModeBtn" class="active" type="button">Units</button>
+        <button id="heroModeBtn" type="button">Heroes</button>
+        <button id="lawModeBtn" type="button">Laws</button>
+      </div>
+      <input id="unitSearch" type="search" placeholder="Filter units, heroes, or laws">
+      <div id="unitList" class="unit-list"></div>
+    </aside>
+
+    <section class="workspace">
+      <div class="toolbar">
+        <div>
+          <h2 id="unitTitle">Select a unit</h2>
+          <p id="unitMeta"></p>
+          <p id="sourceMeta"></p>
+        </div>
+        <div class="toolbar-actions">
+          <label class="check"><input id="replaceAbilities" type="checkbox"> Replace active abilities</label>
+          <label class="check"><input id="replacePassives" type="checkbox"> Replace passives</label>
+          <button id="addAbilityBtn">Add Ability</button>
+          <button id="effectsBtn">Browse Effects</button>
+          <button id="iconsBtn">Pick Icon</button>
+        </div>
+      </div>
+
+      <div class="panels">
+        <section id="heroPanel" class="panel hero-panel hidden">
+          <h3>Hero Overrides</h3>
+          <div id="heroEditor" class="hero-editor empty">Select a hero.</div>
+        </section>
+
+        <section id="lawPanel" class="panel law-panel hidden">
+          <h3>Law Overrides</h3>
+          <div id="lawEditor" class="law-editor empty">Select a law.</div>
+        </section>
+
+        <section class="panel current-specials-panel">
+          <h3>Current Unit Specials</h3>
+          <div id="currentSpecials" class="current-specials empty">No current special abilities found.</div>
+        </section>
+
+        <section class="panel">
+          <h3>Override Abilities</h3>
+          <div id="abilityList" class="ability-list empty">No override abilities selected.</div>
+        </section>
+
+        <section class="panel advanced-panel">
+          <details>
+            <summary>Advanced source data</summary>
+            <div class="tabs">
+              <button class="tab active" data-tab="logic">Logic</button>
+              <button class="tab" data-tab="view">View</button>
+            </div>
+            <pre id="currentData"></pre>
+          </details>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="abilityDialog">
+    <form method="dialog" class="dialog-form">
+      <header>
+        <h2>Add Ability Template</h2>
+        <button value="cancel" aria-label="Close">x</button>
+      </header>
+      <div id="templateGrid" class="template-grid"></div>
+    </form>
+  </dialog>
+
+  <dialog id="skillDialog">
+    <form method="dialog" class="dialog-form effects-dialog">
+      <header>
+        <div>
+          <h2>Hero Skill Browser</h2>
+          <p>Select a native starting skill.</p>
+        </div>
+        <button value="cancel" aria-label="Close">x</button>
+      </header>
+      <div class="effect-tools">
+        <input id="skillSearch" type="search" placeholder="Search skills">
+      </div>
+      <div id="skillList" class="effect-list"></div>
+    </form>
+  </dialog>
+
+  <dialog id="specializationDialog">
+    <form method="dialog" class="dialog-form effects-dialog">
+      <header>
+        <div>
+          <h2>Specialization Browser</h2>
+          <p>Copy a vanilla specialization or choose native bonus templates.</p>
+        </div>
+        <button value="cancel" aria-label="Close">x</button>
+      </header>
+      <div class="effect-tools">
+        <input id="specializationSearch" type="search" placeholder="Search specializations and bonus templates">
+      </div>
+      <div id="specializationList" class="effect-list"></div>
+    </form>
+  </dialog>
+
+  <dialog id="effectsDialog">
+    <form method="dialog" class="dialog-form effects-dialog">
+      <header>
+        <div>
+          <h2>Vanilla Effect Browser</h2>
+          <p id="effectsSource"></p>
+        </div>
+        <button value="cancel" aria-label="Close">x</button>
+      </header>
+      <div class="effect-tools">
+        <input id="effectSearch" type="search" placeholder="Search mechanics, buffs, icons, projectiles, source units">
+        <select id="effectKind">
+          <option value="">All kinds</option>
+        </select>
+      </div>
+      <div id="effectList" class="effect-list"></div>
+    </form>
+  </dialog>
+
+  <dialog id="iconsDialog">
+    <form method="dialog" class="dialog-form effects-dialog">
+      <header>
+        <div>
+          <h2>Donor Icon Browser</h2>
+          <p id="iconsSource"></p>
+        </div>
+        <button value="cancel" aria-label="Close">x</button>
+      </header>
+      <div class="effect-tools">
+        <input id="iconSearch" type="search" placeholder="Search icon files, folders, sprite-like keys">
+        <select id="iconGroup">
+          <option value="">All groups</option>
+        </select>
+      </div>
+      <div id="iconGrid" class="icon-grid"></div>
+    </form>
+  </dialog>
+
+  <template id="abilityCardTemplate">
+    <article class="ability-card">
+      <header>
+        <div>
+          <h4></h4>
+          <p></p>
+        </div>
+        <label class="switch"><input type="checkbox" class="enabled"> Enabled</label>
+      </header>
+      <div class="field-grid"></div>
+      <label>
+        Notes
+        <textarea class="notes" rows="2" placeholder="Static trace requirement, source note, or validation concern"></textarea>
+      </label>
+      <footer>
+        <button class="duplicate" type="button">Duplicate</button>
+        <button class="danger remove" type="button">Remove</button>
+      </footer>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

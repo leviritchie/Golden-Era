@@ -1,0 +1,224 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "Rise of the Necromancer continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub sandro; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_15_sod_necropolis_sandro",
+    "campaignTitle": "Rise of the Necromancer",
+    "campaignEntry": "Sandro.h3c",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "missionConfigPrefix": "homm3_sod_necropolis",
+    "defaultSpawn": {
+      "factionSid": "homm3_necropolis",
+      "heroSid": "homm3_necropolis_hero_11"
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart).",
+    "regionPixels": {
+      "target": [
+        80.0,
+        220.0
+      ],
+      "master": [
+        320.0,
+        220.0
+      ],
+      "finneas_vilmar": [
+        560.0,
+        220.0
+      ],
+      "duke_alarice": [
+        800.0,
+        220.0
+      ]
+    },
+    "missionSpawns": {
+      "target": {
+        "heroSid": "homm3_necropolis_hero_11",
+        "factionSid": "homm3_necropolis"
+      },
+      "master": {
+        "heroSid": "homm3_necropolis_hero_11",
+        "factionSid": "homm3_necropolis"
+      },
+      "finneas_vilmar": {
+        "heroSid": "homm3_necropolis_hero_11",
+        "factionSid": "homm3_necropolis"
+      },
+      "duke_alarice": {
+        "heroSid": "homm3_necropolis_hero_11",
+        "factionSid": "homm3_necropolis"
+      }
+    }
+  },
+  "storyHubMapSidOverrides": {
+    "target": "h3_necropolis_target_raw_translation",
+    "master": "h3_necropolis_master_raw_translation",
+    "finneas_vilmar": "h3_necropolis_finneas_vilmar_raw_translation",
+    "duke_alarice": "h3_necropolis_duke_alarice_raw_translation",
+    "choiceReason": "Rise of the Necromancer missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "target",
+      "toMissionId": "master",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 5,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=5 for target (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_target_raw_translation",
+        "to": "h3_necropolis_master_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "master",
+      "toMissionId": "finneas_vilmar",
+      "sourceBlockIndex": 2,
+      "nextBlockIndex": 3,
+      "levelCap": 10,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=10 for master (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_master_raw_translation",
+        "to": "h3_necropolis_finneas_vilmar_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "finneas_vilmar",
+      "toMissionId": "duke_alarice",
+      "sourceBlockIndex": 3,
+      "nextBlockIndex": 4,
+      "levelCap": 20,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=20 for finneas_vilmar (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_necropolis_finneas_vilmar_raw_translation",
+        "to": "h3_necropolis_duke_alarice_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "target",
+    "master",
+    "finneas_vilmar",
+    "duke_alarice"
+  ],
+  "missionTitles": {
+    "target": "Target",
+    "master": "Master",
+    "finneas_vilmar": "Finneas Vilmar",
+    "duke_alarice": "Duke Alarice"
+  },
+  "missionDescriptions": {
+    "target": "Defeat all of Sandro's enemies to win the scenario. However, if Sandro is defeated in combat, the scenario is lost. Sandro is limited to level 5 but will carry his exper...",
+    "master": "Defeat Ethric and all of his allies to win the scenario. However, if Sandro is defeated in combat, the scenario is lost. Sandro is limited to level 10 but will carry his...",
+    "finneas_vilmar": "Defeat all of Sandro and Finneas' enemies to win the scenario. However, if Sandro or Finneas is defeated in combat, the scenario is lost. Sandro and Finneas are limited...",
+    "duke_alarice": "Defeat Duke Alarice and all his allies to win the campaign. However, if Sandro or Finneas are defeated in combat, the scenario is lost. Sandro and Finneas are limited to..."
+  },
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Dedicated AB/SoD MapImage bake",
+    "Town growth / negative resource timed-event fidelity"
+  ],
+  "videoContract": {
+    "status": "mission_clips_wired_hub_still_only",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": null,
+    "hubFirstShowOmitReason": "RoE parity: hub hover strip is selection-still only; mission pins PlayVideo when composed MP4 meets contract.",
+    "requireComposedAudio": true,
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "requiredMp4RelativeToStreamingAssets": null,
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_15_sod_necropolis_sandro/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "stillArtifact": "artifacts/campaign_port_poc/ab_sod_campaigns/storyhub_visual/sandro_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.52,
+      "focusY": 0.4,
+      "cropReason": "Red dragon perched on the cavern castle spires",
+      "cropsCatalog": "scenarios/ab_sod_campaigns/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "target": "H3x2_RNa",
+      "master": "H3x2_RNb",
+      "finneas_vilmar": "H3x2_RNc",
+      "duke_alarice": "H3x2_RNd"
+    },
+    "actionOrder": "PlayVideo (when composed MP4 ready) then OpenMissionsPrologue on each mission pin; hub firstShowActions stay empty",
+    "failClosed": "sandro hub firstShowActions must stay empty (hubFirstShowPlayVideo=false). Mission PlayVideo requires StreamingAssets/video/{{clip}}.mp4 + softsub sidecar meeting compose contract; otherwise omit PlayVideo and keep prologue."
+  }
+}

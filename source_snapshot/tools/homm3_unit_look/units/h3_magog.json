@@ -1,0 +1,194 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_magog",
+ "status": "look",
+ "notes": "inferno rollout: gog family (fire-thrower). The DEF draws a flame in the hand on every frame; the mesh has only a dull prop there, so the flame is a flipbook over it in every built clip. The attack/shoot fireball is ripped from the DEF with a committed file mask (tools/homm3_vfx/inferno_fx_masks.py: its colours are idle body paint, so defEffects keeps one frame).",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "fireball_glow",
+   "treatment": "dynamic",
+   "notes": "the conjured fireball lights the arm and torso"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "hand_flame",
+    "type": "defFlipbook",
+    "provenance": "inferno_fx_masks.py hot_blob: the hand flame on every frame (idle/move/mouseover), knocked away on the hit (g3 f0-4), raised into the fire wall on the defence (g4 f1-5), flaring on the death (g5 f0-4)",
+    "clips": {
+     "Unit_Idle": {
+      "defGroup": 2,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5
+      ]
+     },
+     "Unit_Move": {
+      "defGroup": 0,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7
+      ]
+     },
+     "Unit_Mouseover": {
+      "defGroup": 1,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8,
+       9
+      ]
+     },
+     "Unit_Hitted": {
+      "defGroup": 3,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4
+      ]
+     },
+     "Unit_Defence": {
+      "defGroup": 4,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4,
+       5
+      ]
+     },
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       0,
+       1,
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_magog/hand_flame"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "notes": "subtractMeshSilhouette off: the flame must cover the mesh's own hand prop"
+   },
+   {
+    "id": "fireball",
+    "type": "defFlipbook",
+    "provenance": "inferno_fx_masks.py hot_blob: g12 attack fireball conjured f2-3, thrown f4, bursting f5-6 (+ detached embers); g15 shoot f2-4 conjure (the projectile is the missile)",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_magog/fireball"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "fireball_glow"
+   },
+   {
+    "id": "fireball_light",
+    "type": "effectLight",
+    "lightId": "fireball_glow",
+    "carrier": "fireball",
+    "anchor": {
+     "bone": "RightHand",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.72,
+     0.35
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.128,
+      1.032,
+      2.725,
+      1.018,
+      0.769,
+      0.0,
+      0.0
+     ],
+     "Unit_ShootFront": [
+      0.0,
+      0.138,
+      0.936,
+      2.281,
+      0.783,
+      0.235,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

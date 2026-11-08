@@ -1,0 +1,212 @@
+{
+    "schemaVersion": 1,
+    "purpose": "Source-prepared implementation matrix for no-compromise custom faction law families. This is not runtime proof and does not authorize gameplay.",
+    "validationState": "Source-prepared only; not built, deployed, startup-proven, runtime-proven, or packet-promoted.",
+    "policy": {
+        "noFallbacks": true,
+        "gameplayRequiresPacketGate": true,
+        "runtimeHooksMustEnterHandlerRegistry": true,
+        "nativeAdaptersOnly": true
+    },
+    "families": {
+        "2": {
+            "key": "sight",
+            "packet": "vision",
+            "handler": "vision.reveal",
+            "adapter": "Homm3AdventureVisionNativeAdapter",
+            "runtime": "Homm3CustomVisionLawRuntime/Homm3CustomLawIdempotenceRuntime",
+            "sourcePrepared": true,
+            "currentCapability": "Can mark a caller-supplied native DataObject as scouted by the active law owner side after resolving exact Side.index from the law owner; config-SID gated one-shot helpers and faction-specific source-prepared vision profiles are available after handler gate allows vision.reveal.",
+            "blockedBy": [
+                "target object classification and in-context owned-structure runtime proof",
+                "active law side-index runtime proof",
+                "fog tile reveal mutation proof",
+                "map refresh proof",
+                "packet gameplayAllowed=false"
+            ]
+        },
+        "6": {
+            "key": "training",
+            "packet": "committed-damage",
+            "handler": "damage.training",
+            "adapter": "Homm3BattleEventNativeAdapter/Homm3BuffDebuffNativeAdapter",
+            "runtime": "Homm3CustomBattleEventLawRuntime/Homm3CustomBuffDebuffLawRuntime",
+            "sourcePrepared": true,
+            "currentCapability": "Can read a caller-supplied ObjectTookDamageEventArgs payload, derive dealer law ownership from FieldObject.basa -> eir.cgle -> TransferSide.logicHero, require exact dealer family using the expanded 210-SID custom unit registry, query exact receiver/dealer buff SIDs through ede.cnyb/bbds, return faction-specific training damage profiles after handler gate allows damage.training, and resolve each effectKey to an explicit generated TrainingDamage mutation design contract.",
+            "blockedBy": [
+                "final unit damage ordering proof",
+                "post-reduction/death ordering proof",
+                "runtime mutation surface proof for contracted TrainingDamage mutation kinds",
+                "packet gameplayAllowed=false"
+            ]
+        },
+        "13": {
+            "key": "counterstroke",
+            "packet": "counterattack",
+            "handler": "counterattack.doctrine",
+            "adapter": "Homm3BattleEventNativeAdapter/Homm3FocusNativeAdapter/Homm3BuffDebuffNativeAdapter",
+            "runtime": "Homm3CustomCounterattackLawRuntime/Homm3CustomFocusLawRuntime/Homm3CustomBuffDebuffLawRuntime",
+            "sourcePrepared": true,
+            "currentCapability": "Can enter counterattack.doctrine only when a future exact hook supplies native EAbilityType.CounterAttack and the counterattacking battle object. The runtime can derive law ownership from FieldObject.basa -> eir.cgle -> TransferSide.logicHero, require exact counterattacker family using the expanded 210-SID custom unit registry, query exact receiver buff SIDs through ede.cnyb/bbds, read Focus event payloads, and return faction-specific counterattack doctrine profiles.",
+            "blockedBy": [
+                "counterattack correlation proof",
+                "separation from normal/follow-up/revenge damage",
+                "committed-damage ordering proof",
+                "packet gameplayAllowed=false"
+            ]
+        },
+        "15": {
+            "key": "spellSchoolLow",
+            "packet": "spell-cooldown",
+            "handler": "spell.low",
+            "adapter": "Homm3SpellCastGateNativeAdapter/Homm3SpellIdentityNativeAdapter/Homm3FocusNativeAdapter/Homm3BuffDebuffNativeAdapter",
+            "runtime": "Homm3CustomSpellSchoolLawRuntime/Homm3CustomFocusLawRuntime/Homm3CustomBuffDebuffLawRuntime",
+            "sourcePrepared": true,
+            "currentCapability": "Can return a faction-specific lower spell-school/access profile after handler gate allows spell.low, and can read exact Focus/Energy payloads through spell.low and derive law ownership from event side.",
+            "blockedBy": [
+                "spellbook access mutation surface",
+                "cast-gate ordering proof",
+                "UI synchronization proof",
+                "packet gameplayAllowed=false"
+            ]
+        },
+        "18": {
+            "key": "meleeFormation",
+            "packet": "battle-action",
+            "handler": "battle.melee-formation",
+            "adapter": "Homm3BattleEventNativeAdapter/Homm3BuffDebuffNativeAdapter",
+            "runtime": "Homm3CustomBattleEventLawRuntime/Homm3CustomBuffDebuffLawRuntime",
+            "sourcePrepared": true,
+            "currentCapability": "Can read a caller-supplied CastAbilityEventArgs payload, derive caster law ownership from FieldObject.basa -> eir.cgle -> TransferSide.logicHero, then require exact caster family using the expanded 210-SID custom unit registry, receiver buff SIDs through ede.cnyb/bbds, minimum attacked object/hex counts, and return faction-specific formation profiles after handler gate allows battle.melee-formation.",
+            "blockedBy": [
+                "action classification proof",
+                "remaining uncontracted shooter/melee role facts and in-context role runtime proof",
+                "formation geometry predicate runtime proof",
+                "safe effect mutation point",
+                "packet gameplayAllowed=false"
+            ]
+        },
+        "19": {
+            "key": "rangedFormation",
+            "packet": "battle-action",
+            "handler": "battle.ranged-formation",
+            "adapter": "Homm3BattleEventNativeAdapter/Homm3BuffDebuffNativeAdapter",
+            "runtime": "Homm3CustomBattleEventLawRuntime/Homm3CustomBuffDebuffLawRuntime",
+            "sourcePrepared": true,
+            "currentCapability": "Can read a caller-supplied CastAbilityEventArgs payload, derive caster law ownership from FieldObject.basa -> eir.cgle -> TransferSide.logicHero, then require first-round volley, exact caster family using the expanded 210-SID custom unit registry, receiver buff SIDs through ede.cnyb/bbds, minimum attacked object/hex counts, and return faction-specific formation profiles after handler gate allows battle.ranged-formation.",
+            "blockedBy": [
+                "ranged/first-volley runtime proof",
+                "remaining uncontracted shooter/melee role facts and in-context role runtime proof",
+                "formation geometry predicate runtime proof",
+                "safe effect mutation point",
+                "packet gameplayAllowed=false"
+            ]
+        },
+        "21": {
+            "key": "goldEconomy",
+            "packet": "reward-result",
+            "handler": "reward.gold-economy",
+            "adapter": "Homm3RewardEconomyNativeAdapter",
+            "runtime": "Homm3CustomRewardEconomyLawRuntime/Homm3CustomLawIdempotenceRuntime",
+            "sourcePrepared": true,
+            "currentCapability": "Can return a faction-specific gold economy profile after handler gate allows reward.gold-economy, without requiring a reward-set context. Can also resolve exact native gold Resource from active law owner data side via Side.res -> ResHeap.gold, then add a positive amount after the same handler gate.",
+            "blockedBy": [
+                "committed reward identity proof",
+                "idempotence proof",
+                "packet gameplayAllowed=false"
+            ]
+        },
+        "22": {
+            "key": "morale",
+            "packet": "morale",
+            "handler": "morale.package",
+            "adapter": "Homm3MoraleTriggerNativeAdapter/Homm3BuffDebuffNativeAdapter",
+            "runtime": "Homm3CustomMoraleLawRuntime/Homm3CustomBuffDebuffLawRuntime",
+            "sourcePrepared": true,
+            "currentCapability": "Can return a faction-specific flat morale/replacement-package profile after handler gate allows morale.package. Morale roll classification exists for morale.trigger and buff SID requirements can be queried from the morale unit through ede.cnyb/bbds; exact morale unit family requirements can use the expanded 210-SID custom unit registry.",
+            "blockedBy": [
+                "flat morale package native/stat mutation design",
+                "positive/negative morale semantic proof",
+                "action queue proof",
+                "packet gameplayAllowed=false"
+            ]
+        },
+        "25": {
+            "key": "moraleTrigger",
+            "packet": "morale",
+            "handler": "morale.trigger",
+            "adapter": "Homm3MoraleTriggerNativeAdapter",
+            "runtime": "Homm3CustomMoraleLawRuntime",
+            "sourcePrepared": true,
+            "currentCapability": "Can classify exact positive/negative morale roll method, derive morale unit law ownership from FieldObject.basa -> eir.cgle -> TransferSide.logicHero, optionally require exact unit-family requirements from the expanded 210-SID custom unit registry, and return faction-specific morale trigger profiles after handler gate allows morale.trigger.",
+            "blockedBy": [
+                "trigger-vs-check semantic proof",
+                "positive/negative action phase proof",
+                "safe action queue mutation point",
+                "packet gameplayAllowed=false"
+            ]
+        },
+        "27": {
+            "key": "spellSchool",
+            "packet": "spell-cooldown",
+            "handler": "spell.high",
+            "adapter": "Homm3SpellCastGateNativeAdapter/Homm3SpellIdentityNativeAdapter/Homm3FocusNativeAdapter/Homm3BuffDebuffNativeAdapter",
+            "runtime": "Homm3CustomSpellSchoolLawRuntime/Homm3CustomFocusLawRuntime/Homm3CustomBuffDebuffLawRuntime",
+            "sourcePrepared": true,
+            "currentCapability": "Can return a faction-specific high spell-school/access profile after handler gate allows spell.high, and can read exact Focus/Energy payloads through spell.high and derive law ownership from event side.",
+            "blockedBy": [
+                "spellbook access mutation surface",
+                "cast-gate ordering proof",
+                "UI synchronization proof",
+                "packet gameplayAllowed=false"
+            ]
+        },
+        "28": {
+            "key": "construction",
+            "packet": "construction",
+            "handler": "construction.commit",
+            "adapter": "Homm3ConstructionNativeAdapter",
+            "runtime": "Homm3CustomConstructionLawRuntime",
+            "sourcePrepared": true,
+            "currentCapability": "Can resolve BuildingsData exactly from BuildingsData, ObjCity, or fbs city logic. When the caller supplies fbs city logic, helpers can also derive the law owner from fbs.cjgv/DataObject.ownerSide plus fbs.cjhd/ctr.caan/Data.sides.array, return faction-specific construction profiles, then refund native daily construction count by active rank after handler gate allows construction.commit.",
+            "blockedBy": [
+                "build commit ordering proof",
+                "charged resource ordering proof",
+                "city logic owner chain runtime proof",
+                "in-context building category runtime proof plus explicit missing contract groups",
+                "packet gameplayAllowed=false"
+            ]
+        },
+        "33": {
+            "key": "calendar",
+            "packet": "reward-result",
+            "handler": "reward.calendar",
+            "adapter": "Homm3RewardEconomyNativeAdapter",
+            "runtime": "Homm3CustomRewardEconomyLawRuntime/Homm3CustomLawIdempotenceRuntime",
+            "sourcePrepared": true,
+            "currentCapability": "Can return a faction-specific calendar/omen profile after handler gate allows reward.calendar, and can resolve exact native gold Resource from active law owner data side via Side.res -> ResHeap.gold for future exact calendar grants.",
+            "blockedBy": [
+                "day/calendar idempotence proof",
+                "source identity proof",
+                "packet gameplayAllowed=false"
+            ]
+        },
+        "34": {
+            "key": "cooldown",
+            "packet": "spell-cooldown",
+            "handler": "spell.cooldown",
+            "adapter": "Homm3SpellCooldownNativeAdapter/Homm3SpellCastGateNativeAdapter/Homm3SpellIdentityNativeAdapter/Homm3FocusNativeAdapter/Homm3BuffDebuffNativeAdapter",
+            "runtime": "Homm3CustomSpellCooldownLawRuntime/Homm3CustomFocusLawRuntime/Homm3CustomBuffDebuffLawRuntime",
+            "sourcePrepared": true,
+            "currentCapability": "Can return faction-specific cooldown profiles, apply ranked cooldown credit through repeated exact native decrement calls or add cooldown if ready to a caller-supplied battle spell, or to all exact school/SID-matching non-ready spells in an exact battle spell pool. Pool helpers can derive the law owner from eex.cfyd -> eir.cgle -> TransferSide.logicHero -> data hero side, and Focus helpers can derive ownership from event side when the handler gate allows spell.cooldown. Absolute set-cooldown mutation remains unavailable because setCooldown has no strict generated-name proof.",
+            "blockedBy": [
+                "cast-to-cooldown ordering proof",
+                "absolute setCooldown mutation remains unavailable",
+                "spell-pool runtime identity proof",
+                "spell-pool caster-to-law-owner runtime proof",
+                "spellbook UI synchronization proof",
+                "packet gameplayAllowed=false"
+            ]
+        }
+    }
+}

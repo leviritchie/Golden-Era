@@ -1,0 +1,1873 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Rerunnable weak-surface dossier plan generated from gameplay_surface_evidence_matrix.json.",
+  "generationBoundary": "Static planning only. Candidate runtime symbols are law-dossier exact-token matches or weak-dossier generated interop matches, not proof.",
+  "weakSurfaceCount": 21,
+  "weakSurfaces": [
+    {
+      "surfaceId": "battleAction.actionClassification",
+      "domain": "battle-action",
+      "status": "partial",
+      "packets": [
+        "battle-action"
+      ],
+      "decompTargets": [
+        "CastAbilityEventArgs",
+        "battle action event candidates"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "weakDossier:battleAction.actionClassification",
+          "dossierTarget": "CastAbilityEventArgs",
+          "diffableSignature": "System.Void .ctor()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Battle.CastAbilityEventArgs",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        }
+      ],
+      "blockedBy": [
+        "action classification proof",
+        "first-volley proof",
+        "formation geometry proof",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Trace controlled melee, ranged, and first-round actions with actor, targets, attacked hexes, and round state.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target CastAbilityEventArgs and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "battleAction.battleLifecycleState",
+      "domain": "battle-action",
+      "status": "candidate",
+      "packets": [
+        "battle-action",
+        "morale",
+        "spell-cooldown",
+        "counterattack"
+      ],
+      "decompTargets": [
+        "battle round state",
+        "battle action phase",
+        "session day idempotence helpers",
+        "eep",
+        "BattleEventArgs",
+        "StartBattleEventArgs"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "weakDossier:battleAction.battleLifecycleState",
+          "dossierTarget": "BattleEventArgs",
+          "diffableSignature": "System.Void .ctor()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Battle.BattleEventArgs",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        },
+        {
+          "symbolId": "weakDossier:battleAction.battleLifecycleState",
+          "dossierTarget": "StartBattleEventArgs",
+          "diffableSignature": "System.Void .ctor(eep)",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Battle.StartBattleEventArgs",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        }
+      ],
+      "blockedBy": [
+        "battle phase proof",
+        "round/day idempotence proof",
+        "packet gameplayAllowed=false",
+        "exact lifecycle method identity still needed; current targets are type-level/static context only"
+      ],
+      "nextProofAction": "Grow this surface after packet-critical action and morale traces are narrowed.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target BattleEventArgs and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "battleAction.formationGeometry",
+      "domain": "battle-action",
+      "status": "partial",
+      "packets": [
+        "battle-action"
+      ],
+      "decompTargets": [
+        "CastAbilityEventArgs attacked objects",
+        "attacked hexes",
+        "battle round state"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "weakDossier:battleAction.formationGeometry",
+          "dossierTarget": "CastAbilityEventArgs",
+          "diffableSignature": "System.Void .ctor()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Battle.CastAbilityEventArgs",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        }
+      ],
+      "blockedBy": [
+        "committed action geometry proof",
+        "round/first-action proof",
+        "unit role classifier proof",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Probe committed action payload only after action classification is narrowed.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target CastAbilityEventArgs and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "battleAction.unitRoleClassifier",
+      "domain": "battle-action",
+      "status": "candidate",
+      "packets": [
+        "battle-action"
+      ],
+      "decompTargets": [
+        "UnitLogicConfig.defaultAttacks/counterAttacks/alternativeAttacks",
+        "AbilityLogicConfig.attackType_/cndd/rod",
+        "CastDealerConfig.shootRange",
+        "EAttackType.Range/Shoot"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "weakDossier:battleAction.unitRoleClassifier",
+          "dossierTarget": "UnitLogicConfig",
+          "diffableSignature": "System.String scs()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Configs.UnitLogicConfig",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        },
+        {
+          "symbolId": "weakDossier:battleAction.unitRoleClassifier",
+          "dossierTarget": "AbilityLogicConfig",
+          "diffableSignature": "Hex.Session.Battle.AbilityID rnw()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Configs.AbilityLogicConfig",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        },
+        {
+          "symbolId": "weakDossier:battleAction.unitRoleClassifier",
+          "dossierTarget": "CastDealerConfig",
+          "diffableSignature": "System.Int32 roi(Hex.Configs.UnitStat)",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Configs.CastDealerConfig",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        },
+        {
+          "symbolId": "weakDossier:battleAction.unitRoleClassifier",
+          "dossierTarget": "EAttackType",
+          "diffableSignature": null,
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Configs.EAttackType",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        }
+      ],
+      "blockedBy": [
+        "unit-to-default-attack config traversal proof",
+        "ranged/shoot/melee semantic proof",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Statically map Unit/TransferUnit -> UnitLogicConfig -> default attack AbilityLogicConfig -> EAttackType and CastDealerConfig, then prove against one known shooter and one known melee unit at runtime.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target UnitLogicConfig and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "battleLifecycle.baseEventBoundary",
+      "domain": "battle-lifecycle",
+      "status": "partial",
+      "packets": [
+        "battle-action",
+        "committed-damage",
+        "counterattack",
+        "morale"
+      ],
+      "decompTargets": [
+        "BattleEventArgs base class",
+        "edb BattleEventArgs dispatch helper family",
+        "known rejected broad dispatcher path"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "weakDossier:battleLifecycle.baseEventBoundary",
+          "dossierTarget": "BattleEventArgs",
+          "diffableSignature": "System.Void .ctor()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Battle.BattleEventArgs",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        }
+      ],
+      "blockedBy": [
+        "exact event subclass/helper identity",
+        "preview-vs-commit proof",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Use exact event payloads like ObjectTookDamageEventArgs and CastAbilityEventArgs; never broad-patch dispatch families.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target BattleEventArgs and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "buffStatus.buffDebuffSidSurfaces",
+      "domain": "buff-status",
+      "status": "candidate",
+      "packets": [
+        "committed-damage",
+        "counterattack",
+        "morale",
+        "battle-action"
+      ],
+      "decompTargets": [
+        "dzv.bbgf",
+        "dzv.bbfn",
+        "dzv.bbfl"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "law.buffDebuff.buffAdd",
+          "dossierTarget": "dzv::bbgf",
+          "diffableSignature": "dzt bbgf(System.String, System.Int32, System.Int32, eab, System.Int32, System.Boolean)",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "dossier_target_tokens"
+          ],
+          "firstRuntimeCandidate": null,
+          "candidateCount": 0,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.buffDebuff.buffHasBySid",
+          "dossierTarget": "dzv::bbfn",
+          "diffableSignature": "System.Boolean bbfn(System.String)",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "dossier_target_tokens"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicDi2StLi1ObceInLi1Unique",
+            "runtime_type_obfuscated": "dzv",
+            "runtime_method": "Method_Public_Boolean_BuffInfo_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 3,
+            "runtime_signature": "System.Boolean Method_Public_Boolean_BuffInfo_0(Hex.Configs.BuffInfo a)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "exact_type_signature_shape_only"
+          },
+          "candidateCount": 16,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.buffDebuff.buffListBySid",
+          "dossierTarget": "dzv::bbfl",
+          "diffableSignature": "List bbfl(System.String)",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "dossier_target_tokens"
+          ],
+          "firstRuntimeCandidate": null,
+          "candidateCount": 0,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "weakDossier:buffStatus.buffDebuffSidSurfaces",
+          "dossierTarget": "dzv",
+          "diffableSignature": null,
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicDi2StLi1ObceInLi1Unique",
+            "runtime_type_obfuscated": "dzv",
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        }
+      ],
+      "blockedBy": [
+        "strict generated-name proof",
+        "status duration/source semantics",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Resolve each dzv method with live bridge before enabling any status mutation law.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target dzv::bbgf and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "committedDamage.buffDebuffApplyQuery",
+      "domain": "committed-damage",
+      "status": "partial",
+      "packets": [
+        "committed-damage",
+        "battle-action",
+        "counterattack",
+        "morale"
+      ],
+      "decompTargets": [
+        "dzv.bbgf",
+        "dzv.bbfn",
+        "dzv.bbfl"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "law.buffDebuff.buffAdd",
+          "dossierTarget": "dzv::bbgf",
+          "diffableSignature": "dzt bbgf(System.String, System.Int32, System.Int32, eab, System.Int32, System.Boolean)",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "dossier_target_tokens"
+          ],
+          "firstRuntimeCandidate": null,
+          "candidateCount": 0,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.buffDebuff.buffHasBySid",
+          "dossierTarget": "dzv::bbfn",
+          "diffableSignature": "System.Boolean bbfn(System.String)",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "dossier_target_tokens"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicDi2StLi1ObceInLi1Unique",
+            "runtime_type_obfuscated": "dzv",
+            "runtime_method": "Method_Public_Boolean_BuffInfo_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 3,
+            "runtime_signature": "System.Boolean Method_Public_Boolean_BuffInfo_0(Hex.Configs.BuffInfo a)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "exact_type_signature_shape_only"
+          },
+          "candidateCount": 16,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.buffDebuff.buffListBySid",
+          "dossierTarget": "dzv::bbfl",
+          "diffableSignature": "List bbfl(System.String)",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "dossier_target_tokens"
+          ],
+          "firstRuntimeCandidate": null,
+          "candidateCount": 0,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "weakDossier:committedDamage.buffDebuffApplyQuery",
+          "dossierTarget": "dzv",
+          "diffableSignature": null,
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicDi2StLi1ObceInLi1Unique",
+            "runtime_type_obfuscated": "dzv",
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        }
+      ],
+      "blockedBy": [
+        "strict generated-name proof",
+        "runtime mutation ordering proof",
+        "packet gameplayAllowed=false",
+        "receiver identity proof",
+        "status application ordering proof",
+        "duration/stacking semantics proof",
+        "law-owner side correlation proof"
+      ],
+      "nextProofAction": "Run a combat/status pilot and require exact buff/debuff diagnostic traces that identify receiver, SID, duration/stacking, source side, and ordering relative to committed damage before any status mutation law is enabled.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target dzv::bbgf and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "construction.chargedCostAndCommit",
+      "domain": "construction",
+      "status": "partial",
+      "packets": [
+        "construction"
+      ],
+      "decompTargets": [
+        "BuildingData.Method_Public_Void_Int32_Boolean_0",
+        "Resource subtract/check methods"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "law.economy.resourceData.subtractIfAvailable",
+          "dossierTarget": "Hex.Session.Data.Resource::bggw",
+          "diffableSignature": "System.Boolean bggw(System.Int32 a)",
+          "decompMethodOrdinal": 2,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.economy.resourceData.subtractIfAvailable"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.Resource",
+            "runtime_type_obfuscated": null,
+            "runtime_method": "Method_Public_Boolean_Int32_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 2,
+            "runtime_signature": "System.Boolean Method_Public_Boolean_Int32_0(System.Int32 a)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 3,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.economy.resourceData.hasAtLeast",
+          "dossierTarget": "Hex.Session.Data.Resource::bggx",
+          "diffableSignature": "System.Boolean bggx(System.Int32 a)",
+          "decompMethodOrdinal": 3,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.economy.resourceData.hasAtLeast"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.Resource",
+            "runtime_type_obfuscated": null,
+            "runtime_method": "Method_Public_Boolean_Int32_1",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 3,
+            "runtime_signature": "System.Boolean Method_Public_Boolean_Int32_1(System.Int32 a)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 3,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.constructionCommit.buildingData.constructStateMutation",
+          "dossierTarget": "Hex.Session.Data.BuildingData::bgck",
+          "diffableSignature": "System.Void bgck(System.Int32 a, System.Boolean b)",
+          "decompMethodOrdinal": 3,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.constructionCommit."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.BuildingData",
+            "runtime_type_obfuscated": null,
+            "runtime_method": "Method_Public_Void_Int32_Boolean_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 3,
+            "runtime_signature": "System.Void Method_Public_Void_Int32_Boolean_0(System.Int32 a, System.Boolean b)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        }
+      ],
+      "blockedBy": [
+        "build commit ordering proof",
+        "charged resource ordering proof",
+        "city owner chain proof",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Trace one build click from eligibility check through resource subtraction and final constructed state.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target Hex.Session.Data.Resource::bggw and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "construction.displayedCost",
+      "domain": "construction",
+      "status": "partial",
+      "packets": [
+        "construction"
+      ],
+      "decompTargets": [
+        "BhBuildingView",
+        "BhTooltipBuilding",
+        "building cost UI diagnostics"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "weakDossier:construction.displayedCost",
+          "dossierTarget": "BhBuildingView",
+          "diffableSignature": "Hex.UI.City.EBuildingUIState trh()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.UI.City.BhBuildingView",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        },
+        {
+          "symbolId": "weakDossier:construction.displayedCost",
+          "dossierTarget": "BhTooltipBuilding",
+          "diffableSignature": "System.Boolean hyd()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.UI.BhTooltipBuilding",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        }
+      ],
+      "blockedBy": [
+        "narrow non-hot UI read proof",
+        "charged cost agreement proof",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Avoid broad UI tracing; design a narrow committed-build correlation probe first.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target BhBuildingView and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "corpseDeath.staticDeathCorpseSignals",
+      "domain": "corpse-death",
+      "status": "partial",
+      "packets": [
+        "committed-damage",
+        "battle-action"
+      ],
+      "decompTargets": [
+        "UnitLogicConfig.leaveCorpse",
+        "ObjectTookDamageEventArgs.stacksDestroyed/immuneToDamage/fromMech"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "weakDossier:corpseDeath.staticDeathCorpseSignals",
+          "dossierTarget": "UnitLogicConfig",
+          "diffableSignature": "System.String scs()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Configs.UnitLogicConfig",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        },
+        {
+          "symbolId": "weakDossier:corpseDeath.staticDeathCorpseSignals",
+          "dossierTarget": "ObjectTookDamageEventArgs",
+          "diffableSignature": "System.Void .ctor()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Battle.ObjectTookDamageEventArgs",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        }
+      ],
+      "blockedBy": [
+        "corpse storage/mutation surface proof",
+        "death cleanup ordering proof",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Search for corpse/death cleanup consumers from UnitLogicConfig.leaveCorpse and ObjectTookDamageEventArgs before implementing corpse economy laws.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target UnitLogicConfig and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "counterattack.listenerCandidates",
+      "domain": "counterattack",
+      "status": "partial",
+      "packets": [
+        "counterattack"
+      ],
+      "decompTargets": [
+        "dxx resolver set",
+        "ebv listener set"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "law.counterattackCorrelation.battleAttack.execute",
+          "dossierTarget": null,
+          "diffableSignature": null,
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.counterattackCorrelation."
+          ],
+          "firstRuntimeCandidate": null,
+          "candidateCount": 0,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.counterattackCorrelation.abilityManager.resolve",
+          "dossierTarget": "dxx::barb",
+          "diffableSignature": "System.Boolean barb(Hex.Configs.EAbilityType a, System.Int32 b, out dxy c)",
+          "decompMethodOrdinal": 21,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.counterattackCorrelation."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicObceDiObce2EAInBoInUnique",
+            "runtime_type_obfuscated": "dxx",
+            "runtime_method": "Method_Public_Boolean_EAbilityType_Int32_byref_ObjectPublicObceInBoInceAbObELInUnique_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 21,
+            "runtime_signature": "System.Boolean Method_Public_Boolean_EAbilityType_Int32_byref_ObjectPublicObceInBoInceAbObELInUnique_0(Hex.Configs.EAbilityType a, System.Int32 b, ObjectPublicObceInBoInceAbObELInUnique& c)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 2,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.counterattackCorrelation.attackResolver",
+          "dossierTarget": null,
+          "diffableSignature": null,
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.counterattackCorrelation."
+          ],
+          "firstRuntimeCandidate": null,
+          "candidateCount": 0,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.counterattackCorrelation.abilityListener.changed",
+          "dossierTarget": "ebv::bbwi",
+          "diffableSignature": "System.Void bbwi(Hex.Session.Battle.Unit a, Hex.Configs.EAbilityType b, System.Int32 c)",
+          "decompMethodOrdinal": 15,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.counterattackCorrelation."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicObcfBocfBocfBocfBocfUnique",
+            "runtime_type_obfuscated": "ebv",
+            "runtime_method": "Method_Public_Void_Unit_EAbilityType_Int32_PDM_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 15,
+            "runtime_signature": "System.Void Method_Public_Void_Unit_EAbilityType_Int32_PDM_0(Hex.Session.Battle.Unit a, Hex.Configs.EAbilityType b, System.Int32 c)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 3,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.counterattackCorrelation.abilityRuntime.changeEvent",
+          "dossierTarget": "dxy::bast",
+          "diffableSignature": "Hex.Session.Battle.ChangeAbilityEventArgs kda()",
+          "decompMethodOrdinal": 3,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.counterattackCorrelation."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicObceInBoInceAbObELInUnique",
+            "runtime_type_obfuscated": "dxy",
+            "runtime_method": "Method_Private_ChangeAbilityEventArgs_PDM_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 3,
+            "runtime_signature": "Hex.Session.Battle.ChangeAbilityEventArgs Method_Private_ChangeAbilityEventArgs_PDM_0()",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 4,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        }
+      ],
+      "blockedBy": [
+        "counterattack dispatch proof",
+        "attacker/defender identity proof",
+        "committed damage correlation proof",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Trace a controlled normal attack/counterattack sequence with ability type, actor, target, and damage correlation.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target law.counterattackCorrelation.battleAttack.execute and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "morale.actionQueueMutation",
+      "domain": "morale",
+      "status": "missing",
+      "packets": [
+        "morale"
+      ],
+      "decompTargets": [
+        "eep.bdhu(Unit,Random)",
+        "eep.grw(Unit,Random,Boolean)"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "law.morale.positiveRoll",
+          "dossierTarget": "eep::bdhu",
+          "diffableSignature": "System.Boolean bdhu(Hex.Session.Battle.Unit a, System.Random b)",
+          "decompMethodOrdinal": 67,
+          "matchReasons": [
+            "dossier_target_tokens"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicPrcfInPrcfSiBoPrcfInUnique",
+            "runtime_type_obfuscated": "eep",
+            "runtime_method": "Method_Public_Boolean_Unit_Random_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 67,
+            "runtime_signature": "System.Boolean Method_Public_Boolean_Unit_Random_0(Hex.Session.Battle.Unit a, Il2CppSystem.Random b)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 8,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.morale.negativeRoll",
+          "dossierTarget": "eep::grw",
+          "diffableSignature": "System.Boolean grw(Hex.Session.Battle.Unit a, System.Random b, System.Boolean c)",
+          "decompMethodOrdinal": 42,
+          "matchReasons": [
+            "dossier_target_tokens"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicPrcfInPrcfSiBoPrcfInUnique",
+            "runtime_type_obfuscated": "eep",
+            "runtime_method": "Method_Public_Boolean_Unit_Random_Boolean_PDM_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 42,
+            "runtime_signature": "System.Boolean Method_Public_Boolean_Unit_Random_Boolean_PDM_0(Hex.Session.Battle.Unit a, Il2CppSystem.Random b, System.Boolean c)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 3,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        }
+      ],
+      "blockedBy": [
+        "safe action queue mutation point",
+        "packet gameplayAllowed=false",
+        "action queue mutation target still missing; morale roll methods are adjacency dossiers only"
+      ],
+      "nextProofAction": "Use decomp semantic index around morale action follow-up before adding runtime diagnostics.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target eep::bdhu and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "morale.rollClassification",
+      "domain": "morale",
+      "status": "partial",
+      "packets": [
+        "morale"
+      ],
+      "decompTargets": [
+        "morale trigger candidate methods",
+        "generated Unit/Random bool candidates"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "law.morale.positiveRoll",
+          "dossierTarget": "eep::bdhu",
+          "diffableSignature": "System.Boolean bdhu(Hex.Session.Battle.Unit a, System.Random b)",
+          "decompMethodOrdinal": 67,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.morale."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicPrcfInPrcfSiBoPrcfInUnique",
+            "runtime_type_obfuscated": "eep",
+            "runtime_method": "Method_Public_Boolean_Unit_Random_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 67,
+            "runtime_signature": "System.Boolean Method_Public_Boolean_Unit_Random_0(Hex.Session.Battle.Unit a, Il2CppSystem.Random b)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 8,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.morale.negativeRoll",
+          "dossierTarget": "eep::grw",
+          "diffableSignature": "System.Boolean grw(Hex.Session.Battle.Unit a, System.Random b, System.Boolean c)",
+          "decompMethodOrdinal": 42,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.morale."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicPrcfInPrcfSiBoPrcfInUnique",
+            "runtime_type_obfuscated": "eep",
+            "runtime_method": "Method_Public_Boolean_Unit_Random_Boolean_PDM_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 42,
+            "runtime_signature": "System.Boolean Method_Public_Boolean_Unit_Random_Boolean_PDM_0(Hex.Session.Battle.Unit a, Il2CppSystem.Random b, System.Boolean c)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 3,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        }
+      ],
+      "blockedBy": [
+        "positive/negative morale semantic proof",
+        "action queue proof",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Trace a visible morale trigger with actor identity, phase, queued action change, and active law/rank.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target eep::bdhu and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "rewardResult.applyRewardSet",
+      "domain": "reward-result",
+      "status": "partial",
+      "packets": [
+        "reward-result"
+      ],
+      "decompTargets": [
+        "czy.vji(Hero,DataRewardSet)"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "law.rewardCommit.rewardSetApply",
+          "dossierTarget": "czy::vji",
+          "diffableSignature": "System.Void vji(Hex.Session.Logic.Hero a, Hex.Session.Data.DataRewardSet b)",
+          "decompMethodOrdinal": 37,
+          "matchReasons": [
+            "dossier_target_tokens"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPrivateviVoaAc172b8058viUnique",
+            "runtime_type_obfuscated": "czy",
+            "runtime_method": "Method_Public_Void_Action_1_ObjectPublicObciInLici1SiObBocoUnique_Object1PublicSiObFrObccSiLiObcc1Unique_PDM_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 0,
+            "runtime_signature": "System.Void Method_Public_Void_Action_1_ObjectPublicObciInLici1SiObBocoUnique_Object1PublicSiObFrObccSiLiObcc1Unique_PDM_0(Il2CppSystem.Action`1<ObjectPublicObciInLici1SiObBocoUnique> a, Object1PublicSiObFrObccSiLiObcc1Unique b)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "exact_type_signature_shape_only"
+          },
+          "candidateCount": 8,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        }
+      ],
+      "blockedBy": [
+        "strict reward apply binding",
+        "committed reward source identity",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Rebuild the reward apply method dossier and bridge payload before using this as a gameplay hook.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target czy::vji and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "rewardResult.queueAndResourceMutation",
+      "domain": "reward-result",
+      "status": "partial",
+      "packets": [
+        "reward-result"
+      ],
+      "decompTargets": [
+        "DataRewardSets add/remove",
+        "Resource.bggu",
+        "Resource.bggv",
+        "Resource.bggw",
+        "Resource.bggx"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "weakDossier:rewardResult.queueAndResourceMutation",
+          "dossierTarget": "Resource",
+          "diffableSignature": "System.Void bggu(System.Int32)",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.Resource",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        }
+      ],
+      "blockedBy": [
+        "committed reward identity proof",
+        "idempotence proof",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Correlate chest choice, reward-set apply, resource mutation, hero identity, and one-shot idempotence.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target Resource and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "spellCooldown.castGateAndUiSync",
+      "domain": "spell-cooldown",
+      "status": "partial",
+      "packets": [
+        "spell-cooldown"
+      ],
+      "decompTargets": [
+        "spell cast gate",
+        "spellbook UI cooldown display",
+        "battle spell pool"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "law.spellCooldown.effectiveCooldown",
+          "dossierTarget": "eew::bdmd",
+          "diffableSignature": "System.Int32 bdmd()",
+          "decompMethodOrdinal": 28,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.spellCooldown."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicObcfInStcfInObcnMacfUnique",
+            "runtime_type_obfuscated": "eew",
+            "runtime_method": "Method_Public_get_Int32_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 28,
+            "runtime_signature": "System.Int32 Method_Public_get_Int32_0()",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 8,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.spellCooldown.decrementCooldown",
+          "dossierTarget": "eew::bdmg",
+          "diffableSignature": "System.Void bdmg()",
+          "decompMethodOrdinal": 16,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.spellCooldown."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicObcfInStcfInObcnMacfUnique",
+            "runtime_type_obfuscated": "eew",
+            "runtime_method": "Method_Public_Void_PDM_1",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 16,
+            "runtime_signature": "System.Void Method_Public_Void_PDM_1()",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 5,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.spellCooldown.setCooldown",
+          "dossierTarget": "eew::bdmh",
+          "diffableSignature": "System.Void bdmh(System.Int32 a)",
+          "decompMethodOrdinal": 45,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.spellCooldown."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicObcfInStcfInObcnMacfUnique",
+            "runtime_type_obfuscated": "eew",
+            "runtime_method": "Method_Public_Void_Int32_PDM_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 2,
+            "runtime_signature": "System.Void Method_Public_Void_Int32_PDM_0(System.Int32 a)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "exact_type_signature_shape_only"
+          },
+          "candidateCount": 8,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.spellCooldown.addCooldownIfReady",
+          "dossierTarget": "eew::bdmi",
+          "diffableSignature": "System.Void bdmi(System.Int32 a)",
+          "decompMethodOrdinal": 14,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.spellCooldown."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicObcfInStcfInObcnMacfUnique",
+            "runtime_type_obfuscated": "eew",
+            "runtime_method": "Method_Public_Void_Int32_PDM_1",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 14,
+            "runtime_signature": "System.Void Method_Public_Void_Int32_PDM_1(System.Int32 a)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 8,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.spellCooldown.poolInit",
+          "dossierTarget": "eex::Init",
+          "diffableSignature": "System.Void Init(eir _caster)",
+          "decompMethodOrdinal": 11,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.spellCooldown."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicObDi2StIncfESDi2LiUnique",
+            "runtime_type_obfuscated": "eex",
+            "runtime_method": "Init",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 11,
+            "runtime_signature": "System.Void Init(ObjectPublicPrcgObPrcgInTrPrcgInUnique _caster)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "exact_type_method_name_and_arity"
+          },
+          "candidateCount": 8,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.spellCooldown.poolCooldownShift",
+          "dossierTarget": "eex::bdnj",
+          "diffableSignature": "System.Void bdnj(System.Int32 a, System.Boolean b = False)",
+          "decompMethodOrdinal": 2,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.spellCooldown."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicObDi2StIncfESDi2LiUnique",
+            "runtime_type_obfuscated": "eex",
+            "runtime_method": "Method_Public_Void_Int32_Boolean_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 2,
+            "runtime_signature": "System.Void Method_Public_Void_Int32_Boolean_0(System.Int32 a, System.Boolean b)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 8,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.spellCastGate.cooldownReadiness",
+          "dossierTarget": "eew::basy",
+          "diffableSignature": "System.Boolean basy()",
+          "decompMethodOrdinal": 20,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.spellCastGate."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicObcfInStcfInObcnMacfUnique",
+            "runtime_type_obfuscated": "eew",
+            "runtime_method": "Method_Public_Virtual_Final_New_Boolean_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 20,
+            "runtime_signature": "System.Boolean Method_Public_Virtual_Final_New_Boolean_0()",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 2,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.spellCastGate.fullCastGate",
+          "dossierTarget": "eew::base",
+          "diffableSignature": "System.Boolean base(eir a)",
+          "decompMethodOrdinal": 27,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.spellCastGate."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "ObjectPublicObcfInStcfInObcnMacfUnique",
+            "runtime_type_obfuscated": "eew",
+            "runtime_method": "Method_Public_Virtual_Final_New_Boolean_ObjectPublicPrcgObPrcgInTrPrcgInUnique_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 27,
+            "runtime_signature": "System.Boolean Method_Public_Virtual_Final_New_Boolean_ObjectPublicPrcgObPrcgInTrPrcgInUnique_0(ObjectPublicPrcgObPrcgInTrPrcgInUnique a)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        }
+      ],
+      "blockedBy": [
+        "spell cast pilot missing",
+        "spellbook UI synchronization proof",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Pilot an actual spell cast; prior pilot did not include one.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target eew::bdmd and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "spellbook.castMagicEventPayloads",
+      "domain": "spellbook",
+      "status": "partial",
+      "packets": [
+        "spell-cooldown",
+        "battle-action"
+      ],
+      "decompTargets": [
+        "CastMagicEventArgs battle spell payload file",
+        "ChangeMagicEventArgs.magicIndex"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "law.spellbook.castMagic.arrayFactory",
+          "dossierTarget": "Hex.Session.Battle.CastMagicEventArgs::bctq",
+          "diffableSignature": "Hex.Session.Battle.CastMagicEventArgs bctq(eir a, eew b, System.Int32[] c)",
+          "decompMethodOrdinal": 1,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.spellbook.castMagic."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Battle.CastMagicEventArgs",
+            "runtime_type_obfuscated": null,
+            "runtime_method": "Method_Public_Static_CastMagicEventArgs_ObjectPublicPrcgObPrcgInTrPrcgInUnique_ObjectPublicObcfInStcfInObcnMacfUnique_Il2CppStructArray_1_Int32_PDM_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 0,
+            "runtime_signature": "Hex.Session.Battle.CastMagicEventArgs Method_Public_Static_CastMagicEventArgs_ObjectPublicPrcgObPrcgInTrPrcgInUnique_ObjectPublicObcfInStcfInObcnMacfUnique_Il2CppStructArray_1_Int32_PDM_0(ObjectPublicPrcgObPrcgInTrPrcgInUnique a, ObjectPublicObcfInStcfInObcnMacfUnique b, Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray`1<System.Int32> c)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "exact_type_signature_shape_only"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.spellbook.castMagic.listsFactory",
+          "dossierTarget": "Hex.Session.Battle.CastMagicEventArgs::bcts",
+          "diffableSignature": "Hex.Session.Battle.CastMagicEventArgs bcts(eir a, eew b, System.Collections.Generic.List`1<Hex.Session.Battle.Hex> c, System.Collections.Generic.List`1<Hex.Session.Battle.Hex> d)",
+          "decompMethodOrdinal": 3,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.spellbook.castMagic."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Battle.CastMagicEventArgs",
+            "runtime_type_obfuscated": null,
+            "runtime_method": "Method_Public_Static_CastMagicEventArgs_ObjectPublicPrcgObPrcgInTrPrcgInUnique_ObjectPublicObcfInStcfInObcnMacfUnique_List_1_Hex_List_1_Hex_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 2,
+            "runtime_signature": "Hex.Session.Battle.CastMagicEventArgs Method_Public_Static_CastMagicEventArgs_ObjectPublicPrcgObPrcgInTrPrcgInUnique_ObjectPublicObcfInStcfInObcnMacfUnique_List_1_Hex_List_1_Hex_0(ObjectPublicPrcgObPrcgInTrPrcgInUnique a, ObjectPublicObcfInStcfInObcnMacfUnique b, Il2CppSystem.Collections.Generic.List`1<Hex.Session.Battle.Hex> c, Il2CppSystem.Collections.Generic.List`1<Hex.Session.Battle.Hex> d)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "exact_type_signature_shape_only"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "weakDossier:spellbook.castMagicEventPayloads",
+          "dossierTarget": "CastMagicEventArgs",
+          "diffableSignature": "System.Void .ctor(eir, eew, System.Collections.Generic.List`1<Hex.Session.Battle.Hex>, System.Collections.Generic.List`1<Hex.Session.Battle.Hex>, System.Collections.Generic.List`1<Hex.Session.Battle.Hex>, System.Collections.Generic.List`1<Hex.Session.Battle.FieldObject>, System.Collections.Generic.HashSet`1<Hex.Session.Battle.FieldObject>)",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Battle.CastMagicEventArgs",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        },
+        {
+          "symbolId": "weakDossier:spellbook.castMagicEventPayloads",
+          "dossierTarget": "ChangeMagicEventArgs",
+          "diffableSignature": "System.Void .ctor()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Battle.ChangeMagicEventArgs",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        }
+      ],
+      "blockedBy": [
+        "focused spell event payload dossier",
+        "actual spell-cast runtime pilot",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Build dossiers for CastMagicEventArgs/ChangeMagicEventArgs call sites, then runtime-pilot one spell cast with cooldown and event traces together.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target Hex.Session.Battle.CastMagicEventArgs::bctq and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "townService.magicManaIntelConverterRoots",
+      "domain": "town-service",
+      "status": "partial",
+      "packets": [
+        "construction",
+        "spell-cooldown",
+        "vision",
+        "battle-action"
+      ],
+      "decompTargets": [
+        "BuildingManaFountain : BuildingData",
+        "BuildingIntelligence : BuildingData",
+        "BuildingUnitsConverter : BuildingData",
+        "BuildingMyceliumRoots : BuildingData",
+        "BuildingManaFountain",
+        "BuildingIntelligence",
+        "BuildingUnitsConverter",
+        "BuildingMyceliumRoots"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "weakDossier:townService.magicManaIntelConverterRoots",
+          "dossierTarget": "BuildingManaFountain",
+          "diffableSignature": "System.Void .ctor()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.BuildingManaFountain",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        },
+        {
+          "symbolId": "weakDossier:townService.magicManaIntelConverterRoots",
+          "dossierTarget": "BuildingIntelligence",
+          "diffableSignature": "System.Void .ctor()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.BuildingIntelligence",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        },
+        {
+          "symbolId": "weakDossier:townService.magicManaIntelConverterRoots",
+          "dossierTarget": "BuildingUnitsConverter",
+          "diffableSignature": "System.Void .ctor()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.BuildingUnitsConverter",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        },
+        {
+          "symbolId": "weakDossier:townService.magicManaIntelConverterRoots",
+          "dossierTarget": "BuildingMyceliumRoots",
+          "diffableSignature": "System.Void .ctor()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.BuildingMyceliumRoots",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        }
+      ],
+      "blockedBy": [
+        "service payload proof",
+        "service execution proof",
+        "resource/party/spell mutation ordering proof",
+        "packet gameplayAllowed=false",
+        "service execution methods still need exact target identity; current targets are root subclasses only"
+      ],
+      "nextProofAction": "Build focused dossiers from each subclass/config before designing laws around these services.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target BuildingManaFountain and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "townService.tavernAndPrisonHeroSources",
+      "domain": "town-service",
+      "status": "partial",
+      "packets": [
+        "construction",
+        "reward-result",
+        "vision"
+      ],
+      "decompTargets": [
+        "BuildingTavern : BuildingData",
+        "ObjTavern : DataObject with bgdk()",
+        "ObjPrison.heroSid",
+        "BuildingTavernConfig.rso()",
+        "ObjTavernConfig.ryr()"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "weakDossier:townService.tavernAndPrisonHeroSources",
+          "dossierTarget": "BuildingTavern",
+          "diffableSignature": "System.Void bgce()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.BuildingTavern",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        },
+        {
+          "symbolId": "weakDossier:townService.tavernAndPrisonHeroSources",
+          "dossierTarget": "ObjTavern",
+          "diffableSignature": "System.Void bgdk()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.ObjTavern",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        },
+        {
+          "symbolId": "weakDossier:townService.tavernAndPrisonHeroSources",
+          "dossierTarget": "ObjPrison",
+          "diffableSignature": "System.Void .ctor()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.ObjPrison",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        }
+      ],
+      "blockedBy": [
+        "tavern hero pool proof",
+        "hero hire/rescue commit proof",
+        "side ownership transfer proof",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Search from tavern/prison interaction methods before implementing hero-hire or prison-rescue laws.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target BuildingTavern and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "ui.spellbookVisualOnlyBoundary",
+      "domain": "ui",
+      "status": "partial",
+      "packets": [
+        "spell-cooldown"
+      ],
+      "decompTargets": [
+        "BhSpellMiniView.spellRang/spellLevel/spellMana/spellPic",
+        "BhSpellMiniView.sph(MagicConfig)",
+        "BhBookFrameView.book/star/star2/line/cgxq/cgxt"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "weakDossier:ui.spellbookVisualOnlyBoundary",
+          "dossierTarget": "BhSpellMiniView::sph",
+          "diffableSignature": "System.Void sph(Hex.Configs.MagicConfig)",
+          "decompMethodOrdinal": 3,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_callable_ordinal_and_signature_shape"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.UI.BhSpellMiniView",
+            "runtime_type_obfuscated": null,
+            "runtime_method": "Method_Public_Void_MagicConfig_PDM_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 3,
+            "runtime_signature": "System.Void Method_Public_Void_MagicConfig_PDM_0(Hex.Configs.MagicConfig a)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        },
+        {
+          "symbolId": "weakDossier:ui.spellbookVisualOnlyBoundary",
+          "dossierTarget": "BhSpellMiniView",
+          "diffableSignature": "System.Int32 spf()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.UI.BhSpellMiniView",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        },
+        {
+          "symbolId": "weakDossier:ui.spellbookVisualOnlyBoundary",
+          "dossierTarget": "BhBookFrameView",
+          "diffableSignature": "System.Void Start()",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "weak_dossier_target",
+            "runtime_type_exact_or_suffix_match",
+            "weak_dossier_runtime_type_exact"
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Battle.BhBookFrameView",
+            "runtime_type_obfuscated": null,
+            "runtime_method": null,
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": null,
+            "runtime_signature": null,
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "weak_dossier_runtime_type_exact"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Weak-dossier generated interop candidate only; proves generated metadata exists for the exact dossier target, not decomp method identity, runtime reachability, gameplay ordering, or hook safety."
+        }
+      ],
+      "blockedBy": [
+        "UI-to-MagicData correlation proof",
+        "cast gate/cooldown synchronization proof",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Use spellbook UI only as a diagnostic correlation surface; gameplay changes must target spell data/cooldown/cast surfaces.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target BhSpellMiniView::sph and reconcile runtime candidate before probe."
+    },
+    {
+      "surfaceId": "vision.nativeRevealMutation",
+      "domain": "vision",
+      "status": "partial",
+      "packets": [
+        "vision"
+      ],
+      "decompTargets": [
+        "fog read/init/count",
+        "map-magic add/lookup",
+        "object scouting candidates"
+      ],
+      "runtimeSymbolCandidates": [
+        {
+          "symbolId": "law.vision.fog.initialize",
+          "dossierTarget": "Hex.Session.Data.DataFogOfWar::bfri",
+          "diffableSignature": "System.Void bfri(System.Int32 a, System.Int32 b)",
+          "decompMethodOrdinal": 0,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.vision."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.DataFogOfWar",
+            "runtime_type_obfuscated": null,
+            "runtime_method": "Method_Public_Void_Int32_Int32_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 0,
+            "runtime_signature": "System.Void Method_Public_Void_Int32_Int32_0(System.Int32 a, System.Int32 b)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.vision.fog.visibilityRead",
+          "dossierTarget": "Hex.Session.Data.DataFogOfWar::bfrj",
+          "diffableSignature": "System.Boolean bfrj(System.Int32 a)",
+          "decompMethodOrdinal": 1,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.vision."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.DataFogOfWar",
+            "runtime_type_obfuscated": null,
+            "runtime_method": "Method_Public_Boolean_Int32_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 1,
+            "runtime_signature": "System.Boolean Method_Public_Boolean_Int32_0(System.Int32 a)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.vision.fog.countCandidate",
+          "dossierTarget": "Hex.Session.Data.DataFogOfWar::bfrl",
+          "diffableSignature": "System.Int32 bfrl()",
+          "decompMethodOrdinal": 3,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.vision."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.DataFogOfWar",
+            "runtime_type_obfuscated": null,
+            "runtime_method": "Method_Public_Int32_PDM_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 3,
+            "runtime_signature": "System.Int32 Method_Public_Int32_PDM_0()",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 4,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.vision.mapMagic.add",
+          "dossierTarget": "Hex.Session.Data.MapMagics::bgca",
+          "diffableSignature": "System.Void bgca(System.String a)",
+          "decompMethodOrdinal": 1,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.vision."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.MapMagics",
+            "runtime_type_obfuscated": null,
+            "runtime_method": "Method_Public_Void_String_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 1,
+            "runtime_signature": "System.Void Method_Public_Void_String_0(System.String a)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 3,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.vision.mapMagic.lookup",
+          "dossierTarget": "Hex.Session.Data.MapMagics::bgcb",
+          "diffableSignature": "Hex.Session.Data.MapMagic bgcb(System.String a)",
+          "decompMethodOrdinal": 2,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.vision."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Session.Data.MapMagics",
+            "runtime_type_obfuscated": null,
+            "runtime_method": "Method_Public_MapMagic_String_0",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 2,
+            "runtime_signature": "Hex.Session.Data.MapMagic Method_Public_MapMagic_String_0(System.String a)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "type_callable_ordinal_and_signature_shape"
+          },
+          "candidateCount": 1,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.vision.mapVision.city",
+          "dossierTarget": "Hex.Map.MapVisionObjectDesc::City",
+          "diffableSignature": "Hex.Map.MapVisionObjectDesc City(System.Int32)",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.vision."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Map.MapVisionObjectDesc",
+            "runtime_type_obfuscated": null,
+            "runtime_method": "City",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 0,
+            "runtime_signature": "Hex.Map.MapVisionObjectDesc City(System.Int32 side)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "exact_type_method_name_and_arity"
+          },
+          "candidateCount": 5,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.vision.mapVision.hero",
+          "dossierTarget": "Hex.Map.MapVisionObjectDesc::Hero",
+          "diffableSignature": "Hex.Map.MapVisionObjectDesc Hero(System.Int32)",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.vision."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Map.MapVisionObjectDesc",
+            "runtime_type_obfuscated": null,
+            "runtime_method": "Hero",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 1,
+            "runtime_signature": "Hex.Map.MapVisionObjectDesc Hero(System.Int32 side)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "exact_type_method_name_and_arity"
+          },
+          "candidateCount": 5,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        },
+        {
+          "symbolId": "law.vision.mapVision.item",
+          "dossierTarget": "Hex.Map.MapVisionObjectDesc::Item",
+          "diffableSignature": "Hex.Map.MapVisionObjectDesc Item(System.Int32)",
+          "decompMethodOrdinal": null,
+          "matchReasons": [
+            "curated_surface_symbol_prefix:law.vision."
+          ],
+          "firstRuntimeCandidate": {
+            "runtime_type": "Hex.Map.MapVisionObjectDesc",
+            "runtime_type_obfuscated": null,
+            "runtime_method": "Item",
+            "runtime_method_obfuscated": null,
+            "runtime_callable_ordinal": 3,
+            "runtime_signature": "Hex.Map.MapVisionObjectDesc Item(System.Int32 tier)",
+            "runtime_source": "experiments\\cpp2il_readable_csharp\\samples\\latest_refresh\\runtime_interop_map.json",
+            "confidence": "exact_type_method_name_and_arity"
+          },
+          "candidateCount": 5,
+          "evidenceBoundary": "Exact-token static candidate only; not runtime proof or hook safety proof."
+        }
+      ],
+      "blockedBy": [
+        "object classification",
+        "fog tile reveal mutation proof",
+        "map refresh proof",
+        "packet gameplayAllowed=false"
+      ],
+      "nextProofAction": "Probe one exact reveal mutation path with side-index logging and visible map refresh.",
+      "recommendedDossierAction": "Build/refresh focused method dossier for matched target Hex.Session.Data.DataFogOfWar::bfri and reconcile runtime candidate before probe."
+    }
+  ]
+}

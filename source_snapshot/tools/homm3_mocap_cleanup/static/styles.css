@@ -1,0 +1,105 @@
+:root {
+  --bg: #12110f;
+  --panel: #1c1a16;
+  --ink: #e8dfc8;
+  --muted: #9a8f78;
+  --line: #3a3428;
+  --accent: #c9a227;
+  --danger: #c45c3a;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 14px/1.4 "Segoe UI", sans-serif; }
+button, select, input, summary { font: inherit; color: inherit; }
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+  align-items: center;
+}
+.brand h1 { margin: 0; font-size: 18px; }
+.brand p { margin: 2px 0 0; color: var(--muted); }
+.actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+button, select, input[type="range"] { background: #2a261e; border: 1px solid var(--line); }
+button { padding: 7px 12px; cursor: pointer; }
+#rewriteWeightsBtn { width: 100%; margin: 8px 0 4px; }
+#skinProgress { display: flex; align-items: center; gap: 8px; margin: 8px 0 4px; }
+#skinProgress[hidden] { display: none; }
+.skin-bar { flex: 1; height: 10px; background: #2a261e; border: 1px solid var(--line); }
+#skinProgressFill { height: 100%; width: 0; background: var(--accent); }
+#skinProgressLabel { min-width: 3.2em; color: var(--muted); }
+#skinExclude { min-height: 7.5em; width: 100%; }
+#skinLabPane label { align-items: flex-start; }
+button.primary { background: var(--accent); color: #1a1408; border-color: #e0c15a; }
+label { display: flex; gap: 8px; align-items: center; }
+main {
+  display: grid;
+  grid-template-columns: minmax(200px, 22vw) minmax(0, 1fr) 340px;
+  height: calc(100% - 72px);
+}
+.plate, .side {
+  background: var(--panel);
+  padding: 12px;
+  overflow: auto;
+}
+.plate { border-right: 1px solid var(--line); }
+.side { border-left: 1px solid var(--line); }
+.plate-stage {
+  background: #000;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.plate-stage img, .overlay-still { max-width: 100%; height: auto; }
+.overlay-still { margin-top: 10px; border: 1px solid var(--line); }
+.stage { display: flex; flex-direction: column; min-width: 0; }
+.viewport { flex: 1; min-height: 0; background: #0b0a08; position: relative; }
+.bone-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.bone-label {
+  position: absolute;
+  transform: translate(-50%, -120%);
+  background: #1a1408cc;
+  color: #f2e6c4;
+  border: 1px solid #c9a227;
+  padding: 1px 5px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.legend { display: flex; align-items: center; gap: 8px; }
+.swatch {
+  flex: 1;
+  height: 10px;
+  background: linear-gradient(90deg, #1d4ed8, #22c55e, #ef4444);
+  border: 1px solid var(--line);
+}
+.timeline {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 12px;
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+  flex-wrap: wrap;
+}
+#frameSlider { flex: 1; }
+.hint, .status { color: var(--muted); }
+.banner {
+  border: 1px solid var(--line);
+  padding: 8px;
+  background: #16140f;
+}
+fieldset { border: 1px solid var(--line); margin: 12px 0; }
+.side h2 { font-size: 15px; margin: 16px 0 8px; }
+.side label { margin: 6px 0; justify-content: space-between; }
+.side label input[type="range"] { flex: 1; }
+.chips button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin: 4px 0;
+}
+.pick { margin-top: 12px; white-space: pre-wrap; }
+.check { color: var(--muted); }

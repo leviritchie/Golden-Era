@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "olden-ai-driver://schemas/screen_dump.schema.json",
+  "title": "Olden AI Driver Screen Dump",
+  "description": "AI catalog dump. Not screen-reader safe. Fingerprints are dump_path only and must never be passed to ai_act.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "dumpId",
+    "screenId",
+    "scene",
+    "frame",
+    "mode",
+    "timestamp",
+    "elements",
+    "gaps",
+    "srSafe"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "ai-driver.v1.screen-dump" },
+    "dumpId": { "type": "string", "minLength": 16 },
+    "screenId": { "type": "string", "minLength": 16 },
+    "scene": { "type": "string" },
+    "frame": { "type": "integer", "minimum": 0 },
+    "mode": {
+      "type": "string",
+      "enum": ["main_menu", "adventure_map", "town", "battle", "loading", "unknown"]
+    },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "elements": {
+      "type": "array",
+      "maxItems": 512,
+      "items": { "$ref": "#/$defs/dumpElement" }
+    },
+    "gaps": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/gap" }
+    },
+    "srSafe": { "const": false }
+  },
+  "$defs": {
+    "rect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "width": { "type": "number", "minimum": 0 },
+        "height": { "type": "number", "minimum": 0 }
+      }
+    },
+    "fingerprint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": { "const": "dump_path" },
+        "value": { "type": "string", "minLength": 1 }
+      }
+    },
+    "dumpElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "role", "name", "path", "label", "rect", "visible", "enabled", "interactable", "fingerprint"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "type": "string", "enum": ["selectable", "text_only", "map_object", "map_marker", "map_hero"] },
+        "role": { "type": "string", "minLength": 1 },
+        "name": { "type": "string" },
+        "path": { "type": "string" },
+        "label": { "type": "string" },
+        "sid": { "type": "string" },
+        "rect": { "$ref": "#/$defs/rect" },
+        "visible": { "type": "boolean" },
+        "enabled": { "type": "boolean" },
+        "interactable": { "type": "boolean" },
+        "onScreen": { "type": "boolean" },
+        "fogVisible": { "type": "boolean" },
+        "fingerprint": { "$ref": "#/$defs/fingerprint" }
+      }
+    },
+    "gap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 },
+        "blocking": { "type": "boolean" }
+      }
+    }
+  }
+}

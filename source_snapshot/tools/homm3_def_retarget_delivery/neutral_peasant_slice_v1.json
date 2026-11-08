@@ -1,0 +1,31 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "neutral_peasant_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/neutral_peasant_slice_v1",
+  "note": "Neutral h3_peasant gets its own model (battle and map were the vanilla OE peasant donor). Meshy mesh artifacts/meshy_downloads/meshy7_missing/h3_peasant/mesh.glb, hand-keyed against CPEAS.DEF: no mocap capture of this unit exists and no shipped capture has its actions. The pitchfork is rigid on RightHand, the left hand follows it by two-bone IK. No effect layers; albedo is the look basecolor. Jitter pass 2026-09-27: silhouetteRefine removed (per-frame dx/dy silhouette offsets read as whole-body jumps), re-shipped in place. | look-only re-freeze on the ground-stamped canonical (fleet_rebuild ground_glb apply; coordinator item 3) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_peasant 0.0776. | 2026-10-11 authenticity pass lane A: fork_c2 prop-cut mesh (fork rigid on RightHand); DEF g12 attack - pitchfork levelled and thrust at the target Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_peasant 0.0628. | lane B 2026-10-12: peasant refrozen - haft remnant rigid on RightHand (no pale spike by the fist in the attack) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_peasant 0.0785.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_peasant",
+      "gameSid": "h3_peasant",
+      "bundleName": "custom_units_neutral_h3_peasant",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "4aed92c02e188fe415b58544036252375b292a0b545fdcd702e332e2a93f1e6f",
+      "identityReview": "4aed92c02e188fe415b58544036252375b292a0b545fdcd702e332e2a93f1e6f",
+      "frozen": {
+        "lookDeliveredGlbSha256": "83dcb7c41aa41a5a63423c6564a4ced566d3045c4b0bc9a83fd9722ca4799998",
+        "idleRetimedGlbSha256": "d757bf2b9d7e7c8dfaee39468047ba36df40464f28ebc1c0aabb265a146dcebe",
+        "vfxManifestSha256": "8391d6518158e7f1a41414201f66bf98c35b3701d1f5a745d88217dc08bd090c",
+        "specSha256": "73dd2ed572ca3b8a9b3b552f211567bc6fc758d054c1b206cbec772b2a38f7e8",
+        "basecolorSha256": "587a4b2c4babe9a9e731f981de0d310bf2f2e1e9ea9bb26b7036176d983b9cbf"
+      }
+    }
+  ]
+}

@@ -1,0 +1,359 @@
+{
+ "unit": "h3_dendroid_shaman",
+ "joints": {
+  "Hips": [
+   0,
+   0.03,
+   0.7
+  ],
+  "Spine": [
+   0,
+   0.03,
+   0.84
+  ],
+  "Spine1": [
+   0.01,
+   0.03,
+   0.97
+  ],
+  "Spine2": [
+   0.01,
+   0.03,
+   1.1
+  ],
+  "Neck": [
+   0.01,
+   0.03,
+   1.24
+  ],
+  "Head": [
+   0.01,
+   0.03,
+   1.32
+  ],
+  "HeadTop_End": [
+   0.02,
+   0.05,
+   1.62
+  ],
+  "LeftShoulder": [
+   0.05,
+   0.02,
+   1.15
+  ],
+  "LeftArm": [
+   0.17,
+   0.03,
+   1.1
+  ],
+  "LeftForeArm": [
+   0.25,
+   0.05,
+   0.86
+  ],
+  "LeftHand": [
+   0.28,
+   -0.1,
+   0.56
+  ],
+  "LeftHand_End": [
+   0.28,
+   -0.2,
+   0.38
+  ],
+  "RightShoulder": [
+   -0.05,
+   0.02,
+   1.15
+  ],
+  "RightArm": [
+   -0.17,
+   0.02,
+   1.1
+  ],
+  "RightForeArm": [
+   -0.26,
+   0.03,
+   0.86
+  ],
+  "RightHand": [
+   -0.27,
+   -0.12,
+   0.56
+  ],
+  "RightHand_End": [
+   -0.27,
+   -0.22,
+   0.38
+  ],
+  "LeftUpLeg": [
+   0.1,
+   0.03,
+   0.66
+  ],
+  "LeftLeg": [
+   0.14,
+   -0.03,
+   0.49
+  ],
+  "LeftFoot": [
+   0.16,
+   0.02,
+   0.12
+  ],
+  "LeftToeBase": [
+   0.17,
+   -0.12,
+   0.02
+  ],
+  "LeftToe_End": [
+   0.18,
+   -0.25,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.1,
+   0.03,
+   0.66
+  ],
+  "RightLeg": [
+   -0.14,
+   -0.02,
+   0.49
+  ],
+  "RightFoot": [
+   -0.16,
+   0.05,
+   0.12
+  ],
+  "RightToeBase": [
+   -0.16,
+   -0.1,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.17,
+   -0.24,
+   0.0
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "sleeve": {
+  "x": 0.17,
+  "zMin": 0.6,
+  "zMax": 1.05
+ },
+ "armCut": {
+  "maxDist": 0.13
+ },
+ "shatter": {
+  "start": 3,
+  "chunks": 14,
+  "burst": 0.4,
+  "up": 0.6,
+  "spin": 5
+ },
+ "extensions": [
+  "castle_armsep",
+  "conflux_rubble"
+ ],
+ "armSep": [
+  {
+   "side": "left",
+   "armBones": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "axis": [
+    [
+     0.182,
+     0.064,
+     1.051
+    ],
+    [
+     0.211,
+     0.074,
+     0.996
+    ],
+    [
+     0.205,
+     0.076,
+     0.91
+    ],
+    [
+     0.225,
+     0.061,
+     0.831
+    ],
+    [
+     0.225,
+     0.028,
+     0.749
+    ],
+    [
+     0.23,
+     -0.029,
+     0.668
+    ],
+    [
+     0.248,
+     -0.088,
+     0.585
+    ],
+    [
+     0.251,
+     -0.118,
+     0.511
+    ],
+    [
+     0.237,
+     -0.183,
+     0.437
+    ],
+    [
+     0.206,
+     -0.226,
+     0.361
+    ]
+   ],
+   "radius": [
+    0.062,
+    0.074,
+    0.073,
+    0.09,
+    0.1,
+    0.082,
+    0.109,
+    0.146,
+    0.136,
+    0.114
+   ],
+   "margin": 0.012,
+   "low": 0.2,
+   "top": 1.12,
+   "ramp": 0.04,
+   "bodyMaxX": 0.2,
+   "neutralDominant": [
+    "LeftHand"
+   ],
+   "bodyBehindY": -0.08,
+   "note": "shaman port of the soldier/guard v2 cut (axes from armaxis on the delivered retarget; radius r90, +0.02 at the ends); cutcheck bridges 0/0, non-arm faces in ARM 325/329; low 0.12 -> 0.2: the 0.12-0.16 fade put a 1e-4 LeftHand weight on one welded left-foot copy (vertex 9777), which split its weld group and failed cs_rekey parity (max 0.0222 H > 0.02)"
+  },
+  {
+   "side": "right",
+   "armBones": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "axis": [
+    [
+     -0.194,
+     0.043,
+     1.064
+    ],
+    [
+     -0.223,
+     0.038,
+     0.985
+    ],
+    [
+     -0.228,
+     0.048,
+     0.907
+    ],
+    [
+     -0.238,
+     0.061,
+     0.832
+    ],
+    [
+     -0.25,
+     0.045,
+     0.75
+    ],
+    [
+     -0.234,
+     0.004,
+     0.669
+    ],
+    [
+     -0.238,
+     -0.16,
+     0.579
+    ],
+    [
+     -0.214,
+     -0.22,
+     0.507
+    ],
+    [
+     -0.207,
+     -0.243,
+     0.424
+    ],
+    [
+     -0.194,
+     -0.221,
+     0.347
+    ],
+    [
+     -0.173,
+     -0.165,
+     0.3
+    ]
+   ],
+   "radius": [
+    0.09,
+    0.1,
+    0.086,
+    0.092,
+    0.121,
+    0.12,
+    0.138,
+    0.126,
+    0.139,
+    0.119,
+    0.098
+   ],
+   "margin": 0.012,
+   "low": 0.2,
+   "top": 1.12,
+   "ramp": 0.04,
+   "bodyMaxX": 0.2,
+   "neutralDominant": [
+    "RightHand"
+   ],
+   "bodyBehindY": -0.08,
+   "note": "shaman port of the soldier/guard v2 cut (axes from armaxis on the delivered retarget; radius r90, +0.02 at the ends); cutcheck bridges 0/0, non-arm faces in ARM 325/329; low 0.12 -> 0.2: the 0.12-0.16 fade put a 1e-4 LeftHand weight on one welded left-foot copy (vertex 9777), which split its weld group and failed cs_rekey parity (max 0.0222 H > 0.02)"
+  }
+ ],
+ "conflux": {
+  "rubbleSettle": {
+   "gather": 0.3,
+   "power": 0.5
+  }
+ },
+ "glbPatch": {
+  "reason": "Soldier S8b key port per DEF lvl5Alt: Hitted f1 forward flinch, f2-f5 both arms flung wide and level; Defence left arm raised in front of the face f3-f7; Death f2 both arms up in a V before the 14-chunk shatter; AttackFront trunk wind f1-f2 and sweep f3-f4 with crouch over the base arm swing; ShootFront cast: hands gathered at the chest f1-f3, both arms overhead f4-f5, right-arm thrust at the enemy f6-f7.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_dendroid_shaman_pose_rot.json",
+    "sha256": "67bb90dd4063182828286050f9a38edad1a1e093e5451f689e9e979a2fe4b5d4",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_dendroid_shaman_crouch_tr.json",
+    "sha256": "017563b7354f5288287aaaef971b860767c4ef2c8014a4ed28658c9afd581e77",
+    "regrid": true
+   }
+  ]
+ }
+}

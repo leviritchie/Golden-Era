@@ -1,0 +1,122 @@
+{
+ "schema": "homm3_def_wing_range.v1",
+ "note": "Peak-to-peak wing beat each unit's HoMM3 DEF shows over its Move frames, in degrees about the shoulder, with an honest bracket boundsDeg [lo, hi]. flyer_articulation.wing_rule(): a unit with a row is judged on wingRange >= DEF_RANGE_SHARE x rangeDeg in place of the flat 60 deg floor (defRow; user-approved 2026-09-27, 'I approve the 80% wing beat concept'); where that share falls under the floor (a low-flap DEF) the stricter end, DEF_RANGE_SHARE x boundsDeg[1], is used (defRowUpperBound). No row means no relaxation (flatFloor). Rows come from the validated calibration tool only.",
+ "units": {
+  "h3_royal_griffin": {
+   "rangeDeg": 110.7,
+   "boundsDeg": [
+    105.7,
+    190.7
+   ],
+   "def": "CRGRIF.dir group 0 (4 Move frames)",
+   "method": "silhouette calibration (def_wing_calibrate.py): wings swept -90..90 deg in 5 deg steps about the body axis against each DEF Move plate, IoU tol 0.005",
+   "glbSha256": "b93bd15f6c82fc0e7553ad1c2753004fd5c0f31db41ac76c9a0bd86a19044057",
+   "frames": [
+    {
+     "masterFrame": 12,
+     "posedDeg": 0.0,
+     "matchDeg": 30.0,
+     "beatDeg": 30.0,
+     "beatBoundsDeg": [
+      27.5,
+      32.5
+     ],
+     "bestIoU": 0.2216
+    },
+    {
+     "masterFrame": 13,
+     "posedDeg": -52.6,
+     "matchDeg": 0.0,
+     "beatDeg": -52.6,
+     "beatBoundsDeg": [
+      -130.1,
+      -50.1
+     ],
+     "bestIoU": 0.3174
+    },
+    {
+     "masterFrame": 14,
+     "posedDeg": -1.7,
+     "matchDeg": 30.0,
+     "beatDeg": 28.3,
+     "beatBoundsDeg": [
+      25.8,
+      30.8
+     ],
+     "bestIoU": 0.2291
+    },
+    {
+     "masterFrame": 15,
+     "posedDeg": 53.1,
+     "matchDeg": 5.0,
+     "beatDeg": 58.1,
+     "beatBoundsDeg": [
+      55.6,
+      60.6
+     ],
+     "bestIoU": 0.4536
+    }
+   ],
+   "sheetReview": "2026-09-27 sheet: level/down/level/up frames matched; the level frames' swept-back wing is approximated by a roll (IoU ~0.2); royal down frame bimodal (upper bound 190.7)",
+   "proof": "generated artifact: offline measurement of DEF plates against the build's own rig"
+  },
+  "h3_battle_griffin": {
+   "rangeDeg": 115.8,
+   "boundsDeg": [
+    110.8,
+    125.8
+   ],
+   "def": "lvl3Alt.dir group 0 (4 Move frames)",
+   "method": "silhouette calibration (def_wing_calibrate.py): wings swept -90..90 deg in 5 deg steps about the body axis against each DEF Move plate, IoU tol 0.005",
+   "glbSha256": "5281a249ced7e67b2093f737653852f9c5e0cd0312247a74e516992010f58df9",
+   "frames": [
+    {
+     "masterFrame": 12,
+     "posedDeg": 0.0,
+     "matchDeg": 0.0,
+     "beatDeg": 0.0,
+     "beatBoundsDeg": [
+      -2.5,
+      2.5
+     ],
+     "bestIoU": 0.1844
+    },
+    {
+     "masterFrame": 13,
+     "posedDeg": -52.6,
+     "matchDeg": 0.0,
+     "beatDeg": -52.6,
+     "beatBoundsDeg": [
+      -60.1,
+      -50.1
+     ],
+     "bestIoU": 0.3866
+    },
+    {
+     "masterFrame": 14,
+     "posedDeg": -1.7,
+     "matchDeg": 35.0,
+     "beatDeg": 33.3,
+     "beatBoundsDeg": [
+      30.8,
+      35.8
+     ],
+     "bestIoU": 0.1926
+    },
+    {
+     "masterFrame": 15,
+     "posedDeg": 53.2,
+     "matchDeg": 10.0,
+     "beatDeg": 63.2,
+     "beatBoundsDeg": [
+      60.7,
+      65.7
+     ],
+     "bestIoU": 0.4191
+    }
+   ],
+   "sheetReview": "2026-09-27 sheet: level/down/level/up frames matched; the level frames' swept-back wing is approximated by a roll (IoU ~0.2); royal down frame bimodal (upper bound 190.7)",
+   "proof": "generated artifact: offline measurement of DEF plates against the build's own rig"
+  }
+ }
+}

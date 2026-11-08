@@ -1,0 +1,160 @@
+{
+  "schema": "homm3_pseudo_rig_fit_job.v1_edge",
+  "unitSid": "h3_crusader",
+  "clipId": "combat_core",
+  "fps": 12,
+  "masterGlb": "artifacts/crusader_pose_pipeline/pseudo_rig/owned_bind/crusader_split_master.glb",
+  "handleCatalog": "artifacts/crusader_pose_pipeline/pseudo_rig/owned_bind/handle_catalog_split.json",
+  "outputDir": "artifacts/crusader_pose_pipeline/pseudo_rig/out_fit_split_v1_death_g5",
+  "exportDir": "artifacts/crusader_pose_pipeline/pseudo_rig/export_split_v1_death_g5",
+  "cullDefSoftShadows": true,
+  "spriteAlphaThreshold": 8,
+  "targetPadFrac": 0.08,
+  "optimizeBones": [
+    "deform_000",
+    "deform_001",
+    "deform_002",
+    "deform_003",
+    "deform_004",
+    "deform_005",
+    "deform_006",
+    "deform_007",
+    "deform_008",
+    "deform_009",
+    "deform_010",
+    "deform_011",
+    "deform_012",
+    "deform_013",
+    "deform_014",
+    "deform_015",
+    "deform_016",
+    "deform_017",
+    "deform_018",
+    "deform_019",
+    "deform_020",
+    "deform_021",
+    "deform_022",
+    "deform_023",
+    "deform_024",
+    "deform_025",
+    "deform_026",
+    "deform_027",
+    "deform_028",
+    "deform_029",
+    "deform_030",
+    "deform_031",
+    "deform_032",
+    "deform_033",
+    "deform_034",
+    "deform_035",
+    "deform_036",
+    "deform_037",
+    "deform_038",
+    "deform_039",
+    "deform_040",
+    "deform_041",
+    "deform_042",
+    "deform_043",
+    "deform_044",
+    "deform_045",
+    "deform_046",
+    "deform_047"
+  ],
+  "camera": {
+    "axis": "iso",
+    "isoAzimuthDeg": 40.0,
+    "isoElevationDeg": 30.0,
+    "distance": 3.0,
+    "orthoScale": 4.2,
+    "rootYawDeg": 0.0,
+    "lookAtZ": 0.75,
+    "isoZOffset": 0.35
+  },
+  "render": {
+    "width": 288,
+    "height": 256
+  },
+  "loss": {
+    "lambdaNeighbor": 0.12,
+    "lambdaDeform": 0.04,
+    "lambdaStretch": 0.02,
+    "lambdaDeformStageA": 0.005,
+    "lambdaStretchStageA": 0.005,
+    "lambdaEdge": 0.9,
+    "lambdaDt": 1.3,
+    "handleNeighborK": 4
+  },
+  "dof": {
+    "planeTranslateBound": 0.6,
+    "depthTranslateBound": 0.2,
+    "rotateBoundRad": 0.0
+  },
+  "optimizer": {
+    "method": "nelder",
+    "blockSize": 4,
+    "randomProbesPerBlock": 16,
+    "simplexBoundFrac": 0.4,
+    "polishIters": 72,
+    "stageBPasses": 1,
+    "stageBPolishIters": 48,
+    "seed": 0
+  },
+  "clips": [
+    {
+      "actionName": "Death",
+      "clipId": "death_g5",
+      "cyclic": false,
+      "frameCount": 6
+    }
+  ],
+  "frames": [
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g05_death/frame_00.png",
+      "clipId": "death_g5",
+      "actionName": "Death",
+      "clipFrame": 0,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g05_death/frame_01.png",
+      "clipId": "death_g5",
+      "actionName": "Death",
+      "clipFrame": 1,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g05_death/frame_02.png",
+      "clipId": "death_g5",
+      "actionName": "Death",
+      "clipFrame": 2,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g05_death/frame_03.png",
+      "clipId": "death_g5",
+      "actionName": "Death",
+      "clipFrame": 3,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g05_death/frame_04.png",
+      "clipId": "death_g5",
+      "actionName": "Death",
+      "clipFrame": 4,
+      "cyclic": false
+    },
+    {
+      "path": "artifacts/crusader_pose_pipeline/source_frames/nn_upscale_g05_death/frame_05.png",
+      "clipId": "death_g5",
+      "actionName": "Death",
+      "clipFrame": 5,
+      "cyclic": false
+    }
+  ],
+  "method_kind": "silhouette",
+  "method": "pseudo_rig_multi_pose_alpha_edge_dt",
+  "poseSolver": "pseudo_handle_tr",
+  "proof": "generated-artifact validated \u2014 pseudo-rig v1 edge+dt; not OE runtime",
+  "targetVersion": "v1",
+  "predPlacement": "clip_rest"
+}

@@ -1,0 +1,430 @@
+{
+ "unit": "h3_sprite",
+ "joints": {
+  "Hips": [
+   0.0,
+   -0.1,
+   1.0
+  ],
+  "Spine": [
+   0.0,
+   -0.09,
+   1.1
+  ],
+  "Spine1": [
+   0.0,
+   -0.08,
+   1.2
+  ],
+  "Spine2": [
+   0.0,
+   -0.08,
+   1.3
+  ],
+  "Neck": [
+   0.0,
+   -0.08,
+   1.42
+  ],
+  "Head": [
+   0.0,
+   -0.09,
+   1.5
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.1,
+   1.72
+  ],
+  "LeftShoulder": [
+   0.04,
+   -0.06,
+   1.38
+  ],
+  "RightShoulder": [
+   -0.04,
+   -0.06,
+   1.38
+  ],
+  "LeftArm": [
+   0.14,
+   -0.05,
+   1.35
+  ],
+  "RightArm": [
+   -0.14,
+   -0.05,
+   1.35
+  ],
+  "LeftForeArm": [
+   0.15,
+   -0.01,
+   1.1
+  ],
+  "RightForeArm": [
+   -0.15,
+   -0.01,
+   1.1
+  ],
+  "LeftHand": [
+   0.07,
+   0.01,
+   0.9
+  ],
+  "RightHand": [
+   -0.07,
+   0.01,
+   0.9
+  ],
+  "LeftHand_End": [
+   0.03,
+   0.02,
+   0.82
+  ],
+  "RightHand_End": [
+   -0.03,
+   0.02,
+   0.82
+  ],
+  "LeftUpLeg": [
+   0.07,
+   -0.1,
+   0.96
+  ],
+  "RightUpLeg": [
+   -0.07,
+   -0.1,
+   0.96
+  ],
+  "LeftLeg": [
+   0.06,
+   -0.14,
+   0.5
+  ],
+  "RightLeg": [
+   -0.06,
+   -0.1,
+   0.5
+  ],
+  "LeftFoot": [
+   0.05,
+   -0.17,
+   0.1
+  ],
+  "RightFoot": [
+   -0.05,
+   -0.06,
+   0.1
+  ],
+  "LeftToeBase": [
+   0.05,
+   -0.24,
+   0.03
+  ],
+  "RightToeBase": [
+   -0.06,
+   -0.15,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.05,
+   -0.31,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.06,
+   -0.22,
+   0.02
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "wingMaxDeg": 0,
+ "wings": [
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.03,
+    0.04,
+    1.3
+   ],
+   "tail": [
+    -0.25,
+    0.25,
+    1.6
+   ],
+   "sign": 1,
+   "region": {
+    "box": [
+     [
+      -0.6,
+      0.03,
+      0.45
+     ],
+     [
+      0.0,
+      0.7,
+      1.9
+     ]
+    ]
+   }
+  },
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.03,
+    0.04,
+    1.3
+   ],
+   "tail": [
+    0.25,
+    0.25,
+    1.6
+   ],
+   "sign": -1,
+   "region": {
+    "box": [
+     [
+      0.0,
+      0.03,
+      0.45
+     ],
+     [
+      0.6,
+      0.7,
+      1.9
+     ]
+    ]
+   }
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 40,
+   "dy": 60
+  }
+ },
+ "extensions": [
+  "conflux_weights",
+  "conflux_leash",
+  "wing_chain"
+ ],
+ "conflux": {
+  "fillUnweighted": true,
+  "limbLeash": {
+   "bones": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "maxDist": 0.07,
+   "boneMaxDist": {
+    "LeftHand": 0.07,
+    "RightHand": 0.07
+   },
+   "nearestOnly": true,
+   "maxDistAll": 0.35,
+   "partition": [
+    "LeftUpLeg",
+    "RightUpLeg",
+    "Hips",
+    "Spine"
+   ],
+   "handSplit": true,
+   "sideSplit": true
+  }
+ },
+ "wingChain": {
+  "wings": [
+   {
+    "bone": "LeftWing",
+    "side": 1
+   },
+   {
+    "bone": "RightWing",
+    "side": -1
+   }
+  ],
+  "adoptWeights": "nearest",
+  "anim": {
+   "Idle": {
+    "open": 0,
+    "flap": {
+     "sin": 15,
+     "phase": -90
+    }
+   },
+   "Mouseover": {
+    "open": 0,
+    "flap": {
+     "sin": 15,
+     "phase": -90
+    }
+   },
+   "MoveStart": {
+    "open": 0,
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       40
+      ],
+      [
+       1,
+       60
+      ]
+     ]
+    }
+   },
+   "Move": {
+    "open": 0,
+    "flap": {
+     "sin": 60,
+     "phase": 90
+    }
+   },
+   "MoveEnd": {
+    "open": 0,
+    "flap": {
+     "keys": [
+      [
+       0,
+       60
+      ],
+      [
+       0.5,
+       25
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "open": 0,
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       30
+      ],
+      [
+       0.6,
+       15
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Defence": {
+    "open": 0,
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       30
+      ],
+      [
+       0.67,
+       30
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "open": 0,
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       25
+      ],
+      [
+       0.6,
+       10
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Death": {
+    "open": 0,
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.25,
+       25
+      ],
+      [
+       0.6,
+       10
+      ],
+      [
+       1,
+       -15
+      ]
+     ]
+    }
+   }
+  }
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: Death lands flat on the ground (the capture fell on her back with both wing membranes standing on edge through the floor, holding the body up): wing chains laid flat and twisted flat; Move glides with the body laid forward and legs trailing like the DEF on every key (the capture stood her nearly upright with running legs except at f2-f3); hip/leg/wing-root weights re-solved",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_sprite_death_move_weights.json",
+    "sha256": "1dacfbb07b97a238ff9e06f9e31590df21e81f084d9087d62b2e1d36e1e136ba",
+    "note": "hip/leg/wing-root weight re-solve (laneB wsolve, GPU) for the Move glide and Death landing"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_sprite_death_landing_glide_rot.json",
+    "regrid": true,
+    "sha256": "bfadd4ef87d5908cad3f494fd0303ba24dbbabf01cb3c5091418652ec9665482"
+   }
+  ]
+ }
+}

@@ -1,0 +1,232 @@
+{
+ "unit": "h3_plasma_elemental",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.03,
+   0.93
+  ],
+  "Spine": [
+   0.0,
+   0.03,
+   1.03
+  ],
+  "Spine1": [
+   0.0,
+   0.03,
+   1.15
+  ],
+  "Spine2": [
+   0.0,
+   0.03,
+   1.27
+  ],
+  "Neck": [
+   0.0,
+   0.02,
+   1.42
+  ],
+  "Head": [
+   0.0,
+   0.0,
+   1.52
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.03,
+   1.74
+  ],
+  "LeftShoulder": [
+   0.07,
+   0.02,
+   1.38
+  ],
+  "RightShoulder": [
+   -0.07,
+   0.02,
+   1.38
+  ],
+  "LeftArm": [
+   0.21,
+   0.02,
+   1.37
+  ],
+  "RightArm": [
+   -0.21,
+   0.02,
+   1.37
+  ],
+  "LeftForeArm": [
+   0.32,
+   0.08,
+   1.17
+  ],
+  "RightForeArm": [
+   -0.32,
+   0.08,
+   1.17
+  ],
+  "LeftHand": [
+   0.45,
+   0.02,
+   0.98
+  ],
+  "RightHand": [
+   -0.45,
+   0.02,
+   0.98
+  ],
+  "LeftHand_End": [
+   0.5,
+   -0.02,
+   0.92
+  ],
+  "RightHand_End": [
+   -0.5,
+   -0.02,
+   0.92
+  ],
+  "LeftUpLeg": [
+   0.1,
+   0.03,
+   0.88
+  ],
+  "RightUpLeg": [
+   -0.1,
+   0.03,
+   0.88
+  ],
+  "LeftLeg": [
+   0.16,
+   -0.04,
+   0.48
+  ],
+  "RightLeg": [
+   -0.13,
+   0.03,
+   0.48
+  ],
+  "LeftFoot": [
+   0.16,
+   0.0,
+   0.1
+  ],
+  "RightFoot": [
+   -0.1,
+   0.23,
+   0.13
+  ],
+  "LeftToeBase": [
+   0.17,
+   -0.14,
+   0.03
+  ],
+  "RightToeBase": [
+   -0.11,
+   0.09,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.17,
+   -0.27,
+   0.01
+  ],
+  "RightToe_End": [
+   -0.11,
+   0.0,
+   0.01
+  ]
+ },
+ "extensions": [
+  "conflux_weights",
+  "conflux_shrink",
+  "conflux_rubble",
+  "element_motion"
+ ],
+ "conflux": {
+  "armFalloff": {
+   "width": 0.04
+  },
+  "clipShrink": {
+   "MoveStart": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    0.7
+   ],
+   "Move": [
+    0.45,
+    0.35,
+    0.2,
+    0.08
+   ],
+   "MoveEnd": [
+    0.6
+   ]
+  },
+  "rubbleSettle": {
+   "gather": 0.5,
+   "power": 0.8
+  },
+  "fillUnweighted": true
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "shatter": {
+  "start": 5,
+  "chunks": 50,
+  "burst": 0.3,
+  "up": 0.3,
+  "spin": 5
+ },
+ "elementMotion": {
+  "mode": "crackle",
+  "period": 7,
+  "flow": {
+   "pulseFromDef": 0.6
+  }
+ },
+ "moveLowPass": {
+  "highHarmonicKeep": 0.7,
+  "reason": "5-key DEF Move loop (0.417 s, 2.4 Hz fundamental): the capture fit's per-frame arm poses alternate (RightArm x -4.6/5.5/-13.8/13.2/4.3 deg), so the 2nd harmonic (4.8 Hz) sits above the 4 Hz cutoff: Move jitter p90 0.391 (worst RightArm; cap 0.35). The crackle jitter (2.5 deg) is not the source. Sweep on the delivered GLB 2026-09-30: k 0.8 -> 0.300, 0.7 -> 0.254, 0.6 -> 0.220, 0.5 -> 0.174; 0.7 is the lightest with margin (genie vizier precedent)."
+ },
+ "glbPatch": {
+  "reason": "2026-10-11 lane D authenticity: DEF g12 AttackFront - both arms raised overhead with the fists together at f2-f3 (the capture raised one arm and held the other at the face), then a deeper lunge (hips down 0.12 and forward, feet planted, leg IK) with both arms thrust forward at f4-f6, recovering at f7. LeftArm/LeftForeArm/RightArm/RightForeArm aims split over two keyRotations ops, Hips keyTranslations; stretchRelax over AttackFront for the shoulder crease (the right upper arm aims inward over the head, which keeps the armpit edge under the input's worst stretch).",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_plasma_elemental_pose_tr.json",
+    "regrid": true,
+    "sha256": "c02dc83e4a46d6bbf03779a897b117a15e9ef86e2b0ad66883e7102e9f57b539"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_plasma_elemental_pose_rot.json",
+    "regrid": true,
+    "sha256": "0d998151c42b58b9ecc498473e2ce4bf67286a8b92c51e4dd96b269ed1748427"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_plasma_elemental_pose_rot.json",
+    "regrid": true,
+    "sha256": "0d998151c42b58b9ecc498473e2ce4bf67286a8b92c51e4dd96b269ed1748427"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "crease of the re-posed joints"
+   }
+  ]
+ }
+}

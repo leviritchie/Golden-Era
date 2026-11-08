@@ -1,0 +1,254 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_zealot",
+ "status": "look",
+ "notes": "castle faction rollout",
+ "lighting": {
+  "mode": "v6m",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": [
+   {
+    "lightId": "rest_occlusion_fill",
+    "maskPath": "tools/homm3_unit_look/units/masks/h3_zealot/rest_occluded_uv.png",
+    "rgb": [
+     0.118,
+     0.141,
+     0.263
+    ],
+    "strength": 1.0
+   }
+  ]
+ },
+ "lights": [
+  {
+   "id": "cast_defence_flash",
+   "treatment": "dynamic",
+   "notes": "Unit_Defence cast flash on the body"
+  },
+  {
+   "id": "cast_melee_flash",
+   "treatment": "dynamic",
+   "notes": "Unit_AttackFront cast flash on the body"
+  },
+  {
+   "id": "cast_bolt_flash",
+   "treatment": "dynamic",
+   "notes": "Unit_ShootFront cast flash on the body"
+  },
+  {
+   "id": "rest_occlusion_fill",
+   "treatment": "baked",
+   "notes": "not a light source: the rest-pose light terms are baked with the arms folded against the chest, so the freed sleeves' inner sides and the rebuilt chest front (chest_c3 surgery) bake black and show black once the arms move; this lifts those texels (UV mask from tools/homm3_unit_look/units/masks/h3_zealot/rest_occluded_uv.png, weighted by how far each texel sits below the lit sleeve colour) to the lit robe-cloth colour"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "cast_defence",
+    "type": "defFlipbook",
+    "provenance": "castle rollout: DEF g04 frames 1-5 electric+water",
+    "clips": {
+     "Unit_Defence": {
+      "defGroup": 4,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric",
+      "water"
+     ],
+     "includeDetached": false,
+     "minComponentPx": 12
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "cast_defence_flash",
+    "notes": "Mesh arms stay crossed (retarget issue logged); defOrigin auto pins the bolt's body contact to the hand."
+   },
+   {
+    "id": "cast_defence_flash_light",
+    "type": "effectLight",
+    "lightId": "cast_defence_flash",
+    "carrier": "cast_defence",
+    "anchor": {
+     "bone": "LeftHand",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.75,
+     0.85,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_Defence": [
+      0.0,
+      0.582,
+      1.66,
+      3.208,
+      4.426,
+      1.154,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "cast_melee",
+    "type": "defFlipbook",
+    "provenance": "castle rollout: DEF g12 frames 1-4 electric+water; delivery: billboard (the def_retarget lane cannot build a unitPlane flipbook; 6d4c51b2fe's turning blast stays a lab render only)",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       1,
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric",
+      "water"
+     ],
+     "includeDetached": false,
+     "minComponentPx": 12
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "cast_melee_flash",
+    "notes": "Mesh arms stay crossed (retarget issue logged); defOrigin auto pins the bolt's body contact to the hand. render unitPlane: the blast is thrown forward (directional), so it turns with the unit."
+   },
+   {
+    "id": "cast_melee_flash_light",
+    "type": "effectLight",
+    "lightId": "cast_melee_flash",
+    "carrier": "cast_melee",
+    "anchor": {
+     "bone": "LeftHand",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.75,
+     0.85,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.665,
+      1.143,
+      4.02,
+      1.141,
+      0.213,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "cast_bolt",
+    "type": "defFlipbook",
+    "provenance": "castle rollout: DEF g15 frames 1-4 electric+water",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       1,
+       2,
+       3,
+       4
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "electric",
+      "water"
+     ],
+     "includeDetached": false,
+     "minComponentPx": 12
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "cast_bolt_flash",
+    "notes": "Mesh arms stay crossed (retarget issue logged); defOrigin auto pins the bolt's body contact to the hand."
+   },
+   {
+    "id": "cast_bolt_flash_light",
+    "type": "effectLight",
+    "lightId": "cast_bolt_flash",
+    "carrier": "cast_bolt",
+    "anchor": {
+     "bone": "LeftHand",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.75,
+     0.85,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_ShootFront": [
+      0.0,
+      0.543,
+      1.148,
+      4.404,
+      4.377,
+      0.814,
+      0.798,
+      0.886,
+      0.839,
+      0.782,
+      0.362,
+      0.25,
+      0.0,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

@@ -1,0 +1,541 @@
+{
+ "unit": "h3_leprechaun",
+ "note": "Leprechaun (CLEPRCHN.DEF, HotA neutral). Mesh: artifacts/meshy_downloads/h3_leprechaun_smartrigged.glb (sha 8aa66c9f...; identity checked 2026-09-27 against DEF idle: green coat, top hat with band, red beard, pipe, striped stockings, cane in the right hand). The cane is rigid on RightHand. ShootFront is DEF group 18 (hat raised, coins poured forward) added by extend_master_clip.py with a motionless capture; its motion is the poseOverlay below (ext/clip_overlay.py), the hat a propBone on Head carried by the left hand from frame 1 to 9. Other clips are the linked-master mocap capture.",
+ "joints": {
+  "Hips": [
+   -0.017,
+   0.097,
+   0.734
+  ],
+  "Spine": [
+   -0.013,
+   0.099,
+   0.828
+  ],
+  "Spine1": [
+   -0.01,
+   0.1,
+   0.923
+  ],
+  "Spine2": [
+   -0.006,
+   0.102,
+   1.029
+  ],
+  "Neck": [
+   -0.003,
+   0.1,
+   1.21
+  ],
+  "Head": [
+   -0.005,
+   0.095,
+   1.31
+  ],
+  "HeadTop_End": [
+   -0.005,
+   0.07,
+   1.7
+  ],
+  "LeftShoulder": [
+   0.056,
+   0.13,
+   1.212
+  ],
+  "LeftArm": [
+   0.183,
+   0.197,
+   1.185
+  ],
+  "LeftForeArm": [
+   0.289,
+   0.316,
+   1.039
+  ],
+  "LeftHand": [
+   0.322,
+   0.157,
+   0.847
+  ],
+  "LeftHand_End": [
+   0.334,
+   0.1,
+   0.778
+  ],
+  "RightShoulder": [
+   -0.083,
+   0.084,
+   1.212
+  ],
+  "RightArm": [
+   -0.222,
+   0.084,
+   1.185
+  ],
+  "RightForeArm": [
+   -0.342,
+   0.024,
+   0.999
+  ],
+  "RightHand": [
+   -0.262,
+   -0.208,
+   1.039
+  ],
+  "RightHand_End": [
+   -0.233,
+   -0.292,
+   1.054
+  ],
+  "LeftUpLeg": [
+   0.103,
+   0.124,
+   0.714
+  ],
+  "LeftLeg": [
+   0.176,
+   0.057,
+   0.442
+  ],
+  "LeftFoot": [
+   0.163,
+   0.15,
+   0.123
+  ],
+  "LeftToeBase": [
+   0.229,
+   -0.009,
+   0.05
+  ],
+  "LeftToe_End": [
+   0.256,
+   -0.089,
+   -0.003
+  ],
+  "RightUpLeg": [
+   -0.136,
+   0.057,
+   0.714
+  ],
+  "RightLeg": [
+   -0.203,
+   -0.009,
+   0.408
+  ],
+  "RightFoot": [
+   -0.216,
+   0.177,
+   0.123
+  ],
+  "RightToeBase": [
+   -0.262,
+   0.017,
+   0.05
+  ],
+  "RightToe_End": [
+   -0.276,
+   -0.062,
+   -0.003
+  ]
+ },
+ "props": [
+  {
+   "name": "cane",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.209,
+      -0.3,
+      0.0
+     ],
+     [
+      -0.209,
+      -0.3,
+      0.95
+     ]
+    ]
+   ],
+   "radius": 0.045
+  }
+ ],
+ "propBones": [
+  {
+   "name": "Hat",
+   "parent": "Head",
+   "head": [
+    0.0,
+    0.08,
+    1.46
+   ],
+   "tail": [
+    0.0,
+    0.08,
+    1.7
+   ],
+   "region": {
+    "box": [
+     [
+      -0.32,
+      -0.3,
+      1.415
+     ],
+     [
+      0.32,
+      0.36,
+      1.75
+     ]
+    ],
+    "color": {
+     "expr": "r-g",
+     "max": 0.08
+    }
+   }
+  }
+ ],
+ "extensions": [
+  "stronghold_propbone",
+  "clip_overlay"
+ ],
+ "poseOverlay": {
+  "ShootFront": [
+   {
+    "f": 0,
+    "bones": {
+     "LeftArm": "base",
+     "LeftForeArm": "base",
+     "LeftHand": "base",
+     "Spine1": "base",
+     "Head": "base"
+    }
+   },
+   {
+    "f": 1,
+    "bones": {
+     "LeftArm": {
+      "aim": [
+       0.67,
+       -0.52,
+       0.52
+      ]
+     },
+     "LeftForeArm": {
+      "aim": [
+       -0.45,
+       -0.3,
+       0.84
+      ]
+     },
+     "LeftHand": {
+      "aim": [
+       -0.5,
+       -0.2,
+       0.84
+      ]
+     }
+    }
+   },
+   {
+    "f": 2,
+    "bones": {
+     "LeftArm": {
+      "aim": [
+       0.3,
+       -0.3,
+       0.9
+      ]
+     },
+     "LeftForeArm": {
+      "aim": [
+       -0.1,
+       -0.15,
+       1.0
+      ]
+     },
+     "LeftHand": {
+      "aim": [
+       -0.1,
+       -0.15,
+       1.0
+      ]
+     }
+    }
+   },
+   {
+    "f": 3,
+    "bones": {
+     "LeftArm": {
+      "aim": [
+       0.3,
+       -0.6,
+       0.75
+      ]
+     },
+     "LeftForeArm": {
+      "aim": [
+       0.0,
+       -0.6,
+       0.8
+      ]
+     },
+     "LeftHand": {
+      "aim": [
+       0.0,
+       -0.6,
+       0.8
+      ],
+      "twist": 30
+     },
+     "Spine1": {
+      "rot": [
+       4,
+       0,
+       0
+      ]
+     },
+     "Head": {
+      "rot": [
+       -10,
+       0,
+       0
+      ]
+     }
+    }
+   },
+   {
+    "f": 4,
+    "bones": {
+     "LeftArm": {
+      "aim": [
+       0.25,
+       -0.9,
+       0.3
+      ]
+     },
+     "LeftForeArm": {
+      "aim": [
+       0.0,
+       -1.0,
+       0.1
+      ]
+     },
+     "LeftHand": {
+      "aim": [
+       0.0,
+       -1.0,
+       0.0
+      ],
+      "twist": 90
+     },
+     "Spine1": {
+      "rot": [
+       8,
+       0,
+       0
+      ]
+     },
+     "Head": {
+      "rot": [
+       -6,
+       0,
+       0
+      ]
+     }
+    }
+   },
+   {
+    "f": 5,
+    "bones": {
+     "LeftArm": {
+      "aim": [
+       0.2,
+       -0.9,
+       -0.1
+      ]
+     },
+     "LeftForeArm": {
+      "aim": [
+       0.05,
+       -1.0,
+       -0.1
+      ]
+     },
+     "LeftHand": {
+      "aim": [
+       0.05,
+       -1.0,
+       -0.2
+      ],
+      "twist": 160
+     },
+     "Spine1": {
+      "rot": [
+       9,
+       0,
+       0
+      ]
+     },
+     "Head": {
+      "rot": [
+       -4,
+       0,
+       0
+      ]
+     }
+    }
+   },
+   {
+    "f": 7,
+    "bones": {
+     "LeftArm": {
+      "aim": [
+       0.2,
+       -0.9,
+       -0.05
+      ]
+     },
+     "LeftForeArm": {
+      "aim": [
+       0.05,
+       -1.0,
+       -0.05
+      ]
+     },
+     "LeftHand": {
+      "aim": [
+       0.05,
+       -1.0,
+       -0.15
+      ],
+      "twist": 160
+     },
+     "Spine1": {
+      "rot": [
+       9,
+       0,
+       0
+      ]
+     },
+     "Head": {
+      "rot": [
+       -4,
+       0,
+       0
+      ]
+     }
+    }
+   },
+   {
+    "f": 8,
+    "bones": {
+     "LeftArm": {
+      "aim": [
+       0.3,
+       -0.5,
+       0.8
+      ]
+     },
+     "LeftForeArm": {
+      "aim": [
+       0.0,
+       -0.4,
+       0.9
+      ]
+     },
+     "LeftHand": {
+      "aim": [
+       0.0,
+       -0.4,
+       0.9
+      ],
+      "twist": 20
+     },
+     "Spine1": {
+      "rot": [
+       4,
+       0,
+       0
+      ]
+     },
+     "Head": {
+      "rot": [
+       -8,
+       0,
+       0
+      ]
+     }
+    }
+   },
+   {
+    "f": 9,
+    "bones": {
+     "LeftArm": {
+      "aim": [
+       0.67,
+       -0.52,
+       0.52
+      ]
+     },
+     "LeftForeArm": {
+      "aim": [
+       -0.45,
+       -0.3,
+       0.84
+      ]
+     },
+     "LeftHand": {
+      "aim": [
+       -0.5,
+       -0.2,
+       0.84
+      ]
+     },
+     "Spine1": "base",
+     "Head": "base"
+    }
+   },
+   {
+    "f": 12,
+    "bones": {
+     "LeftArm": "base",
+     "LeftForeArm": "base",
+     "LeftHand": "base"
+    }
+   }
+  ]
+ },
+ "propCarry": [
+  {
+   "bone": "Hat",
+   "hand": "LeftHand",
+   "clip": "ShootFront",
+   "grab": 1,
+   "release": 9
+  }
+ ],
+ "propFloor": {
+  "bone": "RightHand",
+  "prop": "cane",
+  "clips": [
+   "AttackFront",
+   "Death",
+   "Defence",
+   "Hitted",
+   "Idle",
+   "Mouseover",
+   "Move",
+   "MoveEnd",
+   "MoveStart",
+   "ShootFront"
+  ],
+  "reason": "The cane (rigid on RightHand) goes through the floor: Move up to 0.098 H on every key, AttackFront 0.129, Mouseover 0.038, ShootFront 0.033, Idle 0.026; the DEF (CLEPRCHN g00) swings it like a pendulum with the tip on the floor. Tilting it within its own lean plane puts the tip on the floor; the whole-body ground lift it replaces floated the planted feet (Move slip 0.156 -> 0.318). Every clip is listed; a clip whose cane stays above the floor is left alone."
+ },
+ "gateExceptions": {
+  "freeze": {
+   "Unit_ShootFront:holds": {
+    "value": 3.0,
+    "reason": "Unit_ShootFront holds one pose over 3 DEF frames; measured Unit_ShootFront holds one pose for 3 frames from frame 12 while the DEF moves (max 2); user-approved exception 2026-09-28"
+   }
+  }
+ }
+}

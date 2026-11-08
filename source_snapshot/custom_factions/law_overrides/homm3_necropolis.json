@@ -1,0 +1,685 @@
+{
+  "lawOverrides": {
+    "fraction_law_homm3_necropolis_13": {
+      "enabled": true,
+      "nameText": "Death Grip",
+      "descriptionText": "Friendly creatures' counterattacks deal 50% more damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "counter_attack",
+                "0.50"
+              ],
+              "receivers": [
+                "h3_skeleton",
+                "h3_walking_dead",
+                "h3_wight",
+                "h3_vampire",
+                "h3_lich",
+                "h3_black_knight",
+                "h3_bone_dragon"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Retribution (schools/life/retribution.jpg). Runtime icon key: fraction_law_homm3_necropolis_13_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Retribution",
+      "homm4IconPath": "schools/life/retribution.jpg",
+      "iconKey": "fraction_law_homm3_necropolis_13_icon"
+    },
+    "fraction_law_homm3_necropolis_15": {
+      "enabled": true,
+      "nameText": "Death Rite",
+      "descriptionText": "Heroes can learn tier 1 Night spells.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "magicSchoolSet",
+                "night",
+                "0",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Raise skeletons (schools/death/raise_skeletons.jpg). Runtime icon key: fraction_law_homm3_necropolis_15_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Raise skeletons",
+      "homm4IconPath": "schools/death/raise_skeletons.jpg",
+      "iconKey": "fraction_law_homm3_necropolis_15_icon"
+    },
+    "fraction_law_homm3_necropolis_18": {
+      "enabled": true,
+      "nameText": "Death March",
+      "descriptionText": "Friendly creatures deal 10% more melee damage and take 10% less melee damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "melee_attack",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_skeleton",
+                "h3_walking_dead",
+                "h3_wight",
+                "h3_vampire",
+                "h3_lich",
+                "h3_black_knight",
+                "h3_bone_dragon"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "melee_attack",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_skeleton",
+                "h3_walking_dead",
+                "h3_wight",
+                "h3_vampire",
+                "h3_lich",
+                "h3_black_knight",
+                "h3_bone_dragon"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Creature portrait law icon pass: uses h3_skeleton.png for this creature-function law under runtime icon key fraction_law_homm3_necropolis_18_icon. Static/deploy proven only; law-tree visual smoke still required.",
+      "homm4IconLabel": "Animate dead",
+      "homm4IconPath": "schools/death/animate_dead.jpg",
+      "iconKey": "fraction_law_homm3_necropolis_18_icon",
+      "portraitIconSid": "h3_skeleton"
+    },
+    "fraction_law_homm3_necropolis_19": {
+      "enabled": true,
+      "nameText": "Grave Crossfire",
+      "descriptionText": "Friendly creatures deal 5%/10% more ranged damage and take 5%/10% less ranged damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "shoot_attack",
+                "0.05"
+              ],
+              "receivers": [
+                "h3_skeleton",
+                "h3_walking_dead",
+                "h3_wight",
+                "h3_vampire",
+                "h3_lich",
+                "h3_black_knight",
+                "h3_bone_dragon"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "shoot_attack",
+                "-0.05"
+              ],
+              "receivers": [
+                "h3_skeleton",
+                "h3_walking_dead",
+                "h3_wight",
+                "h3_vampire",
+                "h3_lich",
+                "h3_black_knight",
+                "h3_bone_dragon"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "shoot_attack",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_skeleton",
+                "h3_walking_dead",
+                "h3_wight",
+                "h3_vampire",
+                "h3_lich",
+                "h3_black_knight",
+                "h3_bone_dragon"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "shoot_attack",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_skeleton",
+                "h3_walking_dead",
+                "h3_wight",
+                "h3_vampire",
+                "h3_lich",
+                "h3_black_knight",
+                "h3_bone_dragon"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Mass curse (schools/death/mass_curse.jpg). Runtime icon key: fraction_law_homm3_necropolis_19_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Mass curse",
+      "homm4IconPath": "schools/death/mass_curse.jpg",
+      "iconKey": "fraction_law_homm3_necropolis_19_icon"
+    },
+    "fraction_law_homm3_necropolis_2": {
+      "enabled": true,
+      "nameText": "Tomb Archives",
+      "descriptionText": "Necropolis towns gain 20%/40%/60% more experience.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "cityExpCoef",
+                "0.2"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "cityExpCoef",
+                "0.4"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "cityExpCoef",
+                "0.6"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "Canonical shared-law icon pass: external-building Sight laws use a shared structure/scouting vanilla icon. Static/deploy validation pending.",
+      "iconKey": "fraction_law_nature_2_icon"
+    },
+    "fraction_law_homm3_necropolis_21": {
+      "enabled": true,
+      "nameText": "Mortuary Accounting",
+      "descriptionText": "Gold income from your sources increases by +10% by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "resPercentIncrementSet",
+                "gold",
+                "0.10"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Death call (schools/death/death_call.jpg). Runtime icon key: fraction_law_homm3_necropolis_21_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Death call",
+      "homm4IconPath": "schools/death/death_call.jpg",
+      "iconKey": "fraction_law_homm3_necropolis_21_icon"
+    },
+    "fraction_law_homm3_necropolis_22": {
+      "enabled": true,
+      "nameText": "Legion Without Banner",
+      "descriptionText": "Your army ignores faction-mixing penalties.",
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "unitBoolStat",
+              "parameters": [
+                "ignoreFractionsCount",
+                "true"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_undead_22_icon from the undead faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_undead_22_icon"
+    },
+    "fraction_law_homm3_necropolis_27": {
+      "enabled": true,
+      "nameText": "High Death Rite",
+      "descriptionText": "Heroes can learn any tier of Night spells.",
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "magicSchoolSet",
+                "night",
+                "5",
+                "0"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Hand of Death (schools/death/hand_of_death.jpg). Runtime icon key: fraction_law_homm3_necropolis_27_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Hand of Death",
+      "homm4IconPath": "schools/death/hand_of_death.jpg",
+      "iconKey": "fraction_law_homm3_necropolis_27_icon"
+    },
+    "fraction_law_homm3_necropolis_28": {
+      "enabled": true,
+      "nameText": "Reanimated Masonry",
+      "descriptionText": "Your towns gain an additional daily construction allowance.",
+      "parametersPerLevel": [
+        {
+          "cost": 6,
+          "bonuses": [
+            {
+              "type": "constructionDailyLimit",
+              "parameters": [
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_28_icon"
+    },
+    "fraction_law_homm3_necropolis_33": {
+      "enabled": true,
+      "nameText": "Death Moon",
+      "descriptionText": "Produces 250/500/750 Astrology points daily by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "250"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "500"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "750"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_34_icon"
+    },
+    "fraction_law_homm3_necropolis_34": {
+      "enabled": true,
+      "nameText": "Deathly Silence",
+      "descriptionText": "Enemy heroes lose access to low-tier battle spells from every school.",
+      "parametersPerLevel": [
+        {
+          "cost": 6,
+          "bonuses": [
+            {
+              "type": "heroStatBattle",
+              "parameters": [
+                "magicSchoolSet",
+                "day",
+                "0",
+                "-1"
+              ],
+              "receiverAllegiance": "enemy"
+            },
+            {
+              "type": "heroStatBattle",
+              "parameters": [
+                "magicSchoolSet",
+                "night",
+                "0",
+                "-1"
+              ],
+              "receiverAllegiance": "enemy"
+            },
+            {
+              "type": "heroStatBattle",
+              "parameters": [
+                "magicSchoolSet",
+                "space",
+                "0",
+                "-1"
+              ],
+              "receiverAllegiance": "enemy"
+            },
+            {
+              "type": "heroStatBattle",
+              "parameters": [
+                "magicSchoolSet",
+                "primal",
+                "0",
+                "-1"
+              ],
+              "receiverAllegiance": "enemy"
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
+      "iconNotes": "HOMM4 art-source candidate: Magic leech (schools/death/magic_leech.jpg). Runtime icon key: fraction_law_homm3_necropolis_34_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Magic leech",
+      "homm4IconPath": "schools/death/magic_leech.jpg",
+      "iconKey": "fraction_law_homm3_necropolis_34_icon"
+    },
+    "fraction_law_homm3_necropolis_6": {
+      "enabled": true,
+      "nameText": "Corpse Wisdom",
+      "descriptionText": "Friendly creatures deal +10% damage by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_skeleton",
+                "h3_walking_dead",
+                "h3_wight",
+                "h3_vampire",
+                "h3_lich",
+                "h3_black_knight",
+                "h3_bone_dragon"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "iconNotes": "HOMM4 art-source candidate: Mana flare (schools/chaos/mana_flare.jpg). Runtime icon key: fraction_law_homm3_necropolis_6_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "homm4IconLabel": "Mana flare",
+      "homm4IconPath": "schools/chaos/mana_flare.jpg",
+      "iconKey": "fraction_law_homm3_necropolis_6_icon"
+    },
+    "fraction_law_homm3_necropolis_4": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_undead_4_icon from the undead faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_undead_4_icon"
+    },
+    "fraction_law_homm3_necropolis_5": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_undead_5_icon from the undead faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_undead_5_icon"
+    },
+    "fraction_law_homm3_necropolis_10": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_undead_10_icon from the undead faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_undead_10_icon"
+    },
+    "fraction_law_homm3_necropolis_11": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_undead_11_icon from the undead faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_undead_11_icon"
+    },
+    "fraction_law_homm3_necropolis_14": {
+      "iconNotes": "Canonical resource icon pass: mining laws use the vanilla icon matching the produced special resource instead of donor-faction inheritance. Static/deploy validation pending.",
+      "iconKey": "fraction_law_dungeon_14_icon"
+    },
+    "fraction_law_homm3_necropolis_17": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_undead_17_icon from the undead faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_undead_17_icon",
+      "enabled": true,
+      "nameText": "Vampiric Nobility",
+      "descriptionText": "Life-draining Necropolis creatures restore more Health from the damage they deal.",
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "vampirismHealMultiplier",
+                "0.50"
+              ],
+              "receivers": [
+                "h3_vampire",
+                "h3_vampire_upg",
+                "h3_vampire_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "vampirismHealMultiplier",
+                "1.00"
+              ],
+              "receivers": [
+                "h3_vampire",
+                "h3_vampire_upg",
+                "h3_vampire_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending."
+    },
+    "fraction_law_homm3_necropolis_20": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_undead_20_icon from the undead faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_undead_20_icon"
+    },
+    "fraction_law_homm3_necropolis_23": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_undead_23_icon from the undead faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_undead_23_icon"
+    },
+    "fraction_law_homm3_necropolis_24": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_undead_24_icon from the undead faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_undead_24_icon"
+    },
+    "fraction_law_homm3_necropolis_26": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_undead_26_icon from the undead faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_undead_26_icon"
+    },
+    "fraction_law_homm3_necropolis_30": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_undead_30_icon from the undead faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_undead_30_icon"
+    },
+    "fraction_law_homm3_necropolis_31": {
+      "iconNotes": "Vanilla donor icon pass: uses fraction_law_undead_31_icon from the undead faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
+      "iconKey": "fraction_law_undead_31_icon"
+    },
+    "fraction_law_homm3_necropolis_32": {
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
+      "iconKey": "fraction_law_human_32_icon"
+    },
+    "fraction_law_homm3_necropolis_25": {
+      "enabled": true,
+      "nameText": "Dread",
+      "descriptionText": "Morale trigger chance for friendly creatures increases by +1%/+2%/+3% per Morale point by rank.",
+      "parametersPerLevel": [
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.01"
+              ],
+              "receivers": [
+                "h3_skeleton",
+                "h3_walking_dead",
+                "h3_wight",
+                "h3_vampire",
+                "h3_lich",
+                "h3_black_knight",
+                "h3_bone_dragon"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.02"
+              ],
+              "receivers": [
+                "h3_skeleton",
+                "h3_walking_dead",
+                "h3_wight",
+                "h3_vampire",
+                "h3_lich",
+                "h3_black_knight",
+                "h3_bone_dragon"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "additionalActionChanceModifier",
+                "0.03"
+              ],
+              "receivers": [
+                "h3_skeleton",
+                "h3_walking_dead",
+                "h3_wight",
+                "h3_vampire",
+                "h3_lich",
+                "h3_black_knight",
+                "h3_bone_dragon"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "homm4IconLabel": "Mirth",
+      "homm4IconPath": "schools/life/mirth.jpg",
+      "iconNotes": "HOMM4 art-source candidate: Mirth (schools/life/mirth.jpg). Runtime icon key: fraction_law_homm3_necropolis_25_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "iconKey": "fraction_law_homm3_necropolis_25_icon"
+    },
+    "fraction_law_homm3_necropolis_1": {
+      "iconKey": "fraction_law_human_1_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_necropolis_3": {
+      "iconKey": "fraction_law_human_3_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_necropolis_7": {
+      "iconKey": "fraction_law_human_7_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_necropolis_8": {
+      "iconKey": "fraction_law_human_8_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_necropolis_9": {
+      "iconKey": "fraction_law_human_9_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_necropolis_12": {
+      "iconKey": "fraction_law_human_12_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_necropolis_16": {
+      "iconKey": "fraction_law_human_16_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    },
+    "fraction_law_homm3_necropolis_29": {
+      "iconKey": "fraction_law_human_29_icon",
+      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+    }
+  }
+}

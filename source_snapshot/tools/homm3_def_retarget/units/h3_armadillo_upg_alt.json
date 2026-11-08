@@ -1,0 +1,292 @@
+{
+ "unit": "h3_armadillo_upg_alt",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.65,
+   0.95
+  ],
+  "Spine": [
+   0.0,
+   0.3,
+   1.0
+  ],
+  "Spine1": [
+   0.0,
+   -0.05,
+   1.0
+  ],
+  "Spine2": [
+   0.0,
+   -0.5,
+   0.95
+  ],
+  "Neck": [
+   0.0,
+   -0.95,
+   0.8
+  ],
+  "Head": [
+   0.0,
+   -1.15,
+   0.7
+  ],
+  "HeadTop_End": [
+   0.0,
+   -1.52,
+   0.5
+  ],
+  "LeftShoulder": [
+   0.2,
+   -0.65,
+   0.85
+  ],
+  "LeftArm": [
+   0.42,
+   -0.65,
+   0.7
+  ],
+  "LeftForeArm": [
+   0.47,
+   -0.65,
+   0.42
+  ],
+  "LeftHand": [
+   0.54,
+   -0.65,
+   0.12
+  ],
+  "LeftHand_End": [
+   0.57,
+   -0.79,
+   0.0
+  ],
+  "LeftUpLeg": [
+   0.42,
+   0.81,
+   0.75
+  ],
+  "LeftLeg": [
+   0.38,
+   0.81,
+   0.42
+  ],
+  "LeftFoot": [
+   0.45,
+   0.81,
+   0.12
+  ],
+  "LeftToeBase": [
+   0.45,
+   0.73,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.48,
+   0.65,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.2,
+   -0.65,
+   0.85
+  ],
+  "RightArm": [
+   -0.42,
+   -0.65,
+   0.7
+  ],
+  "RightForeArm": [
+   -0.47,
+   -0.65,
+   0.42
+  ],
+  "RightHand": [
+   -0.54,
+   -0.65,
+   0.12
+  ],
+  "RightHand_End": [
+   -0.57,
+   -0.79,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.42,
+   0.81,
+   0.75
+  ],
+  "RightLeg": [
+   -0.38,
+   0.81,
+   0.42
+  ],
+  "RightFoot": [
+   -0.45,
+   0.81,
+   0.12
+  ],
+  "RightToeBase": [
+   -0.45,
+   0.73,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.48,
+   0.65,
+   0.0
+  ]
+ },
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped"
+ ],
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    -20,
+    70
+   ],
+   "fold": 70,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ]
+  },
+  "tail": {
+   "points": [
+    [
+     0,
+     1.0,
+     0.75
+    ],
+    [
+     0,
+     1.2,
+     0.62
+    ],
+    [
+     0,
+     1.38,
+     0.48
+    ],
+    [
+     0,
+     1.53,
+     0.42
+    ]
+   ],
+   "region": {
+    "box": [
+     [
+      -0.35,
+      1.05,
+      0.0
+     ],
+     [
+      0.35,
+      1.6,
+      1.0
+     ]
+    ]
+   },
+   "rootBlend": 0.6
+  }
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "strideMatch": {
+  "maxDrop": 0.35,
+  "reason": "foreleg reach cap binds at shallower drops (fleet-agent scratch after the plant-set fix 80c2a729ba): 0.15 ratio 2.20; 0.25 ratio 1.91; 0.35 slip 0.357 ratio 1.376 (passes). Deep drop: sheet judged for crouch read (coordinator relay 2026-09-27); pelvisHold 0 (2026-10-11 lane A): the source Move already sits ~0.075 H below Idle, at the edge of the gate's Hips band, so any extra plant sink made the ground stage's joint entry lift the whole Move and float the planted soles (fresh base runs 438/443 refused); hold the body at its source keys, legs reach-clamp instead",
+  "pelvisHold": 0.0
+ },
+ "glbPatch": {
+  "reason": "authenticity: DEF g12 attack - draw back with the head tucked, then lunge with the body surging forward, shoulders and crest rearing and the snout driven at the target (the shipped clip barely moved); body/neck weights re-solved",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_armadillo_upg_alt_armadillo_attack_weights.json",
+    "sha256": "57edf3e275b834b924d8ae2e65832b679e359494c075f5aed7d64717c42a8ddd",
+    "note": "armadillo lunge: body/neck weights re-solved (wsolve, GPU)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_armadillo_upg_alt_pose_rot.json",
+    "sha256": "0364002865491d0b789a5c115e84ab18a20e21a00f5236234c802a4750e6e4e4",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_armadillo_upg_alt_pose_rot.json",
+    "sha256": "0364002865491d0b789a5c115e84ab18a20e21a00f5236234c802a4750e6e4e4",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_armadillo_upg_alt_pose_tr.json",
+    "sha256": "d5cc96541ffba1bb52ac68cdf595c2a7b443ad024ae7b1ff2b25dda88744280d"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_armadillo_upg_alt_pose_tr.json",
+    "sha256": "d5cc96541ffba1bb52ac68cdf595c2a7b443ad024ae7b1ff2b25dda88744280d"
+   }
+  ]
+ }
+}

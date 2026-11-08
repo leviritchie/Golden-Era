@@ -1,0 +1,71 @@
+{
+    "schemaVersion":  "ai-start-combat-owner-discovery-probe.v1",
+    "status":  "source-prepared-only",
+    "commandExposure":  "ai_start_combat and ai_open_town must remain absent until metadata resolution, owner discovery, reversible non-production proof, and one-route production implementation are runtime-proven.",
+    "freshnessPreflight":  {
+                               "command":  "node tools\\olden_ai_mcp\\check_runtime_freshness.mjs --ai-bridge-dir \"V:\\SteamLibrary\\steamapps\\common\\Heroes of Might and Magic Olden Era - Golden Era\\BepInEx\\plugins\\OfflineUnlockMod\\ai_driver_bridge\" --live-bridge-dir \"V:\\SteamLibrary\\steamapps\\common\\Heroes of Might and Magic Olden Era - Golden Era\\BepInEx\\plugins\\OfflineUnlockMod\\live_probe_bridge\" --sample-ms 1500 --require-fresh",
+                               "requiredBeforeLiveProbe":  true,
+                               "lastKnownBlockedState":  {
+                                                             "aiBridge":  "cityDungeon frame 35372 -\u003e 35372",
+                                                             "liveBridge":  "cityDungeon frame 35368 -\u003e 35368",
+                                                             "fresh":  false
+                                                         }
+                           },
+    "evidenceBoundary":  [
+                             "Every request in this packet is read-only exact Unity component discovery.",
+                             "unity_components_by_type locates owner component instances and may return bounded component/field summaries; it does not invoke methods, call getters, or mutate state.",
+                             "This packet deliberately does not use component_member_path or allowProperties because getter metadata must resolve first and value reads need objectId-specific review.",
+                             "Do not expose ai_start_combat until a later proof resolves a live owner instance, performs a safe non-production transition, and ai_observe confirms mode battle."
+                         ],
+    "liveProbeRequests":  [
+                              {
+                                  "label":  "discover active BhWindowWorld owners",
+                                  "command":  "unity_components_by_type",
+                                  "payload":  {
+                                                  "componentType":  "Hex.Cheat.UI.BhWindowWorld",
+                                                  "requireActiveHierarchy":  true,
+                                                  "fieldLimit":  20,
+                                                  "limit":  20
+                                              },
+                                  "purpose":  "Find active world cheat UI owner components that may hold the generated eys sideCheats controller after metadata resolves."
+                              },
+                              {
+                                  "label":  "discover inactive BhWindowWorld owners",
+                                  "command":  "unity_components_by_type",
+                                  "payload":  {
+                                                  "componentType":  "Hex.Cheat.UI.BhWindowWorld",
+                                                  "requireActiveHierarchy":  false,
+                                                  "fieldLimit":  20,
+                                                  "limit":  20
+                                              },
+                                  "purpose":  "Find inactive world cheat UI owner components without broad managed-object enumeration."
+                              },
+                              {
+                                  "label":  "discover active BhWindowHero owners",
+                                  "command":  "unity_components_by_type",
+                                  "payload":  {
+                                                  "componentType":  "Hex.Cheat.UI.BhWindowHero",
+                                                  "requireActiveHierarchy":  true,
+                                                  "fieldLimit":  20,
+                                                  "limit":  20
+                                              },
+                                  "purpose":  "Find active hero cheat UI owner components that expose sideCheats metadata."
+                              },
+                              {
+                                  "label":  "discover active BhWindowMagic owners",
+                                  "command":  "unity_components_by_type",
+                                  "payload":  {
+                                                  "componentType":  "Hex.Cheat.UI.BhWindowMagic",
+                                                  "requireActiveHierarchy":  true,
+                                                  "fieldLimit":  20,
+                                                  "limit":  20
+                                              },
+                                  "purpose":  "Find active magic cheat UI owner components that expose sideCheats metadata."
+                              }
+                          ],
+    "nextProofAfterOwnerDiscovery":  [
+                                         "If metadata resolution and owner discovery both succeed, review exact objectIds and returned fields before any component_member_path value reads.",
+                                         "Do not enable allowProperties or call get_sideCheats() from this packet.",
+                                         "A later non-production proof must establish map target validity, reversible route behavior, and ai_observe battle-mode postcondition before production exposure."
+                                     ]
+}

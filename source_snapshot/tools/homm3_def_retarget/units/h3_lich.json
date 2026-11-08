@@ -1,0 +1,260 @@
+{
+ "unit": "h3_lich",
+ "joints": {
+  "Hips": [
+   -0.03,
+   0.04,
+   0.88
+  ],
+  "Spine": [
+   -0.03,
+   0.04,
+   0.98
+  ],
+  "Spine1": [
+   -0.03,
+   0.04,
+   1.08
+  ],
+  "Spine2": [
+   -0.03,
+   0.04,
+   1.2
+  ],
+  "Neck": [
+   -0.03,
+   0.04,
+   1.38
+  ],
+  "Head": [
+   -0.03,
+   0.04,
+   1.45
+  ],
+  "HeadTop_End": [
+   -0.03,
+   0.02,
+   1.68
+  ],
+  "LeftShoulder": [
+   0.02,
+   0.05,
+   1.38
+  ],
+  "LeftArm": [
+   0.12,
+   0.05,
+   1.33
+  ],
+  "LeftForeArm": [
+   0.26,
+   0.13,
+   1.14
+  ],
+  "LeftHand": [
+   0.2,
+   -0.08,
+   1.12
+  ],
+  "LeftHand_End": [
+   0.18,
+   -0.18,
+   1.13
+  ],
+  "RightShoulder": [
+   -0.08,
+   0.05,
+   1.38
+  ],
+  "RightArm": [
+   -0.16,
+   0.03,
+   1.3
+  ],
+  "RightForeArm": [
+   -0.27,
+   0.15,
+   1.1
+  ],
+  "RightHand": [
+   -0.28,
+   0.12,
+   0.89
+  ],
+  "RightHand_End": [
+   -0.29,
+   0.11,
+   0.8
+  ],
+  "LeftUpLeg": [
+   0.06,
+   0.05,
+   0.84
+  ],
+  "LeftLeg": [
+   0.07,
+   0.02,
+   0.46
+  ],
+  "LeftFoot": [
+   0.07,
+   0.05,
+   0.08
+  ],
+  "LeftToeBase": [
+   0.07,
+   -0.07,
+   0.02
+  ],
+  "LeftToe_End": [
+   0.07,
+   -0.15,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.12,
+   0.05,
+   0.84
+  ],
+  "RightLeg": [
+   -0.13,
+   0.02,
+   0.46
+  ],
+  "RightFoot": [
+   -0.13,
+   0.05,
+   0.08
+  ],
+  "RightToeBase": [
+   -0.13,
+   -0.07,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.13,
+   -0.15,
+   0.0
+  ]
+ },
+ "props": [
+  {
+   "name": "staff",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.175,
+      -0.19,
+      0.0
+     ],
+     [
+      0.175,
+      -0.19,
+      1.69
+     ]
+    ]
+   ],
+   "radius": 0.08
+  }
+ ],
+ "bootTop": 0.6,
+ "skirtLegShare": 0.5,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 50,
+   "dy": 30
+  }
+ },
+ "propAimResidual": {
+  "bones": [
+   "LeftHand"
+  ],
+  "range": 110
+ },
+ "shatter": {
+  "start": 3,
+  "chunks": 45,
+  "solid": true,
+  "keepWhole": [
+   {
+    "segment": [
+     [
+      0.183,
+      -0.18,
+      1.637
+     ],
+     [
+      0.18,
+      -0.175,
+      0.004
+     ]
+    ],
+    "radius": 0.09
+   }
+  ]
+ },
+ "bonePile": {
+  "spread": 0.8,
+  "heapHeight": 0.25,
+  "tumble": 80,
+  "standProp": {
+   "segment": [
+    [
+     0.183,
+     -0.18,
+     1.637
+    ],
+    [
+     0.18,
+     -0.175,
+     0.004
+    ]
+   ],
+   "radius": 0.09,
+   "at": [
+    0.15,
+    -0.05
+   ],
+   "lean": 8
+  }
+ },
+ "extensions": [
+  "necropolis_propaim",
+  "necropolis_bonepile"
+ ],
+ "glbPatch": {
+  "reason": "authenticity lane A 2026-10-11: DEF ShootFront free-claw articulation on the refreshed base",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lich_sleeve_weights.json",
+    "sha256": "2c1635cc53790456294921f7f13e5930a17a4a2e980d4a34a4004e872f821d95",
+    "note": "shoulder weight re-solve for the claw held out at shoulder height"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lich_pose_rot.json",
+    "sha256": "807fadc0e1d1cd64346d84651346c914364c6cf304f67bf4bc3ec3412fb50df6",
+    "regrid": true,
+    "note": "DEF g15 shoot: the free claw held out to the side at shoulder height f3-f7 while the staff points at the target (applied twice = split)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lich_pose_rot.json",
+    "sha256": "807fadc0e1d1cd64346d84651346c914364c6cf304f67bf4bc3ec3412fb50df6",
+    "regrid": true,
+    "note": "DEF g15 shoot: the free claw held out to the side at shoulder height f3-f7 while the staff points at the target (applied twice = split)"
+   }
+  ]
+ }
+}

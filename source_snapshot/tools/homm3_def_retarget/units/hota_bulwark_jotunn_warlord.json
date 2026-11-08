@@ -1,0 +1,316 @@
+{
+ "unit": "hota_bulwark_jotunn_warlord",
+ "joints": {
+  "Hips": [
+   0.004,
+   0.005,
+   0.889
+  ],
+  "Spine": [
+   0.004,
+   0.008,
+   0.96
+  ],
+  "Spine1": [
+   0.004,
+   0.01,
+   1.03
+  ],
+  "Spine2": [
+   0.004,
+   0.013,
+   1.1
+  ],
+  "Neck": [
+   0.004,
+   0.015,
+   1.2
+  ],
+  "Head": [
+   0.004,
+   0.017,
+   1.26
+  ],
+  "HeadTop_End": [
+   0.004,
+   -0.03,
+   1.55
+  ],
+  "LeftShoulder": [
+   0.045,
+   0.039,
+   1.165
+  ],
+  "LeftArm": [
+   0.213,
+   0.063,
+   1.165
+  ],
+  "LeftForeArm": [
+   0.33,
+   0.162,
+   0.997
+  ],
+  "LeftHand": [
+   0.384,
+   0.109,
+   0.83
+  ],
+  "LeftHand_End": [
+   0.411,
+   0.082,
+   0.748
+  ],
+  "RightShoulder": [
+   -0.034,
+   0.04,
+   1.169
+  ],
+  "RightArm": [
+   -0.187,
+   0.065,
+   1.169
+  ],
+  "RightForeArm": [
+   -0.271,
+   0.17,
+   0.989
+  ],
+  "RightHand": [
+   -0.337,
+   0.092,
+   0.78
+  ],
+  "RightHand_End": [
+   -0.363,
+   0.061,
+   0.699
+  ],
+  "LeftUpLeg": [
+   0.143,
+   -0.011,
+   0.803
+  ],
+  "LeftLeg": [
+   0.198,
+   -0.075,
+   0.461
+  ],
+  "LeftFoot": [
+   0.209,
+   -0.052,
+   0.146
+  ],
+  "LeftToeBase": [
+   0.306,
+   -0.164,
+   0.038
+  ],
+  "LeftToe_End": [
+   0.33,
+   -0.26,
+   0.03
+  ],
+  "RightUpLeg": [
+   -0.082,
+   -0.028,
+   0.807
+  ],
+  "RightLeg": [
+   -0.183,
+   -0.161,
+   0.48
+  ],
+  "RightFoot": [
+   -0.26,
+   0.229,
+   0.153
+  ],
+  "RightToeBase": [
+   -0.295,
+   0.13,
+   0.037
+  ],
+  "RightToe_End": [
+   -0.31,
+   0.0,
+   0.03
+  ]
+ },
+ "props": [
+  {
+   "name": "shield",
+   "bone": "RightHand",
+   "box": [
+    [
+     -0.6,
+     -0.4,
+     0.26
+    ],
+    [
+     -0.365,
+     0.5,
+     1.14
+    ]
+   ]
+  },
+  {
+   "name": "axe",
+   "bone": "LeftHand",
+   "box": [
+    [
+     0.335,
+     -0.5,
+     -0.02
+    ],
+    [
+     0.6,
+     0.2,
+     0.66
+    ]
+   ],
+   "exclude": [
+    {
+     "sphere": [
+      [
+       0.3,
+       -0.12,
+       0.04
+      ],
+      0.12
+     ]
+    }
+   ]
+  },
+  {
+   "name": "axehandle",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.38,
+      0.15,
+      0.8
+     ],
+     [
+      0.41,
+      -0.2,
+      0.35
+     ]
+    ],
+    [
+     [
+      0.36,
+      0.31,
+      0.82
+     ],
+     [
+      0.29,
+      0.47,
+      0.94
+     ]
+    ]
+   ],
+   "radius": 0.055
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.12
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.0,
+   "keepDist": 0.12
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.0,
+   "keepDist": 0.12
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "skirtLegShare": 0.4,
+ "bootTop": 0.12,
+ "glbPatch": {
+  "reason": "2026-10-11 lane B: DEF g12 overhead axe chop with the whole arm. LeftArm/LeftForeArm aims raise the axe up and back over the head f1-f3 and drive it forward and down f4-f6; LeftHand turns keep the axe head leading. This replaces the hand-only chop, which the cape weld had forced. On the arm_c2 surgery base, a limb_skin_split contact split strips the arm weight the heat skin leaves on the flank fur, and a weight re-solve over the shoulder pelt lets the gate pass.",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_jotunn_warlord_arm_weights.json",
+    "sha256": "b43a67cc1b1e04763eb807abd11a8c72c62f78799f58d1dde6dff0e7f6461a31"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_jotunn_warlord_axe_overhead_raise_rot.json",
+    "regrid": true,
+    "sha256": "e56ce7695662d7b85c384b735130a41101fa09a82a9ba7db43cdeeec7a9b6162"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_jotunn_warlord_axe_overhead_raise_rot.json",
+    "regrid": true,
+    "sha256": "e56ce7695662d7b85c384b735130a41101fa09a82a9ba7db43cdeeec7a9b6162"
+   }
+  ]
+ },
+ "sourceMesh": "artifacts/homm3_mesh_surgery/hota_bulwark_jotunn_warlord_arm_c2.glb",
+ "meshSurgeryReason": "2026-10-11 lane B (standing mesh-surgery approval): the Meshy mesh welds the axe arm (upper arm, forearm, hand and axe haft) to the cape and flank below the armpit, so raising the arm for the DEF g12 overhead chop tore the cape out with it (arm aims +319 edges past 2x even at half amplitude, Hips<->LeftArm/ForeArm/Hand). limb_cut_surgery.py, boxed to Blender z<=0.98 so the shoulder stays welded, splits the bridge faces by majority and duplicates the shared vertices (arm copies drop the body bones, body originals drop the arm bones); every original vertex is byte-identical, same mesh at rest. Second cut arm_c2 (from arm_c1, limb_cut_surgery.py --mixed-from, box on the flank under the armpit x 0.18-0.5, z 0.5-0.98): the arm still hung onto the cape/flank fur through a strip of mixed-weight vertices; 20 more bridge faces split, originals byte-identical."
+}

@@ -1,0 +1,85 @@
+{
+ "_comment": "Tower ambient life (town_full3d_ambient.py). px = rest-frame px (1920x1080; the outpainted ring is negative / beyond). Every effect is anchored on its layers' staged surface by a rest ray; a building's upgrade levels each carry a copy.",
+ "effects": [
+  {"id": "forge_fire", "layers": ["tbtwblak"], "kind": "glow", "px": [952, 596], "size": 26, "flicker": "fire", "intensity": 0.6},
+  {"id": "forge_embers", "layers": ["tbtwblak"], "kind": "embers", "px": [952, 590], "width": 12, "rise": 40, "rate": 8},
+  {"id": "forge_smoke", "layers": ["tbtwblak"], "kind": "smoke", "px": [948, 410], "width": 9, "rise": 90, "colour": [0.45, 0.43, 0.42], "period": 3.4, "snap": 24},
+
+  {"id": "spire_motes", "layers": ["tbtwcstl", "tbtwcstl_2", "tbtwcstl_3"], "kind": "motes", "px": [680, 70], "radius": 26, "count": 7, "period": 7, "colour": [0.55, 0.8, 1.0], "rise": 30, "snap": 30},
+  {"id": "spire_glints", "layers": ["tbtwcstl", "tbtwcstl_2", "tbtwcstl_3"], "kind": "glints", "px": [650, 200], "w": 140, "h": 220, "rate": 3, "colour": [0.75, 0.9, 1.0], "snap": 30},
+  {"id": "castle_eagles", "layers": ["tbtwcstl", "tbtwcstl_2", "tbtwcstl_3"], "kind": "birds", "px": [660, 120], "radius": 110, "count": 3, "period": 18, "span": 18, "out": 0.12, "snap": 30},
+
+  {"id": "workshop_steam", "layers": ["tbtwdw_0", "tbtwdw_0_2"], "kind": "smoke", "px": [880, 405], "width": 6, "rise": 45, "period": 1.8, "colour": [0.96, 0.96, 0.98], "density": 1.3, "snap": 20},
+  {"id": "workshop_gear", "layers": ["tbtwdw_0", "tbtwdw_0_2"], "kind": "glints", "px": [852, 442], "w": 22, "h": 22, "rate": 2.5, "colour": [1.0, 0.85, 0.5]},
+
+  {"id": "parapet_glow", "layers": ["tbtwdw_1", "tbtwdw_1_2"], "kind": "glow", "px": [55, 195], "size": 30, "flicker": "breathe", "period": 3.5, "colour": [0.7, 0.55, 1.0], "intensity": 0.4, "snap": 20},
+  {"id": "parapet_glints", "layers": ["tbtwdw_1", "tbtwdw_1_2"], "kind": "glints", "px": [60, 110], "w": 50, "h": 40, "rate": 1.5, "colour": [0.85, 0.75, 1.0], "snap": 20},
+
+  {"id": "golem_smoke", "layers": ["tbtwdw_2"], "kind": "smoke", "px": [432, 335], "width": 10, "rise": 100, "colour": [0.5, 0.48, 0.46], "period": 3.6, "snap": 24},
+  {"id": "golem_forge", "layers": ["tbtwdw_2", "tbtwdw_2_2"], "kind": "glow", "px": [420, 470], "size": 22, "flicker": "fire", "intensity": 0.5, "snap": 20},
+  {"id": "golem_sparks", "layers": ["tbtwdw_2", "tbtwdw_2_2"], "kind": "embers", "px": [420, 470], "width": 14, "rise": 35, "rate": 6, "colour": [1.0, 0.75, 0.35], "snap": 20},
+
+  {"id": "magetower_motes", "layers": ["tbtwdw_3", "tbtwdw_3_2"], "kind": "motes", "px": [1142, 210], "radius": 22, "count": 6, "period": 5, "colour": [0.5, 0.75, 1.0], "rise": 20, "snap": 24},
+  {"id": "magetower_glints", "layers": ["tbtwdw_3", "tbtwdw_3_2"], "kind": "glints", "px": [1150, 300], "w": 40, "h": 110, "rate": 2.5, "colour": [0.7, 0.85, 1.0], "snap": 24},
+
+  {"id": "altar_glow", "layers": ["tbtwdw_4"], "kind": "glow", "px": [1000, 200], "size": 40, "flicker": "breathe", "period": 4, "colour": [1.0, 0.8, 0.35], "intensity": 0.45, "snap": 24},
+  {"id": "altar_wishes", "layers": ["tbtwdw_4"], "kind": "motes", "px": [1000, 230], "radius": 30, "count": 8, "period": 9, "colour": [1.0, 0.85, 0.45], "rise": 60, "snap": 24},
+  {"id": "altar2_orb", "layers": ["tbtwdw_4_2"], "kind": "glow", "px": [990, 45], "size": 28, "flicker": "breathe", "period": 3, "colour": [1.0, 0.8, 0.35], "intensity": 0.6, "snap": 24},
+  {"id": "altar2_wishes", "layers": ["tbtwdw_4_2"], "kind": "motes", "px": [990, 90], "radius": 28, "count": 9, "period": 8, "colour": [1.0, 0.85, 0.45], "rise": 50, "snap": 24},
+
+  {"id": "pavilion_dome", "layers": ["tbtwdw_5", "tbtwdw_5_2"], "kind": "glints", "px": [1300, 415], "w": 70, "h": 35, "rate": 3, "colour": [1.0, 0.92, 0.6], "snap": 20},
+  {"id": "pavilion_towers", "layers": ["tbtwdw_5_2"], "kind": "glints", "px": [1340, 330], "w": 80, "h": 25, "rate": 1.5, "colour": [1.0, 0.92, 0.6], "snap": 20},
+
+  {"id": "temple_clouds", "layers": ["tbtwdw_6", "tbtwdw_6_2"], "kind": "mist", "px": [300, 395], "w": 300, "h": 18, "drift": 3, "alpha": 0.45, "count": 6, "puff": 45, "snap": 24},
+  {"id": "temple_glints", "layers": ["tbtwdw_6", "tbtwdw_6_2"], "kind": "glints", "px": [300, 330], "w": 220, "h": 50, "rate": 2, "colour": [0.75, 0.88, 1.0], "snap": 24},
+
+  {"id": "knowledge_runes", "layers": ["tbtwext2"], "kind": "glints", "px": [1225, 385], "w": 280, "h": 28, "rate": 3, "spark": 3, "life": 1.2, "colour": [0.55, 0.9, 1.0], "snap": 16},
+  {"id": "knowledge_motes", "layers": ["tbtwext2"], "kind": "embers", "px": [1225, 385], "width": 250, "rise": 40, "rate": 3, "life": 3.0, "colour": [0.55, 0.85, 1.0], "snap": 16},
+
+  {"id": "hall_windows", "layers": ["tbtwhall", "tbtwhall_2", "tbtwhall_3", "tbtwhall_4"], "kind": "glow", "px": [150, 565], "size": 20, "flicker": "candle", "period": 0.9, "intensity": 0.3, "snap": 30},
+  {"id": "hall_windows_b", "layers": ["tbtwhall_2", "tbtwhall_3", "tbtwhall_4"], "kind": "glow", "px": [300, 560], "size": 20, "flicker": "candle", "period": 1.1, "intensity": 0.3, "snap": 30},
+  {"id": "hall_dome", "layers": ["tbtwhall_3", "tbtwhall_4"], "kind": "glints", "px": [160, 320], "w": 90, "h": 45, "rate": 3, "colour": [1.0, 0.92, 0.6], "snap": 30},
+
+  {"id": "skyship_bob", "layers": ["tbtwholy"], "kind": "bob", "amp": 5, "period": 7.5, "sway": 0.4, "rockDeg": 1.5},
+
+  {"id": "guild_motes", "layers": ["tbtwmage", "tbtwmage_2", "tbtwmage_3", "tbtwmage_4"], "kind": "motes", "px": [1228, 260], "radius": 30, "count": 8, "period": 6, "colour": [0.65, 0.6, 1.0], "rise": 40, "snap": 24},
+  {"id": "guild_door", "layers": ["tbtwmage", "tbtwmage_2", "tbtwmage_3", "tbtwmage_4"], "kind": "glow", "px": [1215, 380], "size": 26, "flicker": "breathe", "period": 3.2, "colour": [0.6, 0.55, 1.0], "intensity": 0.4, "snap": 24},
+
+  {"id": "market_lamps", "layers": ["tbtwmark"], "kind": "glow", "px": [1200, 612], "size": 16, "flicker": "fire", "intensity": 0.45, "snap": 20},
+  {"id": "market_lamps_b", "layers": ["tbtwmark"], "kind": "glow", "px": [1350, 612], "size": 16, "flicker": "fire", "period": 0.6, "intensity": 0.45, "snap": 20},
+  {"id": "market_wares", "layers": ["tbtwmark"], "kind": "glints", "px": [1280, 628], "w": 130, "h": 18, "rate": 1.5, "colour": [1.0, 0.9, 0.7], "snap": 20},
+
+  {"id": "silo_clock", "layers": ["tbtwsilo"], "kind": "glints", "px": [1400, 440], "w": 18, "h": 18, "rate": 1.2, "colour": [1.0, 0.9, 0.6], "snap": 16},
+  {"id": "merchants_door", "layers": ["tbtwspec"], "kind": "glints", "px": [1270, 610], "w": 30, "h": 30, "rate": 2.5, "colour": [0.85, 0.65, 1.0], "snap": 20},
+  {"id": "merchants_clock", "layers": ["tbtwspec"], "kind": "glow", "px": [1262, 560], "size": 22, "flicker": "breathe", "period": 4, "colour": [1.0, 0.85, 0.5], "intensity": 0.35, "snap": 20},
+
+  {"id": "tavern_smoke", "layers": ["tbtwtvrn"], "kind": "smoke", "px": [770, 530], "width": 8, "rise": 80, "period": 3.2, "snap": 24},
+  {"id": "tavern_hearth", "layers": ["tbtwtvrn"], "kind": "glow", "px": [722, 630], "size": 20, "flicker": "fire", "intensity": 0.45, "snap": 20},
+  {"id": "tavern_lantern", "layers": ["tbtwtvrn"], "kind": "glow", "px": [802, 640], "size": 14, "flicker": "candle", "period": 0.7, "intensity": 0.5, "snap": 20},
+
+  {"id": "cottage_smoke_a", "layers": ["environment"], "kind": "smoke", "px": [1007, 624], "width": 6, "rise": 70, "period": 3.0, "snap": 10},
+  {"id": "cottage_smoke_b", "layers": ["environment"], "kind": "smoke", "px": [1136, 601], "width": 6, "rise": 75, "period": 3.4, "snap": 10},
+  {"id": "cottage_smoke_c", "layers": ["environment"], "kind": "smoke", "px": [1201, 613], "width": 6, "rise": 70, "period": 2.8, "density": 0.8, "snap": 10},
+  {"id": "cottage_smoke_d", "layers": ["environment"], "kind": "smoke", "px": [1048, 511], "width": 5, "rise": 60, "period": 3.2, "snap": 10},
+  {"id": "cottage_smoke_e", "layers": ["environment"], "kind": "smoke", "px": [1097, 454], "width": 5, "rise": 55, "period": 3.6, "density": 0.8, "snap": 10},
+  {"id": "cottage_smoke_f", "layers": ["environment"], "kind": "smoke", "px": [1224, 452], "width": 5, "rise": 55, "period": 3.0, "snap": 10},
+  {"id": "cottage_smoke_g", "layers": ["environment"], "kind": "smoke", "px": [904, 509], "width": 5, "rise": 55, "period": 3.3, "density": 0.8, "snap": 10},
+  {"id": "cottage_window_a", "layers": ["environment"], "kind": "glow", "px": [1125, 693], "size": 14, "flicker": "candle", "intensity": 0.3, "snap": 8},
+  {"id": "cottage_window_b", "layers": ["environment"], "kind": "glow", "px": [1237, 710], "size": 14, "flicker": "candle", "period": 0.8, "intensity": 0.3, "snap": 8},
+  {"id": "cottage_window_c", "layers": ["environment"], "kind": "glow", "px": [1102, 585], "size": 12, "flicker": "candle", "period": 1.1, "intensity": 0.3, "snap": 8},
+
+  {"id": "lake_shimmer_a", "layers": ["environment"], "kind": "glints", "px": [0, 820], "w": 320, "h": 120, "rate": 5, "spark": 3, "life": 0.5, "colour": [0.85, 0.95, 1.0], "snap": 10},
+  {"id": "lake_shimmer_b", "layers": ["environment"], "kind": "glints", "px": [260, 930], "w": 300, "h": 140, "rate": 5, "spark": 3.5, "life": 0.5, "colour": [0.85, 0.95, 1.0], "snap": 10},
+  {"id": "lake_shimmer_c", "layers": ["environment"], "kind": "glints", "px": [-210, 960], "w": 200, "h": 140, "rate": 4, "spark": 3.5, "life": 0.5, "colour": [0.85, 0.95, 1.0], "snap": 10},
+  {"id": "lake_shimmer_d", "layers": ["environment"], "kind": "glints", "px": [420, 720], "w": 200, "h": 50, "rate": 3, "spark": 2.5, "life": 0.5, "colour": [0.85, 0.95, 1.0], "snap": 10},
+  {"id": "lake_mist", "layers": ["environment"], "kind": "mist", "px": [100, 770], "w": 600, "h": 30, "drift": 3, "alpha": 0.35, "count": 5, "puff": 70, "snap": 10},
+
+  {"id": "peak_spindrift_l", "layers": ["environment"], "kind": "spindrift", "px": [80, 35], "width": 60, "reach": 220, "dir": [1, -0.2], "rate": 2.5, "snap": 20},
+  {"id": "ridge_spindrift_r", "layers": ["environment"], "kind": "spindrift", "px": [1500, -60], "width": 70, "reach": 240, "dir": [1, -0.15], "rate": 2.5, "snap": 30},
+  {"id": "ridge_spindrift_m", "layers": ["environment"], "kind": "spindrift", "px": [1390, 75], "width": 50, "reach": 160, "dir": [1, -0.25], "rate": 2, "alpha": 0.45, "snap": 30},
+  {"id": "slope_clouds", "layers": ["environment"], "kind": "mist", "px": [-150, 150], "w": 320, "h": 40, "drift": 2, "alpha": 0.4, "count": 4, "puff": 90, "snap": 30},
+
+  {"id": "eagles_west", "layers": ["environment"], "kind": "birds", "px": [150, 100], "radius": 110, "count": 4, "period": 20, "span": 18, "out": 0.25, "snap": 30},
+  {"id": "eagles_east", "layers": ["environment"], "kind": "birds", "px": [1620, 60], "radius": 130, "count": 3, "period": 24, "span": 16, "out": 0.25, "snap": 30}
+ ]
+}

@@ -1,0 +1,87 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_diamond_dragon",
+ "status": "look",
+ "notes": "rampart rollout: dragon with the DEF's own ice breath as a region-cut file-mask flipbook (defEffects keeps only the outer specks: the breath is drawn in the body's own colours) and its fitted dynamic light",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "breath_glow",
+   "treatment": "dynamic",
+   "notes": "breath lights the head and forelimbs"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "breath",
+    "type": "defFlipbook",
+    "provenance": "roster inventory rampart: g12 attack_front f3-6 (breath); mask by tools/homm3_unit_look/units/masks/rampart_effect_masks.py",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_diamond_dragon/breath"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Head",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "breath_glow",
+    "render": "unitPlane",
+    "notes": "render unitPlane: directional pieces (thrown/jetting forward) turn with the unit (vfx_depth.py)."
+   },
+   {
+    "id": "breath_light",
+    "type": "effectLight",
+    "lightId": "breath_glow",
+    "carrier": "breath",
+    "anchor": {
+     "bone": "Head",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     0.7,
+     0.9,
+     1.0
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.103,
+      0.0,
+      0.041,
+      0.531,
+      0.065,
+      0.0,
+      0.2,
+      0.141
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

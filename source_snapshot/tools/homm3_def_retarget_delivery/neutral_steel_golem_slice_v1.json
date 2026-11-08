@@ -1,0 +1,34 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "neutral_steel_golem_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/neutral_steel_golem_slice_v1",
+  "note": "Neutral steel golem own model (config from its DEF, golem sibling template; look without the metal pass, which worsened the DEF metal region). Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_steel_golem 0.0498. | look B (vanilla philosophy finish, finish.py; look.py --stages finish,apply), animation unchanged Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_steel_golem 0.0498.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_steel_golem",
+      "gameSid": "h3_steel_golem",
+      "bundleName": "custom_units_neutral_h3_steel_golem",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "a81742d1e9325d35c256b77c01c4566d20a6fc461018e01cdcbdd22b53e6efc7",
+      "identityReview": "none",
+      "deferMeshes": {
+        "h3_steel_golem_Rubble": "the death shatter's rubble mesh (build_unit.py shatter) is a second SkinnedMeshRenderer; this lane builds exactly one body SMR and the runtime's uvAtlas/Hex/Lit rebind assume one. Without it the body still collapses at the shatter frame, so the death ends in a vanish instead of falling chunks"
+      },
+      "frozen": {
+        "lookDeliveredGlbSha256": "0251fbc4c75ff6a4bcf88861e24cd9781986d70af18c1fd4c78a340583cf88cc",
+        "idleRetimedGlbSha256": "04d17d0075f8541bd2b36499fa78739d7a000a1d01784410ba19acfc04df66bb",
+        "vfxManifestSha256": "ded793b254abf2dbd83bce45c89e73389fd1862c472a49399597fe26900f5740",
+        "specSha256": "aac3abbe527ceaa5c99268855255ac913068cb54f9871c0c9c7a285db4ac74ee",
+        "basecolorSha256": "c2fb05af706e0d3249c76a8b705e63a9bb35274f7292fc5498377b33a488bc6b"
+      }
+    }
+  ]
+}

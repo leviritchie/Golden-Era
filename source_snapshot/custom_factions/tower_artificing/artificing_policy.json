@@ -1,0 +1,5203 @@
+{
+  "schemaVersion": 1,
+  "doc": "docs/homm3_tower_artificing.md",
+  "enabled": false,
+  "enabledNote": "false = Core keeps Arcane Battery as the Tower faction skill; Artificing rows (graft buffs, ledger hero buffs, Transcribe) are still generated but nothing grants them. Flip to true only after the runtime has an in-game check.",
+  "factionSkillSid": "skill_faction_homm3_tower",
+  "factionSkillName": "Artificing",
+  "graftSlotsByRank": [
+    1,
+    1,
+    2
+  ],
+  "graftScope": "unit_line",
+  "graftScopeNote": "A graft applies to every variant of a Tower unit line (base, upgrade, alternate upgrade), so upgrading never loses it. Change to unit_sid only with a ledger migration.",
+  "transcribe": {
+    "abilitySid": "skill_faction_homm3_tower_ability_transcribe",
+    "effectBuffSid": "homm3_tower_transcribe_effect",
+    "focus": 2,
+    "cooldown": 2,
+    "castTarget": "all",
+    "icon": "h3_mage",
+    "effectIcon": "magic_early_start_effect_icon"
+  },
+  "essence": {
+    "perDefeatedCreatureByTier": [
+      1,
+      2,
+      3,
+      5,
+      8,
+      12,
+      20
+    ],
+    "source": "enemy creatures lost by every losing side of a battle this hero won (started vs after TransferSide stacks, same accounting as Skeletal Necromancy)",
+    "bits": 16
+  },
+  "graftCost": {
+    "formula": "round_to(base * tierWeight[sourceTier] * tierWeight[targetTier], roundTo)",
+    "base": 25,
+    "roundTo": 5,
+    "tierWeight": [
+      1.0,
+      1.5,
+      2.0,
+      3.0,
+      4.0,
+      5.5,
+      7.0
+    ],
+    "sourceTierRule": "tier of the unit the passive was transcribed from; when the same schematic is transcribed again the lower (cheaper) tier is kept",
+    "targetTierRule": "tier of the Tower unit line receiving the graft"
+  },
+  "ledger": {
+    "heroBuffsPath": "DB/heroes_buffs/heroes_buffs.json",
+    "essenceBitPrefix": "homm3_tower_artificing_essence_bit_",
+    "schematicBitPrefix": "homm3_tower_artificing_schematic_",
+    "schematicTierBits": 3,
+    "graftBitPrefix": "homm3_tower_artificing_graft_",
+    "graftIndexBits": 9,
+    "lines": 7,
+    "maxSlots": 2
+  },
+  "graftBuff": {
+    "path": "DB/buffs/sub_skills_battle_hero_buffs.json",
+    "sidPrefix": "homm3_tower_graft_",
+    "canDispel": true,
+    "infinite": true,
+    "addition": "data"
+  },
+  "genericRules": [
+    {
+      "reason": "attack_type",
+      "field": "name",
+      "pattern": "^(Melee Attack|Ranged Attack|Long Reach)$"
+    },
+    {
+      "reason": "movement_type",
+      "field": "name",
+      "pattern": "^(Flying|Blink)$"
+    },
+    {
+      "reason": "creature_class",
+      "field": "name",
+      "pattern": "^(Bloodless|Golem)$"
+    },
+    {
+      "reason": "creature_class",
+      "field": "key",
+      "pattern": "^base_class_"
+    }
+  ],
+  "genericRulesNote": "field=name matches the English display name, field=key the view passive key (Lang name sid without _name). Generic passives are never written into the Schematic Book. Creature-type immunity blocks (living/undead/construct/demon/embodiment/dragon/magic_creature) are hidden logic, not view passives, so they never become schematics.",
+  "manualPayloads": {
+    "angel_passive_1": {
+      "actions": [
+        {
+          "trigger": "unit_got_buff",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "ally"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "targetCondition_": "alive"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "targetCondition_": "alive"
+            },
+            "targetMechanics": [
+              {
+                "mech": "mimic_buffs",
+                "values": [
+                  "0",
+                  "allynoself",
+                  "positive"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "angel mimic_buffs action on ally unit_got_buff."
+    },
+    "angel_passive_2": {
+      "data": {
+        "immunities": [
+          {
+            "type": "effect",
+            "tags": [
+              "negative"
+            ]
+          }
+        ]
+      },
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_aura",
+            "isPositive": true,
+            "data": {
+              "immunities": [
+                {
+                  "type": "effect",
+                  "tags": [
+                    "negative"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "ally",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "ally",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "unit_end_move",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "ally",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "Carrier: immune to negative effects. Adjacent allies get the same immunity, refreshed at round start and after any unit moves (duration 1, so it can outlast a move away until the round ends)."
+    },
+    "aqualotl_passive_1": {
+      "data": {
+        "immunities": [
+          {
+            "type": "damage",
+            "tags": [
+              "primal_6_magic_ice_bolt_damage",
+              "primal_13_magic_avalanche_damage"
+            ]
+          },
+          {
+            "type": "effect",
+            "tags": [
+              "primal_6_magic_ice_bolt_effect"
+            ]
+          },
+          {
+            "type": "effect",
+            "tags": [
+              "primal_13_magic_avalanche_effect"
+            ]
+          }
+        ]
+      },
+      "note": "Ice Bolt / Circle of Winter damage+effect immunities from aqualotl; 'leaves no body' is class data and is not copied."
+    },
+    "aqualotl_passive_2": {
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "aqualotl_debuff_2",
+            "duration": 1
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target."
+    },
+    "arbitrator_passive_1": {
+      "data": {
+        "stats": {
+          "ignoreShootDmgBuff": true
+        }
+      },
+      "descriptionText": "Ranged penalties are ignored for this creature.",
+      "note": "Partial: ignoreShootDmgBuff (no range penalty) only. The per-hex bonus and the reversed melee penalty live in the source's attack definition."
+    },
+    "arbitrator_passive_2": {
+      "actions": [
+        {
+          "trigger": "unit_took_damage",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance_both",
+              "values": [
+                "self",
+                "enemy"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "noself",
+              "targetCondition_": "alive"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "noself",
+              "targetCondition_": "alive"
+            },
+            "targetMechanics": [
+              {
+                "mech": "damage",
+                "values": [
+                  "0",
+                  "4",
+                  "1",
+                  "none",
+                  "0",
+                  "true"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "arbitrator_debuff_attack",
+            "duration": 1
+          }
+        ]
+      },
+      "note": "Pure damage: native on-damage action with the source damage values; slow: runtime on-hit. Native unit_took_damage action (Holy Arms shape): fires on any damage the carrier deals to an enemy, ability damage included."
+    },
+    "arbitrator_passive_3": {
+      "data": {
+        "stats": {}
+      },
+      "helpers": [
+        {
+          "kind": "hero_buff",
+          "row": {
+            "id": "{graft}_map",
+            "bonuses": [
+              {
+                "type": "heroStat",
+                "parameters": [
+                  "manaBonus",
+                  "20"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "runtime": {
+        "heroBuff": "{graft}_map",
+        "nativeUnitSet": "arbitrator_globalbuff"
+      },
+      "descriptionText": "While a stack of this grafted Tower line is in the hero's army, the hero's maximum mana increases by 20. This effect does not stack.",
+      "note": "Map graft: hero buff with the native arbitrator_globalbuff unit-set bonus; skipped while a native Arbitrator is in the army."
+    },
+    "assassin_passive_1": {
+      "data": {
+        "stats": {
+          "crit": 1.0,
+          "luckMax": 2
+        }
+      },
+      "note": "assassin stats: crit 1.0 (Lucky Strike bonus) and luckMax 5 vs default 3 (+2, additive)."
+    },
+    "assassin_passive_2": {
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "assassin_debuff",
+            "duration": 2
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target."
+    },
+    "assassin_passive_3": {
+      "actions": [
+        {
+          "trigger": "unit_cast_ability",
+          "triggerConditions": [
+            {
+              "checkFunction": "ability_and_allegiance",
+              "values": [
+                "self",
+                "default_attack"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "buffTarget_": "all",
+            "buff": {
+              "sid": "assassin_selfbuff_2",
+              "duration": -1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "unit_cast_ability",
+          "triggerConditions": [
+            {
+              "checkFunction": "ability_and_allegiance",
+              "values": [
+                "self",
+                "counter_attack"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "buffTarget_": "ally",
+            "buff": {
+              "sid": "assassin_selfbuff_2",
+              "duration": -1
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "assassin_upg_alt self luck buff on default attack; the luck stacks are non-dispellable and survive a purge of the graft."
+    },
+    "avatar_of_war_passive_1": {
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_aura",
+            "isPositive": false,
+            "data": {
+              "stats": {
+                "moral": -1
+              }
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "global_buff",
+                "values": [
+                  "enemy",
+                  "{graft}_aura",
+                  "1",
+                  "0",
+                  "1",
+                  "-1"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "global_buff",
+                "values": [
+                  "enemy",
+                  "{graft}_aura",
+                  "1",
+                  "0",
+                  "1",
+                  "-1"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "Every round a native global_buff gives all enemies -1 Morale until round end. Stacks with a real Avatar of War's aura (the native tag/power dedupe is unit-config only)."
+    },
+    "avatar_of_war_passive_2": {
+      "actions": [
+        {
+          "trigger": "unit_took_damage",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance_both",
+              "values": [
+                "self",
+                "enemy"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "buffTarget_": "all",
+            "buff": {
+              "sid": "avatar_of_war_buff",
+              "duration": -1
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "Self gain: source action (avatar_of_war_buff on dealing damage). Target drain: runtime on-hit (avatar_of_war_debuff) on the carrier's basic attacks and counters.",
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "avatar_of_war_debuff",
+            "duration": -1
+          }
+        ]
+      }
+    },
+    "avatar_of_war_passive_3": {
+      "actions": [
+        {
+          "trigger": "unit_took_damage",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance_both",
+              "values": [
+                "self",
+                "enemy"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "noself",
+              "targetCondition_": "alive"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "noself",
+              "targetCondition_": "alive"
+            },
+            "targetMechanics": [
+              {
+                "mech": "kill_stacks",
+                "values": [
+                  "1",
+                  "7"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "Native kill_stacks [1, 7] (tier cap kept). Native unit_took_damage action (Holy Arms shape): fires on any damage the carrier deals to an enemy, ability damage included."
+    },
+    "avatar_of_war_passive_4": {
+      "actions": [
+        {
+          "trigger": "unit_died",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "ally"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "targetCondition_": "alive"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "targetCondition_": "alive"
+            },
+            "buffTarget_": "all",
+            "buff": {
+              "sid": "avatar_of_war_additionbuff",
+              "duration": 1
+            }
+          }
+        }
+      ],
+      "note": "Ally unit_died -> avatar_of_war_additionbuff (+3 Attack)."
+    },
+    "base_passive_absolute_resistance": {
+      "data": {
+        "immunities": [
+          {
+            "type": "damage",
+            "tags": [
+              "magic_damage"
+            ]
+          }
+        ]
+      },
+      "note": "Magic damage immunity block carried by Absolute Resistance units."
+    },
+    "base_passive_alert": {
+      "data": {
+        "sequenceEffect": "counter_before_attack"
+      },
+      "note": "Parry: the logic block every Parry unit carries (8 units)."
+    },
+    "base_passive_aware_1": {
+      "statOverrides": [
+        {
+          "stat": "numCounters",
+          "value": 2
+        }
+      ],
+      "note": "Alert I: two counters per round. Override, so it would lower a unit that already counters more often; no Tower line does."
+    },
+    "base_passive_aware_2": {
+      "statOverrides": [
+        {
+          "stat": "numCounters",
+          "value": 999
+        }
+      ],
+      "note": "Alert II: numCounters 999 is native 'unlimited' (law_runtime_hooks_20261021.md)."
+    },
+    "base_passive_double_strike": {
+      "data": {
+        "sequenceEffect": "add_attack_after_counter_melee"
+      },
+      "note": "Logic block on every Double Strike unit but one."
+    },
+    "base_passive_double_strike_ranged_attack": {
+      "data": {
+        "sequenceEffect": "add_attack_after_counter_shoot"
+      },
+      "note": "Logic block on all Double Shot units."
+    },
+    "base_passive_duelist": {
+      "data": {
+        "stats": {}
+      },
+      "perUnit": "duelist_melee",
+      "note": "Per carrier: Tower shooters whose adjacent melee alternative attack deals statDmgMult < 1 get outDmgMods melee_attack restoring it to full (h3_gremlin_upg: +1.0). Every other Tower unit already deals full melee damage, so the graft is a label."
+    },
+    "base_passive_evasive_0": {
+      "data": {
+        "stats": {
+          "inDmgMods": {
+            "list": [
+              {
+                "t": "shoot_attack",
+                "v": -0.3
+              }
+            ]
+          }
+        }
+      },
+      "note": "esquire stats.inDmgMods shoot_attack -0.3."
+    },
+    "base_passive_evasive_2": {
+      "data": {
+        "stats": {
+          "inDmgMods": {
+            "list": [
+              {
+                "t": "shoot_attack",
+                "v": -0.6
+              }
+            ]
+          }
+        }
+      },
+      "note": "animated_armor stats.inDmgMods shoot_attack -0.6 (its melee/magic entries are the other two Defense III cards)."
+    },
+    "base_passive_immunity_magic_3": {
+      "data": {
+        "immunities": [
+          {
+            "type": "magic_level",
+            "tags": [
+              "3"
+            ]
+          }
+        ]
+      },
+      "note": "magic_level immunity split out of the dragon bundle."
+    },
+    "base_passive_immunity_magic_4": {
+      "data": {
+        "immunities": [
+          {
+            "type": "magic_level",
+            "tags": [
+              "4"
+            ]
+          }
+        ]
+      },
+      "note": "magic_level immunity split out of the dragon bundle."
+    },
+    "base_passive_immunity_magic_5": {
+      "data": {
+        "immunities": [
+          {
+            "type": "magic_level",
+            "tags": [
+              "5"
+            ]
+          }
+        ]
+      },
+      "note": "magic_level immunity split out of the dragon bundle."
+    },
+    "base_passive_noncounter": {
+      "data": {
+        "sequenceEffect": "disable_counter"
+      },
+      "note": "Source units set triggerCounter=false on the attack; buff form is sequenceEffect disable_counter (qilin_wisp_buff_*). Unproven that it suppresses the defender's counter for a buffed attacker."
+    },
+    "base_passive_quickness": {
+      "data": {
+        "stats": {
+          "ignoreShootingBlock": true
+        }
+      },
+      "note": "stats.ignoreShootingBlock: succubus stats carry it; native precedent light_and_shade_cloak unit bonus."
+    },
+    "base_passive_resistant_2": {
+      "data": {
+        "stats": {
+          "inDmgMods": {
+            "list": [
+              {
+                "t": "magic_damage",
+                "v": -0.6
+              }
+            ]
+          }
+        }
+      },
+      "note": "animated_armor stats.inDmgMods magic_damage -0.6."
+    },
+    "base_passive_resistant_3": {
+      "data": {
+        "stats": {
+          "inDmgMods": {
+            "list": [
+              {
+                "t": "magic_damage",
+                "v": -0.9
+              }
+            ]
+          }
+        }
+      },
+      "note": "mech_guard stats.inDmgMods magic_damage -0.9."
+    },
+    "base_passive_sharpshooter": {
+      "data": {
+        "stats": {
+          "ignoreShootDmgBuff": true
+        }
+      },
+      "note": "stats.ignoreShootDmgBuff, as living_arrows_shroomwood_bow_*_unit_bonus. No effect on a melee line."
+    },
+    "base_passive_staunch_1": {
+      "data": {
+        "stats": {
+          "attackPen": 0.3
+        }
+      },
+      "note": "inquisitor attackPen 0.3 (passive block or stats)."
+    },
+    "base_passive_staunch_2": {
+      "data": {
+        "stats": {
+          "attackPen": 0.4
+        }
+      },
+      "note": "inquisitor_upg attackPen 0.4 (passive block or stats)."
+    },
+    "base_passive_steelskin_0": {
+      "data": {
+        "stats": {
+          "inDmgMods": {
+            "list": [
+              {
+                "t": "melee_attack",
+                "v": -0.3
+              }
+            ]
+          }
+        }
+      },
+      "note": "pet stats.inDmgMods melee_attack -0.3."
+    },
+    "base_passive_steelskin_2": {
+      "data": {
+        "stats": {
+          "inDmgMods": {
+            "list": [
+              {
+                "t": "melee_attack",
+                "v": -0.6
+              }
+            ]
+          }
+        }
+      },
+      "note": "animated_armor stats.inDmgMods melee_attack -0.6."
+    },
+    "base_passive_strike_pierce_1": {
+      "data": {
+        "stats": {
+          "armorPen": 0.3
+        }
+      },
+      "note": "sunlight_cavalry armorPen 0.3 (passive block or stats)."
+    },
+    "base_passive_strike_pierce_2": {
+      "data": {
+        "stats": {
+          "armorPen": 0.4
+        }
+      },
+      "note": "sunlight_cavalry_upg armorPen 0.4 (passive block or stats)."
+    },
+    "black_dragon_passive_1": {
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_aura_ally",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "moral": 1,
+                "luck": 1
+              }
+            }
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_aura_enemy",
+            "isPositive": false,
+            "data": {
+              "stats": {
+                "moral": -1,
+                "luck": -1
+              }
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "global_buff",
+                "values": [
+                  "ally",
+                  "{graft}_aura_ally",
+                  "1",
+                  "0",
+                  "1",
+                  "-1",
+                  "enemy",
+                  "{graft}_aura_enemy",
+                  "1",
+                  "0",
+                  "1",
+                  "-1"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "global_buff",
+                "values": [
+                  "ally",
+                  "{graft}_aura_ally",
+                  "1",
+                  "0",
+                  "1",
+                  "-1",
+                  "enemy",
+                  "{graft}_aura_enemy",
+                  "1",
+                  "0",
+                  "1",
+                  "-1"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "Every round a native global_buff: allies +1 Morale/Luck, enemies -1, until round end."
+    },
+    "black_dragon_passive_2": {
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_aura",
+            "isPositive": false,
+            "data": {
+              "stats": {
+                "alwaysMinDmg": true
+              }
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "enemy",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "enemy",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "unit_end_move",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "enemy",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "Adjacent enemies always deal minimum damage; refreshed at round start and after any unit moves."
+    },
+    "blade_dancer_passive_1": {
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "blade_dancer_debuff_1",
+            "duration": -1
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target."
+    },
+    "blade_dancer_passive_2": {
+      "data": {
+        "stats": {
+          "outDmgMods": {
+            "list": [
+              {
+                "t": "melee_attack",
+                "v": 1.0
+              }
+            ]
+          }
+        }
+      },
+      "note": "Melee damage +100% (outDmgMods melee_attack)."
+    },
+    "coatl_passive_1": {
+      "statOverrides": [
+        {
+          "stat": "maxInComingNegativeBuffDuration",
+          "value": 1
+        }
+      ],
+      "note": "coatl stats.maxInComingNegativeBuffDuration 1 (absolute cap, so an override)."
+    },
+    "crossbowman_passive_1": {
+      "data": {
+        "stats": {}
+      },
+      "helpers": [
+        {
+          "kind": "hero_buff",
+          "row": {
+            "id": "{graft}_map",
+            "bonuses": [
+              {
+                "type": "heroStat",
+                "parameters": [
+                  "viewRadius",
+                  "1"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "runtime": {
+        "heroBuff": "{graft}_map",
+        "nativeUnitSet": "crossbowman_globalbuff"
+      },
+      "descriptionText": "While a stack of this grafted Tower line is in the hero's army, the hero's sight radius increases by 1. This effect does not stack.",
+      "note": "Map graft: hero buff with the native crossbowman_globalbuff unit-set bonus, held while a carrier stack is in the army (Homm3TowerArtificingRuntime map reconcile). Skipped while a native crossbowman is in the army (native non-stacking)."
+    },
+    "demon_passive_1": {
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_hive_1",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "defence": 1
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_hive_2",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "defence": 2
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_hive_3",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "defence": 3
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_hive_4",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "defence": 4
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_hive_5",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "defence": 5
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_hive_6",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "defence": 6
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_hive_7",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "defence": 7
+              }
+            },
+            "infinite": true
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "unit_died",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "add_energy",
+                "values": [
+                  "energy",
+                  "ally",
+                  "2",
+                  "0",
+                  "1"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "runtime": {
+        "battleStart": "ally_hive_count",
+        "faction": "demon"
+      },
+      "note": "Death: +2 Focus (source action). Defense: runtime at the first round adds {graft}_hive_N, N = unique Hive (demon) unit sids in the carrier's army."
+    },
+    "demon_passive_2": {
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_hive_1",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "offence": 1
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_hive_2",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "offence": 2
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_hive_3",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "offence": 3
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_hive_4",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "offence": 4
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_hive_5",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "offence": 5
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_hive_6",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "offence": 6
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_hive_7",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "offence": 7
+              }
+            },
+            "infinite": true
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "unit_died",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance_both",
+              "values": [
+                "self",
+                "enemy"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "add_energy",
+                "values": [
+                  "energy",
+                  "ally",
+                  "2",
+                  "0",
+                  "1"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "runtime": {
+        "battleStart": "ally_hive_count",
+        "faction": "demon"
+      },
+      "note": "Kill: +2 Focus (source action). Attack: runtime at the first round adds {graft}_hive_N, N = unique Hive (demon) unit sids in the carrier's army."
+    },
+    "dragon_hunter_passive_1": {
+      "descriptionText": "Attacks wound the target. Wounded creatures take 32 Damage plus 8 per creature in the wounding stack at the start of their turn. This effect is stackable. Duration: 2 round(s).",
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "dragon_hunter_blood",
+            "duration": 2
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target."
+    },
+    "dragon_hunter_passive_2": {
+      "data": {
+        "stats": {
+          "outDmgModsByTargetTags": {
+            "list": [
+              {
+                "t": "dragon",
+                "v": 1.0
+              }
+            ]
+          }
+        }
+      },
+      "note": "dragon_hunter stats.outDmgModsByTargetTags dragon +1.0."
+    },
+    "druid_passive_1": {
+      "helpers": [
+        {
+          "kind": "side_buff",
+          "row": {
+            "id": "{graft}_side",
+            "isPositive": true,
+            "tags": [
+              "positive"
+            ],
+            "addition": "swap",
+            "heroStat": {
+              "manaCostBonus": -1
+            }
+          }
+        },
+        {
+          "kind": "side_buff_info",
+          "row": {
+            "id": "{graft}_side_info",
+            "sid": "{graft}_side",
+            "allegiance": "ally",
+            "duration": 1,
+            "durationPerStack": 0
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "side_buff",
+                "values": [
+                  "{graft}_side_info"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "side_buff",
+                "values": [
+                  "{graft}_side_info"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "Side buff on the carrier's side each round (swap, so it never stacks with itself): hero spells cost 1 less. Adds to, rather than replacing, a real Druid's modifier."
+    },
+    "druid_passive_2": {
+      "data": {
+        "stats": {}
+      },
+      "helpers": [
+        {
+          "kind": "hero_buff",
+          "row": {
+            "id": "{graft}_map",
+            "bonuses": [
+              {
+                "type": "heroStat",
+                "parameters": [
+                  "magicSchoolSet",
+                  "day",
+                  "2",
+                  "1"
+                ]
+              },
+              {
+                "type": "heroStat",
+                "parameters": [
+                  "magicSchoolSet",
+                  "night",
+                  "2",
+                  "1"
+                ]
+              },
+              {
+                "type": "heroStat",
+                "parameters": [
+                  "magicSchoolSet",
+                  "space",
+                  "2",
+                  "1"
+                ]
+              },
+              {
+                "type": "heroStat",
+                "parameters": [
+                  "magicSchoolSet",
+                  "primal",
+                  "2",
+                  "1"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "runtime": {
+        "heroBuff": "{graft}_map",
+        "nativeUnitSet": "druid_upg_alt_globalbuff"
+      },
+      "descriptionText": "While a stack of this grafted Tower line is in the hero's army, the level of the hero's battle spells increases by 1. This effect does not stack.",
+      "note": "Map graft: hero buff with the native druid_upg_alt_globalbuff unit-set bonuses (magicSchoolSet per school, the map-level spell level the battle reads); skipped while a native Druid (upg alt) is in the army."
+    },
+    "eldritch_flyer_passive_1": {
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_frost",
+            "isPositive": false,
+            "data": {
+              "stats": {
+                "blockEnergyRegen": true
+              }
+            },
+            "maxDuration": 1
+          }
+        }
+      ],
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "{graft}_frost",
+            "duration": 1
+          }
+        ]
+      },
+      "note": "Source sets dontTriggerEnergyRegen on its attack. Copy: runtime on-hit adds a 1-round blockEnergyRegen debuff, so the target gains no Focus until the round ends (slightly broader than the source)."
+    },
+    "ent_passive_1": {
+      "data": {
+        "immunities": [
+          {
+            "type": "damage",
+            "tags": [
+              "primal_8_magic_cave_in_damage",
+              "primal_16_magic_stone_fangs_damage"
+            ]
+          }
+        ]
+      },
+      "note": "ent Cave In / Stone Fangs damage immunity block; 'leaves no body' not copied."
+    },
+    "ent_passive_2": {
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_aura",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "alwaysTakeMinDmg": true
+              }
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "ally",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "ally",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "unit_end_move",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "ally",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "Adjacent allies always take minimum damage; refreshed at round start and after any unit moves."
+    },
+    "ent_passive_3": {
+      "actions": [
+        {
+          "trigger": "unit_took_damage",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance_both",
+              "values": [
+                "enemy",
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "targetCondition_": "alive"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "targetCondition_": "alive"
+            },
+            "targetMechanics": [
+              {
+                "mech": "revenge_damage",
+                "values": [
+                  "percent",
+                  "max_unit",
+                  "1",
+                  "0",
+                  "5",
+                  "melee"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "ent_upg_alt revenge_damage action on melee hits."
+    },
+    "ent_passive_4": {
+      "actions": [
+        {
+          "trigger": "unit_died",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "hexOrObject",
+              "targetCondition_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "hexOrObject",
+              "targetCondition_": "self"
+            },
+            "targetMechanics": [
+              {
+                "mech": "spawn_object",
+                "values": [
+                  "obstacle",
+                  "ent_stone",
+                  "1",
+                  "1",
+                  "0",
+                  "false"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "ent_upg spawns the ent_stone obstacle on death."
+    },
+    "esquire_passive_1": {
+      "actions": [
+        {
+          "trigger": "unit_got_buff",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance_receiving_tags",
+              "values": [
+                "self",
+                "receiving",
+                "positive"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "buffTarget_": "all",
+            "buff": {
+              "sid": "esquire_additionbuff",
+              "duration": 1
+            }
+          }
+        }
+      ],
+      "note": "esquire_additionbuff (+2 Defense) on gaining a positive effect."
+    },
+    "esquire_passive_2": {
+      "data": {
+        "stats": {
+          "inDmgMods": {
+            "list": [
+              {
+                "t": "shoot_attack",
+                "v": -0.3
+              }
+            ]
+          }
+        }
+      },
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_aura",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "inDmgMods": {
+                  "list": [
+                    {
+                      "t": "shoot_attack",
+                      "v": -0.3
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "ally",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "ally",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "unit_end_move",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "ally",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "Carrier and adjacent allies take -30% ranged damage; the aura half refreshes at round start and after any unit moves."
+    },
+    "fairy_dragon_passive_1": {
+      "actions": [
+        {
+          "trigger": "start_turn",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all",
+              "selection": "hexOrObject",
+              "targetCondition_": "all"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all",
+              "selection": "hexOrObject",
+              "targetCondition_": "all"
+            },
+            "damageTarget_": "none",
+            "buffTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "change_mana",
+                "values": [
+                  "transfer",
+                  "ally",
+                  "2",
+                  "0",
+                  "0",
+                  "false"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "change_mana transfer action only; the dragon immunities in the same block are not copied."
+    },
+    "fairy_dragon_passive_2": {
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_aura",
+            "isPositive": false,
+            "data": {
+              "disablers": [
+                {
+                  "ability": "ability",
+                  "attack": "all"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "enemy",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "enemy",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "unit_end_move",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "enemy",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "Adjacent enemies cannot use abilities; refreshed at round start and after any unit moves."
+    },
+    "flicker_passive_1": {
+      "runtime": {
+        "vampirism": {
+          "rate": 0.2,
+          "target": "self",
+          "healType": "WithTempStacks"
+        }
+      },
+      "note": "Runtime: heals the carrier for 20% of basic-attack damage dealt via native UnitHealer.Heal (with temp stacks)."
+    },
+    "flicker_passive_2": {
+      "descriptionText": "Attacks curse the target. Once per round, Cursed creatures take 8 Pure Damage plus 1 per creature in the cursing stack at the start of their turn. This effect is stackable. Duration: 2 round(s).",
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "flicker_curse",
+            "duration": 2
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target."
+    },
+    "frostworm_rider_passive_1": {
+      "data": {
+        "stats": {}
+      },
+      "helpers": [
+        {
+          "kind": "hero_buff",
+          "row": {
+            "id": "{graft}_map",
+            "bonuses": [
+              {
+                "type": "heroStat",
+                "parameters": [
+                  "landscapePenaltyPerBonus",
+                  "-0.5"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "runtime": {
+        "heroBuff": "{graft}_map",
+        "nativeUnitSet": "frostworm_rider_globalbuff"
+      },
+      "descriptionText": "While a stack of this grafted Tower line is in the hero's army, terrain penalties for the hero are reduced by 50%. This effect does not stack.",
+      "note": "Map graft: hero buff with the native frostworm_rider_globalbuff unit-set bonus; skipped while a native Frostworm Rider is in the army."
+    },
+    "frostworm_rider_passive_2": {
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "frostworm_rider_debuff",
+            "duration": 2
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target. Counters included, as on the source."
+    },
+    "frostworm_rider_passive_3": {
+      "actions": [
+        {
+          "trigger": "unit_took_damage",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance_both",
+              "values": [
+                "self",
+                "enemy"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "noself",
+              "targetCondition_": "alive"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "noself",
+              "targetCondition_": "alive"
+            },
+            "targetMechanics": [
+              {
+                "mech": "damage",
+                "values": [
+                  "20",
+                  "0",
+                  "1",
+                  "none",
+                  "0",
+                  "true"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "Native pure damage 20 per hit. Native unit_took_damage action (Holy Arms shape): fires on any damage the carrier deals to an enemy, ability damage included."
+    },
+    "giant_frog_passive_1": {
+      "descriptionText": "Attacks poison the target. Poisoned creatures take 24 Magic Damage plus 6 per creature in the poisoning stack at the start of their turn. This effect is stackable. Duration: 2 round(s).",
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "frog_poison",
+            "duration": 2
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target."
+    },
+    "godslayer_passive_1": {
+      "data": {
+        "stats": {}
+      },
+      "perUnit": "godslayer_threshold",
+      "note": "Per carrier: outDamageIfLevelAbove from the source with outLevelAboveThreshold = carrier tier + 1 (native compares target tier >= threshold). T7 carriers get no bonus (no higher tier)."
+    },
+    "godslayer_passive_2": {
+      "data": {
+        "stats": {
+          "overkillProtection": 1
+        }
+      },
+      "note": "godslayer_upg stats.overkillProtection 1."
+    },
+    "godslayer_passive_3": {
+      "data": {
+        "stats": {
+          "maxAddedApPerRound": 1
+        }
+      },
+      "actions": [
+        {
+          "trigger": "unit_died",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance_both",
+              "values": [
+                "self",
+                "enemy"
+              ]
+            },
+            {
+              "checkFunction": "is_active_unit"
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "buffTarget_": "none",
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "targetMechanics": [
+              {
+                "mech": "add_action_points",
+                "values": [
+                  "1"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "godslayer_upg_alt add_action_points on kill + stats.maxAddedApPerRound 1."
+    },
+    "graverobber_passive_1": {
+      "actions": [
+        {
+          "trigger": "unit_died",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "ally"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "targetMechanics": [
+              {
+                "mech": "add_energy",
+                "values": [
+                  "energy",
+                  "ally",
+                  "1",
+                  "0",
+                  "1"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "graverobber_upg_alt add_energy on ally death."
+    },
+    "graverobber_passive_2": {
+      "descriptionText": "Long Reach attacks poison the target. Poisoned creatures take 16 Magic Damage plus 3 per creature in the poisoning stack at the start of their turn. This effect is stackable. Duration: 2 round(s).",
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "graverobber_poison",
+            "duration": 2,
+            "attackTag": "range_attack"
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target. Long Reach (range_attack) only; a carrier without one never triggers it."
+    },
+    "griffin_passive_1": {
+      "data": {
+        "sequenceEffect": "assist_ability"
+      },
+      "statOverrides": [
+        {
+          "stat": "numCounters",
+          "value": 2
+        }
+      ],
+      "note": "griffin_upg_alt: assist_ability sequence + stats.numCounters 2."
+    },
+    "h3_balance_passive_basic_guard": {
+      "data": {
+        "stats": {
+          "inDmgMods": {
+            "list": [
+              {
+                "t": "basic_attack",
+                "v": -0.1
+              }
+            ]
+          }
+        }
+      },
+      "note": "Guard Formation units: stats.inDmgMods basic_attack -0.1 (their shoot_attack entry is the Ranged Defense card)."
+    },
+    "h3_balance_passive_command_shot": {
+      "data": {
+        "stats": {
+          "outDmgMods": {
+            "list": [
+              {
+                "t": "shoot_attack",
+                "v": 0.1
+              }
+            ]
+          }
+        }
+      },
+      "note": "h3_orc_upg stats.outDmgMods shoot_attack +0.1."
+    },
+    "h3_balance_passive_piercing_shot": {
+      "data": {
+        "stats": {
+          "outDmgMods": {
+            "list": [
+              {
+                "t": "shoot_attack",
+                "v": 0.1
+              }
+            ]
+          }
+        }
+      },
+      "note": "h3_corsair / h3_pirate stats.outDmgMods shoot_attack +0.1."
+    },
+    "h3_balance_passive_ranged_support": {
+      "data": {
+        "stats": {
+          "outDmgMods": {
+            "list": [
+              {
+                "t": "shoot_attack",
+                "v": 0.1
+              }
+            ]
+          }
+        }
+      },
+      "note": "h3_monk stats.outDmgMods shoot_attack +0.1."
+    },
+    "h3_behemoth_passive_1": {
+      "data": {
+        "stats": {
+          "armorPen": 0.4
+        }
+      },
+      "note": "h3_behemoth armorPen 0.4 (passive block or stats)."
+    },
+    "h3_behemoth_upg_alt_passive_1": {
+      "data": {
+        "stats": {
+          "armorPen": 0.6
+        }
+      },
+      "note": "h3_behemoth_upg_alt armorPen 0.6 (passive block or stats)."
+    },
+    "h3_behemoth_upg_passive_1": {
+      "data": {
+        "stats": {
+          "armorPen": 0.8
+        }
+      },
+      "note": "h3_behemoth_upg armorPen 0.8 (passive block or stats)."
+    },
+    "h3_castle_passive_jousting_charge": {
+      "data": {
+        "stats": {
+          "damagePerHex": 0.05
+        }
+      },
+      "note": "h3_cavalier stats.damagePerHex 0.05."
+    },
+    "h3_common_no_retaliation_attack": {
+      "data": {
+        "sequenceEffect": "disable_counter"
+      },
+      "note": "Source units set triggerCounter=false on the attack; buff form is sequenceEffect disable_counter (qilin_wisp_buff_*). Unproven that it suppresses the defender's counter for a buffed attacker."
+    },
+    "h3_common_passive_after_shot_weakness": {
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "magic_unnatural_calm_effect_0",
+            "duration": 3,
+            "attackTag": "shoot_attack"
+          }
+        ]
+      },
+      "descriptionText": "Ranged attacks reduce the target's normal damage by 15% for 3 rounds after damage is dealt.",
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target. Weakness half only; the Disrupting Ray follow-up is Cove runtime logic and is not copied."
+    },
+    "h3_common_passive_attack_ignore_30": {
+      "data": {
+        "stats": {
+          "attackPen": 0.3
+        }
+      },
+      "note": "h3_nix attackPen 0.3 (passive block or stats)."
+    },
+    "h3_common_passive_attack_ignore_60": {
+      "data": {
+        "stats": {
+          "attackPen": 0.6
+        }
+      },
+      "note": "h3_nix_warrior attackPen 0.6 (passive block or stats)."
+    },
+    "h3_common_passive_bulwark_flyer_slow": {
+      "runtime": {
+        "battleStart": "enemy_flyer_buff",
+        "buff": "homm3_bulwark_frostbound_skies_speed_1",
+        "duration": 99
+      },
+      "note": "Runtime at the first round: every enemy flyer (stats.moveType fly) gets the Bulwark Frostbound Skies speed debuff, as the native Bulwark runtime does."
+    },
+    "h3_common_passive_bulwark_freezing_shot": {
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "magic_ice_bolt_effect_0",
+            "duration": 1,
+            "attackTag": "shoot_attack"
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target."
+    },
+    "h3_common_passive_bulwark_frost_shot": {
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "magic_ice_bolt_effect_0",
+            "duration": 1,
+            "attackTag": "shoot_attack"
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target."
+    },
+    "h3_common_passive_cove_fearless": {
+      "data": {
+        "immunities": [
+          {
+            "type": "effect",
+            "tags": [
+              "homm3_cove_fearsome_effect"
+            ]
+          }
+        ]
+      },
+      "note": "Fearless effect immunity block."
+    },
+    "h3_common_passive_defense_pierce_30": {
+      "data": {
+        "stats": {
+          "armorPen": 0.3
+        }
+      },
+      "note": "h3_halfling_grenadier armorPen 0.3 (passive block or stats)."
+    },
+    "h3_common_passive_dendroid_binding": {
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "ent_root",
+            "duration": 2,
+            "attackTag": "melee_attack"
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target."
+    },
+    "h3_common_passive_free_shooting": {
+      "data": {
+        "stats": {
+          "ignoreShootingBlock": true
+        }
+      },
+      "note": "stats.ignoreShootingBlock (adjacent shooting block), as Nimbleness."
+    },
+    "h3_common_passive_ice_damage_immunity": {
+      "data": {
+        "immunities": [
+          {
+            "type": "damage",
+            "tags": [
+              "primal_6_magic_ice_bolt_damage",
+              "primal_13_magic_avalanche_damage"
+            ]
+          },
+          {
+            "type": "effect",
+            "tags": [
+              "primal_6_magic_ice_bolt_effect"
+            ]
+          }
+        ]
+      },
+      "note": "Exact block from h3_argali / h3_nymph / h3_oceanid."
+    },
+    "h3_common_passive_positive_luck": {
+      "data": {
+        "stats": {
+          "luckMin": 4
+        }
+      },
+      "note": "h3_halfling luckMin 1 vs h3 default -3: +4 additive."
+    },
+    "h3_cove_passive_swashbuckler_gold": {
+      "data": {
+        "stats": {}
+      },
+      "runtime": {
+        "dailyGold": {
+          "gold": 15,
+          "sourceUnit": "h3_crew_mate_upg_alt"
+        }
+      },
+      "descriptionText": "At the start of each day, every creature in this grafted stack produces Gold while it is in a hero's army: {gold}.",
+      "note": "Map graft: daily gold per carrier creature, tier-scaled as gold x source weekly growth / carrier line weekly growth (city weeklyIncrement), granted by the shared side day-start hook (Homm3SwashbucklerGoldHook consumer). '{gold}' expands to the per-line rates."
+    },
+    "h3_crystal_dragon_passive_magic_resistance": {
+      "data": {
+        "stats": {
+          "inDmgMods": {
+            "list": [
+              {
+                "t": "magic_damage",
+                "v": -0.2
+              }
+            ]
+          }
+        }
+      },
+      "note": "h3_crystal_dragon stats.inDmgMods magic_damage -0.2."
+    },
+    "h3_cyclops_upg_alt_passive_1": {
+      "data": {
+        "stats": {
+          "ignoreShootDmgBuff": true
+        }
+      },
+      "note": "Siege Thrower: stats.ignoreShootDmgBuff (distance penalty), as Sharpshooter."
+    },
+    "h3_fangarm_passive_hypnotic_strike": {
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "magic_berserker_effect_0_no_damage",
+            "duration": 1,
+            "attackTag": "melee_attack"
+          }
+        ],
+        "berserkOnHit": true
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target. Then calls native MechBerserk.ApplyBerserk on the target (1 action), as the source berserk mechanic does; fails closed if the symbol is missing."
+    },
+    "h3_fangarm_passive_unlimited_retaliation": {
+      "statOverrides": [
+        {
+          "stat": "numCounters",
+          "value": 999
+        }
+      ],
+      "note": "Fangarm stats.numCounters=999."
+    },
+    "h3_fortress_passive_regeneration": {
+      "actions": [
+        {
+          "trigger": "start_turn",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive",
+              "heal_damage"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "targetMechanics": [
+              {
+                "mech": "heal_percent",
+                "values": [
+                  "without respawn",
+                  "max_unit",
+                  "0.25",
+                  "0.00",
+                  "true"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "h3_hydra_upg_alt heal_percent 0.25 at start_turn."
+    },
+    "h3_giant_ability_1": {
+      "data": {
+        "immunities": [
+          {
+            "type": "mechanic",
+            "tags": [
+              "berserk"
+            ]
+          },
+          {
+            "type": "mechanic",
+            "tags": [
+              "revenge_berserk"
+            ]
+          },
+          {
+            "type": "effect",
+            "tags": [
+              "sleep_effect"
+            ]
+          }
+        ]
+      },
+      "note": "Mind spells as OE has them: the berserk and revenge_berserk mechanics and the Sleep effect."
+    },
+    "h3_golem_ability_1": {
+      "data": {
+        "stats": {
+          "inDmgMods": {
+            "list": [
+              {
+                "t": "magic_damage",
+                "v": -0.5
+              }
+            ]
+          }
+        }
+      },
+      "note": "h3_golem stats.inDmgMods magic_damage -0.5."
+    },
+    "h3_golem_upg_ability_1": {
+      "data": {
+        "stats": {
+          "inDmgMods": {
+            "list": [
+              {
+                "t": "magic_damage",
+                "v": -0.75
+              }
+            ]
+          }
+        }
+      },
+      "note": "h3_golem_upg stats.inDmgMods magic_damage -0.75."
+    },
+    "h3_golem_upg_alt_ability": {
+      "data": {
+        "stats": {}
+      },
+      "runtime": {
+        "abilities": {
+          "sourceUnit": "h3_golem_upg_alt",
+          "indices": [
+            0
+          ]
+        }
+      },
+      "descriptionText": "The grafted creature gains the Golem's Web ability: spend 2 Focus to give an enemy -2 Speed for 1 round.",
+      "note": "Ability graft: at Unit.Init the runtime appends a fresh copy (JsonUtility from the embedded source config) of the source unit's abilities[0] to the carrier's own ability array. Skipped on the source unit itself and past the 5 HUD skill slots."
+    },
+    "h3_gremlin_upg_alt_ability": {
+      "data": {
+        "stats": {}
+      },
+      "runtime": {
+        "abilities": {
+          "sourceUnit": "h3_gremlin_upg_alt",
+          "indices": [
+            0,
+            1
+          ]
+        }
+      },
+      "descriptionText": "The grafted creature gains the Gremlin Mechanic's Repair abilities: twice per battle restore 10% health to an allied stack with resurrection, and a 50% repair for another allied stack.",
+      "note": "Ability graft: both source abilities appended at Unit.Init (see h3_golem_upg_alt_ability)."
+    },
+    "h3_harpy_upg_passives_3": {
+      "data": {
+        "sequenceEffect": "disable_counter"
+      },
+      "note": "Source units set triggerCounter=false on the attack; buff form is sequenceEffect disable_counter (qilin_wisp_buff_*). Unproven that it suppresses the defender's counter for a buffed attacker."
+    },
+    "h3_leprechaun_passive_luck_aura": {
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_aura",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "luck": 1
+              }
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "ally",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "ally",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "unit_end_move",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "ally",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "Adjacent allies +1 Luck; refreshed at round start and after any unit moves."
+    },
+    "h3_mage_ability_2": {
+      "data": {
+        "stats": {
+          "ignoreShootDmgBuff": true,
+          "ignoreShootingBlock": true
+        }
+      },
+      "note": "ignoreShootDmgBuff + ignoreShootingBlock: no range falloff, no adjacent block."
+    },
+    "h3_mage_ability_3": {
+      "helpers": [
+        {
+          "kind": "side_buff",
+          "row": {
+            "id": "{graft}_side",
+            "isPositive": true,
+            "tags": [
+              "positive"
+            ],
+            "addition": "swap",
+            "heroStat": {
+              "manaCostBonus": -2
+            }
+          }
+        },
+        {
+          "kind": "side_buff_info",
+          "row": {
+            "id": "{graft}_side_info",
+            "sid": "{graft}_side",
+            "allegiance": "ally",
+            "duration": 1,
+            "durationPerStack": 0
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "side_buff",
+                "values": [
+                  "{graft}_side_info"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "side_buff",
+                "values": [
+                  "{graft}_side_info"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "Side buff on the carrier's side each round: hero spells cost 2 less."
+    },
+    "h3_naga_ability_1": {
+      "data": {
+        "sequenceEffect": "disable_counter"
+      },
+      "note": "Source units set triggerCounter=false on the attack; buff form is sequenceEffect disable_counter (qilin_wisp_buff_*). Unproven that it suppresses the defender's counter for a buffed attacker."
+    },
+    "h3_naga_ability_2": {
+      "data": {
+        "stats": {
+          "alwaysMaxDmg": true
+        }
+      },
+      "descriptionText": "Always deals maximum damage instead of rolling a damage range.",
+      "note": "Source units have damageMin = damageMax; the copy is alwaysMaxDmg, which reads the same at the top of the carrier's range."
+    },
+    "h3_steel_golem_passive_magic_resistance": {
+      "data": {
+        "stats": {
+          "inDmgMods": {
+            "list": [
+              {
+                "t": "magic_damage",
+                "v": -0.8
+              }
+            ]
+          }
+        }
+      },
+      "note": "h3_steel_golem stats.inDmgMods magic_damage -0.8."
+    },
+    "h3_troll_passive_regeneration": {
+      "actions": [
+        {
+          "trigger": "start_turn",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive",
+              "heal_damage"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "targetMechanics": [
+              {
+                "mech": "heal_percent",
+                "values": [
+                  "without respawn",
+                  "max_unit",
+                  "1.00",
+                  "0.00",
+                  "true"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "h3_troll heal_percent 1.00 at start_turn."
+    },
+    "h3_wight_passives_2": {
+      "actions": [
+        {
+          "trigger": "start_turn",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive",
+              "heal_damage"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "targetMechanics": [
+              {
+                "mech": "heal_percent",
+                "values": [
+                  "without respawn",
+                  "max_unit",
+                  "0.10",
+                  "0.00",
+                  "true"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "h3_wight heal_percent 0.10 at start_turn."
+    },
+    "h3_wight_upg_alt_passives_2": {
+      "actions": [
+        {
+          "trigger": "start_turn",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive",
+              "heal_damage"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "targetMechanics": [
+              {
+                "mech": "heal_percent",
+                "values": [
+                  "without respawn",
+                  "max_unit",
+                  "0.10",
+                  "0.00",
+                  "true"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "h3_wight_upg_alt heal_percent 0.10 at start_turn."
+    },
+    "h3_wight_upg_passives_2": {
+      "actions": [
+        {
+          "trigger": "start_turn",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive",
+              "heal_damage"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "targetMechanics": [
+              {
+                "mech": "heal_percent",
+                "values": [
+                  "without respawn",
+                  "max_unit",
+                  "0.10",
+                  "0.00",
+                  "true"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "h3_wight_upg heal_percent 0.10 at start_turn."
+    },
+    "h3_wolf_rider_upg_passive_1": {
+      "data": {
+        "sequenceEffect": "add_attack_after_counter_melee"
+      },
+      "note": "Ferocity: h3_wolf_rider_upg's only logic block, the Double Strike sequence."
+    },
+    "hive_queen_passive_1": {
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_faction_human",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "offencePerc": 0.25
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_faction_undead",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "defencePerc": 0.25
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_faction_nature",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "luck": 2,
+                "moral": 2
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_faction_unfrozen",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "hpPerc": 0.2
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_faction_dungeon",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "damagePerc": 0.1
+              }
+            },
+            "infinite": true
+          }
+        },
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_faction_neutral",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "speed": 2
+              }
+            },
+            "infinite": true
+          }
+        }
+      ],
+      "runtime": {
+        "battleStart": "enemy_faction_buffs",
+        "factions": [
+          "human",
+          "undead",
+          "nature",
+          "unfrozen",
+          "dungeon",
+          "neutral"
+        ]
+      },
+      "note": "Runtime at the first round: one helper buff per listed faction present in the enemy army (native unique_fractions_buff semantics: the six base factions only; HoMM3 factions give nothing)."
+    },
+    "hive_queen_passive_2": {
+      "helpers": [
+        {
+          "kind": "side_buff",
+          "row": {
+            "id": "{graft}_side",
+            "isPositive": true,
+            "tags": [
+              "positive"
+            ],
+            "addition": "swap",
+            "heroStat": {
+              "magicAttackPerBonus": 0.25
+            }
+          }
+        },
+        {
+          "kind": "side_buff_info",
+          "row": {
+            "id": "{graft}_side_info",
+            "sid": "{graft}_side",
+            "allegiance": "ally",
+            "duration": 1,
+            "durationPerStack": 0
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "side_buff",
+                "values": [
+                  "{graft}_side_info"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "side_buff",
+                "values": [
+                  "{graft}_side_info"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "Side buff on the carrier's side each round: hero magic damage +25% (HeroStat.magicAttackPerBonus, read by DamageCalculatorUtility)."
+    },
+    "hive_queen_passive_3": {
+      "data": {
+        "stats": {
+          "damagePerDeltaLevelLower": 0.03
+        }
+      },
+      "note": "hive_queen stats.damagePerDeltaLevelLower 0.03."
+    },
+    "hydra_passive_1": {
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "hydra_debuff",
+            "duration": 2
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target."
+    },
+    "hydra_passive_2": {
+      "actions": [
+        {
+          "trigger": "start_turn",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive",
+              "heal_damage",
+              "avatar_immunities"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "targetMechanics": [
+              {
+                "mech": "heal_percent",
+                "values": [
+                  "without respawn",
+                  "max_unit",
+                  "1.0",
+                  "0.00",
+                  "true"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "hydra_upg start_turn heal_percent action only (its other two actions are Growing Teeth and Poisonous Blood)."
+    },
+    "hydra_passive_3": {
+      "actions": [
+        {
+          "trigger": "unit_took_damage",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all",
+              "selection": "object"
+            },
+            "buffTarget_": "enemy",
+            "buff": {
+              "sid": "hydra_debuff",
+              "duration": 2
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "hydra_upg unit_took_damage -> hydra_debuff on adjacent enemies."
+    },
+    "hydra_passive_4": {
+      "actions": [
+        {
+          "trigger": "unit_took_damage",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "buffTarget_": "all",
+            "buff": {
+              "sid": "hydra_selfbuff_1",
+              "duration": -1
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "Base hydra unit_took_damage -> hydra_selfbuff_1 (+1 Attack); hydra_upg_alt uses the +2 variant."
+    },
+    "inquisitor_passive_1": {
+      "data": {
+        "stats": {
+          "energyPerTakeDamage": 1
+        }
+      },
+      "note": "inquisitor_upg energyPerTakeDamage 2 vs 1: +1 additive."
+    },
+    "kitten_horn_passive_1": {
+      "actions": [
+        {
+          "trigger": "unit_died",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "ally",
+              "targetCondition_": "all"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "ally",
+              "targetCondition_": "all"
+            },
+            "targetMechanics": [
+              {
+                "mech": "revenge_berserk",
+                "values": [
+                  "8"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "kitten_horn revenge_berserk on death."
+    },
+    "lava_larva_passive_1": {
+      "actions": [
+        {
+          "trigger": "unit_died",
+          "triggerConditions": [
+            {
+              "checkFunction": "larva_self_destruct",
+              "values": [
+                "noself",
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive",
+              "magic_damage",
+              "lava_larva_damage",
+              "lava_larva_explosion_attack"
+            ],
+            "triggerCounter": false,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "attackPatternSid": "attack_rumble_x1_x100",
+            "damageTarget_": "noself",
+            "damageType_": "magic_pure",
+            "statDmgMult": 0.0,
+            "minBaseDmg": 15,
+            "maxBaseDmg": 15,
+            "damageMultiplerPerHeroLevel": 1.0,
+            "buffTarget_": "none",
+            "targetMechanics": []
+          }
+        }
+      ],
+      "descriptionText": "Upon death, this creature explodes, dealing Magic Damage that grows with the hero's level to all adjacent creatures.",
+      "note": "lava_larva death explosion action."
+    },
+    "lich_passive_1": {
+      "runtime": {
+        "vampirism": {
+          "rate": 0.2,
+          "target": "allies_no_self",
+          "healType": "WithoutRespawn"
+        }
+      },
+      "note": "Runtime: heals every other living ally for 20% of basic-attack damage dealt (without respawn), as the source allynoself vampirism."
+    },
+    "lich_passive_2": {
+      "data": {
+        "stats": {}
+      },
+      "helpers": [
+        {
+          "kind": "hero_buff",
+          "row": {
+            "id": "{graft}_map",
+            "bonuses": [
+              {
+                "type": "heroStat",
+                "parameters": [
+                  "expPerBonus",
+                  "0.10"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "runtime": {
+        "heroBuff": "{graft}_map",
+        "nativeUnitSet": "lich_globalbuff"
+      },
+      "descriptionText": "While a stack of this grafted Tower line is in the hero's army, the hero gains 10% more experience. This effect does not stack.",
+      "note": "Map graft: hero buff with the native lich_globalbuff unit-set bonus; skipped while a native Lich (upg alt) is in the army."
+    },
+    "lightweaver_passive_1": {
+      "actions": [
+        {
+          "trigger": "unit_got_buff",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance_receiving_tags",
+              "values": [
+                "self",
+                "receiving",
+                "positive"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "buffTarget_": "all",
+            "buff": {
+              "sid": "lightweaver_additionbuff",
+              "duration": 1
+            }
+          }
+        }
+      ],
+      "note": "lightweaver_additionbuff (+1 damage) on gaining a positive effect."
+    },
+    "mech_guard_passive_1": {
+      "data": {
+        "immunities": [
+          {
+            "type": "mechanic",
+            "tags": [
+              "kill_stacks"
+            ]
+          }
+        ]
+      },
+      "note": "mech_guard kill_stacks mechanic immunity."
+    },
+    "medusa_passive_1": {
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "medusa_debuff",
+            "duration": 2,
+            "attackTag": "shoot_attack"
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target."
+    },
+    "minos_passive_1": {
+      "data": {
+        "stats": {
+          "moralMin": 5,
+          "additionalActionChanceModifier": 0.05
+        }
+      },
+      "note": "minos stats: moralMin 0 vs default -5 (+5 additive), additionalActionChanceModifier 0.05."
+    },
+    "minos_passive_2": {
+      "actions": [
+        {
+          "trigger": "unit_took_damage",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "buffTarget_": "all",
+            "buff": {
+              "sid": "minos_selfbuff",
+              "duration": -1
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "minos_selfbuff (+1 Morale) on taking damage."
+    },
+    "minos_passive_3": {
+      "actions": [
+        {
+          "trigger": "double_turn",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "buffTarget_": "all",
+            "buff": {
+              "sid": "minos_moral_selfbuff",
+              "duration": 2
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "minos_moral_selfbuff on double_turn."
+    },
+    "obsidian_dragon_passive_1": {
+      "data": {
+        "stats": {
+          "inDmgMods": {
+            "list": [
+              {
+                "t": "melee_attack",
+                "v": -0.25
+              },
+              {
+                "t": "range_attack",
+                "v": -0.5
+              },
+              {
+                "t": "shoot_attack",
+                "v": -0.75
+              }
+            ]
+          }
+        }
+      },
+      "note": "dragon_upg stats.inDmgMods melee -0.25, range (Long Reach) -0.5, shoot -0.75."
+    },
+    "olgoi_passive_1": {
+      "actions": [
+        {
+          "trigger": "unit_end_move",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive",
+              "undead_immunities",
+              "embodiment_immunities",
+              "construct_immunities"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "buffTarget_": "none",
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "targetCondition_": "dead",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "targetCondition_": "alive",
+              "selection": "object"
+            },
+            "targetMechanics": [
+              {
+                "mech": "destroy_corpse_and_heal",
+                "values": [
+                  "one",
+                  "120",
+                  "1",
+                  "0",
+                  "until start amount"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "olgoi destroy_corpse_and_heal on unit_end_move."
+    },
+    "olgoi_passive_2": {
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_aura",
+            "isPositive": false,
+            "data": {
+              "stats": {
+                "luck": -1
+              }
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "global_buff",
+                "values": [
+                  "enemy",
+                  "{graft}_aura",
+                  "1",
+                  "0",
+                  "1",
+                  "-1"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "global_buff",
+                "values": [
+                  "enemy",
+                  "{graft}_aura",
+                  "1",
+                  "0",
+                  "1",
+                  "-1"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "Every round a native global_buff: enemies -1 Luck until round end."
+    },
+    "peasant_passive_1": {
+      "data": {
+        "stats": {}
+      },
+      "runtime": {
+        "dailyGold": {
+          "gold": 10,
+          "sourceUnit": "peasant"
+        }
+      },
+      "descriptionText": "At the start of each day, every creature in this grafted stack produces Gold while it is in a hero's army: {gold}.",
+      "note": "Map graft: daily gold per carrier creature, tier-scaled as gold x source weekly growth / carrier line weekly growth (the Peasant's growth is its hire-site weeklyIncrement). Native peasant_globalbuff sideResFromUnits is not reused: its party binding exists only for unit sets. '{gold}' expands to the per-line rates."
+    },
+    "peasant_passive_3": {
+      "actions": [
+        {
+          "trigger": "start_turn",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "buffTarget_": "all",
+            "buff": {
+              "sid": "undead_peasant_buff",
+              "duration": -1
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "undead_peasant_buff (+2 damage) every start_turn."
+    },
+    "pet_passive_1": {
+      "actions": [
+        {
+          "trigger": "unit_took_damage",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance_both",
+              "values": [
+                "self",
+                "enemy"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "buffTarget_": "all",
+            "buff": {
+              "sid": "pet_buff",
+              "duration": -1
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "Self gain: source action (pet_buff on dealing damage). Target drain: runtime on-hit (pet_debuff) on the carrier's basic attacks and counters.",
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "pet_debuff",
+            "duration": -1
+          }
+        ]
+      }
+    },
+    "pet_passive_2": {
+      "actions": [
+        {
+          "trigger": "unit_died",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "ally"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "targetCondition_": "alive"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "targetCondition_": "alive"
+            },
+            "buffTarget_": "all",
+            "buff": {
+              "sid": "pet_additionbuff",
+              "duration": 1
+            }
+          }
+        }
+      ],
+      "note": "pet_additionbuff (+3 Defense) on ally death."
+    },
+    "pet_passive_3": {
+      "descriptionText": "Attacks wound the target. Wounded creatures take 12 Damage plus 2 per creature in the wounding stack at the start of their turn. This effect is stackable. Duration: 2 round(s).",
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "pet_blood",
+            "duration": 2
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target."
+    },
+    "phoenix_passive_1": {
+      "data": {
+        "immunities": [
+          {
+            "type": "damage",
+            "tags": [
+              "primal_4_magic_fire_globe_damage",
+              "primal_7_magic_wall_of_flame_damage",
+              "primal_11_magic_armageddon_damage"
+            ]
+          },
+          {
+            "type": "effect",
+            "tags": [
+              "overTime_effect_fire"
+            ]
+          }
+        ]
+      },
+      "note": "phoenix Fireball/Firewall/Armageddon damage immunity + fire over-time effect immunity; 'leaves no body' not copied."
+    },
+    "phoenix_passive_2": {
+      "data": {
+        "stats": {}
+      },
+      "descriptionText": "Leaves a pile of ash upon death. At the start of the following round, about half of the stack is revived from that pile (no more than the original amount). Each stack can only be revived once per battle this way. The pile is destroyed upon taking Damage.",
+      "perUnit": "phoenix_revive",
+      "runtime": {
+        "oncePerBattle": true
+      },
+      "note": "Per carrier: on death spawn an ash obstacle that revives that carrier's own unit sid at the next round (native spawn_revived_phoenix, rate 0.5). Once per battle: revived stacks join after battle start and get no graft."
+    },
+    "phoenix_passive_3": {
+      "actions": [
+        {
+          "trigger": "start_turn",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive",
+              "heal_damage",
+              "avatar_immunities"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "targetMechanics": [
+              {
+                "mech": "heal_percent",
+                "values": [
+                  "until start amount",
+                  "lost_squad",
+                  "0.25",
+                  "0.00",
+                  "true"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "phoenix_upg_alt heal_percent of lost_squad at start_turn (can revive)."
+    },
+    "qilin_passive_1": {
+      "data": {
+        "immunities": [
+          {
+            "type": "damage",
+            "tags": [
+              "primal_1_magic_thunderbolt_damage",
+              "primal_12_magic_chain_lightning_damage"
+            ]
+          }
+        ]
+      },
+      "note": "qilin Lightning Bolt / Chain Lightning damage immunity, split from the shared block (movementNegative is Lightning Fast)."
+    },
+    "qilin_passive_2": {
+      "data": {
+        "immunities": [
+          {
+            "type": "effect",
+            "tags": [
+              "movementNegative"
+            ]
+          }
+        ]
+      },
+      "note": "qilin movementNegative effect immunity, split from the shared block."
+    },
+    "qilin_passive_3": {
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_aura",
+            "isPositive": false,
+            "data": {
+              "stats": {
+                "inDmgMods": {
+                  "list": [
+                    {
+                      "t": "magic_damage",
+                      "v": 0.3
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "enemy",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "enemy",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        },
+        {
+          "trigger": "unit_end_move",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "enemy",
+            "buff": {
+              "sid": "{graft}_aura",
+              "duration": 1
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "Adjacent enemies take +30% magic damage; refreshed at round start and after any unit moves."
+    },
+    "qilin_passive_4": {
+      "data": {
+        "stats": {
+          "energyPerRound": 2
+        }
+      },
+      "note": "qilin_upg energyPerRound 2 vs 0."
+    },
+    "succubus_passive_1": {
+      "helpers": [
+        {
+          "kind": "side_buff",
+          "row": {
+            "id": "{graft}_side",
+            "isPositive": false,
+            "tags": [
+              "negative"
+            ],
+            "addition": "swap",
+            "heroStat": {
+              "manaCostBonus": 1
+            }
+          }
+        },
+        {
+          "kind": "side_buff_info",
+          "row": {
+            "id": "{graft}_side_info",
+            "sid": "{graft}_side",
+            "allegiance": "enemy",
+            "duration": 1,
+            "durationPerStack": 0
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "side_buff",
+                "values": [
+                  "{graft}_side_info"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "side_buff",
+                "values": [
+                  "{graft}_side_info"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "Side buff on the enemy side each round: enemy hero spells cost 1 more."
+    },
+    "succubus_passive_2": {
+      "data": {
+        "stats": {
+          "energyPerCast": 2
+        }
+      },
+      "note": "succubus_upg energyPerCast 3 vs 1: +2 additive."
+    },
+    "sunlight_cavalry_passive_1": {
+      "helpers": [
+        {
+          "kind": "buff",
+          "row": {
+            "id": "{graft}_aura",
+            "isPositive": true,
+            "data": {
+              "stats": {
+                "moral": 1
+              }
+            }
+          }
+        }
+      ],
+      "actions": [
+        {
+          "trigger": "start_battle",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "global_buff",
+                "values": [
+                  "ally",
+                  "{graft}_aura",
+                  "1",
+                  "0",
+                  "1",
+                  "-1"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "trigger": "start_round",
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "damageTarget_": "none",
+            "targetMechanics": [
+              {
+                "mech": "global_buff",
+                "values": [
+                  "ally",
+                  "{graft}_aura",
+                  "1",
+                  "0",
+                  "1",
+                  "-1"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "Every round a native global_buff: allies +1 Morale until round end."
+    },
+    "sunlight_cavalry_passive_2": {
+      "data": {
+        "stats": {
+          "damagePerHex": 0.05
+        }
+      },
+      "note": "sunlight_cavalry stats.damagePerHex 0.05 (upgrades carry 0.1; the payload uses the base value)."
+    },
+    "sunlight_cavalry_passive_3": {
+      "actions": [
+        {
+          "trigger": "unit_got_buff",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance_receiving_tags",
+              "values": [
+                "self",
+                "receiving",
+                "positive"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self",
+              "selection": "object"
+            },
+            "buffTarget_": "all",
+            "buff": {
+              "sid": "sunlightCavalry_additionbuff",
+              "duration": 1
+            }
+          }
+        }
+      ],
+      "note": "sunlightCavalry_additionbuff (+2 Attack) on gaining a positive effect."
+    },
+    "trick_demon_passive_1": {
+      "data": {
+        "stats": {
+          "damagePerDeltaLevel": 0.03
+        }
+      },
+      "note": "trick_demon stats.damagePerDeltaLevel 0.03."
+    },
+    "trogl_passive_1": {
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "trogl_debuff",
+            "duration": 2
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target."
+    },
+    "trogl_passive_2": {
+      "actions": [
+        {
+          "trigger": "unit_took_damage",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_swirl_x1_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "self"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all"
+            },
+            "buffTarget_": "enemy",
+            "buff": {
+              "sid": "trogl_debuff",
+              "duration": 2
+            },
+            "targetMechanics": []
+          }
+        }
+      ],
+      "note": "trogl_upg_alt trogl_debuff on adjacent enemies when damaged."
+    },
+    "twinkle_passive_1": {
+      "actions": [
+        {
+          "trigger": "unit_died",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance",
+              "values": [
+                "self"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "attackPatternSid": "attack_single_x100",
+            "instacast": true,
+            "untargetedCast": true,
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all",
+              "selection": "hexOrObject",
+              "targetCondition_": "all"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "all",
+              "selection": "hexOrObject",
+              "targetCondition_": "all"
+            },
+            "targetMechanics": [
+              {
+                "mech": "side_buff",
+                "values": [
+                  "side_buff_unit_twinkle_death"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "twinkle_upg_alt side_buff_unit_twinkle_death on death."
+    },
+    "vampire_passive_1": {
+      "runtime": {
+        "vampirism": {
+          "rate": 0.5,
+          "target": "self",
+          "healType": "WithRealUntilStart"
+        }
+      },
+      "note": "Runtime: heals the carrier for 50% of basic-attack damage dealt, reviving up to the starting count (the source 'until start amount')."
+    },
+    "wasp_passive_1": {
+      "runtime": {
+        "onHit": [
+          {
+            "buff": "wasp_debuff",
+            "duration": 2
+          }
+        ]
+      },
+      "note": "Runtime on-hit (Homm3TowerArtificingRuntime): the carrier's basic attacks and counters that damage an enemy add the source buff to the target."
+    },
+    "wasp_passive_2": {
+      "actions": [
+        {
+          "trigger": "unit_took_damage",
+          "triggerConditions": [
+            {
+              "checkFunction": "allegiance_both",
+              "values": [
+                "self",
+                "enemy"
+              ]
+            }
+          ],
+          "damageDealer": {
+            "tags": [
+              "passive"
+            ],
+            "triggerCounter": false,
+            "damageTarget_": "none",
+            "statDmgMult": 0.0,
+            "attackPatternSid": "attack_single_x100",
+            "castTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "noself",
+              "targetCondition_": "alive"
+            },
+            "affectTargetParams": {
+              "targetTags": [
+                "unit"
+              ],
+              "castTarget_": "noself",
+              "targetCondition_": "alive"
+            },
+            "targetMechanics": [
+              {
+                "mech": "kill_stacks",
+                "values": [
+                  "1",
+                  "6"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "note": "Native kill_stacks [1, 6] (tier cap kept). Native unit_took_damage action (Holy Arms shape): fires on any damage the carrier deals to an enemy, ability damage included."
+    }
+  },
+  "manualPayloadsNote": "key -> {data?, actions?, statOverrides?, helpers?, runtime?, perUnit?, descriptionText?, note}. The only payload source: view passives are display labels that are not index-aligned with logic passive blocks. data/actions/statOverrides go on the graft buff. helpers are extra Core rows ({kind: buff|side_buff|side_buff_info|obstacle|hero_buff, row}); '{graft}' in any string expands to the graft buff sid. runtime is read by Homm3TowerArtificingRuntime (onHit, berserkOnHit, vampirism, battleStart, oncePerBattle; map grafts: heroBuff + nativeUnitSet, dailyGold; abilities). perUnit names a generator rule that writes one variant graft row per Tower unit sid. descriptionText replaces the resolved Lang description.",
+  "excludedKeys": {
+    "peasant_passive_2": "flavour passive tied to the Peasant's pet",
+    "base_passive_strike_reach_1": "attack-bound: an attack pattern (area/reach/swipe); a buff cannot change the carrier's attack shape",
+    "base_passive_strike_rumble_1": "attack-bound: an attack pattern (area/reach/swipe); a buff cannot change the carrier's attack shape",
+    "base_passive_strike_rumble_2": "attack-bound: an attack pattern (area/reach/swipe); a buff cannot change the carrier's attack shape",
+    "base_passive_strike_swipe_1": "attack-bound: an attack pattern (area/reach/swipe); a buff cannot change the carrier's attack shape",
+    "h3_naga_upg_alt_ability": "attack-bound: an attack pattern (area/reach/swipe); a buff cannot change the carrier's attack shape",
+    "hydra_passive_5": "attack-bound: an attack pattern (area/reach/swipe); a buff cannot change the carrier's attack shape (counterattack pattern)",
+    "base_passive_countershot": "attack-bound: needs a ranged counterattack the carrier does not have; the native counter queue cannot be extended by a buff (StepQueue push unproven)"
+  },
+  "excludedKeysNote": "key -> reason. Not transcribable: attack shapes (a buff cannot change the carrier's attack pattern) and the Peasant's flavour passive.",
+  "observation": {
+    "chanceByRank": [
+      15,
+      25,
+      35
+    ],
+    "diagnostics": true,
+    "diagnosticLogLines": 400
+  },
+  "observationNote": "Approved 2026-10-26: one roll per observed passive per battle at chanceByRank (Basic/Advanced/Expert %), both sides observable. diagnostics = log the befp attribution scope (independent of enabled; spends no rolls) up to diagnosticLogLines lines per launch.",
+  "observeOverrides": {
+    "angel_passive_2": [{"kind": "immunity", "immunities": [{"type": "effect", "tags": ["negative"]}]}, {"kind": "aura", "tags": ["angel_aura"]}],
+    "arbitrator_passive_2": [{"kind": "buff_applied", "buffs": ["arbitrator_debuff_attack"]}],
+    "arbitrator_passive_3": [{"kind": "map_proxy", "proxy": "max_mana"}],
+    "avatar_of_war_passive_1": [{"kind": "aura", "tags": ["avatar_of_war_aura"]}, {"kind": "morale_roll", "stats": ["moral"]}],
+    "avatar_of_war_passive_3": [{"kind": "attack_mech", "mechs": ["kill_stacks"]}],
+    "base_passive_duelist": [{"kind": "damage_stat", "stats": ["outDmgMods.melee_attack"]}],
+    "black_dragon_passive_1": [{"kind": "aura", "tags": ["black_dragon_ally_aura", "black_dragon_enemy_aura"]}],
+    "black_dragon_passive_2": [{"kind": "aura", "tags": ["black_dragon_aura"]}, {"kind": "damage_stat", "stats": ["alwaysMinDmg"]}],
+    "crossbowman_passive_1": [{"kind": "map_proxy", "proxy": "presence"}],
+    "demon_passive_1": [{"kind": "synergy"}],
+    "demon_passive_2": [{"kind": "synergy"}],
+    "druid_passive_1": [{"kind": "side_modifier", "tags": ["druid_manacost_buff"]}],
+    "druid_passive_2": [{"kind": "map_proxy", "proxy": "spell_level"}],
+    "ent_passive_2": [{"kind": "aura", "tags": ["ent_aura"]}],
+    "esquire_passive_2": [{"kind": "aura", "tags": ["esquire_aura"]}, {"kind": "damage_stat", "stats": ["inDmgMods"]}],
+    "fairy_dragon_passive_2": [{"kind": "aura", "tags": ["fairy_dragon_aura"]}],
+    "frostworm_rider_passive_1": [{"kind": "map_proxy", "proxy": "presence"}],
+    "frostworm_rider_passive_3": [{"kind": "attack_mech", "mechs": ["damage"]}],
+    "godslayer_passive_1": [{"kind": "damage_stat", "stats": ["outDamageIfLevelAbove"]}],
+    "h3_cove_passive_swashbuckler_gold": [{"kind": "map_proxy", "proxy": "presence"}],
+    "h3_leprechaun_passive_luck_aura": [{"kind": "aura", "tags": ["h3_leprechaun_aura"]}, {"kind": "luck_roll", "stats": ["luck"]}],
+    "h3_mage_ability_3": [{"kind": "side_modifier", "tags": ["homm3_tower_magic_channeler"]}],
+    "hive_queen_passive_2": [{"kind": "side_modifier", "tags": ["hive_queen_globalbuff"]}],
+    "hydra_passive_4": [{"kind": "passive_action", "links": [{"unit": "hydra", "passive": 0, "action": 0, "trigger": "unit_took_damage"}, {"unit": "hydra_upg", "passive": 0, "action": 0, "trigger": "unit_took_damage"}, {"unit": "hydra_upg_alt", "passive": 0, "action": 0, "trigger": "unit_took_damage"}]}],
+    "lich_passive_2": [{"kind": "map_proxy", "proxy": "xp"}],
+    "olgoi_passive_2": [{"kind": "aura", "tags": ["olgoi_aura"]}, {"kind": "luck_roll", "stats": ["luck"]}],
+    "peasant_passive_1": [{"kind": "map_proxy", "proxy": "presence"}],
+    "phoenix_passive_2": [{"kind": "passive_action", "links": [{"unit": "h3_firebird_upg", "passive": 0, "action": 0, "trigger": "unit_died"}, {"unit": "h3_firebird_upg_alt", "passive": 0, "action": 0, "trigger": "unit_died"}, {"unit": "phoenix_upg", "passive": 1, "action": 0, "trigger": "unit_died"}]}],
+    "qilin_passive_3": [{"kind": "aura", "tags": ["qilin_aura"]}],
+    "succubus_passive_1": [{"kind": "side_modifier", "tags": ["succubus_manacost_debuff"]}],
+    "sunlight_cavalry_passive_1": [{"kind": "aura", "tags": ["sunlight_cavalry_aura"]}, {"kind": "morale_roll", "stats": ["moral"]}],
+    "wasp_passive_2": [{"kind": "attack_mech", "mechs": ["kill_stacks"]}]
+  },
+  "observeOverridesNote": "key -> observe specs replacing the derivation (tools/tower_artificing/observe_specs.py) where the native mechanic is not a matching passive action: auras and global passives (aura tags), hero side modifiers and unit-set hero bonuses, attack mechs, map cards (map_proxy), partial native actions."
+}

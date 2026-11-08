@@ -1,0 +1,273 @@
+{
+ "unit": "h3_medusa_queen",
+ "strideExempt": "legless body: serpent tail, no legs; the rig has no leg chain",
+ "joints": {
+  "Hips": [
+   -0.1,
+   -0.29,
+   0.99
+  ],
+  "Spine": [
+   -0.1,
+   -0.278,
+   1.058
+  ],
+  "Spine1": [
+   -0.101,
+   -0.268,
+   1.129
+  ],
+  "Spine2": [
+   -0.103,
+   -0.257,
+   1.209
+  ],
+  "Neck": [
+   -0.105,
+   -0.25,
+   1.28
+  ],
+  "Head": [
+   -0.1,
+   -0.25,
+   1.38
+  ],
+  "HeadTop_End": [
+   -0.08,
+   -0.3,
+   1.65
+  ],
+  "LeftShoulder": [
+   -0.02,
+   -0.25,
+   1.27
+  ],
+  "LeftArm": [
+   0.08,
+   -0.24,
+   1.28
+  ],
+  "LeftForeArm": [
+   0.13,
+   -0.14,
+   1.06
+  ],
+  "LeftHand": [
+   0.14,
+   -0.42,
+   0.99
+  ],
+  "LeftHand_End": [
+   0.13,
+   -0.52,
+   0.99
+  ],
+  "RightShoulder": [
+   -0.18,
+   -0.25,
+   1.27
+  ],
+  "RightArm": [
+   -0.27,
+   -0.24,
+   1.26
+  ],
+  "RightForeArm": [
+   -0.33,
+   -0.22,
+   1.03
+  ],
+  "RightHand": [
+   -0.22,
+   -0.47,
+   0.915
+  ],
+  "RightHand_End": [
+   -0.16,
+   -0.54,
+   0.885
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "dungeon_fixweights",
+  "dungeon_yawclamp",
+  "dungeon_slump",
+  "floater_fix"
+ ],
+ "props": [
+  {
+   "name": "bow",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      -0.03,
+      -0.49,
+      0.915
+     ],
+     [
+      0.0,
+      -0.49,
+      0.92
+     ]
+    ],
+    [
+     [
+      0.0,
+      -0.49,
+      0.92
+     ],
+     [
+      0.13,
+      -0.47,
+      0.99
+     ]
+    ],
+    [
+     [
+      0.13,
+      -0.47,
+      0.99
+     ],
+     [
+      0.27,
+      -0.45,
+      1.12
+     ]
+    ],
+    [
+     [
+      0.27,
+      -0.45,
+      1.12
+     ],
+     [
+      0.34,
+      -0.38,
+      1.25
+     ]
+    ],
+    [
+     [
+      0.34,
+      -0.38,
+      1.25
+     ],
+     [
+      0.5,
+      -0.4,
+      1.45
+     ]
+    ]
+   ],
+   "radius": 0.05,
+   "exclude": [
+    {
+     "sphere": [
+      [
+       -0.17,
+       -0.5,
+       0.9
+      ],
+      0.08
+     ]
+    }
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "roll": 20
+  },
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "tail": {
+  "segments": 12,
+  "amplitude": 0.2,
+  "wavelength": 0.75,
+  "handsAboveZ": 0.85,
+  "handsRadius": 0.3,
+  "excludeNearHands": 0.05,
+  "behind": [
+   0.0,
+   1.0,
+   0.0
+  ],
+  "behindReason": "Model-space trail axis: the body faces -Y (capture forward ~ -Y; the frozen idle faces glTF +Z under the facing contract), so the Move tail trails +Y, straight opposite travel. The earlier [-0.893, 0.416, 0] was -right of the sprite camera (screen-left in the DEF 2D view), which in 3D put the Move tail ~65 deg off the travel axis (same defect as the nagas, 0699b5d146). The look stamp's frontResolved +y is lighting.front 'auto' reading the Head-Hips lean, not the facing."
+ },
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "slump": {
+  "clip": "Death",
+  "frames": 2,
+  "angle": 65,
+  "dir": [
+   0.4,
+   -0.9,
+   0.0
+  ]
+ },
+ "yawClamp": 30,
+ "floaterFix": {
+  "k": 8,
+  "maxVerts": 200,
+  "stage": "before_keys",
+  "pieces": [
+   {
+    "point": [
+     -0.11332,
+     -0.49923,
+     0.93183
+    ],
+    "from": "RightHand",
+    "bone": "RightHand",
+    "note": "2026-10-11 lane B: the 46-vert cut island by the right hand split between RightHand and Hips weights (opens 6.1 cm in Idle f1), bound to RightHand as on h3_medusa"
+   }
+  ]
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: Death - the DEF medusa collapses forward onto her coils into a low heap; the capture arched sideways. The coil column folds onto a spiral pile and the torso falls forward (keyTranslations Hips + keyRotations Tail/Spine, f6-f7); stretchRelax evens the coil crease. The DEF's raised arms (f3-f6) are not re-authored: the forearms rest on the hips at bind and raising the upper arms tears the fused waist skin (+177 edges past 2x); needs an arm/waist separation first",
+  "ops": [
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_medusa_queen_death_reauthor_tr.json",
+    "sha256": "beeab49d2809decf37bab0fd9bd7396e27fbfb6a29021876419f64d9226b2046"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_medusa_queen_death_reauthor_rot.json",
+    "sha256": "b5f6f215206738d9d41879657cf5af180ffd58abd3afcb5fc2b8dd446cc4dbd8"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_medusa_queen_death_reauthor_rot.json",
+    "sha256": "b5f6f215206738d9d41879657cf5af180ffd58abd3afcb5fc2b8dd446cc4dbd8"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "coil fold crease"
+   }
+  ]
+ }
+}

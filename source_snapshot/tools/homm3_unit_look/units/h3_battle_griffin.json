@@ -1,0 +1,154 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_battle_griffin",
+ "status": "look",
+ "notes": "castle faction rollout",
+ "lighting": {
+  "mode": "v6m",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [],
+ "vfx": {
+  "layers": [
+   {
+    "id": "hit_feathers",
+    "type": "defFlipbook",
+    "provenance": "castle rollout: DEF g03 frames 1-6 smoke",
+    "clips": {
+     "Unit_Hitted": {
+      "defGroup": 3,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "smoke"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 5
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Hips",
+     "defOrigin": {
+      "Unit_Hitted": [
+       [
+        197,
+        217
+       ],
+       [
+        190,
+        221
+       ],
+       [
+        178,
+        210
+       ],
+       [
+        188,
+        215
+       ],
+       [
+        202,
+        218
+       ],
+       [
+        211,
+        218
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "Loose feathers; defOrigin = DEF body centroid per frame pinned to the anchor bone, so the feathers keep their DEF offset from the body."
+   },
+   {
+    "id": "death_feathers",
+    "type": "defFlipbook",
+    "provenance": "castle rollout: DEF g05 frames 1-8 smoke",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "defEffects",
+     "classes": [
+      "smoke"
+     ],
+     "includeDetached": true,
+     "minComponentPx": 5
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Hips",
+     "defOrigin": {
+      "Unit_Death": [
+       [
+        190,
+        208
+       ],
+       [
+        184,
+        198
+       ],
+       [
+        193,
+        214
+       ],
+       [
+        215,
+        215
+       ],
+       [
+        222,
+        213
+       ],
+       [
+        214,
+        220
+       ],
+       [
+        209,
+        235
+       ],
+       [
+        216,
+        242
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "Loose feathers; defOrigin = DEF body centroid per frame."
+   }
+  ]
+ }
+}

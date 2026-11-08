@@ -1,0 +1,175 @@
+{
+ "unit": "h3_genie_vizier",
+ "joints": {
+  "Hips": [
+   -0.08,
+   0.02,
+   0.92
+  ],
+  "Spine": [
+   -0.08,
+   0.02,
+   1.0
+  ],
+  "Spine1": [
+   -0.09,
+   0.02,
+   1.1
+  ],
+  "Spine2": [
+   -0.1,
+   0.02,
+   1.2
+  ],
+  "Neck": [
+   -0.1,
+   0.0,
+   1.32
+  ],
+  "Head": [
+   -0.1,
+   -0.02,
+   1.42
+  ],
+  "HeadTop_End": [
+   -0.1,
+   -0.02,
+   1.66
+  ],
+  "RightShoulder": [
+   -0.15,
+   0.02,
+   1.28
+  ],
+  "RightArm": [
+   -0.3,
+   0.02,
+   1.28
+  ],
+  "RightForeArm": [
+   -0.37,
+   0.0,
+   1.1
+  ],
+  "RightHand": [
+   -0.3,
+   -0.12,
+   1.0
+  ],
+  "RightHand_End": [
+   -0.27,
+   -0.18,
+   0.98
+  ],
+  "LeftShoulder": [
+   -0.05,
+   0.02,
+   1.28
+  ],
+  "LeftArm": [
+   0.1,
+   0.02,
+   1.28
+  ],
+  "LeftForeArm": [
+   0.2,
+   0.02,
+   1.12
+  ],
+  "LeftHand": [
+   0.16,
+   -0.14,
+   1.05
+  ],
+  "LeftHand_End": [
+   0.14,
+   -0.2,
+   1.03
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "props": [
+  {
+   "name": "blade",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.2,
+      -0.16,
+      1.1
+     ],
+     [
+      0.3,
+      -0.2,
+      1.22
+     ]
+    ],
+    [
+     [
+      0.3,
+      -0.2,
+      1.22
+     ],
+     [
+      0.38,
+      -0.26,
+      1.4
+     ]
+    ],
+    [
+     [
+      0.38,
+      -0.26,
+      1.4
+     ],
+     [
+      0.42,
+      -0.28,
+      1.6
+     ]
+    ]
+   ],
+   "radius": 0.05
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "shrinkOut": {
+  "start": 3
+ },
+ "moveLowPass": {
+  "highHarmonicKeep": 0.1,
+  "reason": "5-frame DEF Move (0.417 s loop, 2.4 Hz fundamental) puts the capture's 2nd harmonic at 4.8 Hz, above the 4 Hz jitter cutoff: p90 0.58 (worst Head). Fleet sweep (869c1ce728): k 0.6 -> 0.46, 0.4 -> 0.40, 0.25 -> 0.37, 0.1 -> 0.3497; the largest k that passes. Thin margin, flagged in the tower pass table."
+ },
+ "glbPatch": {
+  "reason": "authenticity lane-A 2026-10-10: DEF g12 scimitar slash: the capture raised the blade behind the head (f1-f3, kept) but swung it back up and behind at f5-f6; AttackFront now cuts forward and down at f5 (LeftHand aimed by the blade's local axis, forearm extended) and follows through down-front at f6. Move: the capture's Neck/Head fit swung +-60-80 deg in opposite directions on alternate keys of the 5-frame loop (head flung round, jitter p90 0.356 over the 0.35 cap on the refreshed build); their local rotations are low-passed over the closed loop (DC + 1st harmonic kept, loopsmooth.py) so the head rides the body's whirl. keyRotations half offset, applied twice.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_genie_vizier_slash_rot.json",
+    "sha256": "bf9e187ae1b90b73ccebaaea661c3efe8fce4ece03908aa81c5d6c6da8fdf370",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_genie_vizier_slash_rot.json",
+    "sha256": "bf9e187ae1b90b73ccebaaea661c3efe8fce4ece03908aa81c5d6c6da8fdf370",
+    "regrid": true
+   }
+  ]
+ }
+}

@@ -1,0 +1,224 @@
+{
+  "schema": "homm3.olden_campaign_continuity_carry_policy.v1",
+  "title": "Elixir of Life continuity carry policy",
+  "proofBoundary": "source/static + generated-artifact; Core.zip install is opt-in via tools/install_roe_castle_continuity_weave.py --hub gelu; runtime transfer writeback unvalidated",
+  "planDoc": "docs/plans/2026-07-10-homm3-campaign-continuity-viability.md",
+  "hostShell": "native_storyhub",
+  "campaign": {
+    "hubSid": "homm3_19_sod_rampart_gelu",
+    "campaignTitle": "Elixir of Life",
+    "campaignEntry": "Gelu.h3c",
+    "batchManifest": "scenarios/ab_sod_campaigns/batch_manifest.json",
+    "missionConfigPrefix": "homm3_sod_rampart",
+    "defaultSpawn": {
+      "factionSid": "homm3_rampart",
+      "heroSid": "homm3_rampart_hero_17"
+    },
+    "hubSidNote": "Spawn heroes are H3M-canon (map human hero / mainCustomHeroId / heroesNames). Narrative campaign titles are not spawn sources. Later protagonists unlock via StoryHub UnlockHero (delayed isAvailableAtStart).",
+    "regionPixels": {
+      "graduation_exercise": [
+        80.0,
+        220.0
+      ],
+      "cutthroats": [
+        320.0,
+        220.0
+      ],
+      "valley_of_the_dragon_lords": [
+        560.0,
+        220.0
+      ],
+      "a_thief_in_the_night": [
+        800.0,
+        220.0
+      ]
+    },
+    "missionSpawns": {
+      "graduation_exercise": {
+        "heroSid": "homm3_rampart_hero_17",
+        "factionSid": "homm3_rampart"
+      },
+      "cutthroats": {
+        "heroSid": "homm3_rampart_hero_17",
+        "factionSid": "homm3_rampart"
+      },
+      "valley_of_the_dragon_lords": {
+        "heroSid": "homm3_rampart_hero_17",
+        "factionSid": "homm3_rampart"
+      },
+      "a_thief_in_the_night": {
+        "heroSid": "homm3_rampart_hero_17",
+        "factionSid": "homm3_rampart"
+      }
+    }
+  },
+  "storyHubMapSidOverrides": {
+    "graduation_exercise": "h3_rampart_graduation_exercise_raw_translation",
+    "cutthroats": "h3_rampart_cutthroats_raw_translation",
+    "valley_of_the_dragon_lords": "h3_rampart_valley_of_the_dragon_lords_raw_translation",
+    "a_thief_in_the_night": "h3_rampart_a_thief_in_the_night_raw_translation",
+    "choiceReason": "Elixir of Life missions use raw_translation (full core overlay) with Story_maps-only install."
+  },
+  "nativeTransfer": {
+    "storyHubField": "transferHeroProgressFromSession",
+    "campaignInfoField": "transferHeroProgressFromSession_",
+    "requiredValue": true,
+    "storyHubSaveField": "heroesSaves",
+    "heroProgressFields": [
+      "level",
+      "experience",
+      "skills",
+      "magics",
+      "slots",
+      "inventory",
+      "statsByLevel",
+      "additionalStats",
+      "perks"
+    ],
+    "evidence": [
+      "Hex.StoryHub.DB.Config.StoryHub.transferHeroProgressFromSession",
+      "Hex.Session.CampaignInfo.transferHeroProgressFromSession_",
+      "Hex.StoryHub.Data.StoryHubSave.heroesSaves",
+      "Hex.StoryHub.Data.Hero level/experience/skills/magics/slots/inventory"
+    ]
+  },
+  "minimumFaithfulSubset": {
+    "dimensions": [
+      "experience",
+      "primarySkills",
+      "secondarySkills",
+      "spells",
+      "artifacts"
+    ],
+    "status": "required_for_v1",
+    "proofLabel": "source/static-inferred from StoryHub.Data.Hero shape + VCMI heroKeeps"
+  },
+  "deferredExplicitLoss": {
+    "dimensions": [
+      "keepCreatures"
+    ],
+    "status": "deferred_not_silently_supported",
+    "reason": "Olden StoryHub hero save sheet does not prove army/creature carry; army carry remains a separate decision.",
+    "proofLabel": "not-traceable-yet"
+  },
+  "handoffs": [
+    {
+      "fromMissionId": "graduation_exercise",
+      "toMissionId": "cutthroats",
+      "sourceBlockIndex": 1,
+      "nextBlockIndex": 2,
+      "levelCap": 10,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=10 for graduation_exercise (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_rampart_graduation_exercise_raw_translation",
+        "to": "h3_rampart_cutthroats_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "cutthroats",
+      "toMissionId": "valley_of_the_dragon_lords",
+      "sourceBlockIndex": 2,
+      "nextBlockIndex": 3,
+      "levelCap": 15,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=15 for cutthroats (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_rampart_cutthroats_raw_translation",
+        "to": "h3_rampart_valley_of_the_dragon_lords_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    },
+    {
+      "fromMissionId": "valley_of_the_dragon_lords",
+      "toMissionId": "a_thief_in_the_night",
+      "sourceBlockIndex": 3,
+      "nextBlockIndex": 4,
+      "levelCap": 20,
+      "strongestHeroesCarryCount": 8,
+      "sourceTextProven": "H3M levelLimit=20 for valley_of_the_dragon_lords (Complete LOD campaign map header).",
+      "mapSids": {
+        "from": "h3_rampart_valley_of_the_dragon_lords_raw_translation",
+        "to": "h3_rampart_a_thief_in_the_night_raw_translation"
+      },
+      "strongestNSelection": {
+        "hoMM3Behavior": "carry_top_n_heroes_by_strength",
+        "oldenNativeStatus": "not_proven",
+        "v1Policy": "require_transferHeroProgressFromSession_true_and_document_strongest_n_gap",
+        "blocker": "native_storyhub_may_transfer_all_available_heroes_not_top_n; needs runtime proof or explicit bridge"
+      }
+    }
+  ],
+  "missionChain": [
+    "graduation_exercise",
+    "cutthroats",
+    "valley_of_the_dragon_lords",
+    "a_thief_in_the_night"
+  ],
+  "missionTitles": {
+    "graduation_exercise": "Graduation Exercise",
+    "cutthroats": "Cutthroats",
+    "valley_of_the_dragon_lords": "Valley of the Dragon Lords",
+    "a_thief_in_the_night": "A Thief in the Night"
+  },
+  "missionDescriptions": {
+    "graduation_exercise": "Defeat all Gelu's enemies win the scenario. However, if Gelu is defeated in combat, the scenario is lost. Your heroes are limited to level 10, but Gelu and two other her...",
+    "cutthroats": "Stop a group of rogue AvLee lords from selling the Ring of Vitality to a Death Knight lord in Deyja to win the scenario. However, if Gelu is defeated in combat, the scen...",
+    "valley_of_the_dragon_lords": "This valley is land of the Dragon Lords. They must be defeated and the Ring of Life located to win the scenario. However, if Gelu is defeated in combat, the scenario is...",
+    "a_thief_in_the_night": "Steal the Vial of Lifeblood from the Vampire Lord Vokial to create the Elixir of Life and win the campaign. However, if Gelu is defeated in combat, the scenario is lost...."
+  },
+  "nonGoalsForThisMilestone": [
+    "Plugin playable-shell CampaignInfo population",
+    "Army/creature carry",
+    "Strongest-N selection bridge",
+    "Dedicated AB/SoD MapImage bake",
+    "Town growth / negative resource timed-event fidelity"
+  ],
+  "videoContract": {
+    "status": "mission_clips_wired_hub_still_only",
+    "hubFirstShowPlayVideo": false,
+    "hubFirstShowClipKey": null,
+    "hubFirstShowOmitReason": "RoE parity: hub hover strip is selection-still only; mission pins PlayVideo when composed MP4 meets contract.",
+    "requireComposedAudio": true,
+    "subtitleMode": "softsub_sidecar_and_lockit",
+    "minAcceptWidth": 1280,
+    "minAcceptHeight": 720,
+    "targetCanvas": "2560x1080",
+    "requiredMp4RelativeToStreamingAssets": null,
+    "selectionIcon": {
+      "storyHubField": "mainIconSid",
+      "iconSid": "main_icon",
+      "coreMember": "campaigns/homm3_19_sod_rampart_gelu/icons/main_icon.png",
+      "nativeSize": [
+        378,
+        693
+      ],
+      "stillArtifact": "artifacts/campaign_port_poc/ab_sod_campaigns/storyhub_visual/gelu_selection_still.png",
+      "composePolicy": "letterbox_trim_then_vertical_focus",
+      "focusX": 0.48,
+      "focusY": 0.4,
+      "cropReason": "Central armored heroine raising the blade with Gelu at left",
+      "cropsCatalog": "scenarios/ab_sod_campaigns/selection_icon_crops.v1.json"
+    },
+    "clipsInfoMember": "DB/clips_info.json",
+    "missionClipKeys": {
+      "graduation_exercise": "H3x2_ELa",
+      "cutthroats": "H3x2_ELb",
+      "valley_of_the_dragon_lords": "H3x2_ELc",
+      "a_thief_in_the_night": "H3x2_ELd"
+    },
+    "actionOrder": "PlayVideo (when composed MP4 ready) then OpenMissionsPrologue on each mission pin; hub firstShowActions stay empty",
+    "failClosed": "gelu hub firstShowActions must stay empty (hubFirstShowPlayVideo=false). Mission PlayVideo requires StreamingAssets/video/{{clip}}.mp4 + softsub sidecar meeting compose contract; otherwise omit PlayVideo and keep prologue."
+  }
+}

@@ -1,0 +1,201 @@
+{
+ "unit": "h3_wraith",
+ "joints": {
+  "Hips": [
+   0.024,
+   0.059,
+   1.043
+  ],
+  "Spine": [
+   0.024,
+   0.065,
+   1.108
+  ],
+  "Spine1": [
+   0.024,
+   0.07,
+   1.173
+  ],
+  "Spine2": [
+   0.024,
+   0.076,
+   1.245
+  ],
+  "Neck": [
+   0.024,
+   0.08,
+   1.302
+  ],
+  "Head": [
+   0.03,
+   0.06,
+   1.4
+  ],
+  "HeadTop_End": [
+   0.03,
+   0.05,
+   1.68
+  ],
+  "LeftShoulder": [
+   0.087,
+   0.066,
+   1.365
+  ],
+  "LeftArm": [
+   0.192,
+   0.066,
+   1.365
+  ],
+  "LeftForeArm": [
+   0.248,
+   0.066,
+   1.155
+  ],
+  "LeftHand": [
+   0.143,
+   -0.15,
+   1.183
+  ],
+  "LeftHand_End": [
+   0.105,
+   -0.231,
+   1.194
+  ],
+  "RightShoulder": [
+   -0.038,
+   0.066,
+   1.365
+  ],
+  "RightArm": [
+   -0.143,
+   0.073,
+   1.365
+  ],
+  "RightForeArm": [
+   -0.213,
+   0.073,
+   1.155
+  ],
+  "RightHand": [
+   -0.171,
+   -0.136,
+   1.134
+  ],
+  "RightHand_End": [
+   -0.154,
+   -0.224,
+   1.126
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 60,
+   "dy": 60,
+   "roll": 90
+  }
+ },
+ "shatter": {
+  "start": 6,
+  "chunks": 40,
+  "solid": true
+ },
+ "bonePile": {
+  "spread": 0.7,
+  "heapHeight": 0.18,
+  "tumble": 70
+ },
+ "extensions": [
+  "castle_armsep",
+  "necropolis_bonepile"
+ ],
+ "armSep": [
+  {
+   "armBones": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "shell": {
+    "share": 0.4,
+    "minVerts": 400
+   },
+   "low": 0.4,
+   "top": 1.32,
+   "ramp": 0.08,
+   "side": "left",
+   "note": "wraith sleeves: bone heat fused the hanging sleeve to the robe (Hips/Spine weights), so the overhead Death raise tore it; shell-mode cut frees the sleeve (2026-10-10)"
+  },
+  {
+   "armBones": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "shell": {
+    "share": 0.4,
+    "minVerts": 400
+   },
+   "low": 0.4,
+   "top": 1.32,
+   "ramp": 0.08,
+   "side": "right",
+   "note": "wraith sleeves: bone heat fused the hanging sleeve to the robe (Hips/Spine weights), so the overhead Death raise tore it; shell-mode cut frees the sleeve (2026-10-10)"
+  }
+ ],
+ "glbPatch": {
+  "reason": "authenticity 2026-10-11: Defence guard + Death full overhead claw raise on the sleeve-shell-cut base; robe hem below the sleeves follows the hips (DEF g04/g05)",
+  "ops": [
+   {
+    "op": "moveWeights",
+    "from": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand",
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "to": "Hips",
+    "space": "blender",
+    "region": [
+     {
+      "axis": "z",
+      "below": 0.5,
+      "ramp": 0.1
+     }
+    ],
+    "onlyWith": {
+     "bones": [
+      "Hips",
+      "Spine"
+     ],
+     "atLeast": 0.35
+    },
+    "note": "robe hem below the sleeves carried 20-40% arm weight from bone heat; the overhead Death raise dragged it up (tears); the hem follows the hips"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_wraith_pose_rot.json",
+    "sha256": "98e9eb4795c0e77b4c2f64dd81bce22d6801c8f1ecca0f8c445eaa86c13c8fe0",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_wraith_pose_rot.json",
+    "sha256": "98e9eb4795c0e77b4c2f64dd81bce22d6801c8f1ecca0f8c445eaa86c13c8fe0",
+    "regrid": true
+   }
+  ]
+ }
+}

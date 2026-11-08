@@ -1,0 +1,73 @@
+{
+ "schema": "town_full3d_recipe.v2",
+ "faction": "factory",
+ "seed": "gc_v1",
+ "candidate": "zs_v1",
+ "note": "factory zs_v1 (2026-10-01, town agent): castle_zs_v6's recipe v2 on seed gc_v1 = the installed pb_v1 with its LDI unlayered (town_full3d_ldi.py unlayer on pb_v1's terrain_streak.npz), the stale mirror closure Mesh_Back_Terrain_Mirror removed (it hangs off the old LDI cuts; restShownPx 0) and every Meshy prop dropped (all 10: they were placed on the smear curtains this LDI cuts away, and after it each floats 2-27 m; town_t2_props.py drop, recorded in work/props/placement.json), and four near-field pebbles removed (Mesh_Near_pebbles, 36 verts each, 0.28 / 0.12 / 0.12 / 0.11 m over the ground; the build's anchoring is strict above 0.05 m and neither the piece slide nor the ground fill keeps the rest frame: work/dropped_pieces.json). So the LDI runs here (fromPreLdi false). certificate.extraPoses: every pose where the first final (loop 36, 2026-10-02) found visible-behind (max 32 px), unseen-face (19 px, loop_264) or hidden ground-hole growth (max 15 px), so the repair rounds certify them.",
+ "ldi": {
+  "pieces": [
+   "Mesh_Terrain"
+  ],
+  "cut": "zone",
+  "backRule": "vlb",
+  "vlbK": 2.0,
+  "keepRounds": 0,
+  "reachLoop": 12,
+  "fromPreLdi": false
+ },
+ "backstop": {
+  "K": 2.0,
+  "stepPx": 4,
+  "groundSrcM": 1.0
+ },
+ "repair": {
+  "rules": [
+   "drop",
+   "card",
+   "flap",
+   "planar"
+  ],
+  "rounds": 8
+ },
+ "certificate": {
+  "loop": 12,
+  "extraPoses": [
+   "loop_120",
+   "loop_168",
+   "transition_010",
+   "transition_012",
+   "transition_018",
+   "transition_020",
+   "transition_059",
+   "transition_061",
+   "loop_228",
+   "loop_240",
+   "loop_264",
+   "loop_276",
+   "loop_348",
+   "loop_372",
+   "transition_004",
+   "transition_005",
+   "transition_024",
+   "transition_028",
+   "transition_041",
+   "transition_042",
+   "transition_054",
+   "transition_055",
+   "transition_072",
+   "transition_076",
+   "transition_090",
+   "transition_091"
+  ]
+ },
+ "restPaint": {
+  "knownGaps": [
+   {
+    "state": "min_tbfacas2",
+    "layer": "tbfacas2",
+    "maxPx": 590,
+    "why": "Meshy T2 cas2 spire over painted sky; same gap installed in pb_v1"
+   }
+  ]
+ }
+}

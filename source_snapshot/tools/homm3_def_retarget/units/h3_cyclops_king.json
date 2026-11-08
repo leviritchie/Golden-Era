@@ -1,0 +1,353 @@
+{
+ "unit": "h3_cyclops_king",
+ "joints": {
+  "Hips": [
+   -0.024,
+   0.213,
+   0.895
+  ],
+  "Spine": [
+   -0.019,
+   0.217,
+   1.002
+  ],
+  "Spine1": [
+   -0.014,
+   0.22,
+   1.108
+  ],
+  "Spine2": [
+   -0.008,
+   0.224,
+   1.228
+  ],
+  "Neck": [
+   -0.003,
+   0.227,
+   1.322
+  ],
+  "Head": [
+   -0.003,
+   0.227,
+   1.422
+  ],
+  "HeadTop_End": [
+   -0.003,
+   0.227,
+   1.622
+  ],
+  "LeftShoulder": [
+   0.017,
+   0.157,
+   1.405
+  ],
+  "LeftArm": [
+   0.122,
+   0.227,
+   1.35
+  ],
+  "LeftForeArm": [
+   0.185,
+   0.283,
+   1.105
+  ],
+  "LeftHand": [
+   0.213,
+   0.108,
+   1.063
+  ],
+  "LeftHand_End": [
+   0.227,
+   0.022,
+   1.042
+  ],
+  "RightShoulder": [
+   -0.136,
+   0.157,
+   1.405
+  ],
+  "RightArm": [
+   -0.227,
+   0.22,
+   1.336
+  ],
+  "RightForeArm": [
+   -0.283,
+   0.129,
+   1.105
+  ],
+  "RightHand": [
+   -0.234,
+   -0.045,
+   1.091
+  ],
+  "RightHand_End": [
+   -0.21,
+   -0.132,
+   1.084
+  ],
+  "LeftUpLeg": [
+   0.087,
+   0.234,
+   0.818
+  ],
+  "LeftLeg": [
+   0.227,
+   0.094,
+   0.518
+  ],
+  "LeftFoot": [
+   0.262,
+   0.164,
+   0.063
+  ],
+  "LeftToeBase": [
+   0.325,
+   0.094,
+   -0.007
+  ],
+  "LeftToe_End": [
+   0.381,
+   0.066,
+   -0.007
+  ],
+  "RightUpLeg": [
+   -0.143,
+   0.213,
+   0.811
+  ],
+  "RightLeg": [
+   -0.199,
+   0.045,
+   0.483
+  ],
+  "RightFoot": [
+   -0.318,
+   0.269,
+   0.077
+  ],
+  "RightToeBase": [
+   -0.325,
+   0.192,
+   -0.007
+  ],
+  "RightToe_End": [
+   -0.325,
+   0.136,
+   -0.007
+  ]
+ },
+ "extensions": [
+  "stronghold_propbone",
+  "stronghold_rip"
+ ],
+ "propBones": [
+  {
+   "name": "Rock",
+   "parent": "RightHand",
+   "head": [
+    -0.234,
+    -0.045,
+    1.091
+   ],
+   "tail": [
+    0.02,
+    -0.14,
+    1.08
+   ],
+   "regions": [
+    {
+     "sphere": [
+      [
+       0.02,
+       -0.14,
+       1.08
+      ],
+      0.29
+     ],
+     "color": {
+      "expr": "mx-mn",
+      "max": 0.12
+     }
+    },
+    {
+     "sphere": [
+      [
+       0.0,
+       -0.17,
+       1.06
+      ],
+      0.27
+     ],
+     "exclude": [
+      {
+       "box": [
+        [
+         -1,
+         -0.02,
+         0
+        ],
+        [
+         1,
+         1,
+         2
+        ]
+       ]
+      },
+      {
+       "box": [
+        [
+         -1,
+         -1,
+         0
+        ],
+        [
+         -0.15,
+         1,
+         2
+        ]
+       ]
+      },
+      {
+       "box": [
+        [
+         0.15,
+         -1,
+         0
+        ],
+        [
+         1,
+         1,
+         2
+        ]
+       ]
+      }
+     ]
+    }
+   ],
+   "hide": [
+    {
+     "clip": "ShootFront",
+     "from": 6,
+     "to": 13
+    }
+   ]
+  }
+ ],
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "Rock"
+  ]
+ },
+ "strips": [
+  {
+   "name": "belly",
+   "bones": [
+    "LeftHand",
+    "LeftForeArm",
+    "RightHand",
+    "RightForeArm"
+   ],
+   "box": [
+    [
+     -0.14,
+     0.0,
+     0.75
+    ],
+    [
+     0.14,
+     0.4,
+     1.25
+    ]
+   ]
+  }
+ ],
+ "rips": [
+  {
+   "name": "larm_torso",
+   "a": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "b": [
+    "Hips",
+    "Spine",
+    "Spine1",
+    "Spine2",
+    "LeftUpLeg",
+    "RightUpLeg"
+   ],
+   "box": [
+    [
+     0.0,
+     -0.02,
+     0.8
+    ],
+    [
+     1,
+     1,
+     1.3
+    ]
+   ]
+  },
+  {
+   "name": "rarm_torso",
+   "a": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "b": [
+    "Hips",
+    "Spine",
+    "Spine1",
+    "Spine2",
+    "LeftUpLeg",
+    "RightUpLeg"
+   ],
+   "box": [
+    [
+     -1,
+     -0.02,
+     0.8
+    ],
+    [
+     0.0,
+     1,
+     1.3
+    ]
+   ]
+  }
+ ],
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: Death collapses into a low heap over the boulder on the ground like the DEF (hips dropped with the feet planted, knees fold under from f2); the capture ended propped above the ground on its legs",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cyclops_king_death_crouch_weights.json",
+    "sha256": "4f6b7842598e7816ee087e640a54929d1e2e8441211638afcf70ab2b851312a0",
+    "note": "lane B 2026-10-11: hip/thigh crease weights re-solved (GPU) so the Death knee fold lands without new tears"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cyclops_king_death_kneel_heap_tr.json",
+    "regrid": true,
+    "sha256": "786a9a98fd6e3d119225cd6e27bd2169fde18bb720d50d1e2a3089ff7fb29828"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cyclops_king_death_kneel_heap_rot.json",
+    "regrid": true,
+    "sha256": "945f01fb44a4ba917c23e2cc48c0613f39d7b85510f85fb5bf2052d2a55d2cfe"
+   }
+  ]
+ }
+}

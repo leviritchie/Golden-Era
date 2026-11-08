@@ -1,0 +1,641 @@
+{
+ "unit": "h3_gargoyle",
+ "joints": {
+  "Hips": [
+   0,
+   0.02,
+   0.78
+  ],
+  "Spine": [
+   0,
+   0.03,
+   0.9
+  ],
+  "Spine1": [
+   0,
+   0.03,
+   1.02
+  ],
+  "Spine2": [
+   0,
+   0.03,
+   1.13
+  ],
+  "Neck": [
+   0,
+   0.0,
+   1.25
+  ],
+  "Head": [
+   0,
+   -0.08,
+   1.35
+  ],
+  "HeadTop_End": [
+   0,
+   -0.05,
+   1.62
+  ],
+  "RightShoulder": [
+   -0.08,
+   0.02,
+   1.2
+  ],
+  "RightArm": [
+   -0.2,
+   0.02,
+   1.2
+  ],
+  "RightForeArm": [
+   -0.26,
+   0.0,
+   1.0
+  ],
+  "RightHand": [
+   -0.27,
+   -0.2,
+   0.98
+  ],
+  "RightHand_End": [
+   -0.27,
+   -0.3,
+   0.95
+  ],
+  "LeftShoulder": [
+   0.08,
+   0.02,
+   1.2
+  ],
+  "LeftArm": [
+   0.2,
+   0.02,
+   1.2
+  ],
+  "LeftForeArm": [
+   0.26,
+   0.0,
+   1.0
+  ],
+  "LeftHand": [
+   0.27,
+   -0.2,
+   0.98
+  ],
+  "LeftHand_End": [
+   0.27,
+   -0.3,
+   0.95
+  ],
+  "RightUpLeg": [
+   -0.12,
+   0.02,
+   0.76
+  ],
+  "RightLeg": [
+   -0.17,
+   -0.12,
+   0.45
+  ],
+  "RightFoot": [
+   -0.2,
+   0.05,
+   0.15
+  ],
+  "RightToeBase": [
+   -0.22,
+   -0.08,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.24,
+   -0.2,
+   0.02
+  ],
+  "LeftUpLeg": [
+   0.12,
+   0.02,
+   0.76
+  ],
+  "LeftLeg": [
+   0.17,
+   -0.12,
+   0.45
+  ],
+  "LeftFoot": [
+   0.2,
+   0.05,
+   0.15
+  ],
+  "LeftToeBase": [
+   0.22,
+   -0.08,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.24,
+   -0.2,
+   0.02
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "wingMaxDeg": 0,
+ "wings": [
+  {
+   "bone": "RightWing",
+   "head": [
+    -0.2,
+    0.15,
+    1.25
+   ],
+   "tail": [
+    -0.42,
+    0.1,
+    1.55
+   ],
+   "sign": 1,
+   "region": {
+    "box": [
+     [
+      -0.6,
+      -0.3,
+      0.12
+     ],
+     [
+      -0.31,
+      0.45,
+      1.62
+     ]
+    ]
+   }
+  },
+  {
+   "bone": "LeftWing",
+   "head": [
+    0.2,
+    0.15,
+    1.25
+   ],
+   "tail": [
+    0.42,
+    0.1,
+    1.55
+   ],
+   "sign": -1,
+   "region": {
+    "box": [
+     [
+      0.31,
+      -0.3,
+      0.12
+     ],
+     [
+      0.6,
+      0.45,
+      1.62
+     ]
+    ]
+   }
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 40,
+   "dy": 60
+  }
+ },
+ "shatter": {
+  "start": 14,
+  "chunks": 45,
+  "burst": 0.35,
+  "up": 0.2,
+  "spin": 3,
+  "solid": true
+ },
+ "extensions": [
+  "wing_chain",
+  "conflux_rubble"
+ ],
+ "wingChain": {
+  "wings": [
+   {
+    "bone": "LeftWing",
+    "side": 1,
+    "fan": {
+     "wrist": [
+      0.46,
+      -0.02,
+      1.5
+     ],
+     "fingers": 3,
+     "anchorR": 0.2,
+     "anchorBlend": 0.2
+    }
+   },
+   {
+    "bone": "RightWing",
+    "side": -1,
+    "fan": {
+     "wrist": [
+      -0.45,
+      0.0,
+      1.5
+     ],
+     "fingers": 3,
+     "anchorR": 0.2,
+     "anchorBlend": 0.2
+    }
+   }
+  ],
+  "anim": {
+   "Idle": {
+    "open": 0,
+    "fold": 10
+   },
+   "MoveStart": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       0.6
+      ],
+      [
+       1,
+       1
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.66,
+       65
+      ],
+      [
+       1,
+       100
+      ]
+     ]
+    }
+   },
+   "Move": {
+    "open": 1,
+    "flap": {
+     "sin": 60,
+     "phase": -90,
+     "offset": 40
+    },
+    "fold": {
+     "sin": 50,
+     "phase": -90,
+     "half": "pos"
+    },
+    "droop": {
+     "sin": 30,
+     "phase": -90,
+     "half": "pos"
+    }
+   },
+   "MoveEnd": {
+    "open": {
+     "keys": [
+      [
+       0,
+       1
+      ],
+      [
+       0.5,
+       0.5
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       100
+      ],
+      [
+       0.5,
+       40
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Mouseover": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.5,
+       0.15
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Hitted": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       1
+      ],
+      [
+       0.5,
+       0.9
+      ],
+      [
+       0.83,
+       0.2
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       25
+      ],
+      [
+       0.6,
+       15
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Defence": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       0.7
+      ],
+      [
+       0.67,
+       0.7
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       35
+      ],
+      [
+       0.67,
+       35
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "AttackFront": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       0.8
+      ],
+      [
+       0.6,
+       1
+      ],
+      [
+       0.8,
+       0.7
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.33,
+       30
+      ],
+      [
+       0.6,
+       10
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "Death": {
+    "open": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.25,
+       0.9
+      ],
+      [
+       0.5,
+       1
+      ],
+      [
+       0.75,
+       0.3
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    "flap": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.25,
+       30
+      ],
+      [
+       0.6,
+       10
+      ],
+      [
+       1,
+       -15
+      ]
+     ]
+    },
+    "droop": {
+     "keys": [
+      [
+       0,
+       0
+      ],
+      [
+       0.6,
+       0
+      ],
+      [
+       1,
+       40
+      ]
+     ]
+    }
+   }
+  },
+  "fit": {
+   "params": [
+    "flap",
+    "open",
+    "fan",
+    "fold",
+    "droop",
+    "sweep"
+   ],
+   "penalty": 0.0008,
+   "smooth": 0.0008,
+   "offsets": [],
+   "clips": [
+    "Hitted",
+    "Defence",
+    "AttackFront",
+    "Death"
+   ]
+  },
+  "adoptWeights": "nearest"
+ },
+ "conflux": {
+  "rubbleSettle": {
+   "gather": 0.6,
+   "power": 0.8
+  }
+ },
+ "glbPatch": {
+  "reason": "lane A 2026-10-10 authenticity: the wings act like the DEF. AttackFront f0-f5 wings spread wide (Move's open fan, membrane facing the camera) and fold f6-f7, right claw winds up f1 and swipes forward f5-f6; Defence f2-f8 the wings wrap forward around the body as a shield; Move upstroke f0-f2 raises the wings up and back over the body; Mouseover f3-f6 wings lift behind the shoulders, head glances toward the enemy at f0/f8; Death f1-f3 recoils with the wings flung wide and low (Hitted f2 pose) before the petrify. Wing-root diffusion makes it fit the CS stretch gate (5469 -> 4617 edges, worst 18.41 -> 12.77). Split table applied twice (120 deg cap).",
+  "ops": [
+   {
+    "op": "diffuseWeights",
+    "bones": [
+     "Spine2",
+     "WingL_*"
+    ],
+    "alpha": 0.8,
+    "iterations": 50,
+    "region": [
+     {
+      "axis": "x",
+      "above": 0.12,
+      "ramp": 0.06
+     }
+    ],
+    "note": "wing membrane weights diffused with the Spine2 root (pure Spine2+wing groups, one side each): spreads the folded-drape membrane stretch over the wing so it can spread and rise"
+   },
+   {
+    "op": "diffuseWeights",
+    "bones": [
+     "Spine2",
+     "WingR_*"
+    ],
+    "alpha": 0.8,
+    "iterations": 50,
+    "region": [
+     {
+      "axis": "x",
+      "below": -0.12,
+      "ramp": 0.06
+     }
+    ],
+    "note": "wing membrane weights diffused with the Spine2 root (pure Spine2+wing groups, one side each): spreads the folded-drape membrane stretch over the wing so it can spread and rise"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gargoyle_wings_rot.json",
+    "sha256": "760eb87f0908e4c188fc3fe6b2ff36de32e838ad7ed37a91820eb90dc8d934b6",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gargoyle_wings_rot.json",
+    "sha256": "760eb87f0908e4c188fc3fe6b2ff36de32e838ad7ed37a91820eb90dc8d934b6",
+    "regrid": true
+   }
+  ]
+ }
+}

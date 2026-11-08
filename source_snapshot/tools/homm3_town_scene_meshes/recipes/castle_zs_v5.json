@@ -1,0 +1,40 @@
+{
+ "schema": "town_full3d_recipe.v1",
+ "faction": "castle",
+ "seed": "rx_ldi_zone_old_nfix3_cloth",
+ "candidate": "zs_v5",
+ "note": "zs_v5 (2026-10-01): zs_v4 (nfix3_cloth + the zero-streak recipe + repair rule flap) plus the four sweep samples the 43-pose certificate failed zs_v4 at in the full state (16-17 px each, all residual step faces in tbcmark, tbcshal3, tbcsdw_5_2) as extra repair poses. Repair stays on loop 12; the 43-pose run is the final gate.",
+ "ldi": {
+  "pieces": [
+   "Mesh_Terrain"
+  ],
+  "cut": "zone",
+  "backRule": "vlb",
+  "vlbK": 2.0,
+  "keepRounds": 0,
+  "reachLoop": 12,
+  "fromPreLdi": true
+ },
+ "backstop": {
+  "K": 2.0,
+  "stepPx": 4,
+  "groundSrcM": 1.0
+ },
+ "repair": {
+  "rules": [
+   "drop",
+   "card",
+   "flap"
+  ],
+  "rounds": 8
+ },
+ "certificate": {
+  "loop": 12,
+  "extraPoses": [
+   "loop_060",
+   "loop_096",
+   "loop_240",
+   "loop_336"
+  ]
+ }
+}

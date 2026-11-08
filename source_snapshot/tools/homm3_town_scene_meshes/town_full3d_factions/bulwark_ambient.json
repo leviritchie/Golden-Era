@@ -1,0 +1,950 @@
+{
+ "_comment": "Bulwark ambient life (town_full3d_ambient.py; px = rest-frame px, ambient_sheet.jpg). A northern town in deep snow under a green aurora, the wind off the eastern peaks blowing everything west: snow falling in three depth layers, aurora rays over the peaks, warm breath steaming in slow beats out of the cave dwellings and the mammoth tent, peat smoke from the real hearths (hut, tent smoke hole, tavern, hall, forge chimney), forge and pyre light pooled on the snow, cinders and ash off the great pyre, meltwater dripping off the warm eaves, powder sifting off the roofs, ice stars on the shards and the ice spires, rime crystals spiralling up the mage spire, arctic sea smoke off the open river, diamond dust in the moonlight, snow snaking over the open field, ravens round the castle and the church spire, spindrift off the castle tower. Kinds snowfall / aurora / ground_snake / diamond_dust / ice_star / rime_swirl / icicle_drip / hearth_smoke / breath_steam / hearth_pool / pyre_cinders / frost_smoke / roof_slough / ravens: bulwark_ambient_kinds.py; spindrift is shared.",
+ "effects": [
+  {
+   "id": "cstl_ravens",
+   "layers": [
+    "tbbucstl",
+    "tbbucas2",
+    "tbbucas3"
+   ],
+   "kind": "ravens",
+   "px": [
+    300,
+    200
+   ],
+   "radius": 110,
+   "count": 4,
+   "period": 11,
+   "span": 30,
+   "life": 9,
+   "out": 0.03,
+   "snap": 30
+  },
+  {
+   "id": "cstl_tower_spindrift",
+   "layers": [
+    "tbbucstl",
+    "tbbucas2",
+    "tbbucas3"
+   ],
+   "kind": "spindrift",
+   "px": [
+    215,
+    100
+   ],
+   "width": 36,
+   "reach": 110,
+   "dir": [
+    -1,
+    -0.12
+   ],
+   "rate": 2.5,
+   "snap": 30
+  },
+  {
+   "id": "grail_spire_stars",
+   "layers": [
+    "tbbuho01"
+   ],
+   "kind": "ice_star",
+   "px": [
+    605,
+    90
+   ],
+   "w": 90,
+   "h": 120,
+   "star": 24,
+   "rate": 1.6,
+   "colour": [
+    0.6,
+    1.0,
+    0.95
+   ],
+   "snap": 40,
+   "intensity": 1.0
+  },
+  {
+   "id": "icetower_stars",
+   "layers": [
+    "tbbudw_1",
+    "tbbuu101"
+   ],
+   "kind": "ice_star",
+   "px": [
+    612,
+    235
+   ],
+   "w": 70,
+   "h": 60,
+   "star": 20,
+   "rate": 1.2,
+   "snap": 30,
+   "intensity": 1.0
+  },
+  {
+   "id": "church_roof_slough",
+   "layers": [
+    "tbbudw_6",
+    "tbbuup_6"
+   ],
+   "kind": "roof_slough",
+   "px": [
+    862,
+    205
+   ],
+   "w": 30,
+   "fall": 40,
+   "rate": 2.4,
+   "puff": 28,
+   "snap": 24,
+   "alpha": 0.7
+  },
+  {
+   "id": "church_spire_ravens",
+   "layers": [
+    "tbbudw_6",
+    "tbbuup_6"
+   ],
+   "kind": "ravens",
+   "px": [
+    800,
+    120
+   ],
+   "radius": 55,
+   "count": 3,
+   "period": 8,
+   "span": 22,
+   "life": 8,
+   "out": 0.03,
+   "snap": 30
+  },
+  {
+   "id": "mage_rime_low",
+   "layers": [
+    "tbbum101",
+    "tbbum201"
+   ],
+   "kind": "rime_swirl",
+   "px": [
+    1088,
+    385
+   ],
+   "radius": 30,
+   "rise": 150,
+   "period": 4,
+   "count": 12,
+   "spark": 9,
+   "snap": 24
+  },
+  {
+   "id": "mage_rime_high",
+   "layers": [
+    "tbbum301",
+    "tbbum401"
+   ],
+   "kind": "rime_swirl",
+   "px": [
+    1088,
+    385
+   ],
+   "radius": 30,
+   "rise": 260,
+   "period": 4.5,
+   "life": 8,
+   "count": 16,
+   "spark": 9,
+   "snap": 24
+  },
+  {
+   "id": "hall_smoke",
+   "layers": [
+    "tbbuha01",
+    "tbbha201",
+    "tbbha301"
+   ],
+   "kind": "hearth_smoke",
+   "px": [
+    1300,
+    330
+   ],
+   "width": 13.5,
+   "rise": 90,
+   "lean": -10,
+   "period": 4.5,
+   "snap": 24,
+   "alpha": 0.65
+  },
+  {
+   "id": "hall_icicles",
+   "layers": [
+    "tbbuha01",
+    "tbbha201",
+    "tbbha301"
+   ],
+   "kind": "icicle_drip",
+   "px": [
+    1345,
+    393
+   ],
+   "w": 110,
+   "rate": 1.1,
+   "fall": 22,
+   "snap": 20,
+   "drop": 7
+  },
+  {
+   "id": "hall_roof_slough",
+   "layers": [
+    "tbbuha01",
+    "tbbha201",
+    "tbbha301"
+   ],
+   "kind": "roof_slough",
+   "px": [
+    1415,
+    345
+   ],
+   "w": 30,
+   "fall": 40,
+   "rate": 2.0,
+   "snap": 30,
+   "puff": 28,
+   "alpha": 0.7
+  },
+  {
+   "id": "lodge_icicles",
+   "layers": [
+    "tbbud201",
+    "tbbuu201"
+   ],
+   "kind": "icicle_drip",
+   "px": [
+    1228,
+    560
+   ],
+   "w": 45,
+   "rate": 0.8,
+   "fall": 24,
+   "snap": 20,
+   "drop": 7
+  },
+  {
+   "id": "lodge_roof_slough",
+   "layers": [
+    "tbbud201",
+    "tbbuu201"
+   ],
+   "kind": "roof_slough",
+   "px": [
+    1370,
+    572
+   ],
+   "w": 90,
+   "fall": 34,
+   "rate": 2.8,
+   "snap": 24,
+   "puff": 28,
+   "alpha": 0.7
+  },
+  {
+   "id": "hut_smoke",
+   "layers": [
+    "tbbud001",
+    "tbbuu001"
+   ],
+   "kind": "hearth_smoke",
+   "px": [
+    62,
+    272
+   ],
+   "width": 10.5,
+   "rise": 70,
+   "lean": -8,
+   "period": 4.0,
+   "snap": 24,
+   "alpha": 0.65
+  },
+  {
+   "id": "tent_smokehole",
+   "layers": [
+    "tbbud301",
+    "tbbuu301"
+   ],
+   "kind": "hearth_smoke",
+   "px": [
+    556,
+    326
+   ],
+   "width": 9.0,
+   "rise": 80,
+   "lean": -9,
+   "period": 4.2,
+   "colour": [
+    0.46,
+    0.44,
+    0.42
+   ],
+   "snap": 20,
+   "alpha": 0.65
+  },
+  {
+   "id": "tent_breath",
+   "layers": [
+    "tbbud301",
+    "tbbuu301"
+   ],
+   "kind": "breath_steam",
+   "px": [
+    588,
+    425
+   ],
+   "dir": [
+    0.6,
+    -1
+   ],
+   "reach": 42,
+   "puff": 88,
+   "period": 5.2,
+   "alpha": 0.6,
+   "snap": 24
+  },
+  {
+   "id": "cave_breath_l",
+   "layers": [
+    "tbbud501",
+    "tbbuhu01",
+    "tbbuu501"
+   ],
+   "kind": "breath_steam",
+   "px": [
+    82,
+    442
+   ],
+   "dir": [
+    0.1,
+    -1
+   ],
+   "reach": 42,
+   "puff": 88,
+   "period": 4.1,
+   "alpha": 0.6,
+   "snap": 24
+  },
+  {
+   "id": "cave_breath_m",
+   "layers": [
+    "tbbud501",
+    "tbbuhu01",
+    "tbbuu501"
+   ],
+   "kind": "breath_steam",
+   "px": [
+    180,
+    447
+   ],
+   "dir": [
+    -0.1,
+    -1
+   ],
+   "reach": 38,
+   "puff": 78,
+   "period": 5.3,
+   "alpha": 0.6,
+   "snap": 24
+  },
+  {
+   "id": "cave_breath_r",
+   "layers": [
+    "tbbud501",
+    "tbbuhu01",
+    "tbbuu501"
+   ],
+   "kind": "breath_steam",
+   "px": [
+    250,
+    436
+   ],
+   "dir": [
+    0.15,
+    -1
+   ],
+   "reach": 38,
+   "puff": 78,
+   "period": 4.7,
+   "alpha": 0.6,
+   "snap": 24
+  },
+  {
+   "id": "tavern_smoke",
+   "layers": [
+    "tbbutv01"
+   ],
+   "kind": "hearth_smoke",
+   "px": [
+    632,
+    462
+   ],
+   "width": 10.5,
+   "rise": 80,
+   "lean": -9,
+   "period": 4.0,
+   "snap": 20,
+   "alpha": 0.65
+  },
+  {
+   "id": "tavern_door_pool",
+   "layers": [
+    "tbbutv01"
+   ],
+   "kind": "hearth_pool",
+   "px": [
+    676,
+    600
+   ],
+   "size": 140,
+   "flat": 0.32,
+   "intensity": 0.035,
+   "colour": [
+    1.0,
+    0.68,
+    0.32
+   ],
+   "period": 2.4,
+   "snap": 24,
+   "out": 0.04
+  },
+  {
+   "id": "shrine_pool",
+   "layers": [
+    "tbbus201"
+   ],
+   "kind": "hearth_pool",
+   "px": [
+    930,
+    368
+   ],
+   "size": 150,
+   "flat": 0.3,
+   "intensity": 0.03,
+   "colour": [
+    1.0,
+    0.8,
+    0.42
+   ],
+   "period": 3.0,
+   "snap": 24,
+   "out": 0.04
+  },
+  {
+   "id": "wall_slough",
+   "layers": [
+    "tbbudw_4",
+    "tbbuup_4"
+   ],
+   "kind": "roof_slough",
+   "px": [
+    850,
+    316
+   ],
+   "w": 60,
+   "fall": 30,
+   "rate": 2.0,
+   "snap": 24,
+   "puff": 28,
+   "alpha": 0.7
+  },
+  {
+   "id": "silo_slough",
+   "layers": [
+    "tbbusilo"
+   ],
+   "kind": "roof_slough",
+   "px": [
+    895,
+    468
+   ],
+   "w": 40,
+   "fall": 26,
+   "rate": 1.8,
+   "puff": 28,
+   "snap": 20,
+   "alpha": 0.7
+  },
+  {
+   "id": "market_icicles",
+   "layers": [
+    "tbbuma01"
+   ],
+   "kind": "icicle_drip",
+   "px": [
+    745,
+    515
+   ],
+   "w": 40,
+   "rate": 0.7,
+   "fall": 22,
+   "snap": 24,
+   "drop": 7
+  },
+  {
+   "id": "forge_chimney",
+   "layers": [
+    "tbbubl01"
+   ],
+   "kind": "hearth_smoke",
+   "px": [
+    1038,
+    456
+   ],
+   "width": 12.0,
+   "rise": 85,
+   "lean": -10,
+   "period": 3.6,
+   "colour": [
+    0.3,
+    0.29,
+    0.29
+   ],
+   "density": 1.2,
+   "alpha": 0.65,
+   "snap": 20
+  },
+  {
+   "id": "forge_pool",
+   "layers": [
+    "tbbubl01"
+   ],
+   "kind": "hearth_pool",
+   "px": [
+    1050,
+    598
+   ],
+   "size": 220,
+   "flat": 0.28,
+   "intensity": 0.04,
+   "colour": [
+    1.0,
+    0.5,
+    0.2
+   ],
+   "period": 1.4,
+   "snap": 24,
+   "out": 0.04
+  },
+  {
+   "id": "forge_meltwater",
+   "layers": [
+    "tbbubl01"
+   ],
+   "kind": "icicle_drip",
+   "px": [
+    1065,
+    516
+   ],
+   "w": 50,
+   "rate": 1.3,
+   "fall": 20,
+   "snap": 24,
+   "drop": 7
+  },
+  {
+   "id": "pyre_cinders",
+   "layers": [
+    "tbbumr01"
+   ],
+   "kind": "pyre_cinders",
+   "px": [
+    928,
+    565
+   ],
+   "width": 50,
+   "rise": 170,
+   "rate": 10,
+   "ash": 1.6,
+   "snap": 24
+  },
+  {
+   "id": "pyre_pool",
+   "layers": [
+    "tbbumr01"
+   ],
+   "kind": "hearth_pool",
+   "px": [
+    928,
+    655
+   ],
+   "size": 360,
+   "flat": 0.27,
+   "intensity": 0.045,
+   "colour": [
+    1.0,
+    0.52,
+    0.2
+   ],
+   "period": 1.2,
+   "snap": 24,
+   "out": 0.04
+  },
+  {
+   "id": "snow_far",
+   "layers": [
+    "environment"
+   ],
+   "kind": "snowfall",
+   "px": [
+    900,
+    430
+   ],
+   "w": 1500,
+   "h": 430,
+   "deep": 200,
+   "flake": 7,
+   "fall": 18,
+   "count": 500,
+   "alpha": 0.7,
+   "snap": 40
+  },
+  {
+   "id": "snow_mid",
+   "layers": [
+    "environment"
+   ],
+   "kind": "snowfall",
+   "px": [
+    900,
+    720
+   ],
+   "w": 1800,
+   "h": 650,
+   "deep": 160,
+   "flake": 10,
+   "fall": 26,
+   "count": 380,
+   "alpha": 0.78,
+   "snap": 40
+  },
+  {
+   "id": "snow_near",
+   "layers": [
+    "environment"
+   ],
+   "kind": "snowfall",
+   "px": [
+    960,
+    1020
+   ],
+   "w": 1950,
+   "h": 950,
+   "deep": 120,
+   "flake": 15,
+   "fall": 42,
+   "count": 150,
+   "alpha": 0.82,
+   "snap": 40
+  },
+  {
+   "id": "aurora_curtain_main",
+   "layers": [
+    "environment"
+   ],
+   "kind": "aurora_curtain",
+   "px": [
+    1350,
+    170
+   ],
+   "out": -0.27,
+   "snap": 30,
+   "hem": [
+    [
+     860,
+     165
+    ],
+    [
+     1020,
+     130
+    ],
+    [
+     1180,
+     150
+    ],
+    [
+     1340,
+     115
+    ],
+    [
+     1500,
+     95
+    ],
+    [
+     1650,
+     60
+    ]
+   ],
+   "height": [
+    120,
+    150,
+    130,
+    155,
+    120,
+    90
+   ],
+   "sway": 14,
+   "folds": 2.2,
+   "intensity": 0.45,
+   "hemw": 0.06,
+   "fade": 2.4,
+   "phase": 0.0
+  },
+  {
+   "id": "aurora_curtain_far",
+   "layers": [
+    "environment"
+   ],
+   "kind": "aurora_curtain",
+   "px": [
+    1340,
+    140
+   ],
+   "out": -0.32,
+   "snap": 30,
+   "hem": [
+    [
+     700,
+     75
+    ],
+    [
+     880,
+     45
+    ],
+    [
+     1080,
+     62
+    ],
+    [
+     1280,
+     35
+    ],
+    [
+     1420,
+     50
+    ]
+   ],
+   "height": [
+    70,
+    90,
+    80,
+    95,
+    70
+   ],
+   "sway": 10,
+   "folds": 1.6,
+   "intensity": 0.22,
+   "hemw": 0.12,
+   "fade": 1.8,
+   "phase": 2.1,
+   "hemcol": [
+    0.4,
+    0.95,
+    0.85
+   ],
+   "lowcol": [
+    0.2,
+    0.75,
+    0.8
+   ],
+   "highcol": [
+    0.6,
+    0.3,
+    1.0
+   ],
+   "hemsoft": 0.18
+  },
+  {
+   "id": "river_seasmoke_head",
+   "layers": [
+    "environment"
+   ],
+   "kind": "frost_smoke",
+   "px": [
+    525,
+    610
+   ],
+   "w": 110,
+   "h": 14,
+   "wisp": 72,
+   "rise": 11,
+   "count": 9,
+   "alpha": 0.22,
+   "snap": 30,
+   "colour": [
+    0.9,
+    0.95,
+    1.0
+   ]
+  },
+  {
+   "id": "river_seasmoke_mid",
+   "layers": [
+    "environment"
+   ],
+   "kind": "frost_smoke",
+   "px": [
+    450,
+    770
+   ],
+   "w": 260,
+   "h": 24,
+   "wisp": 117,
+   "rise": 15,
+   "count": 12,
+   "alpha": 0.22,
+   "snap": 30,
+   "colour": [
+    0.9,
+    0.95,
+    1.0
+   ]
+  },
+  {
+   "id": "river_seasmoke_mouth",
+   "layers": [
+    "environment"
+   ],
+   "kind": "frost_smoke",
+   "px": [
+    330,
+    960
+   ],
+   "w": 520,
+   "h": 40,
+   "wisp": 194,
+   "rise": 22,
+   "count": 15,
+   "alpha": 0.22,
+   "snap": 30,
+   "colour": [
+    0.9,
+    0.95,
+    1.0
+   ]
+  },
+  {
+   "id": "field_snake_far",
+   "layers": [
+    "environment"
+   ],
+   "kind": "ground_snake",
+   "px": [
+    1550,
+    700
+   ],
+   "w": 450,
+   "h": 6,
+   "speed": 70,
+   "width": 6,
+   "count": 10,
+   "snap": 30
+  },
+  {
+   "id": "field_snake_near",
+   "layers": [
+    "environment"
+   ],
+   "kind": "ground_snake",
+   "px": [
+    1550,
+    950
+   ],
+   "w": 600,
+   "h": 10,
+   "speed": 110,
+   "width": 10,
+   "count": 12,
+   "snap": 30
+  },
+  {
+   "id": "dust_field",
+   "layers": [
+    "environment"
+   ],
+   "kind": "diamond_dust",
+   "px": [
+    1300,
+    760
+   ],
+   "w": 500,
+   "h": 220,
+   "spark": 9,
+   "count": 16,
+   "snap": 30
+  },
+  {
+   "id": "dust_riverbank",
+   "layers": [
+    "environment"
+   ],
+   "kind": "diamond_dust",
+   "px": [
+    720,
+    690
+   ],
+   "w": 300,
+   "h": 130,
+   "spark": 9,
+   "count": 10,
+   "snap": 30
+  },
+  {
+   "id": "shards_river",
+   "layers": [
+    "environment"
+   ],
+   "kind": "ice_star",
+   "px": [
+    1122,
+    725
+   ],
+   "w": 30,
+   "h": 90,
+   "star": 20,
+   "rate": 0.9,
+   "snap": 30,
+   "intensity": 1.0
+  },
+  {
+   "id": "shards_field",
+   "layers": [
+    "environment"
+   ],
+   "kind": "ice_star",
+   "px": [
+    1665,
+    520
+   ],
+   "w": 260,
+   "h": 30,
+   "star": 19,
+   "rate": 1.0,
+   "snap": 30,
+   "intensity": 1.0
+  },
+  {
+   "id": "shards_bank",
+   "layers": [
+    "environment"
+   ],
+   "kind": "ice_star",
+   "px": [
+    360,
+    830
+   ],
+   "w": 30,
+   "h": 30,
+   "star": 22,
+   "rate": 0.6,
+   "snap": 30,
+   "intensity": 1.0
+  }
+ ]
+}

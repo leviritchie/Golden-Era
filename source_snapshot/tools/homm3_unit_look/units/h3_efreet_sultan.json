@@ -1,0 +1,232 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_efreet_sultan",
+ "status": "look",
+ "notes": "inferno rollout: efreet (fire-tailed genie). The attack's hand fireball and the death's star flash are ripped from the DEF with committed file masks (tools/homm3_vfx/inferno_fx_masks.py; the fire tail makes their colours body paint). The fire tail itself is left to the grade (no floor light) so the unit stays deliverable; its flicker is not a layer yet.",
+ "lighting": {
+  "mode": "v7c",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "fireball_glow",
+   "treatment": "dynamic",
+   "notes": "the hand fireball lights the arm and chest"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "fire_volume",
+    "type": "volumetricFire",
+    "provenance": "DEF-ripped (CEFRES.DEF g2 idle, f0-4): the flame tail boils in place below the waist; volfire_survey defFire 0.48, flicker 0.33, fire in the bottom six tenths (0.33-0.70 per tenth), torso not fire",
+    "source": {
+     "defGroup": 2,
+     "frames": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ],
+     "fireMask": {
+      "minLuma": 100,
+      "minWarmth": 40
+     }
+    },
+    "emitter": {
+     "excludeBones": [
+      "*Arm",
+      "*ForeArm",
+      "*Hand",
+      "*Shoulder",
+      "Head",
+      "Neck",
+      "Spine1",
+      "Spine2"
+     ]
+    },
+    "systems": {
+     "tongues": {
+      "windows": 24,
+      "cellPx": [
+       12,
+       24
+      ],
+      "baseAt": 0.75,
+      "coverage": 0.5,
+      "heightRange": [
+       0.0,
+       0.55
+      ],
+      "minUp": -0.3,
+      "lifetimeDefFrames": [
+       4,
+       8
+      ],
+      "riseDefPxPerFrame": 1.0
+     },
+     "body": {
+      "windows": 24,
+      "cellPx": [
+       10,
+       16
+      ],
+      "coverage": 0.3,
+      "heightRange": [
+       0.0,
+       0.55
+      ],
+      "lifetimeDefFrames": [
+       3,
+       6
+      ],
+      "riseDefPxPerFrame": 0.5
+     }
+    },
+    "anchor": {
+     "bone": "Hips"
+    },
+    "clips": {
+     "Unit_Idle": 1.0,
+     "Unit_MoveStart": 1.0,
+     "Unit_Move": 1.0,
+     "Unit_MoveEnd": 1.0,
+     "Unit_Mouseover": 1.0,
+     "Unit_Hitted": 1.0,
+     "Unit_Defence": 1.0,
+     "Unit_AttackFront": 1.0,
+     "Unit_Death": [
+      1,
+      1,
+      0.3,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    },
+    "notes": "partial-fire unit: the emitter is the lower body only (arms, shoulders, upper spine, neck and head excluded by bone), capped at 0.55 of the rest height where the DEF's fire stops; Death: the fire hands over to death_flash (g5 f2-6, the whole sprite is the flash) at key 2. No embers."
+   },
+   {
+    "id": "fireball",
+    "type": "defFlipbook",
+    "provenance": "inferno_fx_masks.py hot_blob: g12 attack f4-7, the fireball held out in the hand",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       4,
+       5,
+       6,
+       7
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_efreet_sultan/fireball"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto"
+    },
+    "texelsPerDefPx": 1,
+    "light": "fireball_glow"
+   },
+   {
+    "id": "fireball_light",
+    "type": "effectLight",
+    "lightId": "fireball_glow",
+    "carrier": "fireball",
+    "anchor": {
+     "bone": "RightHand",
+     "towardLayerCentroid": 0.5,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.75,
+     0.4
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.243,
+      0.34,
+      0.334,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.165
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "death_flash",
+    "type": "defFlipbook",
+    "provenance": "inferno_fx_masks.py opaque_all: g5 death f2-6, the body bursts into a white star flash (the whole sprite is the flash)",
+    "clips": {
+     "Unit_Death": {
+      "defGroup": 5,
+      "frames": [
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_efreet_sultan/death_flash"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "Hips",
+     "defOrigin": {
+      "Unit_Death": [
+       [
+        195,
+        232
+       ],
+       [
+        196,
+        236
+       ],
+       [
+        194,
+        238
+       ],
+       [
+        195,
+        244
+       ],
+       [
+        196,
+        242
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "notes": "defOrigin = the mask centroid per frame (the sprite is the effect, so 'auto' has no body contact)."
+   }
+  ]
+ }
+}

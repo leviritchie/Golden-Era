@@ -1,0 +1,76 @@
+"""CampaignEventIR: immutable source census for RoE Castle campaign events."""
+
+from .audience_encode import (
+    encode_prop_actions_sides,
+    encode_start_turn_sides,
+    should_emit_ai_ignore,
+)
+from .compile_backends import (
+    compile_guarded_map_event_triggers,
+    compile_repeating_resource_triggers,
+    map_event_action_repeat,
+    map_event_emit_ai_ignore,
+    map_event_prop_actions_sides,
+    timed_resource_arm_counter_sid,
+    timed_town_resource_arm_counter_sid,
+    town_event_host_entity_sid,
+)
+from .decode_census import (
+    build_batch_event_census,
+    build_mission_event_census,
+    build_mission_event_census_from_walk,
+)
+from .model import (
+    EXPECTED_EVENT_CENSUS,
+    EVENT_CENSUS_SCHEMA,
+    EVENT_IR_SCHEMA,
+    Audience,
+    BackendId,
+    BackendStatus,
+    BatchEventCensus,
+    CampaignEventIR,
+    Effects,
+    EventScope,
+    GuardStack,
+    HostKind,
+    HostRef,
+    MissionEventCensus,
+    Schedule,
+)
+from .readiness import assert_delivery_ready, collect_readiness_blockers, select_backend, with_readiness
+
+__all__ = [
+    "EXPECTED_EVENT_CENSUS",
+    "EVENT_CENSUS_SCHEMA",
+    "EVENT_IR_SCHEMA",
+    "Audience",
+    "BackendId",
+    "BackendStatus",
+    "BatchEventCensus",
+    "CampaignEventIR",
+    "Effects",
+    "EventScope",
+    "GuardStack",
+    "HostKind",
+    "HostRef",
+    "MissionEventCensus",
+    "Schedule",
+    "assert_delivery_ready",
+    "build_batch_event_census",
+    "build_mission_event_census",
+    "build_mission_event_census_from_walk",
+    "collect_readiness_blockers",
+    "compile_guarded_map_event_triggers",
+    "compile_repeating_resource_triggers",
+    "encode_prop_actions_sides",
+    "encode_start_turn_sides",
+    "map_event_action_repeat",
+    "map_event_emit_ai_ignore",
+    "map_event_prop_actions_sides",
+    "select_backend",
+    "should_emit_ai_ignore",
+    "timed_resource_arm_counter_sid",
+    "timed_town_resource_arm_counter_sid",
+    "town_event_host_entity_sid",
+    "with_readiness",
+]

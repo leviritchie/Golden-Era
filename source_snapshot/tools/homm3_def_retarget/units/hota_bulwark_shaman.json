@@ -1,0 +1,346 @@
+{
+ "unit": "hota_bulwark_shaman",
+ "joints": {
+  "Hips": [
+   0.122,
+   0.031,
+   0.868
+  ],
+  "Spine": [
+   0.122,
+   0.051,
+   0.954
+  ],
+  "Spine1": [
+   0.12,
+   0.09,
+   1.1
+  ],
+  "Spine2": [
+   0.12,
+   0.09,
+   1.22
+  ],
+  "Neck": [
+   0.12,
+   0.08,
+   1.33
+  ],
+  "Head": [
+   0.12,
+   0.04,
+   1.4
+  ],
+  "HeadTop_End": [
+   0.136,
+   -0.22,
+   1.56
+  ],
+  "LeftShoulder": [
+   0.199,
+   0.073,
+   1.315
+  ],
+  "LeftArm": [
+   0.318,
+   0.073,
+   1.315
+  ],
+  "LeftForeArm": [
+   0.402,
+   0.185,
+   1.106
+  ],
+  "LeftHand": [
+   0.43,
+   0.024,
+   0.938
+  ],
+  "LeftHand_End": [
+   0.44,
+   -0.037,
+   0.874
+  ],
+  "RightShoulder": [
+   0.052,
+   0.073,
+   1.315
+  ],
+  "RightArm": [
+   -0.052,
+   0.136,
+   1.336
+  ],
+  "RightForeArm": [
+   -0.143,
+   0.115,
+   1.106
+  ],
+  "RightHand": [
+   -0.255,
+   -0.01,
+   1.008
+  ],
+  "RightHand_End": [
+   -0.307,
+   -0.069,
+   0.963
+  ],
+  "LeftUpLeg": [
+   0.227,
+   -0.017,
+   0.819
+  ],
+  "LeftLeg": [
+   0.311,
+   -0.157,
+   0.491
+  ],
+  "LeftFoot": [
+   0.297,
+   -0.045,
+   0.107
+  ],
+  "LeftToeBase": [
+   0.353,
+   -0.171,
+   -0.005
+  ],
+  "LeftToe_End": [
+   0.367,
+   -0.283,
+   -0.019
+  ],
+  "RightUpLeg": [
+   -0.115,
+   0.003,
+   0.477
+  ],
+  "RightLeg": [
+   -0.108,
+   0.213,
+   0.107
+  ],
+  "RightFoot": [
+   -0.185,
+   0.094,
+   -0.005
+  ],
+  "RightToeBase": [
+   -0.185,
+   0.052,
+   -0.005
+  ],
+  "RightToe_End": [
+   -0.185,
+   0.01,
+   -0.005
+  ]
+ },
+ "props": [
+  {
+   "name": "staff",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.2,
+      -0.38,
+      1.23
+     ],
+     [
+      0.47,
+      0.39,
+      0.32
+     ]
+    ]
+   ],
+   "radius": 0.045
+  },
+  {
+   "name": "staffball",
+   "bone": "LeftHand",
+   "sphere": [
+    [
+     0.19,
+     -0.35,
+     1.2
+    ],
+    0.115
+   ],
+   "exclude": [
+    {
+     "box": [
+      [
+       -1,
+       -0.25,
+       0
+      ],
+      [
+       1,
+       1,
+       2
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "staffknob",
+   "bone": "LeftHand",
+   "sphere": [
+    [
+     0.44,
+     0.33,
+     0.38
+    ],
+    0.1
+   ]
+  },
+  {
+   "name": "drum",
+   "bone": "RightHand",
+   "sphere": [
+    [
+     -0.33,
+     -0.1,
+     1.02
+    ],
+    0.28
+   ],
+   "exclude": [
+    {
+     "box": [
+      [
+       -0.14,
+       -1,
+       0
+      ],
+      [
+       1,
+       1,
+       2
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       -1,
+       -1,
+       0
+      ],
+      [
+       1,
+       1,
+       0.82
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "LeftHand"
+  ]
+ },
+ "armCut": {
+  "maxDist": 0.1
+ },
+ "extensions": [
+  "bulwark_limbcut"
+ ],
+ "limbStrip": [
+  {
+   "chain": [
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "keep": [
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.1
+  },
+  {
+   "chain": [
+    "RightForeArm",
+    "RightHand"
+   ],
+   "keep": [
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "keepDist": 0.1
+  },
+  {
+   "chain": [
+    "LeftArm"
+   ],
+   "keep": [
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.05,
+   "keepDist": 0.1
+  },
+  {
+   "chain": [
+    "RightArm"
+   ],
+   "keep": [
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand"
+   ],
+   "fallback": "Spine1",
+   "belowZ": 1.05,
+   "keepDist": 0.1
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "skirtLegShare": 0.35,
+ "bootTop": 0.12,
+ "strideMatch": {
+  "maxDrop": 0.25,
+  "swingLift": 0.08,
+  "reason": "short-reach walker (legs near straight at the source Move): default 0.15: jitter p90 0.357; 0.25: slip 0.297 ratio 0.98 jitter 0.14 (workerB scratch trials 2026-09-27). Lane B 2026-10-11: the 10-11 fresh build's right foot skated through its swing (pooled slip 0.866, right 1.14, over the 0.765 exception); swingLift 0.08 lifts the swing foot clear (scratch trials on the fresh export: 0.05 -> 0.816, 0.06 -> 0.763, 0.07 -> 0.469, 0.08 -> 0.378, 0.10 -> 0.214; maxDrop 0.30/0.35 unchanged at 0.866), stride and moveSpeed unchanged"
+ },
+ "glbPatch": {
+  "reason": "2026-10-11 lane B: the DEF shaman lifts the staff orb overhead at ShootFront f1-f3 and points the orb level at the target f4-f5 (the capture held the staff upright, orb up, through the shot); in AttackFront the orb leans back over the hand at f3 and is thrust forward at f5-f6 (capture: orb up). The staff hand (LeftHand, orb at -PCA) turns per key toward those targets; the arm/robe skin where the staff hand rests on the left hip is re-solved (wsolve, two keepsw passes) so the turns do not drag the robe (gate 2252 -> 2229 edges).",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_shaman_staff_weights.json",
+    "sha256": "546a36962a917d33ab2ae6037d142278372b0af26f097bb90de381448dce555b",
+    "note": "staff arm/robe weight re-solve"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_shaman_staff_orb_point_rot.json",
+    "regrid": true,
+    "sha256": "768ff3ac7616f85bec1da089238051b0b7a2a361b64109268b9f3a05a76e7ca4"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_shaman_staff_orb_point_rot.json",
+    "regrid": true,
+    "sha256": "768ff3ac7616f85bec1da089238051b0b7a2a361b64109268b9f3a05a76e7ca4"
+   }
+  ]
+ }
+}

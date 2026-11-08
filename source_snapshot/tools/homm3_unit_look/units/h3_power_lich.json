@@ -1,0 +1,161 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_power_lich",
+ "status": "look",
+ "notes": "necropolis rollout",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "shoot_glow",
+   "treatment": "dynamic",
+   "notes": "the DEF washes the body red while the staff orb flares (shoot f2-8)"
+  },
+  {
+   "id": "hover_glow",
+   "treatment": "dynamic",
+   "notes": "the DEF washes the body green on mouseover (g01)"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "staff_orb",
+    "type": "defFlipbook",
+    "provenance": "roster inventory necropolis g15 shoot_front on-body tint (fire); the staff-tip orb turns red f2-8. mask: tools/homm3_unit_look/units/masks/necropolis_masks.py staff_orb",
+    "clips": {
+     "Unit_ShootFront": {
+      "defGroup": 15,
+      "frames": [
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_power_lich/staff_orb"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 0
+    },
+    "anchor": {
+     "bone": "LeftHand",
+     "defOrigin": {
+      "Unit_ShootFront": [
+       [
+        231,
+        207
+       ],
+       [
+        217,
+        208
+       ],
+       [
+        223,
+        211
+       ],
+       [
+        223,
+        211
+       ],
+       [
+        224,
+        214
+       ],
+       [
+        221,
+        208
+       ],
+       [
+        226,
+        205
+       ]
+      ]
+     }
+    },
+    "texelsPerDefPx": 1,
+    "light": "shoot_glow",
+    "notes": "no staff bone: pinned to the staff hand (LeftHand). Each key's origin is chosen so the effect lands on the MESH staff tip: origin = DEF effect centroid - (mesh staff tip - mesh LeftHand), with the tip read off the def_retarget SpriteCam render (farthest mesh pixel from the hand along the hand->effect line). The mesh staff is shorter/angled differently than the DEF's, so the DEF offset alone left the effect floating off the tip."
+   },
+   {
+    "id": "shoot_glow_light",
+    "type": "effectLight",
+    "lightId": "shoot_glow",
+    "carrier": "staff_orb",
+    "anchor": {
+     "bone": "Spine2",
+     "towardLayerCentroid": 0.3,
+     "towardCameraU": 0.4
+    },
+    "rgb": [
+     1.0,
+     0.3,
+     0.22
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_ShootFront": [
+      0.0,
+      0.048,
+      0.228,
+      0.259,
+      0.312,
+      0.297,
+      0.318,
+      0.212,
+      0.159,
+      0.026,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted"
+   },
+   {
+    "id": "hover_glow_light",
+    "type": "effectLight",
+    "lightId": "hover_glow",
+    "carrier": "staff_orb",
+    "anchor": {
+     "bone": "Spine2",
+     "towardLayerCentroid": 0.0,
+     "towardCameraU": 0.4
+    },
+    "rgb": [
+     0.45,
+     1.0,
+     0.4
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_Mouseover": [
+      0.0,
+      0.02,
+      0.053,
+      0.109,
+      0.092,
+      0.096,
+      0.085,
+      0.105,
+      0.052,
+      0.011,
+      0.0
+     ]
+    },
+    "intensitySource": "fitted",
+    "notes": "carried by staff_orb, which draws nothing on mouseover (carrier liveness keeps it alive)"
+   }
+  ]
+ }
+}

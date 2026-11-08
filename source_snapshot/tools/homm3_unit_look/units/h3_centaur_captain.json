@@ -1,0 +1,35 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_centaur_captain",
+ "status": "look",
+ "notes": "rampart rollout",
+ "lighting": {
+  "mode": "v7c",
+  "front": "auto",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": [],
+  "defSegmenter": {
+   "module": "tools/homm3_unit_look/units/masks/centaur_segment.py",
+   "function": "segment_centaur_captain"
+  },
+  "regions": [
+   {
+    "name": "hair",
+    "mask": {
+     "maskPath": "tools/homm3_unit_look/units/masks/h3_centaur_captain/hair_green.png"
+    },
+    "target": "defPalette",
+    "defRegion": "hair",
+    "knobs": {
+     "skyCompensation": true
+    },
+    "notes": "2026-10-09 lane A (coordinator: captain fetlock feathering and tail tip stay green-grey; HoMM3 is neutral grey there): the Meshy source paints that hair green (a* < -4, mean Lab 46.6/-15/10.7). The raw albedo's green-cast texels (centaur_segment.build_hair_mask) take the CECENT shaded mid-grey palette by rank."
+   }
+  ]
+ },
+ "lights": [],
+ "vfx": {
+  "layers": []
+ }
+}

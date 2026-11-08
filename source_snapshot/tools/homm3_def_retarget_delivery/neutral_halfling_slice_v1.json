@@ -1,0 +1,31 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "neutral_halfling_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/neutral_halfling_slice_v1",
+  "note": "Neutral halfling own model: hand-keyed (no mocap capture; no shipped capture has the overhead sling whirl). User asked to bundle the finished neutral meshes; deploy is the user's. Jitter pass 2026-09-27: silhouetteRefine removed (per-frame dx/dy silhouette offsets read as whole-body jumps), re-shipped in place. | look-only re-freeze on the ground-stamped canonical (fleet_rebuild ground_glb apply; coordinator item 3) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_neutral_halfling 0.3625. | 2026-10-11 authenticity pass lane A: DEF g12 attack lunge reach + g15 shoot sling whirled overhead Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_neutral_halfling 0.3045. | halfling-lunge-f096901405 Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_neutral_halfling 0.3045.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_neutral_halfling",
+      "gameSid": "h3_neutral_halfling",
+      "bundleName": "custom_units_neutral_h3_neutral_halfling",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "6f8bcbd779fb61a0675802141f4f356b58bd1b535c8031bbe4734b8c7451af17",
+      "identityReview": "none",
+      "frozen": {
+        "lookDeliveredGlbSha256": "7171c7cc0a1dac052b1dc154dfed104038cd451966b01fc04646082032df482f",
+        "idleRetimedGlbSha256": "b32c53f9d057ca0cc403c328eafce7d4559c3336259106fd90a61cc9c2f54e39",
+        "vfxManifestSha256": "8fa194d6ec7fa6bf648348ad5aaaec74daa555685e4e055c0f284f04f37e612e",
+        "specSha256": "4bf9da23a0c0fc507d8120e94e8509d44108f3a53c304faf44374b33edf7bff4",
+        "basecolorSha256": "c5fefe9f62f4e6c04dd215def192bfa7428f3ec6742cf0f23a6f8a2eda341ec7"
+      }
+    }
+  ]
+}

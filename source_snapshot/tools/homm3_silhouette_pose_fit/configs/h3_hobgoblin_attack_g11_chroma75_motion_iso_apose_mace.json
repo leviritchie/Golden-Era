@@ -1,0 +1,84 @@
+{
+  "unitSid": "h3_hobgoblin",
+  "clipId": "attack_g11",
+  "fps": 12,
+  "masterGlb": "artifacts/hobgoblin_attack_pose_pipeline/master/hobgoblin_apose_mace_attach.glb",
+  "outputDir": "artifacts/hobgoblin_attack_pose_pipeline/out_attack_g11_chroma75_motion_iso_apose_mace",
+  "boneRoles": "artifacts/hobgoblin_attack_pose_pipeline/out_apose_mace_attach/bone_roles_apose_mace.json",
+  "cullDefSoftShadows": true,
+  "camera": {
+    "axis": "iso",
+    "isoAzimuthDeg": 40.0,
+    "isoElevationDeg": 30.0,
+    "distance": 3.0,
+    "orthoScale": 2.6,
+    "rootYawDeg": 0.0
+  },
+  "frames": [
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_00.png"
+    },
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_01.png"
+    },
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_02.png"
+    },
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_03.png"
+    },
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_04.png"
+    },
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_05.png"
+    },
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_06.png"
+    },
+    {
+      "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_07.png"
+    }
+  ],
+  "method_kind": "silhouette",
+  "method": "chroma_silhouette_motion",
+  "render": {
+    "width": 192,
+    "height": 170
+  },
+  "optimizeBones": [
+    "Hips",
+    "Spine02",
+    "Spine01",
+    "Spine",
+    "neck",
+    "Head",
+    "LeftShoulder",
+    "LeftArm",
+    "LeftForeArm",
+    "LeftHand",
+    "RightShoulder",
+    "RightArm",
+    "RightForeArm",
+    "RightHand",
+    "LeftUpLeg",
+    "LeftLeg",
+    "RightUpLeg",
+    "RightLeg"
+  ],
+  "optimizer": {
+    "method": "hybrid",
+    "boundRad": 0.96,
+    "restWeight": 0.0,
+    "motionWeight": 0.15,
+    "chromaWeight": 0.75,
+    "silhouetteWeight": 0.25,
+    "identityFrame0": true,
+    "maxStepRad": 0.7,
+    "deMaxiter": 5,
+    "popsize": 18,
+    "polishIters": 40,
+    "seed": 7
+  },
+  "notes": "A-pose+mace-attach master. chroma75/sil25/motion on canonical g11."
+}

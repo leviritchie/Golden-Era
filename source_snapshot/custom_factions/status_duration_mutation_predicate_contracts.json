@@ -1,0 +1,82 @@
+﻿{
+  "schemaVersion": 1,
+  "purpose": "Source-authored contracts for custom law profiles that require native status duration mutation semantics. This is static traceability only and does not authorize gameplay mutation.",
+  "validationState": "source-prepared-static-only; runtime proof is still required before gameplayAllowed can become true.",
+  "policy": {
+    "effectKeysMustMatchRequiresStatusDurationMutationProfiles": true,
+    "calendarFamilyOnly": true,
+    "statusDurationMutationMustUseNativeStatusState": true,
+    "statusClassificationAloneIsNotMutation": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedFactions": [
+    "homm3_fortress",
+    "homm3_inferno",
+    "homm3_rampart"
+  ],
+  "allowedFamily": "Calendar",
+  "requiredRuntimeProof": [
+    "native status instance identity proof",
+    "status duration read proof",
+    "status duration write or extension proof",
+    "status owner and affected stack correlation proof",
+    "source law-owner side correlation proof",
+    "battle-start or unit-turn timing proof",
+    "cleanup or expiration ordering proof",
+    "idempotent per-status application proof"
+  ],
+  "contracts": {
+    "fortress.poison-slow-duration-calendar": {
+      "mutationKinds": [
+        "poison-or-slow-status-duration-extension",
+        "adjacent-regeneration-companion-only"
+      ],
+      "companionPredicates": [
+        "RequiresBattleStartOrRoundEvent"
+      ],
+      "forbiddenSubstitutes": [
+        "status taxonomy classification counted as duration mutation",
+        "status application counted without duration read/write proof",
+        "battle start counted as status duration mutation",
+        "poison or slow spell text counted as live status instance",
+        "adjacent regeneration counted as poison or slow duration extension"
+      ],
+      "notes": "Requires native poison or slow status instance duration read/write proof before Witch Signs can extend durations; battle timing and regeneration are companion boundaries only."
+    },
+    "inferno.fire-gated-sign-calendar": {
+      "mutationKinds": [
+        "fire-marker-or-status-duration-context",
+        "gated-sign-companion-only"
+      ],
+      "companionPredicates": [
+        "RequiresGatingSacrificeOrSummon",
+        "RequiresSpellCastEvent"
+      ],
+      "forbiddenSubstitutes": [
+        "status taxonomy classification counted as duration mutation",
+        "status application counted without duration read/write proof",
+        "battle start counted as status duration mutation",
+        "fire spell cast counted as live status duration mutation",
+        "gating or summon transaction counted as status duration mutation"
+      ],
+      "notes": "Requires native status or marker duration mutation proof before Infernal Signs can use fire/gated sign duration behavior; spell casts and gating transactions are companion evidence only."
+    },
+    "rampart.cleanse-regeneration-resistance-calendar": {
+      "mutationKinds": [
+        "regeneration-or-resistance-status-duration-cycle",
+        "cleanse-companion-only"
+      ],
+      "companionPredicates": [
+        "RequiresBattleStartOrRoundEvent"
+      ],
+      "forbiddenSubstitutes": [
+        "status taxonomy classification counted as duration mutation",
+        "status application counted without duration read/write proof",
+        "battle start counted as status duration mutation",
+        "cleanse event counted as regeneration duration mutation",
+        "positive status name counted without live status instance"
+      ],
+      "notes": "Requires native regeneration or resistance status instance duration read/write proof before Druidic Calendar can cycle status durations; cleanse and battle timing are companion boundaries only."
+    }
+  }
+}

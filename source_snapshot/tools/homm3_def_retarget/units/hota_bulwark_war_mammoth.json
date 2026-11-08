@@ -1,0 +1,506 @@
+{
+ "unit": "hota_bulwark_war_mammoth",
+ "sourceMesh": "artifacts/homm3_mesh_surgery/hota_bulwark_war_mammoth_tusk_c2.glb",
+ "meshSurgery": {
+  "tool": "tools/homm3_def_retarget/limb_cut_surgery.py",
+  "input": "artifacts/meshy_downloads/hota_bulwark_war_mammoth_smartrigged.glb",
+  "record": "artifacts/homm3_mesh_surgery/hota_bulwark_war_mammoth_tusk_c2.surgery.json",
+  "note": "2026-10-12 authenticity lane B (mesh surgery pre-approved, coordinator follow-up to the trunk chain): the Meshy mesh welds the left tusk root and cheek onto the left foreleg and the auto-rig skinned them to LeftArm/LeftForeArm (the right tusk and cheek are on Head), so the trunk reach tore the left tusk into shards against the leg. 129 bridge faces between the head side and the foreleg are split (35 seam copies, plus the 85 undivided UV-seam copies at foreleg positions, all nudged 1.5 mm; --weld-split); skin unchanged, the glbPatch tusk weight table puts the tusk and cheek on Head."
+ },
+ "joints": {
+  "Hips": [
+   0.0,
+   0.575,
+   1.05
+  ],
+  "Spine": [
+   0.0,
+   0.35,
+   1.1
+  ],
+  "Spine1": [
+   0.0,
+   0.12,
+   1.15
+  ],
+  "Spine2": [
+   0.0,
+   -0.12,
+   1.2
+  ],
+  "Neck": [
+   0.0,
+   -0.38,
+   1.2
+  ],
+  "Head": [
+   0.0,
+   -0.6,
+   1.25
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.88,
+   1.0
+  ],
+  "LeftShoulder": [
+   0.1,
+   -0.27,
+   1.15
+  ],
+  "LeftArm": [
+   0.24,
+   -0.3,
+   0.9
+  ],
+  "LeftForeArm": [
+   0.24,
+   -0.3,
+   0.5
+  ],
+  "LeftHand": [
+   0.24,
+   -0.3,
+   0.15
+  ],
+  "LeftHand_End": [
+   0.24,
+   -0.37,
+   0.0
+  ],
+  "LeftUpLeg": [
+   0.24,
+   0.53,
+   0.95
+  ],
+  "LeftLeg": [
+   0.24,
+   0.56,
+   0.55
+  ],
+  "LeftFoot": [
+   0.24,
+   0.53,
+   0.15
+  ],
+  "LeftToeBase": [
+   0.24,
+   0.5,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.24,
+   0.44,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.1,
+   -0.16,
+   1.15
+  ],
+  "RightArm": [
+   -0.24,
+   -0.19,
+   0.9
+  ],
+  "RightForeArm": [
+   -0.24,
+   -0.19,
+   0.5
+  ],
+  "RightHand": [
+   -0.24,
+   -0.19,
+   0.15
+  ],
+  "RightHand_End": [
+   -0.24,
+   -0.26,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.24,
+   0.62,
+   0.95
+  ],
+  "RightLeg": [
+   -0.24,
+   0.65,
+   0.55
+  ],
+  "RightFoot": [
+   -0.24,
+   0.62,
+   0.15
+  ],
+  "RightToeBase": [
+   -0.24,
+   0.59,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.24,
+   0.53,
+   0.0
+  ]
+ },
+ "props": [
+  {
+   "name": "tusks",
+   "bone": "Head",
+   "box": [
+    [
+     -0.6,
+     -1.0,
+     0.0
+    ],
+    [
+     0.6,
+     -0.47,
+     1.05
+    ]
+   ]
+  },
+  {
+   "name": "trunktip",
+   "bone": "Head",
+   "box": [
+    [
+     -0.09,
+     -0.65,
+     0.0
+    ],
+    [
+     0.13,
+     -0.35,
+     0.3
+    ]
+   ]
+  }
+ ],
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped",
+  "rig_chain"
+ ],
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    -20,
+    70
+   ],
+   "fold": 70,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ]
+  }
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "rigChains": [
+  {
+   "prefix": "Trunk",
+   "parent": "Head",
+   "bones": 6,
+   "points": [
+    [
+     0,
+     -0.83,
+     1.12
+    ],
+    [
+     0,
+     -0.84,
+     0.85
+    ],
+    [
+     0,
+     -0.82,
+     0.62
+    ],
+    [
+     0,
+     -0.75,
+     0.46
+    ],
+    [
+     0,
+     -0.67,
+     0.36
+    ],
+    [
+     0,
+     -0.57,
+     0.25
+    ],
+    [
+     0,
+     -0.46,
+     0.19
+    ],
+    [
+     0,
+     -0.36,
+     0.17
+    ]
+   ],
+   "radius": [
+    0.3,
+    0.3,
+    0.3,
+    0.25,
+    0.2,
+    0.18,
+    0.15,
+    0.12
+   ],
+   "root": 0.04,
+   "rootBlend": 0.15,
+   "minParent": 0.5,
+   "exclude": [
+    {
+     "box": [
+      [
+       0.21,
+       -1.2,
+       -0.1
+      ],
+      [
+       1.0,
+       0.0,
+       1.4
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       -1.0,
+       -1.2,
+       -0.1
+      ],
+      [
+       -0.21,
+       0.0,
+       1.4
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       0.15,
+       -1.2,
+       -0.1
+      ],
+      [
+       1.0,
+       0.0,
+       0.45
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       -1.0,
+       -1.2,
+       -0.1
+      ],
+      [
+       -0.15,
+       0.0,
+       0.45
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       -1.0,
+       -0.6,
+       0.45
+      ],
+      [
+       1.0,
+       0.0,
+       1.4
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       -1.0,
+       -0.68,
+       0.82
+      ],
+      [
+       1.0,
+       0.0,
+       1.4
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       -1.0,
+       -1.2,
+       0.98
+      ],
+      [
+       1.0,
+       0.0,
+       2.0
+      ]
+     ]
+    }
+   ],
+   "reason": "2026-10-11 lane B rig surgery (lane C rig_chain, h3_mammoth_upg_alt recipe): the trunk rode the Head bone rigidly, so the DEF trunk lift (Mouseover, g01 trumpet) and reach (AttackFront g12) could only be faked by tipping the head. A 6-bone chain along this mesh's own trunk centreline (traced from the head-weighted |x|<0.21 shell) takes the trunk's vertices; tusks (|x| > 0.15 below z 0.45), cheeks (|x| > 0.21), mouth (y > -0.6 from z 0.45, lips y > -0.68 above z 0.82: the trunk's own inner surface sits just in front of the mouth, and a wider mouth box left it behind as a hanging curtain) and forehead (z > 0.98) excluded; below z 0.95 the web faces bridging the trunk to the tusks, cheeks and mouth are split off and stay with the head.",
+   "cut": {
+    "belowZ": 0.95,
+    "web": "parent"
+   },
+   "smoothArc": 6
+  }
+ ],
+ "correctiveSmooth": {
+  "excludeBones": [
+   "Trunk_00",
+   "Trunk_01",
+   "Trunk_02",
+   "Trunk_03",
+   "Trunk_04",
+   "Trunk_05"
+  ],
+  "note": "2026-10-11 lane B (lane C pairing): Corrective Smooth folds the thin trunk shell's local frames when the chain bends; the trunk chain takes skin only"
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: the DEF mammoth throws its head and trunk up and forward in AttackFront (f3-f6) and lifts it in Mouseover (f4-f9); the capture kept the head level in both. Neck + Head pitch the head up so the tusks and trunk swing out (as on h3_mammoth_upg_alt). The DEF trunk lift and reach ride a 6-bone trunk chain (rig_chain rig surgery, 2026-10-11) 2026-10-12 lane B tusk follow-up (mesh surgery pre-approved): the reach showed the left tusk in shards and a dark fleck under the trunk. The Meshy auto-rig had skinned the left tusk and cheek to the left foreleg they rest against, and a small patch of the left forefoot to Head. tusk_c2 surgery cuts the head side off the foreleg; the tusk table puts both tusks rigid on Head, mirrors the right cheek's skin onto the left and gives the forefoot patch its neighbours' weights; the head/neck skin is re-solved against every gated pose on the new mesh (tusk_reach_weights, replacing the old neck table), and a whole-body strain limiter covers the reach and walk clips.",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_war_mammoth_trunk_fragments.json",
+    "sha256": "c9b2c1ebda08c119f29e3571d29e675e064475064dabc02fd04552a41ddef4ab",
+    "note": "lane B 2026-10-11: the rig_chain cut left a few chain-weighted faces disconnected from the trunk (on the tusk roots); they keep their pre-chain weights so they stay with the head instead of flying with the trunk as loose flecks"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_war_mammoth_tusk_weights.json",
+    "sha256": "c83ee6631f3fc5a09bcf711e12ed17dafcbf6a41b3154770b95b4e9afe1afa5c",
+    "note": "lane B 2026-10-12: the Meshy auto-rig skinned the left tusk and cheek to the left foreleg (LeftArm/LeftForeArm; the right ones are on Head), so the trunk reach tore the tusk into shards and a head-skinned patch on the left forefoot flew off as a dark fleck. Both tusks (ivory faces, tuskpin.py) go rigid on Head, the left cheek takes the mirrored right-side skin (mirrorpin.py), the foreleg side of the tusk_c1 cut keeps the foreleg, and two small Head-skinned islands on the left foreleg take their neighbours' weights."
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_war_mammoth_head_throw_rot.json",
+    "regrid": true,
+    "sha256": "51dd9f563dbbb6c587805eba0e9d199a06d73db94cadd305a03d275890920a1d"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_war_mammoth_head_throw_rot.json",
+    "regrid": true,
+    "sha256": "51dd9f563dbbb6c587805eba0e9d199a06d73db94cadd305a03d275890920a1d"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_war_mammoth_trunk_rot.json",
+    "sha256": "a704b43789d68ad1ae34c9c60b7f24186042e3323085f69d591374c878635380",
+    "regrid": true,
+    "note": "lane B 2026-10-11: trunk on its rig_chain (Trunk_00..05): Mouseover swings it forward and up with the tip curled (DEF g01 trumpet; Trunk_00 root pivot capped at 0.25x so the trunk root stays seated on the face), AttackFront reaches it out with the tip hooked (DEF g12); lane C's h3_mammoth_upg_alt keys (same clip lengths and chain layout); split table applied twice"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_war_mammoth_trunk_rot.json",
+    "sha256": "a704b43789d68ad1ae34c9c60b7f24186042e3323085f69d591374c878635380",
+    "regrid": true,
+    "note": "lane B 2026-10-11: trunk on its rig_chain (Trunk_00..05): Mouseover swings it forward and up with the tip curled (DEF g01 trumpet; Trunk_00 root pivot capped at 0.25x so the trunk root stays seated on the face), AttackFront reaches it out with the tip hooked (DEF g12); lane C's h3_mammoth_upg_alt keys (same clip lengths and chain layout); split table applied twice"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Mouseover",
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.4,
+    "maxMove": 0.08,
+    "bones": [
+     "Trunk_*"
+    ],
+    "note": "lane B 2026-10-11 (lane C recipe): strain limiter on the trunk skin for the two trunk clips"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Mouseover",
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.4,
+    "maxMove": 0.08,
+    "note": "lane B 2026-10-12: whole-body strain limiter on the two head clips only (the tusk now rides the Head rigidly after the tusk_c2 cut), so the cheek and foreleg skin around the cut takes the head throw without tearing. Locomotion clips untouched (cs_rekey)."
+   }
+  ]
+ }
+}

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Runtime proof ledger for no-compromise custom faction law activation packets. This file gates movement from diagnostics/planning into gameplay implementation.",
+  "validationState": "Static-validated June 16 by tools/release_port/check_custom_law_no_compromise_static.py. Updated June 18 with live bridge metadata proof for selected packet surfaces; gameplayAllowed remains false until runtime ordering and mutation semantics are proven.",
+  "rules": [
+    "Every packet referenced by custom_law_targets.json must have exactly one proof entry.",
+    "gameplayAllowed must remain false until runtime evidence proves the exact consuming hook context, active law/rank, and native mutation surface required by the packet.",
+    "Static decompilation evidence may support a packet, but it cannot set gameplayAllowed=true by itself.",
+    "Do not replace unproven packets with donor effects or broad fallback rows.",
+    "When gameplayAllowed becomes true, evidenceSummary must name the capture artifact, flags, scenario, exact native symbols, consumed state, mutated state, and updated docs."
+  ],
+  "packets": {
+    "battle-action": {
+      "proofStatus": "runtime-unproven",
+      "gameplayAllowed": false,
+      "evidenceSummary": "Diagnostic battle-event and formationProbe surfaces exist, but visible melee/ranged/first-action/adjacency correlation and active law-rank consumption are not proven.",
+      "lastEvidenceArtifact": null
+    },
+    "committed-damage": {
+      "proofStatus": "runtime-unproven",
+      "gameplayAllowed": false,
+      "evidenceSummary": "DiffableCs and generated interop metadata identify Hex.Session.Battle.Unit.bbgw(...) with exact generated EMechType-shaped runtime method Method_Public_Virtual_Void_InterfacePublicAbstractbaObbbUnInbbUnObbbObUnique_InterfacePublicAbstractbaBoaObVobabaObInUnique_ObjectPublicCacodaCaObceObceUnique_Int32_EMechType_Boolean_Single_Boolean_0, and a June 18 read-only bridge request returned that as the only full-signature candidate. Damage event diagnostics exist, but no decomp callable ordinal was supplied in that bridge proof, and visible committed-damage ordering, final-damage semantics, death cleanup ordering, and safe mutation semantics are not proven.",
+      "lastEvidenceArtifact": null
+    },
+    "construction": {
+      "proofStatus": "live-bridge-metadata-proven-runtime-ordering-unproven",
+      "gameplayAllowed": false,
+      "evidenceSummary": "Live bridge metadata proves exact runtime candidates for construction UI/session/building-data surfaces, including Hex.Session.City.BhBuildingsManager.bajt(String) resolving to Method_Private_MonoBehaviourPublicStBhbuceBhInceStBhceUnique_String_PDM_0 with callable ordinal match. Displayed cost, charged cost, eligibility, build commit, resource mutation, constructed state, and active law-rank agreement are not proven.",
+      "lastEvidenceArtifact": "experiments/cpp2il_readable_csharp/samples/latest_refresh/live_bridge_proofs"
+    },
+    "counterattack": {
+      "proofStatus": "partial-live-bridge-metadata-proven-correlation-unproven",
+      "gameplayAllowed": false,
+      "evidenceSummary": "Live bridge metadata proves exact dxx resolver-set and ebv listener-set candidates for diagnostics, but real counterattack dispatch, actor identity, committed damage correlation, Focus/buff/restore mutation, and active law-rank consumption are not proven.",
+      "lastEvidenceArtifact": "experiments/cpp2il_readable_csharp/samples/latest_refresh/live_bridge_proofs"
+    },
+    "morale": {
+      "proofStatus": "runtime-unproven",
+      "gameplayAllowed": false,
+      "evidenceSummary": "Morale roll diagnostics exist, but visible extra-action/failure ordering, action queue mutation, and active law-rank consumption are not proven.",
+      "lastEvidenceArtifact": null
+    },
+    "reward-result": {
+      "proofStatus": "partial-live-bridge-metadata-proven-commit-unproven",
+      "gameplayAllowed": false,
+      "evidenceSummary": "Live bridge metadata proves exact reward queue/remove candidates and resource data mutation semantics. A June 18 read-only resolve for czy.vji(Hero,DataRewardSet) found Method_Public_Void_Hero_DataRewardSet_PDM_0 as the full-shape candidate but with callable ordinal 36, while requested decomp ordinal 37 resolved to a mismatched Void(Int32) method; reward apply therefore remains unbound. Committed reward/result source identity, idempotent grant point, and active law-rank consumption are not proven.",
+      "lastEvidenceArtifact": "experiments/cpp2il_readable_csharp/samples/latest_refresh/live_bridge_proofs"
+    },
+    "spell-cooldown": {
+      "proofStatus": "live-bridge-metadata-proven-cast-gate-unproven",
+      "gameplayAllowed": false,
+      "evidenceSummary": "Live bridge metadata proves exact effective/decrement/add-if-ready/pool-shift cooldown candidates. A June 18 read-only resolve_decomp_method request for eew.bdmh(Int32) / decomp ordinal 45 rejected the shape-only generated Void(Int32) candidates: ordinal 45 resolved to Method_Private_Single_Int32_PDM_4, while generated Void(Int32) methods were ordinal mismatches. setCooldown remains unpromoted; source-prepared cooldown reductions now use repeated exact decrement calls instead of an absolute setter. Cast-gate/UI/execution synchronization and active law-rank consumption are not proven.",
+      "lastEvidenceArtifact": "experiments/cpp2il_readable_csharp/samples/latest_refresh/live_bridge_proofs"
+    },
+    "vision": {
+      "proofStatus": "live-bridge-metadata-proven-reveal-mutation-unproven",
+      "gameplayAllowed": false,
+      "evidenceSummary": "Live bridge/static metadata proves exact fog read/init/count, map-magic add/lookup, object-scouting candidates, and MapVisionObjectDesc factory identities. June 18 read-only bridge requests resolved City(Int32), Hero(Int32), Item(Int32), Method_Public_Static_MapVisionObjectDesc_Int32_PDM_0, and Method_Public_Static_MapVisionObjectDesc_String_PDM_0 with callable ordinal matches. Object classification, native fog reveal mutation, side/rank context, map refresh, and idempotent reveal semantics are not proven.",
+      "lastEvidenceArtifact": "experiments/cpp2il_readable_csharp/samples/latest_refresh/live_bridge_proofs"
+    }
+  }
+}

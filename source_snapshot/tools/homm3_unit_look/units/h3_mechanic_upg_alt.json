@@ -1,0 +1,89 @@
+{
+ "schema": "homm3_unit_look.v1",
+ "unit": "h3_mechanic_upg_alt",
+ "status": "look",
+ "notes": "factory: flamethrower. The jet is ripped from the DEF through a committed file mask (factory_fx_masks.py jet rule: fire-class pixels in front of the jet rear edge; drops the relit coat/hose) and carries a fitted dynamic light (the DEF relights the whole coat orange while the jet burns).",
+ "lighting": {
+  "mode": "v7c",
+  "front": "-y",
+  "arena": "sand",
+  "knobs": {},
+  "bakedGlow": []
+ },
+ "lights": [
+  {
+   "id": "jet_fire",
+   "treatment": "dynamic",
+   "notes": "the jet relights coat and hose orange on g12 f3-f8"
+  }
+ ],
+ "vfx": {
+  "layers": [
+   {
+    "id": "flame_jet",
+    "type": "defFlipbook",
+    "provenance": "roster inventory factory: g12 attack_front fire/flame f1-8 (extends)",
+    "clips": {
+     "Unit_AttackFront": {
+      "defGroup": 12,
+      "frames": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     }
+    },
+    "effectMask": {
+     "method": "file",
+     "path": "tools/homm3_unit_look/units/masks/h3_mechanic_upg_alt/flame_jet"
+    },
+    "bodyMask": {
+     "subtractMeshSilhouette": false,
+     "dilatePx": 1
+    },
+    "anchor": {
+     "bone": "RightHand",
+     "defOrigin": "auto",
+     "boneTip": true
+    },
+    "texelsPerDefPx": 1,
+    "light": "jet_fire"
+   },
+   {
+    "id": "jet_fire_light",
+    "type": "effectLight",
+    "lightId": "jet_fire",
+    "carrier": "flame_jet",
+    "anchor": {
+     "bone": "RightHand",
+     "towardLayerCentroid": 0.2,
+     "towardCameraU": 0.3
+    },
+    "rgb": [
+     1.0,
+     0.62,
+     0.28
+    ],
+    "range": 3.0,
+    "intensity": {
+     "Unit_AttackFront": [
+      0.0,
+      0.0,
+      0.124,
+      0.765,
+      1.644,
+      2.421,
+      3.312,
+      1.34,
+      0.977,
+      0.508
+     ]
+    },
+    "intensitySource": "fitted"
+   }
+  ]
+ }
+}

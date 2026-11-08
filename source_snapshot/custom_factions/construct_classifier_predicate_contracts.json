@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom Tower law profiles that require construct unit classification. This records authored construct identity semantics only; it does not prove live battle stack identity, hero party enumeration, spell-cast correlation, construct readiness state, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresConstructClassifierProfiles": true,
+    "towerOnly": true,
+    "constructFactMustComeFromUnitFamilyTags": true,
+    "towerConstructLinesMustMatchManifest": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "requiredStaticEvidence": {
+    "manifestPath": "custom_factions/homm3_tower.json",
+    "unitFamilyTagsPath": "custom_factions/unit_family_tags.json",
+    "factionSid": "homm3_tower",
+    "requiredConstructBaseSids": [
+      "h3_gargoyle",
+      "h3_golem"
+    ],
+    "requiredConstructUnitSids": [
+      "h3_gargoyle",
+      "h3_gargoyle_upg",
+      "h3_gargoyle_upg_alt",
+      "h3_golem",
+      "h3_golem_upg",
+      "h3_golem_upg_alt"
+    ],
+    "requiredFact": "construct=yes"
+  },
+  "requiredRuntimeProof": [
+    "live battle stack unit SID proof",
+    "hero party unit SID proof",
+    "construct classifier reaches consuming hook proof",
+    "spell cast to construct owner correlation proof",
+    "temporary summon or duplicate-stack handling proof",
+    "construct readiness state timing proof",
+    "idempotent construct effect application proof"
+  ],
+  "contracts": {
+    "tower.cooldown-construct-calculus-calendar": {
+      "constructKinds": [
+        "calendar-construct-cooldown-calculus",
+        "authored-tower-gargoyle-or-golem-line"
+      ],
+      "companionPredicates": [
+        "RequiresCooldownMutation",
+        "RequiresSpellCastEvent"
+      ],
+      "forbiddenSubstitutes": [
+        "Tower faction membership counted as construct",
+        "donor Human unit identity counted as construct",
+        "SID substring construct inference",
+        "display-name construct inference",
+        "any non-living unit counted as construct",
+        "spell cast counted without construct owner correlation proof"
+      ],
+      "notes": "Tower cooldown construct calculus requires authored Tower Gargoyle or Golem construct unit identity plus separate spell-cast and cooldown predicates; Tower membership alone is not a construct classifier."
+    },
+    "tower.construct-intercept-overcharge": {
+      "constructKinds": [
+        "formation-construct-intercept",
+        "authored-tower-gargoyle-or-golem-line"
+      ],
+      "companionPredicates": [
+        "RequiresHeroSpellCast"
+      ],
+      "forbiddenSubstitutes": [
+        "Tower faction membership counted as construct",
+        "donor Human unit identity counted as construct",
+        "SID substring construct inference",
+        "display-name construct inference",
+        "any non-living unit counted as construct",
+        "formation position counted without construct unit identity proof"
+      ],
+      "notes": "Tower construct intercept overcharge requires authored Tower Gargoyle or Golem construct unit identity in the formation context and a separate hero spell-cast predicate."
+    },
+    "tower.construct-readiness-package": {
+      "constructKinds": [
+        "morale-package-construct-readiness",
+        "authored-tower-gargoyle-or-golem-line"
+      ],
+      "companionPredicates": [
+        "RequiresSpellCastEvent"
+      ],
+      "forbiddenSubstitutes": [
+        "Tower faction membership counted as construct",
+        "donor Human unit identity counted as construct",
+        "SID substring construct inference",
+        "display-name construct inference",
+        "any non-living unit counted as construct",
+        "readiness state counted without construct timing proof"
+      ],
+      "notes": "Tower construct readiness package requires authored Tower Gargoyle or Golem construct unit identity and separate spell-cast/readiness timing proof; non-living or Tower identity alone is not enough."
+    }
+  }
+}

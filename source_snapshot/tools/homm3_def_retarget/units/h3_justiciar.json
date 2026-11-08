@@ -1,0 +1,789 @@
+{
+ "unit": "h3_justiciar",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.08,
+   0.92
+  ],
+  "Spine": [
+   0.0,
+   0.07,
+   1.0
+  ],
+  "Spine1": [
+   0.0,
+   0.06,
+   1.08
+  ],
+  "Spine2": [
+   0.01,
+   0.04,
+   1.18
+  ],
+  "Neck": [
+   0.01,
+   -0.02,
+   1.3
+  ],
+  "Head": [
+   0.02,
+   -0.05,
+   1.38
+  ],
+  "HeadTop_End": [
+   0.02,
+   -0.08,
+   1.58
+  ],
+  "LeftShoulder": [
+   0.05,
+   -0.01,
+   1.26
+  ],
+  "LeftArm": [
+   0.15,
+   -0.04,
+   1.25
+  ],
+  "LeftForeArm": [
+   0.26,
+   -0.06,
+   1.09
+  ],
+  "LeftHand": [
+   0.26,
+   -0.2,
+   0.98
+  ],
+  "LeftHand_End": [
+   0.26,
+   -0.27,
+   0.92
+  ],
+  "RightShoulder": [
+   -0.03,
+   0.0,
+   1.26
+  ],
+  "RightArm": [
+   -0.13,
+   0.01,
+   1.26
+  ],
+  "RightForeArm": [
+   -0.22,
+   0.12,
+   1.13
+  ],
+  "RightHand": [
+   -0.27,
+   0.15,
+   1.0
+  ],
+  "RightHand_End": [
+   -0.28,
+   0.2,
+   1.03
+  ]
+ },
+ "grounding": false,
+ "staticChains": [
+  {
+   "prefix": "HFR",
+   "points": [
+    [
+     -0.11,
+     -0.22,
+     0.62
+    ],
+    [
+     -0.096,
+     -0.206,
+     0.35
+    ],
+    [
+     -0.102,
+     -0.205,
+     0.15
+    ],
+    [
+     -0.098,
+     -0.23,
+     0.03
+    ]
+   ]
+  },
+  {
+   "prefix": "HFL",
+   "points": [
+    [
+     0.105,
+     -0.25,
+     0.62
+    ],
+    [
+     0.108,
+     -0.242,
+     0.35
+    ],
+    [
+     0.098,
+     -0.261,
+     0.15
+    ],
+    [
+     0.1,
+     -0.298,
+     0.03
+    ]
+   ]
+  },
+  {
+   "prefix": "HHL",
+   "points": [
+    [
+     0.12,
+     0.4,
+     0.62
+    ],
+    [
+     0.11,
+     0.453,
+     0.35
+    ],
+    [
+     0.127,
+     0.4,
+     0.2
+    ],
+    [
+     0.135,
+     0.322,
+     0.03
+    ]
+   ]
+  },
+  {
+   "prefix": "HHR",
+   "points": [
+    [
+     -0.13,
+     0.48,
+     0.62
+    ],
+    [
+     -0.125,
+     0.587,
+     0.35
+    ],
+    [
+     -0.14,
+     0.59,
+     0.15
+    ],
+    [
+     -0.13,
+     0.57,
+     0.03
+    ]
+   ]
+  },
+  {
+   "prefix": "HNeck",
+   "points": [
+    [
+     0.0,
+     -0.22,
+     0.88
+    ],
+    [
+     0.0,
+     -0.42,
+     1.1
+    ],
+    [
+     0.0,
+     -0.55,
+     1.22
+    ],
+    [
+     0.0,
+     -0.7,
+     0.95
+    ]
+   ]
+  },
+  {
+   "prefix": "HTail",
+   "points": [
+    [
+     0.0,
+     0.6,
+     0.88
+    ],
+    [
+     0.0,
+     0.7,
+     0.65
+    ],
+    [
+     0.0,
+     0.76,
+     0.4
+    ]
+   ]
+  }
+ ],
+ "props": [
+  {
+   "name": "blade",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.355,
+      -0.72,
+      0.63
+     ],
+     [
+      -0.355,
+      -0.38,
+      0.655
+     ]
+    ],
+    [
+     [
+      -0.355,
+      -0.38,
+      0.655
+     ],
+     [
+      -0.31,
+      -0.18,
+      0.78
+     ]
+    ]
+   ],
+   "radius": 0.06
+  },
+  {
+   "name": "bladeknee",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.31,
+      -0.18,
+      0.78
+     ],
+     [
+      -0.28,
+      0.05,
+      0.9
+     ]
+    ]
+   ],
+   "radius": 0.055
+  },
+  {
+   "name": "hilt",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.28,
+      0.05,
+      0.9
+     ],
+     [
+      -0.264,
+      0.37,
+      1.1
+     ]
+    ]
+   ],
+   "radius": 0.065
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "castle_mount",
+  "castle_handcut",
+  "castle_yaw",
+  "castle_refine",
+  "castle_riderthrow"
+ ],
+ "mount": {
+  "riderBox": [
+   [
+    -0.4,
+    -0.26,
+    0.85
+   ],
+   [
+    0.4,
+    0.45,
+    1.75
+   ]
+  ],
+  "riderDamp": 0.5,
+  "bob": 0.02,
+  "nod": 6,
+  "chains": {
+   "HFL": {
+    "phase": 0.0,
+    "swing": 22,
+    "flex": [
+     0,
+     35,
+     20
+    ]
+   },
+   "HHR": {
+    "phase": 0.0,
+    "swing": 22,
+    "flex": [
+     0,
+     35,
+     20
+    ]
+   },
+   "HFR": {
+    "phase": 0.5,
+    "swing": 22,
+    "flex": [
+     0,
+     35,
+     20
+    ]
+   },
+   "HHL": {
+    "phase": 0.5,
+    "swing": 22,
+    "flex": [
+     0,
+     35,
+     20
+    ]
+   },
+   "HNeck": {
+    "nod": true
+   }
+  },
+  "deathFall": {
+   "deg": 85,
+   "side": -1,
+   "pivotX": 0.25,
+   "start": 0.4,
+   "end": 0.66,
+   "riderHold": true,
+   "riderFlat": -30,
+   "lanceLie": [
+    "RightHand",
+    [
+     -0.28,
+     0.05,
+     0.9
+    ],
+    [
+     -0.355,
+     -0.72,
+     0.63
+    ]
+   ]
+  },
+  "frontSink": {
+   "start": 0.05,
+   "end": 0.45,
+   "pitch": 26,
+   "pivotY": 0.42,
+   "fore": [
+    -60,
+    130,
+    20
+   ],
+   "neck": -35,
+   "riderUpright": true
+  },
+  "riderTwist": {
+   "clip": "Hitted",
+   "deg": -90,
+   "bones": [
+    "Spine",
+    "Spine1",
+    "Spine2"
+   ],
+   "hold": 0.72,
+   "end": 0.86,
+   "keep": [
+    "RightShoulder"
+   ]
+  },
+  "rigSegments": {
+   "legs": {
+    "chains": [
+     "HFL",
+     "HFR",
+     "HHL",
+     "HHR"
+    ],
+    "blend": 0.08,
+    "radius": 0.12,
+    "band": [
+     0.36,
+     0.5
+    ]
+   },
+   "throat": {
+    "min2": 0.02,
+    "min0": 0.05,
+    "grow": 4,
+    "power": 2,
+    "smooth": 20,
+    "headR": [
+     0.17,
+     0.27
+    ],
+    "headOwn": [
+     0.12,
+     0.2
+    ]
+   }
+  }
+ },
+ "castleRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 60,
+   "dy": 80,
+   "roll": 35
+  },
+  "clipParams": {
+   "MoveStart": [
+    "dx",
+    "dy",
+    "roll"
+   ],
+   "Defence": [
+    "dx",
+    "dy",
+    "roll"
+   ],
+   "AttackFront": [
+    "dx",
+    "dy",
+    "roll"
+   ],
+   "Death": [
+    "dx",
+    "dy"
+   ]
+  },
+  "propAim": [
+   "RightHand"
+  ],
+  "aimRange": 100,
+  "aimFromRest": true
+ },
+ "yawDeg": 65,
+ "castleHandCut": {
+  "sides": [
+   "Right",
+   "Left"
+  ],
+  "handRadius": 0.1,
+  "foreRadius": 0.07,
+  "foreMinLum": 0.0,
+  "upperRadius": 0.15,
+  "upperMinArm": 0.4
+ },
+ "strideMatch": {
+  "pelvisHold": 0.0,
+  "trotPhase": 0.875,
+  "swingLift": 0.09,
+  "swingCurl": 45.0,
+  "reason": "authenticity 2026-10-08 (lane B): h3_justiciar shares the h3_champion DEF animation set; stride options and legDeltas transferred from h3_champion (see h3_champion.json strideMatch for the DEF basis: level diagonal trot, hold the fitted pelvis height, high swing lift with fetlock curl, DEF-solved leg drive).",
+  "legDeltas": "tools/homm3_def_retarget_delivery/stride_leg_deltas/h3_champion.json"
+ },
+ "riderThrow": {
+  "seamSmooth": 2,
+  "note": "h3_justiciar (same DEF animation as h3_champion) Death f2-f7: the rider rises out of the saddle and falls clear of the horse, the lance drops. Geometry re-placed for the justiciar mesh, whose lance is in the RightHand (the DEF's lance hand too); keys as h3_champion.",
+  "riderHips": {
+   "head": [
+    0.0,
+    0.07,
+    1.0
+   ],
+   "tail": [
+    0.0,
+    0.07,
+    1.08
+   ],
+   "boxes": [
+    [
+     [
+      0.14,
+      -0.14,
+      0.4
+     ],
+     [
+      0.41,
+      0.19,
+      1.05
+     ]
+    ],
+    [
+     [
+      -0.43,
+      -0.14,
+      0.4
+     ],
+     [
+      -0.16,
+      0.19,
+      1.05
+     ]
+    ],
+    [
+     [
+      -0.18,
+      -0.11,
+      0.97
+     ],
+     [
+      0.16,
+      0.21,
+      1.12
+     ]
+    ]
+   ]
+  },
+  "lance": {
+   "parent": "RightHand",
+   "head": [
+    -0.282,
+    0.15,
+    1.005
+   ],
+   "tail": [
+    -0.292,
+    0.04,
+    0.958
+   ],
+   "segments": [
+    [
+     [
+      -0.355,
+      -0.72,
+      0.63
+     ],
+     [
+      -0.355,
+      -0.38,
+      0.655
+     ]
+    ],
+    [
+     [
+      -0.355,
+      -0.38,
+      0.655
+     ],
+     [
+      -0.31,
+      -0.18,
+      0.78
+     ]
+    ],
+    [
+     [
+      -0.31,
+      -0.18,
+      0.78
+     ],
+     [
+      -0.28,
+      0.05,
+      0.9
+     ]
+    ],
+    [
+     [
+      -0.28,
+      0.05,
+      0.9
+     ],
+     [
+      -0.264,
+      0.37,
+      1.1
+     ]
+    ]
+   ],
+   "radius": 0.065
+  },
+  "keys": {
+   "RiderHips": [
+    [
+     0.1,
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      0
+     ]
+    ],
+    [
+     0.3,
+     [
+      0,
+      0.02,
+      0.1
+     ],
+     [
+      6,
+      0,
+      0
+     ]
+    ],
+    [
+     0.55,
+     [
+      0,
+      0.05,
+      0.18
+     ],
+     [
+      0,
+      0,
+      0
+     ]
+    ],
+    [
+     0.8,
+     [
+      0,
+      0.1,
+      0.32
+     ],
+     [
+      -10,
+      0,
+      0
+     ]
+    ]
+   ],
+   "Lance": [
+    [
+     0.0,
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      0
+     ]
+    ],
+    [
+     0.14,
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      25,
+      0,
+      0
+     ]
+    ],
+    [
+     0.3,
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      50,
+      0,
+      0
+     ]
+    ],
+    [
+     0.56,
+     [
+      0,
+      0.1,
+      -0.12
+     ],
+     [
+      100,
+      0,
+      0
+     ]
+    ],
+    [
+     0.8,
+     [
+      0,
+      0.35,
+      -0.45
+     ],
+     [
+      0,
+      0,
+      0
+     ]
+    ]
+   ]
+  }
+ },
+ "correctiveSmooth": {
+  "excludeBones": [
+   "Lance"
+  ],
+  "note": "2026-10-08 authenticity: the rigid lance takes skin only (corrective smooth dragged lance vertices into shards on h3_cavalier)"
+ },
+ "sourceMesh": "artifacts/homm3_mesh_surgery/h3_justiciar_sliver.glb",
+ "glbPatch": {
+  "reason": "2026-10-08 authenticity pass (lane B): the justiciar and champion DEFs are one HoMM3 animation set, so the champion's passed per-DEF-frame pose fit (commit 0c692ae845: head forward, AttackFront rear then low long lunge with the lance couched, Death rider thrown on castle_riderthrow) is transferred by world-space retarget (arms swapped and mirrored: the justiciar, like its DEF, holds the lance in the right hand) as local rotation offsets plus root translations. Numpy patch lane. 2026-10-08 Move carriage (lane B check flags): the fitted Move reclined the rider about 20 deg with the head tipped back (looking at the sky, unlike the upright DEF rider); a stacked keyRotations table (h3_justiciar_head_rot.json) aims the Spine-Neck line back to the rider's Idle carriage and the head level looking ahead.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_justiciar_pose.json",
+    "sha256": "5144f596325f7122ab6b9731461c329ba6ab55d3da30edc21f56e1fbf69e69c3",
+    "regrid": true,
+    "note": "DEF pose fit (from h3_champion, world-space retarget)"
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_justiciar_pose_tr.json",
+    "sha256": "3abdcf19c2d00e99e6cccf9765db84ce538fac0f21dc8a406430234a24b0c425",
+    "note": "root path (from h3_champion)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_justiciar_head_rot.json",
+    "sha256": "cf8bb60619291992ca969f9450bec29fb69f3d4013e6650b0ab62f06500cf9d2",
+    "regrid": true,
+    "note": "Move carriage: rider torso back to the Idle Spine-Neck line and head level looking ahead, stacked on the DEF pose fit"
+   }
+  ]
+ }
+}

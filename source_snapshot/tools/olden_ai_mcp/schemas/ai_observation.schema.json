@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "olden-ai-driver://schemas/ai_observation.schema.json",
+  "title": "Olden AI Driver Observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "observationId",
+    "screenId",
+    "scene",
+    "frame",
+    "mode",
+    "timestamp",
+    "uiElements",
+    "gameObjects",
+    "actions",
+    "gaps"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "ai-driver.v1.observation" },
+    "observationId": { "type": "string", "minLength": 16 },
+    "screenId": { "type": "string", "minLength": 16 },
+    "scene": { "type": "string" },
+    "frame": { "type": "integer", "minimum": 0 },
+    "mode": {
+      "type": "string",
+      "enum": ["main_menu", "adventure_map", "town", "battle", "loading", "unknown"]
+    },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "uiElements": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/uiElement" }
+    },
+    "gameObjects": {
+      "type": "array",
+      "maxItems": 256,
+      "items": { "$ref": "#/$defs/gameObject" }
+    },
+    "town": { "$ref": "#/$defs/townState" },
+    "battle": { "$ref": "#/$defs/battleState" },
+    "map": { "$ref": "#/$defs/mapState" },
+    "actions": {
+      "type": "array",
+      "maxItems": 128,
+      "items": { "$ref": "#/$defs/action" }
+    },
+    "gaps": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/gap" }
+    }
+  },
+  "$defs": {
+    "rect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "width": { "type": "number", "minimum": 0 },
+        "height": { "type": "number", "minimum": 0 }
+      }
+    },
+    "fingerprint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": { "type": "string", "enum": ["runtime_instance_id", "semantic", "native_sid", "screen_path"] },
+        "value": { "type": "string", "minLength": 1 }
+      }
+    },
+    "uiElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "role", "name", "path", "rect", "visible", "enabled", "interactable", "fingerprint"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "role": { "type": "string", "minLength": 1 },
+        "name": { "type": "string" },
+        "path": { "type": "string" },
+        "text": { "type": "string" },
+        "rect": { "$ref": "#/$defs/rect" },
+        "visible": { "type": "boolean" },
+        "enabled": { "type": "boolean" },
+        "interactable": { "type": "boolean" },
+        "fingerprint": { "$ref": "#/$defs/fingerprint" }
+      }
+    },
+    "gameObject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "name", "visible", "fingerprint"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "type": "string", "minLength": 1 },
+        "name": { "type": "string" },
+        "sid": { "type": "string" },
+        "ownerSide": { "type": "integer" },
+        "visible": { "type": "boolean" },
+        "fingerprint": { "$ref": "#/$defs/fingerprint" }
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actionId", "kind", "role", "targetId", "targetFingerprint", "screenId"],
+      "properties": {
+        "actionId": { "type": "string", "minLength": 16 },
+        "kind": { "type": "string", "enum": ["click", "submit"] },
+        "role": { "type": "string", "minLength": 1 },
+        "targetId": { "type": "string", "minLength": 1 },
+        "targetFingerprint": { "$ref": "#/$defs/fingerprint" },
+        "screenId": { "type": "string", "minLength": 16 },
+        "label": { "type": "string" }
+      }
+    },
+    "gap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 },
+        "blocking": { "type": "boolean" }
+      }
+    },
+    "townState": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "townSid": { "type": "string" },
+        "ownerSide": { "type": "integer" },
+        "selectedBuildingSid": { "type": "string" }
+      }
+    },
+    "battleState": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "activeSide": { "type": "integer" },
+        "activeUnitId": { "type": "string" },
+        "round": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "mapState": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "activeHeroId": { "type": "string" },
+        "currentSide": { "type": "integer" }
+      }
+    }
+  }
+}

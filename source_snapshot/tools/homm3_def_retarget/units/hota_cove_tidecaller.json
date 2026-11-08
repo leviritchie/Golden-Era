@@ -1,0 +1,218 @@
+{
+ "unit": "hota_cove_tidecaller",
+ "joints": {
+  "Hips": [
+   -0.012,
+   -0.017,
+   0.847
+  ],
+  "Spine": [
+   -0.012,
+   -0.005,
+   0.94
+  ],
+  "Spine1": [
+   -0.012,
+   0.006,
+   1.033
+  ],
+  "Spine2": [
+   -0.012,
+   0.019,
+   1.137
+  ],
+  "Neck": [
+   -0.012,
+   0.03,
+   1.219
+  ],
+  "Head": [
+   -0.018,
+   -0.003,
+   1.312
+  ],
+  "HeadTop_End": [
+   -0.032,
+   -0.103,
+   1.604
+  ],
+  "LeftShoulder": [
+   0.028,
+   -0.023,
+   1.298
+  ],
+  "LeftArm": [
+   0.121,
+   -0.05,
+   1.272
+  ],
+  "LeftForeArm": [
+   0.187,
+   -0.017,
+   1.099
+  ],
+  "LeftHand": [
+   0.068,
+   -0.216,
+   1.179
+  ],
+  "LeftHand_End": [
+   0.024,
+   -0.289,
+   1.208
+  ],
+  "RightShoulder": [
+   -0.065,
+   0.016,
+   1.298
+  ],
+  "RightArm": [
+   -0.158,
+   0.05,
+   1.285
+  ],
+  "RightForeArm": [
+   -0.198,
+   0.056,
+   1.112
+  ],
+  "RightHand": [
+   -0.277,
+   -0.01,
+   0.933
+  ],
+  "RightHand_End": [
+   -0.312,
+   -0.039,
+   0.855
+  ],
+  "LeftUpLeg": [
+   0.075,
+   -0.05,
+   0.787
+  ],
+  "LeftLeg": [
+   0.141,
+   -0.096,
+   0.422
+  ],
+  "LeftFoot": [
+   0.221,
+   -0.07,
+   0.116
+  ],
+  "LeftToeBase": [
+   0.287,
+   -0.143,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.234,
+   -0.05,
+   0.189
+  ],
+  "RightUpLeg": [
+   -0.098,
+   -0.003,
+   0.787
+  ],
+  "RightLeg": [
+   -0.111,
+   0.01,
+   0.422
+  ],
+  "RightFoot": [
+   -0.138,
+   0.096,
+   0.123
+  ],
+  "RightToeBase": [
+   -0.171,
+   -0.01,
+   0.063
+  ],
+  "RightToe_End": [
+   -0.171,
+   0.109,
+   0.156
+  ]
+ },
+ "props": [
+  {
+   "name": "orb",
+   "bone": "LeftHand",
+   "sphere": [
+    [
+     0.04,
+     -0.325,
+     1.4
+    ],
+    0.095
+   ]
+  },
+  {
+   "name": "sword",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.283,
+      0.075,
+      1.023
+     ],
+     [
+      -0.283,
+      -0.675,
+      0.273
+     ]
+    ],
+    [
+     [
+      -0.298,
+      -0.027,
+      0.886
+     ],
+     [
+      -0.29,
+      0.082,
+      0.978
+     ]
+    ]
+   ],
+   "radius": 0.11,
+   "wholeIslands": 0.6
+  }
+ ],
+ "bootTop": 0.12,
+ "skirtLegShare": 0.4,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "sourceMesh": "artifacts/homm3_mesh_surgery/hota_cove_tidecaller_sword_m1.glb",
+ "meshReason": "2026-10-11 authenticity pass (lane A): the DEF AttackFront draws the sword overhead, slashes down and levels it at the target, but the Meshy mesh wore it sheathed through the left hip belt. sword_draw_surgery.py (same mesh geometry and recipe as hota_cove_sorceress sword_m1) re-seats the sword with the grip in the right fist, blade lowered forward; the sword prop (wholeIslands) makes it rigid on RightHand.",
+ "glbPatch": {
+  "reason": "authenticity: DEF g12 attack - with the sword now in her right fist (sword_m1 draw surgery), she winds it back out to the side (f3), raises it overhead (f4), slashes down in front (f5-f6) and levels it at the target (f7), instead of holding it raised by the shoulder. Right arm/shoulder weights re-solved (wsolve fixed point, 3 passes)",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_tidecaller_slash_weights.json",
+    "sha256": "34a8979949f71c0bc2068ef590c0d03c995a5a0480566a73184f5dc06032f794",
+    "note": "tidecaller overhead slash: right arm/shoulder weights re-solved (wsolve fixed point, GPU)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_tidecaller_pose_rot.json",
+    "sha256": "1092eccf534b29e27b6d09c1517c971fc95582fe3c18bd9b26860f402ed9801b",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_tidecaller_pose_rot.json",
+    "sha256": "1092eccf534b29e27b6d09c1517c971fc95582fe3c18bd9b26860f402ed9801b",
+    "regrid": true
+   }
+  ]
+ }
+}

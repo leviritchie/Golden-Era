@@ -1,0 +1,255 @@
+{
+ "unit": "toa_goblin_trapper",
+ "joints": {
+  "Hips": [
+   -0.024,
+   0.108,
+   0.722
+  ],
+  "Spine": [
+   -0.024,
+   0.094,
+   0.862
+  ],
+  "Spine1": [
+   -0.024,
+   0.08,
+   1.001
+  ],
+  "Spine2": [
+   -0.024,
+   0.065,
+   1.158
+  ],
+  "Neck": [
+   -0.024,
+   0.052,
+   1.28
+  ],
+  "Head": [
+   -0.017,
+   0.01,
+   1.301
+  ],
+  "HeadTop_End": [
+   -0.02,
+   -0.02,
+   1.62
+  ],
+  "LeftShoulder": [
+   0.066,
+   0.038,
+   1.225
+  ],
+  "LeftArm": [
+   0.178,
+   0.129,
+   1.204
+  ],
+  "LeftForeArm": [
+   0.283,
+   0.297,
+   0.98
+  ],
+  "LeftHand": [
+   0.436,
+   0.192,
+   0.792
+  ],
+  "LeftHand_End": [
+   0.488,
+   0.156,
+   0.728
+  ],
+  "RightShoulder": [
+   -0.087,
+   -0.003,
+   1.218
+  ],
+  "RightArm": [
+   -0.22,
+   0.017,
+   1.176
+  ],
+  "RightForeArm": [
+   -0.394,
+   0.08,
+   0.946
+  ],
+  "RightHand": [
+   -0.485,
+   -0.066,
+   0.736
+  ],
+  "RightHand_End": [
+   -0.515,
+   -0.115,
+   0.667
+  ],
+  "LeftUpLeg": [
+   0.094,
+   0.157,
+   0.722
+  ],
+  "LeftLeg": [
+   0.262,
+   0.01,
+   0.443
+  ],
+  "LeftFoot": [
+   0.234,
+   0.122,
+   0.122
+  ],
+  "LeftToeBase": [
+   0.338,
+   -0.017,
+   -0.003
+  ],
+  "LeftToe_End": [
+   0.408,
+   -0.157,
+   0.025
+  ],
+  "RightUpLeg": [
+   -0.136,
+   0.052,
+   0.722
+  ],
+  "RightLeg": [
+   -0.22,
+   -0.108,
+   0.394
+  ],
+  "RightFoot": [
+   -0.283,
+   0.108,
+   0.122
+  ],
+  "RightToeBase": [
+   -0.269,
+   -0.073,
+   0.004
+  ],
+  "RightToe_End": [
+   -0.241,
+   -0.255,
+   0.018
+  ]
+ },
+ "extensions": [
+  "stronghold_propbone"
+ ],
+ "propBones": [
+  {
+   "name": "Ball",
+   "parent": "RightHand",
+   "head": [
+    -0.515,
+    -0.115,
+    0.667
+   ],
+   "tail": [
+    -0.515,
+    -0.395,
+    0.717
+   ],
+   "faceTest": "centroid",
+   "regions": [
+    {
+     "sphere": [
+      [
+       0.111,
+       -0.21,
+       0.893
+      ],
+      0.2
+     ],
+     "exclude": [
+      {
+       "box": [
+        [
+         -1,
+         -0.13,
+         0
+        ],
+        [
+         1,
+         1,
+         2
+        ]
+       ]
+      }
+     ]
+    }
+   ],
+   "relocate": {
+    "from": [
+     [
+      0.111,
+      -0.21,
+      0.893
+     ],
+     [
+      0,
+      1,
+      0
+     ],
+     [
+      0,
+      0,
+      1
+     ]
+    ],
+    "to": [
+     [
+      -0.515,
+      -0.395,
+      0.717
+     ],
+     [
+      0,
+      1,
+      0
+     ],
+     [
+      0,
+      0,
+      1
+     ]
+    ]
+   }
+  }
+ ],
+ "armCut": {
+  "maxDist": 0.08
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [],
+  "propAim": [
+   "Ball"
+  ]
+ },
+ "glbPatch": {
+  "reason": "authenticity lane B 2026-10-11: AttackFront wind-up, level forward strike, ground smash with the flail head (DEF g12)",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/toa_goblin_trapper_attack_overhead_smash_rot.json",
+    "regrid": true,
+    "sha256": "f843bc5fdfc41704f6fed35261ba38c30139a9b0deff18d7fe87a3460a1383b1"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/toa_goblin_trapper_attack_overhead_smash_rot.json",
+    "regrid": true,
+    "sha256": "f843bc5fdfc41704f6fed35261ba38c30139a9b0deff18d7fe87a3460a1383b1"
+   }
+  ]
+ }
+}

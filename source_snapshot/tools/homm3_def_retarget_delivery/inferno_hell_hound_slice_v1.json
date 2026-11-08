@@ -1,0 +1,36 @@
+{
+  "schema": "homm3_def_retarget_delivery_selection.v1",
+  "slice": "inferno_hell_hound_slice_v1",
+  "disposition": "user_requested_ingame_test",
+  "accepted": false,
+  "out": "artifacts/homm3_def_retarget_delivery/inferno_hell_hound_slice_v1",
+  "note": "2026-10-02 hell hound off the legacy 09-16 Roc-template mocap lane (forelegs miming in the air, pitched gait) onto def_retarget; inferno_hindplant plants the hind paws at Hitted/Death entry so the ground gate passes. Own sub-slice so the 20-unit inferno_slice_v1 is not rebuilt. Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_hell_hound 0.2008. | look B (vanilla philosophy finish, finish.py; look.py --stages finish,apply), animation unchanged Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_hell_hound 0.2008. | h3_hell_hound Death: solid shatter + rubbleSettle bone heap (rubble still deferMeshes; needs the mergeMeshes row migration to show in game) Fleet rollout (docs/homm3_def_retarget_fleet_census.md): every unit re-baked on the Tikhonov corrective-smooth solve (a9de7da122) and look re-applied before this freeze; frozen by tools/homm3_def_retarget_delivery/freeze_slice.py. Morph ratios at freeze: h3_hell_hound 0.2008.",
+  "chain": {
+    "retarget": "existing canonical build artifacts/homm3_def_retarget/<unit>/<unit>_def_retarget.glb, re-baked by tools/homm3_def_retarget_delivery/fleet_rebuild.py (emphasis deliver.py --force, or bake_cs.py + RENDER_ONLY run_unit.sh + verify_glb.py for non-emphasised units)",
+    "emphasis": "tools/homm3_def_retarget_emphasis/deliver.py (run by fleet_rebuild.py)",
+    "look": "tools/homm3_unit_look/look.py <unit> --force (run by fleet_rebuild.py), frozen copies under <out>/<unit>/inputs",
+    "idleRetime": "applied at freeze: tools/homm3_idle_cadence/retime_idle.py on the frozen look-delivered GLB"
+  },
+  "units": [
+    {
+      "labSid": "h3_hell_hound",
+      "gameSid": "h3_hell_hound",
+      "bundleName": "custom_units_inferno_h3_hell_hound",
+      "albedo": "basecolor",
+      "sourceMeshSha256": "7714e7bbc039d707f456b545f996ae6922421c9fe415265a6b791db8935f9cfa",
+      "identityReview": "none",
+      "vfxAuthority": "vanilla_style",
+      "vanillaStyleSpec": "tools/homm3_vfx/vanilla_style/units/h3_hell_hound.json",
+      "mergeMeshes": {
+        "h3_hell_hound_Rubble": "the death shatter's rubble mesh (build_unit.py shatter) is merged into the body primitive at prepare (merge_rubble_glb.py): one SkinnedMeshRenderer, the Chunk bones already in its bone list, zero offsets for every corrective morph, so the death breaks into falling chunks in game instead of vanishing"
+      },
+      "frozen": {
+        "lookDeliveredGlbSha256": "b656dc4a87e5d866bfde2c568372c9912f319df38584dbf62f6d8eb3b7e34bd0",
+        "idleRetimedGlbSha256": "0847532f62277407985f3fc4f2decf0e31887a84628c9fc41c7a5c7b2ad74335",
+        "vfxManifestSha256": "4cfdbeddff64b9a6fac9bbb81aff0eebee887dea8a10325ff8afb2955085ad82",
+        "specSha256": "fe7ee815a73c4f59a28f153d50306f93d3e696b1624ff43c4227e207a8f6c090",
+        "basecolorSha256": "7094406a91dcc01215a07797d0dd16df2bf3ef8031b03f2b6a814d234d039369"
+      }
+    }
+  ]
+}

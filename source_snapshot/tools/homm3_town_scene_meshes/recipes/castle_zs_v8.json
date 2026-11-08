@@ -1,0 +1,42 @@
+{
+ "schema": "town_full3d_recipe.v2",
+ "faction": "castle",
+ "seed": "carve_v2",
+ "candidate": "zs_v8",
+ "note": "zs_v8 (2026-10-02): zs_v7's recipe (seed carve_v2) plus the sprite ground decals (town_full3d_sprite_decal.py): zs_v7's rest-paint term failed min_tbcscas2/3 (the river the Citadel sprite paints, 1290 px of grass) and min_tbcsdw_5 (the Griffin Tower's wooden structure, 887 px of Back_Terrain): building-seed coverage gaps, byte-identical since zs_v5. The decals lay that sprite paint on the environment's rest surface in the building's prefab.",
+ "ldi": {
+  "pieces": [
+   "Mesh_Terrain"
+  ],
+  "cut": "zone",
+  "backRule": "vlb",
+  "vlbK": 2.0,
+  "keepRounds": 0,
+  "reachLoop": 12,
+  "fromPreLdi": false
+ },
+ "backstop": {
+  "K": 2.0,
+  "stepPx": 4,
+  "groundSrcM": 1.0
+ },
+ "repair": {
+  "rules": [
+   "drop",
+   "card",
+   "flap",
+   "planar"
+  ],
+  "rounds": 8
+ },
+ "certificate": {
+  "loop": 12,
+  "extraPoses": [
+   "loop_060",
+   "loop_096",
+   "loop_240",
+   "loop_336"
+  ]
+ },
+ "decal": {}
+}

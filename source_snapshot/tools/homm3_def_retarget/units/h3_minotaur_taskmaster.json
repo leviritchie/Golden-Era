@@ -1,0 +1,255 @@
+{
+ "unit": "h3_minotaur_taskmaster",
+ "joints": {
+  "Hips": [
+   0.012,
+   0.279,
+   0.86
+  ],
+  "Spine": [
+   0.012,
+   0.251,
+   0.945
+  ],
+  "Spine1": [
+   0.012,
+   0.223,
+   1.029
+  ],
+  "Spine2": [
+   0.012,
+   0.191,
+   1.124
+  ],
+  "Neck": [
+   0.012,
+   0.166,
+   1.199
+  ],
+  "Head": [
+   0.01,
+   0.2,
+   1.32
+  ],
+  "HeadTop_End": [
+   0.01,
+   -0.05,
+   1.55
+  ],
+  "LeftShoulder": [
+   0.111,
+   0.213,
+   1.258
+  ],
+  "LeftArm": [
+   0.204,
+   0.226,
+   1.185
+  ],
+  "LeftForeArm": [
+   0.284,
+   0.279,
+   0.986
+  ],
+  "LeftHand": [
+   0.31,
+   0.12,
+   0.84
+  ],
+  "LeftHand_End": [
+   0.31,
+   0.07,
+   0.74
+  ],
+  "RightShoulder": [
+   -0.081,
+   0.226,
+   1.258
+  ],
+  "RightArm": [
+   -0.167,
+   0.259,
+   1.192
+  ],
+  "RightForeArm": [
+   -0.247,
+   0.259,
+   0.986
+  ],
+  "RightHand": [
+   -0.28,
+   0.08,
+   0.82
+  ],
+  "RightHand_End": [
+   -0.27,
+   0.03,
+   0.72
+  ],
+  "LeftUpLeg": [
+   0.138,
+   0.279,
+   0.787
+  ],
+  "LeftLeg": [
+   0.204,
+   0.186,
+   0.408
+  ],
+  "LeftFoot": [
+   0.218,
+   0.273,
+   0.163
+  ],
+  "LeftToeBase": [
+   0.238,
+   0.266,
+   0.07
+  ],
+  "LeftToe_End": [
+   0.251,
+   0.107,
+   0.003
+  ],
+  "RightUpLeg": [
+   -0.114,
+   0.279,
+   0.787
+  ],
+  "RightLeg": [
+   -0.181,
+   0.186,
+   0.408
+  ],
+  "RightFoot": [
+   -0.187,
+   0.273,
+   0.163
+  ],
+  "RightToeBase": [
+   -0.207,
+   0.266,
+   0.07
+  ],
+  "RightToe_End": [
+   -0.221,
+   0.133,
+   -0.01
+  ]
+ },
+ "props": [
+  {
+   "name": "axe",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.26,
+      0.03,
+      0.76
+     ],
+     [
+      -0.15,
+      -0.42,
+      1.06
+     ]
+    ],
+    [
+     [
+      -0.19,
+      -0.2,
+      0.72
+     ],
+     [
+      -0.17,
+      -0.2,
+      1.08
+     ]
+    ],
+    [
+     [
+      -0.15,
+      -0.38,
+      0.74
+     ],
+     [
+      -0.13,
+      -0.38,
+      1.1
+     ]
+    ]
+   ],
+   "radius": 0.08
+  },
+  {
+   "name": "axegrip",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.26,
+      0.03,
+      0.76
+     ],
+     [
+      -0.34,
+      0.3,
+      0.5
+     ]
+    ]
+   ],
+   "radius": 0.045
+  }
+ ],
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "extensions": [
+  "dungeon_fixweights"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ],
+  "limits": {
+   "dx": 20,
+   "dy": 20,
+   "roll": 20
+  },
+  "propAim": [
+   "RightHand"
+  ]
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: AttackFront - the DEF taskmaster thrusts the axe level far forward at the strike; the capture held it at the waist pointing down. RightHand aims the haft level forward at f3-f6 (wind-up kept); stretchRelax on the wrist crease",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_minotaur_taskmaster_attack_level_thrust_rot.json",
+    "regrid": true,
+    "sha256": "9829b8de176542f2425d67361ac936f528df2a366c00312e25367b2b53d09d9f"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_minotaur_taskmaster_attack_level_thrust_rot.json",
+    "regrid": true,
+    "sha256": "9829b8de176542f2425d67361ac936f528df2a366c00312e25367b2b53d09d9f"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "crease of the re-posed joints"
+   }
+  ]
+ }
+}

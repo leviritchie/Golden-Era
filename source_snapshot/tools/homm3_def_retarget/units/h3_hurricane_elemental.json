@@ -1,0 +1,142 @@
+{
+ "unit": "h3_hurricane_elemental",
+ "sourceMesh": "artifacts/homm3_mesh_surgery/h3_hurricane_elemental_armshell_s5.glb",
+ "meshSurgeryReason": "2026-10-12 lane A (standing mesh-surgery approval; send-back 'fists welded to the belly is a mesh defect'): Meshy modelled the crossed forearms and fists as part of the whirlwind torso's front wall and the upper-arm puffs as part of its sides, with no torso surface behind them, so any arm raise tore a sheet off the belly (a fist-only limb_cut left the forearms welded). limb_shell_surgery.py duplicates each arm's faces (arm-chain skin share > 0.5 in the delivery base, above z 0.95) into a free shell and pulls the original faces in to close the torso wall under them; every face, UV and texel is kept, and at rest the arms cover the wall exactly as before. The wall and arm shells are re-skinned in the glbPatch (setWeights). s5 (coordinator option b) relocates the left fist copy island from the belly onto the elbow end of the left upper-arm puff (--relocate artifacts/homm3_mesh_surgery/h3_hurricane_elemental_fist_relocate.json) so the raised arm carries it.",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.0,
+   0.9
+  ],
+  "Spine": [
+   0.0,
+   0.0,
+   1.02
+  ],
+  "Spine1": [
+   0.0,
+   0.0,
+   1.14
+  ],
+  "Spine2": [
+   0.0,
+   0.0,
+   1.26
+  ],
+  "Neck": [
+   0.0,
+   -0.02,
+   1.42
+  ],
+  "Head": [
+   0.0,
+   -0.04,
+   1.52
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.05,
+   1.72
+  ],
+  "LeftShoulder": [
+   0.06,
+   0.0,
+   1.38
+  ],
+  "RightShoulder": [
+   -0.06,
+   0.0,
+   1.38
+  ],
+  "LeftArm": [
+   0.2,
+   0.0,
+   1.35
+  ],
+  "RightArm": [
+   -0.2,
+   0.0,
+   1.35
+  ],
+  "LeftForeArm": [
+   0.26,
+   -0.06,
+   1.17
+  ],
+  "RightForeArm": [
+   -0.26,
+   -0.06,
+   1.17
+  ],
+  "LeftHand": [
+   0.16,
+   -0.15,
+   1.2
+  ],
+  "RightHand": [
+   -0.16,
+   -0.15,
+   1.2
+  ],
+  "LeftHand_End": [
+   0.07,
+   -0.18,
+   1.22
+  ],
+  "RightHand_End": [
+   -0.07,
+   -0.18,
+   1.22
+  ]
+ },
+ "grounding": false,
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy",
+   "roll"
+  ]
+ },
+ "shrinkOut": {
+  "start": 4,
+  "power": 1.2
+ },
+ "extensions": [
+  "conflux_weights",
+  "conflux_tilt",
+  "element_motion"
+ ],
+ "conflux": {
+  "fillUnweighted": true,
+  "maxBodyTilt": 60.0
+ },
+ "elementMotion": {
+  "mode": "vortex",
+  "period": 10,
+  "flow": {
+   "pulseFromDef": 0.5
+  }
+ },
+ "glbPatch": {
+  "reason": "DEF g12 AttackFront: with the arms cut free of the torso wall (limb_shell surgery), both arms are thrown up overhead on the wind-up (f0-f1, body rearing back), then the body lunges deeper and lower toward the target (f2-f3) with both arms driven forward; idle-family clips turn the left upper arm 40 deg inward and forward so the relocated left fist (s5) crosses in front of the belly",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_hurricane_elemental_shell_weights.json",
+    "sha256": "ea9414a4f25665e82aa1688b974fbbd78e27c9c2fb235e5ec506a3cd4863f48f",
+    "note": "limb_shell re-skin: torso wall under the arms from its non-arm neighbours, arm shells on their own side's chain"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_hurricane_elemental_pose_rot.json",
+    "sha256": "78313c37931e1b47cf19ce1a75151f0e8a8487d65dc6fe9e4bc52033cf5ca93e",
+    "regrid": true
+   }
+  ]
+ }
+}

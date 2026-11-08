@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-authored predicate contract for custom law profiles that require a real damage-taken event. This records committed damage-taken semantics only; it does not prove final damage ordering, receiver identity, death ordering, kill correlation, rage/warcry correlation, or authorize gameplay mutation.",
+  "validationState": "source-prepared-runtime-unproven",
+  "policy": {
+    "effectKeysMustMatchRequiresDamageTakenEventProfiles": true,
+    "allowedFactionPrefixesOnly": true,
+    "damageTakenMustMeanPositiveCommittedDamageToReceiver": true,
+    "attemptedAttackOrAnimationSubstituteForbidden": true,
+    "runtimeProofStillRequiredForGameplay": true
+  },
+  "allowedEffectKeyPrefixes": [
+    "fortress.",
+    "stronghold."
+  ],
+  "requiredRuntimeProof": [
+    "positive final damage value proof",
+    "damage receiver unit identity proof",
+    "attacker and receiver side correlation proof",
+    "post-mitigation damage ordering proof",
+    "death and kill ordering proof",
+    "non-damage animation exclusion proof",
+    "idempotent per-hit application proof"
+  ],
+  "contracts": {
+    "fortress.damage-taken-slow-poison-package": {
+      "damageTakenKinds": [
+        "morale-package-damage-taken",
+        "positive-committed-damage-to-receiver"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "attempted attack counted as damage taken",
+        "blocked or zero damage counted as damage taken",
+        "damage animation counted as damage taken",
+        "damage plan preview counted as damage taken",
+        "attacker damage dealt counted without receiver proof",
+        "poison or slow status tick counted without damage receiver proof"
+      ],
+      "notes": "Fortress damage-taken slow/poison package requires positive committed damage to the receiving unit stack; status presence or attack animation is not enough."
+    },
+    "stronghold.damage-kill-rage-package": {
+      "damageTakenKinds": [
+        "morale-package-damage-kill-rage",
+        "positive-committed-damage-to-receiver"
+      ],
+      "companionPredicates": [
+        "RequiresKillOrLossEvent",
+        "RequiresWarcryOrRageEvent"
+      ],
+      "forbiddenSubstitutes": [
+        "attempted attack counted as damage taken",
+        "blocked or zero damage counted as damage taken",
+        "damage animation counted as damage taken",
+        "damage plan preview counted as damage taken",
+        "kill event counted as damage taken without damage receiver proof",
+        "rage or warcry event counted as damage taken"
+      ],
+      "notes": "Stronghold damage/kill/rage package requires positive committed damage to the receiving unit stack plus separate kill/loss and rage/warcry predicates where used."
+    },
+    "fortress.damage-taken-or-slow-poison-momentum": {
+      "damageTakenKinds": [
+        "morale-trigger-damage-taken-or-status-momentum",
+        "positive-committed-damage-to-receiver"
+      ],
+      "companionPredicates": [],
+      "forbiddenSubstitutes": [
+        "attempted attack counted as damage taken",
+        "blocked or zero damage counted as damage taken",
+        "damage animation counted as damage taken",
+        "damage plan preview counted as damage taken",
+        "slow or poison status presence counted as damage taken",
+        "momentum trigger counted without committed damage proof"
+      ],
+      "notes": "Fortress damage-taken momentum requires positive committed damage to the receiving unit stack when using the damage branch; slow/poison status logic remains a separate predicate concern."
+    },
+    "stronghold.damage-kill-tempo": {
+      "damageTakenKinds": [
+        "morale-trigger-damage-kill-tempo",
+        "positive-committed-damage-to-receiver"
+      ],
+      "companionPredicates": [
+        "RequiresKillOrLossEvent"
+      ],
+      "forbiddenSubstitutes": [
+        "attempted attack counted as damage taken",
+        "blocked or zero damage counted as damage taken",
+        "damage animation counted as damage taken",
+        "damage plan preview counted as damage taken",
+        "kill event counted as damage taken without damage receiver proof",
+        "tempo trigger counted without committed damage proof"
+      ],
+      "notes": "Stronghold damage/kill tempo requires positive committed damage to the receiving unit stack and separate kill/loss proof for the kill branch."
+    }
+  }
+}

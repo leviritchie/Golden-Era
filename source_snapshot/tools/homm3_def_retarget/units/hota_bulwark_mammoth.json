@@ -1,0 +1,493 @@
+{
+ "unit": "hota_bulwark_mammoth",
+ "joints": {
+  "Hips": [
+   0.0,
+   0.575,
+   1.05
+  ],
+  "Spine": [
+   0.0,
+   0.35,
+   1.1
+  ],
+  "Spine1": [
+   0.0,
+   0.12,
+   1.15
+  ],
+  "Spine2": [
+   0.0,
+   -0.12,
+   1.2
+  ],
+  "Neck": [
+   0.0,
+   -0.38,
+   1.2
+  ],
+  "Head": [
+   0.0,
+   -0.6,
+   1.25
+  ],
+  "HeadTop_End": [
+   0.0,
+   -0.88,
+   1.0
+  ],
+  "LeftShoulder": [
+   0.1,
+   -0.25,
+   1.15
+  ],
+  "LeftArm": [
+   0.25,
+   -0.28,
+   0.9
+  ],
+  "LeftForeArm": [
+   0.25,
+   -0.28,
+   0.5
+  ],
+  "LeftHand": [
+   0.25,
+   -0.28,
+   0.15
+  ],
+  "LeftHand_End": [
+   0.25,
+   -0.35,
+   0.0
+  ],
+  "LeftUpLeg": [
+   0.28,
+   0.53,
+   0.95
+  ],
+  "LeftLeg": [
+   0.28,
+   0.56,
+   0.55
+  ],
+  "LeftFoot": [
+   0.28,
+   0.53,
+   0.15
+  ],
+  "LeftToeBase": [
+   0.28,
+   0.5,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.28,
+   0.44,
+   0.0
+  ],
+  "RightShoulder": [
+   -0.1,
+   -0.22,
+   1.15
+  ],
+  "RightArm": [
+   -0.25,
+   -0.25,
+   0.9
+  ],
+  "RightForeArm": [
+   -0.25,
+   -0.25,
+   0.5
+  ],
+  "RightHand": [
+   -0.25,
+   -0.25,
+   0.15
+  ],
+  "RightHand_End": [
+   -0.25,
+   -0.32,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.28,
+   0.62,
+   0.95
+  ],
+  "RightLeg": [
+   -0.28,
+   0.65,
+   0.55
+  ],
+  "RightFoot": [
+   -0.28,
+   0.62,
+   0.15
+  ],
+  "RightToeBase": [
+   -0.28,
+   0.59,
+   0.03
+  ],
+  "RightToe_End": [
+   -0.28,
+   0.53,
+   0.0
+  ]
+ },
+ "props": [
+  {
+   "name": "tusks",
+   "bone": "Head",
+   "box": [
+    [
+     -0.6,
+     -1.0,
+     0.0
+    ],
+    [
+     0.6,
+     -0.47,
+     1.05
+    ]
+   ]
+  },
+  {
+   "name": "trunktip",
+   "bone": "Head",
+   "box": [
+    [
+     -0.09,
+     -0.65,
+     0.0
+    ],
+    [
+     0.13,
+     -0.35,
+     0.3
+    ]
+   ]
+  }
+ ],
+ "grounding": false,
+ "extensions": [
+  "rampart_quadruped",
+  "rig_chain"
+ ],
+ "quadruped": {
+  "staticCapture": true,
+  "legs": [
+   {
+    "bones": [
+     "LeftArm",
+     "LeftForeArm",
+     "LeftHand"
+    ],
+    "front": true,
+    "phase": 0
+   },
+   {
+    "bones": [
+     "RightArm",
+     "RightForeArm",
+     "RightHand"
+    ],
+    "front": true,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "LeftUpLeg",
+     "LeftLeg",
+     "LeftFoot"
+    ],
+    "front": false,
+    "phase": 0.5
+   },
+   {
+    "bones": [
+     "RightUpLeg",
+     "RightLeg",
+     "RightFoot"
+    ],
+    "front": false,
+    "phase": 0
+   }
+  ],
+  "nod": {
+   "bones": [
+    "Neck"
+   ],
+   "deg": 3
+  },
+  "fit": {
+   "pitch": [
+    -20,
+    70
+   ],
+   "fold": 70,
+   "side": 95,
+   "sideClips": [
+    "Death"
+   ],
+   "foldLegs": [
+    [
+     "LeftArm",
+     "LeftForeArm"
+    ],
+    [
+     "RightArm",
+     "RightForeArm"
+    ]
+   ]
+  }
+ },
+ "silhouetteRefine": {
+  "params": []
+ },
+ "rigChains": [
+  {
+   "prefix": "Trunk",
+   "parent": "Head",
+   "bones": 6,
+   "points": [
+    [
+     0,
+     -0.8,
+     1.12
+    ],
+    [
+     0,
+     -0.81,
+     0.85
+    ],
+    [
+     0,
+     -0.81,
+     0.62
+    ],
+    [
+     0,
+     -0.78,
+     0.45
+    ],
+    [
+     0,
+     -0.7,
+     0.32
+    ],
+    [
+     0,
+     -0.58,
+     0.2
+    ],
+    [
+     0,
+     -0.47,
+     0.16
+    ],
+    [
+     0,
+     -0.36,
+     0.22
+    ],
+    [
+     0,
+     -0.31,
+     0.33
+    ]
+   ],
+   "radius": [
+    0.3,
+    0.3,
+    0.3,
+    0.25,
+    0.2,
+    0.18,
+    0.15,
+    0.12,
+    0.12
+   ],
+   "root": 0.04,
+   "rootBlend": 0.15,
+   "minParent": 0.5,
+   "exclude": [
+    {
+     "box": [
+      [
+       0.21,
+       -1.2,
+       -0.1
+      ],
+      [
+       1.0,
+       0.0,
+       1.4
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       -1.0,
+       -1.2,
+       -0.1
+      ],
+      [
+       -0.21,
+       0.0,
+       1.4
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       0.15,
+       -1.2,
+       -0.1
+      ],
+      [
+       1.0,
+       0.0,
+       0.45
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       -1.0,
+       -1.2,
+       -0.1
+      ],
+      [
+       -0.15,
+       0.0,
+       0.45
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       -1.0,
+       -0.62,
+       0.45
+      ],
+      [
+       1.0,
+       0.0,
+       1.4
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       -1.0,
+       -0.76,
+       0.84
+      ],
+      [
+       1.0,
+       0.0,
+       1.4
+      ]
+     ]
+    },
+    {
+     "box": [
+      [
+       -1.0,
+       -1.2,
+       0.98
+      ],
+      [
+       1.0,
+       0.0,
+       2.0
+      ]
+     ]
+    }
+   ],
+   "reason": "2026-10-11 lane B rig surgery (lane C rig_chain, h3_mammoth_upg_alt recipe): the trunk rode the Head bone rigidly, so the DEF trunk lift (Mouseover, g01 trumpet) and reach (AttackFront g12) could only be faked by tipping the head. A 6-bone chain along this mesh's own trunk centreline (traced from the head-weighted |x|<0.21 shell) takes the trunk's vertices; tusks (|x| > 0.15 below z 0.45), cheeks (|x| > 0.21), mouth (y > -0.62 from z 0.45, lips y > -0.76 above z 0.84: the trunk's own inner surface sits just in front of the mouth, and a wider mouth box left it behind as a hanging curtain) and forehead (z > 0.98) excluded; below z 0.95 the web faces bridging the trunk to the tusks, cheeks and mouth are split off and stay with the head.",
+   "cut": {
+    "belowZ": 0.95,
+    "web": "parent"
+   },
+   "smoothArc": 6
+  }
+ ],
+ "correctiveSmooth": {
+  "excludeBones": [
+   "Trunk_00",
+   "Trunk_01",
+   "Trunk_02",
+   "Trunk_03",
+   "Trunk_04",
+   "Trunk_05"
+  ],
+  "note": "2026-10-11 lane B (lane C pairing): Corrective Smooth folds the thin trunk shell's local frames when the chain bends; the trunk chain takes skin only"
+ },
+ "glbPatch": {
+  "reason": "lane B 2026-10-11 authenticity: the DEF mammoth throws its head and trunk up and forward in AttackFront (f3-f6) and lifts it in Mouseover (f4-f9); the capture kept the head level in both. Neck + Head pitch the head up so the tusks and trunk swing out (as on h3_mammoth_upg_alt). The DEF trunk lift and reach ride a 6-bone trunk chain (rig_chain rig surgery, 2026-10-11)",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_mammoth_neck_weights.json",
+    "sha256": "73bb47d888e6d2edf1afd89fe8599199525c3027afa53d0d96768c1ba229d966",
+    "note": "lane B 2026-10-11: neck/head and throat skin weights re-solved on the edges the AttackFront head throw and Mouseover head lift tear (wsolve --newonly, iterated with the CS re-bake, GPU)"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_mammoth_trunk_fragments.json",
+    "sha256": "a5ca679963a7989b0b35a241e163b4d18f7c231cd8d6b2996539481e0209c10e",
+    "note": "lane B 2026-10-11: the rig_chain cut left a few chain-weighted faces disconnected from the trunk (on the tusk roots); they keep their pre-chain weights so they stay with the head instead of flying with the trunk as loose flecks"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_mammoth_head_throw_rot.json",
+    "regrid": true,
+    "sha256": "8c2cfd5828303eef84d004c2948ad291ffef1527eabfc6012ef3fc180d940469"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_mammoth_head_throw_rot.json",
+    "regrid": true,
+    "sha256": "8c2cfd5828303eef84d004c2948ad291ffef1527eabfc6012ef3fc180d940469"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_mammoth_trunk_rot.json",
+    "sha256": "aa22a382b9f0773a2946805e460a034f38181e752c85c1781bdc00d47404da3a",
+    "regrid": true,
+    "note": "lane B 2026-10-11: trunk on its rig_chain (Trunk_00..05): Mouseover swings it forward and up with the tip curled (DEF g01 trumpet; Trunk_00 root pivot capped at 0.25x so the trunk root stays seated on the face), AttackFront reaches it out with the tip hooked (DEF g12); lane C's h3_mammoth_upg_alt keys (same clip lengths and chain layout); split table applied twice"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_mammoth_trunk_rot.json",
+    "sha256": "aa22a382b9f0773a2946805e460a034f38181e752c85c1781bdc00d47404da3a",
+    "regrid": true,
+    "note": "lane B 2026-10-11: trunk on its rig_chain (Trunk_00..05): Mouseover swings it forward and up with the tip curled (DEF g01 trumpet; Trunk_00 root pivot capped at 0.25x so the trunk root stays seated on the face), AttackFront reaches it out with the tip hooked (DEF g12); lane C's h3_mammoth_upg_alt keys (same clip lengths and chain layout); split table applied twice"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Mouseover",
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.4,
+    "maxMove": 0.08,
+    "bones": [
+     "Trunk_*"
+    ],
+    "note": "lane B 2026-10-11 (lane C recipe): strain limiter on the trunk skin for the two trunk clips"
+   }
+  ]
+ }
+}

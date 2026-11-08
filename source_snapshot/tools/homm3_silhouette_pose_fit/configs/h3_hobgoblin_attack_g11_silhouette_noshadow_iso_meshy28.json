@@ -1,0 +1,65 @@
+{
+  "unitSid": "h3_hobgoblin",
+  "clipId": "attack_g11",
+  "fps": 12,
+  "method": "silhouette_iou",
+  "masterGlb": "artifacts/hobgoblin_attack_pose_pipeline/master/Meshy_AI_Character_output_2.glb",
+  "outputDir": "artifacts/hobgoblin_attack_pose_pipeline/out_attack_g11_silhouette_noshadow_iso_meshy28",
+  "cullDefSoftShadows": true,
+  "camera": {
+    "axis": "iso",
+    "isoAzimuthDeg": 40.0,
+    "isoElevationDeg": 30.0,
+    "distance": 3.0,
+    "orthoScale": 2.6,
+    "rootYawDeg": 0.0
+  },
+  "render": {
+    "width": 192,
+    "height": 170
+  },
+  "optimizeBones": [
+    "Bone_001",
+    "Bone_003",
+    "Bone_002",
+    "Bone_017",
+    "Bone_016",
+    "Bone_027",
+    "Bone_026",
+    "Bone_025",
+    "Bone_024",
+    "Bone_023",
+    "Bone_022",
+    "Bone_021",
+    "Bone_020",
+    "Bone_019",
+    "Bone_015",
+    "Bone_014",
+    "Bone_009",
+    "Bone_008"
+  ],
+  "optimizer": {
+    "method": "hybrid",
+    "boundRad": 0.96,
+    "restWeight": 0.0,
+    "motionWeight": 0.0,
+    "chromaWeight": 0.0,
+    "silhouetteWeight": 1.0,
+    "identityFrame0": true,
+    "deMaxiter": 5,
+    "popsize": 18,
+    "polishIters": 40,
+    "seed": 7
+  },
+  "frames": [
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_00.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_01.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_02.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_03.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_04.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_05.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_06.png" },
+    { "path": "artifacts/hobgoblin_attack_pose_pipeline/source_attack_frames/canonical_group_11/frame_07.png" }
+  ],
+  "notes": "Raw silhouette-IoU on Meshy28 under iso. DEF soft shadows culled (near-black + partial alpha). identityFrame0 keeps bind on f0. No chroma, no keypoints, no MotionBERT/RIFE."
+}

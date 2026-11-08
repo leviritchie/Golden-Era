@@ -1,0 +1,171 @@
+{
+  "adapter_binding": {
+    "gameplay_gated": false,
+    "gateway_methods": [
+      "TryCommitUnitHexMove"
+    ],
+    "notes": "M3 focused_live_positive satisfied 2026-07-20 (proof_ledger/entries/ds_m3_movement_push_live_positive.json). MovementPush ungated via MovementPushLivePositiveProven. MovementTeleport / non-push relocate binds the same TryCommitUnitHexMove path via movement.relocate.bfdi_v1 (M6). Prefer one journaled UnitData.bfdi / Method_Public_set_Void_Hex_0 invoke over helper+_cfqf dual-write.",
+    "operations": [
+      "MovementPush"
+    ]
+  },
+  "banned_surfaces": [
+    {
+      "reason": "lastCorpse-shaped; not on bfdi push path (pin table 6b/6c)",
+      "surface": "Hex.bcxo / cfqf as Unit occupancy commit store"
+    },
+    {
+      "reason": "View hub; commit publish is eda.bcim→eda.cfia via bdhw",
+      "surface": "edb.* as movement commit publish"
+    },
+    {
+      "reason": "Prefer single journaled UnitData.bfdi; dual-write live-negative for occupancy",
+      "surface": "helper+_cfqf dual-write as production MovementPush"
+    }
+  ],
+  "card_id": "movement.commit.bfdi_v1",
+  "family": "movement",
+  "gamesymbols_export": {
+    "exported": true,
+    "reason": "Exported proven surfaces only into GameSymbols.DirectStateLaws (MovementCommitOwnerMembers/FieldObjectDataHexMembers/HexFieldObjectsMutatorMembers). Blocked readbacks/notify/publish remain non-exported. MovementPush ungated after M3 live-positive 2026-07-20.",
+    "symbols": [
+      "UnitData.set_hex",
+      "FieldObjectData.set_hex",
+      "FieldObjectData.get_hex",
+      "RemoveObject",
+      "AddFieldObject"
+    ],
+    "exported_at": "2026-07-20T17:37:49Z",
+    "target": "GameSymbols.DirectStateLaws"
+  },
+  "live_methods": [
+    {
+      "blocked_reason": null,
+      "method_id": "Hex.Session.Battle.UnitData::bfdi(Hex)",
+      "mono_alias": "UnitData.set_hex",
+      "role": "commit_owner",
+      "rva": "0x2078360",
+      "status": "equivalence-proven"
+    },
+    {
+      "blocked_reason": "blocked: UnitData.bfdh readback — no Capstone asm artifact; native disasm is not a proven CompGen getter/setter shape (11 ins); refuse invented CF. Capture with field-delta oracle alongside bfdi once live GE session available, or add UnitData_bfdh.asm.txt + CompGen/ISIL lift.",
+      "method_id": "Hex.Session.Battle.UnitData::bfdh()",
+      "mono_alias": "UnitData.get_hex",
+      "role": "readback",
+      "rva": null,
+      "status": "blocked"
+    },
+    {
+      "blocked_reason": null,
+      "method_id": "edf::bcuo(Hex)",
+      "mono_alias": "FieldObjectData.set_hex",
+      "role": "occupancy_mutator",
+      "rva": "0x1F055B0",
+      "status": "equivalence-proven"
+    },
+    {
+      "blocked_reason": null,
+      "method_id": "edf::bcun()",
+      "mono_alias": "FieldObjectData.get_hex",
+      "role": "readback",
+      "rva": null,
+      "status": "equivalence-proven"
+    },
+    {
+      "blocked_reason": null,
+      "method_id": "Hex.Session.Battle.Hex::bcyn(FieldObject)",
+      "mono_alias": "RemoveObject",
+      "role": "occupancy_mutator",
+      "rva": "0x1F33CB0",
+      "status": "equivalence-proven"
+    },
+    {
+      "blocked_reason": null,
+      "method_id": "Hex.Session.Battle.Hex::bcyl(FieldObject)",
+      "mono_alias": "AddFieldObject",
+      "role": "occupancy_mutator",
+      "rva": "0x1F33BA0",
+      "status": "equivalence-proven"
+    },
+    {
+      "blocked_reason": "blocked: empty-listener field-delta oracle captured but EquivTester refuses proof (no occupancy/publish store mutation; completed flag-only). Needs live battle listeners for real fan-out delta.",
+      "method_id": "eep::bdhv(Unit,Hex)",
+      "mono_alias": "leave-hex listener fan-out",
+      "role": "pre_notify",
+      "rva": "0x1F463F0",
+      "status": "blocked"
+    },
+    {
+      "blocked_reason": "blocked: field-delta plant incomplete for eep.bdhw — Unit.get_hex→[hex+0x70] Int32[] / eep+0x78 path still NREs before eda.bcim publish on main-menu plant (v4). Identity+static chain remain; bcim captured separately. Do not invent oracle.",
+      "method_id": "eep::bdhw(Unit,Hex)",
+      "mono_alias": "enter-hex + publish",
+      "role": "post_notify",
+      "rva": "0x1F465D0",
+      "status": "blocked"
+    },
+    {
+      "blocked_reason": "blocked: null-cfia publish plant captured but EquivTester refuses proof (no handler invoke / store mutation). Needs planted non-null eda.cfia observer for real publish delta.",
+      "method_id": "eda::bcim(object,BattleEventArgs)",
+      "mono_alias": "BattleLogicEvents invoke",
+      "role": "publish_dispatcher",
+      "rva": null,
+      "status": "blocked"
+    }
+  ],
+  "milestone_id": "ds_m1_movement_commit",
+  "milestone_ledger_path": "experiments/olden_cs_recovery/proof_ledger/milestones/ds_m1_movement_commit.ledger.json",
+  "mono_aliases": [
+    "UnitData.set_hex",
+    "UnitData.get_hex",
+    "FieldObjectData.set_hex",
+    "FieldObjectData.get_hex",
+    "RemoveObject",
+    "AddFieldObject",
+    "leave-hex listener fan-out",
+    "enter-hex + publish",
+    "BattleLogicEvents invoke"
+  ],
+  "notes": "Bar C fail-closed. Static lift / pin-table rename / Capstone asm are not equivalence proof. Primary oracle strategy: field-delta (edf+0x10, fieldObjects membership, eda.cfia invoke observed). Card promotes when every live_methods entry is equivalence-proven OR blocked-with-reason (bfdh may stay blocked as readback-optional). Verified 2026-07-20 against DiffableCs + mono_live_pin_table.md. Promote movement.commit.bfdi_v1 only when every method_id is equivalence-proven (field-delta live_execution) or explicitly blocked with reason. Do not ungate MovementPush (M3). Do not treat as dest recipe (M2).",
+  "ordered_stores": [
+    {
+      "notes": "Stored inside edf.bcuo after leave; read via bcun/ede.bcuh",
+      "offset_or_member": "edf+0x10",
+      "role": "helper_hex"
+    },
+    {
+      "notes": "Mutated by Hex.bcyn (leave) then Hex.bcyl (enter) inside bcuo",
+      "offset_or_member": "Hex.fieldObjects (+0x28)",
+      "role": "list_occupancy"
+    },
+    {
+      "notes": "May refresh on AddFieldObject; not the Unit occupant property",
+      "offset_or_member": "Hex.cfqg (+0x3A)",
+      "role": "occupancy_flag_refresh"
+    }
+  ],
+  "pin_table_path": "experiments/direct_state_movement_trace/mono_live_pin_table.md",
+  "proof_status": "equivalence-proven",
+  "publish": {
+    "call_chain": [
+      "eep.bdhw",
+      "eda.bcim",
+      "eda.cfia"
+    ],
+    "english_name": "OnUnitEndedMovement",
+    "english_name_strength": "ordinal-inferred",
+    "field": "cfia",
+    "hub_type": "eda",
+    "kind": "hub_field",
+    "notes": "English name ordinal-inferred; do not treat as OnUnitChangedHex / edb View publish.",
+    "offset": "+0xC0"
+  },
+  "role": "commit_owner",
+  "schema_version": 1,
+  "title": "M1 — MovementPush commit / occupancy / publish triad",
+  "ungate_requires": [
+    "focused_live_positive",
+    "field_delta_oracle_bar_c",
+    "fieldObjects_and_helper_hex_dual_readback"
+  ],
+  "updated_at": "2026-07-20T17:37:49Z"
+}

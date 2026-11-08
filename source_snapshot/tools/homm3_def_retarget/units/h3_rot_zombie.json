@@ -1,0 +1,245 @@
+{
+ "unit": "h3_rot_zombie",
+ "joints": {
+  "Hips": [
+   0.027,
+   0.267,
+   0.827
+  ],
+  "Spine": [
+   0.025,
+   0.256,
+   0.928
+  ],
+  "Spine1": [
+   0.023,
+   0.244,
+   1.029
+  ],
+  "Spine2": [
+   0.021,
+   0.231,
+   1.143
+  ],
+  "Neck": [
+   0.02,
+   0.2,
+   1.25
+  ],
+  "Head": [
+   0.02,
+   0.015,
+   1.371
+  ],
+  "HeadTop_End": [
+   0.02,
+   -0.012,
+   1.61
+  ],
+  "LeftShoulder": [
+   0.08,
+   0.18,
+   1.28
+  ],
+  "LeftArm": [
+   0.21,
+   0.17,
+   1.25
+  ],
+  "LeftForeArm": [
+   0.25,
+   0.2,
+   1.02
+  ],
+  "LeftHand": [
+   0.25,
+   0.06,
+   0.87
+  ],
+  "LeftHand_End": [
+   0.24,
+   0.0,
+   0.83
+  ],
+  "RightShoulder": [
+   -0.06,
+   0.18,
+   1.28
+  ],
+  "RightArm": [
+   -0.19,
+   0.17,
+   1.25
+  ],
+  "RightForeArm": [
+   -0.25,
+   0.18,
+   1.02
+  ],
+  "RightHand": [
+   -0.27,
+   0.08,
+   0.82
+  ],
+  "RightHand_End": [
+   -0.27,
+   0.03,
+   0.77
+  ],
+  "LeftUpLeg": [
+   0.126,
+   0.267,
+   0.827
+  ],
+  "LeftLeg": [
+   0.159,
+   0.042,
+   0.501
+  ],
+  "LeftFoot": [
+   0.219,
+   0.227,
+   0.11
+  ],
+  "LeftToeBase": [
+   0.246,
+   0.115,
+   0.03
+  ],
+  "LeftToe_End": [
+   0.272,
+   0.002,
+   0.0
+  ],
+  "RightUpLeg": [
+   -0.073,
+   0.267,
+   0.827
+  ],
+  "RightLeg": [
+   -0.19,
+   0.08,
+   0.47
+  ],
+  "RightFoot": [
+   -0.28,
+   0.25,
+   0.1
+  ],
+  "RightToeBase": [
+   -0.29,
+   0.14,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.3,
+   0.05,
+   0.0
+  ]
+ },
+ "props": [
+  {
+   "name": "hammer_handle",
+   "bone": "RightHand",
+   "segments": [
+    [
+     [
+      -0.28,
+      0.12,
+      0.84
+     ],
+     [
+      -0.21,
+      -0.36,
+      0.57
+     ]
+    ]
+   ],
+   "radius": 0.045
+  },
+  {
+   "name": "hammer_head",
+   "bone": "RightHand",
+   "box": [
+    [
+     -0.32,
+     -0.57,
+     0.41
+    ],
+    [
+     -0.07,
+     -0.33,
+     0.69
+    ]
+   ]
+  },
+  {
+   "name": "cleaver",
+   "bone": "LeftHand",
+   "segments": [
+    [
+     [
+      0.24,
+      0.14,
+      0.7
+     ],
+     [
+      0.2,
+      -0.2,
+      1.12
+     ]
+    ]
+   ],
+   "radius": 0.045
+  },
+  {
+   "name": "cleaver_head",
+   "bone": "LeftHand",
+   "box": [
+    [
+     0.12,
+     -0.34,
+     0.93
+    ],
+    [
+     0.3,
+     -0.12,
+     1.25
+    ]
+   ]
+  }
+ ],
+ "propComponents": {
+  "bones": [
+   "RightHand",
+   "LeftHand"
+  ],
+  "minFrac": 0.4,
+  "maxVerts": 300
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "silhouetteRefine": {
+  "params": [
+   "dx",
+   "dy"
+  ],
+  "limits": {
+   "dx": 50,
+   "dy": 30
+  }
+ },
+ "propAimResidual": {
+  "bones": [
+   "RightHand"
+  ]
+ },
+ "extensions": [
+  "necropolis_weightfill",
+  "necropolis_propcomp",
+  "necropolis_propaim"
+ ]
+}

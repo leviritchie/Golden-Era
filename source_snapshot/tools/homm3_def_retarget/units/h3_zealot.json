@@ -1,0 +1,241 @@
+{
+ "unit": "h3_zealot",
+ "sourceMesh": "artifacts/homm3_mesh_surgery/h3_zealot_chest_c4.glb",
+ "armPart": {
+  "mesh": "artifacts/homm3_mesh_surgery/h3_zealot_chest_c4.glb",
+  "record": "artifacts/homm3_mesh_surgery/h3_zealot_chest_c4.glb.surgery.json",
+  "elbowRadius": 0.12,
+  "panelSmooth": 40,
+  "panelStrip": [
+   "LeftArm",
+   "RightArm",
+   "LeftShoulder",
+   "RightShoulder",
+   "LeftForeArm",
+   "RightForeArm",
+   "LeftHand",
+   "RightHand"
+  ],
+  "bones": [
+   "Arm",
+   "ForeArm",
+   "Hand"
+  ],
+  "keepJoint": "Arm",
+  "armSmooth": 80,
+  "smoothShoulder": true,
+  "diffuse": {
+   "bones": [
+    "*Shoulder",
+    "*Arm",
+    "*ForeArm",
+    "*Hand",
+    "Spine*",
+    "Neck",
+    "Head"
+   ],
+   "iterations": 100
+  },
+  "shortEdgeTie": 0.005
+ },
+ "joints": {
+  "Hips": [
+   0,
+   -0.02,
+   0.92
+  ],
+  "Spine": [
+   0,
+   -0.03,
+   1.02
+  ],
+  "Spine1": [
+   0,
+   -0.04,
+   1.12
+  ],
+  "Spine2": [
+   0,
+   -0.03,
+   1.26
+  ],
+  "Neck": [
+   0,
+   -0.03,
+   1.4
+  ],
+  "Head": [
+   0,
+   -0.03,
+   1.48
+  ],
+  "HeadTop_End": [
+   0,
+   -0.03,
+   1.66
+  ],
+  "LeftShoulder": [
+   0.04,
+   -0.03,
+   1.4
+  ],
+  "LeftArm": [
+   0.19,
+   -0.02,
+   1.38
+  ],
+  "LeftForeArm": [
+   0.23,
+   -0.08,
+   1.12
+  ],
+  "LeftHand": [
+   0.06,
+   -0.28,
+   1.08
+  ],
+  "LeftHand_End": [
+   -0.02,
+   -0.3,
+   1.09
+  ],
+  "RightShoulder": [
+   -0.04,
+   -0.03,
+   1.4
+  ],
+  "RightArm": [
+   -0.19,
+   -0.02,
+   1.38
+  ],
+  "RightForeArm": [
+   -0.23,
+   -0.08,
+   1.12
+  ],
+  "RightHand": [
+   -0.06,
+   -0.28,
+   1.05
+  ],
+  "RightHand_End": [
+   0.02,
+   -0.3,
+   1.05
+  ],
+  "LeftUpLeg": [
+   0.09,
+   -0.02,
+   0.88
+  ],
+  "LeftLeg": [
+   0.1,
+   -0.04,
+   0.48
+  ],
+  "LeftFoot": [
+   0.1,
+   -0.02,
+   0.08
+  ],
+  "LeftToeBase": [
+   0.1,
+   -0.14,
+   0.02
+  ],
+  "LeftToe_End": [
+   0.1,
+   -0.22,
+   0.01
+  ],
+  "RightUpLeg": [
+   -0.09,
+   -0.02,
+   0.88
+  ],
+  "RightLeg": [
+   -0.1,
+   -0.04,
+   0.48
+  ],
+  "RightFoot": [
+   -0.1,
+   -0.02,
+   0.08
+  ],
+  "RightToeBase": [
+   -0.1,
+   -0.14,
+   0.02
+  ],
+  "RightToe_End": [
+   -0.1,
+   -0.22,
+   0.01
+  ]
+ },
+ "absoluteLimbs": [
+  "Arm",
+  "ForeArm",
+  "Hand"
+ ],
+ "skirtLegShare": 0.2,
+ "bootTop": 0.08,
+ "extensions": [
+  "castle_armblock"
+ ],
+ "armBlock": {
+  "bones": [
+   "Neck",
+   "Head",
+   "LeftShoulder",
+   "LeftArm",
+   "LeftForeArm",
+   "LeftHand",
+   "RightShoulder",
+   "RightArm",
+   "RightForeArm",
+   "RightHand"
+  ],
+  "follow": 0.15,
+  "clipFollow": {},
+  "boneFollow": {
+   "Neck": 0.3,
+   "Head": 0.3,
+   "LeftForeArm": 1.0,
+   "LeftHand": 1.0,
+   "RightForeArm": 1.0,
+   "RightHand": 1.0,
+   "LeftArm": 0.3,
+   "RightArm": 0.3
+  }
+ },
+ "legDamp": 0.6,
+ "glbPatch": {
+  "reason": "2026-10-08 authenticity pass (lane A): with chest_c3 freeing both sleeves, the arms act by motion intent: AttackFront both hands thrust forward from chest height, ShootFront the right hand raised forward-up to cast, Hitted/Defence arms recoil and guard, Death arms flung wide then collapse. Aim keys per DEF frame (pose.py spec s11), numpy patch lane. 2026-10-09 (lane A, chest_c4): AttackFront redone as the DEF's full-arm cast; at f3-f4 both arms are straight forward from protracted shoulders with a 9+9 deg Spine/Spine1 lean, so the hands reach about 0.75 m forward (front z 0.75-0.79, was 0.64); f1-f2 gather at the chest as before. Table h3_zealot_pose3.json; h3_zealot_pose_noaf.json is h3_zealot_pose.json without its AttackFront keys.",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_zealot_pose_noaf.json",
+    "sha256": "0cfedf07bfe042bfab5bae08e82b435e715fb3d4e0c669328990cfdd1cad534a",
+    "regrid": true,
+    "note": "arm key poses by motion intent (whole sleeve freed by chest_c3)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_zealot_pose2.json",
+    "sha256": "6c69d5719ed3d6534f23a6b47e464f83489783099e441b7f43f8241182c18771",
+    "regrid": true,
+    "note": "second half of rotations over 115 deg (Death, Hitted fling)"
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_zealot_pose3.json",
+    "sha256": "c20049843cd0b4ec49d82bc3fb070054ed0fda7a2db4935a0a919c187c0b61d2",
+    "regrid": true,
+    "note": "AttackFront full-arm cast on chest_c4"
+   }
+  ]
+ }
+}
