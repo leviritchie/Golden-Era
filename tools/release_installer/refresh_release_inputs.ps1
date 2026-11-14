@@ -19,9 +19,9 @@ $OverlayDir = Join-Path $StageRoot "core_overlay"
 $OutputZipPath = [System.IO.Path]::GetFullPath((Join-Path $RepoRoot $OutputZip))
 $OutputShaPath = "$OutputZipPath.sha256"
 
-# Must match InstallerBackend.cs CompatibleCoreZipSha256 (Steam build 25672315, depot manifest 7750145598966689713).
-$PinnedInstallerCleanCoreZipSha256 = "f11b90c19aae60908a4d503e639f2abf7a02c5d706cdb072879ef9773812d954"
-$PinnedInstallerCleanCoreZipBytes = [int64]12962693
+# Must match InstallerBackend.cs CompatibleCoreZipSha256 (Steam build 26615913, depot manifest 2034879257573334098).
+$PinnedInstallerCleanCoreZipSha256 = "7d64afda8e11f9011c9c37d2358d919e7230718f7695cb6aa1907beca94c616f"
+$PinnedInstallerCleanCoreZipBytes = [int64]13162750
 
 function Require-Path($Path, $Message) {
     if (-not (Test-Path -LiteralPath $Path)) {
@@ -36,11 +36,11 @@ function Assert-PinnedInstallerCleanCore($CoreZip) {
     if ($actualBytes -ne $PinnedInstallerCleanCoreZipBytes -or
         -not $actualHash.Equals($PinnedInstallerCleanCoreZipSha256, [System.StringComparison]::OrdinalIgnoreCase)) {
         throw @"
-CleanReleaseCore does not match the installer-pinned Steam build 25672315 Core.zip.
+CleanReleaseCore does not match the installer-pinned Steam build 26615913 Core.zip.
   expected SHA-256: $PinnedInstallerCleanCoreZipSha256 ($PinnedInstallerCleanCoreZipBytes bytes)
   actual   SHA-256: $actualHash ($actualBytes bytes)
   path: $CoreZip
-Use: download_depot 3105440 3105441 7750145598966689713
+Use: download_depot 3105440 3105441 2034879257573334098
 "@
     }
 }

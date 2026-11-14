@@ -2,7 +2,7 @@
 >
 > **Already installed an earlier version?** Run the v0.1.326 installer and choose **Update an existing Golden Era copy**. (The v0.1.319 download was broken and installed an older August build; updating fixes that too.)
 
-> This release is built for Olden Era Steam build 25672315 (depot 3105441, manifest 7750145598966689713), the current Steam build as of October 2026. If your Steam install is on that build, just point the installer at it. If Steam has updated past it, the installer will walk you through downloading an extra copy of that build from Steam to make this as painless as possible.
+> **Steam build change.** The v0.1.326 installer is built for Olden Era Steam build 25672315 (depot 3105441, manifest 7750145598966689713). The [nightly](https://github.com/leviritchie/Golden-Era/releases/tag/nightly) and every release after v0.1.326 are built for the current Steam build, **26615913** (depot 3105441, manifest 2034879257573334098, November 2026). If your Steam install is on the build your installer targets, just point the installer at it. If Steam has updated past it, the installer will walk you through downloading an extra copy of that build from Steam to make this as painless as possible.
 > The installer does not patch your Steam install in place. It copies your clean Steam game folder to a separate Golden Era folder and installs the mod into that copy only.
 
 # Golden Era: A mod for Heroes of Might and Magic: Olden Era
@@ -41,7 +41,7 @@ The current public package includes the expanded custom-faction framework and as
    - `GoldenEraModInstaller-*-upscaled-portraits.exe`, or
    - `GoldenEraModInstaller-*-standard-portraits.exe`
 3. Double-click the EXE. On first run it downloads the mod payload from that same Release (about 12 GB, split into several part files) and checks the SHA-256 hash before installing.
-4. The wizard will ask for a clean Olden Era build 25672315 folder (your Steam install if it's on that build, otherwise the depot download), a separate modded copy folder, and your HoMM3 installation.
+4. The wizard will ask for a clean Olden Era folder on the build your installer targets (see above) (your Steam install if it's on that build, otherwise the depot download), a separate modded copy folder, and your HoMM3 installation.
    The modded copy needs about 22 GB of free space on its drive (the game files plus the unpacked mod), and the download needs another 12 GB wherever the installer is saved.
 
 An internet connection is required for the first payload download. For an offline install, also download every payload part file from the Release (every `golden_era_release_payload-v0.1.326.zip.partNN` file) into the same folder as the EXE before running it.

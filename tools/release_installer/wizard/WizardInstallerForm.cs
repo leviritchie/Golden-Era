@@ -198,8 +198,8 @@ internal sealed class WizardInstallerForm : Form
                 pageHost.Controls.Add(BuildOperationPage());
                 break;
             case WizardStep.Source:
-                titleLabel.Text = "Select a clean Olden Era build 25672315";
-                subtitleLabel.Text = "If your Steam install is still on build 25672315, browse to it. Otherwise download the pinned Steam depot and select or detect that folder.";
+                titleLabel.Text = "Select a clean Olden Era build 26615913";
+                subtitleLabel.Text = "If your Steam install is still on build 26615913, browse to it. Otherwise download the pinned Steam depot and select or detect that folder.";
                 nextButton.Text = "Next";
                 pageHost.Controls.Add(BuildSourcePage());
                 break;
@@ -235,9 +235,9 @@ internal sealed class WizardInstallerForm : Form
     private Control BuildOperationPage()
     {
         var panel = NewPagePanel();
-        panel.Controls.Add(NewRadioRow(installRadio, "Create a clean Golden Era copy from your Olden Era build 25672315 folder and install the mod."));
+        panel.Controls.Add(NewRadioRow(installRadio, "Create a clean Golden Era copy from your Olden Era build 26615913 folder and install the mod."));
         panel.Controls.Add(NewRadioRow(updateRadio, "Refresh the mod payload in a copy that was already installed by this installer."));
-        panel.Controls.Add(NewRadioRow(repairRadio, "Rebuild a target copy from a clean Olden Era build 25672315 folder, then reinstall the mod payload."));
+        panel.Controls.Add(NewRadioRow(repairRadio, "Rebuild a target copy from a clean Olden Era build 26615913 folder, then reinstall the mod payload."));
         panel.Controls.Add(NewRadioRow(uninstallRadio, "Delete an existing Golden Era target copy created for this mod."));
         return panel;
     }
@@ -245,7 +245,7 @@ internal sealed class WizardInstallerForm : Form
     private Control BuildSourcePage()
     {
         var panel = NewPagePanel();
-        panel.Controls.Add(NewInfoLabel("If your Steam Olden Era install is on build 25672315, click Browse and select it. If Steam has updated past that build, open the Steam console and run this command:"));
+        panel.Controls.Add(NewInfoLabel("If your Steam Olden Era install is on build 26615913, click Browse and select it. If Steam has updated past that build, open the Steam console and run this command:"));
         panel.Controls.Add(NewPathRow(depotCommandBox,
             ("Open Steam Console", OpenSteamConsole),
             ("Copy Command", () => CopyText(depotCommandBox.Text, "Steam depot command"))));
@@ -539,7 +539,7 @@ internal sealed class WizardInstallerForm : Form
 
     private void BrowseSource()
     {
-        using var dialog = new FolderBrowserDialog { Description = "Select a clean Olden Era build 25672315 folder (Steam install or depot download)" };
+        using var dialog = new FolderBrowserDialog { Description = "Select a clean Olden Era build 26615913 folder (Steam install or depot download)" };
         if (Directory.Exists(sourcePathBox.Text))
         {
             dialog.SelectedPath = sourcePathBox.Text;

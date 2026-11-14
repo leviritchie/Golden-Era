@@ -32,9 +32,9 @@ internal static class InstallerBackend
     private const long DiskSpaceMarginBytes = 1_000_000_000L;
     private const ulong CompatibleSteamAppId = 3105440;
     private const ulong CompatibleSteamDepotId = 3105441;
-    private const ulong CompatibleSteamManifestId = 7750145598966689713;
-    private const string CompatibleGameAssemblySha256 = "d9972b0e7f7dd1c17758808e2f1b80e0a728946416d9a41deaa99bad744de53a";
-    private const string CompatibleCoreZipSha256 = "f11b90c19aae60908a4d503e639f2abf7a02c5d706cdb072879ef9773812d954";
+    private const ulong CompatibleSteamManifestId = 2034879257573334098;
+    private const string CompatibleGameAssemblySha256 = "7cc2de0d14a6ff98880a78c457385992d0d8ba294f991c689c5122afa464d47e";
+    private const string CompatibleCoreZipSha256 = "7d64afda8e11f9011c9c37d2358d919e7230718f7695cb6aa1907beca94c616f";
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -1403,7 +1403,7 @@ popd
         if (!string.Equals(actual, expected, StringComparison.OrdinalIgnoreCase))
         {
             throw new InvalidOperationException(
-                $"The selected folder's {label} is not from Olden Era build 25672315 (expected SHA-256 {expected}, found {actual}). " +
+                $"The selected folder's {label} is not from Olden Era build 26615913 (expected SHA-256 {expected}, found {actual}). " +
                 $"Steam may have updated the game. Download the pinned build with the Steam console command \"{CompatibleSteamDepotCommand}\" and select that depot folder.");
         }
     }
