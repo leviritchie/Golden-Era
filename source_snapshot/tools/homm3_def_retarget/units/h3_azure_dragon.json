@@ -8620,7 +8620,7 @@
   ]
  },
  "glbPatch": {
-  "reason": "DEF g00 move: the dragon flies low and level - body lifted off the floor and horizontal, neck stretched forward with the head level at the travel; ours crouched with the chest up and the head held high on a vertical neck. Lift the body 0.30, level the chest (Spine2), stretch the neck forward and level the head; MoveStart lifts into it, MoveEnd settles out. Idle breathes (Spine2/Neck/Head) instead of a dead hold.",
+  "reason": "DEF g00 move: the dragon flies low and level - body lifted off the floor and horizontal, neck stretched forward with the head level at the travel; ours crouched with the chest up and the head held high on a vertical neck. Lift the body 0.30, level the chest (Spine2), stretch the neck forward and level the head; MoveStart lifts into it, MoveEnd settles out. Idle breathes (Spine2/Neck/Head) instead of a dead hold.; clip pass 2026-11-11 (user-approved candidate): Idle, AttackFront, Death, Defence, Hitted, Mouseover re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -8643,6 +8643,23 @@
     "op": "keyTranslations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_azure_dragon_pose_tr.json",
     "sha256": "549adf361bcbfe6e082c921fccc267abb6f100eb13aa39fa833faa445669a892"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_azure_dragon_clip_repair_weights.json",
+    "note": "clip pass repair: outer wing panels + claws re-skinned from the body fallback mix onto the wing fingers (616 vertices, harmonic fill)",
+    "sha256": "8f14798f18c97df81d58b0d47fc5ba3f8a457282dd3e54a8037c62ffe6676319"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_azure_dragon_clip_repair_facecut.json",
+    "note": "clip pass repair: re-skinned wing panel unfused from the back / flank (86 faces)",
+    "sha256": "0fa3ac05b57b393ce79118fa7d1a12da82b0b55a3ad8dc45e33adaf46cca3c2e"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_azure_dragon_clip_tracks.json",
+    "sha256": "3cd47cef5b0e8fd7afecfaa530572b2ee583c28613e1d5b9ae86d7d53d0979db"
    }
   ]
  }

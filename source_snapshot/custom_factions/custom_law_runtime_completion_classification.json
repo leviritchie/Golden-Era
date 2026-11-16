@@ -1,7 +1,7 @@
 ﻿{
     "schemaVersion":  1,
     "purpose":  "Authoritative current classification of custom faction laws after the June 21 native-data replacement pass.",
-    "policy":  "All active custom law rows are represented as native-data implementations. Runtime-candidate classifications must not be reintroduced without source mutation proof and runtime validation.",
+    "policy":  "All active custom law rows are native-data implementations except the row-13 counterattack laws classified runtime-backed (user decision 2026-11-10: the generic counterattack-damage rows were placeholders for the runtime designs). Other runtime-candidate classifications must not be reintroduced without source mutation proof and runtime validation.",
     "classifications":  [
                             {
                                 "lawSid":  "fraction_law_homm3_castle_2",
@@ -143,9 +143,9 @@
                                 "faction":  "cove",
                                 "lawIndex":  13,
                                 "name":  "Boarding Hooks",
-                                "classification":  "native-data-implemented",
-                                "reason":  "Native-data replacement 2026-06-21: active law row uses concrete Core-native bonuses only; speculative runtime mutators are disabled until individually revalidated.",
-                                "targetMechanic":  "Friendly units deal increased counterattack damage."
+                                "classification":  "runtime-backed",
+                                "reason":  "Runtime law 2026-11-10: native row 13 is a zero-strength outDmgMods counter_attack 0.00 loader anchor; the described effect is applied by Homm3CounterattackDoctrineMutationRuntime (registered in Plugin.Load) on native counterattacks only. Runtime proof pending.",
+                                "targetMechanic":  "Each time a friendly creature counterattacks, your hero gains 1 Focus (up to 5 Focus per battle)."
                             },
                             {
                                 "lawSid":  "fraction_law_homm3_cove_15",
@@ -260,9 +260,9 @@
                                 "faction":  "dungeon",
                                 "lawIndex":  13,
                                 "name":  "Outnumber",
-                                "classification":  "native-data-implemented",
-                                "reason":  "Native-data replacement 2026-06-21: active law row uses concrete Core-native bonuses only; speculative runtime mutators are disabled until individually revalidated.",
-                                "targetMechanic":  "Friendly units deal increased counterattack damage."
+                                "classification":  "runtime-backed",
+                                "reason":  "Runtime law 2026-11-10: native row 13 is a zero-strength outDmgMods counter_attack 0.00 loader anchor; the described effect is applied by Homm3CounterattackDoctrineMutationRuntime (registered in Plugin.Load) on native counterattacks only. Runtime proof pending.",
+                                "targetMechanic":  "Friendly creatures' counterattacks deal 40% more damage when the counterattacking stack has more creatures than the attacker."
                             },
                             {
                                 "lawSid":  "fraction_law_homm3_dungeon_15",
@@ -377,9 +377,9 @@
                                 "faction":  "fortress",
                                 "lawIndex":  13,
                                 "name":  "Thorned Hides",
-                                "classification":  "native-data-implemented",
-                                "reason":  "Native-data replacement 2026-06-21: active law row uses concrete Core-native bonuses only; speculative runtime mutators are disabled until individually revalidated.",
-                                "targetMechanic":  "Friendly units deal increased counterattack damage."
+                                "classification":  "runtime-backed",
+                                "reason":  "Runtime law 2026-11-10: native row 13 is a zero-strength outDmgMods counter_attack 0.00 loader anchor; the described effect is applied by Homm3CounterattackDoctrineMutationRuntime (registered in Plugin.Load) on native counterattacks only. Runtime proof pending.",
+                                "targetMechanic":  "When a friendly creature counterattacks, the attacking stack deals 25% less damage with its next attack."
                             },
                             {
                                 "lawSid":  "fraction_law_homm3_fortress_15",
@@ -494,9 +494,9 @@
                                 "faction":  "rampart",
                                 "lawIndex":  13,
                                 "name":  "Avenger\u0027s Reprisal",
-                                "classification":  "native-data-implemented",
-                                "reason":  "Native-data replacement 2026-06-21: active law row uses concrete Core-native bonuses only; speculative runtime mutators are disabled until individually revalidated.",
-                                "targetMechanic":  "Friendly units deal increased counterattack damage."
+                                "classification":  "runtime-backed",
+                                "reason":  "Runtime law 2026-11-10: native row 13 is a zero-strength outDmgMods counter_attack 0.00 loader anchor; the described effect is applied by Homm3CounterattackDoctrineMutationRuntime (registered in Plugin.Load) on native counterattacks only. Runtime proof pending.",
+                                "targetMechanic":  "Friendly creatures' counterattacks deal 30% more damage, or 60% more when the counterattacking stack has fewer creatures than the attacker."
                             },
                             {
                                 "lawSid":  "fraction_law_homm3_rampart_15",
@@ -611,9 +611,9 @@
                                 "faction":  "tower",
                                 "lawIndex":  13,
                                 "name":  "Reactive Wards",
-                                "classification":  "native-data-implemented",
-                                "reason":  "Native-data replacement 2026-06-21: active law row uses concrete Core-native bonuses only; speculative runtime mutators are disabled until individually revalidated.",
-                                "targetMechanic":  "Friendly units deal increased counterattack damage."
+                                "classification":  "runtime-backed",
+                                "reason":  "Runtime law 2026-11-10: native row 13 is a zero-strength outDmgMods counter_attack 0.00 loader anchor; the described effect is applied by Homm3CounterattackDoctrineMutationRuntime (registered in Plugin.Load) on native counterattacks only. Runtime proof pending.",
+                                "targetMechanic":  "Your creatures' counterattacks deal 4%/6% more damage for each point of your hero's Spell Power, by rank (max +60%/+100%). No bonus if the army has no hero."
                             },
                             {
                                 "lawSid":  "fraction_law_homm3_tower_15",
@@ -728,9 +728,9 @@
                                 "faction":  "conflux",
                                 "lawIndex":  13,
                                 "name":  "Elemental Backlash",
-                                "classification":  "native-data-implemented",
-                                "reason":  "Native-data replacement 2026-06-21: active law row uses concrete Core-native bonuses only; speculative runtime mutators are disabled until individually revalidated.",
-                                "targetMechanic":  "Friendly units deal increased counterattack damage."
+                                "classification":  "runtime-backed",
+                                "reason":  "Runtime law 2026-11-10: native row 13 is a zero-strength outDmgMods counter_attack 0.00 loader anchor; the described effect is applied by Homm3CounterattackDoctrineMutationRuntime (registered in Plugin.Load) on native counterattacks only. Runtime proof pending.",
+                                "targetMechanic":  "Friendly creatures' counterattacks unleash an elemental backlash and deal 35% more damage."
                             },
                             {
                                 "lawSid":  "fraction_law_homm3_conflux_15",
@@ -962,9 +962,9 @@
                                 "faction":  "necropolis",
                                 "lawIndex":  13,
                                 "name":  "Death Grip",
-                                "classification":  "native-data-implemented",
-                                "reason":  "Native-data replacement 2026-06-21: active law row uses concrete Core-native bonuses only; speculative runtime mutators are disabled until individually revalidated.",
-                                "targetMechanic":  "Friendly units deal increased counterattack damage."
+                                "classification":  "runtime-backed",
+                                "reason":  "Runtime law 2026-11-10: native row 13 is a zero-strength outDmgMods counter_attack 0.00 loader anchor; the described effect is applied by Homm3CounterattackDoctrineMutationRuntime (registered in Plugin.Load) on native counterattacks only. Runtime proof pending.",
+                                "targetMechanic":  "Friendly creatures' counterattacks drain life: the counterattacking stack heals 25% of the damage it deals, raising fallen creatures up to its starting size."
                             },
                             {
                                 "lawSid":  "fraction_law_homm3_necropolis_15",
@@ -1079,9 +1079,9 @@
                                 "faction":  "stronghold",
                                 "lawIndex":  13,
                                 "name":  "Blood Feud",
-                                "classification":  "native-data-implemented",
-                                "reason":  "Native-data replacement 2026-06-21: active law row uses concrete Core-native bonuses only; speculative runtime mutators are disabled until individually revalidated.",
-                                "targetMechanic":  "Friendly units deal increased counterattack damage."
+                                "classification":  "runtime-backed",
+                                "reason":  "Runtime law 2026-11-10: native row 13 is a zero-strength outDmgMods counter_attack 0.00 loader anchor; the described effect is applied by Homm3CounterattackDoctrineMutationRuntime (registered in Plugin.Load) on native counterattacks only. Runtime proof pending.",
+                                "targetMechanic":  "Each time a friendly creature counterattacks, that stack deals 5% more damage for the rest of the battle (up to 25%)."
                             },
                             {
                                 "lawSid":  "fraction_law_homm3_stronghold_15",

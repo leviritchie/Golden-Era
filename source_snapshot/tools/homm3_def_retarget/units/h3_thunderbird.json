@@ -392,13 +392,42 @@
   "adoptWeights": "nearest"
  },
  "glbPatch": {
-  "reason": "lane B 2026-10-11 authenticity: Move flies level on the facing (capture yawed +65 deg and dived -20) with the head and beak forward (capture hung the head beak-down); MoveStart/MoveEnd ramp the same correction. The 2026-09-28 Move:Hips ground exception is dropped: the levelled flight passes the entry band",
+  "reason": "lane B 2026-10-11 authenticity: Move flies level on the facing (capture yawed +65 deg and dived -20) with the head and beak forward (capture hung the head beak-down); MoveStart/MoveEnd ramp the same correction. The 2026-09-28 Move:Hips ground exception is dropped: the levelled flight passes the entry band; 2026-11-09 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate; clip pass 2026-11-11 (user-approved candidate): Death, Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_thunderbird_flight_facing_head_level_rot.json",
     "regrid": true,
     "sha256": "d7d55ab3bb154577873150555554057edf0826783b47ed73646d876f0f7ad62e"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_thunderbird_flight_weights.json",
+    "sha256": "ea9502b37cda9eb02045d84bb053d909ae7625d66052c52beb9dd798b8e13cde"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_thunderbird_flight_tracks.json",
+    "sha256": "66620aa5e379314229435f810f917a5c2b196b277b184163d2ba1fb3b1e2d286"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_thunderbird_clip_tracks.json",
+    "sha256": "984fe7b1764253e1953a191cf8437f5a01f7984521aade2a9ebe66f1c8930958"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "flyer flight: crease of the spread wings"
    }
   ]
  }

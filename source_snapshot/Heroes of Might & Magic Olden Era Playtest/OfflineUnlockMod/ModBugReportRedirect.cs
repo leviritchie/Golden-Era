@@ -754,6 +754,26 @@ internal static class ModBugReportRedirect
 		}
 	}
 
+	/// <summary>
+	/// True when the background submit has already recorded a relay acknowledgement for this report on disk. The
+	/// status UI uses it as a fallback so a report the relay confirmed never stays on "Sending" (2026-11-11 report
+	/// 00a6878d was stored in Drive and recorded acknowledged while the in-game status never left Sending).
+	/// </summary>
+	internal static bool IsRecordedAcknowledged(string reportId)
+	{
+		if (!TryNormalizeReportId(reportId, out var normalized))
+			return false;
+		try
+		{
+			var matches = FindBundlesByReportId(BundleDirectory(), normalized);
+			return matches.Length == 1 && ReadBundleState(matches[0]) == StateAcknowledged;
+		}
+		catch
+		{
+			return false;
+		}
+	}
+
 	private static void WriteBundleState(string bundlePath, string state)
 	{
 		var safe = new StringBuilder(state.Length);

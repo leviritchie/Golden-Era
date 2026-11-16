@@ -211,7 +211,7 @@
  "sourceMesh": "artifacts/homm3_mesh_surgery/hota_factory_juggernaut_fist_c1.glb",
  "meshSurgeryReason": "2026-10-11 lane A (standing mesh-surgery approval): the Meshy mesh welds the resting left fist onto the left thigh plate (92 bridge faces), so the DEF g12 forward punch tore a thigh-plate shard out with the fist (gate: worst edge stretch rose). limb_cut_surgery.py splits the bridge by majority and duplicates the 46 shared vertices (fist copies drop the leg bones, thigh originals drop the forearm/hand); every original vertex is byte-identical, same mesh at rest.",
  "glbPatch": {
-  "reason": "DEF g12 attack: left-fist forward punch, torso squared to the target, right fist guards",
+  "reason": "DEF g12 attack: left-fist forward punch, torso squared to the target, right fist guards; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
   "ops": [
    {
     "op": "setWeights",
@@ -230,6 +230,22 @@
     "table": "tools/homm3_glb_patch/key_rotations/hota_factory_juggernaut_pose_rot.json",
     "sha256": "2292702711903c451df79bd57e9c40fce0d0582399a51fbaecf5b8361bfc1994",
     "regrid": true
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_factory_juggernaut_clip_tracks.json",
+    "sha256": "41bb4d7681bb84b8d4033daefacfae0241dd90d73747a0c76a2ef5d1cfe3ed39"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
    }
   ]
  }

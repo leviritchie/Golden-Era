@@ -325,7 +325,7 @@
   ]
  },
  "glbPatch": {
-  "reason": "DEF g12 attack: lunges into a deep forward crouch, torso pitched over the front knee, dagger thrust low (f4-f6), instead of slashing upright in place",
+  "reason": "DEF g12 attack: lunges into a deep forward crouch, torso pitched over the front knee, dagger thrust low (f4-f6), instead of slashing upright in place; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death, ShootFront re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -354,6 +354,28 @@
     "op": "keyTranslations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_lizard_assassin_pose_tr.json",
     "sha256": "3f7f5b38a66c706f874e129f7312b3adc590935f72e1712f5f4f8e0190189c6e"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lizard_assassin_move_tracks.json",
+    "sha256": "02851fe5ac4f76068e96a8bdeed43f7e2404eb557b670cce121f726ba26b9c3f"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lizard_assassin_clip_repair_facecut.json",
+    "sha256": "f8dbf54329a982cb7f10d7c61aa48af51b2a65bb28919a8b098bee2a70ed78a2",
+    "note": "clip pass repair: 139 faces that weld the bow staff to the head, chest and thigh"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lizard_assassin_clip_repair_weights.json",
+    "sha256": "3ff9809623f933390e1bdb391f1a84dbdb3dd6938e2ebf5c7092a62a24d937ce",
+    "note": "clip pass repair: whole bow staff and knob rigid on LeftHand (278 vertices)"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lizard_assassin_clip_tracks.json",
+    "sha256": "09c87eb053c90b70c2ff415c7669bafee5868f83c1b0a31161e7b397a0dddf30"
    }
   ]
  }

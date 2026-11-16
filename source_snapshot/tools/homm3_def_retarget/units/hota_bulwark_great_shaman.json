@@ -248,7 +248,7 @@
  "sourceMesh": "artifacts/homm3_mesh_surgery/hota_bulwark_great_shaman_arm_c2.glb",
  "meshSurgeryReason": "2026-10-11 lane B (standing mesh-surgery approval): the Meshy mesh welds the staff arm's sleeve and hand onto the robe at the left hip (33 bridge faces between the source forearm/hand chain Bone_029..Bone_025 and the hips/spine/left-thigh bones), so the DEF g12/g15 staff raise and forward thrust dragged the robe out with the sleeve (gate +323 edges past 2x, mostly Hips<->LeftForeArm). limb_cut_surgery.py splits the bridge by majority and duplicates the 20 shared vertices (sleeve copies drop the body bones, robe originals drop the arm bones); every original vertex is byte-identical, same mesh at rest. Second cut arm_c2 (from arm_c1, limb_cut_surgery.py --mixed-from, box below the shoulder z 0.5-0.9): the sleeve's inner side still hung onto the torso/robe through a strip of mixed-weight vertices that the first cut's pure-class rule did not see, so the overhead staff raise dragged the robe up with it (Hips<->LeftForeArm, robe Hips-Hips); 24 more bridge faces split, 18 vertices duplicated, originals byte-identical.",
  "glbPatch": {
-  "reason": "2026-10-11 lane B: the DEF great shaman raises the staff orb-up overhead (lightning) at AttackFront f1-f3 and drives the orb forward at the target f4-f6; in ShootFront the orb goes overhead f2-f3 and points level at the target f4-f5. The capture kept the orb low by the hand with the shaft poking forward. After the second limb cut (arm_c2: the sleeve off the robe) the staff arm itself is aimed per key (LeftArm/LeftForeArm) and the staff hand turned on top (LeftHand, orb at -PCA). Weights: the sleeve/robe/shoulder band re-solved against every gated pose (lane B wsolve, --newonly then --keepsw; setWeights, weld groups identical) so the raise no longer drags the robe; the robe at the left hip where the staff hand rests in the bind pose gives its stray hand/forearm share to the hips (moveWeights). The old single robe-vertex pin indexed the pre-cut base and is replaced by the re-solve.",
+  "reason": "2026-10-11 lane B: the DEF great shaman raises the staff orb-up overhead (lightning) at AttackFront f1-f3 and drives the orb forward at the target f4-f6; in ShootFront the orb goes overhead f2-f3 and points level at the target f4-f5. The capture kept the orb low by the hand with the shaft poking forward. After the second limb cut (arm_c2: the sleeve off the robe) the staff arm itself is aimed per key (LeftArm/LeftForeArm) and the staff hand turned on top (LeftHand, orb at -PCA). Weights: the sleeve/robe/shoulder band re-solved against every gated pose (lane B wsolve, --newonly then --keepsw; setWeights, weld groups identical) so the raise no longer drags the robe; the robe at the left hip where the staff hand rests in the bind pose gives its stray hand/forearm share to the hips (moveWeights). The old single robe-vertex pin indexed the pre-cut base and is replaced by the re-solve.; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -293,6 +293,22 @@
     },
     "keep": 0.0,
     "note": "robe at the left hip where the staff hand rests in the bind pose: its stray hand/forearm share rides the hips so the staff swing no longer drags the robe"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_great_shaman_move_tracks.json",
+    "sha256": "c8fffa9b771ace864b8beb1752cf35e93e1fee7dea036c6baa514b0bf9f70ef1"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_great_shaman_clip_repair_weights.json",
+    "sha256": "c638de37800cb3bc09b7172a60581746585f3fc861f69d296219d4693c9c8274",
+    "note": "clip pass repair: two spearhead shells of the staff (fallback Hips/LeftUpLeg weights) rigid on LeftHand like the rest of the staff"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_great_shaman_clip_tracks.json",
+    "sha256": "0cd262a86fc812c2401868fe11e32a48b1013afb23221ebeb1597648050da47d"
    }
   ]
  }

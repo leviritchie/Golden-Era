@@ -872,7 +872,7 @@ internal static class Homm3FactorySplitAssemblyRuntime
 			foreach (var subSkill in EnumerateObjects(subSkills))
 			{
 				var sid = NormalizeSid(TryReadString(subSkill, GameSymbols.DraconicDominion.HeroSubSkillSidMembers));
-				if (string.Equals(sid, subSkillSid, StringComparison.Ordinal))
+				if (string.Equals(sid, subSkillSid, StringComparison.Ordinal) && Homm3DungeonDraconicDominionHook.IsSubSkillActive(subSkill))
 					return true;
 			}
 		}

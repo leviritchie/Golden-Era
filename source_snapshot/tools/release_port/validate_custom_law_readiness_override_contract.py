@@ -22,7 +22,9 @@ RELEASE_PORT = ROOT / "tools" / "release_port"
 QUEUE_GENERATOR = RELEASE_PORT / "generate_custom_law_implementation_queue.py"
 
 EXPECTED_READINESS_COUNTS = {
-    "native-exact-ready": 130,
+    "native-exact-ready": 122,
+    # Row-13 counterattack laws (2026-11-10): native loader anchor + Homm3CounterattackDoctrineMutationRuntime.
+    "runtime-backed-ready": 8,
     "source-prepared-runtime-blocked": 0,
     "temporary-compromise-playable-strict-placeholder-ready": 0,
 }
@@ -107,6 +109,13 @@ def validate_queue(queue: dict[str, Any]) -> list[str]:
                 errors.append(f"{sid}: native-exact-ready requires concrete strict native row bonuses")
             if not isinstance(action, str) or "Keep the exact native/data row" not in action:
                 errors.append(f"{sid}: native-exact-ready action must preserve exact native/data row")
+        elif readiness == "runtime-backed-ready":
+            if status != "runtime-backed":
+                errors.append(f"{sid}: runtime-backed-ready requires target status runtime-backed, got {status!r}")
+            if source_status != "playable-concrete-row" or not isinstance(source_bonus_count, int) or source_bonus_count <= 0:
+                errors.append(f"{sid}: runtime-backed-ready requires the native loader-anchor source row")
+            if not isinstance(action, str) or "Keep the native loader-anchor row" not in action:
+                errors.append(f"{sid}: runtime-backed-ready action must preserve the native loader-anchor row")
         elif readiness == "source-prepared-runtime-blocked":
             if status != "needs-runtime":
                 errors.append(f"{sid}: source-prepared-runtime-blocked requires target status needs-runtime, got {status!r}")

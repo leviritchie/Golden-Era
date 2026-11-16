@@ -138,7 +138,7 @@ internal static class Homm3ConfluxElementalConjunctionRuntime
 				continue;
 
 			var changed = 0;
-			changed += TryApplyLawStat(transferSideObject, Homm3CustomFactionLawRuntime.MeleeFormationIndex, "battle.melee-formation", "attack", new[] { "attack" }, familyCount, state, families) ? 1 : 0;
+			changed += TryApplyLawStat(transferSideObject, Homm3CustomFactionLawRuntime.MeleeFormationIndex, "battle.melee-formation", "attack", new[] { "offence", "attack" }, familyCount, state, families) ? 1 : 0;
 			changed += TryApplyLawStat(transferSideObject, Homm3CustomFactionLawRuntime.RangedFormationIndex, "battle.ranged-formation", "defense", new[] { "defense", "defence" }, familyCount, state, families) ? 1 : 0;
 			changed += TryApplyLawStat(transferSideObject, Homm3CustomFactionLawRuntime.SpellSchoolAccessHighIndex, "spell.high", "spell power", new[] { "spellPower", "spellpower", "magicPower", "power" }, familyCount, state, families) ? 1 : 0;
 

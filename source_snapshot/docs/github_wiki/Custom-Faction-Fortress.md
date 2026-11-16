@@ -24,26 +24,21 @@ Generated from live Core.zip on 2026-05-23.
 - Direct dwelling prefix: `barracks_homm3_fortress_`.
 - Donor dwelling prefixes resolved only by exact/contextual payload: `barracks_nature_`.
 
-## Faction Skill: Hunting Grounds
+## Faction Skill: Predator Instinct
 
-`skill_faction_homm3_fortress` (Basic / Advanced / Expert Hunting Grounds) replaces Swamp Tactics.
+`skill_faction_homm3_fortress` (Basic / Advanced / Expert Predator Instinct) replaces Hunting Grounds.
 
-- Each battle the hero wins adds one Trophy (neutrals or heroes). A lost siege or a retreat is a loss and never counts.
-- The meter does not empty when full. The first time it reaches the cap in a week, every weekly site (event bank with `visitorsResetType: OnStartWeek`, for example Windmill, Stables, Mysterious Stone, the resource storages) the hero visited so far this week is restocked once. After that the meter stays capped, so there is at most one restock per hero per week.
-- The meter and the visited list reset at every week start.
-- Creature dwellings are not restocked. They have no visitor list and grow weekly by `weeklyIncrement`, so a restock would create extra creatures.
-- Enemy units in this hero's battles take a penalty that grows with the Trophy count:
-
-| Rank | Cap | -1 Initiative at | Also -1 Speed at | Restock at | Extra |
-| --- | --- | --- | --- | --- | --- |
-| Basic | 8 | 3 | 6 | 8 | - |
-| Advanced | 7 | 2 | 5 | 7 | - |
-| Expert | 6 | 2 | 4 | 6 | -2 Initiative at 6 |
-
-- The hero shows one visible buff, "Hunting Grounds Trophies" (`homm3_fortress_trophies_{rank}_{n}`, with the rank icon). Its tooltip shows `Trophies N/cap`, the current penalty, the next milestone, and whether this week's restock is used. The buff lasts `UntilNextWeek` and is saved with the hero. A buff at the cap means the restock is used.
-- Adventure-map meter: a compact gauge on the hero portrait, in the style of the Necropolis necromancy meter, fills with Trophies (tick marks at the penalty milestones) and turns grey with a dimmed icon once this week's restock is used; hovering it shows the same details as the buff (`Homm3FortressHuntingGroundsMeter`, HUD only).
-- Subskills: Swamp Advantage, Mire Grip, Thick Hides (Advanced); Bog Ambush, Stagnant Air, Poisoned Mire (Expert). Mire Grip's -1 Speed stacks with the Trophy Speed penalty.
-- Runtime owner: `Homm3FortressHuntingGroundsHook` (config `homm3FortressHuntingGrounds`, default on). Known gap: weekly sites visited before a mid-week reload are not restocked.
+- At the start of each battle, each melee stack in the Fortress hero's army is randomly assigned one enemy stack as its prey. Pairing is 1-to-1: if you have more stacks, some have no prey; if the enemy has more, some enemy stacks have no predator.
+- Predators deal +10% / +20% / +30% damage to their prey (Basic / Advanced / Expert).
+- Hover one of the hero's stacks to see a glowing, slightly wavy blood-red line from the predator to its prey. Predator and prey also show marker buffs ("Predator" / "Hunted").
+- Advanced subskills:
+  - Swamp Tactics: +10% damage on native terrain.
+  - Intimidation: an enemy attacked by its predator loses 3 Initiative for 2 rounds (Ice Bolt's slow).
+  - Endurance Hunting: ranged stacks can also be predators.
+- Expert subskills:
+  - Frenzy: army ability. Spend 1 Focus to give all predators Haste for the round; they are taunted by their prey while it is in reach.
+  - Cautious: predators parry when attacked by their prey (they retaliate before the attack, like the Grove tier-1 ability).
+  - Pounce: prey cannot retaliate against its predator.
 
 ## Known Debt / Warnings
 

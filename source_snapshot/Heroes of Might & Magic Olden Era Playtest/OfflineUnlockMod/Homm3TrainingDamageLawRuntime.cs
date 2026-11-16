@@ -1628,7 +1628,7 @@ private static bool TryStrengthenRampartAvengerPotency(
 	}
 
 
-	private static bool TryReadBattleStackCount(object battleUnit, out int stackCount, out string failReason)
+	internal static bool TryReadBattleStackCount(object battleUnit, out int stackCount, out string failReason)
 	{
 		stackCount = 0;
 		if (battleUnit == null)
@@ -1741,7 +1741,7 @@ private static string DescribeRuntimeObject(object value)
 			failReason = "battle logic exposed no exact transfer battle";
 			return false;
 		}
-		if (!TryReadExactObject(transferBattle, GameSymbols.BattleEventLaws.TransferBattleSidesMembers, out var sides) || sides is not System.Collections.IEnumerable sideEnumerable)
+		if (!TryReadExactObject(transferBattle, GameSymbols.BattleEventLaws.TransferBattleSidesMembers, out var sides) || !Il2CppCollections.TryEnumerate(sides, out var sideEnumerable))
 		{
 			failReason = "transfer battle exposed no enumerable exact sides";
 			return false;
@@ -1751,7 +1751,7 @@ private static string DescribeRuntimeObject(object value)
 		{
 			if (side == null)
 				continue;
-			if (!TryReadExactObject(side, GameSymbols.BattleEventLaws.TransferSideUnitsMembers, out var sideUnits) || sideUnits is not System.Collections.IEnumerable unitEnumerable)
+			if (!TryReadExactObject(side, GameSymbols.BattleEventLaws.TransferSideUnitsMembers, out var sideUnits) || !Il2CppCollections.TryEnumerate(sideUnits, out var unitEnumerable))
 				continue;
 			foreach (var unit in unitEnumerable)
 			{

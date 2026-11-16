@@ -842,7 +842,7 @@
   ]
  },
  "glbPatch": {
-  "reason": "DEF g12 attack: the thunderbird pitches its body forward and drives the neck and beak straight out at the target (f3-f5), tail streaming level behind, then rears back up, instead of staying upright with the tail curled into a hook; body/tail-root weights re-solved so the lunge does not tear the hips",
+  "reason": "DEF g12 attack: the thunderbird pitches its body forward and drives the neck and beak straight out at the target (f3-f5), tail streaming level behind, then rears back up, instead of staying upright with the tail curled into a hook; body/tail-root weights re-solved so the lunge does not tear the hips; 2026-11-10 flyer flight repair pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights repaired so the tear gate holds; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -861,6 +861,22 @@
     "table": "tools/homm3_glb_patch/key_rotations/hota_cove_stormbird_pose_rot.json",
     "sha256": "fa967b107cc40056255dd6c7c2e8c4153dc593b0b8a294c0ea4cb25efe8b7db7",
     "regrid": true
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_stormbird_flight_weights.json",
+    "sha256": "13c712ebf325b2ea44d781fc67e9c724b790659bd17c9fee866ddf50a72db300"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_stormbird_flight_tracks.json",
+    "sha256": "6199b64dfa2d4572567a41ce127cdc3be653891fc05e44c55f899469c0ba0a07"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_stormbird_clip_tracks.json",
+    "sha256": "e2a8d2752b5a6ce825b205c5f1a33e48544aa6c2a83dac80fa831ea61981cc64"
    }
   ]
  }

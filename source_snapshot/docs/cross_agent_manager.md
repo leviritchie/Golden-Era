@@ -2,6 +2,8 @@
 
 **Status:** Source/static and isolated CLI/store behavior validated on 2026-10-02: all 10 contract tests pass, with no skips, including concurrent processes and Windows junction scopes. The full-tier MSBuild validator target also passes. A live Codex-to-Claude roundtrip has not been exercised; no game plugin was compiled or deployed for this setup.
 
+**2026-11-12:** Codex is retired (the owner's Codex subscription ended). Its board records are stale and its claims carry no authority; Claude owns the work Codex used to do. The board stays in use for coordinating concurrent Claude sessions, and `codex` remains a valid `TOOL` value only for historical records. References to Codex below are history.
+
 ## Purpose And Boundary
 
 The manager is a repo-local coordination board and message mailbox for real agents running in different tools. It lets independently started Codex and Claude sessions register, create and claim work, persist versioned handoffs, and exchange messages by running the CLI. It does not launch agents, send native tool messages, wake another session, or provide notifications. An agent receives messages only when it polls or waits.

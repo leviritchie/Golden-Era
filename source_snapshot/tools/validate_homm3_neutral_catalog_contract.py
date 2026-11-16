@@ -48,6 +48,13 @@ REQUIRED_STAT_KEYS = (
 #   option A, user decision): t2/t3/t5/t6/t7 differ from Golden Era.
 # - steam_25672315: read from the vanilla Steam 25672315 Core on 2026-10-02 (hotfix); equal to
 #   steam_25509697 (the hotfix changed no DB/units row), so it pins the same table.
+# - steam_26297049: read from the vanilla Steam 26297049 (v0.82.06) Core on 2026-10-29
+#   (artifacts/port_current/port_26297049/core_rebuild/neutral_tier_bands_26297049.json). The
+#   patch rebalanced every tier and added native mummy, trickster and kitten_skeleton, so it has
+#   its own table. golden_era keeps the 25672315 table until GE is promoted to 26297049: the
+#   installed GE Core is still the 25672315 one.
+# - steam_26615913: read from the vanilla Steam 26615913 Core on 2026-11-12. The patch changed
+#   dragon_upg and a few squadValues, but no tier's min/max moved, so it pins the 26297049 table.
 # The target is always named by the caller (--neutral-band-target / band_target); it is never
 # inferred from the Core's contents, and an unknown target fails closed. Omitting it means
 # DEFAULT_NEUTRAL_BAND_TARGET, the active modded runtime target named in AGENTS.md.
@@ -71,10 +78,21 @@ STEAM_25509697_NATIVE_TIER_BANDS: dict[int, dict[str, tuple[int, int]]] = {
     6: {"hp": (75, 160), "offence": (19, 30), "defence": (18, 30), "damageMin": (12, 30), "damageMax": (14, 38), "initiative": (5, 13), "speed": (3, 8), "squadValue": (852, 2273), "gold": (700, 1900)},
     7: {"hp": (150, 400), "offence": (22, 40), "defence": (20, 40), "damageMin": (25, 65), "damageMax": (25, 75), "initiative": (7, 16), "speed": (4, 11), "squadValue": (1875, 8064), "gold": (1200, 5000)},
 }
+STEAM_26297049_NATIVE_TIER_BANDS: dict[int, dict[str, tuple[int, int]]] = {
+    1: {"hp": (4, 15), "offence": (2, 6), "defence": (2, 6), "damageMin": (1, 6), "damageMax": (2, 6), "initiative": (4, 8), "speed": (2, 8), "squadValue": (35, 184), "gold": (35, 170)},
+    2: {"hp": (6, 18), "offence": (3, 8), "defence": (0, 8), "damageMin": (2, 4), "damageMax": (3, 6), "initiative": (4, 8), "speed": (3, 7), "squadValue": (92, 249), "gold": (85, 230)},
+    3: {"hp": (14, 40), "offence": (4, 12), "defence": (4, 12), "damageMin": (3, 8), "damageMax": (5, 12), "initiative": (1, 12), "speed": (3, 7), "squadValue": (128, 355), "gold": (130, 350)},
+    4: {"hp": (30, 50), "offence": (6, 16), "defence": (8, 18), "damageMin": (5, 13), "damageMax": (8, 18), "initiative": (4, 11), "speed": (2, 8), "squadValue": (207, 636), "gold": (240, 600)},
+    5: {"hp": (45, 95), "offence": (12, 23), "defence": (13, 22), "damageMin": (10, 18), "damageMax": (14, 20), "initiative": (4, 13), "speed": (2, 8), "squadValue": (420, 1334), "gold": (390, 1180)},
+    6: {"hp": (75, 160), "offence": (20, 29), "defence": (18, 33), "damageMin": (12, 30), "damageMax": (16, 36), "initiative": (5, 12), "speed": (3, 9), "squadValue": (930, 2482), "gold": (800, 1800)},
+    7: {"hp": (150, 400), "offence": (26, 45), "defence": (24, 50), "damageMin": (25, 65), "damageMax": (25, 75), "initiative": (7, 16), "speed": (5, 11), "squadValue": (1867, 8041), "gold": (1200, 5000)},
+}
 NATIVE_TIER_BANDS_BY_TARGET: dict[str, dict[int, dict[str, tuple[int, int]]]] = {
     "golden_era": STEAM_25509697_NATIVE_TIER_BANDS,
     "steam_25509697": STEAM_25509697_NATIVE_TIER_BANDS,
     "steam_25672315": STEAM_25509697_NATIVE_TIER_BANDS,
+    "steam_26297049": STEAM_26297049_NATIVE_TIER_BANDS,
+    "steam_26615913": STEAM_26297049_NATIVE_TIER_BANDS,
 }
 NEUTRAL_BAND_TARGETS: tuple[str, ...] = tuple(NATIVE_TIER_BANDS_BY_TARGET)
 DEFAULT_NEUTRAL_BAND_TARGET = "golden_era"

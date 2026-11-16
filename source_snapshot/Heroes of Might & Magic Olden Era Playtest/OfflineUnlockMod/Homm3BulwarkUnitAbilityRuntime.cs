@@ -22,11 +22,12 @@ namespace OfflineUnlockMod;
 /// tracks units, apply from SnapshotUnits at Init postfix, and use its named consumer
 /// for late/nested construction while plans remain until the next battle prefix.
 ///
-/// Plans are keyed by the native Il2Cpp pointer of TransferSide (enemy side to
-/// slow), not RuntimeHelpers.GetHashCode. Unit.Init arg[2] is the battle-side
-/// wrapper and must be bridged via BattleSideTransferSideMembers; bridged
-/// TransferSide proxies often carry a different managed identity than
-/// TransferBattle.sides even when the native object matches.
+/// Plans are keyed by battle-local side index (TransferBattle.sides array index of
+/// the enemy side to slow), read at Unit.Init from the battle-side wrapper via
+/// BattleSideWrapperLocalSideIndexMembers. Not by TransferSide native pointer:
+/// the Factory Split Assembly live-negative (2026-07-25) showed the bridged
+/// TransferSide is a distinct native object from TransferBattle.sides[j]. The
+/// side-index join is static-trace adopted here (2026-11-10), live-unproven.
 /// Flyer classification reads Core unit-logic stats.moveType == "fly" only
 /// (GameSymbols.BattleEventLaws.UnitConfigFlyMoveTypeValue). Apply dedupe keys
 /// battle units by native pointer. Buffs are faction-owned speed-only rows.
@@ -52,7 +53,7 @@ internal static class Homm3BulwarkUnitAbilityRuntime
 	};
 
 	private static readonly object Gate = new();
-	private static readonly Dictionary<long, int> FlyerSlowMagnitudeByEnemySideKey = new();
+	private static readonly Dictionary<int, int> FlyerSlowMagnitudeByEnemySideKey = new();
 	private static readonly HashSet<long> SlowAppliedUnitKeys = new();
 
 	private static bool _registered;
@@ -144,7 +145,8 @@ internal static class Homm3BulwarkUnitAbilityRuntime
 			// Death March / Split Assembly ownership: do not clear plans here — late
 			// Unit.Init must still resolve the same TransferSide keys until the next
 			// battle prefix.
-			ApplyPlannedFlyerSlowToRegisteredUnits("battle-logic-init-postfix");
+			// No SnapshotUnits apply here: that registry accumulates stale units across repeated Inits
+			// (Factory Split Assembly finding); Unit.Init applies directly via the side-index join.
 		}
 		catch (Exception ex)
 		{
@@ -197,39 +199,21 @@ internal static class Homm3BulwarkUnitAbilityRuntime
 					+ ".");
 			}
 
-			// Unit.Init arg[2] is the live battle-side wrapper, not TransferSide.
-			// Plans are keyed by native TransferSide pointer from TransferBattle.sides.
-			if (!TryResolveTransferSideFromUnitInitArg(battleSideArg, out var transferSide, out var resolveReason))
+			// Unit.Init arg[2] is the live battle-side wrapper. Join on its battle-local side index, which
+			// matches TransferBattle.sides array indexes (the Factory Split Assembly live-proven join):
+			// the bridged TransferSide is a distinct native object from TransferBattle.sides[j], so a
+			// native-pointer join misses with plans active.
+			if (!TryResolveBattleLocalSideIndex(battleSideArg, out var planKey, out var sideIndexReason))
 			{
 				if (flyer)
 				{
 					LogLimited(
-						"unit init TransferSide resolve failed while plans active: unitSid="
+						"unit init battle-local side index unresolved while plans active: unitSid="
 						+ unitSid
 						+ " battleSideType="
 						+ (battleSideArg.GetType().FullName ?? "?")
 						+ " reason="
-						+ resolveReason);
-				}
-				return;
-			}
-
-			if (!TryResolveTransferSidePlanKey(transferSide, out var planKey, out var planKeyReason))
-			{
-				if (flyer)
-				{
-					LogLimited(
-						"unit init TransferSide plan-key resolve failed: unitSid="
-						+ unitSid
-						+ " reason="
-						+ planKeyReason
-						+ " managedHash="
-						+ RuntimeHelpers.GetHashCode(transferSide)
-						+ " activePlans="
-						+ planCount
-						+ " planKeys=["
-						+ FormatPlanKeys()
-						+ "]");
+						+ sideIndexReason);
 				}
 				return;
 			}
@@ -244,10 +228,8 @@ internal static class Homm3BulwarkUnitAbilityRuntime
 						LogLimited(
 							"unit init plan miss: unitSid="
 							+ unitSid
-							+ " transferSideNativeKey="
+							+ " sideIndex="
 							+ planKey
-							+ " managedHash="
-							+ RuntimeHelpers.GetHashCode(transferSide)
 							+ " activePlans="
 							+ FlyerSlowMagnitudeByEnemySideKey.Count
 							+ " planKeys=["
@@ -301,12 +283,10 @@ internal static class Homm3BulwarkUnitAbilityRuntime
 			if (snapshot.Unit == null)
 				continue;
 			// Snapshot TransferSide may be the battle-side wrapper stored at Unit.Init.
-			if (!TryResolveTransferSideFromUnitInitArg(snapshot.TransferSide, out var transferSide, out _))
-				continue;
-			if (!TryResolveTransferSidePlanKey(transferSide, out var planKey, out _))
+			if (!TryResolveBattleLocalSideIndex(snapshot.TransferSide, out var planKey, out _))
 			{
 				if (sampledMissKeys.Count < 8)
-					sampledMissKeys.Add("keyResolveFail:managedHash=" + RuntimeHelpers.GetHashCode(transferSide));
+					sampledMissKeys.Add("sideIndexResolveFail");
 				continue;
 			}
 			int magnitude;
@@ -316,11 +296,7 @@ internal static class Homm3BulwarkUnitAbilityRuntime
 				{
 					if (sampledMissKeys.Count < 8)
 					{
-						sampledMissKeys.Add(
-							"nativeKey="
-							+ planKey
-							+ ":managedHash="
-							+ RuntimeHelpers.GetHashCode(transferSide));
+						sampledMissKeys.Add("sideIndex=" + planKey);
 					}
 					continue;
 				}
@@ -493,6 +469,30 @@ internal static class Homm3BulwarkUnitAbilityRuntime
 		return Homm3DirectStateIdentity.TryResolveKey(transferSide, out planKey, out failReason);
 	}
 
+	/// <summary>Battle-local side index from the Unit.Init battle-side wrapper (matches TransferBattle.sides indexes).</summary>
+	private static bool TryResolveBattleLocalSideIndex(object battleSideArg, out int sideIndex, out string failReason)
+	{
+		sideIndex = -1;
+		failReason = null;
+		if (battleSideArg == null)
+		{
+			failReason = "battle side arg null";
+			return false;
+		}
+		if (battleSideArg is TransferSide)
+		{
+			failReason = "side arg is TransferSide; expected battle-side wrapper for local side index";
+			return false;
+		}
+		if (!TryReadNamedObject(battleSideArg, GameSymbols.BattleEventLaws.BattleSideWrapperLocalSideIndexMembers, out var raw) || raw is not int index)
+		{
+			failReason = "battle side " + (battleSideArg.GetType().FullName ?? "?") + " exposed no battle-local side index (BattleSideWrapperLocalSideIndexMembers)";
+			return false;
+		}
+		sideIndex = index;
+		return true;
+	}
+
 	private static string FormatPlanKeys()
 	{
 		lock (Gate)
@@ -577,15 +577,10 @@ internal static class Homm3BulwarkUnitAbilityRuntime
 				var enemy = sides[j];
 				if (enemy == null)
 					continue;
-				if (!TryResolveTransferSidePlanKey(enemy, out var key, out var keyReason))
-				{
-					LogLimited("flyer Slow enemy side skipped: TransferSide plan-key resolve failed: " + keyReason);
-					continue;
-				}
 				lock (Gate)
 				{
-					if (!FlyerSlowMagnitudeByEnemySideKey.TryGetValue(key, out var existing) || magnitude > existing)
-						FlyerSlowMagnitudeByEnemySideKey[key] = magnitude;
+					if (!FlyerSlowMagnitudeByEnemySideKey.TryGetValue(j, out var existing) || magnitude > existing)
+						FlyerSlowMagnitudeByEnemySideKey[j] = magnitude;
 				}
 			}
 
@@ -596,13 +591,12 @@ internal static class Homm3BulwarkUnitAbilityRuntime
 				{
 					if (index == i || sides[index] == null)
 						continue;
-					if (TryResolveTransferSidePlanKey(sides[index], out var enemyKey, out _))
-						enemyKeys.Add(enemyKey.ToString());
+					enemyKeys.Add(index.ToString());
 				}
 				_log?.LogInfo(
 					"HoMM3 Bulwark flyer Slow planned: jotunnSideMagnitude="
 					+ magnitude
-					+ " enemySideNativeKeys=["
+					+ " enemySideIndexes=["
 					+ string.Join(",", enemyKeys)
 					+ "].");
 			}

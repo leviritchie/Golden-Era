@@ -404,7 +404,7 @@
   "note": "2026-10-10 authenticity tail chain: the corrective smooth pulled the thin low-poly tail tube apart at the Tail_02/03 crease once the DEF trail bend was keyed (1 cm edge to 5.7x through Move); the whip chain takes skin only past the root (Tail_00 keeps the smoothed rump seam)"
  },
  "glbPatch": {
-  "reason": "HoMM3 DEF g12/g03/g05 (same motion as the gog): AttackFront = ShootFront fireball wind-up back behind the head (f2-f3) then a forward hurl with a spine lunge (f4-f5); Hitted recoils with the fire arm flung overhead (f2-f3); Death sinks into the DEF's hunched seated heap (head down, knees folded, arms down) instead of lying flat. stretchRelax smooths the shoulder and hip creases. || tail: 2026-10-10 authenticity (lane A): tail floor clearance (laneA tailclear.py --mid --seed0): key 0 carries half the first tail pose and the tail ops are raised per key so neither the keys nor the slerped in-betweens put the tip under the feet (it swept up to 27 cm through the floor from the hanging rest, and lifted the body through grounding at keys) || moveEnd: 2026-10-10 authenticity (lane B): MoveEnd settles on the Idle key-0 stance (Hips + legs from Idle t=0, Spine and Tail_00 keep their world rotation); the left foot was pitched toe-down 6 cm through the floor (tower_tools gen.py copy fromClip, table h3_magog_moveend_rot.json)",
+  "reason": "HoMM3 DEF g12/g03/g05 (same motion as the gog): AttackFront = ShootFront fireball wind-up back behind the head (f2-f3) then a forward hurl with a spine lunge (f4-f5); Hitted recoils with the fire arm flung overhead (f2-f3); Death sinks into the DEF's hunched seated heap (head down, knees folded, arms down) instead of lying flat. stretchRelax smooths the shoulder and hip creases. || tail: 2026-10-10 authenticity (lane A): tail floor clearance (laneA tailclear.py --mid --seed0): key 0 carries half the first tail pose and the tail ops are raised per key so neither the keys nor the slerped in-betweens put the tip under the feet (it swept up to 27 cm through the floor from the hanging rest, and lifted the body through grounding at keys) || moveEnd: 2026-10-10 authenticity (lane B): MoveEnd settles on the Idle key-0 stance (Hips + legs from Idle t=0, Spine and Tail_00 keep their world rotation); the left foot was pitched toe-down 6 cm through the floor (tower_tools gen.py copy fromClip, table h3_magog_moveend_rot.json); 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): AttackFront, Death, Defence, Hitted, ShootFront re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -421,19 +421,29 @@
    {
     "op": "keyRotations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_magog_tail_rot.json",
-    "sha256": "a3f02322b7f9f0913448582ce88cdfad1dcaa29b2d6e49a644ec10a2c7ef3158",
+    "sha256": "0f145cf2e82affa4ece06a7be07bef38a016c3d64bcb5fe76db43ce44b910324",
     "regrid": true
    },
    {
     "op": "keyRotations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_magog_tail_rot.json",
-    "sha256": "a3f02322b7f9f0913448582ce88cdfad1dcaa29b2d6e49a644ec10a2c7ef3158",
+    "sha256": "0f145cf2e82affa4ece06a7be07bef38a016c3d64bcb5fe76db43ce44b910324",
     "regrid": true
    },
    {
     "op": "keyRotations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_magog_moveend_rot.json",
     "sha256": "8fe1a697178ba2ff82aafcac8b46f083b0f320e4d84fedbed7603d7d60e64239"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_magog_move_tracks.json",
+    "sha256": "d3d3e5283d1ec55edcad9e28e8c07e6ec12934703dac1082f346c3807c0aec19"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_magog_clip_tracks.json",
+    "sha256": "b98c1f116766a33d3bbdeec925d2debcffff72c541f9db8fca643d895db1f15f"
    },
    {
     "op": "stretchRelax",

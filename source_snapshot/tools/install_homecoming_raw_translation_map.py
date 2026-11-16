@@ -192,6 +192,20 @@ def patch_core_overlay_and_quickstart(repo_root: Path, game_root: Path, backup_s
     temp_zip = temp_dir / core_zip.name
     try:
         with zipfile.ZipFile(core_zip, "r") as source:
+            # Retain rows the snapshot overlay lacks (earlier layers, newer vanilla builds)
+            # instead of replacing each member whole; see tools/core_overlay_member_merge.py.
+            from core_overlay_member_merge import OverlayMergeError, merge_overlay_member  # noqa: WPS433
+
+            source_names = set(source.namelist())
+            for member in list(overlay_members):
+                if member == QUICKSTART_MEMBER or member not in source_names:
+                    continue
+                try:
+                    overlay_members[member] = merge_overlay_member(
+                        member, source.read(member), overlay_members[member]
+                    )
+                except OverlayMergeError as exc:
+                    fail(str(exc))
             qs = json.loads(source.read(QUICKSTART_MEMBER).decode("utf-8-sig"))
             scenarios = list(qs.get("scenarios") or [])
             if MAP_SID not in scenarios:

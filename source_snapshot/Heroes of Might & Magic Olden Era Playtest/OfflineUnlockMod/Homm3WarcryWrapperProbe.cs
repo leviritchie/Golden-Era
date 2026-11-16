@@ -4,6 +4,7 @@ using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using Hex.Session.Battle;
+using BhBattleAbilityView = Hex.UI.BhBattleAbilityView;
 
 namespace OfflineUnlockMod;
 
@@ -34,12 +35,16 @@ internal static class Homm3WarcryWrapperProbe
 
         try
         {
-            // BhUnitAbilityView binding probe is intentionally disabled; the old typed wrapper fields were removed.
-            var bindMethod = AccessTools.Method(typeof(BhUnitAbilityView), "beiq");
-            if (bindMethod != null)
-                log.LogInfo("[WarcryWrapperProbe] BhUnitAbilityView.befk candidate found; typed wrapper bind probe remains disabled.");
+            // The ability-view hero bind probe is intentionally disabled; only report whether the scoped bind resolves.
+            var bindMethods = GameMember.FindMethods(
+                typeof(BhBattleAbilityView),
+                typeof(void),
+                new Type[] { null, null, typeof(int) },
+                GameSymbols.BattleAbilityView.HeroBind);
+            if (bindMethods.Length > 0)
+                log.LogInfo("[WarcryWrapperProbe] BhBattleAbilityView." + bindMethods[0].Name + " hero bind found; typed wrapper bind probe remains disabled.");
             else
-                log.LogWarning("[WarcryWrapperProbe] BhUnitAbilityView.befk not found.");
+                log.LogWarning("[WarcryWrapperProbe] BhBattleAbilityView hero bind " + GameSymbols.BattleAbilityView.HeroBind.Id + " not found.");
 
             var initializerType = FindRuntimeType(GameSymbols.WarcryHeroAbility.WrapperProbeLegacyInitializerTypeNames);
             var initializerCtor = initializerType == null ? null : AccessTools.Constructor(initializerType);
@@ -110,7 +115,7 @@ internal static class Homm3WarcryWrapperProbe
     {
         if (typeNames == null)
             return null;
-        var asm = typeof(BhUnitAbilityView).Assembly;
+        var asm = typeof(BhBattleAbilityView).Assembly;
         foreach (var typeName in typeNames)
         {
             if (string.IsNullOrWhiteSpace(typeName))

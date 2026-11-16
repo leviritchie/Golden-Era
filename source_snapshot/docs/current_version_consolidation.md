@@ -1,5 +1,7 @@
 # Current Version Consolidation: 25672315
 
+> **2026-11-13: superseded.** On the owner's request the 26615913 port copy replaced this install (two same-volume directory moves). Golden Era now runs Steam build **26615913** (GameAssembly `7cc2de0d…464d47e`, Core `e77aaad3…`, plugin from `port/26615913` 2f7b7bec4b). The 25672315 install below is at rollback root `V:\olden_port_work\golden_era_25672315_rollback_20261113`. Receipt: [`consolidation_26615913/promotion_receipt.json`](../artifacts/port_current/consolidation_26615913/promotion_receipt.json). Main merged `port/26615913` the same day (e53ee35fb7) and builds against 26615913 with `V:/olden_port_work/port_26615913/compile_against_live.sh`.
+
 Status: installed-payload proven for the files listed in the 2026-10-04 promotion receipt. The receipt does not claim a whole-tree hash audit, startup smoke, or gameplay test. This is the current status hub for the 25672315 consolidation.
 
 ## Build And Path Identity

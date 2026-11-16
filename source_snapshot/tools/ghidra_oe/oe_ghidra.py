@@ -19,14 +19,26 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
-BUILD = '25672315'
 WORK = Path(r'V:\olden_port_work\ghidra')
 GHIDRA = Path(r'V:\Tools\ghidra\ghidra_12.1.4_PUBLIC')
 JDK = Path(r'V:\Tools\jdk\jdk-21.0.12.1+1')
-INDEX = REPO / 'artifacts' / 'port_current' / f'idx2_live_{BUILD}'
-GA_SHA = 'D9972B0E7F7DD1C17758808E2F1B80E0A728946416D9A41DEAA99BAD744DE53A'
-PROJECT = f'OE_{BUILD}'
 PROGRAM = 'GameAssembly.dll'
+# Steam build -> pinned GameAssembly.dll sha256. 25672315 is the Golden Era build; one project (and one turn lock) each.
+BUILDS = {
+    '25672315': 'D9972B0E7F7DD1C17758808E2F1B80E0A728946416D9A41DEAA99BAD744DE53A',
+    '26615913': '7CC2DE0D14A6FF98880A78C457385992D0D8BA294F991C689C5122AFA464D47E',
+}
+BUILD = '25672315'
+INDEX = GA_SHA = PROJECT = None
+
+
+def select_build(build: str) -> None:
+    global BUILD, INDEX, GA_SHA, PROJECT
+    if build not in BUILDS:
+        sys.exit(f'unknown build {build}; known: {", ".join(BUILDS)}')
+    BUILD, GA_SHA = build, BUILDS[build]
+    INDEX = REPO / 'artifacts' / 'port_current' / f'idx2_live_{BUILD}'
+    PROJECT = f'OE_{BUILD}'
 
 
 def sha256_file(p: Path) -> str:
@@ -59,7 +71,7 @@ def setup(a) -> int:
     t0 = time.time()
     with project_turn(a.wait):
         rc = headless(['-import', str(ga), '-noanalysis', '-overwrite', '-scriptPath', str(HERE / 'scripts'),
-                       '-postScript', 'ImportOeSymbols.java', str(labels), '-log', str(WORK / 'setup.log')], a.maxmem)
+                       '-postScript', 'ImportOeSymbols.java', str(labels), '-log', str(WORK / ('setup.log' if BUILD == '25672315' else f'setup_{BUILD}.log'))], a.maxmem)
     print(f'setup exit {rc} in {time.time() - t0:.0f}s; log {WORK / "setup.log"}')
     return rc
 
@@ -70,7 +82,7 @@ def project_turn(wait_s: int):
     10 s slices up to `wait_s`, then fail with a diagnostic instead of hitting Ghidra's LockException)."""
     import msvcrt
     WORK.mkdir(parents=True, exist_ok=True)
-    f = open(WORK / 'project.turn.lock', 'a+b')
+    f = open(WORK / ('project.turn.lock' if BUILD == '25672315' else f'project_{BUILD}.turn.lock'), 'a+b')
     deadline = time.time() + wait_s
     while True:
         try:
@@ -107,6 +119,7 @@ def query(a) -> int:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument('--build', default='25672315', help='Steam build whose project to use (default: Golden Era 25672315)')
     sub = ap.add_subparsers(dest='op', required=True)
     s = sub.add_parser('setup')
     s.add_argument('--force', action='store_true')
@@ -122,6 +135,7 @@ def main() -> int:
     q.add_argument('--wait', type=int, default=900, help='seconds to wait for the project turn')
     q.set_defaults(fn=query)
     a = ap.parse_args()
+    select_build(a.build)
     return a.fn(a)
 
 

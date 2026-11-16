@@ -116,7 +116,7 @@ internal static class Homm3MapObjectUnitVisualHook
 			if (!hasHomm3 && !looksUnit)
 				return;
 			if (hasHomm3)
-				Homm3MapBillboardDeathFadeHook.RegisterRoot(root, meta, sid);
+				Homm3MapBillboardDeathFadeHook.RegisterRoot(root, meta, sid, __instance);
 
 			if (hasHomm3 && _homm3ObjectDiagRemaining > 0)
 			{

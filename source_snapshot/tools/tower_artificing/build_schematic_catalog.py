@@ -1,9 +1,9 @@
 """Build the Tower Artificing Schematic catalog from a Core.zip.
 
 A schematic is one displayed unit passive (a view `passives[].name` Lang key) that a Tower hero can
-transcribe and graft. The catalog decides, per schematic:
+observe in an enemy army and graft. The catalog decides, per schematic:
 
-- classification: `copyable`, `generic` (policy `genericRules`; never transcribed) or `excluded`;
+- classification: `copyable`, `generic` (policy `genericRules`; never observed) or `excluded`;
 - payload: the buff-shaped mechanics (`data` / `actions` / `statOverrides`) a graft buff carries.
   Unit passives and buff rows share those three shapes, so a graft is a native, dispellable battle buff.
   View passives are display labels and are not index-aligned with logic `passives` blocks (positional
@@ -153,7 +153,7 @@ def check_runtime(key: str, runtime: dict[str, Any]) -> None:
         fail("heroBuff and nativeUnitSet go together (the native set marks the non-stacking source)")
     gold = runtime.get("dailyGold")
     if gold is not None and not (isinstance(gold.get("gold"), int) and gold["gold"] > 0 and isinstance(gold.get("sourceUnit"), str)):
-        fail("dailyGold needs a positive integer gold and a sourceUnit (its weekly growth scales the rate)")
+        fail("dailyGold needs a positive integer gold and a sourceUnit (its weekly growth vs the Tier 1 line's sets the flat rate)")
     abilities = runtime.get("abilities")
     if abilities is not None:
         indices = abilities.get("indices")
@@ -207,17 +207,17 @@ def map_graft_fields(row: dict[str, Any], runtime: dict[str, Any], ctx: dict[str
         src = growth.get(gold["sourceUnit"])
         if not src:
             raise SystemExit(f"{key}: no weekly growth for {gold['sourceUnit']}")
-        rates = []
-        for line in ctx["lines"]:
-            line_growth = growth.get(line["baseSid"])
-            if not line_growth:
-                raise SystemExit(f"{key}: no weekly growth for Tower line {line['baseSid']}")
-            rates.append(max(1, int(gold["gold"] * src / line_growth + 0.5)))
+        # Locked to the tier-1 rate on every line (owner 2026-11-13: tier scaling made high-tier carriers far too
+        # strong): gold x source weekly growth / the Tier 1 line's weekly growth, the same for all seven lines.
+        tier1 = min(ctx["lines"], key=lambda line: line["tier"])
+        tier1_growth = growth.get(tier1["baseSid"])
+        if not tier1_growth:
+            raise SystemExit(f"{key}: no weekly growth for Tower line {tier1['baseSid']}")
+        rate = max(1, int(gold["gold"] * src / tier1_growth + 0.5))
+        rates = [rate] * len(ctx["lines"])
         row["dailyGoldByLine"] = rates
         if "graftDescription" in row:
-            row["graftDescription"] = row["graftDescription"].replace(
-                "{gold}", ", ".join(f"T{line['tier']} {rate}" for line, rate in zip(ctx["lines"], rates))
-            )
+            row["graftDescription"] = row["graftDescription"].replace("{gold}", str(rate))
     abilities = runtime.get("abilities")
     if abilities is not None:
         source = abilities["sourceUnit"]
@@ -368,6 +368,8 @@ def observe_rows(rows: list[dict[str, Any]], policy: dict[str, Any], logics: dic
     chances = obs.get("chanceByRank")
     if not (isinstance(chances, list) and len(chances) == len(policy["graftSlotsByRank"]) and all(isinstance(c, int) and 0 < c <= 100 for c in chances)):
         raise SystemExit("observation.chanceByRank needs one percent (1..100) per rank")
+    if obs.get("rule") != "battle_end_enemy_army":
+        raise SystemExit("observation.rule must be battle_end_enemy_army (the only rule the runtime implements)")
     if not isinstance(obs.get("diagnostics"), bool) or not (isinstance(obs.get("diagnosticLogLines"), int) and obs["diagnosticLogLines"] > 0):
         raise SystemExit("observation needs diagnostics (bool) and a positive diagnosticLogLines")
     overrides = policy.get("observeOverrides") or {}
@@ -631,6 +633,12 @@ def cs_string(value: str) -> str:
     return '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
 
 
+def cs_text(value: str) -> str:
+    """Display text: whitespace normalized (nbsp, newlines) so the literal stays on one line."""
+    text = " ".join(value.replace(" ", " ").split())
+    return cs_string(text)
+
+
 def render_cs(catalog: dict[str, Any], policy: dict[str, Any]) -> str:
     ledger = policy["ledger"]
     lines = [
@@ -645,12 +653,13 @@ def render_cs(catalog: dict[str, Any], policy: dict[str, Any]) -> str:
         "internal static class Homm3TowerArtificingCatalog",
         "{",
         f"\tinternal const string CatalogCoreSha256 = {cs_string(catalog['sourceCore']['sha256'])};",
-        "\t/// <summary>policy.enabled: false keeps the runtime inert (no essence, no grafts, no Transcribe capture).</summary>",
+        "\t/// <summary>policy.enabled: false keeps the runtime inert (no essence, no observation, no grafts).</summary>",
         f"\tinternal const bool Enabled = {'true' if policy.get('enabled') else 'false'};",
         f"\tinternal const string FactionSkillSid = {cs_string(policy['factionSkillSid'])};",
-        f"\tinternal const string TranscribeAbilitySid = {cs_string(policy['transcribe']['abilitySid'])};",
-        f"\tinternal const string TranscribeEffectBuffSid = {cs_string(policy['transcribe']['effectBuffSid'])};",
         f"\tinternal const string GraftBuffPrefix = {cs_string(policy['graftBuff']['sidPrefix'])};",
+        "\t/// <summary>policy.graftSpell: the world spell every rank grants; its cast opens the graft picker.</summary>",
+        f"\tinternal const string GraftMagicSid = {cs_string(policy['graftSpell']['magicSid'])};",
+        f"\tinternal const string GraftMagicMode = {cs_string(policy['graftSpell']['mode'])};",
         f"\tinternal const string EssenceBitPrefix = {cs_string(ledger['essenceBitPrefix'])};",
         f"\tinternal const string SchematicBitPrefix = {cs_string(ledger['schematicBitPrefix'])};",
         f"\tinternal const string GraftBitPrefix = {cs_string(ledger['graftBitPrefix'])};",
@@ -664,7 +673,7 @@ def render_cs(catalog: dict[str, Any], policy: dict[str, Any]) -> str:
         f"\tinternal const bool ObservationDiagnostics = {'true' if policy['observation']['diagnostics'] else 'false'};",
         f"\tinternal const int ObservationDiagnosticLogLines = {policy['observation']['diagnosticLogLines']};",
         "",
-        "\t/// <summary>Percent chance an observed passive enters the book, at Basic/Advanced/Expert (one roll per passive per battle).</summary>",
+        "\t/// <summary>Percent chance a graftable passive in an enemy army enters the book at battle end, at Basic/Advanced/Expert.</summary>",
         "\tinternal static readonly int[] ObservationChanceByRank = { " + ", ".join(str(v) for v in policy["observation"]["chanceByRank"]) + " };",
         "\t/// <summary>Graft slots per Tower line at Basic/Advanced/Expert.</summary>",
         "\tinternal static readonly int[] GraftSlotsByRank = { " + ", ".join(str(v) for v in policy["graftSlotsByRank"]) + " };",
@@ -680,7 +689,7 @@ def render_cs(catalog: dict[str, Any], policy: dict[str, Any]) -> str:
     for line in catalog["towerLines"]:
         for sid in line["unitSids"]:
             lines.append(f"\t\t[{cs_string(sid)}] = {line['index']},")
-    lines += ["\t};", "", "\t/// <summary>Every tiered unit sid -> tier (source tier for transcription).</summary>", "\tinternal static readonly Dictionary<string, int> UnitTierBySid = new()", "\t{"]
+    lines += ["\t};", "", "\t/// <summary>Every tiered unit sid -> tier (source tier for observation).</summary>", "\tinternal static readonly Dictionary<string, int> UnitTierBySid = new()", "\t{"]
     for sid, tier in catalog["unitTiers"].items():
         lines.append(f"\t\t[{cs_string(sid)}] = {tier},")
     lines += ["\t};", "", "\t/// <summary>Unit sid -> graftable schematic indices that unit shows.</summary>", "\tinternal static readonly Dictionary<string, int[]> GraftableSchematicsByUnitSid = new()", "\t{"]
@@ -690,6 +699,15 @@ def render_cs(catalog: dict[str, Any], policy: dict[str, Any]) -> str:
     graftable = [row for row in catalog["schematics"] if row.get("graftable")]
     for row in graftable:
         lines.append(f"\t\t[{row['index']}] = {cs_string(row['key'])},")
+    lines += ["\t};", "", "\t/// <summary>Schematic index -> English display name (graft picker).</summary>", "\tinternal static readonly Dictionary<int, string> SchematicNameByIndex = new()", "\t{"]
+    for row in graftable:
+        lines.append(f"\t\t[{row['index']}] = {cs_text(row['displayName'])},")
+    lines += ["\t};", "", "\t/// <summary>Schematic index -> English graft description (graft picker).</summary>", "\tinternal static readonly Dictionary<int, string> SchematicDescriptionByIndex = new()", "\t{"]
+    for row in graftable:
+        lines.append(f"\t\t[{row['index']}] = {cs_text(row.get('graftDescription') or row.get('description') or '')},")
+    lines += ["\t};", "", "\t/// <summary>Line index -> base unit sid of the Tower line (graft picker label).</summary>", "\tinternal static readonly string[] TowerLineBaseSids =", "\t{"]
+    for line in catalog["towerLines"]:
+        lines.append(f"\t\t{cs_string(line['baseSid'])},")
 
     def runtime_rows(name: str) -> list[tuple[dict[str, Any], Any]]:
         return [(row, row["runtime"][name]) for row in graftable if (row.get("runtime") or {}).get(name)]

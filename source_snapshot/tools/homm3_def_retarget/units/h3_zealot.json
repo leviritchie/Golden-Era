@@ -213,7 +213,7 @@
  },
  "legDamp": 0.6,
  "glbPatch": {
-  "reason": "2026-10-08 authenticity pass (lane A): with chest_c3 freeing both sleeves, the arms act by motion intent: AttackFront both hands thrust forward from chest height, ShootFront the right hand raised forward-up to cast, Hitted/Defence arms recoil and guard, Death arms flung wide then collapse. Aim keys per DEF frame (pose.py spec s11), numpy patch lane. 2026-10-09 (lane A, chest_c4): AttackFront redone as the DEF's full-arm cast; at f3-f4 both arms are straight forward from protracted shoulders with a 9+9 deg Spine/Spine1 lean, so the hands reach about 0.75 m forward (front z 0.75-0.79, was 0.64); f1-f2 gather at the chest as before. Table h3_zealot_pose3.json; h3_zealot_pose_noaf.json is h3_zealot_pose.json without its AttackFront keys.",
+  "reason": "2026-10-08 authenticity pass (lane A): with chest_c3 freeing both sleeves, the arms act by motion intent: AttackFront both hands thrust forward from chest height, ShootFront the right hand raised forward-up to cast, Hitted/Defence arms recoil and guard, Death arms flung wide then collapse. Aim keys per DEF frame (pose.py spec s11), numpy patch lane. 2026-10-09 (lane A, chest_c4): AttackFront redone as the DEF's full-arm cast; at f3-f4 both arms are straight forward from protracted shoulders with a 9+9 deg Spine/Spine1 lean, so the hands reach about 0.75 m forward (front z 0.75-0.79, was 0.64); f1-f2 gather at the chest as before. Table h3_zealot_pose3.json; h3_zealot_pose_noaf.json is h3_zealot_pose.json without its AttackFront keys.; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -235,6 +235,11 @@
     "sha256": "c20049843cd0b4ec49d82bc3fb070054ed0fda7a2db4935a0a919c187c0b61d2",
     "regrid": true,
     "note": "AttackFront full-arm cast on chest_c4"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_zealot_clip_tracks.json",
+    "sha256": "fcde133c589f58fda3c9dd50f7246aadb654b9845ac8ac2da16d994432bf10e7"
    }
   ]
  }

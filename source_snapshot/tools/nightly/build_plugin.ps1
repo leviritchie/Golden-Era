@@ -178,6 +178,9 @@ try {
         'build', "`"$csproj`"", '-c', 'Release', '--nologo', '-m:1', '-nodeReuse:false',
         '-p:UseSharedCompilation=false',
         '-p:OfficialDeobfBuild=true',
+        # Drop the publish_plugin/tools reference copies from the candidate search path so Hex*.dll resolve to
+        # GameRoot\BepInEx\interop (the game build being shipped), as compile_against_live.sh does.
+        '-p:UseLiveInteropOnly=true',
         '-p:DeployPluginToGame=false',
         '-p:FullValidation=false',
         "-p:ReleaseCandidateBuild=$(if ($ReleaseCandidate) { 'true' } else { 'false' })",

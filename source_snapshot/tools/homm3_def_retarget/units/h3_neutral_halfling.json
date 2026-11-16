@@ -13035,7 +13035,7 @@
   ]
  },
  "glbPatch": {
-  "reason": "2026-10-11 authenticity pass (lane A): DEF g12 attack - the free (left) hand stabs forward at chest/shoulder height through the lunge instead of waving overhead at f2 and f7 (left-arm IK on keys 2, 3, 6, 7); DEF g15 shoot - the sling whirls overhead (f1-f8) instead of being held still: the raised right hand circles a 15 cm loop, a quarter turn per key (right-arm IK, the sling keeps its world orientation so the wrist does not twist). keyRotations split pair. Lane B 2026-10-12: DEF g12 lunge - hips 0.26 forward / 0.06 down, spine pitched 12 deg with the head holding its gaze, stab arm straightened, front foot steps out and the back foot drags (two-bone IK) at f2-f6, so the stab reaches out like the DEF's.",
+  "reason": "2026-10-11 authenticity pass (lane A): DEF g12 attack - the free (left) hand stabs forward at chest/shoulder height through the lunge instead of waving overhead at f2 and f7 (left-arm IK on keys 2, 3, 6, 7); DEF g15 shoot - the sling whirls overhead (f1-f8) instead of being held still: the raised right hand circles a 15 cm loop, a quarter turn per key (right-arm IK, the sling keeps its world orientation so the wrist does not twist). keyRotations split pair. Lane B 2026-10-12: DEF g12 lunge - hips 0.26 forward / 0.06 down, spine pitched 12 deg with the head holding its gaze, stab arm straightened, front foot steps out and the back foot drags (two-bone IK) at f2-f6, so the stab reaches out like the DEF's.; clip pass 2026-11-11 (user-approved candidate): Death, Defence, Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -13067,6 +13067,29 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_neutral_halfling_lunge_tr.json",
     "note": "lane B 2026-10-12: lunge hips path (see lunge_rot)",
     "sha256": "fe9462aa063e5e4327d3f565f24841cc5613773ce8a19c48c37dd658b0493638"
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_neutral_halfling_clip_repair_joints.json",
+    "sha256": "b468b1744472cdcb71061363065a203cea052b3013c61837a1b417419be149ec",
+    "note": "clip pass repair: Sling_01 / Sling_02 hanging from RightHand"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_neutral_halfling_clip_repair_facecut.json",
+    "sha256": "a5f6599be0c617399ab6b881d964a695dca3d5e118d195f20b406d64e1a872ab",
+    "note": "clip pass repair: faces that weld the sling to the right leg, hip and tunic"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_neutral_halfling_clip_repair_weights.json",
+    "sha256": "1ef17f6e6e455a8ffafea16f45bf006e755b4ece17cdd6a566d65532af876534",
+    "note": "clip pass repair: whole sling (straps + pouches) on RightHand -> Sling_01 -> Sling_02, none left on legs / hips"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_neutral_halfling_clip_tracks.json",
+    "sha256": "7173c6b4e5cc9a1ec6a703798d3477db4cb622f71df2eecdfef0d1cb62cb2c5d"
    }
   ]
  }

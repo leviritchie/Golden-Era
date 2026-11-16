@@ -4693,13 +4693,17 @@ internal static class Homm3SwampAutumnTintProof
 		{
 			foreach (var definition in Definitions)
 			{
-				extended |= ExtendInstanceArraySlotFieldOnly(
-					controllerInstance,
-					controllerType,
-					GameSymbols.TerrainSound.AmbientFogControllerActiveByTileCode,
-					definition.TileCode,
-					definition.SoundDonorTileCode,
-					source);
+				if (ExtendInstanceArraySlotFieldOnly(
+					    controllerInstance,
+					    controllerType,
+					    GameSymbols.TerrainSound.AmbientFogControllerActiveByTileCode,
+					    definition.TileCode,
+					    definition.SoundDonorTileCode,
+					    source))
+				{
+					extended = true;
+					ResetAmbientFogControllerActiveSlot(controllerInstance, controllerType, definition.TileCode);
+				}
 			}
 		}
 		catch (Exception ex)
@@ -4715,6 +4719,28 @@ internal static class Homm3SwampAutumnTintProof
 				+ source
 				+ ".");
 		}
+	}
+
+	// The live array is the controller's per-slot "sound started" flag (26615913 fng crbw, Golden Era fks copp): the
+	// refresh starts a slot's sound when its volume rises above 0 and the flag is off. A new slot has no sound
+	// running yet, so it must start off rather than inherit the donor's flag.
+	private static void ResetAmbientFogControllerActiveSlot(object controllerInstance, Type controllerType, int index)
+	{
+		var field = FindArrayStorageField(controllerType, GameSymbols.TerrainSound.AmbientFogControllerActiveByTileCode);
+		var array = field?.GetValue(controllerInstance);
+		if (array == null)
+			return;
+		if (array is bool[] managed)
+		{
+			if (index >= 0 && index < managed.Length)
+				managed[index] = false;
+			return;
+		}
+		var arrayType = array.GetType();
+		if (!TryGetWrappedArrayAccessors(arrayType, out _, out var itemProp, out var getItem, out var setItem))
+			return;
+		if (GetWrappedArrayElement(array, itemProp, getItem, index) is bool)
+			SetWrappedArrayElement(array, itemProp, setItem, index, false);
 	}
 
 	private static void DisableAmbientFogControllerExtension(string reason)

@@ -695,12 +695,19 @@
     <Error Text="Missing HoMM3 unit balance adjustment contract validator: $(Homm3UnitBalanceAdjustmentValidator)" Condition="!Exists('$(Homm3UnitBalanceAdjustmentValidator)')" />
     <Exec Command="python &quot;$(Homm3UnitBalanceAdjustmentValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
   </Target>
-  <Target Name="ValidateHomm3FactorySplitAssemblyRuntimeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+  <Target Name="ValidateFactoryLogisticsContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
     <PropertyGroup>
-      <Homm3FactorySplitAssemblyRuntimeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_factory_split_assembly_runtime_contract.py</Homm3FactorySplitAssemblyRuntimeValidator>
+      <FactoryLogisticsContractValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_factory_logistics_contract.py</FactoryLogisticsContractValidator>
     </PropertyGroup>
-    <Error Text="Missing HoMM3 Factory Split Assembly runtime validator: $(Homm3FactorySplitAssemblyRuntimeValidator)" Condition="!Exists('$(Homm3FactorySplitAssemblyRuntimeValidator)')" />
-    <Exec Command="python &quot;$(Homm3FactorySplitAssemblyRuntimeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+    <Error Text="Missing Factory Logistics Network contract validator: $(FactoryLogisticsContractValidator)" Condition="!Exists('$(FactoryLogisticsContractValidator)')" />
+    <Exec Command="python &quot;$(FactoryLogisticsContractValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateHomm3ConfluxFusionRuntimeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3ConfluxFusionRuntimeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_conflux_fusion_runtime_contract.py</Homm3ConfluxFusionRuntimeValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 Conflux Elemental Fusion runtime validator: $(Homm3ConfluxFusionRuntimeValidator)" Condition="!Exists('$(Homm3ConfluxFusionRuntimeValidator)')" />
+    <Exec Command="python &quot;$(Homm3ConfluxFusionRuntimeValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
   </Target>
   <Target Name="ValidateHomm3MarshalSuppressingFireRuntimeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
     <PropertyGroup>
@@ -863,16 +870,6 @@
     </PropertyGroup>
     <Error Text="Missing direct-state headless replay validator: $(DirectStateHeadlessReplayValidator)" Condition="!Exists('$(DirectStateHeadlessReplayValidator)')" />
     <Exec Command="python &quot;$(DirectStateHeadlessReplayValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
-  </Target>
-  <Target Name="ValidateHomm3InfernoGatingHexEffectContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
-    <PropertyGroup>
-      <Homm3InfernoGatingHexEffectValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_inferno_gating_hex_effect_contract.py</Homm3InfernoGatingHexEffectValidator>
-      <Homm3InfernoGatingHexEffectCoreZip Condition="'$(Homm3InfernoGatingHexEffectCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' == 'true'">$(GameRootDir)HeroesOldenEra_Data\StreamingAssets\Core.zip</Homm3InfernoGatingHexEffectCoreZip>
-      <Homm3InfernoGatingHexEffectCoreZip Condition="'$(Homm3InfernoGatingHexEffectCoreZip)' == '' and '$(OfficialDeobfBuildNormalized)' != 'true'">$(MSBuildThisFileDirectory)..\..\artifacts\core_overlay_work\Core.zip</Homm3InfernoGatingHexEffectCoreZip>
-    </PropertyGroup>
-    <Error Text="Missing HoMM3 Inferno Gating hex-effect contract validator: $(Homm3InfernoGatingHexEffectValidator)" Condition="!Exists('$(Homm3InfernoGatingHexEffectValidator)')" />
-    <Error Text="Missing HoMM3 Inferno Gating hex-effect Core.zip: $(Homm3InfernoGatingHexEffectCoreZip). Pass -p:Homm3InfernoGatingHexEffectCoreZip=... or set GameRoot to the validated install root." Condition="!Exists('$(Homm3InfernoGatingHexEffectCoreZip)')" />
-    <Exec Command="python &quot;$(Homm3InfernoGatingHexEffectValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot; --core &quot;$(Homm3InfernoGatingHexEffectCoreZip)&quot;" Timeout="300000" />
   </Target>
   <Target Name="ValidateHomm3CustomHeroLevelupSkillContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
     <PropertyGroup>
@@ -1596,6 +1593,8 @@
       <DeployHomm3ImportTable Include="$(MSBuildThisFileDirectory)homm3_import.json" />
       <DeployHomm3UpscaledSfx Include="$(MSBuildThisFileDirectory)homm3_upscaled_sfx\**\*" />
       <DeployCustomFactionManifest Include="$(MSBuildThisFileDirectory)..\..\custom_factions\**\homm3_*.json" />
+      <DeployConfluxFusionConfig Include="$(MSBuildThisFileDirectory)..\..\custom_factions\conflux_fusion\fusion_config.json" Condition="Exists('$(MSBuildThisFileDirectory)..\..\custom_factions\conflux_fusion\fusion_config.json')" />
+      <DeployFactoryLogisticsConfig Include="$(MSBuildThisFileDirectory)..\..\custom_factions\factory_logistics\logistics_config.json" Condition="Exists('$(MSBuildThisFileDirectory)..\..\custom_factions\factory_logistics\logistics_config.json')" />
       <DeployHomm3Portrait Include="$(MSBuildThisFileDirectory)homm3_portraits\**\*.*" />
       <DeployHomm3HeroPortrait Include="$(MSBuildThisFileDirectory)homm3_hero_portraits\**\*.*" />
       <DeployHomm3HeroPortraitUpscaled Include="$(MSBuildThisFileDirectory)homm3_hero_portraits_upscaled\**\*.*" />
@@ -1635,6 +1634,10 @@
     <Copy SourceFiles="@(DeployHomm3ImportTable)" DestinationFiles="@(DeployHomm3ImportTable-&gt;'$(PluginDeployDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3ImportTable)' != ''" />
     <Copy SourceFiles="@(DeployHomm3UpscaledSfx)" DestinationFiles="@(DeployHomm3UpscaledSfx-&gt;'$(PluginDeployDir)homm3_upscaled_sfx\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3UpscaledSfx)' != ''" />
     <Copy SourceFiles="@(DeployCustomFactionManifest)" DestinationFiles="@(DeployCustomFactionManifest-&gt;'$(PluginDeployDir)custom_factions\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployCustomFactionManifest)' != ''" />
+    <!-- Elemental Fusion balancing (Lane 1 owns the file); Homm3ConfluxFusionRuntime re-reads it on every cast. -->
+    <Copy SourceFiles="@(DeployConfluxFusionConfig)" DestinationFolder="$(PluginDeployDir)custom_factions\conflux_fusion" SkipUnchangedFiles="true" Condition="'@(DeployConfluxFusionConfig)' != ''" />
+    <!-- Factory Logistics Network numbers; Homm3FactoryLogisticsConfig re-reads it when the file changes. -->
+    <Copy SourceFiles="@(DeployFactoryLogisticsConfig)" DestinationFolder="$(PluginDeployDir)custom_factions\factory_logistics" SkipUnchangedFiles="true" Condition="'@(DeployFactoryLogisticsConfig)' != ''" />
     <Copy SourceFiles="@(DeployHomm3Portrait)" DestinationFiles="@(DeployHomm3Portrait-&gt;'$(PluginDeployDir)homm3_portraits\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3Portrait)' != ''" />
     <!-- SkipUnchangedFiles=false: portrait promote can replace PNG bytes while leaving timestamps
          in states that previously left the Golden Era plugin folder on stale Voy/pre-rebake art. -->

@@ -10,18 +10,15 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 import zipfile
 from typing import Any
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent / "release_port"))
+import homm3_factory_logistics_core_overlay as factory_logistics  # noqa: E402
 
 
 EXACT_SKILL_TEXT: dict[str, tuple[str, str, list[str]]] = {
-    "homm3_factory": (
-        "Split Assembly",
-        "At battle start, each distinct Natural and Industrial Factory recruit line unlocks one assembly bonus for your whole army. Skill rank scales those bonuses; the fourth bonus in each branch requires Expert and four lines.",
-        [
-            "Natural lines unlock 5% ranged damage, 5% less damage taken, then +1 start Focus. Industrial lines unlock 5% melee damage, +1 Speed, then +1 Initiative. Fourth-branch bonuses require Expert and four lines.",
-            "Natural lines unlock 10% ranged damage, 10% less damage taken, then +1 start Focus. Industrial lines unlock 10% melee damage, +1 Speed, then +1 Initiative. Fourth-branch bonuses require Expert and four lines.",
-            "Natural lines unlock 15% ranged damage, 15% less damage taken, +1 start Focus, and Carapace on all units. Industrial lines unlock 15% melee damage, +2 Speed, +2 Initiative, and Field Triage (spend 1 Focus to heal and revive any allied unit). Fourth-branch bonuses require Expert and four lines.",
-        ],
-    ),
+    # Logistics Network (2026-11-16) owns the Factory text; the overlay reads the same module.
+    "homm3_factory": (factory_logistics.SKILL_NAME, factory_logistics.SKILL_DESC, list(factory_logistics.RANK_DESCS)),
     "homm3_bulwark": (
         "Runes",
         "Each creature stack in the hero's army gains Rune Levels from acting, taking damage, and defending; cumulative Rune thresholds grant Attack, Defense, and Speed.",
@@ -55,6 +52,30 @@ def assignment_literal(module: ast.Module, name: str) -> Any:
         if isinstance(target, ast.Name) and target.id == name:
             return ast.literal_eval(node.value)
     fail(f"overlay missing literal {name}")
+
+
+FACTORY_SKILL_TEXT_SOURCE = (
+    "(factory_logistics.SKILL_NAME, factory_logistics.SKILL_DESC, list(factory_logistics.RANK_DESCS))"
+)
+
+
+def generic_skill_text_entries(module: ast.Module) -> dict[str, Any]:
+    """GENERIC_FACTION_SKILL_TEXT entries: literal values evaluated, module references as source text."""
+    for node in module.body:
+        target = node.target if isinstance(node, ast.AnnAssign) else None
+        if isinstance(node, ast.Assign) and len(node.targets) == 1:
+            target = node.targets[0]
+        if isinstance(target, ast.Name) and target.id == "GENERIC_FACTION_SKILL_TEXT" and isinstance(node.value, ast.Dict):
+            entries: dict[str, Any] = {}
+            for key, value in zip(node.value.keys, node.value.values):
+                if not isinstance(key, ast.Constant):
+                    continue
+                try:
+                    entries[key.value] = ast.literal_eval(value)
+                except ValueError:
+                    entries[key.value] = ast.unparse(value)
+            return entries
+    fail("overlay missing GENERIC_FACTION_SKILL_TEXT dict")
 
 
 def function_source(source: str, module: ast.Module, name: str) -> str:
@@ -197,104 +218,14 @@ def validate_msbuild_target(project_path: Path) -> None:
         fail("OfflineUnlockMod.csproj must run ValidateHomm3FactoryBulwarkCoreSkillContract BeforeBuild")
 
 
-def validate_split_assembly_hud(root: Path) -> None:
-    plugin = root / "Heroes of Might & Magic Olden Era Playtest" / "OfflineUnlockMod"
-    required_files = (
-        "Homm3FactorySplitAssemblyEvaluator.cs",
-        "Homm3FactorySplitAssemblyHudSpriteCache.cs",
-        "Homm3FactorySplitAssemblyArmyStripHud.cs",
-        "Homm3FactorySplitAssemblyRuntime.cs",
-    )
-    for name in required_files:
-        path = plugin / name
-        if not path.is_file():
-            fail(f"missing Split Assembly HUD owner: {name}")
-
-    evaluator = (plugin / "Homm3FactorySplitAssemblyEvaluator.cs").read_text(encoding="utf-8-sig")
-    require_tokens(
-        evaluator,
-        "Split Assembly shared evaluator",
-        (
-            "internal static class Homm3FactorySplitAssemblyEvaluator",
-            "TryEvaluate(",
-            "ResolveUnlockedTiers(",
-            "ResolveRankCap(",
-            "BuildTooltipText(",
-            "NaturalOverclockSubSkillSid",
-            "IndustrialOverclockSubSkillSid",
-        ),
-    )
-
-    runtime = (plugin / "Homm3FactorySplitAssemblyRuntime.cs").read_text(encoding="utf-8-sig")
-    require_tokens(
-        runtime,
-        "Split Assembly combat runtime evaluator join",
-        (
-            "Homm3FactorySplitAssemblyEvaluator.TryEvaluate(",
-            "CollectTransferSideUnitSids(",
-        ),
-    )
-
-    hud = (plugin / "Homm3FactorySplitAssemblyArmyStripHud.cs").read_text(encoding="utf-8-sig")
-    require_tokens(
-        hud,
-        "Split Assembly army-strip HUD",
-        (
-            "internal static class Homm3FactorySplitAssemblyArmyStripHud",
-            "TryRegister(",
-            "HOMM3_FACTORY_SPLIT_ASSEMBLY_METERS",
-            "Homm3FactorySplitAssemblyHudHoverPump",
-            "EnsureLeafSprite(",
-            "EnsureGearSprite(",
-            "NatureGreen",
-            "IndustryOrangeBrown",
-            "TickHover(",
-            "HOMM3_FACTORY_SPLIT_ASSEMBLY_TOOLTIP",
-            "BhHeroHUDPanel",
-            "HeroHudPanelHeroViewFields",
-            "TooltipHeroItemPortraitFields",
-            "DataPartyUnitSidMembers",
-            "PositionMeterLeftOfPortrait(",
-        ),
-    )
-    if '"Hex.Session.Hud.BhHeroUIElement"' in hud or "SideHeroIconFields" in hud:
-        fail("Split Assembly army-strip HUD must not target BhHeroUIElement / side-list heroIcon")
-
-    cache = (plugin / "Homm3FactorySplitAssemblyHudSpriteCache.cs").read_text(encoding="utf-8-sig")
-    require_tokens(
-        cache,
-        "Split Assembly HUD sprite cache",
-        (
-            'FolderName = "homm3_factory_split_assembly_hud"',
-            "RequiredSpriteNames",
-            "TryGetOrCreateSprite(",
-        ),
-    )
-
-    # Legacy pip/rail PNGs may remain for reference; simple HUD uses procedural leaf/gear icons.
-    art_dir = plugin / "homm3_factory_split_assembly_hud"
-    if art_dir.is_dir():
-        for name in art_dir.glob("*.png"):
-            if name.stat().st_size < 32:
-                fail(f"empty Split Assembly HUD art: {name.name}")
-            header = name.read_bytes()[:8]
-            if header[:8] != b"\x89PNG\r\n\x1a\n":
-                fail(f"Split Assembly HUD art must be PNG: {name.name}")
-
-    plugin_source = (plugin / "Plugin.cs").read_text(encoding="utf-8-sig")
-    if "Homm3FactorySplitAssemblyArmyStripHud.TryRegister(_harmony, Log)" not in plugin_source:
-        fail("Plugin.cs must register Homm3FactorySplitAssemblyArmyStripHud")
-
-    project = (plugin / "OfflineUnlockMod.csproj").read_text(encoding="utf-8-sig")
-    require_tokens(
-        project,
-        "Split Assembly HUD deploy contract",
-        (
-            "DeployHomm3FactorySplitAssemblyHud",
-            "homm3_factory_split_assembly_hud",
-            "RequiredHomm3FactorySplitAssemblyHud",
-        ),
-    )
+def validate_split_assembly_retired(root: Path) -> None:
+    """Logistics Network replaced Split Assembly (2026-11-16): its runtime and HUD must not register."""
+    plugin_source = (root / "Heroes of Might & Magic Olden Era Playtest" / "OfflineUnlockMod" / "Plugin.cs").read_text(encoding="utf-8-sig")
+    for retired in ("Homm3FactorySplitAssemblyRuntime.TryRegister(", "Homm3FactorySplitAssemblyArmyStripHud.TryRegister("):
+        if retired in plugin_source:
+            fail(f"Plugin.cs must not register retired Split Assembly owner: {retired}")
+    if "Homm3FactoryLogisticsRuntime.TryRegister(_harmony, Log)" not in plugin_source:
+        fail("Plugin.cs must register Homm3FactoryLogisticsRuntime")
 
 
 def validate_bulwark_promotion(root: Path) -> None:
@@ -340,10 +271,11 @@ def main() -> None:
     overlay_path = root / "tools" / "release_port" / "apply_release_core_overlay.py"
     source = overlay_path.read_text(encoding="utf-8-sig")
     module = ast.parse(source)
-    skill_text = assignment_literal(module, "GENERIC_FACTION_SKILL_TEXT")
-    for faction_sid, expected in EXACT_SKILL_TEXT.items():
-        if skill_text.get(faction_sid) != expected:
-            fail(f"{faction_sid} exact skill text drifted")
+    skill_text = generic_skill_text_entries(module)
+    if skill_text.get("homm3_bulwark") != EXACT_SKILL_TEXT["homm3_bulwark"]:
+        fail("homm3_bulwark exact skill text drifted")
+    if skill_text.get("homm3_factory") != FACTORY_SKILL_TEXT_SOURCE:
+        fail("homm3_factory skill text must come from homm3_factory_logistics_core_overlay")
 
     specialized = function_source(source, module, "make_specialized_generic_skill_row")
     require_tokens(
@@ -355,35 +287,20 @@ def main() -> None:
             'unit_bool_stat_bonus("ignoreFractionsCount")',
             "HOMM3_FACTORY_SPLIT_ASSEMBLY_SUBSKILLS_BY_LEVEL",
             "HOMM3_BULWARK_RUNES_SUBSKILLS_BY_LEVEL",
-            "Split Assembly:",
-            "HOMM3_FACTORY_FIELD_TRIAGE_ABILITY_SID",
+            "factory_logistics.faction_skill_levels()",
+            "factory_logistics.IMPLEMENTED",
             'implemented = ""',
             'source_mechanic_for_surface_row(faction_sid, "faction_skill", skill_sid)',
         ),
     )
     if "levels = [[], [], []]" in specialized:
         fail("Factory/Bulwark faction skills must not ship empty Core bonus arrays; native HeroSkill apply NREs on map load")
-    require_tokens(
-        specialized,
-        "Factory Field Triage Expert grant",
-        (
-            'faction_sid == "homm3_factory"',
-            '{"type": "heroBattleAbility", "parameters": [HOMM3_FACTORY_FIELD_TRIAGE_ABILITY_SID, "0"]}',
-        ),
-    )
+    if "HOMM3_FACTORY_FIELD_TRIAGE_ABILITY_SID" in specialized:
+        fail("Logistics Network replaced Split Assembly: the Factory skill must not grant Field Triage")
     for helper_name, tokens in (
         (
             "make_homm3_factory_split_assembly_subskills",
-            (
-                "sub_skill_faction_homm3_factory_sand_advantage",
-                "landscapePenaltyPerBonus",
-                "enableEnemyHeroInfo",
-                "startEnergyLevelsBonus",
-                "HOMM3_FACTORY_NATURAL_OVERCLOCK_SUBSKILL_SID",
-                "HOMM3_FACTORY_INDUSTRIAL_OVERCLOCK_SUBSKILL_SID",
-                "+1 effective Natural line count",
-                "+1 effective Industrial line count",
-            ),
+            ("factory_logistics.make_subskills()",),
         ),
         (
             "make_homm3_bulwark_runes_subskills",
@@ -407,11 +324,12 @@ def main() -> None:
     ):
         helper = function_source(source, module, helper_name)
         require_tokens(helper, helper_name, tokens)
-    for const_name, expected_len in (
-        ("HOMM3_FACTORY_SPLIT_ASSEMBLY_SUBSKILLS_BY_LEVEL", 6),
-        ("HOMM3_BULWARK_RUNES_SUBSKILLS_BY_LEVEL", 6),
+    if "HOMM3_FACTORY_SPLIT_ASSEMBLY_SUBSKILLS_BY_LEVEL = factory_logistics.SUBSKILLS_BY_LEVEL" not in source:
+        fail("Factory Advanced/Expert subskills must come from homm3_factory_logistics_core_overlay")
+    for const_name, expected_len, mapping in (
+        ("factory_logistics.SUBSKILLS_BY_LEVEL", 6, factory_logistics.SUBSKILLS_BY_LEVEL),
+        ("HOMM3_BULWARK_RUNES_SUBSKILLS_BY_LEVEL", 6, assignment_literal(module, "HOMM3_BULWARK_RUNES_SUBSKILLS_BY_LEVEL")),
     ):
-        mapping = assignment_literal(module, const_name)
         flat = [sid for level in (2, 3) for sid in mapping.get(level, ())]
         if len(flat) != expected_len or len(set(flat)) != expected_len:
             fail(f"{const_name} must list six unique Advanced/Expert subskill SIDs")
@@ -423,7 +341,7 @@ def main() -> None:
             'faction_sid not in {"homm3_factory", "homm3_bulwark"}',
             'faction_sid in {"homm3_factory", "homm3_bulwark"}',
             "exact faction skill text contract is missing",
-            "sub_skill_faction_homm3_factory_sand_advantage_name",
+            "factory_logistics.subskill_lang_rows()",
             "sub_skill_faction_homm3_bulwark_snow_advantage_name",
         ),
     )
@@ -439,6 +357,7 @@ def main() -> None:
             "merge homm3_factory Split Assembly subskills",
             "merge homm3_factory Field Triage hero ability",
             "merge homm3_factory Split Assembly buff rows",
+            "factory_logistics.merge_logistics_skill_rows_into_overlay",
             "merge homm3_bulwark Runes subskills",
         ),
     )
@@ -555,7 +474,7 @@ def main() -> None:
     validate_source_hero_biographies(root)
     validate_law_overrides(root)
     validate_bulwark_promotion(root)
-    validate_split_assembly_hud(root)
+    validate_split_assembly_retired(root)
     print("validated Factory/Bulwark exact Core skill and additional-recruitment contracts")
 
 

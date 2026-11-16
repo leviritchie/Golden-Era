@@ -165,6 +165,8 @@ internal static class Homm3MapSquadVisualControllerHook
 		}
 		foreach (var getter in GameSymbols.MapSquadVisual.RootGetter.NameHints)
 		{
+			if (string.IsNullOrEmpty(getter) || GameSymbolScope.IsSentinel(getter))
+				continue;
 			var method = AccessTools.DeclaredMethod(type, getter, Type.EmptyTypes);
 			if (method != null && typeof(GameObject).IsAssignableFrom(method.ReturnType))
 				return true;
@@ -228,7 +230,8 @@ internal static class Homm3MapSquadVisualControllerHook
 		for (var i = 0; i < hints.Length; i++)
 		{
 			var name = hints[i];
-			if (string.IsNullOrEmpty(name))
+			// A scope-refused hint is a sentinel, not a method name: HarmonyX warns on every lookup of it.
+			if (string.IsNullOrEmpty(name) || GameSymbolScope.IsSentinel(name))
 				continue;
 
 			var method = AccessTools.DeclaredMethod(controllerType, name, parameterTypes);

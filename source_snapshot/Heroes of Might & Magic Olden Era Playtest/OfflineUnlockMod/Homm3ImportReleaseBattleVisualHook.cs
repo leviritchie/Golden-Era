@@ -502,7 +502,7 @@ internal static class Homm3ImportReleaseBattleVisualHook
 		if (TryConsumeSummonedVisualContext(transfer, viewConfig, unitSid, "ecd.Init", out var summonedSid))
 			unitSid = summonedSid;
 		if (!string.IsNullOrEmpty(unitSid) && unitSid.StartsWith("h3_", StringComparison.Ordinal))
-			Homm3BattleUnitLawOwnerRegistry.UpgradeDonorRegistrationsToCustomSid(unitSid);
+			Homm3BattleUnitLawOwnerRegistry.UpgradeDonorRegistrationsToCustomSid(unitSid, transfer);
 		LogInitDiagnostic(__instance, transfer, viewConfig, unitSid, leftSide);
 		if (TryReplaceBattleVisualForDrawer(__instance, unitSid, leftSide, "ecd.Init", null, transfer, viewConfig))
 			QueueDrawerGuard(__instance, unitSid, "ecd.Init");
@@ -1381,7 +1381,7 @@ internal static class Homm3ImportReleaseBattleVisualHook
 		var stemPrefix = Homm3ImportVisuals.ResolveHomm3LabAudioStemPrefix(entry);
 		if (string.IsNullOrEmpty(stemPrefix))
 			return;
-		Homm3LabBattleAudioPlayer.TryAttach(instance, entry.BundleName, stemPrefix, Plugin.LogSource);
+		Homm3LabBattleAudioPlayer.TryAttach(instance, Homm3ImportVisuals.ResolveHomm3LabAudioBundleName(entry), stemPrefix, Plugin.LogSource);
 		Homm3LabClipAudioDriver.TryAttach(instance, Plugin.LogSource);
 	}
 

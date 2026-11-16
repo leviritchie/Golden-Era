@@ -32,7 +32,7 @@ internal static class Homm3ConstructionBuildingCategoryRegistry
 		[new Key("homm3_stronghold", "Build_Bank")] = new Entry("military", "stronghold.freelancers_guild"),
 		[new Key("homm3_tower", "Build_Resource_Depot_level_2")] = new Entry("construct", "tower.sculptors_wings"),
 		[new Key("homm3_tower", "Build_Training_Range")] = new Entry("construct", "tower.workshop_yard"),
-		[new Key("homm3_tower", "Build_Intelligence_Academy")] = new Entry("magical", "tower.library"),
+		[new Key("homm3_tower", "Build_Intelligence_Academy")] = new Entry("magical", "tower.lookout_tower"),
 		[new Key("homm3_tower", "Build_Golden_Calf")] = new Entry("magical", "tower.skyship_beacon"),
 	};
 

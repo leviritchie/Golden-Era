@@ -397,18 +397,18 @@
   ]
  },
  "glbPatch": {
-  "reason": "authenticity lane-A 2026-10-10: rig adds floaterFix (tail-curl strip -> Tail_07, chest sliver off the fire region) and an articulated tail (props tail on Hips + inferno_whipchain prefix Tail, Tail_00..09); it hung coiled round the right leg in every clip. keyRotations (half offset, applied twice), same g12/g15/g05 DEF as gog/magog: AttackFront = ShootFront fireball wind-up behind the head (f2-f3) and forward hurl with a spine lunge (f4-f5), the tail swinging back and curling up behind; Death sinks into the seated heap (hunched, knees folded, arms down) with the fire arm folded in instead of lying on its back with it raised, tail flung back in the fall then laid down along the ground; Move streams the tail behind in a travelling wave on all 10 keys (the loop seam key snapped back to the hanging tail, 73 deg, fixed 2026-10-10); Hitted lashes it out low behind; Defence/MoveStart/MoveEnd raise/settle it. stretchRelax smooths the wind-up shoulder crease. || tail: 2026-10-10 authenticity (lane A): tail floor clearance (laneA tailclear.py --mid --seed0): key 0 carries half the first tail pose and the tail ops are raised per key so neither the keys nor the slerped in-betweens put the tip under the feet (it swept up to 27 cm through the floor from the hanging rest, and lifted the body through grounding at keys) || defencePlant: 2026-10-10 authenticity (lane B): Defence feet back on the floor (both feet sank 2-8 cm at every key; grounding left f2 5.7 cm under): per key the Hips rise by the smaller sink and the other leg is two-bone IK'd up, feet keep their world rotation (laneB_tools plant.py); Tail_03 lifted 8 deg at key 5 (4 at key 6) so the slerped sweep clears the floor (it dipped 1.5 cm)",
+  "reason": "authenticity lane-A 2026-10-10: rig adds floaterFix (tail-curl strip -> Tail_07, chest sliver off the fire region) and an articulated tail (props tail on Hips + inferno_whipchain prefix Tail, Tail_00..09); it hung coiled round the right leg in every clip. keyRotations (half offset, applied twice), same g12/g15/g05 DEF as gog/magog: AttackFront = ShootFront fireball wind-up behind the head (f2-f3) and forward hurl with a spine lunge (f4-f5), the tail swinging back and curling up behind; Death sinks into the seated heap (hunched, knees folded, arms down) with the fire arm folded in instead of lying on its back with it raised, tail flung back in the fall then laid down along the ground; Move streams the tail behind in a travelling wave on all 10 keys (the loop seam key snapped back to the hanging tail, 73 deg, fixed 2026-10-10); Hitted lashes it out low behind; Defence/MoveStart/MoveEnd raise/settle it. stretchRelax smooths the wind-up shoulder crease. || tail: 2026-10-10 authenticity (lane A): tail floor clearance (laneA tailclear.py --mid --seed0): key 0 carries half the first tail pose and the tail ops are raised per key so neither the keys nor the slerped in-betweens put the tip under the feet (it swept up to 27 cm through the floor from the hanging rest, and lifted the body through grounding at keys) || defencePlant: 2026-10-10 authenticity (lane B): Defence feet back on the floor (both feet sank 2-8 cm at every key; grounding left f2 5.7 cm under): per key the Hips rise by the smaller sink and the other leg is two-bone IK'd up, feet keep their world rotation (laneB_tools plant.py); Tail_03 lifted 8 deg at key 5 (4 at key 6) so the slerped sweep clears the floor (it dipped 1.5 cm); 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death, Defence, Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_amalek_throw_tail_rot.json",
-    "sha256": "03e97b5312337091d341b8e1a84cdada381d4866fbb430892f2a1130b4d9c1af",
+    "sha256": "c1aaed21e5f2f609a54f5146b631d1c114c0e9f93b91cba4db9a831dca1495cf",
     "regrid": true
    },
    {
     "op": "keyRotations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_amalek_throw_tail_rot.json",
-    "sha256": "03e97b5312337091d341b8e1a84cdada381d4866fbb430892f2a1130b4d9c1af",
+    "sha256": "c1aaed21e5f2f609a54f5146b631d1c114c0e9f93b91cba4db9a831dca1495cf",
     "regrid": true
    },
    {
@@ -426,6 +426,16 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_amalek_defence_taillift_rot.json",
     "sha256": "7a35b41692daa19a7c58fa8bddac722c5a56e1c5a26ae01bd9dbe3dffe2f8010",
     "regrid": true
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_amalek_move_tracks.json",
+    "sha256": "3a1a23fb90e2bab75ca2c39dd189912989683b7cc35ed0965e57978bb1f29856"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_amalek_clip_tracks.json",
+    "sha256": "9e9cf75546d5f74f5f6add305eefe604fb4e4177cc35c13bb01d184f77759531"
    },
    {
     "op": "stretchRelax",

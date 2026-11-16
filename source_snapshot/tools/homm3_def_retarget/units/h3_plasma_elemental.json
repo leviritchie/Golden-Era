@@ -196,7 +196,7 @@
   "reason": "5-key DEF Move loop (0.417 s, 2.4 Hz fundamental): the capture fit's per-frame arm poses alternate (RightArm x -4.6/5.5/-13.8/13.2/4.3 deg), so the 2nd harmonic (4.8 Hz) sits above the 4 Hz cutoff: Move jitter p90 0.391 (worst RightArm; cap 0.35). The crackle jitter (2.5 deg) is not the source. Sweep on the delivered GLB 2026-09-30: k 0.8 -> 0.300, 0.7 -> 0.254, 0.6 -> 0.220, 0.5 -> 0.174; 0.7 is the lightest with margin (genie vizier precedent)."
  },
  "glbPatch": {
-  "reason": "2026-10-11 lane D authenticity: DEF g12 AttackFront - both arms raised overhead with the fists together at f2-f3 (the capture raised one arm and held the other at the face), then a deeper lunge (hips down 0.12 and forward, feet planted, leg IK) with both arms thrust forward at f4-f6, recovering at f7. LeftArm/LeftForeArm/RightArm/RightForeArm aims split over two keyRotations ops, Hips keyTranslations; stretchRelax over AttackFront for the shoulder crease (the right upper arm aims inward over the head, which keeps the armpit edge under the input's worst stretch).",
+  "reason": "2026-10-11 lane D authenticity: DEF g12 AttackFront - both arms raised overhead with the fists together at f2-f3 (the capture raised one arm and held the other at the face), then a deeper lunge (hips down 0.12 and forward, feet planted, leg IK) with both arms thrust forward at f4-f6, recovering at f7. LeftArm/LeftForeArm/RightArm/RightForeArm aims split over two keyRotations ops, Hips keyTranslations; stretchRelax over AttackFront for the shoulder crease (the right upper arm aims inward over the head, which keeps the armpit edge under the input's worst stretch).; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyTranslations",
@@ -215,6 +215,11 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_plasma_elemental_pose_rot.json",
     "regrid": true,
     "sha256": "0d998151c42b58b9ecc498473e2ce4bf67286a8b92c51e4dd96b269ed1748427"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_plasma_elemental_clip_tracks.json",
+    "sha256": "7117336e6b71b42366ccbd1b5b539c46b7e6b0e0d827844322fea59441f4c420"
    },
    {
     "op": "stretchRelax",

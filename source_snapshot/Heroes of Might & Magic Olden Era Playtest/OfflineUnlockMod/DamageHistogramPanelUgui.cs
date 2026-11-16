@@ -69,6 +69,11 @@ internal readonly struct HistogramLayoutParams
 /// <see cref="DamageHistogramSettings.UsePanelCanvasUgui"/>).</summary>
 internal static class DamageHistogramPanelUgui
 {
+	// Same label as the IMGUI caption (DamageHistogramOverlay.ChartCaptionLuckSuffix): the luck share comes from
+	// BattleBalanceConfig.luckDistribution and the anti-streak luck accumulator makes the next strike's odds depend on
+	// earlier rolls, so the gold share is the average, not this strike's chance.
+	private const string ChartCaptionLuckSuffix = " - luck: average odds";
+
 	private static GameObject s_root;
 	private static int s_rootParentId;
 	private static bool s_logOnce;
@@ -648,6 +653,10 @@ internal static class DamageHistogramPanelUgui
 		var captionText = retaliation
 			? layout.CaptionRetal
 			: layout.CaptionAttack;
+		if (snap.LuckSharePerBin != null)
+		{
+			captionText += ChartCaptionLuckSuffix;
+		}
 		var capH = 2.5f * layout.S + Mathf.Max(12f, layout.CapFontPx * 1.25f);
 		var blockGo = new GameObject("Block");
 		blockGo.transform.SetParent(parent, false);

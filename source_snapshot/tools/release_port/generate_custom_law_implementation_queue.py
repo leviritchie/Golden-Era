@@ -186,7 +186,7 @@ def strict_status(status: str, strict_row: dict[str, Any] | None) -> str:
     count = bonus_count(strict_row)
     if strict_row is None:
         return "missing"
-    if status == "native-exact":
+    if status in ("native-exact", "runtime-backed"):
         return "native-row-present"
     if count == 0:
         return "bonus-free-placeholder"
@@ -216,6 +216,10 @@ def classify_readiness(
         if source_row is None:
             return "native-exact-source-missing", "Restore or verify the exact native/data row before relying on this target."
         return "native-exact-ready", "Keep the exact native/data row; no custom runtime implementation is needed for the current target mechanic."
+    if target_status == "runtime-backed":
+        if source_row is None:
+            return "runtime-backed-source-missing", "Restore the native loader-anchor row before relying on the registered runtime."
+        return "runtime-backed-ready", "Keep the native loader-anchor row; the registered plugin runtime delivers the target mechanic (runtime proof pending)."
     if profile is None:
         return "profile-missing", "Add a source-prepared effect profile matching this target before any implementation work."
     if predicates.get("missing", 0) or predicates.get("rejected", 0) or predicates.get("unmapped", 0):

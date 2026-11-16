@@ -48,7 +48,7 @@ public sealed class Plugin : BasePlugin
 {
 	internal const string PluginGuid = "levir.heroesoe.offlineunlock";
 	internal const string PluginName = "HeroesOE Offline Unlock";
-	internal const string PluginVersion = "0.1.320";
+	internal const string PluginVersion = "0.1.328";
 #if OFFICIAL_DEOBF_BUILD
 	internal const string OfficialDeobfBuildSentinel = "OFFLINE_UNLOCK_MOD_OFFICIAL_DEOBF_BUILD_SENTINEL_V1";
 #else
@@ -84,19 +84,59 @@ public sealed class Plugin : BasePlugin
 	}
 
 	/// <summary>
-	/// Port bring-up (docs/port_to_current_game_version.md): on the pinned current build a required feature whose
-	/// game symbols did not map is switched off with one error line instead of stopping the whole plugin. Used as an
-	/// exception filter in front of the Golden Era fatal catch: it returns false on Golden Era and on an unknown build,
-	/// so those still log fatal and rethrow exactly as before. Hooks the feature registered before it threw stay in place.
+	/// Port bring-up (docs/port_to_current_game_version.md): on the pinned current build, and on an unrecognised build
+	/// (decision D11, port 26297049), a required feature whose game symbols did not map is switched off with one error
+	/// line instead of stopping the whole plugin part-way through Load. Used as an exception filter in front of the
+	/// Golden Era fatal catch: it returns false only on Golden Era, which still logs fatal and rethrows exactly as
+	/// before. Hooks the feature registered before it threw stay in place.
 	/// </summary>
 	private bool PortRequiredFeatureOff(string feature, Exception ex)
 	{
-		if (GameBuild.Kind != GameBuildKind.Current)
+		if (GameBuild.Kind == GameBuildKind.Golden)
 			return false;
 		Log.LogError(
 			"PORT: required feature OFF on " + GameBuild.Describe() + ": " + feature + " ("
 			+ ex.GetType().Name + ": " + ex.Message + "). The plugin keeps loading; hooks this feature registered before "
 			+ "the failure stay in place.");
+		return true;
+	}
+
+	/// <summary>
+	/// Decision D11 (port 26297049): on an unrecognised GameAssembly.dll the obfuscated symbol scopes stay unapplied
+	/// and GameMember refuses every Golden-Era-only obfuscated hint, so the symbol-bound required slices fail and
+	/// <see cref="PortRequiredFeatureOff"/> switches each one off. This is the single notice that says why: on a readable
+	/// unrecognised hash it replaces the GameBuild identity line (log) and is also shown on screen once. An unreadable
+	/// GameAssembly.dll has no hash to report, so GameBuild.LogIdentity keeps that case (it carries the path and error).
+	/// Returns false when the caller must log the build identity itself.
+	/// </summary>
+	private bool LogUnrecognisedBuildNotice()
+	{
+		if (GameBuild.Kind != GameBuildKind.Unknown)
+			return false;
+		var found = GameBuild.Sha256;
+		if (!System.Text.RegularExpressions.Regex.IsMatch(found, "^[0-9A-Fa-f]{64}$"))
+			return false;
+		var retired = "";
+		foreach (var build in GameBuild.RetiredBuilds)
+		{
+			if (string.Equals(found, build.GameAssemblySha256, StringComparison.OrdinalIgnoreCase))
+				retired = " (retired Olden Era build " + build.BuildId + ")";
+		}
+		var notice = "Golden Era was built for Olden Era build " + GameSymbols.CurrentScopes.BuildId + ", found GameAssembly.dll sha256 "
+			+ found + retired + ".";
+		Log.LogError(
+			"GameBuild: " + notice + " Supported: current " + GameSymbols.CurrentScopes.BuildId + " sha256 "
+			+ GameSymbols.Builds.CurrentGameAssemblySha256 + ", Golden Era frozen copy sha256 " + GameSymbols.Builds.GoldenGameAssemblySha256
+			+ ". Features bound to obfuscated game symbols are switched off (one PORT line each); the rest keeps loading.");
+		try
+		{
+			GoldenEraBuildNoticeHost.Show(notice + " Features that depend on that game build are switched off. "
+				+ "Install the Golden Era release made for this game version, or restore the game version Golden Era was made for.");
+		}
+		catch (Exception ex)
+		{
+			Log.LogError("GameBuild: on-screen build notice could not be shown (" + ex.GetType().Name + ": " + ex.Message + ").");
+		}
 		return true;
 	}
 
@@ -194,7 +234,8 @@ public sealed class Plugin : BasePlugin
 	{
 		LogSource = Log;
 		// Build identity selects GameSymbols.TypeGroups scopes; an unknown GameAssembly.dll refuses them loudly.
-		GameBuild.LogIdentity(Log);
+		if (!LogUnrecognisedBuildNotice())
+			GameBuild.LogIdentity(Log);
 		Homm3LoadTiming.Mark("Plugin.Load.begin");
 		Homm3LoadTiming.EnsureFrameProbe(Log);
 		// Earliest practical CreateMarker intercept for olden_cs_recovery edb::.cctor call-trace.
@@ -579,6 +620,20 @@ public sealed class Plugin : BasePlugin
 					Log.LogFatal("Homm3CustomUiIcon release-safe UI slice failed during startup: " + ex);
 					throw;
 				}
+				// Separate from the town/dialog UI icon slice above so a missing battle ability-view surface
+				// only turns off the battle ability icons.
+				try
+				{
+					Homm3CustomUiIconHook.RegisterRequiredReleaseSafeBattleAbilityIconSlice(_harmony, Log);
+				}
+				catch (Exception ex) when (PortRequiredFeatureOff("Homm3CustomUiIcon release-safe battle ability icon slice", ex))
+				{
+				}
+				catch (Exception ex)
+				{
+					Log.LogFatal("Homm3CustomUiIcon release-safe battle ability icon slice failed during startup: " + ex);
+					throw;
+				}
 			}
 			else
 			{
@@ -706,6 +761,8 @@ public sealed class Plugin : BasePlugin
 				try
 				{
 					Homm3SwashbucklerGoldHook.RegisterRequiredReleaseSafeSlice(_harmony, Log);
+					// Optional: custom daily gold in the gold-hover income preview (fails soft, logs why).
+					Homm3CustomIncomeTooltip.TryRegister(_harmony, Log);
 				}
 				catch (Exception ex) when (PortRequiredFeatureOff("HoMM3 Swashbuckler gold release-safe slice", ex))
 				{
@@ -757,25 +814,6 @@ public sealed class Plugin : BasePlugin
 			else
 			{
 				Log.LogInfo("HoMM3 Cove Treasure Hunting Plunder slice skipped by bisection gate.");
-			}
-			if (cfg.Homm3FortressHuntingGrounds)
-			{
-				try
-				{
-					Homm3FortressHuntingGroundsHook.RegisterRequiredReleaseSafeSlice(_harmony, Log);
-				}
-				catch (Exception ex) when (PortRequiredFeatureOff("HoMM3 Fortress Hunting Grounds slice", ex))
-				{
-				}
-				catch (Exception ex)
-				{
-					Log.LogFatal("HoMM3 Fortress Hunting Grounds slice failed during startup: " + ex);
-					throw;
-				}
-			}
-			else
-			{
-				Log.LogInfo("HoMM3 Fortress Hunting Grounds slice skipped by bisection gate.");
 			}
 			GoldenEraGameplayOptions.TryRegisterRuntimeHooks(_harmony, Log);
 			if (cfg.Homm3CoveAfterShotDisruptingRay)
@@ -944,6 +982,14 @@ public sealed class Plugin : BasePlugin
 			{
 				Log.LogInfo("Homm3Import tooltip portrait release-safe slice skipped by bisection gate.");
 			}
+			try
+			{
+				NativeRendererCacheGuard.Register(_harmony, Log);
+			}
+			catch (Exception ex)
+			{
+				Log.LogWarning("NativeRendererCacheGuard registration failed: " + ex.Message);
+			}
 			if (cfg.Homm3ReleaseSafeHeroMapSprite)
 			{
 				try
@@ -1032,11 +1078,23 @@ public sealed class Plugin : BasePlugin
 			// Castle Elite Strategem is a faction-skill spell-toggle runtime, not part of the
 			// disabled custom-law mutator pass below. Keep it registered with the Castle magic rows.
 			Homm3CastleEliteStrategemRuntime.TryRegister(_harmony, Log);
-			Homm3FactorySplitAssemblyRuntime.TryRegister(_harmony, Log);
 			Homm3TowerArtificingRuntime.TryRegister(_harmony, Log);
+			// Conflux Elemental Fusion: world spell -> fusion panel on the same native Necromancer Will handler (foreign modes pass through).
+			Homm3ConfluxFusionRuntime.TryRegister(_harmony, Log);
+			// Factory Logistics Network (replaces Split Assembly): mine/dwelling/day/week hooks + world spell -> network viewer (same Necromancer Will handler, own mode).
+			Homm3FactoryLogisticsRuntime.TryRegister(_harmony, Log);
+			// Factory Logistics Network panels (lane UI): the upgrade panel opens on the facade's VisitRequested event.
+			Homm3FactoryLogisticsUi.TryRegister();
 			// Diagnostic attribution scope for Artificing observation; gated by policy.observation.diagnostics, not Enabled.
 			Homm3TowerArtificingObservation.TryRegister(_harmony, Log);
-			Homm3FactorySplitAssemblyArmyStripHud.TryRegister(_harmony, Log);
+			// Inferno Gating: spellbook toggle + reserved army slots + round-2 hellgate entry (state, battle, Open Gate stages fail closed independently).
+			Homm3InfernoGatingRuntime.TryRegister(_harmony, Log);
+			Homm3InfernoGatingArmyStripHud.TryRegister(_harmony, Log);
+			Homm3InfernoGatingPortal.TryRegister(_harmony, Log);
+			// Fortress Predator Instinct (replaced Hunting Grounds 2026-11-14): battle-start predator/prey pairs, Frenzy, combat filters, hover blood line.
+			Homm3FortressPredatorInstinctRuntime.TryRegister(_harmony, Log);
+			Homm3FortressPredatorInstinctCombat.TryRegister(_harmony, Log);
+			Homm3FortressPredatorLine.TryRegister(_harmony, Log);
 			Homm3FactoryBulwarkCombatForceSetupPilot.TryRegister(_harmony, Log);
 			Homm3BulwarkUnitAbilityRuntime.TryRegister(_harmony, Log);
 			Homm3BulwarkRunesRuntime.TryRegister(_harmony, Log);
@@ -1044,6 +1102,9 @@ public sealed class Plugin : BasePlugin
 			Homm3HeroSkillApplyDiag.TryRegister(_harmony, Log);
 			Homm3CounterstrokeDoctrineHook.TryRegister(_harmony, Log);
 			Homm3CounterattackCorrelationLawDiagnostics.TryRegister(_harmony, Log);
+			// Law row 13 runtime (user decision 2026-11-10): the native row is a zero-strength loader anchor for the
+			// 8 runtime-backed factions. Must stay after Homm3RuntimeMechanicHooks (committed-damage conflict audit).
+			Homm3CounterattackDoctrineMutationRuntime.TryRegister(_harmony, Log);
 			Log.LogInfo("HoMM3 custom law gameplay mutators remain limited to explicitly registered proven or active runtimes; Castle Elite Strategem is registered separately as a faction-skill spell-toggle runtime.");
 			Homm3CustomFactionEconomyLawDiagnostics.TryRegister(_harmony, Log);
 			Homm3RewardCommitLawDiagnostics.TryRegister(_harmony, Log);
@@ -1650,7 +1711,8 @@ public sealed class Plugin : BasePlugin
 		{
 			foreach (var methodName in GameSymbols.ReleaseTownUi.BuildingViewBind.NameHints)
 				patched += PatchCityTownMethod(harmony, buildingViewType, methodName, 3, nameof(ModActions.AfterReleaseCityTownUiRefreshArg0));
-			patched += PatchCityTownMethod(harmony, buildingViewType, "UpdateView", 0, nameof(ModActions.AfterReleaseCityTownUiRefreshBuildingView));
+			foreach (var name in GameSymbols.ReleaseTownUi.BuildingViewUpdateView.NameHints)
+				patched += PatchCityTownMethod(harmony, buildingViewType, name, 0, nameof(ModActions.AfterReleaseCityTownUiRefreshBuildingView));
 			foreach (var name in GameSymbols.ReleaseTownUi.BuildingViewHide.NameHints)
 				patched += PatchCityTownMethod(harmony, buildingViewType, name, 0, nameof(ModActions.AfterReleaseCityTownUiRefresh));
 		}
@@ -1683,26 +1745,10 @@ public sealed class Plugin : BasePlugin
 		if (dayPanelButtonType != null)
 			patched += PatchCityTownMethodPrefix(harmony, dayPanelButtonType, "OnPointerClick", 1, nameof(ModActions.PrefixReleaseCityDayPanelButtonClick));
 
-		var dayPanelType = ModActions.GetHexType("Hex.Session.Hud.BhDayPanel");
-		if (dayPanelType != null)
-		{
-			foreach (var methodName in GameSymbols.ReleaseTownUi.DayPanelBack.NameHints)
-				patched += PatchCityTownMethodPrefix(harmony, dayPanelType, methodName, 0, nameof(ModActions.PrefixReleaseCityDayPanelBackAction));
-		}
-
-		var dayPanelV2Type = ModActions.GetHexType("Hex.Session.Hud.BhDayPanelV2");
-		if (dayPanelV2Type != null)
-		{
-			foreach (var methodName in GameSymbols.ReleaseTownUi.DayPanelBack.NameHints)
-				patched += PatchCityTownMethodPrefix(harmony, dayPanelV2Type, methodName, 0, nameof(ModActions.PrefixReleaseCityDayPanelV2BackAction));
-		}
-
 		var genericButtonType = ModActions.GetHexType("Hex.UI.GeneralKit.BhGenericButton") ?? ModActions.GetHexType("Hex.UI.BhGenericButton");
 		if (genericButtonType != null)
 		{
 			patched += PatchCityTownMethodPrefix(harmony, genericButtonType, "OnPointerClick", 1, nameof(ModActions.PrefixReleaseCityGenericButtonClick));
-			foreach (var methodName in GameSymbols.ReleaseTownUi.GenericButtonBack.NameHints)
-				patched += PatchCityTownMethodPrefix(harmony, genericButtonType, methodName, 0, nameof(ModActions.PrefixReleaseCityGenericButtonBackAction));
 		}
 
 		var exitHudType = ModActions.GetHexType("Hex.Session.Hud.BhButtonExitHud");
@@ -2652,22 +2698,7 @@ internal static class ModActions
 		return !TryHandleReleaseCityDayPanelButtonClick(__instance, __originalMethod);
 	}
 
-	internal static bool PrefixReleaseCityDayPanelBackAction(MethodBase __originalMethod, BhDayPanel __instance)
-	{
-		return !TryHandleReleaseCityDayPanelBackAction(__instance, __originalMethod);
-	}
-
-	internal static bool PrefixReleaseCityDayPanelV2BackAction(MethodBase __originalMethod, object __instance)
-	{
-		return !TryHandleReleaseCityBackArrowFallback(__instance as Component, __originalMethod, "day-panel-v2-action");
-	}
-
 	internal static bool PrefixReleaseCityGenericButtonClick(MethodBase __originalMethod, BhGenericButton __instance)
-	{
-		return !TryHandleReleaseCityExitHudArrowClick(__instance, __originalMethod);
-	}
-
-	internal static bool PrefixReleaseCityGenericButtonBackAction(MethodBase __originalMethod, BhGenericButton __instance)
 	{
 		return !TryHandleReleaseCityExitHudArrowClick(__instance, __originalMethod);
 	}
@@ -2930,40 +2961,6 @@ internal static class ModActions
 			LogReleaseTownUiBackMainDiagnostic(
 				"orphan-day-panel-button-disable-failed",
 				"method:" + DescribeMethod(originalMethod)
-					+ "|error:" + ex.GetType().Name + ":" + ex.Message);
-			return false;
-		}
-	}
-
-	private static bool TryHandleReleaseCityDayPanelBackAction(BhDayPanel panel, MethodBase originalMethod)
-	{
-		try
-		{
-			if (panel == null || !IsActiveComponent(panel))
-				return false;
-			if (!IsActiveSceneCityInterior())
-				return false;
-
-			var session = FindCitySessionForDayPanel(panel);
-			if (session == null)
-				return false;
-			if (!TryCloseReleaseCitySubwindow(session, -1, panel, out var closeTarget))
-				return false;
-
-			LogReleaseTownUiDiagnostic(
-				"back-navigation-close",
-				"method:" + (originalMethod == null ? "null" : originalMethod.DeclaringType?.FullName + "." + originalMethod.Name)
-					+ "|state:day-panel-action"
-					+ "|target:" + closeTarget.GetType().FullName);
-			ApplyCustomCityBackdrop();
-			Homm3StrongholdTownLayers.SyncCurrentCityLayers();
-			return true;
-		}
-		catch (Exception ex)
-		{
-			LogReleaseTownUiEvidenceDiagnostic(
-				"back-navigation-close-failed",
-				"method:" + (originalMethod == null ? "null" : originalMethod.DeclaringType?.FullName + "." + originalMethod.Name)
 					+ "|error:" + ex.GetType().Name + ":" + ex.Message);
 			return false;
 		}
@@ -4143,18 +4140,6 @@ internal static class ModActions
 		return null;
 	}
 
-	private static BhCityUISession FindCitySessionForDayPanel(BhDayPanel panel)
-	{
-		if (panel == null)
-			return null;
-		foreach (var session in EnumerateReleaseCitySessions())
-		{
-			if (IsSessionForDayPanel(session, panel))
-				return session;
-		}
-		return null;
-	}
-
 	private static IEnumerable<BhCityUISession> EnumerateReleaseCitySessions()
 	{
 		var staticSession = TryReadReleaseCityStaticSession();
@@ -4201,20 +4186,6 @@ internal static class ModActions
 		var hireView = TryReadMember(session, typeof(BhCityUISession), "hire") as BhHireCityView;
 		var hireDayPanel = TryReadMember(hireView, typeof(BhHireCityView), "dayPanel") as BhDayPanel;
 		return IsDayPanelForButton(hireDayPanel, button);
-	}
-
-	private static bool IsSessionForDayPanel(BhCityUISession session, BhDayPanel panel)
-	{
-		if (session == null || panel == null)
-			return false;
-		var buildingSession = TryReadMember(session, typeof(BhCityUISession), "buildingSession") as BhUIBuildingSession;
-		var buildingExitButton = TryReadMember(buildingSession, typeof(BhUIBuildingSession), "exitButton") as BhDayPanel;
-		if (SameIl2CppObject(buildingExitButton, panel))
-			return true;
-
-		var hireView = TryReadMember(session, typeof(BhCityUISession), "hire") as BhHireCityView;
-		var hireDayPanel = TryReadMember(hireView, typeof(BhHireCityView), "dayPanel") as BhDayPanel;
-		return SameIl2CppObject(hireDayPanel, panel);
 	}
 
 	private static bool IsDayPanelForButton(BhDayPanel panel, BhDayPanelButtonManager button)
@@ -7354,6 +7325,17 @@ internal static class ModActions
 					?? current.GetField("_" + name + "_k__BackingField", flags);
 				if (field != null)
 					return field.GetValue(instance);
+				// Il2CppInterop exposes a native field as a same-named property. Still field-only: accept the property
+				// only when the wrapper generated it for a native field (static NativeFieldInfoPtr_<name>), never a
+				// computed getter.
+				foreach (var candidate in new[] { name, "<" + name + ">k__BackingField", "_" + name + "_k__BackingField" })
+				{
+					if (!GameMember.IsInteropNativeFieldProperty(current, candidate))
+						continue;
+					var property = current.GetProperty(candidate, flags);
+					if (property?.GetMethod != null && property.GetIndexParameters().Length == 0)
+						return property.GetValue(instance);
+				}
 			}
 			catch
 			{
@@ -8806,7 +8788,10 @@ internal static class ModActions
 
 	internal static bool TryHandleMenuButtonClick(BhNavigationButton button)
 	{
-		var view = ScMainMenu.me?.mainMenuNavigationView;
+		var menu = DeobfInteropCompat.TryGetStaticMember(typeof(ScMainMenu), out var me, GameSymbols.MainMenu.StaticMeField)
+			? me as ScMainMenu
+			: null;
+		var view = menu?.mainMenuNavigationView;
 		if (view == null || button == null)
 		{
 			return false;
@@ -12785,5 +12770,71 @@ internal static class SessionStateProbe
 		}
 
 		return string.Join(", ", parts);
+	}
+}
+
+/// <summary>
+/// Dismissible IMGUI notice for decision D11 (port 26297049): shown once when GameAssembly.dll is not a build this
+/// Golden Era was made for, so the player knows why custom features are missing. Layout matches ModBugReportWarningHost.
+/// </summary>
+public sealed class GoldenEraBuildNoticeHost : MonoBehaviour
+{
+	private const string HostObjectName = "OfflineUnlockMod.GoldenEraBuildNotice";
+	private static GoldenEraBuildNoticeHost _instance;
+	private static string _message;
+	private static bool _registered;
+
+	public GoldenEraBuildNoticeHost(IntPtr ptr) : base(ptr) { }
+
+	internal static void Show(string message)
+	{
+		_message = message;
+		if (_instance != null)
+			return;
+		if (!_registered)
+		{
+			Il2CppInterop.Runtime.Injection.ClassInjector.RegisterTypeInIl2Cpp<GoldenEraBuildNoticeHost>();
+			_registered = true;
+		}
+		var go = new GameObject(HostObjectName) { hideFlags = HideFlags.HideAndDontSave };
+		UnityEngine.Object.DontDestroyOnLoad(go);
+		_instance = go.AddComponent<GoldenEraBuildNoticeHost>();
+	}
+
+	private void OnGUI()
+	{
+		var previousMatrix = GUI.matrix;
+		try
+		{
+			if (_message == null)
+				return;
+			// 720-line virtual screen, below the bug report notice slot so both stay readable when shown together.
+			var scale = Mathf.Max(1f, Screen.height / 720f);
+			GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(scale, scale, 1f));
+			var width = Mathf.Min(560f, Screen.width / scale - 32f);
+			var area = new Rect(16f, 176f, width, 150f);
+			GUI.Box(area, GUIContent.none);
+			GUILayout.BeginArea(new Rect(area.x + 10f, area.y + 8f, area.width - 20f, area.height - 16f));
+			try
+			{
+				var style = new GUIStyle(GUI.skin.label) { wordWrap = true };
+				GUILayout.Label("Golden Era: unsupported game version", GUI.skin.label);
+				GUILayout.Label(_message, style);
+				if (GUILayout.Button("Dismiss", GUILayout.Width(100f), GUILayout.Height(28f)))
+					_message = null;
+			}
+			finally
+			{
+				GUILayout.EndArea();
+			}
+		}
+		catch (Exception)
+		{
+			_message = null;
+		}
+		finally
+		{
+			GUI.matrix = previousMatrix;
+		}
 	}
 }

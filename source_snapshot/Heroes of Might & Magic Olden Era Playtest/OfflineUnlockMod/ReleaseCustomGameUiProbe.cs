@@ -71,19 +71,15 @@ internal static class ReleaseCustomGameUiProbe
 		patched += PatchPickSkillView(h, log);
 		patched += PatchPickUnitSlot(h, log);
 		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScFractionSelect", "Open", 1, prefixName: nameof(PrefixLobbyPopupOpen));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScFractionSelect", "qwn", 0, postfixName: nameof(PostfixLobbyFractionList));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScFractionSelect", "qvm", 0, postfixName: nameof(PostfixLobbyFractionList));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScFractionSelect", "qwo", 4, prefixName: nameof(PrefixLobbyFractionCurrent));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScFractionSelect", "qvn", 4, prefixName: nameof(PrefixLobbyFractionCurrent));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScFractionSelect", "qwp", 1, prefixName: nameof(PrefixLobbyFractionSelected));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScFractionSelect", "qvo", 1, prefixName: nameof(PrefixLobbyFractionSelected));
+		// Interop names are the same on Golden Era 25672315 and 26615913 (row add rsc/sgh, select callback rsd/sgi);
+		// the list-returning PDM sibling is an uncalled decoy, so the list is logged via SoFractions instead.
+		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScFractionSelect", GameSymbols.CustomGame.LobbyFractionRowAdd[0], 4, prefixName: nameof(PrefixLobbyFractionCurrent));
+		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScFractionSelect", GameSymbols.CustomGame.LobbyFractionSelected[0], 1, prefixName: nameof(PrefixLobbyFractionSelected));
 		patched += PatchLobbyFractionElement(h, log, prefixName: nameof(PrefixLobbyFractionElement), postfixName: nameof(PostfixLobbyFractionElement));
 		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.BhFraction", "OnBtn", 1, prefixName: nameof(PrefixLobbyElementClick));
 		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScHeroSelect", "Open", 1, prefixName: nameof(PrefixLobbyPopupOpen));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScHeroSelect", "qwv", 3, prefixName: nameof(PrefixLobbyHeroCurrent));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScHeroSelect", "qvs", 3, prefixName: nameof(PrefixLobbyHeroCurrent));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScHeroSelect", "qww", 1, prefixName: nameof(PrefixLobbyHeroSelected));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScHeroSelect", "qvt", 1, prefixName: nameof(PrefixLobbyHeroSelected));
+		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScHeroSelect", GameSymbols.CustomGame.LobbyHeroRowAdd[0], 3, prefixName: nameof(PrefixLobbyHeroCurrent));
+		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScHeroSelect", GameSymbols.CustomGame.LobbyHeroSelected[0], 1, prefixName: nameof(PrefixLobbyHeroSelected));
 		patched += PatchLobbyHeroElement(h, log, prefixName: nameof(PrefixLobbyHeroElement));
 		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.BhHero", "OnBtn", 1, prefixName: nameof(PrefixLobbyElementClick));
 
@@ -99,20 +95,21 @@ internal static class ReleaseCustomGameUiProbe
 		_log = log;
 		_translateDungeonSelectionToStronghold = false;
 		var patched = 0;
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScFractionSelect", "qwn", 0, postfixName: nameof(PostfixLobbyFractionList));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScFractionSelect", "qvl", 0, postfixName: nameof(PostfixLobbyFractionList));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScFractionSelect", "qwo", 4, prefixName: nameof(PrefixStrongholdFractionElement));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScFractionSelect", "qvm", 4, prefixName: nameof(PrefixStrongholdFractionElement));
+		// The faction list itself needs no hook: SoFractionsCustomFactionAliasPatch (Plugin.cs) resolves custom faction
+		// sids to cloned FractionLobbyAssets, and ScFractionSelect's list builder (sgb on 26615913) reads them through
+		// SoFractions. Its list-returning sibling (Method_Private_List_1_FractionLobbyAsset_PDM_0) is an uncalled PDM
+		// decoy on Golden Era and 26615913 alike, so a postfix there never fires.
+		// Per-row add (sid, sprite, interactable, locked); same interop name on 25672315 (rsc) and 26615913 (sgh).
+		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.ScFractionSelect", GameSymbols.CustomGame.LobbyFractionRowAdd[0], 4, prefixName: nameof(PrefixStrongholdFractionElement));
 		patched += PatchLobbyFractionElement(h, log, prefixName: nameof(PrefixStrongholdFractionElement));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.BhFraction", "OnBtn", 1, prefixName: nameof(PrefixStrongholdFractionButtonClick), postfixName: nameof(PostfixStrongholdFractionButtonClick));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.BhFraction", "qoc", 0, prefixName: nameof(PrefixStrongholdFractionButtonClick), postfixName: nameof(PostfixStrongholdFractionButtonClick));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.BhFraction", "qnf", 0, prefixName: nameof(PrefixStrongholdFractionButtonClick), postfixName: nameof(PostfixStrongholdFractionButtonClick));
+		// Button sid translation only acts while _translateDungeonSelectionToStronghold is set, which this integration
+		// never does (custom factions have their own lobby assets), so the click handlers are not hooked here.
 		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.BhFractionAdditionalInfo", "Show", 1, postfixName: nameof(PostfixStrongholdFractionAdditionalInfo));
 		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.BhFractionAdditionalInfo", "Init", 1, postfixName: nameof(PostfixStrongholdFractionAdditionalInfo));
 		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.BhLobbyPopupFractionElement", "Init", 4, postfixName: nameof(PostfixStrongholdLobbyPopupFractionElement));
 		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.BhLobbyPopupFractionElement", "OnPointerEnter", 1, postfixName: nameof(PostfixStrongholdLobbyPopupFractionElement));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.BhLobbyPopupFractionElement", "qpt", 1, postfixName: nameof(PostfixStrongholdLobbyPopupFractionElement));
-		patched += PatchByName(h, log, "Hex.GameHub.Lobby.UI.BhLobbyPopupFractionElement", "qow", 1, postfixName: nameof(PostfixStrongholdLobbyPopupFractionElement));
+		// The other 1-arg row method is the click callback (onFractionClicked.Invoke(sid)); the popup can close inside it,
+		// so it is deliberately not post-patched. Init + OnPointerEnter cover the row text, banner and info card.
 		foreach (var methodName in GameSymbols.CustomGame.FactionDetailsBind.NameHints)
 			patched += PatchByName(h, log, "Hex.BhFactionDetails", methodName, 1, postfixName: nameof(PostfixStrongholdPickFactionDetails));
 		patched += PatchByName(h, log, "Hex.BhFactionDetails", GameSymbols.CustomGame.FactionDetailsRefresh.NameHints[0], 0, postfixName: nameof(PostfixStrongholdPickFactionDetailsRefresh));
@@ -559,9 +556,24 @@ internal static class ReleaseCustomGameUiProbe
 			ApplySpriteToFirstImage(fraction, banner);
 	}
 
+	// BhFactionDetails bind (Method_Public_Void_FractionConfig_0) never stores its config in a field on 26615913
+	// (decomp: iko writes no FractionConfig slot), so the refresh postfix reuses the faction the bind postfix saw.
+	private static readonly Dictionary<IntPtr, string> _factionDetailsBoundSid = new();
+
+	private static IntPtr FactionDetailsKey(object instance)
+		=> instance is Il2CppInterop.Runtime.InteropTypes.Il2CppObjectBase o ? o.Pointer : IntPtr.Zero;
+
 	private static void PostfixStrongholdPickFactionDetails(object __instance, object[] __args)
 	{
 		var factionSid = GetHomm3FactionSidFromConfig(Arg(__args, 0));
+		var key = FactionDetailsKey(__instance);
+		if (key != IntPtr.Zero)
+		{
+			if (factionSid == null)
+				_factionDetailsBoundSid.Remove(key);
+			else
+				_factionDetailsBoundSid[key] = factionSid;
+		}
 		if (factionSid == null)
 		{
 			LogPickUnitPortrait("BhFactionDetails skipped: unresolved faction config=" + FormatConfig(Arg(__args, 0)) + ".");
@@ -582,6 +594,9 @@ internal static class ReleaseCustomGameUiProbe
 	{
 		var factionConfig = GetMemberValue(__instance, GameSymbols.CustomGame.FactionDetailsConfigFields);
 		var factionSid = GetHomm3FactionSidFromConfig(factionConfig);
+		var key = FactionDetailsKey(__instance);
+		if (factionSid == null && key != IntPtr.Zero)
+			_factionDetailsBoundSid.TryGetValue(key, out factionSid);
 		if (factionSid == null)
 		{
 			LogPickUnitPortrait(
@@ -816,7 +831,7 @@ internal static class ReleaseCustomGameUiProbe
 		if (IsHomm3LobbyFactionSid(sid))
 			return sid.Trim();
 
-		sid = FormatSimple(GetMemberValue(instance, "bwvc", "fractionSid", "sid"));
+		sid = FormatSimple(GetMemberValue(instance, GameSymbols.CustomGame.LobbyPopupFractionSidFields));
 		return IsHomm3LobbyFactionSid(sid) ? sid.Trim() : null;
 	}
 
@@ -2116,7 +2131,7 @@ internal static class ReleaseCustomGameUiProbe
 			_translateDungeonSelectionToStronghold = false;
 			if (_loggedFactionInjected.Add(factionSid))
 			{
-				LogInfo("ReleaseCustomGameUiProbe: appended " + factionSid + " to ScFractionSelect.qvl() using Dungeon layout assets and custom banner.");
+				LogInfo("ReleaseCustomGameUiProbe: appended " + factionSid + " to the ScFractionSelect faction list using Dungeon layout assets and custom banner.");
 			}
 			return "added:customBanner=" + customBanner + ":translateSelection=False";
 		}

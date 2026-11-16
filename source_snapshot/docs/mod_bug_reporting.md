@@ -36,11 +36,14 @@ registers the redirect before the telemetry block. Unbound protection is an erro
 
 ## Submission Contract
 
-The required player experience is a report form followed by a clear private-upload consent choice.
-Logs and report text go to the mod owner's private Google Drive folder; screenshot inclusion also
-requires the player's choice and `modBugReportingIncludeScreenshot=true` (default `false`, opt-in). A
-screenshot is not text-scrubbed. The consent screen must disclose this rather than imply that all personal
-details are guaranteed removed. It also discloses the metadata sent (plugin/game/OS versions, report ID,
+Since 2026-11-11 (owner decision after report 00a6878d: the agreement window was hard to read and players
+skip it), pressing the game's Submit sends the report at once; filing the report is the consent. No
+screenshot is ever taken on that path. "Discard and start new" on an unsent report also sends directly; the
+consent window code is no longer reachable.
+Logs and report text go to the mod owner's private Google Drive folder; screenshot inclusion would also
+require the player's choice and `modBugReportingIncludeScreenshot=true` (default `false`, opt-in). A
+screenshot is not text-scrubbed. The disclosure text below describes what the consent screen showed, and
+remains the reference for what is sent. It also discloses the metadata sent (plugin/game/OS versions, report ID,
 timestamps), that Google sees the connection's IP address, and the retention periods: up to 90 days in the
 private Drive, up to 30 days (newest 50) locally.
 

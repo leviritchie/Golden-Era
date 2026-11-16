@@ -9,10 +9,17 @@ Proves, on small synthetic files, that a build profile:
   * accepts matching files.
 It does not exercise the Golden Era default path, which is unchanged.
 
-Run: python tools/port_current/test_live_parity_build_profile.py
+It also checks every committed tools/port_current/live_parity_build_<buildid>.json against its
+frozen mirror manifest: buildid, depotManifest, GameAssembly.dll sha256 and each file's base
+(mirror path, size, sha256) must match. --verify-sources BUILDID additionally requires that
+profile's patched sources (gitignored, under artifacts/port_current/patched_<buildid>/) to exist
+with the recorded size and sha256; other profiles' sources are not read.
+
+Run: python tools/port_current/test_live_parity_build_profile.py [--verify-sources 26297049]
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
 import importlib.util
 import json
@@ -46,8 +53,69 @@ def expect_fail(fn, label: str) -> None:
     raise AssertionError(f"expected failure: {label}")
 
 
+def sha_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1 << 24), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def check_committed_profiles(st, verify_sources: set[str]) -> None:
+    profiles = sorted((REPO / "tools" / "port_current").glob("live_parity_build_*.json"))
+    if not profiles:
+        raise AssertionError("no committed live_parity_build_*.json profiles found")
+    for path in profiles:
+        profile = st.load_build_profile(path)
+        build = path.stem.removeprefix("live_parity_build_")
+        if profile.get("buildid") != build:
+            raise AssertionError(f"{path.name}: buildid {profile.get('buildid')!r} does not match its file name")
+        manifest_path = REPO / profile.get("mirrorManifest", "")
+        if not manifest_path.is_file():
+            raise AssertionError(f"{path.name}: mirrorManifest {profile.get('mirrorManifest')!r} missing")
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        mbuild = manifest["build"]
+        if mbuild.get("buildid") != build:
+            raise AssertionError(f"{path.name}: mirror manifest is build {mbuild.get('buildid')!r}")
+        if profile.get("depotManifest") != mbuild.get("depotManifest"):
+            raise AssertionError(
+                f"{path.name}: depotManifest {profile.get('depotManifest')!r} != mirror {mbuild.get('depotManifest')!r}"
+            )
+        mfiles = {e["path"]: e for e in manifest["files"]}
+        ga = mfiles.get("GameAssembly.dll")
+        if not ga or ga["sha256"] != profile["gameAssemblySha256"]:
+            raise AssertionError(f"{path.name}: gameAssemblySha256 does not match the mirror's GameAssembly.dll")
+        for rel, spec in sorted(profile["files"].items()):
+            base = spec.get("base") or {}
+            entry = mfiles.get(base.get("mirrorPath"))
+            if not entry or (entry["size"], entry["sha256"]) != (base.get("size"), base.get("sha256")):
+                raise AssertionError(f"{path.name}: {rel} base does not match mirror entry {base.get('mirrorPath')!r}")
+            if not isinstance(spec.get("size"), int) or len(spec.get("sha256", "")) != 64:
+                raise AssertionError(f"{path.name}: {rel} lacks a patched size/sha256")
+            if build in verify_sources:
+                src = REPO / spec["source"]
+                if not src.is_file():
+                    raise AssertionError(f"{path.name}: {rel} source missing: {src}")
+                if src.stat().st_size != spec["size"] or sha_file(src) != spec["sha256"]:
+                    raise AssertionError(f"{path.name}: {rel} source {src} does not match its recorded size/sha256")
+        what = "mirror manifest + patched sources" if build in verify_sources else "mirror manifest"
+        print(f"ok profile {path.name} matches its {what}")
+
+
 def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "--verify-sources", action="append", default=[], metavar="BUILDID",
+        help="also hash this build profile's patched sources (repeatable)",
+    )
+    args = ap.parse_args()
     st = load_stager()
+    unknown = set(args.verify_sources) - {
+        p.stem.removeprefix("live_parity_build_") for p in (REPO / "tools" / "port_current").glob("live_parity_build_*.json")
+    }
+    if unknown:
+        raise AssertionError(f"--verify-sources names no committed profile: {sorted(unknown)}")
+    check_committed_profiles(st, set(args.verify_sources))
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
         game = tmp / "game"

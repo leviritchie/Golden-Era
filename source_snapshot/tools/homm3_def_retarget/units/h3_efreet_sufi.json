@@ -104,7 +104,7 @@
   "start": 2
  },
  "glbPatch": {
-  "reason": "authenticity lane-A 2026-10-10: DEF g12 fire punch wind-up: AttackFront f1-f2 raise both hands overhead (the capture held one fist at the face); keyRotations (half offset, applied twice). The f3-f5 forward pitch on the flame tail is in this DEF and stays as captured (no Hips hold, unlike the sultan). stretchRelax evens the armpit/elbow edges of the overhead raise.",
+  "reason": "authenticity lane-A 2026-10-10: DEF g12 fire punch wind-up: AttackFront f1-f2 raise both hands overhead (the capture held one fist at the face); keyRotations (half offset, applied twice). The f3-f5 forward pitch on the flame tail is in this DEF and stays as captured (no Hips hold, unlike the sultan). stretchRelax evens the armpit/elbow edges of the overhead raise.; clip pass 2026-11-11 (user-approved candidate): Idle, Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -117,6 +117,23 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_efreet_sufi_windup_rot.json",
     "sha256": "b21c9ac6a95d796a17de4612899192e60ebcf61baecd8d0188f9a2779c7d8e60",
     "regrid": true
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreet_sufi_clip_repair_joints.json",
+    "note": "Tail_ chain under Hips (clip pass repair)",
+    "sha256": "dc902e072496109f3c8471fa0d7dcf423a364d918ed03b20e69ca49300f24391"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreet_sufi_clip_repair_weights.json",
+    "note": "Hips share of the hanging part onto the Tail_ chain, soft bands",
+    "sha256": "d324fe2fc17305f916e3f44962251e06e52047f173f93024d40ecc6a629256af"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreet_sufi_clip_tracks.json",
+    "sha256": "1a5f651255d4c5a7a698eb298dd49c4f1330f61c4eb9bb6cdc8924c90fe25678"
    },
    {
     "op": "stretchRelax",

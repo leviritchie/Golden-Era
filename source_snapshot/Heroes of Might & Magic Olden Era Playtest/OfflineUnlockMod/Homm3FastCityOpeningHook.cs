@@ -6,6 +6,12 @@ using HarmonyLib;
 
 namespace OfflineUnlockMod;
 
+// Clamps the SmoothOpening black-screen frame count for custom cities. 26297049 (static native evidence, port
+// 26297049 P5): the tracker's Int32(EType, String) is round(Single(EType, String) * 60), plus 2 for EType 1, where the
+// Single is the longest recorded open time for the content sid, capped at 10 s. So vanilla can still ask for up to
+// 600 frames and the clamp stays. Every Single(EType, String) caller is an Int32(EType, String) wrapper, and the
+// facade's static Int32(EType, String) tail-jumps into the scoped tracker method, so clamping the Int32 results
+// covers the Single path; the other tracker Int32 overloads (_PDM_0.._3) are code copies with no live caller.
 internal static class Homm3FastCityOpeningHook
 {
 	private const int SmoothOpeningCityTypeValue = 2;
@@ -56,9 +62,16 @@ internal static class Homm3FastCityOpeningHook
 	private static int PatchNamedFrameMethods(Harmony harmony, Type type, GameSymbols.MethodSymbol symbol)
 	{
 		var count = 0;
+		var declared = AccessTools.GetDeclaredMethods(type);
+		var shapeMatches = new List<string>();
+		foreach (var method in declared)
+		{
+			if (IsFrameCountMethod(method))
+				shapeMatches.Add(method.Name);
+		}
 		foreach (var name in symbol.NameHints)
 		{
-			foreach (var method in AccessTools.GetDeclaredMethods(type))
+			foreach (var method in declared)
 			{
 				if (!string.Equals(method.Name, name, StringComparison.Ordinal))
 					continue;
@@ -70,6 +83,12 @@ internal static class Homm3FastCityOpeningHook
 				harmony.Patch(method, postfix: new HarmonyMethod(typeof(Homm3FastCityOpeningHook), nameof(ClampCityOpenFrames)));
 				count++;
 			}
+		}
+		if (count == 0 && shapeMatches.Count > 0)
+		{
+			// The shape alone is ambiguous (several Int32(EType, String) overloads), so a hint miss is not guessed.
+			_log?.LogWarning("HoMM3 fast city opening: " + symbol.Id + " named no Int32(EType, String) method on " + type.FullName
+				+ " (shape matches: " + string.Join(", ", shapeMatches) + "; " + GameBuild.Describe() + "); that type stays native.");
 		}
 		return count;
 	}

@@ -27,20 +27,6 @@
    ],
    "reason": "DEF idle is itself a single still pose (DEF silhouette change 0.0); retiming a still pose changes nothing visible. Faithful."
   },
-  "h3_fargazer": {
-   "treatment": "rule",
-   "flags": [
-    "fastAfterRule"
-   ],
-   "reason": "After the 3.2x rule the idle still runs 51 deg/s mean / 410 deg/s peak-p90, above the native p95 (41.8 / 330.7). The DEF idle itself is among the most-moving in the roster (eyestalk writhe; DEF silhouette change 0.0584, rank 238/255), so the speed is faithful motion content, not tempo; no native unit is a like-for-like analog. Global rule kept: a larger factor would make the DEF's continuous eyestalk writhe read as slow motion. Reviewed after rollout (artifacts/homm3_idle_cadence/review/h3_fargazer/): the retimed idle is one 2.67 s pulse in which the tentacles splay and close and the body tilts (88 deg p90 swing); the tempo sits at the native beat and the speed is amplitude. Rule kept."
-  },
-  "h3_genie_upg": {
-   "treatment": "rule",
-   "flags": [
-    "nearStatic"
-   ],
-   "reason": "Accepted as nearStatic 2026-09-28, user-approved (\"proceed with all four recommendations\"): the most-moving bones swing 2.758 deg (p90), below the quietest native idle (3.13 deg), on the hand-keyed identity-regenerated mesh lane (33c1fc508b). Not boosted; the idle keeps the global tempo rule like the other accepted nearStatic units (an `exclude` would make the slice freeze's retime_idle.py refuse the unit)."
-  },
   "h3_hurricane_elemental": {
    "treatment": "rule",
    "flags": [

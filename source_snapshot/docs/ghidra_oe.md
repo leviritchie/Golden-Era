@@ -35,6 +35,17 @@ Purpose: read native IL2CPP method bodies for the engine questions in
 - **No struct layouts / `il2cpp.h`.** Field accesses decompile as `*(param + 0x48)`; map offsets with the
   interop dummy DLLs (`FieldOffset` attributes) or the mono decomp.
 
+## Build 26615913 (current port target)
+
+A second project sits beside the first: inputs `V:\olden_port_work\ghidra\inputs_26615913\GameAssembly.dll`
+(sha `7CC2DE0D…D47E`), project `project\OE_26615913`, labels from `idx2_live_26615913`. Pass `--build 26615913`
+before the subcommand (the default is 25672315). Each build has its own lock (`project_26615913.turn.lock`) and
+setup log (`setup_26615913.log`), so queries against the two builds do not block each other.
+
+```bash
+python tools/ghidra_oe/oe_ghidra.py --build 26615913 query decomp "Hex.UI.BhBattleAbilityView$$*"
+```
+
 ## Use
 
 ```bash

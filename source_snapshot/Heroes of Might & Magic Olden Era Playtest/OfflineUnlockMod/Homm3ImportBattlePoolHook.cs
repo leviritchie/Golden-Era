@@ -345,7 +345,7 @@ internal static class Homm3ImportBattlePoolHook
 				var stemPrefix = Homm3ImportVisuals.ResolveHomm3LabAudioStemPrefix(entry);
 				if (!string.IsNullOrEmpty(stemPrefix))
 				{
-					Homm3LabBattleAudioPlayer.TryAttach(instance, entry.BundleName, stemPrefix, Plugin.LogSource);
+					Homm3LabBattleAudioPlayer.TryAttach(instance, Homm3ImportVisuals.ResolveHomm3LabAudioBundleName(entry), stemPrefix, Plugin.LogSource);
 					Homm3LabClipAudioDriver.TryAttach(instance, Plugin.LogSource);
 				}
 			}
@@ -411,7 +411,7 @@ internal static class Homm3ImportBattlePoolHook
 				var prefixKeep = Homm3ImportVisuals.ResolveHomm3LabAudioStemPrefix(existing);
 				if (!string.IsNullOrEmpty(prefixKeep))
 				{
-					Homm3LabBattleAudioPlayer.TryAttach(b, existing.BundleName, prefixKeep, Plugin.LogSource);
+					Homm3LabBattleAudioPlayer.TryAttach(b, Homm3ImportVisuals.ResolveHomm3LabAudioBundleName(existing), prefixKeep, Plugin.LogSource);
 					Homm3LabClipAudioDriver.TryAttach(b, Plugin.LogSource);
 				}
 			}
@@ -489,7 +489,7 @@ internal static class Homm3ImportBattlePoolHook
 				var stemPrefix = Homm3ImportVisuals.ResolveHomm3LabAudioStemPrefix(entry);
 				if (!string.IsNullOrEmpty(stemPrefix))
 				{
-					Homm3LabBattleAudioPlayer.TryAttach(instance, entry.BundleName, stemPrefix, Plugin.LogSource);
+					Homm3LabBattleAudioPlayer.TryAttach(instance, Homm3ImportVisuals.ResolveHomm3LabAudioBundleName(entry), stemPrefix, Plugin.LogSource);
 					Homm3LabClipAudioDriver.TryAttach(instance, Plugin.LogSource);
 				}
 			}

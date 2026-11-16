@@ -154,7 +154,7 @@
   }
  ],
  "glbPatch": {
-  "reason": "authenticity 2026-10-11: Defence guard + Death full overhead claw raise on the sleeve-shell-cut base; robe hem below the sleeves follows the hips (DEF g04/g05)",
+  "reason": "authenticity 2026-10-11: Defence guard + Death full overhead claw raise on the sleeve-shell-cut base; robe hem below the sleeves follows the hips (DEF g04/g05); clip pass 2026-11-11 (user-approved candidate): AttackFront, Death, ShootFront re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "moveWeights",
@@ -195,6 +195,23 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_wraith_pose_rot.json",
     "sha256": "98e9eb4795c0e77b4c2f64dd81bce22d6801c8f1ecca0f8c445eaa86c13c8fe0",
     "regrid": true
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_wraith_clip_repair_joints.json",
+    "sha256": "db8c381f8b9781f517d9daddf49e77c46f702074c2d590fd26fac7fbdefc39b2",
+    "note": "clip pass repair: cloth chain ['RightSleeveA', 'RightSleeveF'] under None (rest in every clip)"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_wraith_clip_repair_weights.json",
+    "sha256": "5c50cb269b2c10714004022407f1e0eb5c01c3bda622ddb243890193bdb62c29",
+    "note": "clip pass repair: hanging cloth onto its own chain"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_wraith_clip_tracks.json",
+    "sha256": "a51cfd22dcf3553a3313c40f955d0bceba303c248d4c2464520249e1c07fddce"
    }
   ]
  }

@@ -377,7 +377,7 @@
   "reason": "At the normalized 5.5 moveSpeed the forelegs stand nearly straight (shoulder 0.72 over wrist 0.15, leg 0.34 H), so at the default 0.15 drop FL reach caps the stance sweep at 0.09 H and forces cadence 1.32; the cycle fundamental then sits at 2.14 Hz and the gallop second harmonic (FR3 0.65 of its energy, RightForeArm 0.55) lands above the 4 Hz jitter cutoff (p90 0.60 > 0.35). maxDrop 0.25 lowers the cadence need to 1.15: jitter p90 0.17, slip 0.58, ratio 1.10, pelvis drop 0.084 H; fixes the cause (reach) rather than smoothing with highHarmonicKeep (2026-09-28)."
  },
  "glbPatch": {
-  "reason": "authenticity lane B 2026-10-11: AttackFront - sword raised overhead (DEF f1-f2), cut up-forward (f3) and thrust level at the target (f4-f5) along the rig's facing; stretchRelax on AttackFront for the re-posed creases",
+  "reason": "authenticity lane B 2026-10-11: AttackFront - sword raised overhead (DEF f1-f2), cut up-forward (f3) and thrust level at the target (f4-f5) along the rig's facing; stretchRelax on AttackFront for the re-posed creases; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass",
   "ops": [
    {
     "op": "keyRotations",
@@ -390,6 +390,11 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_wolf_rider_sword_cut_thrust_rot.json",
     "regrid": true,
     "sha256": "b59ca3d302add022ba41d5188751fdd8919c434194b507a927cee19e49d19f10"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_wolf_rider_move_tracks.json",
+    "sha256": "271e130edf5ae2da98ebe32688d3465ae5170f8dff85278d594c8ca7b3760980"
    },
    {
     "op": "stretchRelax",

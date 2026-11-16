@@ -2329,6 +2329,15 @@ SOURCE_MECHANICS_STATUSES = {"exact", "substituted", "changed", "runtime-pending
 SOURCE_MECHANICS_SURFACES = {"building", "faction_skill", "unit_ability", "unit_passive", "runtime"}
 DESIGN_DEBT_KEY_RE = re.compile(r"debt|trace|sourceDifferences|xHomm3SourceDifference", re.IGNORECASE)
 DESIGN_DEBT_TEXT_RE = re.compile(r"\b(debt|trace_required|trace required|blocked|awaiting verified|unverified|mvp|proxy)\b", re.IGNORECASE)
+# Vanilla Lang tokens that the design-debt scan reads because they share a member with mod
+# tokens, and whose own text matches DESIGN_DEBT_TEXT_RE. Pinned as (member, sid) -> exact vanilla
+# text, read from the vanilla Steam 26297049 Core on 2026-10-29 (no such token in 25672315; no DB
+# row of the scanned members matches in either build). A token is skipped only while both its sid
+# and its text equal the pin, so a mod-written text on the same sid is still scanned.
+VANILLA_DESIGN_DEBT_TEXT_TOKENS: dict[tuple[str, str], str] = {
+    ("Lang/english/texts/unitsAbility.json", "ability_no_block"): "Cannot be blocked.",
+    ("Lang/english/texts/unitsAbility.json", "ability_no_turn_no_block"): "Does not end the turn. Cannot be blocked.",
+}
 
 
 def hero_specialization_unique_bonus_signature(row: dict[str, Any]) -> str:
@@ -2962,7 +2971,22 @@ def validate_no_design_debt(core: Path, manifests: list[tuple[Path, dict[str, An
         ):
             continue
         doc = read_core_json(core, member)
-        if doc is not None:
+        if doc is None:
+            continue
+        tokens = doc.get("tokens") if isinstance(doc, dict) else None
+        if isinstance(tokens, list):
+            for key, child in doc.items():
+                if key != "tokens":
+                    validate_no_design_debt_value({key: child}, v, member)
+            for index, token in enumerate(tokens):
+                if (
+                    isinstance(token, dict)
+                    and set(token) == {"sid", "text"}
+                    and VANILLA_DESIGN_DEBT_TEXT_TOKENS.get((member, token["sid"])) == token["text"]
+                ):
+                    continue
+                validate_no_design_debt_value(token, v, f"{member}.tokens[{index}]")
+        else:
             validate_no_design_debt_value(doc, v, member)
 
 
@@ -3295,6 +3319,14 @@ def validate_homm3_primal_magic_tier_contract(core: Path, v: Validation) -> None
     if unexpected_cove_rows:
         v.error(f"Primal Magic tier contract: Cove Treasure Hunting variants must not occupy Primal spell tiers: {unexpected_cove_rows!r}")
 
+def conflux_fused_unit_sids() -> set[str]:
+    path = ROOT / "custom_factions" / "conflux_fusion" / "fusion_config.json"
+    if not path.is_file():
+        return set()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return {row["fused"] for row in data["pairs"] + (data.get("recipes") or [])}
+
+
 def validate_custom_faction_skill_bonus(
     faction_sid: str,
     skill_sid: str,
@@ -3543,83 +3575,70 @@ def manifest_donor_unit_sids(manifest: dict[str, Any]) -> set[str]:
     return result
 
 
-# Fortress Hunting Grounds trophy meter; must match apply_release_core_overlay.py
-# HOMM3_FORTRESS_HUNTING_GROUNDS_* and Homm3FortressHuntingGroundsHook.CapByLevel.
-FORTRESS_HUNTING_GROUNDS_CAPS = {1: 8, 2: 7, 3: 6}
-FORTRESS_HUNTING_GROUNDS_MILESTONES = {
-    1: ((3, 1, 0), (6, 1, 1)),
-    2: ((2, 1, 0), (5, 1, 1)),
-    3: ((2, 1, 0), (4, 1, 1), (6, 2, 1)),
-}
-FORTRESS_HUNTING_GROUNDS_HOOK = (
-    ROOT / "Heroes of Might & Magic Olden Era Playtest" / "OfflineUnlockMod" / "Homm3FortressHuntingGroundsHook.cs"
+# Fortress Predator Instinct; must match tools/release_port/homm3_fortress_predator_instinct_core_overlay.py
+# and Homm3FortressPredatorInstinctRuntime (bonus percents, carrier SIDs).
+FORTRESS_PREDATOR_INSTINCT_RUNTIME = (
+    ROOT / "Heroes of Might & Magic Olden Era Playtest" / "OfflineUnlockMod" / "Homm3FortressPredatorInstinctRuntime.cs"
 )
+FORTRESS_PREDATOR_SUBSKILLS = {
+    2: (
+        "sub_skill_faction_homm3_fortress_swamp_advantage",
+        "sub_skill_faction_homm3_fortress_mire_grip",
+        "sub_skill_faction_homm3_fortress_thick_hides",
+    ),
+    3: (
+        "sub_skill_faction_homm3_fortress_bog_ambush",
+        "sub_skill_faction_homm3_fortress_stagnant_air",
+        "sub_skill_faction_homm3_fortress_poisoned_mire",
+    ),
+}
+FORTRESS_PREDATOR_FRENZY_ABILITY = "skill_faction_homm3_fortress_ability_frenzy"
+FORTRESS_PREDATOR_BUFFS = ("homm3_fortress_predator_1", "homm3_fortress_predator_2", "homm3_fortress_predator_3", "homm3_fortress_prey")
 
 
-def validate_fortress_hunting_grounds_rows(core: Path, skill_sid: str, row: dict[str, Any], v: Validation) -> None:
-    """Hunting Grounds: ranks carry no static enemy penalty; 21 trophy hero buffs carry the creeping penalty."""
-    label = "homm3_fortress: Hunting Grounds"
+def validate_fortress_predator_instinct_rows(core: Path, skill_sid: str, row: dict[str, Any], v: Validation) -> None:
+    """Predator Instinct: runtime-owned ranks, six subskills, Frenzy ability and the predator/prey marker buffs."""
+    label = "homm3_fortress: Predator Instinct"
     try:
-        hook_text = FORTRESS_HUNTING_GROUNDS_HOOK.read_text(encoding="utf-8-sig")
+        runtime_text = FORTRESS_PREDATOR_INSTINCT_RUNTIME.read_text(encoding="utf-8-sig")
     except OSError:
-        hook_text = ""
-    if "CapByLevel = { 0, 8, 7, 6 }" not in hook_text or '"homm3_fortress_trophies_"' not in hook_text:
-        v.error(f"{label}: {FORTRESS_HUNTING_GROUNDS_HOOK.name} must declare CapByLevel = {{ 0, 8, 7, 6 }} and the homm3_fortress_trophies_ prefix")
-    for index, level in enumerate(row.get("parametersPerLevel") or [], start=1):
-        for bonus in (level.get("bonuses") or []) if isinstance(level, dict) else []:
-            if (
-                isinstance(bonus, dict)
-                and bonus.get("receiverAllegiance") == "enemy"
-                and isinstance(bonus.get("parameters"), list)
-                and bonus["parameters"][:1] in (["initiative"], ["speed"])
-            ):
-                v.error(f"{label}: rank {index} must not carry a static enemy {bonus['parameters'][0]} penalty (trophy buffs own it)")
-    buffs_doc = read_core_json(core, "DB/heroes_buffs/heroes_buffs.json")
-    buffs = {
-        b.get("id"): b
-        for b in (buffs_doc.get("array") if isinstance(buffs_doc, dict) else None) or []
-        if isinstance(b, dict) and isinstance(b.get("id"), str)
+        runtime_text = ""
+    for needle in ("BonusPercentByRank = { 0, 10, 20, 30 }", '"homm3_fortress_predator_"', '"homm3_fortress_prey"', '"' + FORTRESS_PREDATOR_FRENZY_ABILITY + '"'):
+        if needle not in runtime_text:
+            v.error(f"{label}: {FORTRESS_PREDATOR_INSTINCT_RUNTIME.name} must declare {needle}")
+    levels = row.get("parametersPerLevel") or []
+    if len(levels) != 3:
+        v.error(f"{label}: skill must have 3 ranks")
+    for index, level in enumerate(levels, start=1):
+        subskills = list(level.get("subSkills") or []) if isinstance(level, dict) else []
+        if subskills != list(FORTRESS_PREDATOR_SUBSKILLS.get(index, ())):
+            v.error(f"{label}: rank {index} subSkills must be {list(FORTRESS_PREDATOR_SUBSKILLS.get(index, ()))!r}, got {subskills!r}")
+    abilities_doc = read_core_json(core, "DB/heroes_abilities/heroes_abilities_base/hero_abilities.json")
+    abilities = {
+        a.get("id"): a for a in (abilities_doc.get("array") if isinstance(abilities_doc, dict) else None) or [] if isinstance(a, dict)
     }
-    map_text = lang_token_text_map(core, "Lang/english/texts/mapObjects.json")
-    if map_text.get("homm3_fortress_trophies_buff_name") != "Hunting Grounds Trophies":
-        v.error(f"{label}: mapObjects lang homm3_fortress_trophies_buff_name must be 'Hunting Grounds Trophies'")
-    for lvl, cap in FORTRESS_HUNTING_GROUNDS_CAPS.items():
-        for n in range(1, cap + 1):
-            sid = f"homm3_fortress_trophies_{lvl}_{n}"
-            buff = buffs.get(sid)
-            if buff is None:
-                v.error(f"{label}: Core heroes_buffs missing trophy buff {sid}")
-                continue
-            if buff.get("isDispellable") is not True or buff.get("hidden") is not False:
-                v.error(f"{label}: {sid} must be visible and isDispellable=true (native Remove needs it)")
-            ini = spd = 0
-            for threshold, i, sp in FORTRESS_HUNTING_GROUNDS_MILESTONES[lvl]:
-                if n >= threshold:
-                    ini, spd = i, sp
-            expected = []
-            if ini:
-                expected.append(["initiative", f"-{ini}"])
-            if spd:
-                expected.append(["speed", f"-{spd}"])
-            actual = [
-                b.get("parameters")
-                for b in buff.get("bonuses") or []
-                if isinstance(b, dict) and b.get("type") == "unitStat" and b.get("receiverAllegiance") == "enemy"
-            ]
-            if actual != expected or len(buff.get("bonuses") or []) != len(expected):
-                v.error(f"{label}: {sid} enemy bonuses must be {expected!r}, got {buff.get('bonuses')!r}")
-            text = map_text.get(f"{sid}_description") or ""
-            if not text.startswith(f"Trophies {n}/{cap}") or ("restock: used" in text) != (n == cap):
-                v.error(f"{label}: {sid}_description must start 'Trophies {n}/{cap}' and say 'restock: used' only at the cap")
+    frenzy = abilities.get(FORTRESS_PREDATOR_FRENZY_ABILITY)
+    if not isinstance(frenzy, dict) or (frenzy.get("levels") or [{}])[0].get("energyLevel") != 1:
+        v.error(f"{label}: Core hero_abilities must define {FORTRESS_PREDATOR_FRENZY_ABILITY} with energyLevel 1")
+    buffs_doc = read_core_json(core, "DB/buffs/sub_skills_battle_hero_buffs.json")
+    buff_ids = {
+        b.get("id") for b in (buffs_doc.get("array") if isinstance(buffs_doc, dict) else None) or [] if isinstance(b, dict)
+    }
+    for sid in FORTRESS_PREDATOR_BUFFS:
+        if sid not in buff_ids:
+            v.error(f"{label}: Core sub_skills_battle_hero_buffs missing marker buff {sid}")
     skill_text = lang_token_text_map(core, "Lang/english/texts/heroSkills.json")
     for token, expected_name in (
-        (f"{skill_sid}_name", "Hunting Grounds"),
-        (f"{skill_sid}_name_1", "Basic Hunting Grounds"),
-        (f"{skill_sid}_name_2", "Advanced Hunting Grounds"),
-        (f"{skill_sid}_name_3", "Expert Hunting Grounds"),
+        (f"{skill_sid}_name", "Predator Instinct"),
+        (f"{skill_sid}_name_1", "Basic Predator Instinct"),
+        (f"{skill_sid}_name_2", "Advanced Predator Instinct"),
+        (f"{skill_sid}_name_3", "Expert Predator Instinct"),
     ):
         if skill_text.get(token) != expected_name:
             v.error(f"{label}: {token} must be {expected_name!r}, got {skill_text.get(token)!r}")
+    for index, percent in enumerate((10, 20, 30), start=1):
+        if f"+{percent}%" not in (skill_text.get(f"{skill_sid}_desc_{index}") or ""):
+            v.error(f"{label}: {skill_sid}_desc_{index} must state +{percent}%")
 
 
 def validate_custom_faction_skill_row(
@@ -3640,7 +3659,7 @@ def validate_custom_faction_skill_row(
         report_missing_release_surface(manifest, v, f"{faction_sid}: core missing faction skill row {skill_sid}")
         return
     if faction_sid == "homm3_fortress":
-        validate_fortress_hunting_grounds_rows(core, skill_sid, row, v)
+        validate_fortress_predator_instinct_rows(core, skill_sid, row, v)
     exact_text = FACTORY_BULWARK_EXACT_SKILL_TEXT.get(faction_sid)
     if exact_text is not None:
         expected_name, expected_desc, expected_rank_descs = exact_text
@@ -3672,7 +3691,7 @@ def validate_custom_faction_skill_row(
                 # Match the working HoMM3 faction-skill load contract (Dungeon shape):
                 # ignoreFractionsCount at every rank, empty Basic subSkills, and exactly
                 # three Advanced/Expert subSkill SIDs that resolve in sub_skills.json.
-                # Factory Expert may also grant Field Triage via heroBattleAbility.
+                # Factory ranks also grant the Logistics Network world spell (heroMagicAddition).
                 bonuses = level.get("bonuses")
                 has_ignore = (
                     isinstance(bonuses, list)
@@ -3688,22 +3707,19 @@ def validate_custom_faction_skill_row(
                         f"{faction_sid}: runtime-owned faction skill rank {index} must carry "
                         "unitBoolStat ignoreFractionsCount=true like working faction skills"
                     )
-                if faction_sid == "homm3_factory" and index == 3:
-                    has_field_triage = (
-                        isinstance(bonuses, list)
-                        and any(
-                            isinstance(bonus, dict)
-                            and bonus.get("type") == "heroBattleAbility"
-                            and isinstance(bonus.get("parameters"), list)
-                            and bonus.get("parameters")
-                            and bonus["parameters"][0] == "skill_faction_homm3_factory_ability_field_triage"
-                            for bonus in bonuses
-                        )
+                if faction_sid == "homm3_factory":
+                    has_logistics_spell = isinstance(bonuses, list) and any(
+                        isinstance(bonus, dict)
+                        and bonus.get("type") == "heroMagicAddition"
+                        and isinstance(bonus.get("parameters"), list)
+                        and bonus.get("parameters")
+                        and bonus["parameters"][0] == "homm3_factory_logistics_network"
+                        for bonus in bonuses
                     )
-                    if not has_field_triage:
+                    if not has_logistics_spell:
                         v.error(
-                            f"{faction_sid}: Expert Split Assembly must grant "
-                            "skill_faction_homm3_factory_ability_field_triage"
+                            f"{faction_sid}: Logistics Network rank {index} must grant "
+                            "homm3_factory_logistics_network via heroMagicAddition"
                         )
                 subskills = level.get("subSkills")
                 if index == 1:
@@ -3814,6 +3830,9 @@ def validate_custom_faction_skill_row(
 
     validate_homm3_cove_treasure_hunting_magic_contract(core, faction_sid, row, v)
     custom_units = set(expand_units(manifest))
+    if faction_sid == "homm3_conflux":
+        # Elemental Fusion subskills target the generated fused units (custom_factions/conflux_fusion).
+        custom_units |= conflux_fused_unit_sids()
     referenced_subskills: set[str] = set()
     for level_index, level in enumerate(row.get("parametersPerLevel") or [], start=1):
         if not isinstance(level, dict):
@@ -4472,7 +4491,7 @@ def main(argv: list[str]) -> int:
     parser.add_argument("--plugin-root", type=Path, help="Optional deployed OfflineUnlockMod plugin directory to validate runtime payload assets.")
     parser.add_argument(
         "--neutral-band-target",
-        choices=("golden_era", "steam_25509697", "steam_25672315"),
+        choices=("golden_era", "steam_25509697", "steam_25672315", "steam_26297049", "steam_26615913"),
         default="golden_era",
         help=(
             "Game build the --core is for; selects the pinned native neutral tier bands "

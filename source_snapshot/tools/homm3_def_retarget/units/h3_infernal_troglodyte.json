@@ -272,7 +272,7 @@
   "chainsReason": "2026-09-30: the floor-resting tail was a rigid Hips prop (box), so it dipped with the pelvis that the stride-matched Move drops for the smaller imagePlane body and went through the floor (ground_glb then lifted the swing foot past its tolerance / floated the plant). A Hips-parented tail chain with surface (geodesic 0.6) ownership, as h3_kobold_upg_alt and the Fortress tails; centreline traced over the welded surface from the tail's floor end. stride_match_glb's tail_clearance then curls Tail_00 up onto the Idle floor where the Move dips it."
  },
  "glbPatch": {
-  "reason": "lane B 2026-10-10 authenticity (DEF spear): AttackFront thrust - spear lowers to horizontal f1-f6 and rises f7-f9, Spine1 leans 14 deg and the arm reaches at f5 (was a vertical spear through the whole attack); Hitted spear upright tipping back; Death f0-f3 spear upright before the fall; Defence spear vertical -> raised -> down-forward -> forward-horizontal -> raised (was flat/tipped down). Offsets split in two ops (120 deg cap)",
+  "reason": "lane B 2026-10-10 authenticity (DEF spear): AttackFront thrust - spear lowers to horizontal f1-f6 and rises f7-f9, Spine1 leans 14 deg and the arm reaches at f5 (was a vertical spear through the whole attack); Hitted spear upright tipping back; Death f0-f3 spear upright before the fall; Defence spear vertical -> raised -> down-forward -> forward-horizontal -> raised (was flat/tipped down). Offsets split in two ops (120 deg cap); 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -284,6 +284,16 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_infernal_troglodyte_spear_rot.json",
     "sha256": "28a7f2a45a5d2840803c1670ff72cbf1fb6c6047c40326f8944ce7918c0e277f",
     "note": "second half of the split offset"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_infernal_troglodyte_move_tracks.json",
+    "sha256": "37de9a52f21a9fc08e359461a6a6d7b8e7f27a2384f01c10e88034f77fa99c08"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_infernal_troglodyte_clip_tracks.json",
+    "sha256": "d9d355a482657c015102e0c52348bea96d8983c9087d4c195c2d1e23e6341fa5"
    },
    {
     "op": "stretchRelax",

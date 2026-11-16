@@ -35,6 +35,26 @@ internal static class GameMember
 	// Find all parameterless methods on `declaringType` whose return type equals `returnType`.
 	// Methods whose names appear in `nameHints` are returned first, in hint order; remaining
 	// matches follow alphabetically. Result is cached per (type, id).
+	/// <summary>
+	/// True when <paramref name="propertyName"/> on <paramref name="declaringType"/> is the property Il2CppInterop
+	/// generated for a native field (it declares the static NativeFieldInfoPtr_ pointer), i.e. reading it is a plain
+	/// field read, never a computed getter.
+	/// </summary>
+	internal static bool IsInteropNativeFieldProperty(Type declaringType, string propertyName)
+	{
+		if (declaringType == null || string.IsNullOrEmpty(propertyName))
+			return false;
+		try
+		{
+			return declaringType.GetField("NativeFieldInfoPtr_" + propertyName,
+				BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly) != null;
+		}
+		catch (AmbiguousMatchException)
+		{
+			return false;
+		}
+	}
+
 	internal static MethodInfo[] FindParameterlessReturning(
 		Type declaringType,
 		Type returnType,

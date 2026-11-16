@@ -363,7 +363,7 @@
  "propBonesReason": "authenticity lane-A 2026-10-10: the DEF Death flings the staff away (f1-f2: the orb flies up off it and the shaft falls aside) and both are gone from f3 while the body burns down; staff and orb on their own child bones of LeftHand so the glbPatch can throw them and the build hides them from Death f3. Two boxes add the staff's foot cap and the orb's top finial: 6-vertex islands just outside the segment/sphere that stayed on LeftHand and floated as specks after the hide.",
  "armStripReason": " | lane-A 2026-10-10: the robe back panel behind the right arm (glTF y 0.35-0.8, z < -0.15) carried 0.2-0.4 RightArm weight, so when the Death crumble swings the arm the cloth was dragged out into thin spikes behind the body (f4-f6); a sphere strip (Blender center (-0.12,0.33,0.55), r 0.22, armKeep 0.8) gives it back to the body, the rigid sleeve keeps its arm.",
  "glbPatch": {
-  "reason": "authenticity lane-A 2026-10-10 (v2): DEF Death is struck and throws the staff away (f1-f2: the orb flies up off the top and the shaft topples aside; both gone from f3), then the body crumbles straight down into a heap (f3-f7). keyRotations (half offset, applied twice): LeftHand keeps its f0 grip pose at f1-f2 so staff and orb stay upright instead of swinging level with the arm; the Staff bone topples back at f2; Spine slumps forward and Neck drops the head (f2-f7), both arms fall to the sides (f2-f7), LeftHand holds its f6 angle on f7. keyTranslations: the Orb pops 0.22 m up off the staff (f1) and starts to fall (f2), the Staff slides down and out of the hand (f1-f2), Hips sink 0.22 m by f6 over the captured feet. The build hides Staff and Orb from f3 (propBones). Death only. Regenerated on the robe-back armStrip base; stretchRelax on Death strain-limits the hip crease of the sink (the strip lowered the base's worst stretch, so the sink's crease became the worst edge). teardiag PASS 8358 -> 6939.",
+  "reason": "authenticity lane-A 2026-10-10 (v2): DEF Death is struck and throws the staff away (f1-f2: the orb flies up off the top and the shaft topples aside; both gone from f3), then the body crumbles straight down into a heap (f3-f7). keyRotations (half offset, applied twice): LeftHand keeps its f0 grip pose at f1-f2 so staff and orb stay upright instead of swinging level with the arm; the Staff bone topples back at f2; Spine slumps forward and Neck drops the head (f2-f7), both arms fall to the sides (f2-f7), LeftHand holds its f6 angle on f7. keyTranslations: the Orb pops 0.22 m up off the staff (f1) and starts to fall (f2), the Staff slides down and out of the hand (f1-f2), Hips sink 0.22 m by f6 over the captured feet. The build hides Staff and Orb from f3 (propBones). Death only. Regenerated on the robe-back armStrip base; stretchRelax on Death strain-limits the hip crease of the sink (the strip lowered the base's worst stretch, so the sink's crease became the worst edge). teardiag PASS 8358 -> 6939.; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass",
   "ops": [
    {
     "op": "keyRotations",
@@ -385,6 +385,11 @@
     "sha256": "82fea091a627bf8011a259251422c0f6efa4cf733f696ef13fd71be1ae732837",
     "regrid": true,
     "note": "Orb/Staff throw, Hips sink"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_battle_mage_move_tracks.json",
+    "sha256": "ff175d0c89f2d04d4f5f9593b814dc56322740332e14480e254d3533c7811631"
    },
    {
     "op": "stretchRelax",

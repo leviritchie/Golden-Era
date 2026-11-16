@@ -696,7 +696,7 @@
   "note": "2026-10-08 authenticity: the corrective smooth dragged lance vertices into shards when the transferred lance-arm pose turns the hand; the rigid lance takes skin only"
  },
  "glbPatch": {
-  "reason": "2026-10-08 authenticity pass (lane B): the cavalier and champion DEFs are one HoMM3 animation set, so the champion's passed per-DEF-frame pose fit (commit 0c692ae845: head forward instead of chin-in, AttackFront rear then low long lunge with the lance couched, Death rider thrown on castle_riderthrow) is transferred as local rotation offsets plus root translations. Numpy patch lane. The table is resampled by normalized clip phase onto the cavalier's own key grids (Idle and Move run one key longer than the champion's). 2026-10-08 Move carriage (lane B check flags): the fitted Move reclined the rider about 20 deg with the head tipped back (looking at the sky, unlike the upright DEF rider); a stacked keyRotations table (h3_cavalier_head_rot.json) aims the Spine-Neck line back to the rider's Idle carriage and the head level looking ahead.",
+  "reason": "2026-10-08 authenticity pass (lane B): the cavalier and champion DEFs are one HoMM3 animation set, so the champion's passed per-DEF-frame pose fit (commit 0c692ae845: head forward instead of chin-in, AttackFront rear then low long lunge with the lance couched, Death rider thrown on castle_riderthrow) is transferred as local rotation offsets plus root translations. Numpy patch lane. The table is resampled by normalized clip phase onto the cavalier's own key grids (Idle and Move run one key longer than the champion's). 2026-10-08 Move carriage (lane B check flags): the fitted Move reclined the rider about 20 deg with the head tipped back (looking at the sky, unlike the upright DEF rider); a stacked keyRotations table (h3_cavalier_head_rot.json) aims the Spine-Neck line back to the rider's Idle carriage and the head level looking ahead.; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "moveWeights",
@@ -780,6 +780,28 @@
     "sha256": "eada5864a4a87d0bac8a5ede58c8db7e367b790fac283aab7abeb847ae2aee95",
     "regrid": true,
     "note": "Move carriage: rider torso back to the Idle Spine-Neck line and head level looking ahead, stacked on the DEF pose fit"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cavalier_move_tracks.json",
+    "sha256": "072dcf6fd8ec2033ae2dfc4e14bf976ec2c103cac8bacd5d5a311e969a64ee65"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cavalier_clip_repair_weights.json",
+    "note": "clip pass repair: lance cone base ring off LeftHand / Hips onto Lance (27 vertices)",
+    "sha256": "3adc92af86f6f954881fc68f9912a69ac501f104deb5df564039d7409178d736"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cavalier_clip_repair_facecut.json",
+    "note": "clip pass repair: gauntlet rim faces that shared the lance cone base ring (19 faces)",
+    "sha256": "a59f2bb5907c9933f21354f4c67969c80c845a837a034aec9375dbe1faa2a8e4"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cavalier_clip_tracks.json",
+    "sha256": "ce6aa9919734090e0fb3150863b8908f1a5b02c681af70cf5519fc3fd350aea9"
    }
   ]
  }

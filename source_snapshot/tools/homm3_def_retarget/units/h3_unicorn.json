@@ -283,7 +283,7 @@
   "params": []
  },
  "glbPatch": {
-  "reason": "2026-10-09 authenticity pass (lane B), Rampart. Death: the base reared only ~27 deg and then flopped 90 deg onto its side in one frame with the root jumping 0.55 H sideways and the legs stiff; now it rears hard f1-f3 (+15 deg, hind legs and tail held on their planted lines), starts leaning over at f3 (15 deg), is mid-fall at f4 (pose slerped halfway from the base's own f3 rear to its f5 lie, root halfway along the path and lifted to keep the hooves on the ground), lands at f5 and lies dead f5-f7 with the forelegs and bottom hind leg folded, root pulled 0.24 H back toward its hex (rest drift 0.476 -> 0.29 H; the per-key 0.25 H translation guard is the limit; the top hind leg stays straight because the tail is fused to that hock). AttackFront: the head stayed up with the horn pointing skyward through the charge; now the neck and head drop at f4-f6 so the horn is levelled at the enemy, as the DEF. Hitted: the head never moved; now it is thrown up and back (horn tipping back) f1-f4 with the base's half-rear. Defence: +10 deg more rear f3-f8 with hinds and tail held. Tear gate 1106 -> 1023 (worst 8.236 -> 8.58, within slack) after the tail/hock weight diffusion.",
+  "reason": "2026-10-09 authenticity pass (lane B), Rampart. Death: the base reared only ~27 deg and then flopped 90 deg onto its side in one frame with the root jumping 0.55 H sideways and the legs stiff; now it rears hard f1-f3 (+15 deg, hind legs and tail held on their planted lines), starts leaning over at f3 (15 deg), is mid-fall at f4 (pose slerped halfway from the base's own f3 rear to its f5 lie, root halfway along the path and lifted to keep the hooves on the ground), lands at f5 and lies dead f5-f7 with the forelegs and bottom hind leg folded, root pulled 0.24 H back toward its hex (rest drift 0.476 -> 0.29 H; the per-key 0.25 H translation guard is the limit; the top hind leg stays straight because the tail is fused to that hock). AttackFront: the head stayed up with the horn pointing skyward through the charge; now the neck and head drop at f4-f6 so the horn is levelled at the enemy, as the DEF. Hitted: the head never moved; now it is thrown up and back (horn tipping back) f1-f4 with the base's half-rear. Defence: +10 deg more rear f3-f8 with hinds and tail held. Tear gate 1106 -> 1023 (worst 8.236 -> 8.58, within slack) after the tail/hock weight diffusion.; 2026-11-10 unit pass (user-approved candidate, rig / mesh repair): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass, with the candidate's added joints and face cuts",
   "ops": [
    {
     "op": "diffuseWeights",
@@ -312,6 +312,22 @@
     "sha256": "0acc399c4d2f7c90b8df00ba9a01f3c45343a587f9d494285b6f1cd9b8da9a65",
     "regrid": true,
     "note": "Death root: arcs from the f3 rear over the f4 mid-fall to the lying pose, pulled back toward the hex (0.24 H, the per-key guard)"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_unicorn_move_cut.json",
+    "sha256": "4fd05b86081297aecdb360bc899a7ec6c668ee8578537f5841443dc712959827",
+    "note": "unit pass: 116 bridging faces the candidate cuts (mover_quadB)"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_unicorn_move_weights.json",
+    "sha256": "a792a9f2ff9311d0457c05e6da5910315855a8df1542c6e8c4074b406b7e0bf7"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_unicorn_move_tracks.json",
+    "sha256": "f87cbf2e11ba2f3f8f5c66bc7bb5239c0cd7924f3fe053f5668fbf0f10a819d8"
    }
   ]
  }

@@ -201,8 +201,8 @@
       "lawIndex": 13,
       "lawSid": "fraction_law_homm3_cove_13",
       "name": "Boarding Hooks",
-      "targetMechanic": "Friendly creatures' counterattacks deal 50% more damage by rank.",
-      "implementationStatus": "native-exact"
+      "targetMechanic": "Each time a friendly creature counterattacks, your hero gains 1 Focus (up to 5 Focus per battle).",
+      "implementationStatus": "runtime-backed"
     },
     {
       "faction": "cove",
@@ -305,8 +305,8 @@
       "lawIndex": 13,
       "lawSid": "fraction_law_homm3_dungeon_13",
       "name": "Outnumber",
-      "targetMechanic": "Friendly creatures' counterattacks deal 50% more damage by rank.",
-      "implementationStatus": "native-exact"
+      "targetMechanic": "Friendly creatures' counterattacks deal 40% more damage when the counterattacking stack has more creatures than the attacker.",
+      "implementationStatus": "runtime-backed"
     },
     {
       "faction": "dungeon",
@@ -409,8 +409,8 @@
       "lawIndex": 13,
       "lawSid": "fraction_law_homm3_fortress_13",
       "name": "Thorned Hides",
-      "targetMechanic": "Friendly creatures' counterattacks deal 50% more damage by rank.",
-      "implementationStatus": "native-exact"
+      "targetMechanic": "When a friendly creature counterattacks, the attacking stack deals 25% less damage with its next attack.",
+      "implementationStatus": "runtime-backed"
     },
     {
       "faction": "fortress",
@@ -513,8 +513,8 @@
       "lawIndex": 13,
       "lawSid": "fraction_law_homm3_rampart_13",
       "name": "Avenger's Reprisal",
-      "targetMechanic": "Friendly creatures' counterattacks deal 50% more damage by rank.",
-      "implementationStatus": "native-exact"
+      "targetMechanic": "Friendly creatures' counterattacks deal 30% more damage, or 60% more when the counterattacking stack has fewer creatures than the attacker.",
+      "implementationStatus": "runtime-backed"
     },
     {
       "faction": "rampart",
@@ -601,7 +601,7 @@
       "lawIndex": 2,
       "lawSid": "fraction_law_homm3_tower_2",
       "name": "Observatory Network",
-      "targetMechanic": "Tower magic guilds offer additional spell levels and open more spells for learning.",
+      "targetMechanic": "Each time you build a Mage Guild level in a Tower city, 1/2 extra spells are unlocked in the Magic Observatory, by rank.",
       "implementationStatus": "native-exact"
     },
     {
@@ -609,7 +609,7 @@
       "lawIndex": 6,
       "lawSid": "fraction_law_homm3_tower_6",
       "name": "Arcane Conduits",
-      "targetMechanic": "Tower creatures gain Attack based on their hero's Spell Power and Defense based on their hero's Knowledge.",
+      "targetMechanic": "Tower creatures gain 25% of their hero's Spell Power as Attack and 25% of their hero's Knowledge as Defense.",
       "implementationStatus": "native-exact"
     },
     {
@@ -617,8 +617,8 @@
       "lawIndex": 13,
       "lawSid": "fraction_law_homm3_tower_13",
       "name": "Reactive Wards",
-      "targetMechanic": "Friendly creatures' counterattacks deal 50%/100% more damage by rank.",
-      "implementationStatus": "native-exact"
+      "targetMechanic": "Your creatures' counterattacks deal 4%/6% more damage for each point of your hero's Spell Power, by rank (max +60%/+100%). No bonus if the army has no hero.",
+      "implementationStatus": "runtime-backed"
     },
     {
       "faction": "tower",
@@ -633,7 +633,7 @@
       "lawIndex": 18,
       "lawSid": "fraction_law_homm3_tower_18",
       "name": "Battle Automata",
-      "targetMechanic": "Friendly creatures deal 5%/10% more melee damage and take 5%/10% less melee damage by rank.",
+      "targetMechanic": "Tower creatures deal 5%/10% more melee damage and take 5%/10% less melee damage, by rank.",
       "implementationStatus": "native-exact"
     },
     {
@@ -641,7 +641,7 @@
       "lawIndex": 19,
       "lawSid": "fraction_law_homm3_tower_19",
       "name": "Battle Automata",
-      "targetMechanic": "Friendly creatures deal 5%/10% more ranged damage and take 5%/10% less ranged damage by rank.",
+      "targetMechanic": "Tower creatures deal 5%/10% more ranged damage and take 5%/10% less ranged damage, by rank.",
       "implementationStatus": "native-exact"
     },
     {
@@ -649,7 +649,7 @@
       "lawIndex": 21,
       "lawSid": "fraction_law_homm3_tower_21",
       "name": "Transmutation Ledger",
-      "targetMechanic": "Gold income from your sources increases by +10% by rank.",
+      "targetMechanic": "Your sources of Gold produce 10% more Gold.",
       "implementationStatus": "native-exact"
     },
     {
@@ -665,15 +665,15 @@
       "lawIndex": 25,
       "lawSid": "fraction_law_homm3_tower_25",
       "name": "Synchronization",
-      "targetMechanic": "Morale trigger chance for friendly creatures increases by +1%/+2%/+3% per Morale point by rank.",
+      "targetMechanic": "Tower creatures' chance to trigger Morale increases by 1%/2%/3% for each point of their Morale, by rank.",
       "implementationStatus": "native-exact"
     },
     {
       "faction": "tower",
       "lawIndex": 27,
       "lawSid": "fraction_law_homm3_tower_27",
-      "name": "Prepared Artifice",
-      "targetMechanic": "Heroes can learn any tier of Space spells.",
+      "name": "High Arcana",
+      "targetMechanic": "Your heroes can learn Arcane spells of every tier.",
       "implementationStatus": "native-exact"
     },
     {
@@ -681,7 +681,7 @@
       "lawIndex": 28,
       "lawSid": "fraction_law_homm3_tower_28",
       "name": "Grand Workshop",
-      "targetMechanic": "Magic upgrades cost 20%/30%/40% less.",
+      "targetMechanic": "Spell upgrades in the Magic Observatory cost 20%/30%/40% less Alchemical Dust, by rank.",
       "implementationStatus": "native-exact"
     },
     {
@@ -697,7 +697,7 @@
       "lawIndex": 34,
       "lawSid": "fraction_law_homm3_tower_34",
       "name": "Overclocked Spellworks",
-      "targetMechanic": "Positive effects on friendly creatures last +1 additional rounds by rank.",
+      "targetMechanic": "All positive effects on Tower creatures last 1 additional round.",
       "implementationStatus": "native-exact"
     },
     {
@@ -721,8 +721,8 @@
       "lawIndex": 13,
       "lawSid": "fraction_law_homm3_conflux_13",
       "name": "Elemental Backlash",
-      "targetMechanic": "Friendly creatures' counterattacks deal 50% more damage by rank.",
-      "implementationStatus": "native-exact"
+      "targetMechanic": "Friendly creatures' counterattacks unleash an elemental backlash and deal 35% more damage.",
+      "implementationStatus": "runtime-backed"
     },
     {
       "faction": "conflux",
@@ -929,8 +929,8 @@
       "lawIndex": 13,
       "lawSid": "fraction_law_homm3_necropolis_13",
       "name": "Death Grip",
-      "targetMechanic": "Friendly creatures' counterattacks deal 50% more damage by rank.",
-      "implementationStatus": "native-exact"
+      "targetMechanic": "Friendly creatures' counterattacks drain life: the counterattacking stack heals 25% of the damage it deals, raising fallen creatures up to its starting size.",
+      "implementationStatus": "runtime-backed"
     },
     {
       "faction": "necropolis",
@@ -1033,8 +1033,8 @@
       "lawIndex": 13,
       "lawSid": "fraction_law_homm3_stronghold_13",
       "name": "Blood Feud",
-      "targetMechanic": "Friendly creatures' counterattacks deal 50% more damage by rank.",
-      "implementationStatus": "native-exact"
+      "targetMechanic": "Each time a friendly creature counterattacks, that stack deals 5% more damage for the rest of the battle (up to 25%).",
+      "implementationStatus": "runtime-backed"
     },
     {
       "faction": "stronghold",

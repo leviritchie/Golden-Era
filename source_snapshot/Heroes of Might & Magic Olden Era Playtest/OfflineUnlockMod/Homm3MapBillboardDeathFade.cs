@@ -18,6 +18,7 @@ public sealed class Homm3MapBillboardDeathFade : MonoBehaviour
 	private Vector3 _startScale;
 	private float _elapsed;
 	private bool _started;
+	private bool _destroyWhenDone;
 
 	private void Awake()
 	{
@@ -37,6 +38,17 @@ public sealed class Homm3MapBillboardDeathFade : MonoBehaviour
 			_block = new MaterialPropertyBlock();
 	}
 
+	// The live removal path (bye.pta on 26615913) calls Object.Destroy on the map object root in the same call
+	// that triggers the fade, which would take this quad down before the first faded frame. Detach the quad
+	// (keeping its world pose) so it outlives the root, and let it destroy itself once fully transparent.
+	public void DetachAndDestroyWhenDone()
+	{
+		_destroyWhenDone = true;
+		if (transform.parent)
+			transform.SetParent(null, true);
+		_startScale = transform.localScale;
+	}
+
 	private void LateUpdate()
 	{
 		if (!_started)
@@ -50,6 +62,11 @@ public sealed class Homm3MapBillboardDeathFade : MonoBehaviour
 		transform.localScale = _startScale * Mathf.Lerp(1f, 0.96f, t);
 		if (t >= 1f && _renderer)
 			_renderer.forceRenderingOff = true;
+		if (t >= 1f && _destroyWhenDone)
+		{
+			_started = false;
+			Destroy(gameObject);
+		}
 	}
 
 	private void ApplyAlpha(float alpha)
@@ -237,11 +254,15 @@ internal static class Homm3MapBillboardDeathFadeHook
 		}
 	}
 
-	internal static void RegisterRoot(GameObject root, object meta, string sid)
+	internal static void RegisterRoot(GameObject root, object meta, string sid, object placedObject = null)
 	{
 		if (!root || !HasFadeBillboard(root))
 			return;
-		var id = TryGetInt(meta, GameSymbols.MapBillboardDeathFade.ObjectIdFields);
+		// 26615913: the map-object id is the placed object's own int (bye.cbop, field_Public_Int32_0 at +0x18,
+		// the key Hex.Map.MapObjects.pvd/put use); the meta type (byg) has no id field.
+		var id = TryGetInt(placedObject, GameSymbols.MapBillboardDeathFade.ObjectIdFields);
+		if (id <= 0)
+			id = TryGetInt(meta, GameSymbols.MapBillboardDeathFade.ObjectIdFields);
 		if (id <= 0)
 			id = TryParseFirstPositiveInt(root.name);
 		var tracked = new TrackedRoot { Root = root, Id = id, Sid = sid ?? string.Empty };
@@ -296,9 +317,13 @@ internal static class Homm3MapBillboardDeathFadeHook
 	{
 		try
 		{
-			var data = GetFirstFieldValue(__instance, GameSymbols.MapBillboardDeathFade.ObjectDataFields)
-			           ?? InvokeFirstNoArg(__instance, null, GameSymbols.MapBillboardDeathFade.ObjectDataGetter);
-			var id = TryGetInt(data, GameSymbols.MapBillboardDeathFade.ObjectIdFields);
+			var id = TryGetInt(__instance, GameSymbols.MapBillboardDeathFade.ObjectIdFields);
+			if (id <= 0)
+			{
+				var data = GetFirstFieldValue(__instance, GameSymbols.MapBillboardDeathFade.ObjectDataFields)
+				           ?? InvokeFirstNoArg(__instance, null, GameSymbols.MapBillboardDeathFade.ObjectDataGetter);
+				id = TryGetInt(data, GameSymbols.MapBillboardDeathFade.ObjectIdFields);
+			}
 			if (id > 0 && RootsById.TryGetValue(id, out var tracked))
 				Trigger(tracked, __originalMethod?.Name ?? "?");
 		}
@@ -316,8 +341,16 @@ internal static class Homm3MapBillboardDeathFadeHook
 		if (quads.Length == 0)
 			return;
 		for (var i = 0; i < quads.Length; i++)
-			if (quads[i])
-				quads[i].StartFade();
+		{
+			if (!quads[i])
+				continue;
+			quads[i].StartFade();
+			quads[i].DetachAndDestroyWhenDone();
+		}
+		var rootName = tracked.Root.name;
+		RootsByRootInstanceId.Remove(tracked.Root.GetInstanceID());
+		if (tracked.Id > 0 && RootsById.TryGetValue(tracked.Id, out var current) && ReferenceEquals(current, tracked))
+			RootsById.Remove(tracked.Id);
 		if (_triggerDiagRemaining > 0)
 		{
 			_triggerDiagRemaining--;
@@ -325,7 +358,7 @@ internal static class Homm3MapBillboardDeathFadeHook
 				"Homm3 map billboard death fade: triggered path='"
 				+ (path ?? "?")
 				+ "' root='"
-				+ (tracked.Root.name ?? "?")
+				+ (rootName ?? "?")
 				+ "' id="
 				+ tracked.Id
 				+ " sid='"
@@ -398,10 +431,16 @@ internal static class Homm3MapBillboardDeathFadeHook
 		const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 		for (var t = obj.GetType(); t != null; t = t.BaseType)
 		{
-			var f = t.GetField(name, flags);
+			var f = t.GetField(name, flags | BindingFlags.DeclaredOnly);
 			if (f != null)
 			{
 				try { return f.GetValue(obj); } catch { }
+			}
+			// Il2CppInterop exposes game fields (field_Public_Int32_0 etc.) as properties, not CLR fields.
+			var p = t.GetProperty(name, flags | BindingFlags.DeclaredOnly);
+			if (p != null && p.CanRead && p.GetIndexParameters().Length == 0)
+			{
+				try { return p.GetValue(obj); } catch { }
 			}
 		}
 		return null;

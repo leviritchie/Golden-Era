@@ -439,7 +439,7 @@
     "keysPerSpan": 3
   },
   "glbPatch": {
-    "reason": "2026-10-08 authenticity a26 (lane-A): CRGRIF is a recolour of CGRIFF (same animation frame for frame), so the passed h3_royal_griffin motion is transferred bone by bone (V:/olden_port_work/authenticity/h3_griffin/xfer/xfer2.py, idle-delta mode: each shared bone takes the royal's world-rotation change since Unit_Idle key 0 on top of this unit's own approved Idle key 0; Hips path scaled by the height ratio). Flight clips keep the beak at its idle pitch and reach the fore talons forward under the head as the DEF does. The rigid folded wings keep the 2026-10-05 fit's own local keys (its DEF-phased beat), now carried by the new body. Unit_Idle is not transferred (the approved build idle, untouched, keeps its closed loop). Replaces h3_griffin_folded_body.json. Wing spread (Defence/Hitted/Death/MoveStart fan) is not reachable on the folded mesh: a wing_chain build tears 1594 -> 5340 edges at full spread and still over at 25%; that needs the parked ground/flight mesh swap (user decision).",
+    "reason": "2026-10-08 authenticity a26 (lane-A): CRGRIF is a recolour of CGRIFF (same animation frame for frame), so the passed h3_royal_griffin motion is transferred bone by bone (V:/olden_port_work/authenticity/h3_griffin/xfer/xfer2.py, idle-delta mode: each shared bone takes the royal's world-rotation change since Unit_Idle key 0 on top of this unit's own approved Idle key 0; Hips path scaled by the height ratio). Flight clips keep the beak at its idle pitch and reach the fore talons forward under the head as the DEF does. The rigid folded wings keep the 2026-10-05 fit's own local keys (its DEF-phased beat), now carried by the new body. Unit_Idle is not transferred (the approved build idle, untouched, keeps its closed loop). Replaces h3_griffin_folded_body.json. Wing spread (Defence/Hitted/Death/MoveStart fan) is not reachable on the folded mesh: a wing_chain build tears 1594 -> 5340 edges at full spread and still over at 25%; that needs the parked ground/flight mesh swap (user decision).; 2026-11-10 flyer flight (user-approved candidate, rig / mesh repair): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, with the candidate's added joints and face cuts; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
     "ops": [
       {
         "op": "diffuseWeights",
@@ -480,6 +480,27 @@
         "table": "tools/homm3_glb_patch/key_rotations/h3_griffin_xfer_tr3.json",
         "sha256": "1470bc1d8393a9e23c9c5c773a5a7c1f35e3af3a0044e8b15392995c6e1575f9",
         "regrid": true
+      },
+      {
+        "op": "addJoints",
+        "table": "tools/homm3_glb_patch/key_rotations/h3_griffin_flight_joints.json",
+        "sha256": "e65885bc4a639cdf1fe41834a5de292f905042e6c876687e070cecc2f11cd0f9",
+        "note": "unit pass: 8 joints the candidate's Move needs (flyer)"
+      },
+      {
+        "op": "setWeights",
+        "table": "tools/homm3_glb_patch/key_rotations/h3_griffin_flight_weights.json",
+        "sha256": "cac2fc3253d20cdbf566f204601ca111e3604485b27a5cbe6325fb2e0bf29ad4"
+      },
+      {
+        "op": "setTracks",
+        "table": "tools/homm3_glb_patch/key_rotations/h3_griffin_flight_tracks.json",
+        "sha256": "cbd70f7fd5ffcce5645c6925cb2d49fb611970f3c94c3162cec89ea1980a3e31"
+      },
+      {
+        "op": "setTracks",
+        "table": "tools/homm3_glb_patch/key_rotations/h3_griffin_clip_tracks.json",
+        "sha256": "731523b6becb9a4b527f2ce6c3a8e69ddb8d1b6ad6c8e2e0eea540cc2adeed8d"
       }
     ]
   },

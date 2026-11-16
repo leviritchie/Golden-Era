@@ -199,5 +199,38 @@
   "propAim": [
    "LeftHand"
   ]
+ },
+ "glbPatch": {
+  "reason": "2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Mouseover re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
+  "ops": [
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gnoll_move_tracks.json",
+    "sha256": "636c08c05ddeeb953d1308af18aa60d2b1726d443a22616d03d3ab1ac6045898"
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gnoll_clip_repair_joints.json",
+    "note": "Flail_ chain under LeftHand (clip pass repair)",
+    "sha256": "0cdb4149aac00f63e1e5561aea67079ee9f6ea1736014b899d70f3fd8a38e6e1"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gnoll_clip_repair_weights.json",
+    "note": "LeftHand share of the hanging part onto the Flail_ chain, soft bands",
+    "sha256": "7836d1a8e202bca3aee70fe7b1851069a743ad540dbd1289c0b79017f0fe8a2a"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gnoll_clip_repair_weights_2.json",
+    "sha256": "2814aaedd7528c88473609d19fb29ebe9f501fd7f2e63cffa700a86058026a10",
+    "note": "clip pass repair: sliver edges that tear in plain skin (Hips/Spine/Spine1-dominant, < 0.03 long) get one weight row per connected cluster"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gnoll_clip_tracks.json",
+    "sha256": "eef0bbe1f11539b9a9053462ed2301a274904cdef3f89c4a22a81f5f5b433931"
+   }
+  ]
  }
 }

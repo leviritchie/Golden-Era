@@ -585,7 +585,8 @@ internal static class Homm3BattleAttackFacingHook
 		          ?? TryGetStringMember(unit, "unitSid");
 		if (string.IsNullOrWhiteSpace(sid))
 		{
-			foreach (var name in new[] { "chey", "_chdi_k__BackingField", "<chey>k__BackingField", "chbu", "_chbu_k__BackingField", "<chbu>k__BackingField", "cggz" })
+			// Refused on 26297049 (the scope logs why); its sentinels bind nothing and the UnitTransferFields path below runs.
+			foreach (var name in GameSymbols.BattleUi.AttackFacingUnitSidProbeFields)
 			{
 				var nested = GetMemberValue(unit, name);
 				sid = TryGetStringMember(nested, "configSid")

@@ -202,7 +202,7 @@
  "skirtLegShare": 0.5,
  "bootTop": 0.5,
  "glbPatch": {
-  "reason": "authenticity pass (lane B): ShootFront, Mouseover, AttackFront and Hitted key poses re-authored by motion intent against the DEF (crossbow brought up and aimed level at the enemy, prod forward and limbs flat, kicking up on the shot; crossbow lifted level at the hip on mouseover; free arm wound up and driven straight at the enemy in a lunge with the chest and face kept on the target; hit knocks him back off balance with the head snapped back and both arms flung out). Upper-arm aims at 0.7 and the clavicles lifted on the hit to hold the tear gate over master targets 2630 -> 2616, worst edge unchanged (41.459). 2026-10-08 check pass: head held upright in MoveStart, Move, MoveEnd and Mouseover (was pitched down at the ground/crossbow; DEF looks ahead), and the crossbow hand held steady across the chest in Move (was flipping over the shoulder mid-stride; DEF holds it still).",
+  "reason": "authenticity pass (lane B): ShootFront, Mouseover, AttackFront and Hitted key poses re-authored by motion intent against the DEF (crossbow brought up and aimed level at the enemy, prod forward and limbs flat, kicking up on the shot; crossbow lifted level at the hip on mouseover; free arm wound up and driven straight at the enemy in a lunge with the chest and face kept on the target; hit knocks him back off balance with the head snapped back and both arms flung out). Upper-arm aims at 0.7 and the clavicles lifted on the hit to hold the tear gate over master targets 2630 -> 2616, worst edge unchanged (41.459). 2026-10-08 check pass: head held upright in MoveStart, Move, MoveEnd and Mouseover (was pitched down at the ground/crossbow; DEF looks ahead), and the crossbow hand held steady across the chest in Move (was flipping over the shoulder mid-stride; DEF holds it still).; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -221,6 +221,23 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_archer_pose_tr.json",
     "sha256": "269442e2de41519b54c69ac030cfcee58616482d6e0dfb0d0d56f63d274481d0",
     "regrid": true
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_archer_clip_repair_facecut.json",
+    "sha256": "9a440bd570734f1fcc3e74c7243c80a2ccb62f14e1c6db2e5897a1b51584b52d",
+    "note": "clip pass repair: 86 faces that weld the left forearm / hand / crossbow to the hip, flank and thigh"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_archer_clip_repair_weights.json",
+    "sha256": "fa439b99498fdeec36168727abfe067944c934e5cb5a94c2b7ee011530b1536c",
+    "note": "clip pass repair: left forearm off Hips/Spine onto LeftArm/LeftForeArm/LeftHand, crossbow butt and prod tip rigid on LeftHand (413 vertices)"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_archer_clip_tracks.json",
+    "sha256": "db87ca8b0beddebe397e80e8ca46865bbdeecf76cb222e15886324586f20010e"
    }
   ]
  }

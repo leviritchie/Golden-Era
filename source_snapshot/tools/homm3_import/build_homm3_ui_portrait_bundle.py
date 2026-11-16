@@ -26,6 +26,7 @@ from pathlib import Path
 import importlib.util as _uq_ilu  # noqa: E402
 _uq_spec = _uq_ilu.spec_from_file_location("unity_queue", Path(__file__).resolve().parents[1] / "unity_queue" / "unity_queue.py")
 UQ = _uq_ilu.module_from_spec(_uq_spec)
+sys.modules["unity_queue"] = UQ  # dataclasses resolve their module through sys.modules
 _uq_spec.loader.exec_module(UQ)
 UNITY_DIRECT = UQ.take_direct_flag()
 

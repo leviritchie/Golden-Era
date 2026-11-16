@@ -856,7 +856,7 @@
   }
  ],
  "glbPatch": {
-  "reason": "lane C 2026-10-12 authenticity: the DEF ayssid raises its wings high and back at Mouseover and flings them wide open on AttackFront; ours kept the wings folded along the flanks (thin sticks)",
+  "reason": "lane C 2026-10-12 authenticity: the DEF ayssid raises its wings high and back at Mouseover and flings them wide open on AttackFront; ours kept the wings folded along the flanks (thin sticks); 2026-11-10 flyer flight (user-approved candidate, rig / mesh repair): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, with the candidate's added joints and face cuts; clip pass 2026-11-11 (user-approved candidate): Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -871,6 +871,28 @@
     "sha256": "9908de78efc3815f4e9be10f8ae1ae4f8fcbf538a06c15f5c8e9e13f08ac8a8b",
     "regrid": true,
     "note": "rigid WingL/R_00 world turns (split: the table is applied twice): Mouseover pitch 80 back-up + roll 25 out (f1-f9), AttackFront pitch 55 + roll 50 (f1-f7); the folded wing is its own sheet, so the whole membrane opens with no new tears"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_ayssid_flight_cut.json",
+    "sha256": "60665e1860aa010cebf35f874526d3c1f6f273ea2987cbedb8c783f6412c9fe1",
+    "note": "unit pass: 891 bridging faces the candidate cuts (flyer_A)"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_ayssid_flight_weights.json",
+    "sha256": "1367d19ea85cee0ce8e22e90d0e61af15c00baea733d73112c90b6831404b31e"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_ayssid_flight_tracks.json",
+    "sha256": "a6378ca8f50c94eeb40a06487cfbd03652ebcd1bb4633ff7fda4a277f1337ab3"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_ayssid_clip_tracks.json",
+    "sha256": "7df9360f6d7fbdca18661d6570cf7870e94c71dff3c4b410626bfb6146d98d2e"
    }
   ]
  }

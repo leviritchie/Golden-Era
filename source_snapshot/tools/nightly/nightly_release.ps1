@@ -26,7 +26,7 @@
                   uniform 1.9 GB <base>.partNN parts.
     plan          --print-plan of both EXEs: every download URL must be .../releases/download/nightly/<part>
                   for a part that exists in the asset folder; footers must agree with the parts.
-    verify        offline installer check from the clean 25672315 mirror. A full --headless install
+    verify        offline installer check from the clean 26615913 mirror. A full --headless install
                   needs mirror + 2 x uncompressed payload of free space and a -Homm3Root; when that
                   does not fit, the installer's own --verify-payload runs instead (sha256 over the
                   parts, zip structure, overlay operation count). The choice and numbers are recorded.
@@ -64,7 +64,7 @@ param(
     [switch] $Publish,
     [string] $WorkRoot = 'N:\nightly',
     [string] $GameRoot = 'V:\SteamLibrary\steamapps\common\Heroes of Might and Magic Olden Era - Golden Era',
-    [string] $CleanMirror = 'V:\olden_mirrors\Heroes of Might and Magic Olden Era - Current Era 25672315',
+    [string] $CleanMirror = 'V:\olden_mirrors\Heroes of Might and Magic Olden Era - Current Era 26615913',
     [string] $Repo,
     [string] $Homm3Root,
     # Plugin folder holding the git-ignored compile inputs, forwarded to build_plugin.ps1. Default: -Repo's
@@ -512,7 +512,7 @@ try {
         # The release_installer tools and the stager's repo inputs come from the same commit.
         [void](New-Item -ItemType Directory -Force -Path $toolsSrc)
         $tarball = Join-Path $WorkDir 'tools.tar'
-        & git -C $Repo archive --format=tar -o $tarball $sha -- tools/release_installer scenarios/roe_castle_campaign/batch_manifest.json tools/install_roe_castle_continuity_weave.py
+        & git -C $Repo archive --format=tar -o $tarball $sha -- tools/release_installer scenarios/roe_castle_campaign/batch_manifest.json tools/install_roe_castle_continuity_weave.py 'tools/port_current/mirror_manifest_*.json'
         if ($LASTEXITCODE -ne 0) { throw 'git archive of the release tools failed' }
         & (Join-Path $env:SystemRoot 'System32\tar.exe') -xf $tarball -C $toolsSrc
         if ($LASTEXITCODE -ne 0) { throw 'tar extract of the release tools failed' }

@@ -15,6 +15,9 @@ DEFAULT_OVERRIDE_DIR = ROOT / "custom_factions" / "law_overrides"
 
 ALLOWED_STATUSES = {
     "native-exact",
+    # Native loader-anchor row plus a registered plugin runtime that delivers the mechanic
+    # (row-13 counterattack laws, 2026-11-10). Final like native-exact; not a strict placeholder.
+    "runtime-backed",
     "needs-runtime",
     "temporary-compromise",
     "blocked",

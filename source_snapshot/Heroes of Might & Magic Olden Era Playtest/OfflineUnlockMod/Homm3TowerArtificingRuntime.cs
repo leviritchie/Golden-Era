@@ -24,10 +24,11 @@ namespace OfflineUnlockMod;
 ///   schematic book homm3_tower_artificing_schematic_{i}_bit_{0..2}       lowest source tier seen (0 = unknown)
 ///   graft slots    homm3_tower_artificing_graft_l{line}_s{slot}_bit_{0..8} schematic index + 1 (0 = empty)
 ///
-/// Transcribe: the hero action applies the 1-round marker buff homm3_tower_transcribe_effect to any living
-/// stack. A postfix on the native unit buff add (dzv.bbgf) sees the marker and writes that unit's graftable
-/// schematics (catalog) into the caster's book. Caster hero route: the caster's TransferSide.logicHero; when
-/// that is unreadable, the only Artificing hero in the battle (logged as such; two Artificing heroes = refuse).
+/// Observation: at battle end (the shared battle-result prefix, so auto-resolve too) every side whose hero has
+/// Artificing rolls once per distinct graftable passive in the enemy armies (every other side's stacks at battle
+/// start, native unit sids only, so grafted passives are never observed). The chance is
+/// ObservationChanceByRank[rank]; the roll is seeded by battle key + side + schematic, so a replay agrees. A hit
+/// writes the schematic into that hero's book at the observed unit's tier, keeping the lowest tier seen.
 ///
 /// Essence: the shared battle-result prefix (Homm3RuntimeMechanicHooks.PrefixBattleResultCleanup) awards the
 /// winning Artificing hero EssencePerCreatureByTier x creatures lost by every other side (started vs after
@@ -58,13 +59,16 @@ namespace OfflineUnlockMod;
 ///   gold        DailyGoldBySchematic per carrier creature by line, added to the side's day-start grant
 ///               (Homm3SwashbucklerGoldHook consumer). Not in the native income forecast.
 ///
-/// Spend: <see cref="TryGraft"/> validates and pays; no UI calls it yet (spend UI needs an approved mockup).
+/// Spend: every Artificing rank grants the Artificing world spell (GraftMagicSid, a Necromancer Will clone with
+/// [GraftMagicMode] parameters). PrefixGraftSpellCast intercepts its cast and opens Homm3TowerArtificingPicker
+/// for the casting hero; the picker calls <see cref="TryGraft"/>, which validates and pays. AI heroes earn
+/// essence and learn schematics but have no spend path.
 ///
-/// Proof tier: source + build. Runtime unproven: the caster TransferSide read on the hero-ability caster, the
-/// native application of statOverrides / sequenceEffect from a mid-battle buff row, essence in simulated
-/// (auto-resolve) battles, the dealer tags on basic attacks, the heal/berserk statics and the first
+/// Proof tier: source + build. Runtime unproven: the world-spell intercept and the IMGUI picker, battle-end
+/// observation, the native application of statOverrides / sequenceEffect from a mid-battle buff row, essence in
+/// simulated (auto-resolve) battles, the dealer tags on basic attacks, the heal/berserk statics and the first
 /// RoundStarted timing, JsonUtility ability configs and the injected abilities' cast animation / HUD / charges,
-/// and the RecalculateStats symbol all need a Golden Era check before policy.enabled flips.
+/// and the RecalculateStats symbol all need the Golden Era checklist in docs/homm3_tower_artificing.md.
 /// </summary>
 internal static class Homm3TowerArtificingRuntime
 {
@@ -87,7 +91,6 @@ internal static class Homm3TowerArtificingRuntime
 	private static bool _registrationAttempted;
 	private static bool _ledgerRegistered;
 	private static bool _battleRegistered;
-	private static bool _captureRegistered;
 	private static bool _damageRegistered;
 	private static bool _roundRegistered;
 	private static bool _firstRoundStarted;
@@ -96,6 +99,10 @@ internal static class Homm3TowerArtificingRuntime
 	private static MethodInfo _berserkMethod;
 	private static bool _mapRegistered;
 	private static bool _dayStartRegistered;
+	private static bool _spellRegistered;
+	private static PropertyInfo _handlerWorldHeroProperty;
+	private static PropertyInfo _worldHeroLogicHeroProperty;
+	private static int _loggedForeignCasts;
 	[ThreadStatic] private static bool _reconcilingMap;
 	/// <summary>Logic hero (native pointer) -> its active grafts, re-read on rank change, at day start and after TryGraft.</summary>
 	private static readonly Dictionary<long, MapHeroGrafts> MapGraftsByHero = new();
@@ -150,7 +157,7 @@ internal static class Homm3TowerArtificingRuntime
 		}
 
 		internal int Essence { get; }
-		/// <summary>Schematic index -> lowest source tier transcribed (0 = not in the book).</summary>
+		/// <summary>Schematic index -> lowest source tier observed (0 = not in the book).</summary>
 		internal int[] SchematicTiers { get; }
 		/// <summary>[line, slot] -> schematic index, -1 when empty.</summary>
 		internal int[,] GraftSlots { get; }
@@ -214,20 +221,6 @@ internal static class Homm3TowerArtificingRuntime
 			_log?.LogError(LogPrefix + "[battle] NOT registered (no grafts applied; essence still needs the battle-result hook): " + ex.GetBaseException().Message);
 		}
 
-		// Stage 3 (capture): postfix on the exact unit buff add.
-		try
-		{
-			var unitBuffManagerType = GameMember.FindType(GameSymbols.BuffDebuffLaws.BuffManagerTypeId, GameSymbols.BuffDebuffLaws.BuffManagerTypeHint)
-			                          ?? throw new TypeLoadException("unit buff manager type not found");
-			var buffAdd = FindBuffAdd(unitBuffManagerType);
-			Patch(harmony, buffAdd, null, nameof(PostfixUnitBuffAdd));
-			_captureRegistered = true;
-		}
-		catch (Exception ex)
-		{
-			_log?.LogError(LogPrefix + "[capture] NOT registered (Transcribe marks units but records nothing): " + ex.GetBaseException().Message);
-		}
-
 		// Stage 4 (combat): battle event dispatcher postfixes for on-hit, vampirism and first-round grafts.
 		// Heal / berserk statics are optional: unresolved = that effect off, logged.
 		if (_battleRegistered)
@@ -273,13 +266,38 @@ internal static class Homm3TowerArtificingRuntime
 			_dayStartRegistered = true;
 		else
 			_log?.LogError(LogPrefix + "[map] day-start consumer NOT registered (no graft gold; map buffs refresh only on army change): " + dayStartFailure);
+		if (!Homm3SwashbucklerGoldHook.TryRegisterDayStartHeroForecast("homm3.tower.artificing", ForecastDayStartHero, out var forecastFailure))
+			_log?.LogWarning(LogPrefix + "[map] graft gold not shown in the gold tooltip: " + forecastFailure);
+
+		// Stage 6 (spell): the Artificing world spell rides the native Necromancer Will handler (Dungeon Captives
+		// / Castle Elite Strategem pattern); its cast opens the graft picker.
+		MethodInfo castMethod = null;
+		try
+		{
+			var handlerType = ResolveTypeByHints(hexAssembly, GameSymbols.CastleEliteStrategem.NecromancyWorldMagicHandlerTypeHints, "homm3.tower.artificing.necromancyHandler");
+			castMethod = ResolveExactMethod(handlerType, typeof(bool), Type.EmptyTypes, GameSymbols.CastleEliteStrategem.NecromancyWorldMagicCast);
+			var worldHeroType = ResolveTypeByHints(hexAssembly, GameSymbols.HomecomingBoatTravel.WorldHeroTypeHints, "homm3.tower.artificing.worldHero");
+			_handlerWorldHeroProperty = ResolveTypedProperty(handlerType, GameSymbols.CastleEliteStrategem.NecromancyWorldMagicWorldHeroProperty, worldHeroType, "homm3.tower.artificing.necromancyHandler.worldHero");
+			_worldHeroLogicHeroProperty = ResolveTypedProperty(worldHeroType, GameSymbols.CastleEliteStrategem.WorldHeroLogicHeroProperty, _logicHeroType, "homm3.tower.artificing.worldHero.logicHero");
+			Patch(harmony, castMethod, nameof(PrefixGraftSpellCast), null);
+			_spellRegistered = true;
+			// Soft: without it the picker still works, but map input and the map cursor show through it.
+			Homm3TowerArtificingPickerInputBlock.TryRegister(harmony, hexAssembly, _log);
+			// Soft: Arcane Essence in the vanilla energy frame beside the hero portrait.
+			Homm3TowerArtificingEssenceFrame.TryRegister(harmony, hexAssembly, _log);
+		}
+		catch (Exception ex)
+		{
+			UnpatchOwned(harmony, castMethod, nameof(PrefixGraftSpellCast));
+			_log?.LogError(LogPrefix + "[spell] NOT registered (the Artificing spell falls through to the native Necromancer Will handler; no graft picker): " + ex.GetBaseException().Message);
+		}
 
 		var summary = LogPrefix + "registration summary: ledger=" + Stage(_ledgerRegistered) + " battle=" + Stage(_battleRegistered)
-			+ " capture=" + Stage(_captureRegistered) + " combat=" + Stage(_damageRegistered && _roundRegistered)
+			+ " combat=" + Stage(_damageRegistered && _roundRegistered)
 			+ " heal=" + Stage(_healMethod != null) + " berserk=" + Stage(_berserkMethod != null)
-			+ " map=" + Stage(_mapRegistered) + " dayStart=" + Stage(_dayStartRegistered)
+			+ " map=" + Stage(_mapRegistered) + " dayStart=" + Stage(_dayStartRegistered) + " spell=" + Stage(_spellRegistered)
 			+ " graftable=" + Homm3TowerArtificingCatalog.SchematicKeyByIndex.Count + ". Proof tier: build; runtime unproven.";
-		if (_battleRegistered && _captureRegistered && _damageRegistered && _roundRegistered && _mapRegistered && _dayStartRegistered)
+		if (_battleRegistered && _damageRegistered && _roundRegistered && _mapRegistered && _dayStartRegistered && _spellRegistered)
 			_log?.LogInfo(summary);
 		else
 			_log?.LogError(summary);
@@ -289,6 +307,8 @@ internal static class Homm3TowerArtificingRuntime
 
 	private static void PrefixBattleLogicInit(object __1)
 	{
+		if (Homm3TowerArtificingPicker.IsOpen)
+			Homm3TowerArtificingPicker.Close();
 		lock (Gate)
 		{
 			SidesByIndex.Clear();
@@ -574,6 +594,33 @@ internal static class Homm3TowerArtificingRuntime
 	}
 
 	/// <summary>Daily gold for one hero (shared side day-start grant); refreshes its graft slots and map buffs first.</summary>
+	/// <summary>Side-effect-free <see cref="OnDayStartHero"/> for the gold-hover income preview (cached grafts, no buff refresh).</summary>
+	private static (int Gold, string Label) ForecastDayStartHero(object entry)
+	{
+		if (entry == null || _logicHeroType == null || !_logicHeroType.IsInstanceOfType(entry) || Homm3TowerArtificingCatalog.DailyGoldBySchematic.Count == 0)
+			return (0, null);
+		var grafts = MapGraftsFor(entry, false);
+		var dataHero = grafts == null ? null : ResolveDataHero(entry);
+		var army = dataHero == null ? null : Homm3SwashbucklerGoldHook.ReadArmy(dataHero);
+		if (army == null)
+			return (0, null);
+		var gold = 0L;
+		foreach (var (sid, stacks) in army)
+		{
+			if (!Homm3TowerArtificingCatalog.TowerLineByUnitSid.TryGetValue(sid, out var line) || !grafts.TryGetValue(line, out var schematics))
+				continue;
+			foreach (var schematic in schematics)
+			{
+				if (Homm3TowerArtificingCatalog.DailyGoldBySchematic.TryGetValue(schematic, out var rates))
+					gold += (long)stacks * rates[line];
+			}
+		}
+		if (gold <= 0)
+			return (0, null);
+		var name = Homm3HeroDisplayNames.Resolve(dataHero.configSid) ?? dataHero.configSid;
+		return ((int)Math.Min(int.MaxValue / 2, gold), "Artificing grafts (" + name + ")");
+	}
+
 	private static int OnDayStartHero(object entry)
 	{
 		if (entry == null || _logicHeroType == null || !_logicHeroType.IsInstanceOfType(entry))
@@ -596,9 +643,21 @@ internal static class Homm3TowerArtificingRuntime
 			}
 		}
 		if (gold <= 0)
+		{
+			// A gold graft with no carrier stack in the army pays nothing; say so once per hero-day.
+			foreach (var pair in grafts)
+			{
+				foreach (var schematic in pair.Value)
+				{
+					if (Homm3TowerArtificingCatalog.DailyGoldBySchematic.ContainsKey(schematic))
+						LogGold("day-start gold for " + DescribeHero(ResolveDataHero(entry)) + ": schematic " + schematic + " on line " + pair.Key
+							+ " but no stack of that line in the army [" + string.Join(",", army.ConvertAll(a => a.Sid + "x" + a.Stacks)) + "].");
+				}
+			}
 			return 0;
+		}
 		var amount = (int)Math.Min(int.MaxValue / 2, gold);
-		LogEvent("day-start gold for " + DescribeHero(ResolveDataHero(entry)) + ": +" + amount + " [" + string.Join(",", parts) + "].");
+		LogGold("day-start gold for " + DescribeHero(ResolveDataHero(entry)) + ": +" + amount + " [" + string.Join(",", parts) + "].");
 		return amount;
 	}
 
@@ -717,8 +776,12 @@ internal static class Homm3TowerArtificingRuntime
 		_observingDamage = true;
 		try
 		{
-			if (!Homm3BattleEventNativeAdapter.TryReadDamageEvent(__args[1], out var hit, out _)
-			    || hit.Damage <= 0 || hit.ImmuneToDamage || hit.Caster == null || hit.Receiver == null)
+			if (!Homm3BattleEventNativeAdapter.TryReadDamageEvent(__args[1], out var hit, out var readFail))
+			{
+				LogSkip("on-hit: damage event unreadable: " + readFail);
+				return;
+			}
+			if (hit.Damage <= 0 || hit.ImmuneToDamage || hit.Caster == null || hit.Receiver == null)
 				return;
 			if (!Homm3DirectStateIdentity.TryResolveKey(hit.Caster, out var casterKey, out _)
 			    || !Homm3DirectStateIdentity.TryResolveKey(hit.Receiver, out var receiverKey, out _))
@@ -736,6 +799,8 @@ internal static class Homm3TowerArtificingRuntime
 				grafts = new Dictionary<int, string>(grafts);
 			}
 			var tags = ReadDealerTags(hit.Dealer);
+			if (tags.Count == 0)
+				LogSkip("on-hit: dealer tags unreadable for " + caster.UnitSid + " -> " + receiver.UnitSid + ".");
 			if (!tags.Contains(BasicAttackTag))
 				return;
 			foreach (var pair in grafts)
@@ -1048,101 +1113,135 @@ internal static class Homm3TowerArtificingRuntime
 		return selected ?? throw new MissingMethodException(symbol.Id + " dispatcher not found on " + hubType.FullName);
 	}
 
-	// ---------------------------------------------------------------- Transcribe capture
+	// ---------------------------------------------------------------- battle result: observation
 
-	private static void PostfixUnitBuffAdd(object __instance, object __result, [HarmonyArgument(0)] string sid, [HarmonyArgument(3)] object caster)
+	/// <summary>
+	/// One roll per distinct graftable passive in the enemy armies, for every side whose hero has Artificing.
+	/// Enemy armies are the other sides' stacks at battle start (TransferSide units, native sids), so the roll
+	/// happens whether the battle was fought or auto-resolved, won or lost.
+	/// </summary>
+	private static void ObserveEnemyArmies(int battleKey, TransferBattle started, bool showNotification)
 	{
-		if (__result == null || !string.Equals(sid, Homm3TowerArtificingCatalog.TranscribeEffectBuffSid, StringComparison.Ordinal))
+		if (started?.sides == null)
 			return;
-		try
+		for (var sideIndex = 0; sideIndex < started.sides.Length; sideIndex++)
 		{
-			var receiver = ReadMember(__instance, GameSymbols.BuffDebuffLaws.BuffManagerReceiverMembers);
-			if (receiver == null || !Homm3BattleUnitLawOwnerRegistry.TryGetRegisteredConfigSid(receiver, out var unitSid) || string.IsNullOrWhiteSpace(unitSid))
+			var logicHero = started.sides[sideIndex]?.logicHero;
+			var dataHero = ResolveDataHero(logicHero);
+			var rank = ResolveRank(dataHero);
+			if (rank <= 0)
+				continue;
+			var chances = Homm3TowerArtificingCatalog.ObservationChanceByRank;
+			var chance = chances[Math.Min(rank, chances.Length) - 1];
+			var observed = new SortedDictionary<int, int>();
+			for (var enemyIndex = 0; enemyIndex < started.sides.Length; enemyIndex++)
 			{
-				_log?.LogError(LogPrefix + "Transcribe refused: marked unit unresolved (receiver " + (receiver?.GetType().FullName ?? "null") + ").");
-				return;
+				if (enemyIndex != sideIndex)
+					CollectObservable(started.sides[enemyIndex], observed);
 			}
-			unitSid = unitSid.Trim();
-			if (!TryResolveCasterHero(caster, out var logicHero, out var route, out var heroFail))
+			if (observed.Count == 0)
+				continue;
+			var learned = new Dictionary<int, int>();
+			var rolls = new List<string>();
+			foreach (var pair in observed)
 			{
-				_log?.LogError(LogPrefix + "Transcribe of " + unitSid + " refused: caster hero unresolved (" + heroFail + ").");
-				return;
+				var roll = ObservationRoll(battleKey, sideIndex, pair.Key);
+				var hit = roll < chance;
+				if (hit)
+					learned[pair.Key] = pair.Value;
+				rolls.Add(pair.Key + (hit ? "!" : "") + ":" + roll);
 			}
-			var result = Transcribe(logicHero, unitSid, out var detail);
-			LogEvent("Transcribe " + unitSid + " by " + DescribeHero(ResolveDataHero(logicHero)) + " via " + route + ": " + (result ? "recorded " : "nothing recorded: ") + detail + ".");
-		}
-		catch (Exception ex)
-		{
-			_log?.LogError(LogPrefix + "Transcribe capture failed closed: " + ex.GetBaseException().Message);
+			var line = "battle " + battleKey + " side " + sideIndex + " " + DescribeHero(dataHero) + " observed " + observed.Count
+				+ " passives at " + chance + "% [" + string.Join(",", rolls) + "]";
+			if (learned.Count == 0)
+			{
+				LogEvent(line + ": nothing learned.");
+				continue;
+			}
+			var applied = new List<Homm3TowerArtificingLearnNotification.Learned>();
+			var written = WriteBook(logicHero, learned, out var detail, applied);
+			if (written || detail.StartsWith("book already", StringComparison.Ordinal))
+				LogEvent(line + ": " + detail + ".");
+			else
+				_log?.LogError(LogPrefix + line + ": book write failed: " + detail);
+			if (written && showNotification && started.sides[sideIndex].controlType == TransferSide.EControlType.ME)
+				Homm3TowerArtificingLearnNotification.Show(applied);
 		}
 	}
 
-	private static bool TryResolveCasterHero(object caster, out object logicHero, out string route, out string failReason)
+	/// <summary>Adds each graftable schematic of the side's living stacks, at the lowest tier that carries it.</summary>
+	private static void CollectObservable(TransferSide side, IDictionary<int, int> observed)
 	{
-		logicHero = null;
-		route = null;
-		failReason = null;
-		if (ReadMember(caster, GameSymbols.BuffDebuffLaws.BuffReceiverSideMembers) is TransferSide side && side.logicHero != null && ResolveRank(ResolveDataHero(side.logicHero)) > 0)
+		if (side?.units == null)
+			return;
+		foreach (var unit in side.units)
 		{
-			logicHero = side.logicHero;
-			route = "caster TransferSide";
-			return true;
+			var sid = unit != null && unit.stacks > 0 ? unit.configSid?.Trim() : null;
+			if (sid == null
+			    || !Homm3TowerArtificingCatalog.UnitTierBySid.TryGetValue(sid, out var tier) || tier < 1 || tier > MaxSchematicTier
+			    || !Homm3TowerArtificingCatalog.GraftableSchematicsByUnitSid.TryGetValue(sid, out var schematics))
+				continue;
+			foreach (var schematic in schematics)
+			{
+				if (!observed.TryGetValue(schematic, out var seen) || tier < seen)
+					observed[schematic] = tier;
+			}
 		}
-		var candidates = new List<object>();
-		lock (Gate)
-		{
-			foreach (var info in SidesByIndex.Values)
-				candidates.Add(info.LogicHero);
-		}
-		if (candidates.Count == 1)
-		{
-			logicHero = candidates[0];
-			route = "only Artificing hero in battle (caster " + (caster?.GetType().FullName ?? "null") + " exposed no TransferSide)";
-			return true;
-		}
-		failReason = "caster " + (caster?.GetType().FullName ?? "null") + " exposed no TransferSide and the battle has " + candidates.Count + " Artificing heroes";
-		return false;
 	}
 
-	/// <summary>Writes a unit's graftable schematics into the hero's book, keeping the lowest source tier.</summary>
-	internal static bool Transcribe(object logicHero, string unitSid, out string detail)
+	/// <summary>Deterministic 0..99 roll from battle key, side and schematic (replays and reloads agree).</summary>
+	internal static int ObservationRoll(int battleKey, int sideIndex, int schematic)
 	{
-		if (!Homm3TowerArtificingCatalog.UnitTierBySid.TryGetValue(unitSid, out var tier) || tier < 1 || tier > MaxSchematicTier)
+		unchecked
 		{
-			detail = "unit has no catalog tier";
-			return false;
+			var x = (ulong)(uint)battleKey * 0x9E3779B97F4A7C15UL ^ (ulong)(uint)sideIndex * 0xC2B2AE3D27D4EB4FUL ^ (ulong)(uint)schematic * 0x165667B19E3779F9UL;
+			x ^= x >> 30;
+			x *= 0xBF58476D1CE4E5B9UL;
+			x ^= x >> 27;
+			x *= 0x94D049BB133111EBUL;
+			x ^= x >> 31;
+			return (int)(x % 100UL);
 		}
-		if (!Homm3TowerArtificingCatalog.GraftableSchematicsByUnitSid.TryGetValue(unitSid, out var schematics) || schematics.Length == 0)
-		{
-			detail = "unit has no graftable passives (tier " + tier + ")";
-			return false;
-		}
+	}
+
+	/// <summary>Writes schematics into the hero's book at the given source tiers, keeping the lowest tier seen.</summary>
+	internal static bool WriteBook(object logicHero, IReadOnlyDictionary<int, int> tierBySchematic, out string detail,
+		List<Homm3TowerArtificingLearnNotification.Learned> applied = null)
+	{
 		var manager = ResolveHeroBuffManager(logicHero, out detail);
 		if (manager == null)
 			return false;
 		var failures = new List<string>();
 		var changes = new List<string>();
-		foreach (var schematic in schematics)
+		foreach (var pair in tierBySchematic)
 		{
+			var schematic = pair.Key;
+			var tier = pair.Value;
+			if (tier < 1 || tier > MaxSchematicTier || !Homm3TowerArtificingCatalog.SchematicKeyByIndex.TryGetValue(schematic, out var key))
+				continue;
 			var current = ReadBits(manager, SchematicBitPrefix(schematic), Homm3TowerArtificingCatalog.SchematicTierBits);
 			if (current != 0 && current <= tier)
 				continue;
 			WriteBits(manager, SchematicBitPrefix(schematic), Homm3TowerArtificingCatalog.SchematicTierBits, tier, failures);
-			changes.Add(Homm3TowerArtificingCatalog.SchematicKeyByIndex[schematic] + " tier " + (current == 0 ? "new" : current + "->") + tier);
+			changes.Add(key + " tier " + (current == 0 ? "new" : current + "->") + tier);
+			applied?.Add(new Homm3TowerArtificingLearnNotification.Learned(schematic, tier, current != 0));
 		}
 		if (failures.Count > 0)
 		{
 			detail = "ledger write incomplete: " + string.Join("; ", failures);
 			return false;
 		}
-		detail = changes.Count == 0 ? "book already holds these at tier <= " + tier : string.Join(", ", changes);
+		detail = changes.Count == 0 ? "book already holds these at the same or a lower tier" : "learned " + string.Join(", ", changes);
 		return changes.Count > 0;
 	}
 
 	// ---------------------------------------------------------------- battle result: essence
 
 	/// <summary>Called by Homm3RuntimeMechanicHooks.PrefixBattleResultCleanup before the native result applies.</summary>
-	internal static void ObserveBeforeBattleResult(object battleLogic)
+	internal static void ObserveBeforeBattleResult(object battleLogic) => ObserveBeforeBattleResult(battleLogic, false);
+
+	/// <param name="showNotification">The native result's show-notification flag; gates the "schematic learned" notice.</param>
+	internal static void ObserveBeforeBattleResult(object battleLogic, bool showNotification)
 	{
 		if (!_ledgerRegistered || battleLogic == null)
 			return;
@@ -1157,6 +1256,14 @@ internal static class Homm3TowerArtificingRuntime
 			var transfer = ReadMember(battleLogic, GameSymbols.SkeletalNecromancy.BattleLogicTransferBattleFields) as TransferBattle;
 			var started = ReadMember(battleLogic, GameSymbols.SkeletalNecromancy.BattleLogicStartedTransferBattleFields) as TransferBattle;
 			var result = ReadMember(battleLogic, GameSymbols.SkeletalNecromancy.BattleLogicBattleResultInfoFields) as BattleResultInfo;
+			try
+			{
+				ObserveEnemyArmies(key, started, showNotification);
+			}
+			catch (Exception ex)
+			{
+				LogSkip("battle " + key + " observation failed closed: " + ex.GetBaseException().Message);
+			}
 			if (transfer?.sides == null || started?.sides == null || result == null)
 			{
 				LogSkip("battle " + key + " result unreadable; no essence.");
@@ -1232,7 +1339,89 @@ internal static class Homm3TowerArtificingRuntime
 		return total;
 	}
 
-	// ---------------------------------------------------------------- spend
+	// ---------------------------------------------------------------- spend: world spell -> picker
+
+	/// <summary>
+	/// Prefix on the native Necromancer Will cast. Settings whose first parameter is not GraftMagicMode pass
+	/// through untouched (Castle / Dungeon prefixes and the native toggle own them). Ours never reach the native
+	/// toggle: the cast opens the graft picker for the casting hero and reports success; any failure is logged
+	/// and reported as a failed cast.
+	/// </summary>
+	private static bool PrefixGraftSpellCast(object __instance, ref bool __result)
+	{
+		var recognized = false;
+		try
+		{
+			var setting = ReadMember(__instance, GameSymbols.CastleEliteStrategem.NecromancyWorldMagicSettingMembers) as MagicSetting;
+			var parameters = ReadParameters(setting?.parameters);
+			if (parameters.Count < 1 || !string.Equals(parameters[0], Homm3TowerArtificingCatalog.GraftMagicMode, StringComparison.Ordinal))
+				return true;
+			recognized = true;
+			__result = false;
+			var worldHero = _handlerWorldHeroProperty.DeclaringType.IsInstanceOfType(__instance) ? _handlerWorldHeroProperty.GetValue(__instance) : null;
+			var logicHero = worldHero == null || !_worldHeroLogicHeroProperty.DeclaringType.IsInstanceOfType(worldHero) ? null : _worldHeroLogicHeroProperty.GetValue(worldHero);
+			var dataHero = ResolveDataHero(logicHero);
+			if (dataHero == null)
+			{
+				_log?.LogError(LogPrefix + "Artificing spell refused: casting hero unresolved (worldHero " + (worldHero == null ? "null" : "set")
+					+ ", logicHero " + (logicHero == null ? "null" : "set") + ").");
+				return false;
+			}
+			var rank = ResolveRank(dataHero);
+			if (rank <= 0)
+			{
+				_log?.LogWarning(LogPrefix + "Artificing spell refused: " + DescribeHero(dataHero) + " lacks " + Homm3TowerArtificingCatalog.FactionSkillSid + ".");
+				return false;
+			}
+			if (!Homm3TowerArtificingPicker.Open(logicHero, DescribeHero(dataHero), rank, out var fail))
+			{
+				_log?.LogError(LogPrefix + "Artificing spell refused: picker did not open for " + DescribeHero(dataHero) + " (" + fail + ").");
+				return false;
+			}
+			LogEvent("Artificing spell cast by " + DescribeHero(dataHero) + " (rank " + rank + "); graft picker open.");
+			__result = true;
+			return false;
+		}
+		catch (Exception ex)
+		{
+			if (recognized)
+			{
+				__result = false;
+				_log?.LogError(LogPrefix + "Artificing spell failed closed; native handler suppressed: " + ex.GetBaseException().Message);
+				return false;
+			}
+			if (_loggedForeignCasts++ < 8)
+				_log?.LogWarning(LogPrefix + "world-magic inspection failed; native handler remains responsible: " + ex.GetBaseException().Message);
+			return true;
+		}
+	}
+
+	private static List<string> ReadParameters(object parameters)
+	{
+		var result = new List<string>();
+		if (parameters is string[] managed)
+		{
+			result.AddRange(managed);
+			return result;
+		}
+		if (parameters is IEnumerable enumerable)
+		{
+			foreach (var item in enumerable)
+				result.Add(item as string ?? item?.ToString());
+		}
+		return result;
+	}
+
+	private static PropertyInfo ResolveTypedProperty(Type type, string name, Type propertyType, string symbolId)
+	{
+		var property = type?.GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+		               ?? throw new MissingMemberException(symbolId + " property " + name + " not found on " + (type?.FullName ?? "null"));
+		if (property.PropertyType != propertyType || property.GetGetMethod(true) == null)
+			throw new MissingMemberException(symbolId + " property " + name + " has type " + property.PropertyType.FullName + ", expected " + propertyType?.FullName);
+		return property;
+	}
+
+	// ---------------------------------------------------------------- spend: ledger
 
 	/// <summary>
 	/// Grafts a Schematic Book passive onto a Tower line slot and pays its essence. Replacing a filled slot pays the
@@ -1282,6 +1471,18 @@ internal static class Homm3TowerArtificingRuntime
 			{
 				failReason = "line " + line + " already carries schematic " + schematic + " in slot " + other;
 				return false;
+			}
+		}
+		// One Tower line per schematic (user 2026-11-13): an active graft on another line blocks this one.
+		for (var otherLine = 0; otherLine < Homm3TowerArtificingCatalog.Lines; otherLine++)
+		{
+			for (var other = 0; otherLine != line && other < SlotsForRank(rank) && other < Homm3TowerArtificingCatalog.MaxSlots; other++)
+			{
+				if (state.GraftSlots[otherLine, other] == schematic)
+				{
+					failReason = "schematic " + schematic + " is already grafted on line " + otherLine + " slot " + other;
+					return false;
+				}
 			}
 		}
 		cost = Homm3TowerArtificingCatalog.GraftCost[sourceTier - 1, line];
@@ -1431,6 +1632,12 @@ internal static class Homm3TowerArtificingRuntime
 	}
 
 	/// <summary>Faction-skill rank 1..3 of skill_faction_homm3_tower, 0 when absent or unreadable.</summary>
+	/// <summary>True when the logic hero has the Artificing faction skill (any rank).</summary>
+	internal static bool HeroHasArtificing(object logicHero)
+	{
+		return ResolveRank(ResolveDataHero(logicHero)) > 0;
+	}
+
 	private static int ResolveRank(DataHero dataHero)
 	{
 		if (dataHero == null)
@@ -1629,6 +1836,15 @@ internal static class Homm3TowerArtificingRuntime
 	{
 		return ok ? "ok" : "FAILED";
 	}
+
+	/// <summary>Daily-gold lines keep their own budget so a long session's battle events cannot starve them.</summary>
+	private static void LogGold(string message)
+	{
+		if (_loggedGold++ < 60)
+			_log?.LogInfo(LogPrefix + message);
+	}
+
+	private static int _loggedGold;
 
 	private static void LogEvent(string message)
 	{

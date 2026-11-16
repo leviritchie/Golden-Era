@@ -324,7 +324,7 @@
   "reason": "Short reach (left hind leg cap 0.016 H, forelegs 0.09/0.15 H at 0.15 drop) forces cadence 1.6 on a short Move (needed 2.15), whose step harmonics read as jitter (0.61 > 0.35, worst LeftHand). maxDrop 0.25 lowers the cadence need to 1.46: slip 0.11, ratio 1.06, jitter 0.27, pelvis drop 0.067 H; 0.20 still jittered (0.54) (2026-09-27)."
  },
  "glbPatch": {
-  "reason": "2026-10-09 authenticity pass (lane A, Rampart), built like the war unicorn's accepted send-back fix 1: no whole-body rotation fakes a part-body move. The quadruped fit is narrowed (pitch 0..25 about the hind feet, Hitted 0..10, Defence 0..12, dx +-4 px, standing clips on the floor), which also removes the Move tail-flag and gallop pitch. AttackFront: f1-f3 rear on held hind legs with the forelegs tucked high, then the horn levelled at the enemy by neck and head (Neck +10, Head +40 at f4-f6). Hitted: half-rear with forelegs tucked and the head thrown back by the neck and head (-20/-50). Defence: the DEF rear-and-strike: both forelegs struck out forward at chest height, neck up, hind legs planted, tail streaming out (half weight; full weight tore the hock). Death (lane B choreography on this base): rear trimmed to 6 deg, mid-fall slerp, roll, side-lie with folded legs, root pulled back toward the hex (0.24 H). Mesh repairs: the tail dock was skinned to LeftLeg in the base (moved to QTail_00; it tore the left hock whenever the tail moved and merged weld groups under the diffuse), tail-dominant vertices off the hind legs, tail/hock boundary diffused. Gate 8 -> 4 edges over 2x, worst 2.933 -> 2.356.",
+  "reason": "2026-10-09 authenticity pass (lane A, Rampart), built like the war unicorn's accepted send-back fix 1: no whole-body rotation fakes a part-body move. The quadruped fit is narrowed (pitch 0..25 about the hind feet, Hitted 0..10, Defence 0..12, dx +-4 px, standing clips on the floor), which also removes the Move tail-flag and gallop pitch. AttackFront: f1-f3 rear on held hind legs with the forelegs tucked high, then the horn levelled at the enemy by neck and head (Neck +10, Head +40 at f4-f6). Hitted: half-rear with forelegs tucked and the head thrown back by the neck and head (-20/-50). Defence: the DEF rear-and-strike: both forelegs struck out forward at chest height, neck up, hind legs planted, tail streaming out (half weight; full weight tore the hock). Death (lane B choreography on this base): rear trimmed to 6 deg, mid-fall slerp, roll, side-lie with folded legs, root pulled back toward the hex (0.24 H). Mesh repairs: the tail dock was skinned to LeftLeg in the base (moved to QTail_00; it tore the left hock whenever the tail moved and merged weld groups under the diffuse), tail-dominant vertices off the hind legs, tail/hock boundary diffused. Gate 8 -> 4 edges over 2x, worst 2.933 -> 2.356.; clip pass 2026-11-11 (user-approved candidate): AttackFront, Defence re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "moveWeights",
@@ -409,6 +409,11 @@
     "sha256": "6b531f249deeb513073a7d7bb3d2cc50458ca194c9a099dc33f71af01bea4b4f",
     "regrid": true,
     "note": "Hips translation keys (Death root pull-back)"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_pristine_unicorn_clip_tracks.json",
+    "sha256": "02a5383b880da05f97dea714b9544074f425b2251379df601c6c2153044d3d94"
    }
   ]
  }

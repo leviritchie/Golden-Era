@@ -43,7 +43,9 @@ internal static class Homm3SkeletalNecromancyProbe
 	private static Type _configRootType;
 	private static object _unitLogicConfigTable;
 	private static bool _postBattleEnabled;
-	private static readonly HashSet<int> _postBattleApplied = new();
+	// Keyed by native BattleLogic pointer + battle id: the id is a per-session counter that repeats after
+	// a save reload or new game, which would otherwise silently skip that battle's skeleton reward.
+	private static readonly HashSet<(long ptr, int id)> _postBattleApplied = new();
 	private static int _loggedSkipped;
 	private static int _loggedPostBattleResults;
 
@@ -146,7 +148,7 @@ internal static class Homm3SkeletalNecromancyProbe
 
 			lock (_postBattleApplied)
 			{
-				if (_postBattleApplied.Contains(GetBattleLogicKey(__0)))
+				if (_postBattleApplied.Contains(GetBattleLogicAppliedKey(__0)))
 					return;
 			}
 
@@ -155,7 +157,7 @@ internal static class Homm3SkeletalNecromancyProbe
             if (ApplyPostBattleSkeletonReward(__0, FormatMethod(__originalMethod), showNotification))
 			{
 				lock (_postBattleApplied)
-					_postBattleApplied.Add(GetBattleLogicKey(__0));
+					_postBattleApplied.Add(GetBattleLogicAppliedKey(__0));
 			}
 		}
 		catch (Exception ex)
@@ -163,6 +165,12 @@ internal static class Homm3SkeletalNecromancyProbe
 			if (_loggedSkipped++ < 8)
 				_log?.LogWarning("HoMM3 skeletal necromancy post-battle: reward application failed: " + ex.Message);
 		}
+	}
+
+	private static (long ptr, int id) GetBattleLogicAppliedKey(object battleLogic)
+	{
+		var ptr = battleLogic is Il2CppObjectBase il2Cpp ? il2Cpp.Pointer.ToInt64() : 0L;
+		return (ptr, GetBattleLogicKey(battleLogic));
 	}
 
 	private static int GetBattleLogicKey(object battleLogic)
@@ -299,7 +307,10 @@ internal static class Homm3SkeletalNecromancyProbe
 			+ conversionPercent.ToString("0.##")
 			+ " source="
 			+ source);
-		Homm3SkeletalNecromancyNotificationBootstrap.Show(reward, rewardUnitSid);
+		// Only the local player's own raise gets the popup; AI necromancers raise silently (user 2026-11-13: the popup
+		// kept appearing at turn end while playing Tower).
+		if (showNotification && winnerStarted != null && winnerStarted.controlType == TransferSide.EControlType.ME)
+			Homm3SkeletalNecromancyNotificationBootstrap.Show(reward, rewardUnitSid);
 		return true;
 	}
 
@@ -377,7 +388,7 @@ internal static class Homm3SkeletalNecromancyProbe
 				foreach (var subSkill in EnumerateObjects(subSkills))
 				{
 					var sid = NormalizeSid(TryReadString(subSkill, GameSymbols.SkeletalNecromancy.HeroSubSkillSidMembers));
-					if (string.Equals(sid, subSkillSid, StringComparison.Ordinal))
+					if (string.Equals(sid, subSkillSid, StringComparison.Ordinal) && Homm3DungeonDraconicDominionHook.IsSubSkillActive(subSkill))
 						return true;
 				}
 			}
@@ -443,7 +454,7 @@ internal static class Homm3SkeletalNecromancyProbe
 
 			enemyStacks++;
 			var config = ResolveUnitLogicConfig(beforeUnit);
-			var blockedReason = GetBlockedReason(config);
+			var blockedReason = GetBlockedReason(config) ?? GetBlockedHomm3SidReason(beforeUnit.configSid);
 			if (blockedReason != null)
 			{
 				blockedStacks++;
@@ -509,6 +520,25 @@ internal static class Homm3SkeletalNecromancyProbe
 			return false;
 		return heroSid.StartsWith("homm3_necropolis_hero_", StringComparison.Ordinal)
 		       || heroSid.StartsWith("hero_homm3_necropolis_", StringComparison.Ordinal);
+	}
+
+	/// <summary>
+	/// HoMM3 non-living lines. The overlay rewrites donor 'undead' class tags to the faction sid and the
+	/// undead/construct class lives only on the view config, so the logic-tag check above misses them.
+	/// </summary>
+	private static string GetBlockedHomm3SidReason(string configSid)
+	{
+		var sid = NormalizeSid(configSid);
+		if (string.IsNullOrEmpty(sid) || !sid.StartsWith("h3_", StringComparison.Ordinal))
+			return null;
+		if (Homm3CustomFactionRegistry.TryGetFactionSidForCustomUnitSid(sid, out var factionSid)
+		    && string.Equals(factionSid, "homm3_necropolis", StringComparison.Ordinal))
+			return "homm3Undead:" + sid;
+		if (sid.Contains("_elemental")
+		    || sid.StartsWith("h3_golem", StringComparison.Ordinal)
+		    || sid.StartsWith("h3_gargoyle", StringComparison.Ordinal))
+			return "homm3NonLiving:" + sid;
+		return null;
 	}
 
 	private static string GetBlockedReason(UnitLogicConfig config)

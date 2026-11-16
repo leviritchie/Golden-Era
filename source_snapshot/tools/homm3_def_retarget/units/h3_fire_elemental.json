@@ -215,5 +215,26 @@
    "gain": 0.5
   }
  },
- "shatterReason": "authenticity lane-B 2026-10-11: the deferred rubble (deferMeshes) was not drawn in game, so the Death ended in a vanish; solid chunks + the rubbleSettle heap on the ground (h3_behemoth / conflux elementals recipe), so the slice row can move to mergeMeshes."
+ "shatterReason": "authenticity lane-B 2026-10-11: the deferred rubble (deferMeshes) was not drawn in game, so the Death ended in a vanish; solid chunks + the rubbleSettle heap on the ground (h3_behemoth / conflux elementals recipe), so the slice row can move to mergeMeshes.",
+ "glbPatch": {
+  "reason": "clip pass 2026-11-11 (user-approved candidate): Defence re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
+  "ops": [
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_fire_elemental_clip_tracks.json",
+    "sha256": "e1d1661613d45ccc720e1585edd17bde52c56e6a4898fe56a89074b84524d85c"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Defence"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
+   }
+  ]
+ }
 }

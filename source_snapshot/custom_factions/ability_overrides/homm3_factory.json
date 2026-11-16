@@ -22,7 +22,7 @@
           "nameKey": "",
           "descriptionKey": "",
           "nameText": "Bombardier Mark",
-          "descriptionText": "Spend 1 Focus to weaken an enemy's Attack and Defense for 2 rounds.",
+          "descriptionText": "Spend 1 Focus without ending the turn to weaken an enemy's Attack and Defense for 2 rounds.",
           "iconKey": "day_5_magic_shorten_shadow",
           "abilityType": "Ability_type_debuff",
           "animationIndex": 2,
@@ -86,7 +86,7 @@
           "nameKey": "",
           "descriptionKey": "",
           "nameText": "Ember Canister",
-          "descriptionText": "Spend 1 Focus to mark an enemy so it takes extra damage for 2 rounds.",
+          "descriptionText": "Spend 1 Focus without ending the turn to mark an enemy so it takes extra damage for 2 rounds.",
           "iconKey": "night_11_magic_vulnerability",
           "abilityType": "Ability_type_debuff",
           "animationIndex": 2,
@@ -389,7 +389,7 @@
           "nameKey": "",
           "descriptionKey": "",
           "nameText": "Taunting Plate",
-          "descriptionText": "Spend 2 Focus to force nearby enemies to target this stack.",
+          "descriptionText": "Spend 2 Focus to force nearby enemies to target this stack for 1 round.",
           "iconKey": "day_8_magic_taunt",
           "abilityType": "Ability_type_buff",
           "animationIndex": 2,
@@ -426,7 +426,11 @@
               "attackPatternSid": "attack_single_x100",
               "damageTarget_": "none",
               "damageType_": "none",
-              "buffTarget_": "self"
+              "buffTarget_": "self",
+              "buff": {
+                "sid": "magic_taunt_effect_0",
+                "duration": 1
+              }
             },
             "spellTier": 1,
             "school": "day"
@@ -554,7 +558,11 @@
               "attackPatternSid": "attack_single_x100",
               "damageTarget_": "none",
               "damageType_": "none",
-              "buffTarget_": "self"
+              "buffTarget_": "self",
+              "buff": {
+                "sid": "magic_hksmillas_rampage_effect_0",
+                "duration": 1
+              }
             }
           },
           "notes": "Source/static configured from the locked Factory ability kit; runtime behavior remains unproven."
@@ -756,7 +764,7 @@
           "nameKey": "",
           "descriptionKey": "",
           "nameText": "Suppressing Fire",
-          "descriptionText": "Spend 2 Focus to place a trap on a free hex. When triggered, it deals Pure Damage equal to 150% of this stack's normal attack.",
+          "descriptionText": "Spend 2 Focus to place a trap on a free hex. When triggered, it deals Pure Damage equal to 150% of this stack's normal attack to every creature on and next to that hex, allies included.",
           "iconKey": "space_5_magic_trap_jaws",
           "abilityType": "Ability_type_debuff",
           "animationIndex": 2,
@@ -982,7 +990,7 @@
           "nameKey": "",
           "descriptionKey": "",
           "nameText": "Boiler Rampage",
-          "descriptionText": "Spend 3 Focus to empower an allied stack for 1 round.",
+          "descriptionText": "Spend 3 Focus to empower an allied stack with an extra attack for 1 round.",
           "iconKey": "primal_14_magic_hksmillas_rampage",
           "abilityType": "Ability_type_buff",
           "animationIndex": 2,
@@ -1019,7 +1027,11 @@
               "attackPatternSid": "attack_single_x100",
               "damageTarget_": "none",
               "damageType_": "none",
-              "buffTarget_": "ally"
+              "buffTarget_": "ally",
+              "buff": {
+                "sid": "magic_hksmillas_rampage_effect_0",
+                "duration": 1
+              }
             }
           },
           "notes": "Source/static configured from the locked Factory ability kit; runtime behavior remains unproven."

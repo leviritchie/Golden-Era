@@ -234,7 +234,7 @@
   ]
  },
  "glbPatch": {
-  "reason": "lane B 2026-10-11 authenticity: Move carries the boulder at the chest with the eye and face fully clear above it in the battle and preview views (the capture held it 0.08 H higher than Idle, covering the eye); both upper arms turned 55 deg down, MoveStart/MoveEnd ramp it; arm/rock + hand/thigh weight bleed re-solved so the carry passes the CS gate",
+  "reason": "lane B 2026-10-11 authenticity: Move carries the boulder at the chest with the eye and face fully clear above it in the battle and preview views (the capture held it 0.08 H higher than Idle, covering the eye); both upper arms turned 55 deg down, MoveStart/MoveEnd ramp it; arm/rock + hand/thigh weight bleed re-solved so the carry passes the CS gate; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -247,6 +247,28 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_cyclops_move_boulder_lowered_rot.json",
     "regrid": true,
     "sha256": "81f141e1ac96f263dd780aebc5882377b5b900b84cbaccf245e0af94d9c66841"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cyclops_move_tracks.json",
+    "sha256": "a17ac90ab193758a996f2611075782ea5dd33f06474fa65da7454a351731f0ea"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cyclops_clip_repair_facecut.json",
+    "note": "clip pass repair: faces with corners on both the boulder and the hand / body",
+    "sha256": "a2b101a3ea11d706343b3f52e7015d936fd7bbb9aa476e02262685eaf5f92cf6"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cyclops_clip_repair_weights.json",
+    "note": "clip pass repair: boulder pieces on RightHand -> Rock; RightHand / RightForeArm bleed stripped from belly and loincloth, LeftHand bleed from the left thigh",
+    "sha256": "78b91afc14664d941af388a97b93caf6dabe20008e0724df8d504bcb9431b089"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_cyclops_clip_tracks.json",
+    "sha256": "36d23b3497889a079ea24c76ff60d6b6b40a172b9a5d66ded8a2b587de062a1a"
    }
   ]
  }

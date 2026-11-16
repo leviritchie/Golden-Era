@@ -18,7 +18,6 @@ DEFAULT_TARGETS = ROOT / "custom_factions" / "custom_law_targets.json"
 DEFAULT_PLUGIN = ROOT / "Heroes of Might & Magic Olden Era Playtest" / "OfflineUnlockMod" / "Plugin.cs"
 FORBIDDEN_NATIVE_ONLY_RUNTIME_REGISTRATIONS = (
     "Homm3TrainingDamageLawRuntime.TryRegister(",
-    "Homm3CounterattackDoctrineMutationRuntime.TryRegister(",
     "Homm3BattleActionLawRuntime.TryRegister(",
     "Homm3SquadValueEconomyLawRuntime.TryRegister(",
     "Homm3MoraleTriggerLawRuntime.TryRegister(",
@@ -37,6 +36,12 @@ ALLOWED_LEVELS = {
     "no-generated-or-dossier-candidate",
 }
 IMPLEMENTATION_STATUSES = {"candidate", "partial", "missing", "runtime-unproven", "proven-live-metadata"}
+# Runtimes that a law row may register only when custom_law_targets.json marks that row "runtime-backed"
+# (user decision 2026-11-10: law row 13 Counterstroke Doctrine moved from placeholder native data to runtime).
+# Registration is then required, and still forbidden when no row of that law index is runtime-backed.
+RUNTIME_BACKED_REGISTRATIONS = {
+    "Homm3CounterattackDoctrineMutationRuntime.TryRegister(": 13,
+}
 
 
 def load_json(path: Path) -> Any:
@@ -56,7 +61,20 @@ def has_runtime_law_targets(targets_doc: dict[str, Any]) -> bool:
             return True
     return False
 
-def validate_no_runtime_mutator_registrations(plugin_path: Path) -> list[str]:
+def runtime_backed_law_indexes(targets_doc: dict[str, Any]) -> set[int]:
+    rows = targets_doc.get("targets")
+    result: set[int] = set()
+    if not isinstance(rows, list):
+        return result
+    for row in rows:
+        if isinstance(row, dict) and row.get("implementationStatus") == "runtime-backed":
+            index = row.get("lawIndex")
+            if isinstance(index, int):
+                result.add(index)
+    return result
+
+
+def validate_no_runtime_mutator_registrations(plugin_path: Path, targets_doc: dict[str, Any] | None = None) -> list[str]:
     try:
         source = plugin_path.read_text(encoding="utf-8-sig")
     except OSError as exc:
@@ -66,6 +84,19 @@ def validate_no_runtime_mutator_registrations(plugin_path: Path) -> list[str]:
         if needle in source:
             errors.append(
                 "native-data-only law targets cannot register speculative runtime mutator "
+                + needle.removesuffix("(")
+            )
+    backed = runtime_backed_law_indexes(targets_doc or {})
+    for needle, law_index in RUNTIME_BACKED_REGISTRATIONS.items():
+        registered = needle in source
+        if law_index in backed and not registered:
+            errors.append(
+                f"law row {law_index} targets are runtime-backed but Plugin.cs does not register "
+                + needle.removesuffix("(")
+            )
+        elif law_index not in backed and registered:
+            errors.append(
+                f"no law row {law_index} target is runtime-backed; cannot register runtime mutator "
                 + needle.removesuffix("(")
             )
     return errors
@@ -154,13 +185,13 @@ def main() -> int:
     try:
         targets = load_json(args.targets)
         if not has_runtime_law_targets(targets):
-            startup_errors = validate_no_runtime_mutator_registrations(args.plugin)
+            startup_errors = validate_no_runtime_mutator_registrations(args.plugin, targets)
             if startup_errors:
                 print("runtime candidate coverage validation failed:", file=sys.stderr)
                 for error in startup_errors:
                     print(f"  - {error}", file=sys.stderr)
                 return 1
-            print("runtime candidate coverage validation skipped: no active runtime-backed custom law targets")
+            print("runtime candidate coverage validation skipped: no needs-runtime/compromise/blocked custom law targets; startup registrations match native-only and runtime-backed rows")
             return 0
         report = load_json(args.report)
         matrix = load_json(args.matrix)

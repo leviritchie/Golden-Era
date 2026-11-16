@@ -262,23 +262,30 @@ internal static class Homm3ImportArmyStripPortraitHook
 			log?.LogWarning("Homm3Import army-strip portrait: BhHeroWithPartyCityView legacy refresh patch failed: " + ex.Message);
 		}
 
-		// Battle turn-order queue: BhTurnView.UpdateView(Unit, TurnState, bool)
-		// Postfix applies portrait; finalizer suppresses the KeyNotFoundException that spams when
-		// h3_* unit SIDs are not found in the vanilla portrait/config dictionary.
+		// Battle turn-order queue: BhTurnView update view (Unit, TurnState, bool); 26297049 renamed it
+		// (scope BattleUi.TurnViewUpdateView). Postfix applies portrait; finalizer suppresses the
+		// KeyNotFoundException that spams when h3_* unit SIDs are not found in the vanilla portrait/config dictionary.
 		try
 		{
-			var updateView = AccessTools.Method(typeof(BhTurnView), "UpdateView");
-			if (updateView != null)
+			var updateViews = GameMember.FindMethods(
+				typeof(BhTurnView),
+				typeof(void),
+				new Type[] { typeof(Unit), null, typeof(bool) },
+				GameSymbols.BattleUi.TurnViewUpdateView);
+			if (updateViews.Length == 1)
 			{
+				var updateView = updateViews[0];
 				h.Patch(updateView,
 					postfix: new HarmonyMethod(typeof(Homm3ImportArmyStripPortraitHook), nameof(PostfixBhTurnViewUpdateView)),
 					finalizer: new HarmonyMethod(typeof(Homm3ImportArmyStripPortraitHook), nameof(FinalizerBhTurnViewUpdateView)));
 				patched++;
-				log?.LogInfo("Homm3Import army-strip portrait: BhTurnView.UpdateView postfix+finalizer registered.");
+				log?.LogInfo("Homm3Import army-strip portrait: BhTurnView." + updateView.Name + " postfix+finalizer registered.");
 			}
 			else
 			{
-				log?.LogWarning("Homm3Import army-strip portrait: BhTurnView.UpdateView not found.");
+				// Required turn-bar surface: log the failure once and leave turn-bar portraits off; the rest of the slice stays.
+				log?.LogError("Homm3Import army-strip portrait: REQUIRED BhTurnView update view " + GameSymbols.BattleUi.TurnViewUpdateView.Id
+					+ " resolved " + updateViews.Length + " method(s) on " + GameBuild.Describe() + "; battle turn-bar portraits are OFF.");
 			}
 		}
 		catch (Exception ex)

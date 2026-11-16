@@ -206,7 +206,7 @@
   "reason": "2026-10-10 lane A: the flail ball (rigid on the chain end) dips through the floor on 4 Move keys after emphasis; tilting it about the chain end keeps it on the floor (the ground stage's Move lift itself came from the Hips entry, fixed in glbPatch)"
  },
  "glbPatch": {
-  "reason": "2026-10-10 lane A, Move stride plant (ground_glb planted-sole refusal, rule 2026-09-28 postdates the 09-24 build): Move's Hips enter 0.075 H below Idle, past the gate's DEF Hips band (0.067), so the closed-loop joint entry lifted the whole body +0.008 and the swing-off soles (0.033-0.040 H) went past GROUND_TOL. The Hips are raised 0.0145 with the legs IK'd back to the planted ankles (Move closer to the DEF's Hips height, no whole-body offset needed). The robe's front hem (Hips + LeftToeBase mixed weights) tore at the raised Hips (+6 edges past 2x), so 30% of its toe weight moves to the shin (keep 0.7, hem verts only, the foot and sole untouched): dry-run stretch 5160 -> 5136, stride, prop floor, CS re-key and ground all pass",
+  "reason": "2026-10-10 lane A, Move stride plant (ground_glb planted-sole refusal, rule 2026-09-28 postdates the 09-24 build): Move's Hips enter 0.075 H below Idle, past the gate's DEF Hips band (0.067), so the closed-loop joint entry lifted the whole body +0.008 and the swing-off soles (0.033-0.040 H) went past GROUND_TOL. The Hips are raised 0.0145 with the legs IK'd back to the planted ankles (Move closer to the DEF's Hips height, no whole-body offset needed). The robe's front hem (Hips + LeftToeBase mixed weights) tore at the raised Hips (+6 edges past 2x), so 30% of its toe weight moves to the shin (keep 0.7, hem verts only, the foot and sole untouched): dry-run stretch 5160 -> 5136, stride, prop floor, CS re-key and ground all pass; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass",
   "ops": [
    {
     "op": "moveWeights",
@@ -243,6 +243,11 @@
     "sha256": "71b236cc191752fe58b964229053f5c59b0ab816729eb4bc99ca92873a080bfe",
     "regrid": true,
     "note": "Move: Hips +0.0145 (0.0085 H) on every key"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gremlin_upg_move_tracks.json",
+    "sha256": "b99ec7baede48542083efdd2741091dd155f04d624ff8bfe28fec553f339081c"
    }
   ]
  }

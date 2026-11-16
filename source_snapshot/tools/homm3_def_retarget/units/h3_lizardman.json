@@ -330,5 +330,27 @@
   "propAim": [
    "LeftHand"
   ]
+ },
+ "glbPatch": {
+  "reason": "clip pass 2026-11-11 (user-approved candidate): ShootFront re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
+  "ops": [
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lizardman_clip_repair_facecut.json",
+    "sha256": "db0b3bb29c4b58d13b26db84defde8826e8897b22b5c2ad0fefed7b72c3e3afd",
+    "note": "clip pass repair: faces that weld the bow to the head, chest and thigh"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lizardman_clip_repair_weights.json",
+    "sha256": "3f7ded3cbcf2e0b09f0ccf04cad0aa526dc71c1649a598a5295df463dafd462e",
+    "note": "clip pass repair: whole bow (upper limb, knob, lower limb) rigid on LeftHand"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_lizardman_clip_tracks.json",
+    "sha256": "451b23349cb67bc18499921ce3837d558d5822566549851f2be21a2a191c85cc"
+   }
+  ]
  }
 }

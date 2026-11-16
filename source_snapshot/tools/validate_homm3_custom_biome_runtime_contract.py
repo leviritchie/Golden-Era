@@ -404,6 +404,37 @@ def validate_void_core_row(core_zip: Path, errors: list[str]) -> None:
     require(row.get("penalty") == VOID_CORE_TILE_PENALTY, f"Void Core tile penalty mismatch: {row}", errors)
 
 
+def validate_faction_biome_content_lists(core_zip: Path, errors: list[str]) -> None:
+    """Every faction biome needs rows in every biome-keyed generator content list (rare mines by biome, rare
+    resources, guarded banks); a zone in a biome with no row gets nothing from that list (2026-11-16: Factory
+    starts lost their Blitz "mine by biome" rare mines). apply_custom_biome_pack.add_content_list_biomes adds them."""
+    if not core_zip.is_file():
+        return
+    try:
+        with zipfile.ZipFile(core_zip) as core:
+            names = core.namelist()
+            faction_biomes: set[str] = set()
+            for name in names:
+                if name.startswith("DB/fractions/") and name.endswith(".json"):
+                    doc = json.loads(core.read(name).decode("utf-8-sig"))
+                    for row in doc.get("array", []) if isinstance(doc, dict) else []:
+                        if isinstance(row, dict) and isinstance(row.get("biome"), str) and row["biome"]:
+                            faction_biomes.add(row["biome"])
+            for name in names:
+                if not (name.startswith("generator/content_lists/") and name.endswith(".json")):
+                    continue
+                doc = json.loads(core.read(name).decode("utf-8-sig"))
+                for content_list in doc if isinstance(doc, list) else []:
+                    rows = content_list.get("content") if isinstance(content_list, dict) else None
+                    biomes = {row["biome"] for row in rows or [] if isinstance(row, dict) and isinstance(row.get("biome"), str) and row["biome"]}
+                    if not biomes:
+                        continue
+                    missing = sorted(faction_biomes - biomes)
+                    require(not missing, f"{name} {content_list.get('name')}: no rows for faction biome(s) {missing}", errors)
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"failed to check generator content-list biomes in {core_zip}: {exc}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
@@ -524,6 +555,7 @@ def main() -> int:
     core_zip = args.core.resolve() if args.core else infer_game_core_zip(plugin_dir)
     if core_zip is not None:
         validate_void_core_row(core_zip, errors)
+        validate_faction_biome_content_lists(core_zip, errors)
     require("CustomBiomePackedSlotCapacity = 32" in symbols, "GameSymbols must size CustomBiomePackedSlotCapacity to cover Foundry/Permafrost tile codes 29-30", errors)
 
     require("TryReadMapDataDimensions(mapData, raw, out width, out height, out reason)" in renderer, "renderer must derive active packed-layer dimensions from MapData plus tilesMap length", errors)

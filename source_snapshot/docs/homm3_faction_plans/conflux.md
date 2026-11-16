@@ -95,12 +95,15 @@ Economy note: Conflux balance is defined by HotA costs and growth above. Do not 
 
 ## Laws And Faction Skill
 
-Faction skill proposal: `Elemental Conjury` (shipped name; formerly designed as Summon Elementals).
+Faction skill: `Elemental Fusion` (user design 2026-11-15; replaced Elemental Conjury, which was formerly designed as Summon Elementals).
 
-Current shipped behavior (not a summon button):
+Current behavior:
 
-- Rank grants start Focus and scales elemental-line Focus abilities from hero Attack and Spell Power.
-- Subskill SIDs use `sub_skill_faction_homm3_conflux_elemental_conjury_*`.
+- Every rank grants the `homm3_conflux_elemental_fusion` world spell (Necromancer Will clone, no mana cost, unlimited uses). The plugin runtime opens a fusion picker and permanently replaces two elemental stacks with floor(0.9 x pooled squadValue / fused squadValue) fused creatures; each stack must supply at least 1/3 of the pooled value.
+- Basic unlocks the Air, Water and Fire lines (36 fusions), Advanced adds Earth (66), Expert adds Psychic (105).
+- 105 generated `h3_fusion_<host>_<guest>` units (`custom_factions/conflux_fusion/`, built by `tools/release_port/homm3_conflux_fusion_core_overlay.py`): HP = sum, damage = 90% of the sum, Attack/Defense = higher parent + 1, Initiative/Speed = faster parent, host's attacks; both parents' kits unless a signature replaces the actives or passives.
+- 37 stage-2 `h3_fusion_ii_<slug>` units (`recipes` in `fusion_config.json`, `stage2` in `fusion_units.json`, user 2026-11-15): two named stage-1 fused units fuse again by the same count rule; same stat rule on the two fused parents; the host parent's attack shape plus only the unit's own signature (no parent abilities); about 1.2x model scale and bespoke VFX per unit.
+- Subskill SIDs keep `sub_skill_faction_homm3_conflux_elemental_conjury_*` for save compatibility (Elemental Ground, Planar Reserve, Stable Bond, Deep Channels, Elemental Paths, Perfect Fusion).
 - Do not reintroduce `summon_elementals` SID tokens except as overlay stale-removal quarantine entries.
 
 Potential law/subskill themes remain design candidates until the skill is specified:
@@ -148,7 +151,7 @@ Use `docs/homm3_tears_of_ashan_creature_specs.md` as the source for these `_upg_
 
 ## Unique Faction Mechanics
 
-- `Elemental Conjury`: shipped as start-Focus and elemental Focus ability Attack/Spell Power scaling under `skill_faction_homm3_conflux` with `elemental_conjury` subskill SIDs. Do not describe a summon button. A Hive/Gating-style true summon remains a separate future design if pursued.
+- `Elemental Fusion`: world spell that permanently fuses two elemental stacks into one of 105 fused elementals, under `skill_faction_homm3_conflux` with `elemental_conjury` subskill SIDs. Do not describe a summon button. A Hive/Gating-style true summon remains a separate future design if pursued.
 - Elemental immunities, vulnerabilities, morale immunity, and resurrection immunity are core faction mechanics, not optional polish.
 - Magic University and Aurora Borealis are core Conflux identity buildings and remain explicit static-trace debts until implemented exactly.
 

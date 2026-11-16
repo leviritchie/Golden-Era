@@ -191,5 +191,31 @@
  "strideMatch": {
   "maxDrop": 0.3,
   "reason": "DEF Move keeps the right leg near straight: at the default 0.15 pelvis drop its reach cap is 0 (stride delivered 0.25 of required) and cadence 1.6 leaves ratio 1.73 (slip 0.40). Scratch sweep (worker A, 2026-09-27) on the pre-stride GLB: maxDrop 0.20 slip 0.166, ratio 1.144, cadence 1.6, jitter 0.155; 0.25 slip 0.109, ratio 1.072. Smallest drop that passes with margin. | worker C 2026-09-28: after 794015d6f6 planted feet stand on the Idle floor and the post-commit rebuild failed stride at maxDrop 0.2 (see worker C pass table); maxDrop 0.2 -> 0.3 (cap 0.35), measured: maxDrop 0.20 now slip 0.6911 ratio 1.5877 (FAIL); 0.30 slip 0.4148 ratio 1.0579 cadence 1.32 jitter 0.213 (PASS)."
+ },
+ "glbPatch": {
+  "reason": "2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
+  "ops": [
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gremlin_move_tracks.json",
+    "sha256": "a556205bc4e1ba42b4fb3afe4318f11c5c6f5bac5ca213a9761c1bfd6bb2f28b"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gremlin_clip_tracks.json",
+    "sha256": "1f8c1d0c161394c385fb1f20fe2935ad01c1cbd1bafb5933c940675d9d9a039e"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
+   }
+  ]
  }
 }

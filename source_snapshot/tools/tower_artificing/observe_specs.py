@@ -1,4 +1,4 @@
-"""Observation specs for Tower Artificing (docs/homm3_tower_artificing.md, "Observation replaces Transcribe").
+"""Observation specs for Tower Artificing (docs/homm3_tower_artificing.md, "Observation"; the 2026-11-11 battle-end rule no longer uses these specs for rolls, only for the diagnostics probe and review).
 
 A graftable schematic enters the book when a native unit's passive is *observed*: it changed the outcome
 of a combat event. Each graftable row gets a list of specs naming the event that proves it. Most specs are

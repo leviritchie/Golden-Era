@@ -241,5 +241,26 @@
   "necropolis_weightfill",
   "necropolis_propcomp",
   "necropolis_propaim"
- ]
+ ],
+ "glbPatch": {
+  "reason": "clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
+  "ops": [
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_rot_zombie_clip_tracks.json",
+    "sha256": "19a01a281864d319b0e61c8253a0ddd3e27d89782f787f69ff3fc73d039b7f83"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
+   }
+  ]
+ }
 }

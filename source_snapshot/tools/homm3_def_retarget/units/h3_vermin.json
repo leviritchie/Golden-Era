@@ -822,7 +822,7 @@
   "floater_fix"
  ],
  "glbPatch": {
-  "reason": "authenticity lane-A 2026-10-10: rig adds an articulated tail (props tail on Hips + inferno_whipchain prefix Tail, Tail_00..07) and finger-fan wing chains (wing_chain), both fused to the body before. keyRotations (half offset, applied twice) + keyTranslations: AttackFront is the DEF pounce (as h3_imp: crouch f1, spring f2, flies forward with the spine pitched and both claws reaching, legs tucked, Hips up/forward at the peak, lands f5) with the tail streaming straight back; Hitted recoils upright with the head up, arms low and forward (the capture flung one arm overhead), Hips shoved back 0.25 and the tail lashing back; Move streams the tail behind in a travelling wave; Defence sweeps the tail back and up; MoveStart/MoveEnd raise/settle it; Death flings it back in the leap. Wing beats per clip come from wingChain anim in the build. stretchRelax on AttackFront; teardiag PASS 4149 -> 3638.",
+  "reason": "authenticity lane-A 2026-10-10: rig adds an articulated tail (props tail on Hips + inferno_whipchain prefix Tail, Tail_00..07) and finger-fan wing chains (wing_chain), both fused to the body before. keyRotations (half offset, applied twice) + keyTranslations: AttackFront is the DEF pounce (as h3_imp: crouch f1, spring f2, flies forward with the spine pitched and both claws reaching, legs tucked, Hips up/forward at the peak, lands f5) with the tail streaming straight back; Hitted recoils upright with the head up, arms low and forward (the capture flung one arm overhead), Hips shoved back 0.25 and the tail lashing back; Move streams the tail behind in a travelling wave; Defence sweeps the tail back and up; MoveStart/MoveEnd raise/settle it; Death flings it back in the leap. Wing beats per clip come from wingChain anim in the build. stretchRelax on AttackFront; teardiag PASS 4149 -> 3638.; 2026-11-09 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate",
   "ops": [
    {
     "op": "keyRotations",
@@ -841,6 +841,17 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_vermin_pounce_tr.json",
     "sha256": "8e44ef5c396c3e43ef739e1cc9b6566283de7d36b6507be56901cdbfbe78e8f7",
     "regrid": true
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_vermin_flight_weights.json",
+    "sha256": "d980b72b88724b9daf0437d43015d819db94ba577645e555d6e4a81d6bd50ec4"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": false,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_vermin_flight_tracks.json",
+    "sha256": "904a36a6e3c82f2ca82f8a07f66a6725380cca6daee294627bb5b60aefd064b7"
    },
    {
     "op": "stretchRelax",

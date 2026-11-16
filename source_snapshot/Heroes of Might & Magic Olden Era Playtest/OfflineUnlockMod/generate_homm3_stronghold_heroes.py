@@ -13,6 +13,8 @@ Run:
 
 Verify Core.zip (after city + heroes steps):
   python verify_homm3_stronghold_core_parity.py
+Verify a --core-only seed layer (no Lang written yet):
+  python verify_homm3_stronghold_core_parity.py --core PATH --core-only
 """
 
 from __future__ import annotations
@@ -80,8 +82,18 @@ DEMON_SUB_CLASSES_PATH = "DB/heroes_sub_classes/sub_classes_demon.json"
 NATURE_SUB_CLASSES_PATH = "DB/heroes_sub_classes/sub_classes_nature.json"
 STRONGHOLD_SUB_CLASSES_PATH = "DB/heroes_sub_classes/sub_classes_homm3_stronghold.json"
 ARENA_GAME_PATH = "DB/arenaGame.json"
-ARENA_PICK_CONTENT_PATH = "DB/ai_pick/arena_pick_content.json"
-ARENA_PICK_MODS_PATH = "DB/ai_pick/arena_pick_mods.json"
+# Since 26297049 every AI pick profile is one file {array:[{id, defualtVal, content:[{sid, array}], mods}]}.
+# Stronghold heroes get rows in the arena profile and the five world profiles (port decision D1=b).
+AI_PICK_PROFILE_PATHS = (
+    "DB/ai_pick/arena.json",
+    "DB/ai_pick/ai_picks_world_default.json",
+    "DB/ai_pick/ai_picks_one_hero_main.json",
+    "DB/ai_pick/ai_picks_multi_hero_main.json",
+    "DB/ai_pick/ai_picks_generalist.json",
+    "DB/ai_pick/ai_picks_courier.json",
+)
+# Vanilla side_buff_infos.durationPerStack is an int list since 26297049 (donor dungeon rows use [1, 0]).
+WARCRY_SIDE_BUFF_DURATION_PER_STACK = [1, 0]
 SKILLS_BY_LEVEL_REPLACE_PATH = "DB/heroes_skills/skills_by_level_replace_tables/skills_by_level_replace_table.json"
 
 STRONGHOLD_CLASS_NAME_TOKENS: dict[str, str] = {
@@ -605,6 +617,20 @@ def warcry_unit_buff_id(mode: str, rank: int | None = None, *, negative: bool = 
     return base if rank == 1 else f"{base}_{rank - 1}"
 
 
+def warcry_tempo_subskill4_total_buff_id(rank: int) -> str:
+    """Tempo Cry + Deafening Call combined ally buff (initiative rank + 1).
+
+    Tempo applies through the single direct ``damageDealer.buff`` slot, and a
+    hero-ability delta that sets ``buff`` replaces the base buff instead of adding
+    a second one. The _4 delta therefore swaps in this rank-matched row whose
+    stat already equals base + 1 (base/base_1/base_2 for ranks 1/2/3).
+    """
+    if rank not in (1, 2, 3):
+        raise ValueError(f"unsupported Warcry unit buff rank: {rank}")
+    base = "homm3_stronghold_warcry_initiative_effect_sub_skill_4_total"
+    return base if rank == 1 else f"{base}_{rank - 1}"
+
+
 def warcry_unit_buff_description_id(mode: str, *, negative: bool = False) -> str:
     suffix = "_negative" if negative else ""
     return f"homm3_stronghold_warcry_{mode}_effect{suffix}_description"
@@ -661,10 +687,13 @@ def warcry_direct_unit_buff_dealer(allegiance: str, buff_sid: str, mechanics: li
 
 
 def warcry_mode_effect_mechanics(mode: str, rank: int) -> list[dict]:
-    mechanics = [warcry_global_buff_mechanic("ally", mode, rank)]
-    if mode in ("moral", "luck"):
-        mechanics.insert(0, {"mech": "side_buff", "values": [f"side_buff_homm3_stronghold_warcry_{mode}_{rank}", "true"]})
-    return mechanics
+    # Rallying/Fortune: the ally side_buff (heroStat moral/luck) already reaches
+    # every allied creature, so an extra ally global_buff unit buff of the same
+    # stat would double the bonus. Ally moral/luck use the side buff only.
+    # (Tempo never reaches here: it uses the direct-buff dealer.)
+    if mode not in ("moral", "luck"):
+        raise ValueError(f"warcry_mode_effect_mechanics: unsupported mode {mode!r}")
+    return [{"mech": "side_buff", "values": [f"side_buff_homm3_stronghold_warcry_{mode}_{rank}", "true"]}]
 
 
 def warcry_force_sibling_cooldowns(mode: str) -> list[dict]:
@@ -750,6 +779,20 @@ def make_warcry_unit_buff_rows() -> list[dict]:
             "addition": "duration",
             "data": {"stats": {stat: 1}},
         })
+        if mode == "initiative":
+            for rank in (1, 2, 3):
+                rows.append({
+                    "id": warcry_tempo_subskill4_total_buff_id(rank),
+                    "aiValue": 4000,
+                    "aiValuePerDuration": 400,
+                    "icon": icon,
+                    "name_": f"skill_faction_homm3_stronghold_ability_{mode}_name",
+                    "description_": warcry_unit_buff_description_id(mode),
+                    "tags": positive_tags,
+                    "isPositive": True,
+                    "addition": "duration",
+                    "data": {"stats": {stat: rank + 1}},
+                })
     return rows
 
 
@@ -794,11 +837,12 @@ def make_warcry_delta_ability(mode: str, subskill: int) -> dict:
         if subskill == 2:
             mechanics = []
             if mode == "initiative":
-                dealer = warcry_direct_unit_buff_dealer(
-                    "enemy",
-                    warcry_unit_buff_id(mode, rank, negative=True),
-                    mechanics,
-                )
+                # Do not touch the direct buff slot / buffTarget_: a delta that sets
+                # them replaces the base ally Tempo buff (allies lost +rank). Add the
+                # enemy penalty as an appended mechanic instead, like vanilla
+                # Dungeon deltas; fields left out keep the base dealer's values.
+                mechanics.append(warcry_global_buff_mechanic("enemy", mode, rank, negative=True))
+                dealer = {"instacast": True, "targetMechanics": mechanics}
             else:
                 mechanics.append(warcry_global_buff_mechanic("enemy", mode, rank, negative=True))
                 dealer = warcry_global_unit_dealer(mechanics)
@@ -810,13 +854,15 @@ def make_warcry_delta_ability(mode: str, subskill: int) -> dict:
         elif subskill == 4:
             mechanics = []
             if mode == "initiative":
+                # The delta's buff replaces the base buff, so swap in the combined
+                # rank+1 row rather than a standalone +1 buff.
                 dealer = warcry_direct_unit_buff_dealer(
                     "ally",
-                    warcry_unit_buff_id(mode, subskill4=True),
+                    warcry_tempo_subskill4_total_buff_id(rank),
                     mechanics,
                 )
             else:
-                mechanics.append(warcry_global_buff_mechanic("ally", mode, subskill4=True))
+                # Ally moral/luck: side buff only (see warcry_mode_effect_mechanics).
                 dealer = warcry_global_unit_dealer(mechanics)
             if mode in ("moral", "luck"):
                 mechanics.insert(0, {
@@ -997,7 +1043,7 @@ def patch_homm3_stronghold_warcries_skill(all_data: dict[str, bytes]) -> None:
                 "sid": f"side_buff_homm3_stronghold_warcry_{mode}_effect_{rank}",
                 "allegiance": "ally",
                 "duration": 9999,
-                "durationPerStack": 0,
+                "durationPerStack": list(WARCRY_SIDE_BUFF_DURATION_PER_STACK),
             })
             upsert_by_id(side_buffs, {
                 "id": f"side_buff_homm3_stronghold_warcry_{mode}_effect_{rank}_sub_skill_2",
@@ -1011,7 +1057,7 @@ def patch_homm3_stronghold_warcries_skill(all_data: dict[str, bytes]) -> None:
                 "sid": f"side_buff_homm3_stronghold_warcry_{mode}_effect_{rank}_sub_skill_2",
                 "allegiance": "enemy",
                 "duration": 9999,
-                "durationPerStack": 0,
+                "durationPerStack": list(WARCRY_SIDE_BUFF_DURATION_PER_STACK),
             })
         upsert_by_id(side_buffs, {
             "id": f"side_buff_homm3_stronghold_warcry_{mode}_effect_sub_skill_4",
@@ -1025,7 +1071,7 @@ def patch_homm3_stronghold_warcries_skill(all_data: dict[str, bytes]) -> None:
             "sid": f"side_buff_homm3_stronghold_warcry_{mode}_effect_sub_skill_4",
             "allegiance": "ally",
             "duration": 9999,
-            "durationPerStack": 0,
+            "durationPerStack": list(WARCRY_SIDE_BUFF_DURATION_PER_STACK),
         })
     dump_root(all_data, SIDE_BUFFS_PATH, side_buffs)
     dump_root(all_data, SIDE_BUFF_INFOS_PATH, side_infos)
@@ -1333,19 +1379,51 @@ def patch_arena_game_heroes(all_data: dict[str, bytes]) -> int:
     return added
 
 
-def patch_arena_pick_content(all_data: dict[str, bytes]) -> int:
-    root = json.loads(all_data[ARENA_PICK_CONTENT_PATH].decode("utf-8-sig"))
-    content = root.get("content")
-    if not isinstance(content, list):
-        raise RuntimeError(f"{ARENA_PICK_CONTENT_PATH}: expected content list")
+def ai_pick_profiles(all_data: dict[str, bytes]) -> tuple[dict[str, dict], list[tuple[str, dict]]]:
+    """Load the D1 AI pick profile files; fail closed if any is missing.
 
-    added = 0
-    for block in content:
-        if not isinstance(block, dict) or block.get("sid") != "heroes":
-            continue
-        arr = block.get("array")
+    Returns the parsed roots by path and (path, profile) for every array item.
+    """
+    missing = [path for path in AI_PICK_PROFILE_PATHS if path not in all_data]
+    if missing:
+        raise RuntimeError(
+            f"AI pick profiles missing from Core: {missing}. This layer targets the 26297049 DB/ai_pick schema "
+            f"(arena.json + ai_picks_*.json); the legacy arena_pick_content/arena_pick_mods files are not supported."
+        )
+    roots: dict[str, dict] = {}
+    profiles: list[tuple[str, dict]] = []
+    for path in AI_PICK_PROFILE_PATHS:
+        root = json.loads(all_data[path].decode("utf-8-sig"))
+        roots[path] = root
+        arr = root.get("array") if isinstance(root, dict) else None
+        if not isinstance(arr, list) or not arr:
+            raise RuntimeError(f"{path}: expected a non-empty profile array")
+        for profile in arr:
+            if not isinstance(profile, dict) or not isinstance(profile.get("id"), str):
+                raise RuntimeError(f"{path}: expected profile objects with an id")
+            profiles.append((path, profile))
+    return roots, profiles
+
+
+def dump_ai_pick_profiles(all_data: dict[str, bytes], roots: dict[str, dict]) -> None:
+    for path, root in roots.items():
+        all_data[path] = json.dumps(root, ensure_ascii=False, indent="	").encode("utf-8")
+
+
+def patch_arena_pick_content(all_data: dict[str, bytes]) -> int:
+    roots, profiles = ai_pick_profiles(all_data)
+    added_total = 0
+    for path, profile in profiles:
+        where = f"{path}[{profile['id']}]"
+        content = profile.get("content")
+        if not isinstance(content, list):
+            raise RuntimeError(f"{where}: expected content list")
+        blocks = [block for block in content if isinstance(block, dict) and block.get("sid") == "heroes"]
+        if len(blocks) != 1:
+            raise RuntimeError(f"{where}: expected exactly one heroes content bucket, found {len(blocks)}")
+        arr = blocks[0].get("array")
         if not isinstance(arr, list):
-            raise RuntimeError(f"{ARENA_PICK_CONTENT_PATH}: expected heroes array")
+            raise RuntimeError(f"{where}: expected heroes array")
         arr[:] = [
             item
             for item in arr
@@ -1353,6 +1431,7 @@ def patch_arena_pick_content(all_data: dict[str, bytes]) -> int:
         ]
         existing = {item.get("sid") for item in arr if isinstance(item, dict)}
         source_count = 0
+        added = 0
         for item in list(arr):
             if not isinstance(item, dict):
                 continue
@@ -1367,21 +1446,19 @@ def patch_arena_pick_content(all_data: dict[str, bytes]) -> int:
             arr.append(clone)
             existing.add(clone["sid"])
             added += 1
-        break
+        if source_count != 18 or added != source_count:
+            raise RuntimeError(
+                f"{where}: expected to clone 18 dungeon_hero_* picks into {HERO_PREFIX}_*, "
+                f"found {source_count} donors and added {added}"
+            )
+        added_total += added
 
-    if added != source_count:
-        raise RuntimeError(
-            f"{ARENA_PICK_CONTENT_PATH}: expected to add {source_count} {HERO_PREFIX} hero picks, added {added}"
-        )
-    all_data[ARENA_PICK_CONTENT_PATH] = json.dumps(root, ensure_ascii=False, indent="\t").encode("utf-8")
-    return added
+    dump_ai_pick_profiles(all_data, roots)
+    return added_total
 
 
 def patch_arena_pick_mods(all_data: dict[str, bytes]) -> int:
-    root = json.loads(all_data[ARENA_PICK_MODS_PATH].decode("utf-8-sig"))
-    arr = root.get("array")
-    if not isinstance(arr, list):
-        raise RuntimeError(f"{ARENA_PICK_MODS_PATH}: expected array list")
+    roots, profiles = ai_pick_profiles(all_data)
 
     def mentions_stronghold_hero(item: dict) -> bool:
         because = item.get("becauseOf")
@@ -1389,32 +1466,41 @@ def patch_arena_pick_mods(all_data: dict[str, bytes]) -> int:
             isinstance(s, str) and s.startswith(f"{HERO_PREFIX}_") for s in because
         )
 
-    arr[:] = [item for item in arr if not (isinstance(item, dict) and mentions_stronghold_hero(item))]
-    existing = {json.dumps(item, sort_keys=True) for item in arr if isinstance(item, dict)}
-    added = 0
-    for item in list(arr):
-        if not isinstance(item, dict):
-            continue
-        because = item.get("becauseOf")
-        if not isinstance(because, list) or not any(
-            isinstance(s, str) and s.startswith("dungeon_hero_") for s in because
-        ):
-            continue
-        clone = copy.deepcopy(item)
-        clone["becauseOf"] = [
-            fix_hero_id_strings(s) if isinstance(s, str) and s.startswith("dungeon_hero_") else s
-            for s in because
-        ]
-        maybe_remap_unit_strings(clone.get("who"))
-        key = json.dumps(clone, sort_keys=True)
-        if key in existing:
-            continue
-        arr.append(clone)
-        existing.add(key)
-        added += 1
+    added_total = 0
+    for path, profile in profiles:
+        where = f"{path}[{profile['id']}]"
+        arr = profile.get("mods")
+        if not isinstance(arr, list):
+            raise RuntimeError(f"{where}: expected mods list")
+        arr[:] = [item for item in arr if not (isinstance(item, dict) and mentions_stronghold_hero(item))]
+        existing = {json.dumps(item, sort_keys=True) for item in arr if isinstance(item, dict)}
+        added = 0
+        for item in list(arr):
+            if not isinstance(item, dict):
+                continue
+            because = item.get("becauseOf")
+            if not isinstance(because, list) or not any(
+                isinstance(s, str) and s.startswith("dungeon_hero_") for s in because
+            ):
+                continue
+            clone = copy.deepcopy(item)
+            clone["becauseOf"] = [
+                fix_hero_id_strings(s) if isinstance(s, str) and s.startswith("dungeon_hero_") else s
+                for s in because
+            ]
+            maybe_remap_unit_strings(clone.get("who"))
+            key = json.dumps(clone, sort_keys=True)
+            if key in existing:
+                continue
+            arr.append(clone)
+            existing.add(key)
+            added += 1
+        if added == 0:
+            raise RuntimeError(f"{where}: no dungeon_hero_* modifier rows to clone for {HERO_PREFIX}_*")
+        added_total += added
 
-    all_data[ARENA_PICK_MODS_PATH] = json.dumps(root, ensure_ascii=False, indent="\t").encode("utf-8")
-    return added
+    dump_ai_pick_profiles(all_data, roots)
+    return added_total
 
 
 def patch_skills_by_level_replace_table(all_data: dict[str, bytes]) -> int:

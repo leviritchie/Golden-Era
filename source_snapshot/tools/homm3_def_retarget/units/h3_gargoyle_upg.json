@@ -588,7 +588,7 @@
   }
  },
  "glbPatch": {
-  "reason": "2026-10-10 lane A (Tower rubble pass): the full rebuild for the Death rubble settle re-ran the wing_chain IoU fit under today's tools, which drifted the non-Death clips from the shipped 2026-09-28 build (AttackFront 0.17 H, Hitted 0.14 H, Defence 0.12 H, Move 0.09 H). These tables restore the shipped motion: per bone, the local offset from the rebuilt clip to the shipped one (AttackFront, Hitted, Defence, Mouseover, Move, MoveEnd), split into identical rot + rot2 halves, plus Hips translation. Death keeps the rebuild (the intended change: solid rubble that settles into a heap). Stretch gate 2589 -> 2551 edges. 2026-10-10 lane A wing pass (gargoyle recipe): Spine2+wing diffuseWeights over each wing (x beyond 0.12, alpha 0.8, 50 iterations) spreads the folded-drape membrane stretch at the wing root, then the restore tables, then h3_gargoyle_upg_wings_rot.json applied twice (each half under the 120 deg cap): AttackFront spread wings up and out, Move upstroke raised into a fan, Defence wing wrap forward, Mouseover small lift, Hitted f0-f3 and Death f0-f4 wings flung open as in the DEF. Idle, MoveStart and MoveEnd keep the shipped motion. Stretch gate 2589 -> 1886 edges.",
+  "reason": "2026-10-10 lane A (Tower rubble pass): the full rebuild for the Death rubble settle re-ran the wing_chain IoU fit under today's tools, which drifted the non-Death clips from the shipped 2026-09-28 build (AttackFront 0.17 H, Hitted 0.14 H, Defence 0.12 H, Move 0.09 H). These tables restore the shipped motion: per bone, the local offset from the rebuilt clip to the shipped one (AttackFront, Hitted, Defence, Mouseover, Move, MoveEnd), split into identical rot + rot2 halves, plus Hips translation. Death keeps the rebuild (the intended change: solid rubble that settles into a heap). Stretch gate 2589 -> 2551 edges. 2026-10-10 lane A wing pass (gargoyle recipe): Spine2+wing diffuseWeights over each wing (x beyond 0.12, alpha 0.8, 50 iterations) spreads the folded-drape membrane stretch at the wing root, then the restore tables, then h3_gargoyle_upg_wings_rot.json applied twice (each half under the 120 deg cap): AttackFront spread wings up and out, Move upstroke raised into a fan, Defence wing wrap forward, Mouseover small lift, Hitted f0-f3 and Death f0-f4 wings flung open as in the DEF. Idle, MoveStart and MoveEnd keep the shipped motion. Stretch gate 2589 -> 1886 edges.; 2026-11-09 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate",
   "ops": [
    {
     "op": "diffuseWeights",
@@ -651,6 +651,12 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_gargoyle_upg_wings_rot.json",
     "sha256": "62b56f249cbc2e3b87b293012b0d80eecc85e96a243411d60944047776958149",
     "regrid": true
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": false,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gargoyle_upg_flight_tracks.json",
+    "sha256": "7f5352be75da83728e5df7718d8c8d956dc0375bb40fc1be77d8b635474245e1"
    }
   ]
  }

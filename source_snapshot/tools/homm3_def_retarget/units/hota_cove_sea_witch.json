@@ -193,7 +193,7 @@
  "meshReason": "2026-09-27 workerD: the old smartrigged mesh was the wrong identity (plumed-hat gunman); regenerated with Meshy-7 from the unit's concept (task 01a0e5a4-095a-73d4-bec4-b5a27fa50cf1, 30 credits) and installed with install_mesh.py. Joints hand-placed on shaded front/side views of the new mesh; props and knobs follow the sorceress (same DEF family): orb rigid on LeftHand, sheathed sword rigid on Hips. The old gunman knobs (blunderbuss prop, propAim, cove_reweight, coveArmReach) described the retired mesh and were dropped. 2026-10-11 lane A (user-approved prop surgery): the DEF AttackFront draws the cutlass overhead and slashes, so the sword is cut from the hip and re-seated in the right fist (sword_draw_surgery.py -> sword_m1); prop sword is rigid on RightHand and binds only the cut-free sword island (wholeIslands), not the fist around the grip.",
  "sourceMesh": "artifacts/homm3_mesh_surgery/hota_cove_sea_witch_sword_m1.glb",
  "glbPatch": {
-  "reason": "authenticity: DEF g12 attack - with the cutlass now in her right fist (sword prop surgery), she winds it back out to the side (f3), raises it overhead (f4), slashes down in front (f5-f6) and levels it at the target (f7), instead of jabbing with the hand low by the hip. Right arm/shoulder weights re-solved",
+  "reason": "authenticity: DEF g12 attack - with the cutlass now in her right fist (sword prop surgery), she winds it back out to the side (f3), raises it overhead (f4), slashes down in front (f5-f6) and levels it at the target (f7), instead of jabbing with the hand low by the hip. Right arm/shoulder weights re-solved; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -212,6 +212,11 @@
     "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sea_witch_pose_rot.json",
     "sha256": "2e5d1ab94485f2a8dd3ce81a0de12eb35da2690b8ab051415935b94f82a5b319",
     "regrid": true
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sea_witch_clip_tracks.json",
+    "sha256": "cb6449596e2750d08de5f459ee88aa91bb2ef1cf25c5cb078d0cff9dad0c47a1"
    }
   ]
  }

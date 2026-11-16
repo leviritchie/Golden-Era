@@ -31,6 +31,7 @@ MAP_MUSIC_SOUNDS_PATH = "DB/map_music_sounds.json"
 MAP_AMBIENT_SOUNDS_PATH = "DB/map_ambient_sounds.json"
 ARENA_OBSTRUCTIONS_CONFIG_PATH = "DB/arenas/arenas_obstructions_configs/test_obstructions.json"
 FRACTIONS_PREFIX = "DB/fractions/"
+CONTENT_LISTS_PREFIX = "generator/content_lists/"
 
 BIOMES = [
     {
@@ -289,6 +290,49 @@ def set_faction_biome(members: dict[str, bytes], faction: str, target: str) -> l
     return updates
 
 
+def add_content_list_biomes(members: dict[str, bytes], source: str, target: str) -> int:
+    """Give `target` its own rows in every biome-keyed generator content list.
+
+    Vanilla lists such as basic_content_list_rare_mines_by_biome, the rare-resource pickups and the guarded
+    resource/creature banks carry one row per vanilla biome; a zone in a custom biome matched none of them, so
+    e.g. a Factory (Foundry) start lost the three "mine by biome" rare mines Blitz places in its side zones
+    (owner playtest 2026-11-16). Rows of `source` are cloned for `target`; when `source` has no row in a list
+    (Sand in the rare mine/resource lists), `target` gets every sid the list offers to any biome, at its highest
+    weight, so the pick is random among them. Lists that already have `target` rows are left alone.
+    """
+    added = 0
+    for name in sorted(members):
+        if not name.startswith(CONTENT_LISTS_PREFIX) or not name.endswith(".json"):
+            continue
+        doc = load_json(members[name], name)
+        if not isinstance(doc, list):
+            continue
+        changed = False
+        for content_list in doc:
+            rows = content_list.get("content") if isinstance(content_list, dict) else None
+            if not isinstance(rows, list):
+                continue
+            keyed = [row for row in rows if isinstance(row, dict) and isinstance(row.get("biome"), str) and row["biome"]]
+            if not keyed or any(row["biome"] == target for row in keyed):
+                continue
+            clones = [copy.deepcopy(row) for row in keyed if row["biome"] == source]
+            if not clones:
+                best: dict[str, dict[str, Any]] = {}
+                for row in keyed:
+                    sid = row.get("sid")
+                    if isinstance(sid, str) and (sid not in best or float(row.get("weight", 0)) > float(best[sid].get("weight", 0))):
+                        best[sid] = row
+                clones = [copy.deepcopy(best[sid]) for sid in sorted(best)]
+            for clone in clones:
+                clone["biome"] = target
+                rows.append(clone)
+                added += 1
+            changed = True
+        if changed:
+            members[name] = dump_json(doc)
+    return added
+
+
 def build_pack(core: Path, out_dir: Path) -> dict[str, Any]:
     docs_paths = [
         TILES_PATH,
@@ -344,8 +388,10 @@ def apply_custom_biome_pack_to_members(members: dict[str, bytes], docs: dict[str
         mapping = add_arena_views(docs, arena_source, target)
         arena_rows = add_arena_info(docs, arena_source, target, mapping)
         obstruction_models = add_arena_obstruction_models(docs, arena_source, target)
+        content_list_rows = 0
         if not terrain_only:
             faction_updates = set_faction_biome(members, faction, target)
+            content_list_rows = add_content_list_biomes(members, source, target)
         report["biomes"].append(
             {
                 "target": target,
@@ -362,6 +408,7 @@ def apply_custom_biome_pack_to_members(members: dict[str, bytes], docs: dict[str
                 "arenaRows": arena_rows,
                 "arenaObstructionModels": obstruction_models,
                 "factionUpdates": faction_updates,
+                "contentListRows": content_list_rows,
             }
         )
 

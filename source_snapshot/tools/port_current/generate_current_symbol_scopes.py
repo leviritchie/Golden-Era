@@ -57,7 +57,7 @@ GENERATED_CS = PLUGIN_DIR / "GameSymbolsCurrent.g.cs"
 REMAP_DIR = HERE / "remap"
 # The one live build the plugin treats as GameBuildKind.Current. Retired builds keep their tracked
 # remap/evidence/overrides/report files; only this build is generated into GameSymbolsCurrent.g.cs.
-BUILD_ID = "25672315"
+BUILD_ID = "26615913"
 REMAP = REMAP_DIR / f"game_symbols_remap_{BUILD_ID}.json"
 EVIDENCE = REMAP_DIR / f"current_scope_evidence_{BUILD_ID}.json"
 OVERRIDES = REMAP_DIR / f"current_scope_overrides_{BUILD_ID}.json"
@@ -69,6 +69,8 @@ OVERRIDES_SCHEMA = "game_symbols_current_scope_overrides.v1"
 REAL_TYPE_NAME = re.compile(r"^(?![a-z]{1,4}$)[A-Za-z_][A-Za-z0-9_.+`]*$")
 GENERATED = re.compile(r"^(Method|field|prop|NativeFieldInfoPtr|NativeMethodInfoPtr)_|Unique$|^Object(Public|Private|N)")
 PTR_PREFIXES = ("NativeFieldInfoPtr_", "NativeMethodInfoPtr_")
+# BepInEx.cfg UnhollowerDeobfuscationRegex (Golden Era and the port copy): natives it matches are renamed by Il2CppInterop.
+DEOBF_RENAMED = re.compile(r"^[a-z]{2}$|^[a-z]{3}$|^[a-c][a-z]{3}$")
 SCOPABLE_TYPES = ("string", "string[]", "MethodSymbol", "FieldSymbol", "MethodSymbol[]", "FieldSymbol[]", "tuple[]")
 OK = ("MAPPED", "UNCHANGED")
 
@@ -377,7 +379,7 @@ def _parse_type_group(d: Decl, init) -> None:
 # Evidence (built from the indexes, tracked so --check needs no artifacts)
 # ------------------------------------------------------------------------------------------------
 def build_evidence(remap_doc: dict, remap_sha: str, live_index: Path, golden_index: Path, live_shapes: Path,
-                   golden_shapes: Path) -> dict:
+                   golden_shapes: Path, overrides: dict | None = None) -> dict:
     from symbol_remap import model
 
     L = model.load(str(live_index))
@@ -447,6 +449,26 @@ def build_evidence(remap_doc: dict, remap_sha: str, live_index: Path, golden_ind
                 owners = _entry_live_owners(e)
                 for o in owners:
                     member_ok[o + "\t" + e["live"]] = e["live"] in chain_names(o)
+    # Il2CppInterop renames every native name that matches BepInEx's UnhollowerDeobfuscationRegex to an
+    # interop name (Method_*/field_*) and keeps the native only in [ObfuscatedName]. Plugin consumers that match
+    # MemberInfo.Name exactly never see such a native literal, so the emitter writes the bound member's interop
+    # name in its place. Collected for every native literal the remap or the overrides can emit.
+    wanted = {e["live"] for g in remap_doc["groups"] for e in g["entries"] if isinstance(e.get("live"), str)}
+    for spec in (overrides or {}).get("symbols", {}).values():
+        wanted.update(x for x in spec.get("live") or [] if isinstance(x, str))
+    wanted = {x[len(pfx):] if x.startswith(pfx) else x for x in wanted for pfx in PTR_PREFIXES}
+    wanted = {x for x in wanted if DEOBF_RENAMED.match(x)}
+    renamed: dict[str, dict[str, str]] = defaultdict(dict)
+    for t in L.types.values():
+        owner = t.full.replace("/", "+")
+        # a field's interop property (F row) before its generated get_/set_ accessors
+        for r in sorted(t.rows, key=lambda r: r.kind != "F"):
+            if r.kind == "F" and r.name.startswith(PTR_PREFIXES):
+                continue
+            nat = r.native[4:] if r.native.startswith("fld:") else (
+                r.native.split(":", 2)[2] if r.native.startswith("tok:") and r.native.count(":") >= 2 else r.obf)
+            if nat in wanted and r.name and r.name != nat and not r.name.startswith(("get_", "set_")):
+                renamed[nat].setdefault(owner, r.name)
     return {
         "schema": EVIDENCE_SCHEMA,
         "remapSha256": remap_sha,
@@ -460,6 +482,7 @@ def build_evidence(remap_doc: dict, remap_sha: str, live_index: Path, golden_ind
         "memberOnLiveOwner": dict(sorted(member_ok.items())),
         "typeLiteralReachesGoldenType": dict(sorted(golden_route.items())),
         "deadAliasNamesLiveSymbol": dict(sorted(hazards.items())),
+        "renamedNativeMembers": {k: dict(sorted(v.items())) for k, v in sorted(renamed.items()) if v},
     }
 
 
@@ -813,6 +836,27 @@ def emit(scopes: list[Scope], gscopes: list[GroupScope], remap_sha: str, evidenc
     return "\n".join(lines)
 
 
+RENAMED: dict[str, dict[str, str]] = {}
+
+
+def _interop_name(lit, s: Scope, type_check) -> str | None:
+    """The interop name of the member a renamed native literal binds (see build_evidence), else the literal."""
+    if not isinstance(lit, str) or type_check or s.kind == "type":
+        return lit
+    pfx = next((x for x in PTR_PREFIXES if lit.startswith(x)), "")
+    by_owner = RENAMED.get(lit[len(pfx):])
+    if not by_owner:
+        return lit
+    hits = {by_owner[o] for o in s.owners if o in by_owner} if s.owners else set()
+    names = hits if len(hits) == 1 else set(by_owner.values())
+    if len(names) != 1:
+        return lit
+    name = names.pop()
+    if pfx and not name.startswith("field_" if pfx == "NativeFieldInfoPtr_" else "Method_"):
+        return lit
+    return pfx + name
+
+
 def _emit_one(s: Scope) -> str:
     d = s.decl
     sym = cs_str(d.symbol)
@@ -823,7 +867,7 @@ def _emit_one(s: Scope) -> str:
         fn = {"string": "RefuseOne", "string[]": "Refuse", "MethodSymbol": "RefuseMethod", "FieldSymbol": "RefuseField",
               "MethodSymbol[]": "RefuseMethods", "FieldSymbol[]": "RefuseFields", "tuple[]": "RefuseNamedCounts"}[d.decl_type]
         return f"\t\t\t{n} = GameSymbolScope.{fn}({sym}, {n}, {h}, {reason});"
-    live = [p.live for p in s.positions]
+    live = [_interop_name(p.live, s, p.type_check) for p in s.positions]
     owners = cs_str(";".join(s.owners)) if s.owners else "null"
     if d.decl_type == "string":
         if s.positions[0].type_check:
@@ -928,6 +972,8 @@ def generate(remap_path: Path, evidence_path: Path, overrides_path: Path, symbol
     ga_sha = str(remap_doc.get("target", {}).get("gameAssemblySha256", "")).upper()
     if not re.fullmatch(r"[0-9A-F]{64}", ga_sha):
         sys.exit("generate_current_symbol_scopes: REFUSED: remap target carries no GameAssembly sha256")
+    RENAMED.clear()
+    RENAMED.update(evidence.get("renamedNativeMembers", {}))
     cs = emit(scopes, gscopes, remap_sha, evidence_sha, ga_sha)
     rep = report_doc(scopes, gscopes, remap_doc, remap_sha, evidence_sha)
     return cs, json.dumps(rep, indent=1, ensure_ascii=False) + "\n", rep
@@ -953,7 +999,8 @@ def main(argv=None) -> int:
         if not (a.live_shapes and a.golden_shapes):
             ap.error("--evidence needs --live-shapes and --golden-shapes (tools/port_current/interop_shape_index TSVs)")
         doc = json.loads(a.remap.read_text(encoding="utf-8"))
-        ev = build_evidence(doc, text_sha256(a.remap), a.live_index, a.golden_index, a.live_shapes, a.golden_shapes)
+        ov_doc = json.loads(a.overrides.read_text(encoding="utf-8")) if a.overrides.is_file() else None
+        ev = build_evidence(doc, text_sha256(a.remap), a.live_index, a.golden_index, a.live_shapes, a.golden_shapes, ov_doc)
         a.evidence_file.write_text(json.dumps(ev, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
         print(f"wrote {a.evidence_file}")
 

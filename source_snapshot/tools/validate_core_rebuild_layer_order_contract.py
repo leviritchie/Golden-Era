@@ -30,6 +30,16 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DRIVER = REPO_ROOT / "tools" / "port_current" / "rebuild_core_from_vanilla.py"
+VIDEO_STAGER = REPO_ROOT / "tools" / "port_current" / "stage_campaign_video_dependencies.py"
+# The game build the port rebuilds from; the overlay's target-pinned readbacks must name it.
+PORT_GAME_TARGET = "steam_26615913"
+VIDEO_LAYER_ARGS = (
+    "--source-game-root", "{video_source}",
+    "--game-root", "{game_root}",
+    "--work", "{work}/campaign_video_dependencies",
+    "--report", "{work}/campaign_video_dependencies/report.json",
+    "--seven-zip", "{seven_zip}",
+)
 
 EXPECTED_LAYER_ORDER = (
     "stronghold_city",
@@ -113,19 +123,11 @@ def static_checks(drv, errors: list[str]) -> None:
         # The rebuild is from the port's vanilla Core, so its target-pinned readbacks must be the
         # port build's (option A), never the Golden Era default.
         idx = overlay.args.index("--game-target") if "--game-target" in overlay.args else -1
-        if idx < 0 or overlay.args[idx + 1] != "steam_25672315":
-            errors.append("release_core_overlay: driver must pass --game-target steam_25672315")
+        if idx < 0 or overlay.args[idx + 1] != PORT_GAME_TARGET:
+            errors.append(f"release_core_overlay: driver must pass --game-target {PORT_GAME_TARGET}")
     video = next((layer for layer in drv.LAYERS if layer.name == "campaign_video_dependencies"), None)
-    if video is not None:
-        expected = (
-            "--source-game-root", "{video_source}",
-            "--game-root", "{game_root}",
-            "--work", "{work}/campaign_video_dependencies",
-            "--report", "{work}/campaign_video_dependencies.json",
-            "--seven-zip", "{seven_zip}",
-        )
-        if video.args != expected:
-            errors.append(f"campaign_video_dependencies: unsafe or drifted arguments: {video.args}")
+    if video is not None and video.args != VIDEO_LAYER_ARGS:
+        errors.append(f"campaign_video_dependencies: unsafe or drifted arguments: {video.args}")
 
 
 def expect_refusal(drv, argv: list[str], needle: str, label: str, errors: list[str]) -> None:
@@ -201,12 +203,26 @@ def behaviour_checks(drv, errors: list[str]) -> None:
                 errors.append(f"fail-closed: {label}: layer statuses {got} != {statuses}")
 
         # The final media-closure layer may validate/stage external dependencies without editing Core.
+        # The fake layer runs the real stager's output-layout checks on the arguments the driver
+        # substitutes, so a --report the stager would refuse fails here, not at layer 12.
         video = scripts / "video.py"
         video.write_text(
-            "import pathlib, sys\n"
+            "import importlib.util, pathlib, sys\n"
+            f"spec = importlib.util.spec_from_file_location('stager', {str(VIDEO_STAGER)!r})\n"
+            "stager = importlib.util.module_from_spec(spec)\n"
+            "sys.modules[spec.name] = stager\n"
+            "spec.loader.exec_module(stager)\n"
             "args = sys.argv[1:]\n"
-            "work = pathlib.Path(args[args.index('--work') + 1])\n"
-            "report = pathlib.Path(args[args.index('--report') + 1])\n"
+            "def arg(flag):\n"
+            "    return pathlib.Path(args[args.index(flag) + 1])\n"
+            "work, report = arg('--work'), arg('--report')\n"
+            "try:\n"
+            "    stager._validate_output_layout(game_root=arg('--game-root'),\n"
+            "                                   source_game_root=arg('--source-game-root'),\n"
+            "                                   work=work, report_path=report)\n"
+            "except stager.DependencyError as ex:\n"
+            "    print(f'stager output layout refused: {ex}')\n"
+            "    sys.exit(2)\n"
             "work.mkdir(parents=True, exist_ok=True)\n"
             "report.parent.mkdir(parents=True, exist_ok=True)\n"
             "report.write_text('{}', encoding='utf-8')\n",
@@ -218,18 +234,8 @@ def behaviour_checks(drv, errors: list[str]) -> None:
         source_core = source_root / drv.STAGED_CORE_REL
         source_core.parent.mkdir(parents=True)
         write_zip(source_core, {"DB/clips_info.json": b"{}"})
-        closure = L(
-            "campaign_video_dependencies",
-            video,
-            (
-                "--source-game-root", "{video_source}", "--game-root", "{game_root}",
-                "--work", "{work}/campaign_video_dependencies",
-                "--report", "{work}/campaign_video_dependencies.json",
-                "--seven-zip", "{seven_zip}",
-            ),
-            "test no-Core-change closure",
-            core_change_required=False,
-        )
+        closure = L("campaign_video_dependencies", video, VIDEO_LAYER_ARGS, "test no-Core-change closure",
+                    core_change_required=False)
         original_layers, original_order = drv.LAYERS, drv.LAYER_ORDER
         try:
             drv.LAYERS = (closure,)

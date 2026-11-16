@@ -11,7 +11,9 @@ nothing happens (Player.log: ``chest reward set info ... rewards list:`` empty,
 no ``OnRewardSetApplied``).
 
 This module owns one rule: every unit logic row of a core-enabled custom faction
-with a tier the vanilla container prices (1..7) has exactly one container row. Custom
+with a tier the vanilla container prices (1..7) has exactly one container row.
+Conflux Elemental Fusion units (rows marked ``xHomm3Fusion``) are excluded: they
+only exist by fusing two elemental stacks and are never rewarded or recruited. Custom
 faction rows are priced from the vanilla rows' own per-tier budget
 (median of ``amount * squadValue`` over vanilla faction units of that tier), so
 the reward's army value tracks the vanilla faction boxes of the same tier.
@@ -30,6 +32,8 @@ UNIT_LOGICS_PREFIX = "DB/units/units_logics/"
 NEUTRAL_FRACTION = "neutral"
 # Vanilla prices every faction unit of tiers 1..7 (DB/reward_units_container.json).
 FACTION_TIERS = frozenset(range(1, 8))
+# Conflux Elemental Fusion units (homm3_conflux_fusion_core_overlay): fusion-only, never rewarded.
+FUSED_UNIT_MARKER = "xHomm3Fusion"
 
 
 def _loads_lenient(raw: bytes) -> Any:
@@ -55,6 +59,8 @@ def load_unit_logic_rows(members: dict[str, bytes]) -> dict[str, dict[str, Any]]
             continue
         for row in array:
             if isinstance(row, dict) and isinstance(row.get("id"), str):
+                if isinstance(row.get(FUSED_UNIT_MARKER), dict):
+                    continue
                 rows[row["id"]] = row
     return rows
 

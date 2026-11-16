@@ -109,7 +109,7 @@
   "maxDist": 0.07
  },
  "glbPatch": {
-  "reason": "authenticity lane-A 2026-10-10: the CGENIE capture leaves the transplanted open-arm body with hanging arms; the DEF folds them across the chest at rest/move/mouseover, raises the left arm in Defence f2-f5, flings both wide in Hitted f1-f4, raises then thrusts both hands at the target in AttackFront f2-f4 and throws them overhead in Death f2+. Spec: tools/homm3_glb_patch/key_rotations/h3_genie_arms_spec.json (generator V:/olden_port_work/authenticity/h3_genie/work/armspec.py, SOFT=0.3, CLAV=0, XLU=0.8,-0.35,0.5, XLF=-0.95,0.15,0.25 (2026-10-10 follow-up: the folded forearms cross at chest height instead of the belly, as in the DEF): the raised/wide/thrust directions are blended 30% toward hanging-forward so the shoulders hold; split table: rot applied twice).",
+  "reason": "authenticity lane-A 2026-10-10: the CGENIE capture leaves the transplanted open-arm body with hanging arms; the DEF folds them across the chest at rest/move/mouseover, raises the left arm in Defence f2-f5, flings both wide in Hitted f1-f4, raises then thrusts both hands at the target in AttackFront f2-f4 and throws them overhead in Death f2+. Spec: tools/homm3_glb_patch/key_rotations/h3_genie_arms_spec.json (generator V:/olden_port_work/authenticity/h3_genie/work/armspec.py, SOFT=0.3, CLAV=0, XLU=0.8,-0.35,0.5, XLF=-0.95,0.15,0.25 (2026-10-10 follow-up: the folded forearms cross at chest height instead of the belly, as in the DEF): the raised/wide/thrust directions are blended 30% toward hanging-forward so the shoulders hold; split table: rot applied twice).; 2026-11-10 unit pass (user-approved candidate, rig / mesh repair): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass, with the candidate's added joints and face cuts; clip pass 2026-11-11 (user-approved candidate): Idle, Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "moveWeights",
@@ -194,6 +194,28 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_genie_hitted_lift_tr.json",
     "sha256": "89225287c86a094964e2c03ba845df72894e7ffa91582c84589627df63bf541c",
     "note": "2026-10-10: the smoke tail now follows the Hips only (moveWeights above), so the Hitted recoil crouch (Hips y 0.95 -> 0.79) pushed the tail tip 0.085 H below the floor; the DEF's lowest point sinks only 0.022 H in Hitted. Hips +0.03/+0.06/+0.06 (glTF units) on keys 3-5 keeps the recoil and backward lurch but makes the crouch shallower, which matches the DEF floor line."
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_genie_move_joints.json",
+    "sha256": "8d1ebfc238a57b7971b9c548047d489ace3a040efe7e35000ca4c33650eeb1ad",
+    "note": "unit pass: 4 joints the candidate's Move needs (mover_floatA)"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_genie_move_weights.json",
+    "sha256": "43dbb050d3f7746f1d4df0a04636543542f8e56b4af1d9a92a2ce47c832e20a1"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_genie_move_tracks.json",
+    "sha256": "db2ab819d2a01a5c0f59a9c083f3c334b286c7b832ba1f05bce1891a4c5bc49e"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_genie_clip_tracks.json",
+    "sha256": "6d5007ceaac85713532c671435d724afcbedd5b6b24a9c7c5c12f6746160c2ce"
    },
    {
     "op": "stretchRelax",

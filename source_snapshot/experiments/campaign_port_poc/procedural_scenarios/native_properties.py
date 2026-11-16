@@ -95,8 +95,23 @@ ACTIVATION_SIDS = frozenset(
 )
 
 
-def property_rows(content_sid: str, object_id: int) -> dict[str, dict[str, Any]]:
-    """Return only property families proven for this native ObjectConfig SID."""
+def property_rows(
+    content_sid: str, object_id: int, *, variant: int | None = None
+) -> dict[str, dict[str, Any]]:
+    """Return only property families proven for this native ObjectConfig SID.
+
+    ``variant`` pins a native content-list variant through propVariants.selectedVar;
+    None keeps -1 so the logic rolls one.
+    """
+    if variant is not None:
+        if isinstance(variant, bool) or not isinstance(variant, int) or variant < 0:
+            raise ValueError(
+                f"native variant for {content_sid!r} must be a non-negative integer, got {variant!r}"
+            )
+        if content_sid not in VARIANT_SIDS:
+            raise ValueError(
+                f"native variant {variant} requested for {content_sid!r}, which has no propVariants contract"
+            )
     rows: dict[str, dict[str, Any]] = {}
     if content_sid in RESOURCE_SIDS:
         # Native scenarios use zero to request ObjectConfig/logic amount rolling.
@@ -111,7 +126,7 @@ def property_rows(content_sid: str, object_id: int) -> dict[str, dict[str, Any]]
         rows["propVariants"] = {
             "type": 0,
             "id": object_id,
-            "selectedVar": -1,
+            "selectedVar": -1 if variant is None else variant,
             "typeVariant": 0,
             "fraction": 0,
             "unitVersion": 0,

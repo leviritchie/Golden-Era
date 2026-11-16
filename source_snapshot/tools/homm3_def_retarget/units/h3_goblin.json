@@ -197,7 +197,7 @@
   ]
  },
  "glbPatch": {
-  "reason": "authenticity lane B 2026-10-11: AttackFront overhead wind-up, level forward strike, ground smash (DEF g12)",
+  "reason": "authenticity lane B 2026-10-11: AttackFront overhead wind-up, level forward strike, ground smash (DEF g12); clip pass 2026-11-11 (user-approved candidate): Death, Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
   "ops": [
    {
     "op": "keyRotations",
@@ -210,6 +210,23 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_goblin_attack_overhead_smash_rot.json",
     "regrid": true,
     "sha256": "c92c090f28a088ecfd9c283b6b90f5111e32ea3cbae185bd559e33a9d34166eb"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_goblin_clip_tracks.json",
+    "sha256": "1822a493ddb9983f47c0a4adee6df306df1ebef3850189805ab91220e0fadd77"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death",
+     "Unit_Hitted"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
    }
   ]
  }

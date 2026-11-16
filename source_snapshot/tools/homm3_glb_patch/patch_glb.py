@@ -43,13 +43,37 @@ later stage measures the patched body. Ops (docs/homm3_glb_patch_lane.md):
                {clips: {clip: {bone: {times, factor}}}}, each factor in [0.5, 2]); a channel on another grid is
                resampled onto the table's (same first..last key). Children inherit the scale: a stub arm lengthened
                into a punch (h3_air_elemental).
+  setTracks    replace listed bones' translation / rotation / scale keys of whole clips from a sha256-pinned table in
+               the same directory (schema homm3_glb_patch_tracks.v1: {clips: {clip: {times, bones: {bone:
+               {translation?, rotation?, scale?}}}}}); times must be the clip's own key grid (so the master frame
+               mapping and the one-key-per-CS-target rule hold), rotations unit quaternions, scales within the
+               keyScales range. Carries a clip authored offline on the shipped rig (the flyer flights: h3_roc).
+               "clearCorrectives": true zeroes the CS targets of the table's clips instead of re-baking them (a clip
+               authored and approved on the plain skin; a differential re-bake of correctives fitted to the replaced
+               pose pulls layered feathers through each other); stretchRelax and the tear gate then run on those.
+  addJoints    append new bones to the rig from a sha256-pinned table in the same directory (schema
+               homm3_glb_patch_joints.v1: {jointCount, joints: [{name, parent, head: [x, y, z]}]}): jointCount pins the
+               skin's joint count the table was authored on; each joint is a new node under `parent` (a skin joint or
+               an earlier joint of the table), at rest-space `head` with the identity bind rotation, appended to the
+               END of the skin's joint list (existing JOINTS_0 indices stay valid) with its inverse bind matrix, and
+               held at its rest TRS by 2-key STEP channels in every clip (as the export holds a static bone), so old
+               clips carry it rigidly with its parent. Later setWeights / setTracks ops may name the new joints.
+  cutFaces     drop triangles of the body from a sha256-pinned table in the same directory (schema
+               homm3_glb_patch_face_cut.v1: {faceCount, indexSha256, faces: [face index, ...]}): indexSha256 pins the
+               export's index buffer bytes, faces are rows of it. Vertices, UVs, normals and morph targets are kept
+               (the CS targets stay per-vertex); only the index buffer shrinks. For a part modelled fused to another
+               (a tail to a calf) whose bridging triangles stretch into a web. Refused: more than CUT_MAX_SHARE of the
+               faces, a vertex left in no face, a second cutFaces op. The patch then declares the topology change in
+               its stamp ("topology") and proves vertex data byte-identical and the kept triangles the export's own.
 After the ops, <unit>_DEF_Master (the whole reel, the GLB's first animation, what viewers play) is rebuilt from the
 patched Unit_* clips with build_unit.py's clip-to-master frame mapping (master_sequence.json: Unit_<contractSuffix> is the
 longest segment of that suffix, its key i is master frame globalStart + i; a bookend / shorter segment frame takes the
 Unit frame showing the same DEF PNG), so the master shows exactly what ships; frames with no shipped counterpart keep
 their keys and are listed in the stamp's masterSync. The CS targets of the master are re-baked with the rest.
-Every op leaves POSITION, NORMAL, TEXCOORD_0, indices and images byte-identical (checked: the look's geometry hash
-and base colour stay valid, so look.py --stages apply re-delivers the stamped texture without a re-bake).
+Every op leaves POSITION, NORMAL, TEXCOORD_0 and images byte-identical, and every op but cutFaces the indices (checked:
+the look's geometry hash and base colour stay valid, so look.py --stages apply re-delivers the stamped texture without
+a re-bake; after a cutFaces the look accepts the delivery only through declared_cut_errors: the same vertex data and
+the retained base's triangles in order, minus exactly the stamped number of faces).
 The Corrective Smooth morph targets (bake_cs.py) are re-baked differentially in numpy (cs_numpy.py): per target,
 stored + (CS(new skin/pose) - CS(old skin/pose)), bit-identical where the difference is below 1e-7, after a parity
 proof that numpy CS on the input reproduces Blender's stored targets (PARITY_P99_MAX of the body height; refused past it)
@@ -103,14 +127,24 @@ OPS = {"moveWeights": {"op", "from", "to", "region", "keep", "space", "onlyWith"
        "keyRotations": {"op", "table", "sha256", "regrid", "note"},
        "keyTranslations": {"op", "table", "sha256", "regrid", "note"},
        "keyScales": {"op", "table", "sha256", "note"},
+       "setTracks": {"op", "table", "sha256", "clearCorrectives", "note"},
        "diffuseWeights": {"op", "bones", "iterations", "alpha", "region", "note"},
        "setWeights": {"op", "table", "sha256", "note"},
+       "addJoints": {"op", "table", "sha256", "note"},
+       "cutFaces": {"op", "table", "sha256", "note"},
        "stretchRelax": {"op", "clips", "ratio", "iterations", "smooth", "bones", "maxMove", "note"}}
 WEIGHT_TABLE_SCHEMA = "homm3_glb_patch_weight_table.v1"
 KEY_ROT_SCHEMA = "homm3_glb_patch_key_rotations.v1"
 KEY_ROT_DIR = "tools/homm3_glb_patch/key_rotations"
 KEY_TR_SCHEMA = "homm3_glb_patch_key_translations.v1"
 KEY_SC_SCHEMA = "homm3_glb_patch_key_scales.v1"
+TRACKS_SCHEMA = "homm3_glb_patch_tracks.v1"
+JOINTS_SCHEMA = "homm3_glb_patch_joints.v1"
+FACE_CUT_SCHEMA = "homm3_glb_patch_face_cut.v1"
+CUT_MAX_SHARE = 0.1           # cutFaces: at most this share of the body's triangles (a seam between fused parts, not a remesh)
+JOINT_HEAD_MARGIN = 0.5       # addJoints: a head farther than this x the body height outside the rest bounds is refused
+MAX_SKIN_JOINTS = 255         # JOINTS_0 is unsigned bytes in these exports
+TRACK_PATHS = {"translation": 3, "rotation": 4, "scale": 3}
 KEY_SC_RANGE = (0.5, 2.0)     # one key's scale factor per axis; outside it the table is refused (2x is the tear line)
 KEY_TR_MAX_OVER_H = 0.25      # one key's translation delta, / body height; past it the table is refused
 KEY_ROT_MAX_DEG = 120.0       # one key's offset; past it the table is refused (a fit that ran away)
@@ -200,6 +234,12 @@ def spec_errors(spec) -> list[str]:
                 bad.append(f"ops[{i}] keyRotations: regrid must be true or false")
         elif kind == "setWeights":
             bad += [f"ops[{i}] setWeights: {e}" for e in weight_table(op)[1]]
+        elif kind == "addJoints":
+            bad += [f"ops[{i}] addJoints: {e}" for e in joints_table(op)[1]]
+        elif kind == "cutFaces":
+            bad += [f"ops[{i}] cutFaces: {e}" for e in face_cut_table(op)[1]]
+            if any(isinstance(o, dict) and o.get("op") == "cutFaces" for o in ops[:i]):
+                bad.append(f"ops[{i}] cutFaces: a second cutFaces op (one table pins the export's index buffer)")
         elif kind == "stretchRelax":
             bad += [f"ops[{i}] stretchRelax: {e}" for e in stretch_relax_errors(op)]
             if any(isinstance(o, dict) and o.get("op") != "stretchRelax" for o in ops[i + 1:]):
@@ -207,6 +247,10 @@ def spec_errors(spec) -> list[str]:
                            "targets, after all skin and track edits)")
         elif kind == "keyScales":
             bad += [f"ops[{i}] keyScales: {e}" for e in key_scales_table(op)[1]]
+        elif kind == "setTracks":
+            bad += [f"ops[{i}] setTracks: {e}" for e in tracks_table(op)[1]]
+            if "clearCorrectives" in op and not isinstance(op["clearCorrectives"], bool):
+                bad.append(f"ops[{i}] setTracks: clearCorrectives must be true or false")
         elif kind == "keyTranslations":
             bad += [f"ops[{i}] keyTranslations: {e}" for e in key_translations_table(op)[1]]
             if "regrid" in op and not isinstance(op["regrid"], bool):
@@ -487,6 +531,78 @@ def op_key_scales(g: Glb, op: dict) -> dict:
     if regridded:
         rep["regridded"] = regridded
     return rep
+
+
+def tracks_table(op: dict) -> tuple[dict | None, list[str]]:
+    """(table, schema errors) of a setTracks op: a repo file under KEY_ROT_DIR pinned by its sha256, schema
+    TRACKS_SCHEMA, {clips: {clip: {times, bones: {bone: {translation?, rotation?, scale?}}}}} with one value per time
+    (rotation: unit quaternion xyzw; scale: per axis within KEY_SC_RANGE)."""
+    t = op.get("table")
+    if not (isinstance(t, str) and t.replace("\\", "/").startswith(KEY_ROT_DIR + "/") and t.endswith(".json")
+            and ".." not in t):
+        return None, [f"table must be a repo-relative {KEY_ROT_DIR}/<name>.json path"]
+    p = ROOT / t
+    if not p.is_file():
+        return None, [f"table {t} does not exist"]
+    raw = p.read_bytes()
+    if op.get("sha256") != sha(raw):
+        return None, [f"sha256 is not the table's ({sha(raw)}): re-pin it after editing {t}"]
+    try:
+        tab = json.loads(raw.decode("utf-8"))
+    except ValueError as e:
+        return None, [f"table {t} is not JSON ({e})"]
+    bad = [] if tab.get("schema") == TRACKS_SCHEMA else [f"table schema must be {TRACKS_SCHEMA}"]
+    cl = tab.get("clips")
+    if not (isinstance(cl, dict) and cl):
+        return tab, bad + ["table clips must be a non-empty {clip: {times, bones}} map"]
+    for c, d in cl.items():
+        if not (isinstance(d, dict) and set(d) == {"times", "bones"} and isinstance(d["bones"], dict) and d["bones"]):
+            bad.append(f"{c}: must be {{times, bones: {{bone: {{translation?, rotation?, scale?}}}}}}"); continue
+        tt = np.asarray(d["times"], float)
+        if tt.ndim != 1 or not len(tt) or np.any(np.diff(tt) <= 0):
+            bad.append(f"{c}: times must be increasing"); continue
+        for b, tr in d["bones"].items():
+            if not (isinstance(tr, dict) and tr and not set(tr) - set(TRACK_PATHS)):
+                bad.append(f"{c} {b}: must hold translation / rotation / scale"); continue
+            for path, v in tr.items():
+                try:
+                    v = np.asarray(v, float)
+                except (TypeError, ValueError):
+                    v = np.zeros(0)
+                if v.shape != (len(tt), TRACK_PATHS[path]) or not np.isfinite(v).all():
+                    bad.append(f"{c} {b} {path}: needs one finite {TRACK_PATHS[path]}-vector per time")
+                elif path == "rotation" and np.abs(np.linalg.norm(v, axis=1) - 1.0).max() > 1e-3:
+                    bad.append(f"{c} {b} rotation: quaternions must be unit length")
+                elif path == "scale" and (v.min() < KEY_SC_RANGE[0] or v.max() > KEY_SC_RANGE[1]):
+                    bad.append(f"{c} {b} scale: must be within {KEY_SC_RANGE}")
+    return tab, bad
+
+
+def op_set_tracks(g: Glb, op: dict) -> dict:
+    """Replace listed bones' keys of whole clips with the table's (LINEAR, on the clip's own key grid: the table's
+    times must equal it, so clip length, the master frame mapping and the CS targets' keys are unchanged). Bones and
+    paths the table does not list keep their channels. The clip is authored offline on the shipped rig (flyer
+    flights, 2026-11-09 h3_roc); the CS re-bake and the tear gate see the new poses."""
+    tab, bad = tracks_table(op)
+    if bad:
+        raise SystemExit(f"setTracks: {'; '.join(bad)}")
+    done = {}
+    for clip, d in tab["clips"].items():
+        a = g.anim(clip)
+        t, grid = np.asarray(d["times"], float), g.key_grid(clip)
+        if len(t) != len(grid) or np.abs(t - grid).max() > KEY_ROT_TIME_EPS:
+            raise SystemExit(f"setTracks: {clip}: the table's {len(t)} times are not the clip's key grid "
+                             f"({len(grid)} keys, {grid[0]:.4f}..{grid[-1]:.4f})")
+        tg = {}
+        for bone, tr in d["bones"].items():
+            if bone not in g.names:
+                raise SystemExit(f"setTracks: no node {bone!r}")
+            for path, v in tr.items():
+                v = np.asarray(v, float)
+                tg[(g.names.index(bone), path)] = v / np.linalg.norm(v, axis=1, keepdims=True) if path == "rotation" else v
+        write_channels(g, a, t, tg, "LINEAR")
+        done[clip] = {"keys": len(t), "bones": len(d["bones"])}
+    return {"op": "setTracks", "table": op["table"], "sha256": op["sha256"], "clips": done}
 
 
 def op_key_translations(g: Glb, op: dict, height: float) -> dict:
@@ -774,6 +890,285 @@ def op_set_weights(body: Body, op: dict, J: np.ndarray, W: np.ndarray) -> tuple[
             J2[v, k], W2[v, k] = names.index(b), x / s
     return J2, W2, {"op": "setWeights", "table": op["table"], "sha256": op["sha256"],
                     "vertices": len(tab["vertices"]), "note": op.get("note", "")}
+
+
+def pinned_table(op: dict, schema: str) -> tuple[dict | None, list[str]]:
+    """(table, errors) of an op's sha256-pinned repo table under KEY_ROT_DIR with the given schema."""
+    t = op.get("table")
+    if not (isinstance(t, str) and t.replace("\\", "/").startswith(KEY_ROT_DIR + "/") and t.endswith(".json")
+            and ".." not in t):
+        return None, [f"table must be a repo-relative {KEY_ROT_DIR}/<name>.json path"]
+    p = ROOT / t
+    if not p.is_file():
+        return None, [f"table {t} does not exist"]
+    raw = p.read_bytes()
+    if op.get("sha256") != sha(raw):
+        return None, [f"sha256 is not the table's ({sha(raw)}): re-pin it after editing {t}"]
+    try:
+        tab = json.loads(raw.decode("utf-8"))
+    except ValueError as e:
+        return None, [f"table {t} is not JSON ({e})"]
+    if not isinstance(tab, dict) or tab.get("schema") != schema:
+        return None, [f"table schema must be {schema}"]
+    return tab, []
+
+
+def _num(v) -> bool:
+    return isinstance(v, (int, float)) and not isinstance(v, bool) and bool(np.isfinite(v))
+
+
+def joints_table(op: dict) -> tuple[dict | None, list[str]]:
+    """(table, schema errors) of an addJoints op: JOINTS_SCHEMA {jointCount, joints: [{name, parent, head}]}; a parent
+    is a joint of the skin or an earlier joint of the table (checked against the skin by the op)."""
+    tab, bad = pinned_table(op, JOINTS_SCHEMA)
+    if tab is None:
+        return tab, bad
+    return tab, joints_table_errors(tab)
+
+
+def joints_table_errors(tab: dict) -> list[str]:
+    bad = []
+    extra = set(tab) - {"schema", "unit", "note", "jointCount", "joints"}
+    if extra:
+        bad.append(f"unknown table keys {sorted(extra)}")
+    if not (isinstance(tab.get("jointCount"), int) and not isinstance(tab["jointCount"], bool) and tab["jointCount"] > 0):
+        bad.append("table jointCount must be the skin's joint count the table was authored on")
+    js = tab.get("joints")
+    if not (isinstance(js, list) and js):
+        return bad + ["table joints must be a non-empty list of {name, parent, head}"]
+    seen = set()
+    for k, j in enumerate(js):
+        if not (isinstance(j, dict) and set(j) == {"name", "parent", "head"} and isinstance(j["name"], str)
+                and j["name"].strip() == j["name"] and j["name"] and isinstance(j["parent"], str) and j["parent"]
+                and isinstance(j["head"], list) and len(j["head"]) == 3 and all(_num(x) for x in j["head"])):
+            bad.append(f"joints[{k}]: must be {{name, parent, head: [x, y, z]}}")
+            continue
+        if j["name"] in seen:
+            bad.append(f"joints[{k}]: duplicate name {j['name']!r}")
+        if j["parent"] == j["name"]:
+            bad.append(f"joints[{k}]: {j['name']!r} is its own parent")
+        seen.add(j["name"])
+    return bad
+
+
+def face_cut_table(op: dict) -> tuple[dict | None, list[str]]:
+    """(table, schema errors) of a cutFaces op: FACE_CUT_SCHEMA {faceCount, indexSha256, faces}: strictly increasing
+    row numbers of the export's index buffer, which indexSha256 pins."""
+    tab, bad = pinned_table(op, FACE_CUT_SCHEMA)
+    if tab is None:
+        return tab, bad
+    return tab, face_cut_table_errors(tab)
+
+
+def face_cut_table_errors(tab: dict) -> list[str]:
+    bad = []
+    extra = set(tab) - {"schema", "unit", "note", "faceCount", "indexSha256", "faces"}
+    if extra:
+        bad.append(f"unknown table keys {sorted(extra)}")
+    n = tab.get("faceCount")
+    if not (isinstance(n, int) and not isinstance(n, bool) and n > 0):
+        bad.append("table faceCount must be the body's triangle count")
+        n = None
+    if not (isinstance(tab.get("indexSha256"), str) and len(tab["indexSha256"]) == 64):
+        bad.append("table indexSha256 must be the sha256 of the export's index buffer bytes")
+    fs = tab.get("faces")
+    if not (isinstance(fs, list) and fs and all(isinstance(x, int) and not isinstance(x, bool) for x in fs)):
+        return bad + ["table faces must be a non-empty list of face indices"]
+    if any(b <= a for a, b in zip(fs, fs[1:])) or fs[0] < 0:
+        bad.append("table faces must be strictly increasing, from 0")
+    if n is not None:
+        if fs[-1] >= n:
+            bad.append(f"table faces reach {fs[-1]}, past faceCount {n}")
+        if len(fs) > CUT_MAX_SHARE * n:
+            bad.append(f"table cuts {len(fs)} of {n} faces, more than {CUT_MAX_SHARE} of the body (a remesh, not a cut)")
+    return bad
+
+
+def index_bytes(g: Glb, ai: int) -> bytes:
+    """The raw little-endian bytes of an index accessor (tightly packed)."""
+    a = g.json["accessors"][ai]
+    bv = g.json["bufferViews"][a["bufferView"]]
+    if "sparse" in a or bv.get("byteStride"):
+        raise SystemExit(f"index accessor {ai} is sparse or strided")
+    size = {5121: 1, 5123: 2, 5125: 4}[a["componentType"]]
+    off = bv.get("byteOffset", 0) + a.get("byteOffset", 0)
+    return bytes(g.bin[off:off + a["count"] * size])
+
+
+def op_add_joints(g: Glb, body: "Body", op: dict, tab: dict | None = None) -> dict:
+    """Append the table's joints to the rig (see the module docstring). Edits g in place: nodes, the skin's joint list
+    and inverse bind accessor, and a rest-TRS hold in every animation; the caller rebuilds Body(g)."""
+    if tab is None:
+        tab, bad = joints_table(op)
+        if bad:
+            raise SystemExit(f"addJoints: {'; '.join(bad)}")
+    if tab["jointCount"] != len(body.joints):
+        raise SystemExit(f"addJoints: the table was authored on a {tab['jointCount']}-joint skin, this skin has "
+                         f"{len(body.joints)} (another export, or the joints were already added)")
+    if len(g.json.get("skins", [])) != 1:
+        raise SystemExit(f"addJoints: the GLB has {len(g.json.get('skins', []))} skins; the op edits a single-skin export")
+    if len(body.joints) + len(tab["joints"]) > MAX_SKIN_JOINTS:
+        raise SystemExit(f"addJoints: {len(body.joints)} + {len(tab['joints'])} joints exceed {MAX_SKIN_JOINTS}")
+    skin = g.json["skins"][g.nodes[body.node]["skin"]]
+    lo, hi = body.V.min(0) - JOINT_HEAD_MARGIN * body.H, body.V.max(0) + JOINT_HEAD_MARGIN * body.H
+    bind = {n: np.linalg.inv(m) for n, m in zip(body.jnames, body.ibm)}      # joint bind world matrices
+    node_of = dict(zip(body.jnames, body.joints))
+    new_ibm, added = [], []
+    for j in tab["joints"]:
+        name, par = j["name"], j["parent"]
+        if name in g.names:
+            raise SystemExit(f"addJoints: a node named {name!r} already exists")
+        if par not in bind:
+            raise SystemExit(f"addJoints: parent {par!r} of {name!r} is neither a skin joint nor an earlier new joint")
+        head = np.asarray(j["head"], float)
+        if np.any(head < lo) or np.any(head > hi):
+            raise SystemExit(f"addJoints: head of {name!r} {head.tolist()} is outside the body's rest bounds "
+                             f"(+- {JOINT_HEAD_MARGIN} x height); rest-space glTF coordinates are expected")
+        Gp = bind[par]
+        R = Gp[:3, :3]
+        if np.abs(R.T @ R - np.eye(3)).max() > 1e-4 or np.linalg.det(R) < 0:
+            raise SystemExit(f"addJoints: parent {par!r} has a scaled or sheared bind matrix; the new joint's rest "
+                             "TRS would not be a rigid transform")
+        Gk = np.eye(4)
+        Gk[:3, 3] = head
+        L = np.linalg.inv(Gp) @ Gk
+        q = G.mat_q(L[:3, :3])
+        q = q / np.linalg.norm(q)
+        node = {"name": name, "translation": [float(np.float32(x)) for x in L[:3, 3]],
+                "rotation": [float(np.float32(x)) for x in (q if q[3] >= 0 else -q)]}
+        g.nodes.append(node)
+        ni = len(g.nodes) - 1
+        g.names.append(name)
+        g.nodes[node_of[par]].setdefault("children", []).append(ni)
+        g.parent[ni] = node_of[par]
+        skin["joints"].append(ni)
+        node_of[name], bind[name] = ni, Gk
+        new_ibm.append(np.linalg.inv(Gk))
+        added.append(ni)
+    ibm = np.concatenate([body.ibm, np.stack(new_ibm)])
+    skin["inverseBindMatrices"] = g.append_accessor(ibm.transpose(0, 2, 1).reshape(-1, 16), "MAT4")
+    # a rest-TRS hold in every clip, as the export keys a static bone: 2-key STEP translation / rotation / scale over
+    # the clip's own first..last key, one sampler per channel (idle retime refuses shared samplers)
+    held = 0
+    for a in g.json.get("animations", []):
+        ends = [g.read(s["input"])[[0, -1], 0] for s in a["samplers"]]
+        if not ends:
+            raise SystemExit(f"addJoints: animation {a.get('name')} has no key span to hold the new joints over")
+        # the float32 first / last key MOST samplers carry, not the min / max: an earlier regrid op can leave a few
+        # channels a float rounding off the export's key (0.083333 next to 0.08333334), and a hold keyed on that
+        # stray time puts a near-duplicate key into the clip's key union (2026-11-10 h3_griffin: the ground stage
+        # then wrote an 11-key Hips track into a x3-densified 10-key clip and the freeze gate read it as resampled)
+        t0, t1 = (float(vals[np.argmax(n)]) for vals, n in
+                  (np.unique(np.array([e[k] for e in ends], np.float32), return_counts=True) for k in (0, 1)))
+        if t1 <= t0:
+            raise SystemExit(f"addJoints: animation {a.get('name')} has no key span to hold the new joints over")
+        tin = g.append_accessor(np.array([[t0], [t1]], np.float32), "SCALAR")
+        for ni in added:
+            n = g.nodes[ni]
+            for path, v, typ in (("translation", n["translation"], "VEC3"), ("rotation", n["rotation"], "VEC4"),
+                                 ("scale", [1.0, 1.0, 1.0], "VEC3")):
+                out = g.append_accessor(np.array([v, v], np.float32), typ)
+                a["samplers"].append({"input": tin, "output": out, "interpolation": "STEP"})
+                a["channels"].append({"sampler": len(a["samplers"]) - 1, "target": {"node": ni, "path": path}})
+                held += 1
+    # the bake never saw these joints: a vertex re-skinned to them (setWeights) gets no Corrective Smooth, by the
+    # bake's own exclusion rule (correctiveSmooth.excludeBones: the corrective is scaled by 1 - the weight on the
+    # listed bones). CS on a thin ribbon that a new chain bends away from its rest curl collapses it (2026-11-10
+    # h3_demon: the re-baked Move targets cut the tail in two; tools/homm3_def_retarget/ext/rig_chain.py pairs every
+    # chain it builds with the same exclusion). cs_rebake's new side and cs_rekey downstream read this record.
+    excluded = []
+    bake = (g.json.get("asset", {}).get("extras") or {}).get(CS.BAKE_STAMP)
+    if isinstance(bake, dict):
+        excluded = [j["name"] for j in tab["joints"]]
+        bake["excludeBones"] = list(bake.get("excludeBones") or []) + excluded
+    return {"op": "addJoints", "table": op["table"], "sha256": op["sha256"], "jointCount": [tab["jointCount"], len(ibm)],
+            "joints": [[j["name"], j["parent"]] for j in tab["joints"]], "heldChannels": held,
+            "correctiveExcludeBonesAdded": excluded, "note": op.get("note", "")}
+
+
+def op_cut_faces(g: Glb, body: "Body", op: dict, tab: dict | None = None) -> dict:
+    """Drop the table's triangles from the body's index buffer, in place (the accessor and its bufferView shrink; the
+    freed tail bytes are zeroed). The caller rebuilds Body(g)."""
+    if tab is None:
+        tab, bad = face_cut_table(op)
+        if bad:
+            raise SystemExit(f"cutFaces: {'; '.join(bad)}")
+    if body.prim.get("mode", 4) != 4:
+        raise SystemExit("cutFaces: the body primitive is not a triangle list")
+    ai = body.prim["indices"]
+    a = g.json["accessors"][ai]
+    if tab["faceCount"] != len(body.F):
+        raise SystemExit(f"cutFaces: the table is for {tab['faceCount']} faces, the body has {len(body.F)}")
+    raw = index_bytes(g, ai)
+    if sha(raw) != tab["indexSha256"]:
+        raise SystemExit(f"cutFaces: the body's index buffer ({sha(raw)}) is not the one the table pins "
+                         f"({tab['indexSha256']}): another export; rebuild the table on this one")
+    if accessor_refs(g).get(ai, 0) != 1 or sum(1 for x in g.json["accessors"] if x.get("bufferView") == a["bufferView"]) != 1:
+        raise SystemExit("cutFaces: the index accessor or its bufferView is shared; refusing an in-place cut")
+    keep = np.ones(len(body.F), bool)
+    keep[np.asarray(tab["faces"], np.int64)] = False
+    F1 = body.F[keep]
+    used = np.zeros(len(body.V), bool)
+    used[body.F.ravel()] = True
+    orphan = used.copy()
+    orphan[F1.ravel()] = False
+    # vertices only the cut faces used stay in the buffers (no vertex is ever removed or renumbered: the morph
+    # targets, the look's texture fit and every weight table index them). They are still skinned, so the ground /
+    # bounds stages see the same point cloud as before the cut; they are simply never drawn. Reported, not refused.
+    dt = {5121: "u1", 5123: "<u2", 5125: "<u4"}[a["componentType"]]
+    data = np.ascontiguousarray(F1.reshape(-1), dtype=dt).tobytes()
+    bv = g.json["bufferViews"][a["bufferView"]]
+    off = bv.get("byteOffset", 0) + a.get("byteOffset", 0)
+    g.bin[off:off + len(raw)] = data + b"\0" * (len(raw) - len(data))
+    a["count"] = int(F1.size)
+    bv["byteLength"] = a.get("byteOffset", 0) + len(data)
+    if "min" in a or "max" in a:
+        a["min"], a["max"] = [int(F1.min())], [int(F1.max())]
+    return {"op": "cutFaces", "table": op["table"], "sha256": op["sha256"], "faces": [len(body.F), len(F1)],
+            "facesCut": int(len(body.F) - len(F1)), "orphanVertices": int(orphan.sum()), "indexSha256": [tab["indexSha256"], sha(data)],
+            "note": op.get("note", "")}
+
+
+def vertex_data_sha(data: bytes) -> str:
+    """sha256 over the body primitive's POSITION, NORMAL and TEXCOORD_0 bytes (the per-vertex geometry a cut keeps)."""
+    sys.path.insert(0, str(ROOT / "tools/homm3_unit_look"))
+    import glbpatch as LG  # noqa: E402
+    lg = LG.Glb(data)
+    h = hashlib.sha256()
+    for p in lg.json["meshes"][lg.body_mesh_index()]["primitives"]:
+        for k in ("POSITION", "NORMAL", "TEXCOORD_0"):
+            if k in p["attributes"]:
+                h.update(k.encode() + lg.accessor_bytes(p["attributes"][k]))
+    return h.hexdigest()
+
+
+def declared_cut_errors(delivered: bytes, base: bytes) -> list[str]:
+    """Why `delivered` is NOT `base` with a declared cutFaces ([] = it is): the delivered GLB's patch stamp names
+    `base` as its source and declares a face cut, the body's POSITION / NORMAL / TEXCOORD_0 bytes are the base's, and
+    the delivered triangles are the base's rows in order minus exactly the stamped number of faces. The look's
+    geometry gate (tools/homm3_unit_look/look.py stage_apply) accepts an index change only through this."""
+    st = Glb(delivered).json.get("asset", {}).get("extras", {}).get(STAMP)
+    topo = (st or {}).get("topology") if isinstance(st, dict) else None
+    if not (isinstance(topo, dict) and isinstance(topo.get("facesCut"), int) and topo["facesCut"] > 0):
+        return [f"the GLB's {STAMP} stamp declares no face cut"]
+    if st.get("sourceGlbSha256") != sha(base):
+        return [f"the {STAMP} stamp's source is not the retained base"]
+    bad = []
+    if vertex_data_sha(delivered) != vertex_data_sha(base):
+        bad.append("the body's POSITION / NORMAL / TEXCOORD_0 bytes differ from the base's")
+    F0, F1 = Body(Glb(base)).F, Body(Glb(delivered)).F
+    if len(F0) - len(F1) != topo["facesCut"]:
+        bad.append(f"{len(F0) - len(F1)} faces are gone, the stamp declares {topo['facesCut']}")
+    else:
+        i, n0 = 0, len(F0)                       # F1 must be an in-order subsequence of F0's rows
+        for row in F1:
+            while i < n0 and not np.array_equal(F0[i], row):
+                i += 1
+            if i == n0:
+                bad.append("the delivered triangles are not the base's rows in order")
+                break
+            i += 1
+    return bad
 
 
 def op_move_weights(body: Body, op: dict, J: np.ndarray, W: np.ndarray) -> tuple[np.ndarray, np.ndarray, dict]:
@@ -1302,9 +1697,15 @@ def skin_matrices(g: Glb, body: Body, clip: str, time: float) -> np.ndarray:
 
 
 def cs_rebake(g_old: Glb, g_new: Glb, body: Body, J0, W0, J1, W1, parity_only=False, clips=None,
-              dup_poses: set | None = None, relax_ops: list | None = None, unit: str | None = None) -> tuple[dict, list]:
+              dup_poses: set | None = None, relax_ops: list | None = None, unit: str | None = None,
+              clear_clips: set | None = None, body1: Body | None = None) -> tuple[dict, list]:
     """Per target: numpy CS offsets under the old and the new skin/pose; parity of the old against the stored target.
-    relax_ops: stretchRelax ops, run on the re-baked targets of their clips before the tear gate measures them."""
+    relax_ops: stretchRelax ops, run on the re-baked targets of their clips before the tear gate measures them.
+    body1: the patched GLB's body when an addJoints / cutFaces op changed the rig or the triangles (default: body).
+    The old side (parity, the stretch gate's input) is then measured on `body` (the export's joints and triangles),
+    the new side (the re-baked offsets, stretchRelax, the gate's output) on body1: the welded proxy of the written
+    mesh, the one cs_rekey rebuilds downstream."""
+    body1 = body if body1 is None else body1
     Wn0 = W0 / np.maximum(W0.sum(1, keepdims=True), 1e-9)
     Wn1 = W1 / np.maximum(W1.sum(1, keepdims=True), 1e-9)
     weld = CS.Weld(body.V, J0, Wn0, body.F)
@@ -1326,7 +1727,7 @@ def cs_rebake(g_old: Glb, g_new: Glb, body: Body, J0, W0, J1, W1, parity_only=Fa
     v2 = (g_old.json.get("asset", {}).get("extras") or {}).get(CS.BAKE_STAMP, {}).get("schema") == CS.BAKE_SCHEMA
     ce = 0.0 if v2 else CS.COND_EDGE * body.H
     poses = [p for p in target_poses(g_old, body, unit) if clips is None or p[1] in clips]
-    body._pose_times = [(c, t) for _, c, t in poses]
+    body._pose_times = body1._pose_times = [(c, t) for _, c, t in poses]
     errs, stored_mag, changed_v, changed_t, support_errs = [], [], 0, 0, []
     worst = {"conditioned": 0.0, "illConditioned": 0.0}
     ill_total, ill_changed, all_total, all_changed = 0, 0, 0, 0
@@ -1341,13 +1742,15 @@ def cs_rebake(g_old: Glb, g_new: Glb, body: Body, J0, W0, J1, W1, parity_only=Fa
     # the written weights; offsets under the new skin must come from that same proxy or its parity check refuses
     weld1, cache1 = weld, cache
     if not parity_only:
-        w1 = CS.Weld(body.V, J1, Wn1, body.F)
-        if w1.ng != weld.ng or not np.array_equal(w1.gid, weld.gid):
+        w1 = CS.Weld(body1.V, J1, Wn1, body1.F)
+        if body1 is not body or w1.ng != weld.ng or not np.array_equal(w1.gid, weld.gid):
             weld1 = w1
-            cache1 = weld1.rest_deltas(body.V[weld1.rep], *CS.bake_smoothing(
+            cache1 = weld1.rest_deltas(body1.V[weld1.rep], *CS.bake_smoothing(
                 (g_old.json.get("asset", {}).get("extras") or {}).get(CS.BAKE_STAMP)))
-    weld1.set_exclusion(CS.exclusion_share(J1, Wn1, body.jnames, excl)[weld1.rep] if excl else None)
-    R1 = None if parity_only else         CS.offsets_batch(weld1, body.V, J1, Wn1, [skin_matrices(g_new, body, c, t) for _, c, t in poses], cache1, ce)
+    # the new side's exclusion is the patched record's: addJoints appends its joints to the bake's excludeBones
+    excl1 = ((g_new.json.get("asset", {}).get("extras") or {}).get(CS.BAKE_STAMP) or {}).get("excludeBones") or []
+    weld1.set_exclusion(CS.exclusion_share(J1, Wn1, body1.jnames, excl1)[weld1.rep] if excl1 else None)
+    R1 = None if parity_only else         CS.offsets_batch(weld1, body1.V, J1, Wn1, [skin_matrices(g_new, body1, c, t) for _, c, t in poses], cache1, ce)
     for pi, (ti, clip, tm) in enumerate(poses):
         stored = g_old.read(body.targets[ti])
         d0, c0 = R0[pi]
@@ -1379,8 +1782,10 @@ def cs_rebake(g_old: Glb, g_new: Glb, body: Body, J0, W0, J1, W1, parity_only=Fa
                 support_errs.append(e[m & cond])
             if (m & ~cond).any():
                 worst["illConditioned"] = max(worst["illConditioned"], float(n[m & ~cond].max()))
+        if clear_clips and clip in clear_clips:   # setTracks clearCorrectives: the authored clip ships on the plain skin
+            out = np.zeros_like(stored)
         new_targets.append((ti, out))
-    relaxed = [] if parity_only else op_stretch_relax(relax_ops or [], weld1, body, J1, Wn1, g_new, poses, new_targets)
+    relaxed = [] if parity_only else op_stretch_relax(relax_ops or [], weld1, body1, J1, Wn1, g_new, poses, new_targets)
     for pi, (ti, clip, tm) in enumerate(poses):
         if parity_only:
             break
@@ -1388,8 +1793,8 @@ def cs_rebake(g_old: Glb, g_new: Glb, body: Body, J0, W0, J1, W1, parity_only=Fa
         if dup_poses and (clip, round(tm, 4)) in dup_poses:   # a master copy of a shipped pose: gated on its Unit_* clip
             stretch["dedupedMasterTargets"] += 1
             continue
-        for k, (J_, W_, g_, D_) in (("input", (J0, Wn0, g_old, stored)), ("output", (J1, Wn1, g_new, out))):
-            r = edge_stretch(body, J_, W_, skin_matrices(g_, body, clip, tm), D_)
+        for k, (J_, W_, g_, D_, b_) in (("input", (J0, Wn0, g_old, stored, body)), ("output", (J1, Wn1, g_new, out, body1))):
+            r = edge_stretch(b_, J_, W_, skin_matrices(g_, b_, clip, tm), D_)
             stretch[k]["edgesOver2x"] += int((r > STRETCH_RATIO).sum())
             stretch[k]["worst"] = max(stretch[k]["worst"], round(float(r.max()), 3))
 
@@ -1520,14 +1925,24 @@ def patch_bytes(unit: str, data: bytes, spec: dict) -> tuple[bytes, dict]:
     if STAMP in g0.json.get("asset", {}).get("extras", {}):
         raise SystemExit(f"{unit}: the GLB is already patched ({STAMP}); patch the verified export")
     g = Glb(data)
-    body = Body(g)
+    body0 = Body(g0)                      # the export's rig and triangles: the CS parity / tear gate's input side
+    body = Body(g)                        # rebuilt after an addJoints / cutFaces (the patched rig and triangles)
     J, W = body.J.copy(), body.W.copy()
-    ops = []
+    ops, topo = [], {}
     relax_ops = [op for op in spec["ops"] if op["op"] == "stretchRelax"]
     for op in spec["ops"]:
         if op["op"] == "stretchRelax":
             continue                      # runs on the re-baked CS targets, inside cs_rebake (recorded there)
-        if op["op"] == "moveWeights":
+        if op["op"] == "addJoints":
+            r = op_add_joints(g, body, op)
+            body = Body(g)
+            topo.setdefault("jointsAdded", []).extend(n for n, _ in r["joints"])
+        elif op["op"] == "cutFaces":
+            r = op_cut_faces(g, body, op)
+            body = Body(g)
+            topo["facesCut"] = r["facesCut"]
+            topo["cutTableSha256"] = op["sha256"]
+        elif op["op"] == "moveWeights":
             J, W, r = op_move_weights(body, op, J, W)
         elif op["op"] == "diffuseWeights":
             J, W, r = op_diffuse_weights(body, op, J, W)
@@ -1541,6 +1956,8 @@ def patch_bytes(unit: str, data: bytes, spec: dict) -> tuple[bytes, dict]:
             r = op_key_translations(g, op, body.H)
         elif op["op"] == "keyScales":
             r = op_key_scales(g, op)
+        elif op["op"] == "setTracks":
+            r = op_set_tracks(g, op)
         else:
             r = op_rotate_track(g, op)
         ops.append(r)
@@ -1559,9 +1976,11 @@ def patch_bytes(unit: str, data: bytes, spec: dict) -> tuple[bytes, dict]:
     if relax_ops and not body.targets:
         raise SystemExit(f"{unit}: stretchRelax corrects CS_ targets and the body has none")
     if body.targets:
-        cs, new_targets = cs_rebake(g0, g, body, body.J, body.W, J, W,
+        cs, new_targets = cs_rebake(g0, g, body0, body0.J, body0.W, J, W, body1=body,
                                      dup_poses=master_duplicate_poses(g0, fmap) if "copyCheck" in msync else None,
-                                     relax_ops=relax_ops, unit=unit)
+                                     relax_ops=relax_ops, unit=unit,
+                                     clear_clips={c for op in spec["ops"] if op["op"] == "setTracks"
+                                                  and op.get("clearCorrectives") for c in tracks_table(op)[0]["clips"]})
         ops += cs.get("stretchRelax", [])
         perr = parity_errors(cs)
         if perr:
@@ -1569,19 +1988,34 @@ def patch_bytes(unit: str, data: bytes, spec: dict) -> tuple[bytes, dict]:
                              f"stretch {json.dumps(cs.get('stretch'))}); fix the patch or use the full chain")
     refs = accessor_refs(g)
     at = body.prim["attributes"]
+    if J.max() > {5121: 255, 5123: 65535}[g.json["accessors"][at["JOINTS_0"]]["componentType"]]:
+        raise SystemExit(f"{unit}: a joint index past the JOINTS_0 component range")
     overwrite(g, at["JOINTS_0"], J, refs)
     overwrite(g, at["WEIGHTS_0"], W, refs)
     for ti, arr in (new_targets if body.targets else []):
         overwrite(g, body.targets[ti], arr, refs)
+    before = geometry_and_images(data)
+    if topo:
+        topo["sourceGeometrySha256"] = before["geometrySha256"]
     g.json.setdefault("asset", {}).setdefault("extras", {})[STAMP] = {
         "schema": SCHEMA, "tool": "tools/homm3_glb_patch/patch_glb.py", "sourceGlbSha256": sha(data),
         "configSha256": canonical_sha(spec), "reason": spec["reason"], "ops": ops, "masterSync": msync, "csRebake": cs,
+        **({"topology": topo} if topo else {}),
         "proof": "generated artifact: numpy skin/track patch + differential CS re-bake; not built into a bundle, not in game"}
     out = g.to_bytes()
-    before, after = geometry_and_images(data), geometry_and_images(out)
-    if before != after:
+    after = geometry_and_images(out)
+    if topo.get("facesCut"):
+        # the one declared geometry change: the index buffer lost exactly the table's faces. Everything else must be
+        # the export's: images, normals, and (declared_cut_errors) the vertex data and the kept triangles in order
+        topo["geometrySha256"] = after["geometrySha256"]
+        out = g.to_bytes()                # the stamp now names the cut geometry
+        same = {k: before[k] == after[k] for k in ("normalSha256", "imageSha256")}
+        bad = declared_cut_errors(out, data)
+        if not all(same.values()) or bad or after["geometrySha256"] == before["geometrySha256"]:
+            raise SystemExit(f"{unit}: cutFaces changed more than the declared faces ({same}, {bad}); refusing")
+    elif before != after:
         raise SystemExit(f"{unit}: the patch changed geometry, normals or images ({before} -> {after}); refusing")
-    return out, {"ops": ops, "masterSync": msync, "csRebake": cs, **after}
+    return out, {"ops": ops, "masterSync": msync, "csRebake": cs, **({"topology": topo} if topo else {}), **after}
 
 
 def apply_bytes(unit: str, data: bytes, path: Path, out: Path | None = None):

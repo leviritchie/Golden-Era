@@ -282,7 +282,12 @@ internal static class Homm3RewardEconomyNativeAdapter
 			return false;
 		}
 
-		return TryInvokeVoid(_resourceAddValue, resource, new object[] { amount }, "resource add", out failReason);
+		if (!TryInvokeVoid(_resourceAddValue, resource, new object[] { amount }, "resource add", out failReason))
+			return false;
+		// The direct add raises no resource-changed event; redraw the bar so the totals show now, not at the next native change.
+		if (amount != 0)
+			Homm3ResourceBarRefresh.TryRefresh();
+		return true;
 	}
 
 	internal static bool TrySpendResourceIfAvailableFromWrapper(object resourceWrapper, string resourceName, int amount, out bool spent, out string failReason)

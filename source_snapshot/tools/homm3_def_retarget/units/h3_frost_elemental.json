@@ -2734,7 +2734,7 @@
  },
  "shatterReason": "authenticity lane-B 2026-10-11: the deferred rubble (deferMeshes) was not drawn in game, so the Death ended in a vanish; solid chunks + the rubbleSettle heap on the ground (h3_behemoth / h3_vampire / h3_fire_hound recipe), so the conflux_slice_v1 row can move to mergeMeshes.",
  "glbPatch": {
-  "reason": "lane B 2026-10-11 authenticity: AttackFront strikes with a full-body pirouette like the DEF (facing the viewer f4, reversed f5, facing away f6, round again f7) instead of only twisting the torso; the tail fin lifts like the DEF instead of staying flat - Defence curls the tail end up behind the body (f2-f8), AttackFront whips it up (f4-f7), Move lifts the fin with the swim stroke (f1-f5)",
+  "reason": "lane B 2026-10-11 authenticity: AttackFront strikes with a full-body pirouette like the DEF (facing the viewer f4, reversed f5, facing away f6, round again f7) instead of only twisting the torso; the tail fin lifts like the DEF instead of staying flat - Defence curls the tail end up behind the body (f2-f8), AttackFront whips it up (f4-f7), Move lifts the fin with the swim stroke (f1-f5); 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass",
   "ops": [
    {
     "op": "setWeights",
@@ -2753,6 +2753,17 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_frost_elemental_tail_fin_spin_rot.json",
     "regrid": true,
     "sha256": "a1dd4c87dae4f29258a18d39aa3f189e37f3f4a9fd43d003bea77fe95aed4ec6"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_frost_elemental_move_weights.json",
+    "sha256": "c9ccb5600d8bd73c95fc0c7c7d336f881225f33ada207f3e3387671c0f157021"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_frost_elemental_move_tracks.json",
+    "sha256": "03ef5b608dc028e50090dca9afbfb09818ebc8d7b62350dd9804b888c5c38e79"
    }
   ]
  }

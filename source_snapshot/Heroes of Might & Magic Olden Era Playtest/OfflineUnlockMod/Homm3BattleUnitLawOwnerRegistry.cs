@@ -24,6 +24,10 @@ internal static class Homm3BattleUnitLawOwnerRegistry
 	private static readonly Dictionary<long, string> UnitPointerToConfigSid = new();
 	private static readonly Dictionary<long, object> TransferSideKeyToDataSide = new();
 	private static readonly Dictionary<int, object> SideIndexToDataSide = new();
+	// Battle-local side index (battle-side wrapper Int32, 0 = attacker) -> Data.Side, seeded only from exact
+	// logicHero bridge results in this battle. SideIndexToDataSide is keyed by the world Data.Side.index and must
+	// never be read with a battle-local index (2026-11-10 law hooks defect: neutrals inherited map player laws).
+	private static readonly Dictionary<int, object> BattleLocalSideIndexToDataSide = new();
 	private static readonly Dictionary<string, UnitInitConsumer> UnitInitConsumersByOwner = new(StringComparer.Ordinal);
 	private static UnitInitConsumer[] _unitInitConsumers = Array.Empty<UnitInitConsumer>();
 	private static bool _registered;
@@ -120,9 +124,11 @@ internal static class Homm3BattleUnitLawOwnerRegistry
 			UnitPointerToConfigSid.Clear();
 			TransferSideKeyToDataSide.Clear();
 			SideIndexToDataSide.Clear();
+			BattleLocalSideIndexToDataSide.Clear();
 			Homm3BattleLocalLawState.ClearBattleSideIndexedState(reason);
 			_lastClearReason = reason ?? "unspecified";
 		}
+		Homm3CounterattackDoctrineMutationRuntime.ClearForBattle();
 		Plugin.LogSource?.LogInfo("HoMM3 battle unit law-owner registry cleared: " + (reason ?? "unspecified") + ".");
 	}
 
@@ -168,7 +174,7 @@ internal static class Homm3BattleUnitLawOwnerRegistry
 	/// When battle visuals resolve a custom h3_* SID, upgrade any Init registrations that still
 	/// hold that unit's donor scaffold SID and rebind mechanics.
 	/// </summary>
-	internal static void UpgradeDonorRegistrationsToCustomSid(string customSid)
+	internal static void UpgradeDonorRegistrationsToCustomSid(string customSid, TransferUnit drawerTransfer)
 	{
 		customSid = NormalizeRegisteredConfigSid(customSid);
 		if (string.IsNullOrWhiteSpace(customSid)
@@ -180,11 +186,24 @@ internal static class Homm3BattleUnitLawOwnerRegistry
 		List<KeyValuePair<long, object>> units;
 		lock (Gate)
 		{
+			// Scope to THIS drawer's unit. Donor sids are shared by many lines (and by vanilla/neutral
+			// stacks), so upgrading every donor-sid registration relabelled unrelated units.
 			var upgrades = new List<long>();
-			foreach (var pair in UnitPointerToConfigSid)
+			var drawerTransferPtr = drawerTransfer?.Pointer ?? IntPtr.Zero;
+			if (drawerTransferPtr != IntPtr.Zero)
 			{
-				if (string.Equals(pair.Value, donorSid, StringComparison.OrdinalIgnoreCase))
-					upgrades.Add(pair.Key);
+				foreach (var pair in UnitKeyToUnit)
+				{
+					var unit = pair.Value;
+					if (!TryGetUnitNativePointer(unit, out var unitPointer)
+					    || !UnitPointerToConfigSid.TryGetValue(unitPointer, out var registered)
+					    || !string.Equals(registered, donorSid, StringComparison.OrdinalIgnoreCase))
+						continue;
+					if (TryReadObject(unit, GameSymbols.BattleVisual.BattleUnitTransferFields, out var unitTransfer)
+					    && unitTransfer is Il2CppObjectBase transferObj
+					    && transferObj.Pointer == drawerTransferPtr)
+						upgrades.Add(unitPointer);
+				}
 			}
 			for (var i = 0; i < upgrades.Count; i++)
 				UnitPointerToConfigSid[upgrades[i]] = customSid;
@@ -235,29 +254,9 @@ internal static class Homm3BattleUnitLawOwnerRegistry
 			return false;
 		if (TryResolveDataSideFromBattleSide(battleSide, out dataSide))
 			return true;
-		if (!TryReadInt(battleSide, GameSymbols.BattleEventLaws.TransferSideSideIdMembers, out var sideIndex))
-		{
-			LogDataSideFailure("battle-side-to-data-side stage failed: TransferSide exposed no exact sideIdInWorld/side index: battleSide=" + DescribeObject(battleSide));
-			return false;
-		}
-		lock (Gate)
-		{
-			if (SideIndexToDataSide.TryGetValue(sideIndex, out dataSide) && dataSide != null)
-			{
-				if (_dataSideResolveLogs++ < RegistrationLogCap)
-					Plugin.LogSource?.LogInfo("HoMM3 battle unit law-owner registry resolved data side from preseeded side map: sideIndex=" + sideIndex + " dataSide=" + DescribeObject(dataSide) + ". Registered for diagnostics/packet-gated candidate gameplay.");
-				return true;
-			}
-		}
-		if (!TryResolveGlobalDataSide(sideIndex, out dataSide, out var failReason))
-		{
-			LogDataSideFailure("global Data.Side lookup failed: sideIndex=" + sideIndex + " reason=" + failReason);
-			return false;
-		}
-		RegisterDataSide(sideIndex, dataSide);
-		if (_dataSideResolveLogs++ < RegistrationLogCap)
-			Plugin.LogSource?.LogInfo("HoMM3 battle unit law-owner registry resolved data side from global root: sideIndex=" + sideIndex + " dataSide=" + DescribeObject(dataSide) + ". Registered for diagnostics/packet-gated candidate gameplay.");
-		return true;
+		// No sideIdInWorld fallback: garrison battles proved both sides can report 0, which would hand
+		// one player's laws to the other side. TryResolveDataSideFromBattleSide already logged why.
+		return false;
 	}
 	internal static bool TryResolveDataSideFromBattleSide(object battleSide, out object dataSide)
 	{
@@ -274,9 +273,43 @@ internal static class Homm3BattleUnitLawOwnerRegistry
 				return true;
 			}
 		}
+		// Exact owner first: a hero side's logicHero names its Data.Side directly. The wrapper local index
+		// below is battle-local (0 = attacker) while SideIndexToDataSide is keyed by Data.Side.index, so it
+		// only agrees when world side 0 attacks; keep it for heroless sides only.
+		var bridged = Homm3CustomFactionLawRuntime.TryResolveDataSideFromBattleTransferSide(battleSide, out dataSide, out var transferSideBridgeReason);
+		// Unit.Init hands over the battle-side wrapper, not the native TransferSide; logicHero lives on the
+		// wrapped TransferSide (26615913: ObjectPublicPrco... .field_Public_TransferSide_0 -> TransferSide.logicHero).
+		if (!bridged
+		    && TryReadObject(battleSide, GameSymbols.CustomFactionLawRuntime.BattleSideTransferSideMembers, out var wrappedTransferSide)
+		    && wrappedTransferSide != null
+		    && !ReferenceEquals(wrappedTransferSide, battleSide))
+		{
+			bridged = Homm3CustomFactionLawRuntime.TryResolveDataSideFromBattleTransferSide(wrappedTransferSide, out dataSide, out var wrappedBridgeReason);
+			if (!bridged)
+				transferSideBridgeReason += "; wrapped TransferSide: " + wrappedBridgeReason;
+		}
+		if (bridged)
+		{
+			RegisterTransferSideDataSide(battleSide, dataSide, "TransferSide.logicHero bridge");
+			// Seed only from the battle-side wrapper (it carries the native TransferSide), as the lookup below requires.
+			if (TryReadObject(battleSide, GameSymbols.CustomFactionLawRuntime.BattleSideTransferSideMembers, out var bridgedNativeTransferSide)
+			    && bridgedNativeTransferSide != null
+			    && !ReferenceEquals(bridgedNativeTransferSide, battleSide)
+			    && TryReadInt(battleSide, GameSymbols.BattleEventLaws.BattleSideWrapperLocalSideIndexMembers, out var bridgedLocalIndex)
+			    && bridgedLocalIndex >= 0)
+			{
+				lock (Gate)
+				{
+					BattleLocalSideIndexToDataSide[bridgedLocalIndex] = dataSide;
+				}
+			}
+			return true;
+		}
 		// Runtime-proofed 2026-06-20: live ObjectPublicPrcgObPrcgInTrPrcgInUnique
 		// battle-side wrappers carry field_Public_Int32_0 as the battle-local side index.
-		// That index matches SideIndexToDataSide keys. Native TransferSide.sideIdInWorld
+		// It is looked up only in the battle-local map seeded by exact bridge results above, never in the
+		// world-keyed SideIndexToDataSide: a heroless side (neutrals, heroless garrisons) therefore fails closed
+		// instead of inheriting whichever player owns the same world index. Native TransferSide.sideIdInWorld
 		// is not reliable for garrison battles because both sides can report 0.
 		if (TryReadObject(battleSide, GameSymbols.CustomFactionLawRuntime.BattleSideTransferSideMembers, out var nativeTransferSide)
 		    && nativeTransferSide != null
@@ -285,9 +318,9 @@ internal static class Homm3BattleUnitLawOwnerRegistry
 		{
 			lock (Gate)
 			{
-				if (SideIndexToDataSide.TryGetValue(wrapperSideIndex, out dataSide) && dataSide != null)
+				if (BattleLocalSideIndexToDataSide.TryGetValue(wrapperSideIndex, out dataSide) && dataSide != null)
 				{
-					RegisterTransferSideDataSide(battleSide, dataSide, "runtime-proven battle-side wrapper local index");
+					RegisterTransferSideDataSide(battleSide, dataSide, "battle-local side index seeded by the logicHero bridge");
 					if (_dataSideResolveLogs++ < RegistrationLogCap)
 						Plugin.LogSource?.LogInfo("HoMM3 battle unit law-owner registry resolved data side from battle-side wrapper local index: wrapperSideIndex=" + wrapperSideIndex + " dataSide=" + DescribeObject(dataSide) + ". Registered for diagnostics/packet-gated candidate gameplay.");
 					return true;
@@ -295,36 +328,9 @@ internal static class Homm3BattleUnitLawOwnerRegistry
 			}
 			LogDataSideFailure("battle-side wrapper local-index lookup failed: wrapperSideIndex=" + wrapperSideIndex + " battleSide=" + DescribeObject(battleSide) + " nativeTransferSide=" + DescribeObject(nativeTransferSide));
 		}
-		if (Homm3CustomFactionLawRuntime.TryResolveDataSideFromBattleTransferSide(battleSide, out dataSide, out var transferSideBridgeReason))
-		{
-			RegisterTransferSideDataSide(battleSide, dataSide, "TransferSide.logicHero bridge");
-			return true;
-		}
-		if (!TryReadInt(battleSide, GameSymbols.BattleEventLaws.TransferSideSideIdMembers, out var sideIndex))
-		{
-			LogDataSideFailure("caster battle-side-to-data-side stage failed: TransferSide exposed no exact sideIdInWorld/side index: battleSide=" + DescribeObject(battleSide) + "; logicHero bridge failed: " + transferSideBridgeReason);
-			return false;
-		}
-		lock (Gate)
-		{
-			if (SideIndexToDataSide.TryGetValue(sideIndex, out dataSide) && dataSide != null)
-			{
-				RegisterTransferSideDataSide(battleSide, dataSide, "preseeded side-index map");
-				if (_dataSideResolveLogs++ < RegistrationLogCap)
-					Plugin.LogSource?.LogInfo("HoMM3 battle unit law-owner registry resolved data side from exact caster battle side: sideIndex=" + sideIndex + " dataSide=" + DescribeObject(dataSide) + ". Registered for diagnostics/packet-gated candidate gameplay.");
-				return true;
-			}
-		}
-		if (!TryResolveGlobalDataSide(sideIndex, out dataSide, out var failReason))
-		{
-			LogDataSideFailure("caster battle side global Data.Side lookup failed: sideIndex=" + sideIndex + " reason=" + failReason + "; logicHero bridge failed: " + transferSideBridgeReason);
-			return false;
-		}
-		RegisterDataSide(sideIndex, dataSide);
-		RegisterTransferSideDataSide(battleSide, dataSide, "global side-index map");
-		if (_dataSideResolveLogs++ < RegistrationLogCap)
-			Plugin.LogSource?.LogInfo("HoMM3 battle unit law-owner registry resolved data side from exact caster battle side/global root: sideIndex=" + sideIndex + " dataSide=" + DescribeObject(dataSide) + ". Registered for diagnostics/packet-gated candidate gameplay.");
-		return true;
+		// No sideIdInWorld fallback (garrison battles report 0 for both sides): fail closed.
+		LogDataSideFailure("caster battle side unresolved; sideIdInWorld fallback refused (garrison-unsafe): battleSide=" + DescribeObject(battleSide) + "; logicHero bridge failed: " + transferSideBridgeReason);
+		return false;
 	}
 
 	private static void RegisterTransferSideDataSide(object battleSide, object dataSide, string source)
@@ -699,6 +705,19 @@ internal static class Homm3BattleUnitLawOwnerRegistry
 		}
 		failReason = "no Data.Side candidate with index " + sideIndex + " among " + checkedCandidates + " non-null candidates";
 		return false;
+	}
+
+	/// <summary>Native pointer of the current global logic root (0 when unresolved); changes with each loaded session.</summary>
+	internal static long ResolveSessionToken()
+	{
+		try
+		{
+			return ResolveGlobalLogicRoot(out _) is Il2CppObjectBase root ? root.Pointer.ToInt64() : 0L;
+		}
+		catch
+		{
+			return 0L;
+		}
 	}
 
 	private static object ResolveGlobalLogicRoot(out string failReason)

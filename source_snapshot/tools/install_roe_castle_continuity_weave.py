@@ -2154,7 +2154,18 @@ def patch_core_zip_for_hubs(
             data_json["campaignHeroes"] = campaign_heroes
 
             if "DB/quickStart.json" in overlay_members:
-                qs = json.loads(overlay_members["DB/quickStart.json"].decode("utf-8-sig"))
+                # The mission overlays carry a snapshot quickStart; keep every list entry the
+                # source Core has that the snapshot lacks (sibling scenarios, newer vanilla
+                # templates) instead of replacing it. See tools/core_overlay_member_merge.py.
+                from core_overlay_member_merge import OverlayMergeError, merge_quickstart
+
+                try:
+                    qs_bytes = merge_quickstart(
+                        source.read("DB/quickStart.json"), overlay_members["DB/quickStart.json"]
+                    )
+                except OverlayMergeError as exc:
+                    fail(str(exc))
+                qs = json.loads(qs_bytes.decode("utf-8-sig"))
             else:
                 qs = json.loads(source.read("DB/quickStart.json").decode("utf-8-sig"))
             scenarios = list(qs.get("scenarios") or [])

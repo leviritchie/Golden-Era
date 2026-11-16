@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""Validate Tower Arcane Battery Core contract against an installed Core.zip."""
+"""Validate the Tower faction skill Core contract against an installed Core.zip.
+
+Branches on custom_factions/tower_artificing/artificing_policy.json `enabled` (user decision 2026-11-11:
+Artificing replaces Arcane Battery as the faction skill, the Arcane Battery subskills stay):
+- enabled: every rank grants the Artificing world spell and the skill text is the Artificing text from
+  homm3_tower_artificing_core_overlay (which keeps the Chronomancy / Borrowed Time hint);
+- disabled: every rank grants the Arcane Battery hero ability at 2/1/0 Focus with the Arcane Battery text.
+Both: the six Arcane Battery subskills (Chronomancy grants Borrowed Time) and the Arcane Battery / Borrowed Time
+rows and texts.
+"""
 
 from __future__ import annotations
 
@@ -7,7 +16,11 @@ import argparse
 import json
 import sys
 import zipfile
+from pathlib import Path
 from typing import Any
+
+sys.path.insert(0, str(Path(__file__).resolve().parent / "release_port"))
+import homm3_tower_artificing_core_overlay as artificing  # noqa: E402
 
 TOWER_FACTION = "homm3_tower"
 TOWER_SKILL = "skill_faction_homm3_tower"
@@ -75,6 +88,8 @@ def main() -> None:
     if not isinstance(skill_rows, list) or not isinstance(subskill_rows, list) or not isinstance(ability_rows, list):
         fail("malformed Core skill/subskill/ability arrays")
 
+    artificing_policy = artificing.load_policy()
+    artificing_on = bool(artificing_policy.get("enabled"))
     skill = row_by_id(skill_rows, TOWER_SKILL, "skills.json")
     levels = skill.get("parametersPerLevel")
     if not isinstance(levels, list) or len(levels) != 3:
@@ -86,9 +101,16 @@ def main() -> None:
         bonuses = level.get("bonuses")
         if not isinstance(bonuses, list) or not bonuses:
             fail(f"{TOWER_SKILL} level {index + 1} missing bonuses")
-        expected = {"type": "heroBattleAbility", "parameters": [ARCANE_BATTERY_ABILITY, str(index)]}
-        if expected not in bonuses:
-            fail(f"{TOWER_SKILL} level {index + 1} missing heroBattleAbility {ARCANE_BATTERY_ABILITY}/{index}")
+        if artificing_on:
+            for expected in artificing.faction_skill_levels(artificing_policy)[index]:
+                if expected not in bonuses:
+                    fail(f"{TOWER_SKILL} level {index + 1} missing Artificing grant {expected}")
+            if any(isinstance(b, dict) and (b.get("parameters") or [None])[0] == ARCANE_BATTERY_ABILITY for b in bonuses):
+                fail(f"{TOWER_SKILL} level {index + 1} still grants {ARCANE_BATTERY_ABILITY} while Artificing is enabled")
+        else:
+            expected = {"type": "heroBattleAbility", "parameters": [ARCANE_BATTERY_ABILITY, str(index)]}
+            if expected not in bonuses:
+                fail(f"{TOWER_SKILL} level {index + 1} missing heroBattleAbility {ARCANE_BATTERY_ABILITY}/{index}")
         for bonus in bonuses:
             if isinstance(bonus, dict) and bonus.get("type") == "heroStat":
                 params = bonus.get("parameters") or []
@@ -214,8 +236,9 @@ def main() -> None:
         fail("malformed english heroSkills lang tokens")
     by_sid = {row.get("sid"): row.get("text") for row in tokens if isinstance(row, dict)}
     name = by_sid.get(f"{TOWER_SKILL}_name")
-    if name != "Arcane Battery":
-        fail(f"{TOWER_SKILL}_name must be 'Arcane Battery', found {name!r}")
+    expected_skill_name = artificing_policy["factionSkillName"] if artificing_on else "Arcane Battery"
+    if name != expected_skill_name:
+        fail(f"{TOWER_SKILL}_name must be {expected_skill_name!r}, found {name!r}")
     ability_name = by_sid.get(f"{ARCANE_BATTERY_ABILITY}_name")
     if ability_name != "Arcane Battery":
         fail(f"{ARCANE_BATTERY_ABILITY}_name must be 'Arcane Battery', found {ability_name!r}")
@@ -230,6 +253,11 @@ def main() -> None:
         "Pick Chronomancy to gain Borrowed Time (+100 Initiative to a friendly stack).",
         "Spend 0 Focus once per round to refresh spellbook use this round.",
     )
+    if artificing_on:
+        _, expected_skill_desc, artificing_rank_descs = artificing.faction_skill_lang(artificing_policy)
+        expected_rank_descs = tuple(artificing_rank_descs)
+        if (by_sid.get(f"{TOWER_SKILL}_desc") or "") != expected_skill_desc:
+            fail(f"{TOWER_SKILL}_desc must be the Artificing text, found {by_sid.get(f'{TOWER_SKILL}_desc')!r}")
     for index, expected_rank_desc in enumerate(expected_rank_descs, start=1):
         rank_desc = by_sid.get(f"{TOWER_SKILL}_desc_{index}") or ""
         if rank_desc != expected_rank_desc:
@@ -260,10 +288,11 @@ def main() -> None:
         fail(f"{CHRONOMANCY_SUBSKILL}_desc must mention Borrowed Time")
     # Borrowed Time is gated behind the rank-2 Chronomancy pick, so the Basic-rank tooltip a fresh Tower
     # hero shows must point at it; otherwise playtesters see no sign of the faction action at all.
-    if "Chronomancy" not in skill_desc or "Borrowed Time" not in skill_desc:
+    # Artificing text drops the hint (user 2026-11-13: redundant; the Chronomancy subskill describes itself).
+    if not artificing_on and ("Chronomancy" not in skill_desc or "Borrowed Time" not in skill_desc):
         fail(f"{TOWER_SKILL}_desc must say the Chronomancy pick adds Borrowed Time")
 
-    print("homm3-tower-arcane-battery-contract: PASS")
+    print("homm3-tower-arcane-battery-contract: PASS (faction skill: " + ("Artificing" if artificing_on else "Arcane Battery") + ")")
 
 
 if __name__ == "__main__":

@@ -1001,7 +1001,7 @@ internal static class Homm3CustomLawEffectProfiles
 				"cove.focus.on-counterattack",
 				normalizedRank,
 				focusDelta: 1,
-				evidenceBoundary: "requires Focus write surface and committed counterattack correlation");
+				evidenceBoundary: "runtime 2026-11-10: +1 Focus per native counterattack on the counterattacker's battle side (Homm3FocusNativeAdapter), at most 5 per side per battle");
 			failReason = null;
 			return true;
 		}
@@ -1012,8 +1012,9 @@ internal static class Homm3CustomLawEffectProfiles
 				"Outnumber",
 				"dungeon.damage-vs-smaller-stack",
 				normalizedRank,
-				damagePercentBonus: 10,
-				requiresTargetOutnumbered: true);
+				damagePercentBonus: 40,
+				requiresTargetOutnumbered: true,
+				evidenceBoundary: "runtime 2026-11-10: counterattack damage +40% when the counterattacking stack has more creatures than the attacker");
 			failReason = null;
 			return true;
 		}
@@ -1024,8 +1025,8 @@ internal static class Homm3CustomLawEffectProfiles
 				"Thorned Hides",
 				"fortress.attack-debuff-on-counterattack",
 				normalizedRank,
-				attackDebuff: -1,
-				evidenceBoundary: "requires exact native attack-debuff application surface");
+				attackDebuff: -25,
+				evidenceBoundary: "runtime 2026-11-10: attackDebuff is a percent; a landed counterattack marks the attacker, whose next damage is reduced by 25% (battle-local, no native buff)");
 			failReason = null;
 			return true;
 		}
@@ -1036,9 +1037,8 @@ internal static class Homm3CustomLawEffectProfiles
 				"Avenger's Reprisal",
 				"rampart.avenger-marked-counterattack-damage",
 				normalizedRank,
-				damagePercentBonus: 100,
-				requiresAvengerMark: true,
-				evidenceBoundary: "uses exact CounterAttack event plus custom Avenger marker SID state; no native buff/status mutation or faction-match inference");
+				damagePercentBonus: 30,
+				evidenceBoundary: "runtime 2026-11-10: counterattack damage +30%, doubled to +60% when the counterattacking stack has fewer creatures than the attacker; no Avenger mark dependency");
 			failReason = null;
 			return true;
 		}
@@ -1050,7 +1050,7 @@ internal static class Homm3CustomLawEffectProfiles
 				"tower.spell-power-as-counterattack-attack",
 				normalizedRank,
 				requiresHeroSpellPower: true,
-				evidenceBoundary: "requires defender hero spell-power read and damage formula injection point");
+				evidenceBoundary: "runtime 2026-11-10: counterattack damage +4%/+6% per point of the counterattacker side hero's Spell Power by rank, capped at 60%/100%; no hero = no bonus");
 			failReason = null;
 			return true;
 		}
@@ -1061,8 +1061,8 @@ internal static class Homm3CustomLawEffectProfiles
 				"Elemental Backlash",
 				"conflux.extra-magic-damage-counterattack",
 				normalizedRank,
-				requiresSeparateMagicDamageSurface: true,
-				evidenceBoundary: "must use a separate magic damage component; folding into physical damage is an explicit design compromise only");
+				damagePercentBonus: 35,
+				evidenceBoundary: "runtime 2026-11-10: counterattack damage +35% folded into the committed counter damage (no separate magic damage component; the native-data alternative needs a data mech on the counter ability)");
 			failReason = null;
 			return true;
 		}
@@ -1086,8 +1086,8 @@ internal static class Homm3CustomLawEffectProfiles
 				"Death Grip",
 				"necropolis.counterattack-drain-restore",
 				normalizedRank,
-				drainPercent: normalizedRank >= 2 ? 20 : 10,
-				evidenceBoundary: "requires final damage amount, lost-unit HP restore surface, and original-stack-size clamp");
+				drainPercent: 25,
+				evidenceBoundary: "runtime 2026-11-10: heals the counterattacker 25% of its committed counter damage through native UnitHealer.Heal (EHealType WithRealUntilStart: revives up to the starting stack size)");
 			failReason = null;
 			return true;
 		}
@@ -1098,8 +1098,8 @@ internal static class Homm3CustomLawEffectProfiles
 				"Blood Feud",
 				"stronghold.stacking-damage-buff-on-counterattack",
 				normalizedRank,
-				stackingDamagePercent: normalizedRank >= 2 ? 4 : 2,
-				evidenceBoundary: "requires stack-scoped battle buff storage and cap before mutation");
+				stackingDamagePercent: 5,
+				evidenceBoundary: "runtime 2026-11-10: +5% damage per native counterattack for that stack for the rest of the battle, capped at 25% (battle-local, no native buff)");
 			failReason = null;
 			return true;
 		}

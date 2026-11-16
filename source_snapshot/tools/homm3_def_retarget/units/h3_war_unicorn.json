@@ -309,7 +309,7 @@
   "reason": "Short reach (forelegs 0.18 H cap at 0.15 drop) forces cadence 1.6 on a short Move, whose step harmonics then read as jitter (0.39 > 0.35, worst RightHand). maxDrop 0.25 lowers the cadence need to 1.24: slip 0.055, ratio 1.06, jitter 0.16, pelvis drop 0.067 H; fixes the cause rather than smoothing with highHarmonicKeep (2026-09-27)."
  },
  "glbPatch": {
-  "reason": "2026-10-09 authenticity send-back fix 1 (lane A, Rampart): the user rejected whole-body rotation doing part-body moves. The quadruped fit is narrowed (pitch 0..25 about the hind feet only where the DEF rears: AttackFront f2-f3; Hitted 0..10, Defence 0..12 half-rears on planted hinds; dx +-4 px; standing clips on the floor) and the keys add no Hips pitch on top. AttackFront: the f2-f3 rear on planted hinds with the forelegs folded high, then a level body for the horn thrust carried by the neck and head (Neck +10, Head +30 at f4-f6). Hitted: half-rear with the head thrown back by the neck and head (-35/-50). Defence: half-rear on planted hinds, head tucked (Neck +10). Death (lane B u8 choreography): pre-collapse rear trimmed to 6 deg, roll at f3-f4, side-lie with legs folded. Mesh repairs carried: tail weights off the hind legs, tail/hock boundary diffused. Gate 1129 -> 1060 edges over 2x.",
+  "reason": "2026-10-09 authenticity send-back fix 1 (lane A, Rampart): the user rejected whole-body rotation doing part-body moves. The quadruped fit is narrowed (pitch 0..25 about the hind feet only where the DEF rears: AttackFront f2-f3; Hitted 0..10, Defence 0..12 half-rears on planted hinds; dx +-4 px; standing clips on the floor) and the keys add no Hips pitch on top. AttackFront: the f2-f3 rear on planted hinds with the forelegs folded high, then a level body for the horn thrust carried by the neck and head (Neck +10, Head +30 at f4-f6). Hitted: half-rear with the head thrown back by the neck and head (-35/-50). Defence: half-rear on planted hinds, head tucked (Neck +10). Death (lane B u8 choreography): pre-collapse rear trimmed to 6 deg, roll at f3-f4, side-lie with legs folded. Mesh repairs carried: tail weights off the hind legs, tail/hock boundary diffused. Gate 1129 -> 1060 edges over 2x.; 2026-11-10 unit pass (user-approved candidate, rig / mesh repair): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass, with the candidate's added joints and face cuts; clip pass 2026-11-11 (user-approved candidate): AttackFront, Defence re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "moveWeights",
@@ -364,6 +364,27 @@
     "sha256": "283ff6c0ab9ea91ceb0d2c77322a64bc5c48df27a8e57b11f8f6bb439d5463b2",
     "regrid": true,
     "note": "Hips translation keys"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_war_unicorn_move_cut.json",
+    "sha256": "f6654712a88022b5b6d5c7255131a07c66b9d02c728e37746eb6e396c36195ac",
+    "note": "unit pass: 112 bridging faces the candidate cuts (mover_quadB)"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_war_unicorn_move_weights.json",
+    "sha256": "b7a0b6276c0189f3b925450af37244bd969a716fb28530eba527c5411d6d0bb2"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_war_unicorn_move_tracks.json",
+    "sha256": "dc2658c2c5d6e5e0ea62df29c8188b112526de3fbe129c3df703de5d65efc62f"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_war_unicorn_clip_tracks.json",
+    "sha256": "b6893dcf441dfef67adf3363f6acdc1c6dbf0be1622c3b33d619db5ce4acd0a8"
    }
   ]
  }

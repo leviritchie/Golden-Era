@@ -343,7 +343,7 @@
   "inferno_whipchain"
  ],
  "glbPatch": {
-  "reason": "HoMM3 DEF g12 fireball throw (AttackFront = ShootFront): the fire arm winds up back behind the head (f2-f3) with the off arm reaching forward, then hurls forward with a spine lunge (f4-f5); Death (g05): the fire arm folds into the heap instead of staying raised (f5-f8). stretchRelax smooths the wind-up shoulder crease. || tail: 2026-10-10 authenticity (lane A): tail floor clearance (laneA tailclear.py --mid --seed0): key 0 carries half the first tail pose and the tail ops are raised per key so neither the keys nor the slerped in-betweens put the tip under the feet (it swept up to 27 cm through the floor from the hanging rest, and lifted the body through grounding at keys)",
+  "reason": "HoMM3 DEF g12 fireball throw (AttackFront = ShootFront): the fire arm winds up back behind the head (f2-f3) with the off arm reaching forward, then hurls forward with a spine lunge (f4-f5); Death (g05): the fire arm folds into the heap instead of staying raised (f5-f8). stretchRelax smooths the wind-up shoulder crease. || tail: 2026-10-10 authenticity (lane A): tail floor clearance (laneA tailclear.py --mid --seed0): key 0 carries half the first tail pose and the tail ops are raised per key so neither the keys nor the slerped in-betweens put the tip under the feet (it swept up to 27 cm through the floor from the hanging rest, and lifted the body through grounding at keys); 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass",
   "ops": [
    {
     "op": "keyRotations",
@@ -360,14 +360,19 @@
    {
     "op": "keyRotations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_gog_tail_rot.json",
-    "sha256": "823e1b2cbef10f0c241843c2486d46d68ea1188b7e9c54d6d43787e73f7d92c8",
+    "sha256": "c0d5f6ef3ef2269ce7118ce885ee23283a30f9fdbb8bbab90c49a6074ed35faf",
     "regrid": true
    },
    {
     "op": "keyRotations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_gog_tail_rot.json",
-    "sha256": "823e1b2cbef10f0c241843c2486d46d68ea1188b7e9c54d6d43787e73f7d92c8",
+    "sha256": "c0d5f6ef3ef2269ce7118ce885ee23283a30f9fdbb8bbab90c49a6074ed35faf",
     "regrid": true
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gog_move_tracks.json",
+    "sha256": "cb0c71e2b0eb86bc0c47214490e578ddd26a21538b99bcd0bb9b09ef15be5701"
    },
    {
     "op": "stretchRelax",

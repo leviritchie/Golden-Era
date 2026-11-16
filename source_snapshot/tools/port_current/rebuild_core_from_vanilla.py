@@ -90,8 +90,8 @@ LAYERS: tuple[Layer, ...] = (
             "--release-core", "{core}",
             "--work-dir", "{work}/core_overlay_work",
             "--release-plugin-root", "{work}/staged_plugin_root",
-            # Target-pinned readbacks (neutral tier bands) use the live 25672315 values (option A).
-            "--game-target", "steam_25672315",
+            # Target-pinned readbacks (neutral tier bands) use the port build's live 26615913 values.
+            "--game-target", "steam_26615913",
         ),
         "The custom-faction release overlay (neutrals, reward units, artifacts, biome pack) with its "
         "candidate validation.",
@@ -155,7 +155,8 @@ LAYERS: tuple[Layer, ...] = (
             "--source-game-root", "{video_source}",
             "--game-root", "{game_root}",
             "--work", "{work}/campaign_video_dependencies",
-            "--report", "{work}/campaign_video_dependencies.json",
+            # The stager requires its report to sit inside its own --work.
+            "--report", "{work}/campaign_video_dependencies/report.json",
             "--seven-zip", "{seven_zip}",
         ),
         "Stages the exact media and subtitle/locale inputs reached by target StoryHub PlayVideo closures, "

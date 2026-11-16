@@ -511,7 +511,7 @@
   }
  },
  "glbPatch": {
-  "reason": "lane B 2026-10-10 authenticity: level-flight legs - with the body flown level (wingChain bodyTurn pitch 55) the capture's legs hung from the hips with the bird shins folded up behind and the right thigh splayed; the DEF carries the talons forward under the body, so the thighs swing forward-down and the shins hang down-back in Move (ramped over MoveStart/MoveEnd); stretchRelax evens the hip/knee crease; Hitted (2026-10-10 coordinator send-back): the spread wings read edge-on from the battle camera, so the wing chains are aimed up-out-back and their panels turned broadside to it (keyRotations h3_harpy_hitted_wings_rot)",
+  "reason": "lane B 2026-10-10 authenticity: level-flight legs - with the body flown level (wingChain bodyTurn pitch 55) the capture's legs hung from the hips with the bird shins folded up behind and the right thigh splayed; the DEF carries the talons forward under the body, so the thighs swing forward-down and the shins hang down-back in Move (ramped over MoveStart/MoveEnd); stretchRelax evens the hip/knee crease; Hitted (2026-10-10 coordinator send-back): the spread wings read edge-on from the battle camera, so the wing chains are aimed up-out-back and their panels turned broadside to it (keyRotations h3_harpy_hitted_wings_rot); 2026-11-10 flyer flight repair pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights repaired so the tear gate holds; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -524,6 +524,22 @@
     "sha256": "126c4d4a04ad28d94dd2d8bf7f805294b29559dc75f3efaaac231d3f5c2211f6"
    },
    {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_harpy_flight_weights.json",
+    "sha256": "d06bf91bfb141b95fc7861356fa9ae1764f030bde9e59d21283e1c9f14abd835"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_harpy_flight_tracks.json",
+    "sha256": "2fba68eaceba78b879e566ab4ccd1f67900a09f6f4bbba0240e653fd7fad5fad"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_harpy_clip_tracks.json",
+    "sha256": "525528853b9f0e86ca05dc7c07bb432adb82979c6365e7d14471e68b6489c30e"
+   },
+   {
     "op": "stretchRelax",
     "clips": [
      "Unit_Move",
@@ -533,7 +549,7 @@
     "ratio": 1.6,
     "iterations": 1500,
     "smooth": 0.0,
-    "maxMove": 0.08,
+    "maxMove": 0.1,
     "note": "hip/knee crease of the flight legs"
    }
   ]

@@ -523,7 +523,7 @@
   "radius": 0.09
  },
  "glbPatch": {
-  "reason": "Whip chain lash + DEF death: AttackFront keys the Whip_00..09 chain (inferno_whipchain) through the g12 forward crack with a right-arm overhead swing and spine lunge; Death sinks to a seated heap with arms and whip flung up (DEF g05) then laid forward. diffuseWeights smooths the Hips/UpLeg/Spine crotch mix (thigh bleed) so the fold does not tear; stretchRelax evens the re-baked whip and fold edges.",
+  "reason": "Whip chain lash + DEF death: AttackFront keys the Whip_00..09 chain (inferno_whipchain) through the g12 forward crack with a right-arm overhead swing and spine lunge; Death sinks to a seated heap with arms and whip flung up (DEF g05) then laid forward. diffuseWeights smooths the Hips/UpLeg/Spine crotch mix (thigh bleed) so the fold does not tear; stretchRelax evens the re-baked whip and fold edges.; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "diffuseWeights",
@@ -561,6 +561,16 @@
     "regrid": true
    },
    {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_pit_fiend_move_tracks.json",
+    "sha256": "2ede75d217e47af85bf80ab174314bda1af283241fb90352f36c6f409d2f28d3"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_pit_fiend_clip_tracks.json",
+    "sha256": "2877c3e35a43d6cf9c3935d71d533a5f52530fd37c5a26d608811ec5223451b6"
+   },
+   {
     "op": "stretchRelax",
     "clips": [
      "Unit_AttackFront",
@@ -570,6 +580,32 @@
     "iterations": 1500,
     "smooth": 0.4,
     "maxMove": 0.08
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Hitted",
+     "Unit_Defence",
+     "Unit_Mouseover"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.4,
+    "maxMove": 0.08,
+    "note": "unit pass 2026-11-10: tear-gate headroom for the re-baked whip of the new Move (strain limit on clips the stride stage does not re-pose)"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront",
+     "Unit_Death",
+     "Unit_Hitted"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "unit pass 2026-11-10: tear-gate headroom for the re-baked whip of the new Move (strain limit on clips the stride stage does not re-pose) (second pass)"
    }
   ]
  },

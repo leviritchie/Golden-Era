@@ -619,7 +619,7 @@
   ]
  },
  "glbPatch": {
-  "reason": "Whip chain lash + DEF death (same g12/g05 choreography as h3_pit_fiend): AttackFront keys the Whip_00..09 chain (inferno_whipchain) through the forward crack with a right-arm overhead swing and spine lunge; Death sinks to a seated heap with arms and whip flung up, then laid forward. The thigh weight bleeds up to the Spine joint, so diffuseWeights (twice, the per-op iteration cap) evens the Hips/UpLeg/Spine/Spine1 waist and crotch mix (y 0.56-1.18) and the full thigh fold passes; stretchRelax evens the re-baked whip and fold edges.",
+  "reason": "Whip chain lash + DEF death (same g12/g05 choreography as h3_pit_fiend): AttackFront keys the Whip_00..09 chain (inferno_whipchain) through the forward crack with a right-arm overhead swing and spine lunge; Death sinks to a seated heap with arms and whip flung up, then laid forward. The thigh weight bleeds up to the Spine joint, so diffuseWeights (twice, the per-op iteration cap) evens the Hips/UpLeg/Spine/Spine1 waist and crotch mix (y 0.56-1.18) and the full thigh fold passes; stretchRelax evens the re-baked whip and fold edges.; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "diffuseWeights",
@@ -682,6 +682,16 @@
     "regrid": true
    },
    {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_pit_lord_move_tracks.json",
+    "sha256": "d98977919a77376e7f127a78d94ecff8a48bf3db06a344d2b5a8b803116609d3"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_pit_lord_clip_tracks.json",
+    "sha256": "fbea06a2c38be0167feee8645da6aba6d568f60f67fe6ebea339abd9b900bd14"
+   },
+   {
     "op": "stretchRelax",
     "clips": [
      "Unit_AttackFront",
@@ -691,6 +701,19 @@
     "iterations": 1500,
     "smooth": 0.4,
     "maxMove": 0.08
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "unit pass: tear gate on the replaced Move clips"
    }
   ]
  }

@@ -97,6 +97,13 @@ internal static partial class Homm3BattleLocalLawState
 			var state = UnitDamageStates.GetOrCreateValue(battleUnit);
 			if (state == null)
 				return;
+			// Re-binding the same mechanics (repeat drawer/visual Inits mid-battle) must not reset
+			// once-per-battle consumption.
+			if (state.RuntimeBattleSide != null
+			    && state.RuntimeMechanicGeneration == RuntimeMechanicGeneration
+			    && state.RuntimeUnitMechanicIndex == binding.UnitMechanicIndex
+			    && state.RuntimeLawMechanicIndex == binding.LawMechanicIndex)
+				return;
 			state.RuntimeMechanicGeneration = RuntimeMechanicGeneration;
 			state.RuntimeUnitMechanicIndex = binding.UnitMechanicIndex;
 			state.RuntimeLawMechanicIndex = binding.LawMechanicIndex;

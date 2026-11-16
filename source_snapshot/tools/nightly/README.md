@@ -10,7 +10,7 @@ tag `nightly` on the public repo `leviritchie/Golden-Era`.
   gates and the sanitizer/leak gate. The full validator suite does not run.
 - Nothing is deployed. The game is never started, attached to or stopped.
 - The private repo is never pushed. The worktree is only read (`git archive`, `git log`).
-- The Golden Era install and the 25672315 mirror are only read.
+- The Golden Era install and the 26615913 mirror are only read.
 
 ## Files
 
@@ -47,7 +47,7 @@ Parameters:
 | `-Publish` | off | Without it, the run stops after the assets are built and verified. |
 | `-WorkRoot` | `N:\nightly` | All scratch. Must be on the drive labelled `GENightly`. |
 | `-GameRoot` | Golden Era install | Read only: plugin content, BepInEx, Doorstop, modded Core.zip, Unity data. |
-| `-CleanMirror` | 25672315 mirror | Read only: clean Core.zip pin and the headless-install source. |
+| `-CleanMirror` | 26615913 mirror | Read only: clean Core.zip pin and the headless-install source. |
 | `-Homm3Root` | none | Enables the full headless install when N: also has room for it. |
 | `-UntrackedInputsFrom` | `-Repo` plugin folder, else the main checkout's | Read only: git-ignored compile inputs (`publish_plugin\`, `tools\_dump_types\bin\`) passed to `build_plugin.ps1`. A linked worktree has none, so it falls back to the main checkout that owns its git dir. The stager's git-ignored dialog portrait inventory uses the same fallback. |
 | `-KeepAssets` | off | Keep the asset folder after a publish. A dry run always keeps it. |
@@ -118,7 +118,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File <clean export>\tools\nightly\night
 3. **stage**
    - `stage_release_payload.ps1` uses the `tools/release_installer` scripts from the same commit,
      plus the git-ignored dialog portrait inventory copied from the checkout.
-   - It applies the v0.1.319 deltas: the 25672315 clean Core pin; preview hooks and map squad
+   - It applies the v0.1.319 deltas: the clean Core pin (26615913 since 2026-11-13); preview hooks and map squad
      controller kept; bug reporting kept, with only its shape asserted; OldenAiSim.dll scrubbed; and
      the owned-skinned coverage rule for the 3D-only neutrals.
    - Leftover filters drop `*.pre<digit|_>*`, `*.bak_*`, `*.force_*`, `*.npz` and `.foldercache`.
@@ -259,4 +259,4 @@ python "V:\games\olden era playtest tweak\tools\nightly\triage_reports.py" --set
   N:, so the script starts them unelevated with `__COMPAT_LAYER=RunAsInvoker` set on that child only.
   No UAC prompt appears and no system setting changes.
 - File writes only under `N:\nightly`. Reads of the private checkout, the Golden Era install and the
-  25672315 mirror.
+  26615913 mirror.

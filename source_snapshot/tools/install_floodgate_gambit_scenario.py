@@ -4,6 +4,8 @@ from __future__ import annotations
 import argparse, json, shutil, subprocess, sys, zipfile
 from datetime import datetime
 from pathlib import Path
+
+from core_overlay_member_merge import OverlayMergeError, merge_overlay_member
 MAP_SID="h3_floodgate_gambit"
 GAME=Path(r"V:\SteamLibrary\steamapps\common\Heroes of Might and Magic Olden Era - Golden Era")
 ROOT=Path("artifacts")/"campaign_port_poc"/"floodgate_gambit"
@@ -30,7 +32,14 @@ def main()->int:
         skip=set(members)
         for info in src.infolist():
             if info.filename not in skip: dst.writestr(info,src.read(info.filename))
-        for name in members: dst.writestr(name,(ov/name).read_bytes())
+        src_names=set(src.namelist())
+        for name in members:
+            # Retain base rows the snapshot overlay lacks; see tools/core_overlay_member_merge.py.
+            try:
+                payload=merge_overlay_member(name,src.read(name) if name in src_names else None,(ov/name).read_bytes())
+            except OverlayMergeError as exc:
+                raise SystemExit(str(exc))
+            dst.writestr(name,payload)
     shutil.copy2(core,core.with_name(core.name+suffix)); tmp.replace(core)
     print(json.dumps({"ok":True,"mapSid":MAP_SID,"mapsDir":str(dest),"overlayMembers":len(members)},indent=2)); return 0
 if __name__=="__main__": raise SystemExit(main())

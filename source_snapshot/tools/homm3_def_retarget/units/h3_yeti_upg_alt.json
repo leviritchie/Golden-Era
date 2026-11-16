@@ -272,7 +272,7 @@
   "reason": "2026-09-30: the yeti knuckle-walks (rest Hand joints at z 0.20, feet 0.12); the source Move's hands hang to the floor, but grounded_chains leaves arm chains unplanted, so ground_glb refused the Move (P2: planted LeftUpLeg sole lifted +0.054 H at key 16, lowest other point LeftHand-owned). Same class as h3_mighty_gorgon: declare the arms as forelegs."
  },
  "glbPatch": {
-  "reason": "the DEF yeti raises the club straight up overhead at f3 of AttackFront and slams it to the ground in front at f5-f6; the club arm and hand now raise and swing it instead of holding it low across the body (lane B 2026-10-11)",
+  "reason": "the DEF yeti raises the club straight up overhead at f3 of AttackFront and slams it to the ground in front at f5-f6; the club arm and hand now raise and swing it instead of holding it low across the body (lane B 2026-10-11); 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Defence re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -291,6 +291,16 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_yeti_upg_alt_club_overhead_slam_rot.json",
     "regrid": true,
     "sha256": "f941a222a9f8e2234f0f5dafbbd1864dc16366092f589c2c997c00b457c0c1ef"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_yeti_upg_alt_move_tracks.json",
+    "sha256": "440bb94f424274099d63bfaa607d865548a22d96c0a36e460cb1e74f6d9b947c"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_yeti_upg_alt_clip_tracks.json",
+    "sha256": "af9e495c96d1c7b099ca06f5319486a6d88743309ff54d6ac13089a36eaddf51"
    }
   ]
  }

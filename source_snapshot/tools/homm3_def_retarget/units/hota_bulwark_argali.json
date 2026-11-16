@@ -247,7 +247,7 @@
   }
  },
  "glbPatch": {
-  "reason": "lane B 2026-10-11 authenticity: Defence ducks the head so the horns point forward (spine + neck nod f1-f8); Death topples over through f4-f5 (blended toward the lying f6 pose, Hips carried sideways within the translation cap) instead of standing reared until f5 and popping flat",
+  "reason": "lane B 2026-10-11 authenticity: Defence ducks the head so the horns point forward (spine + neck nod f1-f8); Death topples over through f4-f5 (blended toward the lying f6 pose, Hips carried sideways within the translation cap) instead of standing reared until f5 and popping flat; clip pass 2026-11-11 (user-approved candidate): Death, Defence re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
   "ops": [
    {
     "op": "keyTranslations",
@@ -266,6 +266,35 @@
     "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_argali_defence_duck_death_fall_rot.json",
     "regrid": true,
     "sha256": "e568559685d59db72a0ee81dee15c055bec50c67a85a07873e7571e9c6e16e07"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_argali_clip_repair_weights.json",
+    "note": "clip pass repair: horns rigid on Head, Head bleed removed from the neck-side / wither fur under the horn curls",
+    "sha256": "2bdbb71d6aab05b8f9657652efa2d7c2456cbc138a96f138d14222045f84bdcb"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_argali_clip_repair_facecut.json",
+    "note": "clip pass repair: horn curls unwelded from the neck / wither fur (92 faces)",
+    "sha256": "6cce879899a97c9178a36594620e9e56395dfe3f89ca3f27f289574f2dacb3d0"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_argali_clip_tracks.json",
+    "sha256": "297a10ebc5c5d65a2ce760ab33d9c48c53bc80a98b8834cd917d7905a6bfcb4b"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death",
+     "Unit_Defence"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
    }
   ]
  }

@@ -77,6 +77,12 @@ SCOPE_GUARD = "if (!GameSymbolScope.RewriteForCurrentBuild)"
 BUILDS = ("golden", "current")
 MAP_MESH_LOADER_ALIAS = "Method_Public_GameObject_0"
 MAP_MESH_LOADER_OWNER = "Hex.Configs.UnitViewConfig"
+GOLDEN_GAME_ASSEMBLY_SHA256 = "D47706EB0FFEDBDA0EC07EDE47ABC778E6022ED820AE1A1FD23522D3ACDB8416"
+# The manual pins below (map-mesh loader, preview wrapper) were reviewed on Steam 25672315. That basis is a
+# historical fact and stays fixed; a later build inherits the pins only through carry_scope_overrides.py,
+# whose evidence starts "<new build> carry from the <old build> override" and keeps the basis text.
+MANUAL_PIN_BASIS_BUILD = "25672315"
+MANUAL_PIN_BASIS_GAME_ASSEMBLY_SHA256 = "D9972B0E7F7DD1C17758808E2F1B80E0A728946416D9A41DEAA99BAD744DE53A"
 
 # Per-file resolver copies that the central resolver replaced. Their reappearance fails the gate.
 FORBIDDEN_RESOLVER_COPY = re.compile(r"\bstatic\s+Type\s+ResolveFirstType\s*\(")
@@ -361,6 +367,15 @@ def generated_type_groups() -> dict:
     return _GENERATED_TYPE_GROUPS
 
 
+def _manual_pin_attribution_problem(label: str, evidence: str) -> str | None:
+    """A manual pin counts for the current build only if reviewed on it or explicitly carried to it."""
+    build = _current_build_id()
+    if build == MANUAL_PIN_BASIS_BUILD or evidence.startswith(f"{build} carry from the "):
+        return None
+    return (f"{SCOPE_OVERRIDES.name}: {label} evidence is neither the {MANUAL_PIN_BASIS_BUILD} review nor a "
+            f"carry_scope_overrides.py carry to {build}")
+
+
 def check_map_mesh_loader_contract() -> list[str]:
     """Pin the native-body-reviewed UnitViewConfig map-mesh loader through the owning symbol gate."""
     problems: list[str] = []
@@ -396,9 +411,12 @@ def check_map_mesh_loader_contract() -> list[str]:
         if override.get("owners") != [MAP_MESH_LOADER_OWNER]:
             problems.append(f"{SCOPE_OVERRIDES.name}: map-mesh live owner changed")
         evidence = override.get("evidence", "")
+        attribution = _manual_pin_attribution_problem("map-mesh", evidence)
+        if attribution:
+            problems.append(attribution)
         for pin in (
-            "D47706EB0FFEDBDA0EC07EDE47ABC778E6022ED820AE1A1FD23522D3ACDB8416",
-            "D9972B0E7F7DD1C17758808E2F1B80E0A728946416D9A41DEAA99BAD744DE53A",
+            GOLDEN_GAME_ASSEMBLY_SHA256,
+            MANUAL_PIN_BASIS_GAME_ASSEMBLY_SHA256,
             "100685816:seo",
             "100686425:szi",
             "layout-derived",
@@ -518,10 +536,13 @@ def check_unit_preview_wrapper_contract() -> list[str]:
         if override.get("owners") != [owner_name]:
             problems.append(f"{SCOPE_OVERRIDES.name}: preview-wrapper owner changed")
         evidence = override.get("evidence", "")
+        attribution = _manual_pin_attribution_problem("preview-wrapper", evidence)
+        if attribution:
+            problems.append(attribution)
         for pin in (
-            "D47706EB0FFEDBDA0EC07EDE47ABC778E6022ED820AE1A1FD23522D3ACDB8416",
+            GOLDEN_GAME_ASSEMBLY_SHA256,
             "EDE61A05C38006AD853AB716F21CA882A4E0480EAAD46C86FDFB135D01EFFD04",
-            "D9972B0E7F7DD1C17758808E2F1B80E0A728946416D9A41DEAA99BAD744DE53A",
+            MANUAL_PIN_BASIS_GAME_ASSEMBLY_SHA256,
             "A535D47EF5E8C929CA7C4794D9EC596C8D40DDAAD7FBDB1AE7A2B0C2C296D4D7",
             owner_name,
             wrapper_name,
@@ -545,9 +566,23 @@ def check_unit_preview_wrapper_contract() -> list[str]:
     if scope is not None:
         if (scope.get("declType") != "FieldSymbol" or scope.get("status") != "scoped"
                 or scope.get("live") != expected_literals or scope.get("owners") != [owner_name]
-                or scope.get("remapResolution") != "not-in-remap"
+                # not-in-remap when the pin predates the remap; all_mapped once a regenerated remap harvests it
+                # (checked below to agree with the pin). Either way the override decides (minConfidence None).
+                or scope.get("remapResolution") not in ("not-in-remap", "all_mapped")
                 or scope.get("minConfidence") is not None):
             problems.append(f"{SCOPE_REPORT.name}: preview-wrapper pin must be a confidence-free, exact-owner manual scope")
+        if scope.get("remapResolution") == "all_mapped":
+            try:
+                remap_doc = json.loads(SCOPE_REMAP.read_text(encoding="utf-8"))
+                group = next((g for g in remap_doc.get("groups", [])
+                              if g.get("symbol") == "UnitPreview.WindowPreviewWrapperField"), None)
+            except (OSError, json.JSONDecodeError) as exc:
+                group = None
+                problems.append(f"{SCOPE_REMAP.name}: cannot read preview-wrapper remap row: {exc}")
+            if group is not None and (group.get("live") != expected_literals or group.get("ownerLive") != owner_name):
+                problems.append(f"{SCOPE_REMAP.name}: all_mapped preview-wrapper remap row disagrees with the manual pin")
+            elif group is None and not any(f"{SCOPE_REMAP.name}: cannot read" in p for p in problems):
+                problems.append(f"{SCOPE_REMAP.name}: scope says all_mapped but the preview-wrapper remap row is missing")
     elif not any(f"{SCOPE_REPORT.name}: cannot read" in p for p in problems):
         problems.append(f"{SCOPE_REPORT.name}: missing UnitPreview.WindowPreviewWrapperField scope row")
 

@@ -362,6 +362,8 @@ internal static class Homm3FactoryBulwarkCombatForceSetupPilot
 			failReason = "could not write subskill sid=" + subSkillSid;
 			return false;
 		}
+		if (clone is Hex.Session.Data.HeroSubSkill row)
+			row.status = Hex.Session.Data.HeroSubSkill.EStatus.PermanentActive; // a forced pick must read as chosen
 		if (!TryAddToCollection(subSkills, clone, out failReason))
 			return false;
 		return true;

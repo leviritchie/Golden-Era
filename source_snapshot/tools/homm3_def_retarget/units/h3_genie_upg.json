@@ -3959,7 +3959,7 @@
   ]
  },
  "glbPatch": {
-  "reason": "authenticity lane-A 2026-10-10: the hand-keyed CSULTA Hitted only tilted in place; the DEF hurls the Master Genie back and down (f1-f4) before it settles. The Hips lurch is the plain Genie's DEF-fitted Hitted Hips path (same mesh, joints and spritecam convention; CGENIE and CSULTA share the hit choreography), applied as deltas onto the hand-keyed clip, with the plain Genie's Hitted floor lift kept so the rigid smoke tail stays within the DEF floor. Board Hitted IoU 0.29 -> 0.49.",
+  "reason": "authenticity lane-A 2026-10-10: the hand-keyed CSULTA Hitted only tilted in place; the DEF hurls the Master Genie back and down (f1-f4) before it settles. The Hips lurch is the plain Genie's DEF-fitted Hitted Hips path (same mesh, joints and spritecam convention; CGENIE and CSULTA share the hit choreography), applied as deltas onto the hand-keyed clip, with the plain Genie's Hitted floor lift kept so the rigid smoke tail stays within the DEF floor. Board Hitted IoU 0.29 -> 0.49.; 2026-11-10 unit pass (user-approved candidate, rig / mesh repair): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass, with the candidate's added joints and face cuts; clip pass 2026-11-11 (user-approved candidate): Idle, Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "moveWeights",
@@ -4033,6 +4033,28 @@
     "sha256": "f41c1a1d24c3bdbf0605bc2c2333b27e1de9f160dd4e88c240efa12e0bac2642",
     "note": "Hitted Hips translation = the plain Genie's delivered Hitted Hips path minus this clip's own keys (end keys 0); regrid: the fresh export flattens the hand-keyed Hitted Hips translation to a 2-key hold, so it is resampled onto the table's 7-key grid",
     "regrid": true
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_genie_upg_move_joints.json",
+    "sha256": "2aa29ca70b868810797405f3b933b1ca852d80433d01c355e06f4cbe92bff52b",
+    "note": "unit pass: 4 joints the candidate's Move needs (mover_floatA_re)"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_genie_upg_move_weights.json",
+    "sha256": "43dbb050d3f7746f1d4df0a04636543542f8e56b4af1d9a92a2ce47c832e20a1"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_genie_upg_move_tracks.json",
+    "sha256": "bbe2cd2e703bedfb7bff28fc63ea16c476b7da57ab46483f8e032ef7abbb3d12"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_genie_upg_clip_tracks.json",
+    "sha256": "a1b609e0c071ec46a60debd61739218c1425e71754b834f42a0a59c1682871ec"
    }
   ]
  }

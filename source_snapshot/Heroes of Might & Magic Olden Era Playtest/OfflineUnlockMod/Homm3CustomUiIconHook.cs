@@ -6,6 +6,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using Hex.Configs;
 using Hex.Session.Battle;
+using BhBattleAbilityView = Hex.UI.BhBattleAbilityView;
 using Hex.UI.City;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes;
@@ -24,6 +25,7 @@ namespace OfflineUnlockMod;
 internal static class Homm3CustomUiIconHook
 {
 	private static bool _patched;
+	private static bool _battleAbilityPatched;
 	private static int _loggedResolverPatch;
 	private static int _loggedResolverReplace;
 	private static int _loggedSurfacePatch;
@@ -44,6 +46,9 @@ internal static class Homm3CustomUiIconHook
 	private static int _loggedBuildingHireResolveDiag;
 	private static int _loggedBattleResultIconProbe;
 	private static int _loggedRecruitmentPanelReplace;
+	private static int _loggedEightUnitStripLayout;
+	private static object _eightUnitCitySpecialView;
+	private static bool _applyingEightUnitStripLayout;
 	private static int _loggedHireUnitModelListSuppressed;
 	private static int _loggedHireAbilityRebind;
 	private static int _loggedHireAbilityContext;
@@ -137,10 +142,10 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		patched += Required("Hex.UI.City.BhBuildingView bind", () => PatchBuildingViewBindByShape(h, log));
 		patched += Required("Hex.UI.City.BhBuildingView secondary bind", () => PatchBuildingViewSecondaryBindByShape(h, log));
 		patched += Required("Hex.UI.City.BhBuildingView hover refresh", () => PatchBuildingViewHoverRefreshByShape(h, log));
-		patched += Required("Hex.UI.City.BhBuildingView.UpdateView", () => PatchByName(h, log, "Hex.UI.City.BhBuildingView", "UpdateView", null, nameof(PostfixBuildingViewBind)));
+		patched += RequiredExactAnyBySymbolWithPrefix("Hex.UI.City.BhBuildingView update view", "Hex.UI.City.BhBuildingView", GameSymbols.ReleaseTownUi.BuildingViewUpdateView, Array.Empty<Type>(), null, nameof(PostfixBuildingViewBind));
 		patched += Required("Hex.UI.BhTooltipBuilding", () => PatchBuildingTooltipByShape(h, log));
 		patched += Required("Hex.UI.Tooltips.BhTooltipUnitsView bind", () => PatchTooltipUnitsViewBindByShape(h, log));
-		patched += Required("Hex.UI.City.BhHireUnitItemView.UpdateView(string)", () => PatchByNameWithPrefix(h, log, "Hex.UI.City.BhHireUnitItemView", "UpdateView", typeof(string), nameof(PrefixStringArg0DonorSurface), nameof(PostfixStringArg0DonorSurface)));
+		patched += RequiredExactAnyBySymbolWithPrefix("Hex.UI.City.BhHireUnitItemView update view(string)", "Hex.UI.City.BhHireUnitItemView", GameSymbols.ReleaseTownUi.HireUnitItemViewUpdateView, ResolveHireUnitItemUpdateViewParameterTypes(), nameof(PrefixStringArg0DonorSurface), nameof(PostfixStringArg0DonorSurface));
 		patched += Required("Hex.UI.City.BhHireUnitItemView.Init", () => PatchByNameWithPrefix(h, log, "Hex.UI.City.BhHireUnitItemView", "Init", null, nameof(PrefixHireUnitItemInit), nameof(PostfixHireUnitItemInit)));
 		patched += Required("Hex.UI.City.BhHireUnitItemView refresh", () => PatchHireUnitItemRefreshByShape(h, log));
 		patched += Required("Hex.UI.City.BhCitySpecialView.Init", () => PatchByName(h, log, "Hex.UI.City.BhCitySpecialView", "Init", null, nameof(PostfixCitySpecialRecruitmentPanel)));
@@ -156,11 +161,19 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		patched += RequiredAnyBySymbol("Hex.Session.City.BhHireUnitAbilityView primary ability bind", "Hex.Session.City.BhHireUnitAbilityView", GameSymbols.UnitPreviewAbilityIcons.AbilityViewPrimaryBind, ResolveAbilityViewConfigBindParameterTypes(swapOrder: true), nameof(PostfixAbilityConfigArg1Surface));
 		patched += RequiredAnyBySymbol("Hex.Session.City.BhHireUnitAbilityView secondary ability bind", "Hex.Session.City.BhHireUnitAbilityView", GameSymbols.UnitPreviewAbilityIcons.AbilityViewSecondaryBind, ResolveAbilityViewConfigBindParameterTypes(swapOrder: false), nameof(PostfixAbilityConfigArg0Surface));
 		patched += Required("Hex.BhHireUnitAbilities bind", () => PatchHireUnitAbilitiesBindByShape(h, log));
-		patched += Required("Hex.Session.Battle.BhUnitAbilityView ability bind", () => PatchBattleAbilityViewBindByShape(h, log));
+		// The battle ability-view bind is its own required slice (RegisterRequiredReleaseSafeBattleAbilityIconSlice),
+		// so a missing battle surface cannot take the town icons and dialog portraits down with it.
+		if (!required)
+			patched += PatchBattleAbilityViewUnitBind(h, log, nameof(PrefixBattleAbilityViewBindRelease), nameof(PostfixBattleAbilityViewBindRelease));
 		patched += RequiredAnyBySymbol("Hex.UI.City.BhRewardNotificationHeroStat show", "Hex.UI.City.BhRewardNotificationHeroStat", GameSymbols.ReleaseTownUi.HeroStatRewardShow, Array.Empty<Type>(), nameof(PostfixHeroStatRewardNotification));
 		patched += Required("Hex.UI.City.BhRewardNotificationHeroStat.Update", () => PatchByName(h, log, "Hex.UI.City.BhRewardNotificationHeroStat", "Update", null, nameof(PostfixHeroStatRewardNotification)));
 		patched += Required("Hex.UI.City.BhRewardNotificationHeroStat.OnHide", () => PatchAnyByName(h, log, "Hex.UI.City.BhRewardNotificationHeroStat", GameSymbols.ReleaseTownUi.HeroStatRewardHide.NameHints, null, nameof(PostfixHeroStatRewardNotificationHidden)));
-		patched += RequiredAnyBySymbol("Hex.UI.City.BhRewardNotificationHeroStat hide/apply", "Hex.UI.City.BhRewardNotificationHeroStat", GameSymbols.ReleaseTownUi.HeroStatRewardHideOrApply, Array.Empty<Type>(), nameof(PostfixHeroStatRewardNotificationHidden));
+		// On 26615913 the hide/apply symbol remaps to the same method as show (wkp, the populate body); a "hidden"
+		// postfix there disables the popup right after it is corrected. OnHide (above) still restores city input.
+		if (SameMethodSymbolNames(GameSymbols.ReleaseTownUi.HeroStatRewardHideOrApply, GameSymbols.ReleaseTownUi.HeroStatRewardShow))
+			log?.LogWarning("Homm3CustomUiIcon: hero-stat reward hide/apply symbol resolves to the show method on this build; hide/apply postfix not registered (OnHide covers it).");
+		else
+			patched += RequiredAnyBySymbol("Hex.UI.City.BhRewardNotificationHeroStat hide/apply", "Hex.UI.City.BhRewardNotificationHeroStat", GameSymbols.ReleaseTownUi.HeroStatRewardHideOrApply, Array.Empty<Type>(), nameof(PostfixHeroStatRewardNotificationHidden));
 		patched += Required("Hex.Session.UI.HeroProfile.BhHeroSpecializationView bind", () => PatchHeroProfileIconViewByShape(h, log, "Hex.Session.UI.HeroProfile.BhHeroSpecializationView", nameof(PostfixHeroProfileSpecializationIcon)));
 		patched += Required("Hex.Session.UI.HeroProfile.BhHeroSkillView bind", () => PatchHeroProfileIconViewByShape(h, log, "Hex.Session.UI.HeroProfile.BhHeroSkillView", nameof(PostfixHeroProfileSkillIcon)));
 		patched += Required("Hex.Session.UI.HeroProfile.BhHeroSubSkillView bind", () => PatchHeroProfileIconViewByShape(h, log, "Hex.Session.UI.HeroProfile.BhHeroSubSkillView", nameof(PostfixHeroProfileSubSkillIcon)));
@@ -178,6 +191,18 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			log?.LogInfo("Homm3CustomUiIcon release-safe UI slice: " + patched + " UI icon patch(es) registered.");
 
 		_patched = true;
+	}
+
+	internal static void RegisterRequiredReleaseSafeBattleAbilityIconSlice(Harmony h, ManualLogSource log)
+	{
+		if (_battleAbilityPatched)
+			return;
+		if (h == null)
+			throw new InvalidOperationException("Harmony was not initialized before required Homm3CustomUiIcon battle ability icon registration.");
+		if (PatchBattleAbilityViewUnitBind(h, log, nameof(PrefixBattleAbilityViewBindRelease), nameof(PostfixBattleAbilityViewBindRelease)) == 0)
+			throw new MissingMethodException(typeof(BhBattleAbilityView).FullName, "unit ability bind " + GameSymbols.BattleAbilityView.UnitBind.Id);
+		_battleAbilityPatched = true;
+		log?.LogInfo("Homm3CustomUiIcon release-safe battle ability icon slice registered.");
 	}
 
 	internal static bool TryResolveSprite(string key, out Sprite sprite)
@@ -342,6 +367,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		var key = sid.Trim();
 		return string.Equals(key, "pet_blood_icon", StringComparison.Ordinal)
 			|| string.Equals(key, "magic_early_start_effect_icon", StringComparison.Ordinal)
+			|| string.Equals(key, "magic_berserker_effect_icon", StringComparison.Ordinal) // Fortress Frenzy
 			|| string.Equals(key, "magic_sharp_edge_effect_icon", StringComparison.Ordinal)
 			|| string.Equals(key, "magic_fatal_decay_effect_icon", StringComparison.Ordinal)
 			|| string.Equals(key, "magic_favorable_wind_effect_icon", StringComparison.Ordinal)
@@ -553,7 +579,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		patched += PatchAnyBySymbol(h, log, "Hex.Session.City.BhHireUnitAbilityView", GameSymbols.UnitPreviewAbilityIcons.AbilityViewSecondaryBind, ResolveAbilityViewConfigBindParameterTypes(swapOrder: false), nameof(PostfixAbilityConfigArg0Surface), false);
 		patched += PatchAnyByNameWithPrefix(h, log, "Hex.BhHireUnitAbilities", GameSymbols.UnitPreviewAbilityIcons.HireUnitAbilitiesBind.NameHints, typeof(Unit), nameof(PrefixHireUnitAbilitiesBind), nameof(PostfixHireUnitAbilitiesBind), nameof(FinalizerHireUnitAbilitiesBind));
 
-		patched += PatchByNameWithPrefix(h, log, "Hex.UI.City.BhHireUnitItemView", "UpdateView", typeof(string), nameof(PrefixStringArg0DonorSurface), nameof(PostfixStringArg0DonorSurface));
+		patched += PatchExactAnyBySymbolWithPrefix(h, log, "Hex.UI.City.BhHireUnitItemView", GameSymbols.ReleaseTownUi.HireUnitItemViewUpdateView, ResolveHireUnitItemUpdateViewParameterTypes(), nameof(PrefixStringArg0DonorSurface), nameof(PostfixStringArg0DonorSurface), false);
 		foreach (var methodName in GameSymbols.ReleaseTownUi.HireUnitItemRefresh.NameHints)
 			patched += PatchByName(h, log, "Hex.UI.City.BhHireUnitItemView", methodName, null, nameof(PostfixNoArgSurfaceDiag));
 
@@ -566,7 +592,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		patched += PatchByName(h, log, "Hex.Session.UI.BhLevelUpSkillView", "Init", null, nameof(PostfixLevelUpSkillIcon));
 		patched += PatchMagicItemViewShowByShape(h, log);
 		patched += PatchAnyByName(h, log, "Hex.UI.BhTooltipBuilding", GameSymbols.ReleaseTownUi.BuildingTooltipBind.NameHints, null, nameof(PostfixBuildingTooltipFromCity));
-		patched += PatchAnyByNameWithPrefixByFirstParameterTypeName(h, log, "Hex.Session.Battle.BhUnitAbilityView", GameSymbols.SelectedUnitHud.AbilityViewBind.NameHints, GameSymbols.SelectedUnitHud.AbilityViewWrapperTypeNames, null, nameof(PostfixBattleAbilityViewBind));
+		patched += PatchBattleAbilityViewUnitBind(h, log, null, nameof(PostfixBattleAbilityViewBind));
 		patched += TryPatchBattleResultIconProbes(h, log);
 
 		return patched;
@@ -1148,23 +1174,30 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		return 0;
 	}
 
-	private static int PatchBattleAbilityViewBindByShape(Harmony h, ManualLogSource log)
+	// 26297049 merged BhUnitAbilityView into Hex.UI.BhBattleAbilityView; unit slots bind through
+	// (wrapper, enabled, index). The postfixes read the wrapper and the enabled flag only.
+	private static int PatchBattleAbilityViewUnitBind(Harmony h, ManualLogSource log, string prefixName, string postfixName)
 	{
-		var typeName = "Hex.Session.Battle.BhUnitAbilityView";
-		var type = FindRuntimeType(typeName);
-		if (type == null)
-			return 0;
-		foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+		foreach (var method in GameMember.FindMethods(
+		         typeof(BhBattleAbilityView),
+		         typeof(void),
+		         new Type[] { null, typeof(bool), typeof(int) },
+		         GameSymbols.BattleAbilityView.UnitBind))
 		{
-			var ps = method.GetParameters();
-			if (method.ReturnType != typeof(void) || ps.Length != 2 || ps[1].ParameterType != typeof(bool))
+			if (!FirstParameterTypeNameMatches(method.GetParameters(), GameSymbols.SelectedUnitHud.AbilityViewWrapperTypeNames))
 				continue;
-			if (!FirstParameterTypeNameMatches(ps, GameSymbols.SelectedUnitHud.AbilityViewWrapperTypeNames))
-				continue;
-			return TryApplySurfacePatchWithPrefixFinalizer(h, log, method, nameof(PrefixBattleAbilityViewBindRelease), nameof(PostfixBattleAbilityViewBindRelease), null) ? 1 : 0;
+			return TryApplySurfacePatchWithPrefixFinalizer(h, log, method, prefixName, postfixName, null) ? 1 : 0;
 		}
-		log?.LogWarning("Homm3CustomUiIcon: compatible battle ability-view bind not found on " + typeName + ".");
+		log?.LogWarning("Homm3CustomUiIcon: battle ability-view unit bind " + GameSymbols.BattleAbilityView.UnitBind.Id + " not found on " + typeof(BhBattleAbilityView).FullName + ".");
 		return 0;
+	}
+
+	// BhHireUnitItemView's UpdateView took (string) through 25672315; 26297049 adds an int.
+	private static Type[] ResolveHireUnitItemUpdateViewParameterTypes()
+	{
+		return GameBuild.Kind == GameBuildKind.Current
+			? new[] { typeof(string), typeof(int) }
+			: new[] { typeof(string) };
 	}
 
 	private static int PatchByName(Harmony h, ManualLogSource log, string typeName, string methodName, Type firstParameterType, string postfixName)
@@ -2420,6 +2453,10 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		if (!IsCurrentHomm3RecruitmentCity())
 			return;
 		TryApplyRecruitmentItemView(__instance, -1, FormatMethod(__originalMethod));
+		// Native binds can run after the strip refresh postfix and re-show the wrong row.
+		if (_eightUnitCitySpecialView != null
+		    && UsesEightUnitCitySpecialRecruitmentStrip(GetRecruitmentBaseSidsForCurrentFaction()))
+			TryApplyEightUnitRecruitmentStripLayout(_eightUnitCitySpecialView);
 	}
 
 	private static void PrefixHireUnitItemInit(object __instance, object[] __args, MethodBase __originalMethod, ref bool __state)
@@ -2693,12 +2730,26 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		TryApplyStrongholdHallRewardNotification(__instance, FormatMethod(__originalMethod));
 	}
 
+	private static bool SameMethodSymbolNames(GameSymbols.MethodSymbol a, GameSymbols.MethodSymbol b)
+	{
+		var left = a.NameHints;
+		var right = b.NameHints;
+		if (left == null || right == null || left.Length == 0 || left.Length != right.Length)
+			return false;
+		for (var i = 0; i < left.Length; i++)
+		{
+			if (!string.Equals(left[i], right[i], StringComparison.Ordinal))
+				return false;
+		}
+		return true;
+	}
+
 	private static void PostfixHeroStatRewardNotificationHidden(object __instance, MethodBase __originalMethod)
 	{
 		TryRestoreCityInputAfterHeroStatReward(__instance, FormatMethod(__originalMethod));
 	}
 
-	private static void PostfixBattleAbilityViewBind(BhUnitAbilityView __instance, object __0, bool __1, MethodBase __originalMethod)
+	private static void PostfixBattleAbilityViewBind(BhBattleAbilityView __instance, object __0, bool __1, MethodBase __originalMethod)
 	{
 		try
 		{
@@ -2732,7 +2783,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		}
 	}
 
-	private static void PrefixBattleAbilityViewBindRelease(BhUnitAbilityView __instance)
+	private static void PrefixBattleAbilityViewBindRelease(BhBattleAbilityView __instance)
 	{
 		if (!HasRememberedBattleAbilityIconReplacement(__instance))
 		{
@@ -2741,7 +2792,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		}
 	}
 
-	private static void PostfixBattleAbilityViewBindRelease(BhUnitAbilityView __instance, object __0, bool __1, MethodBase __originalMethod)
+	private static void PostfixBattleAbilityViewBindRelease(BhBattleAbilityView __instance, object __0, bool __1, MethodBase __originalMethod)
 	{
 		try
 		{
@@ -2766,9 +2817,13 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			return;
 		try
 		{
-			var views = root.GetComponentsInChildren<BhUnitAbilityView>(true);
+			// Unit slots only: hero/shared/special slots of the merged view keep their own icons.
+			var views = root.GetComponentsInChildren<BhBattleAbilityView>(true);
 			for (var i = 0; i < views.Length; i++)
-				RefreshBattleAbilityIconRelease(views[i], null, "selected-hud-controls-refresh");
+			{
+				if (Homm3ImportBhSelectedUnitHudFix.IsUnitSlotAbilityView(views[i]))
+					RefreshBattleAbilityIconRelease(views[i], null, "selected-hud-controls-refresh");
+			}
 		}
 		catch (Exception ex)
 		{
@@ -2786,9 +2841,12 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			return;
 		try
 		{
-			var views = root.GetComponentsInChildren<BhUnitAbilityView>(true);
+			// Unit slots only: hero/shared/special slots of the merged view keep their own icons.
+			var views = root.GetComponentsInChildren<BhBattleAbilityView>(true);
 			for (var i = 0; i < views.Length; i++)
 			{
+				if (!Homm3ImportBhSelectedUnitHudFix.IsUnitSlotAbilityView(views[i]))
+					continue;
 				ClearBattleAbilityIconOverlay(views[i]);
 				ClearBattleAbilityIconReplacement(views[i]);
 			}
@@ -2803,7 +2861,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		}
 	}
 
-	private static void RefreshBattleAbilityIconRelease(BhUnitAbilityView view, object abilityHint, string source)
+	private static void RefreshBattleAbilityIconRelease(BhBattleAbilityView view, object abilityHint, string source)
 	{
 		if (!view)
 			return;
@@ -2999,7 +3057,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 				return;
 			}
 
-			ApplySpriteToImage(image, sprite);
+			ApplySpriteToImageKeepVisibility(image, sprite);
 			LogBuildingTooltip(tooltip, key, sprite, source, "replaced");
 		}
 		catch (Exception ex)
@@ -3025,12 +3083,12 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		return null;
 	}
 
-	private static object TryGetReleaseAbility(BhUnitAbilityView view)
+	private static object TryGetReleaseAbility(BhBattleAbilityView view)
 	{
 		if (view == null)
 			return null;
-		return TryGetFirstMemberValue(view, GameSymbols.SelectedUnitHud.AbilityViewAbilityFields)
-			?? TryGetReleaseAbility(TryGetFirstMemberValue(view, GameSymbols.SelectedUnitHud.AbilityViewWrapperFields));
+		return TryGetFirstMemberValue(view, GameSymbols.BattleAbilityView.UnitAbilityField)
+			?? TryGetReleaseAbility(TryGetFirstMemberValue(view, GameSymbols.BattleAbilityView.AbilityWrapperField));
 	}
 
 	private static object TryInvokeReleaseAbilityOut(object wrapper, string methodName)
@@ -3105,7 +3163,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			{
 				if (item is not Image image || !image)
 					continue;
-				ApplySpriteToImage(image, sprite);
+				ApplySpriteToImageKeepVisibility(image, sprite);
 				applied++;
 			}
 
@@ -3113,7 +3171,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			var overlayImage = overlayObject ? overlayObject.GetComponent<Image>() ?? overlayObject.GetComponentInChildren<Image>(true) : null;
 			if (overlayImage)
 			{
-				ApplySpriteToImage(overlayImage, sprite);
+				ApplySpriteToImageKeepVisibility(overlayImage, sprite);
 				applied++;
 			}
 
@@ -3164,8 +3222,9 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 					? TryApplyRecruitmentItemList(list, explicitSids, source + "." + fieldName, hideExtraViews: eightUnitStrip)
 					: TryApplyRecruitmentItemList(list, source + "." + fieldName);
 			}
-			if (eightUnitStrip && view is Component layoutRoot)
-				TryApplyEightUnitRecruitmentStripLayout(layoutRoot, baseSids);
+			_eightUnitCitySpecialView = eightUnitStrip ? view : null;
+			if (eightUnitStrip)
+				TryApplyEightUnitRecruitmentStripLayout(view);
 			if (applied == 0 && view is Component component)
 			{
 				var itemViews = component.GetComponentsInChildren<MonoBehaviour>(true);
@@ -3210,32 +3269,22 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 	}
 
 	/// <summary>
-	/// Bottom mini-strip row. Factory's additional Gantry line uses the third low slot;
-	/// the primary tier-7 line stays off the mini strip (full hire / dwelling only).
+	/// Bottom mini-strip row, 3-card variant (native <c>LowRow</c>). Seven-dwelling towns use it;
+	/// eight-dwelling towns (Factory: 7 tiers + Gantry) use the 4-card <c>itemsLow4</c> row instead,
+	/// which is also the list native code binds for them, so this one stays hidden.
 	/// </summary>
 	private static IReadOnlyList<string> ResolveCitySpecialLow3RecruitmentSids(string[] baseSids)
 	{
-		if (baseSids.Length <= 4)
+		if (baseSids.Length <= 4 || baseSids.Length > 7)
 			return Array.Empty<string>();
-		if (baseSids.Length > 7)
-		{
-			return new[]
-			{
-				baseSids[4],
-				baseSids[5],
-				baseSids[baseSids.Length - 1],
-			};
-		}
 		return SliceRecruitmentSids(baseSids, 4, Math.Min(3, baseSids.Length - 4));
 	}
 
 	private static IReadOnlyList<string> ResolveCitySpecialLow4RecruitmentSids(string[] baseSids)
 	{
-		if (baseSids.Length > 7)
-			return Array.Empty<string>();
 		if (baseSids.Length <= 4)
 			return Array.Empty<string>();
-		return SliceRecruitmentSids(baseSids, 4, baseSids.Length - 4);
+		return SliceRecruitmentSids(baseSids, 4, Math.Min(4, baseSids.Length - 4));
 	}
 
 	private static IReadOnlyList<string> SliceRecruitmentSids(string[] sids, int start, int count)
@@ -3585,9 +3634,6 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		{
 			ClearRecruitmentItemStrayRootPortrait(component, image);
 			HideHireUnitNativeDonorVisuals(component, sid, source);
-			if (UsesEightUnitCitySpecialRecruitmentStrip(GetRecruitmentBaseSidsForCurrentFaction())
-			    && ContainsIgnoreCase(component.GetType().FullName, "BhCityHireIncrementItemView"))
-				component.gameObject.SetActive(true);
 		}
 		RememberRecruitmentItemSid(item, sid);
 		LogRecruitmentPanelReplace(item, sid, sprite, source, "postfix");
@@ -3725,60 +3771,107 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		LogRecruitmentPullupDiag("cleared-extra", item, index, source, null, image, "");
 	}
 
-	private static void TryApplyEightUnitRecruitmentStripLayout(Component view, string[] baseSids)
+	/// <summary>
+	/// Eight-dwelling town strip (Factory: 7 tiers + Gantry) as a 4 + 4 grid.
+	/// CityUI prefab facts (Golden Era 26615913, level53): <c>items</c> and <c>itemsLow4</c> are
+	/// <c>SPECIAL VIEW/GameObject/UNIT PREVIEW SMALL</c>..<c>(7)</c>, and <c>itemsLow3</c> is
+	/// <c>SPECIAL VIEW/LowRow/UNIT PREVIEW SMALL (4)</c>..<c>(6)</c>. The GameObject row's GridLayoutGroup is
+	/// disabled, so the four <c>itemsLow4</c> cards keep stray saved positions (two above-right of the strip,
+	/// two below-left) that no shipped faction uses. Native code binds eight-unit towns into <c>items</c> +
+	/// <c>itemsLow4</c>; this puts each <c>itemsLow4</c> card under its <c>items</c> column on the
+	/// <c>LowRow</c> line, shows both rows and hides the 3-card <c>LowRow</c>. Idempotent; rerun after native binds.
+	/// </summary>
+	private static void TryApplyEightUnitRecruitmentStripLayout(object view)
 	{
-		if (view == null || baseSids == null || baseSids.Length <= 7)
+		if (view == null || _applyingEightUnitStripLayout)
 			return;
-		var specialView = FindRecruitmentStripChildTransform(view.transform, "SPECIAL VIEW");
-		if (!specialView)
+		if (view is Component viewComponent && !viewComponent)
+		{
+			_eightUnitCitySpecialView = null;
 			return;
-		var gameObjectRow = FindRecruitmentStripChildTransform(specialView, "GameObject");
-		var lowRow = FindRecruitmentStripChildTransform(specialView, "LowRow");
-		if (!gameObjectRow || !lowRow)
-			return;
+		}
+		_applyingEightUnitStripLayout = true;
+		try
+		{
+			List<Component> top = null, low4 = null, low3 = null;
+			foreach (var fieldName in GameSymbols.ReleaseTownUi.CitySpecialRecruitmentItemLists)
+			{
+				if (string.IsNullOrWhiteSpace(fieldName))
+					continue;
+				if (top == null && GameSymbols.ReleaseTownUi.IsCitySpecialTopRecruitmentItemList(fieldName))
+					top = CollectRecruitmentStripCards(TryGetMemberValue(view, fieldName));
+				else if (GameSymbols.ReleaseTownUi.IsCitySpecialLow4RecruitmentItemList(fieldName))
+					low4 = CollectRecruitmentStripCards(TryGetMemberValue(view, fieldName));
+				else if (GameSymbols.ReleaseTownUi.IsCitySpecialLow3RecruitmentItemList(fieldName))
+					low3 = CollectRecruitmentStripCards(TryGetMemberValue(view, fieldName));
+			}
+			if (top == null || low4 == null || top.Count == 0 || low4.Count == 0)
+			{
+				LogEightUnitStripLayout("missing lists top=" + (top?.Count ?? -1) + " low4=" + (low4?.Count ?? -1));
+				return;
+			}
 
-		SetRecruitmentStripCardActive(gameObjectRow, "UNIT PREVIEW SMALL", true);
-		SetRecruitmentStripCardActive(gameObjectRow, "UNIT PREVIEW SMALL (1)", true);
-		SetRecruitmentStripCardActive(gameObjectRow, "UNIT PREVIEW SMALL (2)", true);
-		SetRecruitmentStripCardActive(gameObjectRow, "UNIT PREVIEW SMALL (3)", true);
-		SetRecruitmentStripCardActive(gameObjectRow, "UNIT PREVIEW SMALL (4)", false);
-		SetRecruitmentStripCardActive(gameObjectRow, "UNIT PREVIEW SMALL (5)", false);
-		SetRecruitmentStripCardActive(gameObjectRow, "UNIT PREVIEW SMALL (6)", false);
-		SetRecruitmentStripCardActive(gameObjectRow, "UNIT PREVIEW SMALL (7)", false);
-
-		SetRecruitmentStripCardActive(lowRow, "UNIT PREVIEW SMALL (4)", true);
-		SetRecruitmentStripCardActive(lowRow, "UNIT PREVIEW SMALL (5)", true);
-		SetRecruitmentStripCardActive(lowRow, "UNIT PREVIEW SMALL (6)", true);
+			var row = low4[0].transform.parent;
+			float? lowY = null;
+			if (low3 != null && low3.Count > 0 && row)
+				lowY = row.InverseTransformPoint(low3[0].transform.position).y;
+			for (var i = 0; i < low4.Count; i++)
+			{
+				var card = low4[i].transform;
+				var column = top[Math.Min(i, top.Count - 1)].transform;
+				if (card.parent != column.parent)
+					continue;
+				var columnPos = column.localPosition;
+				var y = lowY ?? columnPos.y - (column is RectTransform rect ? rect.rect.height * 1.18f : 111f);
+				var target = new Vector3(columnPos.x, y, columnPos.z);
+				if ((card.localPosition - target).sqrMagnitude > 0.01f)
+					card.localPosition = target;
+			}
+			for (var i = 0; i < top.Count; i++)
+				SetRecruitmentStripCardActive(top[i], true);
+			for (var i = 0; i < low4.Count; i++)
+				SetRecruitmentStripCardActive(low4[i], true);
+			if (low3 != null)
+			{
+				for (var i = 0; i < low3.Count; i++)
+					SetRecruitmentStripCardActive(low3[i], false);
+			}
+			LogEightUnitStripLayout("applied top=" + top.Count + " low4=" + low4.Count + " low3=" + (low3?.Count ?? 0)
+				+ " lowY=" + (lowY.HasValue ? lowY.Value.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture) : "fallback"));
+		}
+		catch (Exception ex)
+		{
+			LogEightUnitStripLayout("failed: " + ex.GetType().Name + ": " + ex.Message);
+		}
+		finally
+		{
+			_applyingEightUnitStripLayout = false;
+		}
 	}
 
-	private static Transform FindRecruitmentStripChildTransform(Transform root, string name)
+	private static List<Component> CollectRecruitmentStripCards(object list)
 	{
-		if (!root || string.IsNullOrWhiteSpace(name))
-			return null;
-		var children = root.GetComponentsInChildren<Transform>(true);
-		for (var i = 0; i < children.Length; i++)
+		var result = new List<Component>();
+		foreach (var item in EnumerateIl2CppList(list))
 		{
-			var child = children[i];
-			if (child && string.Equals(child.name, name, StringComparison.Ordinal))
-				return child;
+			if (item is Component component && component)
+				result.Add(component);
 		}
-		return null;
+		return result;
 	}
 
-	private static void SetRecruitmentStripCardActive(Transform row, string cardName, bool active)
+	private static void SetRecruitmentStripCardActive(Component card, bool active)
 	{
-		if (!row || string.IsNullOrWhiteSpace(cardName))
+		if (card && card.gameObject && card.gameObject.activeSelf != active)
+			card.gameObject.SetActive(active);
+	}
+
+	private static void LogEightUnitStripLayout(string message)
+	{
+		if (_loggedEightUnitStripLayout >= 6)
 			return;
-		var children = row.GetComponentsInChildren<Transform>(true);
-		for (var i = 0; i < children.Length; i++)
-		{
-			var child = children[i];
-			if (!child || !string.Equals(child.name, cardName, StringComparison.Ordinal))
-				continue;
-			if (child.parent != null && child.parent.name.IndexOf("UNIT SELECTION", StringComparison.OrdinalIgnoreCase) >= 0)
-				continue;
-			child.gameObject.SetActive(active);
-		}
+		_loggedEightUnitStripLayout++;
+		Plugin.LogSource?.LogInfo("Homm3CustomUiIcon: eight-unit town strip layout " + message + ".");
 	}
 
 	private static Image FindRecruitmentItemPortraitImage(Component root)
@@ -4926,6 +5019,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			return false;
 		if (string.IsNullOrWhiteSpace(key))
 		{
+			ReleaseSkillIconOverride(FindHeroProfileIconImage(view), surface, source, key);
 			Homm3UiCardDiagnostics.Log(
 				surface,
 				"icon-binder-miss",
@@ -4939,6 +5033,9 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		LogSurfaceDiag(view, key, source, surface);
 		if (!TryResolveSprite(key, out var sprite) || !sprite)
 		{
+			// Vanilla skill (or unresolvable custom key): the native bind already set image.sprite,
+			// but a pooled view may still carry our overrideSprite from an earlier custom skill.
+			ReleaseSkillIconOverride(FindHeroProfileIconImage(view), surface, source, key);
 			Homm3UiCardDiagnostics.Log(
 				surface,
 				"icon-binder-miss",
@@ -4955,7 +5052,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 				"reason='no-image' source='" + (source ?? "?") + "' key='" + key + "' view='" + DescribeIconSurface(view) + "'");
 			return false;
 		}
-		ApplySpriteToImage(image, sprite);
+		ApplySkillIconOverride(image, sprite);
 		Homm3UiCardDiagnostics.Log(
 			surface,
 			"icon-applied",
@@ -5062,6 +5159,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			return false;
 		if (string.IsNullOrWhiteSpace(key))
 		{
+			ReleaseSkillIconOverride(FindLevelUpSkillIconImage(view), surface, source, key);
 			Homm3UiCardDiagnostics.Log(
 				surface,
 				"icon-binder-miss",
@@ -5069,7 +5167,12 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			return false;
 		}
 		if (!Homm3FactionSkillIconSpriteCache.IsFactionSkillIconKey(key))
+		{
+			// Level-up offer tiles are reused: a slot that showed a custom skill keeps our
+			// overrideSprite (which Unity draws over image.sprite) unless we drop it here.
+			ReleaseSkillIconOverride(FindLevelUpSkillIconImage(view), surface, source, key);
 			return false;
+		}
 		Homm3UiCardDiagnostics.Log(
 			surface,
 			"icon-binder-hit",
@@ -5077,6 +5180,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		LogSurfaceDiag(view, key, source, surface);
 		if (!Homm3FactionSkillIconSpriteCache.TryGetOrCreateSprite(key, out var sprite) || !sprite)
 		{
+			ReleaseSkillIconOverride(FindLevelUpSkillIconImage(view), surface, source, key);
 			Homm3UiCardDiagnostics.Log(
 				surface,
 				"icon-binder-miss",
@@ -5093,7 +5197,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 				"reason='no-image' source='" + (source ?? "?") + "' key='" + key + "' view='" + DescribeIconSurface(view) + "'");
 			return false;
 		}
-		ApplySpriteToImage(image, sprite);
+		ApplySkillIconOverride(image, sprite);
 		Homm3UiCardDiagnostics.Log(
 			surface,
 			"icon-applied",
@@ -5113,7 +5217,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			: view.GetType().FullName ?? view.GetType().Name;
 	}
 
-	private static bool TryApplyBattleAbilityIcon(BhUnitAbilityView view, string key, Sprite sprite, string source)
+	private static bool TryApplyBattleAbilityIcon(BhBattleAbilityView view, string key, Sprite sprite, string source)
 	{
 		if (!view || !sprite)
 			return false;
@@ -5163,7 +5267,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		return true;
 	}
 
-	private static bool TryApplyBattleAbilityIconOverlayOnly(BhUnitAbilityView view, string key, Sprite sprite, string source)
+	private static bool TryApplyBattleAbilityIconOverlayOnly(BhBattleAbilityView view, string key, Sprite sprite, string source)
 	{
 		if (!view || !sprite)
 			return false;
@@ -5208,7 +5312,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		return overlayApplied;
 	}
 
-	private static bool TryApplyNativeBattleAbilityIcon(BhUnitAbilityView view, Sprite sprite)
+	private static bool TryApplyNativeBattleAbilityIcon(BhBattleAbilityView view, Sprite sprite)
 	{
 		if (!view || !sprite)
 			return false;
@@ -5325,7 +5429,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		}
 	}
 
-	private static void TryApplyBattleAbilityFocusMarkersRelease(BhUnitAbilityView view, object ability)
+	private static void TryApplyBattleAbilityFocusMarkersRelease(BhBattleAbilityView view, object ability)
 	{
 		if (!view || ability == null)
 			return;
@@ -5366,7 +5470,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		}
 	}
 
-	private static bool TryApplyBattleAbilityIconOverlay(BhUnitAbilityView view, Image anchor, Sprite sprite)
+	private static bool TryApplyBattleAbilityIconOverlay(BhBattleAbilityView view, Image anchor, Sprite sprite)
 	{
 		if (!view || !anchor || !sprite)
 			return false;
@@ -5398,7 +5502,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		return true;
 	}
 
-	private static void RaiseBattleAbilityOverlayBelowEnergyContainer(BhUnitAbilityView view)
+	private static void RaiseBattleAbilityOverlayBelowEnergyContainer(BhBattleAbilityView view)
 	{
 		if (!view)
 			return;
@@ -5412,7 +5516,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		}
 	}
 
-	private static void PlaceBattleAbilityOverlayBelowEnergyContainer(BhUnitAbilityView view, RectTransform overlayRect)
+	private static void PlaceBattleAbilityOverlayBelowEnergyContainer(BhBattleAbilityView view, RectTransform overlayRect)
 	{
 		if (!view || !overlayRect || !overlayRect.parent)
 			return;
@@ -5422,7 +5526,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			overlayRect.SetSiblingIndex(Mathf.Max(0, energy.GetSiblingIndex()));
 	}
 
-	private static RectTransform FindEnergyContainerRect(BhUnitAbilityView view, Transform requiredParent)
+	private static RectTransform FindEnergyContainerRect(BhBattleAbilityView view, Transform requiredParent)
 	{
 		if (!view || !requiredParent)
 			return null;
@@ -5452,7 +5556,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		return null;
 	}
 
-	private static void ClearBattleAbilityIconOverlay(BhUnitAbilityView view)
+	private static void ClearBattleAbilityIconOverlay(BhBattleAbilityView view)
 	{
 		if (!view)
 			return;
@@ -5469,7 +5573,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		catch { }
 	}
 
-	private static void ClearBattleAbilityIconReplacement(BhUnitAbilityView view)
+	private static void ClearBattleAbilityIconReplacement(BhBattleAbilityView view)
 	{
 		if (!view)
 			return;
@@ -5509,12 +5613,12 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		}
 	}
 
-	private static bool HasRememberedBattleAbilityIconReplacement(BhUnitAbilityView view)
+	private static bool HasRememberedBattleAbilityIconReplacement(BhBattleAbilityView view)
 	{
 		return view && BattleAbilityIconKeyByView.ContainsKey(GetStableObjectKey(view));
 	}
 
-	private static bool HasRememberedBattleAbilityIconReplacementKey(BhUnitAbilityView view, string key)
+	private static bool HasRememberedBattleAbilityIconReplacementKey(BhBattleAbilityView view, string key)
 	{
 		return view
 		       && !string.IsNullOrWhiteSpace(key)
@@ -5522,7 +5626,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		       && string.Equals(remembered, key.Trim(), StringComparison.Ordinal);
 	}
 
-	private static bool HasBattleAbilityIconReplacement(BhUnitAbilityView view, string key, Sprite sprite)
+	private static bool HasBattleAbilityIconReplacement(BhBattleAbilityView view, string key, Sprite sprite)
 	{
 		if (!view || string.IsNullOrWhiteSpace(key) || !sprite)
 			return false;
@@ -5536,14 +5640,14 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		           || string.Equals(overlay.overrideSprite ? overlay.overrideSprite.name : null, sprite.name, StringComparison.Ordinal));
 	}
 
-	private static void RememberBattleAbilityIconReplacement(BhUnitAbilityView view, string key)
+	private static void RememberBattleAbilityIconReplacement(BhBattleAbilityView view, string key)
 	{
 		if (!view || string.IsNullOrWhiteSpace(key))
 			return;
 		BattleAbilityIconKeyByView[GetStableObjectKey(view)] = key.Trim();
 	}
 
-	private static void ForgetBattleAbilityIconReplacement(BhUnitAbilityView view)
+	private static void ForgetBattleAbilityIconReplacement(BhBattleAbilityView view)
 	{
 		if (!view)
 			return;
@@ -5573,7 +5677,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		return overlayRect ? overlayRect.GetComponent<Image>() : null;
 	}
 
-	private static Image TryFindBattleAbilityIconOverlay(BhUnitAbilityView view)
+	private static Image TryFindBattleAbilityIconOverlay(BhBattleAbilityView view)
 	{
 		if (!view)
 			return null;
@@ -5881,6 +5985,66 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		return null;
 	}
 
+	// Build-tree cards and tooltips (state icons, overlayIcon, buildingBp): native owns SetActive/enabled
+	// and alpha. Only swap the art; never resurrect a surface native has hidden (a forced-on overlay
+	// could be left floating over the town after a build).
+	private static void ApplySpriteToImageKeepVisibility(Image image, Sprite sprite)
+	{
+		if (!image || !sprite)
+			return;
+		image.sprite = sprite;
+		image.overrideSprite = sprite;
+		image.preserveAspect = true;
+		var color = image.color;
+		image.color = new Color(1f, 1f, 1f, color.a);
+	}
+
+	// Skill icon images (level-up offers, hero profile skills/subskills) are pooled and rebound by
+	// native code, which writes image.sprite only. Our overrideSprite wins over that, so remember
+	// what we applied and drop it when the same image is rebound to a vanilla skill.
+	private static readonly Dictionary<int, Sprite> SkillIconOverrideByImage = new();
+	private static readonly Dictionary<int, bool> SkillIconPreserveAspectByImage = new();
+
+	private static void ApplySkillIconOverride(Image image, Sprite sprite)
+	{
+		if (!image || !sprite)
+			return;
+		var id = image.GetInstanceID();
+		if (!SkillIconPreserveAspectByImage.ContainsKey(id))
+			SkillIconPreserveAspectByImage[id] = image.preserveAspect;
+		SkillIconOverrideByImage[id] = sprite;
+		ApplySpriteToImage(image, sprite);
+	}
+
+	private static void ReleaseSkillIconOverride(Image image, string surface, string source, string key)
+	{
+		if (!image)
+			return;
+		var id = image.GetInstanceID();
+		var tracked = SkillIconOverrideByImage.TryGetValue(id, out var applied);
+		var current = image.overrideSprite;
+		var ours = current
+			&& ((tracked && applied && current.GetInstanceID() == applied.GetInstanceID())
+				|| Homm3FactionSkillIconSpriteCache.IsModSkillIconSprite(current));
+		if (ours)
+		{
+			image.overrideSprite = null;
+			if (SkillIconPreserveAspectByImage.TryGetValue(id, out var preserveAspect))
+				image.preserveAspect = preserveAspect;
+			Homm3UiCardDiagnostics.Log(
+				surface,
+				"icon-override-released",
+				"source='" + (source ?? "?") + "' key='" + (key ?? "") + "' stale='" + (current ? current.name : "?")
+				+ "' native='" + (image.sprite ? image.sprite.name : "?") + "' image='" + image.name + "'",
+				limit: 48);
+		}
+		if (tracked)
+		{
+			SkillIconOverrideByImage.Remove(id);
+			SkillIconPreserveAspectByImage.Remove(id);
+		}
+	}
+
 	private static void ApplySpriteToImage(Image image, Sprite sprite)
 	{
 		if (!image || !sprite)
@@ -5929,6 +6093,12 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			if (field != null)
 			{
 				try { return field.GetValue(obj); } catch { }
+			}
+			// Il2CppInterop exposes native fields as same-named properties.
+			var property = t.GetProperty(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
+			if (property != null && property.GetMethod != null && property.GetIndexParameters().Length == 0)
+			{
+				try { return property.GetValue(obj); } catch { }
 			}
 		}
 		return null;
@@ -6359,7 +6529,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			+ (sprite ? sprite.name : "?") + "' image='" + (image ? image.name : "?") + "'.");
 	}
 
-	private static void LogBattleAbilityReplace(BhUnitAbilityView view, string key, Sprite sprite)
+	private static void LogBattleAbilityReplace(BhBattleAbilityView view, string key, Sprite sprite)
 	{
 		if (!Homm3DiagnosticFlags.IsEnabled("homm3_ui_icon_diag.flag"))
 			return;
@@ -6375,7 +6545,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			+ (sprite ? sprite.name : "?") + "' view='" + (view ? view.name : "?") + "'.");
 	}
 
-	private static void LogBattleAbilityIconDiag(BhUnitAbilityView view, string key, Sprite sprite, string source, Image image, int score, string phase)
+	private static void LogBattleAbilityIconDiag(BhBattleAbilityView view, string key, Sprite sprite, string source, Image image, int score, string phase)
 	{
 		if (!Homm3DiagnosticFlags.IsEnabled("homm3_ui_icon_diag.flag"))
 			return;
@@ -6409,7 +6579,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			+ " size=" + size.x.ToString("0.##") + "x" + size.y.ToString("0.##");
 	}
 
-	private static void LogBattleAbilityFocusMarkers(BhUnitAbilityView view, string name, int cost)
+	private static void LogBattleAbilityFocusMarkers(BhBattleAbilityView view, string name, int cost)
 	{
 		if (!Homm3DiagnosticFlags.IsEnabled("homm3_ui_icon_diag.flag"))
 			return;
@@ -6746,7 +6916,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		return (method.DeclaringType?.FullName ?? method.DeclaringType?.Name ?? "?") + "." + method.Name;
 	}
 
-	private static void LogBattleAbilityBinderHit(BhUnitAbilityView view, object ability, string source)
+	private static void LogBattleAbilityBinderHit(BhBattleAbilityView view, object ability, string source)
 	{
 		if (!Homm3DiagnosticFlags.IsEnabled("homm3_ui_icon_diag.flag"))
 			return;
@@ -6776,7 +6946,7 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		}
 	}
 
-	private static string FormatView(BhUnitAbilityView view)
+	private static string FormatView(BhBattleAbilityView view)
 	{
 		if (!view)
 			return "(null)";

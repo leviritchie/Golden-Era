@@ -412,7 +412,7 @@
   "params": []
  },
  "glbPatch": {
-  "reason": "2026-10-08 authenticity pass (lane B), Rampart: AttackFront and ShootFront re-authored by motion intent against the DEF. AttackFront: the base never struck (spear vertical through f4-f6); now the spear is cocked overhead tip-forward at f3, then the arm drives a down-forward stab with the torso lunging (f4-f5) and recovers level (f6-f7). ShootFront: the base wound the javelin tip-backward and released it across the body at the hip; now the tip stays forward through the wind-up, the arm drives the throw straight at the enemy (f4) and the torso bends through (f5). Head kept on the target (20 deg back at the cock, 25 deg down on the strike). Torso bend split Spine/Spine1 and no f3 arm hold, to keep the tear gate at 232 -> 232 (worst 8.997 unchanged). Hitted: the base kept the spear pointed forward through the hit; now the forearm and spear fly up and back as the torso is thrown back (f1-f2) and come forward again (f3-f4), as the DEF; gate 232 -> 228. Death: the base flopped onto its side in one frame at f3 (root jumping 0.29 H sideways and turning 60 deg), then propped the torso up with the spear raised; from the battle camera it read as a standing centaur. Now it rears through f2, the forelegs buckle at f3, the hindquarters drop at f4 and it lies collapsed belly-down f5-f7 as the DEF: legs folded under, root lowered to ground contact (belly 0.07 m), human torso slumped forward over the withers with the head down, spear angled to the ground. The fold tore the tail and rump (232 -> 688), because tail and rump-top verts carried 0.4 thigh weight. Two moveWeights ops hand that skin to Hips; gate 232 -> 179 (worst 8.997 unchanged).",
+  "reason": "2026-10-08 authenticity pass (lane B), Rampart: AttackFront and ShootFront re-authored by motion intent against the DEF. AttackFront: the base never struck (spear vertical through f4-f6); now the spear is cocked overhead tip-forward at f3, then the arm drives a down-forward stab with the torso lunging (f4-f5) and recovers level (f6-f7). ShootFront: the base wound the javelin tip-backward and released it across the body at the hip; now the tip stays forward through the wind-up, the arm drives the throw straight at the enemy (f4) and the torso bends through (f5). Head kept on the target (20 deg back at the cock, 25 deg down on the strike). Torso bend split Spine/Spine1 and no f3 arm hold, to keep the tear gate at 232 -> 232 (worst 8.997 unchanged). Hitted: the base kept the spear pointed forward through the hit; now the forearm and spear fly up and back as the torso is thrown back (f1-f2) and come forward again (f3-f4), as the DEF; gate 232 -> 228. Death: the base flopped onto its side in one frame at f3 (root jumping 0.29 H sideways and turning 60 deg), then propped the torso up with the spear raised; from the battle camera it read as a standing centaur. Now it rears through f2, the forelegs buckle at f3, the hindquarters drop at f4 and it lies collapsed belly-down f5-f7 as the DEF: legs folded under, root lowered to ground contact (belly 0.07 m), human torso slumped forward over the withers with the head down, spear angled to the ground. The fold tore the tail and rump (232 -> 688), because tail and rump-top verts carried 0.4 thigh weight. Two moveWeights ops hand that skin to Hips; gate 232 -> 179 (worst 8.997 unchanged).; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "moveWeights",
@@ -470,6 +470,16 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_pose_tr.json",
     "sha256": "d329b219e613ed9e8cd0499b1e0b442258e0878b4727e4100060b26081e619e3",
     "note": "Death root path: lowered to belly ground contact, kept in place"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_move_tracks.json",
+    "sha256": "d1fb2ef289b0b5c60f761f0edc08ac470e39d6d53a4f26db28eef6d2b3aab16f"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_clip_tracks.json",
+    "sha256": "0242db71a4f537337bbe906753a2aa9798c6b6c0cc46fb6c81df7812df73853a"
    }
   ]
  }

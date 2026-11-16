@@ -1294,7 +1294,7 @@
   }
  ],
  "glbPatch": {
-  "reason": "DEF g04 defence: wings open back and up (f2-f6) instead of staying folded (h3_wyvern recipe), on the castle_armsep membrane cut",
+  "reason": "DEF g04 defence: wings open back and up (f2-f6) instead of staying folded (h3_wyvern recipe), on the castle_armsep membrane cut; clip pass 2026-11-11 (user-approved candidate): Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
   "ops": [
    {
     "op": "setWeights",
@@ -1313,6 +1313,11 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_wyvern_monarch_pose_rot.json",
     "sha256": "bf21c40a25a59ee66ce5ee61924b965bdda6fb3084840bd72ac52e36edc693db",
     "regrid": true
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_wyvern_monarch_clip_tracks.json",
+    "sha256": "05b5b43e1b53ccf0b6bd2d929a5542c40f87308b6607b8f64ef5c91138b86164"
    },
    {
     "op": "stretchRelax",
@@ -1336,6 +1341,17 @@
      "WingR_04"
     ],
     "note": "wing membrane creases of the spread wings"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Hitted"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
    }
   ]
  }

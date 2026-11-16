@@ -45,7 +45,8 @@ internal static class Homm3ConstructionNativeAdapter
 	private static MethodInfo _buildingViewCostCheckCandidate;
 	private static MethodInfo _buildingViewBindCandidate;
 	private static MethodInfo _buildingViewUpdateCandidate;
-	private static FieldInfo _todaysConstructionsCountField;
+	// FieldInfo on managed/mono builds, PropertyInfo under Il2CppInterop (native fields are exposed as properties).
+	private static MemberInfo _todaysConstructionsCountField;
 	private static bool _resolved;
 	private static string _resolveFailure;
 
@@ -312,7 +313,7 @@ internal static class Homm3ConstructionNativeAdapter
 
 		try
 		{
-			count = Convert.ToInt32(_todaysConstructionsCountField.GetValue(buildingsData), System.Globalization.CultureInfo.InvariantCulture);
+			count = Convert.ToInt32(GetMemberValue(_todaysConstructionsCountField, buildingsData), System.Globalization.CultureInfo.InvariantCulture);
 			failReason = null;
 			return true;
 		}
@@ -345,7 +346,7 @@ internal static class Homm3ConstructionNativeAdapter
 
 		try
 		{
-			_todaysConstructionsCountField.SetValue(buildingsData, Math.Max(0, count));
+			SetMemberValue(_todaysConstructionsCountField, buildingsData, Math.Max(0, count));
 			failReason = null;
 			return true;
 		}
@@ -479,7 +480,29 @@ internal static class Homm3ConstructionNativeAdapter
 		return null;
 	}
 
-	private static FieldInfo ResolveExactField(Type type, string[] names, Type requiredFieldType)
+	private static object GetMemberValue(MemberInfo member, object instance) => member switch
+	{
+		FieldInfo field => field.GetValue(instance),
+		PropertyInfo property => property.GetValue(instance),
+		_ => throw new InvalidOperationException("unsupported member " + member?.GetType().Name),
+	};
+
+	private static void SetMemberValue(MemberInfo member, object instance, object value)
+	{
+		switch (member)
+		{
+			case FieldInfo field:
+				field.SetValue(instance, value);
+				break;
+			case PropertyInfo property:
+				property.SetValue(instance, value);
+				break;
+			default:
+				throw new InvalidOperationException("unsupported member " + member?.GetType().Name);
+		}
+	}
+
+	private static MemberInfo ResolveExactField(Type type, string[] names, Type requiredFieldType)
 	{
 		if (type == null)
 			return null;
@@ -490,11 +513,21 @@ internal static class Homm3ConstructionNativeAdapter
 			if (string.IsNullOrWhiteSpace(name))
 				continue;
 			var field = type.GetField(name, flags);
-			if (field == null)
+			if (field != null)
+			{
+				if (requiredFieldType != null && field.FieldType != requiredFieldType)
+					continue;
+				return field;
+			}
+			// Il2CppInterop: the native field is a same-named read/write property.
+			PropertyInfo property;
+			try { property = type.GetProperty(name, flags); }
+			catch (System.Reflection.AmbiguousMatchException) { continue; }
+			if (property == null || property.GetMethod == null || property.SetMethod == null || property.GetIndexParameters().Length != 0)
 				continue;
-			if (requiredFieldType != null && field.FieldType != requiredFieldType)
+			if (requiredFieldType != null && property.PropertyType != requiredFieldType)
 				continue;
-			return field;
+			return property;
 		}
 
 		return null;

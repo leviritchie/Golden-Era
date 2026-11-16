@@ -1202,5 +1202,40 @@
  "shrinkOut": {
   "start": 3,
   "power": 1.0
+ },
+ "glbPatch": {
+  "reason": "2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
+  "ops": [
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_nereid_move_tracks.json",
+    "sha256": "05c3cdff9298542bdb15c06102fecb6c221553f50efb3974199eaf7ff2e48772"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_nereid_clip_repair_facecut.json",
+    "note": "clip pass repair: faces welding two passes of the tail coil together (181 faces, tail-bone coordinate step >= 0.9)",
+    "sha256": "5b42e2023db2a3f7d8e4137378f049e49f80700dc39fd5506f8b3c65c22cea20"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_nereid_clip_tracks.json",
+    "sha256": "e96f8994fb44544f3ee27188ee3750fc56c31519e535df604f5afe38a444631b"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "unit pass: tear gate on the replaced Move clips"
+   }
+  ]
  }
 }

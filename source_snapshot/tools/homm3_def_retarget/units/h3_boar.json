@@ -5325,7 +5325,7 @@
   }
  ],
  "glbPatch": {
-  "reason": "2026-10-11 authenticity pass (lane A): DEF g05 death - the boar rears nose-high (f2-f4), then crashes onto its side (f5-f7) with the rider; the build slid the pair 1.27 m sideways belly-down without rearing. The boar (WolfBody) and the rider (Hips) are sibling roots, so each gets the same rigid motion: 35% of the sideways drift folded back, a 24 deg nose-up rear about the hind hooves (keys 1-5), then a further 30 deg roll onto the side about the near hooves (keys 5-7). keyRotations split pair + keyTranslations split pair (each half under the per-op cap). Lane B 2026-10-12: the pair fell belly-toward-camera; the DEF lies back-to-camera. The pair is re-rolled rigidly about the boar's own forward axis: upright in profile through the rear (keys 1-4), then onto the far side so the back faces the battle camera (+75..+83 deg, keys 5-7); the translation of the rigid pair is balanced between the two roots so both stay under the per-op cap.",
+  "reason": "2026-10-11 authenticity pass (lane A): DEF g05 death - the boar rears nose-high (f2-f4), then crashes onto its side (f5-f7) with the rider; the build slid the pair 1.27 m sideways belly-down without rearing. The boar (WolfBody) and the rider (Hips) are sibling roots, so each gets the same rigid motion: 35% of the sideways drift folded back, a 24 deg nose-up rear about the hind hooves (keys 1-5), then a further 30 deg roll onto the side about the near hooves (keys 5-7). keyRotations split pair + keyTranslations split pair (each half under the per-op cap). Lane B 2026-10-12: the pair fell belly-toward-camera; the DEF lies back-to-camera. The pair is re-rolled rigidly about the boar's own forward axis: upright in profile through the rear (keys 1-4), then onto the far side so the back faces the battle camera (+75..+83 deg, keys 5-7); the translation of the rigid pair is balanced between the two roots so both stay under the per-op cap.; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -5348,6 +5348,28 @@
     "op": "keyTranslations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_boar_pose_tr.json",
     "sha256": "2c89d0d97b234ec08856f6147030c9f15444ce5cda3980707cdc2a5b16fb0894"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_boar_move_tracks.json",
+    "sha256": "3063f1ffae764aa5c61eee680c0f745831fb217b983f2b650cd2c98c1b0df152"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_boar_clip_repair_facecut.json",
+    "note": "clip pass repair: rider forearms / hands / mace unfused from the boar and the rider's lap (98 faces)",
+    "sha256": "5eb1a9284951ae9cb07e9578ce72b580b7c13a23b966c3e3e5e04deea7232b79"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_boar_clip_repair_weights.json",
+    "note": "clip pass repair: lap seam vertices off WolfHead / FR2, arm bleed stripped from the lap (234 vertices)",
+    "sha256": "0eb93e75ab6dbc89deb5b2a9574697b2e82be3eb539312d04eb2b7dd145e9d94"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_boar_clip_tracks.json",
+    "sha256": "c1bf20ebe6ddc47fd14d4f3c2e33f5099455afcae34fe938b7b259a6244416b6"
    }
   ]
  }

@@ -391,13 +391,36 @@
   }
  },
  "glbPatch": {
-  "reason": "lane B 2026-10-11 authenticity: Move flies on the facing (capture yawed +29 deg) with the head and beak stretched forward level (capture hung the head beak-down); MoveStart/MoveEnd ramp the same correction",
+  "reason": "2026-11-09 flyer flight (user-approved candidate): wing weights smoothed along WingL/R_00..03, Unit_Move / MoveStart / MoveEnd replaced by the authored articulated flight (level body, head forward); supersedes the lane B 2026-10-11 facing/head-level keyRotations; clip pass 2026-11-11 (user-approved candidate): Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
-    "op": "keyRotations",
-    "table": "tools/homm3_glb_patch/key_rotations/h3_roc_flight_facing_head_level_rot.json",
-    "regrid": true,
-    "sha256": "8df0a7e1a2bed25b117b35f857cb2d31e43bdbc01af935e82ab0d179cc5b2f19"
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_roc_flight_weights.json",
+    "sha256": "96cb4843d50c11812e1fae7d896e286a6b7615fa88d065232fa6869caa9aaf72"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_roc_flight_tracks.json",
+    "sha256": "04e41c5f58497f7dc503afe1525cc990130515e0f61fbe26f77b7e50cdcc0786"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_roc_clip_tracks.json",
+    "sha256": "9df25f79ad733131f33415b9ca0901365ce7214cf10765072d1915bc6ed659cf"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "wing-root crease of the spread, scaled flight wings"
    }
   ]
  }

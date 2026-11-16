@@ -193,7 +193,7 @@
  "sourceMesh": "artifacts/homm3_mesh_surgery/hota_cove_tidecaller_sword_m1.glb",
  "meshReason": "2026-10-11 authenticity pass (lane A): the DEF AttackFront draws the sword overhead, slashes down and levels it at the target, but the Meshy mesh wore it sheathed through the left hip belt. sword_draw_surgery.py (same mesh geometry and recipe as hota_cove_sorceress sword_m1) re-seats the sword with the grip in the right fist, blade lowered forward; the sword prop (wholeIslands) makes it rigid on RightHand.",
  "glbPatch": {
-  "reason": "authenticity: DEF g12 attack - with the sword now in her right fist (sword_m1 draw surgery), she winds it back out to the side (f3), raises it overhead (f4), slashes down in front (f5-f6) and levels it at the target (f7), instead of holding it raised by the shoulder. Right arm/shoulder weights re-solved (wsolve fixed point, 3 passes)",
+  "reason": "authenticity: DEF g12 attack - with the sword now in her right fist (sword_m1 draw surgery), she winds it back out to the side (f3), raises it overhead (f4), slashes down in front (f5-f6) and levels it at the target (f7), instead of holding it raised by the shoulder. Right arm/shoulder weights re-solved (wsolve fixed point, 3 passes); clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
   "ops": [
    {
     "op": "setWeights",
@@ -212,6 +212,34 @@
     "table": "tools/homm3_glb_patch/key_rotations/hota_cove_tidecaller_pose_rot.json",
     "sha256": "1092eccf534b29e27b6d09c1517c971fc95582fe3c18bd9b26860f402ed9801b",
     "regrid": true
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_tidecaller_clip_repair_joints.json",
+    "note": "Cloak_ chain under Hips (clip pass repair)",
+    "sha256": "829a553ebe150038ea62f037e49e2c92b11ac5fc5df356aadfbb4c396999c832"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_tidecaller_clip_repair_weights.json",
+    "note": "Hips share of the hanging part onto the Cloak_ chain, soft bands",
+    "sha256": "3ef1fdba58b2921e1cd05de75c07eb607788540ef9ed268586db9d7d66938238"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_tidecaller_clip_tracks.json",
+    "sha256": "ca689c607df48105bd30a73bb30914be91b7f79dddacbe6ac7e93778ea196aff"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
    }
   ]
  }

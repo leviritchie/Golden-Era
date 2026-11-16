@@ -984,7 +984,7 @@
   "note": "basilisk flamespitter left forepaw: same crouched Meshy bind pose as h3_greater_basilisk (forearm/paw lying on the left hind toes), so the DEF g04 Defence guard with both forepaws raised needs the shell cut below z 0.32 (2026-10-11)"
  },
  "glbPatch": {
-  "reason": "DEF g04 defence: chest rears with BOTH forepaws raised in front of the face (f3-f8), as h3_greater_basilisk; DEF g05 death: ends lying flat (f4-f5) instead of sitting hunched, as h3_basilisk",
+  "reason": "DEF g04 defence: chest rears with BOTH forepaws raised in front of the face (f3-f8), as h3_greater_basilisk; DEF g05 death: ends lying flat (f4-f5) instead of sitting hunched, as h3_basilisk; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass",
   "ops": [
    {
     "op": "setWeights",
@@ -1015,6 +1015,11 @@
     "sha256": "efbb8108b9542611207e7b353f437663709f2a8850be8e38e0eec163922dc358"
    },
    {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_basilisk_flamespitter_move_tracks.json",
+    "sha256": "60cdff28a109e4ab8bd19904fe036d7455aae0e4d3dd810a6bf69ff5178bff55"
+   },
+   {
     "op": "stretchRelax",
     "clips": [
      "Unit_Defence"
@@ -1034,6 +1039,19 @@
      "RightForeArm"
     ],
     "note": "neck/forepaw crease of the raised guard"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "unit pass: tear gate on the replaced Move clips"
    }
   ]
  }

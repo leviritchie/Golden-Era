@@ -1,11 +1,24 @@
 #!/usr/bin/env python3
-"""Validate the HoMM3 Conflux Elemental Conjury Attack and Spell Power contract."""
+"""Validate the HoMM3 Conflux Elemental Fusion faction-skill contract on a candidate Core.
+
+The file name and CLI are kept from the Elemental Conjury validator (csproj and
+tools/port_current/run_core_validators.py call it). Checks, on the in-memory overlay:
+
+- skill_faction_homm3_conflux: every rank grants the homm3_conflux_elemental_fusion world spell and
+  carries no Elemental Conjury Focus/Attack/Spell Power bonuses; Advanced/Expert keep 3 subskills each;
+- the world spell row (Necromancer Will clone, [mode] parameters, mana 10, usage limit 1) + Lang rows;
+- subskills: no stale Summon Elementals rows; Stable Bond/Perfect Fusion target exactly the 105 fused units;
+- elemental Focus casts: spell-effect Focus receivers, per-creature damage for Thunderbolt/Chain
+  Lightning/Fireball, Blinding Strike 115%, elemental startEnergy 6/12;
+- the 105 fused unit rows: present, stat rule against the final parents, Lang names, never pooled.
+"""
 
 from __future__ import annotations
 
 import argparse
 import importlib.util
 import json
+import math
 import pathlib
 import sys
 import zipfile
@@ -13,26 +26,25 @@ from typing import Any
 
 CONFLUX_FACTION = "homm3_conflux"
 CONFLUX_SKILL = "skill_faction_homm3_conflux"
-ARCANE_CONDUIT = "sub_skill_faction_homm3_conflux_elemental_conjury_spell_power"
-GREATER_CONJURY = "sub_skill_faction_homm3_conflux_elemental_conjury_expert_spell_tier"
+SPELL_SID = "homm3_conflux_elemental_fusion"
+SPELL_MEMBER = "DB/magics/world_neutral_magics.json"
+SUBSKILLS_MEMBER = "DB/heroes_skills/sub_skills/sub_skills.json"
+FUSED_DEFENSE = "sub_skill_faction_homm3_conflux_elemental_conjury_spell_power"
+FUSED_ATTACK = "sub_skill_faction_homm3_conflux_elemental_conjury_expert_spell_tier"
 STALE_SUMMON_ELEMENTALS_SUBSKILL_PREFIX = "sub_skill_faction_homm3_conflux_summon_elementals_"
-EXPECTED_ELEMENTAL_LINE_RECEIVERS = (
-    "h3_air_elemental",
-    "h3_air_elemental_upg",
-    "h3_air_elemental_upg_alt",
-    "h3_water_elemental",
-    "h3_water_elemental_upg",
-    "h3_water_elemental_upg_alt",
-    "h3_fire_elemental",
-    "h3_fire_elemental_upg",
-    "h3_fire_elemental_upg_alt",
-    "h3_earth_elemental",
-    "h3_earth_elemental_upg",
-    "h3_earth_elemental_upg_alt",
-    "h3_psychic_elemental",
-    "h3_psychic_elemental_upg",
-    "h3_psychic_elemental_upg_alt",
-)
+RETIRED_CONJURY_STATS = ("heroOffenceModifier", "heroSpellPowerModifier", "heroIntelligenceModifier", "finalAbilityDamageBonusPercent")
+EXPECTED_SUBSKILLS = {
+    2: [
+        "sub_skill_faction_homm3_conflux_elemental_conjury_native_terrain",
+        "sub_skill_faction_homm3_conflux_elemental_conjury_focus_charge",
+        FUSED_DEFENSE,
+    ],
+    3: [
+        "sub_skill_faction_homm3_conflux_elemental_conjury_expert_focus_charge",
+        "sub_skill_faction_homm3_conflux_elemental_conjury_pathfinding",
+        FUSED_ATTACK,
+    ],
+}
 EXPECTED_FOCUS_SPELL_RECEIVERS = (
     "h3_air_elemental_upg",
     "h3_air_elemental_upg_alt",
@@ -41,9 +53,17 @@ EXPECTED_FOCUS_SPELL_RECEIVERS = (
     "h3_earth_elemental_upg",
     "h3_earth_elemental_upg_alt",
 )
+# (unit, ability index): (minStackDmg, maxStackDmg) with statDmgMult 0 and zero base damage.
+EXPECTED_PER_CREATURE_CASTS = {
+    ("h3_air_elemental_upg", 0): (11, 12),  # Storm: Thunderbolt
+    ("h3_fire_elemental_upg_alt", 0): (28, 29),  # Plasma: Chain Lightning
+    ("h3_earth_elemental_upg", 0): (16, 17),  # Magma: Fireball
+}
+ICE_BLINDING_STRIKE = ("h3_water_elemental_upg", 0, 1.15)
+
 
 def fail(message: str) -> None:
-    print(f"homm3-conflux-focus-attack-spell-power-contract: {message}", file=sys.stderr)
+    print(f"homm3-conflux-elemental-fusion-contract: {message}", file=sys.stderr)
     raise SystemExit(1)
 
 
@@ -93,120 +113,92 @@ def array_rows(doc: Any, member: str) -> list[Any]:
     fail(f"{member}: missing array rows")
 
 
-def bonus_with_params(bonuses: Any, bonus_type: str, params: list[str]) -> dict[str, Any] | None:
-    if not isinstance(bonuses, list):
-        return None
-    for bonus in bonuses:
-        if isinstance(bonus, dict) and bonus.get("type") == bonus_type and bonus.get("parameters") == params:
-            return bonus
-    return None
+def lang_text(doc: Any) -> dict[str, str]:
+    """Lang text rows from both sections: vanilla Lang uses ``tokens``; Golden Era Cores also carry ``array``."""
+    out: dict[str, str] = {}
+    if isinstance(doc, dict):
+        for section in ("tokens", "array"):
+            for row in doc.get(section) or []:
+                if isinstance(row, dict) and isinstance(row.get("sid"), str) and isinstance(row.get("text"), str):
+                    out[row["sid"]] = row["text"]
+    return out
 
 
-def validate_receiver_bonus(
-    bonuses: Any,
-    expected_receivers: list[str],
-    params: list[str],
-    label: str,
-    issues: list[str],
-) -> None:
-    bonus = bonus_with_params(bonuses, "unitStat", params)
-    if bonus is None:
-        issues.append(f"{label}: missing unitStat {params!r}")
-        return
-    receivers = bonus.get("receivers")
-    if receivers != expected_receivers:
-        issues.append(f"{label}: receivers={receivers!r}, expected {expected_receivers!r}")
+def unit_row(core_zip, overlay, sid: str, kind: str) -> dict[str, Any]:
+    member = f"DB/units/units_{kind}/{CONFLUX_FACTION}/{sid}_{'l' if kind == 'logics' else 'v'}.json"
+    return first_array_item(read_json(core_zip, overlay, member), member)
 
 
-def validate_hero_focus_bonus(bonuses: Any, amount: str, label: str, issues: list[str]) -> None:
-    if bonus_with_params(bonuses, "heroStat", ["startEnergyLevelsBonus", amount]) is None:
-        issues.append(f"{label}: missing startEnergyLevelsBonus {amount}")
-
-
-def validate_skill_row(skill_row: dict[str, Any], elemental_lines: list[str], focus_receivers: list[str], issues: list[str]) -> None:
+def validate_skill_row(skill_row: dict[str, Any], issues: list[str]) -> None:
     levels = skill_row.get("parametersPerLevel")
     if not isinstance(levels, list) or len(levels) != 3:
         issues.append(f"{CONFLUX_SKILL}: expected exactly 3 parametersPerLevel rows")
         return
-    for index, amount in enumerate(("1", "2", "3"), start=1):
-        level = levels[index - 1]
+    for index, level in enumerate(levels, start=1):
         bonuses = level.get("bonuses") if isinstance(level, dict) else None
-        validate_hero_focus_bonus(bonuses, amount, f"{CONFLUX_SKILL}:level{index}", issues)
-        validate_receiver_bonus(
-            bonuses,
-            elemental_lines,
-            ["heroOffenceModifier", "0.50"],
-            f"{CONFLUX_SKILL}:level{index}",
-            issues,
-        )
-        validate_receiver_bonus(
-            bonuses,
-            elemental_lines,
-            ["heroSpellPowerModifier", "0.50"],
-            f"{CONFLUX_SKILL}:level{index}",
-            issues,
-        )
-    level2_subskills = levels[1].get("subSkills") if isinstance(levels[1], dict) else None
-    level3_subskills = levels[2].get("subSkills") if isinstance(levels[2], dict) else None
-    if ARCANE_CONDUIT not in (level2_subskills or []):
-        issues.append(f"{CONFLUX_SKILL}:level2 missing {ARCANE_CONDUIT}")
-    if GREATER_CONJURY not in (level3_subskills or []):
-        issues.append(f"{CONFLUX_SKILL}:level3 missing {GREATER_CONJURY}")
-    focus_set = set(focus_receivers)
-    if not focus_set.issubset(set(elemental_lines)):
-        issues.append(f"{CONFLUX_SKILL}: focus receivers outside elemental-lines set: {sorted(focus_set - set(elemental_lines))!r}")
+        grants = [
+            b for b in bonuses or []
+            if isinstance(b, dict) and b.get("type") == "heroMagicAddition" and b.get("parameters") == [SPELL_SID, "false"]
+        ]
+        if len(grants) != 1:
+            issues.append(f"{CONFLUX_SKILL}:level{index}: expected one heroMagicAddition [{SPELL_SID}, false], found {len(grants)}")
+        for bonus in bonuses or []:
+            params = bonus.get("parameters") if isinstance(bonus, dict) else None
+            if isinstance(params, list) and params and params[0] in RETIRED_CONJURY_STATS + ("startEnergyLevelsBonus",):
+                issues.append(f"{CONFLUX_SKILL}:level{index}: retired Elemental Conjury bonus {params!r}")
+        if index in EXPECTED_SUBSKILLS:
+            subskills = level.get("subSkills") if isinstance(level, dict) else None
+            if list(subskills or []) != EXPECTED_SUBSKILLS[index]:
+                issues.append(f"{CONFLUX_SKILL}:level{index}: subSkills={subskills!r}, expected {EXPECTED_SUBSKILLS[index]!r}")
 
 
-def validate_subskills(subskill_rows: list[Any], elemental_lines: list[str], focus_receivers: list[str], issues: list[str]) -> None:
+def validate_spell(spell_row: dict[str, Any], issues: list[str]) -> None:
+    if spell_row.get("manaCost") != [0, 0, 0, 0]:
+        issues.append(f"{SPELL_SID}: manaCost={spell_row.get('manaCost')!r}, expected [0, 0, 0, 0]")
+    if spell_row.get("usedOnMap") is not True:
+        issues.append(f"{SPELL_SID}: usedOnMap must be true")
+    world = spell_row.get("worldMagic")
+    settings = world.get("magicSettings") if isinstance(world, dict) else None
+    if not isinstance(settings, list) or not settings:
+        issues.append(f"{SPELL_SID}: missing worldMagic.magicSettings")
+        return
+    for setting in settings:
+        if setting.get("mechType") != "change_use_necromancy":
+            issues.append(f"{SPELL_SID}: mechType={setting.get('mechType')!r}, expected change_use_necromancy")
+        if setting.get("parameters") != [SPELL_SID]:
+            issues.append(f"{SPELL_SID}: parameters={setting.get('parameters')!r}, expected [{SPELL_SID!r}]")
+        if setting.get("usageLimit") != -1:
+            issues.append(f"{SPELL_SID}: usageLimit={setting.get('usageLimit')!r}, expected -1 (unlimited)")
+
+
+def validate_subskills(subskill_rows: list[Any], fused_sids: list[str], issues: list[str]) -> None:
     for row in subskill_rows:
-        if not isinstance(row, dict):
-            continue
-        sid = row.get("id")
+        sid = row.get("id") if isinstance(row, dict) else None
         if isinstance(sid, str) and sid.startswith(STALE_SUMMON_ELEMENTALS_SUBSKILL_PREFIX):
             issues.append(f"stale Summon Elementals subskill still present in Core overlay: {sid}")
-    arcane = row_by_id(subskill_rows, ARCANE_CONDUIT, "DB/heroes_skills/sub_skills/sub_skills.json")
-    validate_receiver_bonus(
-        arcane.get("bonuses"),
-        elemental_lines,
-        ["heroOffenceModifier", "0.50"],
-        ARCANE_CONDUIT,
-        issues,
-    )
-    validate_receiver_bonus(
-        arcane.get("bonuses"),
-        elemental_lines,
-        ["heroSpellPowerModifier", "0.50"],
-        ARCANE_CONDUIT,
-        issues,
-    )
-    greater = row_by_id(subskill_rows, GREATER_CONJURY, "DB/heroes_skills/sub_skills/sub_skills.json")
-    validate_receiver_bonus(
-        greater.get("bonuses"),
-        focus_receivers,
-        ["finalAbilityDamageBonusPercent", "1.0"],
-        GREATER_CONJURY,
-        issues,
-    )
+    for level_sids in EXPECTED_SUBSKILLS.values():
+        for sid in level_sids:
+            row = row_by_id(subskill_rows, sid, SUBSKILLS_MEMBER)
+            for bonus in row.get("bonuses") or []:
+                params = bonus.get("parameters") if isinstance(bonus, dict) else None
+                if isinstance(params, list) and params and params[0] in RETIRED_CONJURY_STATS:
+                    issues.append(f"{sid}: retired Elemental Conjury bonus {params!r}")
+    for sid, stat in ((FUSED_DEFENSE, "defence"), (FUSED_ATTACK, "offence")):
+        row = row_by_id(subskill_rows, sid, SUBSKILLS_MEMBER)
+        match = [b for b in row.get("bonuses") or [] if isinstance(b, dict) and (b.get("parameters") or [None])[0] == stat]
+        if len(match) != 1 or match[0].get("receivers") != fused_sids:
+            issues.append(f"{sid}: expected one unitStat {stat} bonus whose receivers are the 105 fused units")
 
 
-
-def spell_focus_receivers(core_zip: zipfile.ZipFile, overlay: dict[str, bytes], unit_sids: list[str], issues: list[str]) -> list[str]:
+def spell_focus_receivers(core_zip, overlay, unit_sids: list[str], issues: list[str]) -> list[str]:
     result: list[str] = []
     for sid in unit_sids:
-        logic_member = f"DB/units/units_logics/{CONFLUX_FACTION}/{sid}_l.json"
-        view_member = f"DB/units/units_views/{CONFLUX_FACTION}/{sid}_v.json"
-        logic = first_array_item(read_json(core_zip, overlay, logic_member), logic_member)
-        view = first_array_item(read_json(core_zip, overlay, view_member), view_member)
-        logic_abilities = logic.get("abilities")
-        view_abilities = view.get("abilities")
-        if not isinstance(logic_abilities, list):
-            logic_abilities = []
-        if not isinstance(view_abilities, list):
-            view_abilities = []
+        logic = unit_row(core_zip, overlay, sid, "logics")
+        view = unit_row(core_zip, overlay, sid, "views")
+        logic_abilities = logic.get("abilities") if isinstance(logic.get("abilities"), list) else []
+        view_abilities = view.get("abilities") if isinstance(view.get("abilities"), list) else []
         for index, ability in enumerate(logic_abilities):
-            if not isinstance(ability, dict):
-                continue
-            selection = ability.get("xHomm3SpellEffectSelection")
+            selection = ability.get("xHomm3SpellEffectSelection") if isinstance(ability, dict) else None
             if not isinstance(selection, dict):
                 continue
             if sid not in result:
@@ -214,90 +206,108 @@ def spell_focus_receivers(core_zip: zipfile.ZipFile, overlay: dict[str, bytes], 
             if ability.get("energyLevel", 0) <= 0:
                 issues.append(f"{sid}: spell-effect Focus action {index} has no positive energyLevel")
             if selection.get("effectiveSpellPower") is not None:
-                issues.append(f"{sid}: spell-effect Focus action {index} hardcodes effectiveSpellPower instead of inheriting heroSpellPowerModifier")
+                issues.append(f"{sid}: spell-effect Focus action {index} hardcodes effectiveSpellPower")
             marker = ability.get("xHomm3AbilityOverride")
-            source_key = marker.get("sourceSpellEffectKey") if isinstance(marker, dict) else None
-            if not isinstance(marker, dict) or not isinstance(source_key, str):
+            if not isinstance(marker, dict) or not isinstance(marker.get("sourceSpellEffectKey"), str):
                 issues.append(f"{sid}: spell-effect Focus action {index} is missing sourceSpellEffectKey marker")
-            if index >= len(view_abilities) or not isinstance(view_abilities[index], dict):
-                issues.append(f"{sid}: spell-effect Focus action {index} has no matching view ability")
-                continue
-            view_ability = view_abilities[index]
-            view_selection = view_ability.get("xHomm3SpellEffectSelection")
-            if view_selection != selection:
-                issues.append(f"{sid}: view spell-effect selection {view_selection!r} does not match logic {selection!r}")
+            if index >= len(view_abilities) or view_abilities[index].get("xHomm3SpellEffectSelection") != selection:
+                issues.append(f"{sid}: spell-effect Focus action {index} has no matching view selection")
     return result
 
 
-def validate_language_rows(lang_rows: list[Any], issues: list[str]) -> None:
-    text_by_sid = {row.get("sid"): row.get("text") for row in lang_rows if isinstance(row, dict)}
+def validate_elemental_casts(core_zip, overlay, start_energy: dict[str, int], issues: list[str]) -> None:
+    for (sid, index), (low, high) in EXPECTED_PER_CREATURE_CASTS.items():
+        abilities = unit_row(core_zip, overlay, sid, "logics").get("abilities") or []
+        dealer = abilities[index].get("damageDealer") if index < len(abilities) else None
+        got = {k: (dealer or {}).get(k) for k in ("statDmgMult", "minBaseDmg", "maxBaseDmg", "minStackDmg", "maxStackDmg")}
+        if got != {"statDmgMult": 0.0, "minBaseDmg": 0, "maxBaseDmg": 0, "minStackDmg": low, "maxStackDmg": high}:
+            issues.append(f"{sid}:abilities:{index}: per-creature cast fields {got!r}, expected statDmgMult 0, base 0, stack {low}-{high}")
+    sid, index, mult = ICE_BLINDING_STRIKE
+    abilities = unit_row(core_zip, overlay, sid, "logics").get("abilities") or []
+    dealer = abilities[index].get("damageDealer") if index < len(abilities) else None
+    if not isinstance(dealer, dict) or dealer.get("statDmgMult") != mult:
+        issues.append(f"{sid}:abilities:{index}: Blinding Strike statDmgMult {(dealer or {}).get('statDmgMult')!r}, expected {mult}")
+    for sid, value in start_energy.items():
+        got = unit_row(core_zip, overlay, sid, "logics").get("stats", {}).get("startEnergy")
+        if got != value:
+            issues.append(f"{sid}: startEnergy={got!r}, expected {value}")
+
+
+def half_up(value: float) -> int:
+    return int(math.floor(value + 0.5))
+
+
+def validate_fused_units(core_zip, overlay, fusion_module, issues: list[str]) -> int:
+    config = fusion_module.load_config()
+    units = fusion_module.load_units()["units"]
+    names = lang_text(read_json(core_zip, overlay, "Lang/english/texts/units.json"))
+    checked = 0
+    for pair in config["pairs"]:
+        sid = pair["fused"]
+        try:
+            logic = unit_row(core_zip, overlay, sid, "logics")
+            view = unit_row(core_zip, overlay, sid, "views")
+        except SystemExit:
+            issues.append(f"{sid}: fused unit rows missing")
+            continue
+        host = unit_row(core_zip, overlay, pair["host"], "logics")["stats"]
+        guest = unit_row(core_zip, overlay, pair["guest"], "logics")["stats"]
+        stats = logic.get("stats") or {}
+        faster = guest if (guest["speed"], guest["initiative"]) > (host["speed"], host["initiative"]) else host
+        expected = {
+            "hp": host["hp"] + guest["hp"],
+            "damageMin": half_up(0.9 * (host["damageMin"] + guest["damageMin"])),
+            "damageMax": half_up(0.9 * (host["damageMax"] + guest["damageMax"])),
+            "offence": max(host["offence"], guest["offence"]) + 1,
+            "defence": max(host["defence"], guest["defence"]) + 1,
+            "speed": faster["speed"],
+            "initiative": faster["initiative"],
+        }
+        for key, value in expected.items():
+            if stats.get(key) != value:
+                issues.append(f"{sid}: stats.{key}={stats.get(key)!r}, expected {value}")
+        if logic.get("squadValue") != units[sid]["squadValue"]:
+            issues.append(f"{sid}: squadValue={logic.get('squadValue')!r}, expected {units[sid]['squadValue']}")
+        for key in ("upgradeSid", "baseSid"):
+            if key in logic:
+                issues.append(f"{sid}: fused unit must not carry {key}")
+        marker = logic.get(fusion_module.FUSED_UNIT_MARKER)
+        if not isinstance(marker, dict) or marker.get("poolEligible") is not False:
+            issues.append(f"{sid}: missing {fusion_module.FUSED_UNIT_MARKER} marker with poolEligible false")
+        if names.get(f"{sid}_name") != pair["name"]:
+            issues.append(f"{sid}: Lang units.json name {names.get(sid + '_name')!r}, expected {pair['name']!r}")
+        if len(logic.get("abilities") or []) != len(view.get("abilities") or []):
+            issues.append(f"{sid}: logic/view ability counts differ")
+        checked += 1
+    return checked
+
+
+def validate_language_rows(core_zip, overlay, issues: list[str]) -> None:
+    skills = lang_text(read_json(core_zip, overlay, "Lang/english/texts/heroSkills.json"))
     checks = {
-        "skill_faction_homm3_conflux_desc": ("Attack", "Spell Power", "Focus"),
-        "skill_faction_homm3_conflux_desc_1": ("50%", "Attack", "Spell Power"),
-        "skill_faction_homm3_conflux_desc_2": ("50%", "Attack", "Spell Power"),
-        "skill_faction_homm3_conflux_desc_3": ("50%", "Attack", "Spell Power", "elemental", "Phoenix", "Knowledge"),
-        "sub_skill_faction_homm3_conflux_elemental_conjury_spell_power_desc": ("100%", "Attack", "Spell Power"),
-        "sub_skill_faction_homm3_conflux_elemental_conjury_expert_spell_tier_desc": ("Elemental Focus abilities", "100%"),
+        "skill_faction_homm3_conflux_name": ("Elemental Fusion",),
+        "skill_faction_homm3_conflux_desc": ("Elemental Fusion", "permanently"),
+        "skill_faction_homm3_conflux_desc_1": ("Air", "Water", "Fire", "36", "10 mana", "90%", "permanent"),
+        "skill_faction_homm3_conflux_desc_2": ("Earth", "66"),
+        "skill_faction_homm3_conflux_desc_3": ("Psychic", "105"),
+        f"{FUSED_DEFENSE}_desc": ("Fused", "Defense"),
+        f"{FUSED_ATTACK}_desc": ("Fused", "Attack"),
     }
     for sid, required in checks.items():
-        text = text_by_sid.get(sid)
+        text = skills.get(sid)
         if not isinstance(text, str):
             issues.append(f"heroSkills localization missing {sid}")
             continue
-        lowered = text.lower()
         for token in required:
-            if token.lower() not in lowered:
+            if token.lower() not in text.lower():
                 issues.append(f"{sid}: text {text!r} missing {token!r}")
-
-
-def validate_source_shape(repo_root: pathlib.Path, issues: list[str]) -> None:
-    source = (repo_root / "tools" / "release_port" / "apply_release_core_overlay.py").read_text(encoding="utf-8-sig")
-    required = [
-        "HOMM3_CONFLUX_ELEMENTAL_FOCUS_SPELL_RECEIVERS",
-        "HOMM3_CONFLUX_ELEMENTAL_CONJURY_SUBSKILLS_BY_LEVEL",
-        "HOMM3_CONFLUX_ELEMENTAL_CONJURY_STALE_SUBSKILL_IDS",
-        'unit_stat_bonus(elemental_lines, "heroOffenceModifier", "0.50")',
-        'unit_stat_bonus(elemental_lines, "heroSpellPowerModifier", "0.50")',
-        'unit_stat_bonus(spell_units, "finalAbilityDamageBonusPercent", "1.0")',
-        "Elemental-line Focus abilities apply 50% of hero Attack and 50% of hero Spell Power.",
-        "Arcane Conduit raises both to 100%.",
-        "elemental and Phoenix-line creatures gain 15% of hero Knowledge as extra power.",
-        "sub_skill_faction_homm3_conflux_elemental_conjury_spell_power",
-        "sub_skill_faction_homm3_conflux_elemental_conjury_expert_spell_tier",
-    ]
-    for snippet in required:
-        if snippet not in source:
-            issues.append(f"overlay source is missing Conflux Attack/Spell Power contract snippet: {snippet}")
-    if "HOMM3_CONFLUX_SUMMON_ELEMENTALS_SUBSKILLS_BY_LEVEL" in source:
-        issues.append("overlay source still defines HOMM3_CONFLUX_SUMMON_ELEMENTALS_SUBSKILLS_BY_LEVEL")
-    if "make_homm3_conflux_summon_elementals_subskills" in source:
-        issues.append("overlay source still defines make_homm3_conflux_summon_elementals_subskills")
-    # Active (non-stale) rows must not keep the old summon_elementals SID token.
-    for line in source.splitlines():
-        stripped = line.strip()
-        if "summon_elementals" not in stripped:
-            continue
-        if stripped.startswith("#"):
-            continue
-        if "HOMM3_CONFLUX_ELEMENTAL_CONJURY_STALE_" in stripped:
-            continue
-        if '"sub_skill_faction_homm3_conflux_summon_elementals_' in stripped:
-            # Allowed only inside the stale-ID set values.
-            continue
-        if "Former Summon Elementals" in stripped:
-            continue
-        if "Renamed from Summon Elementals" in stripped:
-            continue
-        issues.append(f"overlay source still uses summon_elementals outside stale-ID quarantine: {stripped}")
-
-
-def validate_generated_receiver_sets(generated_elemental_lines: list[str], generated_focus_receivers: list[str], issues: list[str]) -> None:
-    expected_elemental_lines = list(EXPECTED_ELEMENTAL_LINE_RECEIVERS)
-    expected_focus_receivers = list(EXPECTED_FOCUS_SPELL_RECEIVERS)
-    if generated_elemental_lines != expected_elemental_lines:
-        issues.append(f"generated elemental-line receivers={generated_elemental_lines!r}, expected {expected_elemental_lines!r}")
-    if generated_focus_receivers != expected_focus_receivers:
-        issues.append(f"generated spell-effect Focus receivers={generated_focus_receivers!r}, expected {expected_focus_receivers!r}")
+        if "conjury" in text.lower():
+            issues.append(f"{sid}: text still names Elemental Conjury")
+    magic = lang_text(read_json(core_zip, overlay, "Lang/english/texts/magic.json"))
+    if magic.get(f"{SPELL_SID}_name") != "Elemental Fusion":
+        issues.append(f"magic.json {SPELL_SID}_name={magic.get(SPELL_SID + '_name')!r}")
+    if not magic.get(f"{SPELL_SID}_description"):
+        issues.append(f"magic.json missing {SPELL_SID}_description")
 
 
 def main() -> int:
@@ -312,46 +322,39 @@ def main() -> int:
         fail(f"missing source Core.zip: {core_path}")
 
     module = import_overlay(repo_root)
+    fusion_module = module.conflux_fusion
     manifest = module.load_custom_faction_manifest(CONFLUX_FACTION)
-    generated_elemental_lines = (
-        module.manifest_line_receivers(manifest, 2)
-        + module.manifest_line_receivers(manifest, 3)
-        + module.manifest_line_receivers(manifest, 4)
-        + module.manifest_line_receivers(manifest, 5)
-        + module.manifest_line_receivers(manifest, 6)
-    )
-    generated_focus_receivers = list(module.HOMM3_CONFLUX_ELEMENTAL_FOCUS_SPELL_RECEIVERS)
-    elemental_lines = list(EXPECTED_ELEMENTAL_LINE_RECEIVERS)
-    focus_receivers = list(EXPECTED_FOCUS_SPELL_RECEIVERS)
     unit_sids = list(module.manifest_unit_sids(manifest))
     issues: list[str] = []
-    validate_source_shape(repo_root, issues)
-    validate_generated_receiver_sets(generated_elemental_lines, generated_focus_receivers, issues)
+    if list(module.HOMM3_CONFLUX_ELEMENTAL_FOCUS_SPELL_RECEIVERS) != list(EXPECTED_FOCUS_SPELL_RECEIVERS):
+        issues.append("HOMM3_CONFLUX_ELEMENTAL_FOCUS_SPELL_RECEIVERS drifted from the expected spell-effect Focus receivers")
+    fused_sids = fusion_module.fused_unit_sids()
     try:
         overlay, _notes = module.build_overlay(core_path)
     except Exception as ex:  # noqa: BLE001
         fail(f"cannot build candidate Core overlay in memory: {ex}")
     with zipfile.ZipFile(core_path) as core_zip:
-        skills_doc = read_json(core_zip, overlay, "DB/heroes_skills/skills/skills.json")
-        skill_row = row_by_id(array_rows(skills_doc, "DB/heroes_skills/skills/skills.json"), CONFLUX_SKILL, "DB/heroes_skills/skills/skills.json")
-        validate_skill_row(skill_row, elemental_lines, focus_receivers, issues)
-        subskills_doc = read_json(core_zip, overlay, "DB/heroes_skills/sub_skills/sub_skills.json")
-        validate_subskills(array_rows(subskills_doc, "DB/heroes_skills/sub_skills/sub_skills.json"), elemental_lines, focus_receivers, issues)
+        skill_row = row_by_id(array_rows(read_json(core_zip, overlay, "DB/heroes_skills/skills/skills.json"), "skills.json"), CONFLUX_SKILL, "skills.json")
+        validate_skill_row(skill_row, issues)
+        validate_spell(row_by_id(array_rows(read_json(core_zip, overlay, SPELL_MEMBER), SPELL_MEMBER), SPELL_SID, SPELL_MEMBER), issues)
+        validate_subskills(array_rows(read_json(core_zip, overlay, SUBSKILLS_MEMBER), SUBSKILLS_MEMBER), fused_sids, issues)
         actual_focus_receivers = spell_focus_receivers(core_zip, overlay, unit_sids, issues)
-        if actual_focus_receivers != focus_receivers:
-            issues.append(f"spell-effect Focus receivers={actual_focus_receivers!r}, expected {focus_receivers!r}")
-        lang_doc = read_json(core_zip, overlay, "Lang/english/texts/heroSkills.json")
-        validate_language_rows(array_rows(lang_doc, "Lang/english/texts/heroSkills.json"), issues)
+        if actual_focus_receivers != list(EXPECTED_FOCUS_SPELL_RECEIVERS):
+            issues.append(f"spell-effect Focus receivers={actual_focus_receivers!r}, expected {list(EXPECTED_FOCUS_SPELL_RECEIVERS)!r}")
+        start_energy = {sid: int(v) for sid, v in fusion_module.load_units()["elementalStartEnergy"].items()}
+        validate_elemental_casts(core_zip, overlay, start_energy, issues)
+        checked = validate_fused_units(core_zip, overlay, fusion_module, issues)
+        validate_language_rows(core_zip, overlay, issues)
     if issues:
         for issue in issues[:100]:
             print(issue, file=sys.stderr)
         if len(issues) > 100:
             print(f"... {len(issues) - 100} more", file=sys.stderr)
-        fail(f"Conflux focus Attack and Spell Power contract has {len(issues)} issue(s)")
+        fail(f"Conflux Elemental Fusion contract has {len(issues)} issue(s)")
     print(
-        "homm3-conflux-focus-attack-spell-power-contract: "
-        f"validated {len(elemental_lines)} elemental-line receivers, {len(focus_receivers)} spell-effect Focus receivers, "
-        "50% Attack/Spell Power faction-skill inheritance, Arcane Conduit 100% Attack/Spell Power inheritance, and Greater Conjury focus damage bonus rows"
+        "homm3-conflux-elemental-fusion-contract: validated the Elemental Fusion skill/spell/subskill rows, "
+        f"{len(EXPECTED_FOCUS_SPELL_RECEIVERS)} spell-effect Focus receivers, per-creature elemental casts, "
+        f"{len(start_energy)} elemental startEnergy rows and {checked} fused unit rows"
     )
     return 0
 

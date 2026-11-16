@@ -138,7 +138,7 @@
   "exempt": "levitates: its lowest point is hanging tentacles, not a ground contact (strideExempt levitates; DEF shadow sits below the body); grounding would pin the tentacle tips to the floor (measured Defence Hips -0.124 at entry on the grounded candidate); user-approved exception 2026-09-28"
  },
  "glbPatch": {
-  "reason": "2026-10-11 lane B authenticity (gaze): the DEF fargazer keeps its central eye on the enemy in every clip, but the capture spun the eye body (Spine2) up to 90-120 deg sideways (Move keys 3-11, MoveStart/MoveEnd/Mouseover +70..+95, AttackFront -120 mid-beam, Death -45), so the eye turned away for whole stretches. Per key, Spine2 is turned about world Y so its forward yaw stays within +-15 deg (small sway kept; pitch untouched); tentacles unchanged. Split keyRotations, regridded on Spine2.",
+  "reason": "2026-10-11 lane B authenticity (gaze): the DEF fargazer keeps its central eye on the enemy in every clip, but the capture spun the eye body (Spine2) up to 90-120 deg sideways (Move keys 3-11, MoveStart/MoveEnd/Mouseover +70..+95, AttackFront -120 mid-beam, Death -45), so the eye turned away for whole stretches. Per key, Spine2 is turned about world Y so its forward yaw stays within +-15 deg (small sway kept; pitch untouched); tentacles unchanged. Split keyRotations, regridded on Spine2.; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Idle, Mouseover re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -151,6 +151,17 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_fargazer_gaze_yaw_rot.json",
     "regrid": true,
     "sha256": "c488424b590874a62ae8b0e859df95aac8f3bdba7b7005adb8345f92cbc32d28"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_fargazer_move_tracks.json",
+    "sha256": "6709e96b77dd86a35061a5f64a404425e321b8ad22561bdf79a4cb00e85c80a4"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_fargazer_clip_tracks.json",
+    "sha256": "19337dcfa70d9bbc2d810d3135f38468750721f3027dd4b9cb537d85c7f3cfbb"
    }
   ]
  }

@@ -3,7 +3,7 @@
     "fraction_law_homm3_necropolis_13": {
       "enabled": true,
       "nameText": "Death Grip",
-      "descriptionText": "Friendly creatures' counterattacks deal 50% more damage by rank.",
+      "descriptionText": "Friendly creatures' counterattacks drain life: the counterattacking stack heals 25% of the damage it deals, raising fallen creatures up to its starting size.",
       "parametersPerLevel": [
         {
           "cost": 3,
@@ -14,7 +14,7 @@
                 "modifierSet",
                 "outDmgMods",
                 "counter_attack",
-                "0.50"
+                "0.00"
               ],
               "receivers": [
                 "h3_skeleton",
@@ -29,7 +29,7 @@
           ]
         }
       ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "notes": "Runtime law 2026-11-10 (user: switch counterattack laws to runtime): the native bonus is a zero-strength loader anchor (unitStat modifierSet outDmgMods counter_attack 0.00) so Core keeps a valid law row; the effect described above is applied by the plugin (Homm3CounterattackDoctrineMutationRuntime) on native counterattacks only. Replaces the 2026-06-21 generic +50% counterattack-damage placeholder, which is removed so the two never stack. Runtime proof pending.",
       "iconNotes": "HOMM4 art-source candidate: Retribution (schools/life/retribution.jpg). Runtime icon key: fraction_law_homm3_necropolis_13_icon. Runtime rendering remains unproven until law-tree smoke.",
       "homm4IconLabel": "Retribution",
       "homm4IconPath": "schools/life/retribution.jpg",

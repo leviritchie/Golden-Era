@@ -18,7 +18,18 @@ from homm3_neutral_catalog import (
     unit_view_path,
 )
 
-ARENA_PICK_CONTENT_PATH = "DB/ai_pick/arena_pick_content.json"
+# Build 26297049 replaced DB/ai_pick/arena_pick_content.json with one {array:[{id, defualtVal,
+# content:[{sid, array:[{sid, val}]}], mods}]} member per pick profile: the arena table plus five
+# world-AI tables. GE units go into every profile's units bucket (D1=b), so a GE unit never drops
+# to the profile's defualtVal.
+AI_PICK_PROFILE_PATHS = (
+    "DB/ai_pick/arena.json",
+    "DB/ai_pick/ai_picks_world_default.json",
+    "DB/ai_pick/ai_picks_one_hero_main.json",
+    "DB/ai_pick/ai_picks_multi_hero_main.json",
+    "DB/ai_pick/ai_picks_generalist.json",
+    "DB/ai_pick/ai_picks_courier.json",
+)
 MAP_OBJECTS_PATH = "DB/map/objects/4_interactables.json"
 BARRACKS_HIRES_PATH = "DB/objects_logic/hires/barracks.json"
 UNITS_LANG_PATH = "Lang/english/texts/units.json"
@@ -302,6 +313,70 @@ def add_homm3_neutral_lang_rows(
             notes.append(f"merge homm3_neutral dwelling localization ({len(map_rows)})")
 
 
+def _ai_pick_units_bucket(name: str, profile: Any) -> list[Any]:
+    if not isinstance(profile, dict):
+        raise RuntimeError(f"{name}: ai_pick array item must be an object")
+    profile_id = profile.get("id")
+    content = profile.get("content")
+    if not isinstance(content, list):
+        raise RuntimeError(f"{name}:{profile_id}: ai_pick profile has no content list")
+    buckets = [row for row in content if isinstance(row, dict) and row.get("sid") == "units"]
+    if len(buckets) != 1 or not isinstance(buckets[0].get("array"), list):
+        raise RuntimeError(f"{name}:{profile_id}: expected exactly one units bucket with an array, found {len(buckets)}")
+    return buckets[0]["array"]
+
+
+def _merge_ai_pick_profile_units(
+    name: str,
+    profile: Any,
+    faction_unit_sids: list[str],
+    neutral_donors: dict[str, str],
+) -> int:
+    """Add GE units to one profile's units bucket; return the number of rows added.
+
+    Values are cloned from donor rows. A neutral clones its catalog donor's row (a custom-faction
+    donor is added in the faction pass first). The faction units' donor map is not passed here, so
+    they clone the profile's single vanilla unit value; any donor row carries that value, and a
+    non-uniform bucket fails closed until the per-unit donor map is wired in.
+    """
+    rows = _ai_pick_units_bucket(name, profile)
+    profile_id = profile.get("id")
+    vals: dict[str, Any] = {}
+    for row in rows:
+        if isinstance(row, dict) and isinstance(row.get("sid"), str):
+            vals.setdefault(row["sid"], row.get("val"))
+    added = 0
+    pending_faction = [sid for sid in faction_unit_sids if sid not in vals]
+    if pending_faction:
+        vanilla_vals = set(vals.values())
+        if len(vanilla_vals) != 1 or not isinstance(next(iter(vanilla_vals)), (int, float)):
+            raise RuntimeError(
+                f"{name}:{profile_id}: units bucket values {sorted(map(str, vanilla_vals))} are not one number; "
+                "faction units need a per-unit donor map to clone their pick value"
+            )
+        faction_val = next(iter(vanilla_vals))
+        for sid in pending_faction:
+            rows.append({"sid": sid, "val": faction_val})
+            vals[sid] = faction_val
+            added += 1
+    missing_donors: list[str] = []
+    for sid, donor in neutral_donors.items():
+        if sid in vals:
+            continue
+        donor_val = vals.get(donor)
+        if not isinstance(donor_val, (int, float)):
+            missing_donors.append(f"{sid}<-{donor}")
+            continue
+        rows.append({"sid": sid, "val": donor_val})
+        vals[sid] = donor_val
+        added += 1
+    if missing_donors:
+        raise RuntimeError(
+            f"{name}:{profile_id}: neutral pick donors have no numeric units row: {', '.join(missing_donors)}"
+        )
+    return added
+
+
 def merge_homm3_neutral_arena_pick(
     release_zip: zipfile.ZipFile,
     output: dict[str, bytes],
@@ -310,33 +385,24 @@ def merge_homm3_neutral_arena_pick(
     faction_unit_sids: tuple[str, ...] = (),
 ) -> None:
     catalog = load_homm3_neutral_catalog()
-    sids = list(dict.fromkeys([*faction_unit_sids, *pool_eligible_unit_sids(catalog)]))
-    doc = _read_json(release_zip, output, ARENA_PICK_CONTENT_PATH)
-    if not isinstance(doc, dict):
-        raise RuntimeError(f"malformed {ARENA_PICK_CONTENT_PATH}")
-    content = doc.get("content")
-    if not isinstance(content, list):
-        content = []
-        doc["content"] = content
-    bucket = next((row for row in content if isinstance(row, dict) and row.get("sid") == "units"), None)
-    if bucket is None:
-        bucket = {"sid": "units", "array": []}
-        content.append(bucket)
-    rows = bucket.get("array")
-    if not isinstance(rows, list):
-        rows = []
-        bucket["array"] = rows
-    existing = {row.get("sid") for row in rows if isinstance(row, dict)}
-    changed = 0
-    for sid in sids:
-        if sid in existing:
-            continue
-        rows.append({"sid": sid, "val": 100})
-        existing.add(sid)
-        changed += 1
-    if changed:
-        output[ARENA_PICK_CONTENT_PATH] = _write_json(doc)
-        notes.append(f"merge arena_pick unit pool (+{changed})")
+    pool_sids = set(pool_eligible_unit_sids(catalog))
+    neutral_donors = {
+        str(unit["sid"]): str(unit["donorUnitSid"]) for unit in catalog_units(catalog) if str(unit["sid"]) in pool_sids
+    }
+    faction_sids = [sid for sid in dict.fromkeys(faction_unit_sids) if sid not in neutral_donors]
+    available = set(release_zip.namelist()) | set(output)
+    missing = [name for name in AI_PICK_PROFILE_PATHS if name not in available]
+    if missing:
+        raise RuntimeError(f"homm3_neutral ai_pick merge: Core is missing pick profile member(s): {', '.join(missing)}")
+    for name in AI_PICK_PROFILE_PATHS:
+        doc = _read_json(release_zip, output, name)
+        profiles = doc.get("array") if isinstance(doc, dict) else None
+        if not isinstance(profiles, list) or not profiles:
+            raise RuntimeError(f"{name}: ai_pick member must be an object with a non-empty array")
+        changed = sum(_merge_ai_pick_profile_units(name, profile, faction_sids, neutral_donors) for profile in profiles)
+        if changed:
+            output[name] = _write_json(doc)
+            notes.append(f"merge ai_pick unit pool into {name} (+{changed})")
 
 
 def add_homm3_neutral_squad_templates(

@@ -96,9 +96,9 @@
     {
       "id": "conflux.elemental_conjury",
       "surface": "faction_skill",
-      "sourceName": "Elemental Conjury",
+      "sourceName": "Elemental Conjury (replaced by Elemental Fusion)",
       "status": "substituted",
-      "reason": "Elemental Conjury uses rank-based start Focus and elemental-line Spell Power scaling with Advanced/Expert subskills; Expert Greater Conjury uses Focus ability damage bonus instead of true spell-tier rebake. Subskill SIDs use elemental_conjury (not summon_elementals). Player-facing name matches shipped non-summon behavior.",
+      "reason": "Elemental Fusion (user design 2026-11-15) replaces Elemental Conjury under the same skill SID: every rank grants the homm3_conflux_elemental_fusion world spell (Necromancer Will clone, no mana cost, unlimited uses) that permanently fuses two elemental stacks into one of 105 generated h3_fusion_* units (custom_factions/conflux_fusion); 37 named recipes fuse two fused units again into a stage-2 h3_fusion_ii_* unit with its own signature. Basic unlocks Air/Water/Fire, Advanced adds Earth, Expert adds Psychic. HoMM3 has no fusion; the fused units are never recruited. Advanced/Expert subskill SIDs keep elemental_conjury tokens for save compatibility; Stable Bond/Perfect Fusion give fused units +2 Defense/+2 Attack.",
       "playerTextPolicy": "must_match_current_behavior",
       "currentRows": [
         "skill_faction_homm3_conflux"
@@ -107,7 +107,10 @@
         "Summon Elementals",
         "summon button",
         "summons an elemental",
-        "rank-dependent elemental summon"
+        "rank-dependent elemental summon",
+        "Elemental Conjury",
+        "Greater Conjury",
+        "Arcane Conduit"
       ],
       "forbiddenSidTokens": [
         "summon_elementals"

@@ -1358,7 +1358,7 @@
  "groundNote": "2026-09-29 FP (main review): absolute floor measured on the accepted build (feet and tail below z=0 in every ground clip: green Idle -0.106 of the height, gold -0.078, LeftFoot/RightFoot and QTail vertices). ground_check passes because it is relative to Idle key 0, which was itself sunk. quadruped.fit.groundClips pins the fit's dy (-7 px) to 0 in the ground clips. Tail: flightLife QTail_00 lat offset +15 in the ground clips lifts the tail root, because the sit's 'keep' tail drops with the rear and its curl went 0.09-0.11 of the height below z=0 (sink_probe 2026-09-29). dyEase MoveEnd out / Death in: the landing ends on the idle floor and Death enters from the stance (the free fit had griffin MoveEnd rise 7 -> 15 px and end 0.22 of the height up, then pop down into Idle). The QTail_00 lift is held in every clip (as the griffin line, 2026-09-29): lifting it only in the ground clips left MoveEnd's and Death's entry tail hanging lower than Idle's, which pushes their Hips step past the DEF allowance once ground_glb puts the lowest vertex on the floor; held everywhere, no clip boundary pops. 2026-09-29 FP v6 (gold only): the held QTail_00 +15 lift is removed. Bisected on V: builds (HEAD config grounds; HEAD + the held tail lift alone fails ground_glb apply with MoveEnd Hips +0.336 / MoveStart +0.106 against the DEF's 0.165 / 0.058, entryJoint infeasible), so on the gold mesh the lift moves the lowest vertex off the tail and the landing entry cannot meet both the feet and Hips bands. Green keeps it (grounds clean).",
  "note": "2026-10-09 authenticity pass (lane A): the diamond dragon (lvl7Alt, same DEF groups and frame counts as CDDRAG apart from 2-frame turns) shipped the 2026-09-27 recipe without the gold/green FP and authenticity upgrades: no flightLife (dead Idle/Hitted, no AttackFront lunge), small wings, Death rolled belly-up at f6-f7. Ported from h3_gold_dragon: extensions flight_life + wing_mesh_scale, wingChain (anim, land, fit clips, bodyTurn, hittedNote), flightLife, wingMeshScale x1.6, deliveryDensify, quadrupedSit counterPitch, quadruped.fit groundClips + dyEase. Kept the diamond's own joints, tail polyline, wing regions and meshNote. The MoveEnd:Hips ground exception (2026-09-28) is dropped: with the gold fit (dyEase MoveEnd out) ground_check passes and flagged it stale.",
  "glbPatch": {
-  "reason": "2026-10-10 authenticity pass (lane A, Rampart), the gold dragon's accepted recipe (lane B) ported onto the diamond base. Fit: quadrupedSit keeps AttackFront seated at 55 deg throughout (the base dropped the sit to 8 deg and slid +47 px mid-clip, a whole-body dive standing in for the breath); fit.dxClips windows the ground clips' dx. AttackFront: during the breath (f3-f6) spine -20, neck -10, head -55 counter the flightLife chest dive so the open mouth is levelled at the target; wings raised and swept f2-f6. Death: the base ended standing vertical on its tail; now wings swing high over the back f2-f4, the collapse arcs f5-f7 (slerp restart from the f5 slump) and ends belly-down: root lowered and pulled back, legs folded under, forearms flat, wings folded back, tail laid out, neck bowed 35 deg and head dropped 50 deg. Hitted: wings opened; Defence: wings lifted 16/12/6 deg f0-f2 so the tips clear the floor. Mesh repairs (weights, not a smaller move): tail, hind shin/foot, Neck/Spine2 and Head/Neck blends diffused (the gold's dorsal-spike moveWeights do not fit the diamond's proportions and were not needed). Tear gate 807 -> 791 edges over 2x, worst 6.617 -> 4.162.",
+  "reason": "2026-10-10 authenticity pass (lane A, Rampart), the gold dragon's accepted recipe (lane B) ported onto the diamond base. Fit: quadrupedSit keeps AttackFront seated at 55 deg throughout (the base dropped the sit to 8 deg and slid +47 px mid-clip, a whole-body dive standing in for the breath); fit.dxClips windows the ground clips' dx. AttackFront: during the breath (f3-f6) spine -20, neck -10, head -55 counter the flightLife chest dive so the open mouth is levelled at the target; wings raised and swept f2-f6. Death: the base ended standing vertical on its tail; now wings swing high over the back f2-f4, the collapse arcs f5-f7 (slerp restart from the f5 slump) and ends belly-down: root lowered and pulled back, legs folded under, forearms flat, wings folded back, tail laid out, neck bowed 35 deg and head dropped 50 deg. Hitted: wings opened; Defence: wings lifted 16/12/6 deg f0-f2 so the tips clear the floor. Mesh repairs (weights, not a smaller move): tail, hind shin/foot, Neck/Spine2 and Head/Neck blends diffused (the gold's dorsal-spike moveWeights do not fit the diamond's proportions and were not needed). Tear gate 807 -> 791 edges over 2x, worst 6.617 -> 4.162.; 2026-11-10 flyer flight repair pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights repaired so the tear gate holds",
   "ops": [
    {
     "op": "diffuseWeights",
@@ -1423,6 +1423,30 @@
     "sha256": "230e4103c5cb43161116fe0660b54a3370b64590f05b40200b4ea8f3a746b5ff",
     "regrid": true,
     "note": "2026-10-10 lane A: Death root arcs down from f5 and lies on the belly at f6-f7"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_diamond_dragon_flight_weights.json",
+    "sha256": "4c530c07f824317a0bbf0d3d807ff23bc35aabb802036e9fccec7b0d2aa5a590"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_diamond_dragon_flight_tracks.json",
+    "sha256": "2e94c7561c8f4b1936ee860c269fdf6e6ff60c3bcc0b5d0da5df5b17f5bdfdc6"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "flyer flight: crease of the spread wings"
    }
   ]
  }

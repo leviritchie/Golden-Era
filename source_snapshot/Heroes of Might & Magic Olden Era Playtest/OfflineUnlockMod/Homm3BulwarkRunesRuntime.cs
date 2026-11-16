@@ -51,6 +51,26 @@ internal static class Homm3BulwarkRunesRuntime
 	private static readonly object Gate = new();
 	private static readonly Dictionary<long, StackRuneState> StackStateByNativeKey = new();
 	private static readonly Dictionary<long, ActionCorrelation> ActionByUnitKey = new();
+	// Battle-wide serial of the current native action (any stack's). Damage taken and counterattacks
+	// happen during the ATTACKER's action, when the receiver/counterer has no open action of its own,
+	// so they correlate on this serial instead of the receiver's per-unit ActionByUnitKey entry.
+	private static long _actionSerial;
+	// Bumped on every battle-state clear so (generation, serial) stays unique across battles in one session.
+	private static long _battleGeneration;
+
+	/// <summary>
+	/// Battle-wide action correlation for other exact commit-surface consumers (counterattack doctrine).
+	/// False until an ActionStarted dispatch has been observed in the current battle.
+	/// </summary>
+	internal static bool TryGetActionCorrelation(out long battleGeneration, out long actionSerial)
+	{
+		lock (Gate)
+		{
+			battleGeneration = _battleGeneration;
+			actionSerial = _actionSerial;
+		}
+		return actionSerial > 0;
+	}
 	/// <summary>
 	/// Wait arm outside ActionCorrelation: ActionStarted intervenes between
 	/// Method_15 (Wait) and Method_47 on dual-raise Wait, and would wipe a flag
@@ -122,6 +142,10 @@ internal static class Homm3BulwarkRunesRuntime
 		try
 		{
 			_logicHeroDataHeroGetter = ResolveLogicHeroDataHeroGetter();
+			// Rune state is cleared from the shared battle-result prefix; register it ourselves instead of
+			// relying on Hunting Grounds / Skeletal Necromancy having done so.
+			if (!Homm3RuntimeMechanicHooks.TryRegisterSharedBattleResult(harmony, _log))
+				_log?.LogWarning("HoMM3 Bulwark Runes: shared battle-result cleanup unavailable; Rune state may persist past battle end.");
 			_patched = PatchLogicHub(harmony);
 			if (_patched <= 0)
 			{
@@ -229,6 +253,8 @@ internal static class Homm3BulwarkRunesRuntime
 			StackStateByNativeKey.Clear();
 			ActionByUnitKey.Clear();
 			AwardedObservationKeys.Clear();
+			_actionSerial = 0;
+			_battleGeneration++;
 		}
 		_log?.LogInfo("HoMM3 Bulwark Runes battle state cleared: reason=" + reason);
 	}
@@ -443,7 +469,8 @@ internal static class Homm3BulwarkRunesRuntime
 		}
 	}
 
-	private static Type ResolveAbilityRuntimeType()
+	// Shared with Homm3CounterattackDoctrineMutationRuntime (same token-pinned commit surface).
+	internal static Type ResolveAbilityRuntimeType()
 	{
 		for (var i = 0; i < GameSymbols.BulwarkRunesLaws.AbilityRuntimeTypeHints.Length; i++)
 		{
@@ -456,7 +483,7 @@ internal static class Homm3BulwarkRunesRuntime
 		return null;
 	}
 
-	private static MethodInfo ResolveAbilityCommitExecuteMethod(Type type)
+	internal static MethodInfo ResolveAbilityCommitExecuteMethod(Type type)
 	{
 		if (type == null || GameSymbols.BulwarkRunesLaws.AbilityCommitExecute.NameHints == null)
 			return null;
@@ -577,6 +604,7 @@ internal static class Homm3BulwarkRunesRuntime
 				return;
 			lock (Gate)
 			{
+				_actionSerial++;
 				ActionByUnitKey.TryGetValue(unitKey, out var prior);
 				var sequence = prior == null ? 1 : prior.Sequence + 1;
 				ActionByUnitKey[unitKey] = new ActionCorrelation
@@ -658,7 +686,20 @@ internal static class Homm3BulwarkRunesRuntime
 				return;
 			}
 
-			var action = RequireOrBeginAction(unitKey);
+			ActionCorrelation action;
+			if (abilityType == EAbilityType.CounterAttack && RequireAction(unitKey) == null)
+			{
+				// Counterattack during an enemy's action: award once per enclosing action serial and do not
+				// open a correlation for the counterer (that stale entry would block its later awards).
+				long serial;
+				lock (Gate)
+					serial = _actionSerial;
+				action = new ActionCorrelation { UnitKey = unitKey, Sequence = (int)serial };
+			}
+			else
+			{
+				action = RequireOrBeginAction(unitKey);
+			}
 			if (action.WaitObserved)
 			{
 				LogLimited("corr attack/cast withheld: Wait observed unitKey=" + unitKey);
@@ -705,7 +746,7 @@ internal static class Homm3BulwarkRunesRuntime
 		}
 	}
 
-	private static bool TryReadCommittedAbility(
+	internal static bool TryReadCommittedAbility(
 		object abilityRuntime,
 		out object caster,
 		out EAbilityType abilityType,
@@ -851,8 +892,13 @@ internal static class Homm3BulwarkRunesRuntime
 				return;
 			if (!TryResolveUnitKey(damage.Receiver, out var unitKey, out _))
 				return;
-			var action = RequireAction(unitKey);
-			var obsKey = "dmg:" + unitKey + ":" + (action?.Sequence ?? 0) + ":" + Homm3DirectStateIdentity.ResolveKeyOrZero(eventArgs);
+			// "Taking damage during an action: +2" -- the enclosing action is usually the attacker's, so
+			// correlate on the battle-wide action serial: first positive damage per receiver per action.
+			long serial;
+			lock (Gate)
+				serial = _actionSerial;
+			var action = serial == 0 ? null : new ActionCorrelation { UnitKey = unitKey, Sequence = (int)serial };
+			var obsKey = "dmg:" + unitKey + ":" + serial;
 			var gain = CorrelateGain(
 				action,
 				GainKind.DamageTaken,
@@ -1044,6 +1090,9 @@ internal static class Homm3BulwarkRunesRuntime
 	{
 		if (_probeOnly || gain <= 0 || unit == null)
 			return;
+		// The ability-runtime caster arrives as its declared FieldObject interop proxy, so reflection
+		// member reads miss the Unit members (sid null => every stack looked like a war machine).
+		unit = TryWrapBattleUnit(unit) ?? unit;
 		if (!TryResolveEligibleStack(unit, unitKey, out var unitSid, out var skillRank, out var failReason))
 		{
 			// Registry GetHashCode caches can stick a TransferSide whose logicHero is
@@ -1105,6 +1154,15 @@ internal static class Homm3BulwarkRunesRuntime
 		{
 			if (!TryDispatchThresholdBuff(unit, crossed[i], out var buffFail))
 			{
+				// Un-mark this and the remaining crossed thresholds so a later gain retries them.
+				lock (Gate)
+				{
+					if (StackStateByNativeKey.TryGetValue(unitKey, out var failedState))
+					{
+						for (var k = i; k < crossed.Count; k++)
+							failedState.AppliedThresholds.Remove(crossed[k]);
+					}
+				}
 				LogLimited(
 					"Rune threshold buff failed closed: level="
 					+ crossed[i]
@@ -1386,6 +1444,22 @@ internal static class Homm3BulwarkRunesRuntime
 	private static bool TryResolveUnitKey(object unit, out long unitKey, out string failReason)
 	{
 		return Homm3DirectStateIdentity.TryResolveKey(unit, out unitKey, out failReason);
+	}
+
+	/// <summary>Class-checked re-wrap as <see cref="Unit"/>; null for non-units and managed fixtures.</summary>
+	private static object TryWrapBattleUnit(object value)
+	{
+		if (value is Unit || value is not Il2CppInterop.Runtime.InteropTypes.Il2CppObjectBase il2Cpp
+		    || il2Cpp.Pointer == IntPtr.Zero)
+			return null;
+		try
+		{
+			return il2Cpp.TryCast<Unit>();
+		}
+		catch
+		{
+			return null;
+		}
 	}
 
 	private static string TryResolveBattleUnitSid(object unit)

@@ -490,7 +490,7 @@
   "params": []
  },
  "glbPatch": {
-  "reason": "2026-10-09 authenticity send-back fix 1 (lane A, Rampart): the user rejected whole-body rotation doing part-body moves. The quadruped fit is narrowed (pitch 0..10 about the hind feet, Defence 0, dx +-4 px, standing clips on the floor, Death roll only at the collapse) and the keys carry no Hips or horse-Spine rotation. AttackFront/ShootFront: the rear is the forelegs tucked at the knee (QF_00 -45, QF_01 +70 at f2-f3) with the torso arched back; the lunge is Spine1/Spine2 (up to 25/12 deg) over a planted horse. Hitted: torso thrown back and twisted, head back. Death: hind legs buckle and the forelegs give (Hips sinks 0.05 H, f3-f5) with both arms raised, then the base side fall at f6. Defence: torso and neck turn (Spine1 25-30 deg) over a level horse. Gate 15 -> 15 edges over 2x.",
+  "reason": "2026-10-09 authenticity send-back fix 1 (lane A, Rampart): the user rejected whole-body rotation doing part-body moves. The quadruped fit is narrowed (pitch 0..10 about the hind feet, Defence 0, dx +-4 px, standing clips on the floor, Death roll only at the collapse) and the keys carry no Hips or horse-Spine rotation. AttackFront/ShootFront: the rear is the forelegs tucked at the knee (QF_00 -45, QF_01 +70 at f2-f3) with the torso arched back; the lunge is Spine1/Spine2 (up to 25/12 deg) over a planted horse. Hitted: torso thrown back and twisted, head back. Death: hind legs buckle and the forelegs give (Hips sinks 0.05 H, f3-f5) with both arms raised, then the base side fall at f6. Defence: torso and neck turn (Spine1 25-30 deg) over a level horse. Gate 15 -> 15 edges over 2x.; 2026-11-10 unit pass (user-approved candidate, rig / mesh repair): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass, with the candidate's added joints and face cuts; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -512,6 +512,22 @@
     "sha256": "b80b004f749cff5c6cad93139609d644dd699f0bc96a2cb72d29455239173e25",
     "regrid": true,
     "note": "Hips translation keys"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_captain_move_cut.json",
+    "sha256": "b7c46007c42d4f7a9a9900a2dc45321ef18c09ac35e625ef90b5e7f635acd7b7",
+    "note": "unit pass: 37 bridging faces the candidate cuts (mover_mount)"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_captain_move_tracks.json",
+    "sha256": "f8567098f75a3bc5b1fd4afcf269fa1ab6334d4d15dd9193b77573533e1b69e8"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_captain_clip_tracks.json",
+    "sha256": "8a2eaa03ef2dfe15c03e6be4bf0a22e6cd3e5fed6dfa50edd696d5b7caf27661"
    }
   ]
  }

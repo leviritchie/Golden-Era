@@ -419,7 +419,7 @@ internal sealed class Homm3AdventureLookaheadState
 		var heroesMember = ReadMember(sideHeroes, GameSymbols.AdventureAiDecision.SideHeroesListMembers);
 		if (heroesMember == null)
 			heroesMember = sideHeroes;
-		if (heroesMember is not IEnumerable enumerable)
+		if (!Il2CppCollections.TryEnumerate(heroesMember, out var enumerable))
 			return;
 		var seen = new HashSet<int>();
 		foreach (var item in enumerable)
@@ -478,7 +478,7 @@ internal sealed class Homm3AdventureLookaheadState
 		hero.Mana = ReadInt(dataHero, GameSymbols.AdventureAiDecision.DataHeroManaFieldHints, hero.Mana);
 		var party = ReadMember(dataHero, GameSymbols.AdventureAiDecision.DataHeroPartyFieldHints);
 		var units = party == null ? null : ReadMember(party, GameSymbols.AdventureAiDecision.DataPartyUnitsFieldHints);
-		if (units is IEnumerable unitEnum)
+		if (Il2CppCollections.TryEnumerate(units, out var unitEnum))
 		{
 			hero.Party.Clear();
 			foreach (var u in unitEnum)
@@ -735,7 +735,7 @@ internal sealed class Homm3AdventureMarkSnapshot
 
 	private static void CopyIntCollection(object source, List<int> dest)
 	{
-		if (source is not IEnumerable enumerable || dest == null)
+		if (dest == null || !Il2CppCollections.TryEnumerate(source, out var enumerable))
 			return;
 		foreach (var item in enumerable)
 		{
@@ -750,7 +750,7 @@ internal sealed class Homm3AdventureMarkSnapshot
 	{
 		if (source is int[] arr)
 			return (int[])arr.Clone();
-		if (source is not IEnumerable enumerable)
+		if (!Il2CppCollections.TryEnumerate(source, out var enumerable))
 			return Array.Empty<int>();
 		var list = new List<int>();
 		CopyIntCollection(enumerable, list);

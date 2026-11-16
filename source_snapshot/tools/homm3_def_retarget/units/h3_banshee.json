@@ -154,7 +154,7 @@
   }
  ],
  "glbPatch": {
-  "reason": "DEF g12 attack: both hands thrown up overhead (f1), stretched along the rising diagonal (f2), then the claws dive forward-down at the target (f3-f5); robe front stripped of bled arm weights (z<0.55) + GPU weight re-solve so the raise does not tear the robe (gate 3490 -> 3476)",
+  "reason": "DEF g12 attack: both hands thrown up overhead (f1), stretched along the rising diagonal (f2), then the claws dive forward-down at the target (f3-f5); robe front stripped of bled arm weights (z<0.55) + GPU weight re-solve so the raise does not tear the robe (gate 3490 -> 3476); 2026-11-10 unit pass (user-approved candidate, rig / mesh repair): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass, with the candidate's added joints and face cuts; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -173,6 +173,33 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_banshee_pose_rot.json",
     "sha256": "c20569e4c998553d2f7fdd58455ac84141d1d0f04b5f4fcd5fe10d65d9336a70",
     "regrid": true
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_banshee_move_joints.json",
+    "sha256": "39152357550ca0c6e06c7c855578f1ad31ed8b9448fe3283bd9f82537d95a9ca",
+    "note": "unit pass: 4 joints the candidate's Move needs (mover_floatA)"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_banshee_move_weights.json",
+    "sha256": "76158626c3ee55028f990452ae621e1f27acdbd57e958520b517e9fe0b114d55"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_banshee_move_tracks.json",
+    "sha256": "8f0e71541ba8b1233f755b0b7dbef31a2415e2740d2759aeaf04fb1a71282fd7"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_banshee_clip_repair_weights.json",
+    "sha256": "da91c4afc3bc4f0d5343b38ae96730d812d51d87ca4bbd0894640715b00bc408"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_banshee_clip_tracks.json",
+    "sha256": "d3da1866af3958651fe35b9fdcabfba2c398fa8e54e7fae6b13a07c60c9cb9a6"
    }
   ]
  }

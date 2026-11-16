@@ -175,9 +175,14 @@ scheduler and no incremental Blender.
      re-bake and before the tear gate. It is for deep hip and knee flexion, the case no weight op fixes; see
      "Deep hip and knee flexion" below.
 
-   POSITION, NORMAL, TEXCOORD_0, the indices and the images stay byte-identical, and the check refuses otherwise.
-   So the look's geometry hash still holds and `look.py --stages apply` re-delivers the stamped texture without a
-   re-bake.
+   - `addJoints` `{table, sha256, note?}` and `cutFaces` `{table, sha256, note?}`: the two declared rig / topology
+     ops; see "Added joints and face cuts" below.
+
+   POSITION, NORMAL, TEXCOORD_0 and the images stay byte-identical, and the check refuses otherwise. The indices
+   stay byte-identical too unless the patch carries a `cutFaces` op; then the output must be exactly the export
+   minus the table's faces (`declared_cut_errors`).
+   So the look's geometry hash still holds (or differs only by the declared, re-proven cut) and
+   `look.py --stages apply` re-delivers the stamped texture without a re-bake.
 3. **Corrective Smooth re-bake.** `cs_numpy.py` is a line-by-line port of Blender 5.2's `MOD_correctivesmooth.cc`
    on `bake_cs`'s welded proxy: the length-weighted smoothing, the corner tangent frames with angle weights, the
    delta cache, and the Tikhonov solve with the scale mask. Per morph target, conditioned vertices get
@@ -251,10 +256,12 @@ longer declares the patch.
 
 ## When the lane is NOT valid (use the full chain)
 
-- **Geometry, UV, normal or topology changes**: retopology, cut or split edges, a remesh, new props, a texture
-  re-bake. The patch refuses any geometry, normal or image hash change.
-- **Rig changes**: joint rest positions, new bones such as extra kobold tail bones, bone lengths such as shaman leg
-  joints. Inverse binds and rest are the build's.
+- **Geometry, UV, normal or topology changes**: retopology, split edges, a remesh, new props, moved or new vertices,
+  a texture re-bake. The patch refuses any vertex, normal or image hash change. The one exception is dropping whole
+  triangles with `cutFaces` (at most 10 % of the body, no vertex removed).
+- **Rig changes**: joint rest positions, bone lengths such as shaman leg joints, re-parenting, removing or renaming a
+  joint. Inverse binds and rest of the export's joints are the build's. The one exception is appending new leaf
+  chains under an existing skin joint with `addJoints` (extra tail or wing-tip bones).
 - **Weight changes that split a weld group.** UV-seam copies would skin differently and crack; the patch refuses and
   asks for wider ramps.
 - **A rawAccepted look.** `look.py --try-modes` re-bakes in Blender, so `--from-base` refuses.
@@ -518,3 +525,120 @@ the Titan proof above.
 - Source/static: the validator, the unit tests, and the fleet_rebuild wiring.
 - Not proven: bundle build, install, in-game appearance. `h3_jotunn_upg_alt` is not in `bulwark_slice_v1`, so
   shipping it needs a slice decision.
+
+## Authored clips (setTracks, 2026-11-09)
+
+`setTracks` replaces whole clips' bone keys from a sha256-pinned table (`homm3_glb_patch_tracks.v1`:
+`{clips: {clip: {times, bones: {bone: {translation?, rotation?, scale?}}}}}`). It carries a clip authored offline on the
+shipped rig; the first use is the flyer flights (pilot h3_roc: `Unit_Move`, `Unit_MoveStart`, `Unit_MoveEnd`).
+
+- The table's times must be the clip's own key grid, so clip length, the master frame mapping and the
+  one-key-per-CS-target rule are unchanged. A flight authored at 30 fps is sampled onto that grid.
+- Rotations must be unit quaternions and scales within the `keyScales` range. A bone the shipped clip hides with a
+  zero scale (the `RubbleRoot` copy on phoenix and the gargoyles) must be left out of the table, or the copy shows.
+- `"clearCorrectives": true` zeroes the CS targets of the table's clips instead of re-baking them. Use it when the
+  clip was authored and judged on the plain skin: on h3_roc the differential re-bake pulled hidden feather layers
+  through the wing (black blotches) and tore 2224 edges against 725 on the plain skin. Keep the re-bake (omit the key)
+  when the new poses stay close to the shipped ones.
+- The tear gate is unchanged. Spread wings usually need a trailing `stretchRelax` on the replaced clips.
+- Scratch harness: `V:/olden_port_work/flyer_move/_deliver/deliver.py` (existing ops kept, ours appended, dry run,
+  then `fleet_rebuild.py --from-base`).
+- `clearCorrectives` does not survive a unit whose stride stage re-keys `Unit_Move` (walkers in `plant` mode):
+  `cs_rekey` re-bakes the moved poses from the patched reference, where the cleared targets are zero, and its parity
+  check refuses (h3_unicorn, 2026-11-10). Such a unit keeps the re-bake.
+
+## Added joints and face cuts (addJoints, cutFaces, 2026-11-10)
+
+Two ops for candidates that need more bones or fewer triangles than the export has: a short tail that needs more
+segments to whip (h3_demon: 8 joints under `Tail_09`), a membrane that bridges two limbs and has to be opened before
+the limbs can move apart (h3_unicorn: 116 faces between the tail and the hind legs). Both are declared by a
+sha256-pinned table under `tools/homm3_glb_patch/key_rotations/`, both are recorded in the stamp
+(`topology: {jointsAdded, facesCut, cutTableSha256, sourceGeometrySha256, geometrySha256}`), and neither changes a
+vertex: `setWeights`, `setTracks`, the morph targets and the look's texture fit keep indexing the same vertices.
+Ops run in the listed order, so an `addJoints` goes before the `setWeights` / `setTracks` that name its joints.
+
+### addJoints
+
+Table `homm3_glb_patch_joints.v1`:
+
+```json
+{"schema": "homm3_glb_patch_joints.v1", "unit": "h3_demon", "jointCount": 33,
+ "joints": [{"name": "Tail_10", "parent": "Tail_09", "head": [-0.15, 0.33, -0.3]},
+            {"name": "Tail_11", "parent": "Tail_10", "head": [-0.175, 0.28, -0.27]}]}
+```
+
+- `jointCount` is the skin's joint count the table was authored on; another count refuses.
+- `head` is the joint's rest position in the body's rest space (the space of POSITION). The joint's bind is a pure
+  translation to `head` (identity rotation, unit scale); its local rest is `inv(parent bind) @ T(head)`, so rest
+  equals bind and an unkeyed new joint moves nothing.
+- New joints are appended: the node list and `skin.joints` grow at the end, every existing joint index, inverse bind
+  and JOINTS_0 value is untouched, and a patch with only `addJoints` changes no vertex's skinning.
+- In every clip (the `<unit>_DEF_Master` clip included) each new joint gets the export's static-bone convention: 2-key
+  STEP translation / rotation / scale channels at rest over the clip's own first..last key, one sampler per channel.
+  `setTracks` then replaces the channels of the clips it authors. "First" and "last" are the float32 key MOST of the
+  clip's samplers carry, not the min / max: an earlier regrid op can leave a few channels a float rounding off the
+  export's key, and a hold on that stray time adds a near-duplicate key to the clip's key union (h3_griffin: the
+  ground stage wrote an 11-key Hips track into a x3-densified 10-key clip and the freeze gate read MoveStart /
+  MoveEnd as resampled).
+- The new joints are appended to the bake record's `excludeBones` (`asset.extras` bake stamp) in the output, so a
+  vertex re-skinned to them gets no Corrective Smooth (the corrective is scaled by 1 - its weight on excluded bones),
+  in every clip. The bake never saw these joints, and CS on a thin ribbon that a new chain bends away from its rest
+  curl collapses it: on h3_demon the re-baked Move targets cut the tail in two until the exclusion was added
+  (`rig_chain.py` pairs every chain the build makes with the same exclusion). The re-bake's new side and `cs_rekey`
+  both read the patched record; the op reports the names as `correctiveExcludeBonesAdded`.
+
+Refusals: a name that already exists or repeats; a parent that is neither a skin joint nor an earlier joint of the
+table (a new top-level joint is never possible: the ground stage needs the single `Root`, and the Unity import
+refuses curves on top-level nodes); a `head` further than half a body height outside the rest bounds; a parent bind
+that is not rigid; more than one skin; more than 255 joints (JOINTS_0 stays 8-bit).
+
+What it does not check, and the author must: the name-keyed stages downstream read joint names. A new `Wing*`,
+`*UpLeg` / `*Arm` chain member, `Tail_*` and the like joins whatever those stages do with that pattern (stride
+`chains_of`, the flyer articulation regions, the facing contract's `Wing*L_00`, the idle cadence's wing test), which
+is what a longer chain wants and what an unrelated helper bone does not. Channels written by `setTracks` on new
+joints must be on the clip's key grid and loop-closed like any other bone's.
+
+### cutFaces
+
+Table `homm3_glb_patch_face_cut.v1`:
+
+```json
+{"schema": "homm3_glb_patch_face_cut.v1", "unit": "h3_unicorn", "faceCount": 8706,
+ "indexSha256": "<sha256 of the export's body index bytes>", "faces": [4410, 4411, 4498]}
+```
+
+- `faces` are triangle numbers in the export's index buffer, strictly increasing. `faceCount` and `indexSha256` pin
+  the buffer the numbers were read from; another export refuses.
+- The kept triangles stay in order in the same accessor (count and bufferView length shrink in place). No vertex is
+  removed or renumbered. Vertices left in no triangle stay in the buffers, still skinned, so the ground, stride and
+  bounds stages see the same point cloud as before; the op reports them (`orphanVertices`).
+- At most one `cutFaces` per patch and at most 10 % of the body's faces (`CUT_MAX_SHARE`): a cut, not a remesh.
+- The CS re-bake measures the old side (numpy parity, the tear gate's input) on the export's triangles and the new
+  side (the re-baked offsets, `stretchRelax`, the tear gate's output) on the cut mesh's welded proxy, the one
+  `cs_rekey` rebuilds downstream. A cut bridge therefore stops counting as a torn edge only in the output.
+
+The geometry gates take the cut only as declared and re-proven, never as "geometry may differ":
+
+- `patch_bytes` requires POSITION, NORMAL, TEXCOORD_0 and the images byte-identical, and
+  `declared_cut_errors(output, export)` empty: the stamp names the export's sha and `facesCut`, the vertex data
+  hashes are equal, and the output's triangles are an in-order subsequence of the export's, exactly `facesCut`
+  shorter.
+- `tools/homm3_unit_look/look.py` `stage_apply` still refuses a geometry hash that differs from the texture fit's.
+  The single exception (`declared_face_cut_errors`): the retained base `artifacts/homm3_glb_patch/<unit>/base.glb`
+  has the fit's geometry hash, and `declared_cut_errors(delivery, base)` is empty. A delivery without the stamp, on
+  another base, with a moved vertex or with a triangle that is not the base's fails that proof and is refused as
+  before. The fit stays valid because the fit is per vertex / per texel and the cut removes no vertex and no UV.
+- `cs_rekey` compares against the post-patch bytes (its reference), so it sees one topology throughout.
+
+Runtime cost: the added joints cost one bone each in the skinned mesh and 3 constant curves per clip; a cut is free.
+
+### Scratch harness and pilots
+
+`V:/olden_port_work/unit_pass/_deliver/deliver_rig.py <unit> [--dry]`: builds the candidate with the unit's own tool
+on the patched base, reads the appended joints and the dropped triangles out of the candidate GLB, refuses anything
+the two ops cannot express (vertex changes, re-ordered triangles, a non-identity bind), derives the weight and track
+tables on the same topology, dry-runs the patch, then runs `fleet_rebuild.py --from-base` and renders a
+shipped / candidate / delivered sheet. Pilots 2026-11-10: h3_unicorn (`cutFaces` 116 + `setWeights` + `setTracks`),
+h3_demon (`addJoints` 8 + `cutFaces` 53 + `setWeights` + `setTracks`).
+
+Tests: `python -m unittest tools/homm3_glb_patch/test_patch_glb.py` (`RigTopology`).

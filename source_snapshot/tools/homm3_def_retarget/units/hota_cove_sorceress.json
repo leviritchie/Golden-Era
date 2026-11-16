@@ -193,7 +193,7 @@
  "sourceMesh": "artifacts/homm3_mesh_surgery/hota_cove_sorceress_sword_m1.glb",
  "meshReason": "2026-10-11 lane A (user-approved prop surgery, as on the sea witch): the DEF AttackFront draws the sword overhead and slashes, so the sword is cut from the hip belt and re-seated in the right fist (sword_draw_surgery.py -> sword_m1); prop sword is rigid on RightHand and binds only the cut-free sword island (wholeIslands), not the fist around the grip.",
  "glbPatch": {
-  "reason": "authenticity: DEF g12 attack - with the sword now in her right fist (sword prop surgery), she winds it back out to the side (f3), raises it overhead (f4), slashes down in front (f5-f6) and levels it at the target (f7), instead of a short jab with the hand by the chest. Right arm/shoulder weights re-solved",
+  "reason": "authenticity: DEF g12 attack - with the sword now in her right fist (sword prop surgery), she winds it back out to the side (f3), raises it overhead (f4), slashes down in front (f5-f6) and levels it at the target (f7), instead of a short jab with the hand by the chest. Right arm/shoulder weights re-solved; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
   "ops": [
    {
     "op": "setWeights",
@@ -212,6 +212,22 @@
     "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sorceress_pose_rot.json",
     "sha256": "ac98fb90d2b851b650437f2d73d8238a37d165408843fb203610ec3c9872c30b",
     "regrid": true
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sorceress_clip_tracks.json",
+    "sha256": "1747cd0f1a73357509f93a2e4ff0a06db2c0dcc1fa080a9ea8cd41f9967be6ea"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
    }
   ]
  }

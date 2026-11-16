@@ -331,7 +331,7 @@
   "note": "2026-10-10 lane-A: a 1 mm Meshy sliver at the back of the right armpit (RightArm 0.57 / RightShoulder 0.27 / Spine1 0.11 on both ends) was blown to 37x its rest length by the corrective smooth in the Defence guard (t 0.583), with a 3.9 mm neighbour at 9.9x; both collapsed at their midpoints (2 collapses, max vertex move 1.8 mm, 7012 -> 7008 vertices, no face flips). Re-weighting cannot help: the ends already share their weights."
  },
  "glbPatch": {
-  "reason": "authenticity lane-A 2026-10-10: DEF g12 scythe strike (arch devil spec ported; shaft axis re-measured on this scythe from the shaft segment of the props polyline): the capture swung the scythe one-handed and let it hang. AttackFront levels the scythe two-handed pointing back (f1), swings it up over the shoulder (f2-f3), sweeps it forward at the waist with a forward lean (f4) and follows through down-front (f5-f7); the shaft aim is split between LeftForeArm (0.8) and LeftHand so the wrist does not break. Defence (g04 guard): the torso leans back away from the blow f2-f8, and LeftHand is then held at its f0 world orientation so the scythe stays upright against the body (the capture flailed it out behind f3-f5 and up overhead f7). keyRotations half offset, applied twice; stretchRelax on AttackFront. || defenceStepBack (lane B 2026-10-10): Defence backs off 0.42 (Hips, f1-f9 ramp) with the torso leaning back 12 deg, as the DEF steps back and guards",
+  "reason": "authenticity lane-A 2026-10-10: DEF g12 scythe strike (arch devil spec ported; shaft axis re-measured on this scythe from the shaft segment of the props polyline): the capture swung the scythe one-handed and let it hang. AttackFront levels the scythe two-handed pointing back (f1), swings it up over the shoulder (f2-f3), sweeps it forward at the waist with a forward lean (f4) and follows through down-front (f5-f7); the shaft aim is split between LeftForeArm (0.8) and LeftHand so the wrist does not break. Defence (g04 guard): the torso leans back away from the blow f2-f8, and LeftHand is then held at its f0 world orientation so the scythe stays upright against the body (the capture flailed it out behind f3-f5 and up overhead f7). keyRotations half offset, applied twice; stretchRelax on AttackFront. || defenceStepBack (lane B 2026-10-10): Defence backs off 0.42 (Hips, f1-f9 ramp) with the torso leaning back 12 deg, as the DEF steps back and guards; clip pass 2026-11-11 (user-approved candidate): Idle, Mouseover re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -355,6 +355,11 @@
     "op": "keyRotations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_arch_demon_defence_stepback_rot.json",
     "sha256": "c30dddfcea27497c73d2382c3ba51cbe8b40abbff29361d31bf5a3f90621e8e5"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_arch_demon_clip_tracks.json",
+    "sha256": "713339d7c81c67cc8ab7ee85cf75baccf3a00dcf48eca8810304ae5d1cbbb8e0"
    },
    {
     "op": "stretchRelax",

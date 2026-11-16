@@ -217,7 +217,7 @@
   "foreRadius": 0.07
  },
  "glbPatch": {
-  "reason": "authenticity pass (lane B): Defence re-authored by motion intent against the DEF. The sword comes up upright before the face (f1-f2), tilts up-and-forward into a high parry held in front of the head (f3-f7), returns upright (f8-f9) and settles to rest; the base swung it horizontally back over the right shoulder. Rig, not move cuts: the forearm turns across the face so the wrist keeps its grip angle instead of bending back (wrist crease closed). Tear gate over master targets 982 -> 977, worst edge unchanged (5.847). Hilt weights (2026-10-08 coordinator review): the sword's pommel and crossguard carried right-thigh/spine weight and floated off at the hip when the sword rose; both move to RightHand. Walk sword swing (2026-10-08 user report from in game: the walk moves the sword from the wrist, not the arm): Move is re-authored so the sword arm swings from the shoulder, forward with the blade up toward the enemy at f0-f2 and back past the hip with the blade trailing down at f3-f5, then forward again at f6-f7. The hand is locked to the forearm at one grip for the whole cycle (wrist rotation 0), where the base held the forearm still and flipped the blade at the wrist. MoveStart and MoveEnd blend the same grip and arm in and out. Mesh fixes, not move cuts: the lower-back RightArm weight moves to Spine1 (tear gate 953 -> 949 <= input 951, worst edge 5.847 -> 5.791), and 19 pommel verts lose their residual leg weight (cs_rekey parity on the Move targets 0.0202 H -> 0.0081 H; it was 0.0193 H before this change). 2026-10-08 check pass: head held steady at the walking carriage through MoveStart/Move/MoveEnd (was rolling side to side up to 18 deg each stride; the DEF head stays level).",
+  "reason": "authenticity pass (lane B): Defence re-authored by motion intent against the DEF. The sword comes up upright before the face (f1-f2), tilts up-and-forward into a high parry held in front of the head (f3-f7), returns upright (f8-f9) and settles to rest; the base swung it horizontally back over the right shoulder. Rig, not move cuts: the forearm turns across the face so the wrist keeps its grip angle instead of bending back (wrist crease closed). Tear gate over master targets 982 -> 977, worst edge unchanged (5.847). Hilt weights (2026-10-08 coordinator review): the sword's pommel and crossguard carried right-thigh/spine weight and floated off at the hip when the sword rose; both move to RightHand. Walk sword swing (2026-10-08 user report from in game: the walk moves the sword from the wrist, not the arm): Move is re-authored so the sword arm swings from the shoulder, forward with the blade up toward the enemy at f0-f2 and back past the hip with the blade trailing down at f3-f5, then forward again at f6-f7. The hand is locked to the forearm at one grip for the whole cycle (wrist rotation 0), where the base held the forearm still and flipped the blade at the wrist. MoveStart and MoveEnd blend the same grip and arm in and out. Mesh fixes, not move cuts: the lower-back RightArm weight moves to Spine1 (tear gate 953 -> 949 <= input 951, worst edge 5.847 -> 5.791), and 19 pommel verts lose their residual leg weight (cs_rekey parity on the Move targets 0.0202 H -> 0.0081 H; it was 0.0193 H before this change). 2026-10-08 check pass: head held steady at the walking carriage through MoveStart/Move/MoveEnd (was rolling side to side up to 18 deg each stride; the DEF head stays level).; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "moveWeights",
@@ -340,6 +340,11 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_swordsman_pose_rot.json",
     "sha256": "6e50db09b6581afc5c5b96751353c339425ecf0585a5dd9fbbf9b7d5b97838d7",
     "regrid": true
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_swordsman_clip_tracks.json",
+    "sha256": "bb419868c15929512f0802c9266f7146ec177b712506b6a2eafc37fc2c160455"
    }
   ]
  },

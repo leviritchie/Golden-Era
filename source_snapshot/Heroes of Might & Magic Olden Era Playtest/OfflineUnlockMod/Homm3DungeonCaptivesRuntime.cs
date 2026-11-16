@@ -6,123 +6,168 @@ using BepInEx.Logging;
 using HarmonyLib;
 using Hex.Configs;
 using Hex.Session.Battle;
-using Hex.Session.Data;
 using Il2CppInterop.Runtime.InteropTypes;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using UnityEngine;
+using BuffDuration = Hex.Session.Data.BuffDuration;
 using DataHero = Hex.Session.Data.Hero;
+using DataParty = Hex.Session.Data.DataParty;
+using EListenerCallbackCall = Hex.Session.Logic.EListenerCallbackCall;
+using PartyChangedType = Hex.Events.PartyChangedType;
 
 namespace OfflineUnlockMod;
 
 /// <summary>
-/// HoMM3 Dungeon Captives (replaces Draconic Dominion's flee-recruit redirect).
+/// HoMM3 Dungeon War Captives (skill_faction_homm3_dungeon; replaces the 2026-10-12 flee-capture Captives bank).
 ///
-/// Capture: when a human clicks the native "let them flee" button (BhSquadEscapeUISession escape
-/// click) and the hero owns skill_faction_homm3_dungeon, the fleeing squad's strength
-/// (sum of UnitLogicConfig.squadValue x amount) is banked on the hero. The prefix only reads the
-/// squad/hero context; the postfix records it after the native flee resolved, so the fight button
-/// never records anything and the native flow is never suppressed.
+/// Captives: when a hero with the faction skill wins a battle, every enemy creature killed (started minus remaining
+/// stacks on every other side, x UnitLogicConfig.squadValue) is summed; captives = floor(value x (1.15 with Dungeon
+/// Cells) / <see cref="ValuePerCaptive"/>). Nothing happens at 0 captives.
 ///
-/// State lives only in native hero map buffs, so it is saved and loaded with the hero by the
-/// native buff system (Data.Hero.buffs): one visible tier buff (homm3_dungeon_captives_tier_N,
-/// +N Attack / +N Defense) and hidden binary-weight marker buffs that encode the exact banked
-/// strength (100-strength units) and the captured-squad count. Every read reconstructs the state
-/// from those buffs; there is no managed cache that could leak across saves or sessions.
+/// Choice (one per battle):
+///   Execute  hero gains ExecuteXpPerCaptive[rank] XP per captive through the native exp component AddExp (exp bonus and
+///            level-up loop apply); Interrogation adds 1.5% of that XP as mana (rounded).
+///   Ransom   RansomGoldPerCaptive[rank] gold per captive (Slave Markets +25%).
+///   Eat      EatPercent[rank] of each own stack's losses this battle (floor), capped so the restored squad value never
+///            exceeds the captives' value. Written into the winner TransferSide before the native result applies it.
+///   Enslave  (Enslave Captives subskill) the captives join the hero's enslaved count: a hidden binary-weight buff set
+///            saved with the hero; the day-start consumer pays EnslaveGoldPerDay[rank] per enslaved captive (Slave Markets
+///            +25%) for as long as the hero exists. The visible bonus-less enslaved buff carries a live tooltip.
+///   Recruit  (Recruit Captives subskill) RecruitPercent[rank] of each defeated creature type at its full native unitCost,
+///            added to the hero's army (existing stacks merge; new types need a free slot of the 7).
 ///
-/// Spells: Execute / Ransom rows reuse the native Necromancer Will world-magic handler (the Castle
-/// Elite Strategem pattern) with Dungeon-only parameters [mode, level]. Execute grants XP through
-/// the native exp component AddExp (native level-up loop), Ransom grants gold through the shared
-/// reward-economy adapter. Both empty the captives first and pay only after the buffs were cleared.
+/// Flow: the shared battle-result prefix (Homm3RuntimeMechanicHooks.PrefixBattleResultCleanup ->
+/// <see cref="ObserveBeforeBattleResult"/>) builds the offer while the result still holds the battle's losses. A local
+/// human's <see cref="Homm3DungeonWarCaptivesWindow"/> is queued to open ~0.6 s after the native result has been written,
+/// so the army strip and hero panel show the post-battle state, and the choice pays into the live hero (Execute XP/mana
+/// stick). Eat and Recruit then add units through the logic party's native AddUnits (merge into a same-sid stack or a free
+/// slot of 7; fires the party-changed listeners). AI winners pick Eat when it restores anything, else Ransom, before the
+/// result applies (Eat writes the winner TransferSide).
 ///
-/// UI: Homm3DungeonCaptivesHud (hero-portrait skill meter, shared Homm3HeroSkillMeterHud) and Homm3DungeonCaptivesBuffTooltip (live
-/// hero-profile buff tooltip) in Homm3DungeonCaptivesHud.cs; both read this state on demand.
+/// Legacy (Captives bank saves): a hero still holding the old strength bank is paid it once as Ransom at day start and
+/// the old buffs are cleared; old Execute/Ransom spells left in a spellbook are suppressed (the native Necromancer Will
+/// toggle must never run for them).
 ///
-/// Proof tier: source + static native disassembly + build. Runtime unproven.
+/// Proof tier: source + build. Runtime unproven: the post-result window timing, the logic-party AddUnits for Eat
+/// and Recruit, the day-start payout and the window all need the Golden Era checklist in
+/// docs/homm3_faction_plans/dungeon.md.
 /// </summary>
 internal static class Homm3DungeonCaptivesRuntime
 {
 	internal const string FactionSkillSid = "skill_faction_homm3_dungeon";
 	internal const string InterrogationSubSkillSid = "sub_skill_faction_homm3_dungeon_draconic_diplomacy_2";
+	internal const string EnslaveSubSkillSid = "sub_skill_faction_homm3_dungeon_draconic_diplomacy_3";
+	internal const string RecruitSubSkillSid = "sub_skill_faction_homm3_dungeon_draconic_diplomacy_4";
 	internal const string SlaveMarketsSubSkillSid = "sub_skill_faction_homm3_dungeon_draconic_diplomacy_5";
 	internal const string DungeonCellsSubSkillSid = "sub_skill_faction_homm3_dungeon_draconic_diplomacy_6";
 
-	private const string NativeNecromancyMechType = "change_use_necromancy";
-	internal const string ExecuteMode = "homm3_dungeon_captives_execute";
-	internal const string RansomMode = "homm3_dungeon_captives_ransom";
-
-	internal const string TierBuffPrefix = "homm3_dungeon_captives_tier_";
-	internal const string StrengthBitBuffPrefix = "homm3_dungeon_captives_strength_bit_";
-	internal const string SquadBitBuffPrefix = "homm3_dungeon_captives_squads_bit_";
-	internal const int StrengthBitCount = 20;
-	internal const int SquadBitCount = 8;
-	internal const int StrengthUnit = 100;
-	internal const int MaxStrengthUnits = (1 << StrengthBitCount) - 1;
-	internal const int MaxSquads = (1 << SquadBitCount) - 1;
-
-	/// <summary>Effective-strength thresholds for tiers 1..5 (tier N = +N Attack / +N Defense).</summary>
-	internal static readonly int[] TierThresholds = { 2000, 6000, 12000, 22000, 36000 };
-
-	/// <summary>Execute XP per banked strength at Basic/Advanced/Expert (K_xp 0.11 x 0.5/0.75/1.0).</summary>
-	internal static readonly double[] ExecuteXpPerStrength = { 0.055, 0.0825, 0.11 };
-
-	/// <summary>Ransom gold per banked strength at Basic/Advanced/Expert (K_gold 0.8 x 0.25/0.375/0.5).</summary>
-	internal static readonly double[] RansomGoldPerStrength = { 0.2, 0.3, 0.4 };
-
+	internal const int ValuePerCaptive = 100;
+	internal static readonly int[] ExecuteXpPerCaptive = { 6, 9, 12 };
+	internal static readonly int[] RansomGoldPerCaptive = { 10, 15, 20 };
+	internal static readonly double[] EnslaveGoldPerDay = { 1.0, 1.5, 2.0 };
+	internal static readonly int[] EatPercent = { 20, 30, 40 };
+	internal static readonly int[] RecruitPercent = { 10, 15, 20 };
 	internal const double SlaveMarketsGoldMultiplier = 1.25;
-	internal const double InterrogationManaPerXp = 0.10;
-	internal const double DungeonCellsTierStrengthMultiplier = 1.25;
-	private const float CaptureDedupeSeconds = 2f;
+	internal const double DungeonCellsCaptiveMultiplier = 1.15;
+	internal const double InterrogationManaPerXp = 0.015; // 2026-11-15 user: 15% of the former 10%
+	internal const int MaxArmySlots = 7;
+
+	internal const string EnslavedBuffSid = "homm3_dungeon_captives_enslaved";
+	internal const string EnslavedBitBuffPrefix = "homm3_dungeon_captives_enslaved_bit_";
+	internal const int EnslavedBitCount = 20;
+	internal const int MaxEnslaved = (1 << EnslavedBitCount) - 1;
+
+	// Legacy Captives bank (pre War Captives saves): read once, paid as Ransom, cleared.
+	private const string NativeNecromancyMechType = "change_use_necromancy";
+	private const string LegacyExecuteMode = "homm3_dungeon_captives_execute";
+	private const string LegacyRansomMode = "homm3_dungeon_captives_ransom";
+	private const string LegacyTierBuffPrefix = "homm3_dungeon_captives_tier_";
+	private const string LegacyStrengthBitBuffPrefix = "homm3_dungeon_captives_strength_bit_";
+	private const string LegacySquadBitBuffPrefix = "homm3_dungeon_captives_squads_bit_";
+	private const int LegacyStrengthBitCount = 20;
+	private const int LegacySquadBitCount = 8;
+	private const int LegacyTierCount = 5;
+	private const int LegacyStrengthUnit = 100;
+
+	private const string GoldResourceName = "gold";
+	private const string LogPrefix = "HoMM3 Dungeon War Captives: ";
+
+	internal enum Choice
+	{
+		Execute,
+		Ransom,
+		Eat,
+		Enslave,
+		Recruit,
+	}
+
+	internal sealed class UnitLine
+	{
+		internal string Sid;
+		internal int Count;
+		internal int SlotPos;
+		internal int SquadValue;
+		/// <summary>Native unitCost per creature (resource, amount); filled for Recruit lines.</summary>
+		internal readonly List<(string Name, int Cost)> Cost = new();
+	}
+
+	internal sealed class Offer
+	{
+		internal int BattleKey;
+		internal object LogicHero;
+		internal DataHero DataHero;
+		internal string HeroSid;
+		internal int Rank;
+		internal bool IsLocalHuman;
+		internal long DefeatedValue;
+		internal int Captives;
+		internal bool Interrogation;
+		internal bool HasEnslave;
+		internal bool HasRecruit;
+		internal bool SlaveMarkets;
+		internal bool DungeonCells;
+		internal int ExecuteXp;
+		internal int ExecuteMana;
+		internal int RansomGold;
+		internal int EnslavedBefore;
+		internal int EnslaveDailyGoldAfter;
+		internal readonly List<UnitLine> Eat = new();
+		internal int EatCreatures;
+		internal readonly List<UnitLine> Recruit = new();
+		internal int RecruitCreatures;
+		internal readonly SortedDictionary<string, int> RecruitCost = new(StringComparer.Ordinal);
+		internal string RecruitBlocked;
+		/// <summary>True only for the AI's automatic pick, made before the native result applies (Eat writes the winner
+		/// TransferSide). The human's window opens after the result, so its Eat/Recruit add units through the logic party.</summary>
+		internal bool ArmyWritable;
+	}
 
 	private static bool _registrationAttempted;
-	/// <summary>Core stage (hero bridge, exp, buffs) resolved; the UI snapshot and both hooks need it.</summary>
 	private static bool _registered;
-	private static bool _spellsRegistered;
-	private static bool _captureRegistered;
+	private static bool _partyRegistered;
+	private static bool _dayStartRegistered;
 	private static ManualLogSource _log;
-	private static MemberInfo _escapeSquadMember;
-	private static MemberInfo _escapeWorldHeroMember;
-	private static MemberInfo _squadDataMember;
-	private static PropertyInfo _worldHeroLogicHeroProperty;
 	private static PropertyInfo _handlerWorldHeroProperty;
+	private static PropertyInfo _worldHeroLogicHeroProperty;
 	private static MethodInfo _logicHeroDataHeroGetter;
+	private static Type _logicHeroType;
 	private static PropertyInfo _expComponentProperty;
 	private static MethodInfo _expAddMethod;
 	private static PropertyInfo _buffManagerProperty;
 	private static MethodInfo _buffAddMethod;
 	private static MethodInfo _buffRemoveMethod;
 	private static MethodInfo _buffGetMethod;
-	private static IntPtr _lastCapturedSquadPointer;
-	private static float _lastCaptureRealtime;
-	private static int _loggedCaptures;
-	private static int _loggedCasts;
+	private static MethodInfo _transferSideAddSpawnedUnit;
+	private static MethodInfo _transferSideSortBySlot;
+	private static PropertyInfo _logicHeroPartyProperty;
+	private static MethodInfo _partyAddUnitsMethod;
+	private static bool _arrangeRegistered;
+
+	private static readonly object Gate = new();
+	private static readonly HashSet<int> Resolved = new();
+	private static int _loggedEvents;
 	private static int _loggedSkips;
-	private static int _loggedEscapeClicks;
-	private static int _loggedForeignCasts;
 
-	internal sealed class CaptureContext
-	{
-		internal object LogicHero;
-		internal DataHero DataHero;
-		internal long Strength;
-		internal IntPtr SquadPointer;
-		internal string SquadSummary;
-	}
-
-	internal readonly struct CaptivesState
-	{
-		internal CaptivesState(int strengthUnits, int squads, int tier)
-		{
-			StrengthUnits = strengthUnits;
-			Squads = squads;
-			Tier = tier;
-		}
-
-		internal int StrengthUnits { get; }
-		internal int Squads { get; }
-		internal int Tier { get; }
-		internal long Strength => (long)StrengthUnits * StrengthUnit;
-		internal bool IsEmpty => StrengthUnits <= 0;
-	}
+	// ---------------------------------------------------------------- registration
 
 	internal static void TryRegister(Harmony harmony, ManualLogSource log)
 	{
@@ -132,453 +177,1296 @@ internal static class Homm3DungeonCaptivesRuntime
 		_log = log;
 		var hexAssembly = typeof(TransferBattle).Assembly;
 
-		// Stage 1 (core): hero bridge, exp component and buff manager. Spells, capture and UI all need it.
+		// Core: hero bridge, exp component, buff manager, TransferSide unit add. Everything else needs it.
 		Type worldHeroType = null;
 		try
 		{
-			var logicHeroType = hexAssembly.GetType(GameSymbols.CastleEliteStrategem.LogicHeroTypeName)
-			                    ?? throw new TypeLoadException("Missing Hex.Session.Logic.Hero");
-			// Hero bridge (WorldHero -> Logic.Hero -> Data.Hero), shared with Castle Elite Strategem.
+			_logicHeroType = hexAssembly.GetType(GameSymbols.CastleEliteStrategem.LogicHeroTypeName)
+			                 ?? throw new TypeLoadException("Missing Hex.Session.Logic.Hero");
 			worldHeroType = ResolveRequiredTypeByHint(hexAssembly, GameSymbols.HomecomingBoatTravel.WorldHeroTypeHints, "homm3.dungeon.captives.worldHero");
-			_worldHeroLogicHeroProperty = ResolveRequiredTypedProperty(worldHeroType, GameSymbols.CastleEliteStrategem.WorldHeroLogicHeroProperty, logicHeroType, "homm3.dungeon.captives.worldHero.logicHero");
-			_logicHeroDataHeroGetter = ResolveRequiredNamedMethod(logicHeroType, typeof(DataHero), Type.EmptyTypes, GameSymbols.CastleEliteStrategem.LogicHeroDataHeroGetter, instance: true);
-
-			// Native exp component + AddExp(int, bool).
-			_expComponentProperty = ResolveRequiredProperty(logicHeroType, GameSymbols.DungeonCaptives.LogicHeroExpComponentMembers[0], "homm3.dungeon.captives.logicHero.expComponent");
+			_worldHeroLogicHeroProperty = ResolveRequiredTypedProperty(worldHeroType, GameSymbols.CastleEliteStrategem.WorldHeroLogicHeroProperty, _logicHeroType, "homm3.dungeon.captives.worldHero.logicHero");
+			_logicHeroDataHeroGetter = ResolveRequiredNamedMethod(_logicHeroType, typeof(DataHero), Type.EmptyTypes, GameSymbols.CastleEliteStrategem.LogicHeroDataHeroGetter, instance: true);
+			_expComponentProperty = ResolveRequiredProperty(_logicHeroType, GameSymbols.DungeonCaptives.LogicHeroExpComponentMembers[0], "homm3.dungeon.captives.logicHero.expComponent");
 			_expAddMethod = ResolveRequiredNamedMethod(_expComponentProperty.PropertyType, typeof(void), new[] { typeof(int), typeof(bool) }, GameSymbols.DungeonCaptives.ExpComponentAddExp, instance: true);
-
-			// Native hero map-buff manager Add/Remove/Get.
-			_buffManagerProperty = ResolveRequiredProperty(logicHeroType, GameSymbols.DungeonCaptives.LogicHeroBuffManagerMembers[0], "homm3.dungeon.captives.logicHero.buffManager");
+			_buffManagerProperty = ResolveRequiredProperty(_logicHeroType, GameSymbols.DungeonCaptives.LogicHeroBuffManagerMembers[0], "homm3.dungeon.captives.logicHero.buffManager");
 			var buffManagerType = _buffManagerProperty.PropertyType;
 			_buffAddMethod = ResolveRequiredNamedMethod(buffManagerType, typeof(void), new[] { typeof(string), typeof(Il2CppReferenceArray<BuffDuration>) }, GameSymbols.DungeonCaptives.BuffManagerAdd, instance: true);
 			_buffRemoveMethod = ResolveRequiredNamedMethod(buffManagerType, typeof(void), new[] { typeof(string) }, GameSymbols.DungeonCaptives.BuffManagerRemove, instance: true);
 			_buffGetMethod = ResolveRequiredNamedMethod(buffManagerType, null, new[] { typeof(string) }, GameSymbols.DungeonCaptives.BuffManagerGet, instance: true);
 			if (!string.Equals(_buffGetMethod.ReturnType.FullName, "Hex.Session.Logic.Buff", StringComparison.Ordinal))
 				throw new MissingMethodException("homm3.dungeon.captives.buffManager.get returns " + _buffGetMethod.ReturnType.FullName + ", expected Hex.Session.Logic.Buff");
+			_transferSideAddSpawnedUnit = ResolveRequiredNamedMethod(typeof(TransferSide), typeof(void), new[] { typeof(TransferUnit), typeof(bool) }, GameSymbols.SkeletalNecromancy.TransferSideAddSpawnedUnit, instance: true);
+			_transferSideSortBySlot = ResolveRequiredNamedMethod(typeof(TransferSide), typeof(void), Type.EmptyTypes, GameSymbols.SkeletalNecromancy.TransferSideSortBySlot, instance: true);
+			if (!Homm3RuntimeMechanicHooks.TryRegisterSharedBattleResult(harmony, log))
+				throw new InvalidOperationException("shared battle-result hook did not register");
 			_registered = true;
-			_log?.LogInfo("HoMM3 Dungeon Captives [core] registered: worldHero=" + worldHeroType.FullName
-				+ ", exp=" + FormatMethod(_expAddMethod)
-				+ ", buffs=" + FormatMethod(_buffAddMethod) + "/" + _buffRemoveMethod.Name + "/" + _buffGetMethod.Name + ".");
+			_log?.LogInfo(LogPrefix + "[core] registered: exp=" + FormatMethod(_expAddMethod) + ", buffs=" + FormatMethod(_buffAddMethod)
+				+ ", transferSide add=" + _transferSideAddSpawnedUnit.Name + "/sort=" + _transferSideSortBySlot.Name + ", shared battle-result prefix.");
 		}
 		catch (Exception ex)
 		{
-			_log?.LogError("HoMM3 Dungeon Captives [core] NOT registered (fail closed: no capture, no Execute/Ransom handling, no meter): " + ex.GetBaseException().Message);
+			_log?.LogError(LogPrefix + "[core] NOT registered (fail closed: no captives after battles): " + ex.GetBaseException().Message);
 		}
 
 		if (_registered)
 		{
-			// Stage 2 (spells): Execute / Ransom ride the native Necromancer Will world-magic handler (Castle Elite Strategem pattern).
+			// Party: the human's window opens after the native result, so Eat and Recruit add units through the logic party's
+			// native AddUnits, which also fires the party-changed listeners (army strip refresh).
+			try
+			{
+				_logicHeroPartyProperty = ResolveRequiredProperty(_logicHeroType, GameSymbols.DungeonCaptives.LogicHeroPartyMembers[0], "homm3.dungeon.captives.logicHero.party");
+				_partyAddUnitsMethod = ResolveRequiredNamedMethod(_logicHeroPartyProperty.PropertyType, typeof(void),
+					new[] { typeof(string), typeof(int), typeof(EListenerCallbackCall) }, GameSymbols.DungeonCaptives.LogicPartyAddUnits, instance: true);
+				_partyRegistered = true;
+				_log?.LogInfo(LogPrefix + "[party] registered: add units=" + FormatMethod(_partyAddUnitsMethod) + ".");
+			}
+			catch (Exception ex)
+			{
+				_log?.LogError(LogPrefix + "[party] NOT registered (Eat/Recruit unavailable on the choice window): " + ex.GetBaseException().Message);
+			}
+
+			// Recruit panel: the chosen army arrangement is written to the logic party's Data.Units (slot, stacks), new stacks
+			// through the native AddUnitAtSlot, then the party listeners run once (army strip refresh).
+			// The army write is the shared Homm3PartyArmyWriter (also used by Conflux Elemental Fusion).
+			if (_partyRegistered)
+			{
+				if (Homm3PartyArmyWriter.TryResolve(_logicHeroType, out var writerFail))
+				{
+					_arrangeRegistered = true;
+					_log?.LogInfo(LogPrefix + "[recruit panel] registered: " + Homm3PartyArmyWriter.Describe() + ".");
+				}
+				else
+				{
+					_log?.LogError(LogPrefix + "[recruit panel] NOT registered (Recruit unavailable on the choice window): " + writerFail);
+				}
+			}
+
+			// Spells: suppress leftover Captives-bank Execute/Ransom rows before the native Necromancer Will toggle sees them.
 			try
 			{
 				var handlerType = ResolveRequiredTypeByHint(hexAssembly, GameSymbols.CastleEliteStrategem.NecromancyWorldMagicHandlerTypeHints, "homm3.dungeon.captives.necromancyHandler");
 				var castMethod = ResolveRequiredNamedMethod(handlerType, typeof(bool), Type.EmptyTypes, GameSymbols.CastleEliteStrategem.NecromancyWorldMagicCast, instance: true);
 				_handlerWorldHeroProperty = ResolveRequiredTypedProperty(handlerType, GameSymbols.CastleEliteStrategem.NecromancyWorldMagicWorldHeroProperty, worldHeroType, "homm3.dungeon.captives.necromancyHandler.worldHero");
 				Patch(harmony, castMethod, nameof(PrefixNecromancyWorldMagicCast), null);
-				_spellsRegistered = true;
-				_log?.LogInfo("HoMM3 Dungeon Captives [spells] registered: Execute/Ransom prefix on " + FormatMethod(castMethod) + ".");
+				_log?.LogInfo(LogPrefix + "[legacy spells] registered: retired Execute/Ransom rows are suppressed on " + FormatMethod(castMethod) + ".");
 			}
 			catch (Exception ex)
 			{
-				_log?.LogError("HoMM3 Dungeon Captives [spells] NOT registered (Execute/Ransom fall through to the native Necromancer Will handler and do nothing): " + ex.GetBaseException().Message);
+				_log?.LogError(LogPrefix + "[legacy spells] NOT registered (a leftover Execute/Ransom spell would reach the native Necromancer Will toggle): " + ex.GetBaseException().Message);
 			}
 
-			// Stage 3 (capture): the escape popup context members, then its own escape click.
-			try
-			{
-				var escapeType = hexAssembly.GetType(GameSymbols.DraconicDominion.SquadEscapeUiTypeName)
-				                 ?? throw new TypeLoadException("Missing " + GameSymbols.DraconicDominion.SquadEscapeUiTypeId + " type " + GameSymbols.DraconicDominion.SquadEscapeUiTypeName);
-				// Declared on the popup itself: live interop also exposes the hidden base BhScreen method with the same name and signature.
-				var escapeClick = ResolveRequiredNamedMethod(escapeType, typeof(void), Type.EmptyTypes, GameSymbols.DraconicDominion.SquadEscapeOnEscapeClick, instance: true, declaredOnType: true);
-				_escapeSquadMember = ResolveRequiredMember(escapeType, GameSymbols.DraconicDominion.SquadEscapeSquadMembers, "homm3.dungeon.captives.escape.squad");
-				_escapeWorldHeroMember = ResolveRequiredMember(escapeType, GameSymbols.DraconicDominion.SquadEscapeLogicHeroMembers, "homm3.dungeon.captives.escape.worldHero");
-				var squadWrapperType = MemberValueType(_escapeSquadMember);
-				var escapeHeroType = MemberValueType(_escapeWorldHeroMember);
-				_squadDataMember = ResolveRequiredTypedMember(squadWrapperType, typeof(DataSquad), GameSymbols.DraconicDominion.SquadWrapperDataSquadMembers, "homm3.dungeon.captives.squadWrapper.dataSquad");
-				if (escapeHeroType != worldHeroType)
-					throw new MissingMemberException("homm3.dungeon.captives escape-popup hero type " + escapeHeroType.FullName + " differs from the world hero type " + worldHeroType.FullName);
-				Patch(harmony, escapeClick, nameof(PrefixEscapeClick), nameof(PostfixEscapeClick));
-				_captureRegistered = true;
-				_log?.LogInfo("HoMM3 Dungeon Captives [capture] registered: " + FormatMethod(escapeClick)
-					+ " (prefix reads, postfix records), squad=" + _escapeSquadMember.Name + "." + _squadDataMember.Name + ", hero=" + _escapeWorldHeroMember.Name + ".");
-			}
-			catch (Exception ex)
-			{
-				_log?.LogError("HoMM3 Dungeon Captives [capture] NOT registered (letting enemies flee banks nothing; flee stays native): " + ex.GetBaseException().Message);
-			}
+			if (Homm3SwashbucklerGoldHook.TryRegisterDayStartHeroConsumer("homm3.dungeon.warCaptives", OnDayStartHero, out var dayStartFailure))
+				_dayStartRegistered = true;
+			else
+				_log?.LogError(LogPrefix + "[day start] NOT registered (no enslaved gold, no legacy bank payout): " + dayStartFailure);
+			if (!Homm3SwashbucklerGoldHook.TryRegisterDayStartHeroForecast("homm3.dungeon.warCaptives", ForecastDayStartHero, out var forecastFailure))
+				_log?.LogWarning(LogPrefix + "[income preview] enslaved gold not shown in the gold tooltip: " + forecastFailure);
 
-			Homm3DungeonCaptivesHud.TryRegister(harmony, log);
 			Homm3DungeonCaptivesBuffTooltip.TryRegister(harmony, log);
+			// The choice window is modal through the Artificing picker's input gates (idempotent registration).
+			Homm3TowerArtificingPickerInputBlock.TryRegister(harmony, hexAssembly, log);
 		}
 
-		var allOk = _registered && _spellsRegistered && _captureRegistered && Homm3DungeonCaptivesHud.IsRegistered && Homm3DungeonCaptivesBuffTooltip.IsRegistered;
-		var summary = "HoMM3 Dungeon Captives registration summary: core=" + Stage(_registered) + " spells=" + Stage(_spellsRegistered)
-			+ " capture=" + Stage(_captureRegistered) + " meter=" + Stage(Homm3DungeonCaptivesHud.IsRegistered)
-			+ " tooltip=" + Stage(Homm3DungeonCaptivesBuffTooltip.IsRegistered) + ". Proof tier: build; runtime unproven.";
-		if (allOk)
+		var summary = LogPrefix + "registration summary: core=" + Stage(_registered) + " party=" + Stage(_partyRegistered)
+			+ " dayStart=" + Stage(_dayStartRegistered) + " tooltip=" + Stage(Homm3DungeonCaptivesBuffTooltip.IsRegistered) + ". Proof tier: build; runtime unproven.";
+		if (_registered && _partyRegistered && _dayStartRegistered && Homm3DungeonCaptivesBuffTooltip.IsRegistered)
 			_log?.LogInfo(summary);
 		else
 			_log?.LogError(summary);
 	}
 
-	private static string Stage(bool ok)
+	private static string Stage(bool ok) => ok ? "ok" : "FAILED";
+
+	// Sides whose hero chose on the captives window this session (only the local human player gets the window):
+	// their day-start enslaved gold is announced on the result banner.
+	private static readonly HashSet<int> LocalSides = new();
+	private static readonly List<string> DayStartLines = new();
+	private static int _dayStartFrame = -1;
+	private static long _dayStartTotal;
+
+	private static void AnnounceDayStart(DataHero dataHero, int enslaved, int daily)
 	{
-		return ok ? "ok" : "FAILED";
+		lock (LocalSides)
+		{
+			if (!LocalSides.Contains(dataHero.sideId))
+				return;
+		}
+		var frame = UnityEngine.Time.frameCount;
+		if (frame != _dayStartFrame)
+		{
+			_dayStartFrame = frame;
+			DayStartLines.Clear();
+		}
+		var name = Homm3HeroDisplayNames.Resolve(dataHero.configSid) ?? dataHero.configSid;
+		_dayStartTotal = (_dayStartFrame == frame && DayStartLines.Count > 0 ? _dayStartTotal : 0) + daily;
+		DayStartLines.Add(name + ": " + enslaved + " enslaved captives, +" + daily.ToString("N0") + " Gold");
+		var header = "War Captives income today: +" + _dayStartTotal.ToString("N0") + " Gold";
+		Homm3DungeonWarCaptivesWindow.ShowBanner(header + "\n" + string.Join("\n", DayStartLines), DayStartLines.Count + 1);
 	}
 
-	// ---------------------------------------------------------------- capture
-
-	private static void PrefixEscapeClick(object __instance, ref CaptureContext __state)
+	/// <summary>
+	/// The window's choice. The window opens after the native battle result has applied, so every choice pays straight
+	/// into the live hero/army: Execute/Ransom/Enslave directly, Eat through the logic party's native AddUnits, Recruit by
+	/// writing the recruit panel's army arrangement (<paramref name="board"/>; null recruits everything that fits).
+	/// </summary>
+	internal static bool Choose(Offer offer, Choice choice, out string failReason, RecruitBoard board = null)
 	{
-		__state = null;
-		try
+		failReason = null;
+		if (offer == null)
 		{
-			var squadWrapper = ReadResolvedMember(__instance, _escapeSquadMember);
-			var squad = ReadResolvedMember(squadWrapper, _squadDataMember) as DataSquad;
-			if (squad == null || !squad.isEscape)
-			{
-				LogEscapeClick("escape click fired; nothing recorded: " + (squad == null ? "popup squad unresolved" : "squad not marked DataSquad.isEscape") + ".");
-				return;
-			}
-			var worldHero = ReadResolvedMember(__instance, _escapeWorldHeroMember);
-			var logicHero = worldHero == null ? null : _worldHeroLogicHeroProperty.GetValue(worldHero);
-			var dataHero = ResolveDataHero(logicHero);
-			if (dataHero == null)
-			{
-				LogEscapeClick("escape click fired; nothing recorded: popup hero unresolved (worldHero " + (worldHero == null ? "null" : "set") + ", logicHero " + (logicHero == null ? "null" : "set") + ").");
-				return;
-			}
-			var rank = Homm3DungeonDraconicDominionHook.ResolveFactionSkillRank(dataHero);
-			if (rank <= 0)
-			{
-				LogEscapeClick("escape click fired; nothing recorded: hero " + DescribeHero(dataHero) + " lacks " + FactionSkillSid + ".");
-				return;
-			}
-			if (!TryComputeSquadStrength(squad, out var strength, out var summary, out var failReason))
-			{
-				LogSkip("capture refused: " + failReason + " (squad " + summary + ").");
-				return;
-			}
-			LogEscapeClick("escape click fired: hero " + DescribeHero(dataHero) + " rank=" + rank + " squad=[" + summary + "] strength=" + strength + "; recording after the native flee.");
-			__state = new CaptureContext
-			{
-				LogicHero = logicHero,
-				DataHero = dataHero,
-				Strength = strength,
-				SquadPointer = (squadWrapper as Il2CppObjectBase)?.Pointer ?? IntPtr.Zero,
-				SquadSummary = summary,
-			};
+			failReason = "no offer";
+			return false;
 		}
-		catch (Exception ex)
+		// The result write-back can replace the Data.Hero behind the logic hero; pay into the live one.
+		var live = ResolveDataHero(offer.LogicHero);
+		if (live != null)
+			offer.DataHero = live;
+		if (!IsChoiceAvailable(offer, choice, out failReason))
+			return false;
+		if (offer.DataHero != null)
+			lock (LocalSides)
+				LocalSides.Add(offer.DataHero.sideId);
+		LogEvent("battle " + offer.BattleKey + ": " + choice + " chosen after the result applied.");
+		switch (choice)
 		{
-			__state = null;
-			LogSkip("capture context read failed; nothing recorded: " + ex.GetBaseException().Message);
+			case Choice.Eat:
+				ApplyEat(offer, (string sid, int count, int slot, out string how) => AddUnitsToParty(offer, sid, count, out how), null);
+				break;
+			case Choice.Recruit:
+				if (board == null)
+				{
+					board = NewRecruitBoard(offer, out var boardFail);
+					if (board == null)
+					{
+						failReason = boardFail;
+						return false;
+					}
+					board.RecruitAll();
+				}
+				if (!ApplyRecruitBoard(offer, board, out failReason))
+					return false;
+				break;
+			default:
+				ApplyDirect(offer, choice);
+				break;
 		}
+		return true;
 	}
 
-	private static void PostfixEscapeClick(CaptureContext __state)
+	/// <summary>Why a choice cannot be taken right now (null when it can); the window greys the row with this text.</summary>
+	internal static bool IsChoiceAvailable(Offer offer, Choice choice, out string reason)
 	{
-		if (__state == null)
+		reason = null;
+		switch (choice)
+		{
+			case Choice.Eat:
+				if (offer.EatCreatures <= 0)
+					reason = "No losses to recover";
+				else if (!offer.ArmyWritable && !_partyRegistered)
+					reason = "Unavailable (see the log)";
+				else if (!offer.ArmyWritable && !PartyFits(offer, offer.Eat))
+					reason = "No free army slot";
+				break;
+			case Choice.Enslave:
+				if (!offer.HasEnslave)
+					reason = "Requires Enslave Captives";
+				break;
+			case Choice.Recruit:
+				if (!offer.HasRecruit)
+					reason = "Requires Recruit Captives";
+				else if (offer.RecruitBlocked != null)
+					reason = offer.RecruitBlocked;
+				else if (offer.RecruitCreatures <= 0)
+					reason = "Too few captives to recruit";
+				else if (offer.ArmyWritable)
+				{
+					if (!PartyFits(offer, offer.Recruit))
+						reason = "No free army slot";
+					else if (!CanAfford(offer, offer.RecruitCost, out var missing))
+						reason = "Not enough " + missing;
+				}
+				else if (!_arrangeRegistered)
+					reason = "Unavailable (see the log)";
+				else if (!AnyRecruitFits(offer))
+					reason = "No free army slot";
+				else if (!CanAffordOne(offer, out var missingOne))
+					reason = "Not enough " + missingOne;
+				break;
+		}
+		return reason == null;
+	}
+
+	// ---------------------------------------------------------------- battle result
+
+	/// <summary>
+	/// Called by Homm3RuntimeMechanicHooks.PrefixBattleResultCleanup before the native result applies (alreadyApplied=false).
+	/// The offer is built here (the result still holds the battle's losses); a local human's window is queued to open once
+	/// the result has been written and the HUD refreshed, the AI picks now.
+	/// </summary>
+	internal static void ObserveBeforeBattleResult(object battleLogic, bool showNotification)
+	{
+		if (!_registered || battleLogic == null)
 			return;
 		try
 		{
-			var now = Time.realtimeSinceStartup;
-			if (__state.SquadPointer != IntPtr.Zero
-			    && __state.SquadPointer == _lastCapturedSquadPointer
-			    && now - _lastCaptureRealtime < CaptureDedupeSeconds)
+			var key = BattleKey(battleLogic);
+			lock (Gate)
 			{
-				LogSkip("capture deduped: same escape squad clicked again within " + CaptureDedupeSeconds + "s.");
+				if (!Resolved.Add(key))
+					return;
+			}
+			if (!TryBuildOffer(battleLogic, out var offer, out var why))
+			{
+				if (why != null)
+					LogEvent("battle " + key + ": no captives offer (" + why + ").");
 				return;
 			}
-			_lastCapturedSquadPointer = __state.SquadPointer;
-			_lastCaptureRealtime = now;
-
-			if (!TryReadState(__state.LogicHero, __state.DataHero, out var before, out var readFail))
+			if (offer.IsLocalHuman)
 			{
-				LogSkip("capture refused: captives state unreadable (" + readFail + ").");
+				offer.ArmyWritable = false;
+				if (!Homm3DungeonWarCaptivesWindow.OpenAfterResult(offer, out var fail))
+				{
+					_log?.LogError(LogPrefix + "choice window could not be queued for battle " + key + " (" + fail + "); paying Ransom.");
+					ApplyDirect(offer, Choice.Ransom);
+				}
+				else
+				{
+					LogEvent("battle " + key + ": choice window queued to open after the result applies. " + DescribeOffer(offer));
+				}
 				return;
 			}
-			var addedUnits = (int)Math.Max(1, Math.Min(MaxStrengthUnits, (__state.Strength + StrengthUnit / 2) / StrengthUnit));
-			var units = (int)Math.Min(MaxStrengthUnits, (long)before.StrengthUnits + addedUnits);
-			var squads = Math.Min(MaxSquads, before.Squads + 1);
-			if (!TryWriteState(__state.LogicHero, __state.DataHero, units, squads, out var after, out var writeFail))
-			{
-				_log?.LogError("HoMM3 Dungeon Captives: capture write incomplete (" + writeFail + "); state may be partial.");
-				return;
-			}
-			var readback = TryReadState(__state.LogicHero, __state.DataHero, out var stored, out var readbackFail)
-				? "readback strength=" + stored.Strength + " squads=" + stored.Squads + " tierBuff=" + stored.Tier
-				: "readback failed (" + readbackFail + ")";
-			if (_loggedCaptures++ < 40)
-				_log?.LogInfo("HoMM3 Dungeon Captives captured: hero=" + DescribeHero(__state.DataHero)
-					+ " squad=[" + __state.SquadSummary + "] strength=+" + __state.Strength
-					+ " banked=" + after.Strength + " squads=" + after.Squads + " tier=" + before.Tier + "->" + after.Tier + "; " + readback + ".");
-			Homm3DungeonCaptivesHud.NotifyStateChanged("capture");
+			offer.ArmyWritable = true;
+			Apply(battleLogic, offer, offer.EatCreatures > 0 ? Choice.Eat : Choice.Ransom);
 		}
 		catch (Exception ex)
 		{
-			_log?.LogError("HoMM3 Dungeon Captives: capture record failed: " + ex.GetBaseException().Message);
+			LogSkip("battle-result captives failed closed: " + ex.GetBaseException().Message);
 		}
 	}
 
-	private static bool TryComputeSquadStrength(DataSquad squad, out long strength, out string summary, out string failReason)
+	/// <summary>AI pick, before the native result applies: Eat writes the winner TransferSide.</summary>
+	private static void Apply(object battleLogic, Offer offer, Choice choice)
 	{
-		strength = 0;
-		failReason = null;
-		var parts = new List<string>();
-		if (squad?.units == null)
+		if (choice == Choice.Eat || choice == Choice.Recruit)
 		{
-			summary = "none";
-			failReason = "fleeing squad has no units";
-			return false;
-		}
-		foreach (var unit in squad.units)
-		{
-			if (unit == null || unit.amount <= 0)
-				continue;
-			var sid = NormalizeSid(ReadMember(unit, GameSymbols.DraconicDominion.DataSquadUnitSidMembers) as string);
-			parts.Add((sid ?? "?") + ":" + unit.amount);
-			var config = Homm3DungeonDraconicDominionHook.ResolveUnitLogicConfigBySid(sid);
-			if (config == null)
+			var transfer = ReadMember(battleLogic, GameSymbols.SkeletalNecromancy.BattleLogicTransferBattleFields) as TransferBattle;
+			var result = ReadMember(battleLogic, GameSymbols.SkeletalNecromancy.BattleLogicBattleResultInfoFields) as BattleResultInfo;
+			var winner = transfer?.sides != null && result != null && result.winnerIndex >= 0 && result.winnerIndex < transfer.sides.Length
+				? transfer.sides[result.winnerIndex]
+				: null;
+			if (winner == null)
 			{
-				summary = string.Join(",", parts);
-				failReason = "UnitLogicConfig missing for " + (sid ?? "null");
-				return false;
+				_log?.LogError(LogPrefix + "battle " + offer.BattleKey + ": winner TransferSide unreadable; " + choice + " replaced by Ransom.");
+				ApplyDirect(offer, Choice.Ransom);
+				return;
 			}
-			strength += (long)Math.Max(0, config.squadValue) * unit.amount;
+			UnitAdder add = (string sid, int count, int slot, out string how) => AddUnits(winner, sid, count, slot, out how);
+			Action done = () => _transferSideSortBySlot.Invoke(winner, Array.Empty<object>());
+			if (choice == Choice.Eat)
+				ApplyEat(offer, add, done);
+			else
+				ApplyRecruit(offer, add, done);
+			return;
 		}
-		summary = parts.Count == 0 ? "none" : string.Join(",", parts);
-		if (strength <= 0)
-		{
-			failReason = "fleeing squad strength is 0";
-			return false;
-		}
-		return true;
+		ApplyDirect(offer, choice);
 	}
 
-	// ---------------------------------------------------------------- spells
+	private delegate bool UnitAdder(string sid, int count, int preferredSlot, out string how);
 
-	private static bool PrefixNecromancyWorldMagicCast(object __instance, ref bool __result)
+	/// <summary>Live army of the offer's hero after the result: Data.Hero.party.units as (sid, stacks).</summary>
+	private static List<(string Sid, int Stacks)> ReadParty(Offer offer)
 	{
-		var recognized = false;
+		var list = new List<(string, int)>();
+		var units = offer.DataHero?.party?.units;
+		if (units == null)
+			return list;
+		for (var i = 0; i < units.Count; i++)
+		{
+			var unit = units[i];
+			if (unit == null)
+				continue;
+			list.Add((NormalizeSid(ReadMember(unit, GameSymbols.AdventureAiDecision.DataUnitSidFieldHints) as string), unit.stacks));
+		}
+		return list;
+	}
+
+	/// <summary>Native AddUnits merges into a same-sid stack, else takes a free slot (7 max); every new sid needs one.</summary>
+	private static bool PartyFits(Offer offer, List<UnitLine> lines)
+	{
 		try
 		{
-			var setting = ReadMember(__instance, GameSymbols.CastleEliteStrategem.NecromancyWorldMagicSettingMembers) as MagicSetting;
-			if (!TryReadCaptivesSpell(setting, out var mode, out var level, out var malformed))
+			var party = ReadParty(offer);
+			var present = new HashSet<string>(StringComparer.Ordinal);
+			foreach (var (sid, _) in party)
 			{
-				if (malformed != null)
-				{
-					__result = false;
-					_log?.LogError("HoMM3 Dungeon Captives spell refused: malformed Captives magic setting (" + malformed + "); native handler suppressed.");
-					return false;
-				}
-				if (setting != null && string.Equals(setting.mechType, NativeNecromancyMechType, StringComparison.Ordinal) && _loggedForeignCasts++ < 8)
-					_log?.LogInfo("HoMM3 Dungeon Captives spell hook: non-Captives Necromancer Will setting passed through (params=[" + string.Join(",", ReadParameters(setting.parameters)) + "]).");
-				return true;
+				if (sid != null)
+					present.Add(sid);
 			}
-			recognized = true;
-			__result = false;
-
-			var worldHero = _handlerWorldHeroProperty.DeclaringType.IsInstanceOfType(__instance) ? _handlerWorldHeroProperty.GetValue(__instance) : null;
-			var logicHero = worldHero == null ? null : _worldHeroLogicHeroProperty.GetValue(worldHero);
-			var dataHero = ResolveDataHero(logicHero);
-			var title = string.Equals(mode, ExecuteMode, StringComparison.Ordinal) ? "Execute" : "Ransom";
-			if (dataHero == null)
+			var free = 7 - party.Count;
+			foreach (var line in lines)
 			{
-				_log?.LogError("HoMM3 Dungeon Captives " + title + " refused: casting hero unresolved (worldHero " + (worldHero == null ? "null" : "set")
-					+ ", logicHero " + (logicHero == null ? "null" : "set") + ", handler " + (__instance?.GetType().FullName ?? "null") + ").");
-				return false;
+				if (line.Count > 0 && present.Add(line.Sid))
+					free--;
 			}
-			if (!TryReadState(logicHero, dataHero, out var state, out var readFail))
-			{
-				_log?.LogError("HoMM3 Dungeon Captives " + title + " refused: captives state unreadable (" + readFail + ").");
-				return false;
-			}
-			if (_loggedCasts++ < 40)
-				_log?.LogInfo("HoMM3 Dungeon Captives spell cast: " + title + " level=" + level + " hero=" + DescribeHero(dataHero)
-					+ " held strength=" + state.Strength + " squads=" + state.Squads + " tierBuff=" + state.Tier + ".");
-			if (state.IsEmpty)
-			{
-				_log?.LogInfo("HoMM3 Dungeon Captives " + title + " refused: hero " + DescribeHero(dataHero) + " holds no captives.");
-				return false;
-			}
-
-			var strength = state.Strength;
-			if (string.Equals(mode, ExecuteMode, StringComparison.Ordinal))
-			{
-				var xp = ComputeExecuteXp(strength, level);
-				var mana = HasSubSkill(dataHero, InterrogationSubSkillSid) ? ComputeInterrogationMana(xp) : 0;
-				var expComponent = _expComponentProperty.GetValue(logicHero);
-				if (expComponent == null)
-				{
-					_log?.LogError("HoMM3 Dungeon Captives Execute refused: native exp component missing; captives kept.");
-					return false;
-				}
-				if (!TryWriteState(logicHero, dataHero, 0, 0, out _, out var clearFail))
-				{
-					_log?.LogError("HoMM3 Dungeon Captives Execute refused: clearing captives failed (" + clearFail + "); no XP granted.");
-					return false;
-				}
-				var levelBefore = dataHero.currentLevel;
-				var expBefore = dataHero.currentExp;
-				var manaBefore = dataHero.mana;
-				_expAddMethod.Invoke(expComponent, new object[] { xp, true });
-				if (mana > 0)
-					dataHero.mana += mana;
-				__result = true;
-				_log?.LogInfo("HoMM3 Dungeon Captives Execute payout: hero=" + DescribeHero(dataHero) + " level=" + level + " strength=" + strength
-					+ " squads=" + state.Squads + " xp=+" + xp + " (native AddExp, exp bonus applies) exp " + expBefore + "->" + dataHero.currentExp
-					+ " heroLevel " + levelBefore + "->" + dataHero.currentLevel + " interrogationMana=+" + mana + " mana " + manaBefore + "->" + dataHero.mana
-					+ "; captives emptied, tier buff removed.");
-				Homm3DungeonCaptivesHud.NotifyStateChanged("execute");
-				return false;
-			}
-
-			var gold = ComputeRansomGold(strength, level, HasSubSkill(dataHero, SlaveMarketsSubSkillSid));
-			if (!Homm3CustomFactionLawRuntime.TryResolveDataSideFromLogicHeroExplained(logicHero, out var dataSide, out var sideFail))
-			{
-				_log?.LogError("HoMM3 Dungeon Captives Ransom refused: hero side unresolved (" + sideFail + "); captives kept.");
-				return false;
-			}
-			if (!Homm3RewardEconomyNativeAdapter.TryResolveGoldResourceFromSide(dataSide, out var goldResource, out var goldBefore, out var goldFail))
-			{
-				_log?.LogError("HoMM3 Dungeon Captives Ransom refused: gold resource unresolved (" + goldFail + "); captives kept.");
-				return false;
-			}
-			if (!TryWriteState(logicHero, dataHero, 0, 0, out _, out var ransomClearFail))
-			{
-				_log?.LogError("HoMM3 Dungeon Captives Ransom refused: clearing captives failed (" + ransomClearFail + "); no gold granted.");
-				return false;
-			}
-			if (!Homm3RewardEconomyNativeAdapter.TryAddResourceValue(goldResource, gold, out var addFail))
-			{
-				_log?.LogError("HoMM3 Dungeon Captives Ransom: captives emptied but gold add failed (" + addFail + ").");
-				return false;
-			}
-			__result = true;
-			_log?.LogInfo("HoMM3 Dungeon Captives Ransom payout: hero=" + DescribeHero(dataHero) + " level=" + level + " strength=" + strength
-					+ " squads=" + state.Squads + " gold=+" + gold + " (before " + goldBefore.Value + ")"
-					+ (HasSubSkill(dataHero, SlaveMarketsSubSkillSid) ? " slaveMarkets=x1.25" : "") + "; captives emptied, tier buff removed.");
-			Homm3DungeonCaptivesHud.NotifyStateChanged("ransom");
-			return false;
+			return free >= 0;
 		}
 		catch (Exception ex)
 		{
-			if (recognized)
+			LogSkip("army slot check failed: " + ex.GetBaseException().Message);
+			return false;
+		}
+	}
+
+	private static int PartyStacksOf(Offer offer, string sid)
+	{
+		var total = 0;
+		foreach (var (s, n) in ReadParty(offer))
+		{
+			if (string.Equals(s, sid, StringComparison.Ordinal))
+				total += n;
+		}
+		return total;
+	}
+
+	private static bool AddUnitsToParty(Offer offer, string sid, int count, out string how)
+	{
+		how = null;
+		try
+		{
+			var party = _logicHeroPartyProperty.GetValue(offer.LogicHero);
+			if (party == null)
 			{
-				__result = false;
-				_log?.LogError("HoMM3 Dungeon Captives spell failed closed; native handler suppressed: " + ex.GetBaseException().Message);
+				how = ":no-party";
 				return false;
 			}
-			LogSkip("spell inspection failed; native handler remains responsible: " + ex.GetBaseException().Message);
+			var before = PartyStacksOf(offer, sid);
+			_partyAddUnitsMethod.Invoke(party, new object[] { sid, count, EListenerCallbackCall.RealAndPrediction });
+			var after = PartyStacksOf(offer, sid);
+			how = "(" + before + "->" + after + ")";
+			return after - before == count;
+		}
+		catch (Exception ex)
+		{
+			how = ":" + ex.GetBaseException().Message;
+			return false;
+		}
+	}
+
+	/// <summary>Execute / Ransom / Enslave pay without touching the battle result.</summary>
+	private static void ApplyDirect(Offer offer, Choice choice)
+	{
+		try
+		{
+			switch (choice)
+			{
+				case Choice.Execute:
+					PayExecute(offer);
+					break;
+				case Choice.Enslave:
+					PayEnslave(offer);
+					break;
+				default:
+					if (choice != Choice.Ransom)
+						_log?.LogWarning(LogPrefix + "battle " + offer.BattleKey + ": " + choice + " cannot apply after the result; paying Ransom.");
+					PayRansom(offer);
+					break;
+			}
+		}
+		catch (Exception ex)
+		{
+			_log?.LogError(LogPrefix + "battle " + offer.BattleKey + " " + choice + " payout failed: " + ex.GetBaseException().Message);
+		}
+	}
+
+	/// <summary>Player-facing result of the last applied choice (the window shows it as a fading banner).</summary>
+	// Set by the payout itself, which runs when the native battle apply resumes (after the window closed), so the
+	// result banner is shown from here rather than from the window's Finish.
+	private static string _lastOutcome;
+	internal static string LastOutcome
+	{
+		get => _lastOutcome;
+		set
+		{
+			_lastOutcome = value;
+			if (string.IsNullOrEmpty(value))
+				return;
+			try
+			{
+				Homm3DungeonWarCaptivesWindow.ShowBanner(value);
+			}
+			catch (Exception ex)
+			{
+				LogSkip("result banner failed: " + ex.GetBaseException().Message);
+			}
+		}
+	}
+
+	private static void PayExecute(Offer offer)
+	{
+		var expComponent = _expComponentProperty.GetValue(offer.LogicHero);
+		if (expComponent == null)
+		{
+			_log?.LogError(LogPrefix + "Execute: native exp component missing on " + DescribeHero(offer.DataHero) + "; no XP.");
+			return;
+		}
+		var levelBefore = offer.DataHero.currentLevel;
+		var expBefore = offer.DataHero.currentExp;
+		_expAddMethod.Invoke(expComponent, new object[] { offer.ExecuteXp, true });
+		if (offer.ExecuteMana > 0)
+			offer.DataHero.mana += offer.ExecuteMana;
+		LogEvent("Execute: " + DescribeHero(offer.DataHero) + " captives=" + offer.Captives + " xp=+" + offer.ExecuteXp + " (exp " + expBefore + "->" + offer.DataHero.currentExp
+			+ ", level " + levelBefore + "->" + offer.DataHero.currentLevel + ") mana=+" + offer.ExecuteMana + ".");
+		var levelAfter = offer.DataHero.currentLevel;
+		LastOutcome = "Executed " + offer.Captives + " captives: +" + offer.ExecuteXp.ToString("N0") + " Experience"
+			+ (levelAfter > levelBefore ? " (level " + levelBefore + " → " + levelAfter + ")" : "")
+			+ (offer.ExecuteMana > 0 ? ", +" + offer.ExecuteMana + " Mana" : "") + ".";
+	}
+
+	private static void PayRansom(Offer offer)
+	{
+		if (!TryAddGold(offer.LogicHero, offer.RansomGold, out var before, out var fail))
+		{
+			_log?.LogError(LogPrefix + "Ransom: " + fail + " (" + DescribeHero(offer.DataHero) + ", gold +" + offer.RansomGold + " not paid).");
+			return;
+		}
+		LogEvent("Ransom: " + DescribeHero(offer.DataHero) + " captives=" + offer.Captives + " gold=+" + offer.RansomGold + " (before " + before + ")"
+			+ (offer.SlaveMarkets ? " slaveMarkets x1.25" : "") + ".");
+		LastOutcome = "Ransomed " + offer.Captives + " captives: +" + offer.RansomGold.ToString("N0") + " Gold.";
+	}
+
+	private static void PayEnslave(Offer offer)
+	{
+		if (!TryReadEnslaved(offer.LogicHero, out var before, out var readFail))
+		{
+			_log?.LogError(LogPrefix + "Enslave: enslaved count unreadable (" + readFail + "); paying Ransom instead.");
+			PayRansom(offer);
+			return;
+		}
+		var after = (int)Math.Min(MaxEnslaved, (long)before + offer.Captives);
+		if (!TryWriteEnslaved(offer.LogicHero, after, out var writeFail))
+		{
+			_log?.LogError(LogPrefix + "Enslave: write incomplete (" + writeFail + "); enslaved count may be partial.");
+			return;
+		}
+		LogEvent("Enslave: " + DescribeHero(offer.DataHero) + " captives=" + offer.Captives + " enslaved " + before + "->" + after
+			+ " daily gold now " + ComputeEnslaveDailyGold(after, offer.Rank, offer.SlaveMarkets) + ".");
+		LastOutcome = "Enslaved " + offer.Captives + " captives (" + after + " in total): +" + ComputeEnslaveDailyGold(after, offer.Rank, offer.SlaveMarkets).ToString("N0") + " Gold per day.";
+	}
+
+	// ---------------------------------------------------------------- recruit panel board
+
+	/// <summary>
+	/// The recruit panel's two rows, as in the native diplomacy join panel: the hero's army (top, 7 slots by slotPos) and
+	/// the captives willing to join (bottom). Stacks move freely, merge on the same sid and split into empty slots; as in the
+	/// native panel the hero's own troops may be moved down and released too, the one rule being that the army keeps at
+	/// least one stack. Whatever stays in the bottom row leaves: captives are not recruited, own troops are dismissed.
+	/// </summary>
+	internal sealed class RecruitBoard
+	{
+		internal const string ArmyNeedsAStack = "Your hero must keep at least one stack.";
+		internal readonly string[] TopSid = new string[MaxArmySlots];
+		internal readonly int[] TopCount = new int[MaxArmySlots];
+		internal readonly string[] BottomSid = new string[MaxArmySlots];
+		internal readonly int[] BottomCount = new int[MaxArmySlots];
+		internal readonly Dictionary<string, int> Own = new(StringComparer.Ordinal);
+		internal readonly Dictionary<string, int> Captives = new(StringComparer.Ordinal);
+		internal readonly Dictionary<string, List<(string Name, int Cost)>> UnitCosts = new(StringComparer.Ordinal);
+
+		internal string Sid(bool top, int i) => top ? TopSid[i] : BottomSid[i];
+		internal int Count(bool top, int i) => top ? TopCount[i] : BottomCount[i];
+
+		private void Set(bool top, int i, string sid, int count)
+		{
+			if (count <= 0 || sid == null)
+			{
+				sid = null;
+				count = 0;
+			}
+			if (top)
+			{
+				TopSid[i] = sid;
+				TopCount[i] = count;
+			}
+			else
+			{
+				BottomSid[i] = sid;
+				BottomCount[i] = count;
+			}
+		}
+
+		internal int Total(bool top, string sid)
+		{
+			var total = 0;
+			for (var i = 0; i < MaxArmySlots; i++)
+			{
+				if (string.Equals(Sid(top, i), sid, StringComparison.Ordinal))
+					total += Count(top, i);
+			}
+			return total;
+		}
+
+		/// <summary>Captives of the sid that end up in the army (top total above the hero's own count).</summary>
+		internal int Recruited(string sid)
+		{
+			Own.TryGetValue(sid, out var own);
+			return Math.Max(0, Total(true, sid) - own);
+		}
+
+		internal int RecruitedTotal()
+		{
+			var total = 0;
+			foreach (var sid in Captives.Keys)
+				total += Recruited(sid);
+			return total;
+		}
+
+		/// <summary>The hero's own creatures of the sid that end up below (released): own count above the army total.</summary>
+		internal int Released(string sid)
+		{
+			Own.TryGetValue(sid, out var own);
+			return Math.Max(0, own - Total(true, sid));
+		}
+
+		internal int ReleasedTotal()
+		{
+			var total = 0;
+			foreach (var sid in Own.Keys)
+				total += Released(sid);
+			return total;
+		}
+
+		/// <summary>True when confirming would change the army (something recruited or released).</summary>
+		internal bool Changed => RecruitedTotal() > 0 || ReleasedTotal() > 0;
+
+		private bool Valid()
+		{
+			for (var i = 0; i < MaxArmySlots; i++)
+			{
+				if (TopSid[i] != null)
+					return true;
+			}
+			return false;
+		}
+
+		internal int FirstFree(bool top)
+		{
+			for (var i = 0; i < MaxArmySlots; i++)
+			{
+				if (Sid(top, i) == null)
+					return i;
+			}
+			return -1;
+		}
+
+		private int FirstOf(bool top, string sid, int except)
+		{
+			for (var i = 0; i < MaxArmySlots; i++)
+			{
+				if (i != except && string.Equals(Sid(top, i), sid, StringComparison.Ordinal))
+					return i;
+			}
+			return -1;
+		}
+
+		/// <summary>
+		/// Moves <paramref name="amount"/> creatures (all when &lt;= 0) from one slot to another: into an empty slot, onto the same
+		/// sid (merge), or a whole-stack swap with another sid. Returns null on success, "" for a no-op, else why it was refused
+		/// (the board is unchanged).
+		/// </summary>
+		internal string Move(bool fromTop, int from, bool toTop, int to, int amount = 0)
+		{
+			if (from < 0 || to < 0 || from >= MaxArmySlots || to >= MaxArmySlots || (fromTop == toTop && from == to))
+				return "";
+			var sid = Sid(fromTop, from);
+			var count = Count(fromTop, from);
+			if (sid == null)
+				return "";
+			if (amount <= 0 || amount > count)
+				amount = count;
+			var snapshot = Snapshot();
+			var targetSid = Sid(toTop, to);
+			var targetCount = Count(toTop, to);
+			if (targetSid == null)
+			{
+				Set(toTop, to, sid, amount);
+				Set(fromTop, from, sid, count - amount);
+			}
+			else if (string.Equals(targetSid, sid, StringComparison.Ordinal))
+			{
+				Set(toTop, to, sid, targetCount + amount);
+				Set(fromTop, from, sid, count - amount);
+			}
+			else
+			{
+				if (amount < count)
+					return "Split into an empty slot.";
+				Set(toTop, to, sid, count);
+				Set(fromTop, from, targetSid, targetCount);
+			}
+			if (Valid())
+				return null;
+			Restore(snapshot);
+			return ArmyNeedsAStack;
+		}
+
+		/// <summary>Sends a stack to the other row (onto its sid, else the first empty slot).</summary>
+		internal string MoveToOtherRow(bool top, int i)
+		{
+			var sid = Sid(top, i);
+			if (sid == null)
+				return "";
+			var target = FirstOf(!top, sid, -1);
+			if (target < 0)
+				target = FirstFree(!top);
+			if (target < 0)
+				return top ? "No free slot among the captives." : "No free army slot.";
+			return Move(top, i, !top, target);
+		}
+
+		/// <summary>Splits <paramref name="amount"/> creatures off into the row's first empty slot.</summary>
+		internal string Split(bool top, int i, int amount)
+		{
+			if (Sid(top, i) == null || Count(top, i) < 2)
+				return "";
+			var free = FirstFree(top);
+			if (free < 0)
+				return "No empty slot to split into.";
+			return Move(top, i, top, free, Math.Max(1, Math.Min(amount, Count(top, i) - 1)));
+		}
+
+		/// <summary>Gathers every stack of the slot's sid in the same row into this slot.</summary>
+		internal string Gather(bool top, int i)
+		{
+			var sid = Sid(top, i);
+			if (sid == null)
+				return "";
+			for (var j = 0; j < MaxArmySlots; j++)
+			{
+				if (j != i && string.Equals(Sid(top, j), sid, StringComparison.Ordinal))
+					Move(top, j, top, i);
+			}
+			return null;
+		}
+
+		/// <summary>Native "Add all Army": every captive stack moves up as far as the army has room.</summary>
+		internal void RecruitAll()
+		{
+			for (var i = 0; i < MaxArmySlots; i++)
+			{
+				if (BottomSid[i] != null)
+					MoveToOtherRow(false, i);
+			}
+		}
+
+		internal SortedDictionary<string, int> Cost()
+		{
+			var total = new SortedDictionary<string, int>(StringComparer.Ordinal);
+			foreach (var pair in UnitCosts)
+			{
+				var recruited = Recruited(pair.Key);
+				if (recruited <= 0)
+					continue;
+				foreach (var (name, cost) in pair.Value)
+				{
+					total.TryGetValue(name, out var have);
+					total[name] = (int)Math.Min(int.MaxValue, have + (long)cost * recruited);
+				}
+			}
+			return total;
+		}
+
+		private (string[] TopSid, int[] TopCount, string[] BottomSid, int[] BottomCount) Snapshot()
+		{
+			return ((string[])TopSid.Clone(), (int[])TopCount.Clone(), (string[])BottomSid.Clone(), (int[])BottomCount.Clone());
+		}
+
+		private void Restore((string[] TopSid, int[] TopCount, string[] BottomSid, int[] BottomCount) s)
+		{
+			Array.Copy(s.TopSid, TopSid, MaxArmySlots);
+			Array.Copy(s.TopCount, TopCount, MaxArmySlots);
+			Array.Copy(s.BottomSid, BottomSid, MaxArmySlots);
+			Array.Copy(s.BottomCount, BottomCount, MaxArmySlots);
+		}
+	}
+
+	/// <summary>The live army (top, by slotPos) and the offered captives (bottom), or null with the reason.</summary>
+	internal static RecruitBoard NewRecruitBoard(Offer offer, out string failReason)
+	{
+		if (!Homm3PartyArmyWriter.TryReadArmy(offer.LogicHero, offer.DataHero, out var slotSid, out var slotCount, out var totals, out failReason))
+			return null;
+		var board = new RecruitBoard();
+		Array.Copy(slotSid, board.TopSid, MaxArmySlots);
+		Array.Copy(slotCount, board.TopCount, MaxArmySlots);
+		foreach (var pair in totals)
+			board.Own[pair.Key] = pair.Value;
+		var slot = 0;
+		foreach (var line in offer.Recruit)
+		{
+			if (line.Count <= 0 || slot >= MaxArmySlots)
+				continue;
+			board.BottomSid[slot] = line.Sid;
+			board.BottomCount[slot] = line.Count;
+			slot++;
+			board.Captives.TryGetValue(line.Sid, out var have);
+			board.Captives[line.Sid] = have + line.Count;
+			board.UnitCosts[line.Sid] = line.Cost;
+		}
+		return board;
+	}
+
+	/// <summary>True when at least one offered captive can join: its sid is already in the army or a slot is free.</summary>
+	private static bool AnyRecruitFits(Offer offer)
+	{
+		var board = NewRecruitBoard(offer, out _);
+		if (board == null)
+			return false;
+		if (board.FirstFree(true) >= 0)
+			return true;
+		foreach (var sid in board.Captives.Keys)
+		{
+			if (board.Own.ContainsKey(sid))
+				return true;
+		}
+		return false;
+	}
+
+	/// <summary>True when the side can pay for one creature of at least one offered type.</summary>
+	private static bool CanAffordOne(Offer offer, out string missing)
+	{
+		missing = null;
+		foreach (var line in offer.Recruit)
+		{
+			var one = new Dictionary<string, int>(StringComparer.Ordinal);
+			foreach (var (name, cost) in line.Cost)
+				one[name] = cost;
+			if (CanAfford(offer, one, out var shortOne))
+				return true;
+			missing ??= shortOne;
+		}
+		return false;
+	}
+
+	/// <summary>
+	/// Writes the recruit panel's army row to the live party and charges the recruited captives: existing Data.Units of a
+	/// sid are reused (slotPos and stacks rewritten; a merged-away stack is removed from the list), new stacks go through
+	/// the native AddUnitAtSlot, then the party listeners run once. Charges only after the army reads back as arranged.
+	/// Returns false (nothing changed) when the arrangement cannot be paid or the army changed under the panel.
+	/// </summary>
+	private static bool ApplyRecruitBoard(Offer offer, RecruitBoard board, out string failReason)
+	{
+		failReason = null;
+		if (!_arrangeRegistered)
+		{
+			failReason = "recruit panel calls unresolved";
+			return false;
+		}
+		if (!board.Changed)
+		{
+			failReason = "the army was not changed";
+			return false;
+		}
+		var cost = board.Cost();
+		if (!CanAfford(offer, cost, out var missing))
+		{
+			failReason = "not enough " + missing;
+			return false;
+		}
+		if (!TryResolveHeroSide(offer.LogicHero, out var dataSide, out var sideFail))
+		{
+			failReason = "hero side unresolved (" + sideFail + ")";
+			return false;
+		}
+		var steps = new List<string>();
+		switch (Homm3PartyArmyWriter.Write(offer.LogicHero, offer.DataHero, board.TopSid, board.TopCount, board.Own, steps, out var writeFail))
+		{
+			case Homm3PartyArmyWriter.WriteResult.Refused:
+				failReason = writeFail;
+				return false;
+			case Homm3PartyArmyWriter.WriteResult.WriteFailed:
+				_log?.LogError(LogPrefix + "Recruit: army write failed after [" + string.Join(", ", steps) + "]: " + writeFail + "; nothing charged.");
+				LastOutcome = "Recruit failed while arranging the army (see the log).";
+				return true;
+			case Homm3PartyArmyWriter.WriteResult.ReadBackMismatch:
+				_log?.LogError(LogPrefix + "Recruit: army reads back differently [" + writeFail + "] after [" + string.Join(", ", steps) + "]; nothing charged.");
+				LastOutcome = "Recruit: the army did not update as arranged (see the log).";
+				return true;
+		}
+		foreach (var pair in cost)
+		{
+			if (pair.Value <= 0)
+				continue;
+			if (!Homm3RewardEconomyNativeAdapter.TryResolveResourceFromSide(dataSide, pair.Key, out var resource, out _, out var spendFail)
+				|| !Homm3RewardEconomyNativeAdapter.TryAddResourceValue(resource, -pair.Value, out spendFail))
+				_log?.LogError(LogPrefix + "Recruit: spending " + pair.Value + " " + pair.Key + " failed (" + spendFail + ").");
+		}
+		var parts = new List<string>();
+		foreach (var sid in board.Captives.Keys)
+		{
+			var recruited = board.Recruited(sid);
+			if (recruited > 0)
+				parts.Add((Homm3UnitDisplayNames.Resolve(sid) ?? sid) + " x" + recruited);
+		}
+		var released = new List<string>();
+		foreach (var sid in board.Own.Keys)
+		{
+			var gone = board.Released(sid);
+			if (gone > 0)
+				released.Add((Homm3UnitDisplayNames.Resolve(sid) ?? sid) + " x" + gone);
+		}
+		LogEvent("Recruit: " + DescribeHero(offer.DataHero) + " captives=" + offer.Captives + " recruited [" + string.Join(", ", parts) + "] for "
+			+ FormatCost(cost) + ", released own [" + string.Join(", ", released) + "]; army [" + string.Join(", ", steps) + "].");
+		var outcome = new List<string>();
+		if (parts.Count > 0)
+			outcome.Add("Recruited " + string.Join(", ", parts) + " for " + FormatCost(cost));
+		if (released.Count > 0)
+			outcome.Add((parts.Count > 0 ? "released " : "Released ") + string.Join(", ", released));
+		LastOutcome = string.Join("; ", outcome) + ".";
+		return true;
+	}
+
+	private static void ApplyEat(Offer offer, UnitAdder add, Action done)
+	{
+		var parts = new List<string>();
+		foreach (var line in offer.Eat)
+		{
+			if (line.Count <= 0)
+				continue;
+			if (add(line.Sid, line.Count, line.SlotPos, out var how))
+				parts.Add(line.Sid + "+" + line.Count + how);
+			else
+				parts.Add(line.Sid + "+" + line.Count + ":FAILED" + how);
+		}
+		done?.Invoke();
+		LogEvent("Eat: " + DescribeHero(offer.DataHero) + " captives=" + offer.Captives + " restored [" + string.Join(",", parts) + "].");
+		LastOutcome = "Ate " + offer.Captives + " captives: restored " + DescribeLines(offer.Eat) + ".";
+	}
+
+	private static void ApplyRecruit(Offer offer, UnitAdder add, Action done)
+	{
+		if (!TryResolveHeroSide(offer.LogicHero, out var dataSide, out var sideFail))
+		{
+			_log?.LogError(LogPrefix + "Recruit: hero side unresolved (" + sideFail + "); paying Ransom.");
+			PayRansom(offer);
+			return;
+		}
+		var resources = new List<(string Name, object Resource, int Cost)>();
+		foreach (var cost in offer.RecruitCost)
+		{
+			if (cost.Value <= 0)
+				continue;
+			if (!Homm3RewardEconomyNativeAdapter.TryResolveResourceFromSide(dataSide, cost.Key, out var resource, out var info, out var fail) || info.Value < cost.Value)
+			{
+				_log?.LogWarning(LogPrefix + "Recruit: " + cost.Key + " " + (fail ?? info.Value + " < " + cost.Value) + "; paying Ransom instead.");
+				PayRansom(offer);
+				return;
+			}
+			resources.Add((cost.Key, resource, cost.Value));
+		}
+		foreach (var (name, resource, value) in resources)
+		{
+			if (!Homm3RewardEconomyNativeAdapter.TryAddResourceValue(resource, -value, out var spendFail))
+				_log?.LogError(LogPrefix + "Recruit: spending " + value + " " + name + " failed (" + spendFail + ").");
+		}
+		var parts = new List<string>();
+		foreach (var line in offer.Recruit)
+		{
+			if (line.Count <= 0)
+				continue;
+			parts.Add(line.Sid + "+" + line.Count + (add(line.Sid, line.Count, -1, out var how) ? how : ":FAILED" + how));
+		}
+		done?.Invoke();
+		LogEvent("Recruit: " + DescribeHero(offer.DataHero) + " captives=" + offer.Captives + " recruited [" + string.Join(",", parts) + "] for " + FormatCost(offer.RecruitCost) + ".");
+		LastOutcome = "Recruited " + DescribeLines(offer.Recruit) + " for " + FormatCost(offer.RecruitCost) + ".";
+	}
+
+	private static string DescribeLines(List<UnitLine> lines)
+	{
+		var parts = new List<string>();
+		foreach (var line in lines)
+		{
+			if (line.Count > 0)
+				parts.Add((Homm3UnitDisplayNames.Resolve(line.Sid) ?? line.Sid) + " x" + line.Count);
+		}
+		return parts.Count == 0 ? "nothing" : string.Join(", ", parts);
+	}
+
+	/// <summary>Merges into a living stack of the sid (the given slot first), else adds a new stack the way Skeletal Necromancy does.</summary>
+	private static bool AddUnits(TransferSide side, string sid, int count, int preferredSlot, out string how)
+	{
+		how = null;
+		TransferUnit target = null;
+		if (side.units != null)
+		{
+			foreach (var unit in side.units)
+			{
+				if (unit == null || !string.Equals(NormalizeSid(unit.configSid), sid, StringComparison.Ordinal))
+					continue;
+				if (preferredSlot >= 0 && unit.slotPos == preferredSlot)
+				{
+					target = unit;
+					break;
+				}
+				if (target == null && unit.stacks > 0)
+					target = unit;
+			}
+		}
+		if (target != null)
+		{
+			var before = target.stacks;
+			target.stacks = Math.Max(0, before) + count;
+			how = "@slot" + target.slotPos + "(" + before + "->" + target.stacks + ")";
 			return true;
 		}
-	}
-
-	/// <summary>True for a well-formed Captives setting; <paramref name="malformed"/> is set when the first parameter
-	/// names a Captives mode but the row is unusable (so the native Necromancer Will handler must not run it either).</summary>
-	private static bool TryReadCaptivesSpell(MagicSetting setting, out string mode, out int level, out string malformed)
-	{
-		mode = null;
-		level = 0;
-		malformed = null;
-		if (setting == null || !string.Equals(setting.mechType, NativeNecromancyMechType, StringComparison.Ordinal))
-			return false;
-		var parameters = ReadParameters(setting.parameters);
-		if (parameters.Count < 1)
-			return false;
-		if (!string.Equals(parameters[0], ExecuteMode, StringComparison.Ordinal) && !string.Equals(parameters[0], RansomMode, StringComparison.Ordinal))
-			return false;
-		if (parameters.Count < 2 || !int.TryParse(parameters[1], out level) || level < 1 || level > 3)
-		{
-			level = 0;
-			malformed = "params=[" + string.Join(",", parameters) + "], expected [mode, 1..3]";
-			return false;
-		}
-		mode = parameters[0];
+		_transferSideAddSpawnedUnit.Invoke(side, new object[] { new TransferUnit(sid, count, 0), true });
+		how = ":new";
 		return true;
 	}
 
-	internal static int ComputeExecuteXp(long strength, int level)
-	{
-		var index = Math.Max(1, Math.Min(3, level)) - 1;
-		return (int)Math.Min(int.MaxValue, Math.Round(strength * ExecuteXpPerStrength[index]));
-	}
+	// ---------------------------------------------------------------- offer
 
-	internal static int ComputeInterrogationMana(int xp)
+	internal static bool TryBuildOffer(object battleLogic, out Offer offer, out string why)
 	{
-		return (int)Math.Round(xp * InterrogationManaPerXp);
-	}
-
-	internal static int ComputeRansomGold(long strength, int level, bool slaveMarkets)
-	{
-		var index = Math.Max(1, Math.Min(3, level)) - 1;
-		var gold = strength * RansomGoldPerStrength[index] * (slaveMarkets ? SlaveMarketsGoldMultiplier : 1.0);
-		return (int)Math.Min(int.MaxValue, Math.Round(gold));
-	}
-
-	internal static int ComputeTier(long strength, bool dungeonCells)
-	{
-		var effective = strength * (dungeonCells ? DungeonCellsTierStrengthMultiplier : 1.0);
-		var tier = 0;
-		for (var i = 0; i < TierThresholds.Length; i++)
+		offer = null;
+		why = null;
+		var transfer = ReadMember(battleLogic, GameSymbols.SkeletalNecromancy.BattleLogicTransferBattleFields) as TransferBattle;
+		var started = ReadMember(battleLogic, GameSymbols.SkeletalNecromancy.BattleLogicStartedTransferBattleFields) as TransferBattle;
+		var result = ReadMember(battleLogic, GameSymbols.SkeletalNecromancy.BattleLogicBattleResultInfoFields) as BattleResultInfo;
+		if (transfer?.sides == null || started?.sides == null || result == null)
 		{
-			if (effective >= TierThresholds[i])
-				tier = i + 1;
-		}
-		return tier;
-	}
-
-	// ---------------------------------------------------------------- buff-backed state
-
-	/// <summary>Reconstructs the captives state from the hero's native buffs (save/load safe).</summary>
-	internal static bool TryReadState(object logicHero, DataHero dataHero, out CaptivesState state, out string failReason)
-	{
-		state = default;
-		var manager = ResolveBuffManager(logicHero, out failReason);
-		if (manager == null)
+			why = "battle result unreadable";
 			return false;
-		var units = 0;
-		for (var bit = 0; bit < StrengthBitCount; bit++)
+		}
+		var winnerIndex = result.winnerIndex;
+		if (winnerIndex < 0 || winnerIndex >= started.sides.Length)
+			return false;
+		var winnerStarted = started.sides[winnerIndex];
+		var winnerAfter = winnerIndex < transfer.sides.Length ? transfer.sides[winnerIndex] : null;
+		var logicHero = winnerStarted?.logicHero ?? winnerAfter?.logicHero;
+		var dataHero = ResolveDataHero(logicHero);
+		var rank = Homm3DungeonDraconicDominionHook.ResolveFactionSkillRank(dataHero);
+		if (rank <= 0)
+			return false;
+
+		var o = new Offer
 		{
-			if (HasBuff(manager, StrengthBitBuffPrefix + bit))
+			BattleKey = BattleKey(battleLogic),
+			LogicHero = logicHero,
+			DataHero = dataHero,
+			HeroSid = dataHero.configSid,
+			Rank = rank,
+			IsLocalHuman = winnerStarted != null && winnerStarted.controlType == TransferSide.EControlType.ME,
+			Interrogation = HasSubSkill(dataHero, InterrogationSubSkillSid),
+			HasEnslave = HasSubSkill(dataHero, EnslaveSubSkillSid),
+			HasRecruit = HasSubSkill(dataHero, RecruitSubSkillSid),
+			SlaveMarkets = HasSubSkill(dataHero, SlaveMarketsSubSkillSid),
+			DungeonCells = HasSubSkill(dataHero, DungeonCellsSubSkillSid),
+		};
+
+		// Defeated enemies: every other side, started minus remaining, by sid.
+		var killedBySid = new Dictionary<string, int>(StringComparer.Ordinal);
+		for (var sideIndex = 0; sideIndex < started.sides.Length; sideIndex++)
+		{
+			if (sideIndex == winnerIndex)
+				continue;
+			var after = sideIndex < transfer.sides.Length ? transfer.sides[sideIndex] : null;
+			foreach (var (unit, lost) in Losses(started.sides[sideIndex], after))
+			{
+				var sid = NormalizeSid(unit.configSid);
+				var config = ResolveConfig(unit);
+				if (sid == null || config == null)
+					continue;
+				o.DefeatedValue += (long)Math.Max(0, config.squadValue) * lost;
+				killedBySid.TryGetValue(sid, out var have);
+				killedBySid[sid] = have + lost;
+			}
+		}
+		var captives = o.DefeatedValue * (o.DungeonCells ? DungeonCellsCaptiveMultiplier : 1.0) / ValuePerCaptive;
+		o.Captives = (int)Math.Min(MaxEnslaved, Math.Floor(captives));
+		if (o.Captives <= 0)
+		{
+			why = "defeated value " + o.DefeatedValue + " below one captive";
+			return false;
+		}
+
+		var index = rank - 1;
+		o.ExecuteXp = (int)Math.Min(int.MaxValue, (long)o.Captives * ExecuteXpPerCaptive[index]);
+		o.ExecuteMana = o.Interrogation ? (int)Math.Round(o.ExecuteXp * InterrogationManaPerXp, MidpointRounding.AwayFromZero) : 0;
+		o.RansomGold = (int)Math.Min(int.MaxValue, Math.Floor((long)o.Captives * RansomGoldPerCaptive[index] * (o.SlaveMarkets ? SlaveMarketsGoldMultiplier : 1.0)));
+		if (TryReadEnslaved(logicHero, out var enslaved, out _))
+			o.EnslavedBefore = enslaved;
+		o.EnslaveDailyGoldAfter = ComputeEnslaveDailyGold((int)Math.Min(MaxEnslaved, (long)o.EnslavedBefore + o.Captives), rank, o.SlaveMarkets);
+
+		BuildEat(o, winnerStarted, winnerAfter);
+		BuildRecruit(o, killedBySid, winnerAfter);
+		offer = o;
+		return true;
+	}
+
+	private static void BuildEat(Offer o, TransferSide started, TransferSide after)
+	{
+		var percent = EatPercent[o.Rank - 1];
+		long value = 0;
+		foreach (var (unit, lost) in Losses(started, after))
+		{
+			var count = lost * percent / 100;
+			var config = ResolveConfig(unit);
+			if (count <= 0 || config == null)
+				continue;
+			var line = new UnitLine { Sid = NormalizeSid(unit.configSid), Count = count, SlotPos = unit.slotPos, SquadValue = Math.Max(0, config.squadValue) };
+			o.Eat.Add(line);
+			value += (long)line.SquadValue * count;
+		}
+		// Never restore more squad value than the captives were worth: scale every stack by the same factor (floor).
+		var cap = (long)o.Captives * ValuePerCaptive;
+		if (value > cap && value > 0)
+		{
+			var factor = (double)cap / value;
+			foreach (var line in o.Eat)
+				line.Count = (int)Math.Floor(line.Count * factor);
+		}
+		o.Eat.RemoveAll(line => line.Count <= 0);
+		foreach (var line in o.Eat)
+			o.EatCreatures += line.Count;
+	}
+
+	private static void BuildRecruit(Offer o, Dictionary<string, int> killedBySid, TransferSide winnerAfter)
+	{
+		if (!o.HasRecruit)
+			return;
+		var percent = RecruitPercent[o.Rank - 1];
+		var candidates = new List<UnitLine>();
+		foreach (var pair in killedBySid)
+		{
+			var count = pair.Value * percent / 100;
+			var config = Homm3DungeonDraconicDominionHook.ResolveUnitLogicConfigBySid(pair.Key);
+			if (count <= 0 || config == null)
+				continue;
+			candidates.Add(new UnitLine { Sid = pair.Key, Count = count, SlotPos = -1, SquadValue = Math.Max(0, config.squadValue) });
+		}
+		// Highest total value first; the recruit panel's captive row has seven slots, so the best seven types are offered.
+		// Army fit is the panel's job (the player merges, splits or leaves stacks behind).
+		candidates.Sort((a, b) => ((long)b.SquadValue * b.Count).CompareTo((long)a.SquadValue * a.Count));
+		foreach (var line in candidates)
+		{
+			if (o.Recruit.Count >= MaxArmySlots)
+				break;
+			var config = Homm3DungeonDraconicDominionHook.ResolveUnitLogicConfigBySid(line.Sid);
+			foreach (var (name, cost) in UnitCost(config))
+			{
+				line.Cost.Add((name, cost));
+				o.RecruitCost.TryGetValue(name, out var have);
+				o.RecruitCost[name] = (int)Math.Min(int.MaxValue, have + (long)cost * line.Count);
+			}
+			o.Recruit.Add(line);
+			o.RecruitCreatures += line.Count;
+		}
+	}
+
+	private static IEnumerable<(TransferUnit Unit, int Lost)> Losses(TransferSide started, TransferSide after)
+	{
+		if (started?.units == null)
+			yield break;
+		foreach (var before in started.units)
+		{
+			if (before == null || before.stacks <= 0)
+				continue;
+			var sid = NormalizeSid(before.configSid);
+			var remaining = 0;
+			if (after?.units != null)
+			{
+				foreach (var candidate in after.units)
+				{
+					if (candidate != null && candidate.slotPos == before.slotPos && string.Equals(NormalizeSid(candidate.configSid), sid, StringComparison.Ordinal))
+					{
+						remaining = Math.Max(0, candidate.stacks);
+						break;
+					}
+				}
+			}
+			var lost = Math.Max(0, before.stacks - remaining);
+			if (lost > 0)
+				yield return (before, lost);
+		}
+	}
+
+	private static UnitLogicConfig ResolveConfig(TransferUnit unit)
+	{
+		return unit?.prop_UnitLogicConfig_0 ?? Homm3DungeonDraconicDominionHook.ResolveUnitLogicConfigBySid(unit?.configSid);
+	}
+
+	private static IEnumerable<(string Name, int Cost)> UnitCost(UnitLogicConfig config)
+	{
+		var costs = config?.unitCost?.costResArray;
+		for (var i = 0; costs != null && i < costs.Length; i++)
+		{
+			var name = NormalizeSid(costs[i]?.name);
+			if (name != null && ReadMember(costs[i], GameSymbols.DraconicDominion.ResNameAndCostCostMembers) is int cost && cost > 0)
+				yield return (name, cost);
+		}
+	}
+
+	/// <summary>True when the hero's side holds every resource of <paramref name="price"/>; else names the first short one.</summary>
+	internal static bool CanAfford(Offer offer, IEnumerable<KeyValuePair<string, int>> price, out string missing)
+	{
+		missing = null;
+		if (!TryResolveHeroSide(offer.LogicHero, out var dataSide, out _))
+		{
+			missing = "resources (side unreadable)";
+			return false;
+		}
+		foreach (var cost in price)
+		{
+			if (cost.Value <= 0)
+				continue;
+			if (!Homm3RewardEconomyNativeAdapter.TryResolveResourceFromSide(dataSide, cost.Key, out _, out var info, out _) || info.Value < cost.Value)
+			{
+				missing = cost.Key;
+				return false;
+			}
+		}
+		return true;
+	}
+
+	internal static int ComputeEnslaveDailyGold(int enslaved, int rank, bool slaveMarkets)
+	{
+		if (enslaved <= 0)
+			return 0;
+		var index = Math.Max(1, Math.Min(3, rank)) - 1;
+		return (int)Math.Min(int.MaxValue / 2, Math.Floor(enslaved * EnslaveGoldPerDay[index] * (slaveMarkets ? SlaveMarketsGoldMultiplier : 1.0)));
+	}
+
+	internal static string FormatCost(IDictionary<string, int> cost)
+	{
+		var parts = new List<string>();
+		foreach (var pair in cost)
+		{
+			if (pair.Value > 0)
+				parts.Add(pair.Value.ToString("N0", System.Globalization.CultureInfo.InvariantCulture) + " " + pair.Key);
+		}
+		return parts.Count == 0 ? "free" : string.Join(", ", parts);
+	}
+
+	private static string DescribeOffer(Offer o)
+	{
+		return "hero=" + DescribeHero(o.DataHero) + " rank=" + o.Rank + " defeatedValue=" + o.DefeatedValue + " captives=" + o.Captives
+			+ " execute=+" + o.ExecuteXp + "xp/+" + o.ExecuteMana + "mana ransom=+" + o.RansomGold + "g eat=" + o.EatCreatures
+			+ (o.HasEnslave ? " enslave->" + o.EnslaveDailyGoldAfter + "g/day" : "")
+			+ (o.HasRecruit ? " recruit=" + o.RecruitCreatures + " for " + FormatCost(o.RecruitCost) + (o.RecruitBlocked != null ? " (" + o.RecruitBlocked + ")" : "") : "");
+	}
+
+	// ---------------------------------------------------------------- day start: enslaved gold + legacy bank
+
+	/// <summary>Shared day-start consumer (Homm3SwashbucklerGoldHook): gold for this hero's enslaved captives, plus a legacy bank payout once.</summary>
+	/// <summary>Side-effect-free <see cref="OnDayStartHero"/> for the gold-hover income preview (enslaved gold only).</summary>
+	private static (int Gold, string Label) ForecastDayStartHero(object entry)
+	{
+		if (entry == null || _logicHeroType == null || !_logicHeroType.IsInstanceOfType(entry))
+			return (0, null);
+		var dataHero = ResolveDataHero(entry);
+		if (dataHero == null || !TryReadEnslaved(entry, out var enslaved, out _) || enslaved <= 0)
+			return (0, null);
+		var rank = Math.Max(1, Homm3DungeonDraconicDominionHook.ResolveFactionSkillRank(dataHero));
+		var daily = ComputeEnslaveDailyGold(enslaved, rank, HasSubSkill(dataHero, SlaveMarketsSubSkillSid));
+		var name = Homm3HeroDisplayNames.Resolve(dataHero.configSid) ?? dataHero.configSid;
+		return ((int)Math.Min(int.MaxValue / 2, daily), "Enslaved captives (" + name + ", " + enslaved + ")");
+	}
+
+	private static int OnDayStartHero(object entry)
+	{
+		if (entry == null || _logicHeroType == null || !_logicHeroType.IsInstanceOfType(entry))
+			return 0;
+		try
+		{
+			var dataHero = ResolveDataHero(entry);
+			var manager = ResolveBuffManager(entry, out _);
+			if (dataHero == null || manager == null)
+				return 0;
+			var rank = Math.Max(1, Homm3DungeonDraconicDominionHook.ResolveFactionSkillRank(dataHero));
+			var slaveMarkets = HasSubSkill(dataHero, SlaveMarketsSubSkillSid);
+			long gold = 0;
+			if (TryReadEnslaved(entry, out var enslaved, out _) && enslaved > 0)
+			{
+				var daily = ComputeEnslaveDailyGold(enslaved, rank, slaveMarkets);
+				gold += daily;
+				LogEvent("day start: " + DescribeHero(dataHero) + " enslaved=" + enslaved + " gold=+" + daily + ".");
+				try
+				{
+					AnnounceDayStart(dataHero, enslaved, daily);
+				}
+				catch (Exception ex)
+				{
+					LogSkip("day-start banner failed: " + ex.GetBaseException().Message);
+				}
+			}
+			gold += MigrateLegacyBank(entry, dataHero, manager, rank, slaveMarkets);
+			return (int)Math.Min(int.MaxValue / 2, gold);
+		}
+		catch (Exception ex)
+		{
+			LogSkip("day-start captives failed closed: " + ex.GetBaseException().Message);
+			return 0;
+		}
+	}
+
+	private static long MigrateLegacyBank(object logicHero, DataHero dataHero, object manager, int rank, bool slaveMarkets)
+	{
+		var units = 0;
+		for (var bit = 0; bit < LegacyStrengthBitCount; bit++)
+		{
+			if (HasBuff(manager, LegacyStrengthBitBuffPrefix + bit))
 				units |= 1 << bit;
 		}
-		var squads = 0;
-		for (var bit = 0; bit < SquadBitCount; bit++)
+		var any = units > 0;
+		for (var bit = 0; !any && bit < LegacySquadBitCount; bit++)
+			any = HasBuff(manager, LegacySquadBitBuffPrefix + bit);
+		for (var tier = 0; !any && tier <= LegacyTierCount; tier++)
+			any = HasBuff(manager, LegacyTierBuffPrefix + tier);
+		if (!any)
+			return 0;
+		var failures = new List<string>();
+		for (var bit = 0; bit < LegacyStrengthBitCount; bit++)
+			SetBuff(manager, LegacyStrengthBitBuffPrefix + bit, false, failures);
+		for (var bit = 0; bit < LegacySquadBitCount; bit++)
+			SetBuff(manager, LegacySquadBitBuffPrefix + bit, false, failures);
+		for (var tier = 0; tier <= LegacyTierCount; tier++)
+			SetBuff(manager, LegacyTierBuffPrefix + tier, false, failures);
+		if (failures.Count > 0)
 		{
-			if (HasBuff(manager, SquadBitBuffPrefix + bit))
-				squads |= 1 << bit;
+			_log?.LogError(LogPrefix + "legacy Captives bank of " + DescribeHero(dataHero) + " not cleared (" + string.Join("; ", failures) + "); no payout, retried next day.");
+			return 0;
 		}
-		var tier = 0;
-		for (var t = 1; t <= TierThresholds.Length; t++)
-		{
-			if (HasBuff(manager, TierBuffPrefix + t))
-				tier = t;
-		}
-		state = new CaptivesState(units, squads, tier);
-		failReason = null;
-		return true;
+		var captives = (long)units * LegacyStrengthUnit / ValuePerCaptive;
+		var gold = (long)Math.Floor(captives * RansomGoldPerCaptive[rank - 1] * (slaveMarkets ? SlaveMarketsGoldMultiplier : 1.0));
+		_log?.LogInfo(LogPrefix + "legacy Captives bank of " + DescribeHero(dataHero) + " (" + (long)units * LegacyStrengthUnit + " strength) paid as Ransom: +" + gold + " gold; old buffs cleared.");
+		return gold;
 	}
 
-	/// <summary>Writes units/squads as marker buffs and keeps exactly one tier buff for the derived tier.</summary>
-	private static bool TryWriteState(object logicHero, DataHero dataHero, int units, int squads, out CaptivesState written, out string failReason)
+	// ---------------------------------------------------------------- enslaved state (buffs)
+
+	internal static bool TryReadEnslaved(object logicHero, out int count, out string failReason)
 	{
-		written = default;
+		count = 0;
 		var manager = ResolveBuffManager(logicHero, out failReason);
 		if (manager == null)
 			return false;
-		units = Math.Max(0, Math.Min(MaxStrengthUnits, units));
-		squads = units == 0 ? 0 : Math.Max(0, Math.Min(MaxSquads, squads));
-		var tier = units == 0 ? 0 : ComputeTier((long)units * StrengthUnit, HasSubSkill(dataHero, DungeonCellsSubSkillSid));
+		for (var bit = 0; bit < EnslavedBitCount; bit++)
+		{
+			if (HasBuff(manager, EnslavedBitBuffPrefix + bit))
+				count |= 1 << bit;
+		}
+		return true;
+	}
+
+	private static bool TryWriteEnslaved(object logicHero, int count, out string failReason)
+	{
+		var manager = ResolveBuffManager(logicHero, out failReason);
+		if (manager == null)
+			return false;
+		count = Math.Max(0, Math.Min(MaxEnslaved, count));
 		var failures = new List<string>();
-		for (var bit = 0; bit < StrengthBitCount; bit++)
-			SetBuff(manager, StrengthBitBuffPrefix + bit, (units & (1 << bit)) != 0, failures);
-		for (var bit = 0; bit < SquadBitCount; bit++)
-			SetBuff(manager, SquadBitBuffPrefix + bit, (squads & (1 << bit)) != 0, failures);
-		// Tier 0 is the visible bonus-less "captives held" buff below the first threshold.
-		for (var t = 0; t <= TierThresholds.Length; t++)
-			SetBuff(manager, TierBuffPrefix + t, t == tier && units > 0, failures);
-		written = new CaptivesState(units, squads, tier);
+		for (var bit = 0; bit < EnslavedBitCount; bit++)
+			SetBuff(manager, EnslavedBitBuffPrefix + bit, (count & (1 << bit)) != 0, failures);
+		SetBuff(manager, EnslavedBuffSid, count > 0, failures);
 		if (failures.Count == 0)
 			return true;
 		failReason = string.Join("; ", failures);
@@ -588,7 +1476,7 @@ internal static class Homm3DungeonCaptivesRuntime
 	private static object ResolveBuffManager(object logicHero, out string failReason)
 	{
 		failReason = null;
-		if (logicHero == null || !_buffManagerProperty.DeclaringType.IsInstanceOfType(logicHero))
+		if (logicHero == null || _buffManagerProperty == null || !_buffManagerProperty.DeclaringType.IsInstanceOfType(logicHero))
 		{
 			failReason = "logic hero missing or not Hex.Session.Logic.Hero";
 			return null;
@@ -608,8 +1496,7 @@ internal static class Homm3DungeonCaptivesRuntime
 	{
 		try
 		{
-			var present = HasBuff(manager, sid);
-			if (present == wanted)
+			if (HasBuff(manager, sid) == wanted)
 				return;
 			if (wanted)
 			{
@@ -619,7 +1506,7 @@ internal static class Homm3DungeonCaptivesRuntime
 			}
 			else
 			{
-				// Native Remove only drops dispellable configs: the Captives rows are isDispellable=true.
+				// Native Remove only drops dispellable configs: every Captives row is isDispellable=true.
 				_buffRemoveMethod.Invoke(manager, new object[] { sid });
 			}
 			if (HasBuff(manager, sid) != wanted)
@@ -631,71 +1518,121 @@ internal static class Homm3DungeonCaptivesRuntime
 		}
 	}
 
-	// ---------------------------------------------------------------- UI snapshot
+	// ---------------------------------------------------------------- UI snapshot (enslaved buff tooltip)
 
-	/// <summary>Live numbers for the hero skill meter and the buff tooltip, from the buff-backed state and the hero's real skills.</summary>
-	internal static Homm3DungeonCaptivesUi.Snapshot BuildUiSnapshot(DataHero dataHero, CaptivesState state)
-	{
-		var rank = Homm3DungeonDraconicDominionHook.ResolveFactionSkillRank(dataHero);
-		var cells = HasSubSkill(dataHero, DungeonCellsSubSkillSid);
-		var interrogation = HasSubSkill(dataHero, InterrogationSubSkillSid);
-		var slaveMarkets = HasSubSkill(dataHero, SlaveMarketsSubSkillSid);
-		var effective = (long)Math.Round(state.Strength * (cells ? DungeonCellsTierStrengthMultiplier : 1.0));
-		var tier = state.IsEmpty ? 0 : ComputeTier(state.Strength, cells);
-		var next = tier >= TierThresholds.Length ? 0 : TierThresholds[tier];
-		// Cumulative toward the next tier, so the meter fill equals the "effective / next" hover numbers.
-		var progress = next == 0 ? 1f : Mathf.Clamp01((float)effective / next);
-		var xp = rank > 0 ? ComputeExecuteXp(state.Strength, rank) : 0;
-		return new Homm3DungeonCaptivesUi.Snapshot
-		{
-			Squads = state.Squads,
-			Strength = state.Strength,
-			EffectiveStrength = effective,
-			Tier = tier,
-			NextThreshold = next,
-			Progress = progress,
-			ExecuteXp = xp,
-			InterrogationMana = rank > 0 && interrogation ? ComputeInterrogationMana(xp) : 0,
-			RansomGold = rank > 0 ? ComputeRansomGold(state.Strength, rank, slaveMarkets) : 0,
-			Rank = rank,
-			DungeonCells = cells,
-			Interrogation = interrogation,
-			SlaveMarkets = slaveMarkets,
-		};
-	}
-
-	/// <summary>Reads the state of a Logic.Hero and builds the UI snapshot; false (with a reason) when unreadable.</summary>
-	internal static bool TryBuildUiSnapshot(object logicHero, out DataHero dataHero, out Homm3DungeonCaptivesUi.Snapshot snapshot, out string failReason)
+	internal static bool TryBuildUiSnapshot(object logicHero, out Homm3DungeonCaptivesUi.Snapshot snapshot, out string failReason)
 	{
 		snapshot = null;
-		dataHero = null;
 		if (!_registered)
 		{
-			failReason = "Captives runtime not registered";
+			failReason = "War Captives runtime not registered";
 			return false;
 		}
-		dataHero = ResolveDataHero(logicHero);
+		var dataHero = ResolveDataHero(logicHero);
 		if (dataHero == null)
 		{
 			failReason = "Data.Hero unresolved from logic hero";
 			return false;
 		}
-		if (!TryReadState(logicHero, dataHero, out var state, out failReason))
+		if (!TryReadEnslaved(logicHero, out var enslaved, out failReason))
 			return false;
-		snapshot = BuildUiSnapshot(dataHero, state);
+		var rank = Math.Max(1, Homm3DungeonDraconicDominionHook.ResolveFactionSkillRank(dataHero));
+		var slaveMarkets = HasSubSkill(dataHero, SlaveMarketsSubSkillSid);
+		snapshot = new Homm3DungeonCaptivesUi.Snapshot
+		{
+			Enslaved = enslaved,
+			DailyGold = ComputeEnslaveDailyGold(enslaved, rank, slaveMarkets),
+			GoldPerCaptive = EnslaveGoldPerDay[rank - 1] * (slaveMarkets ? SlaveMarketsGoldMultiplier : 1.0),
+			Rank = rank,
+			SlaveMarkets = slaveMarkets,
+		};
 		return true;
 	}
 
 	internal static bool IsLogicHero(object candidate)
 	{
-		return candidate != null && _buffManagerProperty != null && _buffManagerProperty.DeclaringType.IsInstanceOfType(candidate);
+		return candidate != null && _logicHeroType != null && _logicHeroType.IsInstanceOfType(candidate);
+	}
+
+	// ---------------------------------------------------------------- legacy spells
+
+	/// <summary>Suppresses retired Captives-bank Execute/Ransom rows; any other Necromancer Will setting passes through.</summary>
+	private static bool PrefixNecromancyWorldMagicCast(object __instance, ref bool __result)
+	{
+		try
+		{
+			var setting = ReadMember(__instance, GameSymbols.CastleEliteStrategem.NecromancyWorldMagicSettingMembers) as MagicSetting;
+			if (setting == null || !string.Equals(setting.mechType, NativeNecromancyMechType, StringComparison.Ordinal))
+				return true;
+			var parameters = ReadParameters(setting.parameters);
+			if (parameters.Count < 1 || (!string.Equals(parameters[0], LegacyExecuteMode, StringComparison.Ordinal) && !string.Equals(parameters[0], LegacyRansomMode, StringComparison.Ordinal)))
+				return true;
+			__result = false;
+			_log?.LogWarning(LogPrefix + "retired Captives spell " + parameters[0] + " cast; suppressed (War Captives pays after battles; a legacy bank is paid as Ransom at day start).");
+			return false;
+		}
+		catch (Exception ex)
+		{
+			LogSkip("legacy spell inspection failed; native handler remains responsible: " + ex.GetBaseException().Message);
+			return true;
+		}
 	}
 
 	// ---------------------------------------------------------------- helpers
 
+	/// <summary>The hero's data side: the shared logic-hero -> data-root path, else the live side the day-start hook
+	/// recorded for the data hero's sideId (that hook does not fire on day 1).</summary>
+	private static bool TryResolveHeroSide(object logicHero, out object dataSide, out string failReason)
+	{
+		if (Homm3CustomFactionLawRuntime.TryResolveDataSideFromLogicHeroExplained(logicHero, out dataSide, out var pathFail))
+		{
+			failReason = null;
+			return true;
+		}
+		var dataHero = ResolveDataHero(logicHero);
+		if (dataHero != null && Homm3SwashbucklerGoldHook.TryGetDayStartSide(dataHero.sideId, out var side))
+		{
+			dataSide = side;
+			failReason = null;
+			if (!_loggedSideFallback)
+			{
+				_loggedSideFallback = true;
+				LogEvent("hero side via the day-start side cache (side=" + dataHero.sideId + "; shared path: " + pathFail + ").");
+			}
+			return true;
+		}
+		dataSide = null;
+		failReason = pathFail + "; day-start side cache has no side " + (dataHero == null ? "?" : dataHero.sideId.ToString());
+		return false;
+	}
+
+	private static bool _loggedSideFallback;
+
+	private static bool TryAddGold(object logicHero, int gold, out int before, out string failReason)
+	{
+		before = 0;
+		if (!TryResolveHeroSide(logicHero, out var dataSide, out var sideFail))
+		{
+			failReason = "hero side unresolved (" + sideFail + ")";
+			return false;
+		}
+		if (!Homm3RewardEconomyNativeAdapter.TryResolveGoldResourceFromSide(dataSide, out var goldResource, out var info, out var goldFail))
+		{
+			failReason = "gold resource unresolved (" + goldFail + ")";
+			return false;
+		}
+		before = info.Value;
+		if (gold <= 0)
+		{
+			failReason = null;
+			return true;
+		}
+		return Homm3RewardEconomyNativeAdapter.TryAddResourceValue(goldResource, gold, out failReason);
+	}
+
 	internal static DataHero ResolveDataHero(object logicHero)
 	{
-		if (logicHero == null || !_logicHeroDataHeroGetter.DeclaringType.IsInstanceOfType(logicHero))
+		if (logicHero == null || _logicHeroDataHeroGetter == null || !_logicHeroDataHeroGetter.DeclaringType.IsInstanceOfType(logicHero))
 			return null;
 		return _logicHeroDataHeroGetter.Invoke(logicHero, Array.Empty<object>()) as DataHero;
 	}
@@ -705,13 +1642,24 @@ internal static class Homm3DungeonCaptivesRuntime
 		return dataHero != null && Homm3DungeonDraconicDominionHook.HasHeroSubSkill(dataHero, sid);
 	}
 
-	private static string DescribeHero(DataHero dataHero)
+	internal static string DescribeHero(DataHero dataHero)
 	{
 		if (dataHero == null)
 			return "null";
 		var id = ReadMember(dataHero, GameSymbols.CastleEliteStrategem.DataHeroIdMembers);
-		var session = Homm3SessionIdentity.TryResolveSessionDataKey(out var sessionKey, out _) ? sessionKey.ToString("X") : "?";
-		return (dataHero.configSid ?? "?") + "#" + (id?.ToString() ?? "?") + "@session" + session;
+		return (dataHero.configSid ?? "?") + "#" + (id?.ToString() ?? "?");
+	}
+
+	private static int BattleKey(object battleLogic)
+	{
+		if (ReadMember(battleLogic, GameSymbols.SkeletalNecromancy.BattleLogicIdFields) is int id && id != 0)
+			return id;
+		if (battleLogic is Il2CppObjectBase il2Cpp && il2Cpp.Pointer != IntPtr.Zero)
+		{
+			var ptr = il2Cpp.Pointer.ToInt64();
+			return unchecked((int)(ptr ^ (ptr >> 32)));
+		}
+		return battleLogic.GetHashCode();
 	}
 
 	private static List<string> ReadParameters(object parameters)
@@ -730,9 +1678,7 @@ internal static class Homm3DungeonCaptivesRuntime
 		return result;
 	}
 
-	/// <param name="declaredOnType">Only methods declared on <paramref name="type"/> itself. Required where live interop hides a
-	/// base-class wrapper with the same generated name and signature (C# <c>new</c>), because reflection returns both.</param>
-	private static MethodInfo ResolveRequiredNamedMethod(Type type, Type returnType, Type[] parameterTypes, GameSymbols.MethodSymbol symbol, bool instance, bool declaredOnType = false)
+	private static MethodInfo ResolveRequiredNamedMethod(Type type, Type returnType, Type[] parameterTypes, GameSymbols.MethodSymbol symbol, bool instance)
 	{
 		const BindingFlags flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 		foreach (var name in symbol.NameHints ?? Array.Empty<string>())
@@ -743,8 +1689,6 @@ internal static class Homm3DungeonCaptivesRuntime
 			foreach (var method in type.GetMethods(flags))
 			{
 				if (!string.Equals(method.Name, name, StringComparison.Ordinal) || method.IsStatic == instance)
-					continue;
-				if (declaredOnType && method.DeclaringType != type)
 					continue;
 				if (returnType != null && method.ReturnType != returnType)
 					continue;
@@ -766,15 +1710,9 @@ internal static class Homm3DungeonCaptivesRuntime
 			if (matches.Count == 1)
 				return matches[0];
 			if (matches.Count > 1)
-			{
-				var owners = new List<string>();
-				foreach (var match in matches)
-					owners.Add(match.DeclaringType?.FullName ?? "?");
-				throw new AmbiguousMatchException(symbol.Id + " matched " + matches.Count + " methods named " + name + " on " + type.FullName
-					+ " (declared on " + string.Join(", ", owners) + ")");
-			}
+				throw new AmbiguousMatchException(symbol.Id + " matched " + matches.Count + " methods named " + name + " on " + type.FullName);
 		}
-		throw new MissingMethodException(symbol.Id + " exact method not found on " + (type?.FullName ?? "null") + (declaredOnType ? " (declared on the type itself)" : ""));
+		throw new MissingMethodException(symbol.Id + " exact method not found on " + (type?.FullName ?? "null"));
 	}
 
 	private static PropertyInfo ResolveRequiredProperty(Type type, string name, string symbolId)
@@ -794,54 +1732,6 @@ internal static class Homm3DungeonCaptivesRuntime
 		return property;
 	}
 
-	private static MemberInfo ResolveRequiredMember(Type type, string[] names, string symbolId)
-	{
-		const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-		foreach (var name in names ?? Array.Empty<string>())
-		{
-			if (string.IsNullOrWhiteSpace(name))
-				continue;
-			var property = type.GetProperty(name, flags);
-			if (property != null && property.GetIndexParameters().Length == 0 && property.GetGetMethod(true) != null)
-				return property;
-			var field = type.GetField(name, flags);
-			if (field != null)
-				return field;
-		}
-		throw new MissingMemberException(symbolId + " member not found on " + type.FullName);
-	}
-
-	private static MemberInfo ResolveRequiredTypedMember(Type type, Type valueType, string[] names, string symbolId)
-	{
-		const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-		foreach (var name in names ?? Array.Empty<string>())
-		{
-			if (string.IsNullOrWhiteSpace(name))
-				continue;
-			var property = type.GetProperty(name, flags);
-			if (property != null && property.GetIndexParameters().Length == 0 && property.GetGetMethod(true) != null && property.PropertyType == valueType)
-				return property;
-			var field = type.GetField(name, flags);
-			if (field != null && field.FieldType == valueType)
-				return field;
-			var method = type.GetMethod(name, flags, null, Type.EmptyTypes, null);
-			if (method != null && method.ReturnType == valueType)
-				return method;
-		}
-		throw new MissingMemberException(symbolId + " " + valueType.FullName + " member not found on " + type.FullName);
-	}
-
-	private static Type MemberValueType(MemberInfo member)
-	{
-		return member switch
-		{
-			PropertyInfo property => property.PropertyType,
-			FieldInfo field => field.FieldType,
-			MethodInfo method => method.ReturnType,
-			_ => throw new MissingMemberException("unsupported member " + member),
-		};
-	}
-
 	private static Type ResolveRequiredTypeByHint(Assembly assembly, string[] hints, string symbolId)
 	{
 		foreach (var hint in hints ?? Array.Empty<string>())
@@ -853,19 +1743,6 @@ internal static class Homm3DungeonCaptivesRuntime
 				return type;
 		}
 		throw new TypeLoadException(symbolId + " type not found from hints [" + string.Join(",", hints ?? Array.Empty<string>()) + "]");
-	}
-
-	private static object ReadResolvedMember(object instance, MemberInfo member)
-	{
-		if (instance == null || member == null)
-			return null;
-		return member switch
-		{
-			PropertyInfo property => property.GetValue(instance, null),
-			FieldInfo field => field.GetValue(instance),
-			MethodInfo method => method.Invoke(instance, Array.Empty<object>()),
-			_ => null,
-		};
 	}
 
 	private static object ReadMember(object obj, params string[] names)
@@ -918,15 +1795,15 @@ internal static class Homm3DungeonCaptivesRuntime
 		return method == null ? "null" : method.DeclaringType?.FullName + "." + method.Name;
 	}
 
-	private static void LogEscapeClick(string message)
+	private static void LogEvent(string message)
 	{
-		if (_loggedEscapeClicks++ < 40)
-			_log?.LogInfo("HoMM3 Dungeon Captives capture: " + message);
+		if (_loggedEvents++ < 80)
+			_log?.LogInfo(LogPrefix + message);
 	}
 
 	private static void LogSkip(string message)
 	{
 		if (_loggedSkips++ < 40)
-			_log?.LogWarning("HoMM3 Dungeon Captives: " + message);
+			_log?.LogWarning(LogPrefix + message);
 	}
 }

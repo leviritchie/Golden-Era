@@ -63,6 +63,7 @@ internal static class ModBugReportSubmission
 		internal string Error;
 		internal bool Minimized;
 		internal bool RestoredAfterRestart;
+		internal float NextRecordedStateCheckAtRealtime;
 
 		internal Transaction(string reportId, bool includeScreenshot, IntPtr screenPointer)
 		{
@@ -119,7 +120,7 @@ internal static class ModBugReportSubmission
 		}
 		if (GameBuild.Kind != GameBuildKind.Current)
 		{
-			error = "submission UI is pinned only to current build 25672315; found " + GameBuild.Describe();
+			error = "submission UI is pinned only to current build " + GameSymbols.CurrentScopes.BuildId + "; found " + GameBuild.Describe();
 			return false;
 		}
 		if (!cfg.ModBugReporting || ModBugReportRedirect.State != ModBugReportRedirect.GuardState.Redirecting)
@@ -433,7 +434,10 @@ internal static class ModBugReportSubmission
 		imageRect.anchorMax = Vector2.one;
 		imageRect.offsetMin = Vector2.zero;
 		imageRect.offsetMax = Vector2.zero;
-		image.color = new UnityEngine.Color(0f, 0f, 0f, 0f);
+		// The game's IMGUI skin draws windows without a background, which left white text over the live scene
+		// (report 00a6878d: "extremely hard to read"). This uGUI image already sits exactly under the window to
+		// block clicks, and IMGUI renders above overlay canvases, so an opaque dark fill gives the window a backdrop.
+		image.color = new UnityEngine.Color(0.08f, 0.08f, 0.10f, 0.94f);
 		image.raycastTarget = true;
 		image.maskable = false;
 		image.canvasRenderer.cullTransparentMesh = false;
@@ -481,13 +485,12 @@ internal static class ModBugReportSubmission
 			if (_consentScreenPointer != IntPtr.Zero)
 				return false;
 
-			_consentScreen = __instance;
-			_consentScreenPointer = pointer;
-			_consentChecked = false;
-			_includeScreenshotChecked = false;
-			_consentScroll = Vector2.zero;
+			// 2026-11-11 user decision (report 00a6878d, confirmed in chat): pressing the game's Submit sends right away.
+			// Filing the report is the consent; the separate agreement window was hard to read and players skip it.
+			// The status window still says where the report went. No screenshot is taken on this path.
+			_transaction = new Transaction(Guid.NewGuid().ToString("D").ToLowerInvariant(), false, pointer);
 			_visible = true;
-			return false;
+			return true;
 		}
 		catch (Exception ex)
 		{
@@ -783,6 +786,7 @@ internal static class ModBugReportSubmission
 		{
 			var endpoint = _cfg?.ModBugReportingEndpoint ?? "";
 			transaction.Task = ModBugReportRedirect.PackageAndSubmitAsync(transaction.Capture, endpoint, transaction.ReportId);
+			SafeLogInfo("ModBugReporting: report packaging and upload started (reportId=" + transaction.ReportId + ").");
 		}
 		catch (Exception ex)
 		{
@@ -797,8 +801,13 @@ internal static class ModBugReportSubmission
 		try
 		{
 			var transaction = _transaction;
-			if (transaction == null || transaction.Task == null || !transaction.Task.IsCompleted)
+			if (transaction == null || transaction.Task == null)
 				return;
+			if (!transaction.Task.IsCompleted)
+			{
+				PollRecordedAcknowledgement(transaction);
+				return;
+			}
 
 			transaction.Outcome = transaction.Task.GetAwaiter().GetResult();
 			if (transaction.Outcome != null && transaction.Outcome.Acknowledged)
@@ -834,6 +843,29 @@ internal static class ModBugReportSubmission
 				_visible = true;
 			}
 		}
+	}
+
+	// Fallback for a completed upload whose Task completion is not observed on the Unity thread: the background
+	// submit writes the relay acknowledgement next to the bundle, so a once-a-second check of that file finishes the
+	// status. Only an acknowledgement is taken from disk; failures still come from the Task (or stay Sending).
+	private static void PollRecordedAcknowledgement(Transaction transaction)
+	{
+		if (transaction.State != FlowState.PackagingAndSubmitting)
+			return;
+		var now = Time.realtimeSinceStartup;
+		if (now < transaction.NextRecordedStateCheckAtRealtime)
+			return;
+		transaction.NextRecordedStateCheckAtRealtime = now + 1f;
+		if (!ModBugReportRedirect.IsRecordedAcknowledged(transaction.ReportId))
+			return;
+
+		transaction.State = FlowState.Acknowledged;
+		transaction.Error = null;
+		transaction.Task = null;
+		transaction.Capture = null;
+		_visible = true;
+		SafeLogInfo("ModBugReporting: report relay acknowledgement read from the local receipt (reportId=" + transaction.ReportId
+		            + "); the submit task had not reported completion to the status UI.");
 	}
 
 	private static void BeginRetry(Transaction transaction)
@@ -956,12 +988,14 @@ internal static class ModBugReportSubmission
 		_pendingNewReportScreen = null;
 		_pendingNewReportScreenPointer = IntPtr.Zero;
 		_abandonRetryConfirmation = false;
+		// Same as pressing Submit: the waiting form is sent right away (no agreement window).
 		_consentScreen = screen;
 		_consentScreenPointer = screenPointer;
-		_consentChecked = false;
+		_consentChecked = true;
 		_includeScreenshotChecked = false;
 		_consentScroll = Vector2.zero;
 		_visible = true;
+		ConfirmConsent();
 	}
 
 	private static void AbandonRetry(Transaction transaction)
@@ -1028,9 +1062,11 @@ internal static class ModBugReportSubmission
 			GUILayout.EndScrollView();
 		}
 
+		// The game's IMGUI skin draws no checkbox graphic (report 00a6878d: "the I agree button is not there"), so the
+		// box state is part of the label text.
 		_consentChecked = GUILayout.Toggle(
 			_consentChecked,
-			"I agree to send this report to the Golden Era mod team.",
+			(_consentChecked ? "[X] " : "[  ] ") + "I agree to send this report to the Golden Era mod team (click here).",
 			WrappedLabel());
 		VerticalGap(6f);
 		var previousEnabled = GUI.enabled;
@@ -1169,7 +1205,7 @@ internal static class ModBugReportSubmission
 			case FlowState.PackagingAndSubmitting:
 				return "Sending your report... You can keep playing.";
 			case FlowState.Acknowledged:
-				return "Thanks! Your report was sent.\nReference: " + ShortReference(transaction.ReportId);
+				return "Thanks! Your report was sent to the Golden Era mod team.\nReference: " + ShortReference(transaction.ReportId);
 			case FlowState.Unconfirmed:
 				return transaction.RestoredAfterRestart
 					? "A bug report from your last session was not sent."
@@ -1285,6 +1321,10 @@ internal static class ModBugReportSubmission
 			HidePointerShield();
 			return;
 		}
+		// Pump also runs here: OnGUI provably runs while the status is on screen, so a result can't be missed
+		// even if the host's Update is not reaching Pump. Pump is idempotent (it clears Task once handled).
+		if (Event.current.type == EventType.Layout)
+			Pump();
 		var previousDepth = GUI.depth;
 		var previousEnabled = GUI.enabled;
 		var previousMatrix = GUI.matrix;

@@ -615,7 +615,7 @@
   "adoptWeights": "nearest"
  },
  "glbPatch": {
-  "reason": "DEF g00 move: level flight, body square to the travel, neck/head stretched forward, both wings beating together (mirror); MoveStart/End blend into it; DEF g12 attack: wings raised and spread over the lunge, spine turned to the target; Hitted/Defence/Death wings mirrored; wing membrane weight re-solve so the spread does not tear (gate 699 -> 667)",
+  "reason": "DEF g00 move: level flight, body square to the travel, neck/head stretched forward, both wings beating together (mirror); MoveStart/End blend into it; DEF g12 attack: wings raised and spread over the lunge, spine turned to the target; Hitted/Defence/Death wings mirrored; wing membrane weight re-solve so the spread does not tear (gate 699 -> 667); 2026-11-10 flyer flight (user-approved candidate, rig / mesh repair): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, with the candidate's added joints and face cuts; clip pass 2026-11-11 (user-approved candidate): Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -644,6 +644,22 @@
     "op": "keyTranslations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_spectral_dragon_pose_tr.json",
     "sha256": "0e9ec5e57265de5901a1916cf55a9d30312ea6ddc1c5caa4179bbd060c9eb505"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_spectral_dragon_flight_cut.json",
+    "sha256": "949d8b5bf70dc22fccad8196c0c2eca2605bd8f249fc1c31756bc3e76ce70ee5",
+    "note": "unit pass: 27 bridging faces the candidate cuts (flyer_F)"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_spectral_dragon_flight_tracks.json",
+    "sha256": "e82e8fd80f1e999d108e1cae170f0ae561b1af3895c411779dc2d2f4a32ec0cb"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_spectral_dragon_clip_tracks.json",
+    "sha256": "c438250af232dbc160d15a5e02485e64bed754efc003b5f2d624fbb8c69f3b41"
    }
   ]
  }

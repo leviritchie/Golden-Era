@@ -1253,7 +1253,7 @@
   ]
  },
  "glbPatch": {
-  "reason": "authenticity: DEF g12 attack rears the three necks up tall (f3-f6) before the low strike the capture already had; DEF g04 defence raises the necks straight up (f2-f7); the capture stayed hunched in both. Neck/shoulder weights split (the neck tips carried shoulder weight) and belly re-solved (gate 130 -> 126)",
+  "reason": "authenticity: DEF g12 attack rears the three necks up tall (f3-f6) before the low strike the capture already had; DEF g04 defence raises the necks straight up (f2-f7); the capture stayed hunched in both. Neck/shoulder weights split (the neck tips carried shoulder weight) and belly re-solved (gate 130 -> 126); 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): AttackFront, Mouseover re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -1272,6 +1272,35 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_hydra_pose_rot.json",
     "sha256": "64f6b9bea9739ff316698164d83af677b2c0b27391779af23ef9688c4b5fbad4",
     "regrid": true
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_hydra_move_tracks.json",
+    "sha256": "b78cbbd840480afcfc562271b88c367556331921f458e35631c782f97c4cbe85"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_hydra_clip_repair_weights.json",
+    "note": "clip pass repair: 240 fallback-skinned (Head/Neck) vertices on the upper necks and heads re-skinned onto the NeckC/L/R chains",
+    "sha256": "75c6dd8dfd188dfc17fcf15d8582abb641f79a935cf33554eacfa9af1bf93833"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_hydra_clip_tracks.json",
+    "sha256": "b970dc158bb8f8b5e4fcb725bae4f9d5578dc6cc8b5510b50fc36dc5f9f89149"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "unit pass: tear gate on the replaced Move clips"
    }
   ]
  }

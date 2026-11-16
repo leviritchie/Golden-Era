@@ -37,7 +37,9 @@ internal static class Homm3ConfluxSpellCopyVisualRuntime
 	};
 
 	private static readonly object LockObject = new();
-	private static readonly HashSet<long> DispatchedSourceEventIds = new();
+	// Only the immediate re-dispatch of one native event is a duplicate; event-args addresses are reused,
+	// so a never-cleared history of pointers would silently drop later spell-copy visuals.
+	private static long _lastDispatchedSourceEventId;
 	private static bool _registered;
 	private static string _registrationAuditStatus = "NOT_ATTEMPTED";
 	private static ManualLogSource _log;
@@ -146,7 +148,7 @@ internal static class Homm3ConfluxSpellCopyVisualRuntime
 		var eventId = Homm3DirectStateIdentity.ResolveKeyOrZero(eventArgs);
 		lock (LockObject)
 		{
-			if (DispatchedSourceEventIds.Contains(eventId))
+			if (eventId != 0 && eventId == _lastDispatchedSourceEventId)
 				return false;
 		}
 
@@ -163,7 +165,7 @@ internal static class Homm3ConfluxSpellCopyVisualRuntime
 		}
 
 		lock (LockObject)
-			DispatchedSourceEventIds.Add(eventId);
+			_lastDispatchedSourceEventId = eventId;
 		var replayArgs = new object[] { originalArgs[0], syntheticEvent };
 		originalMethod.Invoke(originalMethod.IsStatic ? null : dispatcher, replayArgs);
 		RecordDispatched(spec, eventInfo);
@@ -184,6 +186,10 @@ internal static class Homm3ConfluxSpellCopyVisualRuntime
 			failReason = "cast ability event has no exact ability index";
 			return false;
 		}
+		// Index 0 also identifies the default attack / counterattack bucket; only the Ability bucket is the
+		// copied spell. Unknown (unread) type keeps the previous index-only behaviour.
+		if (eventInfo.AbilityType is Hex.Configs.EAbilityType abilityType && abilityType != Hex.Configs.EAbilityType.Ability)
+			return false;
 		var classification = Homm3UnitLawClassifier.Classify(eventInfo.Caster);
 		if (!Homm3UnitLawClassifier.HasIdentity(classification, out var identityFailReason))
 		{
@@ -285,14 +291,17 @@ internal static class Homm3ConfluxSpellCopyVisualRuntime
 			return false;
 		if (!TryResolveCastedMagicType(out var castedMagicType, out failReason))
 			return false;
-		var constructor = ResolveExactConstructor(
-			castedMagicType,
-			new[]
-			{
-				"ObjectPublicPrcgObPrcgInTrPrcgInUnique",
-				"ObjectPublicMaHeccObInccStMacnBoUnique",
-				"Int32"
-			});
+		// The pinned parameter tokens are Golden Era names; off Golden match (battle side, our magic data, Int32) by shape.
+		var constructor = GameBuild.IsGolden
+			? ResolveExactConstructor(
+				castedMagicType,
+				new[]
+				{
+					"ObjectPublicPrcgObPrcgInTrPrcgInUnique",
+					"ObjectPublicMaHeccObInccStMacnBoUnique",
+					"Int32"
+				})
+			: ResolveCastedMagicConstructorByShape(castedMagicType, magicRuntimeData.GetType());
 		if (constructor == null)
 		{
 			failReason = spec.UnitSid + " spell-copy visual castedMagic constructor was not found by exact signature";
@@ -432,7 +441,10 @@ internal static class Homm3ConfluxSpellCopyVisualRuntime
 		}
 		foreach (var methodName in GameSymbols.SpellbookLaws.CastMagicFromListsFactory.NameHints)
 		{
-			method = ResolveExactStaticMethod(type, methodName, new[] { "ObjectPublicPrcgObPrcgInTrPrcgInUnique", "ObjectPublicObcfInStcfInObcnMacfUnique", "Il2CppSystem.Collections.Generic.List|Hex.Session.Battle.Hex", "Il2CppSystem.Collections.Generic.List|Hex.Session.Battle.Hex" });
+			// Off Golden the scoped factory name spells out the exact signature; only the arity is re-checked here.
+			method = GameBuild.IsGolden
+				? ResolveExactStaticMethod(type, methodName, new[] { "ObjectPublicPrcgObPrcgInTrPrcgInUnique", "ObjectPublicObcfInStcfInObcnMacfUnique", "Il2CppSystem.Collections.Generic.List|Hex.Session.Battle.Hex", "Il2CppSystem.Collections.Generic.List|Hex.Session.Battle.Hex" })
+				: ResolveExactStaticMethod(type, methodName, new[] { "", "", "Il2CppSystem.Collections.Generic.List|Hex.Session.Battle.Hex", "Il2CppSystem.Collections.Generic.List|Hex.Session.Battle.Hex" });
 			if (method != null)
 			{
 				_castMagicFromListsFactory = method;
@@ -441,6 +453,23 @@ internal static class Homm3ConfluxSpellCopyVisualRuntime
 		}
 		failReason = "CastMagicEventArgs list factory was not found by exact symbols";
 		return false;
+	}
+
+	private static ConstructorInfo ResolveCastedMagicConstructorByShape(Type type, Type magicRuntimeDataType)
+	{
+		if (type == null || magicRuntimeDataType == null)
+			return null;
+		ConstructorInfo found = null;
+		foreach (var constructor in type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+		{
+			var ps = constructor.GetParameters();
+			if (ps.Length != 3 || ps[2].ParameterType != typeof(int) || ps[1].ParameterType != magicRuntimeDataType)
+				continue;
+			if (found != null)
+				return null;
+			found = constructor;
+		}
+		return found;
 	}
 
 	private static ConstructorInfo ResolveExactConstructor(Type type, string[] expectedParameterTypeTokens)

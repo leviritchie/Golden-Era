@@ -8,18 +8,19 @@ schematic_catalog.json (tools/tower_artificing/build_schematic_catalog.py). Rows
   carrier for perUnit schematics (godslayer / duelist / phoenix; the runtime picks it by unit sid);
 - the curated helper rows the grafts reference (`{graft}_*` aura/debuff/faction buffs, side buffs + infos,
   phoenix heart obstacles), each into the vanilla file of its kind;
-- the Transcribe hero action and its 1-round marker buff (Homm3TowerArtificingRuntime watches the
-  marker being added to learn which unit was transcribed);
+- the Artificing world spell (a clone of the native Necromancer Will row with [mode] parameters;
+  Homm3TowerArtificingRuntime intercepts the cast and opens the graft picker);
 - visible hero map buffs for map grafts (`hero_buff` helpers: the native unit-set bonus, held while a carrier
   is in the army; Homm3TowerArtificingRuntime reconciles them);
 - hidden hero map buffs that hold the ledger (essence bits, per-schematic source-tier bits, per-line
   graft slot bits), saved with the hero like the Dungeon Captives ledger.
 
-All rows are always generated. Only `policy.enabled` grants Transcribe through the faction skill and
-renames the skill, so the rows stay inert until the runtime has an in-game check.
+All rows are always generated. Only `policy.enabled` grants the world spell through the faction skill and
+renames the skill, so the rows stay inert while Artificing is disabled.
 """
 from __future__ import annotations
 
+import copy
 import json
 import re
 from pathlib import Path
@@ -28,11 +29,11 @@ from typing import Any
 REPO_ROOT = Path(__file__).resolve().parents[2]
 POLICY_PATH = REPO_ROOT / "custom_factions" / "tower_artificing" / "artificing_policy.json"
 CATALOG_PATH = REPO_ROOT / "custom_factions" / "tower_artificing" / "schematic_catalog.json"
-TRANSCRIBE_BUFFS_PATH = "DB/buffs/sub_skills_battle_hero_ability_buffs.json"
-HERO_ABILITIES_PATH = "DB/heroes_abilities/heroes_abilities_base/hero_abilities.json"
+NECROMANCY_MAGIC_SID = "change_use_necromancy"
+MAGIC_LANG_PATHS = ("Lang/english/texts/magic.json", "Lang/english/texts/magics.json")
+MAGIC_LANG_ARGS_PATH = "Lang/args/magic.json"
 COMBAT_BUFF_LANG_PATHS = ("Lang/english/texts/magic_buff.json", "Lang/english/texts/unitsBuff.json")
 HERO_BUFF_LANG_PATH = "Lang/english/texts/mapObjects.json"
-HERO_SKILLS_LANG_PATH = "Lang/english/texts/heroSkills.json"
 PAYLOAD_KEYS = ("data", "actions", "statOverrides")
 # Helper rows (catalog `helpers`): buffs go with the graft buffs; the rest into the vanilla file of their kind.
 HELPER_PATHS = {
@@ -134,69 +135,60 @@ def make_helper_rows(catalog: dict[str, Any]) -> dict[str, list[dict[str, Any]]]
     return out
 
 
-def make_transcribe_effect_buff_row(policy: dict[str, Any]) -> dict[str, Any]:
-    transcribe = policy["transcribe"]
-    sid = transcribe["effectBuffSid"]
-    return {
-        "id": sid,
-        "aiValue": 0,
-        "aiValuePerDuration": 0,
-        "dontMimic": True,
-        "maxDuration": 1,
-        "icon": transcribe["effectIcon"],
-        "name_": f"{sid}_name",
-        "description_": f"{sid}_description",
-        "tags": ["homm3_tower_artificing_transcribe"],
-        "isPositive": False,
-        "addition": "duration",
-        "canDispel": False,
-        "data": {"stats": {}},
-    }
+def make_graft_magic_row(policy: dict[str, Any], source_rows: list[Any]) -> dict[str, Any]:
+    """Clone of the native Necromancer Will world magic; the runtime intercepts its [mode] parameters."""
+    spell = policy["graftSpell"]
+    base = next((r for r in source_rows if isinstance(r, dict) and r.get("id") == NECROMANCY_MAGIC_SID), None)
+    if not isinstance(base, dict):
+        raise RuntimeError(f"missing Artificing magic source {NECROMANCY_MAGIC_SID}")
+    sid = spell["magicSid"]
+    row = copy.deepcopy(base)
+    row.update(
+        {
+            "id": sid,
+            "name": f"{sid}_name",
+            "icon": spell["icon"],
+            "description": [f"{sid}_description"] * 4,
+            "bonusDescriptions": [],
+            "upEffectDescription": "",
+            "manaCost": [0, 0, 0, 0],
+            "upgradeCost": [0],
+            "rank": 1,
+            "school_": "neutral",
+            "usedOnMap": True,
+            "xHomm3RuntimeHook": (
+                "Artificing reuses the native Necromancer Will world-magic handler; Homm3TowerArtificingRuntime "
+                "intercepts the [mode] parameter row, suppresses the native toggle and opens the graft picker."
+            ),
+        }
+    )
+    world_magic = row.get("worldMagic")
+    settings = world_magic.get("magicSettings") if isinstance(world_magic, dict) else None
+    if not isinstance(settings, list) or not settings:
+        raise RuntimeError(f"malformed Artificing magic source {NECROMANCY_MAGIC_SID}")
+    world_magic["settingPerLevels"] = [0, 0, 0, 0]
+    for setting in settings:
+        if isinstance(setting, dict):
+            setting["mechType"] = NECROMANCY_MAGIC_SID
+            setting["parameters"] = [spell["mode"]]
+            setting["usageLimit"] = -1
+            setting["castInfoSid"] = f"{sid}_cast"
+    return row
 
 
-def make_transcribe_hero_ability(policy: dict[str, Any]) -> dict[str, Any]:
-    """Native buff_ability shape (Borrowed Time donor) with an any-side single target."""
-    transcribe = policy["transcribe"]
-    sid = transcribe["abilitySid"]
-    target_params = {
-        "targetTags": ["unit"],
-        "castTarget_": transcribe["castTarget"],
-        "targetCondition_": "alive",
-        "selection": "object",
-    }
-    return {
-        "id": sid,
-        "levels": [
-            {
-                "aiValue": 0,
-                "name": f"{sid}_name",
-                "description": f"{sid}_description",
-                "icon": transcribe["icon"],
-                "casterEffect": "magic/Prefabs_vfx/Heroes/hero_nature_book_ability_hex",
-                "attackTimeBefore": 0.3,
-                "attackTimeAfter": 1.5,
-                "cd": transcribe["cooldown"],
-                "charges": -1,
-                "energyLevel": transcribe["focus"],
-                "useExpandTooltip": "false",
-                "attackType_": "cast",
-                "damageDealer": {
-                    "tags": ["ability", "buff_ability"],
-                    "attackPatternSid": "attack_single_buff",
-                    "castTargetParams": dict(target_params),
-                    "affectTargetParams": dict(target_params),
-                    "damageTarget_": "none",
-                    "buffTarget_": transcribe["castTarget"],
-                    "buff": {"sid": transcribe["effectBuffSid"], "duration": 1},
-                },
-            }
-        ],
-        "xHomm3ImplementedMechanics": (
-            "Transcribe (Artificing): marks any living stack with a 1-round marker buff. "
-            "Homm3TowerArtificingRuntime sees the marker added and writes that unit's graftable "
-            "schematics into the caster's Schematic Book. aiValue 0: AI heroes do not cast it."
-        ),
-    }
+def magic_lang_rows(policy: dict[str, Any]) -> list[dict[str, str]]:
+    sid = policy["graftSpell"]["magicSid"]
+    return [
+        {"sid": f"{sid}_name", "text": "Artificing"},
+        {
+            "sid": f"{sid}_description",
+            "text": (
+                "Open the Schematic Book and spend Arcane Essence to graft a learned creature passive onto a "
+                "Tower unit line. Free; usable any time on the adventure map."
+            ),
+        },
+        {"sid": f"{sid}_cast", "text": "The Schematic Book opens."},
+    ]
 
 
 def ledger_buff_sids(policy: dict[str, Any], catalog: dict[str, Any]) -> list[str]:
@@ -230,11 +222,7 @@ def make_ledger_hero_buff_rows(policy: dict[str, Any], catalog: dict[str, Any]) 
 
 
 def combat_buff_lang_rows(policy: dict[str, Any], catalog: dict[str, Any]) -> list[dict[str, str]]:
-    effect = policy["transcribe"]["effectBuffSid"]
-    rows = [
-        {"sid": f"{effect}_name", "text": "Transcribed"},
-        {"sid": f"{effect}_description", "text": "An Artificer copied this creature's passive abilities into a Schematic Book."},
-    ]
+    rows: list[dict[str, str]] = []
     for schematic in graftable_schematics(catalog):
         description = schematic.get("graftDescription")
         if not isinstance(description, str) or re.search(r"\{\d+\}", description):
@@ -264,30 +252,21 @@ def hero_buff_lang_rows(catalog: dict[str, Any]) -> list[dict[str, str]]:
     return rows
 
 
-def hero_skill_lang_rows(policy: dict[str, Any]) -> list[dict[str, str]]:
-    transcribe = policy["transcribe"]
-    sid = transcribe["abilitySid"]
-    return [
-        {"sid": f"{sid}_name", "text": "Transcribe"},
-        {
-            "sid": f"{sid}_description",
-            "text": "Copy the passive abilities of target creature, friend or foe, into this hero's Schematic Book.",
-        },
-    ]
-
-
 def faction_skill_levels(policy: dict[str, Any]) -> list[list[dict[str, Any]]]:
-    sid = policy["transcribe"]["abilitySid"]
-    return [[{"type": "heroBattleAbility", "parameters": [sid, "0"]}] for _ in range(3)]
+    sid = policy["graftSpell"]["magicSid"]
+    return [[{"type": "heroMagicAddition", "parameters": [sid, "false"]}] for _ in range(3)]
 
 
 def faction_skill_texts(policy: dict[str, Any]) -> tuple[str, str]:
     slots = policy["graftSlotsByRank"]
+    chances = policy["observation"]["chanceByRank"]
     implemented = (
-        "Artificing: every rank grants the Transcribe hero action. Won battles add Arcane Essence per defeated "
-        "enemy creature by tier; essence buys grafts of Schematic Book passives onto Tower unit lines "
-        f"({slots[0]}/{slots[1]}/{slots[2]} per line at Basic/Advanced/Expert). Homm3TowerArtificingRuntime "
-        "owns the ledger and applies grafts as dispellable battle buffs at battle start. Runtime unproven."
+        "Artificing: at the end of every battle (fought or auto-resolved) the hero rolls once per distinct "
+        f"graftable passive in the enemy army ({chances[0]}/{chances[1]}/{chances[2]}% by rank) to write it into the "
+        "Schematic Book. Won battles add Arcane Essence per defeated enemy creature by tier. Every rank grants the "
+        "Artificing world spell, whose picker spends essence on grafts of Schematic Book passives onto Tower unit "
+        f"lines ({slots[0]}/{slots[1]}/{slots[2]} per line at Basic/Advanced/Expert). Homm3TowerArtificingRuntime "
+        "owns the ledger and applies grafts as dispellable battle buffs at battle start."
     )
     source_difference = (
         "Artificing replaces Arcane Battery. Grafts are native buff rows carrying the source passive's own "
@@ -298,20 +277,26 @@ def faction_skill_texts(policy: dict[str, Any]) -> tuple[str, str]:
 
 def faction_skill_lang(policy: dict[str, Any]) -> tuple[str, str, list[str]]:
     slots = policy["graftSlotsByRank"]
+    chances = policy["observation"]["chanceByRank"]
     description = (
-        "Tower heroes Transcribe creature passives, friend or foe, into a Schematic Book, and spend Arcane Essence "
-        "from won battles to graft them onto Tower units. Grafts are battle buffs and can be dispelled."
+        "After each battle, Tower heroes may learn the passive abilities of enemy creatures into a Schematic Book. "
+        "Defeated enemies yield Arcane Essence, spent with the Artificing spell to graft learned passives onto "
+        "Tower units. Grafts are battle buffs and can be dispelled. Artificing can be accessed through a world map "
+        "spell."
     )
+    # User 2026-11-13: the Chronomancy / Borrowed Time hint is redundant (the subskill describes itself); dropped
+    # from the skill and rank texts.
     rank_descs = [
-        f"Transcribe (2 Focus) copies a creature's passives. Up to {count} graft{'s' if count != 1 else ''} per Tower unit line."
-        for count in slots
+        f"{chance}% chance per enemy passive to learn it after each battle. "
+        f"Up to {count} graft{'s' if count != 1 else ''} per Tower unit line."
+        for chance, count in zip(chances, slots)
     ]
     return policy["factionSkillName"], description, rank_descs
 
 
 def merge_tower_artificing_into_overlay(release_zip, output, notes, helpers) -> None:
     """helpers: read_overlay_or_release_json, write_json, upsert_array_row, dedupe_array_rows_by_id,
-    add_lang_overlay_rows (passed in to avoid importing the overlay module)."""
+    add_lang_overlay_rows, add_lang_args_overlay_rows (passed in to avoid importing the overlay module)."""
     policy = load_policy()
     catalog = load_catalog()
     read_doc = helpers["read_overlay_or_release_json"]
@@ -338,10 +323,17 @@ def merge_tower_artificing_into_overlay(release_zip, output, notes, helpers) -> 
     for kind, rows in helpers_by_kind.items():
         if rows:
             merge_rows(HELPER_PATHS[kind], rows, f"graft {kind} helpers")
-    merge_rows(TRANSCRIBE_BUFFS_PATH, [make_transcribe_effect_buff_row(policy)], "Transcribe marker buff")
-    merge_rows(HERO_ABILITIES_PATH, [make_transcribe_hero_ability(policy)], "Transcribe hero action")
+    magic_path = policy["graftSpell"]["path"]
+    magic_doc = read_doc(release_zip, output, magic_path)
+    if not isinstance(magic_doc, dict) or not isinstance(magic_doc.get("array"), list):
+        raise RuntimeError(f"malformed homm3_tower Artificing magic source {magic_path}")
+    merge_rows(magic_path, [make_graft_magic_row(policy, magic_doc["array"])], "graft world spell")
     merge_rows(policy["ledger"]["heroBuffsPath"], make_ledger_hero_buff_rows(policy, catalog), "ledger hero buffs")
     for path in COMBAT_BUFF_LANG_PATHS:
         add_lang(release_zip, output, path, combat_buff_lang_rows(policy, catalog), notes)
     add_lang(release_zip, output, HERO_BUFF_LANG_PATH, hero_buff_lang_rows(catalog), notes)
-    add_lang(release_zip, output, HERO_SKILLS_LANG_PATH, hero_skill_lang_rows(policy), notes)
+    for path in MAGIC_LANG_PATHS:
+        add_lang(release_zip, output, path, magic_lang_rows(policy), notes)
+    helpers["add_lang_args_overlay_rows"](
+        release_zip, output, MAGIC_LANG_ARGS_PATH, [{"sid": row["sid"], "args": []} for row in magic_lang_rows(policy)], notes
+    )

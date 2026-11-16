@@ -1028,7 +1028,7 @@
   ]
  },
  "glbPatch": {
-  "reason": "authenticity: DEF g12 attack rears the necks up tall (f3-f6) then throws the body low and forward with the heads striking flat at the target (f7-f12); DEF g04 defence raises the necks straight up (f2-f7); the capture barely moved in both. Chest/flank/neck-seam weights re-solved for the lunge (gate 205 -> 188)",
+  "reason": "authenticity: DEF g12 attack rears the necks up tall (f3-f6) then throws the body low and forward with the heads striking flat at the target (f7-f12); DEF g04 defence raises the necks straight up (f2-f7); the capture barely moved in both. Chest/flank/neck-seam weights re-solved for the lunge (gate 205 -> 188); 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): AttackFront, Mouseover re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
   "ops": [
    {
     "op": "setWeights",
@@ -1057,6 +1057,52 @@
     "op": "keyTranslations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_chaos_hydra_pose_tr.json",
     "sha256": "35cd5a3e8773de763b40b8a853db28dfd24b41bf797c72e4c81bb73a9f73e44e"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chaos_hydra_move_tracks.json",
+    "sha256": "4d85659082be9127301024275bf9452e2af76e65c4e81837347705754eab1ea0"
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chaos_hydra_clip_repair_joints.json",
+    "note": "clip pass repair: one copy of the shared chain per head (Head[ABCDE]_NN)",
+    "sha256": "96595491b8c91f23e5a15f5366a168b81698832049c1807db2306a762a66caad"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chaos_hydra_clip_repair_tracks.json",
+    "note": "clip pass repair: the per-head copies follow the shared chain's keys in every clip (unkeyed = shipped pose)",
+    "sha256": "ec1e7861b169bd3e6b6a30cf432c36fabf1f0f2504ab7ba9e8ed7175d204d6d6"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chaos_hydra_clip_repair_weights.json",
+    "note": "clip pass repair: each head's share of the shared chain onto its own copy",
+    "sha256": "53b94f129ec2d5944972672bd937858356977efa110018b6266af54b37a9fa6d"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chaos_hydra_clip_repair_facecut.json",
+    "note": "clip pass repair: faces fusing a jaw / horn to the neck beside it (they stretch past 2x on the plain skin once the necks lose their correctives)",
+    "sha256": "b32c7e60aa41cf8b4cdae84c64c04500260a6eda5a2400f87258bb418cc478b8"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chaos_hydra_clip_tracks.json",
+    "sha256": "d97402423090f4543017b4bdcb9084c07c5d48c83120e1b6c0a8c3aa328bf3c3"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront",
+     "Unit_Mouseover"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
    }
   ]
  }

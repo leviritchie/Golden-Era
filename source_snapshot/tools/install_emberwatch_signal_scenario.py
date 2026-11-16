@@ -12,6 +12,8 @@ import zipfile
 from datetime import datetime
 from pathlib import Path
 
+from core_overlay_member_merge import OverlayMergeError, merge_overlay_member
+
 MAP_SID = "h3_emberwatch_signal"
 DEFAULT_GAME_ROOT = Path(r"V:\SteamLibrary\steamapps\common\Heroes of Might and Magic Olden Era - Golden Era")
 ARTIFACT_ROOT = Path("artifacts") / "campaign_port_poc" / "emberwatch_signal"
@@ -101,12 +103,20 @@ def merge_core_overlay(repo_root: Path, game_root: Path, backup_suffix: str) -> 
         tmp.unlink()
     with zipfile.ZipFile(core_zip, "r") as src, zipfile.ZipFile(tmp, "w", compression=zipfile.ZIP_DEFLATED) as dst:
         skip = set(members)
+        src_names = set(src.namelist())
         for info in src.infolist():
             if info.filename in skip:
                 continue
             dst.writestr(info, src.read(info.filename))
         for member in members:
             payload = (overlay_root / member).read_bytes()
+            # Retain base rows the snapshot overlay lacks; see tools/core_overlay_member_merge.py.
+            try:
+                payload = merge_overlay_member(
+                    member, src.read(member) if member in src_names else None, payload
+                )
+            except OverlayMergeError as exc:
+                fail(str(exc))
             dst.writestr(member, payload)
     tmp.replace(core_zip)
     return members

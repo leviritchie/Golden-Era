@@ -7938,5 +7938,34 @@
     ]
    }
   ]
+ },
+ "glbPatch": {
+  "reason": "2026-11-09 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_faerie_dragon_flight_weights.json",
+    "sha256": "7e263e7b2d5c4b203d16d9ab581a5ff18b9a3e412d7e43575703bcbc7fb40777"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_faerie_dragon_flight_tracks.json",
+    "sha256": "b358c31806f7614588ada70c74a7c0a9a6ffd896093532d0eefce82ea568fd8e"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "flyer flight: crease of the spread wings"
+   }
+  ]
  }
 }

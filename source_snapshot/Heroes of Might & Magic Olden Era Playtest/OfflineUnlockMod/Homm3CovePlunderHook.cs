@@ -68,7 +68,9 @@ internal static class Homm3CovePlunderHook
 	private static IntPtr _logicHeroClass;
 	private static IntPtr _rewardSetClass;
 
-	private static readonly HashSet<int> _plunderedChests = new();
+	// Keyed by native chest pointer + map object id: the id alone is map data and repeats after a save
+	// reload or a new game on the same map, which would silently block that chest's payout forever.
+	private static readonly HashSet<(IntPtr chest, int id)> _plunderedChests = new();
 	private static readonly HashSet<(IntPtr hero, IntPtr mine)> _plunderedMines = new();
 	private static readonly Dictionary<IntPtr, Visitor> _lastMineVisitor = new();
 	private static readonly Dictionary<IntPtr, int> _visitOwnerBefore = new();
@@ -94,20 +96,8 @@ internal static class Homm3CovePlunderHook
 			|| !typeof(Il2CppObjectBase).IsAssignableFrom(chestOpenMethods[0].GetParameters()[0].ParameterType))
 			throw new MissingMethodException(chestLogicType.FullName, "chest open virtual (CovePlunder.ChestHeroOpen): matched " + chestOpenMethods.Length);
 
-		var resourceWrapperType = GameMember.FindType(
-			GameSymbols.SwashbucklerGold.ResourceWrapperTypeId,
-			GameSymbols.SwashbucklerGold.ResourceWrapperTypeHint);
-		if (resourceWrapperType == null)
-			throw new TypeLoadException("Cove Plunder: missing resource wrapper type (SwashbucklerGold.ResourceWrapperTypeHint).");
-		_resourceWrapperCtor = resourceWrapperType.GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(ResHeap) }, null);
-		if (_resourceWrapperCtor == null)
-			throw new MissingMethodException(resourceWrapperType.FullName, ".ctor(ResHeap)");
-		_addResourceMethod = GameMember.FindFirstMethodByNames(
-			resourceWrapperType,
-			new[] { typeof(string), typeof(int) },
-			GameSymbols.SwashbucklerGold.AddResource);
-		if (_addResourceMethod == null || _addResourceMethod.ReturnType != typeof(void))
-			throw new MissingMethodException(resourceWrapperType.FullName, "exact resource add (SwashbucklerGold.AddResource)");
+		if (!EnsureResourcePath(out var resourcePathFail))
+			throw new MissingMethodException("Cove Plunder: " + resourcePathFail);
 
 		var mineLogicType = GameMember.FindType(GameSymbols.CovePlunder.MineLogicTypeId, GameSymbols.CovePlunder.MineLogicTypeHint);
 		if (mineLogicType == null)
@@ -211,7 +201,7 @@ internal static class Homm3CovePlunderHook
 				Step("chest-open skip: chest has no object id (" + objectId + "); refusing an unseeded roll");
 				return;
 			}
-			if (_plunderedChests.Contains(objectId))
+			if (_plunderedChests.Contains((chest.Pointer, objectId)))
 			{
 				Step("chest-open skip: object " + objectId + " already plundered");
 				return;
@@ -220,7 +210,7 @@ internal static class Homm3CovePlunderHook
 			var resource = ChestRareResources[DeterministicIndex("plunder|chest|" + objectId + "|" + dataHero.configSid, ChestRareResources.Length)];
 			if (Grant(dataHero.sideId, resource, level, out var before, out var after, out var fail))
 			{
-				_plunderedChests.Add(objectId);
+				_plunderedChests.Add((chest.Pointer, objectId));
 				_log?.LogInfo(LogPrefix + "chest payout object=" + objectId + " hero=" + dataHero.configSid + " level=" + level
 					+ " side=" + dataHero.sideId + " +" + level + " " + resource + " (" + before + "->" + after + ").");
 			}
@@ -479,13 +469,50 @@ internal static class Homm3CovePlunderHook
 		return true;
 	}
 
+	/// <summary>
+	/// Resolves the native resource wrapper used by <see cref="Grant"/>. Idempotent and independent of the
+	/// Plunder toggle: monster gold (GoldenEraGameplayOptions) grants through it even when Plunder is off.
+	/// </summary>
+	internal static bool EnsureResourcePath(out string failReason)
+	{
+		failReason = null;
+		if (_resourceWrapperCtor != null && _addResourceMethod != null)
+			return true;
+		var resourceWrapperType = GameMember.FindType(
+			GameSymbols.SwashbucklerGold.ResourceWrapperTypeId,
+			GameSymbols.SwashbucklerGold.ResourceWrapperTypeHint);
+		if (resourceWrapperType == null)
+		{
+			failReason = "missing resource wrapper type (SwashbucklerGold.ResourceWrapperTypeHint)";
+			return false;
+		}
+		var ctor = resourceWrapperType.GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(ResHeap) }, null);
+		if (ctor == null)
+		{
+			failReason = resourceWrapperType.FullName + " missing .ctor(ResHeap)";
+			return false;
+		}
+		var add = GameMember.FindFirstMethodByNames(
+			resourceWrapperType,
+			new[] { typeof(string), typeof(int) },
+			GameSymbols.SwashbucklerGold.AddResource);
+		if (add == null || add.ReturnType != typeof(void))
+		{
+			failReason = resourceWrapperType.FullName + " missing exact resource add (SwashbucklerGold.AddResource)";
+			return false;
+		}
+		_resourceWrapperCtor = ctor;
+		_addResourceMethod = add;
+		return true;
+	}
+
 	/// <summary>Adds a resource to a side through the native resource wrapper; also used by GoldenEraGameplayOptions (monster gold).</summary>
 	internal static bool Grant(int sideId, string resource, int amount, out int before, out int after, out string failReason)
 	{
 		before = after = -1;
-		if (_resourceWrapperCtor == null || _addResourceMethod == null)
+		if (!EnsureResourcePath(out var pathFail))
 		{
-			failReason = "Plunder resource path not registered";
+			failReason = "resource path unresolved: " + pathFail;
 			return false;
 		}
 		if (amount <= 0)
@@ -552,7 +579,7 @@ internal static class Homm3CovePlunderHook
 		}
 	}
 
-	private static IntPtr NativeClassOf(Type managedType)
+	internal static IntPtr NativeClassOf(Type managedType)
 	{
 		try
 		{
@@ -567,7 +594,7 @@ internal static class Homm3CovePlunderHook
 		}
 	}
 
-	private static bool IsNativeInstanceOf(object value, IntPtr expectedClass)
+	internal static bool IsNativeInstanceOf(object value, IntPtr expectedClass)
 	{
 		if (value is not Il2CppObjectBase obj || expectedClass == IntPtr.Zero)
 			return false;

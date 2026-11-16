@@ -13,7 +13,12 @@ from pathlib import Path
 from typing import Any
 
 from analyze_core_overlay import DEFAULT_RELEASE_CORE
-from multilingual_custom_lang import TEXT_FILES, canonical_custom_text_files_for_sid, custom_unit_ability_view_sids
+from multilingual_custom_lang import (
+    TEXT_FILES,
+    canonical_custom_text_files_for_sid,
+    custom_unit_ability_view_sids,
+    is_glossary_mixed,
+)
 
 
 PLACEHOLDER_RE = re.compile(r"\{\d+\}")
@@ -62,6 +67,7 @@ def validate(core: Path, max_examples: int) -> int:
     missing = 0
     placeholder_mismatch = 0
     same_as_english = 0
+    mixed_language = 0
     noncanonical = 0
     same_by_file: Counter[str] = Counter()
     same_by_lang: Counter[str] = Counter()
@@ -108,23 +114,28 @@ def validate(core: Path, max_examples: int) -> int:
                         placeholder_mismatch += 1
                         if len(examples) < max_examples:
                             examples.append(f"placeholder mismatch {localized_name}: {sid}")
+                    elif is_glossary_mixed(lang, english_text, localized_text):
+                        mixed_language += 1
+                        if len(examples) < max_examples:
+                            examples.append(f"mixed-language glossary swap {localized_name}: {sid}")
                     elif localized_text == english_text and is_substantive_english(english_text):
+                        # Informational only (owner-approved 2026-11-15): untranslated mod text
+                        # stays fully English rather than being glossary-swapped word by word.
                         same_as_english += 1
                         same_by_file[file_name] += 1
                         same_by_lang[lang] += 1
-                        if len(examples) < max_examples:
-                            examples.append(f"same as English {localized_name}: {sid} = {english_text!r}")
 
     print(
         "Multilingual custom localization audit: "
         f"missing={missing} placeholder_mismatches={placeholder_mismatch} "
-        f"same_as_english_substantive={same_as_english} noncanonical_rows={noncanonical}"
+        f"mixed_language={mixed_language} same_as_english_substantive={same_as_english} (info) "
+        f"noncanonical_rows={noncanonical}"
     )
     print("same_as_english_by_file=" + json.dumps(dict(same_by_file), sort_keys=True))
     print("same_as_english_by_lang=" + json.dumps(dict(same_by_lang), sort_keys=True))
     for example in examples:
         print("example: " + example)
-    return 1 if missing or placeholder_mismatch or same_as_english or noncanonical else 0
+    return 1 if missing or placeholder_mismatch or mixed_language or noncanonical else 0
 
 
 def parse_args() -> argparse.Namespace:

@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Offline harness for Homm3FactoryLogisticsRange (pure solver). Compiles the plugin's Range.cs against a stub
+       map adapter; no game or interop references. Run: dotnet run -c Release -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <BaseOutputPath>V:\olden_port_work\factory_logistics\range_harness_build\bin\</BaseOutputPath>
+    <BaseIntermediateOutputPath>V:\olden_port_work\factory_logistics\range_harness_build\obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\Heroes of Might &amp; Magic Olden Era Playtest\OfflineUnlockMod\Homm3FactoryLogisticsRange.cs" Link="Homm3FactoryLogisticsRange.cs" />
+    <Compile Include="StubMap.cs" />
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+</Project>

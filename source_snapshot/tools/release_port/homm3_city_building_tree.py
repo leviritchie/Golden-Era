@@ -101,11 +101,10 @@ FACTION_LEVEL_REQS: dict[str, dict[str, tuple[Req, ...]]] = {
         "Build_Tier_2:1": (T(1),),  # Parapet <- Workshop
         "Build_Tier_3:1": (T(1),),  # Golem Factory <- Workshop
         "Build_Tier_4:1": (MG(1), T(2), T(3)),  # Mage Tower <- MG1 + Parapet + Golem Factory
-        "Build_Tier_4:2": (("Build_Intelligence_Academy", 1),),  # Upg. Mage Tower <- Library
         "Build_Tier_5:1": (T(4),),  # Altar of Wishes <- Mage Tower
         "Build_Tier_6:1": (T(4),),  # Golden Pavilion <- Mage Tower
         "Build_Tier_7:1": (T(5), T(6)),  # Cloud Temple <- Altar of Wishes + Golden Pavilion
-        "Build_Intelligence_Academy:1": (MG(1),),  # Library <- MG1
+        "Build_Intelligence_Academy:1": (WALL(1),),  # Lookout Tower <- Fort
         "Build_Training_Range:1": (MG(1),),  # Wall of Knowledge <- MG1
         "Build_Bank:1": (HALL(3), WALL(3)),  # Capitol Vault = Capitol <- City Hall + Castle
         "Build_Resource_Depot_level_2:1": (T(2),),  # Sculptor's Wings (horde) <- Parapet
@@ -265,7 +264,9 @@ ADAPTATIONS: dict[str, list[str]] = {
         "The Rampart 'Treasury' row is an OE artifact market: it takes HoMM3 Treasury's Miners' Guild requirement plus the Marketplace its function needs.",
     ],
     "homm3_tower": [
-        "'Wall of Knowledge' lives on the Build_Training_Range row (+1 Knowledge to each visiting hero) and takes its requirement (MG1). Lookout Tower has no row.",
+        "'Wall of Knowledge' lives on the Build_Training_Range row (+1 Knowledge to each visiting hero) and takes its requirement (MG1).",
+        "'Lookout Tower' (+15 sight radius) lives on the Build_Intelligence_Academy row and takes its requirement (Fort).",
+        "Library has no row (its spell effect is the Observatory Network law), so Upg. Mage Tower's Library requirement is dropped.",
     ],
     "homm3_inferno": [
         "'Brimstone Tolls' stands in for Brimstone Clouds (<- Fort); Order of Fire and Cages have no row.",

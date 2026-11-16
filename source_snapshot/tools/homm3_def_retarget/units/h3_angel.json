@@ -642,27 +642,56 @@
    }
   }
  },
-  "glbPatch": {
-    "reason": "authenticity pass (lane B): AttackFront/ShootFront, Hitted, Defence, Move, MoveStart, MoveEnd and Mouseover key poses re-authored by motion intent against the DEF (overhead sword raise into a knees-bent slash that keeps the face and chest toward the enemy (trunk counter-yawed against the base spin), wings flared wide; hit recoil with head thrown back and arms/wings flung wide; knees-bent guard behind the upright sword with the wings spread down and back; full wingbeat whose downstroke passes below horizontal, body facing the travel direction; sword brought up level on mouseover). Wing roots driven as rigid two-vector orients in the chest frame, arcs rolled so no feather crosses the face; Move feather bones rested. Tear gate over master targets 1591 -> 1585, worst edge unchanged (9.895). 2026-10-08 check pass: head held level through MoveStart/Move/MoveEnd (was pitched back 24 deg on take-off and rolling up to 14 deg sideways in flight; the DEF looks ahead). Upstroke wing-root frames (Move f2-f5, MoveStart f1) pitched 35 deg back so the raised wings sit up behind the shoulders instead of wrapping forward over the face in the battle view.",
-    "ops": [
-      {
-        "op": "keyRotations",
-        "table": "tools/homm3_glb_patch/key_rotations/h3_angel_pose_rot.json",
-        "sha256": "b36094b8e99c67a1bbf2d2b776e3a9470d7693187f4f79db54dfb9731c2f5864",
-        "regrid": true
-      },
-      {
-        "op": "keyRotations",
-        "table": "tools/homm3_glb_patch/key_rotations/h3_angel_pose_rot2.json",
-        "sha256": "781c7896c5719522fb04cfb85a5cf9dc66c14b6d9eaa31e8c92ac47ceda7a1a7",
-        "regrid": true
-      },
-      {
-        "op": "keyTranslations",
-        "table": "tools/homm3_glb_patch/key_rotations/h3_angel_pose_tr.json",
-        "sha256": "a3e2e7cd1bdef83441c63dee9f41f2ef7973acc666e28806c0bbdb9677baec22",
-        "regrid": true
-      }
-    ]
-  }
+ "glbPatch": {
+  "reason": "authenticity pass (lane B): AttackFront/ShootFront, Hitted, Defence, Move, MoveStart, MoveEnd and Mouseover key poses re-authored by motion intent against the DEF (overhead sword raise into a knees-bent slash that keeps the face and chest toward the enemy (trunk counter-yawed against the base spin), wings flared wide; hit recoil with head thrown back and arms/wings flung wide; knees-bent guard behind the upright sword with the wings spread down and back; full wingbeat whose downstroke passes below horizontal, body facing the travel direction; sword brought up level on mouseover). Wing roots driven as rigid two-vector orients in the chest frame, arcs rolled so no feather crosses the face; Move feather bones rested. Tear gate over master targets 1591 -> 1585, worst edge unchanged (9.895). 2026-10-08 check pass: head held level through MoveStart/Move/MoveEnd (was pitched back 24 deg on take-off and rolling up to 14 deg sideways in flight; the DEF looks ahead). Upstroke wing-root frames (Move f2-f5, MoveStart f1) pitched 35 deg back so the raised wings sit up behind the shoulders instead of wrapping forward over the face in the battle view.; 2026-11-09 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
+  "ops": [
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_angel_pose_rot.json",
+    "sha256": "b36094b8e99c67a1bbf2d2b776e3a9470d7693187f4f79db54dfb9731c2f5864",
+    "regrid": true
+   },
+   {
+    "op": "keyRotations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_angel_pose_rot2.json",
+    "sha256": "781c7896c5719522fb04cfb85a5cf9dc66c14b6d9eaa31e8c92ac47ceda7a1a7",
+    "regrid": true
+   },
+   {
+    "op": "keyTranslations",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_angel_pose_tr.json",
+    "sha256": "a3e2e7cd1bdef83441c63dee9f41f2ef7973acc666e28806c0bbdb9677baec22",
+    "regrid": true
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_angel_flight_weights.json",
+    "sha256": "72bd4bd7609d3b42e10a1d100807e95cdc693fab9efed508380ceb71061de8c5"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": false,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_angel_flight_tracks.json",
+    "sha256": "982e65338e47beb217db652ee36968b9e87fc661dfed09cd11c503393b4bd896"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_angel_clip_tracks.json",
+    "sha256": "fb36f838c25f9b1c723b5129a9728d213fb954352841dc726f8316d1fe9fcfdd"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "flyer flight: crease of the spread wings"
+   }
+  ]
+ }
 }

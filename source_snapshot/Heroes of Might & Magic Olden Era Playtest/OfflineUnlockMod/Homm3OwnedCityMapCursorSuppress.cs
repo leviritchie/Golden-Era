@@ -29,6 +29,7 @@ internal static class Homm3OwnedCityMapCursorSuppress
 	private static bool _forcedNormalForSession;
 	private static int _loggedSuppress;
 	private static int _prefixDepth;
+	private static string _modalOwner;
 
 	private static MethodInfo _cursorStackSingleton;
 	private static MethodInfo _cursorStackApply;
@@ -91,6 +92,39 @@ internal static class Homm3OwnedCityMapCursorSuppress
 		_log?.LogInfo(LogPrefix + " suppress cleared (" + (reason ?? "unspecified") + ").");
 	}
 
+	/// <summary>
+	/// A mod modal (the Tower Artificing picker) covers the map: show the game's Normal cursor and drop every other
+	/// ECursor apply until it closes. Hover logic behind the modal is also gated by CursorRayCast.IsOverUI, but
+	/// that leaves whatever cursor was last applied (blocked / move / interact); this replaces it. On release the
+	/// map's next hover apply restores its own cursor. Returns false (with detail) when the surfaces are missing.
+	/// </summary>
+	internal static bool SetModalNormal(string owner, bool active, out string detail)
+	{
+		detail = null;
+		if (!_registered)
+		{
+			detail = "cursor_suppress_unregistered";
+			return false;
+		}
+		if (!active)
+		{
+			if (_modalOwner != null && string.Equals(_modalOwner, owner, StringComparison.Ordinal))
+				_modalOwner = null;
+			detail = "released";
+			return true;
+		}
+		_modalOwner = owner ?? "modal";
+		_prefixDepth++;
+		try
+		{
+			return TryForceNormal(out detail);
+		}
+		finally
+		{
+			_prefixDepth--;
+		}
+	}
+
 	private static bool IsMapCityInteractCursor(ECursor cursor)
 	{
 		return cursor == ECursor.PlayerInteractCity
@@ -104,6 +138,8 @@ internal static class Homm3OwnedCityMapCursorSuppress
 		// SceneManager and cursor-manager set can re-enter stack apply; never call them from inside this prefix.
 		if (_prefixDepth > 0)
 			return true;
+		if (_registered && _modalOwner != null)
+			return __0 == ECursor.Normal;
 		if (!_registered || !_suppressActive)
 			return true;
 		if (!IsMapCityInteractCursor(__0))

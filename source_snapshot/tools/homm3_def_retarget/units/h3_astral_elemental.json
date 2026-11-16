@@ -137,7 +137,7 @@
  },
  "armRigReason": "2026-10-12 lane A: the HoMM3 astral elemental's AttackFront throws both clawed hands up and out of the cloak's shoulders; the rig had no arm chain and the closed cloak has no arm geometry under it, so arm bones run from the shoulders down the cloak's front edges to mid-thigh (Hand 1.04, Hand_End 0.94), with arm weight faded out between 6 and 13 cm from the bones (conflux armFalloff), so the raised arms lift the cloak's upper panels wide enough to read at game distance without dragging the whole cloak (send-back: the first, shorter chain to z 1.08 within 9 cm read as too subtle)",
  "glbPatch": {
-  "reason": "DEF g12 AttackFront: both clawed hands are thrown up and out above the shoulders (f2-f6), lifting the cloak's upper panels wide with the chest square to the viewer, instead of staying tucked at the chest",
+  "reason": "DEF g12 AttackFront: both clawed hands are thrown up and out above the shoulders (f2-f6), lifting the cloak's upper panels wide with the chest square to the viewer, instead of staying tucked at the chest; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Defence, Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -150,6 +150,17 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_astral_elemental_pose_rot.json",
     "sha256": "1ff4658006c5b1e5104c2e95831e6ff017dca500de58fadfbba1bf2a5a419819",
     "regrid": true
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_astral_elemental_move_tracks.json",
+    "sha256": "895b101664cf9b4b68a9d5411c005b22977fdd2f037300436309240326f601a2"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_astral_elemental_clip_tracks.json",
+    "sha256": "3e5e2a0460b4f7050ed12f9360e5c251dd38c5d2f73c1b38ba99c1e38e336634"
    }
   ]
  },

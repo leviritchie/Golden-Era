@@ -1,0 +1,171 @@
+{
+  "schema": "homm3_factory_logistics_config/1",
+  "source": "docs/factory_logistics_network_design.md (draft numbers adopted as final for the 2026-11-16 overnight build, DECISIONS.md #1)",
+  "skillSid": "skill_faction_homm3_factory",
+  "spellSid": "homm3_factory_logistics_network",
+  "carrierBuffSid": "homm3_factory_logistics_store",
+  "heroStatBuffPrefix": "homm3_factory_logistics_arcane_stats_",
+  "heroStatBuffMaxLevel": 6,
+  "maxLevel": 3,
+  "baseLogisticsLevel": 2,
+  "rangeMpPerLevel": 100,
+  "dustCostByLevel": [0, 10, 20],
+  "goldRounding": 250,
+  "costScale": 0.2,
+  "mineResources": ["gold", "wood", "ore", "crystals", "mercury", "gemstones"],
+  "mineRareCycle": {
+    "crystals": "mercury",
+    "mercury": "gemstones",
+    "gemstones": "crystals",
+    "wood": "crystals",
+    "ore": "crystals",
+    "gold": "crystals"
+  },
+  "market": {
+    "basicValue": 250,
+    "rareValue": 500,
+    "rareResources": ["crystals", "mercury", "gemstones"],
+    "extraChargeBase": 3.5,
+    "extraChargePerMarket": 0.5,
+    "marketBuildingSids": ["Build_Market"]
+  },
+  "dwelling": {
+    "tierGold": { "1": 1540, "2": 2540, "3": 2790, "4": 3670, "5": 4040, "6": 5040, "7": 14580 },
+    "tierWeeklyValue": { "1": 720, "2": 1960, "3": 1400, "4": 2100, "5": 1725, "6": 1600, "7": 2000 },
+    "basicPerTier": "ceil(t/2)+2",
+    "rarePerTier": "ceil(t/2)+1 at L2, 2x at L3",
+    "rareFallback": "dust",
+    "rareFallbackMultiplier": 2,
+    "rareResources": ["crystals", "mercury", "gemstones"]
+  },
+  "astrologyPerTown": 250,
+  "astrologyNote": "Granted at the side day start through the pinned native astrology add (GameSymbols.FactoryLogisticsArcane): astrologyPerTown per owned town in an Arcane Manufactory's range, at most its effective level of towns per Manufactory; Arcane level texts quote these numbers (DECISIONS.md #55, supersedes #36).",
+  "persistenceEnabled": true,
+  "enhancements": [
+    {
+      "id": "byproduct_processing", "code": 1, "kind": "mine", "name": "Byproduct Processing",
+      "resources": ["wood", "ore", "crystals", "mercury", "gemstones"],
+      "effect": "byproduct", "values": [100, 200, 350], "step": 150, "cap": null,
+      "values2": [0, 50, 100], "step2": 50,
+      "levelLines": ["+100 gold per day.", "+200 gold per day; the mine produces 50% more.", "+350 gold per day; the mine produces twice its normal amount."],
+      "costs": [
+        { "gold": 1000, "wood": 3, "ore": 3 },
+        { "gold": 1500, "R": 2 },
+        { "gold": 2000, "R": 4 }
+      ]
+    },
+    {
+      "id": "export_office", "code": 2, "kind": "mine", "name": "Export Office",
+      "resources": ["wood", "ore", "crystals", "mercury", "gemstones"],
+      "effect": "export", "values": [2, 3, 4], "step": 1, "cap": null,
+      "levelLines": ["Replaces the mine's output: gold = 2x your market sell value of that output.", "Gold = 3x your market sell value of the mine's output.", "Gold = 4x your market sell value of the mine's output."],
+      "costs": [
+        { "gold": 1000, "wood": 5 },
+        { "gold": 1500, "R": 2 },
+        { "gold": 2500, "R": 3 }
+      ]
+    },
+    {
+      "id": "warehouse", "code": 3, "kind": "mine", "name": "Warehouse",
+      "resources": ["wood"],
+      "effect": "warehouse", "values": [20, 40, 60], "step": 20, "cap": 90,
+      "levelLines": ["Replaces the mine's output; your other logistics enhancements cost 20% less.", "Other logistics enhancements cost 40% less.", "Other logistics enhancements cost 60% less."],
+      "costs": [
+        { "gold": 1000, "wood": 5, "ore": 2 },
+        { "gold": 1500, "crystals": 2 },
+        { "gold": 2000, "crystals": 3 }
+      ]
+    },
+    {
+      "id": "rail_station", "code": 4, "kind": "mine", "name": "Rail Station",
+      "resources": ["ore"],
+      "effect": "rail_station", "values": [1, 2, 3], "step": 1, "cap": null,
+      "levelLines": ["Replaces the mine's output; +0.5 day of range for your whole network; also a full Logistics Hub.", "+1.0 day of network range; full Logistics Hub.", "+1.5 days of network range; full Logistics Hub."],
+      "costs": [
+        { "gold": 2000, "wood": 5, "ore": 10 },
+        { "gold": 3000, "crystals": 3 },
+        { "gold": 4000, "crystals": 5 }
+      ]
+    },
+    {
+      "id": "power_station", "code": 5, "kind": "mine", "name": "Power Station",
+      "resources": ["crystals"],
+      "effect": "power_station", "values": [1, 2, 3], "step": 0, "cap": 3,
+      "levelLines": ["Replaces the mine's output; enhanced buildings in range get +1 powered level.", "Enhanced buildings in range get +2 powered levels.", "Enhanced buildings in range get +3 powered levels."],
+      "costs": [
+        { "gold": 2500, "wood": 5, "ore": 5 },
+        { "gold": 3500, "mercury": 4 },
+        { "gold": 5000, "mercury": 6 }
+      ]
+    },
+    {
+      "id": "material_synthesizer", "code": 6, "kind": "mine", "name": "Material Synthesizer",
+      "resources": ["mercury"],
+      "effect": "synthesizer", "values": [1.33, 1.66, 2.0], "step": 0.3333, "cap": null,
+      "levelLines": ["Replaces the mine's output; Export Offices and Mercenary Headquarters in range pay x1.33; +1 market for 1 town in range.", "x1.66; +1 market for up to 2 towns in range.", "x2 (x3 when fully powered); +1 market for up to 3 towns in range."],
+      "costs": [
+        { "gold": 1500, "wood": 5, "ore": 5 },
+        { "gold": 2500, "gemstones": 3 },
+        { "gold": 3500, "gemstones": 5 }
+      ]
+    },
+    {
+      "id": "arcane_manufactory", "code": 7, "kind": "mine", "name": "Arcane Manufactory",
+      "resources": ["gemstones"],
+      "effect": "arcane", "values": [1, 2, 3], "step": 1, "cap": 6,
+      "levelLines": ["Replaces the mine's output; heroes in range +1 to all stats; +250 astrology a day for 1 town in range; 1/6 of dwelling growth upgraded.", "+2 to all stats of heroes in range; +250 astrology a day per town, up to 2 towns; 2/6 of dwelling growth upgraded.", "+3 to all stats of heroes in range; +250 astrology a day per town, up to 3 towns; 3/6 of dwelling growth upgraded."],
+      "costs": [
+        { "gold": 3000, "wood": 5, "ore": 5 },
+        { "gold": 4000, "crystals": 4 },
+        { "gold": 6000, "crystals": 6 }
+      ]
+    },
+    {
+      "id": "logistics_hub", "code": 8, "kind": "any", "name": "Logistics Hub",
+      "resources": ["gold", "wood", "ore", "crystals", "mercury", "gemstones"],
+      "effect": "route_hub", "values": [0.33, 0.66, 1.0], "step": 0.3333, "cap": 1.0,
+      "levelLines": ["Adds to output (the building works as normal); routes passing through regain 33% of the range they spent.", "Routes passing through regain 66% of spent range.", "Routes passing through regain all spent range."],
+      "costs": [
+        { "gold": 1000, "wood": 3, "ore": 3 },
+        { "gold": 1500, "R": 2 },
+        { "gold": 2500, "R": 3 }
+      ]
+    },
+    {
+      "id": "food_distribution_center", "code": 9, "kind": "dwelling", "name": "Food Distribution Center",
+      "effect": "food", "values": [33, 66, 100], "step": 33.3333, "cap": null,
+      "levelLines": ["+33% weekly units.", "+66% weekly units.", "+100% weekly units; the extra units appear for hire as soon as this level is built."],
+      "dwellingGoldFactors": [0.25, 0.30, 0.45]
+    },
+    {
+      "id": "housing_office", "code": 10, "kind": "dwelling", "name": "Housing Office",
+      "effect": "housing", "values": [20, 40, 60], "step": 20, "cap": 90,
+      "levelLines": ["Units hired here cost 20% less.", "Units hired here cost 40% less.", "Units hired here cost 60% less."],
+      "dwellingGoldFactors": [0.20, 0.25, 0.35]
+    },
+    {
+      "id": "rail_network", "code": 11, "kind": "dwelling", "name": "Rail Network",
+      "effect": "rail_network", "values": [0, 1, 2], "step": 1, "cap": null, "heroDeliveryLevel": 3,
+      "levelLines": ["Hire remotely; units go to a town in range.", "Hire remotely to a town; this dwelling's routes get +0.5 day of range.", "Hire remotely to a town or hero; this dwelling's routes get +1.0 day of range."],
+      "dwellingGoldFactors": [0.20, 0.25, 0.45]
+    },
+    {
+      "id": "mercenary_hq", "code": 12, "kind": "dwelling", "name": "Mercenary Headquarters",
+      "effect": "mercenary", "values": [1, 2, 3], "step": 1, "cap": null,
+      "levelLines": ["Replaces the dwelling's units: each week, gold equal to their purchase price.", "Gold = 2x the purchase price of the units it would have produced.", "Gold = 3x the purchase price of the units it would have produced."],
+      "dwellingGoldFactors": [0.25, 0.35, 0.50]
+    },
+    {
+      "id": "support_hub",
+      "code": 13,
+      "kind": "dwelling",
+      "name": "Support Hub",
+      "effect": "support",
+      "values": [15, 30, 45],
+      "step": 15,
+      "cap": null,
+      "levelLines": ["Replaces the dwelling's units; other external dwellings in range produce 15% more units each week.", "Other external dwellings in range produce 30% more units.", "Other external dwellings in range produce 45% more units."],
+      "dwellingGoldFactors": [0.25, 0.3, 0.45]
+    }
+  ]
+}

@@ -56,6 +56,26 @@ internal static class Homm3ImportVisuals
 		internal string PreviewDonorSid;
 		/// <summary>Optional override for <see cref="Homm3LabBattleAudioPlayer"/> clip stems (must end with <c>_</c> or one is appended), e.g. <c>HOMM3_temple_griffon_</c>.</summary>
 		internal string AudioStemPrefix;
+		/// <summary>Optional bundle whose HOMM3 lab audio clips this unit plays (default: its own <c>bundleName</c>). An
+		/// Elemental Fusion unit names its host's bundle; the stems then resolve through that bundle's own entry.</summary>
+		internal string AudioBundleName;
+		/// <summary>
+		/// Optional shared body (Elemental Fusion): the battle/map template is the prefab
+		/// <see cref="MeshPrefabAssetPath"/> (map: <see cref="MeshMapPrefabAssetPath"/>, default the battle one) from
+		/// this other, already-shipped bundle -- mesh, skeleton, blend shapes, clips, Animator controller -- with this
+		/// entry's own <see cref="BattlePrefabAssetPath"/> / <see cref="MapPrefabAssetPath"/> prefab (a crest) parented
+		/// under the bone <see cref="MeshAttachBone"/> (default <c>Head</c>) at identity. This entry's bundle keeps its
+		/// own textures, found by material name next to its prefab as usual (the host body material's name resolves to
+		/// this entry's re-coloured albedo).
+		/// </summary>
+		internal string MeshBundleName;
+		internal string MeshPrefabAssetPath;
+		internal string MeshMapPrefabAssetPath;
+		internal string MeshAttachBone;
+		/// <summary>Shared body only: render a white-COLOR_0 copy of each host mesh that has a colour stream (one copy
+		/// per host mesh, shared by every entry naming it). The host keeps its FLAG displacement mask in COLOR_0.r,
+		/// which the VfxUber body overlay multiplies into its colour.</summary>
+		internal bool MeshVertexColorWhite;
 		/// <summary>
 		/// Optional in-game unit config SIDs (e.g. <c>h3_goblin</c>) that reuse this entry's HoMM3 battle prefab for
 		/// <see cref="TryGetBattleTemplateForUnitSid"/> — tooltip portrait texture and preview hooks. Does not change
@@ -530,6 +550,13 @@ internal static class Homm3ImportVisuals
 					BattlePrefabAssetPath = bPrefab.Replace('\\', '/'),
 					MapPrefabAssetPath = mPrefab.Replace('\\', '/'),
 					AudioStemPrefix = TokenString(t["audioStemPrefix"])?.Trim(),
+					AudioBundleName = TokenString(t["audioBundleName"])?.Trim(),
+					MeshBundleName = TokenString(t["meshBundleName"])?.Trim(),
+					MeshPrefabAssetPath = TokenString(t["meshPrefabAssetPath"])?.Trim().Replace('\\', '/'),
+					MeshMapPrefabAssetPath = TokenString(t["meshMapPrefabAssetPath"])?.Trim().Replace('\\', '/'),
+					MeshAttachBone = TokenString(t["meshAttachBone"])?.Trim(),
+					MeshVertexColorWhite = t["meshVertexColorWhite"] != null && t["meshVertexColorWhite"].Type == JTokenType.Boolean
+					                       && (bool)t["meshVertexColorWhite"],
 					GameUnitSids = gameSids,
 					BattleHeightHexes = TokenPositiveFloat(t["battleHeightHexes"])
 				};
@@ -5018,14 +5045,69 @@ internal static class Homm3ImportVisuals
 		return TryResolveHomm3BattleEntryForUnitSid(unitSid, log, out var entry) && TryGetBattleTemplate(entry, log, out template);
 	}
 
-	/// <summary>Preview-only native donor id for an owned unit SID (the row's explicit <c>previewDonorSid</c>).</summary>
+	/// <summary>
+	/// Preview-only native donor id for an owned unit SID: the row's explicit <c>previewDonorSid</c>, else, for a
+	/// shared-body row (<see cref="Entry.MeshBundleName"/>, Elemental Fusion), the donor of the host body's own unit
+	/// (custom-faction registry donor, then the host row's <c>previewDonorSid</c>). Without a donor the native detail
+	/// factory has no rig for the custom id, the model only arrives through the synthetic mesh lane, and its Hex/Lit
+	/// clone never receives the preview camera's per-material state (_PreviewScreenOffset), so it draws off the
+	/// preview (2026-11-15 playtest: fusion units invisible in the unit window, fine in combat).
+	/// </summary>
 	internal static bool TryGetPreviewDonorSidForUnitSid(string unitSid, ManualLogSource log, out string donorSid)
 	{
 		donorSid = null;
 		if (!TryResolveHomm3BattleEntryForUnitSid(unitSid, log, out var entry) || entry == null)
 			return false;
 		donorSid = entry.PreviewDonorSid;
+		if (!string.IsNullOrWhiteSpace(donorSid))
+			return true;
+		if (string.IsNullOrEmpty(entry.MeshBundleName))
+			return false;
+		var key = unitSid.Trim();
+		if (SharedMeshPreviewDonorBySid.TryGetValue(key, out var cached))
+		{
+			donorSid = cached;
+			return !string.IsNullOrWhiteSpace(donorSid);
+		}
+		string hostSid = null;
+		donorSid = TryResolveSharedMeshHostPreviewDonor(entry, out hostSid);
+		if (!string.IsNullOrWhiteSpace(donorSid))
+			SharedMeshPreviewDonorBySid[key] = donorSid;
+		if (string.IsNullOrWhiteSpace(donorSid))
+			log?.LogError("Homm3Import: shared-mesh preview donor for '" + key + "': host bundle '" + entry.MeshBundleName
+			              + "' has no row whose unit SID resolves a registry donor or previewDonorSid"
+			              + (hostSid != null ? " (last host SID tried '" + hostSid + "')" : " (no host row)") + ".");
+		else
+			log?.LogInfo("Homm3Import: shared-mesh preview donor for '" + key + "' = '" + donorSid + "' (host unit '" + hostSid
+			             + "', bundle '" + entry.MeshBundleName + "').");
 		return !string.IsNullOrWhiteSpace(donorSid);
+	}
+
+	static readonly Dictionary<string, string> SharedMeshPreviewDonorBySid = new(StringComparer.Ordinal);
+
+	static string TryResolveSharedMeshHostPreviewDonor(Entry entry, out string hostSid)
+	{
+		hostSid = null;
+		for (var i = 0; i < Entries.Count; i++)
+		{
+			var host = Entries[i];
+			if (host == null || ReferenceEquals(host, entry) || !string.IsNullOrEmpty(host.MeshBundleName)
+			    || !string.Equals(host.BundleName, entry.MeshBundleName, StringComparison.OrdinalIgnoreCase))
+				continue;
+			var sids = host.GameUnitSids;
+			for (var j = 0; sids != null && j < sids.Count; j++)
+			{
+				var sid = sids[j]?.Trim();
+				if (string.IsNullOrEmpty(sid))
+					continue;
+				hostSid = sid;
+				if (Homm3CustomFactionRegistry.TryGetDonorSid(sid, out var donor) && !string.IsNullOrWhiteSpace(donor))
+					return donor.Trim();
+			}
+			if (!string.IsNullOrWhiteSpace(host.PreviewDonorSid))
+				return host.PreviewDonorSid.Trim();
+		}
+		return null;
 	}
 
 	internal static bool TryResolveHomm3BattleEntryForUnitSid(string unitSid, ManualLogSource log, out Entry entry)
@@ -5088,6 +5170,14 @@ internal static class Homm3ImportVisuals
 		return string.IsNullOrEmpty(mapLeaf) ? null : mapLeaf;
 	}
 
+	/// <summary>The bundle <see cref="Homm3LabBattleAudioPlayer"/> indexes clips from: <c>audioBundleName</c> when set.</summary>
+	internal static string ResolveHomm3LabAudioBundleName(Entry e)
+	{
+		if (e == null)
+			return null;
+		return string.IsNullOrEmpty(e.AudioBundleName) ? e.BundleName : e.AudioBundleName;
+	}
+
 	/// <summary>Stem prefix for <see cref="Homm3LabBattleAudioPlayer"/> — matches <c>stage_homm3_unit_audio.py</c> (<c>HOMM3_&lt;homm3_lab folder&gt;_</c>).</summary>
 	internal static string ResolveHomm3LabAudioStemPrefix(Entry e)
 	{
@@ -5096,6 +5186,12 @@ internal static class Homm3ImportVisuals
 		var ap = e.AudioStemPrefix;
 		if (!string.IsNullOrEmpty(ap))
 			return ap.EndsWith("_", StringComparison.Ordinal) ? ap : ap + "_";
+		if (!string.IsNullOrEmpty(e.AudioBundleName)
+		    && !string.Equals(e.AudioBundleName, e.BundleName, StringComparison.OrdinalIgnoreCase))
+		{
+			var owner = TryEntryByBundleName(e.AudioBundleName);
+			return owner == null || ReferenceEquals(owner, e) ? null : ResolveHomm3LabAudioStemPrefix(owner);
+		}
 		var labSid = TryHomm3LabSidFromPrefabPath(e.BattlePrefabAssetPath);
 		if (!string.IsNullOrEmpty(labSid))
 			return "HOMM3_" + labSid + "_";
@@ -7346,7 +7442,9 @@ internal static class Homm3ImportVisuals
 
 		try
 		{
-			var go = LoadBundleGameObject(b, e.BattlePrefabAssetPath, log, "battle");
+			var go = string.IsNullOrEmpty(e.MeshBundleName)
+				? LoadBundleGameObject(b, e.BattlePrefabAssetPath, log, "battle")
+				: TryBuildSharedMeshTemplate(e, b, e.BattlePrefabAssetPath, e.MeshPrefabAssetPath, "battle", log);
 			if (go && go)
 			{
 				BattleTemplates[key] = go;
@@ -7360,6 +7458,131 @@ internal static class Homm3ImportVisuals
 		}
 
 		return false;
+	}
+
+	static readonly Dictionary<string, GameObject> SharedMeshTemplates = new(StringComparer.Ordinal);
+	static readonly Dictionary<int, Mesh> SharedMeshWhiteColorCopies = new();
+	static GameObject _sharedMeshTemplateHolder;
+
+	/// <summary>
+	/// Shared-body template (<see cref="Entry.MeshBundleName"/>): a persistent copy of the host prefab under an inactive
+	/// DontDestroyOnLoad holder (so the template itself never renders or animates) with this entry's own prefab parented
+	/// under the attach bone at identity. Callers instantiate it like a bundle prefab; one composite per
+	/// (host prefab, own prefab), shared by the battle and map lanes when the paths match. Null (logged) on any miss.
+	/// </summary>
+	static GameObject TryBuildSharedMeshTemplate(Entry e, AssetBundle ownBundle, string ownPrefabPath, string hostPrefabPath,
+		string kind, ManualLogSource log)
+	{
+		if (string.IsNullOrEmpty(hostPrefabPath) || string.IsNullOrEmpty(ownPrefabPath))
+		{
+			log?.LogError("Homm3Import: shared-mesh entry '" + e.BundleName + "' needs meshPrefabAssetPath and its own " + kind + " prefab path.");
+			return null;
+		}
+		var key = e.MeshBundleName + "::" + hostPrefabPath + "|" + e.BundleName + "::" + ownPrefabPath;
+		if (SharedMeshTemplates.TryGetValue(key, out var cached) && cached)
+			return cached;
+		var hostBundle = GetBundle(e.MeshBundleName, log);
+		if (hostBundle == null)
+		{
+			log?.LogError("Homm3Import: shared-mesh entry '" + e.BundleName + "': host bundle '" + e.MeshBundleName + "' did not load.");
+			return null;
+		}
+		var hostPrefab = LoadBundleGameObject(hostBundle, hostPrefabPath, log, kind + "-shared-mesh");
+		var ownPrefab = LoadBundleGameObject(ownBundle, ownPrefabPath, log, kind + "-shared-mesh-own");
+		if (!hostPrefab || !ownPrefab)
+		{
+			log?.LogError("Homm3Import: shared-mesh entry '" + e.BundleName + "': host prefab=" + (hostPrefab ? "ok" : "missing")
+			              + " own prefab=" + (ownPrefab ? "ok" : "missing") + ".");
+			return null;
+		}
+		if (!_sharedMeshTemplateHolder)
+		{
+			_sharedMeshTemplateHolder = new GameObject("__homm3_shared_mesh_templates");
+			UnityEngine.Object.DontDestroyOnLoad(_sharedMeshTemplateHolder);
+			_sharedMeshTemplateHolder.SetActive(false);
+		}
+		GameObject composite = null;
+		try
+		{
+			composite = UnityEngine.Object.Instantiate(hostPrefab, _sharedMeshTemplateHolder.transform, false);
+			composite.name = hostPrefab.name;
+			var boneName = string.IsNullOrEmpty(e.MeshAttachBone) ? "Head" : e.MeshAttachBone;
+			var bone = FindSharedMeshBone(composite.transform, boneName);
+			if (!bone)
+				throw new InvalidOperationException("host prefab has no bone '" + boneName + "'");
+			var own = UnityEngine.Object.Instantiate(ownPrefab, bone, false);
+			own.name = ownPrefab.name;
+			own.transform.localPosition = Vector3.zero;
+			own.transform.localRotation = Quaternion.identity;
+			own.transform.localScale = Vector3.one;
+			var whitened = e.MeshVertexColorWhite ? WhitenSharedMeshVertexColors(composite, own.transform, log) : 0;
+			SharedMeshTemplates[key] = composite;
+			log?.LogInfo("Homm3Import: shared-mesh " + kind + " template '" + e.BundleName + "' = '" + e.MeshBundleName + "' "
+			             + hostPrefabPath + " + own '" + ownPrefabPath + "' under '" + boneName + "' (white-colour meshes="
+			             + whitened + ").");
+			return composite;
+		}
+		catch (Exception ex)
+		{
+			log?.LogError("Homm3Import: shared-mesh " + kind + " template '" + e.BundleName + "' failed: " + ex.Message);
+			if (composite)
+				UnityEngine.Object.Destroy(composite);
+			return null;
+		}
+	}
+
+	static Transform FindSharedMeshBone(Transform root, string name)
+	{
+		if (!root)
+			return null;
+		if (string.Equals(root.name, name, StringComparison.Ordinal))
+			return root;
+		for (var i = 0; i < root.childCount; i++)
+		{
+			var found = FindSharedMeshBone(root.GetChild(i), name);
+			if (found)
+				return found;
+		}
+		return null;
+	}
+
+	/// <summary>Swap every host SkinnedMeshRenderer mesh that has a colour stream (not the own prefab's) for a cached
+	/// white-COLOR_0 copy. Returns the number of renderers swapped; an unreadable mesh is logged and left as is.</summary>
+	static int WhitenSharedMeshVertexColors(GameObject composite, Transform own, ManualLogSource log)
+	{
+		var swapped = 0;
+		var skins = composite.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+		for (var i = 0; skins != null && i < skins.Length; i++)
+		{
+			var skin = skins[i];
+			if (!skin || IsUnderTransform(skin.transform, own))
+				continue;
+			var mesh = skin.sharedMesh;
+			if (!mesh || !mesh.HasVertexAttribute(VertexAttribute.Color))
+				continue;
+			var id = mesh.GetInstanceID();
+			if (!SharedMeshWhiteColorCopies.TryGetValue(id, out var copy) || !copy)
+			{
+				if (!mesh.isReadable)
+				{
+					log?.LogWarning("Homm3Import: shared-mesh white-colour copy skipped: mesh '" + mesh.name + "' is not readable.");
+					continue;
+				}
+				copy = UnityEngine.Object.Instantiate(mesh);
+				copy.name = mesh.name + "_white_vcol";
+				copy.hideFlags = HideFlags.DontUnloadUnusedAsset;
+				var n = copy.vertexCount;
+				var white = new Il2CppStructArray<Color32>(n);
+				var w = new Color32(255, 255, 255, 255);
+				for (var j = 0; j < n; j++)
+					white[j] = w;
+				copy.colors32 = white;
+				SharedMeshWhiteColorCopies[id] = copy;
+			}
+			skin.sharedMesh = copy;
+			swapped++;
+		}
+		return swapped;
 	}
 
 	static GameObject LoadBundleGameObject(AssetBundle bundle, string assetPath, ManualLogSource log, string kind)
@@ -7479,7 +7702,10 @@ internal static class Homm3ImportVisuals
 
 		try
 		{
-			var go = LoadBundleGameObject(b, e.MapPrefabAssetPath, log, "map");
+			var go = string.IsNullOrEmpty(e.MeshBundleName)
+				? LoadBundleGameObject(b, e.MapPrefabAssetPath, log, "map")
+				: TryBuildSharedMeshTemplate(e, b, e.MapPrefabAssetPath,
+					string.IsNullOrEmpty(e.MeshMapPrefabAssetPath) ? e.MeshPrefabAssetPath : e.MeshMapPrefabAssetPath, "map", log);
 			if (go && go)
 			{
 				MapTemplates[key] = go;

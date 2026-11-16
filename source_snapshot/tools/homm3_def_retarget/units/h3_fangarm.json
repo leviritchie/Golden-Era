@@ -736,7 +736,7 @@
     "adoptWeights": "nearest"
   },
   "glbPatch": {
-    "reason": "DEF g05 death / g12 attack: the left claw hand rode WingL_04 (heat skin), so it flew off as a floating shard in Death f1-f3 and stayed behind on the wing in AttackFront; the left arm takes the surgery source's own arm skin (Bone_022-025 -> LeftArm/ForeArm/Hand, arm share > 0.3) and a gate-driven weight re-solve (wsolve --keepsw, 5 passes) keeps it whole Lane B 2026-10-12: DEF g05 death ends as a low heap - at f4-f5 the hips drop 0.15, the spine curls 30 deg and the head 20 deg over the fall, and the legs fold by two-bone IK with the feet set flat on the floor (the build's feet sank through it, so the ground stage had lifted the body back into a tall crouch).",
+    "reason": "DEF g05 death / g12 attack: the left claw hand rode WingL_04 (heat skin), so it flew off as a floating shard in Death f1-f3 and stayed behind on the wing in AttackFront; the left arm takes the surgery source's own arm skin (Bone_022-025 -> LeftArm/ForeArm/Hand, arm share > 0.3) and a gate-driven weight re-solve (wsolve --keepsw, 5 passes) keeps it whole Lane B 2026-10-12: DEF g05 death ends as a low heap - at f4-f5 the hips drop 0.15, the spine curls 30 deg and the head 20 deg over the fall, and the legs fold by two-bone IK with the feet set flat on the floor (the build's feet sank through it, so the ground stage had lifted the body back into a tall crouch).; 2026-11-10 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate",
     "ops": [
       {
         "op": "setWeights",
@@ -762,6 +762,36 @@
         "table": "tools/homm3_glb_patch/key_rotations/h3_fangarm_heap_tr.json",
         "note": "lane B 2026-10-12: death heap hips drop (see heap_rot)",
         "sha256": "baa5a5a93120e90cc531307b14fa267aecced18cc093850efedbda69221c9f2b"
+      },
+      {
+        "op": "cutFaces",
+        "note": "flyer flight: triangles that weld the wing sheet to the flank / legs / tail (tool cut_far / cut_pairs)",
+        "table": "tools/homm3_glb_patch/key_rotations/h3_fangarm_flight_face_cut.json",
+        "sha256": "22f3db5d400d4afb4e73c6c39d04bf17065d5b2ba74798ad93f415d5f9d5be10"
+      },
+      {
+        "op": "setWeights",
+        "table": "tools/homm3_glb_patch/key_rotations/h3_fangarm_flight_weights.json",
+        "sha256": "9702fdc3bc54776dec52de0dc0619aa5a4444cd66742201812a27218a4f6f696"
+      },
+      {
+        "op": "setTracks",
+        "clearCorrectives": false,
+        "table": "tools/homm3_glb_patch/key_rotations/h3_fangarm_flight_tracks.json",
+        "sha256": "640c94d49193ef5477f687f06431d5adcb32fac90fbfcf32da50c1f0a9ef4c4d"
+      },
+      {
+        "op": "stretchRelax",
+        "clips": [
+          "Unit_Move",
+          "Unit_MoveStart",
+          "Unit_MoveEnd"
+        ],
+        "ratio": 1.6,
+        "iterations": 1500,
+        "smooth": 0.0,
+        "maxMove": 0.08,
+        "note": "flyer flight: crease of the spread wings"
       }
     ]
   }

@@ -107,6 +107,16 @@ internal static class Homm3MeshFx
 		// magic/Fresnel rim's _Color/_EdgeColor. Every property must exist on the native material and read back.
 		internal string[] ColorProperties = Array.Empty<string>();
 		internal Color[] ColorValues = Array.Empty<Color>();
+		// Optional per-unit texture swaps (Elemental Fusion: VfxUber _Mask = the unit's vein mask): plugin-folder PNGs
+		// under homm3_mesh_fx/, sha256-pinned, loaded linear, written to the private copy and read back (fail closed).
+		internal string[] TextureProperties = Array.Empty<string>();
+		internal string[] TextureFiles = Array.Empty<string>();
+		internal string[] TextureSha256 = Array.Empty<string>();
+		/// <summary>Optional texture swaps for a second private copy shown on shared-mesh crest renderers
+		/// (<c>fusion_crest</c>, own UVs); absent: crest renderers get no overlay.</summary>
+		internal string[] CrestTextureProperties = Array.Empty<string>();
+		internal string[] CrestTextureFiles = Array.Empty<string>();
+		internal string[] CrestTextureSha256 = Array.Empty<string>();
 	}
 
 	internal sealed class VanillaStyleSpec
@@ -142,6 +152,10 @@ internal static class Homm3MeshFx
 	{
 		internal string Texture;
 		internal string TextureSha256;
+		/// <summary>Optional emission map for a shared-mesh crest renderer (material <c>fusion_crest*</c>), which has its
+		/// own UVs; absent: the crest gets no glow.</summary>
+		internal string CrestTexture;
+		internal string CrestTextureSha256;
 		internal Color Color;
 		internal float MinPower;
 		internal float BlinkPower;
@@ -176,6 +190,7 @@ internal static class Homm3MeshFx
 		internal List<Material> OwnedMaterials;
 		// battle_body_overlay runtime state
 		internal Material OverlayMaterial;
+		internal Material CrestOverlayMaterial;
 		internal bool OverlayOn;
 		internal int OverlayVerifyCountdown;
 	}
@@ -192,6 +207,7 @@ internal static class Homm3MeshFx
 	private static readonly BindingFlags InvokeFlags =
 		BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 	private static readonly Dictionary<string, Texture2D> EmissionTextures = new(StringComparer.Ordinal);
+	private static readonly Dictionary<string, Texture2D> OverlayTextures = new(StringComparer.Ordinal);
 	private static readonly HashSet<string> EmissionFailures = new(StringComparer.Ordinal);
 	private static readonly HashSet<string> EmissionAppliedLog = new(StringComparer.Ordinal);
 	private static bool _emitUpCameraMissingLogged;
@@ -286,20 +302,43 @@ internal static class Homm3MeshFx
 		if (_rows == null || _rows.Count == 0)
 			return;
 		var sids = CollectSkinnedMatchSids(entry);
+		// Shared-body units (Elemental Fusion) carry their fused look in an always-on battle_body_overlay row; the
+		// UI preview shows it too. Other units' overlay rows stay battle-only (unchanged), and the adventure map
+		// keeps none: the overlay material does not follow the map's fog fade.
+		var withBodyOverlay = string.Equals(lane, "ui-preview", StringComparison.Ordinal)
+		                      && !string.IsNullOrEmpty(entry.MeshBundleName);
 		var matched = new List<CatalogRow>();
+		var overlays = 0;
 		for (var i = 0; i < _rows.Count; i++)
 		{
 			var row = _rows[i];
-			if (row?.Vanilla == null || !string.Equals(row.Lane, LaneBattleSkinned, StringComparison.Ordinal))
+			if (row == null || row.UnitSids == null || !SidListIntersects(row.UnitSids, sids))
 				continue;
-			if (row.UnitSids == null || !SidListIntersects(row.UnitSids, sids) || !IsIdleTrigger(row))
+			if (row.Vanilla != null && string.Equals(row.Lane, LaneBattleSkinned, StringComparison.Ordinal) && IsIdleTrigger(row))
+			{
+				matched.Add(row);
 				continue;
-			matched.Add(row);
+			}
+			if (withBodyOverlay && row.Overlay != null && row.Trigger == TriggerMode.Always
+			    && string.Equals(row.Lane, LaneBattleBodyOverlay, StringComparison.Ordinal))
+			{
+				matched.Add(row);
+				overlays++;
+			}
+		}
+		if (withBodyOverlay && _sharedMeshPreviewOverlayLogRemaining > 0)
+		{
+			_sharedMeshPreviewOverlayLogRemaining--;
+			log?.LogInfo("Homm3MeshFx: shared-mesh " + lane + " sids='" + string.Join(",", sids) + "' body overlay rows=" + overlays
+			             + " idle rows=" + (matched.Count - overlays) + (overlays == 0 ? " (no always-on battle_body_overlay row matched)" : "") + ".");
 		}
 		if (matched.Count == 0)
 			return;
 		AttachRows(visual, matched, log, lane + " skinned sids='" + string.Join(",", sids) + "'");
 	}
+
+	private static int _sharedMeshPreviewOverlayLogRemaining = 8;
+	private static int _overlayContextSyncLogRemaining = 8;
 
 	private static bool IsIdleTrigger(CatalogRow row)
 	{
@@ -331,6 +370,17 @@ internal static class Homm3MeshFx
 			return;
 		}
 
+		// A presentation pass that runs again on the same instance (UI preview re-prep) replaces the slots: drop the
+		// overlay materials the previous slots appended so the body never stacks two overlay layers.
+		if (SlotsByHostId.TryGetValue(host.GetInstanceID(), out var previous) && previous != null)
+		{
+			for (var i = 0; i < previous.Length; i++)
+			{
+				var old = previous[i];
+				if (old?.Row?.Overlay != null && old.OverlayOn && old.OverlayMaterial)
+					SetOverlay(host, old, false, null);
+			}
+		}
 		var slots = new Slot[rows.Count];
 		for (var i = 0; i < rows.Count; i++)
 			slots[i] = new Slot { Row = rows[i] };
@@ -467,12 +517,10 @@ internal static class Homm3MeshFx
 		{
 			slot.Instance.SetActive(false);
 			slot.Instance.SetActive(true);
-			TryStartNativeHelper(slot.Instance, slot, forceRestart: true);
 		}
 		else if (!slot.Instance.activeSelf)
 		{
 			slot.Instance.SetActive(true);
-			TryStartNativeHelper(slot.Instance, slot, forceRestart: false);
 		}
 	}
 
@@ -551,8 +599,6 @@ internal static class Homm3MeshFx
 		var startActive = row.Trigger == TriggerMode.Always;
 		instance.SetActive(startActive);
 		TryPrepareNativeHelper(instance, socketParent);
-		if (startActive)
-			TryStartNativeHelper(instance, slot, forceRestart: false);
 		slot.Instance = instance;
 		slot.HelperPrepared = true;
 		if (_attachLogRemaining > 0)
@@ -1725,10 +1771,21 @@ internal static class Homm3MeshFx
 		}
 		var copy = new Material(materials[ov.MaterialIndex]) { name = ChildNamePrefix + row.Id };
 		(slot.OwnedMaterials ??= new List<Material>()).Add(copy);
-		if (!ApplyOverlayTint(copy, row, log))
+		if (!ApplyOverlayTint(copy, row, log) || !ApplyOverlayTextures(copy, row, log))
 		{
 			slot.LoadFailed = true;
 			return false;
+		}
+		if (ov.CrestTextureProperties.Length > 0)
+		{
+			var crestCopy = new Material(copy) { name = copy.name + "_crest" };
+			slot.OwnedMaterials.Add(crestCopy);
+			if (!ApplyOverlayTextureSet(crestCopy, row, ov.CrestTextureProperties, ov.CrestTextureFiles, ov.CrestTextureSha256, log))
+			{
+				slot.LoadFailed = true;
+				return false;
+			}
+			slot.CrestOverlayMaterial = crestCopy;
 		}
 		slot.OverlayMaterial = copy;
 		return true;
@@ -1760,13 +1817,99 @@ internal static class Homm3MeshFx
 		return true;
 	}
 
+	/// <summary>Swap the row's textures onto the private overlay copy and read each one back (fail closed).</summary>
+	private static bool ApplyOverlayTextures(Material copy, CatalogRow row, ManualLogSource log) =>
+		ApplyOverlayTextureSet(copy, row, row.Overlay.TextureProperties, row.Overlay.TextureFiles, row.Overlay.TextureSha256, log);
+
+	private static bool ApplyOverlayTextureSet(Material copy, CatalogRow row, string[] properties, string[] files, string[] shas,
+		ManualLogSource log)
+	{
+		for (var i = 0; i < properties.Length; i++)
+		{
+			var property = properties[i];
+			if (!copy.HasProperty(property))
+			{
+				log?.LogError("Homm3MeshFx: overlay id='" + row.Id + "' '" + row.NativeResPath
+				              + "' material has no texture property '" + property + "'; row disabled.");
+				return false;
+			}
+			var texture = LoadOverlayTexture(row.Id, files[i], shas[i], log);
+			if (!texture)
+				return false;
+			copy.SetTexture(property, texture);
+			var got = copy.GetTexture(property);
+			if (!got || got.GetInstanceID() != texture.GetInstanceID())
+			{
+				log?.LogError("Homm3MeshFx: overlay id='" + row.Id + "' texture '" + property + "' did not read back as written; row disabled.");
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/// <summary>A sha256-pinned plugin-folder PNG (homm3_mesh_fx/&lt;file&gt;) as a linear RGBA32 mipmapped texture;
+	/// cached per file; a failure is logged once and disables the row.</summary>
+	private static Texture2D LoadOverlayTexture(string rowId, string file, string sha256, ManualLogSource log)
+	{
+		if (OverlayTextures.TryGetValue(file, out var cached) && cached)
+			return cached;
+		if (EmissionFailures.Contains("ovtex|" + file))
+			return null;
+		var path = Homm3ImportPortraitSpriteCache.ResolvePluginAssetPath("homm3_mesh_fx/" + file);
+		string failure = null;
+		Texture2D texture = null;
+		try
+		{
+			if (path == null || !File.Exists(path))
+				failure = "file missing";
+			else
+			{
+				var bytes = File.ReadAllBytes(path);
+				string digest;
+				using (var sha = SHA256.Create())
+					digest = BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", string.Empty).ToLowerInvariant();
+				if (!string.Equals(digest, sha256, StringComparison.Ordinal))
+					failure = "sha256 " + digest + " != catalog " + sha256;
+				else
+				{
+					texture = new Texture2D(2, 2, TextureFormat.RGBA32, mipChain: true, linear: true);
+					var il2cppBytes = new Il2CppStructArray<byte>(bytes.LongLength);
+					for (var i = 0; i < bytes.Length; i++)
+						il2cppBytes[i] = bytes[i];
+					if (!ImageConversion.LoadImage(texture, il2cppBytes))
+					{
+						UnityEngine.Object.Destroy(texture);
+						texture = null;
+						failure = "PNG decode failed";
+					}
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+			failure = ex.Message;
+			texture = null;
+		}
+		if (failure != null)
+		{
+			EmissionFailures.Add("ovtex|" + file);
+			log?.LogError("Homm3MeshFx: overlay id='" + rowId + "' texture '" + file + "': " + failure + "; row disabled.");
+			return null;
+		}
+		texture.name = "homm3_mesh_fx_overlay_" + Path.GetFileNameWithoutExtension(file);
+		texture.wrapMode = TextureWrapMode.Clamp;
+		texture.hideFlags = HideFlags.DontUnloadUnusedAsset;
+		OverlayTextures[file] = texture;
+		return texture;
+	}
+
 	/// <summary>Add (on) or remove (off) the slot's overlay on every owned body SMR, then read it back.</summary>
 	private static bool SetOverlay(Homm3MeshFxHost host, Slot slot, bool on, ManualLogSource log)
 	{
 		var overlay = slot.OverlayMaterial;
 		if (!overlay)
 			return !on;
-		var overlayId = overlay.GetInstanceID();
+		var crestOverlay = slot.CrestOverlayMaterial;
 		Il2CppArrayBase<SkinnedMeshRenderer> skins;
 		try
 		{
@@ -1783,7 +1926,13 @@ internal static class Homm3MeshFx
 			var skin = skins[i];
 			if (!skin || IsFxDescendant(skin.transform))
 				continue;
-			bodies++;
+			var crest = IsSharedMeshCrestRenderer(skin);
+			var mine = crest ? crestOverlay : overlay;
+			if (!mine)
+				continue;
+			if (!crest)
+				bodies++;
+			var overlayId = mine.GetInstanceID();
 			var current = skin.sharedMaterials;
 			var kept = new List<Material>();
 			var had = false;
@@ -1797,7 +1946,10 @@ internal static class Homm3MeshFx
 			if (had == on)
 				continue;
 			if (on)
-				kept.Add(overlay);
+			{
+				SyncOverlayRenderContext(mine, current, slot.Row.Id, log);
+				kept.Add(mine);
+			}
 			var next = new Il2CppReferenceArray<Material>(kept.Count);
 			for (var j = 0; j < kept.Count; j++)
 				next[j] = kept[j];
@@ -1824,6 +1976,75 @@ internal static class Homm3MeshFx
 		}
 		return true;
 	}
+
+	/// <summary>
+	/// UI preview: the native preview camera's model draws through material instances carrying a non-zero
+	/// <c>_PreviewScreenOffset</c> (Hex/Lit applies it to clip xy in every variant); an overlay copied from a battle
+	/// prefab's shared sheet carries zero and would draw displaced. Copy the body's non-zero offset (and the preview
+	/// keyword) onto the overlay when it declares the property. Battle / map bodies carry zero: nothing changes there.
+	/// </summary>
+	private static void SyncOverlayRenderContext(Material overlay, Il2CppReferenceArray<Material> body, string rowId, ManualLogSource log)
+	{
+		const string offsetProperty = "_PreviewScreenOffset";
+		const string previewKeyword = "HEX_UI_PREVIEW_CAMERA";
+		if (!overlay || body == null)
+			return;
+		try
+		{
+			Material source = null;
+			for (var j = 0; j < body.Length; j++)
+			{
+				var m = body[j];
+				if (m != null && m && m.GetInstanceID() != overlay.GetInstanceID() && m.HasProperty(offsetProperty))
+				{
+					source = m;
+					break;
+				}
+			}
+			if (source == null)
+				return;
+			var offset = source.GetVector(offsetProperty);
+			if (offset.sqrMagnitude <= 1e-12f)
+				return;
+			var hasProperty = overlay.HasProperty(offsetProperty);
+			if (hasProperty)
+				overlay.SetVector(offsetProperty, offset);
+			// Material.IsKeywordEnabled(string) throws MissingMethodException (ReadOnlySpan) on this interop: read shaderKeywords.
+			var keyword = false;
+			var keywords = source.shaderKeywords;
+			for (var k = 0; keywords != null && k < keywords.Length; k++)
+			{
+				if (string.Equals(keywords[k], previewKeyword, StringComparison.Ordinal))
+				{
+					keyword = true;
+					break;
+				}
+			}
+			if (keyword)
+				overlay.EnableKeyword(previewKeyword);
+			if (_overlayContextSyncLogRemaining > 0)
+			{
+				_overlayContextSyncLogRemaining--;
+				log?.LogInfo("Homm3MeshFx: overlay id='" + rowId + "' preview context from '" + (source.name ?? "?") + "' offset="
+				             + offset.ToString("F4") + " overlayShader='" + (overlay.shader ? overlay.shader.name : "?")
+				             + "' overlayHasOffset=" + hasProperty + " keyword=" + keyword + ".");
+			}
+		}
+		catch (Exception ex)
+		{
+			log?.LogWarning("Homm3MeshFx: overlay id='" + rowId + "' preview context sync failed: " + ex.Message);
+		}
+	}
+
+	/// <summary>The crest renderer of a shared-mesh unit (Homm3ImportVisuals Entry.meshBundleName): own UVs, so it takes
+	/// the rows' crest textures instead of the body ones.</summary>
+	internal static bool IsSharedMeshCrestRenderer(Renderer renderer) =>
+		renderer && string.Equals(renderer.name, SharedMeshCrestName, StringComparison.Ordinal);
+
+	private static bool IsSharedMeshCrestMaterial(Material material) =>
+		material && (material.name ?? string.Empty).StartsWith(SharedMeshCrestName, StringComparison.Ordinal);
+
+	private const string SharedMeshCrestName = "fusion_crest";
 
 	// ------------------------------------------------------------------ Hex/Lit emission-map layer
 
@@ -1862,10 +2083,14 @@ internal static class Homm3MeshFx
 		}
 		if (row == null)
 			return;
-		var texture = LoadEmissionTexture(row, log);
+		var em = row.Emission;
+		var crest = IsSharedMeshCrestMaterial(material);
+		var file = crest ? em.CrestTexture : em.Texture;
+		if (string.IsNullOrEmpty(file))
+			return;
+		var texture = LoadEmissionTexture(row, file, crest ? em.CrestTextureSha256 : em.TextureSha256, log);
 		if (!texture)
 			return;
-		var em = row.Emission;
 		if (!material.HasProperty("_EmissionTex") || !material.HasProperty("_EmissionColor"))
 		{
 			if (EmissionFailures.Add(row.Id + "|props|" + lane))
@@ -1894,10 +2119,10 @@ internal static class Homm3MeshFx
 			log?.LogError(
 				"Homm3MeshFx: emission id='" + row.Id + "' lane=" + lane + " material lacks "
 				+ string.Join(",", missing) + "; the glow is steady instead of the vanilla pulse.");
-		if (EmissionAppliedLog.Add(row.Id + "|" + lane))
+		if (EmissionAppliedLog.Add(row.Id + "|" + lane + (crest ? "|crest" : string.Empty)))
 			log?.LogInfo(
 				"Homm3MeshFx: emission id='" + row.Id + "' lane=" + lane + " material='" + material.name
-				+ "' texture='" + em.Texture + "' proof=source/static.");
+				+ "' texture='" + file + "' proof=source/static.");
 	}
 
 	private static void SetFloatOrNote(Material material, string property, float value, List<string> missing)
@@ -1921,14 +2146,13 @@ internal static class Homm3MeshFx
 		return false;
 	}
 
-	private static Texture2D LoadEmissionTexture(CatalogRow row, ManualLogSource log)
+	private static Texture2D LoadEmissionTexture(CatalogRow row, string file, string sha256, ManualLogSource log)
 	{
-		var em = row.Emission;
-		if (EmissionTextures.TryGetValue(em.Texture, out var cached) && cached)
+		if (EmissionTextures.TryGetValue(file, out var cached) && cached)
 			return cached;
-		if (EmissionFailures.Contains("tex|" + em.Texture))
+		if (EmissionFailures.Contains("tex|" + file))
 			return null;
-		var path = Homm3ImportPortraitSpriteCache.ResolvePluginAssetPath("homm3_mesh_fx/" + em.Texture);
+		var path = Homm3ImportPortraitSpriteCache.ResolvePluginAssetPath("homm3_mesh_fx/" + file);
 		string failure = null;
 		Texture2D texture = null;
 		try
@@ -1941,8 +2165,8 @@ internal static class Homm3MeshFx
 				string digest;
 				using (var sha = SHA256.Create())
 					digest = BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", string.Empty).ToLowerInvariant();
-				if (!string.Equals(digest, em.TextureSha256, StringComparison.Ordinal))
-					failure = "sha256 " + digest + " != catalog " + em.TextureSha256;
+				if (!string.Equals(digest, sha256, StringComparison.Ordinal))
+					failure = "sha256 " + digest + " != catalog " + sha256;
 				else
 				{
 					texture = new Texture2D(2, 2, TextureFormat.RGBA32, mipChain: true);
@@ -1965,13 +2189,13 @@ internal static class Homm3MeshFx
 		}
 		if (failure != null)
 		{
-			EmissionFailures.Add("tex|" + em.Texture);
-			log?.LogError("Homm3MeshFx: emission id='" + row.Id + "' texture '" + em.Texture + "': " + failure + ".");
+			EmissionFailures.Add("tex|" + file);
+			log?.LogError("Homm3MeshFx: emission id='" + row.Id + "' texture '" + file + "': " + failure + ".");
 			return null;
 		}
-		texture.name = "homm3_mesh_fx_emission_" + Path.GetFileNameWithoutExtension(em.Texture);
+		texture.name = "homm3_mesh_fx_emission_" + Path.GetFileNameWithoutExtension(file);
 		texture.hideFlags = HideFlags.DontUnloadUnusedAsset;
-		EmissionTextures[em.Texture] = texture;
+		EmissionTextures[file] = texture;
 		return texture;
 	}
 
@@ -1989,23 +2213,6 @@ internal static class Homm3MeshFx
 				continue;
 			TrySetBoolMember(component, GameSymbols.BattleEffect.SpawnAsChildFields, true);
 			TryInvokeNamed(component, GameSymbols.BattleEffect.Init.NameHints, socket, false);
-		}
-	}
-
-	private static void TryStartNativeHelper(GameObject instance, Slot slot, bool forceRestart)
-	{
-		if (!instance)
-			return;
-		var components = instance.GetComponentsInChildren<Component>(true);
-		if (components == null)
-			return;
-		for (var i = 0; i < components.Length; i++)
-		{
-			var component = components[i];
-			if (!component || !IsEffectHelper(component))
-				continue;
-			if (forceRestart || !slot.HelperPrepared)
-				TryInvokeNamed(component, GameSymbols.BattleEffect.StartPlaying.NameHints);
 		}
 	}
 
@@ -2348,6 +2555,14 @@ internal static class Homm3MeshFx
 			log?.LogError("Homm3MeshFx: id='" + id + "' emission needs texture, textureSha256 and color.");
 			return false;
 		}
+		var crestTexture = ReadString(emission, "crestTexture");
+		var crestDigest = ReadString(emission, "crestTextureSha256");
+		if (string.IsNullOrEmpty(crestTexture) != string.IsNullOrEmpty(crestDigest)
+		    || (crestDigest != null && (crestDigest.Length != 64 || !IsHex(crestDigest))))
+		{
+			log?.LogError("Homm3MeshFx: id='" + id + "' emission crestTexture needs crestTextureSha256 (64 hex), and the reverse.");
+			return false;
+		}
 		parsed = new CatalogRow
 		{
 			Id = id,
@@ -2357,6 +2572,8 @@ internal static class Homm3MeshFx
 			{
 				Texture = texture,
 				TextureSha256 = digest.ToLowerInvariant(),
+				CrestTexture = string.IsNullOrEmpty(crestTexture) ? null : crestTexture,
+				CrestTextureSha256 = crestDigest?.ToLowerInvariant(),
 				Color = new Color(color.x, color.y, color.z, 1f),
 				MinPower = ReadFloat(emission, "minPower", 1f),
 				BlinkPower = ReadFloat(emission, "blinkPower", 0f),
@@ -2441,6 +2658,10 @@ internal static class Homm3MeshFx
 		}
 		if (!TryReadOverlayTint(source["colors"], id, log, out var tintProps, out var tintValues))
 			return false;
+		if (!TryReadOverlayTextures(source["textures"], id, log, out var texProps, out var texFiles, out var texShas))
+			return false;
+		if (!TryReadOverlayTextures(source["crestTextures"], id, log, out var crestProps, out var crestFiles, out var crestShas))
+			return false;
 		parsed = new CatalogRow
 		{
 			Id = id,
@@ -2457,7 +2678,13 @@ internal static class Homm3MeshFx
 				RendererPath = ReadString(source, "rendererPath") ?? string.Empty,
 				MaterialIndex = (int)indexToken,
 				ColorProperties = tintProps,
-				ColorValues = tintValues
+				ColorValues = tintValues,
+				TextureProperties = texProps,
+				TextureFiles = texFiles,
+				TextureSha256 = texShas,
+				CrestTextureProperties = crestProps,
+				CrestTextureFiles = crestFiles,
+				CrestTextureSha256 = crestShas
 			}
 		};
 		Homm3ImportVisuals.RegisterNativeResManagerCacheInterest(parsed.NativeResPath);
@@ -2503,6 +2730,58 @@ internal static class Homm3MeshFx
 			properties[i] = property;
 			values[i] = new Color(c[0], c[1], c[2], c[3]);
 		}
+		return true;
+	}
+
+	/// <summary>source.textures: absent, or [{"property": "_Name", "file": "dir/name.png", "sha256": "64 hex"}] with
+	/// distinct properties and relative .png paths under homm3_mesh_fx/ (not rooted, no '..', no backslash or colon).</summary>
+	private static bool TryReadOverlayTextures(JToken token, string id, ManualLogSource log, out string[] properties,
+		out string[] files, out string[] shas)
+	{
+		properties = Array.Empty<string>();
+		files = Array.Empty<string>();
+		shas = Array.Empty<string>();
+		if (token == null)
+			return true;
+		var list = AsArray(token);
+		if (list == null || list.Count == 0)
+		{
+			log?.LogError("Homm3MeshFx: id='" + id + "' overlay source.textures must be a non-empty array when present.");
+			return false;
+		}
+		properties = new string[list.Count];
+		files = new string[list.Count];
+		shas = new string[list.Count];
+		for (var i = 0; i < list.Count; i++)
+		{
+			var entry = AsObject(list[i]);
+			var property = ReadString(entry, "property");
+			var file = ReadString(entry, "file");
+			var digest = ReadString(entry, "sha256");
+			var ok = !string.IsNullOrWhiteSpace(property) && property.StartsWith("_", StringComparison.Ordinal)
+			         && Array.IndexOf(properties, property) < 0
+			         && !string.IsNullOrWhiteSpace(file) && file.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+			         && !file.StartsWith("/", StringComparison.Ordinal) && file.IndexOf('\\') < 0 && file.IndexOf(':') < 0
+			         && Array.IndexOf(file.Split('/'), "..") < 0
+			         && digest != null && digest.Length == 64 && IsHex(digest);
+			if (!ok)
+			{
+				log?.LogError("Homm3MeshFx: id='" + id + "' overlay source.textures[" + i
+				              + "] needs a distinct '_Property', a relative .png file under homm3_mesh_fx/ and its sha256.");
+				return false;
+			}
+			properties[i] = property;
+			files[i] = file;
+			shas[i] = digest.ToLowerInvariant();
+		}
+		return true;
+	}
+
+	private static bool IsHex(string s)
+	{
+		foreach (var ch in s)
+			if (!Uri.IsHexDigit(ch))
+				return false;
 		return true;
 	}
 

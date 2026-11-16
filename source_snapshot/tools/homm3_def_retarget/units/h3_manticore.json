@@ -836,7 +836,7 @@
   "reason": "Stiff wings: the DEF manticore sweeps its wings through a wide stroke in Move/Hitted/Death, but the capture-only build reaches wingRange 70.9 (flatFloor 60, thin) and the sheet shows the wings near-still. Same body plan and extension set as h3_scorpicore, whose wingChain (9993a4b5d8) gives wingRange 142.6; reused verbatim."
  },
  "glbPatch": {
-  "reason": "lane B 2026-10-11 authenticity flyer pass (gargoyle bar; Idle untouched): Move - the capture walked; the DEF leaps level with the forelegs reaching forward and the hind legs trailing back, tucking under at the gather keys (Hips levelled, legs aimed). Hitted - the DEF crouches flat with both wings spread wide; the Hips drop 0.18 with the forefeet IK-planted, the wing roots aim along the battle camera's screen horizontal (far wing forward-out, near wing back-out) so they read open instead of as a vertical spike, the tail swings low. Death - wings spread through the stagger, then the body drops 0.26 belly-down, forelegs stretched forward, head down, wings folded flat over the back and the tail laid along the floor (fit sideClips [] / groundClips Death keep it upright and grounded). Rotation tables listed twice (split halves); stretchRelax evens the shoulder/hip creases.",
+  "reason": "lane B 2026-10-11 authenticity flyer pass (gargoyle bar; Idle untouched): Move - the capture walked; the DEF leaps level with the forelegs reaching forward and the hind legs trailing back, tucking under at the gather keys (Hips levelled, legs aimed). Hitted - the DEF crouches flat with both wings spread wide; the Hips drop 0.18 with the forefeet IK-planted, the wing roots aim along the battle camera's screen horizontal (far wing forward-out, near wing back-out) so they read open instead of as a vertical spike, the tail swings low. Death - wings spread through the stagger, then the body drops 0.26 belly-down, forelegs stretched forward, head down, wings folded flat over the back and the tail laid along the floor (fit sideClips [] / groundClips Death keep it upright and grounded). Rotation tables listed twice (split halves); stretchRelax evens the shoulder/hip creases.; 2026-11-09 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate; clip pass 2026-11-11 (user-approved candidate): AttackFront re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyTranslations",
@@ -857,6 +857,22 @@
     "sha256": "06d82de2806c667933a84e4eaa003a46a643990cd84f6c473aa81ba884d0a750"
    },
    {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_manticore_flight_weights.json",
+    "sha256": "8f8ec7953db0531e2207d088e4e1e8fe8ad845e3327d90321a0a12202c5b0afb"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_manticore_flight_tracks.json",
+    "sha256": "4995cbf0c8f2c4136f7d8c4da21ec3a4975524474e960762eadb46f9546ceb80"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_manticore_clip_tracks.json",
+    "sha256": "3cb727d1d626520649ca138904dca04ed369735599d25f848b254a61a0b69849"
+   },
+   {
     "op": "stretchRelax",
     "clips": [
      "Unit_Move",
@@ -868,6 +884,18 @@
     "smooth": 0.0,
     "maxMove": 0.08,
     "note": "shoulder/hip crease of the crouch, reach and fold"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "flyer flight: crease of the spread wings"
    }
   ]
  }

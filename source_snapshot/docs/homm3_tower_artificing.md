@@ -1,14 +1,16 @@
 # HoMM3 Tower: Artificing (faction-skill rework)
 
-Status: groundwork only, **disabled** (`custom_factions/tower_artificing/artificing_policy.json` `enabled: false`).
-Tower still ships Arcane Battery. Proof tier: source, generated data, build, and contract validator.
-The runtime is unproven: nothing has run in Golden Era yet.
+Status: **enabled** (`custom_factions/tower_artificing/artificing_policy.json` `enabled: true`, user decision
+2026-11-11). Artificing replaces Arcane Battery as the Tower faction skill; the Arcane Battery subskills stay as they
+are (Chronomancy still grants Borrowed Time). Proof tier: source, generated data, compile, and contract validators.
+The runtime is unproven: nothing has run in Golden Era yet, and nothing has been installed (see the in-game
+checklist at the end).
 
-## Design (from the request, 2026-10-25)
+## Design (from the request, 2026-10-25; revised 2026-11-11)
 
-- **Transcribe** (hero combat action, 2 Focus, cooldown 2, any living stack, friend or foe). It writes that
-  creature's *unique* passives into the hero's **Schematic Book**. Generic traits (attack type, movement type,
-  creature class) are never written.
+- **Schematic Book.** A creature's *unique* passives enter the hero's book by **observation** at the end of a
+  battle (below). Generic traits (attack type, movement type, creature class) are never written. The original
+  Transcribe hero action is dropped.
 - **Arcane Essence.** A won battle gives the winning Artificing hero essence for every enemy creature
   defeated, weighted by tier (`1/2/3/5/8/12/20` for T1..T7). It works like necromancy's lost-stack accounting.
 - **Grafts.** Essence copies a book passive onto a Tower unit line. Each line holds **1/1/2** grafts at
@@ -16,24 +18,32 @@ The runtime is unproven: nothing has run in Golden Era yet.
   covers every variant of the line (base, upgrade, alternate upgrade).
 - **Counterplay.** Grafts are applied as battle buffs to that hero's units in each of the hero's combats, and
   they **can be purged**.
+- **Spend UI.** The faction skill grants the **Artificing** world spell at every rank (free, map only). Casting it
+  opens the graft picker (below).
 
 All tunables live in `artificing_policy.json`. Nothing else hard-codes them.
 
-## Observation replaces Transcribe (approved 2026-10-26; specs + diagnostic probe built, rolls not yet)
+## Observation (built 2026-11-11: battle-end enemy-army roll)
 
-Passives enter the book when they are **observed**: they changed the outcome of a combat event in a battle
-that has an Artificing hero. Transcribe and its hero action are removed.
+User decision 2026-11-11: "%chance to observe applies at the end of combat, per-passive in the enemy army", so
+it works with auto-battle and auto-resolve (`policy.observation.rule = battle_end_enemy_army`).
 
-- **Roll.** One roll per passive per battle, on its first observation, at 15/25/35% by Artificing rank. Rolls
-  are seeded by battle key + schematic (replays agree) and written to the ledger at battle end, alongside
-  essence. AI heroes and auto-resolve get the same path.
-- **Who.** Native units on either side. Grafted carriers are never observed. The source tier recorded is the
-  observed unit's tier.
-- **Predicates, not counterfactuals.** Each category has a rule that is only true when the passive changed
-  the result (Melee Defense: its holder took melee damage; poison: the debuff stuck; drain: heal > 0).
-- **Map cards.** Proxies where a combat event exists (XP award; max mana and spell level when that hero
-  casts); sight, terrain and gold fall back to presence in the battle.
-- **Policy.** Every graftable row gets an `observe` spec; the builder refuses a graftable row without one.
+- **When.** In the shared battle-result prefix, once per battle key, for every side whose hero has the Tower
+  faction skill, win or lose.
+- **What.** Every graftable schematic carried by a living enemy stack in the battle's starting armies
+  (`TransferBattle.sides[*].units`, `stacks > 0`, catalog `GraftableSchematicsByUnitSid`). The tier recorded is the
+  lowest tier that carried it.
+- **Roll.** One roll per passive, at `chanceByRank` 15/25/35% by Artificing rank. The roll is a hash of battle key,
+  side and schematic (`ObservationRoll`), so replays agree. Hits are written to the book; a lower tier lowers a
+  known passive's recorded tier. Already-known passives at the same or lower tier are left alone.
+- **Log.** One line per Artificing side: `battle <k> side <s> <hero> observed <n> passives at <c>% [idx!:roll,...]`
+  (`!` marks a hit).
+- **AI heroes** learn the same way. They have no spend path (the picker is human UI), so their book only matters if
+  a human later takes the hero.
+
+The earlier per-event plan ("observed" = the passive changed a combat event; predicates per category) is kept only
+as the diagnostic probe below. Its `observe` specs stay in the catalog, and the builder still refuses a graftable
+row without one, so a predicate rule can come back later without re-curating.
 
 ### Spike: passive-effect attribution (2026-10-26, source/static)
 
@@ -82,7 +92,51 @@ that has an Artificing hero. Transcribe and its hero action are removed.
   adds whose sid is an observe tag. It stops after `diagnosticLogLines` lines per launch.
 - **In-game check reads.** `identity=match` on linked units proves config identity. `src=runner` inside the
   scope proves in-scope casting. Tagged-buff lines name the native aura buff sids, if auras apply buffs
-  under their tag. Rolls, the ledger write and the Transcribe removal come after that check.
+  under their tag. The probe is off (`diagnostics: false`); the battle-end roll does not depend on it.
+
+## Spend UI: the Artificing world spell and graft picker (built 2026-11-11)
+
+- **Spell.** `homm3_tower_artificing_graft` in `DB/magics/world_neutral_magics.json`, a clone of native
+  `change_use_necromancy` (Necromancer Will) with `parameters [graftSpell.mode]`, 0 mana, usable on the map,
+  unlimited uses, icon `neutral_1_magic_units_replace`. Every faction-skill rank grants it through
+  `heroMagicAddition [sid, "false"]`. Lang: "Artificing" name, description and cast rows (`magic.json`,
+  `magics.json`, `Lang/args/magic.json`).
+- **Cast.** `PrefixGraftSpellCast` is a Harmony prefix on the Necromancer Will world cast
+  (`GameSymbols.CastleEliteStrategem.NecromancyWorldMagicCast`, the same surface Dungeon Captives and Castle Elite
+  Strategem use). It passes through any setting whose `parameters[0]` is not the Artificing mode, resolves the
+  caster hero and rank, opens the picker and returns success. If the mode is ours but the hero cannot be resolved it
+  fails closed (cast refused, logged).
+- **Picker** (`Homm3TowerArtificingPicker.cs`, restyled 2026-11-12). A uGUI clone of the game's Laws window
+  (level11 FractionLaws), built on a ScreenSpaceOverlay canvas from the game's own loaded sprites and SDF fonts.
+  All geometry, sprite names, fonts, sizes and colours live in `Homm3TowerArtificingPickerLayout` in the same file.
+  - **Scroll** (Scroll_Center paper, Scroll_Left/Right rollers over the Skrenshot_Laws_Back backdrop, Tower banner
+    emblem). Left half: the seven Tower lines, each a law cell with the line's portrait, name, "Tier N · g/s
+    grafted" and its slot cells (Frame_Law_Back glow on the selected slot, Overlay_Law_Loced plus lock on locked
+    ones). Middle: the Frame_LawLevel tier column. Right half: the Schematic Book (law cell with the passive icon,
+    name, "Tier N schematic · on this line, slot n", Frame_Law_Price pill with the Mana icon and the cost for the
+    selected line, green or red), 10 rows with wheel scrolling and a paper scrollbar. Bottom: Arcane Essence as
+    big-numbers, hero label and "<Rank> Artificing".
+  - **Docked panel**, a clone of the law tooltip (tolltip_hader / littlr_tooltip 2 / tolltip_futer, bild_frame_top
+    ring with the round-masked icon): schematic name and tier, target line and slot, "Replaces X (no refund)",
+    description, "After grafting" cost and essence left, and the native Graft button (buttom / buttom_MouseOver /
+    Button_NotActive) with the blocked reason or result under it. Corner FullSkreanExitButton closes.
+  - **Text** uses the FontsAlias English styles directly (EN-Regular / EN-Medium / EN-Book at 16-35 px). BhFont is
+    not attached because it would reset the sizes.
+  - **Icons.** Passive icon chain: `icons/abilities/<key>_name`, then the mod's icon hook for h3
+    passives (including donor icons), then the portrait of the base unit that shows it. Line portraits and the banner
+    come from the icon hook. Every lookup is cached.
+  - **Fallbacks.** Native sprites are resolved in one `FindObjectsOfTypeAll` pass when the picker opens. A missing
+    sprite is drawn as a flat colour and logged once; a missing font falls back to another loaded EN font. The
+    picker never refuses to open over an asset.
+  - **Input.** The full-screen Block image is the raycast shield. The host behaviour polls legacy Input (left
+    click on registered hit rects, wheel over the book, Esc) and hover-swaps the button sprites. The view is
+    rebuilt after every change. It spends only through `TryGraft`, which validates and pays, then re-reads the
+    ledger. A battle start closes it.
+  - **Mockup.** `python tools/tower_artificing/picker_mockup.py [--out DIR]` renders four approval shots from the
+    same layout constants, the exported native sprites, icons and fonts (read-only UnityPy), and Python mirrors of
+    `LineSubtitle` / `BookSubtitle` / `BlockedReason`.
+- **Notes.** The book shows the tier the passive was learned at rather than the unit it came from, because the
+  ledger stores only the tier. The hero label is the hero's config sid. AI heroes have no spend path.
 
 ## Pieces
 
@@ -94,8 +148,10 @@ that has an Artificing hero. Transcribe and its hero action are removed.
 | Review table | `docs/generated/homm3_tower_artificing_schematics.md` | For curating payloads |
 | C# catalog | `OfflineUnlockMod/Homm3TowerArtificingCatalog.g.cs` | Constants, cost matrix, unit tiers, graftable schematics per unit, `Enabled` |
 | Core rows | `tools/release_port/homm3_tower_artificing_core_overlay.py` | Called from the `homm3_tower` overlay block |
-| Runtime | `OfflineUnlockMod/Homm3TowerArtificingRuntime.cs` | Ledger, battle-start grafts, runtime grafts (on hit, vampirism, first round), essence, Transcribe capture, `TryGraft` |
+| Runtime | `OfflineUnlockMod/Homm3TowerArtificingRuntime.cs` | Ledger, battle-start grafts, runtime grafts (on hit, vampirism, first round), essence, battle-end observation, world-spell cast prefix, `TryGraft` |
+| Picker | `OfflineUnlockMod/Homm3TowerArtificingPicker.cs` | Graft picker UI opened by the world spell |
 | Validator | `tools/validate_homm3_tower_artificing_contract.py` | Full build tier (`-p:FullValidation=true`). Core-free |
+| Faction skill validator | `tools/validate_homm3_tower_arcane_battery_contract.py` | Installed-Core check; branches on `enabled` (Artificing grants and text vs Arcane Battery), subskills checked either way |
 
 Regenerate after any policy edit with `python tools/tower_artificing/build_schematic_catalog.py`.
 `--check` compares against a fresh Core read. `--check-derived` is the Core-free check the build uses.
@@ -107,7 +163,7 @@ are display labels. They are not index-aligned with the unit's logic passive blo
 mismatch), and their mechanics often live elsewhere (stats such as `numCounters`, `moveType`, attack
 `targetMechanics`). So payloads are **curated, never inferred**:
 
-- `generic`: matched by `genericRules` (attack type, movement type, creature class). Never transcribed.
+- `generic`: matched by `genericRules` (attack type, movement type, creature class). Never observed.
 - `excluded`: `excludedKeys`. Attack shapes a buff cannot change, and the Peasant's pet flavour card.
 - `copyable`: `graftable` only once `manualPayloads` gives it a buff-compatible payload
   (`data` limited to stats, disablers, immunities, sequenceEffect, alwaysMinDmg; plus `actions` and
@@ -115,7 +171,7 @@ mismatch), and their mechanics often live elsewhere (stats such as `numCounters`
   show the passive, as review hints.
 
 Current numbers: 191 schematics, 24 generic, 8 excluded, **159 graftable**, 0 still needing a payload.
-Transcribe records only graftable schematics.
+Observation records only graftable schematics.
 
 Curation (2026-10-25) read each source unit's raw Core logic. A passive's mechanics turned out to live in one of
 four places, and that decided the outcome:
@@ -229,13 +285,10 @@ adds 3 rows; the 159 graftable schematics, essence and graft slots come to 619 h
 2. Shared `Unit.Init` consumer. A unit of a grafted Tower line, matched by its battle-local side index, gets
    `homm3_tower_graft_{i}`: canDispel, infinite, `addition: data`, carrying the passive's own data. It is added
    through `Homm3BuffDebuffNativeAdapter`, so purge removes it natively.
-3. Transcribe. The ability applies the 1-round marker `homm3_tower_transcribe_effect`. A postfix on the unit
-   buff add (`dzv.bbgf`) records the marked unit's graftable schematics for the caster's hero. The caster hero
-   is the caster's `TransferSide.logicHero`; if that cannot be read, it is the only Artificing hero in the
-   battle. If both sides have one, the cast is refused and logged.
-4. Battle result. The shared prefix (`Homm3RuntimeMechanicHooks.PrefixBattleResultCleanup`) adds essence to
+3. Battle result. The shared prefix (`Homm3RuntimeMechanicHooks.PrefixBattleResultCleanup`) adds essence to
    the winner. Essence is creatures lost by every other side × tier essence, deduped per battle key.
-   Untiered units (summons, specials) give nothing and are logged.
+   Untiered units (summons, specials) give nothing and are logged. The same prefix then rolls observation for
+   every Artificing side (see Observation) and writes the hits to the book.
 
 ## Graft cost
 
@@ -251,50 +304,71 @@ adds 3 rows; the 159 graftable schematics, essence and graft slots come to 619 h
 | T6 | 140 | 205 | 275 | 410 | 550 | 755 | 960 |
 | T7 | 175 | 260 | 350 | 525 | 700 | 960 | 1225 |
 
-- **Source tier:** the lowest tier the passive was transcribed from. Transcribing a cheaper source later
-  lowers the price.
+- **Source tier:** the lowest tier the passive was observed on. Observing a cheaper source later lowers the
+  price.
 - **Replacing a graft:** pays the full new cost, with no refund.
 - **Reference point:** one won fight against 20 T3 creatures is worth 60 essence.
 
-## Enabling (in order)
+## Enabling (done 2026-11-11)
 
-1. **Spend UI.** `TryGraft(logicHero, line, slot, schematic)` exists, but nothing calls it. The surface
-   (town building, hero screen, or world spell) is a user decision, and the mockup needs approval before install.
+1. **Spend UI.** The Artificing world spell and graft picker (above). The picker mockup needs the user's approval
+   before the first install.
 2. **Payloads are curated** (159 graftable). Countershot still needs a new native surface.
-3. **Flip `enabled: true`** and regenerate. The overlay then grants Transcribe at every rank and renames the skill
-   Artificing. The runtime registers only when `Homm3TowerArtificingCatalog.Enabled` is true.
-   `validate_homm3_tower_arcane_battery_contract.py` still expects Arcane Battery level grants. Retire or branch it
-   in the same change.
-4. **Golden Era check:**
-   - the caster TransferSide read on a hero-ability caster
-   - graft buffs visible and purgeable
-   - whether `statOverrides` (Alert, Unlimited Retaliation) and `sequenceEffect` (Parry) take effect from a
-     buff added at `Unit.Init`. The adapter folds only four `data.stats` fields; immunities are the safest graft kind.
-   - one graft per payload kind: inDmgMods (Melee Defense), a vanilla-unseen stat (Jousting `damagePerHex`),
-     `disable_counter` (Swift Strike), and an `actions` trigger (Regeneration)
-   - essence after auto-resolve
-   - runtime grafts: the `basic_attack` dealer tag on melee, shots and counters; on-hit debuff + Fangarm berserk;
-     vampirism heal amounts; the first RoundStarted fires after every Unit.Init; side-buff mana cost and
-     spell power; aura helpers refresh each round; Rebirth heart respawns the right sid
-   - map grafts: `Method_Public_Void_1` really is RecalculateStats (static proof: caller counts); the hero buff
-     appears and leaves with the carrier stack; no reentrancy loop; non-stacking with a native set unit;
-     manaBonus / magicSchoolSet read from a hero buff; daily gold on the side's day start
-   - ability grafts: JsonUtility fills the configs (a `damageDealer`-less parse is skipped and logged); the HUD
-     shows the injected skill; cast animation index 2 on carriers; charges reset per battle; the unit info
-     window may not list the injected ability
+3. **`enabled: true`**, regenerated. The overlay grants the world spell at every rank and renames the skill
+   Artificing; the Arcane Battery subskills are unchanged. The runtime registers only when
+   `Homm3TowerArtificingCatalog.Enabled` is true. `validate_homm3_tower_arcane_battery_contract.py` branches on
+   `enabled`; it fails against a Core built before this change, which is expected until the next overlay install.
+
+## Golden Era in-game checklist (first install)
+
+Install path: the normal quick-tier deploy plus a Core overlay rebuild (the faction skill, world spell, graft buffs
+and ledger rows are Core data). Then, with a Tower hero that has the faction skill:
+
+1. **Skill and spell.** The faction skill reads "Artificing" with the observation chances, slots and the
+   Chronomancy / Borrowed Time hint; the Arcane Battery subskills are still offered. The hero's spell book has
+   "Artificing" (0 mana) at Basic, Advanced and Expert.
+2. **Picker.** Cast it on the adventure map: the picker opens, map clicks do not pass through, Esc and the corner
+   close button close it, and the spell is not consumed in a way that blocks recasting. The log has no
+   "native sprites not loaded" or "font ... not loaded" warning. Scroll paper, law cells, price pills, tooltip panel
+   and Graft button look native; book icons show (no empty cells); the wheel scrolls a book longer than 10;
+   hovering the Graft and close buttons swaps their sprites; layout fits at 16:9 and at an ultrawide/4:3 window. Other Necromancer Will clones (Dungeon Captives,
+   Castle Elite Strategem) still behave as before.
+3. **Observation.** Win a fight against a stack with a graftable passive (e.g. a T1 with Melee Defense), by hand and
+   once by auto-battle; also lose one. The log has the `observed <n> passives at <c>%` line for each, and a hit
+   shows up in the picker's book at the stack's tier.
+4. **Essence.** After a win, the picker's Arcane Essence matches the log (essence after auto-resolve too).
+5. **Graft.** Pick a line, slot and book passive with enough essence: Graft spends the shown cost, the slot shows
+   the passive, and a replace warns "No refund". Disabled reasons show for an occupied line, the same graft, and
+   too little essence. Locked slots follow rank (1/1/2).
+6. **Save/load.** Save, reload: essence, book and grafts survive.
+7. **Battle grafts.** In the next fight the grafted line's units carry the visible `homm3_tower_graft_{i}` buff, it
+   works, and a purge removes it. One graft per payload kind: inDmgMods (Melee Defense), a vanilla-unseen stat
+   (Jousting `damagePerHex`), `disable_counter` (Swift Strike), an `actions` trigger (Regeneration); whether
+   `statOverrides` (Alert, Unlimited Retaliation) and `sequenceEffect` (Parry) take effect from a buff added at
+   `Unit.Init`.
+8. **Runtime grafts:** the `basic_attack` dealer tag on melee, shots and counters; on-hit debuff + Fangarm berserk;
+   vampirism heal amounts; the first RoundStarted fires after every Unit.Init; side-buff mana cost and spell
+   power; aura helpers refresh each round; Rebirth heart respawns the right sid.
+9. **Map grafts:** `Method_Public_Void_1` really is RecalculateStats; the hero buff appears and leaves with the
+   carrier stack; no reentrancy loop; non-stacking with a native set unit; manaBonus / magicSchoolSet read from a
+   hero buff; daily gold on the side's day start.
+10. **Ability grafts:** JsonUtility fills the configs (a `damageDealer`-less parse is skipped and logged); the HUD
+    shows the injected skill; cast animation index 2 on carriers; charges reset per battle; the unit info window
+    may not list the injected ability.
+11. **Startup log:** the Tower Artificing summary line shows the runtime registered with `spell=ok`, and no
+    `policy.enabled=false` line.
 
 ## Open questions
 
-- **Spend UI location** (see above).
-- **Arcane Battery subskills.** When enabled, the faction skill grants only Transcribe. The existing Arcane Battery
-  subskills (Arcane Curriculum, Chronomancy with Borrowed Time) still exist; they could stay, be reworked
-  into Artificing subskills, or be retired.
 - **Per-line or per-unit grafts.** The current design is per line (upgrades keep grafts). Changing it needs a
   ledger migration.
 - **Simulated battles.** Auto-resolve and AI-vs-AI run the real battle logic (`law_runtime_hooks_20261021.md`).
-  The battle key dedupes repeated result prefixes for one BattleLogic, but whether essence should come from
-  simulations at all is a design decision.
-- **AI heroes.** Transcribe has `aiValue 0`, so AI heroes never cast it and never spend essence. That is a
-  deliberate human-only advantage for now.
-- **Enemy-only Transcribe.** The current design allows friendly targets, so a hero can transcribe their own army
-  for free. If that is too strong, Transcribe could be enemy-only or cost essence.
+  The battle key dedupes repeated result prefixes for one BattleLogic, but whether essence and observation should
+  come from simulations at all is a design decision.
+- **AI spending.** AI heroes earn essence and learn passives but never graft. That is a deliberate human-only
+  advantage for now.
+- **Book source.** The ledger keeps only the lowest tier per passive, so the picker cannot say which unit it was
+  observed from. Adding that needs more ledger bits.
+
+Resolved 2026-11-11: spend UI location (world spell), Arcane Battery subskills (kept as-is), Transcribe (dropped;
+observation-first), observation timing (battle end, per passive in the enemy army).

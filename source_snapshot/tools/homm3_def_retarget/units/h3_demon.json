@@ -277,7 +277,7 @@
   "inferno_whipchain"
  ],
  "glbPatch": {
-  "reason": "h3_demon DEF fidelity (lane-A authenticity 2026-10-10): AttackFront g12 horn charge (body level, head down, horn forward, arms swept back f3-f5); Death g05 arms thrown up f2-f3 then a hunched seated heap f5-f8 (hips held upright, thighs folded, arms down, f8 collapsing forward) where the capture fell backward and sprawled legs-up. keyRotations x2 (split table) + Death stretchRelax (ratio 1.7, 1000 it, smooth 0.4) for the deep hip/knee fold; teardiag PASS. || tail: 2026-10-10 authenticity (lane A): tail whip-chain keys (h3_demon_tail_rot.json x2) - DEF Move trail at knee height with a travelling flick, AttackFront swings low then hooks the tip up behind, Defence curls it up behind, Death flings and curls it, then rests it just off the floor in the heap (the rigid tail lifted the heap 10-13 cm through grounding)",
+  "reason": "h3_demon DEF fidelity (lane-A authenticity 2026-10-10): AttackFront g12 horn charge (body level, head down, horn forward, arms swept back f3-f5); Death g05 arms thrown up f2-f3 then a hunched seated heap f5-f8 (hips held upright, thighs folded, arms down, f8 collapsing forward) where the capture fell backward and sprawled legs-up. keyRotations x2 (split table) + Death stretchRelax (ratio 1.7, 1000 it, smooth 0.4) for the deep hip/knee fold; teardiag PASS. || tail: 2026-10-10 authenticity (lane A): tail whip-chain keys (h3_demon_tail_rot.json x2) - DEF Move trail at knee height with a travelling flick, AttackFront swings low then hooks the tip up behind, Defence curls it up behind, Death flings and curls it, then rests it just off the floor in the heap (the rigid tail lifted the heap 10-13 cm through grounding); 2026-11-10 unit pass (user-approved candidate, rig / mesh repair): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass, with the candidate's added joints and face cuts; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -302,6 +302,33 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_demon_tail_rot.json",
     "sha256": "60e4caa990b43644156ae9ada3640b093e51644b3d0dc68c323af2255c1d6110",
     "regrid": true
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_demon_move_joints.json",
+    "sha256": "9f07038a02cc6053df02b312b412b10b54cf78a83f3f6e83d450a06df2080d41",
+    "note": "unit pass: 8 joints the candidate's Move needs (mover_tailed)"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_demon_move_cut.json",
+    "sha256": "5454fe2f97237382f0b3bfcc8bc9b404036459b1ac58c6d21a8270d208e1981c",
+    "note": "unit pass: 53 bridging faces the candidate cuts (mover_tailed)"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_demon_move_weights.json",
+    "sha256": "89bf8d1a2d09414448d9774a761668988b186b88395dd282240ce5c2a3f834e8"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_demon_move_tracks.json",
+    "sha256": "79579b957b987ed8c4ff5a91cae6d51befef1ceaa4d585604d182c6ff9f9b4ea"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_demon_clip_tracks.json",
+    "sha256": "562ab7c44f4fd3783a15e6330c1071e05a5f2e3c7b82a43d9c83fb1d46a57e02"
    },
    {
     "op": "stretchRelax",

@@ -23,8 +23,9 @@ PLUGIN = MOD / "Plugin.cs"
 TUNER = MOD / "DamageHistogramOverlay.cs"
 SYMBOLS = MOD / "GameSymbols.cs"
 CURRENT_SYMBOLS = MOD / "GameSymbolsCurrent.g.cs"
+GAME_BUILD = MOD / "GameBuild.cs"
 CSPROJ = MOD / "OfflineUnlockMod.csproj"
-EVIDENCE = Path("tools/port_current/remap/current_scope_overrides_25672315.json")
+REMAP_DIR = Path("tools/port_current/remap")
 FIXTURE_DIR = Path("tools/fixtures/native_preview_startup")
 FIXTURE_PROJECT = FIXTURE_DIR / "NativePreviewStartupFixture.csproj"
 SUCCESS = "NativePreviewStartupScope fixture: OK (12 cases)"
@@ -250,20 +251,34 @@ def check_hook(root: Path, errors: list[str]) -> None:
 def check_hash_evidence(root: Path, errors: list[str]) -> None:
 	current = read(root, CURRENT_SYMBOLS, errors)
 	hash_match = re.search(r'\bGameAssemblySha256\s*=\s*"([0-9A-Fa-f]{64})"', current)
+	build_match = re.search(r'\bBuildId\s*=\s*"(\d+)"', current)
 	require(errors, hash_match is not None, "canonical GameAssembly SHA256 must be a full 64-hex source constant")
-	if hash_match is None:
+	require(errors, build_match is not None, "CurrentScopes.BuildId must be a source constant")
+	if hash_match is None or build_match is None:
 		return
+	build_id = build_match.group(1)
+	# A pin carried by carry_scope_overrides.py keeps its basis review, which cites the GameAssembly of the
+	# build it was reviewed on; that build must be a GameBuild.RetiredBuilds entry with exactly that hash.
+	retired = {build: sha.upper() for build, sha in re.findall(
+		r'\(\s*"(\d+)"\s*,\s*"([0-9A-Fa-f]{64})"\s*\)', read(root, GAME_BUILD, errors))}
+	evidence_path = REMAP_DIR / f"current_scope_overrides_{build_id}.json"
 	try:
-		symbols = json.loads((root / EVIDENCE).read_text(encoding="utf-8")).get("symbols", {})
+		symbols = json.loads((root / evidence_path).read_text(encoding="utf-8")).get("symbols", {})
 	except (OSError, json.JSONDecodeError) as ex:
-		errors.append(f"cannot parse central override evidence: {ex}")
+		errors.append(f"cannot parse central override evidence {evidence_path.as_posix()}: {ex}")
 		return
 	for key in ("UnitPreview.SharedPreviewWarmup", "UnitPreview.SharedPreviewCreate"):
 		row = symbols.get(key, {}) if isinstance(symbols, dict) else {}
 		evidence = row.get("evidence", "") if isinstance(row, dict) else ""
-		cited = re.findall(r"GameAssembly SHA256\s+([0-9A-Fa-f]{64})", evidence)
-		require(errors, len(cited) == 1 and cited[0].upper() == hash_match.group(1).upper(),
-			f"{key} evidence must cite the full canonical GameAssembly SHA256")
+		cited = [sha.upper() for sha in re.findall(r"GameAssembly SHA256\s+([0-9A-Fa-f]{64})", evidence)]
+		carry = re.match(rf"{build_id} carry from the (\d+) override by tools/port_current/carry_scope_overrides\.py", evidence)
+		if carry is None:
+			require(errors, cited == [hash_match.group(1).upper()],
+				f"{key} evidence must cite the full canonical GameAssembly SHA256")
+		else:
+			basis = carry.group(1)
+			require(errors, basis in retired and cited == [retired[basis]],
+				f"{key} evidence carried from {basis} must cite that retired build's full GameAssembly SHA256 ({GAME_BUILD.name})")
 
 
 def check_build_gate(root: Path, errors: list[str]) -> None:

@@ -1081,9 +1081,10 @@ internal static class Homm3RuntimeMechanicHooks
 			if (alreadyApplied)
 				return;
 			Homm3SkeletalNecromancyProbe.ObserveBeforeBattleResult(__0, __1, __originalMethod);
-			Homm3FortressHuntingGroundsHook.ObserveBeforeBattleResult(__0, __1);
+			Homm3DungeonCaptivesRuntime.ObserveBeforeBattleResult(__0, __1);
 			GoldenEraGameplayOptions.ObserveBeforeBattleResult(__0);
-			Homm3TowerArtificingRuntime.ObserveBeforeBattleResult(__0);
+			Homm3TowerArtificingRuntime.ObserveBeforeBattleResult(__0, __1);
+			Homm3InfernoGatingRuntime.ObserveBeforeBattleResult(__0);
 			Homm3BattleUnitLawOwnerRegistry.Clear("runtime-mechanics exact battle-result cleanup");
 			Homm3BulwarkRunesRuntime.ClearBattleState("shared battle-result cleanup");
 		}

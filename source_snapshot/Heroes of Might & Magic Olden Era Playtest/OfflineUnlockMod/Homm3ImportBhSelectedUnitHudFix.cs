@@ -8,6 +8,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using Hex.Configs;
 using Hex.Session.Battle;
+using BhBattleAbilityView = Hex.UI.BhBattleAbilityView;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.InteropTypes;
@@ -40,9 +41,15 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 	private static int _loggedReleaseHotkey;
 	private static int _loggedReleaseActionBarLookup;
 	private static int _releaseAbilityClickDepth;
-	private static BhUnitAbilityView _releaseAbilityClickView;
+	private static BhBattleAbilityView _releaseAbilityClickView;
 	private static bool _releaseAbilityClickForwarded;
 	private static int _loggedReleaseNoAbilityCleanup;
+	private static bool _unitSlotModeResolved;
+	private static PropertyInfo _unitSlotModeProperty;
+	private static object _unitSlotModeValue;
+	private static int _loggedUnitSlotModeFailure;
+	private static PropertyInfo _controlsAbilitiesProperty;
+	private static int _loggedControlsAbilitiesFailure;
 	private static int _loggedReleaseAlias;
 	private static int _loggedReleaseConfigAbilityFallback;
 	private static int _loggedReleaseActionBarPrewarm;
@@ -54,7 +61,6 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 	private static bool _hotkeyFallbackRegistered;
 	private static bool _hotkeyFallbackAttached;
 	private static string _lastBoundControlsSid;
-	private static BhUnitControlsView _lastBoundControlsView;
 	private static object _lastBoundControlsAbilities;
 	private static string _lastBoundReleaseControlsSid;
 	private static BhUnitControlsView _lastBoundReleaseControlsView;
@@ -488,7 +494,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 
 	private static void PatchReleaseAbilityClickDiagnostics(Harmony h, ManualLogSource log)
 	{
-		var clicked = FindMethodByNameAndArity(typeof(BhUnitAbilityView), "OnClicked", 0);
+		var clicked = FindMethodByNameAndArity(typeof(BhBattleAbilityView), "OnClicked", 0);
 		if (clicked != null)
 			h.Patch(clicked,
 				prefix: new HarmonyMethod(typeof(Homm3ImportBhSelectedUnitHudFix), nameof(PrefixReleaseAbilityClicked)),
@@ -568,17 +574,129 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		if (method == null || method.IsSpecialName || method.ReturnType != typeof(void))
 			return false;
 		var parameters = method.GetParameters();
-		return parameters.Length == 1 && ParameterTypesMatch(parameters[0].ParameterType, typeof(BhUnitAbilityView));
+		return parameters.Length == 1 && ParameterTypesMatch(parameters[0].ParameterType, typeof(BhBattleAbilityView));
 	}
 
-	private static BhUnitControlsView TryGetReleaseControlsViewForAbilityClick(BhUnitAbilityView view)
+	// 26297049 merged hero, shared and unit ability slots into BhBattleAbilityView. Only slotMode Unit belongs to the
+	// selected unit's action bar (BhUnitControlsView), so the HUD fixes and the custom icon refresh/clear skip the rest.
+	// slotMode and EAbilitySlotMode exist only on 26297049, so both are read by name through GameSymbols. Where they do
+	// not resolve (Golden Era) no view counts as a unit slot: the guarded paths skip every view and log why once.
+	internal static bool IsUnitSlotAbilityView(BhBattleAbilityView view)
 	{
+		if (view == null || !TryResolveUnitSlotMode())
+			return false;
 		try
 		{
-			var direct = TryGetMemberValue(view, "controlsView") as BhUnitControlsView;
-			if (ControlsViewOwnsReleaseAbilityView(direct, view))
-				return direct;
+			return Equals(_unitSlotModeProperty.GetValue(view), _unitSlotModeValue);
+		}
+		catch (Exception ex)
+		{
+			LogUnitSlotModeFailure("slotMode read failed: " + (ex.InnerException ?? ex).Message);
+			return false;
+		}
+	}
 
+	private static bool TryResolveUnitSlotMode()
+	{
+		if (_unitSlotModeResolved)
+			return _unitSlotModeProperty != null;
+		_unitSlotModeResolved = true;
+		const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
+		var fields = GameSymbols.BattleAbilityView.SlotModeField ?? Array.Empty<string>();
+		var unitNames = GameSymbols.BattleAbilityView.UnitSlotModeName ?? Array.Empty<string>();
+		for (var i = 0; i < fields.Length; i++)
+		{
+			if (GameSymbolScope.IsSentinel(fields[i]))
+				continue;
+			var property = typeof(BhBattleAbilityView).GetProperty(fields[i], flags);
+			if (property == null || !property.PropertyType.IsEnum || property.GetIndexParameters().Length != 0)
+				continue;
+			for (var j = 0; j < unitNames.Length; j++)
+			{
+				if (GameSymbolScope.IsSentinel(unitNames[j]) || !Enum.IsDefined(property.PropertyType, unitNames[j]))
+					continue;
+				_unitSlotModeProperty = property;
+				_unitSlotModeValue = Enum.Parse(property.PropertyType, unitNames[j]);
+				return true;
+			}
+		}
+		LogUnitSlotModeFailure(
+			"no enum slot-mode property [" + string.Join(",", fields) + "] with member [" + string.Join(",", unitNames)
+			+ "] on " + typeof(BhBattleAbilityView).FullName + " (" + GameBuild.Describe()
+			+ "); unit-slot ability-view guards skip every view");
+		return false;
+	}
+
+	private static void LogUnitSlotModeFailure(string message)
+	{
+		if (_loggedUnitSlotModeFailure >= 4)
+			return;
+		_loggedUnitSlotModeFailure++;
+		Plugin.LogSource?.LogWarning("Homm3Import unit-slot ability view: " + message + ".");
+	}
+
+	// BhUnitControlsView.abilities is List<BhBattleAbilityView> on 26297049 and List<BhUnitAbilityView> on Golden Era, so
+	// it is read by name (GameSymbols.BattleAbilityView.ControlsAbilitiesField) and type-checked. Any other shape returns
+	// null and logs why once; callers already treat a null list as "no unit action-bar views".
+	private static Il2CppSystem.Collections.Generic.List<BhBattleAbilityView> GetReleaseControlsAbilityViews(BhUnitControlsView controlsView)
+	{
+		if (controlsView == null)
+			return null;
+		var property = _controlsAbilitiesProperty ?? ResolveControlsAbilitiesProperty();
+		if (property == null)
+			return null;
+		try
+		{
+			return property.GetValue(controlsView) as Il2CppSystem.Collections.Generic.List<BhBattleAbilityView>;
+		}
+		catch (Exception ex)
+		{
+			LogControlsAbilitiesFailure("read failed: " + (ex.InnerException ?? ex).Message);
+			return null;
+		}
+	}
+
+	private static PropertyInfo ResolveControlsAbilitiesProperty()
+	{
+		const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
+		var names = GameSymbols.BattleAbilityView.ControlsAbilitiesField ?? Array.Empty<string>();
+		var expected = typeof(Il2CppSystem.Collections.Generic.List<BhBattleAbilityView>);
+		for (var i = 0; i < names.Length; i++)
+		{
+			if (GameSymbolScope.IsSentinel(names[i]))
+				continue;
+			var property = typeof(BhUnitControlsView).GetProperty(names[i], flags);
+			if (property == null || property.GetIndexParameters().Length != 0)
+				continue;
+			if (property.PropertyType != expected)
+			{
+				LogControlsAbilitiesFailure(
+					names[i] + " is " + property.PropertyType.FullName + ", not " + expected.FullName + " (" + GameBuild.Describe() + ")");
+				return null;
+			}
+			_controlsAbilitiesProperty = property;
+			return property;
+		}
+		LogControlsAbilitiesFailure("no property [" + string.Join(",", names) + "] on " + typeof(BhUnitControlsView).FullName + " (" + GameBuild.Describe() + ")");
+		return null;
+	}
+
+	private static void LogControlsAbilitiesFailure(string message)
+	{
+		if (_loggedControlsAbilitiesFailure >= 4)
+			return;
+		_loggedControlsAbilitiesFailure++;
+		Plugin.LogSource?.LogWarning("Homm3Import unit controls ability views: " + message + "; treating the action bar as empty.");
+	}
+
+	private static BhUnitControlsView TryGetReleaseControlsViewForAbilityClick(BhBattleAbilityView view)
+	{
+		// 26297049: the merged BhBattleAbilityView has no controlsView back-reference; only unit slots
+		// belong to a BhUnitControlsView, found through the selected-unit HUD's abilities list.
+		if (!IsUnitSlotAbilityView(view))
+			return null;
+		try
+		{
 			var huds = Resources.FindObjectsOfTypeAll<BhSelectedUnitHud>();
 			for (var i = 0; i < huds.Length; i++)
 			{
@@ -597,15 +715,15 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		return null;
 	}
 
-	private static bool ControlsViewOwnsReleaseAbilityView(BhUnitControlsView controlsView, BhUnitAbilityView view)
+	private static bool ControlsViewOwnsReleaseAbilityView(BhUnitControlsView controlsView, BhBattleAbilityView view)
 	{
 		if (controlsView == null || view == null)
 			return false;
 		try
 		{
-			var views = controlsView.abilities;
+			var views = GetReleaseControlsAbilityViews(controlsView);
 			if (views == null)
-				return ReferenceEquals(TryGetMemberValue(view, "controlsView") as BhUnitControlsView, controlsView);
+				return false;
 			var viewKey = GetIl2CppObjectKey(view);
 			for (var i = 0; i < views.Count; i++)
 			{
@@ -647,7 +765,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		log?.LogInfo("Homm3Import: release ability hotkey handling patched " + controlsHotkey.Name + ".");
 	}
 
-	private static void PrefixReleaseAbilityClicked(BhUnitAbilityView __instance)
+	private static void PrefixReleaseAbilityClicked(BhBattleAbilityView __instance)
 	{
 		_releaseAbilityClickDepth++;
 		_releaseAbilityClickView = __instance;
@@ -655,7 +773,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		LogReleaseAbilityClick("view.OnClicked", __instance, null);
 	}
 
-	private static void PostfixReleaseAbilityClicked(BhUnitAbilityView __instance)
+	private static void PostfixReleaseAbilityClicked(BhBattleAbilityView __instance)
 	{
 		try
 		{
@@ -711,7 +829,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		}
 	}
 
-	private static void PrefixReleaseControlsAbilityClicked(BhUnitControlsView __instance, BhUnitAbilityView __0, ref bool __state)
+	private static void PrefixReleaseControlsAbilityClicked(BhUnitControlsView __instance, BhBattleAbilityView __0, ref bool __state)
 	{
 		if (_releaseAbilityClickDepth > 0 && SameIl2CppObject(_releaseAbilityClickView, __0))
 			_releaseAbilityClickForwarded = true;
@@ -719,7 +837,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		LogReleaseAbilityClick("controls.begu", __0, __instance);
 	}
 
-	private static void PostfixReleaseControlsAbilityClicked(BhUnitControlsView __instance, BhUnitAbilityView __0, bool __state)
+	private static void PostfixReleaseControlsAbilityClicked(BhUnitControlsView __instance, BhBattleAbilityView __0, bool __state)
 	{
 		try
 		{
@@ -751,7 +869,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		}
 	}
 
-	private static bool IsReleaseControlAbilitySelected(BhUnitControlsView controlsView, BhUnitAbilityView view)
+	private static bool IsReleaseControlAbilitySelected(BhUnitControlsView controlsView, BhBattleAbilityView view)
 	{
 		try
 		{
@@ -768,7 +886,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		}
 	}
 
-	private static void LogReleaseAbilityClick(string source, BhUnitAbilityView view, BhUnitControlsView controlsView)
+	private static void LogReleaseAbilityClick(string source, BhBattleAbilityView view, BhUnitControlsView controlsView)
 	{
 		if (!IsDiagnosticEnabled())
 			return;
@@ -780,7 +898,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 			var ability = GetReleaseAbility(view);
 			var viewConfig = GetReleaseAbilityView(ability);
 			var logic = GetReleaseAbilityLogic(ability);
-			var viewBase = TryGetMemberValue(view, "viewBase") as Component;
+			var viewBase = view != null ? view.viewBase : null;
 			var viewGo = view != null ? view.gameObject : null;
 			var viewBaseGo = viewBase != null ? viewBase.gameObject : null;
 			Plugin.LogSource?.LogInfo(
@@ -792,7 +910,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 				+ " attackType='" + SafeString(logic?.attackType_) + "'"
 				+ " canShow=" + (viewConfig != null && viewConfig.canShowOnUI)
 				+ " viewState=" + DescribeReleaseAbilityViewState(view)
-				+ " controlsBound=" + DescribeReleaseControls(controlsView ?? TryGetMemberValue(view, "controlsView") as BhUnitControlsView)
+				+ " controlsBound=" + DescribeReleaseControls(controlsView ?? TryGetReleaseControlsViewForAbilityClick(view))
 				+ ".");
 		}
 		catch (Exception ex)
@@ -801,19 +919,19 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		}
 	}
 
-	private static bool IsReleaseActionBarAbilityView(BhUnitAbilityView view, BhUnitControlsView knownControlsView = null)
+	private static bool IsReleaseActionBarAbilityView(BhBattleAbilityView view, BhUnitControlsView knownControlsView = null)
 	{
 		try
 		{
-			if (view == null || !view.gameObject.activeInHierarchy)
+			if (!IsUnitSlotAbilityView(view) || !view.gameObject.activeInHierarchy)
 				return false;
 			var ability = GetReleaseAbility(view);
 			if (ability == null)
 				return false;
-			var controlsView = knownControlsView ?? TryGetMemberValue(view, "controlsView") as BhUnitControlsView;
+			var controlsView = knownControlsView ?? TryGetReleaseControlsViewForAbilityClick(view);
 			if (controlsView == null)
 				return false;
-			var views = controlsView.abilities;
+			var views = GetReleaseControlsAbilityViews(controlsView);
 			if (views == null)
 				return IsRecoveredReleaseControlsContext(controlsView)
 				       && IsReleaseAbilityViewClickReady(view)
@@ -924,7 +1042,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		ApplySelectedUnitPortrait(__instance, sid, "release-beet-postfix");
 		RecoverUnitControlsRelease(__instance, __1?.target, sid);
 	}
-	internal static void RememberReleaseAbilityViewAbility(BhUnitAbilityView view, object ability)
+	internal static void RememberReleaseAbilityViewAbility(BhBattleAbilityView view, object ability)
 	{
 		if (view == null)
 			return;
@@ -1875,7 +1993,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 	{
 		try
 		{
-			var views = controlsView?.abilities;
+			var views = GetReleaseControlsAbilityViews(controlsView);
 			if (views == null)
 				return;
 			for (var i = 0; i < views.Count; i++)
@@ -1887,7 +2005,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		}
 	}
 
-	private static void ClearReleaseAbilityViewState(BhUnitAbilityView view, string sid)
+	private static void ClearReleaseAbilityViewState(BhBattleAbilityView view, string sid)
 	{
 		if (view == null)
 			return;
@@ -1896,7 +2014,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		catch (Exception ex) { LogReleaseNoAbilityCleanupWarning(sid, "ability view enabled-state cleanup", ex); }
 		var abilityType = GameInteropTypes.ReleaseAbilityWrapperType;
 		if (abilityType != null
-		    && !TrySetFirstMemberValue(view, GameSymbols.SelectedUnitHud.AbilityViewAbilityFields, abilityType, null))
+		    && !TrySetFirstMemberValue(view, GameSymbols.BattleAbilityView.UnitAbilityField, abilityType, null))
 		{
 			LogReleaseNoAbilityCleanupWarning(sid, "ability view native wrapper field cleanup", null);
 		}
@@ -1921,7 +2039,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		var hidden = 0;
 		try
 		{
-			var views = controlsView?.abilities;
+			var views = GetReleaseControlsAbilityViews(controlsView);
 			if (views == null)
 				return 0;
 
@@ -1965,12 +2083,12 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		var hidden = 0;
 		try
 		{
-			var views = Resources.FindObjectsOfTypeAll<BhUnitAbilityView>();
+			var views = Resources.FindObjectsOfTypeAll<BhBattleAbilityView>();
 			for (var i = 0; i < views.Length; i++)
 			{
 				var view = views[i];
 				var go = view != null ? view.gameObject : null;
-				if (go == null || !go.activeSelf)
+				if (go == null || !go.activeSelf || !IsUnitSlotAbilityView(view))
 					continue;
 				var path = GetPath(go.transform);
 				if (path.IndexOf(SelectedBattleActionBarAbilityPathFragment, StringComparison.Ordinal) < 0)
@@ -2252,7 +2370,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 	{
 		try
 		{
-			var views = controlsView?.abilities;
+			var views = GetReleaseControlsAbilityViews(controlsView);
 			if (views == null || ability == null)
 				return false;
 			var abilityKey = GetIl2CppObjectKey(ability);
@@ -2313,7 +2431,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 
 		try
 		{
-			var views = controlsView.abilities;
+			var views = GetReleaseControlsAbilityViews(controlsView);
 			if (views == null)
 				return hidden;
 			for (var i = 0; i < views.Count; i++)
@@ -2331,17 +2449,17 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		return hidden;
 	}
 
-	private static void PostfixAbilityViewBindAvailability(BhUnitAbilityView __instance, object __0)
+	private static void PostfixAbilityViewBindAvailability(BhBattleAbilityView __instance, object __0)
 	{
 	}
 
-	private static bool PrefixControlsViewClick(BhUnitControlsView __instance, BhUnitAbilityView __0, out bool __state)
+	private static bool PrefixControlsViewClick(BhUnitControlsView __instance, BhBattleAbilityView __0, out bool __state)
 	{
 		__state = false;
 		return true;
 	}
 
-	private static void PostfixControlsViewClick(BhUnitControlsView __instance, BhUnitAbilityView __0, bool __state)
+	private static void PostfixControlsViewClick(BhUnitControlsView __instance, BhBattleAbilityView __0, bool __state)
 	{
 	}
 
@@ -2384,7 +2502,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		}
 	}
 
-	private static BhUnitAbilityView FindReleaseHotkeyView(BhUnitControlsView controlsView, int idButton)
+	private static BhBattleAbilityView FindReleaseHotkeyView(BhUnitControlsView controlsView, int idButton)
 	{
 		if (idButton > 0)
 		{
@@ -2395,11 +2513,11 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		return TryGetReleaseHotkeyViewAt(controlsView, idButton);
 	}
 
-	private static BhUnitAbilityView TryGetReleaseHotkeyViewAt(BhUnitControlsView controlsView, int index)
+	private static BhBattleAbilityView TryGetReleaseHotkeyViewAt(BhUnitControlsView controlsView, int index)
 	{
 		try
 		{
-			var views = controlsView?.abilities;
+			var views = GetReleaseControlsAbilityViews(controlsView);
 			if (views == null || index < 0 || index >= views.Count)
 				return null;
 			var view = views[index];
@@ -2411,7 +2529,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		}
 	}
 
-	private static bool IsHotkeyableReleaseActionBarView(BhUnitControlsView controlsView, BhUnitAbilityView abilityView)
+	private static bool IsHotkeyableReleaseActionBarView(BhUnitControlsView controlsView, BhBattleAbilityView abilityView)
 	{
 		try
 		{
@@ -2435,7 +2553,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 	{
 		try
 		{
-			var views = controlsView?.abilities;
+			var views = GetReleaseControlsAbilityViews(controlsView);
 			if (views == null || index < 0 || index >= views.Count)
 				return false;
 			var view = views[index];
@@ -2479,7 +2597,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		       || CachedReleaseControlsContainAbility(controlsView, ability);
 	}
 
-	private static void LogReleaseHotkeyDecision(string action, BhUnitControlsView controlsView, int idButton, BhUnitAbilityView view)
+	private static void LogReleaseHotkeyDecision(string action, BhUnitControlsView controlsView, int idButton, BhBattleAbilityView view)
 	{
 		if (!IsDiagnosticEnabled())
 			return;
@@ -2488,7 +2606,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		_loggedReleaseHotkey++;
 		try
 		{
-			var views = controlsView?.abilities;
+			var views = GetReleaseControlsAbilityViews(controlsView);
 			Plugin.LogSource?.LogInfo(
 				"Homm3Import release ability hotkey: "
 				+ action
@@ -2505,7 +2623,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		}
 	}
 
-	private static bool IsAbilityViewEnabled(BhUnitAbilityView view)
+	private static bool IsAbilityViewEnabled(BhBattleAbilityView view)
 	{
 		if (view == null)
 			return false;
@@ -2817,12 +2935,20 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 			throw new MissingMethodException(typeof(BhUnitControlsView).FullName, "controls setClickEnabled(bool)");
 		if (FindReleaseControlsSelectMethod(typeof(BhUnitControlsView)) == null)
 			throw new MissingMethodException(typeof(BhUnitControlsView).FullName, "controls select(ability)");
-		var abilityClicked = FindMethodByNameAndArity(typeof(BhUnitAbilityView), "OnClicked", 0);
+		var abilityClicked = FindMethodByNameAndArity(typeof(BhBattleAbilityView), "OnClicked", 0);
 		if (abilityClicked == null)
-			throw new MissingMethodException(typeof(BhUnitAbilityView).FullName, "OnClicked()");
+			throw new MissingMethodException(typeof(BhBattleAbilityView).FullName, "OnClicked()");
 		var controlsClickMethods = FindReleaseControlsClickMethods(typeof(BhUnitControlsView));
 		if (controlsClickMethods.Count == 0)
-			throw new MissingMethodException(typeof(BhUnitControlsView).FullName, "controls click(BhUnitAbilityView)");
+		{
+			var clickHints = GameSymbols.SelectedUnitHud.ControlsClick.NameHints ?? Array.Empty<string>();
+			throw new MissingMethodException(
+				typeof(BhUnitControlsView).FullName,
+				"controls click(BhBattleAbilityView)"
+				+ (clickHints.Length > 0 && Array.TrueForAll(clickHints, GameSymbolScope.IsSentinel)
+					? " (SelectedUnitHud.ControlsClick is refused on " + GameBuild.Describe() + "; it needs a reviewed scope override)"
+					: string.Empty));
+		}
 		if (FindReleaseControlsHotkeyMethod(typeof(BhUnitControlsView)) == null)
 			throw new MissingMethodException(typeof(BhUnitControlsView).FullName, "ControlsHotkey(object,HotkeyAbilityArgs)");
 		var basicCommandsType = FindReleaseBasicCommandsType();
@@ -2934,13 +3060,13 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		       && IsReleaseAbilityWrapperParameterType(ps[1].ParameterType, wrapperType);
 	}
 
-	private static void InvokeReleaseControlsClick(BhUnitControlsView controlsView, BhUnitAbilityView view)
+	private static void InvokeReleaseControlsClick(BhUnitControlsView controlsView, BhBattleAbilityView view)
 	{
 		if (controlsView == null || view == null)
 			return;
 		var methods = FindReleaseControlsClickMethods(controlsView.GetType());
 		if (methods.Count != 1)
-			throw new MissingMethodException(controlsView.GetType().FullName, "controls click(BhUnitAbilityView)");
+			throw new MissingMethodException(controlsView.GetType().FullName, "controls click(BhBattleAbilityView)");
 		methods[0].Invoke(controlsView, new object[] { view });
 	}
 	private static void InvokeReleaseControlsClickEnabled(BhUnitControlsView controlsView, bool enabled)
@@ -3271,7 +3397,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 	{
 		try
 		{
-			var views = controlsView?.abilities;
+			var views = GetReleaseControlsAbilityViews(controlsView);
 			if (views == null || abilities == null || abilities.Length <= 0)
 				return false;
 
@@ -3288,7 +3414,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		}
 	}
 
-	private static bool ActiveReleaseControlsContainAbility(Il2CppSystem.Collections.Generic.List<BhUnitAbilityView> views, object ability)
+	private static bool ActiveReleaseControlsContainAbility(Il2CppSystem.Collections.Generic.List<BhBattleAbilityView> views, object ability)
 	{
 		for (var i = 0; i < views.Count; i++)
 		{
@@ -3387,7 +3513,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 			var selectedView = GetReleaseSelectedAbilityView(controlsView);
 			var selected = GetReleaseAbility(selectedView);
 			var active = 0;
-			var views = controlsView.abilities;
+			var views = GetReleaseControlsAbilityViews(controlsView);
 			if (views != null)
 			{
 				for (var i = 0; i < views.Count; i++)
@@ -3407,7 +3533,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		}
 	}
 
-	private static bool IsReleaseAbilityViewClickReady(BhUnitAbilityView view)
+	private static bool IsReleaseAbilityViewClickReady(BhBattleAbilityView view)
 	{
 		try
 		{
@@ -3427,7 +3553,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		}
 	}
 
-	private static string DescribeReleaseAbilityViewState(BhUnitAbilityView view)
+	private static string DescribeReleaseAbilityViewState(BhBattleAbilityView view)
 	{
 		try
 		{
@@ -4156,7 +4282,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		}
 	}
 
-	private static object GetReleaseAbility(BhUnitAbilityView view)
+	private static object GetReleaseAbility(BhBattleAbilityView view)
 	{
 		if (view == null)
 			return null;
@@ -4171,7 +4297,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 				RememberReleaseAbilityViewAbility(view, nativeAbility);
 				return nativeAbility;
 			}
-			var ability = TryGetFirstMemberValue(view, GameSymbols.SelectedUnitHud.AbilityViewAbilityFields);
+			var ability = TryGetFirstMemberValue(view, GameSymbols.BattleAbilityView.UnitAbilityField);
 			if (IsReleaseAbilityWrapper(ability))
 			{
 				RememberReleaseAbilityViewAbility(view, ability);
@@ -4188,7 +4314,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		return null;
 	}
 
-	private static object TryGetReleaseAbilityFromViewWrapper(BhUnitAbilityView view)
+	private static object TryGetReleaseAbilityFromViewWrapper(BhBattleAbilityView view)
 	{
 		if (view == null)
 			return null;
@@ -4230,11 +4356,11 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		}
 	}
 
-	private static object TryReadReleaseAbilityViewAbility(BhUnitAbilityView view)
+	private static object TryReadReleaseAbilityViewAbility(BhBattleAbilityView view)
 	{
 		if (view == null)
 			return null;
-		var names = GameSymbols.SelectedUnitHud.AbilityViewAbilityFields;
+		var names = GameSymbols.BattleAbilityView.UnitAbilityField;
 		var wrapperType = GameInteropTypes.ReleaseAbilityWrapperType;
 		if (names == null || wrapperType == null)
 			return null;
@@ -4247,26 +4373,26 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		return null;
 	}
 
-	private static object GetReleaseAbilityWrapper(BhUnitAbilityView view)
+	private static object GetReleaseAbilityWrapper(BhBattleAbilityView view)
 	{
 		if (view == null)
 			return null;
-		return TryGetFirstMemberValue(view, GameSymbols.SelectedUnitHud.AbilityViewWrapperFields);
+		return TryGetFirstMemberValue(view, GameSymbols.BattleAbilityView.AbilityWrapperField);
 	}
 
-	private static BhUnitAbilityView GetReleaseSelectedAbilityView(BhUnitControlsView controlsView)
+	private static BhBattleAbilityView GetReleaseSelectedAbilityView(BhUnitControlsView controlsView)
 	{
 		if (controlsView == null)
 			return null;
-		return TryReadNativeObjectMember<BhUnitAbilityView>(controlsView, GameSymbols.SelectedUnitHud.ControlsSelectedViewFields)
-		       ?? TryGetFirstMemberValue(controlsView, GameSymbols.SelectedUnitHud.ControlsSelectedViewFields) as BhUnitAbilityView;
+		return TryReadNativeObjectMember<BhBattleAbilityView>(controlsView, GameSymbols.BattleAbilityView.ControlsSelectedViewField)
+		       ?? TryGetFirstMemberValue(controlsView, GameSymbols.BattleAbilityView.ControlsSelectedViewField) as BhBattleAbilityView;
 	}
 
 	private static void TryClearReleaseControlsSelectedViewField(BhUnitControlsView controlsView, string sid, string reason)
 	{
 		if (controlsView == null)
 			return;
-		if (!TrySetFirstMemberValue(controlsView, GameSymbols.SelectedUnitHud.ControlsSelectedViewFields, typeof(BhUnitAbilityView), null))
+		if (!TrySetFirstMemberValue(controlsView, GameSymbols.BattleAbilityView.ControlsSelectedViewField, typeof(BhBattleAbilityView), null))
 			return;
 		LogDirectReleaseControlsBind("cleared selected action field: " + reason, sid, null, null);
 	}
@@ -5770,8 +5896,8 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 			return typeof(UnitLogicConfig);
 		if (string.Equals(clean, typeof(UnitViewConfig).FullName, StringComparison.Ordinal))
 			return typeof(UnitViewConfig);
-		if (string.Equals(clean, typeof(BhUnitAbilityView).FullName, StringComparison.Ordinal))
-			return typeof(BhUnitAbilityView);
+		if (string.Equals(clean, typeof(BhBattleAbilityView).FullName, StringComparison.Ordinal))
+			return typeof(BhBattleAbilityView);
 		if (string.Equals(clean, typeof(BhUnitControlsView).FullName, StringComparison.Ordinal))
 			return typeof(BhUnitControlsView);
 		if (string.Equals(clean, typeof(BhSelectedUnitHud).FullName, StringComparison.Ordinal))

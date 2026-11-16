@@ -1,4 +1,4 @@
-# Porting OfflineUnlockMod to the Current Steam Build (investigation, 2026-09-28)
+# Current Steam Build Port Overview (port target 26615913; Golden Era runs 25672315)
 
 Status: dated static investigation and staging history. Build-specific details below are
 historical. For the current Golden Era install receipt and proof boundaries, see
@@ -6,7 +6,231 @@ the [current-version consolidation hub](current_version_consolidation.md). The d
 [runtime report](current_version_port_runtime_20261002.md) is historical isolated-copy evidence.
 This overview does not claim full current-build acceptance.
 
-## Current target: Steam build 25509697 (2026-09-30)
+## Port target: Steam build 26615913 (2026-11-12, in progress)
+
+Golden Era still runs **25672315**. Codex started a port to 26297049 (plan
+`artifacts/port_current/port_26297049/PLAN.md`, decisions D1-D14) and was retired on 2026-11-12 before it
+finished. Steam has since replaced 26297049 with **26615913** (depot manifest `2034879257573334098`,
+GameAssembly.dll 99,621,376 B sha256 `7CC2DE0D…464D47E`, metadata 23,352,604 B `FC974B62…`). The port now
+targets 26615913 and carries the 26297049 work forward. It lives on branch `port/26615913`. Nothing has been
+installed into Golden Era; an isolated copy (`V:\olden_port_work\port_26615913\game`) reached the main menu and
+the adventure map on 2026-11-12 and is staged for the owner's manual test.
+
+| Step | State on 26615913 | Proof tier |
+|---|---|---|
+| Mirror | `V:\olden_mirrors\Heroes of Might and Magic Olden Era - Current Era 26615913`, 467 files, 7,392,150,799 B; `tools/port_current/mirror_manifest_26615913.json` | generated artifact validated |
+| Index | `artifacts/port_current/idx2_live_26615913` (141 interop assemblies) + `gen/native_addresses.tsv` (211,442 bodies); shape index `p2/index_cache/shape_index_4a8e6007848f4b48a845ef06.tsv` | generated artifact |
+| Remap | `game_symbols_remap_26615913.json` (golden -> 26615913, no `--native`: the golden binary is gone, as for 25672315/26297049); matcher validation types P 0.9965 / R 0.9792, members P 0.9991. The `UnitViewConfig.MapMeshLoader` row is hand-curated as on 26297049 | generated artifact |
+| Overrides | `carry_scope_overrides.py` carried 287/397 from 26297049; `native_name_shift.py carry` re-derived 71 more; 7 were re-derived by hand with `override_evidence.py` (see below). Second pass (after bring-up): 37 carry REVIEW rows had no override, so the generator auto-scoped them; 16 now carry by native succession, 3 are hand-bound (below) and 15 carry their 26297049 refusal. `DraconicDominion.DiplomacyInfoSquadMembers` stays refused: nothing consumes it | static native evidence |
+| Scopes | 1359 scoped / 105 refused / 83 const / 25 identity / 4 alias (26297049: 1344 / 115). `--check` FRESH; `validate_mod_bug_reporting_contract.py` OK | generated artifact validated |
+| Plugin compile | OfficialDeobf build against the 26615913 interop (`UseLiveInteropOnly`, `HexInteropRootDir` only): see "Compile" below | build |
+| Core | ordered rebuild from the vanilla 26615913 Core with `--game-target steam_26615913`: see "Core" below | generated artifact |
+
+Hand re-derivations (static native evidence, runtime unproven):
+- `HomecomingLayerViewToggle.CurrentViewIndexGetter`, both `BuffManagerAdd`, `FractionConfigIdFields`:
+  same owner and interop name, identical folded bodies.
+- `ElangFontBootstrap.Bootstrap`: the owner's sequential native run `iho..ihx` kept every name, and the real
+  bootstrap `ihr` is the non-PDM `_0` on both 26297049 and 26615913. The 26297049 carry had bound the decoy
+  `PDM_0` (`nij`); 26615913 binds `_0`.
+- `TerrainMaterial.RendererRebuildMaterialArrays` / `RendererPackedBuildStatePrepMethodNames`: two uncalled
+  builder copies now exceed the 16-slot limit (`dlx` PDM_0 cap 33, `fjr` PDM_4 cap 81). `fjr` is taken
+  (closest cap to the 25672315 binding's 76, same interop name as 26297049); the consumer validates the
+  rebuild and rejects a bad candidate.
+- `ReleaseTownUi.BuildingViewUpdateView`, `ConstructionLaws.BuildingViewUpdateCandidate`,
+  `ReleaseTownUi.HireUnitItemViewUpdateView`: 26615913 de-obfuscated these to the real-named `UpdateView`
+  (token-order successor of 26297049 `wit` / `wnb`, body similarity 0.97 / 0.95). Succession had proposed a
+  neighbouring PDM decoy.
+- Auto-scopes that were wrong and now carry the 26297049 refusal: `SelectedUnitHud.ControlsAbilityViewTypeNames`
+  (had bound the unrelated `BhUiShineSweepView`), `SelectedUnitHud.ControlsSelectedViewFields`,
+  `WarcryHeroAbility.HeroAbilityFields`, `BattleUi.AttackFacingUnitSidProbeFields`,
+  `DirectStateLaws.MovementPositionChangedDispatch`.
+- `ModBugReporting.CurrentSubmitIterator{State,Strings}` carry by succession (same 10-field iterator);
+  `CurrentSubmitHandlerNativeName` is `vrr` (tok 100690629).
+- Hand-written `TypeGroups.CustomDwellingHireWorldObject` current shape: 36/40 -> 35/39 (same native `fpp`,
+  ctor(ObjHire); three Boolean PDM decoys dropped, two Void methods added). `WarcryHeroAbilityHeroAbilitiesView`
+  is unchanged.
+
+What changed in 26615913 (static evidence, `artifacts/port_current/core_diff_26297049_26615913.json`):
+- 163 of 467 files changed, none added or removed. Every `level*` hash moved again (`level67` `78ef0946` ->
+  `577de52e`, same size), as did `resources.assets`, `globalgamemanagers` and the metadata.
+- Core: `DB/ai_world` tasks restructured per difficulty; `arenaGame` standard stacks reduced; new
+  `battleSpawns_interactObject_right_long`; `dragon_upg` nerfed (HP 300 -> 250, DEF 34 -> 33, damage 60-80 ->
+  45-70); Sun Curing/Damage buffs stronger; `medusa_upg_alt` ability rank 3 -> 2; druid squad values up;
+  random item guard values +25%; 19 vanilla laws one cheaper at level 1.
+- Neutral tier bands: recomputed from the vanilla Core, identical to 26297049, so target `steam_26615913`
+  pins the 26297049 table.
+- GE laws: the disabled (cloned) slots follow the donor's new costs automatically; `bulwark_4`/`bulwark_26`
+  (explicit Nature copies) already match; the rest are GE-authored and keep their costs.
+
+GameBuild: 26615913 is the generated current build; 26297049 joins 25061458/25509697/25672315 as retired. On
+the port branch Golden Era's 25672315 is therefore a retired build (D11 soft-disable), so this branch must not
+be deployed to Golden Era before promotion.
+
+Done since: town `level67` catalog retarget (F1, 12 catalogs `78ef0946` -> `577de52e`); live-parity profile
+`tools/port_current/live_parity_build_26615913.json` with the metadata cityFactory and dialog-portrait patches
+(F2, `--verify-sources` PASS); runtime bring-up of the isolated copy to the main menu and adventure map.
+GameplayOptions now reads its JSON with managed System.Text.Json: `JToken.Value<T>` threw in an Il2CppInterop
+generic-method type initializer on 26615913, so the saved options were ignored.
+
+Decompile pass (2026-11-12, Ghidra `--build 26615913`, after the user's first in-game test):
+- Graft buffs did nothing: Il2CppInterop renames natives matching the BepInEx deobfuscation regex to
+  `Method_*`/`field_*`, so bare native literals never resolved ("exact buff list-by-SID method was not found").
+  `generate_current_symbol_scopes.py` now records `renamedNativeMembers` in the evidence and emits interop names.
+  Re-run `--evidence` whenever overrides add new native literals.
+- 49 refused symbols re-pinned from decompiled 26615913 bodies (refused 105 -> 56): selected-unit HUD and Warcry
+  on the merged `BhBattleAbilityView`, turn-order items, UnitStat crit/hp, projectile init, forecast calculator,
+  AI pick action, main-menu quick start, Homecoming map data, city UI element refresh, LawIcon config, HeroProfile
+  skill payload, FactionDetailsRefresh (arity 3). Each override carries its decompile evidence; runtime unproven.
+- Focus laws were off: their type gates named `BhHeroAbilitiyView`/`BhHeroAbilitiesView`, which no longer exist;
+  the current scopes now name `Hex.UI.BhBattleAbilityView` and `Hex.UI.Battle.BhHeroAbilitiesView`.
+
+Refused 56 -> 0 (decompile passes 2-4, 2026-11-12/13):
+- 27 declarations removed with their consumers. 21 were read by nothing on either build. Six were pure name
+  lookups that bind on neither build: the town day-panel/generic-button "back" slots (live iha is localization
+  refresh), Warcry ContainerBindWithArena, BattleEffect.StartPlaying, PropHeroNodeFields and KilledStackGetter.
+- 15 pinned:
+  - AI driver screen dump and cheat commands (fmq builders found by the command type id they write)
+  - morale gate bools (layout identical on Golden Era; the 5th bool cphx was appended)
+  - attack-facing and Cove after-shot sid -> TransferUnit.configSid
+- 11 adventure-AI weight-bridge pins (ScoreTask -> fuc `..._Int32_Int32_0` bouv, the real one, not the PDM
+  decoys; locator chain fzg -> fqt -> edb -> Side; task target crwj/crwh; DataObject idMapObject). Registration
+  should now reach RUNTIME_HOOK_REGISTERED when the bridge flags are on (unproven).
+- The last 14 resolved in pass 4 (2026-11-13), so refused = 0:
+  - Pinned from decomp:
+    - town NavigationBack -> BhNavigationView `Method_Public_Virtual_Final_New_Void_0`
+    - BuildingsManagerRefresh1 -> BhBuildingsManager `Method_Private_Void_ObjectPublicVo2_PDM_0/_1` (city-wide and
+      per-building refresh events)
+    - forecast histogram rect -> BhHealDamageForecastPanel `Method_Public_RectTransform_0` (shadowRectTransform)
+    - The Golden Era literals never bound, so all three are new behaviour on 26615913 only.
+  - Ambient fog controller re-derived as fng (`Object1PublicObcrMaBocrMaDi2crEAUnique`): refresh
+    `Method_Private_Void_PDM_4` (bnax, the only GetSoundsVolume caller), Init, and the per-slot "sound started" flag
+    `field_Private_Il2CppStructArray_1_Boolean_0`. A new custom-biome slot starts at false. The old fne/feg scopes
+    were wrong, and without this the refresh indexes past the flag array once the volume arrays are extended.
+  - Death fade symbols mapped:
+    - `Hex.Map.MapObjects.Method_Public_Void_Int32_0` (remove by id)
+    - placed object bye `Method_Public_Void_1` (removal; the old fpu type scope was wrong)
+    - no int-arg removal exists
+    - Code gaps fixed statically (2026-11-13); the feature stays off (`homm3ReleaseDeathFade` false) until the
+      user tests it in game:
+      - The id now comes from the placed object itself: `ObjectIdFields` is pinned to bye `field_Public_Int32_0`
+        (cbop, +0x18). That is the key `MapObjects.pvd`/`put` use in the +0x38 dictionary. Both the register
+        postfix and the removal prefix read it from `__instance` first, with the old meta/data path as fallback.
+      - The field lookup also reads properties, because Il2CppInterop exposes game fields as properties. The old
+        CLR-field-only lookup could never see `field_Public_Int32_0`.
+      - bye.pta destroys the root in the same call, so on trigger each fade quad detaches (keeping its world pose)
+        and destroys itself once fully faded. The tracked root is then dropped from both maps.
+  - Marked verified absent (scoped with every position as the sentinel, evidence in the override): the
+    HeroPortrait loss/death/escape trio (the Current branch uses the panelHero* panels), the movement
+    UnitPosChanged dispatch (view hub only), DrawerHeroIdFields (the only drawer int is a frame counter) and
+    AllStacksFields (the count comes from the AliveStackCountGetter).
+- ReleaseTownUi.BuildingsManagerRefresh2 is now verified absent (2026-11-13), so it binds nothing, the same as
+  Golden Era:
+  - Its Golden Era literal baif belongs to an unrelated type, so the hook never existed there.
+  - The only arity-2 method on live BhBuildingsManager is bemi, a per-building helper. bemg and bemh call it, and
+    both already carry the same postfix through BuildingsManagerRefresh1. Binding it would only repeat the town UI
+    refresh once per built building.
+- All 20 identity entries were checked one by one (2026-11-13), not sampled. Every literal was looked up in both
+  port indexes (Golden Era `idx2_golden` and `idx2_live_26615913`, by type, member and native name) and in both
+  `global-metadata.dat` string tables. Each one is found the same way on both builds, so keeping the Golden Era
+  value changes nothing on 26615913:
+  - Data and asset names, not interop symbols: RoeCastleCampaignMaps.StoryHubPlayableMapSids (mod maps),
+    FactoryCityScene.OwnedCityWorldFactionSids, and FactoryCityScene.RequiredPresentationRootNames (mod scenes;
+    CityCamera and Lights occur equally often in both metadata files).
+  - Shader property names: the three TerrainMaterial `*Properties` arrays. `_Textures` appears once in both
+    metadata files; the rest are material-side names in neither.
+  - Member names absent from both builds, so they bind nothing on either:
+    - BattleUnitInit IsSummon and SpawnedInBattle (only the plain `_isSummon` and `_spawnedInBattle` strings
+      exist, once in each build)
+    - AdventureVisionLaws.SessionWorldMembers
+    - DirectStateLaws.AbilityCastCounterMembers
+    - ReleaseTownUi.FbiConfig and FbiCity
+    - CustomGame.HeroSpecializationConfigSidFields
+    - the four MainMenu button field arrays
+  - AdventureAiDecision DayIndex and ActiveStrategy (cjwk, cjwj): these are absent on Golden Era. On live they
+    exist only on unrelated types (a static string and an Item field), never on the day controller the probe
+    reads, so the reads fall back to defaults on both builds. They are observe-only AI probe fields.
+  - BattleVisual.DrawerInitGeneratedNamePrefixes: the generated method prefix matches on both builds (Golden
+    Era: 4 PDM overloads on the battle unit drawer; live: 2 on `Object1PublicIncmUnIncmObBhIncmAnUnique`).
+- Known follow-ups: none from the 56. No runtime proof exists, by the owner's rule (static/decompile only).
+  Death fade stays off until the owner tests it in game.
+- The gated hint contract (`--gate current`) found one more port defect, hidden as an "identity" scope: Tower
+  Mana Well Aegis looked up the Golden Era interop type `Object1PublicSicoSiblVoblaBoSiVoUnique` (fji), which
+  doesn't exist on 26615913, so its registration threw. It is now pinned to flv
+  `Object1PublicSicqSibmVobmaBoSiVoUnique` and its apply `Method_Public_Virtual_Void_ObjectPublicHeObInObcqSiObVeBoObUnique_0`.
+  The member list matches, and fji.blfr and flv.bmrd decompile to the same body.
+- Re-verification (2026-11-13, by hand, not the helper agent's report):
+  - Decompiled fng.bnax, MapObjects.pvd, bye.pta, BhNavigationView.txg, the forecast getter, panel Awake/Show and
+    the drawer refresh.
+  - Checked the fng field offsets: crbt +0x28 fnb, crbv +0x38 zoom settings, crbw +0x40 bool flags, crby +0x50.
+  - Forecast panel: Awake/Show resize the RectTransform at +0x90, and the Int32 cpab that follows is at +0x98.
+  - Cross-checked every owner, type check and live member of the 20 pass-4 overrides against the live port_index.
+  - This caught the HeroPortrait owners, now corrected to Hex.Session.Hud.BhHeroPortrait.
+- Build path: the in-build gates read `$(BepInExRootDir)interop`, and a property set inside a target overrides a
+  `-p:` value. So V:/olden_port_work/port_26615913/compile_against_live.sh builds against a junction folder
+  (bepinex_live: core -> the Golden Era BepInEx core, interop -> idx2_live_26615913/gen/interop). The project's own
+  build then runs the interop-reference verifier and the gated hint contract against 26615913, and both pass
+  (Build succeeded, 0 errors).
+  - LooksLikeLogicWorldHeroEntry still hard-codes golden type names.
+  - AiDriverCombatSetup CommandSelectorFieldOffset/CommandBoolFieldOffset are +8 stale (0x28/0x3c live and on
+    Golden Era). Nothing reads them; the AI-driver validator pins their text.
+- The port branch does not compile against the 25672315 interop (`Hex.UI.EAbilitySlotMode`, added in 1958f1df31).
+  Since the 2026-11-13 merge, main is the 26615913 code and Golden Era deploys from main.
+The Artificing picker's missing elements/text are not explained statically (same assets and code as Golden Era).
+Promoted locally 2026-11-13 (owner request): the isolated copy was moved into the Golden Era root and the 25672315 install moved to `V:\olden_port_work\golden_era_25672315_rollback_20261113`; receipt `artifacts/port_current/consolidation_26615913/promotion_receipt.json`. Main merged this branch the same day (e53ee35fb7). The nightly was repinned to 26615913 (I4, f98b0f1d3f) and public Golden-Era main carries the 26615913 installer pins plus a README build-change notice (D12/D14, 8c9136e, owner-approved). The promoted copy had the woven Core but none of the campaign/scenario maps or StoryHub videos (they lived only in the deleted rebuild work dir); a rerun of `rebuild_core_from_vanilla.py` (Core entries identical to the installed e77aaad3) restored 348 missing files into the Golden Era install, receipt `V:/olden_port_work/port_26615913/campaign_maps_install_20261113.tsv`. The nightly then needed `UseLiveInteropOnly=true` and the mirror manifests in its tools export (b976220a97); its dry run passes and v0.1.327 was cut from release/v0.1.327 (067e4d9939). Not done: campaign validators on the rebuilt Core (I2).
+
+<!-- PORT_26615913_STATUS -->
+
+## Golden Era build: Steam 25672315 (hotfix, 2026-10-02)
+
+Steam replaced 25509697 with the hotfix **25672315** on 2026-10-02 (depot 3105441 manifest
+`7750145598966689713`, GameAssembly.dll 98,075,648 B sha256 `D9972B0E…744DE53A`, metadata 22,989,412 B
+`99117DC9…7D489817`, Unity 6000.0.66, BepInEx be.755 unchanged). At first sight the appmanifest showed
+StateFlags 1030 (download done, 427 MB of 5.17 GB staged). Nothing was started until it read StateFlags 4 with
+buildid = TargetBuildID = 25672315. Neither the Steam install nor Golden Era was written or launched.
+
+| Step | State on 25672315 | Proof tier |
+|---|---|---|
+| Mirror | `V:\olden_mirrors\Heroes of Might and Magic Olden Era - Current Era 25672315`, 464 files, 7,203,854,506 B; `tools/port_current/mirror_manifest_25672315.json` (listing `a4a7ef9c…`), source check identical to the live install. On V: because F: had 7.5 GB free | generated artifact validated |
+| Working copy | the F: 25509697 copy upgraded **in place** and renamed `F:\olden_port_work\Current Era 25672315 BepInEx`: robocopy from the new mirror (222 files), the four `*.vanilla_25509697` originals removed (the retained F: 25509697 mirror holds them). `mirror_manifest.py verify` against the 25672315 manifest: all 464 game files sha256-identical; the only extras are BepInEx, `dotnet/`, staged maps, doorstop/winhttp and two stray root files | generated artifact validated |
+| Index | `artifacts/port_current/idx2_live_25672315` (`build_index.py generate` over the live install, read only and hash-checked; peak 4.1 GB) + `gen/native_addresses.tsv` (207,182 bodies) | generated artifact |
+| File-level patch: metadata | `pin_escene_city_factory.py` on a staged copy: `artifacts/port_current/patched_25672315/metadata_stage/...` → 22,989,424 B `F69DFC24…3608DB7`; `validate_escene_city_factory_pin.py --strict-layout` OK (31 sections) | generated artifact validated |
+| Core drift (option A) | see "What changed in 25672315" | generated artifact |
+
+### What changed in 25672315 (static evidence)
+
+- **Files:** 220 of 464 changed, none added or removed (manifest diff).
+  - Code: `GameAssembly.dll`, `global-metadata.dat`, `lib_burst_generated.dll` (PE timestamp only).
+  - `Core.zip`, 65 `.rmg.json` templates, `resources.assets` (+12 KB), `resources.assets.resS` (+4.2 MB),
+    `globalgamemanagers` (+848 B), `globalgamemanagers.assets`.
+  - All 73 `level*` and 73 `sharedassets*` files keep their size. A byte diff of samples (level0, level67,
+    sharedassets0/36) shows only small integer bumps in the script/type reference tables: types were added, so
+    script indices shift. `boot.config` changes only its build GUID. So no scene or asset content changed beyond
+    `resources.*`/`globalgamemanagers*`. Every level hash still changes, so the town catalogs' `level67` pin
+    (`sourceLevelSha256`, already stale on 25509697) is stale again: 25672315 `level67` is `70a3658c…`. Town lane.
+- **Types:** 8,110 → 8,120 interop types; 6,477 names identical. One real-name type was added,
+  `Hex.Session.World.ELockableType`, and none removed. The other differences are obfuscated/generated names
+  shifted by the obfuscator.
+- **Core data (`core_diff_25509697_25672315.json`):** 0 members added or removed, 17 changed, all `Lang/*/texts`.
+  - Hungarian is a catch-up translation: hundreds of new keys over artifacts, heroSkills, unitsAbility, ui and others.
+  - English/Russian `ui.json` add `alliance_all_active_slots_in_same`.
+  - `arena_reroll` is re-translated in five languages.
+  - No `DB/` row changed, so the neutral tier bands equal the 25509697 pin. Option A adds target `steam_25672315`
+    (same table), and the rebuild names it (commit `37e0486559`).
+- **RMG templates:** `maxAlliancesCount` was removed from every `.rmg.json`. Horns, Mayhem, Syndicate, Three of
+  a Kind and Countdown reorder `descBlocks`. Nothing in the repo reads or writes `maxAlliancesCount`.
+  `Default.mrmg.json` is unchanged.
+
+<!-- PORT_25672315_STATUS -->
+
+Historical runtime boundary: the report documents isolated F/V-copy candidate runs and their
+specific startup/map observations; these do not establish current Golden Era startup or
+gameplay acceptance. The current 25672315 install receipt, post-promotion preview build/install
+evidence and remaining user checks are in `current_version_consolidation.md`. Keep the recorded
+save/cloud cautions attached to the old isolated-copy tests; no post-promotion launch is claimed.
+
+## Previous target: Steam build 25509697 (2026-09-30, history)
+
+This section is history since 2026-10-02: Steam replaced 25509697 with the 25672315 hotfix (above).
 
 Steam replaced 25061458 with **25509697** on 2026-09-30 (depot 3105441 manifest `434313828171932558`,
 GameAssembly.dll 98,143,744 B sha256 `CF5B0414…9AD4C926`, metadata 22,993,124 B `973FD7ED…97BD2087`,
@@ -377,7 +601,9 @@ Static pre-check of required features against the refused scopes (2026-09-30; so
     their own errors. The one rethrow, the Factory/Bulwark combat force-setup pilot, only runs behind a
     diagnostic flag.
 - Every other required slice is guarded by `PortRequiredFeatureOff`. On 25509697 a slice logs
-  `PORT: required feature OFF` and loading continues. The slices that reference refused symbols, and so may
+  `PORT: required feature OFF` and loading continues. Since D11 (port 26297049) the filter soft-disables on
+  every non-Golden build, unknown builds included; see "Fail soft on every non-Golden build" below.
+  The slices that reference refused symbols, and so may
   log OFF, are below. The count is refused symbols referenced per file; a refused symbol may sit on a
   non-fatal branch.
   - attack facing: 5
@@ -1241,11 +1467,19 @@ sequential native name. A copy can differ in one immediate: the packed builder c
 loop cap. So choose the copy that Golden Era binds by its role (the caller, the call position, or the
 in-order name), never by body score alone. Patching one copy does not patch the others.
 
-**Fail soft on the current build only.** In `Plugin.Load`, each required-registration fatal catch has an
-exception filter in front of it: `catch (Exception ex) when (PortRequiredFeatureOff(label, ex))`. On
-`GameBuildKind.Current` it logs `PORT: required feature OFF on build=current ...: <label> (<exception>)`
-and loading continues. On Golden Era and on an unknown build it returns false, so the original
-`LogFatal` + `throw` runs unchanged. The custom-faction manifest load and the selected-unit HUD guard
+**Fail soft on every non-Golden build (D11, port 26297049).** In `Plugin.Load`, each required-registration
+fatal catch has an exception filter in front of it: `catch (Exception ex) when (PortRequiredFeatureOff(label, ex))`.
+On any build other than `GameBuildKind.Golden` (Current, and Unknown, which includes retired builds) it logs
+`PORT: required feature OFF on <GameBuild.Describe()>: <label> (<exception>)` and loading continues. Only on
+the Golden Era build does it return false, so the original `LogFatal` + `throw` runs unchanged. On an
+unrecognised GameAssembly.dll the obfuscated symbol scopes stay unapplied, so the symbol-bound slices fail
+and switch off one by one. `LogUnrecognisedBuildNotice` says why exactly once: on a readable unknown hash it
+replaces the GameBuild identity line with one error naming the expected build, the found sha256 (and the
+retired build it matches, if any) and the supported hashes, and shows the notice once on screen, with
+what to install or restore, through
+`GoldenEraBuildNoticeHost` ("Golden Era: unsupported game version", with a Dismiss button). When
+GameAssembly.dll cannot be read there is no hash to report, so `GameBuild.LogIdentity` logs the UNKNOWN
+line with the path and error and no notice is shown. The custom-faction manifest load and the selected-unit HUD guard
 stay fatal: the first is file data, the second is a safety interlock. The guard's own symbols (the HudEventBind and ControlsSelect/Hotkey/BasicCommands/AbilityBucket rows above) were mapped instead. Hooks a feature registered before
 it threw stay in place. For custom biomes, that is the renderer-without-sound configuration, which the
 existing diagnostic flag already supports.

@@ -28,18 +28,27 @@
       "validationOwner": "validate_source_mechanics_contract"
     },
     {
-      "id": "tower.library",
+      "id": "tower.lookout_tower",
       "surface": "building",
-      "sourceName": "Library",
-      "status": "substituted",
-      "reason": "Current Tower design uses a native-safe vision/knowledge-style substitute until exact mage guild spell expansion is traced.",
+      "sourceName": "Lookout Tower",
+      "status": "exact",
+      "reason": "Native intelligences row raises the town's sight radius (viewRadius 15), as the HoMM3 Lookout Tower does (+15 sight, requires Fort).",
       "playerTextPolicy": "must_match_current_behavior",
       "currentRows": [
         "Build_Intelligence_Academy"
       ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "tower.library",
+      "surface": "building",
+      "sourceName": "Library",
+      "status": "absent",
+      "reason": "No Tower city row carries the HoMM3 Library (+1 spell per Mage Guild level). The native magicGuildIncrement bonus ships at law scope in fraction_law_homm3_tower_2 (Observatory Network); carrying it on a city building is not proven.",
+      "changeDisposition": "Library has no building row; its spell effect lives on the Observatory Network law until a building carrier for magicGuildIncrement is traced.",
+      "validationOwner": "validate_source_mechanics_contract",
       "forbiddenPlayerText": [
-        "extra spell",
-        "mage guild"
+        "Library"
       ]
     },
     {
@@ -82,7 +91,7 @@
       "surface": "faction_skill",
       "sourceName": "Arcane Battery",
       "status": "substituted",
-      "reason": "Arcane Battery grants a once-per-round hero ability at 2/1/0 Focus by Basic/Advanced/Expert. Native refresh_spell_book restores spellbook use this round. Per-spell cooldowns are intentionally not cleared (full wipe would be overtuned). Scholar Advanced/Expert subskills keep curriculum, Chronomancy, Mana Well Aegis, remote learning, spell economies, start Focus, and Mana Well Aegis (Homm3TowerBottomlessKnowledgeHook).",
+      "reason": "User decision 2026-11-11: with custom_factions/tower_artificing/artificing_policy.json enabled, the faction skill is Artificing (docs/homm3_tower_artificing.md): battle-end observation of enemy passives into a Schematic Book, Arcane Essence from defeated enemies, and the Artificing world spell that grafts book passives onto Tower unit lines. The Arcane Battery hero ability row stays generated but is no longer granted; with the policy disabled the skill reverts to Arcane Battery (2/1/0 Focus, native refresh_spell_book, no per-spell cooldown wipe). Either way the Scholar Advanced/Expert subskills keep curriculum, Chronomancy, Mana Well Aegis, remote learning, spell economies and start Focus (Homm3TowerBottomlessKnowledgeHook).",
       "playerTextPolicy": "must_match_current_behavior",
       "forbiddenPlayerText": [
         "Bottomless Knowledge",
@@ -119,7 +128,8 @@
       ],
       "currentRows": [
         "skill_faction_homm3_tower",
-        "skill_faction_homm3_tower_ability_arcane_battery"
+        "skill_faction_homm3_tower_ability_arcane_battery",
+        "homm3_tower_artificing_graft"
       ],
       "validationOwner": "validate_homm3_tower_arcane_battery_contract"
     }

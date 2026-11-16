@@ -36,6 +36,7 @@ internal static class Homm3FactorySplitAssemblyArmyStripHud
 	private static bool _registered;
 	private static ManualLogSource _log;
 	private static int _loggedSkips;
+	private static readonly System.Collections.Generic.HashSet<string> _loggedSkipReasons = new(StringComparer.Ordinal);
 	private static int _loggedApplies;
 	private static GameObject _sharedTooltip;
 	private static TextMeshProUGUI _sharedTooltipText;
@@ -182,7 +183,11 @@ internal static class Homm3FactorySplitAssemblyArmyStripHud
 				    out var failReason))
 			{
 				Hide(element);
-				if (_loggedSkips++ < 24 && !string.IsNullOrWhiteSpace(failReason))
+				// A hero without the Factory faction skill is the normal case for every other faction; that is not a
+				// warning. Other reasons still warn, once per distinct reason.
+				if (!string.IsNullOrWhiteSpace(failReason)
+				    && !failReason.StartsWith("Factory faction skill not present", StringComparison.Ordinal)
+				    && _loggedSkipReasons.Add(failReason) && _loggedSkips++ < 24)
 					_log?.LogWarning("HoMM3 Factory Split Assembly HUD skip (" + source + "): " + failReason);
 				return;
 			}
@@ -288,7 +293,7 @@ internal static class Homm3FactorySplitAssemblyArmyStripHud
 		return ReadMember(heroView, GameSymbols.ImportVisuals.TooltipHeroItemSessionHeroFields);
 	}
 
-	private static bool TryResolveDataHero(object sessionHero, out DataHero dataHero, out string failReason)
+	internal static bool TryResolveDataHero(object sessionHero, out DataHero dataHero, out string failReason)
 	{
 		dataHero = null;
 		failReason = null;
@@ -409,7 +414,7 @@ internal static class Homm3FactorySplitAssemblyArmyStripHud
 			foreach (var subSkill in EnumerateObjects(subSkills))
 			{
 				var sid = NormalizeSid(TryReadString(subSkill, GameSymbols.DraconicDominion.HeroSubSkillSidMembers));
-				if (string.Equals(sid, subSkillSid, StringComparison.Ordinal))
+				if (string.Equals(sid, subSkillSid, StringComparison.Ordinal) && Homm3DungeonDraconicDominionHook.IsSubSkillActive(subSkill))
 					return true;
 			}
 		}

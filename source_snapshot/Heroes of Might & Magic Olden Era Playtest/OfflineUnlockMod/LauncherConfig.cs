@@ -384,8 +384,6 @@ internal sealed class LauncherConfig
 	/// <summary>Release-safe HoMM3 Cove Treasure Hunting Plunder: chests add 1/2/3 rare resources; a hero's first capture of each mine adds a 100/150/200% resource pile.</summary>
 	public bool Homm3CovePlunder = true;
 
-	/// <summary>Release-safe HoMM3 Fortress Hunting Grounds: battle wins fill a trophy meter (8/7/6); a full meter restocks this week's visited weekly sites once.</summary>
-	public bool Homm3FortressHuntingGrounds = true;
 
 	/// <summary>Release-safe HoMM3 Cove Sea Witch after-shot branch: repeated Weakness applications become cumulative Disrupting Ray.</summary>
 	public bool Homm3CoveAfterShotDisruptingRay = true;
@@ -792,7 +790,6 @@ internal static class LauncherConfigReader
 			Homm3SwashbucklerGoldProduction = ReadBool(json, "homm3SwashbucklerGoldProduction", true),
 			Homm3TowerBottomlessKnowledgeManaWellAegis = ReadBool(json, "homm3TowerBottomlessKnowledgeManaWellAegis", true),
 			Homm3CovePlunder = ReadBool(json, "homm3CovePlunder", true),
-			Homm3FortressHuntingGrounds = ReadBool(json, "homm3FortressHuntingGrounds", true),
 			Homm3CoveAfterShotDisruptingRay = ReadBool(json, "homm3CoveAfterShotDisruptingRay", true),
 			Homm3DungeonDraconicDominion = ReadBool(json, "homm3DungeonDraconicDominion", true),
 			Homm3ImportPreviewHooks = ReadBool(json, "homm3ImportPreviewHooks", false),
@@ -1210,8 +1207,6 @@ internal static class LauncherConfigReader
 			a.Homm3TowerBottomlessKnowledgeManaWellAegis = b.Homm3TowerBottomlessKnowledgeManaWellAegis;
 		if (KeyPresent(jsonB, "homm3CovePlunder"))
 			a.Homm3CovePlunder = b.Homm3CovePlunder;
-		if (KeyPresent(jsonB, "homm3FortressHuntingGrounds"))
-			a.Homm3FortressHuntingGrounds = b.Homm3FortressHuntingGrounds;
 		if (KeyPresent(jsonB, "homm3CoveAfterShotDisruptingRay"))
 			a.Homm3CoveAfterShotDisruptingRay = b.Homm3CoveAfterShotDisruptingRay;
 		if (KeyPresent(jsonB, "homm3DungeonDraconicDominion"))

@@ -97,6 +97,10 @@ internal static class Homm3StrongholdLawIconHook
 		var parameters = method.GetParameters();
 		if (parameters.Length != 2)
 			return false;
+		// Off Golden Era the caller already matched the scoped FractionLawViewBind interop name, which spells out
+		// both parameter types (26615913: bdfd); the type-name filter below only knows the Golden names.
+		if (!GameBuild.IsGolden)
+			return true;
 		return IsLawSideType(parameters[0].ParameterType)
 		       && IsFractionLawRuntimeType(parameters[1].ParameterType);
 	}

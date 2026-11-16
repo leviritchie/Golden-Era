@@ -836,7 +836,7 @@
   "adoptWeights": "nearest"
  },
  "glbPatch": {
-  "reason": "lane B 2026-10-11 authenticity flyer pass (gargoyle bar; Idle untouched): Move - the capture walked; the DEF leaps level with the forelegs reaching forward and the hind legs trailing back, tucking under at the gather keys (Hips levelled, legs aimed). Hitted - the DEF crouches flat with both wings spread wide; the Hips drop 0.18 with the forefeet IK-planted, the wing roots aim along the battle camera's screen horizontal (far wing forward-out, near wing back-out) so they read open instead of as a vertical spike, the tail swings low. Death - wings spread through the stagger, then the body drops 0.26 belly-down, forelegs stretched forward, head down, wings folded flat over the back and the tail laid along the floor (fit sideClips [] / groundClips Death keep it upright and grounded). Rotation tables listed twice (split halves); stretchRelax evens the shoulder/hip creases.",
+  "reason": "lane B 2026-10-11 authenticity flyer pass (gargoyle bar; Idle untouched): Move - the capture walked; the DEF leaps level with the forelegs reaching forward and the hind legs trailing back, tucking under at the gather keys (Hips levelled, legs aimed). Hitted - the DEF crouches flat with both wings spread wide; the Hips drop 0.18 with the forefeet IK-planted, the wing roots aim along the battle camera's screen horizontal (far wing forward-out, near wing back-out) so they read open instead of as a vertical spike, the tail swings low. Death - wings spread through the stagger, then the body drops 0.26 belly-down, forelegs stretched forward, head down, wings folded flat over the back and the tail laid along the floor (fit sideClips [] / groundClips Death keep it upright and grounded). Rotation tables listed twice (split halves); stretchRelax evens the shoulder/hip creases.; 2026-11-09 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate; clip pass 2026-11-11 (user-approved candidate): AttackFront re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyTranslations",
@@ -857,6 +857,22 @@
     "sha256": "3580b9e4520699f7c8c6a81543da688c929ddc570f3f16bae37f91a53e3785d7"
    },
    {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_scorpicore_flight_weights.json",
+    "sha256": "a72340f50f26a7b9f8dcff6ce52f685c6298f464e2370026a5a1890ce64787e2"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_scorpicore_flight_tracks.json",
+    "sha256": "771057b4b3147d3273a9838e85fe965baf470ca0e007f46fbc90e2047b6e4e04"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_scorpicore_clip_tracks.json",
+    "sha256": "d861093916105593dfb21b93fed8dfa83181fddd37da0a5bb71fb68e27be370d"
+   },
+   {
     "op": "stretchRelax",
     "clips": [
      "Unit_Move",
@@ -868,6 +884,18 @@
     "smooth": 0.0,
     "maxMove": 0.08,
     "note": "shoulder/hip crease of the crouch, reach and fold"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "flyer flight: crease of the spread wings"
    }
   ]
  }

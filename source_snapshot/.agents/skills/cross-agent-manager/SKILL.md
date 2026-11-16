@@ -1,6 +1,6 @@
 ---
 name: cross-agent-manager
-description: Coordinate real Codex and Claude sessions through this repository's local work board and message mailbox when the user authorizes cross-tool collaboration. Does not launch or wake agents.
+description: Coordinate concurrent real agent sessions (Claude; Codex retired 2026-11-12) through this repository's local work board and message mailbox when the user authorizes cross-tool collaboration. Does not launch or wake agents.
 ---
 
 # Cross-Agent Manager

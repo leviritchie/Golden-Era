@@ -25,7 +25,6 @@ internal static class DamageKillMapping
 		internal MethodInfo DataGetter;
 		internal MethodInfo StatsMethod;
 		internal MethodInfo StackCountMethod;
-		internal MethodInfo KilledStackMethod;
 	}
 
 	private sealed class DataAccessors
@@ -111,13 +110,7 @@ internal static class DamageKillMapping
 			return false;
 		}
 
-		var accessors = GetUnitAccessors(target.GetType());
-		if (TryInvokeInt(target, accessors.KilledStackMethod, unitDmg, out var nativeKills))
-		{
-			killedStacks = Mathf.Max(0, nativeKills);
-			return true;
-		}
-
+		// No native killed-stacks(int) method exists on Unit (26615913 or Golden Era): use the UnitData maths.
 		try
 		{
 			return TryGetKilledStacksFromUnitData(unitDmg, target, out killedStacks);
@@ -486,8 +479,7 @@ internal static class DamageKillMapping
 			DataProperty = FindProperty(type, GameSymbols.DamageKill.UnitDataFields),
 			DataGetter = FindMethod(type, GameSymbols.DamageKill.UnitDataGetter.NameHints, Type.EmptyTypes),
 			StatsMethod = FindMethod(type, GameSymbols.DamageKill.UnitStatsGetter.NameHints, Type.EmptyTypes),
-			StackCountMethod = FindMethod(type, GameSymbols.DamageKill.StackCountGetter.NameHints, Type.EmptyTypes),
-			KilledStackMethod = FindMethod(type, GameSymbols.DamageKill.KilledStackGetter.NameHints, new[] { typeof(int) })
+			StackCountMethod = FindMethod(type, GameSymbols.DamageKill.StackCountGetter.NameHints, Type.EmptyTypes)
 		};
 		UnitAccessorCache[type] = accessors;
 		return accessors;
@@ -576,30 +568,6 @@ internal static class DamageKillMapping
 		try
 		{
 			var raw = method.Invoke(instance, Array.Empty<object>());
-			if (raw == null)
-			{
-				return false;
-			}
-			value = Convert.ToInt32(raw);
-			return true;
-		}
-		catch
-		{
-			value = 0;
-			return false;
-		}
-	}
-
-	private static bool TryInvokeInt(object instance, MethodInfo method, int argument, out int value)
-	{
-		value = 0;
-		if (instance == null || method == null)
-		{
-			return false;
-		}
-		try
-		{
-			var raw = method.Invoke(instance, new object[] { argument });
 			if (raw == null)
 			{
 				return false;

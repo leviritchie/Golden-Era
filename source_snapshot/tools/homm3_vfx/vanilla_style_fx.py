@@ -201,7 +201,7 @@ def cmd_sources(extra: list[str]) -> None:
     import vanilla_vfx_probe as probe  # noqa: E402  (UnityPy; read-only)
     every = list(specs().values()) + list(specs(drafts=True).values())
     paths = sorted({l["source"]["resPath"] for _, s in every for l in s["layers"] if l["type"] in SOURCE_TYPES}
-                   | set(extra))
+                   | fusion_source_paths() | set(extra))
     out = {"schema": SOURCES_SCHEMA, "game": probe.GAME,
            "proof": "static read of installed serialized assets (tools/homm3_vfx/vanilla_vfx_probe.py); not runtime",
            "sources": {}}
@@ -212,6 +212,18 @@ def cmd_sources(extra: list[str]) -> None:
         out["sources"][p] = {"root": res[0]["tree"]["name"], "nodes": flatten(res[0]["tree"], res[0].get("materials"))}
     dump(SOURCES, out)
     print(f"sources: {len(paths)} prefab(s) -> {rel(SOURCES)}")
+
+
+def fusion_source_paths() -> set[str]:
+    """Prefabs the Elemental Fusion rows read (tools/homm3_vfx/fusion_fx.py): the reaction recipes' particle sources
+    and the fusion body overlay. Guest layers reuse the shipped unit specs' sources, already listed."""
+    fdir = VS_DIR / "fusion"
+    if not fdir.is_dir():
+        return set()
+    out = {load(fdir / "elements.json")["overlay"]["source"]["resPath"]}
+    for p in sorted((fdir / "reactions").glob("*.json")):
+        out |= {l["source"]["resPath"] for l in load(p)["layers"]}
+    return out
 
 
 # ------------------------------------------------------------------ spec validation (shared by compile and check)
@@ -548,7 +560,31 @@ def check_displacement_layer(layer: dict, lw: str) -> None:
 
 # bodyOverlay ``colors`` (a per-unit tint) may only rewrite a shader's own colour properties that drive what it draws.
 # magic/Fresnel: rgb = sat(T*_Emission + f)*_Color + sat(f)*_EdgeColor*_EdgePower (DXBC read, Homm3VfxFresnelReplica).
-OVERLAY_TINT_PROPERTIES = {"magic/Fresnel": ("_Color", "_EdgeColor")}
+# magic/VfxUber (World_watcher_mask_vfx): rgb = _Color * scrolled gradient * _Mask (the Elemental Fusion vein overlay).
+OVERLAY_TINT_PROPERTIES = {"magic/Fresnel": ("_Color", "_EdgeColor"), "magic/VfxUber": ("_Color",)}
+# bodyOverlay ``textures`` may replace only these texture properties, with a PNG shipped under homm3_mesh_fx/
+# (Homm3MeshFx ``source.textures`` [{property, file, sha256}], loaded fail-closed like emission maps).
+OVERLAY_TEXTURE_PROPERTIES = {"magic/VfxUber": ("_Mask",)}
+
+
+def check_overlay_textures(textures, shader: str, lw: str) -> None:
+    allowed = OVERLAY_TEXTURE_PROPERTIES.get(shader, ())
+    if not isinstance(textures, list) or not textures:
+        raise VsError(f"{lw}: textures must be a non-empty list of {{property, file}}")
+    seen = set()
+    for i, t in enumerate(textures):
+        if not isinstance(t, dict) or set(t) - {"sha256"} != {"property", "file"}:
+            raise VsError(f"{lw}: textures[{i}] needs exactly property and file (plus sha256 in compiled rows)")
+        if t["property"] not in allowed:
+            raise VsError(f"{lw}: textures[{i}] {t['property']!r} is not a replaceable texture of {shader!r} "
+                          f"(allowed {list(allowed)})")
+        if t["property"] in seen:
+            raise VsError(f"{lw}: textures[{i}] repeats {t['property']!r}")
+        seen.add(t["property"])
+        f = t["file"]
+        if (not isinstance(f, str) or not f.endswith(".png") or f.startswith(("/", "\\")) or ".." in f.split("/")
+                or "\\" in f or ":" in f):
+            raise VsError(f"{lw}: textures[{i}] file {f!r} must be a relative .png path under homm3_mesh_fx/")
 
 
 def check_overlay_tint(colors, shader: str, lw: str) -> None:
@@ -598,7 +634,9 @@ def check_overlay_layer(layer: dict, sources: dict, lw: str) -> None:
         raise VsError(f"{lw}: {problem or 'an overlay has exactly one trigger'}")
     if "colors" in layer:
         check_overlay_tint(layer["colors"], mats[idx].get("shader"), lw)
-    extra = set(layer) - {"id", "type", "source", "triggers", "colors", "note"}
+    if "textures" in layer:
+        check_overlay_textures(layer["textures"], mats[idx].get("shader"), lw)
+    extra = set(layer) - {"id", "type", "source", "triggers", "colors", "textures", "note"}
     if extra:
         raise VsError(f"{lw}: unknown bodyOverlay keys {sorted(extra)}")
 
@@ -987,7 +1025,9 @@ def build_rows(unit: str, spec: dict, df: dict, emission_files: dict, displaceme
                                     "materialIndex": int(src["materialIndex"]),
                                     **({"colors": [{"property": c["property"],
                                                     "rgba": [float(v) for v in c["rgba"]]}
-                                                   for c in layer["colors"]]} if "colors" in layer else {})},
+                                                   for c in layer["colors"]]} if "colors" in layer else {}),
+                                    **({"textures": [overlay_texture_row(unit, lid, t) for t in layer["textures"]]}
+                                       if "textures" in layer else {})},
                          "trigger": trig, "proof": "generated artifact; in-game look unproven"})
             continue
         if layer["type"] == "emissionMap":
@@ -1035,6 +1075,13 @@ def build_rows(unit: str, spec: dict, df: dict, emission_files: dict, displaceme
                              "trigger": trig, "vanillaStyle": bone_vs, "keepExistingGlow": False,
                              "proof": "generated artifact; in-game look unproven"})
     return rows
+
+
+def overlay_texture_row(unit: str, lid: str, t: dict) -> dict:
+    p = PLUGIN / "homm3_mesh_fx" / t["file"]
+    if not p.is_file():
+        raise VsError(f"{unit}/{lid}: overlay texture {t['file']} is not in {rel(PLUGIN / 'homm3_mesh_fx')}")
+    return {"property": t["property"], "file": t["file"], "sha256": sha(p)}
 
 
 def write_catalog_rows(unit: str, rows: list[dict]) -> None:
@@ -1114,6 +1161,8 @@ def check() -> list[str]:
             by_origin.setdefault(o[len(ORIGIN_PREFIX):], []).append(r)
         elif o.startswith("map_building_fx:") and r.get("lane") == "map_building":
             continue  # map-building effects: tools/homm3_map_building_meshes/map_building_fx.py check
+        elif o.startswith("elemental_fusion:"):
+            continue  # Elemental Fusion units: tools/homm3_vfx/fusion_fx.py check --plugin-dir <plugin>
         elif r.get("lane") == "battle_emission" or "vanillaStyle" in r:
             raise VsError(f"catalog row {r.get('id')}: vanilla-style fields without a vanilla_style origin")
     all_specs = specs()

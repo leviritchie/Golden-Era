@@ -828,7 +828,8 @@ internal static class Homm3FactoryCitySceneRegistrar
 		MethodBase dictGetter = null;
 		foreach (var name in GameSymbols.FactoryCityScene.EsceneSceneLoadDictionaryMembers)
 		{
-			dictGetter = AccessTools.PropertyGetter(di2.GetType(), name)
+			// "get_*" hints are accessor methods, not property names: asking PropertyGetter first made HarmonyX warn.
+			dictGetter = (name.StartsWith("get_", StringComparison.Ordinal) ? null : AccessTools.PropertyGetter(di2.GetType(), name))
 				?? AccessTools.Method(di2.GetType(), name);
 			if (dictGetter != null)
 				break;

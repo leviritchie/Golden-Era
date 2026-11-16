@@ -20,16 +20,9 @@ import zipfile
 from typing import Any
 
 
-EXPECTED_GATING_ROWS = {
-    "HOMM3_INFERNO_GATING_IMP_ABILITY_SID": "h3_imp",
-    "HOMM3_INFERNO_GATING_GOG_ABILITY_SID": "h3_gog",
-    "HOMM3_INFERNO_GATING_HELL_HOUND_ABILITY_SID": "h3_hell_hound",
-}
-
 EXPECTED_CUSTOM_HERO_ABILITY_ICON_ROWS = {
-    "skill_faction_homm3_inferno_ability_gating": ["h3_imp"],
-    "skill_faction_homm3_inferno_ability_gating_gogs": ["h3_gog"],
-    "skill_faction_homm3_inferno_ability_gating_hell_hounds": ["h3_hell_hound"],
+    # Inferno Gating reserve redesign (2026-11-13): the per-unit summon rows are gone; Open Gate is the one active row.
+    "skill_faction_homm3_inferno_ability_open_gate": ["sub_skill_summoner_6_icon"],
     "skill_faction_homm3_rampart_ability_avenger": ["sub_skill_faction_homm3_rampart_avenger_mark"] * 7,
     "skill_faction_homm3_tower_ability_arcane_battery": ["h3_mage"] * 3,
     "skill_faction_homm3_stronghold_ability_moral": ["sub_skill_faction_homm3_stronghold_warcry_rallying"] * 3,
@@ -86,22 +79,8 @@ def require_order(text: str, first: str, second: str, context: str) -> None:
 
 
 def validate_overlay_source(source: str) -> None:
-    require_contains(source, "HOMM3_INFERNO_GATING_ABILITY_UNITS", "Inferno Gating source icon map")
-    for const_name, expected_icon in EXPECTED_GATING_ROWS.items():
-        require_contains(source, const_name, "Inferno Gating source icon map")
-        pattern = re.compile(re.escape(const_name) + r"\s*:\s*['\"]" + re.escape(expected_icon) + r"['\"]")
-        if not pattern.search(source):
-            fail(f"Inferno Gating icon map must route {const_name} to {expected_icon}")
-        factory_pattern = re.compile(
-            r"make_homm3_inferno_gating_hero_ability\(\s*"
-            + re.escape(const_name)
-            + r"\s*,\s*['\"]"
-            + re.escape(expected_icon)
-            + r"['\"]",
-            re.MULTILINE,
-        )
-        if not factory_pattern.search(source):
-            fail(f"Inferno Gating factory row must emit {const_name} with icon {expected_icon}")
+    require_contains(source, "homm3_inferno_gating_core_overlay", "Inferno Gating reserve overlay import")
+    require_not_contains(source, "make_homm3_inferno_gating_hero_ability", "retired Inferno Gating summon rows")
 
 
 def import_overlay_module(repo_root: pathlib.Path) -> Any:

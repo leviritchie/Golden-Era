@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Threading;
 using BepInEx.Logging;
 using HarmonyLib;
 using Hex.Configs;
 using Il2CppInterop.Runtime.InteropTypes;
+using BhBattleAbilityView = Hex.UI.BhBattleAbilityView;
+using EAbilitySlotMode = Hex.UI.EAbilitySlotMode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,6 +32,17 @@ internal static class Homm3WarcriesHeroAbilityHook
 	private static int _iconLogged;
 	private static int _releaseObservedLogged;
 	private static bool _heroAbilitiesMembersLogged;
+	private static int _heroSpecialSlotLogged;
+	// Icon Images whose overrideSprite this hook set (Image native pointer -> Warcry sprite
+	// native pointer). BhBattleAbilityViews are pooled and rebound to other abilities, and
+	// overrideSprite wins over the sprite the native bind writes, so a later non-Warcry bind
+	// must clear our override. No battle/scene reset hook exists here (Il2Cpp sceneLoaded is
+	// not subscribable), so the map is size-capped instead; a stale pointer only ever causes a
+	// redundant overrideSprite=null on an icon Image under a rebound hero ability view.
+	private static readonly Dictionary<IntPtr, IntPtr> _warcryOverriddenIconImages = new();
+	private static readonly object _warcryOverriddenIconImagesLock = new();
+	private const int WarcryOverriddenIconImagesCap = 256;
+	private static int _overrideClearLogged;
 	private static bool DiagnosticsEnabled => Homm3DiagnosticFlags.IsEnabled("homm3_warcry_hero_ability_diag.flag");
 
 	internal static void TryRegister(Harmony h, ManualLogSource log)
@@ -90,24 +104,20 @@ internal static class Homm3WarcriesHeroAbilityHook
 		var containerPatched = 0;
 		var contextPatched = 0;
 
-		var buttonType = FindRuntimeType("Hex.UI.BhHeroAbilitiyView");
-		if (buttonType != null)
+		// 26297049 merged BhHeroAbilitiyView into Hex.UI.BhBattleAbilityView; the hero slot bind is
+		// (hero ability, wrapper, index) and the postfix branches on slotMode.
+		foreach (var method in GameMember.FindMethods(
+		         typeof(BhBattleAbilityView),
+		         typeof(void),
+		         new Type[] { null, null, typeof(int) },
+		         GameSymbols.BattleAbilityView.HeroBind))
 		{
-			foreach (var method in GameMember.FindMethods(
-			         buttonType,
-			         typeof(void),
-			         new Type[] { null, null },
-			         GameSymbols.WarcryHeroAbility.PerAbilityBind))
-			{
-				if (!IsHeroAbilityButtonBindCandidate(method))
-					continue;
-				if (PatchWarcrySurface(h, log, method, nameof(PostfixReleaseHeroButtonBind)))
-					buttonPatched++;
-				break;
-			}
+			if (!IsHeroAbilityButtonBindCandidate(method))
+				continue;
+			if (PatchWarcrySurface(h, log, method, nameof(PostfixReleaseHeroButtonBind)))
+				buttonPatched++;
+			break;
 		}
-		else
-			log?.LogWarning("Homm3WarcriesHeroAbility: release type not found: Hex.UI.BhHeroAbilitiyView");
 
 		var containerType = GameMember.ResolveTypeGroup(GameSymbols.TypeGroups.WarcryHeroAbilityHeroAbilitiesView);
 		if (containerType != null)
@@ -119,17 +129,6 @@ internal static class Homm3WarcriesHeroAbilityHook
 			         GameSymbols.WarcryHeroAbility.ContainerBind))
 			{
 				if (!IsHeroAbilityContainerBindCandidate(method))
-					continue;
-				containerPatched += PatchWarcrySurface(h, log, method, nameof(PostfixReleaseHeroAbilityContainer)) ? 1 : 0;
-			}
-
-			foreach (var method in GameMember.FindMethods(
-			         containerType,
-			         typeof(void),
-			         new Type[] { null, null, null },
-			         GameSymbols.WarcryHeroAbility.ContainerBindWithArena))
-			{
-				if (!IsHeroAbilityContainerBindWithArenaCandidate(method))
 					continue;
 				containerPatched += PatchWarcrySurface(h, log, method, nameof(PostfixReleaseHeroAbilityContainer)) ? 1 : 0;
 			}
@@ -158,7 +157,7 @@ internal static class Homm3WarcriesHeroAbilityHook
 		if (method == null || method.IsSpecialName)
 			return false;
 		var parameters = method.GetParameters();
-		if (parameters.Length != 2)
+		if (parameters.Length != 3 || parameters[2].ParameterType != typeof(int))
 			return false;
 		if (parameters[0].ParameterType == typeof(bool) || parameters[1].ParameterType == typeof(bool))
 			return false;
@@ -180,23 +179,11 @@ internal static class Homm3WarcriesHeroAbilityHook
 		if (TryGetListElementType(parameters[1].ParameterType, out var elementType))
 		{
 			return IsReleaseHeroAbilityTypeName(elementType.Name)
-			       || string.Equals(elementType.FullName, "Hex.UI.BhHeroAbilitiyView", StringComparison.Ordinal);
+			       || elementType == typeof(BhBattleAbilityView);
 		}
 		var methodName = method.Name ?? string.Empty;
 		return methodName.IndexOf("List_1_", StringComparison.Ordinal) >= 0
 		       && methodName.IndexOf("ObjectPublicStInHeInObHecfObchcfUnique", StringComparison.Ordinal) >= 0;
-	}
-
-	private static bool IsHeroAbilityContainerBindWithArenaCandidate(MethodInfo method)
-	{
-		if (method == null || method.IsSpecialName)
-			return false;
-		var parameters = method.GetParameters();
-		if (parameters.Length != 3)
-			return false;
-		if (TryGetListElementType(parameters[2].ParameterType, out var elementType))
-			return IsReleaseHeroAbilityTypeName(elementType.Name);
-		return MatchesMethodSymbolHint(method, GameSymbols.WarcryHeroAbility.ContainerBindWithArena);
 	}
 
 	private static bool MatchesMethodSymbolHint(MethodInfo method, GameSymbols.MethodSymbol symbol)
@@ -289,13 +276,9 @@ internal static class Homm3WarcriesHeroAbilityHook
 
 	private static void ValidateRequiredReleaseWarcryIconSurface(ManualLogSource log)
 	{
-		var buttonType = FindRuntimeType("Hex.UI.BhHeroAbilitiyView");
-		if (buttonType == null)
-			throw new MissingMemberException("Hex.UI.BhHeroAbilitiyView", "type");
-		if (!HasAnyMember(buttonType, GameSymbols.WarcryHeroAbility.HeroAbilityFields))
-			throw new MissingMemberException(buttonType.FullName, string.Join("/", GameSymbols.WarcryHeroAbility.HeroAbilityFields));
-		if (!HasAnyMember(buttonType, GameSymbols.WarcryHeroAbility.HeroAbilityWrapperFields))
-			throw new MissingMemberException(buttonType.FullName, string.Join("/", GameSymbols.WarcryHeroAbility.HeroAbilityWrapperFields));
+		var buttonType = typeof(BhBattleAbilityView);
+		RequireScopedMember(buttonType, GameSymbols.BattleAbilityView.HeroAbilityDataField);
+		RequireScopedMember(buttonType, GameSymbols.BattleAbilityView.AbilityWrapperField);
 
 		var containerType = GameMember.ResolveTypeGroup(GameSymbols.TypeGroups.WarcryHeroAbilityHeroAbilitiesView);
 		if (containerType == null)
@@ -332,6 +315,15 @@ internal static class Homm3WarcriesHeroAbilityHook
 				string.Join("/", GameSymbols.WarcryHeroAbility.HeroAbilityWrapperTypeNames),
 				string.Join("/", GameSymbols.WarcryHeroAbility.HeroAbilityOutGetters));
 		log?.LogInfo("Homm3WarcriesHeroAbility: release warcry member surface required; outGetter=" + outGetter.Name + " on " + resolvedWrapperType.FullName + ".");
+	}
+
+	// A scoped member list is required: a refusal sentinel or a missing member fails registration.
+	private static void RequireScopedMember(Type type, string[] names)
+	{
+		if (names == null || names.Length == 0 || GameSymbolScope.IsSentinel(names[0]))
+			throw new MissingMemberException(type.FullName, names == null || names.Length == 0 ? "(no scoped member)" : names[0]);
+		if (!HasAnyMember(type, names))
+			throw new MissingMemberException(type.FullName, string.Join("/", names));
 	}
 
 	private static bool HasAnyMember(Type type, string[] names)
@@ -503,13 +495,50 @@ internal static class Homm3WarcriesHeroAbilityHook
 
 	private static void PostfixReleaseHeroButtonBind(object __instance, object[] __args)
 	{
+		if (__instance is not BhBattleAbilityView view || !view)
+			return;
+		// The hero bind serves every non-unit slot. Unit slots never carry Warcry icons; the
+		// special-ability HUD keeps the vanilla look (D6=a: GE battle actives stay on the hero row).
+		var slotMode = view.slotMode;
+		if (slotMode == EAbilitySlotMode.Unit)
+		{
+			ClearWarcryIconOverride(view, "release-button-bind-unit");
+			return;
+		}
 		var context = __args != null && __args.Length > 0 ? __args[0] : null;
 		var carrier = __args != null && __args.Length > 1 ? __args[1] : null;
 		var ability = TryGetReleaseWarcryAbility(__instance)
 			?? TryGetReleaseWarcryAbility(carrier)
 			?? TryGetReleaseWarcryAbility(context);
+		if (slotMode == EAbilitySlotMode.HeroSpecial)
+		{
+			if (ability != null && Interlocked.Exchange(ref _heroSpecialSlotLogged, 1) == 0)
+				Plugin.LogSource?.LogWarning(
+					"Homm3WarcriesHeroAbility: GE hero ability '" + TryExtractHeroIconOverrideSid(ability)
+					+ "' was bound to the HeroSpecial slot; its custom icon is only applied on the regular hero ability row.");
+			ClearWarcryIconOverride(view, "release-button-bind-hero-special");
+			return;
+		}
 		LogReleaseWarcryObserved("release-button-bind", ability, __instance, carrier);
-		ApplyWarcryHeroIcon(__instance, ability, "release-button-bind");
+		try
+		{
+			// A pooled view rebound to a non-Warcry ability must drop the overrideSprite we set
+			// for an earlier Warcry bind, or the Warcry icon sticks. Only the bind clears: the
+			// container pass resolves from the view alone and can miss a Warcry the bind found.
+			if (ability == null)
+				ClearWarcryIconOverride(view, "release-button-bind");
+			// The icon sprite cache throws when its bundle fails to load; a Harmony postfix must
+			// never propagate that into the vanilla button bind.
+			ApplyWarcryHeroIcon(__instance, ability, "release-button-bind");
+		}
+		catch (Exception ex)
+		{
+			if (_iconLogged < 8)
+			{
+				_iconLogged++;
+				Plugin.LogSource?.LogWarning("Homm3WarcriesHeroAbility: release-button-bind icon apply failed: " + ex.Message);
+			}
+		}
 	}
 
 	private static void PostfixReleaseHeroAbilityContainer(object __instance)
@@ -532,12 +561,13 @@ internal static class Homm3WarcriesHeroAbilityHook
 	{
 		if (root == null)
 			yield break;
-		if (IsReleaseHeroAbilityView(root))
+		if (root is BhBattleAbilityView)
 		{
-			yield return root;
+			if (IsReleaseHeroAbilityView(root))
+				yield return root;
 			yield break;
 		}
-		foreach (var fieldName in GameSymbols.WarcryHeroAbility.HeroAbilityViewListFields)
+		foreach (var fieldName in ScopedNames(GameSymbols.WarcryHeroAbility.HeroAbilityViewListFields))
 		{
 			var list = TryGetMemberValue(root, fieldName);
 			foreach (var item in EnumerateIl2CppList(list))
@@ -552,8 +582,8 @@ internal static class Homm3WarcriesHeroAbilityHook
 	{
 		if (obj == null)
 			return false;
-		return obj is Hex.UI.BhHeroAbilitiyView
-			|| string.Equals(obj.GetType().FullName, "Hex.UI.BhHeroAbilitiyView", StringComparison.Ordinal);
+		// Unit slots share the type with hero slots on 26297049; only hero-row slots carry Warcry icons.
+		return obj is BhBattleAbilityView view && view.slotMode != EAbilitySlotMode.Unit;
 	}
 
 	private static void LogReleaseWarcryObserved(string source, object ability, object view, object carrier)
@@ -582,14 +612,14 @@ internal static class Homm3WarcriesHeroAbilityHook
 		if (TryExtractHeroIconOverrideSid(obj) != null)
 			return obj;
 
-		foreach (var name in GameSymbols.WarcryHeroAbility.HeroAbilityFields)
+		foreach (var name in ScopedNames(GameSymbols.BattleAbilityView.HeroAbilityDataField, GameSymbols.BattleAbilityView.HeroAbilityField))
 		{
 			var nested = TryGetMemberValue(obj, name);
 			if (TryExtractHeroIconOverrideSid(nested) != null)
 				return nested;
 		}
 
-		foreach (var name in GameSymbols.WarcryHeroAbility.HeroAbilityWrapperFields)
+		foreach (var name in ScopedNames(GameSymbols.BattleAbilityView.AbilityWrapperField))
 		{
 			var nested = TryGetMemberValue(obj, name);
 			var ability = TryGetReleaseWarcryAbility(nested);
@@ -597,7 +627,7 @@ internal static class Homm3WarcriesHeroAbilityHook
 				return ability;
 		}
 
-		foreach (var methodName in GameSymbols.WarcryHeroAbility.HeroAbilityGetters)
+		foreach (var methodName in ScopedNames(GameSymbols.BattleAbilityView.HeroAbilityGetter.NameHints))
 		{
 			var ability = TryInvokeReleaseAbilityGetter(obj, methodName);
 			if (TryExtractHeroIconOverrideSid(ability) != null)
@@ -612,6 +642,21 @@ internal static class Homm3WarcriesHeroAbilityHook
 		}
 
 		return null;
+	}
+
+	// Scoped hint names with refusal sentinels and blanks dropped.
+	private static IEnumerable<string> ScopedNames(params string[][] lists)
+	{
+		foreach (var list in lists)
+		{
+			if (list == null)
+				continue;
+			foreach (var name in list)
+			{
+				if (!string.IsNullOrWhiteSpace(name) && !GameSymbolScope.IsSentinel(name))
+					yield return name;
+			}
+		}
 	}
 
 	private static object TryInvokeReleaseAbilityOut(object wrapper, string methodName)
@@ -1133,7 +1178,7 @@ internal static class Homm3WarcriesHeroAbilityHook
 			var child = component.transform.Find(path);
 			var image = child != null ? child.GetComponent<Image>() : null;
 			if (!image)
-				throw new MissingMemberException("BhHeroAbilitiyView", path);
+				throw new MissingMemberException(nameof(BhBattleAbilityView), path);
 			if (EnsureWarcrySprite(image, sprite))
 				applied++;
 		}
@@ -1151,9 +1196,13 @@ internal static class Homm3WarcriesHeroAbilityHook
 			&& image.color == Color.white
 			&& (!image.gameObject || image.gameObject.activeSelf);
 		if (alreadyCorrect)
+		{
+			TrackWarcryIconOverride(image, sprite);
 			return true;
+		}
 		image.sprite = sprite;
 		image.overrideSprite = sprite;
+		TrackWarcryIconOverride(image, sprite);
 		image.preserveAspect = true;
 		image.enabled = true;
 		image.color = Color.white;
@@ -1161,13 +1210,78 @@ internal static class Homm3WarcriesHeroAbilityHook
 		return true;
 	}
 
+	private static void TrackWarcryIconOverride(Image image, Sprite sprite)
+	{
+		var imagePtr = image.Pointer;
+		if (imagePtr == IntPtr.Zero)
+			return;
+		lock (_warcryOverriddenIconImagesLock)
+		{
+			if (!_warcryOverriddenIconImages.ContainsKey(imagePtr)
+			    && _warcryOverriddenIconImages.Count >= WarcryOverriddenIconImagesCap)
+				_warcryOverriddenIconImages.Clear();
+			_warcryOverriddenIconImages[imagePtr] = sprite.Pointer;
+		}
+	}
+
+	// Clears overrideSprite on this view's icon Images, but only on Images this hook overrode.
+	// Never throws: called from the release bind postfix.
+	private static void ClearWarcryIconOverride(BhBattleAbilityView view, string source)
+	{
+		try
+		{
+			lock (_warcryOverriddenIconImagesLock)
+			{
+				if (_warcryOverriddenIconImages.Count == 0)
+					return;
+			}
+			if (!view)
+				return;
+			foreach (var path in new[] { "DISABLED ICON/ICON", "NORMAL ICON/ICON", "HOVER ICON/ICON" })
+			{
+				var child = view.transform.Find(path);
+				var image = child != null ? child.GetComponent<Image>() : null;
+				if (!image)
+					continue;
+				var imagePtr = image.Pointer;
+				IntPtr warcrySpritePtr;
+				lock (_warcryOverriddenIconImagesLock)
+				{
+					if (!_warcryOverriddenIconImages.TryGetValue(imagePtr, out warcrySpritePtr))
+						continue;
+					_warcryOverriddenIconImages.Remove(imagePtr);
+				}
+				image.overrideSprite = null;
+				// EnsureWarcrySprite also wrote image.sprite. If the native bind did not rewrite it,
+				// the Warcry art is still showing through .sprite; report it rather than guess an icon.
+				var current = image.sprite;
+				if (current && current.Pointer == warcrySpritePtr && _overrideClearLogged < 8)
+				{
+					_overrideClearLogged++;
+					Plugin.LogSource?.LogWarning(
+						"Homm3WarcriesHeroAbility: " + source + " cleared Warcry overrideSprite on '" + path
+						+ "' but image.sprite is still the Warcry sprite (native bind did not rewrite it).");
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+			if (_overrideClearLogged < 8)
+			{
+				_overrideClearLogged++;
+				Plugin.LogSource?.LogWarning("Homm3WarcriesHeroAbility: " + source + " Warcry icon override clear failed: " + ex.Message);
+			}
+		}
+	}
+
 	private static IEnumerable<object> EnumerateHeroViews(object root, int depth)
 	{
 		if (root == null || depth < 0)
 			yield break;
-		if (root is Hex.UI.BhHeroAbilitiyView)
+		if (root is BhBattleAbilityView)
 		{
-			yield return root;
+			if (IsReleaseHeroAbilityView(root))
+				yield return root;
 			yield break;
 		}
 		if (IsHeroAbilitiesView(root))
@@ -1183,9 +1297,10 @@ internal static class Homm3WarcriesHeroAbilityHook
 			catch { continue; }
 			if (value == null)
 				continue;
-			if (value is Hex.UI.BhHeroAbilitiyView)
+			if (value is BhBattleAbilityView)
 			{
-				yield return value;
+				if (IsReleaseHeroAbilityView(value))
+					yield return value;
 				continue;
 			}
 
@@ -1197,9 +1312,10 @@ internal static class Homm3WarcriesHeroAbilityHook
 				{
 					if (item == null)
 						continue;
-					if (item is Hex.UI.BhHeroAbilitiyView)
+					if (item is BhBattleAbilityView)
 					{
-						yield return item;
+						if (IsReleaseHeroAbilityView(item))
+							yield return item;
 						continue;
 					}
 					foreach (var nested in EnumerateHeroViews(item, depth - 1))
@@ -1219,14 +1335,14 @@ internal static class Homm3WarcriesHeroAbilityHook
 	private static IEnumerable<object> EnumerateKnownHeroAbilityLists(object root)
 	{
 		LogHeroAbilitiesViewMembers(root);
-		foreach (var fieldName in new[] { "heroAbilities", "separateHeroAbilities" })
+		foreach (var fieldName in ScopedNames(GameSymbols.WarcryHeroAbility.HeroAbilityViewListFields))
 		{
 			var member = TryGetMemberValue(root, fieldName);
 			if (member == null)
 				continue;
 			foreach (var item in EnumerateIl2CppList(member))
 			{
-				if (item is Hex.UI.BhHeroAbilitiyView)
+				if (IsReleaseHeroAbilityView(item))
 					yield return item;
 			}
 		}
@@ -1439,7 +1555,7 @@ internal static class Homm3WarcriesHeroAbilityHook
 	{
 		if (view == null)
 			return null;
-		foreach (var memberName in GameSymbols.WarcryHeroAbility.HeroAbilityWrapperFields)
+		foreach (var memberName in ScopedNames(GameSymbols.BattleAbilityView.AbilityWrapperField))
 		{
 			var wrapper = TryGetMemberValue(view, memberName);
 			if (wrapper != null)
@@ -1572,7 +1688,7 @@ internal static class Homm3WarcriesHeroAbilityHook
 			if (obj is not Il2CppObjectBase il2Cpp || il2Cpp.Pointer == IntPtr.Zero)
 				return "(no-pointer)";
 
-			// Native disassembly of BhHeroAbilitiyView shows the click callback gates on
+			// Native disassembly of the pre-26297049 BhHeroAbilitiyView showed the click callback gates on
 			// these byte fields: +0x49 must be false, +0x4A and +0x4B must be true.
 			return "bxgb@48=" + (Marshal.ReadByte(il2Cpp.Pointer, 0x48) != 0)
 				+ ",bxgc@49=" + (Marshal.ReadByte(il2Cpp.Pointer, 0x49) != 0)

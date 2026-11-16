@@ -626,7 +626,7 @@
   }
  },
  "glbPatch": {
-  "reason": "2026-10-11 lane B authenticity (DEF g00/g05), on top of the wingChain flight port: Move* - head lifted to look ahead (Neck aimed forward-up, Head pitched back 35 deg; the pitched flight body left her staring at the floor) and talons carried forward under the body (h3_harpy_hag flight legs), ramped over MoveStart/MoveEnd. Death - the capture ended standing with the wings spread; the DEF flares, then curls into a ball on the floor: keys 3-6 copied from key 1, Hips pitched 75 deg forward and dropped with leg IK, back rounded, head tucked, wings wrapped down around the body, arms in. keyTranslations + split keyRotations; stretchRelax on the re-posed clips.",
+  "reason": "2026-10-11 lane B authenticity (DEF g00/g05), on top of the wingChain flight port: Move* - head lifted to look ahead (Neck aimed forward-up, Head pitched back 35 deg; the pitched flight body left her staring at the floor) and talons carried forward under the body (h3_harpy_hag flight legs), ramped over MoveStart/MoveEnd. Death - the capture ended standing with the wings spread; the DEF flares, then curls into a ball on the floor: keys 3-6 copied from key 1, Hips pitched 75 deg forward and dropped with leg IK, back rounded, head tucked, wings wrapped down around the body, arms in. keyTranslations + split keyRotations; stretchRelax on the re-posed clips.; 2026-11-09 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyTranslations",
@@ -645,6 +645,22 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_fury_flight_death_rot.json",
     "regrid": true,
     "sha256": "92ab442fbad890b9d80f6cf672c0eff8febf9d82312db7de8e2751ffb0bd0359"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_fury_flight_weights.json",
+    "sha256": "bd8840fac66573574caf3fbd8e0427ae87fc4dcc4acbb3d400f4b03acc8bf0d3"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": false,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_fury_flight_tracks.json",
+    "sha256": "bd8a0625b03ca6b317f0d0753872c7066578906905035f3b81d0b75f9aed4284"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_fury_clip_tracks.json",
+    "sha256": "53bd0328b57766bd2af6eb2de5759a8654851c7ae63133613f3bcfbea8217b55"
    },
    {
     "op": "stretchRelax",

@@ -18,7 +18,9 @@ internal static class Homm3RampartAvengerCastMarkerRuntime
 	private static bool _registered;
 	private static ManualLogSource _log;
 	private static readonly object LockObject = new();
-	private static readonly System.Collections.Generic.HashSet<long> HandledEventIds = new();
+	// Only the immediately repeated dispatch of one native event is a duplicate. Native event args are
+	// short-lived and their addresses are reused, so a never-cleared history would drop later real casts.
+	private static long _lastHandledEventId;
 	private static int _patched;
 	private static int _observedAvengerCasts;
 	private static int _applied;
@@ -126,9 +128,9 @@ internal static class Homm3RampartAvengerCastMarkerRuntime
 		var eventId = Homm3DirectStateIdentity.ResolveKeyOrZero(eventArgs);
 		lock (LockObject)
 		{
-			if (HandledEventIds.Contains(eventId))
+			if (eventId != 0 && eventId == _lastHandledEventId)
 				return false;
-			HandledEventIds.Add(eventId);
+			_lastHandledEventId = eventId;
 		}
 
 		if (eventInfo.Caster == null)
@@ -168,6 +170,23 @@ internal static class Homm3RampartAvengerCastMarkerRuntime
 		{
 			failReason = "CastAbilityEventArgs.attackedObjects is null";
 			return false;
+		}
+		// The live interop exposes attackedObjects as an Il2CppSystem List, which is not a managed IEnumerable.
+		if (attackedObjects is Il2CppSystem.Collections.Generic.List<Hex.Session.Battle.FieldObject> nativeList)
+		{
+			if (nativeList.Count != 1)
+			{
+				failReason = "Rampart Avenger marker expects exactly one attacked object; observed " + nativeList.Count;
+				return false;
+			}
+			target = nativeList[0];
+			if (target == null)
+			{
+				failReason = "CastAbilityEventArgs.attackedObjects contains a null target";
+				return false;
+			}
+			failReason = null;
+			return true;
 		}
 		if (attackedObjects is not IEnumerable enumerable || attackedObjects is string)
 		{

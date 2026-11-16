@@ -19,6 +19,17 @@ internal static class Homm3FactionSkillIconSpriteCache
 		return TryGetFactionSkillIconFaction(sid, out _) || IsPackagedCustomSubSkillIconKey(sid) || IsPackagedCastleEliteStrategemSpellIconKey(sid);
 	}
 
+	internal const string SpriteNamePrefix = "homm3_skill_icon_sprite_";
+
+	/// <summary>True for sprites this cache created (used to drop stale overrides on pooled UI images).</summary>
+	internal static bool IsModSkillIconSprite(Sprite sprite)
+	{
+		if (!sprite)
+			return false;
+		var name = sprite.name;
+		return !string.IsNullOrEmpty(name) && name.StartsWith(SpriteNamePrefix, StringComparison.Ordinal);
+	}
+
 	internal static bool TryGetFactionSkillIconFaction(string key, out string factionSid)
 	{
 		factionSid = null;
@@ -77,7 +88,7 @@ internal static class Homm3FactionSkillIconSpriteCache
 				100f,
 				0,
 				SpriteMeshType.FullRect);
-			sprite.name = "homm3_skill_icon_sprite_" + sid;
+			sprite.name = SpriteNamePrefix + sid;
 			SpritesBySid[sid] = sprite;
 			return true;
 		}

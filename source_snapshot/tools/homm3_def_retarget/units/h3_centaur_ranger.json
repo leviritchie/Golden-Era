@@ -436,7 +436,7 @@
   "params": []
  },
  "glbPatch": {
-  "reason": "2026-10-09 authenticity send-back fix 1 (lane A, Rampart): the user rejected whole-body rotation doing part-body moves. The quadruped fit is narrowed (pitch 0..10 about the hind feet, Defence and ShootFront 0, dx +-4 px, standing clips on the floor, Death roll only at the collapse) and the keys carry no Hips or horse-Spine rotation. ShootFront (from spec r8): quiver reach f1, nock f2, full draw f3-f4 with the shoulders turned side-on and the draw hand at the cheek, release f5, aim held f6-f9, recover f10-f12, over a level, planted horse. AttackFront: the rear is the forelegs tucked at the knee (QF_00 -45, QF_01 +70 at f2-f3), then the bow-thrust lunge in Spine1/Spine2 (24/12 deg). Hitted: hunch and recoil in Spine1/Spine2/Neck. Death: hind legs buckle and the forelegs give (Hips sinks 0.05 H, f3-f5), the rider slumps flat over the neck, then the base side fall at f6. Defence: guard turn in Spine1/Neck over a level horse. Weight repair: foreleg shoulder and horse-to-torso waist boundaries diffused (the tuck and lunge tore them). Gate 609 -> 603 edges over 2x (worst 8.85 -> 5.74).",
+  "reason": "2026-10-09 authenticity send-back fix 1 (lane A, Rampart): the user rejected whole-body rotation doing part-body moves. The quadruped fit is narrowed (pitch 0..10 about the hind feet, Defence and ShootFront 0, dx +-4 px, standing clips on the floor, Death roll only at the collapse) and the keys carry no Hips or horse-Spine rotation. ShootFront (from spec r8): quiver reach f1, nock f2, full draw f3-f4 with the shoulders turned side-on and the draw hand at the cheek, release f5, aim held f6-f9, recover f10-f12, over a level, planted horse. AttackFront: the rear is the forelegs tucked at the knee (QF_00 -45, QF_01 +70 at f2-f3), then the bow-thrust lunge in Spine1/Spine2 (24/12 deg). Hitted: hunch and recoil in Spine1/Spine2/Neck. Death: hind legs buckle and the forelegs give (Hips sinks 0.05 H, f3-f5), the rider slumps flat over the neck, then the base side fall at f6. Defence: guard turn in Spine1/Neck over a level horse. Weight repair: foreleg shoulder and horse-to-torso waist boundaries diffused (the tuck and lunge tore them). Gate 609 -> 603 edges over 2x (worst 8.85 -> 5.74).; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death, Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
   "ops": [
    {
     "op": "diffuseWeights",
@@ -497,6 +497,41 @@
     "sha256": "b94ec3c8343b30de5ad5ec12b626875e3e85d4e5d8cea6c5599a3e6b6a284e63",
     "regrid": true,
     "note": "Hips translation keys"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_ranger_move_tracks.json",
+    "sha256": "e92ba343ef1f2dc100781d469e141ed62a38098eef017516ab49127d95edb61d"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_centaur_ranger_clip_tracks.json",
+    "sha256": "de23fabeb8407ed59319f0ac905b44445325afb36468112869f85847f7279cd5"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "unit pass: tear gate on the replaced Move clips"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death",
+     "Unit_Hitted"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
    }
   ]
  }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -11,7 +12,6 @@ using Hex.Session.Battle;
 using Hex.Session.Data;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes;
-using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace OfflineUnlockMod;
@@ -106,12 +106,19 @@ internal static class GoldenEraGameplayOptions
 		{
 			if (!File.Exists(SettingsPath))
 				return settings;
-			var json = JObject.Parse(File.ReadAllText(SettingsPath));
-			settings.MovementMultiplier = Pick(json.Value<float?>("heroMovementMultiplier"), MovementChoices, 1f);
-			settings.ExperienceMultiplier = Pick(json.Value<float?>("experienceMultiplier"), ExperienceChoices, 1f);
-			settings.NeutralStrength = Pick(json.Value<float?>("neutralStrength"), NeutralStrengthChoices, 1f);
-			settings.MonsterGoldPercent = Pick(json.Value<int?>("monsterGoldPercent"), MonsterGoldChoices, 0);
-			if (Enum.TryParse(json.Value<string>("siteReset"), true, out SiteResetMode reset))
+			// Managed System.Text.Json, not the game's IL2CPP Newtonsoft: JToken.Value<T> goes through an
+			// Il2CppInterop generic-method store whose type initializer throws on Steam 26615913.
+			using var doc = JsonDocument.Parse(File.ReadAllText(SettingsPath),
+				new JsonDocumentOptions { AllowTrailingCommas = true, CommentHandling = JsonCommentHandling.Skip });
+			var root = doc.RootElement;
+			if (root.ValueKind != JsonValueKind.Object)
+				return settings;
+			settings.MovementMultiplier = Pick(ReadFloat(root, "heroMovementMultiplier"), MovementChoices, 1f);
+			settings.ExperienceMultiplier = Pick(ReadFloat(root, "experienceMultiplier"), ExperienceChoices, 1f);
+			settings.NeutralStrength = Pick(ReadFloat(root, "neutralStrength"), NeutralStrengthChoices, 1f);
+			settings.MonsterGoldPercent = Pick(ReadInt(root, "monsterGoldPercent"), MonsterGoldChoices, 0);
+			if (root.TryGetProperty("siteReset", out var siteReset) && siteReset.ValueKind == JsonValueKind.String
+			    && Enum.TryParse(siteReset.GetString(), true, out SiteResetMode reset))
 				settings.SiteReset = reset;
 		}
 		catch (Exception ex)
@@ -127,17 +134,17 @@ internal static class GoldenEraGameplayOptions
 		_dirty = true;
 		try
 		{
-			var json = new JObject
+			var json = JsonSerializer.Serialize(new Dictionary<string, object>
 			{
 				["heroMovementMultiplier"] = settings.MovementMultiplier,
 				["experienceMultiplier"] = settings.ExperienceMultiplier,
 				["neutralStrength"] = settings.NeutralStrength,
 				["siteReset"] = settings.SiteReset.ToString(),
 				["monsterGoldPercent"] = settings.MonsterGoldPercent,
-			};
+			}, new JsonSerializerOptions { WriteIndented = true });
 			Directory.CreateDirectory(Paths.ConfigPath);
 			var temp = SettingsPath + ".tmp";
-			File.WriteAllText(temp, json.ToString());
+			File.WriteAllText(temp, json);
 			if (File.Exists(SettingsPath))
 				File.Replace(temp, SettingsPath, null);
 			else
@@ -150,6 +157,12 @@ internal static class GoldenEraGameplayOptions
 		if (settings.SiteReset == SiteResetMode.Off)
 			RestoreConvertedBanks();
 	}
+
+	private static float? ReadFloat(JsonElement root, string name) =>
+		root.TryGetProperty(name, out var v) && v.ValueKind == JsonValueKind.Number && v.TryGetSingle(out var f) ? f : null;
+
+	private static int? ReadInt(JsonElement root, string name) =>
+		root.TryGetProperty(name, out var v) && v.ValueKind == JsonValueKind.Number && v.TryGetInt32(out var i) ? i : null;
 
 	private static float Pick(float? value, float[] choices, float fallback)
 	{

@@ -708,7 +708,7 @@
   }
  },
  "glbPatch": {
-  "reason": "authenticity lane-B 2026-10-08: AttackFront/ShootFront re-authored to the DEF overhead raise (f1) and forward chop (f2-f3) with follow-through, wings lifted up and back (f2-f4) instead of wrapping forward over the body; Defence holds the sword raised upright behind with the shield forward. Mesh: the sword blade was welded to the legs by weights (21 blade verts carried RightLeg/LeftLeg+foot weight, 2 blade-root seam twins carried RightUpLeg/Hips), so any sword raise tore the blade faces; both groups move to RightHand. Tear gate 651 -> 19 (worst edge 3.507 -> 2.492). 2026-10-08 check pass: head looks ahead through MoveStart/Move/MoveEnd (in flight it pitched 30 deg down at the ground at the stride ends and leaned 9 deg sideways).",
+  "reason": "authenticity lane-B 2026-10-08: AttackFront/ShootFront re-authored to the DEF overhead raise (f1) and forward chop (f2-f3) with follow-through, wings lifted up and back (f2-f4) instead of wrapping forward over the body; Defence holds the sword raised upright behind with the shield forward. Mesh: the sword blade was welded to the legs by weights (21 blade verts carried RightLeg/LeftLeg+foot weight, 2 blade-root seam twins carried RightUpLeg/Hips), so any sword raise tore the blade faces; both groups move to RightHand. Tear gate 651 -> 19 (worst edge 3.507 -> 2.492). 2026-10-08 check pass: head looks ahead through MoveStart/Move/MoveEnd (in flight it pitched 30 deg down at the ground at the stride ends and leaned 9 deg sideways).; 2026-11-09 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "moveWeights",
@@ -788,6 +788,22 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_archangel_pose_rot2.json",
     "sha256": "f2e02f4f32fa871376c0866bce5a1cbfed5b0990397641083221b000b554bf4c",
     "regrid": true
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_archangel_flight_weights.json",
+    "sha256": "c8b56618138b3dc2bcb693a0d9537304a722636fd8a45b96e371211eb1113450"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_archangel_flight_tracks.json",
+    "sha256": "51198307730f27260986c570a4634cfbec74a8355259e663e453bc4e538e9568"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_archangel_clip_tracks.json",
+    "sha256": "fd947a1a03c07e3ea916bc5b5f09417a8a769267262091dd77581cca61308f48"
    }
   ]
  }

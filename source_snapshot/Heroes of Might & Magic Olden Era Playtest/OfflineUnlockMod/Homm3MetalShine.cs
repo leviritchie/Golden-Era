@@ -625,7 +625,7 @@ internal static class Homm3MetalShine
 	{
 		var text = parent?[property]?.ToString();
 		return !string.IsNullOrEmpty(text)
-		       && float.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out var v)
+		       && Homm3JsonNumber.TryParseFloat(text, out var v)
 			? v
 			: fallback;
 	}

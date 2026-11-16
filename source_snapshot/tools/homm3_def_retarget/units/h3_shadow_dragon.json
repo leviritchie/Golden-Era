@@ -901,7 +901,7 @@
   "reason": "wingChain v3 Move jitter p90 0.363 (worst LeftForeArm; cap 0.35): the 4-frame DEF Move loop puts the fan's 2nd harmonic above the 4 Hz cutoff. Offline sweep on the FULL-built GLB (worker C, 2026-09-27): k 0.8 -> 0.2714 (wingRange 124.1), 0.6 -> 0.1786, 0.5 -> 0.1386, 0.4 -> 0.1031; the lightest tested k that passes with margin."
  },
  "glbPatch": {
-  "reason": "lane B 2026-10-11 authenticity: Death - the DEF shadow dragon rears, then collapses flat belly-down with the wings laid out; the capture curled onto its side (late keys hold the f2 pose, Hips pitches forward, neck forward-down, wings flat, arms forward). Move - wings swept back horizontal on the downbeat as the DEF level flight (the capture held them vertical); stretchRelax on the Death creases",
+  "reason": "lane B 2026-10-11 authenticity: Death - the DEF shadow dragon rears, then collapses flat belly-down with the wings laid out; the capture curled onto its side (late keys hold the f2 pose, Hips pitches forward, neck forward-down, wings flat, arms forward). Move - wings swept back horizontal on the downbeat as the DEF level flight (the capture held them vertical); stretchRelax on the Death creases; clip pass 2026-11-11 (user-approved candidate): AttackFront re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -914,6 +914,23 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_shadow_dragon_death_collapse_flight_wings_rot.json",
     "regrid": true,
     "sha256": "f2d508b69b83748dca54ff3e569954fddac95d58bbd2c9bd25b3b44dda145203"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_shadow_dragon_clip_repair_weights.json",
+    "sha256": "8a3b003bf8152d932fb4c04168f12ee5c14d95bfe9b8b443308d50f49434e643",
+    "note": "clip pass repair: wing membrane off Spine2"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_shadow_dragon_clip_repair_facecut.json",
+    "sha256": "01aced85a7eefd2856c29d2c106d6832713af736ee3f63ca88c98b6e22c925b6",
+    "note": "folded wing membrane welded to the flank / back"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_shadow_dragon_clip_tracks.json",
+    "sha256": "3cffda0817c8d3521d711a73f06dd5fd3f627683d2e532eb48aaa2a944b0d779"
    },
    {
     "op": "stretchRelax",

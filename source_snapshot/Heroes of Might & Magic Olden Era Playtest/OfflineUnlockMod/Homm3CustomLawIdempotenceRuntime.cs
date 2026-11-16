@@ -55,7 +55,9 @@ internal static class Homm3CustomLawIdempotenceRuntime
 			return false;
 		}
 
-		key = handlerKey
+		// Session token: reward/hero/object ids are per-map data that repeat after a save reload or a new
+		// game, and AppliedKeys lives for the whole process, so unscoped keys would refuse real grants.
+		key = "session=" + Homm3BattleUnitLawOwnerRegistry.ResolveSessionToken().ToString(CultureInfo.InvariantCulture) + "|" + handlerKey
 		      + "|law=" + lawIndex.ToString(CultureInfo.InvariantCulture)
 		      + "|rank=" + rank.ToString(CultureInfo.InvariantCulture)
 		      + "|kind=" + grantKind
@@ -126,7 +128,9 @@ internal static class Homm3CustomLawIdempotenceRuntime
 			return false;
 		}
 
-		key = handlerKey
+		// Session token: reward/hero/object ids are per-map data that repeat after a save reload or a new
+		// game, and AppliedKeys lives for the whole process, so unscoped keys would refuse real grants.
+		key = "session=" + Homm3BattleUnitLawOwnerRegistry.ResolveSessionToken().ToString(CultureInfo.InvariantCulture) + "|" + handlerKey
 		      + "|law=" + lawIndex.ToString(CultureInfo.InvariantCulture)
 		      + "|rank=" + rank.ToString(CultureInfo.InvariantCulture)
 		      + "|action=" + action

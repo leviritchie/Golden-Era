@@ -755,7 +755,7 @@
   "postReweight": []
  },
  "glbPatch": {
-  "reason": "DEF g12 attack: the serpent fly uncoils and lunges flat at the target (f3-f4), tail trailing straight behind, head forward at the target, then coils back (f5-f6); the capture lunged into depth with the head turned away from the target and the tail hanging",
+  "reason": "DEF g12 attack: the serpent fly uncoils and lunges flat at the target (f3-f4), tail trailing straight behind, head forward at the target, then coils back (f5-f6); the capture lunged into depth with the head turned away from the target and the tail hanging; 2026-11-10 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate; clip pass 2026-11-11 (user-approved candidate): Death, Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -784,6 +784,17 @@
     "op": "keyTranslations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_serpent_fly_pose_tr.json",
     "sha256": "c518fbf948b14915bbf2eed88ab5c37aa4173c4218946c48e5468a5ee53396e0"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": false,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_serpent_fly_flight_tracks.json",
+    "sha256": "b0abd7b0b03b6a3d572867ae1f5a928d89b0b823392e2c8d511c723738552ab1"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_serpent_fly_clip_tracks.json",
+    "sha256": "33dc14a923e83daa2c8c4ec24dbf9c9762f4bafa2942988959944fa868223528"
    }
   ]
  }

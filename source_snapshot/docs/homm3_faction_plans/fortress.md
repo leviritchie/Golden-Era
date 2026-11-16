@@ -102,21 +102,23 @@ Economy note: Fortress should remain wood/ore and growth oriented, with lower ra
 
 ## Laws And Faction Skill
 
-Faction skill: `Hunting Grounds` (`skill_faction_homm3_fortress`). It replaced the Swamp Tactics candidate on 2026-10-12, by user decision.
+Faction skill: `Predator Instinct` (`skill_faction_homm3_fortress`). It replaced Hunting Grounds on 2026-11-14, by user decision (Hunting Grounds had replaced the Swamp Tactics candidate on 2026-10-12).
 
-- Each battle won adds a Trophy. Lost sieges and retreats do not count.
-- The cap is 8/7/6 at Basic/Advanced/Expert. Reaching it restocks, once per week, the weekly event banks (`visitorsResetType: OnStartWeek`) the hero visited this week, by calling each bank's native `OnStartWeek`. The meter then stays capped until the week turns.
-- The enemy penalty creeps up with the Trophy count, battle-wide:
-  - Basic: -1 Initiative at 3, -1 Speed at 6.
-  - Advanced: -1 Initiative at 2, -1 Speed at 5.
-  - Expert: -1 Initiative at 2, -1 Speed at 4, -2 Initiative at 6.
-- The penalty is carried by the 21 Core hero buffs `homm3_fortress_trophies_{rank}_{n}`: `unitStat` with `receiverAllegiance: enemy`, duration `UntilNextWeek`, `isDispellable`. The skill ranks carry only the runtime-owned load shape (`ignoreFractionsCount`) and the subskills.
-- Creature dwellings are excluded. They use the weekly growth model, not visitor lists.
-- Owner: `Homm3FortressHuntingGroundsHook`. Battle wins come through the shared battle-result prefix. Visits and the week turn bind `GameSymbols.FortressHuntingGrounds`.
-- Open runtime proof:
-  - enemy-allegiance `unitStat` on hero buffs;
-  - `UntilNextWeek` expiry;
-  - bank restock visuals.
+- At the start of each battle, each melee stack of the Fortress hero's army is paired 1-to-1 with a random enemy stack, its prey. Surplus stacks on either side stay unpaired.
+- Predators deal +10/20/30% damage to their prey (Basic/Advanced/Expert), through the single committed-damage owner (`Homm3CounterattackDoctrineMutationRuntime.PrefixUnitApplyDamage`).
+- Hovering a predator stack draws a wavy blood-red line to its prey, with ground rings on both ends and drifting droplets (`Homm3FortressPredatorLine`).
+- Advanced subskills (the subskill SIDs from Hunting Grounds are reused so old saves load):
+  - Swamp Tactics (`swamp_advantage`): +10% damage on native terrain (Core `outAllDmgMod`).
+  - Intimidation (`mire_grip`): prey hit by its predator gets native Ice Bolt slow (`magic_ice_bolt_effect_0`, -3 Initiative) for 2 rounds, applied after the action ends.
+  - Endurance Hunting (`thick_hides`): ranged stacks can be predators too.
+- Expert subskills:
+  - Frenzy (`bog_ambush`): a 1-Focus army ability (`skill_faction_homm3_fortress_ability_frenzy`). Every living predator gets Haste (`magic_haste_effect_1`) for the round and is taunted by its prey. The taunt is a postfix on the native taunt check (`ezx.bjug`); it applies only while the prey is reachable this turn (`ezx.bjui`), like native taunt.
+  - Cautious (`stagnant_air`): a predator parries (counters before the attack) when its prey attacks it. Postfix on the attack builder's parry predicate (`eqd.bhqe`).
+  - Pounce (`poisoned_mire`): prey never retaliates against its predator. Prefix on the counter queue (`eqd.bhqp`) plus the damage-preview forecast (`eqd.bhqo`).
+- Visible state: predator marker battle buffs `homm3_fortress_predator_{1..3}` and the prey marker `homm3_fortress_prey`.
+- The 21 Hunting Grounds trophy hero buffs (`homm3_fortress_trophies_*`) stay in Core as hidden no-ops so old saves load.
+- Owners: `Homm3FortressPredatorInstinctRuntime` (pairing, damage percent, Intimidation, Frenzy), `Homm3FortressPredatorInstinctCombat` (Pounce, Cautious, Frenzy taunt), `Homm3FortressPredatorLine` (hover line). Pins: `GameSymbols.FortressPredatorInstinct`, static evidence in `V:\olden_port_work\predator_instinct\research_a` and `research_b`.
+- Open runtime proof: everything. Pairing at the first round start, hover flag polling, the line's look, Haste/Web buff application, parry order and counter suppression.
 
 Potential law/subskill themes, all requiring concrete design before implementation:
 

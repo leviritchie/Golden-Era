@@ -3356,36 +3356,6 @@ internal static class Homm3StrongholdTownLayersBhBuildingInitPatch
 	}
 }
 
-[HarmonyPatch(typeof(BhUIBuildingSession), nameof(BhUIBuildingSession.OnHide))]
-internal static class Homm3StrongholdTownLayersBhBuildingHidePatch
-{
-	// Runtime-disabled: broad building-card/session lifecycle resync caused post-load town-layer churn; town layers sync on town entry instead.
-	private static bool Prepare()
-	{
-		return false;
-	}
-
-	private static void Postfix()
-	{
-		Homm3StrongholdTownLayers.SyncCurrentCityLayers();
-	}
-}
-
-[HarmonyPatch(typeof(BhBuildingView), nameof(BhBuildingView.UpdateView))]
-internal static class Homm3StrongholdTownLayersBhBuildingRefreshPatch
-{
-	// Runtime-disabled: broad building-card/session lifecycle resync caused post-load town-layer churn; town layers sync on town entry instead.
-	private static bool Prepare()
-	{
-		return false;
-	}
-
-	private static void Postfix()
-	{
-		Homm3StrongholdTownLayers.SyncCurrentCityLayers();
-	}
-}
-
 // FIXME(steam: member absent from steam assemblies; keep disabled): [HarmonyPatch(typeof(Hex.Session.City.BhBuildingsManager), nameof(Hex.Session.City.BhBuildingsManager.baeq))]
 internal static class Homm3StrongholdTownLayersBhBuildingsManagerRefreshPatch
 {

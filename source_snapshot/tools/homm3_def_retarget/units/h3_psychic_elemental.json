@@ -133,5 +133,34 @@
    "minParent": 0.3,
    "reason": "lane C 2026-10-12 rig surgery: the rig is a spine chain with an upright Head, so the facing contract (lateralPair / wingPair / headAxis) could not measure Unit_Idle and freeze_slice refused the unit; a one-bone shoulder pair cut from the robe's shoulder caps (follows Spine2 rigidly, no motion change) gives it a lateralPair"
   }
- ]
+ ],
+ "glbPatch": {
+  "reason": "2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): AttackFront re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
+  "ops": [
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_psychic_elemental_move_tracks.json",
+    "sha256": "7ed9fea1f5bc4e855a31a88ffd4fac3400921a23c85a021364df082959c74545"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_psychic_elemental_clip_tracks.json",
+    "sha256": "532f258f43b720caa22fad3d1023abcfe095941c8190ee8608acf266aace24c5"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "unit pass: tear gate on the replaced Move clips"
+   }
+  ]
+ }
 }

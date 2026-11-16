@@ -3,7 +3,7 @@
     "fraction_law_homm3_tower_13": {
       "enabled": true,
       "nameText": "Reactive Wards",
-      "descriptionText": "Friendly creatures' counterattacks deal 50%/100% more damage by rank.",
+      "descriptionText": "Your creatures' counterattacks deal 4%/6% more damage for each point of your hero's Spell Power, by rank (max +60%/+100%). No bonus if the army has no hero.",
       "parametersPerLevel": [
         {
           "cost": 3,
@@ -14,7 +14,7 @@
                 "modifierSet",
                 "outDmgMods",
                 "counter_attack",
-                "0.50"
+                "0.00"
               ],
               "receivers": [
                 "h3_gremlin",
@@ -37,7 +37,7 @@
                 "modifierSet",
                 "outDmgMods",
                 "counter_attack",
-                "1.00"
+                "0.00"
               ],
               "receivers": [
                 "h3_gremlin",
@@ -52,7 +52,7 @@
           ]
         }
       ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "notes": "Runtime law 2026-11-10 (user: switch counterattack laws to runtime): the native bonus is a zero-strength loader anchor (unitStat modifierSet outDmgMods counter_attack 0.00) so Core keeps a valid law row; the effect described above is applied by the plugin (Homm3CounterattackDoctrineMutationRuntime) on native counterattacks only. Replaces the 2026-06-21 generic +50% counterattack-damage placeholder, which is removed so the two never stack. Runtime proof pending.",
       "iconNotes": "HOMM4 art-source candidate: Retribution (schools/life/retribution.jpg). Runtime icon key: fraction_law_homm3_tower_13_icon. Runtime rendering remains unproven until law-tree smoke.",
       "homm4IconLabel": "Retribution",
       "homm4IconPath": "schools/life/retribution.jpg",
@@ -61,7 +61,7 @@
     "fraction_law_homm3_tower_18": {
       "enabled": true,
       "nameText": "Automaton Phalanx",
-      "descriptionText": "Friendly creatures deal 5%/10% more melee damage and take 5%/10% less melee damage by rank.",
+      "descriptionText": "Tower creatures deal 5%/10% more melee damage and take 5%/10% less melee damage, by rank.",
       "parametersPerLevel": [
         {
           "cost": 3,
@@ -156,7 +156,7 @@
     "fraction_law_homm3_tower_19": {
       "enabled": true,
       "nameText": "Automaton Crossfire",
-      "descriptionText": "Friendly creatures deal 5%/10% more ranged damage and take 5%/10% less ranged damage by rank.",
+      "descriptionText": "Tower creatures deal 5%/10% more ranged damage and take 5%/10% less ranged damage, by rank.",
       "parametersPerLevel": [
         {
           "cost": 3,
@@ -251,7 +251,7 @@
     "fraction_law_homm3_tower_2": {
       "enabled": true,
       "nameText": "Observatory Network",
-      "descriptionText": "Tower magic guilds offer additional spell levels and open more spells for learning.",
+      "descriptionText": "Each time you build a Mage Guild level in a Tower city, 1/2 extra spells are unlocked in the Magic Observatory, by rank.",
       "parametersPerLevel": [
         {
           "cost": 4,
@@ -299,7 +299,7 @@
     "fraction_law_homm3_tower_21": {
       "enabled": true,
       "nameText": "Transmutation Ledger",
-      "descriptionText": "Gold income from your sources increases by +10% by rank.",
+      "descriptionText": "Your sources of Gold produce 10% more Gold.",
       "parametersPerLevel": [
         {
           "cost": 3,
@@ -358,7 +358,7 @@
     "fraction_law_homm3_tower_28": {
       "enabled": true,
       "nameText": "Grand Workshop",
-      "descriptionText": "Magic upgrades cost 20%/30%/40% less.",
+      "descriptionText": "Spell upgrades in the Magic Observatory cost 20%/30%/40% less Alchemical Dust, by rank.",
       "parametersPerLevel": [
         {
           "cost": 2,
@@ -447,7 +447,7 @@
     "fraction_law_homm3_tower_34": {
       "enabled": true,
       "nameText": "Overclocked Spellworks",
-      "descriptionText": "Positive effects on friendly creatures last +1 additional rounds by rank.",
+      "descriptionText": "All positive effects on Tower creatures last 1 additional round.",
       "parametersPerLevel": [
         {
           "cost": 3,
@@ -480,7 +480,7 @@
     "fraction_law_homm3_tower_6": {
       "enabled": true,
       "nameText": "Arcane Conduits",
-      "descriptionText": "Tower creatures gain Attack based on their hero's Spell Power and Defense based on their hero's Knowledge.",
+      "descriptionText": "Tower creatures gain 25% of their hero's Spell Power as Attack and 25% of their hero's Knowledge as Defense.",
       "parametersPerLevel": [
         {
           "cost": 6,
@@ -645,8 +645,8 @@
     "fraction_law_homm3_tower_27": {
       "iconNotes": "HOMM4 art-source candidate: Mass dispel (schools/order/mass_dispel.jpg). Runtime icon key: fraction_law_homm3_tower_27_icon. Runtime rendering remains unproven until law-tree smoke.",
       "enabled": true,
-      "nameText": "Formula Mastery",
-      "descriptionText": "Heroes can learn any tier of Space spells.",
+      "nameText": "High Arcana",
+      "descriptionText": "Your heroes can learn Arcane spells of every tier.",
       "parametersPerLevel": [
         {
           "cost": 3,
@@ -683,7 +683,7 @@
     "fraction_law_homm3_tower_25": {
       "enabled": true,
       "nameText": "Synchronized Response",
-      "descriptionText": "Morale trigger chance for friendly creatures increases by +1%/+2%/+3% per Morale point by rank.",
+      "descriptionText": "Tower creatures' chance to trigger Morale increases by 1%/2%/3% for each point of their Morale, by rank.",
       "parametersPerLevel": [
         {
           "cost": 1,

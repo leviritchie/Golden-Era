@@ -171,7 +171,7 @@
   ]
  },
  "glbPatch": {
-  "reason": "authenticity lane-A2 2026-10-10: DEF Death sinks onto his seat knees-up (f3-f4) and rolls back into a heap with the legs bent (f5-f8); the capture fell back as a straight-legged plank. keyRotations bend hips and knees (thighs up, shins down) from f2 on; no other clip touched.",
+  "reason": "authenticity lane-A2 2026-10-10: DEF Death sinks onto his seat knees-up (f3-f4) and rolls back into a heap with the legs bent (f5-f8); the capture fell back as a straight-legged plank. keyRotations bend hips and knees (thighs up, shins down) from f2 on; no other clip touched.; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
   "ops": [
    {
     "op": "keyRotations",
@@ -184,6 +184,27 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_giant_death2_rot.json",
     "sha256": "bbabc6b929d5a83b862f3f772a3788f9ae4e08b277890446062c97a36dbac28a",
     "regrid": true
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_giant_move_tracks.json",
+    "sha256": "9db0af40ac57a976fee7a2f9947cc210032edf49b792a9bf3a7a3456ff6aaef5"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_giant_clip_tracks.json",
+    "sha256": "91278e82a2f5b04f672879cda99b3948993a4b4765aa037a42c02e0bb6c7f7f7"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
    }
   ]
  }

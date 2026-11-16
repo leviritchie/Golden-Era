@@ -17,6 +17,20 @@ internal static class Homm3SwashbucklerGoldHook
 	private static bool _registered;
 	private static ManualLogSource _log;
 	private static readonly System.Collections.Generic.Dictionary<(IntPtr session, int side), int> _lastGrantDayBySide = new();
+	// Live data sides by index, recorded at each side's day start: a fallback for features that must reach a hero's
+	// side resources mid-turn (War Captives Ransom/Recruit) when the logic-hero -> data-root path is unreadable.
+	private static readonly System.Collections.Generic.Dictionary<int, Side> _sidesByIndex = new();
+
+	internal static bool TryGetDayStartSide(int sideIndex, out Side side)
+	{
+		lock (_sidesByIndex)
+		{
+			if (_sidesByIndex.TryGetValue(sideIndex, out side) && side != null && side.Pointer != IntPtr.Zero && side.index == sideIndex)
+				return true;
+		}
+		side = null;
+		return false;
+	}
 	private static PropertyInfo _sideDataProperty;
 	private static MemberInfo _sideResourceMember;
 	private static PropertyInfo _sideHeroListProperty;
@@ -37,6 +51,7 @@ internal static class Homm3SwashbucklerGoldHook
 	private static MethodInfo _addResourceMethod;
 	private static int _loggedGrants;
 	private static int _loggedSkips;
+	private static int _loggedDayStarts;
 	private static readonly System.Collections.Generic.List<(string Owner, Func<object, int> Gold)> _dayStartHeroConsumers = new();
 
 	/// <summary>
@@ -60,6 +75,122 @@ internal static class Homm3SwashbucklerGoldHook
 				}
 			}
 			_dayStartHeroConsumers.Add((owner, consumer));
+		}
+		return true;
+	}
+
+	private static readonly System.Collections.Generic.Dictionary<int, object> _sideLogicByIndex = new();
+	private static readonly System.Collections.Generic.List<(string Owner, Func<object, (int Gold, string Label)> Forecast)> _dayStartHeroForecasts = new();
+
+	/// <summary>
+	/// Side-effect-free twin of a day-start consumer, for the gold-hover income preview: given the same hero-list entry,
+	/// returns the gold the consumer would add next day start and a short label ("Enslaved captives (Hero)"). It must not
+	/// change any state; a forecast that throws is left out of the preview.
+	/// </summary>
+	internal static bool TryRegisterDayStartHeroForecast(string owner, Func<object, (int Gold, string Label)> forecast, out string failure)
+	{
+		failure = !_registered ? "day-start hook not registered" : forecast == null ? "forecast is null" : null;
+		if (failure != null)
+			return false;
+		lock (_dayStartHeroForecasts)
+		{
+			foreach (var existing in _dayStartHeroForecasts)
+			{
+				if (string.Equals(existing.Owner, owner, StringComparison.Ordinal))
+				{
+					failure = "owner " + owner + " already registered";
+					return false;
+				}
+			}
+			_dayStartHeroForecasts.Add((owner, forecast));
+		}
+		return true;
+	}
+
+	/// <summary>
+	/// The mod's custom gold the local side gets at its next day start (Swashbucklers + every registered forecast),
+	/// one line per source and hero. Needs one day start this session to know the side logic (none on day 1).
+	/// </summary>
+	internal static bool TryForecastLocalCustomGold(out System.Collections.Generic.List<(string Label, int Gold)> lines, out string failure)
+	{
+		lines = new System.Collections.Generic.List<(string Label, int Gold)>();
+		failure = null;
+		if (!_registered)
+		{
+			failure = "day-start hook not registered";
+			return false;
+		}
+		object anySideLogic = null;
+		lock (_sideLogicByIndex)
+		{
+			foreach (var pair in _sideLogicByIndex)
+			{
+				anySideLogic = pair.Value;
+				break;
+			}
+		}
+		if (anySideLogic == null)
+		{
+			failure = "no side day start seen yet this session";
+			return false;
+		}
+		var sessionLogic = GetMemberValue(anySideLogic, _sessionManagerMember);
+		var data = sessionLogic == null ? null : _sessionDataProperty.GetValue(sessionLogic) as Data;
+		// The cache outlives a load/new game; only trust it when it belongs to the current session root.
+		string keyFailure = null;
+		long currentKey = 0;
+		if (data == null
+		    || !Homm3SessionIdentity.TryResolveSessionDataKey(out currentKey, out keyFailure)
+		    || !Homm3DirectStateIdentity.TryResolveKey(data, out var cachedKey, out _)
+		    || cachedKey != currentKey)
+		{
+			failure = "no day start seen in this session yet" + (keyFailure == null ? "" : " (" + keyFailure + ")");
+			return false;
+		}
+		var sides = data.sides;
+		if (sides == null)
+		{
+			failure = "session sides unreadable";
+			return false;
+		}
+		var localIndex = sides.myIndex;
+		object sideLogic;
+		lock (_sideLogicByIndex)
+		{
+			if (!_sideLogicByIndex.TryGetValue(localIndex, out sideLogic) || sideLogic == null)
+			{
+				failure = "local side " + localIndex + " has had no day start yet";
+				return false;
+			}
+		}
+		var stacks = CountSwashbucklers(sideLogic, out _, out _);
+		if (stacks > 0)
+			lines.Add(("Swashbucklers x" + stacks, checked(stacks * GoldPerUnit)));
+		System.Collections.Generic.List<(string Owner, Func<object, (int Gold, string Label)> Forecast)> forecasts;
+		lock (_dayStartHeroForecasts)
+			forecasts = new System.Collections.Generic.List<(string Owner, Func<object, (int Gold, string Label)> Forecast)>(_dayStartHeroForecasts);
+		if (forecasts.Count == 0)
+			return true;
+		var heroes = _sideHeroListProperty.GetValue(sideLogic);
+		if (!TryEnumerateList(heroes, out var enumerable))
+			return true;
+		foreach (var entry in enumerable)
+		{
+			if (!IsActiveHero(ResolveHeroFromListEntry(entry)))
+				continue;
+			foreach (var forecast in forecasts)
+			{
+				try
+				{
+					var (gold, label) = forecast.Forecast(entry);
+					if (gold > 0)
+						lines.Add((string.IsNullOrEmpty(label) ? forecast.Owner : label, gold));
+				}
+				catch (Exception ex)
+				{
+					LogSkip(forecast.Owner + " income forecast failed: " + ex.GetBaseException().Message);
+				}
+			}
 		}
 		return true;
 	}
@@ -667,6 +798,13 @@ internal static class Homm3SwashbucklerGoldHook
 			}
 
 			var side = _sideDataProperty.GetValue(__instance) as Side;
+			if (side != null)
+			{
+				lock (_sidesByIndex)
+					_sidesByIndex[side.index] = side;
+				lock (_sideLogicByIndex)
+					_sideLogicByIndex[side.index] = __instance;
+			}
 			if (side == null || side.status != Side.EStatus.Life)
 				return;
 
@@ -684,6 +822,11 @@ internal static class Homm3SwashbucklerGoldHook
 
 			var stacks = CountSwashbucklers(__instance, out var heroes, out var slots);
 			var extra = SumConsumerGold(__instance, out var extraDetail);
+			// Proof the side day-start fires on this build even when nothing is owed (2026-11-13: a Gold Producer
+			// graft showed no gold and the log could not say whether the hook ran).
+			if (_loggedDayStarts++ < 24)
+				_log?.LogInfo("HoMM3 Swashbuckler gold: day-start side=" + side.index + " day=" + currentDay + " swashbucklers=" + stacks + " extra=" + extra
+					+ (extraDetail.Length == 0 ? "" : " (" + extraDetail.Trim() + ")") + ".");
 			if (stacks <= 0 && extra <= 0)
 				return;
 
@@ -825,6 +968,30 @@ internal static class Homm3SwashbucklerGoldHook
 		catch { return 0; }
 	}
 
+	/// <summary>
+	/// The session day read through the side logic last seen at that side's day start (Conflux Elemental Fusion's
+	/// once-per-day guard). False when that side has not had a day start this session or the day is unreadable.
+	/// </summary>
+	internal static bool TryReadSessionDay(int sideIndex, out int day)
+	{
+		day = -1;
+		object sideLogic;
+		lock (_sideLogicByIndex)
+		{
+			if (!_sideLogicByIndex.TryGetValue(sideIndex, out sideLogic) || sideLogic == null)
+				return false;
+		}
+		try
+		{
+			return TryReadCurrentDay(sideLogic, out day, out _);
+		}
+		catch
+		{
+			day = -1;
+			return false;
+		}
+	}
+
 	private static bool TryReadCurrentDay(object sideLogic, out int day, out IntPtr sessionKey)
 	{
 		day = -1;
@@ -918,10 +1085,37 @@ internal static class Homm3SwashbucklerGoldHook
 		return null;
 	}
 
+	/// <summary>
+	/// Interop Il2CppSystem.Collections.Generic.List&lt;T&gt; derives only from Il2CppSystem.Object (no managed
+	/// IEnumerable), so `as IEnumerable` was always null for the side hero list and the party units: Swashbuckler gold,
+	/// Artificing graft gold and the map graft buffs all silently read an empty army (2026-11-13 static trace). Managed
+	/// collections and Il2Cpp arrays still enumerate directly; anything else goes through Count/Length + get_Item(int).
+	/// </summary>
 	private static bool TryEnumerateList(object list, out IEnumerable enumerable)
 	{
-		enumerable = list as IEnumerable;
-		return enumerable != null;
+		enumerable = null;
+		if (list == null)
+			return false;
+		if (list is IEnumerable direct)
+		{
+			enumerable = direct;
+			return true;
+		}
+		const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+		var type = list.GetType();
+		var countProperty = type.GetProperty("Count", flags) ?? type.GetProperty("Length", flags);
+		var indexer = type.GetMethod("get_Item", flags, null, new[] { typeof(int) }, null);
+		if (countProperty == null || indexer == null)
+			return false;
+		enumerable = EnumerateIndexed(list, countProperty, indexer);
+		return true;
+	}
+
+	private static IEnumerable EnumerateIndexed(object list, PropertyInfo countProperty, MethodInfo indexer)
+	{
+		var count = Convert.ToInt32(countProperty.GetValue(list));
+		for (var i = 0; i < count; i++)
+			yield return indexer.Invoke(list, new object[] { i });
 	}
 
 	private static bool IsActiveHero(object hero)

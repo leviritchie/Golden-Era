@@ -1028,7 +1028,7 @@
   "reason": "Fortress pass 2026-09-28 at the adopted multi_headed_reptile 2.6: default 0.15 fails the stride gate (slip 0.853, ratio 1.157, cadence 1.6 cap; fleet_rebuild gate regression stride:slip). Scratch sweep of the canonical .blend export (artifacts/claude_takeover_20260927/fortress/sweep/h3_ruinous_hydra): 0.20 slip 0.562 ratio 1.155, ground ok, no Move/stride/articulation faults; 0.25 0.545; 0.30 0.528; 0.35 0.509. 0.20 is the smallest drop that passes."
  },
  "glbPatch": {
-  "reason": "DEF g12 attack: the hydra rears its necks up tall (f3-f6), then throws the whole body low and forward at the target, heads striking flat (f7-f12), then recoils; DEF g04 defence: the necks rise straight up and back (f2-f7); the capture barely moved in both",
+  "reason": "DEF g12 attack: the hydra rears its necks up tall (f3-f6), then throws the whole body low and forward at the target, heads striking flat (f7-f12), then recoils; DEF g04 defence: the necks rise straight up and back (f2-f7); the capture barely moved in both; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass",
   "ops": [
    {
     "op": "setWeights",
@@ -1057,6 +1057,11 @@
     "op": "keyTranslations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_ruinous_hydra_pose_tr.json",
     "sha256": "98f0984667f1cda59e1d15b85b00f122447766711802c5a718b0ef69ec840e3a"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_ruinous_hydra_move_tracks.json",
+    "sha256": "f7e8d7f7fab240b15a8d45ba3831ab412fd0309c388ec70164c77b47162c62ec"
    },
    {
     "op": "stretchRelax",

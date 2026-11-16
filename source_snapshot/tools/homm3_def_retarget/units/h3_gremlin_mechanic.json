@@ -228,7 +228,7 @@
  ],
  "armStripReason": "authenticity lane-A 2026-10-10: bone heat welded the back of each sleeve to the robe behind it (vertices half forearm, half Hips/Spine/UpLeg), so raising the free arm (Hitted fling, Death) ripped the robe back (+280 torn edges). Inside these spheres (Blender axes) robe vertices with under 0.8 arm share lose the arm chain and the sleeve/robe contact is split open.",
  "glbPatch": {
-  "reason": "authenticity lane-A 2026-10-10: DEF Death swings the ball overhead and crumples into a heap under it; Hitted flings the free arm up over the head. Death keeps the v1 legs-down crumple (no backward roll) and now pitches the Hips back at f3-f4 so the body lies flat instead of standing as a long diagonal tip, with the knees folded under (f3-f4) and the ball arm thrown out (f2-f5). Hitted: LeftArm/LeftForeArm fling up over the head (f2-f6) instead of hanging low. keyRotations half offset applied twice + Hips keyTranslations; stretchRelax on Hitted/Death strain-limits the sleeve on the new armStrip base. f5-f8 (v3): Hips and Spine held to their f4 lying-flat world rotation with the knees folded, so the body settles into the DEF's low heap under the ball instead of flipping head-down with the legs up (the old f5 tall blob). teardiag PASS 2049 -> 1664.",
+  "reason": "authenticity lane-A 2026-10-10: DEF Death swings the ball overhead and crumples into a heap under it; Hitted flings the free arm up over the head. Death keeps the v1 legs-down crumple (no backward roll) and now pitches the Hips back at f3-f4 so the body lies flat instead of standing as a long diagonal tip, with the knees folded under (f3-f4) and the ball arm thrown out (f2-f5). Hitted: LeftArm/LeftForeArm fling up over the head (f2-f6) instead of hanging low. keyRotations half offset applied twice + Hips keyTranslations; stretchRelax on Hitted/Death strain-limits the sleeve on the new armStrip base. f5-f8 (v3): Hips and Spine held to their f4 lying-flat world rotation with the knees folded, so the body settles into the DEF's low heap under the ball instead of flipping head-down with the legs up (the old f5 tall blob). teardiag PASS 2049 -> 1664.; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -250,6 +250,16 @@
     "sha256": "17d847cbed338e6297b675a0e78a2c86e47b707db53d4308509dc4f506f0d1d3",
     "regrid": true,
     "note": "Death crouch sink"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gremlin_mechanic_move_tracks.json",
+    "sha256": "8f9e67b45e5d6f68298b0736684496ac78155ea57c5adea9346f72b53d1a393d"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_gremlin_mechanic_clip_tracks.json",
+    "sha256": "634d026cd810ba694504eed8023b22d36ce0a9cb6e648fc52049dcbcc4814f33"
    },
    {
     "op": "stretchRelax",

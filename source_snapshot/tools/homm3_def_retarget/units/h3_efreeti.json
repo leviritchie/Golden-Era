@@ -104,7 +104,7 @@
   "start": 2
  },
  "glbPatch": {
-  "reason": "DEF g12 fire punch: AttackFront raises both hands overhead in the wind-up (f1-f2), then thrusts both arms straight forward with the body held near upright (hold Hips partly at the clip's first pose; the capture tipped the whole body ~30 deg forward instead of thrusting the arms). stretchRelax evens the armpit/elbow edges of the overhead raise.",
+  "reason": "DEF g12 fire punch: AttackFront raises both hands overhead in the wind-up (f1-f2), then thrusts both arms straight forward with the body held near upright (hold Hips partly at the clip's first pose; the capture tipped the whole body ~30 deg forward instead of thrusting the arms). stretchRelax evens the armpit/elbow edges of the overhead raise.; 2026-11-10 unit pass (user-approved candidate, rig / mesh repair): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass, with the candidate's added joints and face cuts; clip pass 2026-11-11 (user-approved candidate): Idle, Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -117,6 +117,28 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_efreeti_punch_rot.json",
     "sha256": "a889f11b9d501cc0e0b7c39d17b7a2dda62f591443abe0354ca034393be64ad5",
     "regrid": true
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreeti_move_joints.json",
+    "sha256": "3a12b49bed71a40892802ba253592b5aa60e764a4af63a53de30f87a08b1459d",
+    "note": "unit pass: 4 joints the candidate's Move needs (mover_floatA)"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreeti_move_weights.json",
+    "sha256": "4a09e21a3b16c98c9ead67726f2fad76362a3657a50aea785971e9b029bc6fde"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreeti_move_tracks.json",
+    "sha256": "e2152366116a8ca45b6aebf8e4be63b8508b04aa9ca1c4226263fc6a4cd55420"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreeti_clip_tracks.json",
+    "sha256": "eed37c9f28eadfb2fd48c519c75201d681e2c3c78671714d18425849f166e3d8"
    },
    {
     "op": "stretchRelax",

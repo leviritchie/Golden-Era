@@ -1,14 +1,16 @@
-"""Render approval mockups of the shared hero-skill meter (Dungeon Captives, Fortress Hunting Grounds) next to the
-vanilla necromancy meter, without launching the game.
+"""Render approval mockups of the shared hero-skill meter (Fortress Hunting Grounds) next to the vanilla necromancy
+meter, without launching the game. (The Dungeon Captives meter was retired with War Captives on 2026-11-14; its
+choice window has its own mockup, tools/dungeon_war_captives/window_mockup.py. The Fortress Hunting Grounds meter was
+retired with Predator Instinct on 2026-11-14, so main() no longer renders; the shared helpers below - parse_class,
+parse_tmp_font, SdfFont, caption, tooltip - are still imported by the Captives and Artificing mockups.)
 
 Single sources of truth (nothing is re-typed here):
   * meter geometry / stacking / tick style: parsed from Homm3HeroSkillMeterLayout in
     Heroes of Might & Magic Olden Era Playtest/OfflineUnlockMod/Homm3HeroSkillMeterHud.cs
     (values copied there from level12 CanvasHeroHUDPanel / HERO VIEW HUD / ContainerEnergy)
-  * per-skill icon / fill colour / tooltip colours: Layout classes in Homm3DungeonCaptivesHud.cs and
-    Homm3FortressHuntingGroundsMeter.cs; Fortress milestones parsed from the C# table and asserted equal to
+  * per-skill icon / fill colour / tooltip colours: the Layout class in Homm3FortressHuntingGroundsMeter.cs; Fortress milestones parsed from the C# table and asserted equal to
     HOMM3_FORTRESS_HUNTING_GROUNDS_MILESTONES / CAPS in tools/release_port/apply_release_core_overlay.py
-  * Captives numbers: Homm3DungeonCaptivesRuntime.cs; text: Python mirrors of the C# tooltip builders
+  * text: Python mirrors of the C# tooltip builders
   * sprites: the vanilla meter's own sprites (housing HUD_DownBar_Frame_HeroPortret_Back_WithEnergy, fill
     ProgressBar_FractionEnergi, skull Icon_Stats_Necromancy_Activ), the tooltip plate littlr_tooltip 2 and the
     vanilla necromancer portrait, exported read-only from the installed game (UnityPy); fill recoloured exactly
@@ -33,10 +35,8 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[1]
 MOD = ROOT / "Heroes of Might & Magic Olden Era Playtest" / "OfflineUnlockMod"
 METER_CS = MOD / "Homm3HeroSkillMeterHud.cs"
-CAPTIVES_CS = MOD / "Homm3DungeonCaptivesHud.cs"
 FORTRESS_CS = MOD / "Homm3FortressHuntingGroundsMeter.cs"
 FORTRESS_HOOK_CS = MOD / "Homm3FortressHuntingGroundsHook.cs"
-RUNTIME_CS = MOD / "Homm3DungeonCaptivesRuntime.cs"
 PORTRAITS = MOD / "homm3_hero_portraits_upscaled"
 SKILL_ICON_DIR = MOD / "homm3_skill_icons"
 GAME_DATA = Path("V:/SteamLibrary/steamapps/common/Heroes of Might and Magic Olden Era - Golden Era/HeroesOldenEra_Data")
@@ -93,50 +93,8 @@ def parse_fortress_milestones() -> tuple[dict, dict]:
     return ms, caps
 
 
-def parse_runtime() -> dict:
-    text = RUNTIME_CS.read_text(encoding="utf-8")
-    arr = lambda n: [float(v) for v in re.search(n + r"\s*=\s*\{([^}]*)\}", text).group(1).split(",")]  # noqa: E731
-    const = lambda n: float(re.search(n + r" = ([\d.]+);", text).group(1))  # noqa: E731
-    return {"tiers": [int(v) for v in arr("TierThresholds")], "xp": arr("ExecuteXpPerStrength"), "gold": arr("RansomGoldPerStrength"),
-            "slave": const("SlaveMarketsGoldMultiplier"), "mana": const("InterrogationManaPerXp"), "cells": const("DungeonCellsTierStrengthMultiplier")}
-
-
 def n0(v: int) -> str:
     return f"{v:,}"
-
-
-def captives(rt, strength, squads, rank, interrogation=False, slave=False, cells=False) -> dict:
-    """Mirror of Homm3DungeonCaptivesRuntime.BuildUiSnapshot (cumulative fill = effective / next)."""
-    eff = round(strength * (rt["cells"] if cells else 1.0))
-    tier = 0 if strength <= 0 else sum(1 for t in rt["tiers"] if eff >= t)
-    nxt = 0 if tier >= len(rt["tiers"]) else rt["tiers"][tier]
-    xp = round(strength * rt["xp"][rank - 1]) if rank > 0 else 0
-    return {"Squads": squads, "Strength": strength, "Eff": eff, "Tier": tier, "Next": nxt, "Fill": 1.0 if nxt == 0 else min(1.0, eff / nxt),
-            "Xp": xp, "Mana": round(xp * rt["mana"]) if rank > 0 and interrogation else 0,
-            "Gold": round(strength * rt["gold"][rank - 1] * (rt["slave"] if slave else 1.0)) if rank > 0 else 0,
-            "Rank": rank, "Cells": cells, "Slave": slave}
-
-
-def captives_tooltip(C, s) -> str:
-    """Mirror of Homm3DungeonCaptivesUi.BuildMeterTooltip."""
-    h, note = C["TooltipHeadingColor"], C["TooltipNoteColor"]
-    out = f"<color={h}>Captives</color>\n"
-    if s["Strength"] <= 0:
-        out += "No captives held. Let fleeing enemy squads go to capture them."
-    else:
-        out += f"{s['Squads']}{' squad, ' if s['Squads'] == 1 else ' squads, '}{n0(s['Strength'])} strength"
-        if s["Cells"]:
-            out += f" ({n0(s['Eff'])} with Dungeon Cells)"
-    out += "\n" + (f"Tier {s['Tier']}: +{s['Tier']} Attack, +{s['Tier']} Defense" if s["Tier"] > 0 else "No tier bonus yet") + "\n"
-    out += f"Next: Tier {s['Tier'] + 1} at {n0(s['Next'])} ({n0(s['Eff'])} / {n0(s['Next'])})" if s["Next"] > 0 else "Maximum tier"
-    if s["Rank"] > 0 and s["Strength"] > 0:
-        out += f"\n<color={h}>Cast now</color>\nExecute: +{n0(s['Xp'])} XP"
-        if s["Mana"] > 0:
-            out += f", +{n0(s['Mana'])} mana <color={note}>(Interrogation)</color>"
-        out += f"\nRansom: +{n0(s['Gold'])} gold"
-        if s["Slave"]:
-            out += f" <color={note}>(Slave Markets +25%)</color>"
-    return out
 
 
 def penalty_text(ini, spd) -> str:
@@ -457,23 +415,23 @@ def label(img, text, xy, size=15):
 
 
 def main() -> int:
+    if not FORTRESS_CS.exists():
+        print("Fortress Hunting Grounds meter retired (Predator Instinct, 2026-11-14); no meter mockup to render.")
+        return 0
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", type=Path, default=Path("V:/tmp/ui_meter_v3"))
     args = ap.parse_args()
     out: Path = args.out
     out.mkdir(parents=True, exist_ok=True)
     L = parse_class(METER_CS, "internal static class Homm3HeroSkillMeterLayout")
-    C = parse_class(CAPTIVES_CS, "internal static class Layout")
     F = parse_class(FORTRESS_CS, "internal static class Layout")
     ms, caps = parse_fortress_milestones()
-    rt = parse_runtime()
     meta = export_assets(out / "assets", [V_BACK, V_FILL, V_ICON, V_PORTRAIT, PLATE, SEPARATOR])
     spr = {n: Image.open(out / "assets" / m["file"]).convert("RGBA") for n, m in meta.items()}
     plate = {"img": spr[PLATE], "meta": meta[PLATE]}
     font = SdfFont(out / "assets")
     meter = Meter(L, spr)
     icon = lambda key: Image.open(SKILL_ICON_DIR / f"{key}.png").convert("RGBA")  # noqa: E731
-    p_dungeon = Image.open(PORTRAITS / "homm3_dungeon_hero_15.png").convert("RGBA")
     p_fortress = Image.open(PORTRAITS / "homm3_fortress_hero_1.png").convert("RGBA")
     p_necro = spr[V_PORTRAIT]
     cx, cy = HERO_VIEW
@@ -498,7 +456,6 @@ def main() -> int:
         img.alpha_composite(t, (x, y))
         return img, (x, y, x + t.width, y + t.height)
 
-    cap_main = captives(rt, 7400, 3, 2, interrogation=True)
     fort_main = fortress(F, ms, caps, 2, 4)
     vanilla = dict(fill=0.62, color=None, icon=spr[V_ICON])
     zoom_box = (250, 545, 520, 720)
@@ -511,21 +468,6 @@ def main() -> int:
         "Vanilla hover: native BhTooltips single-text tooltip snapped Left (Necromantic Energy + mode + '(Shift) for raising info'); the skull socket is a button toggling Raising Undead / Restoring Energy.",
     ]).save(out / "01_vanilla_necromancy_meter_reference_720p.png")
     zv = zoom(img, zoom_box)
-
-    # 02 Captives on the Dungeon hero.
-    cap_draw = lambda s, slot=0: dict(fill=s["Fill"], color=C["FillColor"], icon=icon(C["IconKey"]), slot=slot)  # noqa: E731
-    img, r = scene(p_dungeon, [cap_draw(cap_main)])
-    zc = zoom(img, zoom_box)
-    caption(img, [
-        f"DUNGEON CAPTIVES meter at true size: same housing/fill/socket sprites and rects as vanilla; fill recoloured {C['FillColor'][:3]}, socket icon {C['IconKey']} (also the tier buffs' icon).",
-        f"State: Advanced Captives + Interrogation, 3 squads 7,400 strength: fill = 7,400 / 12,000 = {cap_main['Fill']:.2f} (cumulative, equals the hover numbers). No text on screen.",
-        f"Meter rect x{r[0][0]:.0f}-{r[0][2]:.0f} y{r[0][1]:.0f}-{r[0][3]:.0f}. Background: real capture run4_s10.png, portrait HoMM3 Dungeon hero 15.",
-    ]).save(out / "02_dungeon_captives_meter_720p.png")
-    tip_img, tr = with_tip(img.crop((0, 0, 1280, 720)).copy(), r[0], captives_tooltip(C, cap_main))
-    caption(tip_img, [
-        "Captives hover at true size: native BhTooltips single-text tooltip (Method_Public_Void_String_RectTransform_ESnapDirection_Boolean_1, snap Left), the same call vanilla Show makes.",
-        "Plate littlr_tooltip 2 + Amrys font as the native tooltip; the exact inner padding and the native clamp when Left would leave the screen are approximate.",
-    ]).save(out / "03_dungeon_captives_hover_720p.png")
 
     # 04 Fortress Hunting Grounds.
     fort_draw = lambda st, slot=0: dict(fill=st["Fill"], color=F["SpentFillColor"] if st["Spent"] else F["FillColor"], icon=icon(st["Icon"]),  # noqa: E731
@@ -543,9 +485,6 @@ def main() -> int:
 
     # 06 states sheet (3x zoom of true-size renders).
     tiles = [("vanilla necromancy (reference)", zv)]
-    for name, s in (("Captives: none held", captives(rt, 0, 0, 2)), ("Captives: 1,300 -> tier 1 at 2,000", captives(rt, 1300, 1, 1)),
-                    ("Captives: 7,400 / 12,000 (tier 2)", cap_main), ("Captives: max tier", captives(rt, 41000, 14, 3))):
-        tiles.append((name, zoom(scene(p_dungeon, [cap_draw(s)])[0], zoom_box)))
     for name, st in (("Hunting Grounds: Expert 0/6", fortress(F, ms, caps, 3, 0)), ("Hunting Grounds: Basic 3/8", fortress(F, ms, caps, 1, 3)),
                      ("Hunting Grounds: Advanced 5/7", fortress(F, ms, caps, 2, 5)), ("Hunting Grounds: Expert 6/6 restock used", fortress(F, ms, caps, 3, 6))):
         tiles.append((name, zoom(scene(p_fortress, [fort_draw(st)])[0], zoom_box)))
@@ -559,23 +498,23 @@ def main() -> int:
     caption(sheet, ["All states, 3x zoom of the true-size 720p renders (resampled, not re-rendered). Same sprites, rects and fill maths as Homm3HeroSkillMeterHud; tile 1 = vanilla."], 16).save(
         out / "06_meter_states_zoom_3x.png")
 
-    # 07 stacking: Dungeon hero who also learned Necromancy -> vanilla stays in place, ours moves out by StackOffsetX.
-    img, r = scene(p_dungeon, [vanilla, cap_draw(cap_main, slot=1)])
+    # 07 stacking: Fortress hero who also learned Necromancy -> vanilla stays in place, ours moves out by StackOffsetX.
+    img, r = scene(p_fortress, [vanilla, fort_draw(fort_main, slot=1)])
     zs = zoom(img, (200, 545, 520, 720))
     caption(zs, [
         "Stacking (3x): a hero showing the vanilla necromancy meter AND a mod meter. Vanilla keeps slot 0;",
-        f"mod meters take the next slots, StackOffsetX {L['StackOffsetX']:.0f} canvas units each (order: Captives 10, Hunting Grounds 20).",
+        f"mod meters take the next slots, StackOffsetX {L['StackOffsetX']:.0f} canvas units each (Hunting Grounds order 20).",
         f"Mod meter rect at 720p: x{r[1][0]:.0f}-{r[1][2]:.0f}. It covers part of the faction ornament left of the ring",
         "(the vanilla meter does the same at slot 0).",
     ], 16).save(out / "07_stacking_with_vanilla_meter_zoom_3x.png")
 
-    # 08 side by side: vanilla | Captives | Hunting Grounds.
-    side = Image.new("RGBA", (3 * zv.width + 40, zv.height + 10), (16, 16, 20, 255))
-    for i, (name, t) in enumerate((("vanilla necromancy", zv), ("Dungeon Captives", zc), ("Fortress Hunting Grounds", zf))):
+    # 08 side by side: vanilla | Hunting Grounds.
+    side = Image.new("RGBA", (2 * zv.width + 30, zv.height + 10), (16, 16, 20, 255))
+    for i, (name, t) in enumerate((("vanilla necromancy", zv), ("Fortress Hunting Grounds", zf))):
         side.alpha_composite(t, (10 + i * (zv.width + 10), 5))
         label(side, name, (20 + i * (zv.width + 10), 12), 20)
     caption(side, ["Side by side, 3x zoom of the true-size renders: same size and visual language as the vanilla meter; only the fill colour, socket icon and (Fortress) ticks differ."], 16).save(
-        out / "08_side_by_side_vanilla_captives_hunting_zoom_3x.png")
+        out / "08_side_by_side_vanilla_hunting_zoom_3x.png")
 
     if font.missing:
         print("WARNING: glyphs missing from Amrys EN-Regular:", sorted(font.missing))

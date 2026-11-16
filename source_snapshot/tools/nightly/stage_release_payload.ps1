@@ -7,7 +7,7 @@
   This is the v0.1.319 release recipe as a parameterised script. It started as
   tools/release_installer/refresh_official_deobf_release_inputs.ps1 plus the one-off deltas the
   v0.1.319 release applied by hand:
-    - Clean Core pin: Steam build 25672315 (depot 3105441 manifest 7750145598966689713).
+    - Clean Core pin: Steam build 26615913 (depot 3105441 manifest 2034879257573334098).
     - homm3ImportPreviewHooks and homm3ReleaseMapSquadVisualController keep their installed values.
     - Bug reporting keeps the installed values (user-approved 2026-10-05). The gate asserts only the
       shape: modBugReporting=true and an Apps Script /exec endpoint. No endpoint is stored here.
@@ -24,7 +24,7 @@
       or secret in text files and in the two first-party DLLs.
 
   Inputs are read only: the Golden Era install (plugin folder, BepInEx core, Doorstop, modded
-  Core.zip, Unity data, StreamingAssets) and the clean Core.zip from the 25672315 mirror.
+  Core.zip, Unity data, StreamingAssets) and the clean Core.zip from the 26615913 mirror.
   The only file taken from the build of -Ref is the plugin DLL (-PluginDllOverride). Everything else
   is the content deployed to the Golden Era install, which is what the release recipe ships.
 
@@ -59,9 +59,9 @@ $PayloadStreaming = Join-Path $StageRoot 'payload\streaming_assets'
 $OverlayDir = Join-Path $StageRoot 'core_overlay'
 $LiveParityStager = Join-Path $ToolsDir 'stage_golden_era_live_parity_payload.py'
 
-# Steam build 25672315 clean Core.zip (depot 3105441 manifest 7750145598966689713).
-$PinnedCleanCoreSha256 = 'f11b90c19aae60908a4d503e639f2abf7a02c5d706cdb072879ef9773812d954'
-$PinnedCleanCoreBytes = [int64]12962693
+# Steam build 26615913 clean Core.zip (depot 3105441 manifest 2034879257573334098).
+$PinnedCleanCoreSha256 = '7d64afda8e11f9011c9c37d2358d919e7230718f7695cb6aa1907beca94c616f'
+$PinnedCleanCoreBytes = [int64]13162750
 
 $ReleaseCandidateFalseConfigKeys = @(
     'portSmokeProfile',
@@ -276,7 +276,7 @@ function Assert-PinnedCleanCore($CoreZip) {
     $item = Get-Item -LiteralPath $CoreZip
     $actualHash = (Get-FileHash -LiteralPath $CoreZip -Algorithm SHA256).Hash.ToLowerInvariant()
     if ([int64]$item.Length -ne $PinnedCleanCoreBytes -or $actualHash -ne $PinnedCleanCoreSha256) {
-        throw "CleanReleaseCore is not the pinned build 25672315 Core.zip (expected $PinnedCleanCoreSha256 / $PinnedCleanCoreBytes bytes, got $actualHash / $($item.Length) bytes): $CoreZip"
+        throw "CleanReleaseCore is not the pinned build 26615913 Core.zip (expected $PinnedCleanCoreSha256 / $PinnedCleanCoreBytes bytes, got $actualHash / $($item.Length) bytes): $CoreZip"
     }
 }
 
@@ -284,7 +284,7 @@ function Assert-OverlayMatchesPinnedCleanCore($OverlayManifestPath) {
     Require-Path $OverlayManifestPath "Overlay manifest was not found: $OverlayManifestPath"
     $manifest = Get-Content -LiteralPath $OverlayManifestPath -Raw -Encoding UTF8 | ConvertFrom-Json -DateKind String
     if ([string]$manifest.vanillaCore.sha256 -ne $PinnedCleanCoreSha256 -or [int64]$manifest.vanillaCore.size -ne $PinnedCleanCoreBytes) {
-        throw "Exported core_overlay vanillaCore does not match the pinned build 25672315 Core.zip ($($manifest.vanillaCore.sha256) / $($manifest.vanillaCore.size))."
+        throw "Exported core_overlay vanillaCore does not match the pinned build 26615913 Core.zip ($($manifest.vanillaCore.sha256) / $($manifest.vanillaCore.size))."
     }
     return @($manifest.operations).Count
 }
@@ -320,16 +320,37 @@ function Test-Homm3ImportBundleManifestCoverage($PayloadPlugin, $BundleName, $La
     return $text.Contains($labRoot + "battle.prefab") -and $text.Contains($labRoot + "Generated/BillboardAnim/Materials/homm3_frame_")
 }
 
-function Test-OwnedSkinnedCoverage($PayloadPlugin, $Entry, $BundleName) {
-    # Approved for v0.1.319 (3D-only neutrals): both prefabs are the owned-skinned prefab and the bundle ships.
-    $suffix = '/OwnedSkinned/owned_skinned.prefab'
-    foreach ($prop in 'battlePrefabAssetPath', 'mapPrefabAssetPath') {
-        if (-not ($Entry.PSObject.Properties.Name -contains $prop)) { return $false }
-        if (-not ([string]$Entry.$prop).Replace('\', '/').EndsWith($suffix, [StringComparison]::OrdinalIgnoreCase)) { return $false }
-    }
+function Test-Homm3BundleShips($PayloadPlugin, $BundleName) {
     if ([string]::IsNullOrWhiteSpace($BundleName)) { return $false }
     $bundle = Join-Path (Join-Path $PayloadPlugin 'homm3_bundles') $BundleName
     return (Test-Path -LiteralPath $bundle) -and (Test-Path -LiteralPath "$bundle.manifest")
+}
+
+function Test-OwnedSkinnedCoverage($PayloadPlugin, $Entry, $BundleName) {
+    # Approved for v0.1.319 (3D-only neutrals): both prefabs are the owned-skinned prefab and the bundle ships.
+    # Elemental Fusion units (v0.1.328): both prefabs are the fusion crest prefab; the crest bundle file and the host
+    # mesh bundle it attaches to (meshBundleName, an owned-skinned prefab) both ship.
+    $prefabs = @()
+    foreach ($prop in 'battlePrefabAssetPath', 'mapPrefabAssetPath') {
+        if (-not ($Entry.PSObject.Properties.Name -contains $prop)) { return $false }
+        $prefabs += ([string]$Entry.$prop).Replace('\', '/')
+    }
+    $ownedSuffix = '/OwnedSkinned/owned_skinned.prefab'
+    $crestSuffix = '/OwnedSkinned/fusion_crest.prefab'
+    if (@($prefabs | Where-Object { -not $_.EndsWith($ownedSuffix, [StringComparison]::OrdinalIgnoreCase) }).Count -eq 0) {
+        return Test-Homm3BundleShips $PayloadPlugin $BundleName
+    }
+    if (@($prefabs | Where-Object { -not $_.EndsWith($crestSuffix, [StringComparison]::OrdinalIgnoreCase) }).Count -eq 0) {
+        foreach ($prop in 'meshBundleName', 'meshPrefabAssetPath') {
+            if (-not ($Entry.PSObject.Properties.Name -contains $prop)) { return $false }
+        }
+        if (-not ([string]$Entry.meshPrefabAssetPath).Replace('\', '/').EndsWith($ownedSuffix, [StringComparison]::OrdinalIgnoreCase)) { return $false }
+        # Crest bundles (fusion_shared_bundles.py) ship without a Unity .manifest sidecar; the file itself must ship.
+        if ([string]::IsNullOrWhiteSpace($BundleName)) { return $false }
+        $crest = Join-Path (Join-Path $PayloadPlugin 'homm3_bundles') $BundleName
+        return (Test-Path -LiteralPath $crest) -and (Test-Homm3BundleShips $PayloadPlugin ([string]$Entry.meshBundleName))
+    }
+    return $false
 }
 
 function Assert-Homm3ImportSidecarCoverage($PayloadPlugin) {

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "doc": "docs/homm3_tower_artificing.md",
-  "enabled": false,
-  "enabledNote": "false = Core keeps Arcane Battery as the Tower faction skill; Artificing rows (graft buffs, ledger hero buffs, Transcribe) are still generated but nothing grants them. Flip to true only after the runtime has an in-game check.",
+  "enabled": true,
+  "enabledNote": "User decision 2026-11-11: Artificing replaces Arcane Battery as the Tower faction skill (the Arcane Battery subskills stay). false = Core keeps Arcane Battery; the Artificing rows (graft buffs, ledger hero buffs, the graft world spell) are still generated but nothing grants them.",
   "factionSkillSid": "skill_faction_homm3_tower",
   "factionSkillName": "Artificing",
   "graftSlotsByRank": [
@@ -12,15 +12,6 @@
   ],
   "graftScope": "unit_line",
   "graftScopeNote": "A graft applies to every variant of a Tower unit line (base, upgrade, alternate upgrade), so upgrading never loses it. Change to unit_sid only with a ledger migration.",
-  "transcribe": {
-    "abilitySid": "skill_faction_homm3_tower_ability_transcribe",
-    "effectBuffSid": "homm3_tower_transcribe_effect",
-    "focus": 2,
-    "cooldown": 2,
-    "castTarget": "all",
-    "icon": "h3_mage",
-    "effectIcon": "magic_early_start_effect_icon"
-  },
   "essence": {
     "perDefeatedCreatureByTier": [
       1,
@@ -66,6 +57,13 @@
     "canDispel": true,
     "infinite": true,
     "addition": "data"
+  },
+  "graftSpell": {
+    "magicSid": "homm3_tower_artificing_graft",
+    "mode": "homm3_tower_artificing_graft",
+    "path": "DB/magics/world_neutral_magics.json",
+    "icon": "neutral_1_magic_units_replace",
+    "note": "User decision 2026-11-11: the spend UI is a hero world spell. Every Artificing rank grants it (heroMagicAddition); the row reuses the native Necromancer Will handler (change_use_necromancy) with parameters [mode], and Homm3TowerArtificingRuntime intercepts the cast and opens the graft picker. Free, unlimited, usable any time on the adventure map."
   },
   "genericRules": [
     {
@@ -133,12 +131,20 @@
                   "allynoself",
                   "positive"
                 ]
+              },
+              {
+                "mech": "mimic_buffs",
+                "values": [
+                  "0",
+                  "allynoself",
+                  "skill_faction_human_ability_buff"
+                ]
               }
             ]
           }
         }
       ],
-      "note": "angel mimic_buffs action on ally unit_got_buff."
+      "note": "angel mimic_buffs action on ally unit_got_buff (26297049 vanilla: second mimic_buffs for skill_faction_human_ability_buff)."
     },
     "angel_passive_2": {
       "data": {
@@ -1617,7 +1623,10 @@
             "sid": "{graft}_side",
             "allegiance": "ally",
             "duration": 1,
-            "durationPerStack": 0
+            "durationPerStack": [
+              1,
+              0
+            ]
           }
         }
       ],
@@ -2836,8 +2845,8 @@
           "sourceUnit": "h3_crew_mate_upg_alt"
         }
       },
-      "descriptionText": "At the start of each day, every creature in this grafted stack produces Gold while it is in a hero's army: {gold}.",
-      "note": "Map graft: daily gold per carrier creature, tier-scaled as gold x source weekly growth / carrier line weekly growth (city weeklyIncrement), granted by the shared side day-start hook (Homm3SwashbucklerGoldHook consumer). '{gold}' expands to the per-line rates."
+      "descriptionText": "At the start of each day, every creature in this grafted stack produces {gold} Gold while it is in a hero's army.",
+      "note": "Map graft: daily gold per carrier creature, flat on every line at the Tier 1 rate: gold x source weekly growth / Tier 1 line weekly growth (city weeklyIncrement; owner 2026-11-13: tier scaling was overpowered), granted by the shared side day-start hook (Homm3SwashbucklerGoldHook consumer). '{gold}' expands to the flat rate."
     },
     "h3_crystal_dragon_passive_magic_resistance": {
       "data": {
@@ -3014,13 +3023,12 @@
         "abilities": {
           "sourceUnit": "h3_gremlin_upg_alt",
           "indices": [
-            0,
-            1
+            0
           ]
         }
       },
-      "descriptionText": "The grafted creature gains the Gremlin Mechanic's Repair abilities: twice per battle restore 10% health to an allied stack with resurrection, and a 50% repair for another allied stack.",
-      "note": "Ability graft: both source abilities appended at Unit.Init (see h3_golem_upg_alt_ability)."
+      "descriptionText": "The grafted creature gains the Gremlin Mechanic's Repair ability: twice per battle restore 10% health to an allied stack with resurrection.",
+      "note": "Ability graft: the source abilities[0] (h3_repair_active_ability) appended at Unit.Init (see h3_golem_upg_alt_ability). Index 1 dropped: since 3e785c8ec9 the Mechanic ships a single Repair (the duplicate vanilla repair was removed)."
     },
     "h3_harpy_upg_passives_3": {
       "data": {
@@ -3169,7 +3177,10 @@
             "sid": "{graft}_side",
             "allegiance": "ally",
             "duration": 1,
-            "durationPerStack": 0
+            "durationPerStack": [
+              1,
+              0
+            ]
           }
         }
       ],
@@ -3605,7 +3616,10 @@
             "sid": "{graft}_side",
             "allegiance": "ally",
             "duration": 1,
-            "durationPerStack": 0
+            "durationPerStack": [
+              1,
+              0
+            ]
           }
         }
       ],
@@ -3914,7 +3928,8 @@
               "passive",
               "magic_damage",
               "lava_larva_damage",
-              "lava_larva_explosion_attack"
+              "lava_larva_explosion_attack",
+              "lava_larva_explosion_hero"
             ],
             "triggerCounter": false,
             "castTargetParams": {
@@ -3933,8 +3948,8 @@
             "damageTarget_": "noself",
             "damageType_": "magic_pure",
             "statDmgMult": 0.0,
-            "minBaseDmg": 15,
-            "maxBaseDmg": 15,
+            "minBaseDmg": 10,
+            "maxBaseDmg": 10,
             "damageMultiplerPerHeroLevel": 1.0,
             "buffTarget_": "none",
             "targetMechanics": []
@@ -3942,7 +3957,7 @@
         }
       ],
       "descriptionText": "Upon death, this creature explodes, dealing Magic Damage that grows with the hero's level to all adjacent creatures.",
-      "note": "lava_larva death explosion action."
+      "note": "lava_larva death explosion action (26297049 vanilla: 10 dmg, lava_larva_explosion_hero tag)."
     },
     "lich_passive_1": {
       "runtime": {
@@ -4214,7 +4229,7 @@
                 "mech": "destroy_corpse_and_heal",
                 "values": [
                   "one",
-                  "120",
+                  "100",
                   "1",
                   "0",
                   "until start amount"
@@ -4224,7 +4239,7 @@
           }
         }
       ],
-      "note": "olgoi destroy_corpse_and_heal on unit_end_move."
+      "note": "olgoi destroy_corpse_and_heal on unit_end_move (26297049 vanilla: base olgoi heals 100, olgoi_upg 120, olgoi_upg_alt now shows Mana Eater instead; graft follows the base tier, observeOverrides links both Corpse Eater carriers)."
     },
     "olgoi_passive_2": {
       "helpers": [
@@ -4331,8 +4346,8 @@
           "sourceUnit": "peasant"
         }
       },
-      "descriptionText": "At the start of each day, every creature in this grafted stack produces Gold while it is in a hero's army: {gold}.",
-      "note": "Map graft: daily gold per carrier creature, tier-scaled as gold x source weekly growth / carrier line weekly growth (the Peasant's growth is its hire-site weeklyIncrement). Native peasant_globalbuff sideResFromUnits is not reused: its party binding exists only for unit sets. '{gold}' expands to the per-line rates."
+      "descriptionText": "At the start of each day, every creature in this grafted stack produces {gold} Gold while it is in a hero's army.",
+      "note": "Map graft: daily gold per carrier creature, flat on every line at the Tier 1 rate: gold x source weekly growth / Tier 1 line weekly growth (the Peasant's growth is its hire-site weeklyIncrement). Native peasant_globalbuff sideResFromUnits is not reused: its party binding exists only for unit sets. '{gold}' expands to the flat rate."
     },
     "peasant_passive_3": {
       "actions": [
@@ -4740,7 +4755,10 @@
             "sid": "{graft}_side",
             "allegiance": "enemy",
             "duration": 1,
-            "durationPerStack": 0
+            "durationPerStack": [
+              1,
+              0
+            ]
           }
         }
       ],
@@ -5156,15 +5174,16 @@
   },
   "excludedKeysNote": "key -> reason. Not transcribable: attack shapes (a buff cannot change the carrier's attack pattern) and the Peasant's flavour passive.",
   "observation": {
+    "rule": "battle_end_enemy_army",
     "chanceByRank": [
       15,
       25,
       35
     ],
-    "diagnostics": true,
+    "diagnostics": false,
     "diagnosticLogLines": 400
   },
-  "observationNote": "Approved 2026-10-26: one roll per observed passive per battle at chanceByRank (Basic/Advanced/Expert %), both sides observable. diagnostics = log the befp attribution scope (independent of enabled; spends no rolls) up to diagnosticLogLines lines per launch.",
+  "observationNote": "User decision 2026-11-11 (replaces the 2026-10-26 per-event predicates and Transcribe): at the end of every battle, fought or auto-resolved, won or lost, each side whose hero has Artificing rolls once per distinct graftable passive in the enemy armies (other sides' stacks at battle start, native unit sids) at chanceByRank (Basic/Advanced/Expert %); a hit writes the schematic at the observed unit's tier. Seeded by battle key + side + schematic. observe specs / observeOverrides stay as review data and feed only the optional diagnostics probe (befp attribution scope, up to diagnosticLogLines lines per launch).",
   "observeOverrides": {
     "angel_passive_2": [{"kind": "immunity", "immunities": [{"type": "effect", "tags": ["negative"]}]}, {"kind": "aura", "tags": ["angel_aura"]}],
     "arbitrator_passive_2": [{"kind": "buff_applied", "buffs": ["arbitrator_debuff_attack"]}],
@@ -5191,6 +5210,7 @@
     "hive_queen_passive_2": [{"kind": "side_modifier", "tags": ["hive_queen_globalbuff"]}],
     "hydra_passive_4": [{"kind": "passive_action", "links": [{"unit": "hydra", "passive": 0, "action": 0, "trigger": "unit_took_damage"}, {"unit": "hydra_upg", "passive": 0, "action": 0, "trigger": "unit_took_damage"}, {"unit": "hydra_upg_alt", "passive": 0, "action": 0, "trigger": "unit_took_damage"}]}],
     "lich_passive_2": [{"kind": "map_proxy", "proxy": "xp"}],
+    "olgoi_passive_1": [{"kind": "passive_action", "links": [{"unit": "olgoi", "passive": 0, "action": 0, "trigger": "unit_end_move"}, {"unit": "olgoi_upg", "passive": 0, "action": 0, "trigger": "unit_end_move"}]}],
     "olgoi_passive_2": [{"kind": "aura", "tags": ["olgoi_aura"]}, {"kind": "luck_roll", "stats": ["luck"]}],
     "peasant_passive_1": [{"kind": "map_proxy", "proxy": "presence"}],
     "phoenix_passive_2": [{"kind": "passive_action", "links": [{"unit": "h3_firebird_upg", "passive": 0, "action": 0, "trigger": "unit_died"}, {"unit": "h3_firebird_upg_alt", "passive": 0, "action": 0, "trigger": "unit_died"}, {"unit": "phoenix_upg", "passive": 1, "action": 0, "trigger": "unit_died"}]}],

@@ -174,5 +174,26 @@
    "power": 1.0
   }
  },
- "shatterReason": "authenticity lane-B 2026-10-11: the deferred shell rubble (deferMeshes) was not drawn, so the Death ended in a vanish; solid chunks + the rubbleSettle heap on the ground (h3_vampire / h3_lich / h3_fire_hound recipe)."
+ "shatterReason": "authenticity lane-B 2026-10-11: the deferred shell rubble (deferMeshes) was not drawn, so the Death ended in a vanish; solid chunks + the rubbleSettle heap on the ground (h3_vampire / h3_lich / h3_fire_hound recipe).",
+ "glbPatch": {
+  "reason": "clip pass 2026-11-11 (user-approved candidate): AttackFront re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
+  "ops": [
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_ancient_behemoth_clip_tracks.json",
+    "sha256": "208b1aab209287a278de8749dca066658328557ee957f80f6046254c50a73922"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_AttackFront"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
+   }
+  ]
+ }
 }

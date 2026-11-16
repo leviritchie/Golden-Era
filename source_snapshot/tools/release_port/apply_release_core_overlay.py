@@ -56,6 +56,10 @@ from homm3_tower_artificing_core_overlay import (
     merge_tower_artificing_into_overlay,
 )
 from homm3_neutral_core_overlay import add_homm3_neutral_core_overlay, homm3_neutral_donor_unit_sids
+import homm3_inferno_gating_core_overlay
+import homm3_fortress_predator_instinct_core_overlay
+import homm3_conflux_fusion_core_overlay as conflux_fusion
+import homm3_factory_logistics_core_overlay as factory_logistics
 from homm3_reward_units_core_overlay import add_custom_faction_reward_units
 from homm3_city_building_descriptions import (
     derive_city_description_rows,
@@ -772,6 +776,8 @@ def custom_hero_common_specialization_bonuses(class_type: str) -> list[dict[str,
 
 
 def custom_creature_specialization_bonuses(manifest: dict[str, Any], line: dict[str, Any]) -> list[dict[str, Any]]:
+    # Attack/Defense steps follow the vanilla creature specialists: 26297049 moved all
+    # 32 of them from +1 per 3 hero levels to +1 per 5 (own and enemy rows alike).
     variants = manifest_unit_variants(manifest)
     receivers = [manifest_unit_sid_for_variant(line, suffix) for suffix in variants]
     base_sid = manifest_unit_sid_for_variant(line, variants[0] if variants else "")
@@ -784,27 +790,27 @@ def custom_creature_specialization_bonuses(manifest: dict[str, Any], line: dict[
             "type": "unitStat",
             "receivers": receivers,
             "parameters": ["offence", "0"],
-            "upgrade": {"increment": 1, "levelStep": 3},
+            "upgrade": {"increment": 1, "levelStep": 5},
         },
         {
             "type": "unitStat",
             "receivers": receivers,
             "parameters": ["defence", "0"],
-            "upgrade": {"increment": 1, "levelStep": 3},
+            "upgrade": {"increment": 1, "levelStep": 5},
         },
         {
             "type": "unitStat",
             "receiverAllegiance": "enemy",
             "receivers": receivers,
             "parameters": ["offence", "0"],
-            "upgrade": {"increment": -1, "levelStep": 3},
+            "upgrade": {"increment": -1, "levelStep": 5},
         },
         {
             "type": "unitStat",
             "receiverAllegiance": "enemy",
             "receivers": receivers,
             "parameters": ["defence", "0"],
-            "upgrade": {"increment": -1, "levelStep": 3},
+            "upgrade": {"increment": -1, "levelStep": 5},
         },
     ]
 
@@ -2464,6 +2470,9 @@ UNIT_VIEW_ICON_BY_NAME = {
     "base_passive_countershot_name": "sub_skill_siege_2_icon",
     "h3_common_passive_positive_luck_name": "sub_skill_luck_1_icon",
     "h3_common_passive_ice_damage_immunity_name": "sub_skill_resistance_1_icon",
+    "h3_conflux_passive_living_water_name": "magic_ice_bolt_effect_icon",
+    "h3_conflux_passive_frostbite_name": "aqualotl_debuff_2_icon",
+    "h3_conflux_passive_born_of_flame_name": "magic_fire_trap_effect_icon",
     "h3_common_passive_free_shooting_name": "crossbowman_buff_icon",
     "h3_common_passive_attack_ignore_30_name": "sub_skill_units_attackPen_icon",
     "h3_common_passive_attack_ignore_60_name": "sub_skill_units_attackPen_icon",
@@ -2912,46 +2921,6 @@ def normalize_cyclops_shooter_battle_shells(release_zip: zipfile.ZipFile, output
         notes.append(f"retarget Cyclops UnitView battle shells to Blade Dancer shooters ({changed})")
 
 
-def merge_arena_pick_content(release_value: Any) -> tuple[Any, bool]:
-    if not isinstance(release_value, dict):
-        return release_value, False
-    content = release_value.get("content")
-    if not isinstance(content, list):
-        return release_value, False
-
-    from homm3_neutral_catalog import pool_eligible_unit_sids
-
-    pool_sids = tuple(dict.fromkeys([*CORE_ENABLED_GAME_UNIT_SIDS, *pool_eligible_unit_sids()]))
-
-    for bucket in content:
-        if not isinstance(bucket, dict) or bucket.get("sid") != "units":
-            continue
-        rows = bucket.get("array")
-        if not isinstance(rows, list):
-            rows = []
-            bucket["array"] = rows
-        existing = {row.get("sid") for row in rows if isinstance(row, dict)}
-        changed = False
-        for sid in pool_sids:
-            if sid in existing:
-                continue
-            rows.append({"sid": sid, "val": 100})
-            existing.add(sid)
-            changed = True
-        return release_value, changed
-
-    content.append(
-        {
-            "sid": "units",
-            "array": [
-                {"sid": sid, "val": 100}
-                for sid in pool_sids
-            ],
-        }
-    )
-    return release_value, True
-
-
 def merge_lang_rows(release_rows: list[Any], source_rows: list[Any]) -> tuple[list[Any], bool]:
     merged: list[Any] = []
     by_sid: dict[str, int] = {}
@@ -3241,6 +3210,11 @@ def make_tower_arcane_battery_subskills() -> list[dict[str, Any]]:
                 hero_stat_bonus("magicSchoolSet", "space", "2", "1"),
                 hero_stat_bonus("magicSchoolSet", "day", "2", "1"),
             ],
+            "xHomm3ImplementedMechanics": (
+                "magicSchoolSet parameters are [school, learnable tier, level bonus] (native laws: 0/1 = +1 level, "
+                "5/0 = all tiers). 2/1 lets the hero learn Arcane/Daylight up to tier 2 and gives +1 level to all of "
+                "that school's spells; the level bonus is not limited to tiers 1-2."
+            ),
         },
         {
             "id": "sub_skill_faction_homm3_tower_arcane_battery_chronomancy",
@@ -3287,8 +3261,9 @@ def make_tower_arcane_battery_subskills() -> list[dict[str, Any]]:
             "icon": "sub_skill_magic_day_2_icon",
             "bonuses": [],
             "xHomm3RuntimeHook": (
-                "Homm3TowerBottomlessKnowledgeHook cleanses explicit negative dispellable hero-map "
-                "curse buffs after ManaPercentSettingReward applies to a hero with this Arcane Battery subskill."
+                "Homm3TowerBottomlessKnowledgeHook postfixes the native ManaPercentSettingReward apply (Mana Well, "
+                "Crystal Trail, Pandora mana) and, for a hero with this subskill, removes every hero-map buff whose "
+                "config is isPositive=false and isDispellable=true through the hero's native buff manager."
             ),
         },
         {
@@ -3304,9 +3279,13 @@ def make_tower_arcane_battery_subskills() -> list[dict[str, Any]]:
             "desc": "sub_skill_faction_homm3_tower_arcane_battery_spell_economies_desc",
             "icon": "sub_skill_magic_day_6_icon",
             "bonuses": [
-                hero_stat_bonus("magicCostSchoolSet", "space", "0", "0"),
-                hero_stat_bonus("magicCostSchoolSet", "day", "0", "0"),
+                hero_stat_bonus("magicCostSchoolSet", "space", "-2", "0"),
+                hero_stat_bonus("magicCostSchoolSet", "day", "-2", "0"),
             ],
+            "xHomm3ImplementedMechanics": (
+                "magicCostSchoolSet parameters are [school, flat, percent]; the previous 0/0 rows were a no-op. "
+                "-2 flat per Arcane/Daylight cast follows the native skills_campaign night row and Chronomancy's -2."
+            ),
         },
         {
             "id": "sub_skill_faction_homm3_tower_arcane_battery_focused_study",
@@ -3672,7 +3651,7 @@ def strip_unbound_castle_slot_buildings_from_owned_world_city(
     Castle BhBuilding slots. Peers that later gain nativeLevels entries keep the rows.
 
     Retention exception (explicit, not a silent fallback): if source_mechanics declares the
-    SID in a building surface currentRows entry (Tower Library / Workshop Yard), keep the
+    SID in a building surface currentRows entry (Tower Lookout Tower / Wall of Knowledge), keep the
     constructible city row. Those peers still lack compositor art until nativeLevels gains
     the SID; do not invent aliases onto other slots.
     """
@@ -3934,6 +3913,7 @@ def make_fortress_fraction_doc(release_zip: zipfile.ZipFile, manifest: dict[str,
             item.get("fractionLawsLines"),
             {f"fraction_law_{identity['donorFactionSid']}_": (manifest.get("skillsAndLaws") or {})["lawPrefix"]},
         )
+        apply_custom_law_line_placements(item, manifest)
     return doc
 
 
@@ -4064,13 +4044,13 @@ def fallback_melee_attack(trigger_counter: bool) -> dict[str, Any]:
             "triggerCounter": trigger_counter,
             "attackPatternSid": "attack_single_x100",
             "castTargetParams": {
-                "targetTags": "unit attackable_object",
+                "targetTags": ["unit", "attackable_object"],
                 "castTarget_": "enemy",
                 "targetCondition_": "alive",
                 "selection": "object",
             },
             "affectTargetParams": {
-                "targetTags": "unit attackable_object",
+                "targetTags": ["unit", "attackable_object"],
                 "castTarget_": "enemy",
                 "targetCondition_": "alive",
                 "selection": "object",
@@ -4389,6 +4369,153 @@ def cove_fearless_passive() -> dict[str, Any]:
             ]
         }
     }
+
+
+# HoMM3 mind spells mapped to their Olden Era equivalents: Blind/Hypnotize -> Sleep
+# (buff tag `sleep_effect`, also Unicorn Blind), Forgetfulness -> Silence
+# (`silenceEffect`), Berserk -> Berserker. The native Berserker buffs carry no
+# distinguishing tag, so tag_native_mind_control_buffs stamps MIND_BERSERK_EFFECT_TAG
+# on them; the `berserk` mechanic immunity covers on-hit Berserk dealers too.
+MIND_BERSERK_EFFECT_TAG = "homm3_mind_berserk_effect"
+MIND_BERSERK_BUFF_ID_PREFIX = "magic_berserker_effect"
+MIND_CONTROL_BUFFS_PATH = "DB/buffs/buffs_night_magics.json"
+
+
+def mind_spell_immunity_passive() -> dict[str, Any]:
+    return {
+        "data": {
+            "immunities": [
+                {"type": "effect", "tags": ["sleep_effect"]},
+                {"type": "effect", "tags": ["silenceEffect"]},
+                {"type": "effect", "tags": [MIND_BERSERK_EFFECT_TAG]},
+                {"type": "mechanic", "tags": ["berserk"]},
+            ]
+        }
+    }
+
+
+def tag_native_mind_control_buffs(release_zip: zipfile.ZipFile, output: dict[str, bytes], notes: list[str]) -> None:
+    name = MIND_CONTROL_BUFFS_PATH
+    doc = json.loads(output[name].decode("utf-8-sig")) if name in output else read_json(release_zip, name)
+    rows = doc.get("array") if isinstance(doc, dict) else None
+    if not isinstance(rows, list):
+        raise RuntimeError(f"malformed mind-control buff target {name}")
+    tagged = 0
+    for row in rows:
+        if not isinstance(row, dict) or not str(row.get("id", "")).startswith(MIND_BERSERK_BUFF_ID_PREFIX):
+            continue
+        tags = row.setdefault("tags", [])
+        if isinstance(tags, list) and MIND_BERSERK_EFFECT_TAG not in tags:
+            tags.append(MIND_BERSERK_EFFECT_TAG)
+            tagged += 1
+    if tagged:
+        output[name] = write_json(doc)
+        notes.append(f"tag {tagged} native Berserker buffs with {MIND_BERSERK_EFFECT_TAG} for Mind Spell Immunity")
+
+
+# 2026-11-12 audit S11: custom actives applied native donor buffs, so the target's
+# status tooltip showed the donor's name/text ("Big Rock, Rrr!", "Valiant Cry",
+# "Unyielding Will", Naira's Kiss "Marked..."). Clone each donor under a custom id
+# with its own name (and description where the donor's is wrong); custom unit
+# logic rows are retargeted to the clone. Donors in the law status taxonomy
+# (inquisitor_buff) and runtime-keyed ones (magic_decimate_effect for Execute
+# recast, ent_root for Binding) stay on the native row.
+DONOR_STATUS_BUFF_CLONES: dict[str, dict[str, str]] = {
+    "gorilla_stun": {"file": "DB/buffs/units_buffs_neutral.json", "id": "h3_stunned_effect", "name_": "h3_stunned_effect_name"},
+    "griffin_selfbuff_1": {"file": "DB/buffs/units_buffs_human.json", "id": "h3_shield_set_effect", "name_": "h3_shield_set_effect_name"},
+    "minos_buff": {"file": "DB/buffs/units_buffs_dungeon.json", "id": "h3_runic_guard_effect", "name_": "h3_runic_guard_effect_name"},
+    "magic_nairas_kiss_effect_1_old": {
+        "file": "DB/buffs/buffs_night_magics.json",
+        "id": "h3_misfortune_effect",
+        "name_": "h3_common_ability_misfortune_name",
+        "description_": "h3_misfortune_effect_description",
+    },
+    # Conflux Frost Elemental Frostbite (graft of Icy Veins); keeps the native "Cannot restore HP
+    # or be revived in any way." description.
+    "aqualotl_debuff_2": {"file": "DB/buffs/units_buffs_nature.json", "id": "h3_frostbite_effect", "name_": "h3_frostbite_effect_name"},
+}
+DONOR_STATUS_BUFF_CLONE_IDS = {donor: spec["id"] for donor, spec in DONOR_STATUS_BUFF_CLONES.items()}
+# Custom h3_*_effect SIDs are canonical only in the buff text files (multilingual scrub).
+DONOR_STATUS_BUFF_LANG_PATHS = ("Lang/english/texts/unitsBuff.json", "Lang/english/texts/magic_buff.json")
+DONOR_STATUS_BUFF_LANG_ROWS = [
+    {"sid": "h3_misfortune_effect_description", "text": "Morale and Luck at minimum; Attack and Defense set to 0."},
+    {"sid": "h3_stunned_effect_name", "text": "Stunned"},
+    {"sid": "h3_shield_set_effect_name", "text": "Shield Set"},
+    {"sid": "h3_runic_guard_effect_name", "text": "Runic Guard"},
+    {"sid": "h3_frostbite_effect_name", "text": "Frostbite"},
+]
+# A clone retargets only these units' logic; other users keep the donor (e.g. the
+# Minotaur King's "Unyielding Will" really is minos_buff).
+DONOR_STATUS_BUFF_CLONE_ONLY_UNITS: dict[str, set[str]] = {
+    "griffin_selfbuff_1": {"h3_dwarf"},
+    "minos_buff": {"h3_battle_dwarf"},
+    "aqualotl_debuff_2": {"h3_water_elemental_upg_alt"},
+}
+CUSTOM_UNIT_LOGIC_NAME_RE = re.compile(r"^DB/units/units_logics/[^/]+/h3_[^/]+_l\.json$")
+
+
+def retarget_buff_sids(value: Any, mapping: dict[str, str]) -> int:
+    changed = 0
+    if isinstance(value, dict):
+        buff = value.get("buff")
+        if isinstance(buff, dict) and buff.get("sid") in mapping:
+            buff["sid"] = mapping[buff["sid"]]
+            changed += 1
+        for child in value.values():
+            changed += retarget_buff_sids(child, mapping)
+    elif isinstance(value, list):
+        for child in value:
+            changed += retarget_buff_sids(child, mapping)
+    return changed
+
+
+def apply_donor_status_buff_clones(release_zip: zipfile.ZipFile, output: dict[str, bytes], notes: list[str]) -> None:
+    """Write the S11 clone buff rows and retarget custom unit logic to them (idempotent)."""
+    by_file: dict[str, list[tuple[str, dict[str, str]]]] = {}
+    for donor, spec in DONOR_STATUS_BUFF_CLONES.items():
+        by_file.setdefault(spec["file"], []).append((donor, spec))
+    for name, entries in by_file.items():
+        doc = read_overlay_or_release_json(release_zip, output, name)
+        rows = doc.get("array") if isinstance(doc, dict) else None
+        if not isinstance(rows, list):
+            raise RuntimeError(f"malformed donor status buff file {name}")
+        changed = False
+        for donor, spec in entries:
+            donor_row = next((r for r in rows if isinstance(r, dict) and r.get("id") == donor), None)
+            if donor_row is None:
+                raise RuntimeError(f"S11 donor status buff {donor} missing from {name}")
+            clone = copy.deepcopy(donor_row)
+            clone["id"] = spec["id"]
+            clone["name_"] = spec["name_"]
+            if "description_" in spec:
+                clone["description_"] = spec["description_"]
+            clone["xHomm3SourceEffect"] = f"Clone of native {donor} with a custom status name (2026-11-12 audit S11)."
+            changed = upsert_array_row(doc, clone) or changed
+        changed = dedupe_array_rows_by_id(doc) or changed
+        if changed:
+            output[name] = write_json(doc)
+    names = {n for n in release_zip.namelist() if CUSTOM_UNIT_LOGIC_NAME_RE.match(n)}
+    names |= {n for n in output if CUSTOM_UNIT_LOGIC_NAME_RE.match(n)}
+    retargeted = 0
+    for name in sorted(names):
+        try:
+            doc = read_overlay_or_release_json(release_zip, output, name)
+        except (json.JSONDecodeError, UnicodeDecodeError, KeyError):
+            continue
+        unit_sid = name.rsplit("/", 1)[-1][: -len("_l.json")]
+        mapping = {
+            donor: clone
+            for donor, clone in DONOR_STATUS_BUFF_CLONE_IDS.items()
+            if unit_sid in DONOR_STATUS_BUFF_CLONE_ONLY_UNITS.get(donor, {unit_sid})
+        }
+        count = retarget_buff_sids(doc, mapping)
+        if count:
+            output[name] = write_json(doc)
+            retargeted += count
+    if retargeted:
+        notes.append(f"retarget {retargeted} custom unit buff references to S11 status clones")
+    for lang_path in DONOR_STATUS_BUFF_LANG_PATHS:
+        add_lang_overlay_rows(release_zip, output, lang_path, DONOR_STATUS_BUFF_LANG_ROWS, notes)
 
 
 def add_sequence_effect(item: dict[str, Any], effect: str) -> None:
@@ -5092,214 +5219,6 @@ def add_release_fortress_units(release_zip: zipfile.ZipFile, output: dict[str, b
 
 def make_fortress_laws_doc(release_zip: zipfile.ZipFile, manifest: dict[str, Any]) -> dict[str, Any]:
     return make_release_custom_laws_doc(release_zip, manifest)
-
-
-def make_fortress_skill_row(manifest: dict[str, Any]) -> dict[str, Any]:
-    skill_sid = manifest_faction_skill_sid(manifest)
-    levels = (
-        (skill_sid, ()),
-        (
-            f"{skill_sid}_2",
-            (
-                "sub_skill_faction_homm3_fortress_swamp_advantage",
-                "sub_skill_faction_homm3_fortress_mire_grip",
-                "sub_skill_faction_homm3_fortress_thick_hides",
-            ),
-        ),
-        (
-            f"{skill_sid}_3",
-            (
-                "sub_skill_faction_homm3_fortress_bog_ambush",
-                "sub_skill_faction_homm3_fortress_stagnant_air",
-                "sub_skill_faction_homm3_fortress_poisoned_mire",
-            ),
-        ),
-    )
-    row = {
-        "id": skill_sid,
-        "name": f"{skill_sid}_name",
-        "desc": f"{skill_sid}_desc",
-        "skillType": "Faction",
-        "parametersPerLevel": [
-            {
-                "icon": icon,
-                "name": f"{skill_sid}_name_{index}",
-                "desc": f"{skill_sid}_desc_{index}",
-                # Hunting Grounds: the creeping enemy penalty lives on the trophy hero buffs
-                # (make_fortress_hunting_grounds_hero_buff_rows); ranks keep the runtime-owned
-                # faction-skill load shape (ignoreFractionsCount), like Dungeon/Factory/Bulwark.
-                "bonuses": [{"type": "unitBoolStat", "parameters": ["ignoreFractionsCount", "true"]}],
-                "subSkills": list(subskills),
-            }
-            for index, (icon, subskills) in enumerate(levels, start=1)
-        ],
-    }
-    source_mechanic = source_mechanic_for_surface_row(manifest["identity"]["factionSid"], "faction_skill", skill_sid)
-    if source_mechanic is not None:
-        row["xHomm3SourceMechanic"] = source_mechanic.get("id")
-        row["xHomm3MechanicsStatus"] = source_mechanic.get("status")
-    return row
-
-
-# Fortress Hunting Grounds trophy meter. Must match Homm3FortressHuntingGroundsHook.CapByLevel / BuffSid.
-HOMM3_FORTRESS_HUNTING_GROUNDS_BUFF_PREFIX = "homm3_fortress_trophies_"
-HOMM3_FORTRESS_HUNTING_GROUNDS_HERO_BUFFS_PATH = "DB/heroes_buffs/heroes_buffs.json"
-HOMM3_FORTRESS_HUNTING_GROUNDS_CAPS = {1: 8, 2: 7, 3: 6}
-# level -> ordered (trophies, initiative penalty, speed penalty) milestones; reaching the cap adds the restock.
-HOMM3_FORTRESS_HUNTING_GROUNDS_MILESTONES = {
-    1: ((3, 1, 0), (6, 1, 1)),
-    2: ((2, 1, 0), (5, 1, 1)),
-    3: ((2, 1, 0), (4, 1, 1), (6, 2, 1)),
-}
-HOMM3_FORTRESS_HUNTING_GROUNDS_ICONS = {
-    1: "skill_faction_homm3_fortress",
-    2: "skill_faction_homm3_fortress_2",
-    3: "skill_faction_homm3_fortress_3",
-}
-
-
-def fortress_hunting_grounds_penalty(level: int, trophies: int) -> tuple[int, int]:
-    initiative = speed = 0
-    for threshold, ini, spd in HOMM3_FORTRESS_HUNTING_GROUNDS_MILESTONES[level]:
-        if trophies >= threshold:
-            initiative, speed = ini, spd
-    return initiative, speed
-
-
-def fortress_hunting_grounds_penalty_text(initiative: int, speed: int) -> str:
-    parts = []
-    if initiative:
-        parts.append(f"-{initiative} Initiative")
-    if speed:
-        parts.append(f"-{speed} Speed")
-    return " and ".join(parts) if parts else "no penalty yet"
-
-
-def fortress_hunting_grounds_buff_sid(level: int, trophies: int) -> str:
-    return f"{HOMM3_FORTRESS_HUNTING_GROUNDS_BUFF_PREFIX}{level}_{trophies}"
-
-
-def make_fortress_hunting_grounds_hero_buff_rows() -> list[dict[str, Any]]:
-    rows: list[dict[str, Any]] = []
-    for level, cap in HOMM3_FORTRESS_HUNTING_GROUNDS_CAPS.items():
-        for trophies in range(1, cap + 1):
-            sid = fortress_hunting_grounds_buff_sid(level, trophies)
-            initiative, speed = fortress_hunting_grounds_penalty(level, trophies)
-            bonuses: list[dict[str, Any]] = []
-            if initiative:
-                bonuses.append({"type": "unitStat", "receiverAllegiance": "enemy", "parameters": ["initiative", f"-{initiative}"]})
-            if speed:
-                bonuses.append({"type": "unitStat", "receiverAllegiance": "enemy", "parameters": ["speed", f"-{speed}"]})
-            rows.append(
-                {
-                    "id": sid,
-                    "icon": HOMM3_FORTRESS_HUNTING_GROUNDS_ICONS[level],
-                    "name": "homm3_fortress_trophies_buff_name",
-                    "description": f"{sid}_description",
-                    "additionType": "LeftNew",
-                    "isPositive": True,
-                    "hidden": False,
-                    "isDispellable": True,
-                    "bonuses": bonuses,
-                }
-            )
-    return rows
-
-
-def fortress_hunting_grounds_buff_description(level: int, trophies: int) -> str:
-    cap = HOMM3_FORTRESS_HUNTING_GROUNDS_CAPS[level]
-    penalty = fortress_hunting_grounds_penalty_text(*fortress_hunting_grounds_penalty(level, trophies))
-    if trophies >= cap:
-        return (
-            f"Trophies {trophies}/{cap} (full). Enemy units in this hero's battles: {penalty}. "
-            "This week's restock: used. Resets at the start of next week."
-        )
-    following = [m for m in HOMM3_FORTRESS_HUNTING_GROUNDS_MILESTONES[level] if m[0] > trophies]
-    if following and following[0][0] < cap:
-        nxt = f"{fortress_hunting_grounds_penalty_text(following[0][1], following[0][2])} at {following[0][0]}"
-    elif following:
-        nxt = f"{fortress_hunting_grounds_penalty_text(following[0][1], following[0][2])} and the restock at {cap}"
-    else:
-        nxt = f"the restock at {cap}"
-    return (
-        f"Trophies {trophies}/{cap}. Enemy units in this hero's battles: {penalty}. Next: {nxt}. "
-        f"This week's restock: not used yet. Win battles to add Trophies; resets each week."
-    )
-
-
-def fortress_hunting_grounds_buff_lang_rows() -> list[dict[str, str]]:
-    rows = [{"sid": "homm3_fortress_trophies_buff_name", "text": "Hunting Grounds Trophies"}]
-    for level, cap in HOMM3_FORTRESS_HUNTING_GROUNDS_CAPS.items():
-        for trophies in range(1, cap + 1):
-            rows.append(
-                {
-                    "sid": f"{fortress_hunting_grounds_buff_sid(level, trophies)}_description",
-                    "text": fortress_hunting_grounds_buff_description(level, trophies),
-                }
-            )
-    return rows
-
-
-def make_fortress_swamp_tactics_subskills(manifest: dict[str, Any]) -> list[dict[str, Any]]:
-    faction_sid = manifest["identity"]["factionSid"]
-    all_units = manifest_all_unit_receivers(manifest)
-    ambush_units = (
-        manifest_line_receivers(manifest, 2)
-        + manifest_line_receivers(manifest, 3)
-        + manifest_line_receivers(manifest, 6)
-    )
-    return [
-        {
-            "id": "sub_skill_faction_homm3_fortress_swamp_advantage",
-            "name": "sub_skill_faction_homm3_fortress_swamp_advantage_name",
-            "desc": "sub_skill_faction_homm3_fortress_swamp_advantage_desc",
-            "icon": "sub_skill_faction_nature_1_icon",
-            "bonuses": [
-                {"type": "unitStat", "biomeType": "native", "fraction": faction_sid, "parameters": ["outAllDmgMod", "0.1"]},
-                {"type": "unitStat", "biomeType": "native", "fraction": faction_sid, "parameters": ["inAllDmgMod", "-0.1"]},
-            ],
-        },
-        {
-            "id": "sub_skill_faction_homm3_fortress_mire_grip",
-            "name": "sub_skill_faction_homm3_fortress_mire_grip_name",
-            "desc": "sub_skill_faction_homm3_fortress_mire_grip_desc",
-            "icon": "sub_skill_faction_dungeon_2_icon",
-            "bonuses": [{"type": "unitStat", "receiverAllegiance": "enemy", "parameters": ["speed", "-1"]}],
-        },
-        {
-            "id": "sub_skill_faction_homm3_fortress_thick_hides",
-            "name": "sub_skill_faction_homm3_fortress_thick_hides_name",
-            "desc": "sub_skill_faction_homm3_fortress_thick_hides_desc",
-            "icon": "sub_skill_faction_homm3_castle_elite_strategem_shield_wall",
-            "bonuses": [unit_modifier_bonus(all_units, "inDmgMods", "basic_attack", "-0.10")],
-        },
-        {
-            "id": "sub_skill_faction_homm3_fortress_bog_ambush",
-            "name": "sub_skill_faction_homm3_fortress_bog_ambush_name",
-            "desc": "sub_skill_faction_homm3_fortress_bog_ambush_desc",
-            "icon": "sub_skill_faction_dungeon_3_icon",
-            "bonuses": [unit_stat_bonus(ambush_units, "initiative", "1")],
-        },
-        {
-            "id": "sub_skill_faction_homm3_fortress_stagnant_air",
-            "name": "sub_skill_faction_homm3_fortress_stagnant_air_name",
-            "desc": "sub_skill_faction_homm3_fortress_stagnant_air_desc",
-            "icon": "sub_skill_protection_2_icon",
-            "bonuses": [
-                {"type": "unitStat", "receiverAllegiance": "enemy", "parameters": ["modifierSet", "outDmgMods", "range_attack", "-0.10"]},
-                {"type": "unitStat", "receiverAllegiance": "enemy", "parameters": ["modifierSet", "outDmgMods", "shoot_attack", "-0.10"]},
-            ],
-        },
-        {
-            "id": "sub_skill_faction_homm3_fortress_poisoned_mire",
-            "name": "sub_skill_faction_homm3_fortress_poisoned_mire_name",
-            "desc": "sub_skill_faction_homm3_fortress_poisoned_mire_desc",
-            "icon": "sub_skill_magic_night_5_icon",
-            "bonuses": [
-                {"type": "unitStat", "receiverAllegiance": "enemy", "parameters": ["modifierSet", "outDmgMods", "basic_attack", "-0.10"]}
-            ],
-        },
-    ]
 
 
 def make_fortress_subclasses_doc(release_zip: zipfile.ZipFile, manifest: dict[str, Any]) -> Any:
@@ -6224,7 +6143,7 @@ def add_release_fortress_lang(release_zip: zipfile.ZipFile, output: dict[str, by
     law_prefix = manifest_law_prefix(manifest)
     faction_rows = [
         {"sid": identity["displayNameToken"], "text": "Fortress (HoMM3)"},
-        {"sid": identity["descriptionToken"], "text": "The Fortress commands the marsh through durable beasts, fast flyers, and attrition tactics. Beastmasters and witches favor survival, disruption, and their Hunting Grounds over high magic."},
+        {"sid": identity["descriptionToken"], "text": "The Fortress commands the marsh through durable beasts, fast flyers, and attrition tactics. Beastmasters and witches favor survival, disruption, and the Predator Instinct that marks each enemy stack as some beast's prey."},
         {"sid": f"{identity['citySid']}_name", "text": "Fortress"},
     ]
     faction_rows += homm3_town_name_lang_rows(identity, "Fortress")
@@ -6306,7 +6225,7 @@ def add_release_fortress_lang(release_zip: zipfile.ZipFile, output: dict[str, by
             {"sid": "h3_fortress_ability_stone_gaze_name", "text": "Petrifying Gaze"},
             {"sid": "h3_fortress_ability_stone_gaze_description", "text": "Spend 2 Focus to petrify an enemy for 1 round."},
             {"sid": "h3_fortress_ability_death_stare_name", "text": "Death Stare"},
-            {"sid": "h3_fortress_ability_death_stare_description", "text": "Spend 2 Focus to attack for 100% normal damage and kill 1-7 additional creatures in the target stack."},
+            {"sid": "h3_fortress_ability_death_stare_description", "text": "Spend 2 Focus to attack for 100% normal damage and kill 1 additional creature in the target stack."},
             {"sid": "h3_fortress_ability_poison_sting_name", "text": "Poison Sting"},
             {"sid": "h3_fortress_ability_poison_sting_description", "text": "Spend 1 Focus to attack for 100% normal damage and reduce the target's maximum health by 20% for 1 round."},
             {"sid": "h3_fortress_ability_poison_shot_name", "text": "Poison Shot"},
@@ -6316,7 +6235,7 @@ def add_release_fortress_lang(release_zip: zipfile.ZipFile, output: dict[str, by
             {"sid": "h3_fortress_ability_double_strike_name", "text": "Double Strike"},
             {"sid": "h3_fortress_ability_double_strike_description", "text": "Spend 2 Focus to make 2 melee hits."},
             {"sid": "h3_fortress_passive_regeneration_name", "text": "Regeneration"},
-            {"sid": "h3_fortress_passive_regeneration_description", "text": "At the start of its turn, restores up to 25% of maximum stack health without reviving defeated creatures."},
+            {"sid": "h3_fortress_passive_regeneration_description", "text": "At the start of its turn, restores health equal to 25% of one creature's maximum health, without reviving defeated creatures."},
         ]
         + fortress_active_override_lang_rows(),
         notes,
@@ -6348,30 +6267,26 @@ def add_release_fortress_lang(release_zip: zipfile.ZipFile, output: dict[str, by
         output,
         "Lang/english/texts/heroSkills.json",
         [
-            {"sid": f"{skill_sid}_name", "text": "Hunting Grounds"},
-            {"sid": f"{skill_sid}_name_1", "text": "Basic Hunting Grounds"},
-            {"sid": f"{skill_sid}_name_2", "text": "Advanced Hunting Grounds"},
-            {"sid": f"{skill_sid}_name_3", "text": "Expert Hunting Grounds"},
-            {"sid": f"{skill_sid}_desc", "text": "Each battle this hero wins adds a Trophy; lost sieges and retreats do not count. Trophies weaken enemy units in this hero's battles. A full meter restocks the weekly sites this hero visited this week, once. The meter empties at the start of each week."},
-            {"sid": f"{skill_sid}_desc_1", "text": "Up to 8 Trophies. Enemies: -1 Initiative at 3, also -1 Speed at 6. At 8: restock this week's visited weekly sites."},
-            {"sid": f"{skill_sid}_desc_2", "text": "Up to 7 Trophies. Enemies: -1 Initiative at 2, also -1 Speed at 5. At 7: restock this week's visited weekly sites."},
-            {"sid": f"{skill_sid}_desc_3", "text": "Up to 6 Trophies. Enemies: -1 Initiative at 2, also -1 Speed at 4, -2 Initiative at 6. At 6: restock this week's visited weekly sites."},
-            {"sid": "sub_skill_faction_homm3_fortress_swamp_advantage_name", "text": "Swamp Advantage"},
-            {"sid": "sub_skill_faction_homm3_fortress_swamp_advantage_desc", "text": "Fortress creatures on native terrain have outAllDmgMod +10% and inAllDmgMod -10%, so they deal 10% more damage and take 10% less damage."},
-            {"sid": "sub_skill_faction_homm3_fortress_mire_grip_name", "text": "Mire Grip"},
-            {"sid": "sub_skill_faction_homm3_fortress_mire_grip_desc", "text": "Enemy units have -1 Speed. This stacks with the Hunting Grounds Trophy Speed penalty."},
-            {"sid": "sub_skill_faction_homm3_fortress_thick_hides_name", "text": "Thick Hides"},
-            {"sid": "sub_skill_faction_homm3_fortress_thick_hides_desc", "text": "All Fortress creature lines take 10% less damage from attacks tagged basic_attack."},
-            {"sid": "sub_skill_faction_homm3_fortress_bog_ambush_name", "text": "Bog Ambush"},
-            {"sid": "sub_skill_faction_homm3_fortress_bog_ambush_desc", "text": "Lizardman, Serpent Fly, and Wyvern lines have +1 Initiative."},
-            {"sid": "sub_skill_faction_homm3_fortress_stagnant_air_name", "text": "Stagnant Air"},
-            {"sid": "sub_skill_faction_homm3_fortress_stagnant_air_desc", "text": "Enemy attacks tagged range_attack or shoot_attack deal 10% less damage."},
-            {"sid": "sub_skill_faction_homm3_fortress_poisoned_mire_name", "text": "Poisoned Mire"},
-            {"sid": "sub_skill_faction_homm3_fortress_poisoned_mire_desc", "text": "Enemy attacks tagged basic_attack deal 10% less damage."},
+            *homm3_fortress_predator_instinct_core_overlay.hero_skill_lang_rows(),
         ],
         notes,
     )
-    add_lang_overlay_rows(release_zip, output, "Lang/english/texts/mapObjects.json", fortress_hunting_grounds_buff_lang_rows(), notes)
+    add_lang_overlay_rows(
+        release_zip,
+        output,
+        "Lang/english/texts/mapObjects.json",
+        homm3_fortress_predator_instinct_core_overlay.map_object_lang_rows(),
+        notes,
+    )
+    # Combat buff tooltips resolve name_/description_ from magic_buff / unitsBuff (same path as Bulwark).
+    for lang_path in ("Lang/english/texts/magic_buff.json", "Lang/english/texts/unitsBuff.json"):
+        add_lang_overlay_rows(
+            release_zip,
+            output,
+            lang_path,
+            homm3_fortress_predator_instinct_core_overlay.battle_buff_lang_rows(),
+            notes,
+        )
 
 
 def castle_unit_sids_for_line(line: dict[str, Any]) -> list[str]:
@@ -6693,6 +6608,7 @@ def make_castle_fraction_doc(release_zip: zipfile.ZipFile, manifest: dict[str, A
             item.get("fractionLawsLines"),
             {f"fraction_law_{donor_core_faction_sid}_": manifest_law_prefix(manifest)},
         )
+        apply_custom_law_line_placements(item, manifest)
     return doc
 
 
@@ -6784,11 +6700,13 @@ def make_castle_laws_doc(release_zip: zipfile.ZipFile, manifest: dict[str, Any])
             donor_by_index[int(suffix)] = row
 
     indices, _omitted_indices = custom_law_indices_to_emit(manifest, len(rows))
+    live_grant_costs = live_one_time_grant_costs(rows, donor_fraction_sid)
     output_rows: list[dict[str, Any]] = []
     for index in indices:
         copied = copy.deepcopy(donor_by_index.get(index, {}))
         override_definition = None if index in RESOURCE_RICHES_LAW_ICONS else custom_law_override_definition(manifest, index)
         name, desc, levels = override_definition or custom_law_definition(manifest, index)
+        levels = apply_live_one_time_grant_costs(levels, live_grant_costs, f"{law_prefix}{index}")
         copied.update(
             {
                 "id": f"{law_prefix}{index}",
@@ -7435,7 +7353,7 @@ GENERIC_FACTION_BUILDING_TEXT: dict[str, dict[str, list[tuple[str, str]]]] = {
         "Build_Bank": [("Capitol Vault", "Produces 1000 Gold daily through Tower city administration.")],
         "Build_Resource_Depot": [("Resource Silo", "Produces +1 gem per day for the Tower.")],
         "Build_Resource_Depot_level_2": [("Sculptor's Wings", "Increases Stone Gargoyle and Obsidian Gargoyle growth.")],
-        "Build_Intelligence_Academy": [("Library", "Increases this town's sight radius through Tower scholarship.")],
+        "Build_Intelligence_Academy": [("Lookout Tower", "Increases this town's sight radius.")],
         "Build_Training_Range": [("Wall of Knowledge", "Grants +1 Knowledge to any visiting hero.")],
         "Build_Golden_Calf": [("Aether Beacon", "The Tower grail produces resources and greatly increases creature growth.")],
     },
@@ -7444,13 +7362,9 @@ GENERIC_FACTION_BUILDING_TEXT: dict[str, dict[str, list[tuple[str, str]]]] = {
 
 GENERIC_FACTION_SKILL_TEXT: dict[str, tuple[str, str, list[str]]] = {
     "homm3_factory": (
-        "Split Assembly",
-        "At battle start, each distinct Natural and Industrial Factory recruit line unlocks one assembly bonus for your whole army. Skill rank scales those bonuses; the fourth bonus in each branch requires Expert and four lines.",
-        [
-            "Natural lines unlock 5% ranged damage, 5% less damage taken, then +1 start Focus. Industrial lines unlock 5% melee damage, +1 Speed, then +1 Initiative. Fourth-branch bonuses require Expert and four lines.",
-            "Natural lines unlock 10% ranged damage, 10% less damage taken, then +1 start Focus. Industrial lines unlock 10% melee damage, +1 Speed, then +1 Initiative. Fourth-branch bonuses require Expert and four lines.",
-            "Natural lines unlock 15% ranged damage, 15% less damage taken, +1 start Focus, and Carapace on all units. Industrial lines unlock 15% melee damage, +2 Speed, +2 Initiative, and Field Triage (spend 1 Focus to heal and revive any allied unit). Fourth-branch bonuses require Expert and four lines.",
-        ],
+        factory_logistics.SKILL_NAME,
+        factory_logistics.SKILL_DESC,
+        list(factory_logistics.RANK_DESCS),
     ),
     "homm3_bulwark": (
         "Runes",
@@ -7471,13 +7385,9 @@ GENERIC_FACTION_SKILL_TEXT: dict[str, tuple[str, str, list[str]]] = {
         ],
     ),
     "homm3_conflux": (
-        "Elemental Conjury",
-        "Conflux heroes start battle with extra Focus and empower elemental creatures from Attack and Spell Power.",
-        [
-            "Start battle with +1 Focus. Elemental-line Focus abilities apply 50% of hero Attack and 50% of hero Spell Power.",
-            "Start battle with +2 Focus. Elemental-line Focus abilities still apply 50% of hero Attack and 50% of hero Spell Power, and Phoenix-line creatures gain +1 Initiative.",
-            "Start battle with +3 Focus. Elemental-line Focus abilities still apply 50% of hero Attack and 50% of hero Spell Power; elemental and Phoenix-line creatures gain 15% of hero Knowledge as extra power.",
-        ],
+        conflux_fusion.SKILL_NAME,
+        conflux_fusion.SKILL_DESC,
+        list(conflux_fusion.RANK_DESCS),
     ),
     "homm3_cove": (
         "Treasure Hunting",
@@ -7488,15 +7398,7 @@ GENERIC_FACTION_SKILL_TEXT: dict[str, tuple[str, str, list[str]]] = {
             "Gain Treasure Hunting III: cast Groundsight for 0 mana with the strongest native reveal tier. Plunder: chests also give 3 of a random rare resource; first mine captures give a 200% pile.",
         ],
     ),
-    "homm3_inferno": (
-        "Gating",
-        "Inferno heroes call temporary reinforcements through direct summon circles.",
-        [
-            "Gain Gate Imps: spend 1 Focus to summon temporary Imps based on Spell Power.",
-            "Also gain Gate Gogs: spend 2 Focus to summon temporary Gogs based on Spell Power.",
-            "Also gain Gate Hell Hounds: spend 3 Focus to summon temporary Hell Hounds based on Spell Power.",
-        ],
-    ),
+    "homm3_inferno": homm3_inferno_gating_core_overlay.GENERIC_TEXT,
     "homm3_necropolis": (
         "Necromancy",
         "Necropolis heroes raise permanent Skeletons from eligible defeated enemies after battle.",
@@ -7578,37 +7480,6 @@ HOMM3_COVE_FANGARM_UNIT_SID = "h3_fangarm"
 HOMM3_COVE_FANGARM_LOGIC_PATH = f"DB/units/units_logics/neutral/{HOMM3_COVE_FANGARM_UNIT_SID}_l.json"
 HOMM3_COVE_FANGARM_VIEW_PATH = f"DB/units/units_views/neutral/{HOMM3_COVE_FANGARM_UNIT_SID}_v.json"
 HOMM3_COVE_SUMMON_FANGARMS_MECHANIC = "Summon Fangarms active"
-HOMM3_INFERNO_GATING_IMP_ABILITY_SID = "skill_faction_homm3_inferno_ability_gating"
-HOMM3_INFERNO_GATING_GOG_ABILITY_SID = "skill_faction_homm3_inferno_ability_gating_gogs"
-HOMM3_INFERNO_GATING_HELL_HOUND_ABILITY_SID = "skill_faction_homm3_inferno_ability_gating_hell_hounds"
-HOMM3_INFERNO_GATING_ABILITY_SIDS = (
-    HOMM3_INFERNO_GATING_IMP_ABILITY_SID,
-    HOMM3_INFERNO_GATING_GOG_ABILITY_SID,
-    HOMM3_INFERNO_GATING_HELL_HOUND_ABILITY_SID,
-)
-HOMM3_INFERNO_GATING_ABILITY_UNITS = {
-    HOMM3_INFERNO_GATING_IMP_ABILITY_SID: "h3_imp",
-    HOMM3_INFERNO_GATING_GOG_ABILITY_SID: "h3_gog",
-    HOMM3_INFERNO_GATING_HELL_HOUND_ABILITY_SID: "h3_hell_hound",
-}
-HOMM3_INFERNO_GATING_SUMMON_COUNTS = {
-    "h3_imp": ("4", "1", "1"),
-    "h3_gog": ("2", "1", "2"),
-    "h3_hell_hound": ("1", "1", "3"),
-}
-HOMM3_INFERNO_GATING_OBSTACLE_PREFIX = "homm3_inferno_gating_gate"
-HOMM3_INFERNO_GATING_CAST_VFX = "magic/Prefabs_vfx/Heroes/hero_demon_hex"
-HOMM3_INFERNO_GATING_SUMMON_VFX = "Prefabs_vfx/magic_summon_avatar_of_magic_hex"
-HOMM3_INFERNO_GATING_BARRIER_BUFF_SID = "homm3_inferno_gating_barrier_bonus"
-HOMM3_INFERNO_GATING_BARRIER_INFO_SID = "sub_skill_faction_homm3_inferno_gating_barrier_bonus"
-HOMM3_INFERNO_GATING_STALE_SUBSKILL_IDS = {
-    "sub_skill_faction_homm3_inferno_gating_higher_tier",
-}
-HOMM3_INFERNO_GATING_STALE_OBSTACLE_IDS = {
-    f"{HOMM3_INFERNO_GATING_OBSTACLE_PREFIX}_h3_imp",
-    f"{HOMM3_INFERNO_GATING_OBSTACLE_PREFIX}_h3_gog",
-    f"{HOMM3_INFERNO_GATING_OBSTACLE_PREFIX}_h3_hell_hound",
-}
 HOMM3_RAMPART_AVENGER_ABILITY_SID = "skill_faction_homm3_rampart_ability_avenger"
 HOMM3_RAMPART_AVENGER_ICON = "sub_skill_faction_homm3_rampart_avenger_mark"
 HOMM3_STRONGHOLD_WARCRY_ABILITY_ICONS = {
@@ -7627,19 +7498,6 @@ HOMM3_CASTLE_ELITE_STRATEGEM_SUBSKILLS_BY_LEVEL = {
         "sub_skill_faction_homm3_castle_elite_strategem_shield_wall",
         "sub_skill_faction_homm3_castle_elite_strategem_rapid_redeployment",
         "sub_skill_faction_homm3_castle_elite_strategem_coordinated_volley",
-    ),
-}
-
-HOMM3_INFERNO_GATING_SUBSKILLS_BY_LEVEL = {
-    2: (
-        "sub_skill_faction_homm3_inferno_gating_more_units",
-        "sub_skill_faction_homm3_inferno_gating_fast_gate",
-        "sub_skill_faction_homm3_inferno_gating_native_terrain",
-    ),
-    3: (
-        "sub_skill_faction_homm3_inferno_gating_focus_efficiency",
-        "sub_skill_faction_homm3_inferno_gating_any_tile",
-        "sub_skill_faction_homm3_inferno_gating_barrier",
     ),
 }
 
@@ -7729,7 +7587,7 @@ HOMM3_DUNGEON_CAPTIVES_HERO_BUFFS_PATH = "DB/heroes_buffs/heroes_buffs.json"
 HOMM3_DUNGEON_CAPTIVES_EXECUTE_SIDS = tuple(f"homm3_dungeon_captives_execute_{level}" for level in (1, 2, 3))
 HOMM3_DUNGEON_CAPTIVES_RANSOM_SIDS = tuple(f"homm3_dungeon_captives_ransom_{level}" for level in (1, 2, 3))
 HOMM3_DUNGEON_CAPTIVES_TIER_BUFF_PREFIX = "homm3_dungeon_captives_tier_"
-# One Captives icon for the visible tier buffs and the hero-portrait meter (Homm3DungeonCaptivesUi.Layout.IconKey).
+# One Captives icon for the legacy tier buffs, the War Captives enslaved buff and the captives window.
 HOMM3_DUNGEON_CAPTIVES_ICON = "skill_faction_homm3_dungeon"
 HOMM3_DUNGEON_CAPTIVES_STRENGTH_BIT_PREFIX = "homm3_dungeon_captives_strength_bit_"
 HOMM3_DUNGEON_CAPTIVES_SQUADS_BIT_PREFIX = "homm3_dungeon_captives_squads_bit_"
@@ -7738,6 +7596,26 @@ HOMM3_DUNGEON_CAPTIVES_SQUADS_BITS = 8
 HOMM3_DUNGEON_CAPTIVES_TIER_THRESHOLDS = (2000, 6000, 12000, 22000, 36000)
 HOMM3_DUNGEON_CAPTIVES_EXECUTE_XP_PER_1000 = ("55", "82.5", "110")
 HOMM3_DUNGEON_CAPTIVES_RANSOM_GOLD_PER_1000 = ("200", "300", "400")
+
+# War Captives (owner 2026-11-14; replaces the flee-bank Captives above, whose spells/tier/bit
+# rows stay defined only so older saves load: Homm3DungeonCaptivesRuntime pays a legacy bank out
+# as Ransom once and clears it). After each won battle the hero takes 1 captive per 100 squad
+# value of defeated enemy creatures and picks Execute / Ransom / Eat (+ Enslave _3, Recruit _4)
+# on the post-battle captives screen. Numbers per Basic/Advanced/Expert; must match the runtime.
+HOMM3_DUNGEON_WAR_CAPTIVES_SKILL_NAME = "War Captives"
+HOMM3_DUNGEON_WAR_CAPTIVES_VALUE_PER_CAPTIVE = 100
+HOMM3_DUNGEON_WAR_CAPTIVES_EXECUTE_XP = (6, 9, 12)
+HOMM3_DUNGEON_WAR_CAPTIVES_RANSOM_GOLD = (10, 15, 20)
+HOMM3_DUNGEON_WAR_CAPTIVES_ENSLAVE_GOLD_PER_DAY = ("1", "1.5", "2")
+HOMM3_DUNGEON_WAR_CAPTIVES_EAT_PERCENT = (20, 30, 40)
+HOMM3_DUNGEON_WAR_CAPTIVES_RECRUIT_PERCENT = (10, 15, 20)
+HOMM3_DUNGEON_WAR_CAPTIVES_SLAVE_MARKETS_PERCENT = 25
+HOMM3_DUNGEON_WAR_CAPTIVES_DUNGEON_CELLS_PERCENT = 15
+HOMM3_DUNGEON_WAR_CAPTIVES_INTERROGATION_PERCENT = 1.5  # 2026-11-15 user: 15% of the former 10%
+# Enslaved captives: one visible bonus-less buff (live tooltip) + hidden binary-weight count bits.
+HOMM3_DUNGEON_WAR_CAPTIVES_ENSLAVED_BUFF = "homm3_dungeon_captives_enslaved"
+HOMM3_DUNGEON_WAR_CAPTIVES_ENSLAVED_BIT_PREFIX = "homm3_dungeon_captives_enslaved_bit_"
+HOMM3_DUNGEON_WAR_CAPTIVES_ENSLAVED_BITS = 20
 
 HOMM3_STRONGHOLD_WARCRIES_SUBSKILLS_BY_LEVEL = {
     2: (
@@ -7752,7 +7630,8 @@ HOMM3_STRONGHOLD_WARCRIES_SUBSKILLS_BY_LEVEL = {
     ),
 }
 
-# Upgraded Conflux elementals with spell-effect Focus abilities (see homm3_conflux ability overrides).
+# Upgraded Conflux elementals with spell-effect Focus abilities (see homm3_conflux ability overrides);
+# no longer a subskill receiver list, kept for tools/validate_homm3_conflux_focus_spell_power_contract.py.
 HOMM3_CONFLUX_ELEMENTAL_FOCUS_SPELL_RECEIVERS = (
     "h3_air_elemental_upg",
     "h3_air_elemental_upg_alt",
@@ -7778,35 +7657,16 @@ HOMM3_CONFLUX_ELEMENTAL_CONJURY_STALE_LANG_SIDS = {
     for kind in ("name", "desc")
 }
 
-HOMM3_CONFLUX_ELEMENTAL_CONJURY_SUBSKILLS_BY_LEVEL = {
-    2: (
-        "sub_skill_faction_homm3_conflux_elemental_conjury_native_terrain",
-        "sub_skill_faction_homm3_conflux_elemental_conjury_focus_charge",
-        "sub_skill_faction_homm3_conflux_elemental_conjury_spell_power",
-    ),
-    3: (
-        "sub_skill_faction_homm3_conflux_elemental_conjury_expert_focus_charge",
-        "sub_skill_faction_homm3_conflux_elemental_conjury_pathfinding",
-        "sub_skill_faction_homm3_conflux_elemental_conjury_expert_spell_tier",
-    ),
-}
+# Elemental Fusion keeps the Elemental Conjury subskill SIDs (save compatibility); rows/text live in
+# homm3_conflux_fusion_core_overlay.
+HOMM3_CONFLUX_ELEMENTAL_CONJURY_SUBSKILLS_BY_LEVEL = conflux_fusion.SUBSKILLS_BY_LEVEL
 
 # Working HoMM3 faction skills always expose 3 Advanced + 3 Expert subSkill SIDs
 # that resolve in sub_skills.json. Split Assembly combat tiers stay runtime-owned;
 # Advanced/Expert subskills below are real Core rows (plus runtime overclock flags).
 HOMM3_FACTORY_FIELD_TRIAGE_ABILITY_SID = "skill_faction_homm3_factory_ability_field_triage"
-HOMM3_FACTORY_SPLIT_ASSEMBLY_SUBSKILLS_BY_LEVEL = {
-    2: (
-        "sub_skill_faction_homm3_factory_sand_advantage",
-        "sub_skill_faction_homm3_factory_line_discipline",
-        "sub_skill_faction_homm3_factory_field_calibration",
-    ),
-    3: (
-        "sub_skill_faction_homm3_factory_gantry_reserve",
-        "sub_skill_faction_homm3_factory_industrial_tempo",
-        "sub_skill_faction_homm3_factory_couatl_relay",
-    ),
-}
+# Logistics Network keeps the Split Assembly subskill SIDs (save compatibility).
+HOMM3_FACTORY_SPLIT_ASSEMBLY_SUBSKILLS_BY_LEVEL = factory_logistics.SUBSKILLS_BY_LEVEL
 HOMM3_FACTORY_NATURAL_OVERCLOCK_SUBSKILL_SID = "sub_skill_faction_homm3_factory_gantry_reserve"
 HOMM3_FACTORY_INDUSTRIAL_OVERCLOCK_SUBSKILL_SID = "sub_skill_faction_homm3_factory_industrial_tempo"
 HOMM3_BULWARK_RUNES_SUBSKILLS_BY_LEVEL = {
@@ -7990,10 +7850,20 @@ HOMM3_SPECIAL_BUILDING_NODE_POS_BY_FACTION: dict[str, dict[str, dict[str, int]]]
         "Build_Treasury:1": {"xPos": 2, "yPos": 2},
     },
     "homm3_inferno": {
+        # Every dwelling level is pinned: 26297049 redrew the demon_city donor tree
+        # (Tier_2/3/6/7 moved), and a partial map collided with the donor's Tier_3 cell.
+        # These are the 25672315 preferences (that map plus the old donor cells for
+        # Tier_1/3/5), so the derived layout matches the 25672315 install.
+        "Build_Tier_1:1": {"xPos": 6, "yPos": 0},
+        "Build_Tier_1:2": {"xPos": 6, "yPos": 1},
         "Build_Tier_2:1": {"xPos": 5, "yPos": 1},
         "Build_Tier_2:2": {"xPos": 5, "yPos": 2},
+        "Build_Tier_3:1": {"xPos": 4, "yPos": 1},
+        "Build_Tier_3:2": {"xPos": 4, "yPos": 2},
         "Build_Tier_4:1": {"xPos": 6, "yPos": 2},
         "Build_Tier_4:2": {"xPos": 6, "yPos": 3},
+        "Build_Tier_5:1": {"xPos": 7, "yPos": 2},
+        "Build_Tier_5:2": {"xPos": 7, "yPos": 3},
         "Build_Tier_6:1": {"xPos": 5, "yPos": 3},
         "Build_Tier_6:2": {"xPos": 6, "yPos": 4},
         "Build_Tier_7:1": {"xPos": 5, "yPos": 4},
@@ -9386,6 +9256,7 @@ def make_generic_fraction_doc(release_zip: zipfile.ZipFile, manifest: dict[str, 
             item.get("fractionLawsLines"),
             {f"fraction_law_{donor_fraction_sid}_": manifest_law_prefix(manifest)},
         )
+        apply_custom_law_line_placements(item, manifest)
     return doc
 
 
@@ -10227,6 +10098,39 @@ GENERIC_ICE_DAMAGE_IMMUNITY_SIDS = {
     "h3_mountain_ram_upg_alt",
 }
 
+# Conflux elemental signature passives (user-approved 2026-11-14). No passive may be
+# shared between the 15 elementals, so each set holds exactly one unit. Each is a graft
+# of a vanilla effect: the tags below are copied from the donor row named in the
+# comment and checked against the release Core by check_conflux_signature_passive_sources.
+# Living Water = Embodiment of Water (aqualotl passives 0 + its ice effect immunities).
+CONFLUX_LIVING_WATER_SIDS = {"h3_water_elemental"}
+CONFLUX_LIVING_WATER_DAMAGE_IMMUNITY_TAGS = [
+    "primal_6_magic_ice_bolt_damage",
+    "primal_13_magic_avalanche_damage",
+]
+CONFLUX_LIVING_WATER_EFFECT_IMMUNITY_TAGS = [
+    "primal_6_magic_ice_bolt_effect",
+    "primal_13_magic_avalanche_effect",
+]
+# Born of Flame = Embodiment of Fire (phoenix passives 0).
+CONFLUX_BORN_OF_FLAME_SIDS = {"h3_fire_elemental"}
+CONFLUX_BORN_OF_FLAME_DAMAGE_IMMUNITY_TAGS = [
+    "primal_4_magic_fire_globe_damage",
+    "primal_7_magic_wall_of_flame_damage",
+    "primal_11_magic_armageddon_damage",
+]
+# Frostbite = Icy Veins (aqualotl_upg_alt attacks apply aqualotl_debuff_2 for 1 round);
+# the buff is cloned to h3_frostbite_effect (DONOR_STATUS_BUFF_CLONES) for its own name.
+CONFLUX_FROSTBITE_SIDS = {"h3_water_elemental_upg_alt"}
+CONFLUX_FROSTBITE_DONOR_BUFF_SID = "aqualotl_debuff_2"
+CONFLUX_FROSTBITE_BUFF_DURATION = 1
+CONFLUX_SIGNATURE_PASSIVE_SOURCES = (
+    # (donor unit, logic passive index, immunity type, tags)
+    ("aqualotl", 0, "damage", CONFLUX_LIVING_WATER_DAMAGE_IMMUNITY_TAGS),
+    ("aqualotl", 4, "effect", CONFLUX_LIVING_WATER_EFFECT_IMMUNITY_TAGS),
+    ("phoenix", 0, "damage", CONFLUX_BORN_OF_FLAME_DAMAGE_IMMUNITY_TAGS),
+)
+
 GENERIC_FORCE_FLYER_SIDS = {
     "h3_efreeti",
     "h3_efreeti_upg",
@@ -10299,6 +10203,11 @@ GENERIC_CONSTRUCT_PROFILE_SIDS = {
     "h3_dreadnought",
     "h3_juggernaut",
     "h3_dreadnought_upg_alt",
+    # Tower Gargoyles: the Bloodless card (and the Elemental Gargoyle card's
+    # "Gargoyle construct profile") had no logic behind them (2026-11-12 audit).
+    "h3_gargoyle",
+    "h3_gargoyle_upg",
+    "h3_gargoyle_upg_alt",
 }
 
 GENERIC_ELEMENTAL_MORALE_LOCK_SIDS = {
@@ -10318,6 +10227,13 @@ GENERIC_ELEMENTAL_MORALE_LOCK_SIDS = {
     "h3_psychic_elemental_upg",
     "h3_psychic_elemental_upg_alt",
 }
+
+# Fail closed at import if a Conflux signature passive is shared or leaves the elementals.
+_CONFLUX_SIGNATURE_PASSIVE_SETS = (CONFLUX_LIVING_WATER_SIDS, CONFLUX_BORN_OF_FLAME_SIDS, CONFLUX_FROSTBITE_SIDS)
+if any(len(sids) != 1 or not sids <= GENERIC_ELEMENTAL_MORALE_LOCK_SIDS for sids in _CONFLUX_SIGNATURE_PASSIVE_SETS) or len(
+    set().union(*_CONFLUX_SIGNATURE_PASSIVE_SETS)
+) != len(_CONFLUX_SIGNATURE_PASSIVE_SETS):
+    raise RuntimeError("Conflux signature passives must each belong to exactly one distinct elemental")
 
 TOWER_MELEE_ONLY_GUARD_SIDS = {"h3_gremlin", "h3_giant"}
 TOWER_SHOOTER_GUARD_SIDS = {"h3_gremlin_upg", "h3_mage", "h3_mage_upg", "h3_mage_upg_alt", "h3_giant_upg"}
@@ -10400,6 +10316,8 @@ GENERIC_DENDROID_BINDING_SIDS = {"h3_dendroid_guard", "h3_dendroid_soldier", "h3
 GENERIC_SWASHBUCKLER_GOLD_SIDS = {"h3_crew_mate_upg_alt"}
 
 GENERIC_COVE_FEARLESS_SIDS = {"h3_sea_serpent_upg_alt"}
+
+GENERIC_MIND_SPELL_IMMUNITY_SIDS = {"h3_giant", "h3_giant_upg", "h3_giant_upg_alt"}
 
 GENERIC_PHOENIX_REBIRTH_SIDS = {"h3_firebird_upg", "h3_firebird_upg_alt"}
 
@@ -10507,7 +10425,7 @@ STRONG_VANILLA_ACTIVE_SPECS: dict[str, dict[str, Any]] = {
     },
     "misfortune": {
         "implemented": "Naira's Kiss misfortune focus debuff",
-        "buffSid": "magic_nairas_kiss_effect_1_old",
+        "buffSid": "h3_misfortune_effect",
         "buffDuration": 2,
         "viewName": "h3_common_ability_misfortune_name",
         "viewDescription": "h3_common_ability_misfortune_description",
@@ -10583,7 +10501,7 @@ STRONG_VANILLA_ACTIVE_SPECS: dict[str, dict[str, Any]] = {
         "damageTarget": "enemy",
         "damageType": "magic_pure",
         "statDmgMult": 1.0,
-        "buffSid": "gorilla_stun",
+        "buffSid": "h3_stunned_effect",
         "buffDuration": 1,
         "viewName": "h3_common_ability_stunning_blow_name",
         "viewDescription": "h3_common_ability_stunning_blow_description",
@@ -10659,7 +10577,9 @@ STRONG_VANILLA_ACTIVE_SPECS: dict[str, dict[str, Any]] = {
         "rank": 2,
         "cd": 2,
         "energyLevel": 2,
-        "tags": ["ability", "heal_ability", "construct_immunities"],
+        # No construct_immunities tag: constructs carry a cast immunity to it, so the
+        # tag made Repair unable to target the very stacks it exists for (audit S7).
+        "tags": ["ability", "heal_ability"],
         "targetMechanics": [{"mech": "heal_percent", "values": ["without respawn", "max_unit", "0.50", "0.00", "true"]}],
         "viewName": "h3_common_ability_repair_name",
         "viewDescription": "h3_common_ability_repair_description",
@@ -10674,7 +10594,9 @@ STRONG_VANILLA_ACTIVE_SPECS: dict[str, dict[str, Any]] = {
         "rank": 3,
         "cd": 3,
         "energyLevel": 2,
-        "tags": ["ability", "heal_ability", "undead_immunities"],
+        # The native donor (lich_upg_alt) tags avatar_immunities; undead_immunities
+        # made Animate Dead unable to revive any undead stack (audit S7).
+        "tags": ["ability", "heal_ability", "avatar_immunities"],
         "targetMechanics": [{"mech": "revive", "values": ["100", "1", "20", "until start amount"]}],
         "viewName": "h3_common_ability_animate_dead_name",
         "viewDescription": "h3_common_ability_animate_dead_description",
@@ -10718,7 +10640,8 @@ STRONG_VANILLA_ACTIVE_BY_SID: dict[str, tuple[str, ...]] = {
     "h3_black_knight_upg": ("curse",),
     "h3_black_knight_upg_alt": ("curse",),
     "h3_lich_upg_alt": ("animate_dead",),
-    "h3_gremlin_upg_alt": ("repair",),
+    # h3_gremlin_upg_alt already ships h3_repair_active_ability (quality_pass_homm3_tower_overlay.py);
+    # a second vanilla repair here gave the Mechanic two Repair actives.
     "h3_genie_upg": ("bless_spell",),
     "h3_golem_upg_alt": ("magnetic_slow",),
     "h3_mage_upg_alt": ("weakness_ray", "bless_spell"),
@@ -10727,7 +10650,7 @@ STRONG_VANILLA_ACTIVE_BY_SID: dict[str, tuple[str, ...]] = {
 
 ACTIVE_DISPLAY_OVERRIDES_BY_SID: dict[str, dict[str, dict[str, Any]]] = {
     "h3_pikeman": {"stunning_blow": {"name": "Pike Brace", "description": "Spend 3 Focus to lock an enemy in place with a one-round stun."}},
-    "h3_pikeman_upg": {"stunning_blow": {"name": "Halberd Hook", "description": "Spend 2 Focus to strike, stagger, and stun an enemy for 1 round.", "energyLevel": 2, "cd": 2}},
+    "h3_pikeman_upg": {"stunning_blow": {"name": "Halberd Hook", "description": "Spend 2 Focus in melee range to strike, stagger, and stun an enemy for 1 round.", "energyLevel": 2, "cd": 2}},
     "h3_pikeman_upg_alt": {"stunning_blow": {"name": "Sentinel Rebuke", "description": "Spend 2 Focus to punish an enemy advance with a one-round stun.", "energyLevel": 2, "cd": 3, "statDmgMult": 1.2}},
     "h3_cavalier": {"attack_defense_debuff": {"name": "Cavalry Press", "description": "Spend 2 Focus to charge for 75% melee damage and initially reduce the target's Attack and Defense by 3. The effect lasts 2 rounds.", "energyLevel": 2, "cd": 2, "attackType": "melee", "tags": ["melee_attack", "normal_damage", "basic_attack", "ability", "armed_ability"], "damageTarget": "enemy", "damageType": "normal", "statDmgMult": 0.75, "triggerCounter": True, "viewType": "Ability_type_attack_mod", "animationIndex": 1}},
     "h3_cavalier_upg": {"attack_defense_debuff": {"name": "Champion's Break", "description": "Spend 1 Focus to charge for 100% melee damage and initially reduce the target's Attack and Defense by 3. The effect lasts 2 rounds.", "cd": 1, "attackType": "melee", "tags": ["melee_attack", "normal_damage", "basic_attack", "ability", "armed_ability"], "damageTarget": "enemy", "damageType": "normal", "statDmgMult": 1.0, "triggerCounter": True, "viewType": "Ability_type_attack_mod", "animationIndex": 1}},
@@ -10747,8 +10670,8 @@ ACTIVE_DISPLAY_OVERRIDES_BY_SID: dict[str, dict[str, dict[str, Any]]] = {
     "h3_manticore": {"stunning_blow": {"name": "Barbed Pounce", "description": "Spend 3 Focus to pounce for 75% normal damage and paralyze the target for 1 round.", "attackType": "melee", "tags": ["melee_attack", "normal_damage", "basic_attack", "ability", "armed_ability"], "damageTarget": "enemy", "damageType": "normal", "statDmgMult": 0.75, "triggerCounter": True, "viewType": "Ability_type_attack_mod", "animationIndex": 1}},
     "h3_manticore_upg": {"stunning_blow": {"name": "Scorpion Maul", "description": "Spend 2 Focus to maul for 85% normal damage and paralyze the target for 1 round.", "energyLevel": 2, "cd": 2, "attackType": "melee", "tags": ["melee_attack", "normal_damage", "basic_attack", "ability", "armed_ability"], "damageTarget": "enemy", "damageType": "normal", "statDmgMult": 0.85, "triggerCounter": True, "viewType": "Ability_type_attack_mod", "animationIndex": 1}},
     "h3_hydra_upg_alt": {"stunning_blow": {"name": "Many-Headed Slam", "description": "Spend 3 Focus to batter adjacent enemies for 75% normal damage and stun them for 1 round.", "pattern": "attack_swipe_x100_x100", "damageTarget": "enemy", "statDmgMult": 0.75}},
-    "h3_dwarf": {"stunning_blow": {"name": "Shield Set", "description": "Spend 2 Focus without ending the turn to give this stack +5 Attack and +1 Initiative for 2 rounds.", "attackType": "cast", "castTarget": "self", "affectTarget": "self", "buffTarget": "self", "energyLevel": 2, "cd": 2, "actionCost": 0, "tags": ["ability", "buff_ability"], "damageTarget": "none", "damageType": "none", "statDmgMult": 0, "buffSid": "griffin_selfbuff_1", "buffDuration": 2, "viewType": "Ability_type_buff"}},
-    "h3_battle_dwarf": {"stunning_blow": {"name": "Runic Guard", "description": "Spend 2 Focus without ending the turn to ignore attackers' Attack values for 1 round.", "attackType": "cast", "castTarget": "self", "affectTarget": "self", "buffTarget": "self", "energyLevel": 2, "cd": 2, "actionCost": 0, "tags": ["ability", "buff_ability"], "damageTarget": "none", "damageType": "none", "statDmgMult": 0, "buffSid": "minos_buff", "buffDuration": 1, "viewType": "Ability_type_buff"}},
+    "h3_dwarf": {"stunning_blow": {"name": "Shield Set", "description": "Spend 2 Focus without ending the turn to give this stack +5 Attack and +1 Initiative for 2 rounds.", "attackType": "cast", "castTarget": "self", "affectTarget": "self", "buffTarget": "self", "energyLevel": 2, "cd": 2, "actionCost": 0, "tags": ["ability", "buff_ability"], "damageTarget": "none", "damageType": "none", "statDmgMult": 0, "buffSid": "h3_shield_set_effect", "buffDuration": 2, "viewType": "Ability_type_buff"}},
+    "h3_battle_dwarf": {"stunning_blow": {"name": "Runic Guard", "description": "Spend 2 Focus without ending the turn to ignore attackers' Attack values for 1 round.", "attackType": "cast", "castTarget": "self", "affectTarget": "self", "buffTarget": "self", "energyLevel": 2, "cd": 2, "actionCost": 0, "tags": ["ability", "buff_ability"], "damageTarget": "none", "damageType": "none", "statDmgMult": 0, "buffSid": "h3_runic_guard_effect", "buffDuration": 1, "viewType": "Ability_type_buff"}},
     "h3_gargoyle": {"stunning_blow": {"name": "Granite Dive", "description": "Spend 2 Focus to dive for 75% normal damage and suppress 1 retaliation.", "energyLevel": 2, "cd": 2, "attackType": "melee", "tags": ["melee_attack", "normal_damage", "basic_attack", "ability"], "damageTarget": "enemy", "damageType": "normal", "statDmgMult": 0.75, "triggerCounter": True, "buffSid": None, "targetMechanics": [{"mech": "reduce_counters", "values": ["1"]}], "viewType": "Ability_type_attack_mod", "animationIndex": 1}},
     "h3_gargoyle_upg": {"stunning_blow": {"name": "Obsidian Drop", "description": "Spend 2 Focus to slam an enemy for 85% normal damage and stun it for 1 round.", "energyLevel": 2, "cd": 2, "attackType": "melee", "tags": ["melee_attack", "normal_damage", "basic_attack", "ability"], "damageTarget": "enemy", "damageType": "normal", "statDmgMult": 0.85, "triggerCounter": True, "viewType": "Ability_type_attack_mod", "animationIndex": 1}},
     "h3_gargoyle_upg_alt": {"stunning_blow": {"name": "Rooftop Pin", "description": "Spend 2 Focus to pin an enemy for 75% normal damage and stun it for 1 round.", "energyLevel": 2, "cd": 2, "attackType": "melee", "tags": ["melee_attack", "normal_damage", "basic_attack", "ability"], "damageTarget": "enemy", "damageType": "normal", "statDmgMult": 0.75, "triggerCounter": True, "viewType": "Ability_type_attack_mod", "animationIndex": 1}},
@@ -10763,14 +10686,14 @@ ACTIVE_DISPLAY_OVERRIDES_BY_SID: dict[str, dict[str, dict[str, Any]]] = {
     "h3_efreeti": {"thunderbolt": {"name": "Ifrit Spark", "description": "Spend 2 Focus to sear an enemy for 150% pure magic damage."}},
     "h3_efreeti_upg": {"thunderbolt": {"name": "Sultan's Flame", "description": "Spend 2 Focus to splash nearby enemies for 90% pure magic damage.", "pattern": "attack_rumble_x1_x100", "damageTarget": "enemy", "statDmgMult": 0.9}},
     "h3_water_elemental": {"blind": {"name": "Mist Veil", "description": "Spend 3 Focus to attack and blind an enemy for 2 rounds."}},
-    "h3_water_elemental_upg": {"blind": {"name": "Crashing Foam", "description": "Spend 2 Focus to attack and blind an enemy for 2 rounds.", "energyLevel": 2, "cd": 3}},
+    "h3_water_elemental_upg": {"blind": {"name": "Crashing Foam", "description": "Spend 2 Focus to attack and blind an enemy for 2 rounds.", "energyLevel": 2, "cd": 3, "statDmgMult": 1.15}},
     "h3_unicorn": {"blind": {"name": "Dazzling Horn", "description": "Spend 3 Focus to attack and blind an enemy for 2 rounds."}},
     "h3_war_unicorn": {"blind": {"name": "Prismatic Charge", "description": "Spend 2 Focus to attack and blind an enemy for 2 rounds.", "energyLevel": 2, "cd": 3}},
     "h3_pristine_unicorn_upg_alt": {"blind": {"name": "Pure Radiance", "description": "Spend 2 Focus to attack and blind an enemy for 2 rounds.", "energyLevel": 2, "statDmgMult": 1.2}},
     "h3_minotaur": {"bless_spell": {"name": "War Roar", "description": "Spend 2 Focus to bless an allied stack with morale and luck."}},
     "h3_minotaur_upg": {"bless_spell": {"name": "King's Challenge", "description": "Spend 2 Focus to grant an allied stack morale and luck for the fight.", "cd": 1}},
     "h3_minotaur_upg_alt": {"bless_spell": {"name": "Labyrinth Oath", "description": "Spend 1 Focus to grant an allied stack a shorter morale and luck blessing.", "energyLevel": 1, "buffDuration": 1}},
-    "h3_walking_dead": {"attack_defense_debuff": {"name": "Shambling Grasp", "description": "Spend 2 Focus in melee range to initially reduce an enemy's Attack and Defense by 3. The effect lasts 1 round.", "energyLevel": 2, "cd": 2, "buffDuration": 1, "attackType": "melee", "animationIndex": 1}},
+    "h3_walking_dead": {"attack_defense_debuff": {"name": "Shambling Grasp", "description": "Spend 2 Focus in melee range to initially reduce an enemy's Attack and Defense by 3. Duration: 1 round.", "energyLevel": 2, "cd": 2, "buffDuration": 1, "attackType": "melee", "animationIndex": 1}},
     "h3_walking_dead_upg": {"attack_defense_debuff": {"name": "Zombie Clutch", "description": "Spend 1 Focus in melee range to initially reduce an enemy's Attack and Defense by 3. The effect lasts 2 rounds.", "cd": 1, "buffDuration": 2, "attackType": "melee", "animationIndex": 1}},
     "h3_black_knight": {"curse": {"name": "Dread Curse", "description": "Spend 2 Focus in melee range to reduce an enemy's normal damage by 20% and force minimum damage for 1 round.", "energyLevel": 2, "cd": 2, "buffDuration": 1, "attackType": "melee", "animationIndex": 1}},
     "h3_black_knight_upg": {"curse": {"name": "Death Knight's Hex", "description": "Spend 1 Focus in melee range to reduce an enemy's normal damage by 20% and force minimum damage for 2 rounds.", "cd": 1, "buffDuration": 2, "attackType": "melee", "animationIndex": 1}},
@@ -10796,7 +10719,7 @@ ACTIVE_DISPLAY_OVERRIDES_BY_SID: dict[str, dict[str, dict[str, Any]]] = {
     "h3_sea_serpent": {"poison_decay": {"name": "Venomous Bite", "description": "Spend 1 Focus to attack for 75% normal damage and reduce the target's maximum health by 20% for 1 round.", "statDmgMult": 0.75}},
     "h3_sea_serpent_upg_alt": {
         "poison_decay": {"name": "Abyssal Venom", "description": "Spend 1 Focus to attack for 100% normal damage and reduce the target's maximum health by 20% for 1 round.", "statDmgMult": 1.0},
-        "fearsome": {"name": "Fearsome", "description": "Spend 1 Focus to give an enemy a 10% chance to skip action for 1 round."},
+        "fearsome": {"name": "Fearsome", "description": "Spend 1 Focus to give an enemy a 10% chance to skip action for 2 rounds."},
     },
     "h3_haspid": {"poison_decay": {"name": "Haspid Venom", "description": "Spend 1 Focus to attack for 100% normal damage and reduce the target's maximum health by 20% for 1 round.", "cd": 1}},
     "h3_pit_fiend_upg": {"animate_dead": {"name": "Demon Harvest", "description": "Spend 2 Focus to revive an allied stack, up to its starting creature count."}},
@@ -10880,6 +10803,7 @@ MVP_DONOR_ACTIVE_BY_SID: dict[str, tuple[str, ...]] = {
 
 STRONG_VANILLA_REGENERATION_SIDS = {"h3_wight", "h3_wight_upg", "h3_wight_upg_alt"}
 STRONG_VANILLA_LIFE_DRAIN_SIDS = {"h3_vampire_upg", "h3_vampire_upg_alt"}
+STRIP_DONOR_LIFE_DRAIN_SIDS = {"h3_vampire", "h3_wight", "h3_wight_upg", "h3_wight_upg_alt", "h3_lich_upg_alt"}
 STRONG_VANILLA_DEATH_CLOUD_SIDS = {"h3_lich", "h3_lich_upg", "h3_lich_upg_alt"}
 STRONGHOLD_SOURCE_UNIT_MECHANICS: dict[str, dict[str, dict[str, Any]]] = {
     # Restores Stronghold mechanics that the old dedicated release path copied
@@ -11133,6 +11057,8 @@ STRONGHOLD_SOURCE_UNIT_MECHANICS: dict[str, dict[str, dict[str, Any]]] = {
         },
     },
     "h3_cyclops_upg_alt": {
+        # Siege Thrower / "at any range" cards promise no distance falloff.
+        "logic": {"stats": {"ignoreShootDmgBuff": True}},
         "view": {
             "passives": [
                 {"name": "base_passive_ranged_attack_no_range_name", "description": "base_passive_ranged_attack_no_range_description", "useExpandTooltip": "false", "icon": "skill_tactics"},
@@ -11177,8 +11103,12 @@ GENERIC_DATA_MECHANIC_SIDS = (
     | GENERIC_PHOENIX_REBIRTH_SIDS
     | GENERIC_CONSTRUCT_PROFILE_SIDS
     | GENERIC_ELEMENTAL_MORALE_LOCK_SIDS
+    | CONFLUX_LIVING_WATER_SIDS
+    | CONFLUX_BORN_OF_FLAME_SIDS
+    | CONFLUX_FROSTBITE_SIDS
     | GENERIC_DENDROID_BINDING_SIDS
     | GENERIC_COVE_FEARLESS_SIDS
+    | GENERIC_MIND_SPELL_IMMUNITY_SIDS
     | GENERIC_UNLIMITED_RETALIATION_SIDS
     | set(COVE_AFTER_SHOT_WEAKNESS_BY_SID)
     | set(BULWARK_AFTER_SHOT_ICE_BY_SID)
@@ -11192,6 +11122,7 @@ STRONG_VANILLA_MECHANIC_SIDS = (
     | STRONGHOLD_SOURCE_UNIT_MECHANIC_SIDS
     | STRONG_VANILLA_REGENERATION_SIDS
     | STRONG_VANILLA_LIFE_DRAIN_SIDS
+    | STRIP_DONOR_LIFE_DRAIN_SIDS
     | STRONG_VANILLA_DEATH_CLOUD_SIDS
     | GENERIC_DATA_MECHANIC_SIDS
 )
@@ -11218,11 +11149,12 @@ STRONG_VANILLA_LANG_ROWS = [
     {"sid": "h3_common_passive_bulwark_flyer_slow_name", "text": "Frostbound Skies"},
     {"sid": "h3_common_passive_bulwark_flyer_slow_description", "text": "Enemy flying creatures begin combat with reduced Speed while this stack is present."},
     {"sid": "h3_common_ability_magnetic_slow_name", "text": "Magnetic Slow"},
-    {"sid": "h3_common_ability_magnetic_slow_description", "text": "Spend 1 Focus to reduce an enemy's Speed and Initiative by 1."},
+    {"sid": "h3_common_ability_magnetic_slow_description", "text": "Spend 1 Focus to reduce an enemy's Speed and Initiative by 1 for the rest of the battle. Stacks."},
+    {"sid": "inquisitor_ability_3_name", "text": "Blessed"},
     {"sid": "h3_common_ability_misfortune_name", "text": "Misfortune"},
     {"sid": "h3_common_ability_misfortune_description", "text": "Spend 1 Focus to set an enemy's Morale and Luck to minimum and its Attack and Defense to 0 for 2 rounds."},
     {"sid": "h3_common_ability_fearsome_name", "text": "Fearsome"},
-    {"sid": "h3_common_ability_fearsome_description", "text": "Spend 1 Focus to give an enemy a 10% chance to skip action for 1 round."},
+    {"sid": "h3_common_ability_fearsome_description", "text": "Spend 1 Focus to give an enemy a 10% chance to skip action for 2 rounds."},
     {"sid": "h3_common_passive_cove_fearless_name", "text": "Fearless"},
     {"sid": "h3_common_passive_cove_fearless_description", "text": "Immune to Cove Fearsome's 10% skip-action effect."},
     {"sid": "h3_cove_passive_swashbuckler_gold_name", "text": "Gold Producer"},
@@ -11249,11 +11181,17 @@ STRONG_VANILLA_LANG_ROWS = [
     {"sid": "h3_common_ability_animate_dead_name", "text": "Animate Dead"},
     {"sid": "h3_common_ability_animate_dead_description", "text": "Spend 2 Focus to revive an allied stack, up to its starting creature count."},
     {"sid": "h3_common_ability_death_stare_name", "text": "Death Stare"},
-    {"sid": "h3_common_ability_death_stare_description", "text": "Spend 2 Focus to kill 1-7 additional creatures in the target stack."},
+    {"sid": "h3_common_ability_death_stare_description", "text": "Spend 2 Focus to kill 1 additional creature in the target stack."},
     {"sid": "h3_common_passive_regeneration_name", "text": "Regeneration"},
     {"sid": "h3_common_passive_regeneration_description", "text": "Restores 20% health at the start of the unit's turn."},
     {"sid": "h3_common_passive_ice_damage_immunity_name", "text": "Ice Immunity"},
     {"sid": "h3_common_passive_ice_damage_immunity_description", "text": "Immune to Ice Bolt damage and Initiative reduction, and to Avalanche spell damage."},
+    {"sid": "h3_conflux_passive_living_water_name", "text": "Living Water"},
+    {"sid": "h3_conflux_passive_living_water_description", "text": "Leaves no body upon death. Immune to Ice Bolt and Circle of Winter."},
+    {"sid": "h3_conflux_passive_frostbite_name", "text": "Frostbite"},
+    {"sid": "h3_conflux_passive_frostbite_description", "text": "Attacks stop the target from restoring HP or being revived by any means until the end of the round."},
+    {"sid": "h3_conflux_passive_born_of_flame_name", "text": "Born of Flame"},
+    {"sid": "h3_conflux_passive_born_of_flame_description", "text": "Leaves no body upon death. Immune to Fireball, Firewall and Armageddon."},
     {"sid": "h3_common_passive_free_shooting_name", "text": "Free Shooting"},
     {"sid": "h3_common_passive_free_shooting_description", "text": "Ranged attacks ignore the adjacent shooting block penalty."},
     {"sid": "h3_common_passive_attack_ignore_30_name", "text": "Attack Ignore"},
@@ -11265,7 +11203,11 @@ STRONG_VANILLA_LANG_ROWS = [
     {"sid": "h3_common_passive_positive_luck_name", "text": "Positive Luck"},
     {"sid": "h3_common_passive_positive_luck_description", "text": "Luck cannot fall below +1."},
     {"sid": "h3_common_passive_dendroid_binding_name", "text": "Binding"},
-    {"sid": "h3_common_passive_dendroid_binding_description", "text": "Melee attacks root the target for 2 rounds, ending if the Dendroid moves or dies."},
+    # attack_reach_x2 hits a line of three hexes; the native reach_1 card says one.
+    {"sid": "h3_common_passive_strike_reach_2_description", "text": "Deals Damage to the target and <b>any creature</b> on the two hexes behind it."},
+    {"sid": "h3_common_alt_attack_melee_half_description", "text": "Can only attack adjacent enemies. Deals 50% damage."},
+    {"sid": "h3_common_alt_attack_swirl_half_description", "text": "Strikes all adjacent enemies for 50% damage. Enemies do not counterattack."},
+    {"sid": "h3_common_passive_dendroid_binding_description", "text": "Melee attacks root the target for 2 rounds."},
 ]
 
 
@@ -11404,11 +11346,11 @@ def make_cove_summon_fangarms_ability() -> dict[str, Any]:
             "targetMechanics": [
                 {
                     "mech": "spawn_object",
-                    "values": ["unit", HOMM3_COVE_FANGARM_UNIT_SID, "0", "1", "2"],
+                    "values": ["unit", HOMM3_COVE_FANGARM_UNIT_SID, "0", "2", "1"],
                 }
             ],
         },
-        "xHomm3ImplementedMechanics": "Tidecaller Summon Fangarms uses the native unit spawn_object tuple with 50% Power scaling (0 base, +1 per 2 Power) and one charge.",
+        "xHomm3ImplementedMechanics": "Tidecaller Summon Fangarms uses the native unit spawn_object tuple with 50% Power scaling (0 base, +1 per 2 Tidecallers: values 0/2/1; 0/1/2 gave 2 per Tidecaller) and one charge.",
     }
 
 
@@ -11460,7 +11402,7 @@ def strong_vanilla_active_lang_rows() -> list[dict[str, str]]:
                     f"Ranged attacks reduce the target's normal damage by {percent}% for "
                     f"{COVE_AFTER_SHOT_WEAKNESS_DURATION} rounds after damage is dealt. If the target is already "
                     f"affected by Weakness, the attack instead applies Disrupting Ray, reducing its Defense by "
-                    f"{defence_penalty}; this Defense reduction stacks."
+                    f"{defence_penalty} for the rest of the battle; this Defense reduction stacks."
                 ),
             }
         )
@@ -11472,7 +11414,7 @@ def stronghold_source_unit_lang_rows() -> list[dict[str, str]]:
         {"sid": "h3_goblin_ability_2_name", "text": "Snare Trap"},
         {"sid": "h3_goblin_ability_2_description", "text": "Spend 1 Focus to place a snare trap on a target hex."},
         {"sid": "h3_wolf_rider_upg_passive_1_name", "text": "Ferocity"},
-        {"sid": "h3_wolf_rider_upg_passive_1_description", "text": "After this unit counterattacks in melee, it immediately makes an additional melee attack."},
+        {"sid": "h3_wolf_rider_upg_passive_1_description", "text": "Strikes twice in melee: after the target retaliates, it attacks again."},
         {"sid": "h3_wolf_rider_upg_alt_ability_1_name", "text": "Boar Charge"},
         {"sid": "h3_wolf_rider_upg_alt_ability_1_description", "text": "Spend 1 Focus to make a 100% melee attack and give the target -5 Luck for 1 round."},
         {"sid": "h3_orc_hamstring_name", "text": "Hamstring"},
@@ -11555,6 +11497,48 @@ def apply_tower_attack_role_guard_to_view(item: dict[str, Any], custom_sid: str)
     return []
 
 
+def conflux_living_water_passive() -> dict[str, Any]:
+    # Same shape as the native rows: one damage entry, one effect entry per tag.
+    return {
+        "data": {
+            "immunities": [{"type": "damage", "tags": list(CONFLUX_LIVING_WATER_DAMAGE_IMMUNITY_TAGS)}]
+            + [{"type": "effect", "tags": [tag]} for tag in CONFLUX_LIVING_WATER_EFFECT_IMMUNITY_TAGS]
+        }
+    }
+
+
+def conflux_born_of_flame_passive() -> dict[str, Any]:
+    return {"data": {"immunities": [{"type": "damage", "tags": list(CONFLUX_BORN_OF_FLAME_DAMAGE_IMMUNITY_TAGS)}]}}
+
+
+def check_conflux_signature_passive_sources(release_zip: zipfile.ZipFile) -> None:
+    """Fail closed if a grafted donor row no longer carries the tags the graft copies."""
+    for donor_sid, index, immunity_type, tags in CONFLUX_SIGNATURE_PASSIVE_SOURCES:
+        logic_name = f"DB/units/units_logics/nature/{donor_sid}_l.json"
+        donor = first_array_item(read_json(release_zip, logic_name))
+        passives = donor.get("passives") if isinstance(donor, dict) else None
+        if not isinstance(passives, list) or index >= len(passives):
+            raise RuntimeError(f"Conflux passive graft source {donor_sid} passives[{index}] missing")
+        immunities = ((passives[index] or {}).get("data") or {}).get("immunities") or []
+        found = {
+            tag
+            for row in immunities
+            if isinstance(row, dict) and row.get("type") == immunity_type
+            for tag in row.get("tags") or []
+        }
+        missing = sorted(set(tags) - found)
+        if missing:
+            raise RuntimeError(f"Conflux passive graft source {donor_sid} passives[{index}] lacks {immunity_type} tags {missing}")
+    for donor_sid in ("aqualotl_upg_alt",):
+        donor = first_array_item(read_json(release_zip, f"DB/units/units_logics/nature/{donor_sid}_l.json"))
+        attack = (donor.get("defaultAttacks") or [{}])[0] if isinstance(donor, dict) else {}
+        buff = ((attack or {}).get("damageDealer") or {}).get("buff") or {}
+        if buff.get("sid") not in {CONFLUX_FROSTBITE_DONOR_BUFF_SID, f"{HOMM3_VANILLA_BUFF_COPY_PREFIX}{CONFLUX_FROSTBITE_DONOR_BUFF_SID}"} or buff.get(
+            "duration"
+        ) != CONFLUX_FROSTBITE_BUFF_DURATION:
+            raise RuntimeError(f"Conflux Frostbite graft source {donor_sid} attack buff changed: {buff!r}")
+
+
 def apply_generic_mechanics_to_logic(item: dict[str, Any], custom_sid: str, is_shooter: bool, faction_sid: str = "") -> list[str]:
     implemented: list[str] = []
     melee_multiplier = 1.0 if custom_sid in GENERIC_FULL_MELEE_SHOOTER_SIDS else 0.5
@@ -11594,6 +11578,8 @@ def apply_generic_mechanics_to_logic(item: dict[str, Any], custom_sid: str, is_s
         elif faction_sid == "homm3_necropolis":
             implemented.append("undead morale profile")
         elif custom_sid in GENERIC_ELEMENTAL_MORALE_LOCK_SIDS:
+            # Non-living: no corpse to resurrect/raise (Air line inherited a living donor's corpse).
+            item["leaveCorpse"] = False
             implemented.append("elemental morale lock")
     if is_shooter:
         for attack in as_attack_list(item.get("alternativeAttacks")) + as_attack_list(item.get("counterAttacks")):
@@ -11731,6 +11717,14 @@ def apply_generic_mechanics_to_logic(item: dict[str, Any], custom_sid: str, is_s
         if custom_sid in GENERIC_ICE_DAMAGE_IMMUNITY_SIDS:
             append_unique_passive(passives, ice_damage_immunity_passive())
             implemented.append("ice spell damage immunity")
+        if custom_sid in CONFLUX_LIVING_WATER_SIDS:
+            item["leaveCorpse"] = False
+            append_unique_passive(passives, conflux_living_water_passive())
+            implemented.append("Living Water: no body, Ice Bolt and Circle of Winter immunity")
+        if custom_sid in CONFLUX_BORN_OF_FLAME_SIDS:
+            item["leaveCorpse"] = False
+            append_unique_passive(passives, conflux_born_of_flame_passive())
+            implemented.append("Born of Flame: no body, Fireball, Firewall and Armageddon immunity")
         attack_pen = GENERIC_ATTACK_PEN_BY_SID.get(custom_sid)
         if attack_pen is not None:
             append_unique_passive(passives, attack_pen_passive(attack_pen))
@@ -11741,6 +11735,9 @@ def apply_generic_mechanics_to_logic(item: dict[str, Any], custom_sid: str, is_s
         if custom_sid in GENERIC_COVE_FEARLESS_SIDS:
             append_unique_passive(passives, cove_fearless_passive())
             implemented.append("Cove Fearsome effect immunity")
+        if custom_sid in GENERIC_MIND_SPELL_IMMUNITY_SIDS:
+            append_unique_passive(passives, mind_spell_immunity_passive())
+            implemented.append("mind spell immunity (Sleep, Silence, Berserk)")
         if custom_sid in GENERIC_SWASHBUCKLER_GOLD_SIDS:
             implemented.append("Swashbuckler side day-start gold production")
         if custom_sid in GENERIC_CONSTRUCT_PROFILE_SIDS:
@@ -11766,6 +11763,27 @@ def apply_generic_mechanics_to_logic(item: dict[str, Any], custom_sid: str, is_s
             changed = changed or json.dumps(dealer, sort_keys=True, ensure_ascii=False) != before
         if changed:
             implemented.append("Cove after-shot Weakness")
+    if custom_sid in CONFLUX_FROSTBITE_SIDS:
+        frostbite_attacks = 0
+        for attack in (
+            as_attack_list(item.get("defaultAttacks"))
+            + as_attack_list(item.get("alternativeAttacks"))
+            + as_attack_list(item.get("counterAttacks"))
+        ):
+            dealer = attack.get("damageDealer")
+            if not isinstance(dealer, dict):
+                continue
+            current = dealer.get("buff")
+            current_sid = current.get("sid") if isinstance(current, dict) else None
+            if current_sid not in (None, CONFLUX_FROSTBITE_DONOR_BUFF_SID, DONOR_STATUS_BUFF_CLONE_IDS[CONFLUX_FROSTBITE_DONOR_BUFF_SID]):
+                raise RuntimeError(f"{custom_sid}: Frostbite would overwrite attack buff {current_sid!r}")
+            dealer["buffTarget_"] = "enemy"
+            # Retargeted to the h3_frostbite_effect clone by apply_donor_status_buff_clones.
+            dealer["buff"] = {"sid": CONFLUX_FROSTBITE_DONOR_BUFF_SID, "duration": CONFLUX_FROSTBITE_BUFF_DURATION}
+            frostbite_attacks += 1
+        if not frostbite_attacks:
+            raise RuntimeError(f"{custom_sid}: Frostbite found no attack to carry its buff")
+        implemented.append("Frostbite: attacks block HP restoration until end of round")
     if custom_sid in BULWARK_AFTER_SHOT_ICE_BY_SID:
         changed = False
         for attack in as_attack_list(item.get("defaultAttacks")):
@@ -11865,6 +11883,10 @@ def strip_stale_inferno_donor_conditional_passives(item: dict[str, Any]) -> None
             and condition[1] == "ally"
             and condition[2] in {"demon", "demons"}
         ):
+            continue
+        if isinstance(condition, list) and condition and condition[0] == "unique_fractions_buff":
+            # Donor Hive Queen per-enemy-faction bonus; no Inferno card describes it
+            # (2026-11-12 audit S5).
             continue
         kept.append(passive)
     item["conditionalPassives"] = kept
@@ -12019,7 +12041,7 @@ def apply_generic_mechanics_to_view(item: dict[str, Any], custom_sid: str, passi
         append_unique_view_passive(passives, "base_passive_strike_swipe_1_name", "base_passive_strike_swipe_1_description_alt")
         implemented.append("all-adjacent attack")
     if custom_sid in GENERIC_TRI_REACH_ATTACK_SIDS:
-        append_unique_view_passive(passives, "base_passive_strike_reach_1_name", "base_passive_strike_reach_1_description")
+        append_unique_view_passive(passives, "base_passive_strike_reach_1_name", "h3_common_passive_strike_reach_2_description")
         implemented.append("tri-reach attack")
     if custom_sid in GENERIC_ALTERNATIVE_BREATH_ATTACK_SIDS:
         append_unique_view_passive(passives, "base_passive_strike_reach_1_name", "base_passive_strike_reach_1_description")
@@ -12040,6 +12062,15 @@ def apply_generic_mechanics_to_view(item: dict[str, Any], custom_sid: str, passi
     if custom_sid in GENERIC_ICE_DAMAGE_IMMUNITY_SIDS:
         append_unique_view_passive(passives, "h3_common_passive_ice_damage_immunity_name", "h3_common_passive_ice_damage_immunity_description")
         implemented.append("ice spell damage immunity")
+    if custom_sid in CONFLUX_LIVING_WATER_SIDS:
+        append_unique_view_passive(passives, "h3_conflux_passive_living_water_name", "h3_conflux_passive_living_water_description")
+        implemented.append("Living Water: no body, Ice Bolt and Circle of Winter immunity")
+    if custom_sid in CONFLUX_BORN_OF_FLAME_SIDS:
+        append_unique_view_passive(passives, "h3_conflux_passive_born_of_flame_name", "h3_conflux_passive_born_of_flame_description")
+        implemented.append("Born of Flame: no body, Fireball, Firewall and Armageddon immunity")
+    if custom_sid in CONFLUX_FROSTBITE_SIDS:
+        append_unique_view_passive(passives, "h3_conflux_passive_frostbite_name", "h3_conflux_passive_frostbite_description")
+        implemented.append("Frostbite: attacks block HP restoration until end of round")
     attack_pen = GENERIC_ATTACK_PEN_BY_SID.get(custom_sid)
     if attack_pen is not None:
         percent = int(round(attack_pen * 100))
@@ -12134,6 +12165,9 @@ def normalize_generic_unit_view(
             item["baseClass"] = {"name": "base_class_construct", "description": "base_class_construct_description"}
         elif faction_sid == "homm3_necropolis":
             item["baseClass"] = {"name": "base_class_undead", "description": "base_class_undead_description"}
+        elif custom_sid in GENERIC_ELEMENTAL_MORALE_LOCK_SIDS and (item.get("baseClass") or {}).get("name") == "base_class_living":
+            # HoMM3 elementals are non-living; a living donor (Air line: crossbowman) must not leak its class card.
+            item["baseClass"] = {"name": "base_class_embodiment", "description": "base_class_embodiment_description"}
         item["passives"] = passives
         item["defaultAttacks"] = [view_attack(0, custom_sid=custom_sid if is_shooter else None)]
         item["counterAttacks"] = [view_attack(0)]
@@ -12185,15 +12219,40 @@ def apply_stronghold_source_unit_mechanics(item: dict[str, Any], custom_sid: str
     return ["Stronghold source unit mechanics"] if changed else []
 
 
+# Dealer tags earlier generator versions wrote on these strong-vanilla actives. The
+# overlay runs on top of the installed Core, so a row built from the old spec must
+# be replaced in place (keeping card alignment), not left next to the new one.
+LEGACY_STRONG_VANILLA_DEALER_TAGS: dict[str, tuple[tuple[str, ...], ...]] = {
+    "repair": (("ability", "heal_ability", "construct_immunities"),),
+    "animate_dead": (("ability", "heal_ability", "undead_immunities"),),
+}
+
+
+def replace_legacy_strong_vanilla_ability(abilities: list[Any], kind: str, row: dict[str, Any]) -> bool:
+    legacy_tag_sets = LEGACY_STRONG_VANILLA_DEALER_TAGS.get(kind)
+    if not legacy_tag_sets or row in abilities:
+        return False
+    for legacy_tags in legacy_tag_sets:
+        legacy = copy.deepcopy(row)
+        legacy["damageDealer"]["tags"] = list(legacy_tags)
+        for index, existing in enumerate(abilities):
+            if isinstance(existing, dict) and json.dumps(existing, sort_keys=True) == json.dumps(legacy, sort_keys=True):
+                abilities[index] = row
+                return True
+    return False
+
+
 def apply_strong_vanilla_logic_mechanics(item: dict[str, Any], custom_sid: str) -> list[str]:
     implemented: list[str] = []
     abilities = item.setdefault("abilities", [])
     if isinstance(abilities, list):
         for kind in STRONG_VANILLA_ACTIVE_BY_SID.get(custom_sid, ()):
-            if append_unique_json(abilities, make_strong_vanilla_active_ability(kind, custom_sid)):
+            row = make_strong_vanilla_active_ability(kind, custom_sid)
+            if replace_legacy_strong_vanilla_ability(abilities, kind, row) or append_unique_json(abilities, row):
                 implemented.append(str(STRONG_VANILLA_ACTIVE_SPECS[kind]["implemented"]))
         for kind in MVP_DONOR_ACTIVE_BY_SID.get(custom_sid, ()):
-            if append_unique_json(abilities, make_strong_vanilla_active_ability(kind, custom_sid)):
+            row = make_strong_vanilla_active_ability(kind, custom_sid)
+            if replace_legacy_strong_vanilla_ability(abilities, kind, row) or append_unique_json(abilities, row):
                 implemented.append(str(STRONG_VANILLA_ACTIVE_SPECS[kind]["implemented"]))
 
     implemented.extend(apply_stronghold_source_unit_mechanics(item, custom_sid, "logic"))
@@ -12202,6 +12261,26 @@ def apply_strong_vanilla_logic_mechanics(item: dict[str, Any], custom_sid: str) 
         passives = item.setdefault("passives", [])
         if isinstance(passives, list) and append_unique_json(passives, fortress_start_turn_regeneration(0.10)):
             implemented.append("native heal-percent regeneration")
+
+    if custom_sid in STRIP_DONOR_LIFE_DRAIN_SIDS or custom_sid in STRONG_VANILLA_LIFE_DRAIN_SIDS:
+        # Donor drains (native vampire 50%, wight temp-stack drain, lich ally heal)
+        # leaked with no card; Vampire Lord/Prince stacked the donor 50% under the
+        # authored 40% (audit S5 / Vampirism row). Clear them before re-adding.
+        stripped = False
+        for attack in (
+            as_attack_list(item.get("defaultAttacks"))
+            + as_attack_list(item.get("counterAttacks"))
+            + as_attack_list(item.get("alternativeAttacks"))
+        ):
+            self_mechanics = attack.get("selfMechanics")
+            if not isinstance(self_mechanics, list):
+                continue
+            kept = [mech for mech in self_mechanics if not (isinstance(mech, dict) and mech.get("mech") == "vampirism")]
+            if len(kept) != len(self_mechanics):
+                attack["selfMechanics"] = kept
+                stripped = True
+        if stripped and custom_sid in STRIP_DONOR_LIFE_DRAIN_SIDS:
+            implemented.append("donor life drain removed")
 
     if custom_sid in STRONG_VANILLA_LIFE_DRAIN_SIDS:
         vampirism = {"mech": "vampirism", "values": ["0", "0.4", "self", "until start amount"], "afterAttack": True}
@@ -12367,6 +12446,7 @@ def apply_strong_vanilla_mechanics_to_custom_unit_rows(
 ) -> None:
     changed_logic = 0
     changed_view = 0
+    check_conflux_signature_passive_sources(release_zip)
     for manifest in CUSTOM_FACTION_MANIFESTS:
         if not manifest_core_overlay_enabled(manifest):
             continue
@@ -12422,6 +12502,9 @@ def apply_strong_vanilla_mechanics_to_custom_unit_rows(
                                 view_item["baseClass"] = {"name": "base_class_construct", "description": "base_class_construct_description"}
                             elif faction_sid == "homm3_necropolis":
                                 view_item["baseClass"] = {"name": "base_class_undead", "description": "base_class_undead_description"}
+                            elif custom_sid in GENERIC_ELEMENTAL_MORALE_LOCK_SIDS and (view_item.get("baseClass") or {}).get("name") == "base_class_living":
+                                # HoMM3 elementals are non-living; a living donor (Air line: crossbowman) must not leak its class card.
+                                view_item["baseClass"] = {"name": "base_class_embodiment", "description": "base_class_embodiment_description"}
                             if custom_sid in GENERIC_SWIRL_ATTACK_SIDS:
                                 view_item["alternativeAttacks"] = [hydra_alternative_view_attack(1)]
                             if custom_sid in GENERIC_COUNTERSHOT_SIDS:
@@ -12527,6 +12610,334 @@ def custom_law_override_entry(manifest: dict[str, Any], index: int) -> dict[str,
     return None
 
 
+# Custom laws placed explicitly into the donor-cloned fractionLawsLines:
+# faction sid -> (law sid, line index, group index, law it follows). 26297049 dropped
+# human_5 from the human lines ([11,17,5,12] -> [11,17,12]); Factory's Assembly
+# Calibration keeps its old slot (D2=a), while Castle, Cove and Tower take the vanilla
+# tree as is (including the human_32 regroup).
+CUSTOM_LAW_LINE_PLACEMENTS: dict[str, tuple[tuple[str, int, int, str], ...]] = {
+    "homm3_factory": (("fraction_law_homm3_factory_5", 1, 1, "fraction_law_homm3_factory_17"),),
+}
+
+
+def apply_custom_law_line_placements(item: dict[str, Any], manifest: dict[str, Any]) -> None:
+    """Insert CUSTOM_LAW_LINE_PLACEMENTS into a remapped faction row's fractionLawsLines.
+
+    Fails closed when the anchor law or the line/group is gone (vanilla redrew the tree
+    again) and when the law is already in the lines (vanilla restored the slot, so the
+    placement is stale and must be removed).
+    """
+    faction_sid = manifest["identity"]["factionSid"]
+    placements = CUSTOM_LAW_LINE_PLACEMENTS.get(faction_sid, ())
+    if not placements:
+        return
+    lines = item.get("fractionLawsLines")
+    if not isinstance(lines, list):
+        raise RuntimeError(f"{faction_sid}: faction row has no fractionLawsLines to place custom laws into")
+    for law_sid, line_index, group_index, after_sid in placements:
+        present = [
+            law
+            for line in lines
+            if isinstance(line, dict)
+            for group in line.get("groups") or []
+            if isinstance(group, dict)
+            for law in group.get("laws") or []
+            if law == law_sid
+        ]
+        if present:
+            raise RuntimeError(
+                f"{faction_sid}: {law_sid} is already in the donor fractionLawsLines; "
+                "remove its CUSTOM_LAW_LINE_PLACEMENTS entry"
+            )
+        try:
+            laws = lines[line_index]["groups"][group_index]["laws"]
+        except (IndexError, KeyError, TypeError):
+            raise RuntimeError(
+                f"{faction_sid}: fractionLawsLines[{line_index}].groups[{group_index}] is missing; "
+                f"re-derive the placement of {law_sid}"
+            ) from None
+        if not isinstance(laws, list) or after_sid not in laws:
+            raise RuntimeError(
+                f"{faction_sid}: anchor {after_sid} is not in fractionLawsLines[{line_index}].groups[{group_index}] "
+                f"({laws!r}); re-derive the placement of {law_sid}"
+            )
+        laws.insert(laws.index(after_sid) + 1, law_sid)
+
+
+# Enabled law overrides that were already outside their faction's donor-cloned
+# fractionLawsLines on 25672315 (the installed Core has the same 17 gaps). They are
+# dormant table rows, not port regressions; each needs a placement decision before it
+# can leave this list. The reachability check fails on any other unreachable override
+# and on an entry here that has become reachable, so the list only shrinks.
+DORMANT_LAW_OVERRIDE_SIDS_OUTSIDE_LAW_LINES: frozenset[str] = frozenset(
+    {
+        "fraction_law_homm3_conflux_32",
+        "fraction_law_homm3_conflux_33",
+        "fraction_law_homm3_conflux_34",
+        "fraction_law_homm3_factory_20",
+        "fraction_law_homm3_factory_31",
+        "fraction_law_homm3_fortress_32",
+        "fraction_law_homm3_fortress_33",
+        "fraction_law_homm3_fortress_34",
+        "fraction_law_homm3_inferno_31",
+        "fraction_law_homm3_inferno_32",
+        "fraction_law_homm3_inferno_33",
+        "fraction_law_homm3_inferno_34",
+        "fraction_law_homm3_necropolis_25",
+        "fraction_law_homm3_necropolis_33",
+        "fraction_law_homm3_rampart_32",
+        "fraction_law_homm3_rampart_33",
+        "fraction_law_homm3_rampart_34",
+    }
+)
+
+
+def enabled_law_override_sids(manifest: dict[str, Any]) -> list[str]:
+    """Law sids whose override defines gameplay (custom_law_override_definition would apply it)."""
+    override = load_law_override(manifest["identity"]["factionSid"])
+    law_overrides = override.get("lawOverrides") if isinstance(override, dict) else None
+    if not isinstance(law_overrides, dict):
+        return []
+    law_prefix = manifest_law_prefix(manifest)
+    sids: list[str] = []
+    for key, entry in law_overrides.items():
+        if not isinstance(entry, dict) or entry.get("enabled") is False:
+            continue
+        if not any(field in entry for field in ("nameText", "descriptionText", "parametersPerLevel")):
+            continue
+        sids.append(key if key.startswith(law_prefix) else f"{law_prefix}{key}")
+    return sids
+
+
+def assert_enabled_law_overrides_reachable(output: dict[str, bytes], notes: list[str]) -> None:
+    """Fail closed when an enabled law override is missing from its faction's fractionLawsLines.
+
+    The lines are cloned from the live donor faction, so a vanilla law-tree redraw can
+    silently drop a slot an override fills (26297049 removed human_5 from the human lines).
+    """
+    errors: list[str] = []
+    checked = 0
+    for manifest in CUSTOM_FACTION_MANIFESTS:
+        if not manifest_core_overlay_enabled(manifest):
+            continue
+        faction_sid = manifest["identity"]["factionSid"]
+        override_sids = enabled_law_override_sids(manifest)
+        if not override_sids:
+            continue
+        member = manifest_core_member(manifest, "factionJson")
+        if member not in output:
+            errors.append(f"{faction_sid}: faction config {member} was not generated")
+            continue
+        item = first_array_item(json.loads(output[member].decode("utf-8-sig")))
+        lines = item.get("fractionLawsLines") if isinstance(item, dict) else None
+        if not isinstance(lines, list):
+            errors.append(f"{faction_sid}: {member} has no fractionLawsLines")
+            continue
+        reachable = {
+            law
+            for line in lines
+            if isinstance(line, dict)
+            for group in line.get("groups") or []
+            if isinstance(group, dict)
+            for law in group.get("laws") or []
+            if isinstance(law, str)
+        }
+        for law_sid in override_sids:
+            checked += 1
+            dormant = law_sid in DORMANT_LAW_OVERRIDE_SIDS_OUTSIDE_LAW_LINES
+            if law_sid in reachable and dormant:
+                errors.append(
+                    f"{faction_sid}: {law_sid} is now in fractionLawsLines; remove it from "
+                    "DORMANT_LAW_OVERRIDE_SIDS_OUTSIDE_LAW_LINES"
+                )
+            elif law_sid not in reachable and not dormant:
+                errors.append(f"{faction_sid}: enabled law override {law_sid} is not in fractionLawsLines")
+    if errors:
+        raise RuntimeError("enabled law overrides unreachable from the law tree: " + "; ".join(errors))
+    notes.append(f"verify enabled law overrides are reachable from fractionLawsLines ({checked})")
+
+
+# Custom laws whose bonuses are an exact copy of one vanilla law (D7=a: clones follow
+# vanilla). Their costs come from the live vanilla row; their bonuses and level count must
+# equal it, so a vanilla redraw fails here instead of leaving stale text or levels.
+#
+# Index 1 (Tax Collectors, 250/500 gold at 2/2) is byte-identical to dungeon_1 and
+# unfrozen_1 on both 25672315 and 26297049; it is pinned to dungeon_1. 26297049 moved
+# undead_1 to demon_1's three-rank 250/500/750 variant, which GE never cloned.
+# Rows equal only to a retired vanilla law (factory_5 and castle_5 vs human_5) are GE
+# designs now and are deliberately absent.
+VANILLA_LAW_CLONE_SOURCES: dict[str, str] = {
+    **{
+        f"fraction_law_homm3_{slug}_1": "fraction_law_dungeon_1"
+        for slug in (
+            "bulwark", "castle", "conflux", "cove", "dungeon", "factory",
+            "fortress", "inferno", "necropolis", "rampart", "stronghold", "tower",
+        )
+    },
+    "fraction_law_homm3_bulwark_11": "fraction_law_nature_11",
+    "fraction_law_homm3_bulwark_17": "fraction_law_nature_17",
+    "fraction_law_homm3_bulwark_21": "fraction_law_human_21",
+    "fraction_law_homm3_castle_21": "fraction_law_human_21",
+    "fraction_law_homm3_cove_21": "fraction_law_human_21",
+    "fraction_law_homm3_factory_21": "fraction_law_human_21",
+    "fraction_law_homm3_dungeon_34": "fraction_law_nature_21",
+    "fraction_law_homm3_fortress_32": "fraction_law_undead_20",
+}
+
+
+def live_vanilla_law_row(release_zip: zipfile.ZipFile, law_sid: str) -> dict[str, Any]:
+    match = re.fullmatch(r"fraction_law_([a-z]+)_\d+", law_sid)
+    if match is None:
+        raise RuntimeError(f"vanilla law sid {law_sid} does not name a faction law table")
+    member = f"DB/fractions_laws/fractions_laws_table_{match.group(1)}.json"
+    doc = read_json(release_zip, member)
+    rows = doc.get("array") if isinstance(doc, dict) else None
+    row = next((r for r in rows or [] if isinstance(r, dict) and r.get("id") == law_sid), None)
+    if row is None:
+        raise RuntimeError(f"{member} has no vanilla law row {law_sid}")
+    return row
+
+
+def apply_live_vanilla_law_clone_costs(release_zip: zipfile.ZipFile, output: dict[str, bytes], notes: list[str]) -> None:
+    """Price VANILLA_LAW_CLONE_SOURCES rows from the live vanilla law and prove their bonuses match it."""
+    remaining = dict(VANILLA_LAW_CLONE_SOURCES)
+    repriced: list[str] = []
+    for manifest in CUSTOM_FACTION_MANIFESTS:
+        if not manifest_core_overlay_enabled(manifest):
+            continue
+        law_prefix = manifest_law_prefix(manifest)
+        clone_sids = [sid for sid in remaining if sid.startswith(law_prefix) and sid[len(law_prefix):].isdigit()]
+        if not clone_sids:
+            continue
+        member = manifest_core_member(manifest, "lawsTable")
+        if member not in output:
+            raise RuntimeError(f"{member} was not generated; cannot price vanilla law clones {clone_sids}")
+        doc = json.loads(output[member].decode("utf-8-sig"))
+        rows_by_id = {row.get("id"): row for row in doc.get("array") or [] if isinstance(row, dict)}
+        for law_sid in clone_sids:
+            vanilla_sid = remaining.pop(law_sid)
+            row = rows_by_id.get(law_sid)
+            if row is None:
+                raise RuntimeError(f"{member} has no row {law_sid} (declared clone of {vanilla_sid})")
+            levels = row.get("parametersPerLevel")
+            vanilla_levels = live_vanilla_law_row(release_zip, vanilla_sid).get("parametersPerLevel")
+            if not isinstance(levels, list) or not isinstance(vanilla_levels, list) or len(levels) != len(vanilla_levels):
+                raise RuntimeError(
+                    f"{law_sid}: {len(levels or [])} level(s) but live {vanilla_sid} has {len(vanilla_levels or [])}; "
+                    "update its definition and description to the vanilla law"
+                )
+            for rank, (level, vanilla_level) in enumerate(zip(levels, vanilla_levels), start=1):
+                if json.dumps(level.get("bonuses"), sort_keys=True) != json.dumps(vanilla_level.get("bonuses"), sort_keys=True):
+                    raise RuntimeError(
+                        f"{law_sid}: rank {rank} bonuses differ from live {vanilla_sid}; "
+                        "update its definition and description to the vanilla law"
+                    )
+                cost = vanilla_level.get("cost")
+                if not isinstance(cost, int):
+                    raise RuntimeError(f"live {vanilla_sid} rank {rank} has no integer cost")
+                if level.get("cost") != cost:
+                    repriced.append(f"{law_sid} rank {rank} {level.get('cost')}->{cost}")
+                    level["cost"] = cost
+        output[member] = write_json(doc)
+    if remaining:
+        raise RuntimeError(f"vanilla law clones not generated by any core-enabled faction: {sorted(remaining)}")
+    notes.append(
+        f"price {len(VANILLA_LAW_CLONE_SOURCES)} vanilla law clone(s) from the live rows"
+        + (f" (repriced: {', '.join(repriced)})" if repriced else "")
+    )
+
+
+AI_HERO_VALUES_MEMBER = "DB/ai_world/heroes_values/default.json"
+AI_HERO_SKILL_MULTIPLIERS_MEMBER = "DB/ai_world/heroes_skill_value_multipliers.json"
+
+
+def add_custom_hero_ai_world_values(release_zip: zipfile.ZipFile, output: dict[str, bytes], notes: list[str]) -> None:
+    """Give custom heroes and faction skills explicit world-AI value rows (26297049 tables).
+
+    The game falls back to baseValue 1000 for a hero missing from heroes_values
+    (AiConfigHeroBaseValues.TryGet writes 1000f on a miss) and to multiplier 1.0 for a
+    missing skill (AiConfigHeroSkillValueMultipliers lookup), so absent rows are not
+    fatal; the rows make the values explicit and follow vanilla. A hero takes the median
+    baseValue of its donor faction's vanilla heroes of the same class; a faction skill
+    takes its donor faction skill's multiplier.
+    """
+    available = set(release_zip.namelist()) | set(output)
+    for member in (AI_HERO_VALUES_MEMBER, AI_HERO_SKILL_MULTIPLIERS_MEMBER):
+        if member not in available:
+            raise RuntimeError(f"Core is missing world-AI table {member}")
+
+    def load(member: str) -> Any:
+        return json.loads(output[member].decode("utf-8-sig")) if member in output else read_json(release_zip, member)
+
+    values_doc = load(AI_HERO_VALUES_MEMBER)
+    profiles = values_doc.get("array") if isinstance(values_doc, dict) else None
+    if not isinstance(profiles, list) or not profiles or not all(
+        isinstance(profile, dict) and isinstance(profile.get("heroes"), list) for profile in profiles
+    ):
+        raise RuntimeError(f"{AI_HERO_VALUES_MEMBER}: expected an array of profiles with heroes lists")
+    skills_doc = load(AI_HERO_SKILL_MULTIPLIERS_MEMBER)
+    skill_rows = skills_doc.get("skills") if isinstance(skills_doc, dict) else None
+    if not isinstance(skill_rows, list):
+        raise RuntimeError(f"{AI_HERO_SKILL_MULTIPLIERS_MEMBER}: expected a skills list")
+    skill_by_sid = {row.get("sid"): row for row in skill_rows if isinstance(row, dict)}
+
+    hero_count = 0
+    skill_count = 0
+    for manifest in CUSTOM_FACTION_MANIFESTS:
+        if not manifest_core_overlay_enabled(manifest):
+            continue
+        faction_sid = manifest["identity"]["factionSid"]
+        donor_values: dict[str, list[float]] = {"might": [], "magic": []}
+        for source_name in donor_hero_sources(release_zip, manifest):
+            donor = first_array_item(read_json(release_zip, source_name))
+            if not isinstance(donor, dict):
+                continue
+            for profile in profiles:
+                row = next((r for r in profile["heroes"] if isinstance(r, dict) and r.get("sid") == donor.get("id")), None)
+                if row is not None and str(donor.get("classType")) in donor_values:
+                    donor_values[str(donor["classType"])].append(row["baseValue"])
+                    break
+        hero_prefix = f"DB/heroes/{faction_sid}/"
+        hero_members = sorted(name for name in available if name.startswith(hero_prefix) and name.endswith(".json"))
+        if not hero_members:
+            raise RuntimeError(f"{faction_sid}: no hero rows under {hero_prefix}")
+        for member in hero_members:
+            hero = first_array_item(load(member))
+            if not isinstance(hero, dict) or not isinstance(hero.get("id"), str):
+                raise RuntimeError(f"{member}: hero row has no id")
+            class_type = str(hero.get("classType"))
+            peers = sorted(donor_values.get(class_type) or [])
+            if not peers:
+                raise RuntimeError(f"{faction_sid}: no donor {class_type} hero has a {AI_HERO_VALUES_MEMBER} row")
+            base_value = peers[(len(peers) - 1) // 2]
+            for profile in profiles:
+                row = next((r for r in profile["heroes"] if isinstance(r, dict) and r.get("sid") == hero["id"]), None)
+                if row is None:
+                    profile["heroes"].append({"sid": hero["id"], "baseValue": base_value})
+                else:
+                    row["baseValue"] = base_value
+            hero_count += 1
+
+        skill_sid = manifest_faction_skill_sid(manifest)
+        donor_rows = [skill_by_sid[sid] for sid in manifest_donor_faction_skill_sids(manifest) if sid in skill_by_sid]
+        if len(donor_rows) != 1:
+            raise RuntimeError(
+                f"{faction_sid}: expected one donor faction skill row in {AI_HERO_SKILL_MULTIPLIERS_MEMBER} "
+                f"among {manifest_donor_faction_skill_sids(manifest)}, found {len(donor_rows)}"
+            )
+        if skill_sid in skill_by_sid:
+            skill_by_sid[skill_sid]["multiplier"] = donor_rows[0]["multiplier"]
+        else:
+            row = {"sid": skill_sid, "multiplier": donor_rows[0]["multiplier"]}
+            skill_rows.append(row)
+            skill_by_sid[skill_sid] = row
+        skill_count += 1
+
+    output[AI_HERO_VALUES_MEMBER] = write_json(values_doc)
+    output[AI_HERO_SKILL_MULTIPLIERS_MEMBER] = write_json(skills_doc)
+    notes.append(f"add world-AI values for {hero_count} custom hero(es) and {skill_count} faction skill(s)")
+
+
 def custom_law_tracked_indices(manifest: dict[str, Any]) -> tuple[int, ...]:
     law_prefix = manifest_law_prefix(manifest)
     indices: set[int] = set()
@@ -12588,7 +12999,231 @@ def custom_law_override_definition(manifest: dict[str, Any], index: int) -> tupl
     return name_text.strip(), desc_text.strip(), copy.deepcopy(levels)
 
 
+# Donor unit-special slots GE ability overrides address by their 25672315 index (D4: keep raw HoMM3). Vanilla 26297049
+# inserted a melee push ability at minos_upg abilities[0], moving the unchanged minos_buff self-cast to abilities[1], and
+# raised ent_upg_alt abilities[1] ent_taunt_buff duration 1 -> 2. Each entry names the live slot that now holds the
+# historical row and pins only the drifted fields as (live 26297049 value, HoMM3 value); every other field still flows
+# from the live donor. A live value matching neither fails closed so the next vanilla drift is reviewed, not inherited.
+HOMM3_DONOR_UNIT_SPECIAL_SLOT_PINS: dict[tuple[str, str, int], dict[str, Any]] = {
+    ("minos_upg", "abilities", 0): {"liveIndex": 1, "buffSid": "minos_buff", "logicPins": {}},
+    ("ent_upg_alt", "abilities", 1): {
+        "liveIndex": 1,
+        "buffSid": "ent_taunt_buff",
+        "logicPins": {("damageDealer", "buff", "duration"): (2, 1)},
+    },
+}
+
+
+# Vanilla buff rows whose 26297049 values drifted from what HoMM3 GE abilities are specified (and validated) against
+# under these exact sids (D4: keep raw HoMM3). The sid keeps the HoMM3 value for the GE abilities that use it; the
+# vanilla users listed in vanillaUsers are repointed to a GE-owned copy (HOMM3_VANILLA_BUFF_COPY_PREFIX + sid) that
+# carries the live vanilla value, so vanilla spells and units keep their 26297049 behaviour. Pins are
+# (path, live 26297049 value, HoMM3 value); _PIN_MISSING marks an absent key. effect_1 applies and dispels its _bonus
+# row by sid, so both rows are pinned and copied together and the copies reference each other.
+HOMM3_VANILLA_BUFF_COPY_PREFIX = "homm3_vanilla_"
+_PIN_MISSING = object()
+HOMM3_PINNED_SHARED_VANILLA_BUFFS: tuple[dict[str, Any], ...] = (
+    {
+        "buffMember": "DB/buffs/buffs_day_magics.json",
+        "rows": {
+            "magic_shorten_shadow_effect_1": (
+                (("data", "stats", "offence"), -2, -3),
+                (("data", "stats", "defence"), -2, -3),
+            ),
+            "magic_shorten_shadow_effect_1_bonus": (
+                (("data", "stats", "offence"), -2, -3),
+                (("data", "stats", "defence"), -2, -3),
+            ),
+        },
+        "vanillaUsers": (("DB/magics/battle_day_magics.json", "day_5_magic_shorten_shadow", 3),),
+    },
+    {
+        "buffMember": "DB/buffs/units_buffs_dungeon.json",
+        "rows": {"minos_buff": ((("maxDuration",), 2, 1),)},
+        "vanillaUsers": (("DB/units/units_logics/dungeon/minos_upg_l.json", "minos_upg", 1),),
+    },
+    {
+        "buffMember": "DB/buffs/units_buffs_nature.json",
+        "rows": {
+            "ent_taunt_buff": (
+                (("maxDuration",), 2, 1),
+                (("ignoreDurationBuffs",), True, _PIN_MISSING),
+            ),
+        },
+        "vanillaUsers": (("DB/units/units_logics/nature/ent_upg_alt_l.json", "ent_upg_alt", 1),),
+    },
+)
+
+
+def _pin_path_get(row: Any, path: tuple[str, ...]) -> Any:
+    node = row
+    for key in path:
+        if not isinstance(node, dict) or key not in node:
+            return _PIN_MISSING
+        node = node[key]
+    return node
+
+
+def _pin_path_set(row: dict[str, Any], path: tuple[str, ...], value: Any) -> None:
+    node = row
+    for key in path[:-1]:
+        child = node.get(key)
+        if not isinstance(child, dict):
+            raise KeyError(f"pin path {'.'.join(path)}: {key!r} is not an object")
+        node = child
+    if value is _PIN_MISSING:
+        node.pop(path[-1], None)
+    else:
+        node[path[-1]] = value
+
+
+def _rename_sid_strings(value: Any, sid_map: dict[str, str]) -> tuple[Any, int]:
+    if isinstance(value, str):
+        return (sid_map[value], 1) if value in sid_map else (value, 0)
+    if isinstance(value, list):
+        total = 0
+        items = []
+        for item in value:
+            renamed, count = _rename_sid_strings(item, sid_map)
+            items.append(renamed)
+            total += count
+        return items, total
+    if isinstance(value, dict):
+        total = 0
+        mapped: dict[str, Any] = {}
+        for key, item in value.items():
+            renamed, count = _rename_sid_strings(item, sid_map)
+            mapped[key] = renamed
+            total += count
+        return mapped, total
+    return value, 0
+
+
+def pin_homm3_shared_vanilla_buff_values(release_zip: zipfile.ZipFile, output: dict[str, bytes], notes: list[str]) -> None:
+    def load(member: str) -> dict[str, Any]:
+        doc = json.loads(output[member].decode("utf-8-sig")) if member in output else read_json(release_zip, member)
+        if not isinstance(doc, dict) or not isinstance(doc.get("array"), list):
+            raise RuntimeError(f"pinned shared vanilla buffs: {member} has no array")
+        return doc
+
+    known_users = {user[0] for spec in HOMM3_PINNED_SHARED_VANILLA_BUFFS for user in spec["vanillaUsers"]}
+    buff_members = {spec["buffMember"] for spec in HOMM3_PINNED_SHARED_VANILLA_BUFFS}
+    quoted = {
+        sid: f'"{sid}"'.encode()
+        for spec in HOMM3_PINNED_SHARED_VANILLA_BUFFS
+        for sid in spec["rows"]
+    }
+    # A vanilla DB row outside vanillaUsers that uses a pinned sid would silently take the HoMM3 value.
+    for info in release_zip.infolist():
+        member = normalize_name(info.filename)
+        if info.is_dir() or not member.startswith("DB/") or not member.endswith(".json"):
+            continue
+        if member in known_users or member in buff_members or "/homm3_" in member or "/h3_" in member:
+            continue
+        payload = release_zip.read(info)
+        stray = sorted(sid for sid, needle in quoted.items() if needle in payload)
+        if stray:
+            raise RuntimeError(
+                f"pinned shared vanilla buffs: {member} references {stray}; add it to vanillaUsers or retire the pin"
+            )
+
+    for spec in HOMM3_PINNED_SHARED_VANILLA_BUFFS:
+        buff_member = spec["buffMember"]
+        sid_map = {sid: f"{HOMM3_VANILLA_BUFF_COPY_PREFIX}{sid}" for sid in spec["rows"]}
+        buffs_doc = load(buff_member)
+        rows_by_id = {row.get("id"): row for row in buffs_doc["array"] if isinstance(row, dict)}
+        for sid, pins in spec["rows"].items():
+            row = rows_by_id.get(sid)
+            if row is None:
+                raise RuntimeError(f"pinned shared vanilla buffs: {buff_member} lacks {sid}")
+            pinned = copy.deepcopy(row)
+            vanilla = copy.deepcopy(row)
+            for path, live_value, homm3_value in pins:
+                current = _pin_path_get(row, path)
+                if current != live_value and current != homm3_value:
+                    raise RuntimeError(
+                        f"pinned shared vanilla buffs: {sid}.{'.'.join(path)} is {current!r}; expected live "
+                        f"{live_value!r} or HoMM3 {homm3_value!r}"
+                    )
+                _pin_path_set(pinned, path, homm3_value)
+                _pin_path_set(vanilla, path, live_value)
+            vanilla, _ = _rename_sid_strings(vanilla, sid_map)
+            upsert_array_row(buffs_doc, pinned)
+            upsert_array_row(buffs_doc, vanilla)
+        dedupe_array_rows_by_id(buffs_doc)
+        output[buff_member] = write_json(buffs_doc)
+
+        copy_sids = set(sid_map.values())
+        for user_member, user_id, expected_refs in spec["vanillaUsers"]:
+            user_doc = load(user_member)
+            index = next(
+                (i for i, row in enumerate(user_doc["array"]) if isinstance(row, dict) and row.get("id") == user_id),
+                None,
+            )
+            if index is None:
+                raise RuntimeError(f"pinned shared vanilla buffs: {user_member} lacks vanilla user {user_id}")
+            renamed, _ = _rename_sid_strings(user_doc["array"][index], sid_map)
+            _, refs = _rename_sid_strings(renamed, {copy_sid: copy_sid for copy_sid in copy_sids})
+            if refs != expected_refs:
+                raise RuntimeError(
+                    f"pinned shared vanilla buffs: {user_member}:{user_id} has {refs} reference(s) to "
+                    f"{sorted(sid_map)}; expected {expected_refs}"
+                )
+            user_doc["array"][index] = renamed
+            output[user_member] = write_json(user_doc)
+        notes.append(
+            f"pin HoMM3 values on {sorted(spec['rows'])} in {buff_member}; vanilla users keep live values via "
+            f"{sorted(copy_sids)}"
+        )
+
+
+def resolve_pinned_donor_unit_special(
+    release_zip: zipfile.ZipFile,
+    source_unit_sid: str,
+    slot_kind: str,
+    slot_index: int,
+) -> tuple[dict[str, Any], dict[str, Any], str] | None:
+    pin = HOMM3_DONOR_UNIT_SPECIAL_SLOT_PINS.get((source_unit_sid, slot_kind, slot_index))
+    if pin is None:
+        return None
+    label = f"pinned donor unit special {source_unit_sid}:{slot_kind}:{slot_index}"
+    live_index = pin["liveIndex"]
+    try:
+        logic_special, view_special, source_faction_sid = resolve_live_unit_special_from_release(
+            release_zip, source_unit_sid, slot_kind, live_index
+        )
+    except KeyError as ex:
+        raise KeyError(f"{label}: live slot {live_index} missing ({ex})") from ex
+    # An installed Core already points the vanilla donor at its GE-owned live-value copy; GE keeps the pinned sid.
+    buff_sid = pin["buffSid"]
+    live_buff_sid = _pin_path_get(logic_special, ("damageDealer", "buff", "sid"))
+    if live_buff_sid not in {buff_sid, f"{HOMM3_VANILLA_BUFF_COPY_PREFIX}{buff_sid}"}:
+        raise KeyError(f"{label}: live slot {live_index} buff is {live_buff_sid!r}, expected {buff_sid!r}")
+    _pin_path_set(logic_special, ("damageDealer", "buff", "sid"), buff_sid)
+    for path, (live_value, homm3_value) in pin["logicPins"].items():
+        current = _pin_path_get(logic_special, path)
+        if current != live_value and current != homm3_value:
+            raise KeyError(
+                f"{label}: live slot {live_index} {'.'.join(path)} is {current!r}; expected live {live_value!r} "
+                f"or HoMM3 {homm3_value!r}"
+            )
+        _pin_path_set(logic_special, path, homm3_value)
+    return logic_special, view_special, source_faction_sid
+
+
 def resolve_unit_special_from_release(
+    release_zip: zipfile.ZipFile,
+    source_unit_sid: str,
+    slot_kind: str,
+    slot_index: int,
+) -> tuple[dict[str, Any], dict[str, Any], str]:
+    pinned = resolve_pinned_donor_unit_special(release_zip, source_unit_sid, slot_kind, slot_index)
+    if pinned is not None:
+        return pinned
+    return resolve_live_unit_special_from_release(release_zip, source_unit_sid, slot_kind, slot_index)
+
+
+def resolve_live_unit_special_from_release(
     release_zip: zipfile.ZipFile,
     source_unit_sid: str,
     slot_kind: str,
@@ -13250,6 +13885,10 @@ def build_spell_effect_rows(
     buff = dealer.get("buff") if isinstance(dealer, dict) else None
     if duration is not None and isinstance(buff, dict):
         buff["duration"] = duration
+        # HoMM3 unit spell-effects use flat durations; native spell dealers carry
+        # durationPerStack (spell-power scaling) that would stretch the stated duration.
+        for scale_key in ("durationPerStack", "durationPerSpellPower", "durationSpellPower", "durationBonus", "durationScale"):
+            buff.pop(scale_key, None)
     buff_sid = selection.get("buffSid") if isinstance(selection.get("buffSid"), str) else payload.get("buffSid")
     if isinstance(buff_sid, str) and buff_sid.strip() and isinstance(buff, dict):
         buff["sid"] = buff_sid.strip()
@@ -14081,6 +14720,14 @@ def apply_custom_ability_overrides_to_custom_unit_rows(
                     lang_rows,
                 )
 
+            # Overrides run after apply_generic_mechanics_to_logic and may copy donor attacks with
+            # triggerCounter=true (e.g. assassin Hit and Run onto Harpy Hag); re-assert no-retaliation.
+            if custom_sid in GENERIC_NO_RETALIATION_SIDS:
+                for attack in as_attack_list(logic_item.get("alternativeAttacks")):
+                    dealer = attack.get("damageDealer")
+                    if isinstance(dealer, dict):
+                        dealer["triggerCounter"] = False
+
             if json.dumps(logic_doc, sort_keys=True, ensure_ascii=False) != logic_before:
                 output[logic_name] = write_json(logic_doc)
                 changed_logic += 1
@@ -14114,7 +14761,7 @@ CUSTOM_ACTIVE_ABILITY_LOCALIZATION_ROWS: tuple[dict[str, str], ...] = (
     {"sid": "h3_angel_upg_alt_bless_spell_name", "text": "Seraphic Blessing"},
     {"sid": "h3_angel_upg_alt_bless_spell_description", "text": "Spend 2 Focus to give an allied stack +3 Morale and +3 Luck for 2 rounds."},
     {"sid": "h3_castle_ability_rewind_life_name", "text": "Rewind Life"},
-    {"sid": "h3_castle_ability_rewind_life_description", "text": "Spend 2 Focus to revive an allied stack, up to its starting creature count."},
+    {"sid": "h3_castle_ability_rewind_life_description", "text": "Once per battle, spend 2 Focus to revive an allied stack, up to its starting creature count."},
     {"sid": "h3_air_elemental_upg_abilities_0_name", "text": "Thunderbolt"},
     {"sid": "h3_air_elemental_upg_abilities_0_description", "text": "Spend 2 Focus without ending the turn to deal 25 pure magic damage plus 10 per stack."},
     {"sid": "h3_common_ability_misfortune_name", "text": "Misfortune"},
@@ -14132,7 +14779,7 @@ CUSTOM_ACTIVE_ABILITY_LOCALIZATION_ROWS: tuple[dict[str, str], ...] = (
     {"sid": "h3_sea_serpent_upg_alt_poison_decay_name", "text": "Abyssal Venom"},
     {"sid": "h3_sea_serpent_upg_alt_poison_decay_description", "text": "Spend 1 Focus to attack for 100% normal damage and reduce the target's maximum health by 20% for 1 round."},
     {"sid": "h3_sea_serpent_upg_alt_fearsome_name", "text": "Fearsome"},
-    {"sid": "h3_sea_serpent_upg_alt_fearsome_description", "text": "Spend 1 Focus to give an enemy a 10% chance to skip action for 1 round."},
+    {"sid": "h3_sea_serpent_upg_alt_fearsome_description", "text": "Spend 1 Focus to give an enemy a 10% chance to skip action for 2 rounds."},
     {"sid": "h3_medusa_stone_gaze_name", "text": "Stone Gaze"},
     {"sid": "h3_medusa_stone_gaze_description", "text": "Spend 2 Focus to petrify an enemy for 1 round."},
     {"sid": "h3_medusa_upg_stone_gaze_name", "text": "Stone Gaze"},
@@ -14162,7 +14809,7 @@ CUSTOM_ACTIVE_ABILITY_LOCALIZATION_ROWS: tuple[dict[str, str], ...] = (
     {"sid": "h3_gorgon_upg_alt_acid_debuff_name", "text": "Acid Spray"},
     {"sid": "h3_gorgon_upg_alt_acid_debuff_description", "text": "Spend 1 Focus to attack for 100% normal damage and permanently reduce the target's Defense by 1."},
     {"sid": "h3_fortress_ability_death_stare_name", "text": "Death Stare"},
-    {"sid": "h3_fortress_ability_death_stare_description", "text": "Spend 2 Focus to attack for 100% normal damage and kill 1-7 additional creatures in the target stack."},
+    {"sid": "h3_fortress_ability_death_stare_description", "text": "Spend 2 Focus to attack for 100% normal damage and kill 1 additional creature in the target stack."},
     {"sid": "h3_common_ability_thunderbolt_name", "text": "Thunderbolt"},
     {"sid": "h3_common_ability_thunderbolt_description", "text": "Spend 2 Focus to deal 150% pure magic damage."},
     {"sid": "h3_fortress_ability_poison_sting_name", "text": "Poison Sting"},
@@ -14188,7 +14835,7 @@ CUSTOM_ACTIVE_ABILITY_LOCALIZATION_ROWS: tuple[dict[str, str], ...] = (
     {"sid": "h3_black_knight_upg_alt_curse_name", "text": "Dreadtaur Curse"},
     {"sid": "h3_black_knight_upg_alt_curse_description", "text": "Spend 1 Focus to reduce an enemy's normal damage by 20% and force minimum damage for 3 rounds."},
     {"sid": "h3_common_ability_death_stare_name", "text": "Death Stare"},
-    {"sid": "h3_common_ability_death_stare_description", "text": "Spend 2 Focus to kill 1-7 additional creatures in the target stack."},
+    {"sid": "h3_common_ability_death_stare_description", "text": "Spend 2 Focus to kill 1 additional creature in the target stack."},
     {"sid": "h3_bone_dragon_curse_name", "text": "Aging Curse"},
     {"sid": "h3_bone_dragon_curse_description", "text": "Spend 1 Focus to reduce an enemy's normal damage by 20% and force minimum damage for 2 rounds."},
     {"sid": "h3_bone_dragon_upg_curse_name", "text": "Ghostly Curse"},
@@ -14218,7 +14865,7 @@ CUSTOM_ACTIVE_ABILITY_LOCALIZATION_ROWS: tuple[dict[str, str], ...] = (
     {"sid": "h3_common_ability_repair_name", "text": "Repair"},
     {"sid": "h3_common_ability_repair_description", "text": "Spend 2 Focus to restore 50% health to an allied stack."},
     {"sid": "h3_magnetic_slow_active_ability_name", "text": "Magnetic Slow"},
-    {"sid": "h3_magnetic_slow_active_ability_description", "text": "Spend 1 Focus to reduce an enemy's Speed and Initiative by 1."},
+    {"sid": "h3_magnetic_slow_active_ability_description", "text": "Spend 1 Focus to reduce an enemy's Speed and Initiative by 1 for the rest of the battle. Stacks."},
     {"sid": "h3_golem_repair_name", "text": "Repair"},
     {"sid": "h3_golem_repair_description", "text": "Spend 2 Focus to restore 40% health to an allied construct stack."},
     {"sid": "h3_golem_upg_repair_name", "text": "Repair"},
@@ -14243,24 +14890,24 @@ CUSTOM_ACTIVE_ABILITY_LOCALIZATION_ROWS: tuple[dict[str, str], ...] = (
     {"sid": "h3_common_passive_free_shooting_name", "text": "Free Shooting"},
     {"sid": "h3_common_passive_free_shooting_description", "text": "Ranged attacks ignore the adjacent shooting block penalty."},
     {"sid": "h3_common_passive_cove_fearless_description", "text": "Immune to Cove Fearsome's 10% skip-action effect."},
-    {"sid": "h3_common_passive_dendroid_binding_description", "text": "Melee attacks root the target for 2 rounds, ending if the Dendroid moves or dies."},
-    {"sid": "h3_wolf_rider_upg_passive_1_description", "text": "After this unit counterattacks in melee, it immediately makes one extra melee attack."},
+    {"sid": "h3_common_passive_dendroid_binding_description", "text": "Melee attacks root the target for 2 rounds."},
+    {"sid": "h3_wolf_rider_upg_passive_1_description", "text": "Strikes twice in melee: after the target retaliates, it attacks again."},
     {"sid": "h3_gargoyle_upg_alt_ability_description", "text": "Has the Gargoyle construct profile, flies, takes 50% less Air, Earth, Fire, and Water spell damage, and is immune to Stone Gaze."},
     {"sid": "h3_gargoyle_ability_2_description", "text": "Counts as non-living for life drain, poison, disease, and resurrection effects."},
     {"sid": "h3_genie_upg_alt_ability_description", "text": "Flies, deals 150% damage to Efreet-line enemies, takes 50% less Air spell damage, and can cast Misfortune for 1 Focus."},
     {"sid": "h3_genie_ability_2_description", "text": "Deals 150% damage to Efreet-line enemies."},
     {"sid": "h3_genie_upg_ability_1_description", "text": "Can cast a beneficial spell up to 3 times per battle."},
     {"sid": "h3_giant_upg_alt_ability_description", "text": "After attacking, has a 40% chance to cast Thunderbolt for 25 damage per Colossus."},
-    {"sid": "h3_giant_ability_1_description", "text": "Immune to mind spells."},
-    {"sid": "h3_giant_upg_ability_1_description", "text": "Shoots at enemy units with 24 shots and no melee penalty."},
+    {"sid": "h3_giant_ability_1_description", "text": "Immune to mind spells: Sleep, Silence and Berserk."},
+    {"sid": "h3_giant_upg_ability_1_description", "text": "Shoots at enemy units with no melee penalty."},
     {"sid": "h3_giant_upg_ability_2_description", "text": "Deals 150% damage to Black Dragons."},
     {"sid": "h3_golem_upg_alt_ability_description", "text": "Can spend 2 Focus to give an enemy -2 Speed for 1 round; also has construct spell restrictions."},
     {"sid": "h3_golem_ability_2_description", "text": "Neutral Morale and Luck; immune to life drain and corpse-heal effects."},
     {"sid": "h3_gremlin_upg_alt_ability_description", "text": "Can use Repair twice per battle to restore 10% health with resurrection, plus a 50% repair action for allied stacks."},
-    {"sid": "h3_mage_upg_alt_ability_description", "text": "Shoots with 24 shots, reduces allied hero combat spell costs by 2, and can cast 3 bolt spells per battle."},
-    {"sid": "h3_mage_ability_1_description", "text": "Shoots at enemy units with 24 shots."},
+    {"sid": "h3_mage_upg_alt_ability_description", "text": "Shoots at enemy units, reduces allied hero combat spell costs by 2, and can cast 3 bolt spells per battle."},
+    {"sid": "h3_mage_ability_1_description", "text": "Shoots at enemy units."},
     {"sid": "h3_mage_ability_3_description", "text": "Reduces allied hero combat spell costs by 2 while this stack is present."},
-    {"sid": "h3_naga_upg_alt_ability_description", "text": "Melee attacks hit three adjacent targets for fixed damage, and enemies do not retaliate."},
+    {"sid": "h3_naga_upg_alt_ability_description", "text": "Melee attacks hit the target and the two hexes behind it for fixed damage, and enemies do not retaliate."},
 )
 
 
@@ -14284,7 +14931,7 @@ def add_custom_active_ability_localization_rows(
 # the base Core, but their text only ever went to the retired loose playtest Lang
 # tree (OfflineUnlockMod/generate_homm3_stronghold_heroes.py), so the buttons
 # showed "LOC: [...]". Numbers are the installed config's values:
-# - abilities: moral/luck global buffs 1/2/3 and initiative buffs +1/+2/+3 per
+# - abilities: moral/luck ally side buffs 1/2/3 and initiative buffs +1/+2/+3 per
 #   rank; cd 1; each cry dispels the others and puts them on cooldown.
 # - subskill 1: native-terrain outAllDmgMod 0.1 / inAllDmgMod -0.1.
 # - subskill 2: enemy *_negative buff 1/2/3 matching the cry.
@@ -14372,7 +15019,8 @@ HOMM3_MISSING_CUSTOM_LANG_ROWS: dict[str, tuple[dict[str, str], ...]] = {
         {"sid": "h3_fangarm_hypnotic_strike_name", "text": "Hypnotic Strike"},
         {"sid": "h3_fangarm_hypnotic_strike_description", "text": "Spend 2 Focus to attack an enemy for 100% normal melee damage and put it in a Berserk state for 1 round. Cooldown: 2."},
         {"sid": "h3_harpy_upg_alternativeAttacks_0_name", "text": "Hit and Run"},
-        {"sid": "h3_harpy_upg_alternativeAttacks_0_description", "text": _HOMM3_HARPY_HIT_AND_RUN_TEXT},
+        # Harpy Hag has no-retaliation (GENERIC_NO_RETALIATION_SIDS), so its Hit and Run does not provoke.
+        {"sid": "h3_harpy_upg_alternativeAttacks_0_description", "text": "Attack for 50% normal damage, then return to this unit's original position."},
         {"sid": "h3_harpy_upg_alt_h3_harpy_upg_alt_copied_unit_special_1779150600692_name", "text": "Hit and Run"},
         {"sid": "h3_harpy_upg_alt_h3_harpy_upg_alt_copied_unit_special_1779150600692_description", "text": _HOMM3_HARPY_HIT_AND_RUN_TEXT},
     ),
@@ -14546,6 +15194,53 @@ CUSTOM_UNIT_HIDDEN_STAT_STRIP_BY_SID: dict[str, tuple[str, ...]] = {
     "h3_wolf_rider": ("crit",),
     "h3_ogre": ("additionalActionChanceModifier",),
     "h3_naga": ("additionalActionChanceModifier",),
+    # 2026-11-12 static ability audit (docs/custom_unit_ability_static_audit_20261112.md
+    # S5/S6): same donor leaks on the upgrade / alt-upgrade rows, none with a card.
+    # numCounters is reset to the native default of 1 (popping it left counters
+    # unset on the stormbird/manticore rows). "inDmgMods:shoot_attack" drops only
+    # the leaked -30% ranged resistance and keeps any other authored entries.
+    "h3_manticore_upg": ("numCounters",),
+    "h3_manticore_upg_alt": ("numCounters",),
+    "h3_troglodyte_upg_alt": ("numCounters",),
+    "h3_bellwether_armadillo": ("numCounters",),
+    "h3_armadillo": ("numCounters",),
+    "h3_armadillo_upg_alt": ("numCounters",),
+    "h3_goblin_upg_alt": ("numCounters",),
+    "h3_elf_wardancer_upg_alt": ("numCounters",),
+    "h3_pikeman": ("inDmgMods:shoot_attack",),
+    "h3_pikeman_upg": ("inDmgMods:shoot_attack",),
+    "h3_pikeman_upg_alt": ("inDmgMods:shoot_attack",),
+    "h3_crew_mate": ("inDmgMods:shoot_attack",),
+    "h3_seaman": ("inDmgMods:shoot_attack",),
+    "h3_crew_mate_upg_alt": ("inDmgMods:shoot_attack",),
+    "h3_halfling": ("inDmgMods:shoot_attack",),
+    "h3_halfling_grenadier": ("inDmgMods:shoot_attack",),
+    "h3_halfling_upg_alt": ("inDmgMods:shoot_attack",),
+    "h3_gnoll_upg": ("inDmgMods:shoot_attack",),
+    "h3_harpy_upg": ("crit",),
+    "h3_harpy_upg_alt": ("crit",),
+    "h3_wolf_rider_upg": ("crit",),
+    "h3_wolf_rider_upg_alt": ("crit",),
+    "h3_minotaur_upg": ("additionalActionChanceModifier",),
+    "h3_minotaur_upg_alt": ("additionalActionChanceModifier",),
+    "h3_gorgon_upg": ("additionalActionChanceModifier",),
+    "h3_gorgon_upg_alt": ("additionalActionChanceModifier",),
+    "h3_ogre_upg": ("additionalActionChanceModifier",),
+    "h3_ogre_upg_alt": ("additionalActionChanceModifier",),
+    "h3_naga_upg": ("additionalActionChanceModifier",),
+    "h3_naga_upg_alt": ("additionalActionChanceModifier",),
+    "h3_war_mammoth": ("energyPerRound",),
+    "h3_earth_elemental_upg": ("energyPerRound",),
+    "h3_basilisk_upg": ("energyPerRound",),
+    "h3_sandworm": ("damagePerHex",),
+    "h3_olgoi_khorkhoi": ("damagePerHex",),
+    "h3_sandworm_upg_alt": ("damagePerHex",),
+    "h3_imp_upg": ("damagePerDeltaLevel",),
+    "h3_imp_upg_alt": ("damagePerDeltaLevel",),
+    "h3_pit_fiend_upg": ("damagePerDeltaLevelLower",),
+    "h3_pit_fiend_upg_alt": ("damagePerDeltaLevelLower",),
+    "h3_devil_upg": ("outDamageIfLevelAbove", "outLevelAboveThreshold"),
+    "h3_devil_upg_alt": ("outDamageIfLevelAbove", "outLevelAboveThreshold"),
 }
 
 
@@ -14587,6 +15282,23 @@ def normalize_custom_unit_logic_redundant_flags(
                 removed_flags += 1
                 changed = True
             for key in CUSTOM_UNIT_HIDDEN_STAT_STRIP_BY_SID.get(custom_sid, ()):
+                if ":" in key:
+                    mods_key, mod_type = key.split(":", 1)
+                    mods = stats.get(mods_key)
+                    rows = mods.get("list") if isinstance(mods, dict) else None
+                    if isinstance(rows, list):
+                        kept_rows = [row for row in rows if not (isinstance(row, dict) and row.get("t") == mod_type)]
+                        if len(kept_rows) != len(rows):
+                            mods["list"] = kept_rows
+                            removed_flags += 1
+                            changed = True
+                    continue
+                if key == "numCounters":
+                    if stats.get("numCounters") != 1:
+                        stats["numCounters"] = 1
+                        removed_flags += 1
+                        changed = True
+                    continue
                 if key in stats:
                     if key in ("inDmgMods", "outDmgMods"):
                         stats[key] = {"list": []}
@@ -14599,6 +15311,252 @@ def normalize_custom_unit_logic_redundant_flags(
                 changed_members += 1
     if removed_flags:
         notes.append(f"remove/reset stale custom unit donor ability flags ({removed_flags} flags across {changed_members} logic rows)")
+
+
+# Ability rows a previous install wrote that the current generator no longer emits;
+# the overlay builds on the installed Core, so they must be removed explicitly
+# (logic + index-aligned card).
+STALE_INSTALLED_ABILITY_CARDS_BY_SID: dict[str, set[str]] = {
+    # The Mechanic keeps h3_repair_active_ability only (see STRONG_VANILLA_ACTIVE_BY_SID).
+    "h3_gremlin_upg_alt": {"h3_common_ability_repair_name"},
+}
+
+AWAKEN_GATE_BUFF_SID = "wisp_silence"
+NO_TURN_INFO_DESCRIPTIONS = {"ability_no_turn", "ability_no_start_no_turn"}
+AWAKEN_INFO_DESCRIPTIONS = {"ability_no_start", "ability_no_start_no_turn"}
+
+
+def unit_logic_has_awaken_gate(item: dict[str, Any]) -> bool:
+    return AWAKEN_GATE_BUFF_SID in json.dumps(item.get("passives"), ensure_ascii=False)
+
+
+def normalize_custom_unit_ability_card_consistency(
+    release_zip: zipfile.ZipFile,
+    output: dict[str, bytes],
+    notes: list[str],
+) -> None:
+    """Make the turn/Awaken info lines on ability cards match the logic row.
+
+    2026-11-12 static audit S1/S2: overrides with turnBehavior "ends" pop the
+    logic actionCost but kept the donor view's "does not end the turn" line,
+    and donor "after Awaken" lines landed on units without the wisp_silence
+    start-of-battle gate. Logic is authoritative; the card follows it. Also
+    drops donor dontUseEnergy from abilities with a Focus cost (the only native
+    dontUseEnergy row has energyLevel 0).
+    """
+    changed_cards = 0
+    changed_logic = 0
+    changed_ranged_units = 0
+    skipped: list[str] = []
+    for manifest in CUSTOM_FACTION_MANIFESTS:
+        if not manifest_core_overlay_enabled(manifest):
+            continue
+        faction_sid = manifest["identity"]["factionSid"]
+        for custom_sid in manifest_unit_sids(manifest):
+            logic_name = f"DB/units/units_logics/{faction_sid}/{custom_sid}_l.json"
+            view_name = f"DB/units/units_views/{faction_sid}/{custom_sid}_v.json"
+            try:
+                logic_doc = read_overlay_or_release_json(release_zip, output, logic_name)
+                view_doc = read_overlay_or_release_json(release_zip, output, view_name)
+            except (json.JSONDecodeError, UnicodeDecodeError, KeyError):
+                continue
+            logic_item = first_array_item(logic_doc)
+            view_item = first_array_item(view_doc)
+            if not isinstance(logic_item, dict) or not isinstance(view_item, dict):
+                continue
+            ranged_changed = normalize_custom_unit_ranged_cards(logic_item, view_item)
+            alt_changed = normalize_custom_unit_alternative_attack_cards(logic_item, view_item)
+            if ranged_changed or alt_changed:
+                output[view_name] = write_json(view_doc)
+                changed_ranged_units += 1
+            logic_abilities = logic_item.get("abilities")
+            view_abilities = view_item.get("abilities")
+            if not isinstance(logic_abilities, list) or not logic_abilities:
+                continue
+            logic_dirty = False
+            for row in logic_abilities:
+                if not isinstance(row, dict):
+                    continue
+                try:
+                    energy = float(row.get("energyLevel") or 0)
+                except (TypeError, ValueError):
+                    energy = 0.0
+                if row.get("dontUseEnergy") and energy > 0:
+                    row.pop("dontUseEnergy", None)
+                    logic_dirty = True
+            if logic_dirty:
+                output[logic_name] = write_json(logic_doc)
+                changed_logic += 1
+            if not isinstance(view_abilities, list) or len(view_abilities) != len(logic_abilities):
+                skipped.append(custom_sid)
+                continue
+            has_awaken = unit_logic_has_awaken_gate(logic_item)
+            view_dirty = False
+            stale_names = STALE_INSTALLED_ABILITY_CARDS_BY_SID.get(custom_sid, set())
+            if stale_names:
+                pairs = [
+                    (logic_row, view_row)
+                    for logic_row, view_row in zip(logic_abilities, view_abilities)
+                    if not (isinstance(view_row, dict) and view_row.get("name") in stale_names)
+                ]
+                if len(pairs) != len(logic_abilities):
+                    logic_abilities[:] = [pair[0] for pair in pairs]
+                    view_abilities[:] = [pair[1] for pair in pairs]
+                    output[logic_name] = write_json(logic_doc)
+                    view_dirty = True
+                    changed_cards += 1
+            for logic_row, view_row in zip(logic_abilities, view_abilities):
+                if not isinstance(logic_row, dict) or not isinstance(view_row, dict):
+                    continue
+                info = view_row.get("infoDescription")
+                free = logic_row.get("actionCost") == 0
+                awaken = has_awaken and isinstance(info, str) and info in AWAKEN_INFO_DESCRIPTIONS
+                if free:
+                    wanted = "ability_no_start_no_turn" if awaken else "ability_no_turn"
+                else:
+                    wanted = "ability_no_start" if awaken else None
+                if info == wanted:
+                    continue
+                if info is not None and not (isinstance(info, str) and info in NO_TURN_INFO_DESCRIPTIONS | AWAKEN_INFO_DESCRIPTIONS):
+                    continue  # some other authored info line; leave it alone
+                if wanted is None:
+                    view_row.pop("infoDescription", None)
+                else:
+                    view_row["infoDescription"] = wanted
+                view_dirty = True
+                changed_cards += 1
+            if view_dirty:
+                output[view_name] = write_json(view_doc)
+    notes.append(
+        f"align custom unit ability turn/Awaken info lines with logic ({changed_cards} cards; "
+        f"dontUseEnergy dropped on {changed_logic} logic rows; {len(skipped)} units skipped for card/logic count mismatch; "
+        f"ranged/alternate-attack cards aligned on {changed_ranged_units} units)"
+    )
+
+
+def normalize_custom_unit_alternative_attack_cards(logic_item: dict[str, Any], view_item: dict[str, Any]) -> bool:
+    """2026-11-12 audit S9/S10: the generic alternate melee card hid the 50% multiplier
+    and the all-adjacent whirlwind pattern (cards are index-aligned with logic); a
+    stale one-hex reach card sat next to the reach-2 card; flyers with no passive
+    cards at all were missing the Flying card."""
+    changed = False
+    passives = view_item.get("passives")
+    if isinstance(passives, list):
+        descriptions = {row.get("description") for row in passives if isinstance(row, dict)}
+        patterns = {
+            str((attack.get("damageDealer") or {}).get("attackPatternSid") or "")
+            for key in ("defaultAttacks", "alternativeAttacks", "counterAttacks")
+            for attack in as_attack_list(logic_item.get(key))
+        }
+        if (
+            "h3_common_passive_strike_reach_2_description" in descriptions
+            and "base_passive_strike_reach_1_description" in descriptions
+            and not any(pattern.startswith("attack_reach_x1") for pattern in patterns)
+        ):
+            view_item["passives"] = [
+                row for row in passives
+                if not (isinstance(row, dict) and row.get("description") == "base_passive_strike_reach_1_description")
+            ]
+            changed = True
+        stats = logic_item.get("stats") if isinstance(logic_item.get("stats"), dict) else {}
+        if stats.get("moveType") == "fly" and not passives:
+            view_item["passives"] = [{"name": "base_passive_flyer_name", "description": "base_passive_flyer_description"}]
+            changed = True
+    logic_alts = as_attack_list(logic_item.get("alternativeAttacks"))
+    view_alts = view_item.get("alternativeAttacks")
+    if not isinstance(view_alts, list) or len(view_alts) != len(logic_alts):
+        return changed
+    for logic_alt, view_alt in zip(logic_alts, view_alts):
+        if not isinstance(view_alt, dict) or logic_alt.get("attackType_") != "melee":
+            continue
+        dealer = logic_alt.get("damageDealer") if isinstance(logic_alt.get("damageDealer"), dict) else {}
+        try:
+            mult = float(dealer.get("statDmgMult", 1.0))
+        except (TypeError, ValueError):
+            continue
+        pattern = str(dealer.get("attackPatternSid") or "")
+        description = view_alt.get("description")
+        wanted = None
+        if "swirl" in pattern and abs(mult - 0.5) < 1e-6 and description in {"common_attack_1_description", "h3_common_melee_attack_description"}:
+            wanted = "h3_common_alt_attack_swirl_half_description"
+        elif pattern == "attack_single_x100" and abs(mult - 0.5) < 1e-6 and description == "h3_common_melee_attack_description":
+            wanted = "h3_common_alt_attack_melee_half_description"
+        if wanted and description != wanted:
+            view_alt["description"] = wanted
+            changed = True
+    return changed
+
+
+RANGED_FALLOFF_CARD_DESCRIPTION = "base_passive_ranged_attack_no_close_description"
+GENERIC_RANGED_CARD_DESCRIPTION = "h3_common_ranged_attack_description"
+# Plain "can shoot" cards that add nothing next to the falloff card.
+GENERIC_RANGED_CARD_DESCRIPTIONS = {GENERIC_RANGED_CARD_DESCRIPTION, "h3_mage_ability_1_description"}
+RANGED_CARD_DESCRIPTIONS = {
+    RANGED_FALLOFF_CARD_DESCRIPTION,
+    "base_passive_duelist_description",
+    *GENERIC_RANGED_CARD_DESCRIPTIONS,
+    "base_passive_ranged_attack_description",
+    "base_passive_ranged_attack_no_range_description",
+    "base_passive_sharpshooter_description",
+    "base_passive_double_strike_ranged_attack_description",
+    "h3_common_passive_free_shooting_description",
+}
+
+
+RANGED_PRIMARY_CARD_DESCRIPTIONS = GENERIC_RANGED_CARD_DESCRIPTIONS | {
+    "base_passive_ranged_attack_description",
+    "base_passive_ranged_attack_no_range_description",
+    "base_passive_double_strike_ranged_attack_description",
+    "h3_giant_upg_ability_1_description",
+}
+# Cards that already state "no range falloff".
+NO_FALLOFF_CARD_DESCRIPTIONS = {"base_passive_sharpshooter_description", "h3_mage_ability_2_description"}
+
+
+def shooter_has_no_range_falloff(logic_item: dict[str, Any]) -> bool:
+    """True when every shoot dealer has shootDmgBuff 0 (no per-hex falloff)."""
+    values = []
+    for key in ("defaultAttacks", "alternativeAttacks"):
+        for attack in as_attack_list(logic_item.get(key)):
+            if attack.get("attackType_") not in {"shoot", "range"}:
+                continue
+            dealer = attack.get("damageDealer") if isinstance(attack.get("damageDealer"), dict) else {}
+            values.append(dealer.get("shootDmgBuff"))
+    return bool(values) and all(isinstance(value, (int, float)) and value == 0 for value in values)
+
+
+def normalize_custom_unit_ranged_cards(logic_item: dict[str, Any], view_item: dict[str, Any]) -> bool:
+    """2026-11-12 audit S8: ranged passive cards must match the shooter data.
+
+    - melee-only units lose every ranged card (Medusa Warrior);
+    - shooters that ignore range falloff lose the "-X% per hex" card and get Sharpshooter;
+    - shooters showing both the falloff card and the generic "Can attack enemies at
+      range." card keep only the more specific falloff card.
+    """
+    passives = view_item.get("passives")
+    if not isinstance(passives, list):
+        return False
+    stats = logic_item.get("stats") if isinstance(logic_item.get("stats"), dict) else {}
+    is_shooter = find_attack(logic_item, "shoot") is not None or find_attack(logic_item, "range") is not None
+    descriptions = [row.get("description") if isinstance(row, dict) else None for row in passives]
+    before = json.dumps(passives, sort_keys=True, ensure_ascii=False)
+    if not is_shooter:
+        kept = [row for row, desc in zip(passives, descriptions) if desc not in RANGED_CARD_DESCRIPTIONS]
+    elif stats.get("ignoreShootDmgBuff") is True or shooter_has_no_range_falloff(logic_item):
+        kept = [row for row, desc in zip(passives, descriptions) if desc != RANGED_FALLOFF_CARD_DESCRIPTION]
+        kept_descriptions = {row.get("description") for row in kept if isinstance(row, dict)}
+        if not kept_descriptions & RANGED_PRIMARY_CARD_DESCRIPTIONS:
+            kept.insert(0, {"name": "h3_common_ranged_attack_name", "description": GENERIC_RANGED_CARD_DESCRIPTION})
+        if not kept_descriptions & NO_FALLOFF_CARD_DESCRIPTIONS:
+            kept.append({"name": "base_passive_sharpshooter_name", "description": "base_passive_sharpshooter_description"})
+    elif RANGED_FALLOFF_CARD_DESCRIPTION in descriptions:
+        kept = [row for row, desc in zip(passives, descriptions) if desc not in GENERIC_RANGED_CARD_DESCRIPTIONS]
+    else:
+        return False
+    if json.dumps(kept, sort_keys=True, ensure_ascii=False) == before:
+        return False
+    view_item["passives"] = kept
+    return True
 
 
 # HoMM3 neutral OE kits (catalog oeKit, docs/homm3_neutral_oe_kits.md). The donor row
@@ -15240,7 +16198,8 @@ def make_homm3_cove_fangarm_unit_logic() -> dict[str, Any]:
                     "moral": 0,
                     "energyPerCast": 1,
                     "energyPerRound": 0,
-                    "energyPerTakeDamage": 0,
+                    # Native default Focus income; 0 left the 2-Focus Hypnotic Strike uncastable.
+                    "energyPerTakeDamage": 1,
                     "actionPoints": 1,
                     "numCounters": 999,
                     "moralMin": -5,
@@ -15331,160 +16290,6 @@ def make_homm3_cove_fangarm_unit_view() -> dict[str, Any]:
                 ],
             }
         ]
-    }
-
-
-def homm3_inferno_gating_delta_sid(ability_sid: str, key: str) -> str:
-    return f"{ability_sid}_{key}_delta"
-
-
-def homm3_inferno_gating_bonus_info_sid(ability_sid: str, key: str) -> str:
-    return f"sub_skill_faction_homm3_inferno_gating_{key}_{ability_sid}"
-
-
-def make_homm3_inferno_gating_hero_ability(ability_sid: str, unit_sid: str, focus_cost: int) -> dict[str, Any]:
-    base_count, spell_power_increment, spell_power_divisor = HOMM3_INFERNO_GATING_SUMMON_COUNTS[unit_sid]
-    return {
-        "id": ability_sid,
-        "levels": [
-            {
-                "aiValue": 6000,
-                "name": f"{ability_sid}_name",
-                "description": f"{ability_sid}_description",
-                "icon": unit_sid,
-                "casterEffect": HOMM3_INFERNO_GATING_CAST_VFX,
-                "effect": HOMM3_INFERNO_GATING_SUMMON_VFX,
-                "hexEffect": HOMM3_INFERNO_GATING_SUMMON_VFX,
-                "attackTimeBefore": 1.3,
-                "attackTimeAfter": 1.3,
-                "cd": 3,
-                "charges": 1,
-                "energyLevel": focus_cost,
-                "useExpandTooltip": "false",
-                "attackType_": "cast",
-                "damageDealer": {
-                    "tags": ["ability", "summon_ability"],
-                    "triggerCounter": False,
-                    "attackPatternSid": "attack_single_x100",
-                    "castTargetParams": {
-                        "castTarget_": "ally",
-                        "selection": "hex",
-                        "areaType": "near_units",
-                        "distance": 2,
-                    },
-                    "affectTargetParams": {
-                        "castTarget_": "ally",
-                        "selection": "hex",
-                        "areaType": "near_units",
-                        "distance": 2,
-                    },
-                    "damageTarget_": "none",
-                    "damageType_": "none",
-                    "targetMechanics": [
-                        {
-                            "mech": "spawn_object",
-                            "values": [
-                                "unit",
-                                unit_sid,
-                                base_count,
-                                spell_power_increment,
-                                spell_power_divisor,
-                            ],
-                        }
-                    ],
-                },
-            }
-        ],
-        "xHomm3ImplementedMechanics": "Hero-bar Gating directly spawns temporary Inferno units with native spawn_object(unit,...) using Spell Power count scaling and borrows the Summon Avatar target VFX as presentation only; it does not use Avatar singleton summon mechanics or Demon/Hive eggs.",
-    }
-
-
-def make_homm3_inferno_gating_hero_abilities() -> list[dict[str, Any]]:
-    return [
-        make_homm3_inferno_gating_hero_ability(HOMM3_INFERNO_GATING_IMP_ABILITY_SID, "h3_imp", 1),
-        make_homm3_inferno_gating_hero_ability(HOMM3_INFERNO_GATING_GOG_ABILITY_SID, "h3_gog", 2),
-        make_homm3_inferno_gating_hero_ability(HOMM3_INFERNO_GATING_HELL_HOUND_ABILITY_SID, "h3_hell_hound", 3),
-    ]
-
-
-def make_homm3_inferno_gating_delta_ability(ability_sid: str, key: str) -> dict[str, Any]:
-    if key == "fast_gate":
-        level = {"charges": 0, "cd": -1, "energyLevel": 0}
-    elif key == "focus_efficiency":
-        level = {"charges": 0, "cd": 0, "energyLevel": -1}
-    elif key == "any_tile":
-        level = {
-            "charges": 0,
-            "cd": 0,
-            "energyLevel": 0,
-            "damageDealer": {
-                "castTargetParams": {"castTarget_": "all", "selection": "hex"},
-                "affectTargetParams": {"castTarget_": "all", "selection": "hex"},
-            },
-        }
-    else:
-        raise ValueError(key)
-    return {"id": homm3_inferno_gating_delta_sid(ability_sid, key), "levels": [level]}
-
-
-def make_homm3_inferno_gating_delta_abilities() -> list[dict[str, Any]]:
-    rows: list[dict[str, Any]] = []
-    for ability_sid in HOMM3_INFERNO_GATING_ABILITY_SIDS:
-        rows.append(make_homm3_inferno_gating_delta_ability(ability_sid, "fast_gate"))
-        rows.append(make_homm3_inferno_gating_delta_ability(ability_sid, "any_tile"))
-    for ability_sid in (HOMM3_INFERNO_GATING_GOG_ABILITY_SID, HOMM3_INFERNO_GATING_HELL_HOUND_ABILITY_SID):
-        rows.append(make_homm3_inferno_gating_delta_ability(ability_sid, "focus_efficiency"))
-    return rows
-
-
-def make_homm3_inferno_gating_ability_infos() -> list[dict[str, str]]:
-    rows: list[dict[str, str]] = []
-    for ability_sid in HOMM3_INFERNO_GATING_ABILITY_SIDS:
-        for key in ("fast_gate", "any_tile"):
-            rows.append(
-                {
-                    "id": homm3_inferno_gating_bonus_info_sid(ability_sid, key),
-                    "targetAbilitySid": ability_sid,
-                    "deltaAbilitySid": homm3_inferno_gating_delta_sid(ability_sid, key),
-                }
-            )
-    for ability_sid in (HOMM3_INFERNO_GATING_GOG_ABILITY_SID, HOMM3_INFERNO_GATING_HELL_HOUND_ABILITY_SID):
-        rows.append(
-            {
-                "id": homm3_inferno_gating_bonus_info_sid(ability_sid, "focus_efficiency"),
-                "targetAbilitySid": ability_sid,
-                "deltaAbilitySid": homm3_inferno_gating_delta_sid(ability_sid, "focus_efficiency"),
-            }
-        )
-    return rows
-
-
-def make_homm3_inferno_gating_barrier_buff() -> dict[str, Any]:
-    return {
-        "id": HOMM3_INFERNO_GATING_BARRIER_BUFF_SID,
-        "infinite": True,
-        "hidden": True,
-        "canDispel": False,
-        "dontMimic": True,
-        "dontTriggerAction": True,
-        "keepOnDeath": True,
-        "icon": "magic_arinas_chosen_effect_icon",
-        "name_": "sub_skill_faction_homm3_inferno_gating_barrier_name",
-        "description_": "sub_skill_faction_homm3_inferno_gating_barrier_desc",
-        "tags": ["positive"],
-        "maxDuration": 1,
-        "addition": "duration",
-        "data": {"stats": {"healthLimitMinPercent": 0.20}},
-    }
-
-
-def make_homm3_inferno_gating_barrier_info() -> dict[str, Any]:
-    return {
-        "id": HOMM3_INFERNO_GATING_BARRIER_INFO_SID,
-        "sid": HOMM3_INFERNO_GATING_BARRIER_BUFF_SID,
-        "duration": 1,
-        "charges": 1,
-        "allegiance": "ally",
     }
 
 
@@ -15704,85 +16509,6 @@ def make_homm3_rampart_avenger_subskills() -> list[dict[str, Any]]:
             "desc": "sub_skill_faction_homm3_rampart_avenger_focus_efficiency_desc",
             "icon": HOMM3_RAMPART_AVENGER_ICON,
             "bonuses": [hero_stat_bonus("startEnergyLevelsBonus", "1")],
-        },
-    ]
-
-
-def make_homm3_inferno_gating_subskills() -> list[dict[str, Any]]:
-    fast_gate_bonuses = [
-        {
-            "type": "battleSubskillBonus",
-            "parameters": ["hero_ability", homm3_inferno_gating_bonus_info_sid(ability_sid, "fast_gate")],
-        }
-        for ability_sid in HOMM3_INFERNO_GATING_ABILITY_SIDS
-    ]
-    any_tile_bonuses = [
-        {
-            "type": "battleSubskillBonus",
-            "parameters": ["hero_ability", homm3_inferno_gating_bonus_info_sid(ability_sid, "any_tile")],
-        }
-        for ability_sid in HOMM3_INFERNO_GATING_ABILITY_SIDS
-    ]
-    focus_efficiency_bonuses = [
-        {
-            "type": "battleSubskillBonus",
-            "parameters": ["hero_ability", homm3_inferno_gating_bonus_info_sid(ability_sid, "focus_efficiency")],
-        }
-        for ability_sid in (HOMM3_INFERNO_GATING_GOG_ABILITY_SID, HOMM3_INFERNO_GATING_HELL_HOUND_ABILITY_SID)
-    ]
-    return [
-        {
-            "id": "sub_skill_faction_homm3_inferno_gating_more_units",
-            "name": "sub_skill_faction_homm3_inferno_gating_more_units_name",
-            "desc": "sub_skill_faction_homm3_inferno_gating_more_units_desc",
-            "icon": "h3_imp",
-            "bonuses": [
-                {"type": "heroStat", "parameters": ["finalSummonBonusPercent", "0.30"]},
-                {"type": "unitStat", "parameters": ["finalSummonBonusPercent", "0.30"]},
-            ],
-        },
-        {
-            "id": "sub_skill_faction_homm3_inferno_gating_fast_gate",
-            "name": "sub_skill_faction_homm3_inferno_gating_fast_gate_name",
-            "desc": "sub_skill_faction_homm3_inferno_gating_fast_gate_desc",
-            "icon": "skill_tactics",
-            "bonuses": fast_gate_bonuses,
-        },
-        {
-            "id": "sub_skill_faction_homm3_inferno_gating_focus_efficiency",
-            "name": "sub_skill_faction_homm3_inferno_gating_focus_efficiency_name",
-            "desc": "sub_skill_faction_homm3_inferno_gating_focus_efficiency_desc",
-            "icon": "sub_skill_faction_demons_2_icon",
-            "bonuses": focus_efficiency_bonuses,
-        },
-        {
-            "id": "sub_skill_faction_homm3_inferno_gating_native_terrain",
-            "name": "sub_skill_faction_homm3_inferno_gating_native_terrain_name",
-            "desc": "sub_skill_faction_homm3_inferno_gating_native_terrain_desc",
-            "icon": "sub_skill_faction_demons_1_icon",
-            "bonuses": [
-                {"type": "unitStat", "biomeType": "native", "fraction": "homm3_inferno", "parameters": ["outAllDmgMod", "0.1"]},
-                {"type": "unitStat", "biomeType": "native", "fraction": "homm3_inferno", "parameters": ["inAllDmgMod", "-0.1"]},
-            ],
-        },
-        {
-            "id": "sub_skill_faction_homm3_inferno_gating_any_tile",
-            "name": "sub_skill_faction_homm3_inferno_gating_any_tile_name",
-            "desc": "sub_skill_faction_homm3_inferno_gating_any_tile_desc",
-            "icon": "sub_skill_summoner_6_icon",
-            "bonuses": any_tile_bonuses,
-        },
-        {
-            "id": "sub_skill_faction_homm3_inferno_gating_barrier",
-            "name": "sub_skill_faction_homm3_inferno_gating_barrier_name",
-            "desc": "sub_skill_faction_homm3_inferno_gating_barrier_desc",
-            "icon": "magic_arinas_chosen_effect_icon",
-            "bonuses": [
-                {
-                    "type": "battleMechModBonus",
-                    "parameters": ["spawn_object", "add_buff_on_summon", HOMM3_INFERNO_GATING_BARRIER_INFO_SID],
-                }
-            ],
         },
     ]
 
@@ -16009,72 +16735,6 @@ def make_homm3_cove_treasure_hunting_subskills() -> list[dict[str, Any]]:
             "desc": "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_paths_desc",
             "icon": "sub_skill_logistic_3_icon",
             "bonuses": [hero_stat_bonus("movementRestoreBonus", "50")],
-        },
-    ]
-
-
-def conflux_elemental_line_receivers(manifest: dict[str, Any]) -> list[str]:
-    return (
-        manifest_line_receivers(manifest, 2)
-        + manifest_line_receivers(manifest, 3)
-        + manifest_line_receivers(manifest, 4)
-        + manifest_line_receivers(manifest, 5)
-        + manifest_line_receivers(manifest, 6)
-    )
-
-
-def make_homm3_conflux_elemental_conjury_subskills(manifest: dict[str, Any]) -> list[dict[str, Any]]:
-    faction_sid = manifest["identity"]["factionSid"]
-    elemental_lines = conflux_elemental_line_receivers(manifest)
-    spell_units = list(HOMM3_CONFLUX_ELEMENTAL_FOCUS_SPELL_RECEIVERS)
-    return [
-        {
-            "id": "sub_skill_faction_homm3_conflux_elemental_conjury_native_terrain",
-            "name": "sub_skill_faction_homm3_conflux_elemental_conjury_native_terrain_name",
-            "desc": "sub_skill_faction_homm3_conflux_elemental_conjury_native_terrain_desc",
-            "icon": "sub_skill_faction_nature_1_icon",
-            "bonuses": [
-                {"type": "unitStat", "biomeType": "native", "fraction": faction_sid, "parameters": ["outAllDmgMod", "0.1"]},
-                {"type": "unitStat", "biomeType": "native", "fraction": faction_sid, "parameters": ["inAllDmgMod", "-0.1"]},
-            ],
-        },
-        {
-            "id": "sub_skill_faction_homm3_conflux_elemental_conjury_focus_charge",
-            "name": "sub_skill_faction_homm3_conflux_elemental_conjury_focus_charge_name",
-            "desc": "sub_skill_faction_homm3_conflux_elemental_conjury_focus_charge_desc",
-            "icon": "skill_faction_homm3_conflux_2",
-            "bonuses": [hero_stat_bonus("startEnergyLevelsBonus", "1")],
-        },
-        {
-            "id": "sub_skill_faction_homm3_conflux_elemental_conjury_spell_power",
-            "name": "sub_skill_faction_homm3_conflux_elemental_conjury_spell_power_name",
-            "desc": "sub_skill_faction_homm3_conflux_elemental_conjury_spell_power_desc",
-            "icon": "sub_skill_summoner_1_icon",
-            "bonuses": [
-                unit_stat_bonus(elemental_lines, "heroOffenceModifier", "0.50"),
-                unit_stat_bonus(elemental_lines, "heroSpellPowerModifier", "0.50"),
-            ],
-        },
-        {
-            "id": "sub_skill_faction_homm3_conflux_elemental_conjury_expert_focus_charge",
-            "name": "sub_skill_faction_homm3_conflux_elemental_conjury_expert_focus_charge_name",
-            "desc": "sub_skill_faction_homm3_conflux_elemental_conjury_expert_focus_charge_desc",
-            "icon": "skill_faction_homm3_conflux_3",
-            "bonuses": [hero_stat_bonus("startEnergyLevelsBonus", "1")],
-        },
-        {
-            "id": "sub_skill_faction_homm3_conflux_elemental_conjury_pathfinding",
-            "name": "sub_skill_faction_homm3_conflux_elemental_conjury_pathfinding_name",
-            "desc": "sub_skill_faction_homm3_conflux_elemental_conjury_pathfinding_desc",
-            "icon": "sub_skill_scouting_3_icon",
-            "bonuses": [hero_stat_bonus("landscapePenaltyPerBonus", "-1.0")],
-        },
-        {
-            "id": "sub_skill_faction_homm3_conflux_elemental_conjury_expert_spell_tier",
-            "name": "sub_skill_faction_homm3_conflux_elemental_conjury_expert_spell_tier_name",
-            "desc": "sub_skill_faction_homm3_conflux_elemental_conjury_expert_spell_tier_desc",
-            "icon": "sub_skill_magic_primal_1_icon",
-            "bonuses": [unit_stat_bonus(spell_units, "finalAbilityDamageBonusPercent", "1.0")],
         },
     ]
 
@@ -16463,58 +17123,8 @@ def make_homm3_factory_field_triage_hero_ability() -> dict[str, Any]:
 
 
 def make_homm3_factory_split_assembly_subskills() -> list[dict[str, Any]]:
-    return [
-        {
-            "id": "sub_skill_faction_homm3_factory_sand_advantage",
-            "name": "sub_skill_faction_homm3_factory_sand_advantage_name",
-            "desc": "sub_skill_faction_homm3_factory_sand_advantage_desc",
-            "icon": "sub_skill_faction_humans_1_icon",
-            "bonuses": [
-                {"type": "unitStat", "biomeType": "native", "fraction": "homm3_factory", "parameters": ["outAllDmgMod", "0.1"]},
-                {"type": "unitStat", "biomeType": "native", "fraction": "homm3_factory", "parameters": ["inAllDmgMod", "-0.1"]},
-            ],
-        },
-        {
-            "id": "sub_skill_faction_homm3_factory_line_discipline",
-            "name": "sub_skill_faction_homm3_factory_line_discipline_name",
-            "desc": "sub_skill_faction_homm3_factory_line_discipline_desc",
-            "icon": "sub_skill_scouting_3_icon",
-            "bonuses": [hero_stat_bonus("landscapePenaltyPerBonus", "-0.5")],
-        },
-        {
-            "id": "sub_skill_faction_homm3_factory_field_calibration",
-            "name": "sub_skill_faction_homm3_factory_field_calibration_name",
-            "desc": "sub_skill_faction_homm3_factory_field_calibration_desc",
-            "icon": "sub_skill_faction_humans_3_icon",
-            "bonuses": [
-                hero_stat_bonus("enableEnemyHeroInfo", "true"),
-                {"type": "heroScouting", "parameters": ["1.5"]},
-            ],
-        },
-        {
-            "id": HOMM3_FACTORY_NATURAL_OVERCLOCK_SUBSKILL_SID,
-            "name": "sub_skill_faction_homm3_factory_gantry_reserve_name",
-            "desc": "sub_skill_faction_homm3_factory_gantry_reserve_desc",
-            "icon": "sub_skill_faction_humans_4_icon",
-            "bonuses": [],
-            "xHomm3RuntimeHook": "Homm3FactorySplitAssemblyRuntime treats this as +1 effective Natural line count.",
-        },
-        {
-            "id": HOMM3_FACTORY_INDUSTRIAL_OVERCLOCK_SUBSKILL_SID,
-            "name": "sub_skill_faction_homm3_factory_industrial_tempo_name",
-            "desc": "sub_skill_faction_homm3_factory_industrial_tempo_desc",
-            "icon": "sub_skill_faction_humans_5_icon",
-            "bonuses": [],
-            "xHomm3RuntimeHook": "Homm3FactorySplitAssemblyRuntime treats this as +1 effective Industrial line count.",
-        },
-        {
-            "id": "sub_skill_faction_homm3_factory_couatl_relay",
-            "name": "sub_skill_faction_homm3_factory_couatl_relay_name",
-            "desc": "sub_skill_faction_homm3_factory_couatl_relay_desc",
-            "icon": "sub_skill_faction_humans_6_icon",
-            "bonuses": [hero_stat_bonus("startEnergyLevelsBonus", "1")],
-        },
-    ]
+    # Logistics Network subskills on the Split Assembly SIDs.
+    return factory_logistics.make_subskills()
 
 
 def make_homm3_bulwark_runes_subskills() -> list[dict[str, Any]]:
@@ -16604,6 +17214,44 @@ HOMM3_DUNGEON_CAPTIVES_MAGIC_MODES = (
     {"mode": "homm3_dungeon_captives_ransom", "sids": HOMM3_DUNGEON_CAPTIVES_RANSOM_SIDS, "icon": "space_7_magic_shackles"},
 )
 
+# Terror Mandate enemy-unit Morale debuffs. Homm3DungeonDraconicDominionHook applies
+# homm3_dungeon_terror_mandate_morale_{n} to every enemy battle unit at Unit.Init so the
+# penalty also lands on heroless (neutral) armies; n = factions beyond the first, clamped.
+HOMM3_DUNGEON_TERROR_MANDATE_MORALE_BUFF_PREFIX = "homm3_dungeon_terror_mandate_morale_"
+HOMM3_DUNGEON_TERROR_MANDATE_MAX_MAGNITUDE = 6
+HOMM3_DUNGEON_TERROR_MANDATE_BUFFS_PATH = "DB/buffs/buffs_night_magics.json"
+
+
+def make_homm3_dungeon_terror_mandate_buff_rows() -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for magnitude in range(1, HOMM3_DUNGEON_TERROR_MANDATE_MAX_MAGNITUDE + 1):
+        sid = f"{HOMM3_DUNGEON_TERROR_MANDATE_MORALE_BUFF_PREFIX}{magnitude}"
+        rows.append(
+            {
+                "id": sid,
+                "aiValue": 1500 * magnitude,
+                "aiValuePerDuration": 15 * magnitude,
+                "infinite": True,
+                "icon": "magic_nairas_kiss_effect_icon",
+                "name_": f"{sid}_name",
+                "description_": f"{sid}_desc",
+                "tags": ["negative", "homm3_dungeon_terror_mandate"],
+                "isPositive": False,
+                "addition": "data",
+                "data": {"stats": {"moral": -magnitude}},
+            }
+        )
+    return rows
+
+
+def make_homm3_dungeon_terror_mandate_buff_lang_rows() -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    for magnitude in range(1, HOMM3_DUNGEON_TERROR_MANDATE_MAX_MAGNITUDE + 1):
+        sid = f"{HOMM3_DUNGEON_TERROR_MANDATE_MORALE_BUFF_PREFIX}{magnitude}"
+        rows.append({"sid": f"{sid}_name", "text": "Terror Mandate"})
+        rows.append({"sid": f"{sid}_desc", "text": f"-{magnitude} Morale."})
+    return rows
+
 
 def make_homm3_dungeon_captives_magic_rows(release_zip: zipfile.ZipFile, output: dict[str, bytes]) -> list[dict[str, Any]]:
     source_doc = read_overlay_or_release_json(release_zip, output, HOMM3_DUNGEON_CAPTIVES_MAGIC_PATH)
@@ -16680,10 +17328,26 @@ def make_homm3_dungeon_captives_hero_buff_rows() -> list[dict[str, Any]]:
                 ],
             }
         )
-    # Hidden bonus-less bit buffs persist banked strength (units of 100) and squad count in the save.
+    # War Captives Enslave: visible bonus-less buff (live tooltip shows count and daily Gold).
+    rows.append(
+        {
+            "id": HOMM3_DUNGEON_WAR_CAPTIVES_ENSLAVED_BUFF,
+            "icon": HOMM3_DUNGEON_CAPTIVES_ICON,
+            "name": f"{HOMM3_DUNGEON_WAR_CAPTIVES_ENSLAVED_BUFF}_name",
+            "description": f"{HOMM3_DUNGEON_WAR_CAPTIVES_ENSLAVED_BUFF}_description",
+            "additionType": "LeftNew",
+            "isPositive": True,
+            "hidden": False,
+            "isDispellable": True,
+            "bonuses": [],
+        }
+    )
+    # Hidden bonus-less bit buffs persist banked strength (units of 100) and squad count (legacy
+    # Captives) and the enslaved captive count (War Captives) in the save.
     for prefix, count in (
         (HOMM3_DUNGEON_CAPTIVES_STRENGTH_BIT_PREFIX, HOMM3_DUNGEON_CAPTIVES_STRENGTH_BITS),
         (HOMM3_DUNGEON_CAPTIVES_SQUADS_BIT_PREFIX, HOMM3_DUNGEON_CAPTIVES_SQUADS_BITS),
+        (HOMM3_DUNGEON_WAR_CAPTIVES_ENSLAVED_BIT_PREFIX, HOMM3_DUNGEON_WAR_CAPTIVES_ENSLAVED_BITS),
     ):
         for bit in range(count):
             rows.append(
@@ -16718,9 +17382,15 @@ def homm3_dungeon_captives_lang_rows() -> tuple[list[dict[str, str]], list[dict[
             {"sid": f"{sid}_description", "text": f"Ransom every captive this hero holds for {gold} Gold per 1,000 captive strength. Empties the captives and removes their tier bonus."},
             {"sid": f"{sid}_cast", "text": "The captives are ransomed."},
         ]
+    enslave_rates = "/".join(HOMM3_DUNGEON_WAR_CAPTIVES_ENSLAVE_GOLD_PER_DAY)
     buff_rows: list[dict[str, str]] = [
         {"sid": "homm3_dungeon_captives_buff_name", "text": "Captives"},
         {"sid": "homm3_dungeon_captives_bit_description", "text": "Captives ledger."},
+        {"sid": f"{HOMM3_DUNGEON_WAR_CAPTIVES_ENSLAVED_BUFF}_name", "text": "Enslaved Captives"},
+        {
+            "sid": f"{HOMM3_DUNGEON_WAR_CAPTIVES_ENSLAVED_BUFF}_description",
+            "text": f"Captives enslaved by this hero. Each earns {enslave_rates} Gold per day (by War Captives level) while this hero stays in service.",
+        },
     ]
     buff_rows.append(
         {
@@ -16812,6 +17482,7 @@ def add_release_generic_mechanic_support_rows(release_zip: zipfile.ZipFile, mani
                 "upsert_array_row": upsert_array_row,
                 "dedupe_array_rows_by_id": dedupe_array_rows_by_id,
                 "add_lang_overlay_rows": add_lang_overlay_rows,
+                "add_lang_args_overlay_rows": add_lang_args_overlay_rows,
             },
         )
     if faction_sid == "homm3_cove":
@@ -16901,111 +17572,39 @@ def add_release_generic_mechanic_support_rows(release_zip: zipfile.ZipFile, mani
             output[ability_name] = write_json(ability_doc)
             notes.append("merge homm3_stronghold Warcries hero ability icons")
     if faction_sid == "homm3_inferno":
-        ability_name = "DB/heroes_abilities/heroes_abilities_base/hero_abilities.json"
-        try:
-            ability_doc = json.loads(output[ability_name].decode("utf-8-sig")) if ability_name in output else read_json(release_zip, ability_name)
-            if isinstance(ability_doc, dict):
-                changed = False
-                for row in make_homm3_inferno_gating_hero_abilities():
-                    changed = upsert_array_row(ability_doc, row) or changed
-                changed = dedupe_array_rows_by_id(ability_doc) or changed
-                if changed:
-                    output[ability_name] = write_json(ability_doc)
-                    notes.append("merge homm3_inferno Gating hero abilities")
-        except (json.JSONDecodeError, UnicodeDecodeError, KeyError) as ex:
-            notes.append(f"warn missing {faction_sid} Gating hero ability target: {ex}")
+        def _gating_read_doc(name: str) -> Any:
+            return json.loads(output[name].decode("utf-8-sig")) if name in output else read_json(release_zip, name)
 
-        ability_bonuses_name = "DB/heroes_abilities/heroes_abilities_bonuses/hero_abilities_bonuses.json"
-        try:
-            ability_bonuses_doc = json.loads(output[ability_bonuses_name].decode("utf-8-sig")) if ability_bonuses_name in output else read_json(release_zip, ability_bonuses_name)
-            if isinstance(ability_bonuses_doc, dict):
-                changed = False
-                for row in make_homm3_inferno_gating_delta_abilities():
-                    changed = upsert_array_row(ability_bonuses_doc, row) or changed
-                changed = dedupe_array_rows_by_id(ability_bonuses_doc) or changed
-                if changed:
-                    output[ability_bonuses_name] = write_json(ability_bonuses_doc)
-                    notes.append("merge homm3_inferno Gating hero ability deltas")
-        except (json.JSONDecodeError, UnicodeDecodeError, KeyError) as ex:
-            notes.append(f"warn missing {faction_sid} Gating hero ability delta target: {ex}")
+        def _gating_write_doc(name: str, doc: Any) -> None:
+            output[name] = write_json(doc)
 
-        ability_infos_name = "DB/heroes_abilities/heroes_abilities_infos/hero_abilities_infos.json"
-        try:
-            ability_infos_doc = json.loads(output[ability_infos_name].decode("utf-8-sig")) if ability_infos_name in output else read_json(release_zip, ability_infos_name)
-            if isinstance(ability_infos_doc, dict):
-                changed = False
-                for row in make_homm3_inferno_gating_ability_infos():
-                    changed = upsert_array_row(ability_infos_doc, row) or changed
-                changed = dedupe_array_rows_by_id(ability_infos_doc) or changed
-                if changed:
-                    output[ability_infos_name] = write_json(ability_infos_doc)
-                    notes.append("merge homm3_inferno Gating hero ability info rows")
-        except (json.JSONDecodeError, UnicodeDecodeError, KeyError) as ex:
-            notes.append(f"warn missing {faction_sid} Gating hero ability info target: {ex}")
-
-        obstacles_name = "DB/field_objects/obstacles/obstacles_hero.json"
-        try:
-            obstacles_doc = json.loads(output[obstacles_name].decode("utf-8-sig")) if obstacles_name in output else read_json(release_zip, obstacles_name)
-            if isinstance(obstacles_doc, dict):
-                changed = remove_array_rows_by_id(obstacles_doc, HOMM3_INFERNO_GATING_STALE_OBSTACLE_IDS)
-                changed = dedupe_array_rows_by_id(obstacles_doc) or changed
-                if changed:
-                    output[obstacles_name] = write_json(obstacles_doc)
-                    notes.append("remove stale homm3_inferno Gating gate obstacles")
-        except (json.JSONDecodeError, UnicodeDecodeError, KeyError) as ex:
-            notes.append(f"warn missing {faction_sid} Gating obstacle target: {ex}")
-
-        barrier_buffs_name = "DB/buffs/sub_skills_battle_hero_buffs.json"
-        try:
-            barrier_buffs_doc = json.loads(output[barrier_buffs_name].decode("utf-8-sig")) if barrier_buffs_name in output else read_json(release_zip, barrier_buffs_name)
-            if isinstance(barrier_buffs_doc, dict):
-                changed = upsert_array_row(barrier_buffs_doc, make_homm3_inferno_gating_barrier_buff())
-                changed = dedupe_array_rows_by_id(barrier_buffs_doc) or changed
-                if changed:
-                    output[barrier_buffs_name] = write_json(barrier_buffs_doc)
-                    notes.append("merge homm3_inferno Gating barrier buff")
-        except (json.JSONDecodeError, UnicodeDecodeError, KeyError) as ex:
-            notes.append(f"warn missing {faction_sid} Gating barrier buff target: {ex}")
-
-        barrier_infos_name = "DB/side_buffs/bonus_buff_infos/buff_infos.json"
-        try:
-            barrier_infos_doc = json.loads(output[barrier_infos_name].decode("utf-8-sig")) if barrier_infos_name in output else read_json(release_zip, barrier_infos_name)
-            if isinstance(barrier_infos_doc, dict):
-                changed = upsert_array_row(barrier_infos_doc, make_homm3_inferno_gating_barrier_info())
-                changed = dedupe_array_rows_by_id(barrier_infos_doc) or changed
-                if changed:
-                    output[barrier_infos_name] = write_json(barrier_infos_doc)
-                    notes.append("merge homm3_inferno Gating barrier buff info")
-        except (json.JSONDecodeError, UnicodeDecodeError, KeyError) as ex:
-            notes.append(f"warn missing {faction_sid} Gating barrier info target: {ex}")
-
-        subskills_name = "DB/heroes_skills/sub_skills/sub_skills.json"
-        try:
-            subskills_doc = json.loads(output[subskills_name].decode("utf-8-sig")) if subskills_name in output else read_json(release_zip, subskills_name)
-            if isinstance(subskills_doc, dict):
-                changed = remove_array_rows_by_id(subskills_doc, HOMM3_INFERNO_GATING_STALE_SUBSKILL_IDS)
-                for row in make_homm3_inferno_gating_subskills():
-                    changed = upsert_array_row(subskills_doc, row) or changed
-                changed = dedupe_array_rows_by_id(subskills_doc) or changed
-                if changed:
-                    output[subskills_name] = write_json(subskills_doc)
-                    notes.append("merge homm3_inferno Gating subskills")
-        except (json.JSONDecodeError, UnicodeDecodeError, KeyError) as ex:
-            notes.append(f"warn missing {faction_sid} Gating subskill target: {ex}")
+        homm3_inferno_gating_core_overlay.merge_inferno_gating_into_overlay(
+            read_doc=_gating_read_doc,
+            write_doc=_gating_write_doc,
+            upsert_array_row=upsert_array_row,
+            remove_array_rows_by_id=remove_array_rows_by_id,
+            dedupe_array_rows_by_id=dedupe_array_rows_by_id,
+            notes=notes,
+        )
     if faction_sid == "homm3_conflux":
-        subskills_name = "DB/heroes_skills/sub_skills/sub_skills.json"
         try:
-            subskills_doc = json.loads(output[subskills_name].decode("utf-8-sig")) if subskills_name in output else read_json(release_zip, subskills_name)
-            if isinstance(subskills_doc, dict):
-                changed = remove_array_rows_by_id(subskills_doc, HOMM3_CONFLUX_ELEMENTAL_CONJURY_STALE_SUBSKILL_IDS)
-                for row in make_homm3_conflux_elemental_conjury_subskills(manifest):
-                    changed = upsert_array_row(subskills_doc, row) or changed
-                changed = dedupe_array_rows_by_id(subskills_doc) or changed
-                if changed:
-                    output[subskills_name] = write_json(subskills_doc)
-                    notes.append("merge homm3_conflux Elemental Conjury subskills")
+            conflux_fusion.merge_fusion_skill_rows_into_overlay(
+                release_zip,
+                output,
+                notes,
+                {
+                    "read_overlay_or_release_json": read_overlay_or_release_json,
+                    "write_json": write_json,
+                    "upsert_array_row": upsert_array_row,
+                    "dedupe_array_rows_by_id": dedupe_array_rows_by_id,
+                    "remove_array_rows_by_id": remove_array_rows_by_id,
+                    "add_lang_overlay_rows": add_lang_overlay_rows,
+                    "add_lang_args_overlay_rows": add_lang_args_overlay_rows,
+                    "stale_subskill_ids": HOMM3_CONFLUX_ELEMENTAL_CONJURY_STALE_SUBSKILL_IDS,
+                },
+            )
         except (json.JSONDecodeError, UnicodeDecodeError, KeyError) as ex:
-            notes.append(f"warn missing {faction_sid} Elemental Conjury subskill target: {ex}")
+            notes.append(f"warn missing {faction_sid} Elemental Fusion skill target: {ex}")
     if faction_sid == "homm3_necropolis":
         ability_name = "DB/heroes_abilities/heroes_abilities_base/hero_abilities.json"
         try:
@@ -17074,6 +17673,17 @@ def add_release_generic_mechanic_support_rows(release_zip: zipfile.ZipFile, mani
         if changed:
             output[HOMM3_DUNGEON_CAPTIVES_HERO_BUFFS_PATH] = write_json(hero_buffs_doc)
             notes.append("merge homm3_dungeon Captives tier and ledger hero buffs")
+        # Terror Mandate unit debuffs are load-bearing for the runtime (enemy-unit Morale): fail closed.
+        terror_buffs_doc = read_overlay_or_release_json(release_zip, output, HOMM3_DUNGEON_TERROR_MANDATE_BUFFS_PATH)
+        if not isinstance(terror_buffs_doc, dict):
+            raise RuntimeError(f"malformed {faction_sid} Terror Mandate buff target {HOMM3_DUNGEON_TERROR_MANDATE_BUFFS_PATH}")
+        changed = False
+        for row in make_homm3_dungeon_terror_mandate_buff_rows():
+            changed = upsert_array_row(terror_buffs_doc, row) or changed
+        changed = dedupe_array_rows_by_id(terror_buffs_doc) or changed
+        if changed:
+            output[HOMM3_DUNGEON_TERROR_MANDATE_BUFFS_PATH] = write_json(terror_buffs_doc)
+            notes.append("merge homm3_dungeon Terror Mandate enemy-unit Morale buff rows")
     if faction_sid == "homm3_factory":
         subskills_name = "DB/heroes_skills/sub_skills/sub_skills.json"
         try:
@@ -17088,6 +17698,20 @@ def add_release_generic_mechanic_support_rows(release_zip: zipfile.ZipFile, mani
                     notes.append("merge homm3_factory Split Assembly subskills")
         except (json.JSONDecodeError, UnicodeDecodeError, KeyError) as ex:
             notes.append(f"warn missing {faction_sid} Split Assembly subskill target: {ex}")
+        # Logistics Network rows are load-bearing for the runtime (spell, carrier, arcane buffs): fail closed.
+        factory_logistics.merge_logistics_skill_rows_into_overlay(
+            release_zip,
+            output,
+            notes,
+            {
+                "read_overlay_or_release_json": read_overlay_or_release_json,
+                "write_json": write_json,
+                "upsert_array_row": upsert_array_row,
+                "dedupe_array_rows_by_id": dedupe_array_rows_by_id,
+                "add_lang_overlay_rows": add_lang_overlay_rows,
+                "add_lang_args_overlay_rows": add_lang_args_overlay_rows,
+            },
+        )
 
         ability_name = "DB/heroes_abilities/heroes_abilities_base/hero_abilities.json"
         try:
@@ -17560,7 +18184,7 @@ def law_bonus(kind: str, args: list[Any], manifest: dict[str, Any]) -> dict[str,
     raise ValueError(f"unknown law bonus kind {kind}")
 
 
-def law_level(cost: int, specs: list[tuple[Any, ...]], manifest: dict[str, Any]) -> dict[str, Any]:
+def law_level(cost: int | None, specs: list[tuple[Any, ...]], manifest: dict[str, Any]) -> dict[str, Any]:
     bonuses: list[dict[str, Any]] = []
     for spec in specs:
         kind = str(spec[0])
@@ -17570,25 +18194,88 @@ def law_level(cost: int, specs: list[tuple[Any, ...]], manifest: dict[str, Any])
 
 
 def custom_resource_riches_law(manifest: dict[str, Any], index: int) -> tuple[str, str, list[dict[str, Any]]] | None:
+    # Cost None: apply_live_one_time_grant_costs copies the cost of the live donor
+    # row that grants the same resources (vanilla 26297049 moved I-III to 2/3/4).
     if index == 3:
         return (
             "Resource Riches I",
             "Provides 2500 Gold, 5 Wood, and 5 Ore when enacted.",
-            [law_level(1, [("sideOneTimeAddRes", ["gold", 2500]), ("sideOneTimeAddRes", ["wood", 5]), ("sideOneTimeAddRes", ["ore", 5])], manifest)],
+            [law_level(None, [("sideOneTimeAddRes", ["gold", 2500]), ("sideOneTimeAddRes", ["wood", 5]), ("sideOneTimeAddRes", ["ore", 5])], manifest)],
         )
     if index == 16:
         return (
             "Resource Riches II",
             "Provides 5000 Gold, 10 Wood, and 10 Ore when enacted.",
-            [law_level(2, [("sideOneTimeAddRes", ["gold", 5000]), ("sideOneTimeAddRes", ["wood", 10]), ("sideOneTimeAddRes", ["ore", 10])], manifest)],
+            [law_level(None, [("sideOneTimeAddRes", ["gold", 5000]), ("sideOneTimeAddRes", ["wood", 10]), ("sideOneTimeAddRes", ["ore", 10])], manifest)],
         )
     if index == 29:
         return (
             "Resource Riches III",
             "Provides 7500 Gold, 15 Wood, and 15 Ore when enacted.",
-            [law_level(3, [("sideOneTimeAddRes", ["gold", 7500]), ("sideOneTimeAddRes", ["wood", 15]), ("sideOneTimeAddRes", ["ore", 15])], manifest)],
+            [law_level(None, [("sideOneTimeAddRes", ["gold", 7500]), ("sideOneTimeAddRes", ["wood", 15]), ("sideOneTimeAddRes", ["ore", 15])], manifest)],
         )
     return None
+
+
+def one_time_grant_signature(level: Any) -> tuple[tuple[str, str], ...] | None:
+    """Resources granted by a law level made only of sideOneTimeAddRes bonuses, else None."""
+    bonuses = level.get("bonuses") if isinstance(level, dict) else None
+    if not isinstance(bonuses, list) or not bonuses:
+        return None
+    grants: list[tuple[str, str]] = []
+    for bonus in bonuses:
+        if not isinstance(bonus, dict) or bonus.get("type") != "sideOneTimeAddRes":
+            return None
+        parameters = bonus.get("parameters")
+        if not isinstance(parameters, list) or len(parameters) != 2:
+            return None
+        grants.append((str(parameters[0]), str(parameters[1])))
+    return tuple(sorted(grants))
+
+
+def live_one_time_grant_costs(donor_rows: list[Any], donor_fraction_sid: str) -> dict[tuple[tuple[str, str], ...], int]:
+    """Cost of every one-time resource grant level in the live donor law table."""
+    costs: dict[tuple[tuple[str, str], ...], int] = {}
+    for row in donor_rows:
+        levels = row.get("parametersPerLevel") if isinstance(row, dict) else None
+        if not isinstance(levels, list):
+            continue
+        for level in levels:
+            signature = one_time_grant_signature(level)
+            if signature is None:
+                continue
+            cost = level.get("cost")
+            if not isinstance(cost, int):
+                raise RuntimeError(f"donor law {row.get('id')} grant level has no integer cost")
+            prior = costs.setdefault(signature, cost)
+            if prior != cost:
+                raise RuntimeError(
+                    f"donor law table {donor_fraction_sid} prices grant {signature} at both {prior} and {cost}"
+                )
+    return costs
+
+
+def apply_live_one_time_grant_costs(
+    levels: list[dict[str, Any]],
+    live_costs: dict[tuple[tuple[str, str], ...], int],
+    law_sid: str,
+) -> list[dict[str, Any]]:
+    """Price one-time resource grants (Resource Riches I-III) from the live donor rows.
+
+    Generated and override laws carry the grant only; the cost follows whatever the
+    running build charges for the same grant, so vanilla rebalances reach the clones.
+    """
+    for level in levels:
+        signature = one_time_grant_signature(level)
+        if signature is None:
+            if isinstance(level, dict) and level.get("cost") is None:
+                raise RuntimeError(f"{law_sid}: law level has no cost and is not a one-time grant")
+            continue
+        cost = live_costs.get(signature)
+        if cost is None:
+            raise RuntimeError(f"{law_sid}: one-time grant {signature} has no live donor law row to price it")
+        level["cost"] = cost
+    return levels
 
 
 def custom_filled_law_slot_definition(manifest: dict[str, Any], index: int) -> tuple[str, str, list[dict[str, Any]]] | None:
@@ -17891,11 +18578,10 @@ def custom_law_definition(manifest: dict[str, Any], index: int) -> tuple[str, st
     if index in unit_law_by_index:
         return custom_unit_law(manifest, unit_law_by_index[index], index)
     if index == 1:
+        # Clone of vanilla dungeon_1 (VANILLA_LAW_CLONE_SOURCES prices it from the live row).
         return ("Tax Collectors", "Produces 250/500 Gold daily by rank.", [law_level(2, [("sideRes", ["gold", 250])], manifest), law_level(2, [("sideRes", ["gold", 500])], manifest)])
     if index == 2:
         return (str(profile["scout"]), "Heroes gain +1/+2 Sight radius by rank.", [law_level(2, [("heroStat", ["viewRadius", "1"])], manifest), law_level(2, [("heroStat", ["viewRadius", "2"])], manifest)])
-    if index == 3:
-        return ("Resource Riches I", "Provides 2500 Gold, 5 Wood, and 5 Ore when enacted.", [law_level(1, [("sideOneTimeAddRes", ["gold", 2500]), ("sideOneTimeAddRes", ["wood", 5]), ("sideOneTimeAddRes", ["ore", 5])], manifest)])
     if index == 5 and (entry := theme_entry(0)) is not None:
         name, desc, bonuses = entry
         return (name, desc, [law_level(3, bonuses, manifest)])
@@ -17915,8 +18601,6 @@ def custom_law_definition(manifest: dict[str, Any], index: int) -> tuple[str, st
         return (f"Mining: {mine_label}", f"Produces 1/2 {mine_label} daily by rank.", [law_level(2, [("sideRes", [mine_resource, 1])], manifest), law_level(2, [("sideRes", [mine_resource, 2])], manifest)])
     if index == 15:
         return (f"{school_label} Study", f"{school_label} spells of your heroes gain 1 level.", [law_level(3, [("heroStat", ["magicSchoolSet", school_key, "0", "1"])], manifest)])
-    if index == 16:
-        return ("Resource Riches II", "Provides 5000 Gold, 10 Wood, and 10 Ore when enacted.", [law_level(2, [("sideOneTimeAddRes", ["gold", 5000]), ("sideOneTimeAddRes", ["wood", 10]), ("sideOneTimeAddRes", ["ore", 10])], manifest)])
     if index == 18:
         return ("Melee Formations", "Friendly creatures deal 5%/10% more melee damage and take 5%/10% less melee damage by rank.", [law_level(3, [("unitStatAll", ["outDmgMods", "melee_attack", "0.05"]), ("unitStatAll", ["inDmgMods", "melee_attack", "-0.05"])], manifest), law_level(3, [("unitStatAll", ["outDmgMods", "melee_attack", "0.10"]), ("unitStatAll", ["inDmgMods", "melee_attack", "-0.10"])], manifest)])
     if index == 19:
@@ -17925,7 +18609,8 @@ def custom_law_definition(manifest: dict[str, Any], index: int) -> tuple[str, st
         name, desc, bonuses = entry
         return (name, desc, [law_level(4, bonuses, manifest)])
     if index == 21:
-        return ("Prosperous Holdings", "Gold income from your sources increases by 10%/20% by rank.", [law_level(4, [("sideStat", ["resPercentIncrementSet", "gold", "0.10"])], manifest), law_level(4, [("sideStat", ["resPercentIncrementSet", "gold", "0.20"])], manifest)])
+        # Clone of vanilla human_21 (VANILLA_LAW_CLONE_SOURCES prices it from the live row).
+        return ("Prosperous Holdings", "Gold income from your sources increases by 10%/15%/20% by rank.", [law_level(4, [("sideStat", ["resPercentIncrementSet", "gold", "0.10"])], manifest), law_level(2, [("sideStat", ["resPercentIncrementSet", "gold", "0.15"])], manifest), law_level(2, [("sideStat", ["resPercentIncrementSet", "gold", "0.20"])], manifest)])
     if index == 22:
         return ("Banner Discipline", "Heroes gain +1/+2 Morale by rank.", [law_level(2, [("heroStat", ["moral", "1"])], manifest), law_level(2, [("heroStat", ["moral", "2"])], manifest)])
     if index == 25:
@@ -17937,8 +18622,6 @@ def custom_law_definition(manifest: dict[str, Any], index: int) -> tuple[str, st
         return ("High Magic", f"Heroes can learn any tier of {school_label} spells.", [law_level(4, [("heroStat", ["magicSchoolSet", school_key, "5", "0"])], manifest)])
     if index == 28:
         return ("Architect's Mastery", "You can construct 1 additional building daily.", [law_level(6, [("constructionDailyLimit", [1])], manifest)])
-    if index == 29:
-        return ("Resource Riches III", "Provides 7500 Gold, 15 Wood, and 15 Ore when enacted.", [law_level(3, [("sideOneTimeAddRes", ["gold", 7500]), ("sideOneTimeAddRes", ["wood", 15]), ("sideOneTimeAddRes", ["ore", 15])], manifest)])
     if index == 31 and (entry := theme_entry(3)) is not None:
         name, desc, bonuses = entry
         return (name, desc, [law_level(4, bonuses, manifest)])
@@ -18097,10 +18780,12 @@ def make_release_custom_laws_doc(release_zip: zipfile.ZipFile, manifest: dict[st
         raise RuntimeError(f"{faction_sid}: donor law table {donor_fraction_sid} is missing array rows")
     count = len(rows)
     indices, _omitted_indices = custom_law_indices_to_emit(manifest, count)
+    live_grant_costs = live_one_time_grant_costs(rows, donor_fraction_sid)
     output_rows: list[dict[str, Any]] = []
     for index in indices:
         override_definition = None if index in RESOURCE_RICHES_LAW_ICONS else custom_law_override_definition(manifest, index)
         name, desc, levels = override_definition or custom_law_definition(manifest, index)
+        levels = apply_live_one_time_grant_costs(levels, live_grant_costs, f"{law_prefix}{index}")
         row = {
             "id": f"{law_prefix}{index}",
             "icon": custom_law_icon(manifest, rows if isinstance(rows, list) else [], index),
@@ -18164,44 +18849,9 @@ def make_specialized_generic_skill_row(manifest: dict[str, Any], skill_sid: str)
         implemented = "Elite Strategem: Basic grants Spread Out, Advanced adds Compress, and Expert adds Ambush as Castle-owned neutral world-magic toggles. Homm3CastleEliteStrategemRuntime intercepts the native Necromancer Will handler path and mutates start-combat transfer-side placement."
         source_difference = "Castle Elite Strategem intentionally reuses the native Necromancer Will world-magic cast surface for spellbook availability, but owns Castle-only mode parameters and placement behavior in runtime code."
     elif faction_sid == "homm3_conflux":
-        elemental_lines = (
-            manifest_line_receivers(manifest, 2)
-            + manifest_line_receivers(manifest, 3)
-            + manifest_line_receivers(manifest, 4)
-            + manifest_line_receivers(manifest, 5)
-            + manifest_line_receivers(manifest, 6)
-        )
-        phoenix = manifest_line_receivers(manifest, 7)
-        levels = [
-            [
-                hero_stat_bonus("startEnergyLevelsBonus", "1"),
-                unit_stat_bonus(elemental_lines, "heroOffenceModifier", "0.50"),
-                unit_stat_bonus(elemental_lines, "heroSpellPowerModifier", "0.50"),
-            ],
-            [
-                hero_stat_bonus("startEnergyLevelsBonus", "2"),
-                unit_stat_bonus(elemental_lines, "heroOffenceModifier", "0.50"),
-                unit_stat_bonus(elemental_lines, "heroSpellPowerModifier", "0.50"),
-                unit_stat_bonus(phoenix, "initiative", "1"),
-            ],
-            [
-                hero_stat_bonus("startEnergyLevelsBonus", "3"),
-                unit_stat_bonus(elemental_lines, "heroOffenceModifier", "0.50"),
-                unit_stat_bonus(elemental_lines, "heroSpellPowerModifier", "0.50"),
-                unit_stat_bonus(elemental_lines + phoenix, "heroIntelligenceModifier", "0.15"),
-            ],
-        ]
-        implemented = (
-            "Elemental Conjury: start-Focus and elemental-line Focus abilities inherit 50% of hero Attack and 50% of hero Spell Power at all ranks; "
-            "Arcane Conduit raises both to 100%. Advanced/Expert subskills also cover native terrain, extra Focus, "
-            "adventure-map movement, and stronger elemental Focus spell damage."
-        )
-        source_difference = (
-            "Renamed from Summon Elementals to match shipped non-summon behavior. "
-            "Elemental focus uses passive start-Focus and flat 50% Attack plus 50% Spell Power inheritance on elemental lines (100% each with Arcane Conduit) "
-            "instead of rank-dependent summon buttons; Expert Greater Conjury uses finalAbilityDamageBonusPercent on elemental "
-            "Focus spell units rather than true spell-tier rebake."
-        )
+        levels = conflux_fusion.faction_skill_levels()
+        implemented = conflux_fusion.IMPLEMENTED
+        source_difference = conflux_fusion.SOURCE_DIFFERENCE
     elif faction_sid == "homm3_cove":
         levels = [
             [{"type": "heroMagicAddition", "parameters": [HOMM3_COVE_TREASURE_HUNTING_MAGIC_SIDS[0], "false"]}],
@@ -18211,20 +18861,9 @@ def make_specialized_generic_skill_row(manifest: dict[str, Any], skill_sid: str)
         implemented = "Treasure Hunting: Basic/Advanced/Expert grant Cove-owned 0-mana native Groundsight variants pinned to native reveal settings 0/1/2."
         source_difference = "Treasure Hunting replaces the unstable Cannon deployment skill with native world Groundsight access and vanilla-shaped exploration subskills."
     elif faction_sid == "homm3_inferno":
-        levels = [
-            [{"type": "heroBattleAbility", "parameters": [HOMM3_INFERNO_GATING_IMP_ABILITY_SID, "0"]}],
-            [
-                {"type": "heroBattleAbility", "parameters": [HOMM3_INFERNO_GATING_IMP_ABILITY_SID, "0"]},
-                {"type": "heroBattleAbility", "parameters": [HOMM3_INFERNO_GATING_GOG_ABILITY_SID, "0"]},
-            ],
-            [
-                {"type": "heroBattleAbility", "parameters": [HOMM3_INFERNO_GATING_IMP_ABILITY_SID, "0"]},
-                {"type": "heroBattleAbility", "parameters": [HOMM3_INFERNO_GATING_GOG_ABILITY_SID, "0"]},
-                {"type": "heroBattleAbility", "parameters": [HOMM3_INFERNO_GATING_HELL_HOUND_ABILITY_SID, "0"]},
-            ],
-        ]
-        implemented = "Gating: Inferno-owned Imp/Gog/Hell Hound actions directly spawn temporary units with native spawn_object(unit,...) using Spell Power count scaling and borrow Summon Avatar target VFX only; no Avatar singleton summon mechanic or Demon/Hive egg obstacle is used."
-        source_difference = "Gating intentionally scales summon count from hero Spell Power, not current-army-HP like the Demon/Hive obstacle path."
+        levels = homm3_inferno_gating_core_overlay.faction_skill_levels()
+        implemented = homm3_inferno_gating_core_overlay.IMPLEMENTED
+        source_difference = homm3_inferno_gating_core_overlay.SOURCE_DIFFERENCE
     elif faction_sid == "homm3_necropolis":
         levels = [
             [hero_stat_bonus("necromancyPerBonus", "0.10")],
@@ -18256,7 +18895,7 @@ def make_specialized_generic_skill_row(manifest: dict[str, Any], skill_sid: str)
         source_difference = (
             "Arcane Battery replaces Bottomless Knowledge morning mana restore with a battle Focus discharge. "
             "Design is spellbook-refresh only; full per-spell CD wipe was rejected as overtuned. "
-            "Mana Well Aegis stays scoped to explicit negative dispellable hero-map curse buffs."
+            "Mana Well Aegis removes negative dispellable hero-map buffs (by buff config) through the native buff manager."
         )
         if tower_artificing_enabled():
             artificing_policy = load_tower_artificing_policy()
@@ -18264,15 +18903,21 @@ def make_specialized_generic_skill_row(manifest: dict[str, Any], skill_sid: str)
             implemented, source_difference = tower_artificing_faction_skill_texts(artificing_policy)
     elif faction_sid == "homm3_dungeon":
         levels = [
-            [
-                unit_bool_stat_bonus("ignoreFractionsCount"),
-                {"type": "heroMagicAddition", "parameters": [HOMM3_DUNGEON_CAPTIVES_EXECUTE_SIDS[index], "false"]},
-                {"type": "heroMagicAddition", "parameters": [HOMM3_DUNGEON_CAPTIVES_RANSOM_SIDS[index], "false"]},
-            ]
+            [unit_bool_stat_bonus("ignoreFractionsCount")]
             for index in range(3)
         ]
-        implemented = "Captives: Homm3DungeonCaptivesRuntime banks squadValue x count when a human hero lets a fleeing squad go (native flee button), persists the bank as hidden hero buffs, applies tier buffs (+N Attack/+N Defense at 2000/6000/12000/22000/36000 strength), and owns the Execute (XP) and Ransom (gold) world spells granted per rank. Underworld Tribute uses native-terrain unitStat rows."
-        source_difference = "Replaces Draconic Dominion; no Diplomacy buy UI. The rank data preserves native unitBoolStat ignoreFractionsCount; Captives subskills reuse the old Draconic Diplomacy SID slug for save compatibility."
+        implemented = (
+            "War Captives: Homm3DungeonCaptivesRuntime reads the won battle at the shared exact battle-result prefix "
+            "(captives = defeated enemy squadValue / 100, +15% Dungeon Cells) and the post-battle captives screen "
+            "(Homm3DungeonWarCaptivesWindow) offers Execute (XP), Ransom (gold), Eat (restore a share of the winner's "
+            "losses on the TransferSide before native write-back), Enslave (_3, hidden enslaved-count buffs + day-start gold) "
+            "and Recruit (_4, paid share of defeated creatures). Underworld Tribute uses native-terrain unitStat rows."
+        )
+        source_difference = (
+            "Replaces Draconic Dominion and the flee-bank Captives; no Diplomacy buy UI and no spells (legacy Execute/Ransom "
+            "rows stay defined for old saves). The rank data preserves native unitBoolStat ignoreFractionsCount; subskills "
+            "reuse the old Draconic Diplomacy SID slug for save compatibility."
+        )
     elif faction_sid == "homm3_stronghold":
         warcry_modes = ("moral", "luck", "initiative")
         levels = [
@@ -18292,28 +18937,11 @@ def make_specialized_generic_skill_row(manifest: dict[str, Any], skill_sid: str)
         implemented = "Warcries: Basic/Advanced/Expert grant Rallying Cry, Fortune Cry, and Tempo Cry as native hero battle abilities at rank 1/2/3 strength, with Stronghold subskills modifying those abilities."
         source_difference = "Consolidated overlay preserves the retired Stronghold generator's heroBattleAbility rank wiring instead of falling through to the empty generic faction-skill row."
     elif faction_sid == "homm3_factory":
-        # Match the working Dungeon faction-skill load contract: non-empty bonuses at
-        # every rank plus Advanced/Expert subSkill SIDs that resolve in sub_skills.json.
-        # Split Assembly tier accounting stays runtime-owned.
-        levels = [
-            [unit_bool_stat_bonus("ignoreFractionsCount")],
-            [unit_bool_stat_bonus("ignoreFractionsCount")],
-            [
-                unit_bool_stat_bonus("ignoreFractionsCount"),
-                {"type": "heroBattleAbility", "parameters": [HOMM3_FACTORY_FIELD_TRIAGE_ABILITY_SID, "0"]},
-            ],
-        ]
-        implemented = (
-            "Split Assembly: at battle start the runtime counts distinct manifest-owned Natural and Industrial recruit lines "
-            "(plus Expert overclock subskills), unlocks one army-wide tier per counted line, scales magnitudes by skill rank "
-            "(5/10/15% or 1/1/2), locks fourth-tier Carapace and Field Triage behind Expert plus four effective lines, grants +1 Focus "
-            "at Natural tier 3, applies native Carapace with event dispatch, and charge-locks Field Triage unless Industrial tier 4 unlocks."
-        )
-        source_difference = (
-            "Factory has no HotA faction secondary skill. Core ranks reuse the proven Dungeon faction-skill load shape "
-            "(ignoreFractionsCount + three Adv/Exp subskills); tiered Natural/Industrial assembly bonuses stay in "
-            "Homm3FactorySplitAssemblyRuntime."
-        )
+        # Keep the proven Dungeon load shape (ignoreFractionsCount at every rank) and add the
+        # Logistics Network world spell; Field Triage is no longer granted.
+        levels = [[unit_bool_stat_bonus("ignoreFractionsCount"), *rank] for rank in factory_logistics.faction_skill_levels()]
+        implemented = factory_logistics.IMPLEMENTED
+        source_difference = factory_logistics.SOURCE_DIFFERENCE
     elif faction_sid == "homm3_bulwark":
         levels = [
             [unit_bool_stat_bonus("ignoreFractionsCount")],
@@ -18339,7 +18967,7 @@ def make_specialized_generic_skill_row(manifest: dict[str, Any], skill_sid: str)
                     list(HOMM3_CASTLE_ELITE_STRATEGEM_SUBSKILLS_BY_LEVEL.get(index, ()))
                     if faction_sid == "homm3_castle"
                     else list(HOMM3_RAMPART_AVENGER_SUBSKILLS_BY_LEVEL.get(index, ())) if faction_sid == "homm3_rampart"
-                    else list(HOMM3_INFERNO_GATING_SUBSKILLS_BY_LEVEL.get(index, ())) if faction_sid == "homm3_inferno"
+                    else list(homm3_inferno_gating_core_overlay.SUBSKILLS_BY_LEVEL.get(index, ())) if faction_sid == "homm3_inferno"
                     else list(HOMM3_COVE_TREASURE_HUNTING_SUBSKILLS_BY_LEVEL.get(index, ())) if faction_sid == "homm3_cove"
                     else list(HOMM3_NECROPOLIS_SUBSKILLS_BY_LEVEL.get(index, ())) if faction_sid == "homm3_necropolis"
                     else list(HOMM3_DUNGEON_DRACONIC_DOMINION_SUBSKILLS_BY_LEVEL.get(index, ())) if faction_sid == "homm3_dungeon"
@@ -18625,7 +19253,7 @@ def add_release_generic_lang(release_zip: zipfile.ZipFile, manifest: dict[str, A
             {"sid": "h3_cove_ability_guillotine_shot_name", "text": "Guillotine Shot"},
             {"sid": "h3_cove_ability_guillotine_shot_description", "text": "Spend 2 Focus to deal pure damage based on 30% of the target creature's max HP, with a 25% execution threshold."},
             {"sid": "h3_cove_ability_summon_fangarms_name", "text": "Summon Fangarms"},
-            {"sid": "h3_cove_ability_summon_fangarms_description", "text": "Spend 2 Focus without ending the turn, once per battle, to summon Fangarms on an adjacent hex at 50% Power."},
+            {"sid": "h3_cove_ability_summon_fangarms_description", "text": "Spend 2 Focus without ending the turn, once per battle, to summon 1 Fangarm per 2 Tidecallers on an adjacent hex."},
             {"sid": "h3_fangarm_hypnotic_strike_name", "text": "Hypnotic Strike"},
             {"sid": "h3_fangarm_hypnotic_strike_description", "text": "Spend 2 Focus to attack an enemy for 100% normal melee damage and put it in a Berserk state for 1 round. Cooldown: 2."},
             {"sid": "h3_fangarm_passive_hypnotic_strike_name", "text": "Hypnotic Strike"},
@@ -18681,10 +19309,19 @@ def add_release_generic_lang(release_zip: zipfile.ZipFile, manifest: dict[str, A
         skill_desc = f"Improves {display_name} armies through faction training."
         rank_descs = [skill_desc, skill_desc, skill_desc]
     if faction_sid == "homm3_dungeon":
-        skill_name = "Captives"
-        skill_desc = "Enemy units you let flee become captives. Captive strength grants up to +5 Attack and +5 Defense, and can be spent with Execute (Experience) or Ransom (Gold). Armies ignore Morale penalties from fielding creatures of different factions."
+        skill_name = HOMM3_DUNGEON_WAR_CAPTIVES_SKILL_NAME
+        value = HOMM3_DUNGEON_WAR_CAPTIVES_VALUE_PER_CAPTIVE
+        skill_desc = (
+            f"After each victory this hero takes captives: 1 per {value} strength of the defeated enemy creatures. "
+            "Choose their fate: Execute them for Experience, Ransom them for Gold, or Eat them to restore part of the army's losses. "
+            "Armies ignore Morale penalties from fielding creatures of different factions."
+        )
         rank_descs = [
-            f"Enemy units you let flee become captives, granting +1 to +5 Attack and Defense by captive strength. Execute yields {HOMM3_DUNGEON_CAPTIVES_EXECUTE_XP_PER_1000[index]} Experience and Ransom {HOMM3_DUNGEON_CAPTIVES_RANSOM_GOLD_PER_1000[index]} Gold per 1,000 captive strength. The hero's army ignores Morale penalties from fielding creatures of different factions."
+            f"After each victory this hero takes 1 captive per {value} strength of the defeated enemy creatures. "
+            f"Execute: {HOMM3_DUNGEON_WAR_CAPTIVES_EXECUTE_XP[index]} Experience per captive. "
+            f"Ransom: {HOMM3_DUNGEON_WAR_CAPTIVES_RANSOM_GOLD[index]} Gold per captive. "
+            f"Eat: restore {HOMM3_DUNGEON_WAR_CAPTIVES_EAT_PERCENT[index]}% of each stack's losses from that battle (up to the captives' strength). "
+            "The hero's army ignores Morale penalties from fielding creatures of different factions."
             for index in range(3)
         ]
         captives_magic_rows, captives_buff_rows = homm3_dungeon_captives_lang_rows()
@@ -18692,6 +19329,14 @@ def add_release_generic_lang(release_zip: zipfile.ZipFile, manifest: dict[str, A
         add_lang_overlay_rows(release_zip, output, "Lang/english/texts/magics.json", captives_magic_rows, notes)
         add_lang_args_overlay_rows(release_zip, output, "Lang/args/magic.json", [{"sid": row["sid"], "args": []} for row in captives_magic_rows], notes)
         add_lang_overlay_rows(release_zip, output, "Lang/english/texts/mapObjects.json", captives_buff_rows, notes)
+    if faction_sid == "homm3_inferno":
+        skill_name, skill_desc = homm3_inferno_gating_core_overlay.SKILL_NAME, homm3_inferno_gating_core_overlay.SKILL_DESC
+        rank_descs = list(homm3_inferno_gating_core_overlay.RANK_DESCS)
+        gating_magic_rows = homm3_inferno_gating_core_overlay.magic_lang_rows()
+        add_lang_overlay_rows(release_zip, output, "Lang/english/texts/magic.json", gating_magic_rows, notes)
+        add_lang_overlay_rows(release_zip, output, "Lang/english/texts/magics.json", gating_magic_rows, notes)
+        add_lang_args_overlay_rows(release_zip, output, "Lang/args/magic.json", [{"sid": row["sid"], "args": []} for row in gating_magic_rows], notes)
+        add_lang_overlay_rows(release_zip, output, "Lang/english/texts/mapObjects.json", homm3_inferno_gating_core_overlay.buff_lang_rows(), notes)
     if faction_sid == "homm3_tower" and tower_artificing_enabled():
         skill_name, skill_desc, rank_descs = tower_artificing_faction_skill_lang(load_tower_artificing_policy())
     if faction_sid == "homm3_stronghold":
@@ -18816,7 +19461,7 @@ def add_release_generic_lang(release_zip: zipfile.ZipFile, manifest: dict[str, A
                 "text": "Once per round, refresh spellbook use this round.",
             },
             {"sid": "sub_skill_faction_homm3_tower_arcane_battery_arcane_curriculum_name", "text": "Arcane Curriculum"},
-            {"sid": "sub_skill_faction_homm3_tower_arcane_battery_arcane_curriculum_desc", "text": "Arcane and Daylight spells gain +1 level through tier 2."},
+            {"sid": "sub_skill_faction_homm3_tower_arcane_battery_arcane_curriculum_desc", "text": "Arcane and Daylight spells gain +1 level, and can be learned up to tier 2."},
             {"sid": "sub_skill_faction_homm3_tower_arcane_battery_chronomancy_name", "text": "Chronomancy"},
             {
                 "sid": "sub_skill_faction_homm3_tower_arcane_battery_chronomancy_desc",
@@ -18832,7 +19477,7 @@ def add_release_generic_lang(release_zip: zipfile.ZipFile, manifest: dict[str, A
             {"sid": "sub_skill_faction_homm3_tower_arcane_battery_remote_library_name", "text": "Remote Library"},
             {"sid": "sub_skill_faction_homm3_tower_arcane_battery_remote_library_desc", "text": "The hero can learn Arcane spells unlocked in the Observatory without visiting a Mage Guild."},
             {"sid": "sub_skill_faction_homm3_tower_arcane_battery_spell_economies_name", "text": "Spell Economies"},
-            {"sid": "sub_skill_faction_homm3_tower_arcane_battery_spell_economies_desc", "text": "Arcane and Daylight spells cost less Mana."},
+            {"sid": "sub_skill_faction_homm3_tower_arcane_battery_spell_economies_desc", "text": "Arcane and Daylight spells cost 2 less Mana."},
             {"sid": "sub_skill_faction_homm3_tower_arcane_battery_focused_study_name", "text": "Focused Study"},
             {"sid": "sub_skill_faction_homm3_tower_arcane_battery_focused_study_desc", "text": "Start each battle with 1 additional Focus Charge."},
         ]
@@ -18872,30 +19517,28 @@ def add_release_generic_lang(release_zip: zipfile.ZipFile, manifest: dict[str, A
             {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_1_name", "text": "Underworld Tribute"},
             {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_1_desc", "text": "Friendly HoMM3 Dungeon creatures deal 10% more damage and take 10% less damage on native terrain."},
             {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_2_name", "text": "Interrogation"},
-            {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_2_desc", "text": "Execute also restores Mana equal to 10% of the Experience gained."},
-            {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_3_name", "text": "Imperial Menagerie"},
-            {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_3_desc", "text": "Morale penalties from fielding multiple factions become Morale bonuses for this hero."},
-            {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_4_name", "text": "Terror Mandate"},
-            {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_4_desc", "text": "Enemy units lose 1 Morale for each faction beyond the first in this hero's army."},
+            {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_2_desc", "text": f"Executing captives also restores Mana equal to {HOMM3_DUNGEON_WAR_CAPTIVES_INTERROGATION_PERCENT}% of the Experience gained."},
+            {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_3_name", "text": "Enslave Captives"},
+            {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_3_desc", "text": f"Adds Enslave to the captives choice: no Gold now, but each enslaved captive earns {'/'.join(HOMM3_DUNGEON_WAR_CAPTIVES_ENSLAVE_GOLD_PER_DAY)} Gold per day (by War Captives level) while this hero stays in service."},
+            {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_4_name", "text": "Recruit Captives"},
+            {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_4_desc", "text": f"Adds Recruit to the captives choice: hire {'/'.join(str(p) for p in HOMM3_DUNGEON_WAR_CAPTIVES_RECRUIT_PERCENT)}% of the defeated creatures (by War Captives level) at their normal cost."},
             {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_5_name", "text": "Slave Markets"},
-            {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_5_desc", "text": "Ransom yields 25% more Gold."},
+            {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_5_desc", "text": f"Ransom and Enslave give {HOMM3_DUNGEON_WAR_CAPTIVES_SLAVE_MARKETS_PERCENT}% more Gold."},
             {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_6_name", "text": "Dungeon Cells"},
-            {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_6_desc", "text": "Captive strength counts 25% higher for Captives tier thresholds."},
+            {"sid": "sub_skill_faction_homm3_dungeon_draconic_diplomacy_6_desc", "text": f"Take {HOMM3_DUNGEON_WAR_CAPTIVES_DUNGEON_CELLS_PERCENT}% more captives after each battle."},
         ]
+        # Combat buff tooltips resolve name_/description_ from magic_buff / unitsBuff (same path as Bulwark).
+        for lang_path in ("Lang/english/texts/magic_buff.json", "Lang/english/texts/unitsBuff.json"):
+            add_lang_overlay_rows(
+                release_zip,
+                output,
+                lang_path,
+                make_homm3_dungeon_terror_mandate_buff_lang_rows(),
+                notes,
+            )
     if faction_sid == "homm3_factory":
+        hero_skill_rows += factory_logistics.subskill_lang_rows()
         hero_skill_rows += [
-            {"sid": "sub_skill_faction_homm3_factory_sand_advantage_name", "text": "Sand Advantage"},
-            {"sid": "sub_skill_faction_homm3_factory_sand_advantage_desc", "text": "Friendly HoMM3 Factory creatures deal 10% more damage and take 10% less damage on native terrain."},
-            {"sid": "sub_skill_faction_homm3_factory_line_discipline_name", "text": "Workshop Trails"},
-            {"sid": "sub_skill_faction_homm3_factory_line_discipline_desc", "text": "Landscape movement penalties are reduced by 50%."},
-            {"sid": "sub_skill_faction_homm3_factory_field_calibration_name", "text": "Field Calibration"},
-            {"sid": "sub_skill_faction_homm3_factory_field_calibration_desc", "text": "Reveals enemy hero information and improves scouting range."},
-            {"sid": "sub_skill_faction_homm3_factory_gantry_reserve_name", "text": "Natural Overclock"},
-            {"sid": "sub_skill_faction_homm3_factory_gantry_reserve_desc", "text": "Split Assembly treats your army as having one additional Natural recruit line."},
-            {"sid": "sub_skill_faction_homm3_factory_industrial_tempo_name", "text": "Industrial Overclock"},
-            {"sid": "sub_skill_faction_homm3_factory_industrial_tempo_desc", "text": "Split Assembly treats your army as having one additional Industrial recruit line."},
-            {"sid": "sub_skill_faction_homm3_factory_couatl_relay_name", "text": "Gantry Focus"},
-            {"sid": "sub_skill_faction_homm3_factory_couatl_relay_desc", "text": "Your heroes start battles with 1 additional Focus Charge."},
             {"sid": f"{HOMM3_FACTORY_FIELD_TRIAGE_ABILITY_SID}_name", "text": "Field Triage"},
             {
                 "sid": f"{HOMM3_FACTORY_FIELD_TRIAGE_ABILITY_SID}_description",
@@ -19047,39 +19690,7 @@ def add_release_generic_lang(release_zip: zipfile.ZipFile, manifest: dict[str, A
                 notes,
             )
     if faction_sid == "homm3_inferno":
-        hero_skill_rows += [
-            {"sid": f"{HOMM3_INFERNO_GATING_IMP_ABILITY_SID}_name", "text": "Gate Imps"},
-            {
-                "sid": f"{HOMM3_INFERNO_GATING_IMP_ABILITY_SID}_description",
-                "text": "Spend 1 Focus to summon temporary Imps based on Spell Power.",
-            },
-            {"sid": f"{HOMM3_INFERNO_GATING_GOG_ABILITY_SID}_name", "text": "Gate Gogs"},
-            {
-                "sid": f"{HOMM3_INFERNO_GATING_GOG_ABILITY_SID}_description",
-                "text": "Spend 2 Focus to summon temporary Gogs based on Spell Power.",
-            },
-            {"sid": f"{HOMM3_INFERNO_GATING_HELL_HOUND_ABILITY_SID}_name", "text": "Gate Hell Hounds"},
-            {
-                "sid": f"{HOMM3_INFERNO_GATING_HELL_HOUND_ABILITY_SID}_description",
-                "text": "Spend 3 Focus to summon temporary Hell Hounds based on Spell Power.",
-            },
-            {"sid": "skill_faction_homm3_inferno_ability_gating_gate_name", "text": "Inferno Gate"},
-            {"sid": "sub_skill_faction_homm3_inferno_gating_more_units_name", "text": "Wider Gate"},
-            {"sid": "sub_skill_faction_homm3_inferno_gating_more_units_desc", "text": "Gating summons 30% more units."},
-            {"sid": "sub_skill_faction_homm3_inferno_gating_fast_gate_name", "text": "Rapid Gate"},
-            {"sid": "sub_skill_faction_homm3_inferno_gating_fast_gate_desc", "text": "Gating cooldowns are reduced by 1 round."},
-            {"sid": "sub_skill_faction_homm3_inferno_gating_focus_efficiency_name", "text": "Efficient Gate"},
-            {"sid": "sub_skill_faction_homm3_inferno_gating_focus_efficiency_desc", "text": "Gog and Hell Hound Gating cost 1 less Focus."},
-            {"sid": "sub_skill_faction_homm3_inferno_gating_native_terrain_name", "text": "Lava Advantage"},
-            {
-                "sid": "sub_skill_faction_homm3_inferno_gating_native_terrain_desc",
-                "text": "Inferno creatures on native terrain deal 10% more damage and take 10% less damage.",
-            },
-            {"sid": "sub_skill_faction_homm3_inferno_gating_any_tile_name", "text": "Open Gate"},
-            {"sid": "sub_skill_faction_homm3_inferno_gating_any_tile_desc", "text": "Gated demons may be placed on any tile."},
-            {"sid": "sub_skill_faction_homm3_inferno_gating_barrier_name", "text": "Shielded Arrival"},
-            {"sid": "sub_skill_faction_homm3_inferno_gating_barrier_desc", "text": "Gated units gain a barrier the round they enter combat."},
-        ]
+        hero_skill_rows += homm3_inferno_gating_core_overlay.hero_skill_lang_rows()
     if faction_sid == "homm3_conflux":
         remove_lang_overlay_rows(
             release_zip,
@@ -19088,38 +19699,7 @@ def add_release_generic_lang(release_zip: zipfile.ZipFile, manifest: dict[str, A
             HOMM3_CONFLUX_ELEMENTAL_CONJURY_STALE_LANG_SIDS,
             notes,
         )
-        hero_skill_rows += [
-            {"sid": "sub_skill_faction_homm3_conflux_elemental_conjury_native_terrain_name", "text": "Elemental Ground"},
-            {
-                "sid": "sub_skill_faction_homm3_conflux_elemental_conjury_native_terrain_desc",
-                "text": "Conflux creatures on native terrain deal 10% more damage and take 10% less damage.",
-            },
-            {"sid": "sub_skill_faction_homm3_conflux_elemental_conjury_focus_charge_name", "text": "Planar Reserve"},
-            {
-                "sid": "sub_skill_faction_homm3_conflux_elemental_conjury_focus_charge_desc",
-                "text": "Your heroes start battles with 1 additional Focus Charge.",
-            },
-            {"sid": "sub_skill_faction_homm3_conflux_elemental_conjury_spell_power_name", "text": "Arcane Conduit"},
-            {
-                "sid": "sub_skill_faction_homm3_conflux_elemental_conjury_spell_power_desc",
-                "text": "Elemental units in this hero's army cast Focus abilities using 100% of the hero's Attack and Spell Power instead of 50%.",
-            },
-            {"sid": "sub_skill_faction_homm3_conflux_elemental_conjury_expert_focus_charge_name", "text": "Deep Channels"},
-            {
-                "sid": "sub_skill_faction_homm3_conflux_elemental_conjury_expert_focus_charge_desc",
-                "text": "Your heroes start battles with 1 additional Focus Charge.",
-            },
-            {"sid": "sub_skill_faction_homm3_conflux_elemental_conjury_pathfinding_name", "text": "Elemental Paths"},
-            {
-                "sid": "sub_skill_faction_homm3_conflux_elemental_conjury_pathfinding_desc",
-                "text": "Your heroes ignore rough-terrain movement penalties on the adventure map.",
-            },
-            {"sid": "sub_skill_faction_homm3_conflux_elemental_conjury_expert_spell_tier_name", "text": "Greater Conjury"},
-            {
-                "sid": "sub_skill_faction_homm3_conflux_elemental_conjury_expert_spell_tier_desc",
-                "text": "Elemental Focus abilities deal 100% more ability damage.",
-            },
-        ]
+        hero_skill_rows += conflux_fusion.subskill_lang_rows()
     if faction_sid == "homm3_rampart":
         hero_skill_rows += [
             {"sid": f"{HOMM3_RAMPART_AVENGER_ABILITY_SID}_name", "text": "Avenger"},
@@ -20089,40 +20669,23 @@ def add_release_fortress_core_rows(release_zip: zipfile.ZipFile, output: dict[st
         notes.append("warn missing Fortress laws donor: " + str(ex))
     add_release_fortress_units(release_zip, output, notes)
     add_release_fortress_squads(release_zip, output, notes)
-    skill_name = "DB/heroes_skills/skills/skills.json"
-    try:
-        skill_doc = json.loads(output[skill_name].decode("utf-8-sig")) if skill_name in output else read_json(release_zip, skill_name)
-        if isinstance(skill_doc, dict):
-            changed = upsert_array_row(skill_doc, make_fortress_skill_row(manifest))
-            changed = dedupe_array_rows_by_id(skill_doc) or changed
-            if changed:
-                output[skill_name] = write_json(skill_doc)
-                notes.append("merge Fortress Hunting Grounds faction skill")
-    except (json.JSONDecodeError, UnicodeDecodeError, KeyError) as ex:
-        notes.append("warn missing Fortress skill target: " + str(ex))
-    subskills_name = "DB/heroes_skills/sub_skills/sub_skills.json"
-    try:
-        subskills_doc = json.loads(output[subskills_name].decode("utf-8-sig")) if subskills_name in output else read_json(release_zip, subskills_name)
-        if isinstance(subskills_doc, dict):
-            changed = False
-            for row in make_fortress_swamp_tactics_subskills(manifest):
-                changed = upsert_array_row(subskills_doc, row) or changed
-            changed = dedupe_array_rows_by_id(subskills_doc) or changed
-            if changed:
-                output[subskills_name] = write_json(subskills_doc)
-                notes.append("merge Fortress Hunting Grounds subskills")
-    except (json.JSONDecodeError, UnicodeDecodeError, KeyError) as ex:
-        notes.append("warn missing Fortress subskill target: " + str(ex))
-    hero_buffs_doc = read_overlay_or_release_json(release_zip, output, HOMM3_FORTRESS_HUNTING_GROUNDS_HERO_BUFFS_PATH)
-    if not isinstance(hero_buffs_doc, dict) or not isinstance(hero_buffs_doc.get("array"), list):
-        raise RuntimeError(f"malformed Fortress Hunting Grounds hero buff target {HOMM3_FORTRESS_HUNTING_GROUNDS_HERO_BUFFS_PATH}")
-    changed = False
-    for row in make_fortress_hunting_grounds_hero_buff_rows():
-        changed = upsert_array_row(hero_buffs_doc, row) or changed
-    changed = dedupe_array_rows_by_id(hero_buffs_doc) or changed
-    if changed:
-        output[HOMM3_FORTRESS_HUNTING_GROUNDS_HERO_BUFFS_PATH] = write_json(hero_buffs_doc)
-        notes.append("merge Fortress Hunting Grounds trophy hero buffs")
+    def _predator_read_doc(name: str) -> Any:
+        return read_overlay_or_release_json(release_zip, output, name)
+
+    def _predator_write_doc(name: str, doc: Any) -> None:
+        output[name] = write_json(doc)
+
+    homm3_fortress_predator_instinct_core_overlay.merge_fortress_predator_instinct_into_overlay(
+        read_doc=_predator_read_doc,
+        write_doc=_predator_write_doc,
+        upsert_array_row=upsert_array_row,
+        remove_array_rows_by_id=remove_array_rows_by_id,
+        dedupe_array_rows_by_id=dedupe_array_rows_by_id,
+        source_mechanic=source_mechanic_for_surface_row(
+            identity["factionSid"], "faction_skill", homm3_fortress_predator_instinct_core_overlay.SKILL_SID
+        ),
+        notes=notes,
+    )
     add_release_fortress_map_objects(release_zip, output, notes)
     add_release_fortress_heroes_and_tables(release_zip, output, notes)
     add_release_fortress_lang(release_zip, output, notes)
@@ -20262,6 +20825,25 @@ def normalize_primal_magic_tiers(release_zip: zipfile.ZipFile, output: dict[str,
         output[member] = write_json(doc)
         notes.append("normalize vanilla Primal Magic tier contract: Wean is tier 1")
 
+def conflux_fusion_helpers() -> dict[str, Any]:
+    return {
+        "read_json": read_json,
+        "read_overlay_or_release_json": read_overlay_or_release_json,
+        "write_json": write_json,
+        "upsert_array_row": upsert_array_row,
+        "dedupe_array_rows_by_id": dedupe_array_rows_by_id,
+        "add_lang_overlay_rows": add_lang_overlay_rows,
+        "override_text_token": override_text_token,
+        "apply_ability_envelope_overrides": apply_ability_envelope_overrides,
+        "resolve_unit_special_from_release": resolve_unit_special_from_release,
+        "resolve_live_unit_special_from_release": resolve_live_unit_special_from_release,
+        "donor_slot_pins": HOMM3_DONOR_UNIT_SPECIAL_SLOT_PINS,
+        "build_spell_effect_rows": build_spell_effect_rows,
+        "ensure_unit_view_card_icons": ensure_unit_view_card_icons,
+        "dedupe_unit_view_card_rows": dedupe_unit_view_card_rows,
+    }
+
+
 def build_overlay(
     release_core: Path,
     strip_nonfinal_no_compromise_law_bonuses: bool = False,
@@ -20289,9 +20871,13 @@ def build_overlay(
             add_custom_law_visual_marker_buffs(release_zip, output, notes)
             add_custom_hero_specializations_for_all(output, notes)
             normalize_release_tower_unit_views(release_zip, output, notes)
+            apply_donor_status_buff_clones(release_zip, output, notes)
             apply_strong_vanilla_mechanics_to_custom_unit_rows(release_zip, output, notes)
             apply_custom_ability_overrides_to_custom_unit_rows(release_zip, output, notes)
+            apply_donor_status_buff_clones(release_zip, output, notes)
             normalize_custom_unit_logic_redundant_flags(release_zip, output, notes)
+            normalize_custom_unit_ability_card_consistency(release_zip, output, notes)
+            tag_native_mind_control_buffs(release_zip, output, notes)
             normalize_custom_unit_view_map_meshes(release_zip, output, notes)
             normalize_custom_unit_view_unsafe_donor_meshes(release_zip, output, notes)
             normalize_cyclops_shooter_battle_shells(release_zip, output, notes)
@@ -20328,6 +20914,8 @@ def build_overlay(
                 import_view_meshes=load_homm3_import_skinned_preview_meshes(),
             )
             apply_homm3_neutral_oe_kits(release_zip, output, notes)
+            # After every Conflux elemental kit is final, before multilingual sync (fused names/cards).
+            conflux_fusion.add_conflux_fusion_units(release_zip, output, notes, conflux_fusion_helpers())
             # After the neutral rows: they rewrite neutral view rows (moveSpeed included) from their own catalog.
             normalize_custom_unit_view_move_speeds(release_zip, output, notes)
             # After every city-row mutation that feeds tooltip text, before multilingual sync.
@@ -20359,6 +20947,9 @@ def build_overlay(
             stamp_source_mechanics_on_custom_faction_skill_rows(release_zip, output, notes)
             add_custom_law_visual_marker_buffs(release_zip, output, notes)
             apply_homm3_unit_balance_adjustments_to_output(release_zip, output, notes)
+            # After the balance contract: fused stats re-derive from the final parent rows.
+            conflux_fusion.finalize_conflux_fusion_units(release_zip, output, notes, conflux_fusion_helpers())
+            pin_homm3_shared_vanilla_buff_values(release_zip, output, notes)
             assign_homm3_battle_ai_types(release_zip, output, notes)
             assign_homm3_attack_animation_slots(output, notes)
             # After every unit logic row (incl. balance squadValue) is final:
@@ -20369,6 +20960,9 @@ def build_overlay(
             normalize_homm3_town_city_bottom_center_gates(release_zip, output, notes)
             merge_homm3_artifacts_into_overlay(release_zip, output, notes)
             refresh_homm3_derived_city_docs(release_zip, output, notes)
+            apply_live_vanilla_law_clone_costs(release_zip, output, notes)
+            add_custom_hero_ai_world_values(release_zip, output, notes)
+            assert_enabled_law_overrides_reachable(output, notes)
             # Last Lang writer: after the artifact English rows and after multilingual
             # sync, so translations win over sync drafts and English fallbacks.
             add_custom_lang_translations(release_zip, output, notes)
@@ -20383,7 +20977,7 @@ def build_overlay(
 
 # Game build the --release-core is for (--game-target); selects target-pinned Core readbacks
 # such as the native neutral tier bands. Set once in main() from the explicit CLI value.
-GAME_TARGETS = ("golden_era", "steam_25509697", "steam_25672315")
+GAME_TARGETS = ("golden_era", "steam_25509697", "steam_25672315", "steam_26297049", "steam_26615913")
 GAME_TARGET = "golden_era"
 
 
@@ -20792,7 +21386,7 @@ def parse_args() -> argparse.Namespace:
         help=(
             "Game build --release-core belongs to. Selects target-pinned Core readbacks (native neutral "
             "tier bands). Default golden_era (the active modded install); the port rebuild passes "
-            "steam_25672315."
+            "steam_26615913 (steam_26297049 for the previous build)."
         ),
     )
     parser.add_argument(

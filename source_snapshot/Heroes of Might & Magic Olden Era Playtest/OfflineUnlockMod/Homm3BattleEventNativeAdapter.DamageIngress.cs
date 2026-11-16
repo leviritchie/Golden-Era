@@ -196,15 +196,9 @@ internal static partial class Homm3BattleEventNativeAdapter
 			return null;
 		try
 		{
-			var method = typeof(Il2CppObjectPool).GetMethod(
-				"Get",
-				BindingFlags.Public | BindingFlags.Static,
-				null,
-				new[] { typeof(IntPtr) },
-				null);
-			if (method == null || !method.IsGenericMethodDefinition)
-				return null;
-			return method.MakeGenericMethod(typeof(Unit)).Invoke(null, new object[] { il2Cpp.Pointer }) as Unit;
+			// Class-checked cast: the caller may pass a damage dealer / ability object when the caster is
+			// null (hero spells, traps); an unchecked pool wrap would read Unit fields off a foreign object.
+			return il2Cpp.TryCast<Unit>();
 		}
 		catch
 		{

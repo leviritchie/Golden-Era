@@ -616,6 +616,21 @@ def stage_finish(unit, spec, metrics: dict, fitted_now: bool) -> None:
 
 
 # ----------------------------------------------------------------------------- apply (delivery)
+def declared_face_cut_errors(unit: str, src: bytes, fit_geometry_sha: str) -> list[str]:
+    """Why the pre-look GLB `src` is NOT the geometry the look was fitted on minus a patch-lane cutFaces ([] = it is).
+    The retained patch base (artifacts/homm3_glb_patch/<unit>/base.glb) must hash to the fit's geometry, and
+    patch_glb.declared_cut_errors must prove `src` is that base with only the stamped faces removed."""
+    base = ROOT / "artifacts/homm3_glb_patch" / unit / "base.glb"
+    if not base.is_file():
+        return ["no retained patch base"]
+    b = base.read_bytes()
+    if Glb(b).geometry_sha256() != fit_geometry_sha:
+        return ["the retained patch base is not the geometry the look was fitted on"]
+    sys.path.insert(0, str(ROOT / "tools/homm3_glb_patch"))
+    import patch_glb as PG
+    return PG.declared_cut_errors(src, b)
+
+
 def stage_apply(unit, spec):
     outd = S.out_dir(unit)
     tex = outd / "basecolor.png"
@@ -653,8 +668,15 @@ def stage_apply(unit, spec):
     fsj = json.loads(fs.read_text())
     geo = g.geometry_sha256()
     if geo != fsj["geometrySha256"]:
-        raise StageError(5, "the GLB's body geometry changed since the fit (rebuild moved the mesh/UVs); "
-                            "rerun the full stages")
+        # one declared exception: the GLB patch lane's cutFaces (docs/homm3_glb_patch_lane.md) drops triangles from the
+        # index buffer and keeps every vertex and UV, so the fitted texels still map. Accepted only when the retained
+        # patch base is the geometry the look was fitted on and patch_glb proves the delivery is that base minus the
+        # stamped faces (same vertex bytes, the base's triangles in order); anything else is a rebuild
+        why = declared_face_cut_errors(unit, src, fsj["geometrySha256"])
+        if why:
+            raise StageError(5, "the GLB's body geometry changed since the fit (rebuild moved the mesh/UVs); "
+                                f"rerun the full stages [no declared face cut: {'; '.join(why)}]")
+        log(unit, "geometry differs from the fit only by the patch lane's declared cutFaces (verified against the base)")
     ii = g.body_base_color_image()
     if sha256_bytes(g.image_bytes(ii)) != fsj["sourceBasecolorSha256"]:
         raise StageError(5, "the GLB's source base colour changed since the fit; rerun the full stages")

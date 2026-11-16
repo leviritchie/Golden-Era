@@ -127,8 +127,9 @@ board of its frozen GLB passes every clip.
   `INSTALL READY` with the slice; the coordinator installs it per unit (claim `golden-era-deploy` on the cross-agent
   manager, game stopped, `ship_def_retarget_slice.py` prepare/lab/bundles/probe/deploy through the Unity queue,
   readback recorded in the run log). VFX drafts for passed units ship the same way. Never while the game runs.
-- Codex and other agents share the worktree: skip a unit whose files carry someone else's uncommitted edits or a
-  commit from another agent in the last 24 h; commit only own files with `git commit --only`.
+- Other Claude sessions share the worktree: skip a unit whose files carry another live session's uncommitted edits
+  or a commit from another agent in the last 24 h; commit only own files with `git commit --only`. Codex is retired
+  (2026-11-12): its leftover uncommitted edits are unowned and may be adopted or discarded after reading them.
 - Scratch and boards live under `V:/olden_port_work/authenticity/` (not F:, not the git tree); per-run logs under
   `V:/olden_port_work/authenticity/runs/`. Prune superseded candidate GLBs and boards when a unit passes.
 - No broad validators; run only the narrow per-unit checks named by the lane you touched.

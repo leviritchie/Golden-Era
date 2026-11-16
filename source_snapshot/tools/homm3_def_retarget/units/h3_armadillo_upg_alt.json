@@ -253,11 +253,11 @@
  },
  "strideMatch": {
   "maxDrop": 0.35,
-  "reason": "foreleg reach cap binds at shallower drops (fleet-agent scratch after the plant-set fix 80c2a729ba): 0.15 ratio 2.20; 0.25 ratio 1.91; 0.35 slip 0.357 ratio 1.376 (passes). Deep drop: sheet judged for crouch read (coordinator relay 2026-09-27); pelvisHold 0 (2026-10-11 lane A): the source Move already sits ~0.075 H below Idle, at the edge of the gate's Hips band, so any extra plant sink made the ground stage's joint entry lift the whole Move and float the planted soles (fresh base runs 438/443 refused); hold the body at its source keys, legs reach-clamp instead",
-  "pelvisHold": 0.0
+  "reason": "foreleg reach cap binds at shallower drops (fleet-agent scratch after the plant-set fix 80c2a729ba): 0.15 ratio 2.20; 0.25 ratio 1.91; 0.35 slip 0.357 ratio 1.376 (passes). Deep drop: sheet judged for crouch read (coordinator relay 2026-09-27); pelvisHold 0 (2026-10-11 lane A): the source Move already sits ~0.075 H below Idle, at the edge of the gate's Hips band, so any extra plant sink made the ground stage's joint entry lift the whole Move and float the planted soles (fresh base runs 438/443 refused); hold the body at its source keys, legs reach-clamp instead | 2026-11-10 unit pass: the approved Move candidate stands at Idle height on upright legs (no belly sit), so the 10-11 reason for hold 0 is gone and at hold 0 the straight legs have no reach (stride:ratio 1.57 of 1.4, cadence at the 1.6 cap); pelvisHold 0.04 (the knob's cap) gives the planted legs reach (no hold at all is refused: the tail curl ends under the Idle floor)",
+  "pelvisHold": 0.04
  },
  "glbPatch": {
-  "reason": "authenticity: DEF g12 attack - draw back with the head tucked, then lunge with the body surging forward, shoulders and crest rearing and the snout driven at the target (the shipped clip barely moved); body/neck weights re-solved",
+  "reason": "authenticity: DEF g12 attack - draw back with the head tucked, then lunge with the body surging forward, shoulders and crest rearing and the snout driven at the target (the shipped clip barely moved); body/neck weights re-solved; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death, Defence, Hitted, ShootFront re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -286,6 +286,28 @@
     "op": "keyTranslations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_armadillo_upg_alt_pose_tr.json",
     "sha256": "d5cc96541ffba1bb52ac68cdf595c2a7b443ad024ae7b1ff2b25dda88744280d"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_armadillo_upg_alt_move_tracks.json",
+    "sha256": "5a01fb91273fe8d79fc8116b1bf4437eb8d795f9c97c38b491c8678038cffbd8"
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_armadillo_upg_alt_clip_repair_joints.json",
+    "sha256": "3fd7831a8c72b1b5104a8ec25abca3d05f64c88699332d1c8ca60e883e26fd0c",
+    "note": "clip pass repair: Frill twin leaf joints (one per side per body bone the frill follows)"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_armadillo_upg_alt_clip_repair_weights.json",
+    "sha256": "f9ee45641579ef414fdf5254ac4cf17d2c7977349ef584e657748ebc468ed16f",
+    "note": "clip pass repair: collar rim and spikes onto the Frill twins, soft ramp; unkeyed = shipped skin"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_armadillo_upg_alt_clip_tracks.json",
+    "sha256": "b45394de17ee12ad37b233a167ee50fa0afd3f86f5986eff707d3107e5a5a7ba"
    }
   ]
  }

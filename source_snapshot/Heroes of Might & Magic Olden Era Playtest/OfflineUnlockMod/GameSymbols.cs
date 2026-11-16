@@ -109,7 +109,7 @@ internal static partial class GameSymbols
 		// Golden Era frozen copy (depot 3105441 manifest 3222242645517655127), 95,480,832 B, 2026-06-04.
 		internal const string GoldenGameAssemblySha256 = "D47706EB0FFEDBDA0EC07EDE47ABC778E6022ED820AE1A1FD23522D3ACDB8416";
 		// The current live build is the target of the generated scopes (GameSymbolsCurrent.g.cs, see
-		// GameSymbolScope): Steam buildid 25672315 (manifest 7750145598966689713), 98,075,648 B, 2026-10-02.
+		// GameSymbolScope): Steam buildid 26615913 (manifest 2034879257573334098), 99,621,376 B, 2026-11-12.
 		// Its hash comes from the generated remap target so it cannot drift from the scopes.
 		internal const string CurrentGameAssemblySha256 = CurrentScopes.GameAssemblySha256;
 	}
@@ -274,9 +274,6 @@ internal static partial class GameSymbols
 
 		internal static readonly string[] PropHeroDefinedFields =
 			{ "isDefined", "IsDefined", "field_Public_Boolean_0" };
-
-		internal static readonly string[] PropHeroNodeFields =
-			{ "node", "Node", "mapNode", "nodeId", "field_Public_Int32_1" };
 
 		// esd/eta are Il2Cpp plain objects (not UnityEngine.Object); session logic-world walk is primary.
 		// FindObjectsOfTypeAll remains a cold fallback for legacy etc MonoBehaviour shapes only.
@@ -617,12 +614,6 @@ internal static partial class GameSymbols
 			"qc",
 			"ObjectPublicIDisposableObbqObQuThbq1QuWrBoUnique",
 		};
-
-		internal static readonly MethodSymbol CatalogWriteMap = new(
-			"rmg.mapCapture.catalog.writeMap",
-			"ixu",
-			"Method_Public_Void_String_Boolean_FileType_MetaInfo_Il2CppStructArray_1_Byte_PDM_0",
-			"Method_Public_Void_String_Boolean_FileType_MetaInfo_Il2CppStructArray_1_Byte_0");
 	}
 
 	internal static partial class HomecomingBoatTravel
@@ -1501,10 +1492,6 @@ internal static partial class GameSymbols
 			"battle.damageKill.stackCount.getter",
 			"bbaz", "bbcg", "bajq", "bayd", "ish", "crf", "bbak");
 
-		internal static readonly MethodSymbol KilledStackGetter = new(
-			"battle.damageKill.killedStack.getter",
-			"bbfj", "bbel");
-
 		internal static readonly MethodSymbol AliveStackCountGetter = new(
 			"battle.damageKill.aliveStackCount.getter",
 			"bfbe", "beic");
@@ -1654,6 +1641,41 @@ internal static partial class GameSymbols
 
 		internal static readonly string[] AbilityLogicCastTypeMembers =
 			{ "castType_", "get_castType_", "castType" };
+	}
+
+	/// <summary>
+	/// Native CounterAttackStep (etm): the once-per-visible-counter window for the row-13 Counterstroke laws
+	/// (Homm3CounterattackDoctrineMutationRuntime). Golden Era literals from game_symbols_remap_25672315.json
+	/// (golden owner Object1PublicObcgInSicgBoUncgUncgUnique); live 25672315 = Object1PublicObcmInSicmBoUncmUncmUnique
+	/// (Begin tok 100710709, VA 0x1821ECC50), 26297049 = Object1PublicObcoInSicoBoUncoUncoUnique. Current builds get
+	/// their names from tools/port_current/remap/current_scope_overrides_*.json once GameSymbolsCurrent.g.cs is
+	/// regenerated; until then the runtime falls back to the dxy AbilityCommitExecute CounterAttack trigger.
+	/// Evidence: docs/law_runtime_hooks_20261021.md (counterattack row) and
+	/// V:\olden_port_work\law_hooks_25672315\counterattack\r2\REPORT.md. Static proof; runtime unproven.
+	/// </summary>
+	internal static partial class CounterattackStepLaws
+	{
+		/// <summary>CounterAttackStep (etm), derived from the abstract battle step base that owns the EState field.</summary>
+		internal static readonly string[] StepTypeHints =
+			{ "Object1PublicObcgInSicgBoUncgUncgUnique" };
+
+		/// <summary>etm.bhdy Begin(): the only public virtual parameterless void declared on etm. State 2 (Playing) after
+		/// it returns means a counter charge was spent and the counter is enqueued; 3 means no counter (dead or check failed).</summary>
+		internal static readonly MethodSymbol StepBegin = new(
+			"law.counterattackStep.begin",
+			"Method_Public_Virtual_Void_0");
+
+		/// <summary>etm+0x48 (cmcf on 25672315): the counterattacking Unit; the counter's damage carries it as caster.</summary>
+		internal static readonly string[] StepCounterattackerMembers =
+			{ "field_Private_Unit_0" };
+
+		/// <summary>etm cmcg on 25672315: the Unit being counterattacked (the original attacker).</summary>
+		internal static readonly string[] StepAttackerMembers =
+			{ "field_Private_Unit_1" };
+
+		/// <summary>Step state on the abstract step base (2 = Playing, 3 = Finished).</summary>
+		internal static readonly string[] StepStateMembers =
+			{ "field_Public_EState_0" };
 	}
 
 	internal static partial class DamageCastSource
@@ -1840,6 +1862,59 @@ internal static partial class GameSymbols
 
 		internal static readonly string[] ControlsAbilityViewByAbilityFields =
 			{ "field_Private_Dictionary_2_ObjectPublicObceInBoInceAbObELInUnique_ObjectPublicObBochBoObchBochBoUnique_0" };
+	}
+
+	// Current-only (26297049): BhUnitAbilityView and BhHeroAbilitiyView were removed and merged into
+	// Hex.UI.BhBattleAbilityView, one slot view for hero, shared and unit abilities (slotMode: Hex.UI.EAbilitySlotMode).
+	// The literals are the 26297049 interop names; Golden Era has no such slot view, so the Golden hints name nothing
+	// there and every consumer must stay on its Golden path. Static native evidence only, runtime unproven.
+	internal static partial class BattleAbilityView
+	{
+		internal static readonly string[] SlotModeField = { "slotMode" };
+
+		// Hex.UI.EAbilitySlotMode member that marks a selected-unit action-bar slot (Hero=1, SharedBattle=2, Unit=3, HeroSpecial=4).
+		internal static readonly string[] UnitSlotModeName = { "Unit" };
+
+		// BhUnitControlsView.abilities: List<BhBattleAbilityView> on 26297049 (List<BhUnitAbilityView> on Golden Era).
+		internal static readonly string[] ControlsAbilitiesField = { "abilities" };
+
+		internal static readonly string[] ViewBaseField = { "viewBase" };
+
+		// Unit slot bind (wrapper, enabled, index): successor of BhUnitAbilityView's (wrapper, bool) bind.
+		internal static readonly MethodSymbol UnitBind = new(
+			"battle.abilityView.unitBind",
+			"Method_Public_Void_ObjectPublicObBocpBoObcpBocpBoUnique_Boolean_Int32_PDM_0");
+
+		// Hero slot bind (hero ability, wrapper, index): successor of BhHeroAbilitiyView's per-ability bind.
+		internal static readonly MethodSymbol HeroBind = new(
+			"battle.abilityView.heroBind",
+			"Method_Public_Void_ObjectPublicAbccObHeccObBuItccObUnique_ObjectPublicObBocpBoObcpBocpBoUnique_Int32_0");
+
+		internal static readonly MethodSymbol HeroAbilityGetter = new(
+			"battle.abilityView.heroAbilityGetter",
+			"Method_Public_get_ObjectPublicStInHeInObHecnObchcnUnique_0");
+
+		internal static readonly MethodSymbol UnitAbilityGetter = new(
+			"battle.abilityView.unitAbilityGetter",
+			"Method_Public_get_ObjectPublicObclInBoInclAbObELInUnique_0");
+
+		internal static readonly string[] HeroAbilityDataField =
+			{ "field_Private_ObjectPublicStInHeInObHecnObchcnUnique_0" };
+
+		internal static readonly string[] HeroAbilityField =
+			{ "field_Private_ObjectPublicAbccObHeccObBuItccObUnique_0" };
+
+		internal static readonly string[] UnitAbilityField =
+			{ "field_Private_ObjectPublicObclInBoInclAbObELInUnique_0" };
+
+		internal static readonly string[] AbilityWrapperField =
+			{ "field_Private_ObjectPublicObBocpBoObcpBocpBoUnique_0" };
+
+		// BhUnitControlsView's selected slot (was field_Private_BhUnitAbilityView_0; see SelectedUnitHud.ControlsSelectedViewFields).
+		internal static readonly string[] ControlsSelectedViewField = { "field_Private_BhBattleAbilityView_0" };
+
+		// Hex.UI.Battle.BhHeroAbilitiesView.heroAbilities: List<BhBattleAbilityView> on 26297049.
+		internal static readonly string[] HeroAbilitiesListField = { "heroAbilities" };
 	}
 
 	internal static partial class AiDriverCombatSetup
@@ -2316,19 +2391,29 @@ internal static partial class GameSymbols
 
 	}
 
-	internal static partial class UnitAbilityNative
-	{
-		internal static readonly MethodSymbol UnitAbilityAvailability = new(
-			"unitAbility.native.unitAbility.availability",
-			"lis");
-
-		internal static readonly MethodSymbol ControlsNativeUnitBind = new(
-			"unitAbility.native.controls.unitBind",
-			"dng");
-	}
-
 	internal static partial class BattleUi
 	{
+		// BhTurnView.UpdateView(Unit, TurnState, Boolean); obfuscated on 26297049 (the generated scope pins it).
+		internal static readonly MethodSymbol TurnViewUpdateView = new(
+			"battle.ui.turnView.updateView",
+			"UpdateView");
+
+		// BhHeroPortrait battle-result panels. 26297049 replaced the Image/Sprite trio (panelLossHero, deathHero,
+		// escapeHero) with one GameObject per result; Golden Era has none of these names (Current-only scopes).
+		internal static readonly string[] HeroPortraitDeathPanelField = { "panelHeroDeath" };
+
+		internal static readonly string[] HeroPortraitEscapedPanelField = { "panelHeroEscaped" };
+
+		internal static readonly string[] HeroPortraitSurrenderPanelField = { "panelHeroSurrender" };
+
+		// Golden Era BhHeroPortrait battle-result trio: the loss overlay Image and the death/escape Sprites it shows.
+		// Golden-only: refused on 26297049 by a reviewed override (the panel fields above replace them there).
+		internal static readonly string[] HeroPortraitLossPanelImageField = { "panelLossHero" };
+
+		internal static readonly string[] HeroPortraitDeathSpriteField = { "deathHero" };
+
+		internal static readonly string[] HeroPortraitEscapeSpriteField = { "escapeHero" };
+
 		internal static readonly MethodSymbol SelectedHudEventBind = new(
 			"battle.ui.selectedHud.eventBind",
 			"bejn", "behr", "begs", "beic", "begr", "beib", "befv", "beet",
@@ -2370,6 +2455,13 @@ internal static partial class GameSymbols
 
 		internal static readonly string[] UnitTransferFields =
 			{ "chgt", "bewg", "<chgt>k__BackingField", "chfy", "bevh", "<chfy>k__BackingField", "chfv", "<chfv>k__BackingField", "chcp", "<chcp>k__BackingField", "chbu", "<chbu>k__BackingField", "_chjo_k__BackingField", "<chjo>k__BackingField", "chjo", "cggz" };
+
+		// Homm3BattleAttackFacingHook.DescribeUnit diagnostic: members probed for a nested object carrying the sid,
+		// tried before UnitTransferFields. Inherited probe names, unproven on both builds: neither Golden Era's Unit
+		// (idx2_golden) nor 26297049's declares any of them. Kept unchanged on Golden Era; refused on 26297049 by a
+		// reviewed override (no successor proven).
+		internal static readonly string[] AttackFacingUnitSidProbeFields =
+			{ "chey", "_chdi_k__BackingField", "<chey>k__BackingField", "chbu", "_chbu_k__BackingField", "<chbu>k__BackingField", "cggz" };
 
 		internal static readonly string[] UnitConfigIdFields =
 			{ "chgu", "bewi", "<chgu>k__BackingField", "_chgu_k__BackingField", "chgv", "bewk", "<chgv>k__BackingField", "_chgv_k__BackingField", "chgw", "bewm", "<chgw>k__BackingField", "_chgw_k__BackingField", "chgt", "bewg", "<chgt>k__BackingField", "_chgt_k__BackingField", "chfz", "bevj", "<chfz>k__BackingField", "_chfz_k__BackingField", "chga", "bevl", "<chga>k__BackingField", "_chga_k__BackingField", "chgb", "bevn", "<chgb>k__BackingField", "_chgb_k__BackingField", "<chjp>k__BackingField", "_chjp_k__BackingField", "<chjq>k__BackingField", "_chjq_k__BackingField", "<chjr>k__BackingField", "_chjr_k__BackingField", "chfw", "<chfw>k__BackingField", "chfx", "<chfx>k__BackingField", "chfy", "bevh", "<chfy>k__BackingField", "chbv", "<chbv>k__BackingField", "chbw", "<chbw>k__BackingField", "cgha" };
@@ -3670,18 +3762,6 @@ internal static partial class GameSymbols
 			"Method_Public_Boolean_Unit_Random_Boolean_PDM_0",
 			"grw");
 
-		internal static readonly string[] MoraleRollCandidateNames =
-			{
-				"bdht", "bdhu", "bxb", "bxf", "cam", "grw", "jmj",
-				"Method_Public_Boolean_Unit_Random_PDM_1",
-				"Method_Public_Boolean_Unit_Random_Boolean_PDM_1",
-				"Method_Public_Boolean_Unit_Random_PDM_2",
-				"Method_Public_Boolean_Unit_Random_PDM_0",
-				"Method_Public_Boolean_Unit_Random_Boolean_PDM_0",
-				"Method_Public_Boolean_Unit_Random_Boolean_0",
-				"Method_Public_Boolean_Unit_Random_0"
-			};
-
 		internal static readonly string[] UnitStatMembers =
 			{ "<stats>k__BackingField", "stats", "get_stats", "bbcl", "bbcm", "bcuj", "<chju>k__BackingField", "chju", "<chjv>k__BackingField", "chjv" };
 
@@ -3733,6 +3813,8 @@ internal static partial class GameSymbols
 		internal const string HeroAbilityButtonViewTypeId = "law.focus.heroAbility.buttonView";
 		internal static readonly string[] HeroAbilityButtonViewTypeHints =
 			{ "Hex.UI.BhHeroAbilitiyView", "BhHeroAbilitiyView" };
+		// 26615913: hero ability buttons are Hex.UI.BhBattleAbilityView (merged with the unit ability view).
+		internal static readonly string[] HeroAbilityButtonViewCurrentTypeHints = { "Hex.UI.BhBattleAbilityView" };
 
 		internal const string HeroAbilityContainerViewTypeId = "law.focus.heroAbility.containerView";
 		internal static readonly string[] HeroAbilityContainerViewTypeHints =
@@ -3919,9 +4001,31 @@ internal static partial class GameSymbols
 		internal const string RewardApplierTypeId = "homm3.tower.bottomlessKnowledge.rewardApplier";
 		internal static readonly string RewardApplierTypeHint = "czy";
 
+		/// <summary>
+		/// UI event subscriber that opens the reward-set flow (not the applier); kept only for Cove Plunder's diagnostic.
+		/// Mana Well Aegis binds ManaPercentSettingRewardApply instead.
+		/// </summary>
 		internal static readonly MethodSymbol ManaRewardSetAppliers = new(
 			"homm3.tower.bottomlessKnowledge.manaRewardSetAppliers",
 			"Method_Public_Void_Hero_DataRewardSet_PDM_0");
+
+		/// <summary>
+		/// ManaPercentSettingReward logic (native fji on 25672315): the reward factory (fir.blfk) maps reward type 13
+		/// (ManaPercentSettingReward) to it. Its Apply(world hero) virtual (fji.blfr) sets the hero's Mana to a percent of max.
+		/// </summary>
+		internal const string ManaPercentSettingRewardLogicTypeId = "homm3.tower.bottomlessKnowledge.manaPercentSettingRewardLogic";
+		internal static readonly string ManaPercentSettingRewardLogicTypeHint = "Object1PublicSicoSiblVoblaBoSiVoUnique";
+
+		internal static readonly MethodSymbol ManaPercentSettingRewardApply = new(
+			"homm3.tower.bottomlessKnowledge.manaPercentSettingApply",
+			"Method_Public_Virtual_Void_ObjectPublicHeObInObcnSiObVeBoObUnique_0");
+
+		/// <summary>Hex.Session.Logic.Buff → its Hex.Configs.LogicBuffConfig (protected field, exposed by interop as a property).</summary>
+		internal static readonly string[] LogicBuffConfigMembers = { "field_Protected_LogicBuffConfig_0" };
+
+		/// <summary>Hex.Configs.LogicBuffConfig deobfuscated bool fields.</summary>
+		internal const string BuffConfigIsPositiveMember = "isPositive";
+		internal const string BuffConfigIsDispellableMember = "isDispellable";
 
 		internal static readonly string[] LogicHeroDataHeroMembers =
 			{ "get__cbfh_k__BackingField", "get_cbfh", "xal", "cbfh", "_cbfh_k__BackingField", "ccez", "_ccez_k__BackingField" };
@@ -4244,6 +4348,37 @@ internal static partial class GameSymbols
 		internal static readonly string[] LogicHeroBuffManagerMembers =
 			{ "prop_Object1PublicHechInVo_hbaHeBuaLoUnique_0", "_chno_k__BackingField" };
 
+		/// <summary>Hex.Session.Logic.Hero → its logic party (owner of the native add-units call that fires the party-changed
+		/// listeners, so the army strip refreshes). Current-build only.</summary>
+		internal static readonly string[] LogicHeroPartyMembers =
+			{ "prop_ObjectPublicInDaObOwBoLi1cjObcwUnique_0" };
+
+		/// <summary>Logic party AddUnits(string sid, int count, EListenerCallbackCall call): merges into a same-sid stack or adds a
+		/// stack in the first free slot (7 max), then fires the party-changed listeners; does nothing when the army is full.</summary>
+		internal static readonly MethodSymbol LogicPartyAddUnits = new(
+			"homm3.dungeon.captives.logicParty.addUnits",
+			"Method_Public_Void_String_Int32_EListenerCallbackCall_0");
+
+		/// <summary>Logic party → its Data party (DataParty.units is the List&lt;Data.Unit&gt; the party edits). Current-build only.</summary>
+		internal static readonly string[] LogicPartyDataPartyMembers =
+			{ "prop_DataParty_0" };
+
+		/// <summary>Logic party AddUnitAtSlot(string sid, int count, int slot, EListenerCallbackCall call, bool notify): when fewer
+		/// than 7 units, appends a new Data.Unit{sid, count, slot} without checking the slot, then fires the listeners.</summary>
+		internal static readonly MethodSymbol LogicPartyAddUnitAtSlot = new(
+			"homm3.dungeon.captives.logicParty.addUnitAtSlot",
+			"Method_Public_Void_String_Int32_Int32_EListenerCallbackCall_Boolean_0");
+
+		/// <summary>Logic party units-changed listeners (EListenerCallbackCall call).</summary>
+		internal static readonly MethodSymbol LogicPartyNotifyUnits = new(
+			"homm3.dungeon.captives.logicParty.notifyUnits",
+			"Method_Public_Void_EListenerCallbackCall_0");
+
+		/// <summary>Logic party party-changed event (EListenerCallbackCall call, bool, PartyChangedType type).</summary>
+		internal static readonly MethodSymbol LogicPartyNotifyChanged = new(
+			"homm3.dungeon.captives.logicParty.notifyChanged",
+			"Method_Public_Void_EListenerCallbackCall_Boolean_PartyChangedType_0");
+
 		/// <summary>Buff manager Add(string sid, BuffDuration[] durations); dispatches on the config additionType.</summary>
 		internal static readonly MethodSymbol BuffManagerAdd = new(
 			"homm3.dungeon.captives.buffManager.add",
@@ -4286,6 +4421,105 @@ internal static partial class GameSymbols
 		/// <summary>Hex.Session.Data.Buff native field "sid".</summary>
 		internal static readonly string[] DataBuffSidMembers =
 			{ "field_Public_String_0" };
+	}
+
+	/// <summary>
+	/// Fortress Predator Instinct expert subskills (Homm3FortressPredatorInstinctCombat). Static decompile of the
+	/// 26615913 GameAssembly (V:\olden_port_work\predator_instinct\research_a). Attack-sequence builder eqd =
+	/// ObjectPublicObcnLi1HeUncnLi1HeUnique (battle logic +0x38); target validation ezx =
+	/// ObjectPublicAbstractSealedStcpbjStcp31aStcp65Unique. The PDM-suffixed names below are the live bodies (the
+	/// sibling PDM copies are data-referenced only). Proof tier: static; runtime unproven.
+	/// </summary>
+	internal static partial class FortressPredatorInstinct
+	{
+		internal static readonly string[] AttackBuilderTypeHints =
+			{ "ObjectPublicObcnLi1HeUncnLi1HeUnique" };
+
+		/// <summary>eqd.bhqd (tok 100710547): builds one attack's step sequence (anchor, attacker, targetHexIds, ability,
+		/// movePath, int, bool). Calls bhqe per target to choose parry order, then bhqp for each counter.</summary>
+		internal static readonly MethodSymbol BuildAttack = new(
+			"homm3.fortress.predator.buildAttack",
+			"Method_Public_Void_Unit_Unit_Il2CppStructArray_1_Int32_ObjectPublicObclInBoInclAbObELInUnique_Il2CppStructArray_1_Int32_Int32_Boolean_PDM_0");
+
+		/// <summary>eqd.bhqe (tok 100710501): true when the target counters before the attack (counter_before_attack or
+		/// counter_before_and_after_attack sequence effect on a passive or buff).</summary>
+		internal static readonly MethodSymbol TargetParries = new(
+			"homm3.fortress.predator.targetParries",
+			"Method_Private_Boolean_Unit_PDM_0");
+
+		/// <summary>eqd.bhqp (tok 100710570): queues a CounterAttackStep (anchor, attacker, counterattacker, ability,
+		/// targetHexes, delay, forced) after the triggerCounter/alwaysCounter/charge/reach gates.</summary>
+		internal static readonly MethodSymbol QueueCounter = new(
+			"homm3.fortress.predator.queueCounter",
+			"Method_Public_Void_Unit_Unit_Unit_ObjectPublicObclInBoInclAbObELInUnique_Il2CppStructArray_1_Int32_Single_Boolean_PDM_3");
+
+		/// <summary>eqd.bhqo (tok 100710486): "will the target retaliate" forecast for the player's damage preview.</summary>
+		internal static readonly MethodSymbol WillRetaliate = new(
+			"homm3.fortress.predator.willRetaliate",
+			"Method_Public_Boolean_Unit_Unit_ObjectPublicObclInBoInclAbObELInUnique_Hex_List_1_Hex_0");
+
+		internal static readonly string[] TargetRulesTypeHints =
+			{ "ObjectPublicAbstractSealedStcpbjStcp31aStcp65Unique" };
+
+		/// <summary>ezx.bjug (tok 100714511, static): (battle, unit, targetHex) true when taunt blocks the hex. Single choke
+		/// point for player validation, highlighting and AI target choice; counters pass ignoreTaunt and never reach it.</summary>
+		internal static readonly MethodSymbol TauntBlocksHex = new(
+			"homm3.fortress.predator.tauntBlocksHex",
+			"Method_Public_Static_Boolean_ObjectPublicPrcnInPrcnSiBoPrcnInUnique_Unit_Hex_0");
+
+		/// <summary>ezx.bjui (tok 100714563, static): (battle, unit, taunter) true when the unit can reach and hit the
+		/// taunter this turn. Native taunt binds only then.</summary>
+		internal static readonly MethodSymbol CanReachTaunter = new(
+			"homm3.fortress.predator.canReachTaunter",
+			"Method_Private_Static_Boolean_ObjectPublicPrcnInPrcnSiBoPrcnInUnique_Unit_Unit_PDM_1");
+
+		/// <summary>eov.bhav (0x18215FC70, unique body): hero battle ability cast execution (ctx, targetHexes, int, bool);
+		/// raises CastHeroAbilityEventArgs (not CastAbilityEventArgs, so the battle-event dispatcher filter never sees it).
+		/// Owner is InfernoGating.HeroAbilityTypeHints.</summary>
+		internal static readonly MethodSymbol HeroAbilityCast = new(
+			"homm3.fortress.predator.heroAbilityCast",
+			"Method_Public_Void_ObjectPublicBoclUnInclSiBoESclclUnique_Il2CppStructArray_1_Int32_Int32_Boolean_PDM_0");
+
+		/// <summary>eov sid: the interop has no "sid" property (getter is prop_String_0, backing field
+		/// _sid_k__BackingField); reading "sid" returned null and silently skipped every Frenzy check (playtest 2).</summary>
+		internal static readonly string[] HeroAbilitySidMembers =
+			{ "_sid_k__BackingField", "prop_String_0" };
+
+		/// <summary>Hex.Session.Battle.Hex occupant (native cnfx): the Unit standing on the hex.</summary>
+		internal static readonly string[] HexOccupantMembers =
+			{ "prop_Unit_0", "_cnfx_k__BackingField" };
+
+		// Hover line (Homm3FortressPredatorLine; evidence research_b). The battle input controller epl sets the drawer
+		// HighlightFlags.Cursor (4) bit on the hovered unit's drawer and keeps that drawer in epl+0x108 (stale after the
+		// cursor leaves, so the flag must be tested).
+
+		/// <summary>Battle controller emh static singleton.</summary>
+		internal static readonly string[] BattleControllerSingletonMembers =
+			{ "prop_MonoBehaviourPublicObSotispSoBhunfiBhGaUnique_0", "_cmmn_k__BackingField" };
+
+		/// <summary>emh input controller epl = Object1PublicObcnUnBocnObLiBo1cnUnique.</summary>
+		internal static readonly string[] ControllerInputMembers =
+			{ "prop_Object1PublicObcnUnBocnObLiBo1cnUnique_0", "_cmmq_k__BackingField" };
+
+		/// <summary>epl+0x108 (native cnie): drawer that last received the Cursor flag.</summary>
+		internal static readonly string[] InputCursorDrawerMembers =
+			{ "field_Private_Object1PublicIncmUnIncmObBhIncmAnUnique_0" };
+
+		/// <summary>Unit drawer ens +0xC4 (native cmtp): HighlightFlags { Target=1, Controlled=2, Cursor=4 }.</summary>
+		internal static readonly string[] DrawerHighlightFlagsMembers =
+			{ "field_Private_HighlightFlags_0" };
+
+		/// <summary>Unit drawer's Unit (native cmsw).</summary>
+		internal static readonly string[] DrawerUnitMembers =
+			{ "prop_Unit_0", "_cmsw_k__BackingField" };
+
+		/// <summary>Unit drawer's BhUnitViewHelper (native cmsx): projectileEndPoint / shieldPoint transforms.</summary>
+		internal static readonly string[] DrawerViewHelperMembers =
+			{ "prop_MonoBehaviourPublicTrprshTrprVeSkTrshmeUnique_0", "_cmsx_k__BackingField" };
+
+		/// <summary>Unit drawer's visual root GameObject.</summary>
+		internal static readonly string[] DrawerVisualGameObjectMembers =
+			{ "field_Private_GameObject_0" };
 	}
 
 	/// <summary>
@@ -4690,11 +4924,6 @@ internal static partial class GameSymbols
 			"battle.effect.helper.init",
 			"Init",
 			"Method_Public_Virtual_New_Void_Transform_Boolean_0");
-
-		internal static readonly MethodSymbol StartPlaying = new(
-			"battle.effect.helper.startPlaying",
-			"StartPlaying",
-			"baiv");
 	}
 
 	internal static partial class BattleCommand
@@ -4708,10 +4937,6 @@ internal static partial class GameSymbols
 		internal static readonly string[] RuntimeUnitTypeNames =
 			{ "ecx" };
 
-		internal static readonly MethodSymbol AttackCommandExecute = new(
-			"battle.attackCommand.execute",
-			"hrq");
-
 		internal static readonly MethodSymbol AbilityLookup = new(
 			"battle.abilityManager.lookup",
 			"baop", "baoq");
@@ -4724,17 +4949,11 @@ internal static partial class GameSymbols
 			"battle.abilityManager.initAliases",
 			"Init");
 
-		internal static readonly string[] AbilityLogicConfigFields =
-			{ "cejb", "cedw", "cdgt" };
-
 		internal static readonly string[] AbilityViewConfigFields =
 			{ "cejc", "cedx", "cdgu" };
 
 		internal static readonly string[] RuntimeTagListFields =
 			{ "cfjh" };
-
-		internal static readonly string[] AttackTypeMembers =
-			{ "cmyi" };
 
 		internal static readonly string[] UnitSidFields =
 			{ "cfla", "cfhr", "cfjg", "configId", "configSid", "sid", "id", "unitSid" };
@@ -4749,35 +4968,12 @@ internal static partial class GameSymbols
 			"battle.unit.configSid.getter",
 			"bcqo", "bcqp", "GetConfigId", "get_configId");
 
-		internal static readonly MethodSymbol CounterGate = new(
-			"battle.counter.gate",
-			"dtr");
-
-		internal static readonly MethodSymbol CounterHelper = new(
-			"battle.counter.preCounterHelper",
-			"jqy");
-
 		internal static readonly MethodSymbol AttackResolver = new(
 			"battle.counter.attackResolver",
 			"bdht",
 			"bdib",
 			"ux",
 			"hqg");
-
-		internal static readonly MethodSymbol CounterEligibility = new(
-			"battle.counter.eligibility",
-			"bdiq",
-			"gko",
-			"cza",
-			"bdhz",
-			"cgj");
-
-		internal static readonly MethodSymbol CounterSchedule = new(
-			"battle.counter.schedule",
-			"eqk",
-			"bdij",
-			"bdjh",
-			"byx");
 
 		internal static readonly MethodSymbol CounterEventBuilder = new(
 			"battle.counter.eventBuilder",
@@ -4789,32 +4985,13 @@ internal static partial class GameSymbols
 			"bdhu",
 			"fej");
 
-		internal static readonly MethodSymbol MoveClassifier = new(
-			"battle.counter.moveClassifier",
-			"buw");
-
 		internal static readonly MethodSymbol TargetShape = new(
 			"battle.counter.targetShape",
 			"bdil");
 
-		internal static readonly MethodSymbol UnitPair = new(
-			"battle.counter.unitPair",
-			"nbq");
-
 		internal static readonly MethodSymbol CounterEventExecute = new(
 			"battle.counter.eventExecute",
 			"bdvn", "bdvo");
-
-		internal static readonly MethodSymbol EventQueue = new(
-			"battle.counter.eventQueue",
-			"bdvw", "bdvx");
-
-		internal static readonly MethodSymbol BattleExecutorAttack = new(
-			"battle.executor.attack",
-			"lee",
-			"bezr",
-			"zg",
-			"daj");
 
 		internal static readonly MethodSymbol BattleExecutorMove = new(
 			"battle.executor.move",
@@ -4842,6 +5019,16 @@ internal static partial class GameSymbols
 
 	internal static partial class ReleaseTownUi
 	{
+		// UpdateView is a real name on Golden Era and obfuscated on 26297049; each overload gets its own scope.
+		internal static readonly MethodSymbol BuildingViewUpdateView = new(
+			"release.town.buildingView.updateView",
+			"UpdateView");
+
+		// BhHireUnitItemView.UpdateView(String, Int32) on 26297049 (Golden Era: UpdateView(String)).
+		internal static readonly MethodSymbol HireUnitItemViewUpdateView = new(
+			"release.town.hireUnitItemView.updateView",
+			"UpdateView");
+
 		internal static readonly string[] CityWrapperTypeHints =
 			{ "ezx", "ObjectPublicObcjHeObcjcjObcjUnique", "Object1PublicObInObcjcoObcjInObcjUnique" };
 
@@ -5069,22 +5256,6 @@ internal static partial class GameSymbols
 			"NativeFieldInfoPtr_navigation",
 			"navigation");
 
-		internal static readonly MethodSymbol DayPanelBack = new(
-			"release.town.dayPanel.back",
-			"hly", "hlr", "hlm");
-
-		internal static readonly MethodSymbol BuildingScreenBack = new(
-			"release.town.buildingScreen.back",
-			"hly", "hlr");
-
-		internal static readonly MethodSymbol HireScreenBack = new(
-			"release.town.hireScreen.back",
-			"hly", "hlr");
-
-		internal static readonly MethodSymbol GenericButtonBack = new(
-			"release.town.genericButton.back",
-			"hly", "hlr", "hlm");
-
 		internal static readonly MethodSymbol ExitHudShowState = new(
 			"release.town.exitHud.showState",
 			"vxn", "vxi");
@@ -5213,22 +5384,6 @@ internal static partial class GameSymbols
 
 		internal static readonly string[] BuildingViewModelFields =
 			{ "field_Private_ObjectPublicBuObcdStObcdcnInBocnUnique_0", "bzfs", "bzdg" };
-
-		internal static readonly FieldSymbol[] BuildingViewLevelIntFields =
-		{
-			new("release.town.buildingView.level.bzdd", "NativeFieldInfoPtr_bzdd", "bzdd"),
-			new("release.town.buildingView.level.bzde", "NativeFieldInfoPtr_bzde", "bzde"),
-			new("release.town.buildingView.level.bzdi", "NativeFieldInfoPtr_bzdi", "bzdi"),
-			new("release.town.buildingView.level.bzdo", "NativeFieldInfoPtr_bzdo", "bzdo"),
-			new("release.town.buildingView.level.bzdp", "NativeFieldInfoPtr_bzdp", "bzdp"),
-			new("release.town.buildingView.level.bzds", "NativeFieldInfoPtr_bzds", "bzds"),
-			new("release.town.buildingView.level.bzan", "NativeFieldInfoPtr_bzan", "bzan"),
-			new("release.town.buildingView.level.bzao", "NativeFieldInfoPtr_bzao", "bzao"),
-			new("release.town.buildingView.level.bzas", "NativeFieldInfoPtr_bzas", "bzas"),
-			new("release.town.buildingView.level.cnej", "NativeFieldInfoPtr_cnej", "cnej"),
-			new("release.town.buildingView.level.cnek", "NativeFieldInfoPtr_cnek", "cnek"),
-			new("release.town.buildingView.level.cnel", "NativeFieldInfoPtr_cnel", "cnel")
-		};
 
 		internal static readonly string[] BuildingViewFieldOnlyMembers =
 		{
@@ -5583,6 +5738,24 @@ internal static partial class GameSymbols
 			"customGame.factionDetails.refresh",
 			"Init", "hpk", "hpd", "Method_Public_Void_Boolean_Single_Single_0");
 
+		// Game hub lobby popups (ReleaseCustomGameUiProbe). Interop names, identical on Golden Era 25672315 and 26615913:
+		// ScFractionSelect row add (rsc/sgh) and select callback (rsd/sgi), ScHeroSelect row add (sgo) and select
+		// callback (sgp), BhLobbyPopupFractionElement's stored faction sid (cbcj/cdci).
+		internal static readonly string[] LobbyFractionRowAdd =
+			{ "Method_Public_Void_String_Sprite_Boolean_Boolean_0" };
+
+		internal static readonly string[] LobbyFractionSelected =
+			{ "Method_Public_Void_String_PDM_0" };
+
+		internal static readonly string[] LobbyHeroRowAdd =
+			{ "Method_Public_Void_String_Boolean_Boolean_0" };
+
+		internal static readonly string[] LobbyHeroSelected =
+			{ "Method_Public_Void_String_PDM_0" };
+
+		internal static readonly string[] LobbyPopupFractionSidFields =
+			{ "field_Private_String_0", "fractionSid", "sid" };
+
 		internal static readonly string[] FactionDetailsConfigFields =
 			{ "bpkw" };
 
@@ -5671,14 +5844,16 @@ internal static partial class GameSymbols
 		internal const int ScreenShowParameterCount = 1;
 		internal const string ScreenCloseMethodName = "Close";
 
-		// Current-only UI route, pinned to build 25672315's native vbc -> cul state machine.
-		internal const string CurrentSubmitHandlerNativeName = "vbc";
+		// Current-only UI route: Method_Private_Void_PDM_0 starts the +cvm Send iterator. Native name per build:
+		// 25672315 vbc, 26297049 vrw, 26615913 vrr (idx2_live_26615913 tok:100690629, same slot and signature;
+		// +cvm unchanged). Bump with CurrentScopes.BuildId.
+		internal const string CurrentSubmitHandlerNativeName = "vrr";
 		internal const string CurrentSubmitHandlerMethodInfoFieldName = "NativeMethodInfoPtr_Method_Private_Void_PDM_0";
 		internal static readonly MethodSymbol CurrentSubmitHandler = new(
 			"bugReport.submit.handler", "Method_Private_Void_PDM_0");
-		internal const string CurrentSubmitIteratorObfuscatedName = "Hex.UI.Reports.BhBugReportScreen+cul";
+		internal const string CurrentSubmitIteratorObfuscatedName = "Hex.UI.Reports.BhBugReportScreen+cvm";
 		internal const string CurrentSubmitIteratorManagedTypeFullName =
-			"Hex.UI.Reports.BhBugReportScreen+ObjectNPrivateSealedIEnumerator1ObjectIEnumeratorIDisposableIncdObBhcdStByStDicdUnique";
+			"Hex.UI.Reports.BhBugReportScreen+ObjectNPrivateSealedIEnumerator1ObjectIEnumeratorIDisposableIncfObBhcfStByStDicfUnique";
 		internal static readonly MethodSymbol CurrentSubmitIteratorMoveNext = new(
 			"bugReport.submit.iterator.moveNext", "MoveNext");
 		internal static readonly MethodSymbol CurrentScreenClose = new(
@@ -5724,6 +5899,9 @@ internal static partial class GameSymbols
 		internal static readonly string NativeQuickStartOpenNativeName = "pdj";
 		internal static readonly string NativeQuickStartOpenHandler = "Method_Private_Void_Boolean_0";
 		internal const bool NativeQuickStartOpenHandlerArgument = true;
+		// ScMainMenu native static "me": interop field_Public_Static_ScMainMenu_0 on 25672315 and 26297049 alike (the
+		// index maps fld:me to it on both), so it stays a const instead of a per-build scope.
+		internal const string StaticMeField = "field_Public_Static_ScMainMenu_0";
 		internal static readonly string[] CampaignButtonFields = { "campaignButton" };
 		internal static readonly string[] QuickStartButtonFields = { "quickStartButton" };
 		internal static readonly string[] SkirmishButtonFields = { "skirmishButton" };
@@ -5915,10 +6093,6 @@ internal static partial class GameSymbols
 
 		internal static readonly string[] DrawerSessionHeroFields =
 			{ "chzq", "cicl", "field_Private_ObjectPublicHeObInObciSiObVeSeObUnique_0" };
-
-		internal static readonly MethodSymbol HeroConfigGetter = new(
-			"heroMap.drawer.heroConfig",
-			"bftv", "njr", "ipk", "ivd", "rtn");
 
 		internal static readonly MethodSymbol DrawerRefresh = new(
 			"heroMap.drawer.refresh",
@@ -6494,9 +6668,9 @@ internal static partial class GameSymbols
 		// map-object / random-hire / city hooks. Do not re-add fbx /
 		// Object1PublicObcjIncjUnique without an ObjHire shape (they are hero wrappers).
 		internal static readonly string[] HireWorldObjectTypeHints = Array.Empty<string>();
-		// Build 25672315 only, consumed through TypeGroups.CustomDwellingHireWorldObject (shape-pinned): the
-		// ObjHire world object is native fmz (its only ctor takes Hex.Session.Data.ObjHire).
-		internal static readonly string[] HireWorldObjectCurrentTypeHints = { "Object1PublicObcoLiObco1IncuObcoUnique" };
+		// Current build only (26297049, 26615913), consumed through TypeGroups.CustomDwellingHireWorldObject (shape-pinned): the
+		// ObjHire world object is native fpp (its only ctor takes Hex.Session.Data.ObjHire; 25672315 native fmz).
+		internal static readonly string[] HireWorldObjectCurrentTypeHints = { "Object1PublicObcrLiObcr1IncwObcrUnique" };
 
 		internal static readonly MethodSymbol HireWorldObjectInit = new(
 			"map.customDwelling.hireWorldObject.init",
@@ -6597,14 +6771,6 @@ internal static partial class GameSymbols
 		internal const string LegacyControllerTypeId = "warcry.legacy.controllerType";
 		internal static readonly string[] LegacyControllerTypeHints = { "crg" };
 
-		internal static readonly MethodSymbol LegacyAvailability = new(
-			"warcry.legacy.heroAbility.availability",
-			"lis");
-
-		internal static readonly MethodSymbol LegacyEnergyGetter = new(
-			"warcry.legacy.heroAbility.energyGetter",
-			"god", "mgn");
-
 		internal static readonly MethodSymbol LegacyContainerBuild = new(
 			"warcry.legacy.heroAbilitiesView.listBuild",
 			"ryt", "ryu");
@@ -6640,11 +6806,6 @@ internal static partial class GameSymbols
 			"ski", "skj", "sjw", "sjx", "sjk", "sjl",
 			"Method_Public_Void_ObjectPublicAbbwObBubwObItUnbwObUnique_List_1_ObjectPublicStInHeInObHecfObchcfUnique_0",
 			"Method_Public_Void_ObjectPublicAbbwObBubwObItUnbwObUnique_List_1_ObjectPublicStInHeInObHecfObchcfUnique_1");
-
-		// Container arena bind: current BhHeroAbilitiesView.skk(bzd, ead, List<edn>). /3.
-		internal static readonly MethodSymbol ContainerBindWithArena = new(
-			"warcry.heroAbilitiesView.containerBindWithArena",
-			"skk");
 
 		// Container context-set / refresh: current BhHeroAbilitiesView.skp(edn). Older builds used skd/sjr. /1.
 		internal static readonly MethodSymbol ContainerContextSet = new(
@@ -7176,11 +7337,112 @@ internal static partial class GameSymbols
 	}
 
 	/// <summary>
+	/// Inferno Gating redesign (2026-11-13): reserved army slots skip deployment and enter the battle late.
+	/// New on 26615913 (no Golden Era 25672315 counterpart was ever pinned), so the literals below are the
+	/// 26615913 names on both sides of the current-scope override. Static evidence: live port_index
+	/// idx2_live_26615913 + Ghidra OE_26615913 decomp of BattleLogic.Init (clone +0x50, deploy epz.bhns),
+	/// eop.bgyu (spawn), ewd (turn queue) and epx.bhmp (battle-end TransferUnit write-back).
+	/// </summary>
+	internal static partial class InfernoGating
+	{
+		/// <summary>BattleLogic (epx): Init(int, TransferBattle, bool, bool) clones the battle and deploys the clone.</summary>
+		internal static readonly string[] BattleLogicTypeHints = { "ObjectPublicPrcnInPrcnSiBoPrcnInUnique" };
+
+		/// <summary>BattleLogic → FieldObject factory eop (+0x60).</summary>
+		internal static readonly string[] LogicFactoryMembers = { "_cnlk_k__BackingField" };
+
+		/// <summary>BattleLogic → the TransferBattle clone Init deployed from (+0x50, TransferBattle.biir).</summary>
+		internal static readonly string[] LogicBattleCloneMembers = { "_cnli_k__BackingField" };
+
+		/// <summary>BattleLogic → hex grid epv (+0x78).</summary>
+		internal static readonly string[] LogicGridMembers = { "_cnln_k__BackingField" };
+
+		/// <summary>BattleLogic → event hubs eoh (+0x90).</summary>
+		internal static readonly string[] LogicHubsMembers = { "_cnlq_k__BackingField" };
+
+		/// <summary>BattleLogic → battle state epz (+0xb0), owner of the side-wrapper array.</summary>
+		internal static readonly string[] LogicStateMembers = { "field_Public_ObjectPublicObHaOb1InObcnDi2UnUnique_0" };
+
+		/// <summary>BattleLogic → turn queue ewd (+0xb8).</summary>
+		internal static readonly string[] LogicQueueMembers = { "_cnlv_k__BackingField" };
+
+		/// <summary>eoh → round/action event hub eoi (+0x10; RoundStarted _66, ActionEnded PDM_21).</summary>
+		internal static readonly string[] HubsRoundHubMembers = { "field_Public_ObjectPublicEv1BacmEv1BacmBoEvUnique_0" };
+
+		/// <summary>epz → side wrappers (ObjectPublicPrcoObPrcoInTrPrcoInUnique[]).</summary>
+		internal static readonly string[] StateSideWrappersMembers = { "_cnms_k__BackingField" };
+
+		/// <summary>Side wrapper → its (clone) TransferSide.</summary>
+		internal static readonly string[] SideWrapperTransferSideMembers = { "field_Public_TransferSide_0" };
+
+		/// <summary>epv → Hex[] cells.</summary>
+		internal static readonly string[] GridHexesMembers = { "_cnjz_k__BackingField" };
+
+		/// <summary>ewd → current round number (first round is 1).</summary>
+		internal static readonly string[] QueueRoundMembers = { "field_Private_Int32_0" };
+
+		/// <summary>ewd → units still to act this round, initiative order.</summary>
+		internal static readonly string[] QueueToActMembers = { "field_Private_List_1_Unit_0" };
+
+		/// <summary>Unit → TransferUnit that battle-end write-back (epx.bhmp) updates for returnToArmy units.</summary>
+		internal static readonly string[] UnitTransferUnitMembers = { "_cphg_k__BackingField" };
+
+		/// <summary>Unit → UnitData.</summary>
+		internal static readonly string[] UnitDataMembers = { "_cphj_k__BackingField" };
+
+		/// <summary>Unit → live UnitStat (initiative).</summary>
+		internal static readonly string[] UnitStatMembers = { "_cphn_k__BackingField" };
+
+		/// <summary>FieldObject → owning side wrapper.</summary>
+		internal static readonly string[] FieldObjectSideMembers = { "_cndh_k__BackingField" };
+
+		/// <summary>UnitData alive count (bjrd).</summary>
+		internal static readonly string[] UnitDataAliveMembers = { "Method_Public_get_Int32_2" };
+
+		/// <summary>eop.bgyu(type, sid, stacks, sideWrapper, hex, lifetime, returnToArmy, isSummon, spawnedInBattle, ?, ?) : FieldObject.</summary>
+		internal static readonly string[] FactorySpawnMembers =
+			{ "Method_Public_FieldObject_EFieldObjectType_String_Int32_ObjectPublicPrcoObPrcoInTrPrcoInUnique_Hex_Int32_Boolean_Boolean_Boolean_InterfacePublicAbstractbeBoaObVobebaObInUnique_InterfacePublicAbstractbeObbfUnHebfUnInbfObUnique_0" };
+
+		/// <summary>Hero battle ability eov (Open Gate availability).</summary>
+		internal static readonly string[] HeroAbilityTypeHints = { "ObjectPublicStInHeInObHecnObchcnUnique" };
+
+		/// <summary>eov availability checks: beuy(sideWrapper) and bevs() (Focus).</summary>
+		internal static readonly string[] HeroAbilityUsableMembers =
+			{ "Method_Public_Virtual_Final_New_Boolean_ObjectPublicPrcoObPrcoInTrPrcoInUnique_0", "Method_Public_Virtual_Final_New_Boolean_0" };
+
+		/// <summary>eov → owning side wrapper.</summary>
+		internal static readonly string[] HeroAbilitySideMembers = { "field_Public_ObjectPublicPrcoObPrcoInTrPrcoInUnique_0" };
+
+		/// <summary>Battle drawer base → visual root GameObject (gate walk-in reads its position only).</summary>
+		internal static readonly string[] DrawerRootGameObjectMembers = { "field_Public_GameObject_0" };
+	}
+
+	/// <summary>
 	/// HoMM3 Tower Artificing on-hit grafts (Homm3TowerArtificingRuntime). Source-prepared 2026-10-25 from the
 	/// Golden Era interop (ilspycmd of BepInEx/interop/Hex.dll) and the readable decomp; runtime proof pending.
 	/// </summary>
 	internal static partial class TowerArtificing
 	{
+		/// <summary>Hex.CursorRayCast (static; Golden Era native hv, 26615913 ic: current scope override). The world map
+		/// gates hover cursor, clicks, keyboard hero moves and camera input on its IsOverUI flag, which vanilla
+		/// BhUiInteractElement.OnPointerEnter sets (26615913 decomp: writes the class statics +2, the third bool).</summary>
+		internal static readonly string[] CursorRayCastTypeHints =
+			{ "ObjectPublicAbstractSealedBobpcmBobpcmBobpcmBoUnique", "Hex.CursorRayCast" };
+
+		/// <summary>CursorRayCast.isOverUI static field accessor (Golden Era fld bpmb, 26615913 buvn), then the deobf property.</summary>
+		internal static readonly string[] CursorRayCastIsOverUiMembers =
+			{ "field_Private_Static_Boolean_2", "IsOverUI" };
+
+		/// <summary>Hex.InputSys.InputReceiver (Golden Era native bw-shape, 26615913 cbe). Every keyboard / mouse-button
+		/// action listener fires through its TryToPush; returning false from it drops the action for every receiver.</summary>
+		internal static readonly string[] InputReceiverTypeHints =
+			{ "ObjectPublicBobwLi1ObbwBoBobwUnique", "Hex.InputSys.InputReceiver" };
+
+		/// <summary>InputReceiver.TryToPush(InputAction) : bool (Golden Era pkg; 26615913 cbe.qpy, virtual, tok 100682134).
+		/// Overrides in subclasses (26615913 fos.qpy) are found by signature.</summary>
+		internal static readonly string[] InputReceiverTryToPushHints =
+			{ "Method_Public_Boolean_InputAction_0", "TryToPush" };
+
 		/// <summary>Hex.Session.Battle.UnitHealer (static).</summary>
 		internal static readonly string[] UnitHealerTypeHints =
 			{ "ObjectPublicAbstractSealedruVoaUnbIncdInBoUnique", "Hex.Session.Battle.UnitHealer" };
@@ -7242,6 +7504,68 @@ internal static partial class GameSymbols
 	}
 
 	/// <summary>
+	/// Factory Logistics Network range adapter (Homm3FactoryLogisticsMap.cs): the native passability grid
+	/// <c>Hex.Map.Pathmap</c> held by <c>Hex.Map.Map.pathmap</c>. Pathmap fields (decompiled source order):
+	/// const BLOCKED, const OBJECTGATE, sizeX, sizeZ, nodesBlocked (byte counter: object bodies + cliffs),
+	/// nodesGate (object entrances), landscape, roadBonus (float per node), riverPenalty. On 26615913 the
+	/// type is ObjectPublicBycbInBycbTiInSiBySiUnique and its metadata field indices 0..8 follow that order
+	/// (cbva..cbvi); Map.pathmap is the type-unique backing field _cbhc (index 14, after MapObjects _cbhb).
+	/// Proof tier: source/static; runtime read is sanity-checked (lengths, blocked count >= gate count).
+	/// </summary>
+	internal static partial class FactoryLogisticsMap
+	{
+		internal static readonly string[] MapPathmapMembers =
+			{ "pathmap", "get_pathmap" };
+
+		internal static readonly string[] PathmapSizeXMembers =
+			{ "sizeX" };
+
+		internal static readonly string[] PathmapSizeZMembers =
+			{ "sizeZ" };
+
+		internal static readonly string[] PathmapNodesBlockedMembers =
+			{ "nodesBlocked" };
+
+		internal static readonly string[] PathmapNodesGateMembers =
+			{ "nodesGate" };
+
+		internal static readonly string[] PathmapRoadBonusMembers =
+			{ "roadBonus" };
+	}
+
+	/// <summary>
+	/// Factory Logistics Arcane Manufactory astrology grant (Homm3FactoryLogisticsRuntime.GrantArcaneAstrology).
+	/// The side logic (26615913 edb, the SwashbucklerGold side-logic type) owns the astrology progression
+	/// (ecx, base eab) as the type-unique backing field cjzh. ecx's real add method is native bcin
+	/// (tok 100701639): eab.qx(amount) refuses amount &lt; 0 or a maxed level, adds to Data.Side
+	/// currentAstrologyExp (+0xd8) clamped at the max, runs the level-up loop (eab.bbjs) and raises
+	/// EEvent 87 AstrologyExpChange. Its _PDM_ twin (jde) is the obfuscator decoy (DATA ref only).
+	/// Golden literals are descriptive (no real name is known); only the hand pin scopes them.
+	/// Proof tier: source/static (Ghidra 26615913); runtime unproven.
+	/// </summary>
+	internal static partial class FactoryLogisticsArcane
+	{
+		internal static readonly string[] SideAstrologyProgressMembers =
+			{ "astrologyProgressLogic" };
+
+		internal static readonly MethodSymbol AstrologyAddExp = new(
+			"homm3.factory.logistics.astrologyAddExp",
+			"AddAstrologyExperience");
+	}
+
+	/// <summary>
+	/// Trade Contracts (Factory Logistics subskill): the world side's market count that every native trade price reads
+	/// (GetMarketExtraCharge = max(0, 3.5 - 0.5 x count)). Owner type is resolved through
+	/// HomecomingBoatTravel.MovementTypeHints, which pins the same world-side type on the current build.
+	/// </summary>
+	internal static partial class FactoryLogisticsMarket
+	{
+		internal static readonly MethodSymbol MarketsCount = new(
+			"homm3.factory.logistics.marketsCount",
+			"GetMarketsCount");
+	}
+
+	/// <summary>
 	/// Build-scoped type hint groups consumed through GameMember.ResolveTypeGroup (the one central type
 	/// resolver; the per-file ResolveFirstType copies are gone). Golden scopes reuse the existing hint
 	/// arrays and pin the shape of the type the pre-migration first-hint resolver bound on Golden Era;
@@ -7252,11 +7576,12 @@ internal static partial class GameSymbols
 	/// </summary>
 	internal static partial class TypeGroups
 	{
-		// Real-name type that moved namespace; both scopes pinned from their own interop (current: 25509697 base MonoBehaviourPublicBoceBoceUnique).
+		// Real-name type that moved namespace; both scopes pinned from their own interop (current: 26297049 base
+		// MonoBehaviourPublicBocgBocgUnique; its heroAbilities list now holds Hex.UI.BhBattleAbilityView).
 		internal static readonly TypeHintGroup WarcryHeroAbilityHeroAbilitiesView = new(
 			WarcryHeroAbility.HeroAbilitiesViewTypeId,
 			golden: new(WarcryHeroAbility.HeroAbilitiesViewTypeHints, new TypeShape("UnityEngine.MonoBehaviour", 42, 53)),
-			current: new(WarcryHeroAbility.HeroAbilitiesViewCurrentTypeHints, new TypeShape("MonoBehaviourPublicBoceBoceUnique", 21, 25)));
+			current: new(WarcryHeroAbility.HeroAbilitiesViewCurrentTypeHints, new TypeShape("MonoBehaviourPublicBocgBocgUnique", 28, 33)));
 
 		// Golden Era: Hex.Session.Data.DataObject (full hint).
 		internal static readonly TypeHintGroup AdventureObjectScoutingLawsDataObject = new(
@@ -7472,13 +7797,16 @@ internal static partial class GameSymbols
 		internal static readonly TypeHintGroup FocusLawsHeroAbilityButtonView = new(
 			FocusLaws.HeroAbilityButtonViewTypeId,
 			golden: new(FocusLaws.HeroAbilityButtonViewTypeHints, new TypeShape("UnityEngine.MonoBehaviour", 28, 37)),
-			current: TypeHintScope.Generated);
+			// 26615913: BhHeroAbilitiyView was merged into Hex.UI.BhBattleAbilityView (BhHeroAbilitiesView.heroAbilities is
+			// List<BhBattleAbilityView>; hero bind ttd); the adapter only gates on the type. Shape from its own interop.
+			current: new(FocusLaws.HeroAbilityButtonViewCurrentTypeHints, new TypeShape("UnityEngine.MonoBehaviour", 66, 86)));
 
 		// Golden Era: Hex.UI.BhHeroAbilitiesView (full hint).
 		internal static readonly TypeHintGroup FocusLawsHeroAbilityContainerView = new(
 			FocusLaws.HeroAbilityContainerViewTypeId,
 			golden: new(FocusLaws.HeroAbilityContainerViewTypeHints, new TypeShape("UnityEngine.MonoBehaviour", 42, 53)),
-			current: TypeHintScope.Generated);
+			// Same type as WarcryHeroAbilityHeroAbilitiesView on the current build (moved namespace, renamed base).
+			current: new(WarcryHeroAbility.HeroAbilitiesViewCurrentTypeHints, new TypeShape("MonoBehaviourPublicBocgBocgUnique", 28, 33)));
 
 		// Golden Era: Hex.Session.Battle.SideUsedEnergyEventArgs (full hint).
 		internal static readonly TypeHintGroup FocusLawsSideUsedEnergyEventArgs = new(
@@ -7577,11 +7905,12 @@ internal static partial class GameSymbols
 			current: TypeHintScope.Generated);
 
 		// Current-only: no verified ObjHire world object on Golden Era (CustomDwellingHire.HireWorldObjectTypeHints
-		// stays empty there). Build 25672315: native fmz, ctor(ObjHire), fields cowo ObjHire / cowp ObjHireConfig;
-		// shape from the 25672315 interop shape index. Keep this group last (no golden shape to parse).
+		// stays empty there). Builds 26297049 and 26615913: native fpp, ctor(ObjHire), fields ObjHire / ObjHireConfig;
+		// shape from the 26615913 interop shape index (35/39; 36/40 on 26297049, three Boolean PDM decoys dropped,
+		// two Void methods added). Keep this group last (no golden shape to parse).
 		internal static readonly TypeHintGroup CustomDwellingHireWorldObject = new(
 			CustomDwellingHire.HireWorldObjectTypeId,
 			golden: TypeHintScope.None,
-			current: new(CustomDwellingHire.HireWorldObjectCurrentTypeHints, new TypeShape("ObjectPublicObcoDaBoObLi1ObcucoUnique", 33, 37)));
+			current: new(CustomDwellingHire.HireWorldObjectCurrentTypeHints, new TypeShape("ObjectPublicObcrDaBoObLi1ObcwcrUnique", 35, 39)));
 	}
 }

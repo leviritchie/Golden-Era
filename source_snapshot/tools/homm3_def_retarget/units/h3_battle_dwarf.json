@@ -437,7 +437,7 @@
   }
  ],
  "glbPatch": {
-  "reason": "AttackFront per DEF (as h3_dwarf 1b9bbf2162): overhead at f3, swing at the enemy f4, hammer head driven to the ground in front f5-f6 with the f5 deep crouch (hips drop 0.11 H, knees bend, feet planted, Root untouched), recover f7; the f1-f2 windup is the retarget's own.",
+  "reason": "AttackFront per DEF (as h3_dwarf 1b9bbf2162): overhead at f3, swing at the enemy f4, hammer head driven to the ground in front f5-f6 with the f5 deep crouch (hips drop 0.11 H, knees bend, feet planted, Root untouched), recover f7; the f1-f2 windup is the retarget's own.; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
   "ops": [
    {
     "op": "moveWeights",
@@ -528,6 +528,22 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_battle_dwarf_crouch_tr.json",
     "sha256": "dd7d0a7840adab9f1838522636947c7cafd5f4747a276c8bcfcc047d8881a937",
     "regrid": true
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_battle_dwarf_clip_tracks.json",
+    "sha256": "1228ff1c9505844eec4d8cf89ab7a27a988fa57e9d5529298987cfb9e0f22bb9"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
    }
   ]
  }

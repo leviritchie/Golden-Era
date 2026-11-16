@@ -576,7 +576,24 @@ def canonical_custom_text_files_for_sid(
     if sid.startswith(("homm3_fortress_trophies_", "homm3_dungeon_captives_")):
         return {"mapObjects.json"}
 
+    # Conflux Elemental Fusion world spell (homm3_conflux_fusion_core_overlay MAGIC_LANG_PATHS): the
+    # spellbook reads name/description from magic.json; the fraction catch-all below would scrub them.
+    if sid.startswith("homm3_conflux_elemental_fusion"):
+        return {"magic.json", "magics.json"}
+
     if sid.startswith("homm3_") and ("_warcry_" in sid or "_effect" in sid or "_buff" in sid or "_debuff" in sid):
+        return {"magic_buff.json", "unitsBuff.json"}
+
+    # Tower Artificing graft combat buffs (homm3_tower_artificing_core_overlay COMBAT_BUFF_LANG_PATHS):
+    # the battle tooltip reads their name_/description_ from magic_buff + unitsBuff. Without this
+    # the scrub drops all of them and grafted creatures show raw homm3_tower_graft_N_name keys.
+    # The ledger's adventure-map buffs (homm3_tower_graft_N_map_*) live in mapObjects; leave them alone.
+    if re.fullmatch(r"homm3_tower_graft_\d+_(name|desc)", sid):
+        return {"magic_buff.json", "unitsBuff.json"}
+
+    # Fortress Predator Instinct battle markers (homm3_fortress_predator_instinct_core_overlay battle_buff_lang_rows):
+    # the battle tooltip reads name_/description_ from magic_buff + unitsBuff; the fraction catch-all would scrub them.
+    if sid.startswith(("homm3_fortress_predator_", "homm3_fortress_prey_")):
         return {"magic_buff.json", "unitsBuff.json"}
 
     # Custom-law combat markers live in magic_buff / unitsBuff (overlay
@@ -712,6 +729,7 @@ def _translation_memory(
                 and isinstance(localized_text, str)
                 and localized_text
                 and localized_text != english_text
+                and not is_glossary_mixed(lang, english_text, localized_text)
             ):
                 memory.setdefault(english_text, localized_text)
     return memory
@@ -954,8 +972,9 @@ def _draft_translate(lang: str, text: str, memory: dict[str, str]) -> str:
         }.get(lang, text)
 
     # Preserve short proper names if no in-game translation memory knows them.
+    # Keep them whole: word-by-word glossary swaps produce mixed-language text.
     if len(text) <= 32 and not re.search(r"[.!?:;]", text):
-        return _glossary_replace(lang, text)
+        return text
 
     exact = {
         "Allows resource trading.": {
@@ -1139,7 +1158,7 @@ def _draft_translate(lang: str, text: str, memory: dict[str, str]) -> str:
         }.get(lang, text)
 
     skill_rank = re.fullmatch(r"(Basic|Advanced|Expert) (.+)", text)
-    if skill_rank:
+    if skill_rank and not _has_untranslated_words(lang, text):
         return f"{_term(lang, skill_rank.group(1))} {_glossary_replace(lang, skill_rank.group(2))}"
 
     specialist = re.fullmatch(r"(.+) Specialist", text)
@@ -1251,10 +1270,31 @@ def _draft_translate(lang: str, text: str, memory: dict[str, str]) -> str:
             "zhTW": f"使{subject}每週產量增加{amount or ''}。",
         }.get(lang, text)
 
-    # Last pass: use translated game terms while leaving proper names, HoMM3,
-    # HotA, VCMI, SIDs, and exact numeric placeholders intact.
-    translated = _glossary_replace(lang, text)
-    return translated if translated != text else text
+    # Last pass: no phrasebook, memory or template translation exists, so keep
+    # the full English sentence. Swapping single glossary words into an English
+    # sentence produced mixed-language text (e.g. "Hero <ru>spell</ru> damage").
+    return text
+
+
+def _has_untranslated_words(lang: str, text: str) -> bool:
+    """True when English words remain after removing every glossary term from text."""
+    rest = PLACEHOLDER_RE.sub(" ", text)
+    for source in sorted(FALLBACK_TERMS.get(lang, {}), key=len, reverse=True):
+        rest = re.sub(rf"\b{re.escape(source)}\b", " ", rest)
+    return bool(re.search(r"[A-Za-z]{2,}", rest))
+
+
+def is_glossary_mixed(lang: str, english_text: str, localized_text: str) -> bool:
+    """True when a localized row is the English text with only some glossary words swapped in.
+
+    Curated phrasebook text is never "mixed", even when it keeps a proper name in English.
+    """
+    return (
+        localized_text != english_text
+        and localized_text == _glossary_replace(lang, english_text)
+        and _has_untranslated_words(lang, english_text)
+        and localized_text != _phrasebook_translate(lang, english_text)
+    )
 
 
 def _translated_row(lang: str, row: dict[str, Any], memory: dict[str, str]) -> dict[str, Any]:
@@ -1351,9 +1391,21 @@ def sync_multilingual_custom_lang_rows(
                         and isinstance(localized_text, str)
                         and localized_text != phrasebook_translation
                     )
-                    if not (needs_placeholder_repair or needs_same_as_english_repair or needs_phrasebook_refresh):
+                    needs_mixed_language_repair = (
+                        isinstance(english_text, str)
+                        and isinstance(localized_text, str)
+                        and is_glossary_mixed(lang, english_text, localized_text)
+                    )
+                    if not (
+                        needs_placeholder_repair
+                        or needs_same_as_english_repair
+                        or needs_phrasebook_refresh
+                        or needs_mixed_language_repair
+                    ):
                         continue
                 translated = _translated_row(lang, row, memory)
+                if sid in existing and translated.get("text") == existing[sid].get("text"):
+                    continue
                 if translated.get("text") in memory.values():
                     reused_total += 1
                 elif translated.get("text") != row.get("text"):

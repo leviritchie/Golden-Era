@@ -1152,6 +1152,13 @@ internal static class Homm3MapObjectPropCityResolver
 			var f = t.GetField(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
 			if (f != null)
 				return f.GetValue(obj);
+			// Il2CppInterop exposes native fields as same-named properties.
+			var p = t.GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+			if (p != null && p.GetMethod != null && p.GetIndexParameters().Length == 0)
+			{
+				try { return p.GetValue(obj); }
+				catch { return null; }
+			}
 		}
 		return null;
 	}

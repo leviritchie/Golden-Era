@@ -20,6 +20,15 @@ from pathlib import Path
 
 PLUGIN_DIR = Path("Heroes of Might & Magic Olden Era Playtest") / "OfflineUnlockMod"
 
+# Native Submit route of the current build (CurrentScopes.BuildId), from its interop index
+# (idx2_live_26615913 port_index.tsv: BhBugReportScreen.Method_Private_Void_PDM_0 tok:100690629:vrr; the only
+# nested iterator holding the screen, a byte[] and a Dictionary<string, byte[]> is +cvm). Bump with the build.
+CURRENT_SUBMIT_HANDLER_NATIVE_NAME = "vrr"
+CURRENT_SUBMIT_ITERATOR_OBFUSCATED_NAME = "Hex.UI.Reports.BhBugReportScreen+cvm"
+CURRENT_SUBMIT_ITERATOR_TYPE = (
+    "Hex.UI.Reports.BhBugReportScreen+ObjectNPrivateSealedIEnumerator1ObjectIEnumeratorIDisposableIncfObBhcfStByStDicfUnique"
+)
+
 FORBIDDEN_ENDPOINT_TOKENS = (
     "unfrozen",
     "forms.gle",
@@ -45,8 +54,10 @@ FORBIDDEN_DIRECT_SYMBOLS = (
     '"SendReport"',
     '"Method_Private_Void_PDM_0"',
     '"vbc"',
+    f'"{CURRENT_SUBMIT_HANDLER_NATIVE_NAME}"',
     '"NativeMethodInfoPtr_Method_Private_Void_PDM_0"',
     '"Hex.UI.Reports.BhBugReportScreen+cul"',
+    f'"{CURRENT_SUBMIT_ITERATOR_OBFUSCATED_NAME}"',
     '"NativeFieldInfoPtr_field_Private_Int32_0"',
     '"NativeFieldInfoPtr_field_Public_BhBugReportScreen_0"',
     '"NativeFieldInfoPtr_field_Private_String_0"',
@@ -469,14 +480,22 @@ def validate_probe_options(relay: Path) -> list[str]:
 def validate_current_report_symbol_scopes(plugin: Path) -> list[str]:
     repo = plugin.parent.parent
     remap_dir = repo / "tools" / "port_current" / "remap"
-    report_path = remap_dir / "current_scopes_25672315.json"
-    overrides_path = remap_dir / "current_scope_overrides_25672315.json"
     generated_path = plugin / "GameSymbolsCurrent.g.cs"
     errors: list[str] = []
     try:
+        generated = generated_path.read_text(encoding="utf-8-sig")
+    except OSError as exc:
+        return [f"current report symbol scopes: cannot read generated scopes: {exc}"]
+    # The build the plugin rewrites for (CurrentScopes.BuildId) names every scope input checked below.
+    build_match = re.search(r'internal const string BuildId = "(\d+)";', generated)
+    if build_match is None:
+        return [f"current report symbol scopes: {generated_path.name} declares no CurrentScopes.BuildId"]
+    build_id = build_match.group(1)
+    report_path = remap_dir / f"current_scopes_{build_id}.json"
+    overrides_path = remap_dir / f"current_scope_overrides_{build_id}.json"
+    try:
         report = json.loads(report_path.read_text(encoding="utf-8"))
         overrides = json.loads(overrides_path.read_text(encoding="utf-8"))
-        generated = generated_path.read_text(encoding="utf-8-sig")
     except (OSError, ValueError) as exc:
         return [f"current report symbol scopes: cannot read generated scope evidence: {exc}"]
 
@@ -486,7 +505,7 @@ def validate_current_report_symbol_scopes(plugin: Path) -> list[str]:
         ),
         "ModBugReporting.CurrentSubmitIteratorMoveNext": (
             ["MoveNext"],
-            ["Hex.UI.Reports.BhBugReportScreen+ObjectNPrivateSealedIEnumerator1ObjectIEnumeratorIDisposableIncdObBhcdStByStDicdUnique"],
+            [CURRENT_SUBMIT_ITERATOR_TYPE],
             "Method",
         ),
         "ModBugReporting.CurrentScreenClose": (
@@ -494,24 +513,24 @@ def validate_current_report_symbol_scopes(plugin: Path) -> list[str]:
         ),
         "ModBugReporting.CurrentSubmitIteratorState": (
             ["NativeFieldInfoPtr_field_Private_Int32_0", "field_Private_Int32_0"],
-            ["Hex.UI.Reports.BhBugReportScreen+ObjectNPrivateSealedIEnumerator1ObjectIEnumeratorIDisposableIncdObBhcdStByStDicdUnique"],
+            [CURRENT_SUBMIT_ITERATOR_TYPE],
             "Field",
         ),
         "ModBugReporting.CurrentSubmitIteratorOwner": (
             ["NativeFieldInfoPtr_field_Public_BhBugReportScreen_0", "field_Public_BhBugReportScreen_0"],
-            ["Hex.UI.Reports.BhBugReportScreen+ObjectNPrivateSealedIEnumerator1ObjectIEnumeratorIDisposableIncdObBhcdStByStDicdUnique"],
+            [CURRENT_SUBMIT_ITERATOR_TYPE],
             "Field",
         ),
         "ModBugReporting.CurrentSubmitIteratorStrings": (
             [name for index in range(5) for name in (
                 f"NativeFieldInfoPtr_field_Private_String_{index}", f"field_Private_String_{index}",
             )],
-            ["Hex.UI.Reports.BhBugReportScreen+ObjectNPrivateSealedIEnumerator1ObjectIEnumeratorIDisposableIncdObBhcdStByStDicdUnique"],
+            [CURRENT_SUBMIT_ITERATOR_TYPE],
             "Fields",
         ),
         "ModBugReporting.CurrentSubmitIteratorNativeLog": (
             ["NativeFieldInfoPtr_field_Private_Il2CppStructArray_1_Byte_0", "field_Private_Il2CppStructArray_1_Byte_0"],
-            ["Hex.UI.Reports.BhBugReportScreen+ObjectNPrivateSealedIEnumerator1ObjectIEnumeratorIDisposableIncdObBhcdStByStDicdUnique"],
+            [CURRENT_SUBMIT_ITERATOR_TYPE],
             "Field",
         ),
         "ModBugReporting.CurrentSubmitIteratorAttachments": (
@@ -519,14 +538,14 @@ def validate_current_report_symbol_scopes(plugin: Path) -> list[str]:
                 "NativeFieldInfoPtr_field_Private_Dictionary_2_String_Il2CppStructArray_1_Byte_0",
                 "field_Private_Dictionary_2_String_Il2CppStructArray_1_Byte_0",
             ],
-            ["Hex.UI.Reports.BhBugReportScreen+ObjectNPrivateSealedIEnumerator1ObjectIEnumeratorIDisposableIncdObBhcdStByStDicdUnique"],
+            [CURRENT_SUBMIT_ITERATOR_TYPE],
             "Field",
         ),
     }
-    if report.get("schema") != "game_symbols_current_scopes.v1" or str(report.get("buildId")) != "25672315":
-        return ["current report symbol scopes: report schema/build id is not the current 25672315 contract"]
-    if overrides.get("schema") != "game_symbols_current_scope_overrides.v1" or str(overrides.get("buildId")) != "25672315":
-        return ["current report symbol scopes: override schema/build id is not the current 25672315 contract"]
+    if report.get("schema") != "game_symbols_current_scopes.v1" or str(report.get("buildId")) != build_id:
+        return [f"current report symbol scopes: report schema/build id is not the current {build_id} contract"]
+    if overrides.get("schema") != "game_symbols_current_scope_overrides.v1" or str(overrides.get("buildId")) != build_id:
+        return [f"current report symbol scopes: override schema/build id is not the current {build_id} contract"]
 
     declarations = report.get("declarations")
     override_symbols = overrides.get("symbols")
@@ -553,8 +572,8 @@ def validate_current_report_symbol_scopes(plugin: Path) -> list[str]:
         if generated_call not in generated:
             errors.append(f"current report symbol scopes: generated code is missing {scope_kind} mapping for {symbol}")
 
-    remap_path = remap_dir / "game_symbols_remap_25672315.json"
-    evidence_path = remap_dir / "current_scope_evidence_25672315.json"
+    remap_path = remap_dir / f"game_symbols_remap_{build_id}.json"
+    evidence_path = remap_dir / f"current_scope_evidence_{build_id}.json"
     try:
         remap_hash = hashlib.sha256(remap_path.read_bytes()).hexdigest().upper()
         evidence_hash = hashlib.sha256(evidence_path.read_bytes()).hexdigest().upper()
@@ -563,8 +582,8 @@ def validate_current_report_symbol_scopes(plugin: Path) -> list[str]:
     if report.get("remapSha256") != remap_hash or report.get("evidenceSha256") != evidence_hash:
         errors.append("current report symbol scopes: generated report does not match its current remap/evidence inputs")
     if (
-        f"Source remap: tools/port_current/remap/game_symbols_remap_25672315.json sha256 {remap_hash}" not in generated
-        or f"Evidence:     tools/port_current/remap/current_scope_evidence_25672315.json sha256 {evidence_hash}" not in generated
+        f"Source remap: tools/port_current/remap/{remap_path.name} sha256 {remap_hash}" not in generated
+        or f"Evidence:     tools/port_current/remap/{evidence_path.name} sha256 {evidence_hash}" not in generated
     ):
         errors.append("current report symbol scopes: generated C# does not match its remap/evidence hashes")
     return errors
@@ -586,6 +605,7 @@ def validate_submission_surface(plugin: Path, redirect: str, game_symbols: str) 
     else:
         for requirement, token in (
             ("current build pin", "GameBuild.Kind != GameBuildKind.Current"),
+            ("current build id from the generated scopes", "GameSymbols.CurrentScopes.BuildId"),
             ("protected native sink requirement", "ModBugReportRedirect.State != ModBugReportRedirect.GuardState.Redirecting"),
             ("strict transport endpoint preflight", "ModBugReportTransport.IsEndpoint(cfg.ModBugReportingEndpoint)"),
             ("Submit callback MethodSymbol through GameSymbols", "GameSymbols.ModBugReporting.CurrentSubmitHandler"),
@@ -645,10 +665,12 @@ def validate_submission_surface(plugin: Path, redirect: str, game_symbols: str) 
 
     submit = method_body(source, r"private static bool SubmitPrefix\(")
     if submit is None or not all(token in submit for token in (
-        "_authorizedSubmitPointer == pointer", "_consentChecked = false", "_includeScreenshotChecked = false",
-        "_visible = true", "return false;"
+        # 2026-11-11 user decision (report 00a6878d, confirmed in chat): pressing the game's Submit is the consent and
+        # sends at once, without a separate agreement window and never with a screenshot.
+        "_authorizedSubmitPointer == pointer", "new Transaction(", ", false, pointer)",
+        "_visible = true", "return true;"
     )):
-        errors.append("mod report UI: native Submit must pause behind a fresh, unchecked consent screen")
+        errors.append("mod report UI: native Submit must start exactly one screenshot-free transaction for that form")
     consent = method_body(source, r"private static void DrawConsentContents\(")
     if consent is None or not all(token in consent for token in (
         "_consentChecked = GUILayout.Toggle", "_cfg?.ModBugReportingIncludeScreenshot == true",
@@ -764,9 +786,9 @@ def validate_submission_surface(plugin: Path, redirect: str, game_symbols: str) 
         errors.append("mod report UI: abandoning a retained retry must be an explicit, warned user decision")
     if abandon is None or not all(token in abandon for token in (
         "FlowState.Unconfirmed", "RecordAbandoned(transaction)", "_transaction = null", "_consentScreen = screen",
-        "_consentChecked = false", "_includeScreenshotChecked = false", "NativePointer(screen) != screenPointer"
+        "_includeScreenshotChecked = false", "NativePointer(screen) != screenPointer", "ConfirmConsent();"
     )):
-        errors.append("mod report UI: a new report may replace an unconfirmed retry only after explicit abandon and a fresh consent")
+        errors.append("mod report UI: a new report may replace an unconfirmed retry only after explicit abandon")
     if submit is not None and not all(token in submit for token in (
         "_pendingNewReportScreen = __instance", "_pendingNewReportScreenPointer = pointer",
         "_abandonRetryConfirmation = true", "_transaction.State == FlowState.Unconfirmed"
@@ -795,10 +817,10 @@ def validate_submission_surface(plugin: Path, redirect: str, game_symbols: str) 
             errors.append(f"ModBugReportSubmission.cs: game symbol {token} must be centralized in GameSymbols.ModBugReporting")
     normalized_symbols = re.sub(r"\s+", " ", game_symbols)
     if not all(token in normalized_symbols for token in (
-        'CurrentSubmitHandlerNativeName = "vbc"',
+        f'CurrentSubmitHandlerNativeName = "{CURRENT_SUBMIT_HANDLER_NATIVE_NAME}"',
         'CurrentSubmitHandlerMethodInfoFieldName = "NativeMethodInfoPtr_Method_Private_Void_PDM_0"',
-        'CurrentSubmitIteratorObfuscatedName = "Hex.UI.Reports.BhBugReportScreen+cul"',
-        'CurrentSubmitIteratorManagedTypeFullName = "Hex.UI.Reports.BhBugReportScreen+ObjectNPrivateSealedIEnumerator1ObjectIEnumeratorIDisposableIncdObBhcdStByStDicdUnique"',
+        f'CurrentSubmitIteratorObfuscatedName = "{CURRENT_SUBMIT_ITERATOR_OBFUSCATED_NAME}"',
+        f'CurrentSubmitIteratorManagedTypeFullName = "{CURRENT_SUBMIT_ITERATOR_TYPE}"',
         '"bugReport.submit.handler", "Method_Private_Void_PDM_0"',
         '"bugReport.submit.iterator.moveNext", "MoveNext"',
         '"bugReport.screen.close", "Close"',

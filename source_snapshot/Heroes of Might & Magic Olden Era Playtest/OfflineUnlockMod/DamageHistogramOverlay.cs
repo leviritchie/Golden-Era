@@ -447,6 +447,9 @@ public sealed class DamageHistogramGuiBehaviour : MonoBehaviour
 
 	private const string ChartCaptionAttack = "Kills (Attack)";
 	private const string ChartCaptionRetal = "Deaths (Retaliation)";
+	// The luck share is built from BattleBalanceConfig.luckDistribution; the anti-streak luck accumulator makes the
+	// next strike's odds depend on earlier rolls, so the gold share is the average, not this strike's chance.
+	private const string ChartCaptionLuckSuffix = " - luck: average odds";
 
 	/// <summary>Cached for drawing captured forecast-panel sprites. Do not use <see cref="Graphics.DrawTexture"/> in OnGUI — it can access-violate under IL2CPP when combined with the IMGUI state machine.</summary>
 	private static Material s_gameFrameUnlit;
@@ -1857,6 +1860,10 @@ public sealed class DamageHistogramGuiBehaviour : MonoBehaviour
 		var captionText = retaliation
 			? ChartCaptionRetal
 			: ChartCaptionAttack;
+		if (snap.LuckSharePerBin != null)
+		{
+			captionText += ChartCaptionLuckSuffix;
+		}
 		var capH = 2.5f * scale + Mathf.Max(12f, chartCaptionStyle.fontSize * 1.25f);
 		var inner = new Rect(
 			chartArea.x + pad,

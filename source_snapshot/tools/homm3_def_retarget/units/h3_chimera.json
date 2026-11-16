@@ -772,7 +772,7 @@
   "adoptWeights": "nearest"
  },
  "glbPatch": {
-  "reason": "lane B 2026-10-11 authenticity: Move - leaping gallop as the DEF (body level, legs reaching fore and aft, gathered at mid-stride), was a trot; Hitted - crouch with the wing panels twisted open flat; Death - the capture's roll onto its back removed, the body sinks belly-down with legs folded and neck forward, a low heap as in the DEF; stretchRelax on the re-posed creases. Deferred: Hitted snake-tail fling (QTail bend tears the skin, needs weight surgery)",
+  "reason": "lane B 2026-10-11 authenticity: Move - leaping gallop as the DEF (body level, legs reaching fore and aft, gathered at mid-stride), was a trot; Hitted - crouch with the wing panels twisted open flat; Death - the capture's roll onto its back removed, the body sinks belly-down with legs folded and neck forward, a low heap as in the DEF; stretchRelax on the re-posed creases. Deferred: Hitted snake-tail fling (QTail bend tears the skin, needs weight surgery); 2026-11-09 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate; clip pass 2026-11-11 (user-approved candidate): AttackFront re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyTranslations",
@@ -793,6 +793,28 @@
     "sha256": "9f4af1e9b61b4da59aa4d0adfc524e31de5790e5106e3b7140a2cc6d77d9c9bf"
    },
    {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chimera_flight_weights.json",
+    "sha256": "23240950c1794c701f2e0262b4e2e27f1cec798107f0c41d6907ba48c1654d28"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": false,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chimera_flight_tracks.json",
+    "sha256": "623476f881d42103343d6f8f6365d105d829cf5eb764715288379ce8b54ea054"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chimera_clip_repair_weights.json",
+    "note": "clip pass repair: 287 fallback-skinned (Hips) snake horn/fin/spike vertices re-skinned onto QTail_*",
+    "sha256": "3a80939fca627d092e2799202ac85976e889ab0fe6ee1dc5c09a586fd2c3ca54"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_chimera_clip_tracks.json",
+    "sha256": "70d22b2dcfcb66233b2c36c3c4533db093c06b2aefc31cf47dfb1cb6c0975ced"
+   },
+   {
     "op": "stretchRelax",
     "clips": [
      "Unit_Move",
@@ -804,6 +826,18 @@
     "smooth": 0.0,
     "maxMove": 0.08,
     "note": "crease of the re-posed joints"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "flyer flight: crease of the spread wings"
    }
   ]
  }

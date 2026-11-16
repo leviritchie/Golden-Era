@@ -1014,5 +1014,27 @@
  "moveLowPass": {
   "highHarmonicKeep": 0.7,
   "reason": "cove_slice_v1 freeze refused flyer_articulation after the flight_life rebuild: Move jitter 0.40 of p90 above 4 Hz (worst WingR_04, cap 0.35). Sweep starts at the lightest k."
+ },
+ "glbPatch": {
+  "reason": "2026-11-10 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate",
+  "ops": [
+   {
+    "op": "cutFaces",
+    "note": "flyer flight: triangles that weld the wing sheet to the flank / legs / tail (tool cut_far / cut_pairs)",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_halcyon_flight_face_cut.json",
+    "sha256": "f994629be785eb5bb3abc308a276024c10a443ebae8ae136b17b499914c163fd"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_halcyon_flight_weights.json",
+    "sha256": "148c53561b56da57b304549499c34ee76e3fca8cfd49802081747d039d875209"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": false,
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_halcyon_flight_tracks.json",
+    "sha256": "3f3a310b00d0750d287dd8995f34b794be438b2cf0fb9f1fbf170cd0aaca3124"
+   }
+  ]
  }
 }

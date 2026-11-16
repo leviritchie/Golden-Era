@@ -707,7 +707,7 @@
   ]
  },
  "glbPatch": {
-  "reason": "authenticity lane-A 2026-10-10: rig adds the articulated whip (inferno_whipchain Whip_00..09 on the traced whip, pit fiend values; it was one rigid RightHand prop) and floaterFix moves left-hand / fist / whip slivers off the thighs and deletes the 99-vert Meshy fork of the whip hooked in behind the feet. keyRotations (half offset, applied twice), same g12/g05 DEF as the pit fiend (spec ported): AttackFront whip raised f1, swung overhead f2, lashed straight out in front f3-f4, looped back f5, trailing f6, with the right arm overhead and a spine lunge; Death arms and whip flung up f1-f3 then a hunched heap with the whip laid out in front. diffuseWeights smooths the Hips/UpLeg/Spine crotch mix so the fold does not tear; stretchRelax evens the re-baked whip and fold edges. || floorPlant (lane B 2026-10-10): feet planted at MoveStart/MoveEnd/Hitted/AttackFront keys (Hips rises by the smaller sink, other leg two-bone IK'd), Hitted key 0 lowered onto the floor so grounding's entry no longer sinks key 1, whip lifted off the floor at MoveStart/MoveEnd/Hitted keys and Hitted/AttackFront in-betweens (AttackFront whip was 70 cm under the floor between keys 6-7)",
+  "reason": "authenticity lane-A 2026-10-10: rig adds the articulated whip (inferno_whipchain Whip_00..09 on the traced whip, pit fiend values; it was one rigid RightHand prop) and floaterFix moves left-hand / fist / whip slivers off the thighs and deletes the 99-vert Meshy fork of the whip hooked in behind the feet. keyRotations (half offset, applied twice), same g12/g05 DEF as the pit fiend (spec ported): AttackFront whip raised f1, swung overhead f2, lashed straight out in front f3-f4, looped back f5, trailing f6, with the right arm overhead and a spine lunge; Death arms and whip flung up f1-f3 then a hunched heap with the whip laid out in front. diffuseWeights smooths the Hips/UpLeg/Spine crotch mix so the fold does not tear; stretchRelax evens the re-baked whip and fold edges. || floorPlant (lane B 2026-10-10): feet planted at MoveStart/MoveEnd/Hitted/AttackFront keys (Hips rises by the smaller sink, other leg two-bone IK'd), Hitted key 0 lowered onto the floor so grounding's entry no longer sinks key 1, whip lifted off the floor at MoveStart/MoveEnd/Hitted keys and Hitted/AttackFront in-betweens (AttackFront whip was 70 cm under the floor between keys 6-7); 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "diffuseWeights",
@@ -773,6 +773,16 @@
     "regrid": true
    },
    {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_pit_spawn_move_tracks.json",
+    "sha256": "525934024dc3ec08cab9cddf4179cb0b83c5c0e90e4b8b91721c315b621ed926"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_pit_spawn_clip_tracks.json",
+    "sha256": "172b7cec9dd2a74b3c9e3b73a5838cfe5add1e03995105f61dd21d4cbb6b44a0"
+   },
+   {
     "op": "stretchRelax",
     "clips": [
      "Unit_AttackFront",
@@ -782,6 +792,19 @@
     "iterations": 1500,
     "smooth": 0.4,
     "maxMove": 0.08
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "unit pass: tear gate on the replaced Move clips"
    }
   ]
  }

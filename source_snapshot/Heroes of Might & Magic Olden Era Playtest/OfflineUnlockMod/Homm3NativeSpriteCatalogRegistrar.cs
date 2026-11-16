@@ -74,6 +74,41 @@ internal static class Homm3NativeSpriteCatalogRegistrar
 		}
 	}
 
+	/// <summary>
+	/// Asks the native sprite resolver itself for <paramref name="key"/> (vanilla unit portraits are keyed by unit sid there;
+	/// custom keys go through the mod's resolver prefix as usual). Null-safe and logs nothing on a miss.
+	/// </summary>
+	internal static bool TryResolveNative(string key, out Sprite sprite)
+	{
+		sprite = null;
+		if (string.IsNullOrWhiteSpace(key))
+			return false;
+		try
+		{
+			object resolver;
+			lock (SyncRoot)
+			{
+				if (!TryGetResolverInstance(out resolver, out _))
+					return false;
+			}
+			var method = resolver.GetType().GetMethod(
+				ResolverMethodName,
+				BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+				null,
+				new[] { typeof(string) },
+				null);
+			if (method == null || method.ReturnType != typeof(Sprite))
+				return false;
+			sprite = method.Invoke(resolver, new object[] { key.Trim() }) as Sprite;
+			return sprite;
+		}
+		catch
+		{
+			sprite = null;
+			return false;
+		}
+	}
+
 	private static bool TryGetSpriteCatalog(out object catalog, out string reason)
 	{
 		catalog = null;

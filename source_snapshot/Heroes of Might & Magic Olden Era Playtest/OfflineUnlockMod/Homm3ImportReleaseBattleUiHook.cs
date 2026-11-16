@@ -39,6 +39,7 @@ internal static class Homm3ImportReleaseBattleUiHook
 	private static int _loggedBattleResultUnitPortrait;
 	private static int _loggedBattleResultHeroPortrait;
 	private static int _loggedBattleResultHeroPortraitMiss;
+	private static bool _loggedBattleResultPanelsUnresolved;
 	private static int _loggedBattleResultHeroDiag;
 	private static int _loggedBattleHeroOverlayHidden;
 	private static int _loggedBattleHeroImageTree;
@@ -302,7 +303,10 @@ internal static class Homm3ImportReleaseBattleUiHook
 			if (method == null || method.ReturnType != typeof(void))
 				continue;
 			var ps = method.GetParameters();
-			var shapeBind = ps.Length == 2
+			// Golden Era: (string heroSid, TypeResultHero). 26615913 appends an Int32 (surrender gold) to the same
+			// bind (zne); with the 2-arg-only shape nothing was patched and the result screen kept the prefab's
+			// default (vanilla Necromancer) sprite whenever the native icon lookup missed a custom hero.
+			var shapeBind = (ps.Length == 2 || (ps.Length == 3 && ps[2].ParameterType == typeof(int)))
 			                && ps[0].ParameterType == typeof(string)
 			                && string.Equals(ps[1].ParameterType.Name, "TypeResultHero", StringComparison.Ordinal);
 			var legacyRefresh = Array.IndexOf(GameSymbols.BattleUi.ResultHeroPortraitRefresh.NameHints, method.Name) >= 0;
@@ -375,7 +379,7 @@ internal static class Homm3ImportReleaseBattleUiHook
 					continue;
 				try
 				{
-					h.Patch(method, postfix: new HarmonyMethod(typeof(Homm3ImportReleaseBattleUiHook), nameof(PostfixSelectedUnitViewBind)));
+					h.Patch(method, postfix: new HarmonyMethod(typeof(Homm3ImportReleaseBattleUiHook), nameof(PostfixSelectedUnitViewBind)), finalizer: new HarmonyMethod(typeof(Homm3ImportReleaseBattleUiHook), nameof(FinalizerSelectedUnitViewBind)));
 					patched++;
 					if (_loggedPatch < 12)
 					{
@@ -405,7 +409,7 @@ internal static class Homm3ImportReleaseBattleUiHook
 		{
 			try
 			{
-				h.Patch(shapeMatch, postfix: new HarmonyMethod(typeof(Homm3ImportReleaseBattleUiHook), nameof(PostfixSelectedUnitViewBind)));
+				h.Patch(shapeMatch, postfix: new HarmonyMethod(typeof(Homm3ImportReleaseBattleUiHook), nameof(PostfixSelectedUnitViewBind)), finalizer: new HarmonyMethod(typeof(Homm3ImportReleaseBattleUiHook), nameof(FinalizerSelectedUnitViewBind)));
 				patched++;
 				if (_loggedPatch < 12)
 				{
@@ -449,16 +453,8 @@ internal static class Homm3ImportReleaseBattleUiHook
 		}
 
 		var patched = 0;
-		foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+		foreach (var method in SelectTurnViewPoolUnitGetters(type, log))
 		{
-			if (method == null || method.ReturnType != typeof(BhTurnView))
-				continue;
-			if (method.IsSpecialName || method.Name.StartsWith("get_", StringComparison.Ordinal) || method.Name.StartsWith("set_", StringComparison.Ordinal))
-				continue;
-			if (method.ContainsGenericParameters || method.IsGenericMethod || method.IsGenericMethodDefinition)
-				continue;
-			if (method.GetParameters().Length != 0)
-				continue;
 			try
 			{
 				h.Patch(method, postfix: new HarmonyMethod(typeof(Homm3ImportReleaseBattleUiHook), nameof(PostfixTurnViewPoolGet)));
@@ -475,6 +471,48 @@ internal static class Homm3ImportReleaseBattleUiHook
 			}
 		}
 		return patched;
+	}
+
+	// Zero-arg BhTurnView getters of BhTurnViewsPool, unit-view ones only. Golden Era has one public pool getter and
+	// one private create (CreateItem). 26297049 added a separator pool: two public getters and two private creates,
+	// declared unit-first (static native evidence: Public_PDM_0 pops the first view pool and Private_PDM_0
+	// instantiates prefab; the _1 twins pop the second pool and instantiate separatorPrefab). By shape, the unit
+	// getter is the lowest metadata token per visibility; more than two per visibility is an unknown layout and
+	// that visibility is skipped (fail closed) instead of portrait-patching separator views.
+	private static List<MethodInfo> SelectTurnViewPoolUnitGetters(Type type, ManualLogSource log)
+	{
+		var byVisibility = new Dictionary<bool, List<MethodInfo>>();
+		foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+		{
+			if (method == null || method.ReturnType != typeof(BhTurnView))
+				continue;
+			if (method.IsSpecialName || method.Name.StartsWith("get_", StringComparison.Ordinal) || method.Name.StartsWith("set_", StringComparison.Ordinal))
+				continue;
+			if (method.ContainsGenericParameters || method.IsGenericMethod || method.IsGenericMethodDefinition)
+				continue;
+			if (method.GetParameters().Length != 0)
+				continue;
+			if (!byVisibility.TryGetValue(method.IsPublic, out var list))
+				byVisibility[method.IsPublic] = list = new List<MethodInfo>();
+			list.Add(method);
+		}
+
+		var selected = new List<MethodInfo>();
+		foreach (var pair in byVisibility)
+		{
+			var candidates = pair.Value;
+			candidates.Sort((a, b) => a.MetadataToken.CompareTo(b.MetadataToken));
+			if (candidates.Count > 2)
+			{
+				log?.LogWarning("Homm3Import release battle UI: " + candidates.Count + " " + (pair.Key ? "public" : "private")
+					+ " zero-arg BhTurnView getters on BhTurnViewsPool (expected 1, or 2 with the separator twin); those are not patched.");
+				continue;
+			}
+			selected.Add(candidates[0]);
+			if (candidates.Count == 2 && _loggedPatch < 12)
+				log?.LogInfo("Homm3Import release battle UI: turn-view pool separator getter " + FormatMethod(candidates[1]) + " left unpatched.");
+		}
+		return selected;
 	}
 
 	private static IEnumerable<Type> FindTurnItemTypes()
@@ -878,6 +916,38 @@ internal static class Homm3ImportReleaseBattleUiHook
 		{
 			LogMiss("selected unit view portrait failed: " + ex.Message);
 		}
+	}
+
+	// 26615913 decomp (biwl @ 1822bc2c0): the binder starts with portraitSprites[sid] (Dictionary get_Item) and throws
+	// KeyNotFoundException for imported units before touching the view. Il2CppInterop logs and swallows that at the
+	// trampoline, so the postfix never ran. Swallow only that miss here and apply the imported portrait instead.
+	private static int _selectedUnitViewKeyMissLogged;
+
+	private static Exception FinalizerSelectedUnitViewBind(
+		Exception __exception,
+		BhSelectedUnitView __instance,
+		[HarmonyArgument(0)] string sid,
+		MethodBase __originalMethod)
+	{
+		if (__exception == null)
+			return null;
+		var text = __exception.ToString();
+		if (text.IndexOf("KeyNotFoundException", StringComparison.Ordinal) < 0)
+			return __exception;
+		try
+		{
+			ApplyUnitPortrait(ResolveSelectedUnitViewPic(__instance, "SelectedUnitView.Bind.miss"), sid, __instance, FormatMethod(__originalMethod));
+		}
+		catch (Exception ex)
+		{
+			LogMiss("selected unit view portrait (native key miss) failed: " + ex.Message);
+		}
+		if (_selectedUnitViewKeyMissLogged < 4)
+		{
+			_selectedUnitViewKeyMissLogged++;
+			Plugin.LogSource?.LogInfo("Homm3Import release battle UI: selected-unit portrait table has no '" + sid + "'; native lookup skipped, imported portrait applied.");
+		}
+		return null;
 	}
 
 	private static void PostfixTurnViewUpdate(
@@ -2850,14 +2920,51 @@ internal static class Homm3ImportReleaseBattleUiHook
 	{
 		if (portrait == null || type == null || !portraitImage)
 			return 0;
+		if (GameBuild.Kind == GameBuildKind.Current)
+			return HideCurrentBattleResultHeroPlaceholderOverlays(portrait, type, portraitImage, source);
 		var hidden = 0;
-		var lossPanel = TryGetMemberValue(portrait, type, "panelLossHero") as Image;
-		var deathSprite = TryGetMemberValue(portrait, type, "deathHero") as Sprite;
-		var escapeSprite = TryGetMemberValue(portrait, type, "escapeHero") as Sprite;
+		var lossPanel = TryGetFirstMemberValue(portrait, type, GameSymbols.BattleUi.HeroPortraitLossPanelImageField) as Image;
+		// A null value on a resolved field is a portrait without a loss overlay; only a missing declaration is a symbol miss.
+		if (!lossPanel && !HasAnyMember(type, GameSymbols.BattleUi.HeroPortraitLossPanelImageField))
+			LogBattleResultPanelsUnresolvedOnce("loss overlay " + string.Join("/", GameSymbols.BattleUi.HeroPortraitLossPanelImageField));
+		var deathSprite = TryGetFirstMemberValue(portrait, type, GameSymbols.BattleUi.HeroPortraitDeathSpriteField) as Sprite;
+		var escapeSprite = TryGetFirstMemberValue(portrait, type, GameSymbols.BattleUi.HeroPortraitEscapeSpriteField) as Sprite;
 		if (ShouldHideLossPanelOverlay(lossPanel, portraitImage, deathSprite, escapeSprite))
 			hidden += DisableHeroPlaceholderOverlay(lossPanel, source + ".panelLossHero");
 		hidden += HideSiblingHeroPlaceholderOverlays(portraitImage, source);
 		return hidden;
+	}
+
+	// 26297049 replaced the loss overlay Image with one GameObject per result (death, escaped, surrender) that vanilla
+	// toggles itself, so there is no loss overlay to hide. The sibling placeholder sweep must leave those result panels
+	// alone; when none of them resolves the sweep is skipped (fail closed) rather than risk hiding a result marker.
+	private static int HideCurrentBattleResultHeroPlaceholderOverlays(object portrait, Type type, Image portraitImage, string source)
+	{
+		var resultPanels = new[]
+		{
+			TryGetFirstMemberValue(portrait, type, GameSymbols.BattleUi.HeroPortraitDeathPanelField) as GameObject,
+			TryGetFirstMemberValue(portrait, type, GameSymbols.BattleUi.HeroPortraitEscapedPanelField) as GameObject,
+			TryGetFirstMemberValue(portrait, type, GameSymbols.BattleUi.HeroPortraitSurrenderPanelField) as GameObject,
+		};
+		if (!resultPanels[0] && !resultPanels[1] && !resultPanels[2])
+		{
+			LogBattleResultPanelsUnresolvedOnce("result panels "
+				+ string.Join("/", GameSymbols.BattleUi.HeroPortraitDeathPanelField) + ", "
+				+ string.Join("/", GameSymbols.BattleUi.HeroPortraitEscapedPanelField) + ", "
+				+ string.Join("/", GameSymbols.BattleUi.HeroPortraitSurrenderPanelField)
+				+ "; sibling placeholder sweep skipped");
+			return 0;
+		}
+		return HideSiblingHeroPlaceholderOverlays(portraitImage, source, resultPanels);
+	}
+
+	private static void LogBattleResultPanelsUnresolvedOnce(string what)
+	{
+		if (_loggedBattleResultPanelsUnresolved)
+			return;
+		_loggedBattleResultPanelsUnresolved = true;
+		Plugin.LogSource?.LogWarning("Homm3Import release battle UI: BhHeroPortrait " + what + " unresolved on "
+			+ GameBuild.Describe() + "; custom hero result portraits keep the native overlays.");
 	}
 
 	private static bool ShouldHideLossPanelOverlay(Image overlay, Image portraitImage, Sprite deathSprite, Sprite escapeSprite)
@@ -2870,7 +2977,7 @@ internal static class Homm3ImportReleaseBattleUiHook
 		return overlay.enabled;
 	}
 
-	private static int HideSiblingHeroPlaceholderOverlays(Image portraitImage, string source)
+	private static int HideSiblingHeroPlaceholderOverlays(Image portraitImage, string source, GameObject[] keepPanels = null)
 	{
 		if (!portraitImage || !portraitImage.transform)
 			return 0;
@@ -2884,12 +2991,27 @@ internal static class Homm3ImportReleaseBattleUiHook
 			for (var i = 0; i < images.Length; i++)
 			{
 				var image = images[i];
+				if (IsUnderAnyPanel(image, keepPanels))
+					continue;
 				if (ShouldHideHeroPlaceholderOverlay(image, portraitImage))
 					hidden += DisableHeroPlaceholderOverlay(image, source + ".sibling-placeholder");
 			}
 		}
 		catch { }
 		return hidden;
+	}
+
+	private static bool IsUnderAnyPanel(Image image, GameObject[] panels)
+	{
+		if (panels == null || !image)
+			return false;
+		for (var i = 0; i < panels.Length; i++)
+		{
+			var panel = panels[i];
+			if (panel && image.transform.IsChildOf(panel.transform))
+				return true;
+		}
+		return false;
 	}
 
 	private static bool ShouldHideHeroPlaceholderOverlay(Image overlay, Image portraitImage)
@@ -3134,6 +3256,31 @@ internal static class Homm3ImportReleaseBattleUiHook
 			catch { }
 		}
 		return null;
+	}
+
+	private static bool HasAnyMember(Type type, string[] names)
+	{
+		if (type == null || names == null)
+			return false;
+		const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
+		for (var current = type; current != null; current = current.BaseType)
+		{
+			for (var i = 0; i < names.Length; i++)
+			{
+				if (string.IsNullOrWhiteSpace(names[i]))
+					continue;
+				try
+				{
+					if (current.GetField(names[i], flags) != null || current.GetProperty(names[i], flags) != null)
+						return true;
+				}
+				catch (AmbiguousMatchException)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private static object TryGetFirstMemberValue(object obj, Type type, string[] names)

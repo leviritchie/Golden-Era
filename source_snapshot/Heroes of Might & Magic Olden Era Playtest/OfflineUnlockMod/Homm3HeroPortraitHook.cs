@@ -262,7 +262,67 @@ internal static class Homm3HeroPortraitHook
 		count += PatchBySymbol(h, log, typeName, GameSymbols.ImportVisuals.CityHeroWithPartyRefresh, Array.Empty<Type>(), nameof(PostfixCityHeroWithPartyRelease), false);
 		if (required && count == 0)
 			missing.Add(typeName + "." + FirstHint(GameSymbols.ImportVisuals.CityHeroWithPartyRefresh));
+		count += PatchCityHeroWithPartyHeroBind(h, log, typeName);
 		return count;
+	}
+
+	// The hero itself is bound by the (Int32 heroId, Boolean) method (26615913 wtg): it stores the session hero and
+	// calls heroView's (hero, bool) bind. The town screen calls the unit-panel bind (wtf) BEFORE it, so the
+	// CityHeroWithPartyRefresh postfix alone saw the previous hero, or none on the first visit, and hid the card.
+	// Matched by shape (one void (Int32, Boolean) method on this type in Golden Era and 26615913); optional.
+	private static int PatchCityHeroWithPartyHeroBind(Harmony h, ManualLogSource log, string typeName)
+	{
+		var type = FindRuntimeType(typeName);
+		if (type == null)
+			return 0;
+		MethodInfo match = null;
+		foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+		{
+			if (method.ReturnType != typeof(void) || method.IsSpecialName || method.ContainsGenericParameters)
+				continue;
+			var ps = method.GetParameters();
+			if (ps.Length != 2 || ps[0].ParameterType != typeof(int) || ps[1].ParameterType != typeof(bool))
+				continue;
+			if (match != null)
+			{
+				log?.LogWarning("Homm3HeroPortrait: " + typeName + " has more than one (Int32, Boolean) bind; hero-bind postfix skipped.");
+				return 0;
+			}
+			match = method;
+		}
+		if (match == null)
+		{
+			log?.LogWarning("Homm3HeroPortrait: " + typeName + " (Int32, Boolean) hero bind not found; town hero portrait may lag one visit.");
+			return 0;
+		}
+		try
+		{
+			h.Patch(match, postfix: new HarmonyMethod(typeof(Homm3HeroPortraitHook), nameof(PostfixCityHeroWithPartyHeroBind)));
+			log?.LogInfo("Homm3HeroPortrait: surface postfix registered on " + typeName + "." + match.Name + "(Int32, Boolean) hero bind.");
+			return 1;
+		}
+		catch (Exception ex)
+		{
+			log?.LogWarning("Homm3HeroPortrait: " + typeName + " hero bind patch failed: " + ex.Message);
+			return 0;
+		}
+	}
+
+	private static void PostfixCityHeroWithPartyHeroBind(object __instance, MethodBase __originalMethod)
+	{
+		var source = FormatMethod(__originalMethod);
+		LogHeroPortraitBinderHit("town-unit-card-hero-portrait", source, __instance, __instance);
+		if (__instance is BhHeroWithPartyCityView view)
+			TryApplyCityHeroPortrait(view, source, freshHeroBind: true);
+	}
+
+	private static void LogCityHeroOutcome(string source, string outcome, string heroSid, Image image)
+	{
+		if (_loggedCityHeroOutcome >= 12)
+			return;
+		_loggedCityHeroOutcome++;
+		Plugin.LogSource?.LogInfo("Homm3HeroPortrait: town hero card " + (outcome ?? "?")
+			+ " hero='" + (heroSid ?? "?") + "' image='" + (image ? image.name : "?") + "' via " + (source ?? "?") + ".");
 	}
 
 	private static Type ResolveHeroConfigType()
@@ -1185,7 +1245,10 @@ internal static class Homm3HeroPortraitHook
 				return;
 			var iconKey = ResolveStrongholdHeroIconKey(hero);
 			if (iconKey == null)
+			{
+				ForgetHeroSurface(view);
 				return;
+			}
 			if (!Homm3ImportPortraitSpriteCache.TryGetOrCreateStrongholdHeroSpriteForIconKey(iconKey, out var sprite) || !sprite)
 				return;
 
@@ -1230,7 +1293,10 @@ internal static class Homm3HeroPortraitHook
 		{
 			var iconKey = ResolveStrongholdHeroIconKey(heroOrConfig);
 			if (iconKey == null)
+			{
+				ForgetHeroSurface(view);
 				return;
+			}
 			if (!Homm3ImportPortraitSpriteCache.TryGetOrCreateStrongholdHeroSpriteForIconKey(iconKey, out var sprite) || !sprite)
 				return;
 			RememberHeroIdentityTree(heroOrConfig, iconKey);
@@ -1307,7 +1373,7 @@ internal static class Homm3HeroPortraitHook
 		}
 	}
 
-	private static string ResolveStrongholdHeroIconKey(object heroOrConfig)
+	internal static string ResolveStrongholdHeroIconKey(object heroOrConfig)
 	{
 		var seen = new HashSet<int>();
 		return ResolveStrongholdHeroIconKey(heroOrConfig, seen, 0);
@@ -1597,29 +1663,79 @@ internal static class Homm3HeroPortraitHook
 	/// <summary>
 	/// Find the "PORTRAIT" Image on city garrison hero view.
 	/// </summary>
-	private static void TryApplyCityHeroPortrait(BhHeroWithPartyCityView view, string source)
+	private static int _loggedCityHeroOutcome;
+
+	private static void TryApplyCityHeroPortrait(BhHeroWithPartyCityView view, string source, bool freshHeroBind = false)
 	{
 		if (view == null)
 			return;
 
 		try
 		{
+			var heroObject = TryGetFirstMemberValue(view, GameSymbols.ImportVisuals.CityHeroWithPartySessionHeroFields);
+			var heroView = TryGetFirstMemberValue(view, GameSymbols.ImportVisuals.CityHeroWithPartyTooltipFields);
+			var via = "field";
 			var heroSid = ResolveHeroSidFromCityViewFieldOnly(view);
+			// Right after the native hero bind the wrapper is fresh, so its getters are authoritative: a custom hero keys
+			// here, and a vanilla hero must drop whatever a previous custom hero left remembered on the reused heroView
+			// (sweep 2026-11-13: a remembered custom portrait was painted onto a later vanilla hero).
+			if (string.IsNullOrEmpty(heroSid) && freshHeroBind && heroObject != null)
+			{
+				heroSid = ResolveStrongholdHeroIconKey(heroObject);
+				via = "hero-getters";
+				if (string.IsNullOrEmpty(heroSid) && heroView != null)
+					ForgetHeroSurface(heroView);
+			}
+			// 26615913: the field-only walk misses the session-hero wrapper's key, so fall back to what the heroView's
+			// own (wrapper, bool) bind postfix remembered, then, only right after the native hero bind stored a fresh
+			// wrapper, to the getter-based resolver the HUD uses (getters on stale wrappers are the old crash risk).
+			if (string.IsNullOrEmpty(heroSid) && heroObject != null && heroView != null
+			    && _strongholdHeroIconKeyByView.TryGetValue(GetStableObjectKey(heroView), out var remembered)
+			    && IsStrongholdHeroIconKey(remembered))
+			{
+				heroSid = remembered.Trim();
+				via = "heroView-remembered";
+			}
 			if (string.IsNullOrEmpty(heroSid))
 			{
-				ClearCityHeroPortraitOverrideIfStale(view, source);
+				// A bound hero we cannot key is a vanilla hero (or an unresolved custom one): leave the native card alone.
+				// Only an empty slot clears our override and hides the card.
+				if (heroObject == null)
+				{
+					ClearCityHeroPortraitOverrideIfStale(view, source);
+				}
+				else
+				{
+					// Sweep 2026-11-13: an empty slot hid the card; a vanilla hero arriving next must show it again, and must
+					// not keep the custom override sprite a previous custom hero left on the reused image.
+					SetCityHeroWithPartyVisible(view, true, source, "vanilla-hero");
+					DropCustomPortraitOverride(FindCityHeroPortraitImageFieldOnly(view) ?? (heroView != null ? FindBestPortraitImage(heroView) : null));
+				}
+				LogCityHeroOutcome(source, heroObject != null ? "bound-hero-unkeyed" : "no-hero", null, null);
 				return;
 			}
 			SetCityHeroWithPartyVisible(view, true, source, "current-hero");
 
 			var portraitImage = FindCityHeroPortraitImageFieldOnly(view);
+			if (portraitImage == null && heroView != null)
+				portraitImage = FindBestPortraitImage(heroView);
 			if (portraitImage == null)
+			{
+				LogCityHeroOutcome(source, "no-image via " + via, heroSid, null);
 				return;
+			}
 
 			if (TryGetHeroPortraitSprite(heroSid, out var sprite) && sprite)
 			{
 				ApplySpriteToImage(portraitImage, sprite);
+				if (heroView != null)
+					RememberHeroSurface(heroView, heroSid, source + ".heroView");
 				LogReplace(source, heroSid, sprite);
+				LogCityHeroOutcome(source, "applied via " + via, heroSid, portraitImage);
+			}
+			else
+			{
+				LogCityHeroOutcome(source, "no-sprite via " + via, heroSid, portraitImage);
 			}
 		}
 		catch (Exception ex)
@@ -1683,6 +1799,15 @@ internal static class Homm3HeroPortraitHook
 		}
 	}
 
+	/// <summary>Removes our custom hero override sprite so the native (vanilla) portrait shows again.</summary>
+	private static void DropCustomPortraitOverride(Image image)
+	{
+		if (image == null || !IsCustomHeroPortraitSprite(image.overrideSprite))
+			return;
+		image.overrideSprite = null;
+		Homm3UiCardDiagnostics.Log("town-unit-card-hero-portrait", "hero-portrait-override-dropped", "reason='vanilla-hero'", limit: 24);
+	}
+
 	private static void ForgetHeroSurface(object view)
 	{
 		if (view == null)
@@ -1727,7 +1852,7 @@ internal static class Homm3HeroPortraitHook
 		return null;
 	}
 
-	private static bool TryGetHeroPortraitSprite(string heroSid, out Sprite sprite)
+	internal static bool TryGetHeroPortraitSprite(string heroSid, out Sprite sprite)
 	{
 		sprite = null;
 		if (string.IsNullOrWhiteSpace(heroSid))

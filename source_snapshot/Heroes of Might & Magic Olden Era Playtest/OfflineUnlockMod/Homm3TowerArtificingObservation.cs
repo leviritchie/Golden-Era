@@ -10,9 +10,10 @@ using Il2CppInterop.Runtime.InteropTypes;
 namespace OfflineUnlockMod;
 
 /// <summary>
-/// Tower Artificing observation, attribution scope (docs/homm3_tower_artificing.md, "Observation replaces
-/// Transcribe"). Diagnostic only: it records nothing in any schematic book and spends no rolls, so it runs
-/// while policy.enabled is false, gated by policy.observation.diagnostics (ObservationDiagnostics).
+/// Tower Artificing per-event passive attribution probe (docs/homm3_tower_artificing.md). Diagnostic only: the
+/// book is written by the battle-end enemy-army roll in Homm3TowerArtificingRuntime (policy.observation.rule
+/// battle_end_enemy_army); this probe records nothing, spends no rolls and is gated by
+/// policy.observation.diagnostics (ObservationDiagnostics).
 ///
 /// Scope: a prefix / postfix pair on the native passive action runner's trigger handler (ejh.befp). The
 /// handler checks conditions, gathers targets and casts with the runner as castSource, so effects raised

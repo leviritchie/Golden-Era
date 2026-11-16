@@ -13,60 +13,30 @@ using LogicHero = Hex.Session.Logic.Hero;
 namespace OfflineUnlockMod;
 
 /// <summary>
-/// HoMM3 Dungeon faction-skill battle slice (Captives era; file name kept for config/plugin
-/// compatibility). Draconic Dominion's flee-recruit redirect and Diplomacy pricing were removed
-/// 2026-10-12: the escape click is now owned only by <see cref="Homm3DungeonCaptivesRuntime"/>.
-/// This hook keeps the Imperial Menagerie / Terror Mandate morale adjustment at BattleLogic.Init
-/// (prefix applies, finalizer restores) and the TransferHero -> Data.Hero index it needs, and
-/// exposes the faction-skill rank / subskill / unit-config helpers shared with Captives.
+/// HoMM3 Dungeon faction-skill battle slice (file name kept for config/plugin compatibility). War Captives
+/// (2026-11-14) retired the Imperial Menagerie morale and Terror Mandate enemy-morale effects that lived here.
+/// This hook keeps the TransferHero -> Data.Hero index and exposes the faction-skill
+/// rank / subskill / unit-config helpers shared with War Captives, Factory, Inferno and Necromancy.
+/// The escape click is native: no Dungeon code patches it.
 /// </summary>
 internal static class Homm3DungeonDraconicDominionHook
 {
 	private const string DungeonFactionSkillSid = "skill_faction_homm3_dungeon";
-	private const string ImperialMenagerieSubSkillSid = "sub_skill_faction_homm3_dungeon_draconic_diplomacy_3";
-	private const string TerrorMandateSubSkillSid = "sub_skill_faction_homm3_dungeon_draconic_diplomacy_4";
 
 	private static bool _registered;
 	private static ManualLogSource _log;
 	private static Type _configRootType;
 	private static MemberInfo _battleLogicHeroDataMember;
 	private static object _unitLogicConfigTable;
-	private static int _loggedMoraleApplications;
-	private static int _loggedMoraleDiagnostics;
-	private static int _loggedMoraleSideDiagnostics;
 	private static int _loggedResolveSkips;
 	private static readonly Dictionary<string, Hero> TransferHeroDataHeroesBySid = new(StringComparer.Ordinal);
-
-	private sealed class BattleTransferHeroMoraleState
-	{
-		internal readonly List<HeroStatMoraleSnapshot> Snapshots = new();
-	}
-
-	private sealed class HeroStatMoraleSnapshot
-	{
-		internal HeroStat Stat;
-		internal int OriginalMorale;
-	}
-
-	private readonly struct MoraleAdjustment
-	{
-		internal MoraleAdjustment(int imperialMenagerieBonus, int terrorMandatePenalty)
-		{
-			ImperialMenagerieBonus = imperialMenagerieBonus;
-			TerrorMandatePenalty = terrorMandatePenalty;
-		}
-
-		internal int ImperialMenagerieBonus { get; }
-		internal int TerrorMandatePenalty { get; }
-		internal int Delta => ImperialMenagerieBonus - TerrorMandatePenalty;
-	}
 
 	internal static void RegisterRequiredReleaseSafeSlice(Harmony harmony, ManualLogSource log)
 	{
 		if (_registered)
 			return;
 		if (harmony == null)
-			throw new InvalidOperationException("Harmony was not initialized before Dungeon Captives morale registration.");
+			throw new InvalidOperationException("Harmony was not initialized before the Dungeon battle slice registration.");
 
 		_log = log;
 		var hexAssembly = typeof(Hero).Assembly;
@@ -75,37 +45,18 @@ internal static class Homm3DungeonDraconicDominionHook
 			typeof(Hero),
 			GameSymbols.DraconicDominion.BattleLogicHeroDataHeroMembers,
 			"homm3.dungeon.draconicDominion.battleLogicHero.dataHero");
-		var battleLogicType = ResolveRequiredTypeByHint(
-			hexAssembly,
-			GameSymbols.DraconicDominion.BattleLogicTypeHints,
-			GameSymbols.DraconicDominion.BattleLogicTypeId);
-		var transferBattleType = ResolveRequiredTypeByName(
-			hexAssembly,
-			GameSymbols.DraconicDominion.TransferBattleTypeName,
-			GameSymbols.DraconicDominion.TransferBattleTypeId);
-		var battleLogicInitMethod = ResolveRequiredExactNamedMethod(
-			battleLogicType,
-			typeof(void),
-			new[] { typeof(int), transferBattleType, typeof(bool), typeof(bool) },
-			"Init",
-			GameSymbols.DraconicDominion.BattleLogicInit.Id,
-			m => !m.IsStatic);
 		var transferHeroBuilderMethods = ResolveRequiredTransferHeroDataHeroBuilderMethods();
 
-		PatchPrefix(harmony, battleLogicInitMethod, nameof(PrefixBattleLogicInitMorale));
-		PatchFinalizer(harmony, battleLogicInitMethod, nameof(FinalizerBattleLogicInitMorale));
 		foreach (var transferHeroBuilderMethod in transferHeroBuilderMethods)
 			PatchPostfix(harmony, transferHeroBuilderMethod, nameof(PostfixTransferHeroFromDataHero));
 
 		_registered = true;
 		_log?.LogInfo(
-			"HoMM3 Dungeon Captives morale: registered Imperial Menagerie / Terror Mandate on "
-			+ FormatMethod(battleLogicInitMethod)
-			+ ", battle-logic-hero-data="
+			"HoMM3 Dungeon battle slice: battle-logic-hero-data="
 			+ _battleLogicHeroDataMember.Name
 			+ ", transfer-hero-builders="
 			+ transferHeroBuilderMethods.Count
-			+ ". Draconic Dominion flee recruitment removed; the escape click belongs to Homm3DungeonCaptivesRuntime.");
+			+ ". Imperial Menagerie / Terror Mandate morale retired for War Captives; escape click native.");
 	}
 
 	private static void PostfixTransferHeroFromDataHero(LogicHero __0, TransferHero __result)
@@ -114,261 +65,6 @@ internal static class Homm3DungeonDraconicDominionHook
 		// overload (becd): GameMember.TypesEquivalent matches by short name "Hero", and an
 		// IL2CPP Harmony postfix on that overload stack-overflows portrait clicks.
 		IndexTransferHeroDataHero(ResolveDataHero(__0), __result);
-	}
-	private static void PrefixBattleLogicInitMorale(object __1, ref BattleTransferHeroMoraleState __state)
-	{
-		__state = null;
-		try
-		{
-			__state = ApplyBattleLogicInitMorale(__1);
-		}
-		catch (Exception ex)
-		{
-			LogResolveSkip("battle logic init morale adjustment failed: " + ex.Message);
-		}
-	}
-
-	private static Exception FinalizerBattleLogicInitMorale(Exception __exception, BattleTransferHeroMoraleState __state)
-	{
-		RestoreBattleLogicInitMorale(__state);
-		return __exception;
-	}
-
-	private static BattleTransferHeroMoraleState ApplyBattleLogicInitMorale(object transferBattle)
-	{
-		if (transferBattle == null)
-			return null;
-
-		var sidesValue = ReadMember(transferBattle, GameSymbols.DraconicDominion.TransferBattleSidesMembers);
-		var transferSides = EnumerateObjects(sidesValue).Where(side => side != null).ToList();
-		if (transferSides.Count == 0)
-			return null;
-
-		var state = new BattleTransferHeroMoraleState();
-		foreach (var transferSide in transferSides)
-		{
-			var adjustment = ResolveTransferBattleMoraleAdjustment(transferSide, transferSides);
-			LogMoraleSideDiagnostic(transferSide, transferSides, adjustment);
-			if (adjustment.Delta == 0)
-			{
-				LogMoraleDiagnosticIfRelevant(transferSide, transferSides, adjustment);
-				continue;
-			}
-
-			var changed = 0;
-			foreach (var heroStat in ResolveTransferSideHeroStats(transferSide))
-			{
-				if (heroStat == null)
-					continue;
-				RecordHeroStatMoraleSnapshot(state, heroStat);
-				heroStat.moral += adjustment.Delta;
-				changed++;
-			}
-
-			if (changed == 0)
-			{
-				LogMoraleDiagnosticIfRelevant(transferSide, transferSides, adjustment);
-				continue;
-			}
-
-			if (_loggedMoraleApplications++ < 12)
-			{
-				_log?.LogInfo(
-					"HoMM3 Dungeon Captives morale: applied "
-					+ FormatSigned(adjustment.Delta)
-					+ " transfer-battle hero Morale before battle init (Imperial Menagerie +"
-					+ adjustment.ImperialMenagerieBonus
-					+ ", Terror Mandate -"
-					+ adjustment.TerrorMandatePenalty
-					+ ", heroStats="
-					+ changed
-					+ ").");
-			}
-		}
-
-		return state.Snapshots.Count == 0 ? null : state;
-	}
-
-	private static void RestoreBattleLogicInitMorale(BattleTransferHeroMoraleState state)
-	{
-		if (state == null)
-			return;
-		foreach (var snapshot in state.Snapshots)
-		{
-			if (snapshot?.Stat == null)
-				continue;
-			snapshot.Stat.moral = snapshot.OriginalMorale;
-		}
-	}
-
-	private static void RecordHeroStatMoraleSnapshot(BattleTransferHeroMoraleState state, HeroStat heroStat)
-	{
-		if (state == null || heroStat == null)
-			return;
-		if (state.Snapshots.Any(snapshot => ReferenceEquals(snapshot.Stat, heroStat)))
-			return;
-		state.Snapshots.Add(new HeroStatMoraleSnapshot
-		{
-			Stat = heroStat,
-			OriginalMorale = heroStat.moral
-		});
-	}
-
-	private static MoraleAdjustment ResolveTransferBattleMoraleAdjustment(object transferSide, IReadOnlyList<object> allTransferSides)
-	{
-		var imperialBonus = ResolveTransferSideMixedFactionMoraleMagnitude(transferSide, ImperialMenagerieSubSkillSid);
-		var terrorPenalty = ResolveTerrorMandateMoralePenalty(transferSide, allTransferSides);
-		return new MoraleAdjustment(imperialBonus, terrorPenalty);
-	}
-
-	private static IEnumerable<HeroStat> ResolveTransferSideHeroStats(object transferSide)
-	{
-		var seen = new HashSet<HeroStat>();
-		var transferHero = ResolveTransferHero(transferSide);
-		if (transferHero == null)
-			yield break;
-		if (transferHero.heroStat != null && seen.Add(transferHero.heroStat))
-			yield return transferHero.heroStat;
-		if (transferHero.heroStatUnclamped != null && seen.Add(transferHero.heroStatUnclamped))
-			yield return transferHero.heroStatUnclamped;
-	}
-
-	private static int ResolveTransferSideMixedFactionMoraleMagnitude(object transferSide, string subSkillSid)
-	{
-		var dataHero = ResolveTransferSideDataHero(transferSide);
-		if (dataHero == null || !HasHeroSubSkill(dataHero, subSkillSid))
-			return 0;
-
-		var distinctFactions = CountDistinctTransferSideFactions(transferSide);
-		return distinctFactions > 1 ? distinctFactions - 1 : 0;
-	}
-
-	private static int ResolveTerrorMandateMoralePenalty(object ownTransferSide, IReadOnlyList<object> allTransferSides)
-	{
-		var penalty = 0;
-		foreach (var enemyTransferSide in ResolveEnemyTransferSides(ownTransferSide, allTransferSides))
-			penalty += ResolveTransferSideMixedFactionMoraleMagnitude(enemyTransferSide, TerrorMandateSubSkillSid);
-		return penalty;
-	}
-
-	private static IEnumerable<object> ResolveEnemyTransferSides(object ownTransferSide, IReadOnlyList<object> allTransferSides)
-	{
-		foreach (var candidate in allTransferSides ?? Array.Empty<object>())
-		{
-			if (candidate == null || ReferenceEquals(candidate, ownTransferSide))
-				continue;
-			yield return candidate;
-		}
-	}
-
-	private static int CountDistinctTransferSideFactions(object transferSide)
-	{
-		var factions = new HashSet<string>(StringComparer.Ordinal);
-		foreach (var transferUnit in ResolveTransferSideUnits(transferSide))
-		{
-			var faction = ResolveTransferUnitFaction(transferUnit);
-			if (!string.IsNullOrWhiteSpace(faction))
-				factions.Add(faction);
-		}
-		return factions.Count;
-	}
-
-	private static void LogMoraleDiagnosticIfRelevant(object transferSide, IReadOnlyList<object> allTransferSides, MoraleAdjustment adjustment)
-	{
-		var ownHasImperial = TransferSideHeroHasSubSkill(transferSide, ImperialMenagerieSubSkillSid);
-		var enemyHasTerror = ResolveEnemyTransferSides(transferSide, allTransferSides).Any(side => TransferSideHeroHasSubSkill(side, TerrorMandateSubSkillSid));
-		if (!ownHasImperial && !enemyHasTerror)
-			return;
-		if (_loggedMoraleDiagnostics++ >= 8)
-			return;
-
-		_log?.LogInfo(
-			"HoMM3 Dungeon Captives morale diagnostic: transfer-battle init found relevant subskill but no applied delta; ownFactions="
-			+ CountDistinctTransferSideFactions(transferSide)
-			+ ", enemyFactions="
-			+ string.Join(",", ResolveEnemyTransferSides(transferSide, allTransferSides).Select(side => CountDistinctTransferSideFactions(side).ToString()))
-			+ ", imperial=+"
-			+ adjustment.ImperialMenagerieBonus
-			+ ", terror=-"
-			+ adjustment.TerrorMandatePenalty
-			+ ".");
-	}
-
-	private static void LogMoraleSideDiagnostic(object transferSide, IReadOnlyList<object> allTransferSides, MoraleAdjustment adjustment)
-	{
-		if (_loggedMoraleSideDiagnostics++ >= 12)
-			return;
-
-		var dataHero = ResolveTransferSideDataHero(transferSide);
-		var heroStats = ResolveTransferSideHeroStats(transferSide).ToList();
-		var ownFactions = DescribeTransferSideFactions(transferSide);
-		var enemyFactions = string.Join("/", ResolveEnemyTransferSides(transferSide, allTransferSides).Select(DescribeTransferSideFactions));
-		var heroStatMorale = string.Join(",", heroStats.Select(stat => stat?.moral.ToString() ?? "?"));
-		var heroSid = NormalizeSid(TryReadString(dataHero, GameSymbols.DraconicDominion.DataHeroSidMembers)) ?? "?";
-		var transferHeroSid = NormalizeSid(ResolveTransferHero(transferSide)?.configId) ?? "?";
-		var skills = dataHero == null ? "none" : DescribeHeroSkills(dataHero);
-
-		_log?.LogInfo(
-			"HoMM3 Dungeon Captives morale side diagnostic: hero="
-			+ heroSid
-			+ " transferHero="
-			+ transferHeroSid
-			+ " skills="
-			+ skills
-			+ " ownFactions="
-			+ ownFactions
-			+ " enemyFactions="
-			+ (string.IsNullOrWhiteSpace(enemyFactions) ? "none" : enemyFactions)
-			+ " imperial=+"
-			+ adjustment.ImperialMenagerieBonus
-			+ " terror=-"
-			+ adjustment.TerrorMandatePenalty
-			+ " delta="
-			+ FormatSigned(adjustment.Delta)
-			+ " heroStats="
-			+ heroStats.Count
-			+ " morale="
-			+ (string.IsNullOrWhiteSpace(heroStatMorale) ? "none" : heroStatMorale)
-			+ ".");
-	}
-
-	private static string DescribeHeroSkills(Hero dataHero)
-	{
-		var skills = ReadMember(dataHero, GameSymbols.DraconicDominion.DataHeroSkillsMembers);
-		var skillList = ReadMember(skills, GameSymbols.DraconicDominion.HeroSkillsListMembers);
-		var parts = new List<string>();
-		foreach (var heroSkill in EnumerateObjects(skillList))
-		{
-			var skillSid = NormalizeSid(TryReadString(heroSkill, GameSymbols.DraconicDominion.HeroSkillSidMembers)) ?? "?";
-			var level = ReadInt(heroSkill, GameSymbols.DraconicDominion.HeroSkillLevelMembers);
-			var subSkills = ReadMember(heroSkill, GameSymbols.DraconicDominion.HeroSkillSubSkillsMembers);
-			var subSkillSids = EnumerateObjects(subSkills)
-				.Select(subSkill => NormalizeSid(TryReadString(subSkill, GameSymbols.DraconicDominion.HeroSubSkillSidMembers)) ?? "?")
-				.Take(6)
-				.ToList();
-			parts.Add(skillSid + ":" + level + "[" + (subSkillSids.Count == 0 ? "-" : string.Join("|", subSkillSids)) + "]");
-			if (parts.Count >= 10)
-				break;
-		}
-		return parts.Count == 0 ? "none" : string.Join(";", parts);
-	}
-
-	private static string DescribeTransferSideFactions(object transferSide)
-	{
-		var factions = new HashSet<string>(StringComparer.Ordinal);
-		foreach (var transferUnit in ResolveTransferSideUnits(transferSide))
-		{
-			var faction = ResolveTransferUnitFaction(transferUnit);
-			if (!string.IsNullOrWhiteSpace(faction))
-				factions.Add(faction);
-		}
-		return factions.Count == 0 ? "none" : string.Join(",", factions.OrderBy(value => value, StringComparer.Ordinal));
-	}
-
-	private static bool TransferSideHeroHasSubSkill(object transferSide, string subSkillSid)
-	{
-		var dataHero = ResolveTransferSideDataHero(transferSide);
-		return dataHero != null && HasHeroSubSkill(dataHero, subSkillSid);
 	}
 
 	private static TransferSide ResolveTransferSide(object transferSide)
@@ -383,6 +79,15 @@ internal static class Homm3DungeonDraconicDominionHook
 
 	private static Hero ResolveTransferSideDataHero(object transferSide)
 	{
+		// Prefer the side's live battle LogicHero (as Bulwark/Castle do). The configId-keyed index is only
+		// filled by the TransferHero builder postfix, which may not fire, and is never cleared across
+		// loads, so a same-sid hero from an earlier session could otherwise supply stale subskills.
+		if (ResolveTransferSide(transferSide)?.logicHero is LogicHero sideLogicHero)
+		{
+			var fromLogic = ResolveDataHero(sideLogicHero);
+			if (fromLogic != null)
+				return fromLogic;
+		}
 		var transferHero = ResolveTransferHero(transferSide);
 		if (transferHero == null)
 			return null;
@@ -511,14 +216,20 @@ internal static class Homm3DungeonDraconicDominionHook
 	/// <summary>Faction-skill rank 1..3 of skill_faction_homm3_dungeon, 0 when absent. Shared with Captives.</summary>
 	internal static int ResolveFactionSkillRank(Hero dataHero)
 	{
-		if (dataHero == null)
+		return ResolveHeroSkillRank(dataHero, DungeonFactionSkillSid);
+	}
+
+	/// <summary>Rank 1..3 of any hero skill sid, 0 when the hero does not have it.</summary>
+	internal static int ResolveHeroSkillRank(Hero dataHero, string skillSid)
+	{
+		if (dataHero == null || string.IsNullOrWhiteSpace(skillSid))
 			return 0;
 		var skills = ReadMember(dataHero, GameSymbols.DraconicDominion.DataHeroSkillsMembers);
 		var skillList = ReadMember(skills, GameSymbols.DraconicDominion.HeroSkillsListMembers);
 		foreach (var heroSkill in EnumerateObjects(skillList))
 		{
 			var sid = NormalizeSid(TryReadString(heroSkill, GameSymbols.DraconicDominion.HeroSkillSidMembers));
-			if (!string.Equals(sid, DungeonFactionSkillSid, StringComparison.Ordinal))
+			if (!string.Equals(sid, skillSid, StringComparison.Ordinal))
 				continue;
 			var level = ReadInt(heroSkill, GameSymbols.DraconicDominion.HeroSkillLevelMembers);
 			return Math.Max(1, Math.Min(3, level));
@@ -538,10 +249,41 @@ internal static class Homm3DungeonDraconicDominionHook
 			foreach (var subSkill in EnumerateObjects(subSkills))
 			{
 				var sid = NormalizeSid(TryReadString(subSkill, GameSymbols.DraconicDominion.HeroSubSkillSidMembers));
-				if (string.Equals(sid, subSkillSid, StringComparison.Ordinal))
+				if (string.Equals(sid, subSkillSid, StringComparison.Ordinal) && IsSubSkillActive(subSkill))
 					return true;
 			}
 		}
+		return false;
+	}
+
+	/// <summary>
+	/// Data.HeroSkill.subSkills lists every subskill the skill offers, picked or not (a rank-1 hero carries all six
+	/// rows). Only rows whose status is not Inactive were actually chosen (or are granted temporarily).
+	/// </summary>
+	/// <summary>Diagnostic: "sid=status" for every subskill row of every hero skill whose rows mention the prefix.</summary>
+	internal static string DescribeSubSkillRows(Hero dataHero, string sidPrefix)
+	{
+		var parts = new List<string>();
+		var skills = ReadMember(dataHero, GameSymbols.DraconicDominion.DataHeroSkillsMembers);
+		var skillList = ReadMember(skills, GameSymbols.DraconicDominion.HeroSkillsListMembers);
+		foreach (var heroSkill in EnumerateObjects(skillList))
+		{
+			var subSkills = ReadMember(heroSkill, GameSymbols.DraconicDominion.HeroSkillSubSkillsMembers);
+			foreach (var subSkill in EnumerateObjects(subSkills))
+			{
+				var sid = NormalizeSid(TryReadString(subSkill, GameSymbols.DraconicDominion.HeroSubSkillSidMembers));
+				if (sid == null || !sid.StartsWith(sidPrefix, StringComparison.Ordinal))
+					continue;
+				parts.Add(sid.Substring(sidPrefix.Length) + "=" + (subSkill is Hex.Session.Data.HeroSubSkill row ? row.status + "/L" + row.level : "?"));
+			}
+		}
+		return string.Join(", ", parts);
+	}
+
+	internal static bool IsSubSkillActive(object subSkill)
+	{
+		if (subSkill is Hex.Session.Data.HeroSubSkill row)
+			return row.status != Hex.Session.Data.HeroSubSkill.EStatus.Inactive;
 		return false;
 	}
 
@@ -740,12 +482,15 @@ internal static class Homm3DungeonDraconicDominionHook
 		harmony.Patch(target, postfix: new HarmonyMethod(postfix));
 	}
 
-	private static void PatchPrefix(Harmony harmony, MethodInfo target, string prefixName)
+	private static void PatchPrefix(Harmony harmony, MethodInfo target, string prefixName, int priority = -1)
 	{
 		var prefix = AccessTools.Method(typeof(Homm3DungeonDraconicDominionHook), prefixName);
 		if (!GameMember.IsHarmonyPatchCompatible(target, prefix, out var reason))
 			throw new MissingMethodException(target.DeclaringType?.FullName ?? "?", target.Name + " incompatible prefix: " + reason);
-		harmony.Patch(target, prefix: new HarmonyMethod(prefix));
+		var harmonyPrefix = new HarmonyMethod(prefix);
+		if (priority >= 0)
+			harmonyPrefix.priority = priority;
+		harmony.Patch(target, prefix: harmonyPrefix);
 	}
 
 	private static void PatchFinalizer(Harmony harmony, MethodInfo target, string finalizerName)

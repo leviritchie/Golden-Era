@@ -542,7 +542,9 @@ internal static class DeobfInteropCompat
 				continue;
 			for (var j = 0; j < names.Length; j++)
 			{
-				if (!TryGetFieldValue(current, out var nested, names[j]) || nested == null)
+				// Il2CppInterop exposes native fields as same-named properties: field-only lookups miss them.
+				object nested;
+				if (!(TryGetFieldValue(current, out nested, names[j]) || (!fieldOnly && TryGetPropertyValue(current, out nested, names[j]))) || nested == null)
 					continue;
 				var nestedKey = ResolveSessionHeroPortraitKey(nested, seen, depth + 1, fieldOnly);
 				if (!string.IsNullOrWhiteSpace(nestedKey))
@@ -551,6 +553,31 @@ internal static class DeobfInteropCompat
 		}
 
 		return null;
+	}
+
+	private static bool TryGetPropertyValue(object target, out object value, string name)
+	{
+		value = null;
+		if (target == null || string.IsNullOrWhiteSpace(name))
+			return false;
+		for (var cur = target.GetType(); cur != null && cur != typeof(object); cur = cur.BaseType)
+		{
+			PropertyInfo property = null;
+			try { property = cur.GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly); }
+			catch { property = null; }
+			if (property == null || property.GetMethod == null || property.GetIndexParameters().Length != 0)
+				continue;
+			try
+			{
+				value = property.GetValue(target);
+				return value != null;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+		return false;
 	}
 
 	private static bool TryGetFieldValue(object target, out object value, params string[] names)

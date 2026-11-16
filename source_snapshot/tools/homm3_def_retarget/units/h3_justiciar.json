@@ -762,7 +762,7 @@
  },
  "sourceMesh": "artifacts/homm3_mesh_surgery/h3_justiciar_sliver.glb",
  "glbPatch": {
-  "reason": "2026-10-08 authenticity pass (lane B): the justiciar and champion DEFs are one HoMM3 animation set, so the champion's passed per-DEF-frame pose fit (commit 0c692ae845: head forward, AttackFront rear then low long lunge with the lance couched, Death rider thrown on castle_riderthrow) is transferred by world-space retarget (arms swapped and mirrored: the justiciar, like its DEF, holds the lance in the right hand) as local rotation offsets plus root translations. Numpy patch lane. 2026-10-08 Move carriage (lane B check flags): the fitted Move reclined the rider about 20 deg with the head tipped back (looking at the sky, unlike the upright DEF rider); a stacked keyRotations table (h3_justiciar_head_rot.json) aims the Spine-Neck line back to the rider's Idle carriage and the head level looking ahead.",
+  "reason": "2026-10-08 authenticity pass (lane B): the justiciar and champion DEFs are one HoMM3 animation set, so the champion's passed per-DEF-frame pose fit (commit 0c692ae845: head forward, AttackFront rear then low long lunge with the lance couched, Death rider thrown on castle_riderthrow) is transferred by world-space retarget (arms swapped and mirrored: the justiciar, like its DEF, holds the lance in the right hand) as local rotation offsets plus root translations. Numpy patch lane. 2026-10-08 Move carriage (lane B check flags): the fitted Move reclined the rider about 20 deg with the head tipped back (looking at the sky, unlike the upright DEF rider); a stacked keyRotations table (h3_justiciar_head_rot.json) aims the Spine-Neck line back to the rider's Idle carriage and the head level looking ahead.; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass",
   "ops": [
    {
     "op": "keyRotations",
@@ -783,6 +783,11 @@
     "sha256": "cf8bb60619291992ca969f9450bec29fb69f3d4013e6650b0ab62f06500cf9d2",
     "regrid": true,
     "note": "Move carriage: rider torso back to the Idle Spine-Neck line and head level looking ahead, stacked on the DEF pose fit"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_justiciar_move_tracks.json",
+    "sha256": "d5c575d5a92f70b665c7d768facb87f9e5435151e875bf6ef2fd4fb0d72904ef"
    }
   ]
  }

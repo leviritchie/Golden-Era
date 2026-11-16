@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using Hex.Configs;
 using UnityEngine;
 
@@ -12,56 +13,103 @@ namespace OfflineUnlockMod;
 internal static class LuckCritMixture
 {
 	private static bool _loggedCritUnresolved;
+	private static bool _loggedLuckDistributionUnresolved;
+	private static bool _loggedDisableCritsUnresolved;
 
-	private static readonly float[] DefaultLuckDistribution = { 0.05f, 0.1f, 0.15f, 0.2f, 0.25f };
+	/// <summary>
+	/// Fallback when the live table cannot be read: <c>BattleBalanceConfig.luckDistribution</c> is
+	/// [0.08, 0.16, 0.24, 0.32, 0.40] in the 25672315 and 26297049 cores (port 26297049 lane finding
+	/// plugin_behavior:luck-histogram-stale-distribution; the old 0.05..0.25 table was never the game's).
+	/// </summary>
+	internal static readonly float[] DefaultLuckDistribution = { 0.08f, 0.16f, 0.24f, 0.32f, 0.40f };
 
+	/// <summary>
+	/// Live luck table from the config root's <see cref="BattleBalanceConfig"/>. 26297049 added the
+	/// LuckRandomness anti-streak accumulator, which makes each strike's odds depend on the previous rolls, so the
+	/// histogram's luck split built from this table is the average odds, not the next strike's.
+	/// </summary>
 	internal static float[] CopyLuckDistributionOrDefault()
 	{
 		try
 		{
-			var elw = Type.GetType("elw, Assembly-CSharp");
-			var balance = elw?.GetMethod("mma")?.Invoke(null, Array.Empty<object>());
-			var il2Arr = balance?.GetType().GetField("luckDistribution")?.GetValue(balance)
-			             ?? balance?.GetType().GetProperty("luckDistribution")?.GetValue(balance, null);
-			var lengthObj = il2Arr?.GetType().GetProperty("Length")?.GetValue(il2Arr, null);
-			var length = lengthObj == null ? 0 : Convert.ToInt32(lengthObj);
-			if (il2Arr == null || length == 0)
+			var balance = ReadConfigRootMember<BattleBalanceConfig>();
+			var table = balance?.luckDistribution;
+			if (table != null && table.Length > 0)
 			{
-				return (float[])DefaultLuckDistribution.Clone();
+				var copy = new float[table.Length];
+				for (var i = 0; i < copy.Length; i++)
+					copy[i] = table[i];
+				return copy;
 			}
-
-			var getItem = il2Arr.GetType().GetMethod("get_Item", new[] { typeof(int) });
-			var n = length;
-			var copy = new float[n];
-			for (var i = 0; i < n; i++)
-			{
-				copy[i] = Convert.ToSingle(getItem.Invoke(il2Arr, new object[] { i }));
-			}
-
-			return copy;
+			LogOnce(ref _loggedLuckDistributionUnresolved, "LuckCritMixture: BattleBalanceConfig.luckDistribution unresolved on "
+				+ GameBuild.Describe() + "; using the 0.08..0.40 fallback table.");
 		}
-		catch
+		catch (Exception ex)
 		{
-			return (float[])DefaultLuckDistribution.Clone();
+			LogOnce(ref _loggedLuckDistributionUnresolved, "LuckCritMixture: BattleBalanceConfig.luckDistribution read failed ("
+				+ ex.GetType().Name + ": " + ex.Message + "); using the 0.08..0.40 fallback table.");
 		}
+		return (float[])DefaultLuckDistribution.Clone();
 	}
 
 	internal static bool TryGetDisableCrits()
 	{
 		try
 		{
-			var cje = Type.GetType("cje, Assembly-CSharp");
-			var root = cje?.GetMethod("rjc")?.Invoke(null, Array.Empty<object>());
-			var bwsj = root?.GetType().GetField("bwtx")?.GetValue(root)
-			           ?? root?.GetType().GetProperty("bwtx")?.GetValue(root, null);
-			var disableCrits = bwsj?.GetType().GetField("disableCrits")?.GetValue(bwsj)
-			                   ?? bwsj?.GetType().GetProperty("disableCrits")?.GetValue(bwsj, null);
-			return disableCrits != null && Convert.ToBoolean(disableCrits);
+			var promo = ReadConfigRootMember<PromoToolsConfig>();
+			if (promo != null)
+				return promo.disableCrits;
+			LogOnce(ref _loggedDisableCritsUnresolved, "LuckCritMixture: PromoToolsConfig.disableCrits unresolved on "
+				+ GameBuild.Describe() + "; forecast assumes crits are enabled.");
 		}
-		catch
+		catch (Exception ex)
 		{
-			return false;
+			LogOnce(ref _loggedDisableCritsUnresolved, "LuckCritMixture: PromoToolsConfig.disableCrits read failed ("
+				+ ex.GetType().Name + ": " + ex.Message + "); forecast assumes crits are enabled.");
 		}
+		return false;
+	}
+
+	/// <summary>
+	/// The config root (scoped <see cref="GameSymbols.UnitPreviewAbilityIcons.ConfigRootTypeNames"/> and
+	/// <see cref="GameSymbols.UnitPreviewAbilityIcons.ConfigRootMembers"/>) holds exactly one instance member of each
+	/// real-named config type (Golden Era, 25672315 and 26297049 indexes), so the member is picked by its type.
+	/// </summary>
+	private static T ReadConfigRootMember<T>() where T : class
+	{
+		var rootType = GameMember.FindTypeFromHints("luckCritMixture.configRoot", GameSymbols.UnitPreviewAbilityIcons.ConfigRootTypeNames);
+		if (rootType == null)
+			return null;
+		object root = null;
+		const BindingFlags staticFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+		foreach (var member in GameSymbols.UnitPreviewAbilityIcons.ConfigRootMembers)
+		{
+			if (string.IsNullOrEmpty(member))
+				continue;
+			root = rootType.GetProperty(member, staticFlags)?.GetValue(null) ?? rootType.GetField(member, staticFlags)?.GetValue(null);
+			if (root != null)
+				break;
+		}
+		if (root == null)
+			return null;
+		PropertyInfo match = null;
+		foreach (var property in rootType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+		{
+			if (property.PropertyType != typeof(T) || !property.CanRead || property.GetIndexParameters().Length != 0)
+				continue;
+			if (match != null)
+				throw new InvalidOperationException("config root has more than one " + typeof(T).Name + " member (" + match.Name + ", " + property.Name + ")");
+			match = property;
+		}
+		return match?.GetValue(root) as T;
+	}
+
+	private static void LogOnce(ref bool logged, string message)
+	{
+		if (logged)
+			return;
+		logged = true;
+		Plugin.LogSource?.LogWarning(message);
 	}
 
 	/// <summary>

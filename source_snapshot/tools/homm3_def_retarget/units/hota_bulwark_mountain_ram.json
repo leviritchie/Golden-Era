@@ -251,7 +251,7 @@
   "reason": "short-reach walker (legs near straight at the source Move): default 0.15: jitter p90 0.37 (the missing reach spent as cadence 1.6); 0.25: jitter 0.32 (thin); 0.30: slip 0.105 ratio 1.062 cadence 1.19 jitter 0.26 (workerB scratch trials 2026-09-27)"
  },
  "glbPatch": {
-  "reason": "authenticity lane B 2026-10-11: AttackFront forelegs tucked while rearing; Defence ducks the horns forward; Death topples over f4-f5 instead of popping flat at f6",
+  "reason": "authenticity lane B 2026-10-11: AttackFront forelegs tucked while rearing; Defence ducks the horns forward; Death topples over f4-f5 instead of popping flat at f6; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death, Defence re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg + stretchRelax)",
   "ops": [
    {
     "op": "keyTranslations",
@@ -270,6 +270,28 @@
     "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_mountain_ram_rear_duck_fall_rot.json",
     "regrid": true,
     "sha256": "9eadf90b8fd55e4fb9b8a1a6c67b0453d710ccd62fb25aa4fa2ad36744bb097b"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_mountain_ram_move_tracks.json",
+    "sha256": "6357225324cf5919088b99b0d4fe8af6831a49c2745820dbc11b73b752a7f4ab"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_bulwark_mountain_ram_clip_tracks.json",
+    "sha256": "3a727293acff82bb9d6aaa630fd252340bfca035ef8b298c1b5ea3e2482d47dd"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Death",
+     "Unit_Defence"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "clip_pass: tear gate on the edited clips"
    }
   ]
  }

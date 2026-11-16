@@ -171,13 +171,30 @@
   "solid": true
  },
  "glbPatch": {
-  "reason": "lane B 2026-10-11 authenticity: Move flies level on the facing (capture dived -35 deg and swung the body +-30 deg) with the head stretched forward (capture hung it beak-down against the chest); the wing beat is amplified 2.3x about frame 0 (58 -> 133 deg peak to peak; wingamp.py), so the wings out-swing the body; MoveStart/MoveEnd ramp the levelling; stretchRelax on the re-posed creases",
+  "reason": "lane B 2026-10-11 authenticity: Move flies level on the facing (capture dived -35 deg and swung the body +-30 deg) with the head stretched forward (capture hung it beak-down against the chest); the wing beat is amplified 2.3x about frame 0 (58 -> 133 deg peak to peak; wingamp.py), so the wings out-swing the body; MoveStart/MoveEnd ramp the levelling; stretchRelax on the re-posed creases; 2026-11-10 flyer flight (user-approved candidate, rig / mesh repair): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, with the candidate's added joints and face cuts",
   "ops": [
    {
     "op": "keyRotations",
     "table": "tools/homm3_glb_patch/key_rotations/toa_shahrokh_flight_level_head_forward_rot.json",
     "regrid": true,
     "sha256": "da60d2e584c2959c23068e08755c89f229d695afcbc15433fa35e78e331965e8"
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/toa_shahrokh_flight_joints.json",
+    "sha256": "b49c589fd5d9ade95dcf85414c58e3b63270d6fdbf8dea6230bf11e72ae7d5d3",
+    "note": "unit pass: 8 joints the candidate's Move needs (flyer_A)"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/toa_shahrokh_flight_weights.json",
+    "sha256": "1cf2e110c8e9673b9580c833fcdddad146d9a8a240fe1c3f0dcdedd5d9f3ffd8"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/toa_shahrokh_flight_tracks.json",
+    "sha256": "05e291d4dcde8153f3a05386d79f90dc784addef4811261d85441b91f35ab1d8"
    },
    {
     "op": "stretchRelax",

@@ -107,7 +107,7 @@
   "exempt": "hovers on a flame tail: HoMM3 flier (CEFRES.def), legless, and no DEF ground shadow falls below the body; grounding would pin the flame tip to the floor (measured Hitted Hips -0.131 at entry on the grounded candidate); user-approved exception 2026-09-28"
  },
  "glbPatch": {
-  "reason": "DEF g12 fire punch (as h3_efreeti): AttackFront raises both hands overhead in the wind-up (f1-f2), then thrusts both arms straight forward with the body held near upright (hold Hips partly at the clip's first pose; the capture tipped the whole body forward instead of thrusting the arms). stretchRelax evens the armpit/elbow edges of the overhead raise.",
+  "reason": "DEF g12 fire punch (as h3_efreeti): AttackFront raises both hands overhead in the wind-up (f1-f2), then thrusts both arms straight forward with the body held near upright (hold Hips partly at the clip's first pose; the capture tipped the whole body forward instead of thrusting the arms). stretchRelax evens the armpit/elbow edges of the overhead raise.; 2026-11-10 unit pass (user-approved candidate, rig / mesh repair): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass, with the candidate's added joints and face cuts; clip pass 2026-11-11 (user-approved candidate): Idle, AttackFront, Defence, Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "keyRotations",
@@ -120,6 +120,27 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_efreet_sultan_punch_rot.json",
     "sha256": "09f379f5a0dddcffc205a88214abe5dddcd137db479c6158094f569b943eab37",
     "regrid": true
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreet_sultan_move_joints.json",
+    "sha256": "32d25ecf9e89ad12665f498233fb4e90301961ec095c3c7e87c8d61732032f75",
+    "note": "unit pass: 4 joints the candidate's Move needs (mover_floatA)"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreet_sultan_move_weights.json",
+    "sha256": "d40a70af02d0ab9561b67e25629e90c92a1665ee484bda0c91cc36fa8085313d"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreet_sultan_move_tracks.json",
+    "sha256": "2f0a1667f8971e9896763e406ac7fb2be5fdd3dda883476306658c9591646fab"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_efreet_sultan_clip_tracks.json",
+    "sha256": "4a95af7cecdf9fd5c9828748a929527372f83be32ba23500a5617d17fda79339"
    },
    {
     "op": "stretchRelax",

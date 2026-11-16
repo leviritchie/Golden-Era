@@ -142,14 +142,6 @@
   "ForeArm",
   "Hand"
  ],
- "gateExceptions": {
-  "ground": {
-   "Move:Hips": {
-    "value": 0.13,
-    "reason": "joint entry infeasible: the feet and Hips bands do not meet at the stride-matched Move entry; measured on the rebuild's grounded candidate: Move Hips steps +0.130 from Idle at entry (DEF allows 0.081); user-approved exception 2026-09-28"
-   }
-  }
- },
  "props": [
   {
    "name": "tail",
@@ -281,7 +273,7 @@
   "inferno_whipchain"
  ],
  "glbPatch": {
-  "reason": "h3_horned_demon DEF fidelity (lane-A authenticity 2026-10-10): AttackFront g12 horn charge with both arms swept down/back f3-f5 and the head pitched up so the horns aim level forward (capture tucked the head, horns pointing down); Death g05 arms thrown up f2-f3 then the full thigh fold into a hunched seated heap f5-f8, f8 collapsing forward. Weight repair: thigh bleed up the belly/chest (LeftUpLeg/RightUpLeg to y 1.0) handed to Hips and shoulder bleed on the belly handed to Spine1, so the full RightUpLeg fold passes the tear gate (worst 7.254 -> 7.26, edges>2x 1721 -> 1614). keyRotations x2 (split table). || tail: 2026-10-10 authenticity (lane A): tail whip-chain keys (h3_horned_demon_tail_rot.json x2) - DEF Move trail at knee height with a travelling flick, AttackFront swings low then hooks the tip up behind, Defence curls it up behind, Death flings and curls it, then rests it just off the floor in the heap (a trailing tip would lift the heap 8 cm through grounding)",
+  "reason": "h3_horned_demon DEF fidelity (lane-A authenticity 2026-10-10): AttackFront g12 horn charge with both arms swept down/back f3-f5 and the head pitched up so the horns aim level forward (capture tucked the head, horns pointing down); Death g05 arms thrown up f2-f3 then the full thigh fold into a hunched seated heap f5-f8, f8 collapsing forward. Weight repair: thigh bleed up the belly/chest (LeftUpLeg/RightUpLeg to y 1.0) handed to Hips and shoulder bleed on the belly handed to Spine1, so the full RightUpLeg fold passes the tear gate (worst 7.254 -> 7.26, edges>2x 1721 -> 1614). keyRotations x2 (split table). || tail: 2026-10-10 authenticity (lane A): tail whip-chain keys (h3_horned_demon_tail_rot.json x2) - DEF Move trail at knee height with a travelling flick, AttackFront swings low then hooks the tip up behind, Defence curls it up behind, Death flings and curls it, then rests it just off the floor in the heap (a trailing tip would lift the heap 8 cm through grounding); 2026-11-10 unit pass (user-approved candidate, rig / mesh repair): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass, with the candidate's added joints and face cuts; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "moveWeights",
@@ -348,6 +340,33 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_horned_demon_tail_rot.json",
     "sha256": "790f3da9f8238ef4298d26585acbd05da173af736b575adc35d99f389c4a986e",
     "regrid": true
+   },
+   {
+    "op": "addJoints",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_horned_demon_move_joints.json",
+    "sha256": "6277b8ef7d386dbee67fe4d9e22d52520d8c6963495cef94ef7147fd83e0424f",
+    "note": "unit pass: 8 joints the candidate's Move needs (mover_tailed)"
+   },
+   {
+    "op": "cutFaces",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_horned_demon_move_cut.json",
+    "sha256": "836ff3285c69e31c5ef7e705195a11309311440091332d21395621774d8bca1f",
+    "note": "unit pass: 75 bridging faces the candidate cuts (mover_tailed)"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_horned_demon_move_weights.json",
+    "sha256": "3e0f631862a021b60fd527e2692293e9ebd6c5a185a9bf3e347980ae63330e5f"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_horned_demon_move_tracks.json",
+    "sha256": "b1348183c7a2884bf312a4ffe9da4825d8414703d645594add9b4ba05a843bc8"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_horned_demon_clip_tracks.json",
+    "sha256": "957c57047c02032737e543ac9d16b5524f48bc907f8333c6874c2d9159b16d01"
    }
   ]
  }

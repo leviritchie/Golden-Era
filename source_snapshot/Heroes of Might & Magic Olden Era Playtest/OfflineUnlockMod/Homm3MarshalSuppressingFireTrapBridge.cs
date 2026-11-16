@@ -130,6 +130,11 @@ internal static class Homm3MarshalSuppressingFireTrapBridge
 		if (!__result || __instance == null || __args == null || __args.Length < 6)
 			return;
 		var sid = __args[0] as string;
+		if (string.Equals(sid, LavaWallOfFlameTrapSid, StringComparison.Ordinal))
+		{
+			PostfixLavaWallOfFlame(__instance, __args[5]);
+			return;
+		}
 		if (!string.Equals(sid, GameSymbols.MarshalSuppressingFireTrap.TrapSid, StringComparison.Ordinal))
 			return;
 
@@ -210,6 +215,61 @@ internal static class Homm3MarshalSuppressingFireTrapBridge
 		         + " unitDamage=" + damageMin + "-" + damageMax
 		         + " mult=" + AttackDamageMult.ToString("0.##");
 		return true;
+	}
+
+	// ---------------------------------------------------------------- Conflux Lava Elemental Wall of Flame
+
+	/// <summary>
+	/// The Wall of Flame trap the Lava Elemental (and every Elemental Fusion unit with the Lava Elemental as a parent)
+	/// places: flat base damage of LavaDamagePerCreature for each creature in the placing stack, no stack damage, no
+	/// stat multiplier. A hero-cast Wall of Flame has no placing unit (initialCastSource is the hero), so it is left
+	/// to the native spell damage. Placer sids come from <see cref="Homm3ConfluxFusionRuntime.FirewallPlacerSids"/>.
+	/// Proof boundary as above: combat stamping and observed damage remain unvalidated.
+	/// </summary>
+	internal const string LavaWallOfFlameTrapSid = "magic_primal_wall_of_flame_summon";
+	private const int LavaDamagePerCreature = 10;
+	private static int _loggedLavaStamps;
+
+	private static void PostfixLavaWallOfFlame(object trap, object initialCastSource)
+	{
+		try
+		{
+			if (!Homm3BattleEventNativeAdapter.TryResolveBattleUnit(initialCastSource, out var placer) || placer == null)
+				return; // hero cast (or no unit): native spell damage stays
+			if (!Homm3BattleEventNativeAdapter.TryResolveUnitSid(placer, out var placerSid)
+			    || !Homm3ConfluxFusionRuntime.FirewallPlacerSids().Contains(placerSid))
+				return;
+			if (!DamageKillMapping.TryGetStackCount(placer, out var stacks) || stacks <= 0)
+			{
+				LogReject("lava_wall_of_flame placer_stack_unresolved placer=" + placerSid);
+				return;
+			}
+			var damage = (long)stacks * LavaDamagePerCreature;
+			if (damage > int.MaxValue)
+				damage = int.MaxValue;
+			if (!TryResolveInstanceTrapConfig(trap, out var trapConfig, out var configSource))
+			{
+				LogReject("lava_wall_of_flame instance_trap_config_unresolved placer=" + placerSid);
+				return;
+			}
+			var dealer = trapConfig.damageDealer;
+			if (dealer == null)
+			{
+				LogReject("lava_wall_of_flame damage_dealer_null source=" + configSource);
+				return;
+			}
+			dealer.minBaseDmg = (int)damage;
+			dealer.maxBaseDmg = (int)damage;
+			dealer.minStackDmg = 0;
+			dealer.maxStackDmg = 0;
+			dealer.statDmgMult = 0f;
+			if (_loggedLavaStamps++ < 16)
+				_log?.LogInfo("[ConfluxFusion] lava wall-of-flame stamped base damage=" + damage + " placer=" + placerSid + " stacks=" + stacks + " source=" + configSource + ".");
+		}
+		catch (Exception ex)
+		{
+			LogReject("lava_wall_of_flame exception:" + ex.Message);
+		}
 	}
 
 	private static int ScaleStackDamage(int perCreatureDamage, int stacks)

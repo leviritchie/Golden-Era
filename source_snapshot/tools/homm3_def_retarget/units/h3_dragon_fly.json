@@ -760,7 +760,7 @@
   ]
  },
  "glbPatch": {
-  "reason": "DEF g12 attack: the fly uncoils and lunges flat at the target (f3-f4), tail trailing straight behind, head forward at the target, then coils back (f5-f6); DEF g05 death: after the thrash it drops and lies flat on the ground (f5-f6); the capture hovered upright through both",
+  "reason": "DEF g12 attack: the fly uncoils and lunges flat at the target (f3-f4), tail trailing straight behind, head forward at the target, then coils back (f5-f6); DEF g05 death: after the thrash it drops and lies flat on the ground (f5-f6); the capture hovered upright through both; 2026-11-10 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate",
   "ops": [
    {
     "op": "keyRotations",
@@ -783,6 +783,25 @@
     "op": "keyTranslations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_dragon_fly_pose_tr.json",
     "sha256": "0459859310a134cd5e35151eddbee383c41af63d307666ae9e95eafa35be6aa0"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": false,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_dragon_fly_flight_tracks.json",
+    "sha256": "13b9b04582692fcb4822d3391709364d9816626d4c45d321eb7bd11f252f777d"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "flyer flight: crease of the spread wings"
    }
   ]
  }

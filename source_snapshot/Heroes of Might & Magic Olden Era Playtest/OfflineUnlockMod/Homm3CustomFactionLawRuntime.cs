@@ -2523,6 +2523,11 @@ internal static class Homm3CustomFactionLawRuntime
 			var field = type.GetField(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 			if (field != null)
 				return field.GetValue(obj);
+			// Il2CppInterop exposes native fields as properties of the same exact name (e.g. Data.Hero.sideId,
+			// field_Private_*_0): read the property when no managed field carries the name.
+			var property = type.GetProperty(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
+			if (property != null && property.GetIndexParameters().Length == 0 && property.GetMethod != null)
+				return property.GetValue(obj);
 		}
 		catch { }
 		return null;

@@ -78,7 +78,7 @@
   "pivotZ": 0.5
  },
  "glbPatch": {
-  "reason": "authenticity: DEF g12 attack - the sandworm rears back, then throws its front body out nearly level at the target with the maw leading and draws back up (the shipped clip only ducked the head into its coil); front-body weights re-solved so the lunge passes the CS gate",
+  "reason": "authenticity: DEF g12 attack - the sandworm rears back, then throws its front body out nearly level at the target with the maw leading and draws back up (the shipped clip only ducked the head into its coil); front-body weights re-solved so the lunge passes the CS gate; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass",
   "ops": [
    {
     "op": "setWeights",
@@ -97,6 +97,22 @@
     "table": "tools/homm3_glb_patch/key_rotations/h3_sandworm_upg_alt_pose_rot.json",
     "sha256": "1becdc321487b7fb64fc9b0e9c0a5939c014f88ad8061a22879564c0b8f71fad",
     "regrid": true
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_sandworm_upg_alt_move_tracks.json",
+    "sha256": "0ce5ac9d3d96ede79347a53472e1ed5770b46fe3b236498af0cf99e295c5ce09"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "unit pass: tear gate on the replaced Move clips"
    }
   ]
  }

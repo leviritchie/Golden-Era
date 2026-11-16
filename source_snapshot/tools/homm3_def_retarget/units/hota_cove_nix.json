@@ -2843,5 +2843,26 @@
    "Move"
   ],
   "reason": "The spear (rigid on RightHand) stands on the Idle floor, butt down; the stride plant pelvis drop (0.040 H) carries it up to 0.021 H through the floor in Move, and ground_glb then lifted the whole walk off the planted soles (LeftUpLeg / RightUpLeg to +0.045, 2026-09-28). Tilting it within its own lean plane (at most 6.0 deg, 21 of 37 keys) keeps the butt on the floor; Move grounds with no lift."
+ },
+ "glbPatch": {
+  "reason": "2026-11-10 weights repair for the unit-pass Move: the left hand rests on the belt in the bind pose and its weight bled up to 0.29 onto loincloth, hip and thigh skin half a body away (worst edge 10.5x in Unit_Move); that stray share goes back to the vertex's own bones (tear gate 940 -> 823 with the new Move, worst 10.54 -> 7.83); 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
+  "ops": [
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_nix_hand_stray_weights.json",
+    "sha256": "57267c860756f4e86b32ed616b9bc1f6829bb47b4a96ae09aaa58b7b41dd6ea2",
+    "note": "left-hand stray share off the loincloth/hip/thigh skin: vertices farther than 0.07-0.11 H (ramp) from the LeftHand bone give its share back to their other bones (1494 vertices, at most 0.29 of a vertex)"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_nix_move_tracks.json",
+    "sha256": "476d10851b13681dc9958145f8a5ce887bbf25f276b10d3b66512fdf693d329d"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_nix_clip_tracks.json",
+    "sha256": "dcf039930ee912771b78a2ee546b674a1aed87ec6f0bacf9002a683ba58d05f7"
+   }
+  ]
  }
 }

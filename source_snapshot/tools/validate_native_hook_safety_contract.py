@@ -215,12 +215,15 @@ def check_factory_city_open_attempts(plugin: Path, errors: list[str]) -> None:
 
 
 def check_draconic_dominion_escape_ordering(plugin: Path, errors: list[str]) -> None:
-    """B3 (Captives contract, 2026-10-12; was the Draconic Dominion flee redirect).
+    """B3 (War Captives contract, 2026-11-15; before that the AfterBattle hold, the Captives escape capture and the
+    Draconic Dominion flee redirect).
 
-    The native escape click has exactly one mod owner, Homm3DungeonCaptivesRuntime: a void prefix
-    that only reads context into __state (the native flee always runs) and a postfix that records
-    the capture after the native flee resolved. The removed Diplomacy redirect (popup dismiss,
-    navigator opener, flee-state bookkeeping) must not come back in either file.
+    The native escape click has no Dungeon owner: neither the Dominion hook nor the War Captives runtime may patch it or
+    bring back the Diplomacy redirect. War Captives never holds the native battle apply (holding UtilityAfterBattle left
+    the army strip and hero showing the pre-battle state and lost Execute mana to the write-back): the battle-result
+    prefix queues a local human's window to open after the result (Homm3DungeonWarCaptivesWindow.OpenAfterResult) and
+    Choose pays into the live hero without re-entering the native apply. The window closes itself before handing the
+    choice over and has no Esc/close path that could drop the captives.
     """
     dominion = strip_comments((plugin / "Homm3DungeonDraconicDominionHook.cs").read_text(encoding="utf-8"))
     for token in ("PrefixSquadEscapeOnEscapeClick", "SquadEscapeOnEscapeClick", "ResolveNativeDiplomacyNavigatorOrThrow",
@@ -228,34 +231,28 @@ def check_draconic_dominion_escape_ordering(plugin: Path, errors: list[str]) -> 
         if token in dominion:
             errors.append("B3: Homm3DungeonDraconicDominionHook must not own the escape click or the Diplomacy redirect (found " + token + ")")
     captives_path = plugin / "Homm3DungeonCaptivesRuntime.cs"
-    if not captives_path.exists():
-        errors.append("B3: Homm3DungeonCaptivesRuntime.cs missing")
+    window_path = plugin / "Homm3DungeonWarCaptivesWindow.cs"
+    if not captives_path.exists() or not window_path.exists():
+        errors.append("B3: Homm3DungeonCaptivesRuntime.cs or Homm3DungeonWarCaptivesWindow.cs missing")
         return
     captives = strip_comments(captives_path.read_text(encoding="utf-8"))
-    prefix = method_body(captives, r"private static void PrefixEscapeClick\(")
-    postfix = method_body(captives, r"private static void PostfixEscapeClick\(")
-    if prefix is None or postfix is None:
-        errors.append("B3: Captives must patch the escape click with a void prefix PrefixEscapeClick and a postfix PostfixEscapeClick")
-        return
-    if "return false" in prefix:
-        errors.append("B3: the Captives escape prefix must never suppress the native flee")
-    if "TryWriteState(" in prefix or "_buffAddMethod" in prefix:
-        errors.append("B3: the Captives escape prefix must only read context; recording belongs to the postfix")
-    if "TryWriteState(" not in postfix:
-        errors.append("B3: the Captives escape postfix must record the capture")
-    if "isEscape" not in prefix:
-        errors.append("B3: the Captives escape prefix must require DataSquad.isEscape")
-    for token in ("NativeOpenDiplomacy", "DismissSquadEscapePopup", "SquadEscapeHide"):
+    window = strip_comments(window_path.read_text(encoding="utf-8"))
+    for token in ("SquadEscapeOnEscapeClick", "PrefixEscapeClick", "PostfixEscapeClick", "NativeOpenDiplomacy", "DismissSquadEscapePopup"):
         if token in captives:
-            errors.append("B3: Captives must not reintroduce the Diplomacy redirect (found " + token + ")")
-    if captives.count("SquadEscapeOnEscapeClick") != 1:
-        errors.append("B3: Captives must resolve the escape click exactly once")
-    else:
-        resolve_line = next((line for line in captives.splitlines() if "SquadEscapeOnEscapeClick" in line), "")
-        # Live 25672315 interop exposes BhSquadEscapeUISession.Method_Public_Void_0 and the hidden
-        # BhScreen.Method_Public_Void_0 (C# `new`); without the declared-type filter registration fails ambiguous.
-        if "declaredOnType: true" not in resolve_line:
-            errors.append("B3: Captives must resolve the escape click on BhSquadEscapeUISession itself (declaredOnType: true); the base BhScreen wrapper shares its live name")
+            errors.append("B3: War Captives must not patch the escape click or the Diplomacy redirect (found " + token + ")")
+    for token in ("PrefixAfterBattle", "AfterBattleRun", "_reentry"):
+        if token in captives:
+            errors.append("B3: War Captives must not hold or re-enter the native battle apply (found " + token + ")")
+    observe = method_body(captives, r"internal static void ObserveBeforeBattleResult\(")
+    if observe is None or "Homm3DungeonWarCaptivesWindow.OpenAfterResult(" not in observe:
+        errors.append("B3: ObserveBeforeBattleResult must queue the local human's window through OpenAfterResult")
+    elif "Homm3DungeonWarCaptivesWindow.Open(" in observe:
+        errors.append("B3: ObserveBeforeBattleResult must not open the window before the result applies")
+    if "KeyCode.Escape" in window:
+        errors.append("B3: the War Captives window must not close on Esc (every won battle resolves its captives)")
+    finish = method_body(window, r"private static void Finish\(")
+    if finish is None or not (0 <= finish.find("DestroyCanvas()") < finish.find("Homm3DungeonCaptivesRuntime.Choose(")):
+        errors.append("B3: the War Captives window must close before handing the choice to the runtime")
 
 
 def check_elite_strategem_session_scope(plugin: Path, errors: list[str]) -> None:

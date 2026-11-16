@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using HarmonyLib;
 using Hex.Configs;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.InteropTypes;
 
 namespace OfflineUnlockMod;
 
@@ -244,7 +248,7 @@ internal static partial class Homm3BattleEventNativeAdapter
 		info = default;
 		if (!TryResolve(out failReason))
 			return false;
-		if (!ValidateEvent(eventArgs, _objectTookDamageEventArgsType, "ObjectTookDamageEventArgs", out failReason))
+		if (!ValidateEvent(ref eventArgs, _objectTookDamageEventArgsType, "ObjectTookDamageEventArgs", out failReason))
 			return false;
 
 		var type = eventArgs.GetType();
@@ -310,7 +314,7 @@ internal static partial class Homm3BattleEventNativeAdapter
 		info = default;
 		if (!TryResolve(out failReason))
 			return false;
-		if (!ValidateEvent(eventArgs, _objectDestroyedEventArgsType, "ObjectDestroyedEventArgs", out failReason))
+		if (!ValidateEvent(ref eventArgs, _objectDestroyedEventArgsType, "ObjectDestroyedEventArgs", out failReason))
 			return false;
 
 		var type = eventArgs.GetType();
@@ -329,7 +333,7 @@ internal static partial class Homm3BattleEventNativeAdapter
 		info = default;
 		if (!TryResolve(out failReason))
 			return false;
-		if (!ValidateEvent(eventArgs, _objectSpawnedEventArgsType, "ObjectSpawnedEventArgs", out failReason))
+		if (!ValidateEvent(ref eventArgs, _objectSpawnedEventArgsType, "ObjectSpawnedEventArgs", out failReason))
 			return false;
 		var type = eventArgs.GetType();
 		TryReadExactMember(eventArgs, type, GameSymbols.BattleEventLaws.ObjectSpawnedObjectMembers, out var spawnedObject);
@@ -448,7 +452,7 @@ internal static partial class Homm3BattleEventNativeAdapter
 		info = default;
 		if (!TryResolve(out failReason))
 			return false;
-		if (!ValidateEvent(eventArgs, _castAbilityEventArgsType, "CastAbilityEventArgs", out failReason))
+		if (!ValidateEvent(ref eventArgs, _castAbilityEventArgsType, "CastAbilityEventArgs", out failReason))
 			return false;
 
 		var type = eventArgs.GetType();
@@ -720,7 +724,12 @@ internal static partial class Homm3BattleEventNativeAdapter
 		return true;
 	}
 
-	private static bool ValidateEvent(object eventArgs, Type expectedType, string label, out string failReason)
+	/// <summary>
+	/// Checks the payload is the expected event-args type and, when needed, re-wraps it as that exact interop type.
+	/// Harmony hands dispatcher postfixes an interop wrapper of the declared parameter type (BattleEventArgs), so a
+	/// managed type test alone rejects every real ObjectTookDamageEventArgs etc.; the native class decides instead.
+	/// </summary>
+	private static bool ValidateEvent(ref object eventArgs, Type expectedType, string label, out string failReason)
 	{
 		if (eventArgs == null)
 		{
@@ -732,13 +741,77 @@ internal static partial class Homm3BattleEventNativeAdapter
 			failReason = label + " type is unresolved";
 			return false;
 		}
-		if (!expectedType.IsInstanceOfType(eventArgs))
+		if (expectedType.IsInstanceOfType(eventArgs))
 		{
-			failReason = "object is not a resolved " + label + " instance";
+			failReason = null;
+			return true;
+		}
+		if (!TryRewrapAsNative(eventArgs, expectedType, out var typed, out var rewrapFail))
+		{
+			failReason = "object is not a resolved " + label + " instance (" + rewrapFail + ")";
+			return false;
+		}
+		eventArgs = typed;
+		failReason = null;
+		return true;
+	}
+
+	private static readonly Dictionary<Type, IntPtr> NativeClassByType = new();
+
+	/// <summary>Re-wraps an interop proxy as <paramref name="expectedType"/> when its native object is of that class.</summary>
+	private static bool TryRewrapAsNative(object value, Type expectedType, out object typed, out string failReason)
+	{
+		typed = null;
+		if (value is not Il2CppObjectBase proxy || proxy.Pointer == IntPtr.Zero)
+		{
+			failReason = "not a live Il2Cpp object: " + value.GetType().FullName;
+			return false;
+		}
+		if (!typeof(Il2CppObjectBase).IsAssignableFrom(expectedType))
+		{
+			failReason = "expected type is not an interop type: " + expectedType.FullName;
+			return false;
+		}
+		IntPtr expectedClass;
+		lock (NativeClassByType)
+		{
+			if (!NativeClassByType.TryGetValue(expectedType, out expectedClass))
+			{
+				try
+				{
+					var store = typeof(Il2CppClassPointerStore<>).MakeGenericType(expectedType);
+					RuntimeHelpers.RunClassConstructor(store.TypeHandle);
+					expectedClass = store.GetField("NativeClassPtr", BindingFlags.Public | BindingFlags.Static)?.GetValue(null) is IntPtr ptr ? ptr : IntPtr.Zero;
+				}
+				catch
+				{
+					expectedClass = IntPtr.Zero;
+				}
+				NativeClassByType[expectedType] = expectedClass;
+			}
+		}
+		if (expectedClass == IntPtr.Zero)
+		{
+			failReason = "native class of " + expectedType.FullName + " unresolved";
+			return false;
+		}
+		var actual = IL2CPP.il2cpp_object_get_class(proxy.Pointer);
+		if (actual == IntPtr.Zero || !IL2CPP.il2cpp_class_is_assignable_from(expectedClass, actual))
+		{
+			failReason = "native class is " + (actual == IntPtr.Zero ? "unknown" : Marshal.PtrToStringAnsi(IL2CPP.il2cpp_class_get_name(actual)));
+			return false;
+		}
+		try
+		{
+			typed = Activator.CreateInstance(expectedType, proxy.Pointer);
+		}
+		catch (Exception ex)
+		{
+			failReason = "re-wrap as " + expectedType.Name + " failed: " + ex.GetBaseException().Message;
 			return false;
 		}
 		failReason = null;
-		return true;
+		return typed != null;
 	}
 
 	private static bool FailResolve(string reason, out string failReason)
@@ -832,7 +905,7 @@ internal static partial class Homm3BattleEventNativeAdapter
 
 	private static int CountEnumerable(object value)
 	{
-		if (value is not System.Collections.IEnumerable enumerable)
+		if (!Il2CppCollections.TryEnumerate(value, out var enumerable))
 			return 0;
 		var count = 0;
 		foreach (var _ in enumerable)
@@ -848,7 +921,7 @@ internal static partial class Homm3BattleEventNativeAdapter
 	{
 		if (value == null)
 			return "null";
-		if (value is not System.Collections.IEnumerable enumerable || value is string)
+		if (!Il2CppCollections.TryEnumerate(value, out var enumerable))
 			return DescribeObject(value);
 		var count = 0;
 		var samples = new List<string>(3);

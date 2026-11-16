@@ -158,7 +158,9 @@ internal static class BhAppStartTypeInitLoopWorkaround
 			var owner = hexAsm.GetType(typeName, false, false);
 			if (owner == null)
 				return;
-			var method = AccessTools.DeclaredMethod(owner, methodName, Type.EmptyTypes);
+			// Plain reflection: this deobf-era chain (byu.pml / zi.jyv) is absent on Golden Era and 26615913, and
+			// AccessTools.DeclaredMethod logged a HarmonyX warning for every miss.
+			var method = owner.GetMethod(methodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly, null, Type.EmptyTypes, null);
 			if (method == null || method.ReturnType != typeof(void))
 				return;
 			h.Patch(

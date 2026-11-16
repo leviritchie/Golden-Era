@@ -2567,7 +2567,6 @@ internal static partial class Homm3AiDriverBridge
 
 			var heroSid = ReadFirstStringMember(row, GameSymbols.AiDriverScreenDump.PropHeroSidFields);
 			var objectId = Homm3MapObjectPropCityResolver.TryGetIntMember(row, GameSymbols.AiDriverScreenDump.PropHeroIdFields);
-			var propNode = Homm3MapObjectPropCityResolver.TryGetIntMember(row, GameSymbols.AiDriverScreenDump.PropHeroNodeFields);
 			if (string.IsNullOrWhiteSpace(heroSid) && !objectId.HasValue)
 			{
 				index++;
@@ -2583,7 +2582,8 @@ internal static partial class Homm3AiDriverBridge
 			if (!seen.Add(syntheticId ^ unchecked((int)0x4845524F))) // 'HERO'
 				continue;
 
-			int? node = propNode.HasValue && propNode.Value >= 0 ? propNode : null;
+			// PropHero/ObjectProp carry no node on any build; the node comes from the live hero index below.
+			int? node = null;
 			MapWorldScreenPoint point = null;
 			var resolveSource = (string)null;
 

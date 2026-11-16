@@ -1325,7 +1325,7 @@
   ]
  },
  "glbPatch": {
-  "reason": "DEF g04 defence: wings spread wide back and up (f2-f6), DEF g12 attack: wings raised high as it rears (f2-f5); wing elbows weight re-solved + stretchRelax on the crease",
+  "reason": "DEF g04 defence: wings spread wide back and up (f2-f6), DEF g12 attack: wings raised high as it rears (f2-f5); wing elbows weight re-solved + stretchRelax on the crease; 2026-11-09 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate; clip pass 2026-11-11 (user-approved candidate): Hitted re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -1346,6 +1346,17 @@
     "regrid": true
    },
    {
+    "op": "setTracks",
+    "clearCorrectives": false,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_wyvern_flight_tracks.json",
+    "sha256": "6bb3a818d092d7473af9faf3748a3d4948a16a68d340db8c4fc61951a2f328ec"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_wyvern_clip_tracks.json",
+    "sha256": "e6eede27d67af84a75b66ca9503f35b29411e9876421f2c487514e6ef18068d3"
+   },
+   {
     "op": "stretchRelax",
     "clips": [
      "Unit_Defence",
@@ -1363,6 +1374,19 @@
      "WingL_03"
     ],
     "note": "wing elbow crease of the spread wings"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "flyer flight: crease of the spread wings"
    }
   ]
  }

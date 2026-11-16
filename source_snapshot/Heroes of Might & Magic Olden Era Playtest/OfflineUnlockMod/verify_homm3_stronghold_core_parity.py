@@ -91,8 +91,17 @@ HERO_PREFIX = "homm3_stronghold_hero"
 STRONGHOLD_SUB_CLASSES_PATH = "DB/heroes_sub_classes/sub_classes_homm3_stronghold.json"
 SPECS_PATH = f"DB/heroes_specializations/specializations_{FRACTION_ID}.json"
 ARENA_GAME_PATH = "DB/arenaGame.json"
-ARENA_PICK_CONTENT_PATH = "DB/ai_pick/arena_pick_content.json"
-ARENA_PICK_MODS_PATH = "DB/ai_pick/arena_pick_mods.json"
+# 26297049 AI pick profiles (arena + five world profiles, port decision D1=b); each holds content buckets and mods.
+AI_PICK_PROFILE_PATHS = (
+    "DB/ai_pick/arena.json",
+    "DB/ai_pick/ai_picks_world_default.json",
+    "DB/ai_pick/ai_picks_one_hero_main.json",
+    "DB/ai_pick/ai_picks_multi_hero_main.json",
+    "DB/ai_pick/ai_picks_generalist.json",
+    "DB/ai_pick/ai_picks_courier.json",
+)
+SIDE_BUFF_INFOS_PATH = "DB/side_buffs/side_buff_infos/side_buff_infos.json"
+WARCRY_SIDE_BUFF_DURATION_PER_STACK = [1, 0]
 SKILLS_BY_LEVEL_REPLACE_PATH = "DB/heroes_skills/skills_by_level_replace_tables/skills_by_level_replace_table.json"
 SPACE_MAGIC_BUFFS_PATH = "DB/buffs/buffs_space_magics.json"
 M2_M10_PATHS = (
@@ -208,6 +217,14 @@ def main() -> int:
         metavar="PATH",
         help="Core.zip path (default: HEROESOE_CORE_ZIP env or playtest StreamingAssets/Core.zip)",
     )
+    ap.add_argument(
+        "--core-only",
+        action="store_true",
+        help=(
+            "verify the output of generate_homm3_stronghold_heroes.py --core-only: that layer writes no Lang members, "
+            "so the Lang/* token checks are skipped (run without this flag on the final Core)"
+        ),
+    )
     args = ap.parse_args()
     core = resolve_core_path(args.core)
 
@@ -237,8 +254,8 @@ def main() -> int:
             "DB/city_music_sounds.json",
             "DB/objects_logic/hires/barracks.json",
             ARENA_GAME_PATH,
-            ARENA_PICK_CONTENT_PATH,
-            ARENA_PICK_MODS_PATH,
+            *AI_PICK_PROFILE_PATHS,
+            SIDE_BUFF_INFOS_PATH,
             SKILLS_BY_LEVEL_REPLACE_PATH,
         ):
             need(path)
@@ -450,41 +467,44 @@ def main() -> int:
                 got = len(params) if isinstance(params, list) else type(params).__name__
                 err(f"{CITY_JSON_PATH}: Build_Magic_Guild must be capped at 3 levels, got {got}")
 
-        english_cities = "Lang/english/texts/cities.json"
-        if english_cities in names:
-            by_sid = token_text_by_sid(load_json_member(z, english_cities))
-            for sid, expected_text in EXPECTED_ENGLISH_CITY_TEXT.items():
-                got_text = by_sid.get(sid)
-                if got_text != expected_text:
-                    failed = True
-                    err(f"{english_cities}: {sid} Core.zip text {got_text!r} != {expected_text!r}")
+        if args.core_only:
+            print("NOTE: --core-only: skipped Lang/* token checks (the --core-only generator layer writes no Lang)")
         else:
-            failed = True
-            err(f"missing English cities localization member: {english_cities}")
+            english_cities = "Lang/english/texts/cities.json"
+            if english_cities in names:
+                by_sid = token_text_by_sid(load_json_member(z, english_cities))
+                for sid, expected_text in EXPECTED_ENGLISH_CITY_TEXT.items():
+                    got_text = by_sid.get(sid)
+                    if got_text != expected_text:
+                        failed = True
+                        err(f"{english_cities}: {sid} Core.zip text {got_text!r} != {expected_text!r}")
+            else:
+                failed = True
+                err(f"missing English cities localization member: {english_cities}")
 
-        args_cities = "Lang/args/cities.json"
-        if args_cities in names:
-            by_sid = token_args_by_sid(load_json_member(z, args_cities))
-            for sid, expected_args in EXPECTED_CITY_ARG_OVERRIDES.items():
-                got_args = by_sid.get(sid)
-                if got_args != expected_args:
-                    failed = True
-                    err(f"{args_cities}: {sid} Core.zip args {got_args!r} != {expected_args!r}")
-        else:
-            failed = True
-            err(f"missing city args localization member: {args_cities}")
+            args_cities = "Lang/args/cities.json"
+            if args_cities in names:
+                by_sid = token_args_by_sid(load_json_member(z, args_cities))
+                for sid, expected_args in EXPECTED_CITY_ARG_OVERRIDES.items():
+                    got_args = by_sid.get(sid)
+                    if got_args != expected_args:
+                        failed = True
+                        err(f"{args_cities}: {sid} Core.zip args {got_args!r} != {expected_args!r}")
+            else:
+                failed = True
+                err(f"missing city args localization member: {args_cities}")
 
-        english_hero_info = "Lang/english/texts/heroInfo.json"
-        if english_hero_info in names:
-            by_sid = token_text_by_sid(load_json_member(z, english_hero_info))
-            for sid, expected_text in EXPECTED_ENGLISH_HERO_TEXT.items():
-                got_text = by_sid.get(sid)
-                if got_text != expected_text:
-                    failed = True
-                    err(f"{english_hero_info}: {sid} Core.zip text {got_text!r} != {expected_text!r}")
-        else:
-            failed = True
-            err(f"missing English hero localization member: {english_hero_info}")
+            english_hero_info = "Lang/english/texts/heroInfo.json"
+            if english_hero_info in names:
+                by_sid = token_text_by_sid(load_json_member(z, english_hero_info))
+                for sid, expected_text in EXPECTED_ENGLISH_HERO_TEXT.items():
+                    got_text = by_sid.get(sid)
+                    if got_text != expected_text:
+                        failed = True
+                        err(f"{english_hero_info}: {sid} Core.zip text {got_text!r} != {expected_text!r}")
+            else:
+                failed = True
+                err(f"missing English hero localization member: {english_hero_info}")
 
         # Heroes pipeline
         need(STRONGHOLD_SUB_CLASSES_PATH)
@@ -504,33 +524,59 @@ def main() -> int:
             failed = True
             err(f"{ARENA_GAME_PATH} missing homm3_stronghold hero rows: {sorted(missing)}")
 
-        pick_content = load_json_member(z, ARENA_PICK_CONTENT_PATH)
-        pick_heroes = set()
-        for block in pick_content.get("content") or []:
-            if isinstance(block, dict) and block.get("sid") == "heroes":
-                pick_heroes = {
-                    row.get("sid")
-                    for row in block.get("array") or []
-                    if isinstance(row, dict) and isinstance(row.get("sid"), str)
-                }
-                break
-        missing = expected_heroes - pick_heroes
-        if missing:
-            failed = True
-            err(f"{ARENA_PICK_CONTENT_PATH} heroes pick list missing rows: {sorted(missing)}")
-
-        pick_mods = load_json_member(z, ARENA_PICK_MODS_PATH)
-        pick_mod_heroes = set()
-        for row in pick_mods.get("array") or []:
-            if not isinstance(row, dict):
+        for pick_path in AI_PICK_PROFILE_PATHS:
+            if pick_path not in names:
                 continue
-            for sid in row.get("becauseOf") or []:
-                if isinstance(sid, str) and sid.startswith(f"{HERO_PREFIX}_"):
-                    pick_mod_heroes.add(sid)
-        missing = expected_heroes - pick_mod_heroes
-        if missing:
-            failed = True
-            err(f"{ARENA_PICK_MODS_PATH} missing hero modifier coverage: {sorted(missing)}")
+            profiles = load_json_member(z, pick_path).get("array") or []
+            if not profiles:
+                failed = True
+                err(f"{pick_path} has no AI pick profiles")
+            for profile in profiles:
+                if not isinstance(profile, dict):
+                    continue
+                where = f"{pick_path}[{profile.get('id')}]"
+                pick_heroes = set()
+                for block in profile.get("content") or []:
+                    if isinstance(block, dict) and block.get("sid") == "heroes":
+                        pick_heroes = {
+                            row.get("sid")
+                            for row in block.get("array") or []
+                            if isinstance(row, dict) and isinstance(row.get("sid"), str)
+                        }
+                        break
+                missing = expected_heroes - pick_heroes
+                if missing:
+                    failed = True
+                    err(f"{where} heroes pick list missing rows: {sorted(missing)}")
+
+                pick_mod_heroes = set()
+                for row in profile.get("mods") or []:
+                    if not isinstance(row, dict):
+                        continue
+                    for sid in row.get("becauseOf") or []:
+                        if isinstance(sid, str) and sid.startswith(f"{HERO_PREFIX}_"):
+                            pick_mod_heroes.add(sid)
+                missing = expected_heroes - pick_mod_heroes
+                if missing:
+                    failed = True
+                    err(f"{where} mods missing hero modifier coverage: {sorted(missing)}")
+
+        if SIDE_BUFF_INFOS_PATH in names:
+            warcry_infos = [
+                row
+                for row in load_json_member(z, SIDE_BUFF_INFOS_PATH).get("array") or []
+                if isinstance(row, dict) and str(row.get("id", "")).startswith("side_buff_homm3_stronghold_warcry_")
+            ]
+            if len(warcry_infos) != 14:
+                failed = True
+                err(f"{SIDE_BUFF_INFOS_PATH} expected 14 Warcry side buff infos, found {len(warcry_infos)}")
+            for row in warcry_infos:
+                if row.get("durationPerStack") != WARCRY_SIDE_BUFF_DURATION_PER_STACK:
+                    failed = True
+                    err(
+                        f"{SIDE_BUFF_INFOS_PATH} {row.get('id')} durationPerStack is {row.get('durationPerStack')!r}; "
+                        f"expected list {WARCRY_SIDE_BUFF_DURATION_PER_STACK}"
+                    )
 
         skill_replace = load_json_member(z, SKILLS_BY_LEVEL_REPLACE_PATH)
         replace_heroes = {

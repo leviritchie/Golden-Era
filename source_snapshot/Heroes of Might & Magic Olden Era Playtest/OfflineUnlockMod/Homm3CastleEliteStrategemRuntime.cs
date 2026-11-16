@@ -258,6 +258,20 @@ internal static class Homm3CastleEliteStrategemRuntime
 			return;
 		}
 
+		// The skill promises control over NEUTRAL enemy deployment. Against a hero army, a town garrison or
+		// a siege, leave the battle untouched (no re-split, no arena swap) and keep the token for later.
+		foreach (var side in sides)
+		{
+			if (ReferenceEquals(side, ownerSide))
+				continue;
+			// EType is Type_Hero / Type_Squad / Type_Garnison; neutral stacks and banks are Type_Squad.
+			if (side.typeInWorld != TransferSide.EType.Type_Squad || side.hero != null)
+			{
+				LogLimited("stored Elite Strategem mode kept: opponent is not a neutral army (typeInWorld=" + side.typeInWorld + ", hero=" + (side.hero != null) + ").");
+				return;
+			}
+		}
+
 		var mode = ownerState.Mode;
 		var revision = ownerState.Revision;
 

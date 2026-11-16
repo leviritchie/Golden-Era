@@ -8372,5 +8372,29 @@
  "correctiveSmooth": {
   "iterations": 60,
   "factor": 0.8
+ },
+ "glbPatch": {
+  "reason": "2026-11-10 flyer flight repair pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights repaired so the tear gate holds",
+  "ops": [
+   {
+    "op": "setTracks",
+    "clearCorrectives": false,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_pegasus_flight_tracks.json",
+    "sha256": "cd6301faf586f9e5695febe1d45aa5d610d5aaa45acb61778ac8b71314525f8b"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.9,
+    "iterations": 1000,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "flyer flight: crease of the spread wings"
+   }
+  ]
  }
 }

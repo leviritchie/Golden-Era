@@ -5,6 +5,7 @@ using System.Text;
 using BepInEx.Logging;
 using HarmonyLib;
 using Hex.Session.Battle;
+using BhBattleAbilityView = Hex.UI.BhBattleAbilityView;
 using UnityEngine;
 
 namespace OfflineUnlockMod;
@@ -94,7 +95,7 @@ internal static class Homm3SelectedUnitHudHotkeyProbe
 				patched++;
 			}
 
-			var onClicked = AccessTools.Method(typeof(BhUnitAbilityView), "OnClicked");
+			var onClicked = AccessTools.Method(typeof(BhBattleAbilityView), "OnClicked");
 			if (onClicked != null)
 			{
 				harmony.Patch(onClicked, prefix: new HarmonyMethod(typeof(Homm3SelectedUnitHudHotkeyProbe), nameof(PrefixAbilityOnClicked)));
@@ -183,21 +184,21 @@ internal static class Homm3SelectedUnitHudHotkeyProbe
 		return GameMember.FindMethods(
 			typeof(BhUnitControlsView),
 			typeof(void),
-			new[] { typeof(BhUnitAbilityView) },
+			new[] { typeof(BhBattleAbilityView) },
 			GameSymbols.SelectedUnitHud.ControlsClick);
 	}
 
 	private static IEnumerable<MethodInfo> FindAbilityViewBindMethods()
 	{
 		var found = new List<MethodInfo>();
-		foreach (var m in typeof(BhUnitAbilityView).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
+		foreach (var m in typeof(BhBattleAbilityView).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
 		{
 			if (m.ReturnType != typeof(void))
 				continue;
 			var ps = m.GetParameters();
-			if (ps.Length != 2 || ps[1].ParameterType != typeof(bool))
+			if (ps.Length != 3 || ps[1].ParameterType != typeof(bool) || ps[2].ParameterType != typeof(int))
 				continue;
-			if (NameMatches(m.Name, GameSymbols.SelectedUnitHud.AbilityViewBind.NameHints))
+			if (NameMatches(m.Name, GameSymbols.BattleAbilityView.UnitBind.NameHints))
 				found.Add(m);
 		}
 		return found;
@@ -307,7 +308,7 @@ internal static class Homm3SelectedUnitHudHotkeyProbe
 		}
 	}
 
-	private static void PrefixControlsClick(BhUnitControlsView __instance, BhUnitAbilityView __0, MethodBase __originalMethod)
+	private static void PrefixControlsClick(BhUnitControlsView __instance, BhBattleAbilityView __0, MethodBase __originalMethod)
 	{
 		if (!ShouldLog())
 			return;
@@ -317,14 +318,14 @@ internal static class Homm3SelectedUnitHudHotkeyProbe
 			+ " " + SummarizeControls(__instance));
 	}
 
-	private static void PrefixAbilityOnClicked(BhUnitAbilityView __instance)
+	private static void PrefixAbilityOnClicked(BhBattleAbilityView __instance)
 	{
 		if (!ShouldLog())
 			return;
 		Info("ability.OnClicked " + DescribeAbilityView(__instance));
 	}
 
-	private static void PostfixAbilityViewBind(BhUnitAbilityView __instance, object __0, bool __1, MethodBase __originalMethod)
+	private static void PostfixAbilityViewBind(BhBattleAbilityView __instance, object __0, bool __1, MethodBase __originalMethod)
 	{
 		if (!ShouldLog())
 			return;
@@ -352,8 +353,8 @@ internal static class Homm3SelectedUnitHudHotkeyProbe
 		if (count <= id)
 			return "nativePredict=index-oob count=" + count + " idButton=" + id + " (Count<=idButton)";
 
-		BhUnitAbilityView atRaw = null;
-		BhUnitAbilityView atShifted = null;
+		BhBattleAbilityView atRaw = null;
+		BhBattleAbilityView atShifted = null;
 		try { if (id >= 0 && id < count) atRaw = views[id]; } catch { }
 		try
 		{
@@ -463,7 +464,7 @@ internal static class Homm3SelectedUnitHudHotkeyProbe
 		return sb.ToString();
 	}
 
-	private static string DescribeAbilityView(BhUnitAbilityView view)
+	private static string DescribeAbilityView(BhBattleAbilityView view)
 	{
 		if (view == null)
 			return "null";
@@ -485,7 +486,7 @@ internal static class Homm3SelectedUnitHudHotkeyProbe
 		}
 	}
 
-	private static bool LooksClickReady(BhUnitAbilityView view)
+	private static bool LooksClickReady(BhBattleAbilityView view)
 	{
 		if (view == null)
 			return false;
@@ -500,23 +501,23 @@ internal static class Homm3SelectedUnitHudHotkeyProbe
 		return true;
 	}
 
-	private static bool HasUiWrapper(BhUnitAbilityView view)
+	private static bool HasUiWrapper(BhBattleAbilityView view)
 	{
-		return ReadField(view, ref _abilityViewUiWrapperField, GameSymbols.SelectedUnitHud.AbilityViewWrapperFields) != null;
+		return ReadField(view, ref _abilityViewUiWrapperField, GameSymbols.BattleAbilityView.AbilityWrapperField) != null;
 	}
 
-	private static bool HasActionWrapper(BhUnitAbilityView view)
+	private static bool HasActionWrapper(BhBattleAbilityView view)
 	{
-		return ReadField(view, ref _abilityViewActionWrapperField, GameSymbols.SelectedUnitHud.AbilityViewAbilityFields) != null;
+		return ReadField(view, ref _abilityViewActionWrapperField, GameSymbols.BattleAbilityView.UnitAbilityField) != null;
 	}
 
-	private static object ReadField(BhUnitAbilityView view, ref FieldInfo cached, string[] hints)
+	private static object ReadField(BhBattleAbilityView view, ref FieldInfo cached, string[] hints)
 	{
 		if (view == null)
 			return null;
 		try
 		{
-			cached ??= FindInstanceField(typeof(BhUnitAbilityView), hints);
+			cached ??= FindInstanceField(typeof(BhBattleAbilityView), hints);
 			return cached?.GetValue(view);
 		}
 		catch
@@ -525,13 +526,13 @@ internal static class Homm3SelectedUnitHudHotkeyProbe
 		}
 	}
 
-	private static bool? ReadBool(BhUnitAbilityView view, string[] hints)
+	private static bool? ReadBool(BhBattleAbilityView view, string[] hints)
 	{
 		if (view == null)
 			return null;
 		try
 		{
-			var field = FindInstanceField(typeof(BhUnitAbilityView), hints);
+			var field = FindInstanceField(typeof(BhBattleAbilityView), hints);
 			if (field == null || field.FieldType != typeof(bool))
 				return null;
 			return (bool)field.GetValue(view);
@@ -557,17 +558,17 @@ internal static class Homm3SelectedUnitHudHotkeyProbe
 		return null;
 	}
 
-	private static BhUnitAbilityView GetSelectedAbilityView(BhUnitControlsView controls)
+	private static BhBattleAbilityView GetSelectedAbilityView(BhUnitControlsView controls)
 	{
 		if (controls == null)
 			return null;
 		try
 		{
-			foreach (var hint in GameSymbols.SelectedUnitHud.ControlsSelectedViewFields)
+			foreach (var hint in GameSymbols.BattleAbilityView.ControlsSelectedViewField)
 			{
 				var field = typeof(BhUnitControlsView).GetField(hint, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-				if (field != null && typeof(BhUnitAbilityView).IsAssignableFrom(field.FieldType))
-					return field.GetValue(controls) as BhUnitAbilityView;
+				if (field != null && typeof(BhBattleAbilityView).IsAssignableFrom(field.FieldType))
+					return field.GetValue(controls) as BhBattleAbilityView;
 			}
 		}
 		catch { }

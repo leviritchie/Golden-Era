@@ -7132,5 +7132,28 @@
     ]
    }
   ]
+ },
+ "glbPatch": {
+  "reason": "2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass",
+  "ops": [
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_troll_move_tracks.json",
+    "sha256": "ede201f0beea3c748e8885d478b9a0e9c2734da307867dfe15ee27aed3266ca6"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "unit pass: tear gate on the replaced Move clips"
+   }
+  ]
  }
 }

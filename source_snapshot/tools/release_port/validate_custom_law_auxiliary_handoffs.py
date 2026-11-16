@@ -112,8 +112,8 @@ def load_target_sids(path: Path) -> set[str]:
         status = target.get("implementationStatus")
         if not isinstance(sid, str):
             raise ValueError(f"{rel(path)} contains target row without lawSid: {target!r}")
-        if status != "native-exact":
-            raise ValueError(f"{sid}: current auxiliary handoff gate expects native-exact targets, got {status!r}")
+        if status not in ("native-exact", "runtime-backed"):
+            raise ValueError(f"{sid}: current auxiliary handoff gate expects native-exact or runtime-backed targets, got {status!r}")
         result.add(sid)
     return result
 

@@ -9,6 +9,7 @@ from types import SimpleNamespace
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "homm3_unit_look"))   # glbpatch (the look's hash)
 import cs_numpy as CS  # noqa: E402
 import patch_glb as P  # noqa: E402
 
@@ -436,6 +437,44 @@ class KeyScales(KeyRotations):
         pass                                     # covered by test_applies_per_key (keyScales always regrids)
 
 
+class SetTracks(KeyScales):
+    """setTracks: a sha-pinned table replaces whole channels on the clip's own key grid."""
+    def table(self, times, rot, name="tk.json", scale=None, **extra):
+        import json
+        bone = {"rotation": rot, **({"scale": scale} if scale is not None else {})}
+        tab = {"schema": P.TRACKS_SCHEMA, "clips": {"Unit_Idle": {"times": times, "bones": {"Arm": bone}}}, **extra}
+        rel = f"{P.KEY_ROT_DIR}/{name}"
+        raw = json.dumps(tab).encode()
+        (self.tmp / rel).write_bytes(raw)
+        return {"op": "setTracks", "table": rel, "sha256": P.sha(raw)}
+
+    def test_applies_per_key(self):
+        h = np.radians(40) / 2
+        q = [[0, 0, 0, 1.0], [np.sin(h), 0, 0, np.cos(h)]]
+        op = self.table([1 / 12, 2 / 12], q, scale=[[1, 1.25, 1.0]] * 2)
+        self.assertEqual(P.spec_errors({"reason": "r", "ops": [op]}), [])
+        g = self.glb([1 / 12, 2 / 12])
+        rec = P.op_set_tracks(g, op)
+        a = g.anim("Unit_Idle")
+        got = {c["target"]["path"]: g.read(a["samplers"][c["sampler"]]["output"]) for c in a["channels"]}
+        np.testing.assert_allclose(got["rotation"], q, atol=1e-6)
+        np.testing.assert_allclose(got["scale"], [[1, 1.25, 1]] * 2, atol=1e-6)
+        self.assertEqual(rec["clips"], {"Unit_Idle": {"keys": 2, "bones": 1}})
+        with self.assertRaises(SystemExit):     # the table's times must be the clip's key grid
+            P.op_set_tracks(self.glb([1 / 12, 3 / 12]), op)
+
+    def test_refusals(self):
+        ok = self.table([1 / 12], [[0, 0, 0, 1.0]])
+        bad = [dict(ok, sha256="0" * 64), dict(ok, table="elsewhere/t.json"),
+               self.table([1 / 12], [[0, 0, 0, 2.0]], "norm.json"),
+               self.table([1 / 12], [[0, 0, 1.0]], "shape.json"),
+               self.table([2 / 12, 1 / 12], [[0, 0, 0, 1.0]] * 2, "order.json"),
+               self.table([1 / 12], [[0, 0, 0, 1.0]], "range.json", scale=[[1, 2.5, 1.0]]),
+               self.table([1 / 12], [[0, 0, 0, 1.0]], "schema.json", schema="other")]
+        for op in bad:
+            self.assertTrue(P.spec_errors({"reason": "r", "ops": [op]}), op)
+
+
 class TargetPoses(unittest.TestCase):
     """A one-frame clip holds its CS target on both keys; the same pose on every key reads as one target pose."""
     def glb(self, arm_quats):
@@ -544,6 +583,181 @@ class MasterSync(unittest.TestCase):
         dup = P.master_duplicate_poses(g0, fmap)
         self.assertEqual(dup, {("u_DEF_Master", round((t + 1) / 12, 4)) for t in range(6)})
         self.assertEqual(P.master_duplicate_poses(g0, None), set())
+
+
+class RigTopology(SetWeights):
+    """addJoints / cutFaces: sha-pinned rig and index-buffer changes, declared in the stamp and proven against the
+    export (a synthetic two-joint strip with one bridging triangle; no CS targets, so no re-bake)."""
+    NJ, NF = 2, 7
+
+    def setUp(self):
+        super().setUp()
+        self.share, P.CUT_MAX_SHARE = P.CUT_MAX_SHARE, 1.0      # the strip is 7 faces: one cut is past the real cap
+
+    def tearDown(self):
+        P.CUT_MAX_SHARE = self.share
+        super().tearDown()
+
+    def glb_bytes(self):
+        from stride_match_glb import Glb
+        g = Glb.__new__(Glb)
+        g.json = {"asset": {"version": "2.0"}, "accessors": [], "bufferViews": [], "buffers": [{"byteLength": 0}],
+                  "nodes": [{"name": "Root", "children": [1]}, {"name": "Hips", "translation": [0, 0.5, 0]},
+                            {"name": "u", "mesh": 0, "skin": 0}, {"name": "u_Rig", "children": [0, 2]}],
+                  "scenes": [{"nodes": [3]}], "scene": 0}
+        g.bin = bytearray(); g.nodes = g.json["nodes"]; g.names = [n["name"] for n in g.nodes]
+        g.parent = {1: 0, 0: 3, 2: 3}
+
+        def raw(arr, ctype, typ):
+            while len(g.bin) % 4:
+                g.bin.append(0)
+            g.json["bufferViews"].append({"buffer": 0, "byteOffset": len(g.bin), "byteLength": arr.nbytes})
+            g.bin += arr.tobytes()
+            g.json["accessors"].append({"bufferView": len(g.json["bufferViews"]) - 1, "componentType": ctype,
+                                        "count": len(arr), "type": typ})
+            return len(g.json["accessors"]) - 1
+        V = np.array([[x, y, 0] for y in (0, 1, 2, 3) for x in (0, 1)], np.float32)            # 2 x 4 strip, y up
+        F = np.array([[0, 1, 2], [1, 3, 2], [2, 3, 4], [3, 5, 4], [4, 5, 6], [5, 7, 6],
+                      [0, 7, 1]], np.uint16)                                                     # the last one bridges
+        J = np.zeros((8, 4), np.uint8); J[:, 0] = 1
+        W = np.zeros((8, 4), np.float32); W[:, 0] = 1
+        ibm = np.stack([np.eye(4), np.linalg.inv(np.array([[1, 0, 0, 0], [0, 1, 0, 0.5], [0, 0, 1, 0], [0, 0, 0, 1.0]]))])
+        g.json["meshes"] = [{"primitives": [{"attributes": {
+            "POSITION": g.append_accessor(V, "VEC3"), "TEXCOORD_0": raw(V[:, :2].copy(), 5126, "VEC2"),
+            "JOINTS_0": raw(J, 5121, "VEC4"), "WEIGHTS_0": g.append_accessor(W, "VEC4")},
+            "indices": raw(F.reshape(-1), 5123, "SCALAR")}]}]
+        g.json["skins"] = [{"joints": [0, 1],
+                            "inverseBindMatrices": g.append_accessor(ibm.transpose(0, 2, 1).reshape(-1, 16), "MAT4")}]
+        tin = g.append_accessor(np.array([[1 / 12], [2 / 12], [3 / 12]]), "SCALAR")
+        out = g.append_accessor(np.array([[0, 0, 0, 1.0]] * 3), "VEC4")
+        g.json["animations"] = [{"name": "Unit_Idle", "samplers": [{"input": tin, "output": out, "interpolation": "LINEAR"}],
+                                 "channels": [{"sampler": 0, "target": {"node": 1, "path": "rotation"}}]}]
+        return g.to_bytes()
+
+    def tab(self, kind, name, body):
+        import json
+        raw = json.dumps(body).encode()
+        rel = f"{P.KEY_ROT_DIR}/{name}"
+        (self.tmp / rel).write_bytes(raw)
+        return {"op": kind, "table": rel, "sha256": P.sha(raw)}
+
+    def joints(self, name="j.json", count=None, joints=None):
+        return self.tab("addJoints", name, {"schema": P.JOINTS_SCHEMA, "jointCount": count or self.NJ, "joints": joints or [
+            {"name": "T0", "parent": "Hips", "head": [0.5, 1.5, 0]}, {"name": "T1", "parent": "T0", "head": [0.5, 2.5, 0]}]})
+
+    def cut(self, data, faces=(6,), name="c.json", **over):
+        g = P.Glb(data)
+        body = {"schema": P.FACE_CUT_SCHEMA, "faceCount": self.NF,
+                "indexSha256": P.sha(P.index_bytes(g, P.Body(g).prim["indices"])), "faces": list(faces), **over}
+        return self.tab("cutFaces", name, body)
+
+    def test_add_joints_cut_weights_tracks(self):
+        data = self.glb_bytes()
+        h = np.radians(90) / 2
+        ops = [self.joints(), self.cut(data),
+               self.tab("setWeights", "w.json", {"schema": P.WEIGHT_TABLE_SCHEMA, "vertexCount": 8,
+                                                 "vertices": {"6": {"T1": 1.0}, "7": {"T1": 0.5, "T0": 0.5}}}),
+               self.tab("setTracks", "t.json", {"schema": P.TRACKS_SCHEMA, "clips": {"Unit_Idle": {
+                   "times": [1 / 12, 2 / 12, 3 / 12],
+                   "bones": {"T0": {"rotation": [[0, 0, 0, 1.0], [0, 0, float(np.sin(h)), float(np.cos(h))],
+                                                 [0, 0, 0, 1.0]]}}}}})]
+        spec = {"reason": "r", "ops": ops}
+        self.assertEqual(P.spec_errors(spec), [])
+        out, rec = P.patch_bytes("u", data, spec)
+        g = P.Glb(out); b = P.Body(g)
+        self.assertEqual(b.jnames, ["Root", "Hips", "T0", "T1"])                 # appended: old indices stable
+        self.assertEqual(len(b.ibm), 4)
+        np.testing.assert_allclose(np.linalg.inv(b.ibm[3])[:3, 3], [0.5, 2.5, 0], atol=1e-6)
+        self.assertEqual(len(b.F), 6)
+        np.testing.assert_array_equal(b.F, P.Body(P.Glb(data)).F[:6])
+        self.assertEqual(b.J[6, 0], 3); self.assertEqual(sorted(b.J[7, :2].tolist()), [2, 3])
+        a = g.anim("Unit_Idle")
+        ch = {(g.names[c["target"]["node"]], c["target"]["path"]): a["samplers"][c["sampler"]] for c in a["channels"]}
+        self.assertEqual(ch[("T1", "rotation")]["interpolation"], "STEP")         # held at rest, as a static bone
+        self.assertEqual(len(g.read(ch[("T1", "translation")]["input"])), 2)
+        self.assertEqual(ch[("T0", "rotation")]["interpolation"], "LINEAR")       # keyed by setTracks
+        self.assertEqual(len({id(s) for s in ch.values()}), len(ch))              # one sampler per channel
+        w = g.world(g.sample_local("Unit_Idle", np.array([1 / 12, 2 / 12])))
+        np.testing.assert_allclose(w[g.names.index("T1")][0, :3, 3], [0.5, 2.5, 0], atol=1e-5)     # rest = bind
+        np.testing.assert_allclose(w[g.names.index("T1")][1, :3, 3], [-0.5, 1.5, 0], atol=1e-5)    # T0 turned 90 about z
+        topo = g.json["asset"]["extras"][P.STAMP]["topology"]
+        self.assertEqual((topo["jointsAdded"], topo["facesCut"]), (["T0", "T1"], 1))
+        self.assertNotEqual(topo["geometrySha256"], topo["sourceGeometrySha256"])
+        self.assertEqual(rec["geometrySha256"], topo["geometrySha256"])
+        # the look's gate: the delivery is the base minus the declared faces, and nothing else passes as that
+        self.assertEqual(P.declared_cut_errors(out, data), [])
+        self.assertTrue(P.declared_cut_errors(data, data))                         # no stamp
+        self.assertTrue(P.declared_cut_errors(out, data + b"\0"))                  # another base
+        g2 = P.Glb(out); a2 = g2.json["accessors"][b.prim["indices"]]
+        off = g2.json["bufferViews"][a2["bufferView"]]["byteOffset"]
+        g2.bin[off:off + 6] = np.array([0, 7, 1], "<u2").tobytes()                 # a triangle swapped in after the patch
+        self.assertTrue(P.declared_cut_errors(g2.to_bytes(), data))
+        with self.assertRaises(SystemExit):                                         # already patched
+            P.patch_bytes("u", out, spec)
+
+    def test_joints_only_keeps_the_geometry_hash(self):
+        data = self.glb_bytes()
+        out, rec = P.patch_bytes("u", data, {"reason": "r", "ops": [self.joints()]})
+        self.assertEqual(rec["geometrySha256"], P.geometry_and_images(data)["geometrySha256"])
+        self.assertEqual(rec["topology"]["jointsAdded"], ["T0", "T1"])
+        self.assertNotIn("facesCut", rec["topology"])
+        b = P.Body(P.Glb(out))
+        np.testing.assert_array_equal(b.J, P.Body(P.Glb(data)).J)                  # nothing re-skinned
+
+    def test_new_joints_join_the_bakes_corrective_exclusion(self):
+        # the bake never saw the new joints: they join its excludeBones, the list cs_rebake's new side and cs_rekey read
+        g = P.Glb(self.glb_bytes())
+        g.json["asset"]["extras"] = {P.CS.BAKE_STAMP: {"schema": P.CS.BAKE_SCHEMA, "excludeBones": ["Hips"]}}
+        out, rec = P.patch_bytes("u", g.to_bytes(), {"reason": "r", "ops": [self.joints()]})
+        self.assertEqual(P.Glb(out).json["asset"]["extras"][P.CS.BAKE_STAMP]["excludeBones"], ["Hips", "T0", "T1"])
+        self.assertEqual(rec["ops"][0]["correctiveExcludeBonesAdded"], ["T0", "T1"])
+        out, rec = P.patch_bytes("u", self.glb_bytes(), {"reason": "r", "ops": [self.joints()]})   # no bake record
+        self.assertEqual(rec["ops"][0]["correctiveExcludeBonesAdded"], [])
+
+    def test_add_joints_refusals(self):
+        data = self.glb_bytes()
+        j = lambda **k: {"name": "T0", "parent": "Hips", "head": [0.5, 1.5, 0], **k}   # noqa: E731
+        bad_tables = [self.joints("a.json", joints=[j(), j()]), self.joints("b.json", joints=[j(head=[0, 1])]),
+                      self.joints("c.json", joints=[j(parent="T0")]), self.joints("d.json", joints=[j(extra=1)]),
+                      dict(self.joints("e.json"), sha256="0" * 64), dict(self.joints("f.json"), table="elsewhere/j.json")]
+        for op in bad_tables:
+            self.assertTrue(P.spec_errors({"reason": "r", "ops": [op]}), op)
+        bad_on_glb = [self.joints("g.json", count=3),                              # authored on another rig
+                      self.joints("h.json", joints=[j(name="Hips", parent="Root")]),              # the name exists
+                      self.joints("i.json", joints=[j(parent="Nope")]),            # not a joint
+                      self.joints("k.json", joints=[j(parent="u")]),               # a node, but not a skin joint
+                      self.joints("l.json", joints=[j(head=[0.5, 40.0, 0])])]      # not rest-space coordinates
+        for op in bad_on_glb:
+            self.assertEqual(P.spec_errors({"reason": "r", "ops": [op]}), [])
+            with self.assertRaises(SystemExit, msg=op):
+                P.patch_bytes("u", data, {"reason": "r", "ops": [op]})
+
+    def test_cut_faces_refusals(self):
+        data = self.glb_bytes()
+        self.NF = 70                                                                # table-shape errors (spec level)
+        bad_tables = [self.cut(data, (6, 6), "a.json"), self.cut(data, (6, 5), "b.json"), self.cut(data, (70,), "c.json"),
+                      self.cut(data, (), "e.json"),
+                      self.cut(data, (6,), "f.json", indexSha256="short"), dict(self.cut(data, (6,), "g.json"), sha256="0" * 64)]
+        for op in bad_tables:
+            self.assertTrue(P.spec_errors({"reason": "r", "ops": [op]}), op)
+        ok70 = self.cut(data, (6,), "h.json")                                       # faceCount is another body's
+        self.NF = 7
+        one = self.cut(data, (6,), "i.json")
+        self.assertEqual(P.spec_errors({"reason": "r", "ops": [one]}), [])
+        self.assertTrue(P.spec_errors({"reason": "r", "ops": [one, one]}))          # a second cutFaces
+        bad_on_glb = [ok70, self.cut(data, (6,), "j.json", indexSha256="0" * 64)]   # another export's indices
+        for op in bad_on_glb:
+            with self.assertRaises(SystemExit, msg=op):
+                P.patch_bytes("u", data, {"reason": "r", "ops": [op]})
+        out, _ = P.patch_bytes("u", data, {"reason": "r", "ops": [one]})
+        self.assertEqual(len(P.Body(P.Glb(out)).F), 6)
+        out, rec = P.patch_bytes("u", data, {"reason": "r", "ops": [self.cut(data, (4, 5), "k.json")]})
+        cut = [o for o in rec["ops"] if o["op"] == "cutFaces"][0]                   # vertex 6 is left in no face:
+        self.assertEqual((cut["facesCut"], cut["orphanVertices"]), (2, 1))          # kept in the buffers, reported
+        self.assertEqual(len(P.Body(P.Glb(out)).V), 8)
+        self.assertEqual(P.declared_cut_errors(out, data), [])
+        P.CUT_MAX_SHARE = self.share
+        self.assertTrue(P.spec_errors({"reason": "r", "ops": [one]}))               # 1 of 7 is past the share cap
 
 
 if __name__ == "__main__":

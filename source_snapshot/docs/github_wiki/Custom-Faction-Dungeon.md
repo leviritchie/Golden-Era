@@ -15,16 +15,19 @@ Generated from live Core.zip on 2026-05-23.
 | Law prefix | fraction_law_homm3_dungeon_ |
 | Map billboard height | 4.5 |
 
-## Faction Skill: Captives
+## Faction Skill: War Captives
 
-Captives replaced Draconic Dominion on 2026-10-12 (proof tier: build; runtime unproven).
+War Captives replaced the flee-bank Captives on 2026-11-14 (proof tier: build; runtime unproven). Captives itself had replaced Draconic Dominion on 2026-10-12.
 
-- Capture: when a human hero with Captives clicks the native "let them run" button on a fleeing squad, the squad's strength (sum of squadValue x count) is banked on the hero.
-- Tiers: banked strength 2,000 / 6,000 / 12,000 / 22,000 / 36,000 gives +1 to +5 Attack and Defense through one visible hero buff named "Captives".
-- Spells (granted per rank, 0 mana): Execute Captives gives 55 / 82.5 / 110 Experience per 1,000 strength. Ransom Captives gives 200 / 300 / 400 Gold per 1,000 strength. Both empty the captives and are refused if there are none.
-- Persistence: hidden bonus-less hero buffs store the bank (strength in units of 100 and squad count) in the save.
-- Subskills (SIDs keep the `draconic_diplomacy_1..6` slug): Underworld Tribute, Interrogation (Execute also restores Mana equal to 10% of the XP), Imperial Menagerie, Terror Mandate, Slave Markets (Ransom +25% Gold), Dungeon Cells (strength counts 25% higher for tiers).
-- UI: a native buff icon in the hero profile whose tooltip shows live captives, tier, progress to the next tier and what Execute and Ransom would give now; a compact meter on the adventure-map hero portrait, in the style of the Necropolis necromancy meter, that fills toward the next tier and shows the details on hover; and spell descriptions with per-rank yields.
+- Capture: after each won battle the hero takes 1 captive per 100 strength (squadValue x count) of the defeated enemy creatures; Dungeon Cells adds 15%.
+- Choice: a post-battle captives screen offers, per Basic / Advanced / Expert:
+  - Execute: 6 / 9 / 12 Experience per captive.
+  - Ransom: 10 / 15 / 20 Gold per captive.
+  - Eat: restore 20 / 30 / 40% of each stack's losses from that battle, rounded down, up to the captives' strength.
+  - Enslave (Enslave Captives subskill): no Gold now; 1 / 1.5 / 2 Gold per enslaved captive each day while the hero stays in service.
+  - Recruit (Recruit Captives subskill): hire 10 / 15 / 20% of the defeated creatures at their normal cost, if a slot is free.
+- Subskills (SIDs keep the `draconic_diplomacy_1..6` slug): Underworld Tribute, Interrogation (Execute also restores Mana equal to 10% of the XP), Enslave Captives, Recruit Captives, Slave Markets (Ransom and Enslave +25% Gold), Dungeon Cells (+15% captives).
+- Persistence: enslaved captives are stored in hidden bonus-less hero buffs plus one visible "Enslaved Captives" buff whose tooltip shows the count and daily Gold. An old Captives bank is paid out once as Ransom.
 
 ## Runtime Contract
 

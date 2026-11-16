@@ -5,12 +5,15 @@ Core-free, so it runs on every full-tier plugin build:
 - the catalog agrees with the policy (cost matrix, manual payloads after `{graft}` expansion, exclusions, stable
   indices that fit the ledger's graft-index bits, payloads that are valid buff rows; runtime-, helper- or
   variant-only grafts may have an empty buff payload; every graft has a token-free description);
-- the Core overlay rows (graft buffs, Transcribe, ledger and map-graft hero buffs) have the shapes the runtime relies on;
+- the Core overlay rows (graft buffs, the Artificing world spell, ledger and map-graft hero buffs) have the shapes the
+  runtime relies on, and every faction-skill rank grants the spell;
 - map grafts are complete (hero buff + native unit set, 7 per-line gold rates, injected abilities within the HUD slots);
 - the runtime is gated on Enabled and wired into Plugin.cs, the shared battle-result prefix, Logic.Hero
   RecalculateStats and the shared side day-start grant;
-- every graftable row is observable (observe specs of known kinds), and the observation probe is diagnostic only:
-  gated on ObservationDiagnostics, scoped on the passive action runner's trigger handler, no book writes.
+- observation is the battle-end enemy-army roll (policy.observation.rule battle_end_enemy_army) written by the runtime;
+  the per-event observation probe stays diagnostic only: gated on ObservationDiagnostics, scoped on the passive action
+  runner's trigger handler, no book writes;
+- the world spell intercept passes foreign Necromancer Will settings through and the picker spends only via TryGraft.
 """
 from __future__ import annotations
 
@@ -125,19 +128,40 @@ def main() -> int:
     for row in overlay.make_helper_rows(catalog)["hero_buff"]:
         if row.get("hidden") or row.get("isDispellable") is not True or not row.get("bonuses"):
             errors.append(f"map graft hero buff {row['id']} must be visible, carry bonuses and be isDispellable (the reconcile removes it)")
-    ability = overlay.make_transcribe_hero_ability(policy)
-    dealer = ability["levels"][0]["damageDealer"]
-    if dealer["buff"]["sid"] != policy["transcribe"]["effectBuffSid"] or ability["levels"][0]["aiValue"] != 0:
-        errors.append("Transcribe ability must apply the marker buff and keep aiValue 0")
-    marker = overlay.make_transcribe_effect_buff_row(policy)
-    if marker["canDispel"] or marker["maxDuration"] != 1:
-        errors.append("Transcribe marker buff must be a non-dispellable 1-round buff")
+    if "transcribe" in policy:
+        errors.append("policy.transcribe is retired (2026-11-11: observation-first, no Transcribe action)")
+    if policy["observation"].get("rule") != "battle_end_enemy_army":
+        errors.append("policy.observation.rule must be battle_end_enemy_army")
+    chances = policy["observation"]["chanceByRank"]
+    if len(chances) != 3 or any(not isinstance(c, int) or c < 0 or c > 100 for c in chances) or chances != sorted(chances):
+        errors.append(f"observation.chanceByRank {chances} must be 3 non-decreasing percents")
+    spell = policy["graftSpell"]
+    necromancy = {
+        "id": overlay.NECROMANCY_MAGIC_SID,
+        "worldMagic": {"magicSettings": [{"usageLimit": -1, "mechType": overlay.NECROMANCY_MAGIC_SID, "parameters": [], "castInfoSid": "x"}], "settingPerLevels": [0]},
+    }
+    magic = overlay.make_graft_magic_row(policy, [necromancy])
+    settings = magic["worldMagic"]["magicSettings"]
+    if (
+        magic["id"] != spell["magicSid"]
+        or magic.get("usedOnMap") is not True
+        or any(m != 0 for m in magic["manaCost"])
+        or any(st.get("mechType") != overlay.NECROMANCY_MAGIC_SID or st.get("parameters") != [spell["mode"]] for st in settings)
+    ):
+        errors.append("Artificing world spell must be a free map-usable Necromancer Will clone with parameters [graftSpell.mode]")
+    levels = overlay.faction_skill_levels(policy)
+    if len(levels) != 3 or any(level != [{"type": "heroMagicAddition", "parameters": [spell["magicSid"], "false"]}] for level in levels):
+        errors.append("every Artificing rank must grant the world spell via heroMagicAddition")
+    lang_sids = {row["sid"] for row in overlay.magic_lang_rows(policy)}
+    if lang_sids != {f"{spell['magicSid']}_{suffix}" for suffix in ("name", "description", "cast")}:
+        errors.append("Artificing world spell needs name/description/cast lang rows")
 
     runtime = (PLUGIN_DIR / "Homm3TowerArtificingRuntime.cs").read_text(encoding="utf-8")
     plugin = (PLUGIN_DIR / "Plugin.cs").read_text(encoding="utf-8-sig")
     hooks = (PLUGIN_DIR / "Homm3RuntimeMechanicHooks.cs").read_text(encoding="utf-8-sig")
     observation = (PLUGIN_DIR / "Homm3TowerArtificingObservation.cs").read_text(encoding="utf-8-sig")
     gold_hook = (PLUGIN_DIR / "Homm3SwashbucklerGoldHook.cs").read_text(encoding="utf-8-sig")
+    picker = (PLUGIN_DIR / "Homm3TowerArtificingPicker.cs").read_text(encoding="utf-8-sig")
     for needle, text, where in (
         ("if (!IsEnabled)", runtime, "runtime registration must stay gated on Homm3TowerArtificingCatalog.Enabled"),
         ("Homm3TowerArtificingRuntime.TryRegister(_harmony, Log);", plugin, "Plugin.cs must register the runtime"),
@@ -159,13 +183,25 @@ def main() -> int:
         ("if (!Homm3TowerArtificingCatalog.ObservationDiagnostics)", observation, "the observation probe must stay gated on policy.observation.diagnostics"),
         ("GameSymbols.TowerArtificing.PassiveActionRunnerTrigger", observation, "attribution needs the passive action runner trigger scope"),
         ("ObservedPassiveActionsByUnitSid", observation, "attribution must map config identity through the catalog table"),
+        ("ObserveEnemyArmies(key, started);", runtime, "the battle-result prefix must roll battle-end observation"),
+        ("Homm3TowerArtificingCatalog.ObservationChanceByRank", runtime, "observation must roll at the catalog chance by rank"),
+        ("GameSymbols.CastleEliteStrategem.NecromancyWorldMagicCast", runtime, "the world spell needs the Necromancer Will cast prefix"),
+        ("Homm3TowerArtificingCatalog.GraftMagicMode", runtime, "the cast prefix must recognize only the Artificing mode"),
+        ("Homm3TowerArtificingPicker.Open(", runtime, "the Artificing spell must open the graft picker"),
+        ("Homm3TowerArtificingRuntime.TryGraft(", picker, "the picker must spend through TryGraft"),
     ):
         if needle not in text:
             errors.append(where)
 
-    for forbidden in ("TryAddEssence", "WriteBits", "Transcribe(", "TryGraft("):
+    for forbidden in ("TryAddEssence", "WriteBits", "WriteBook(", "TryGraft("):
         if forbidden in observation:
             errors.append(f"the observation probe is diagnostic only; it must not call {forbidden}")
+    for forbidden in ("WriteBits", "TryAddEssence", "WriteBook("):
+        if forbidden in picker:
+            errors.append(f"the picker must not write the ledger directly ({forbidden}); TryGraft validates and pays")
+    for retired in ("Transcribe", "TranscribeAbilitySid"):
+        if retired in runtime:
+            errors.append(f"runtime still references retired {retired}")
 
     if errors:
         print("Tower Artificing contract FAILED:\n  " + "\n  ".join(errors), file=sys.stderr)

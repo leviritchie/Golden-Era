@@ -770,7 +770,7 @@
   "postReweight": []
  },
  "glbPatch": {
-  "reason": "DEF g12 attack: lunges stretched out level, head forward and abdomen trailing straight back, dropping onto the target (f2-f5), instead of hanging upright",
+  "reason": "DEF g12 attack: lunges stretched out level, head forward and abdomen trailing straight back, dropping onto the target (f2-f5), instead of hanging upright; 2026-11-10 flyer flight (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the articulated flight built in V:/olden_port_work/flyer_move, wing weights as that candidate; clip pass 2026-11-11 (user-approved candidate): Death re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -799,6 +799,22 @@
     "op": "keyTranslations",
     "table": "tools/homm3_glb_patch/key_rotations/h3_damsel_fly_pose_tr.json",
     "sha256": "bcbd308d44dc3c9f8d75d0b5888e15081a3d8455a604df95dfa89fd7fbb43157"
+   },
+   {
+    "op": "setWeights",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_damsel_fly_flight_weights.json",
+    "sha256": "316164aa41cbb5a158c680adf9dec2899d4afd885c5b38ff9d906210c11d7b28"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/h3_damsel_fly_flight_tracks.json",
+    "sha256": "c3fcb921ea8f28055fa282a12a7a833121cee1da2fcdff4a4110e5acccd8eda3"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_damsel_fly_clip_tracks.json",
+    "sha256": "c6677b2eea5c983f18fc9c0b01bc5af45b6748f1c0a0b82c87b63cef365c1b96"
    }
   ]
  }

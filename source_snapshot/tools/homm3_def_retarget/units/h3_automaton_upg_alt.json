@@ -614,5 +614,15 @@
    "reason": "DEF g12_attack_front telescopes the drill arm: front edge vs Idle f0 is [0,-.05,-.08,+.04,+.29,+.41,+.45,+.39,+.24,+.08] body lengths (peak +0.45 at DEF f64) while the rebuilt GLB (e9cec4be) peaks at +0.078; the emphasis stamp reports 'reach ratio 0.0 missed' and hand_keys only rotates. Curve = DEF minus the GLB's own body reach per DEF frame, so the tip lands on the DEF's front edge. Measured by reach.py (coordinator approval 2026-09-27). Result (GLB 1480f925, 5 sections): reach.py peak 0.468 L vs DEF 0.45 (before 0.078); edges >2x rest 0 before and after on every clip, worst AttackFront ratio 1.04 unchanged; precheck PASS, jitter p90 0.123.",
    "defPeakL": 0.45
   }
- ]
+ ],
+ "glbPatch": {
+  "reason": "clip pass 2026-11-11 (user-approved candidate): Mouseover re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
+  "ops": [
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/h3_automaton_upg_alt_clip_tracks.json",
+    "sha256": "640e78b4ae66ef552372603c0d37202a9db0e18ce52685060b65306174b0af74"
+   }
+  ]
+ }
 }

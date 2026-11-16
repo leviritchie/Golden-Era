@@ -185,7 +185,7 @@
   "fuseCut": 1.5
  },
  "glbPatch": {
-  "reason": "DEF g12 attack: the sea serpent uncoils its neck and strikes the head far forward at the target with the jaws level (f3-f5), then recoils, instead of buckling the head down into its own coil; neck/upper-coil weights re-solved so the strike does not tear the throat",
+  "reason": "DEF g12 attack: the sea serpent uncoils its neck and strikes the head far forward at the target with the jaws level (f3-f5), then recoils, instead of buckling the head down into its own coil; neck/upper-coil weights re-solved so the strike does not tear the throat; 2026-11-10 unit pass (user-approved candidate): Unit_Move / MoveStart / MoveEnd replaced by the candidate built in V:/olden_port_work/unit_pass; clip pass 2026-11-11 (user-approved candidate): AttackFront, Defence re-authored in V:/olden_port_work/clip_pass (lane attempt as cfg)",
   "ops": [
    {
     "op": "setWeights",
@@ -214,6 +214,30 @@
     "op": "keyTranslations",
     "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sea_serpent_pose_tr.json",
     "sha256": "9dd171b6b5ebe2faef2e2f5f1c96b97fd7ab174682151d7ee6acd4a8f5783e09"
+   },
+   {
+    "op": "setTracks",
+    "clearCorrectives": true,
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sea_serpent_move_tracks.json",
+    "sha256": "2c3b88d2fd16ac072d4a1b62a665c4bdc53f110a94d3e2ee8a7bb2c3e7471a65"
+   },
+   {
+    "op": "setTracks",
+    "table": "tools/homm3_glb_patch/key_rotations/hota_cove_sea_serpent_clip_tracks.json",
+    "sha256": "a15d49366cef72433b31577adec6ac3bc490987062bd9f5e59c29401f0c5bab7"
+   },
+   {
+    "op": "stretchRelax",
+    "clips": [
+     "Unit_Move",
+     "Unit_MoveStart",
+     "Unit_MoveEnd"
+    ],
+    "ratio": 1.6,
+    "iterations": 1500,
+    "smooth": 0.0,
+    "maxMove": 0.08,
+    "note": "unit pass: tear gate on the replaced Move clips"
    }
   ]
  }
