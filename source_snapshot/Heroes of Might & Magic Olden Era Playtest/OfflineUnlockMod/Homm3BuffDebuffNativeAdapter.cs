@@ -569,6 +569,63 @@ internal static class Homm3BuffDebuffNativeAdapter
 		return true;
 	}
 
+	/// <summary>
+	/// Adds <paramref name="delta"/> to one additive int stat ("offence", "defence", "initiative", "speed") on the
+	/// unit's live stat block, the same block the buff stat fold above writes. The caller owns undoing it.
+	/// </summary>
+	internal static bool TryAdjustUnitIntStat(object unit, string field, int delta, out int before, out int after, out string failReason)
+	{
+		before = after = 0;
+		failReason = null;
+		if (unit == null || string.IsNullOrEmpty(field))
+		{
+			failReason = "unit or field missing";
+			return false;
+		}
+		object unitStats = null;
+		try
+		{
+			unitStats = ReadFirstExactMember(unit, unit.GetType(), new[] { "get_stats", "stats", "get__stats_k__BackingField" });
+		}
+		catch
+		{
+			// fall through
+		}
+		if (unitStats == null)
+		{
+			failReason = "Unit.get_stats was not resolved";
+			return false;
+		}
+		if (!TryReadIntMember(unitStats, "get_" + field, out before))
+		{
+			failReason = "missing get_" + field + " on UnitStat";
+			return false;
+		}
+		after = before + delta;
+		if (delta != 0 && !TryWriteIntMember(unitStats, "set_" + field, after))
+		{
+			after = before;
+			failReason = "missing set_" + field + " on UnitStat";
+			return false;
+		}
+		return true;
+	}
+
+	/// <summary>Adds <paramref name="delta"/> to one additive int stat on a UnitStat object (e.g. one the game just built).</summary>
+	internal static bool TryAdjustStatBlockInt(object stats, string field, int delta, out int after)
+	{
+		after = 0;
+		if (stats == null || !TryReadIntMember(stats, "get_" + field, out var before))
+			return false;
+		after = before + delta;
+		if (delta == 0)
+			return true;
+		if (TryWriteIntMember(stats, "set_" + field, after))
+			return true;
+		after = before;
+		return false;
+	}
+
 	private static void UndoAppliedBuffKey(long buffKey)
 	{
 		if (buffKey == 0)

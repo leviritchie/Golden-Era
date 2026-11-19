@@ -59,6 +59,7 @@ from homm3_tower_artificing_core_overlay import (
 from homm3_neutral_core_overlay import add_homm3_neutral_core_overlay, homm3_neutral_donor_unit_sids
 import homm3_inferno_gating_core_overlay
 import homm3_fortress_predator_instinct_core_overlay
+import homm3_stronghold_warcry_core_overlay
 import homm3_conflux_fusion_core_overlay as conflux_fusion
 import homm3_factory_logistics_core_overlay as factory_logistics
 from homm3_reward_units_core_overlay import add_custom_faction_reward_units
@@ -15136,18 +15137,8 @@ HOMM3_STRONGHOLD_WARCRIES_LANG_ROWS: tuple[dict[str, str], ...] = (
     {"sid": "skill_faction_homm3_stronghold_ability_luck_description", "text": "Increases allied Luck by 1/2/3 based on Warcries rank. Only one Warcry can be active at a time."},
     {"sid": "skill_faction_homm3_stronghold_ability_initiative_name", "text": "Tempo Cry"},
     {"sid": "skill_faction_homm3_stronghold_ability_initiative_description", "text": "Increases allied creatures' Initiative by 1/2/3 based on Warcries rank. Only one Warcry can be active at a time."},
-    {"sid": "sub_skill_faction_homm3_stronghold_1_name", "text": "Native Drums"},
-    {"sid": "sub_skill_faction_homm3_stronghold_1_desc", "text": "Friendly Stronghold creatures deal +10% and take -10% Damage on Native Terrain."},
-    {"sid": "sub_skill_faction_homm3_stronghold_2_name", "text": "Intimidating Chorus"},
-    {"sid": "sub_skill_faction_homm3_stronghold_2_desc", "text": "When selecting a Warcry, the enemy side suffers a matching penalty while the Warcry is active."},
-    {"sid": "sub_skill_faction_homm3_stronghold_3_name", "text": "Blood-Fired Blows"},
-    {"sid": "sub_skill_faction_homm3_stronghold_3_desc", "text": "Friendly creatures gain +15% Attack."},
-    {"sid": "sub_skill_faction_homm3_stronghold_4_name", "text": "Deafening Call"},
-    {"sid": "sub_skill_faction_homm3_stronghold_4_desc", "text": "The selected Warcry's bonus increases by an additional +1."},
-    {"sid": "sub_skill_faction_homm3_stronghold_5_name", "text": "Battle Rhythm"},
-    {"sid": "sub_skill_faction_homm3_stronghold_5_desc", "text": "Generates 1 Focus Charge each time the hero selects a Warcry."},
-    {"sid": "sub_skill_faction_homm3_stronghold_6_name", "text": "Adrenal Chant"},
-    {"sid": "sub_skill_faction_homm3_stronghold_6_desc", "text": "When selecting a Warcry, the hero gains 3 temporary mana."},
+    # Subskill text is the Warcry rework's (2026-11-17); the three ability rows above are the retired buttons.
+    *homm3_stronghold_warcry_core_overlay.subskill_lang_rows(),
 )
 
 
@@ -15164,6 +15155,57 @@ def add_homm3_stronghold_warcries_lang_rows(
         notes,
     )
     notes.append(f"merge HoMM3 Stronghold Warcries localization ({len(HOMM3_STRONGHOLD_WARCRIES_LANG_ROWS)} rows)")
+
+
+def refresh_homm3_stronghold_warcry_locale_rows(
+    release_zip: zipfile.ZipFile,
+    output: dict[str, bytes],
+    notes: list[str],
+) -> None:
+    """Replace every locale's retired Warcries skill text with the English Warcry text.
+
+    The Warcry rework (2026-11-17) has no translations yet. An installed Core already carries the old
+    translated Warcries rows, and neither multilingual sync nor add_custom_lang_translations touches a
+    row the Core carries, so without this the other locales would keep describing the removed hero
+    actions. Remove this once the Warcry rows are translated in localization_translations/.
+    """
+    english = read_overlay_or_release_json(release_zip, output, "Lang/english/texts/heroSkills.json")
+    wanted = {
+        token["sid"]: token.get("text")
+        for token in lang_doc_tokens(english)
+        if isinstance(token, dict)
+        and isinstance(token.get("sid"), str)
+        and (
+            token["sid"].startswith("sub_skill_faction_homm3_stronghold_")
+            or token["sid"].startswith("skill_faction_homm3_stronghold_name")
+            or token["sid"].startswith("skill_faction_homm3_stronghold_desc")
+        )
+    }
+    if len(wanted) < 20:
+        raise RuntimeError(f"homm3_stronghold Warcry english text incomplete ({len(wanted)} rows)")
+    names = {name for name in set(release_zip.namelist()) | set(output) if name.startswith("Lang/") and name.endswith("/texts/heroSkills.json")}
+    refreshed = 0
+    for name in sorted(names):
+        if name.split("/")[1] == "english":
+            continue
+        doc = read_overlay_or_release_json(release_zip, output, name)
+        tokens = lang_doc_tokens(doc)
+        seen: set[str] = set()
+        changed = False
+        for token in tokens:
+            if isinstance(token, dict) and token.get("sid") in wanted:
+                seen.add(token["sid"])
+                if token.get("text") != wanted[token["sid"]]:
+                    token["text"] = wanted[token["sid"]]
+                    changed = True
+        for sid, text in wanted.items():
+            if sid not in seen:
+                tokens.append({"sid": sid, "text": text})
+                changed = True
+        if changed:
+            output[name] = write_json(doc)
+            refreshed += 1
+    notes.append(f"refresh homm3_stronghold Warcry text in {refreshed} non-English locale(s) (English until translated)")
 
 
 # Remaining custom LOC misses from the 2026-10-05 Core coverage audit
@@ -19179,23 +19221,11 @@ def make_specialized_generic_skill_row(manifest: dict[str, Any], skill_sid: str)
             "reuse the old Draconic Diplomacy SID slug for save compatibility."
         )
     elif faction_sid == "homm3_stronghold":
-        warcry_modes = ("moral", "luck", "initiative")
-        levels = [
-            [
-                {"type": "heroBattleAbility", "parameters": [f"{skill_sid}_ability_{mode}", "0"]}
-                for mode in warcry_modes
-            ],
-            [
-                {"type": "heroBattleAbility", "parameters": [f"{skill_sid}_ability_{mode}", "1"]}
-                for mode in warcry_modes
-            ],
-            [
-                {"type": "heroBattleAbility", "parameters": [f"{skill_sid}_ability_{mode}", "2"]}
-                for mode in warcry_modes
-            ],
-        ]
-        implemented = "Warcries: Basic/Advanced/Expert grant Rallying Cry, Fortune Cry, and Tempo Cry as native hero battle abilities at rank 1/2/3 strength, with Stronghold subskills modifying those abilities."
-        source_difference = "Consolidated overlay preserves the retired Stronghold generator's heroBattleAbility rank wiring instead of falling through to the empty generic faction-skill row."
+        # Warcry (2026-11-17) is runtime-owned: the ranks carry the native load shape only, so the hero no longer
+        # gets the three Warcries buttons. Subskill and arena rows: homm3_stronghold_warcry_core_overlay.
+        levels = homm3_stronghold_warcry_core_overlay.faction_skill_levels()
+        implemented = homm3_stronghold_warcry_core_overlay.IMPLEMENTED
+        source_difference = homm3_stronghold_warcry_core_overlay.SOURCE_DIFFERENCE
     elif faction_sid == "homm3_factory":
         # Keep the proven Dungeon load shape (ignoreFractionsCount at every rank) and add the
         # Logistics Network world spell; Field Triage is no longer granted.
@@ -19600,13 +19630,9 @@ def add_release_generic_lang(release_zip: zipfile.ZipFile, manifest: dict[str, A
     if faction_sid == "homm3_tower" and tower_artificing_enabled():
         skill_name, skill_desc, rank_descs = tower_artificing_faction_skill_lang(load_tower_artificing_policy())
     if faction_sid == "homm3_stronghold":
-        skill_name = "Warcries"
-        skill_desc = "Once per round, the hero can activate one of three Warcries. Only one Warcry can be active at a time."
-        rank_descs = [
-            "Basic Warcries unlocks Rallying Cry, Fortune Cry, and Tempo Cry at rank 1 strength.",
-            "Advanced Warcries improves Rallying Cry, Fortune Cry, and Tempo Cry to rank 2 strength.",
-            "Expert Warcries improves Rallying Cry, Fortune Cry, and Tempo Cry to rank 3 strength.",
-        ]
+        skill_name = homm3_stronghold_warcry_core_overlay.SKILL_NAME
+        skill_desc = homm3_stronghold_warcry_core_overlay.SKILL_DESC
+        rank_descs = list(homm3_stronghold_warcry_core_overlay.RANK_DESCS)
     hero_skill_rows = [
         {"sid": f"{skill_sid}_name", "text": skill_name},
         {"sid": f"{skill_sid}_name_1", "text": f"Basic {skill_name}"},
@@ -20650,6 +20676,17 @@ def add_release_generic_custom_faction_core_rows(
                         notes.append(note)
             except (json.JSONDecodeError, UnicodeDecodeError, KeyError) as ex:
                 notes.append(f"warn missing {faction_sid} skill target {skill_name}: {ex}")
+    if faction_sid == "homm3_stronghold":
+        def _warcry_write_doc(name: str, doc: Any) -> None:
+            output[name] = write_json(doc)
+
+        homm3_stronghold_warcry_core_overlay.merge_stronghold_warcry_into_overlay(
+            read_doc=lambda name: read_overlay_or_release_json(release_zip, output, name),
+            write_doc=_warcry_write_doc,
+            upsert_array_row=upsert_array_row,
+            dedupe_array_rows_by_id=dedupe_array_rows_by_id,
+            notes=notes,
+        )
     if faction_sid == "homm3_rampart":
         ability_bonuses_name = "DB/heroes_abilities/heroes_abilities_bonuses/hero_abilities_bonuses.json"
         try:
@@ -21343,6 +21380,7 @@ def build_overlay(
             # Last Lang writer: after the artifact English rows and after multilingual
             # sync, so translations win over sync drafts and English fallbacks.
             add_custom_lang_translations(release_zip, output, notes)
+            refresh_homm3_stronghold_warcry_locale_rows(release_zip, output, notes)
 
         if strip_nonfinal_no_compromise_law_bonuses:
             strip_nonfinal_no_compromise_law_bonuses_from_overlay(output, notes)

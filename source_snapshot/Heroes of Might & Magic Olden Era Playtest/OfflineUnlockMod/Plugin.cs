@@ -1091,6 +1091,9 @@ public sealed class Plugin : BasePlugin
 			Homm3FortressPredatorInstinctRuntime.TryRegister(_harmony, Log);
 			Homm3FortressPredatorInstinctCombat.TryRegister(_harmony, Log);
 			Homm3FortressPredatorLine.TryRegister(_harmony, Log);
+			// Stronghold Warcry (replaced the three Warcries hero actions 2026-11-17): attack/ability chain, turn-start Attack bonus, on-screen chain counter.
+			Homm3StrongholdWarcryRuntime.TryRegister(_harmony, Log);
+			Homm3StrongholdWarcryCounter.TryRegister(Log);
 			Homm3FactoryBulwarkCombatForceSetupPilot.TryRegister(_harmony, Log);
 			Homm3BulwarkUnitAbilityRuntime.TryRegister(_harmony, Log);
 			Homm3BulwarkRunesRuntime.TryRegister(_harmony, Log);

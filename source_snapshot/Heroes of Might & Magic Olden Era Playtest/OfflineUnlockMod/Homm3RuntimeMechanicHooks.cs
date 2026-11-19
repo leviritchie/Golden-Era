@@ -1085,6 +1085,7 @@ internal static class Homm3RuntimeMechanicHooks
 			GoldenEraGameplayOptions.ObserveBeforeBattleResult(__0);
 			Homm3TowerArtificingRuntime.ObserveBeforeBattleResult(__0, __1);
 			Homm3InfernoGatingRuntime.ObserveBeforeBattleResult(__0);
+			Homm3StrongholdWarcryRuntime.ObserveBeforeBattleResult(__0);
 			Homm3BattleUnitLawOwnerRegistry.Clear("runtime-mechanics exact battle-result cleanup");
 			Homm3BulwarkRunesRuntime.ClearBattleState("shared battle-result cleanup");
 		}
