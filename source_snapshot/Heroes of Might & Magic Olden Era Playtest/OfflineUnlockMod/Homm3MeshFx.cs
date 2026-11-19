@@ -169,6 +169,9 @@ internal static class Homm3MeshFx
 		internal int LoadAttempts;
 		internal bool LoadFailed;
 		internal bool InWindow;
+		// Stuck-window watchdog: when the window opened, and whether it was force-closed until the animator leaves it.
+		internal float WindowOpenedAt;
+		internal bool WindowForcedClosed;
 		internal bool HelperPrepared;
 		// Animator trigger: the catalog's stock clip slots resolved to the clip names the host's controller plays.
 		internal int ClipsForController;
@@ -209,6 +212,8 @@ internal static class Homm3MeshFx
 	private static readonly Dictionary<string, Texture2D> EmissionTextures = new(StringComparer.Ordinal);
 	private static readonly Dictionary<string, Texture2D> OverlayTextures = new(StringComparer.Ordinal);
 	private static readonly HashSet<string> EmissionFailures = new(StringComparer.Ordinal);
+	private static int EmissionCompressCount;
+	private static double EmissionCompressMs;
 	private static readonly HashSet<string> EmissionAppliedLog = new(StringComparer.Ordinal);
 	private static bool _emitUpCameraMissingLogged;
 
@@ -337,6 +342,30 @@ internal static class Homm3MeshFx
 		AttachRows(visual, matched, log, lane + " skinned sids='" + string.Join(",", sids) + "'");
 	}
 
+	/// <summary>
+	/// True when <see cref="TryAttachForSkinnedPresentation"/> attaches at least one row for this entry on the
+	/// adventure map (same match as that method's non-preview lane; keep the two in step). Such a unit's effect
+	/// instances are created and driven per host, so its finished map shell is never reused as a frozen copy.
+	/// </summary>
+	internal static bool HasAdventureMapSkinnedPresentationRows(Homm3ImportVisuals.Entry entry, ManualLogSource log)
+	{
+		if (entry == null)
+			return false;
+		EnsureCatalog(log);
+		if (_rows == null || _rows.Count == 0)
+			return false;
+		var sids = CollectSkinnedMatchSids(entry);
+		for (var i = 0; i < _rows.Count; i++)
+		{
+			var row = _rows[i];
+			if (row == null || row.UnitSids == null || !SidListIntersects(row.UnitSids, sids))
+				continue;
+			if (row.Vanilla != null && string.Equals(row.Lane, LaneBattleSkinned, StringComparison.Ordinal) && IsIdleTrigger(row))
+				return true;
+		}
+		return false;
+	}
+
 	private static int _sharedMeshPreviewOverlayLogRemaining = 8;
 	private static int _overlayContextSyncLogRemaining = 8;
 
@@ -438,6 +467,52 @@ internal static class Homm3MeshFx
 			}
 		}
 		SlotsByHostId.Remove(id);
+		AnimatorByHostId.Remove(id);
+		AnimatorMissFrameByHostId.Remove(id);
+	}
+
+	// The host's animator is looked up once and reused while it is active and enabled; a miss is retried every 10 frames.
+	private static readonly Dictionary<int, Animator> AnimatorByHostId = new();
+	private static readonly Dictionary<int, int> AnimatorMissFrameByHostId = new();
+
+	private static Animator ResolveHostAnimator(Homm3MeshFxHost host, int hostId)
+	{
+		// A cached animator is reused only while it can still play. A parked or disabled one keeps reporting its last
+		// state, so a looping window effect read from it never sees its window close (Tinker flame jet, 2026-11-18).
+		// No playing animator = no window: return null and look again after a short backoff.
+		if (AnimatorByHostId.TryGetValue(hostId, out var cached) && cached && cached.isActiveAndEnabled)
+			return cached;
+		var frame = Time.frameCount;
+		if (AnimatorMissFrameByHostId.TryGetValue(hostId, out var missFrame) && frame - missFrame < 10 && frame >= missFrame)
+			return null;
+		Animator found = null;
+		try
+		{
+			var all = host.GetComponentsInChildren<Animator>(false);
+			for (var i = 0; i < all.Length; i++)
+			{
+				if (all[i] && all[i].isActiveAndEnabled)
+				{
+					found = all[i];
+					break;
+				}
+			}
+		}
+		catch
+		{
+			found = null;
+		}
+		if (found)
+		{
+			AnimatorByHostId[hostId] = found;
+			AnimatorMissFrameByHostId.Remove(hostId);
+		}
+		else
+		{
+			AnimatorByHostId.Remove(hostId);
+			AnimatorMissFrameByHostId[hostId] = frame;
+		}
+		return found;
 	}
 
 	internal static void Tick(Homm3MeshFxHost host)
@@ -457,14 +532,7 @@ internal static class Homm3MeshFx
 		}
 		if (needAnimator)
 		{
-			try
-			{
-				animator = host.GetComponentInChildren<Animator>(true);
-			}
-			catch
-			{
-				animator = null;
-			}
+			animator = ResolveHostAnimator(host, host.GetInstanceID());
 		}
 
 		for (var i = 0; i < slots.Length; i++)
@@ -1448,8 +1516,22 @@ internal static class Homm3MeshFx
 			var inWindow = AnimatorMatches(animator, slot, out var normalized)
 			               && normalized >= row.WindowStart
 			               && normalized <= row.WindowEnd;
+			if (!inWindow)
+				slot.WindowForcedClosed = false;
+			else if (slot.WindowForcedClosed)
+				inWindow = false;
+			else if (slot.InWindow && Time.time - slot.WindowOpenedAt > MaxVanillaWindowSeconds)
+			{
+				// Watchdog: attack/skill windows last well under a second or two. A window that stays open this long
+				// means the animator reading is stuck, and a looping emitter would otherwise fire for the rest of the
+				// battle. Close it until the animator leaves the window.
+				slot.WindowForcedClosed = true;
+				inWindow = false;
+				LogStuckWindow(host, slot, animator, normalized);
+			}
 			if (inWindow && !slot.InWindow)
 			{
+				slot.WindowOpenedAt = Time.time;
 				if (row.Vanilla.FollowRelease)
 				{
 					ReattachToSocket(slot);
@@ -1470,6 +1552,37 @@ internal static class Homm3MeshFx
 			return;
 		ApplyVanillaScale(slot, force: false);
 		OrientVanilla(slot);
+	}
+
+	private const float MaxVanillaWindowSeconds = 4f;
+	private static readonly HashSet<string> StuckWindowLogged = new(StringComparer.Ordinal);
+
+	private static void LogStuckWindow(Homm3MeshFxHost host, Slot slot, Animator animator, float normalized)
+	{
+		var id = slot.Row.Id ?? "?";
+		if (!StuckWindowLogged.Add(id))
+			return;
+		string detail;
+		try
+		{
+			var state = animator ? animator.GetCurrentAnimatorStateInfo(0) : default;
+			var controller = animator && animator.runtimeAnimatorController ? animator.runtimeAnimatorController.name : "?";
+			detail = "animator='" + (animator ? animator.gameObject.name : "null")
+			         + "' controller='" + controller
+			         + "' enabled=" + (animator && animator.isActiveAndEnabled)
+			         + " speed=" + (animator ? animator.speed : 0f).ToString("F2", CultureInfo.InvariantCulture)
+			         + " stateLoop=" + state.loop
+			         + " stateLength=" + state.length.ToString("F2", CultureInfo.InvariantCulture)
+			         + " normalized=" + normalized.ToString("F3", CultureInfo.InvariantCulture);
+		}
+		catch (Exception ex)
+		{
+			detail = "detail failed: " + ex.Message;
+		}
+		Plugin.LogSource?.LogWarning(
+			"Homm3MeshFx: id='" + id + "' host='" + (host ? host.gameObject.name : "?") + "' window stayed open "
+			+ MaxVanillaWindowSeconds.ToString("F0", CultureInfo.InvariantCulture) + "s; effect stopped until the animator leaves the window. "
+			+ detail + ". Logged once per id.");
 	}
 
 	private static void ReattachToSocket(Slot slot)
@@ -2193,6 +2306,22 @@ internal static class Homm3MeshFx
 			log?.LogError("Homm3MeshFx: emission id='" + row.Id + "' texture '" + file + "': " + failure + ".");
 			return null;
 		}
+		// GPU-only (material _EmissionTex): block-compress and drop the CPU copy. Uncompressed + readable cost ~2.85 GB
+		// in a two-map session (memory telemetry 2026-11-18); DXT5 non-readable is 1/8 of that.
+		var compressWatch = System.Diagnostics.Stopwatch.StartNew();
+		try
+		{
+			texture.Compress(false);
+			texture.Apply(false, true);
+		}
+		catch (Exception ex)
+		{
+			log?.LogWarning("Homm3MeshFx: emission texture '" + file + "' left uncompressed: " + ex.Message);
+		}
+		EmissionCompressMs += compressWatch.Elapsed.TotalMilliseconds;
+		if (++EmissionCompressCount <= 3 || EmissionCompressCount % 50 == 0)
+			log?.LogInfo("Homm3MeshFx: emission textures compressed=" + EmissionCompressCount + " last='" + file + "' "
+				+ texture.width + "x" + texture.height + " " + texture.format + " total_ms=" + EmissionCompressMs.ToString("F0"));
 		texture.name = "homm3_mesh_fx_emission_" + Path.GetFileNameWithoutExtension(file);
 		texture.hideFlags = HideFlags.DontUnloadUnusedAsset;
 		EmissionTextures[file] = texture;

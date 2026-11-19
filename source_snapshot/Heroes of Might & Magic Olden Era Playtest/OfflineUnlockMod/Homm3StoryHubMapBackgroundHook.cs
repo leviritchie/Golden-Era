@@ -246,7 +246,7 @@ internal static class Homm3StoryHubMapBackgroundHook
 	{
 		foreach (var hint in GameSymbols.StoryHubMapBackground.BhStoryHubTypeHints)
 		{
-			var type = ModActions.GetHexType(hint) ?? AccessTools.TypeByName(hint);
+			var type = ModActions.GetHexType(hint) ?? GameMember.TypeByName(hint);
 			if (type != null)
 				return type;
 		}

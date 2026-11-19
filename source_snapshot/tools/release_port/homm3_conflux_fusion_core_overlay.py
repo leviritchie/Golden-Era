@@ -455,7 +455,9 @@ def derive_stats(host: dict[str, Any], guest: dict[str, Any]) -> dict[str, Any]:
     else:
         stats.pop("moveType", None)
     stats["energyPerRound"] = max(int(hs.get("energyPerRound") or 0), int(gs.get("energyPerRound") or 0))
-    stats["startEnergy"] = max(int(hs.get("startEnergy") or 0), int(gs.get("startEnergy") or 0))
+    # No inherited starting Focus (owner 2026-11-16): starting Focus is only a deliberate, carded passive
+    # on a named unit, never a family default passed on by fusion.
+    stats.pop("startEnergy", None)
     if gs.get("maxOverwatchStrikes") and not hs.get("maxOverwatchStrikes"):
         stats["maxOverwatchStrikes"] = gs["maxOverwatchStrikes"]
     return stats
@@ -922,21 +924,9 @@ def add_conflux_fusion_stage2_units(release_zip, output, notes, helpers, rows: _
 
 
 def finalize_conflux_fusion_units(release_zip, output, notes, helpers) -> None:
-    """Phase B (after the balance contract): parent startEnergy, then rebuild every fused row from the final
-    parent rows (stats and kits: the contract still changes parent stats, squad values and some passives).
+    """Phase B (after the balance contract): rebuild every fused row from the final parent rows (stats and
+    kits: the contract still changes parent stats, squad values and some passives).
     Phase A already wrote the same lang tokens before multilingual sync; rebuilding re-upserts identical text."""
-    write_json = helpers["write_json"]
-    start_energy = load_units()["elementalStartEnergy"]
-    changed = 0
-    for sid, value in start_energy.items():
-        logic_name, _ = _unit_paths(sid)
-        doc = json.loads(output[logic_name].decode("utf-8-sig")) if logic_name in output else helpers["read_json"](release_zip, logic_name)
-        row = doc["array"][0]
-        if row["stats"].get("startEnergy") != int(value):
-            row["stats"]["startEnergy"] = int(value)
-            output[logic_name] = write_json(doc)
-            changed += 1
-    notes.append(f"set Conflux elemental startEnergy (6 base / 12 upgrades) on {changed} rows")
     add_conflux_fusion_units(release_zip, output, notes, helpers)
     notes.append("rebuild Conflux fusion unit rows from final parent rows")
     align_fused_card_icons(release_zip, output, notes, helpers)

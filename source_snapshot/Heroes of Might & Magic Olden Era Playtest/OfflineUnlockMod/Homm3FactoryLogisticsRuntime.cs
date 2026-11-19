@@ -1463,18 +1463,31 @@ internal static class Homm3FactoryLogisticsRuntime
 		}
 	}
 
+	private static Component _openHireView;
+	private static float _hireViewMissUntil;
+
 	internal static bool HireWindowOpen()
 	{
 		try
 		{
+			// Polled several times a second (every frame while a visit waits): remember the open window, and
+			// after a miss do not search the scene again for a quarter of a second.
+			if (_openHireView && _openHireView.gameObject.activeInHierarchy)
+				return true;
+			_openHireView = null;
+			var now = Time.realtimeSinceStartup;
+			if (now < _hireViewMissUntil)
+				return false;
+			_hireViewMissUntil = now + 0.25f;
 			var views = UnityObject.FindObjectsOfType(Il2CppType.Of<Hex.UI.City.BhHireCityView>());
 			for (var i = 0; views != null && i < views.Length; i++)
 			{
-				if (views[i] is Component c && c != null && c.gameObject.activeInHierarchy)
-					return true;
-				var cast = views[i]?.TryCast<Component>();
+				var cast = views[i] as Component ?? views[i]?.TryCast<Component>();
 				if (cast != null && cast.gameObject.activeInHierarchy)
+				{
+					_openHireView = cast;
 					return true;
+				}
 			}
 		}
 		catch

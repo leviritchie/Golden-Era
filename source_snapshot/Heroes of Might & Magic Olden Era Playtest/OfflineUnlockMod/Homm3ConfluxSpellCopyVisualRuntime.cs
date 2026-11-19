@@ -67,7 +67,7 @@ internal static class Homm3ConfluxSpellCopyVisualRuntime
 			var patched = 0;
 			foreach (var typeHint in GameSymbols.BattleEventLaws.BattleEventDispatcherTypeHints)
 			{
-				var type = GameMember.FindType(GameSymbols.BattleEventLaws.BattleEventDispatcherTypeId + "." + typeHint, typeHint) ?? AccessTools.TypeByName(typeHint);
+				var type = GameMember.FindType(GameSymbols.BattleEventLaws.BattleEventDispatcherTypeId + "." + typeHint, typeHint) ?? GameMember.TypeByName(typeHint);
 				if (type == null)
 					continue;
 				foreach (var methodName in GameSymbols.BattleEventLaws.BattleEventDispatch.NameHints)
@@ -372,7 +372,7 @@ internal static class Homm3ConfluxSpellCopyVisualRuntime
 			return true;
 		foreach (var hint in GameSymbols.SpellbookLaws.MagicRuntimeDataTypeHints)
 		{
-			type = GameMember.FindType(GameSymbols.SpellbookLaws.MagicRuntimeDataTypeId + "." + hint, hint) ?? AccessTools.TypeByName(hint);
+			type = GameMember.FindType(GameSymbols.SpellbookLaws.MagicRuntimeDataTypeId + "." + hint, hint) ?? GameMember.TypeByName(hint);
 			if (type != null)
 			{
 				_magicRuntimeDataType = type;
@@ -391,7 +391,7 @@ internal static class Homm3ConfluxSpellCopyVisualRuntime
 			return true;
 		foreach (var hint in GameSymbols.SpellbookLaws.CastedMagicTypeHints)
 		{
-			type = GameMember.FindType(GameSymbols.SpellbookLaws.CastedMagicTypeId + "." + hint, hint) ?? AccessTools.TypeByName(hint);
+			type = GameMember.FindType(GameSymbols.SpellbookLaws.CastedMagicTypeId + "." + hint, hint) ?? GameMember.TypeByName(hint);
 			if (type != null)
 			{
 				_castedMagicType = type;
@@ -410,7 +410,7 @@ internal static class Homm3ConfluxSpellCopyVisualRuntime
 			return true;
 		foreach (var hint in GameSymbols.SpellbookLaws.MagicDataTypeHints)
 		{
-			type = GameMember.FindType(GameSymbols.SpellbookLaws.MagicDataTypeId + "." + hint, hint) ?? AccessTools.TypeByName(hint);
+			type = GameMember.FindType(GameSymbols.SpellbookLaws.MagicDataTypeId + "." + hint, hint) ?? GameMember.TypeByName(hint);
 			if (type != null)
 			{
 				_magicDataType = type;
@@ -430,7 +430,7 @@ internal static class Homm3ConfluxSpellCopyVisualRuntime
 		Type type = null;
 		foreach (var hint in GameSymbols.SpellbookLaws.CastMagicEventArgsTypeHints)
 		{
-			type = GameMember.FindType(GameSymbols.SpellbookLaws.CastMagicEventArgsTypeId + "." + hint, hint) ?? AccessTools.TypeByName(hint);
+			type = GameMember.FindType(GameSymbols.SpellbookLaws.CastMagicEventArgsTypeId + "." + hint, hint) ?? GameMember.TypeByName(hint);
 			if (type != null)
 				break;
 		}

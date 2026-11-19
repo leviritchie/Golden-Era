@@ -158,11 +158,32 @@ def main() -> None:
 	require(panel, "if (Homm3ConfluxFusionGlossary.IsOpen)\n\t\t\t{\n\t\t\t\tHomm3ConfluxFusionGlossary.Tick(", "glossary takes input (and Esc) before the panel")
 	require(panel, "Homm3ConfluxFusionGlossary.Open(_window.parent, _session.Config)", "glossary opens on the panel canvas")
 	require(panel, "Homm3ConfluxFusionGlossary.Close();", "panel close also closes the glossary")
+	# Result preview (user 2026-11-16, design B "tooltip only"): the one approved exception to "no explanatory text in the
+	# panel". It is a hover-only layer on the result slot fed by the glossary's entry and the plan Fuse writes; the panel
+	# body rejects above/below stay as they are.
+	require(panel, "var on = !_dragging && plan?.Pair != null && Over(_resultRect, mouse);", "result tooltip only while hovering the result slot, never while dragging")
+	require(panel, "if (_tip != null && _tip.gameObject.activeSelf != on)\n\t\t\t_tip.gameObject.SetActive(on);", "result tooltip shown / hidden by hover, not by a panel rebuild")
+	require(panel, "tip.gameObject.SetActive(false);\n\t\treturn tip;", "result tooltip is built hidden")
+	require(panel, "Homm3ConfluxFusionGlossary.TryGetEntry(_session.Config, plan.Pair.Fused)", "result tooltip reads the glossary entry")
+	require(panel, "_tipPlan = shown ? plan : null;\n\t\t_tip = null;", "result tooltip follows the plan of the last build")
+	require(panel, '"From " + N(plan.InA)', "result tooltip inputs come from the trimmed plan")
+	require(panel, '"Cannot be fused now: " + plan.Blocked', "blocked result tooltip carries the plan's block reason")
+	require(panel, r'var title = ok ? e.Name + "  \u00d7" + N(plan.Fused) : e.Name;', "blocked result tooltip shows no count")
+	require(panel, "if (on && Input.GetMouseButtonDown(1))\n\t\t\tOpenGlossary(plan.Pair.Fused);", "right-click on the result opens the glossary on that fusion")
+	require(panel, "Homm3ConfluxFusionGlossary.Open(_window.parent, _session.Config, selectSid)", "glossary opens on the result's entry")
+	require(panel, 'A.NewImage("Back", tip, null, L.TipBack)', "result tooltip plate is a flat rectangle")
+	require(glossary, "internal static Entry TryGetEntry(Homm3ConfluxFusionConfig config, string sid)", "glossary entry accessor for the result tooltip")
+	require(glossary, "internal static bool Open(Transform canvas, Homm3ConfluxFusionConfig config, string selectSid)", "glossary open-on-entry")
+	if panel.count("Right-click: open in the Fusion Glossary") != 1 or panel.count("BuildResultTip(") != 2:
+		raise SystemExit("result tooltip must be built in one place (BuildResultTip, called from the hover tick only)")
 	require(glossary, 'ButtonTooltip = "Fusion Glossary"', "glossary button tooltip")
 	require(glossary, 'SpriteDatabase = "Button_Database"', "native database button sprite")
-	for sprite in ("Button_Database_MouseOver", "KeyField", "Button_Tab_Dark", "Button_Tab_Dark_Selected", "Button_Tab_Dark_MouseOver",
-	               "tab_1", "tab_selected_1", "scroll_background", '"scroll"', "Dropdown_arrow"):
+	for sprite in ("Button_Database_MouseOver", "KeyField", "tab_1", "tab_highlight_1", "tab_selected_1", "scroll_background", '"scroll"', "Dropdown_arrow"):
 		require(glossary, sprite, f"glossary native sprite {sprite}")
+	# Button_Tab_Dark* (sharedassets4) is not loaded in a session; the native sprite catalog answers unknown names with
+	# its placeholder swirl, so chrome sprites resolve from loaded sprites only (owner report 2026-11-16).
+	reject(glossary, "Button_Tab_Dark", "glossary must not use the unloaded Button_Tab_Dark sprites")
+	reject(glossary, "TryResolveNative(name", "glossary chrome sprites must not fall back to the native sprite catalog")
 	require(glossary, "Input.inputString", "search typing captured from Input.inputString")
 	reject(glossary, "TMP_InputField", "glossary search must not use a TMP_InputField")
 	require(glossary, "if (Input.GetKeyDown(KeyCode.Escape))\n\t\t\t{\n\t\t\t\tClose();\n\t\t\t\treturn;", "Esc closes the glossary only")

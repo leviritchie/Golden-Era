@@ -641,7 +641,7 @@ class Viewer:
         half = (iw - 6) / 2
         for j, name in enumerate(("Active enhancement", "Build / Upgrade")):
             sel = j == tab
-            cv.sprite("Button_Tab_Dark_Selected" if sel else "Button_Tab_Dark", ix + j * (half + 6), ty, half, Lay.CardTabs - 6)
+            cv.sliced("tab_selected_1" if sel else "tab_1", ix + j * (half + 6), ty, half, Lay.CardTabs - 6, 1.0)
             cv.text(P["FontMedium"], P["SizeSmall"], name, ix + j * (half + 6), ty, half, Lay.CardTabs - 6, P["TipTitle"] if sel else P["ButtonText"], "center")
         return ty + Lay.CardTabs + 2
 
@@ -673,7 +673,7 @@ class Viewer:
                     bw_ = 108
                     cw_ = iw - 250 - bw_ - 8
                     up.draw_cost(cv, P, row["cost"], ix + 250 - 62, y + 15, P["TipBody"], size=P["SizeSmall"], align="right", width=iw - 250 + 62 - 8)
-                    cv.sprite("Button_Tab_Dark_MouseOver" if row.get("hover") else "Button_Tab_Dark", ix + iw - bw_ - 8, y + 29, bw_, 22)
+                    cv.sliced("tab_highlight_1" if row.get("hover") else "tab_1", ix + iw - bw_ - 8, y + 29, bw_, 22, 1.0)
                     cv.text(P["FontMedium"], P["SizeSmall"], row["button"], ix + iw - bw_ - 8, y + 29, bw_, 22, P["ButtonText"], "center")
                 else:
                     cv.text(P["FontMedium"], P["SizeSmall"], row["right"], ix + iw - 230, y + 28, 222, 22, P["TipWarn"], "right")

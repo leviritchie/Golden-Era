@@ -1351,11 +1351,12 @@ internal static class Homm3HeroPortraitHook
 			return;
 		try
 		{
-			if (!_strongholdHeroIconKeyByView.TryGetValue(GetStableObjectKey(view), out var iconKey) || string.IsNullOrWhiteSpace(iconKey))
+			var viewKey = GetStableObjectKey(view);
+			if (!_strongholdHeroIconKeyByView.TryGetValue(viewKey, out var iconKey) || string.IsNullOrWhiteSpace(iconKey))
 				return;
 			if (!Homm3ImportPortraitSpriteCache.TryGetOrCreateStrongholdHeroSpriteForIconKey(iconKey, out var sprite) || !sprite)
 				return;
-			var image = FindBestPortraitImage(view);
+			var image = FindRememberedSurfacePortraitImage(view, viewKey);
 			if (image == null)
 				return;
 			if (image.sprite == sprite && image.overrideSprite == sprite && image.enabled)
@@ -1371,6 +1372,28 @@ internal static class Homm3HeroPortraitHook
 		{
 			Plugin.LogSource?.LogDebug("Homm3HeroPortrait: remembered surface " + source + " failed: " + ex.Message);
 		}
+	}
+
+	// The tooltip view's LateUpdate postfix runs every frame; the portrait Image it resolves by reflection is
+	// kept per view and reused while it is alive and still parented under that view.
+	private static readonly Dictionary<long, Image> _rememberedSurfaceImageByView = new();
+
+	private static Image FindRememberedSurfacePortraitImage(object view, long viewKey)
+	{
+		if (_rememberedSurfaceImageByView.TryGetValue(viewKey, out var cached))
+		{
+			if (cached && view is Component owner && owner && cached.transform.IsChildOf(owner.transform))
+				return cached;
+			_rememberedSurfaceImageByView.Remove(viewKey);
+		}
+		var image = FindBestPortraitImage(view);
+		if (image)
+		{
+			if (_rememberedSurfaceImageByView.Count > 256)
+				_rememberedSurfaceImageByView.Clear();
+			_rememberedSurfaceImageByView[viewKey] = image;
+		}
+		return image;
 	}
 
 	internal static string ResolveStrongholdHeroIconKey(object heroOrConfig)
@@ -1812,7 +1835,9 @@ internal static class Homm3HeroPortraitHook
 	{
 		if (view == null)
 			return;
-		_strongholdHeroIconKeyByView.Remove(GetStableObjectKey(view));
+		var key = GetStableObjectKey(view);
+		_strongholdHeroIconKeyByView.Remove(key);
+		_rememberedSurfaceImageByView.Remove(key);
 	}
 
 	private static bool IsCustomHeroPortraitSprite(Sprite sprite, Sprite overrideSprite)

@@ -1,23 +1,6 @@
 {
   "schema": "homm3_conflux_fusion_units.v1",
   "note": "Generated data for the Conflux Elemental Fusion units (user design 2026-11-15). Stats are derived at build time from the final parent rows (tools/release_port/homm3_conflux_fusion_core_overlay.py): HP = sum, damage min/max = round(0.9 x sum), Attack/Defense = higher parent + 1, Initiative/Speed/movement = faster parent, attacks = host's. 'mesh': null keeps the host parent's mesh/mapMesh; set {\"mesh\": ..., \"mapMesh\": ...} to swap in a fused model. 'signature': null keeps both parents' kits; a signature replaces both parents' actives (kind active) or passives (kind passive); build 'fallback' keeps both kits.",
-  "elementalStartEnergy": {
-    "h3_air_elemental": 6,
-    "h3_air_elemental_upg": 12,
-    "h3_air_elemental_upg_alt": 12,
-    "h3_water_elemental": 6,
-    "h3_water_elemental_upg": 12,
-    "h3_water_elemental_upg_alt": 12,
-    "h3_fire_elemental": 6,
-    "h3_fire_elemental_upg": 12,
-    "h3_fire_elemental_upg_alt": 12,
-    "h3_earth_elemental": 6,
-    "h3_earth_elemental_upg": 12,
-    "h3_earth_elemental_upg_alt": 12,
-    "h3_psychic_elemental": 6,
-    "h3_psychic_elemental_upg": 12,
-    "h3_psychic_elemental_upg_alt": 12
-  },
   "units": {
     "h3_fusion_storm_air": {
       "name": "Gale Elemental",
@@ -919,10 +902,10 @@
           "energyLevel": 1,
           "cooldown": 1,
           "rank": 2,
-          "turnBehavior": "ends"
+          "turnBehavior": "free"
         },
-        "descriptionText": "Blinks to any free hex within 4 hexes.",
-        "notes": "Uses the custom Silver Pegasus copy of aqualotl_upg:abilities:1 (teleport, shootRange 4) because its envelope (1 energy, cd 1) is sane. The vanilla aqualotl row is dontUseEnergy, cd 0, energy 0, actionCost 0, an unlimited free blink that depends on its Awaken kit. No damage.",
+        "descriptionText": "Blinks to any free hex within 4 hexes without ending the turn.",
+        "notes": "Uses the custom Silver Pegasus copy of aqualotl_upg:abilities:1 (teleport, shootRange 4) because its envelope (1 energy, cd 1) is sane. The vanilla aqualotl row is dontUseEnergy, cd 0, energy 0, actionCost 0, an unlimited free blink that depends on its Awaken kit. Free action here too (actionCost 0), limited by 1 energy and cd 1. No damage.",
         "nameText": "Rivulet Retreat"
       }
     },

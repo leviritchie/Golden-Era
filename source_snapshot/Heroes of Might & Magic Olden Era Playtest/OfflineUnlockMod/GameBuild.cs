@@ -99,13 +99,39 @@ internal static class GameBuild
 		try
 		{
 			id.Path = System.IO.Path.Combine(Paths.GameRootPath, "GameAssembly.dll");
-			using var stream = new FileStream(id.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete, 1 << 20);
-			using var sha = SHA256.Create();
-			var digest = sha.ComputeHash(stream);
-			var hex = new System.Text.StringBuilder(digest.Length * 2);
-			foreach (var b in digest)
-				hex.Append(b.ToString("X2", System.Globalization.CultureInfo.InvariantCulture));
-			id.Sha256 = hex.ToString();
+			// Hashing 95 MB on every launch is wasted when the file has not changed: remember the hash against
+			// the file's size and write time. Steam rewrites the file on any game update, which changes both.
+			var info = new FileInfo(id.Path);
+			var stamp = info.Length.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|"
+				+ info.LastWriteTimeUtc.Ticks.ToString(System.Globalization.CultureInfo.InvariantCulture);
+			var cachePath = System.IO.Path.Combine(Paths.CachePath, "OfflineUnlockMod.gamebuild.txt");
+			string cached = null;
+			try
+			{
+				if (File.Exists(cachePath))
+				{
+					var lines = File.ReadAllLines(cachePath);
+					if (lines.Length >= 2 && lines[0] == stamp && lines[1].Length == 64)
+						cached = lines[1];
+				}
+			}
+			catch { }
+			if (cached != null)
+			{
+				id.Sha256 = cached;
+			}
+			else
+			{
+				using var stream = new FileStream(id.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete, 1 << 20);
+				using var sha = SHA256.Create();
+				var digest = sha.ComputeHash(stream);
+				var hex = new System.Text.StringBuilder(digest.Length * 2);
+				foreach (var b in digest)
+					hex.Append(b.ToString("X2", System.Globalization.CultureInfo.InvariantCulture));
+				id.Sha256 = hex.ToString();
+				try { File.WriteAllLines(cachePath, new[] { stamp, id.Sha256 }); }
+				catch { }
+			}
 		}
 		catch (Exception ex)
 		{

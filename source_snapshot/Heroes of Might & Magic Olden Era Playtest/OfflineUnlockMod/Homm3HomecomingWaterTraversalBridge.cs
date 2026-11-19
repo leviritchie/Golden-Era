@@ -153,6 +153,9 @@ internal static class Homm3HomecomingWaterTraversalBridge
 		}
 	}
 
+	/// <summary>Raised after any world hero is accepted onto a node (world hero, node). Consumers must be cheap.</summary>
+	internal static Action<object, int> EnterNodeAccepted;
+
 	private static void PostfixWorldHeroEnterNode(object __instance, object __result, object[] __args)
 	{
 		try
@@ -169,6 +172,8 @@ internal static class Homm3HomecomingWaterTraversalBridge
 				LogTransitionSkip("enter-node target node unresolved");
 				return;
 			}
+			try { EnterNodeAccepted?.Invoke(__instance, node); }
+			catch (Exception consumerEx) { LogTransitionSkip("enter-node consumer threw: " + consumerEx.GetBaseException().Message); }
 			RefreshHeroWaterVisualForTargetNode(__instance, node, "enter-node");
 		}
 		catch (Exception ex)
@@ -790,7 +795,7 @@ internal static class Homm3HomecomingWaterTraversalBridge
 
 	private static Type GetTypeByName(string name)
 	{
-		var type = AccessTools.TypeByName(name) ?? AccessTools.TypeByName("Hex." + name);
+		var type = GameMember.TypeByName(name) ?? GameMember.TypeByName("Hex." + name);
 		if (type != null)
 			return type;
 		foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())

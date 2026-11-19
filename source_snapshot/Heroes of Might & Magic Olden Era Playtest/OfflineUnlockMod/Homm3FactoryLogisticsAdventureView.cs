@@ -66,6 +66,28 @@ internal static class Homm3FactoryLogisticsAdventureView
 		}
 	}
 
+	/// <summary>
+	/// The world camera's current <c>Hex.Map.Map</c>, with no view checks. Fallback for the session holder static Map, which
+	/// stays null on some sessions (seen 2026-11-16 on a custom random-map template: "map size not available (0x0)").
+	/// </summary>
+	internal static object TryWorldCameraMap()
+	{
+		try
+		{
+			if (!ResolveCameraMembers())
+				return null;
+			var worldCamera = _cameraSingleton.Invoke(null, Array.Empty<object>());
+			if (worldCamera == null)
+				return null;
+			var map = _cameraCurrentMap.Invoke(worldCamera, Array.Empty<object>());
+			return map is Hex.Map.Map ? map : null;
+		}
+		catch
+		{
+			return null;
+		}
+	}
+
 	private static bool ResolveCameraMembers()
 	{
 		if (_cameraSingleton != null && _cameraCurrentMap != null)

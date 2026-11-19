@@ -27,9 +27,12 @@ internal static class Homm3FactoryLogisticsUi
 {
 	internal const string LogPrefix = "[FactoryLogistics] ui: ";
 
-	internal const string SpriteTab = "Button_Tab_Dark";
-	internal const string SpriteTabSelected = "Button_Tab_Dark_Selected";
-	internal const string SpriteTabHover = "Button_Tab_Dark_MouseOver";
+	// Tabs and small buttons share the native dark tab set with the rows (sharedassets3, 3 px sliced borders), as the
+	// Fusion Glossary (06b8a7364e). The Button_Tab_Dark* set of the mockups lives in sharedassets4, which is not loaded
+	// during a session, so those tabs drew flat fallback plates.
+	internal const string SpriteTab = "tab_1";
+	internal const string SpriteTabSelected = "tab_selected_1";
+	internal const string SpriteTabHover = "tab_highlight_1";
 	internal const string SpriteRow = "tab_1";
 	internal const string SpriteRowSelected = "tab_selected_1";
 	internal const string SpritePlus = "button_plus";
@@ -107,8 +110,35 @@ internal static class Homm3FactoryLogisticsUi
 
 	internal static bool Over(RectTransform rect, Vector2 mouse) => rect != null && RectTransformUtility.RectangleContainsScreenPoint(rect, mouse, null);
 
-	/// <summary>Rough single-line width of a label in the panel fonts (generous: the fonts average about half an em per glyph, and a too-narrow box would shorten the text).</summary>
-	internal static float TextWidth(string text, float size) => string.IsNullOrEmpty(text) ? 0f : text.Length * size * 0.56f + 2f;
+	/// <summary>Single-line width of a label from the font tables (<see cref="Homm3PanelTextMetrics"/>), plus 2 px.</summary>
+	internal static float TextWidth(string text, float size, string font = P.FontMedium) =>
+		string.IsNullOrEmpty(text) ? 0f : Homm3PanelTextMetrics.Width(font, size, text) + 2f;
+
+	/// <summary>Largest size from <paramref name="size"/> down to <paramref name="min"/> (1 px steps) at which a single line fits <paramref name="width"/>.</summary>
+	internal static float FitSize(string text, float size, float width, float min = 14f, string font = P.FontMedium)
+	{
+		while (size > min && Homm3PanelTextMetrics.Width(font, size, text) > width)
+			size -= 1f;
+		return size;
+	}
+
+	/// <summary>
+	/// Box height for <paramref name="text"/> wrapped at <paramref name="width"/>: line count from the font tables times TMP's
+	/// real line pitch (EN-Medium about 1.97 x the size). The panels used to assume 20-22 px lines for 15-16 px text,
+	/// so wrapped text was cut or overlapped the next line.
+	/// </summary>
+	internal static float WrappedHeight(string text, float size, float width, string font = P.FontMedium) =>
+		Homm3PanelTextMetrics.BlockHeight(font, size, Homm3PanelTextMetrics.Lines(font, size, text, width));
+
+	/// <summary>Wrapped text in a box sized by <see cref="WrappedHeight"/>, drawn with Overflow (TMP's Ellipsis cuts a line whose box is a few px short).</summary>
+	internal static TextMeshProUGUI WrappedText(Transform parent, string font, float size, string text, float x, float y, float w, float h, Color color,
+		TextAlignmentOptions align = TextAlignmentOptions.TopLeft)
+	{
+		var label = A.AddText(parent, font, size, text, x, y, w, h, color, align, true);
+		if (label != null)
+			label.overflowMode = TextOverflowModes.Overflow;
+		return label;
+	}
 
 	// ---------------------------------------------------------------- sprites
 
@@ -330,7 +360,7 @@ internal static class Homm3FactoryLogisticsUi
 	/// <summary>A dark tab (selected / plain / hover sprites) with a centred label.</summary>
 	internal static void Tab(Transform parent, List<Clickable> into, string label, float x, float y, float w, float h, bool selected, Action click)
 	{
-		var image = Image(parent, selected ? SpriteTabSelected : SpriteTab, x, y, w, h, selected ? new Color(0.2f, 0.22f, 0.3f, 1f) : new Color(0.1f, 0.12f, 0.18f, 1f));
+		var image = Sliced(parent, selected ? SpriteTabSelected : SpriteTab, x, y, w, h, 1f, selected ? new Color(0.2f, 0.22f, 0.3f, 1f) : new Color(0.1f, 0.12f, 0.18f, 1f));
 		Text(parent, P.FontMedium, P.SizeSmall, label, x, y, w, h, selected ? P.TipTitle : P.ButtonText, TextAlignmentOptions.Center);
 		if (!selected)
 			into.Add(new Clickable { Rect = image.rectTransform, Image = image, Normal = Sprite(SpriteTab), Hover = Sprite(SpriteTabHover), Click = click });

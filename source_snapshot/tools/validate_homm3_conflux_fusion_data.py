@@ -10,7 +10,8 @@ and the signature spec of each fused unit. Checks:
 - host priority Earth > Water > Fire > Air > Psychic; inside a family the upgrade hosts the base and
   _upg hosts _upg_alt; fused sid = h3_fusion_<host short>_<guest short>;
 - both files agree; squad values are positive; signature specs are well formed and replace like for like;
-- elementalStartEnergy is 6 on the 5 base elementals and 12 on the 10 upgrades;
+- no family-wide starting Focus: fusion_units.json has no elementalStartEnergy key and no unit entry sets
+  startEnergy (owner 2026-11-16; the Core contract validator pins the candidate rows and the allow-list);
 - fused units appear in no neutral pool, reward, dwelling or other custom_factions data file;
 - stage-2 recipes (user 2026-11-15): recipeMinRank 1..3; each recipe {a, b, host, guest, fused, name} names two
   different stage-1 fused units, a new h3_fusion_ii_<slug> sid and a unique name; host = the parent whose host
@@ -233,10 +234,11 @@ def main() -> int:
     if set(units) != seen_fused:
         issues.append(f"fusion_units.json units differ from the config pairs: {sorted(set(units) ^ seen_fused)[:5]}")
 
-    start_energy = units_doc.get("elementalStartEnergy") or {}
-    expected_energy = {sid: (6 if variant(sid) == "" else 12) for sid in elementals}
-    if start_energy != expected_energy:
-        issues.append("elementalStartEnergy must be 6 on base elementals and 12 on upgrades")
+    if "elementalStartEnergy" in units_doc:
+        issues.append("fusion_units.json elementalStartEnergy is retired (owner 2026-11-16: no elemental starting Focus as a catch-all)")
+    for sid, entry in list(units.items()) + list((units_doc.get("stage2") or {}).items()):
+        if isinstance(entry, dict) and "startEnergy" in entry:
+            issues.append(f"{sid}: fusion_units.json must not set startEnergy")
 
     stage2_sids = check_stage2(config, units, units_doc.get("stage2") or {}, seen_names, issues)
     check_no_foreign_references(repo, issues)

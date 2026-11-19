@@ -348,21 +348,42 @@ internal static class Homm3FortressPredatorLine
 	// ------------------------------------------------------------------ hover + anchors
 
 	private static Type _controllerType;
+	private const float ControllerTypeRetryMaxSeconds = 30f;
+	private const float ControllerProbeSeconds = 0.25f;
+	private static float _controllerTypeRetryAt;
+	private static float _controllerTypeRetryDelay = 1f;
+	private static float _controllerProbeAt;
 	private static readonly Dictionary<IntPtr, List<Renderer>> RendererCache = new();
 
 	private static bool TryReadHoveredUnit(out Unit unit, out object drawer)
 	{
 		unit = null;
 		drawer = null;
-		_controllerType ??= ResolveType(GameSymbols.BattleVisual.BattleControllerTypeNames);
+		var now = Time.realtimeSinceStartup;
 		if (_controllerType == null)
 		{
-			LogOnce("controller-type", "battle controller type not found; hover line inactive.");
-			return false;
+			// A failed type lookup walks the loaded assemblies; retry with a doubling delay instead of every frame.
+			if (now < _controllerTypeRetryAt)
+				return false;
+			_controllerType = ResolveType(GameSymbols.BattleVisual.BattleControllerTypeNames);
+			if (_controllerType == null)
+			{
+				_controllerTypeRetryAt = now + _controllerTypeRetryDelay;
+				_controllerTypeRetryDelay = Mathf.Min(_controllerTypeRetryDelay * 2f, ControllerTypeRetryMaxSeconds);
+				LogOnce("controller-type", "battle controller type not found; hover line inactive.");
+				return false;
+			}
 		}
+		// Outside battle the controller singleton is null: probe for it a few times a second, not every frame.
+		// Once it exists it is read every frame as before.
+		if (now < _controllerProbeAt)
+			return false;
 		var controller = ReadStatic(_controllerType, GameSymbols.FortressPredatorInstinct.BattleControllerSingletonMembers);
 		if (controller == null)
+		{
+			_controllerProbeAt = now + ControllerProbeSeconds;
 			return false;
+		}
 		var input = Read(controller, GameSymbols.FortressPredatorInstinct.ControllerInputMembers);
 		var cursorDrawer = Read(input, GameSymbols.FortressPredatorInstinct.InputCursorDrawerMembers);
 		if (cursorDrawer == null)

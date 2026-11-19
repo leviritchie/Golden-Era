@@ -80,6 +80,7 @@ internal static class Homm3HeroSpecializationIconSpriteCache
 
 	private static void EnsureMapsLoaded()
 	{
+		using var loadTiming = Homm3LoadTiming.Scope("heroSpecIcons.ensureMaps", 20);
 		if (_iconBySpecSid != null && _knownIconKeys != null)
 			return;
 
@@ -111,15 +112,8 @@ internal static class Homm3HeroSpecializationIconSpriteCache
 				if (arrayToken == null || arrayToken.Type != JTokenType.Array)
 					continue;
 
-				JArray array;
-				try
-				{
-					array = JArray.Parse(arrayToken.ToString());
-				}
-				catch
-				{
-					continue;
-				}
+				// Already parsed above; re-serializing and re-parsing the array and each row tripled the work.
+				var array = (JArray)arrayToken;
 
 				for (var i = 0; i < array.Count; i++)
 				{
@@ -127,15 +121,7 @@ internal static class Homm3HeroSpecializationIconSpriteCache
 					if (rowToken == null || rowToken.Type != JTokenType.Object)
 						continue;
 
-					JObject item;
-					try
-					{
-						item = JObject.Parse(rowToken.ToString());
-					}
-					catch
-					{
-						continue;
-					}
+					var item = (JObject)rowToken;
 
 					var id = item["id"]?.ToString();
 					var icon = item["icon"]?.ToString();

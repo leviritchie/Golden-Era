@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>disable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>GoldenEraFastResolve</AssemblyName>
+    <RootNamespace>GoldenEraFastResolve</RootNamespace>
+    <DebugType>portable</DebugType>
+    <!-- BepInEx core folder of the target install; pass -p:BepInExCoreDir=... to build. -->
+    <BepInExCoreDir Condition="'$(BepInExCoreDir)' == ''">V:\SteamLibrary\steamapps\common\Heroes of Might and Magic Olden Era - Golden Era\BepInEx\core\</BepInExCoreDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BepInEx.Core"><HintPath>$(BepInExCoreDir)BepInEx.Core.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="BepInEx.Preloader.Core"><HintPath>$(BepInExCoreDir)BepInEx.Preloader.Core.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+</Project>

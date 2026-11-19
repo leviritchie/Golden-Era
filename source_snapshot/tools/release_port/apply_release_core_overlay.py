@@ -33,6 +33,7 @@ from analyze_core_overlay import (
 from multilingual_custom_lang import sync_multilingual_custom_lang_rows
 from homm3_landon_dwelling_lang import mirror_landon_barracks_lang_rows
 from validate_city_construction_tree_layout import construction_tree_layout_errors
+from custom_law_tree_layout import DIRECT_RESOURCE_LAW_ICONS, arrange_law_lines, manifest_unit_lines
 from homm3_city_building_tree import (
     DERIVED_CITY_DONORS as DERIVED_HOMM3_CITY_DONORS,
     HOMM3_TREE_FACTIONS as HOMM3_CITY_TREE_FACTIONS,
@@ -61,6 +62,7 @@ import homm3_fortress_predator_instinct_core_overlay
 import homm3_conflux_fusion_core_overlay as conflux_fusion
 import homm3_factory_logistics_core_overlay as factory_logistics
 from homm3_reward_units_core_overlay import add_custom_faction_reward_units
+import homm3_upgrade_pair_parity as upgrade_pair_parity
 from homm3_city_building_descriptions import (
     derive_city_description_rows,
     derive_city_description_sentences,
@@ -72,11 +74,13 @@ import homm3_city_building_description_locales as city_building_locales
 CUSTOM_FACTION_VALIDATOR = REPO_ROOT / "tools" / "validate_custom_faction_manifests.py"
 HOMM3_ATTACK_ANIMATION_SLOT_VALIDATOR = REPO_ROOT / "tools" / "validate_homm3_owned_attack_animation_slots.py"
 CITY_CONSTRUCTION_TREE_LAYOUT_VALIDATOR = REPO_ROOT / "tools" / "release_port" / "validate_city_construction_tree_layout.py"
+CUSTOM_LAW_TREE_LAYOUT_VALIDATOR = REPO_ROOT / "tools" / "release_port" / "validate_custom_law_tree_layout.py"
 HOMM3_CITY_BUILDING_TREE_VALIDATOR = REPO_ROOT / "tools" / "release_port" / "validate_homm3_city_building_tree_contract.py"
 HOMM3_CITY_BUILDING_DESCRIPTIONS_VALIDATOR = (
     REPO_ROOT / "tools" / "release_port" / "validate_homm3_city_building_descriptions_contract.py"
 )
 CUSTOM_FACTION_REWARD_UNITS_VALIDATOR = REPO_ROOT / "tools" / "validate_custom_faction_reward_units_contract.py"
+HOMM3_UPGRADE_PAIR_PARITY_VALIDATOR = REPO_ROOT / "tools" / "validate_homm3_upgrade_pair_parity_contract.py"
 CUSTOM_LAW_NO_COMPROMISE_STATIC_CHECK = REPO_ROOT / "tools" / "release_port" / "check_custom_law_no_compromise_static.py"
 CUSTOM_LAW_CORE_METADATA_VALIDATOR = REPO_ROOT / "tools" / "release_port" / "validate_custom_law_core_metadata.py"
 CUSTOM_LAW_STRICT_ROW_VALIDATOR = REPO_ROOT / "tools" / "release_port" / "validate_custom_law_strict_no_compromise_rows.py"
@@ -7391,11 +7395,11 @@ GENERIC_FACTION_SKILL_TEXT: dict[str, tuple[str, str, list[str]]] = {
     ),
     "homm3_cove": (
         "Treasure Hunting",
-        "Cove heroes read sea charts and rumors to reveal treasures on the adventure map for no mana, and Plunder extra loot from chests and mines.",
+        "Every region of the map hides one buried treasure. Cove heroes gather the torn pieces of its map and dig it up.",
         [
-            "Gain Treasure Hunting I: cast Groundsight for 0 mana to reveal nearby neutral squads. Plunder: chests also give 1 random rare resource; the hero's first capture of each mine gives a normal resource pile of its type.",
-            "Gain Treasure Hunting II: cast Groundsight for 0 mana to reveal nearby neutral squads, resources, and artifacts. Plunder: chests also give 2 of a random rare resource; first mine captures give a 150% pile.",
-            "Gain Treasure Hunting III: cast Groundsight for 0 mana with the strongest native reveal tier. Plunder: chests also give 3 of a random rare resource; first mine captures give a 200% pile.",
+            "Gain Dig. Map pieces within 3 tiles of this hero are revealed; walk to one, or defeat its guards, to take it. The first piece marks four possible sites of the region's treasure and each further piece rules one out. Dig on the right spot to claim it: Dig needs two thirds of the hero's daily movement and ends its movement.",
+            "Treasure Hunting as before. Unlocks the picks Home Waters, Archivist and Lay of the Land.",
+            "Treasure Hunting as before. Unlocks the picks Collector of Secrets, Tireless Captain and Ancient Curses.",
         ],
     ),
     "homm3_inferno": homm3_inferno_gating_core_overlay.GENERIC_TEXT,
@@ -7445,6 +7449,21 @@ HOMM3_COVE_TREASURE_HUNTING_MAGIC_SIDS = (
     "homm3_cove_treasure_hunting_3",
 )
 HOMM3_COVE_GROUNDSIGHT_SOURCE_MAGIC_PATH = "DB/magics/world_primal_magics.json"
+# Dig (docs/cove_treasure_hunting_design.md 6.2): a Necromancer Will clone; Homm3CoveTreasureDig.SpellMode is the mode.
+HOMM3_COVE_DIG_MAGIC_SID = "homm3_cove_dig"
+HOMM3_COVE_DIG_MAGIC_MODE = "homm3_cove_dig"
+HOMM3_COVE_DIG_LANG_ROWS = (
+    {"sid": f"{HOMM3_COVE_DIG_MAGIC_SID}_name", "text": "Dig"},
+    {
+        "sid": f"{HOMM3_COVE_DIG_MAGIC_SID}_description",
+        "text": (
+            "Dig for buried treasure on the hero's tile. Needs at least two thirds of the hero's daily movement and "
+            "ends its movement for the day. Map pieces found near the hero narrow down where each region's treasure "
+            "lies; a wrong spot leaves an empty hole."
+        ),
+    },
+    {"sid": f"{HOMM3_COVE_DIG_MAGIC_SID}_cast", "text": "The crew starts digging."},
+)
 HOMM3_COVE_TREASURE_HUNTING_MAGIC_PATH = "DB/magics/world_neutral_magics.json"
 HOMM3_CASTLE_ELITE_STRATEGEM_MAGIC_PATH = "DB/magics/world_neutral_magics.json"
 HOMM3_CASTLE_ELITE_STRATEGEM_AMBUSH_ARENA_SID = "battleArena_homm3_castle_elite_strategem_ambush"
@@ -7515,18 +7534,152 @@ HOMM3_RAMPART_AVENGER_SUBSKILLS_BY_LEVEL = {
 }
 HOMM3_RAMPART_AVENGER_FOCUS_EFFICIENCY_INFO_SID = "sub_skill_faction_homm3_rampart_avenger_focus_efficiency_info"
 
+# docs/cove_treasure_hunting_design.md section 7. Everything but Home Waters is plugin behaviour (Homm3CoveTreasure*).
 HOMM3_COVE_TREASURE_HUNTING_SUBSKILLS_BY_LEVEL = {
     2: (
         "sub_skill_faction_homm3_cove_treasure_hunting_home_waters",
-        "sub_skill_faction_homm3_cove_treasure_hunting_charted_routes",
-        "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_trails",
+        "sub_skill_faction_homm3_cove_treasure_hunting_archivist",
+        "sub_skill_faction_homm3_cove_treasure_hunting_lay_of_the_land",
     ),
     3: (
-        "sub_skill_faction_homm3_cove_treasure_hunting_black_market_appraisers",
-        "sub_skill_faction_homm3_cove_treasure_hunting_tavern_informants",
-        "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_paths",
+        "sub_skill_faction_homm3_cove_treasure_hunting_collector_of_secrets",
+        "sub_skill_faction_homm3_cove_treasure_hunting_tireless_captain",
+        "sub_skill_faction_homm3_cove_treasure_hunting_ancient_curses",
     ),
 }
+# The Groundsight-era picks, retired with the Groundsight variants and Plunder (design doc section 11).
+HOMM3_COVE_STALE_TREASURE_HUNTING_SUBSKILLS = {
+    "sub_skill_faction_homm3_cove_treasure_hunting_charted_routes",
+    "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_trails",
+    "sub_skill_faction_homm3_cove_treasure_hunting_black_market_appraisers",
+    "sub_skill_faction_homm3_cove_treasure_hunting_tavern_informants",
+    "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_paths",
+}
+HOMM3_COVE_STALE_TREASURE_HUNTING_LANG_SIDS = {
+    f"{sid}_{kind}" for sid in HOMM3_COVE_STALE_TREASURE_HUNTING_SUBSKILLS for kind in ("name", "desc")
+}
+# Buffs the plugin's Treasure Hunting picks add (Homm3CoveTreasureSubskills). Sids and the Collector cap must match it.
+HOMM3_COVE_LAY_OF_THE_LAND_HERO_BUFF_SID = "homm3_cove_lay_of_the_land"
+HOMM3_COVE_LAY_OF_THE_LAND_SPEED_BUFF_SID = "homm3_cove_lay_of_the_land_speed_buff"
+HOMM3_COVE_COLLECTOR_HERO_BUFF_PREFIX = "homm3_cove_collector_of_secrets_"
+HOMM3_COVE_COLLECTOR_MAX_LEVEL = 30
+HOMM3_COVE_HERO_BUFFS_PATH = "DB/heroes_buffs/heroes_buffs.json"
+HOMM3_COVE_BATTLE_BUFFS_PATH = "DB/buffs/sub_skills_battle_hero_buffs.json"
+# Hidden, bonus-less side buff whose durations hold the Treasure Hunting save records (Homm3CoveTreasureSave.cs,
+# same carrier pattern as homm3_factory_logistics_store). The sid must match the plugin's StoreBuffSid.
+HOMM3_COVE_TREASURE_STORE_SIDE_BUFF_SID = "homm3_cove_treasure_store"
+HOMM3_COVE_TREASURE_STORE_SOURCE_SID = "heros_crypt_debuff_none"
+HOMM3_COVE_SIDE_BUFFS_PATH = "DB/logic_side_buffs/logic_side_buffs.json"
+
+
+def make_homm3_cove_treasure_store_side_buff_row(source_rows: list[Any]) -> dict[str, Any]:
+    base = next((r for r in source_rows if isinstance(r, dict) and r.get("id") == HOMM3_COVE_TREASURE_STORE_SOURCE_SID), None)
+    if not isinstance(base, dict):
+        raise RuntimeError(f"missing Treasure Hunting store source {HOMM3_COVE_TREASURE_STORE_SOURCE_SID}")
+    row = copy.deepcopy(base)
+    row.update(
+        {
+            "id": HOMM3_COVE_TREASURE_STORE_SIDE_BUFF_SID,
+            "name": f"{HOMM3_COVE_TREASURE_STORE_SIDE_BUFF_SID}_name",
+            "description": f"{HOMM3_COVE_TREASURE_STORE_SIDE_BUFF_SID}_description",
+            "hidden": True,
+            "bonuses": [],
+        }
+    )
+    return row
+
+
+def make_homm3_cove_treasure_hunting_hero_buff_rows() -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = [
+        {
+            "id": HOMM3_COVE_LAY_OF_THE_LAND_HERO_BUFF_SID,
+            "icon": "sub_skill_logistic_3_icon",
+            "name": f"{HOMM3_COVE_LAY_OF_THE_LAND_HERO_BUFF_SID}_name",
+            "description": f"{HOMM3_COVE_LAY_OF_THE_LAND_HERO_BUFF_SID}_description",
+            "additionType": "LeftNew",
+            "isPositive": True,
+            "hidden": False,
+            "isDispellable": True,
+            "bonuses": [{"type": "heroStat", "parameters": ["landscapePenaltyPerBonus", "-1.0"]}],
+        }
+    ]
+    for level in range(1, HOMM3_COVE_COLLECTOR_MAX_LEVEL + 1):
+        sid = f"{HOMM3_COVE_COLLECTOR_HERO_BUFF_PREFIX}{level}"
+        rows.append(
+            {
+                "id": sid,
+                "icon": "skill_faction_homm3_cove_3",
+                "name": f"{HOMM3_COVE_COLLECTOR_HERO_BUFF_PREFIX}name",
+                "description": f"{sid}_description",
+                "additionType": "LeftNew",
+                "isPositive": True,
+                "hidden": False,
+                "isDispellable": True,
+                "bonuses": [
+                    {"type": "heroStat", "parameters": [stat, str(2 * level)]}
+                    for stat in ("offence", "defence", "spellPower", "intelligence")  # intelligence = Knowledge
+                ],
+            }
+        )
+    return rows
+
+
+def make_homm3_cove_lay_of_the_land_speed_buff_row() -> dict[str, Any]:
+    return {
+        "id": HOMM3_COVE_LAY_OF_THE_LAND_SPEED_BUFF_SID,
+        "aiValue": 2000,
+        "aiValuePerDuration": 0,
+        "infinite": True,
+        "icon": "magic_haste_effect_icon",
+        "name_": f"{HOMM3_COVE_LAY_OF_THE_LAND_SPEED_BUFF_SID}_name",
+        "description_": f"{HOMM3_COVE_LAY_OF_THE_LAND_SPEED_BUFF_SID}_description",
+        "tags": ["positive"],
+        "isPositive": True,
+        "addition": "data",
+        "canDispel": False,
+        "data": {"stats": {"speed": 1}},
+    }
+
+
+def homm3_cove_treasure_hunting_hero_buff_lang_rows() -> list[dict[str, str]]:
+    rows = [
+        {"sid": f"{HOMM3_COVE_LAY_OF_THE_LAND_HERO_BUFF_SID}_name", "text": "Lay of the Land"},
+        {
+            "sid": f"{HOMM3_COVE_LAY_OF_THE_LAND_HERO_BUFF_SID}_description",
+            "text": "You hold a map piece of this region: the hero ignores terrain movement penalties here.",
+        },
+        {"sid": f"{HOMM3_COVE_COLLECTOR_HERO_BUFF_PREFIX}name", "text": "Collector of Secrets"},
+        {"sid": f"{HOMM3_COVE_TREASURE_STORE_SIDE_BUFF_SID}_name", "text": "Treasure Hunting"},
+        {"sid": f"{HOMM3_COVE_TREASURE_STORE_SIDE_BUFF_SID}_description", "text": "Treasure Hunting records."},
+    ]
+    for level in range(1, HOMM3_COVE_COLLECTOR_MAX_LEVEL + 1):
+        rows.append(
+            {
+                "sid": f"{HOMM3_COVE_COLLECTOR_HERO_BUFF_PREFIX}{level}_description",
+                "text": f"Treasures dug up: {level}. +{2 * level} Attack, Defence, Spell Power and Knowledge.",
+            }
+        )
+    return rows
+
+
+HOMM3_COVE_LAY_OF_THE_LAND_SPEED_BUFF_LANG_ROWS = (
+    {"sid": f"{HOMM3_COVE_LAY_OF_THE_LAND_SPEED_BUFF_SID}_name", "text": "Lay of the Land"},
+    {"sid": f"{HOMM3_COVE_LAY_OF_THE_LAND_SPEED_BUFF_SID}_description", "text": "+1 Speed: its hero knows this region from the treasure map."},
+)
+HOMM3_COVE_TREASURE_HUNTING_SUBSKILL_LANG_ROWS = (
+    {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_home_waters_name", "text": "Home Waters"},
+    {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_home_waters_desc", "text": "Cove creatures deal 10% more damage and take 10% less damage on native terrain."},
+    {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_archivist_name", "text": "Archivist"},
+    {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_archivist_desc", "text": "The first time this hero enters a region, you gain a bonus map piece for that region's treasure. Once per region."},
+    {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_lay_of_the_land_name", "text": "Lay of the Land"},
+    {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_lay_of_the_land_desc", "text": "In regions where you hold a map piece, this hero ignores terrain movement penalties. With two or more pieces, the hero's creatures also gain +1 Speed in battles fought there."},
+    {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_collector_of_secrets_name", "text": "Collector of Secrets"},
+    {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_collector_of_secrets_desc", "text": "Each treasure this hero digs up permanently gives the hero +2 Attack, Defence, Spell Power and Knowledge."},
+    {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_tireless_captain_name", "text": "Tireless Captain"},
+    {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_tireless_captain_desc", "text": "Dig costs no movement and can be cast with any movement left."},
+    {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_ancient_curses_name", "text": "Ancient Curses"},
+    {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_ancient_curses_desc", "text": "In regions where you have dug up the treasure, every enemy creature starts combat against this hero under Despair, ignoring immunities."},
+)
 HOMM3_COVE_STALE_CANNONEERING_SUBSKILLS = {
     "sub_skill_faction_homm3_cove_cannoneering_opening_salvo",
     "sub_skill_faction_homm3_cove_cannoneering_veteran_gunners",
@@ -12709,6 +12862,44 @@ def enabled_law_override_sids(manifest: dict[str, Any]) -> list[str]:
     return sids
 
 
+def arrange_custom_law_trees(output: dict[str, bytes], notes: list[str]) -> None:
+    """Move every placed custom law to the line and column its effect asks for.
+
+    fractionLawsLines is the donor's tree with the prefix renamed, but index n of a custom
+    table is not the donor's law n (nature keeps Resource Riches at 4/15/26, the custom
+    tables at 3/16/29), so unit laws sat in the kingdom column and Resource Riches in the
+    army column. custom_law_tree_layout owns the rules; the set of placed laws is unchanged.
+    """
+    moved: list[str] = []
+    for manifest in CUSTOM_FACTION_MANIFESTS:
+        if not manifest_core_overlay_enabled(manifest):
+            continue
+        faction_sid = manifest["identity"]["factionSid"]
+        faction_member = manifest_core_member(manifest, "factionJson")
+        laws_member = manifest_core_member(manifest, "lawsTable")
+        if faction_member not in output or laws_member not in output:
+            raise RuntimeError(f"{faction_sid}: {faction_member} or {laws_member} was not generated; cannot arrange its law tree")
+        faction_doc = json.loads(output[faction_member].decode("utf-8-sig"))
+        item = first_array_item(faction_doc)
+        lines = item.get("fractionLawsLines") if isinstance(item, dict) else None
+        if not isinstance(lines, list):
+            raise RuntimeError(f"{faction_sid}: {faction_member} has no fractionLawsLines")
+        rows_by_id = {
+            str(row.get("id")): row
+            for row in json.loads(output[laws_member].decode("utf-8-sig")).get("array") or []
+            if isinstance(row, dict)
+        }
+        arranged, moves = arrange_law_lines(lines, rows_by_id, manifest_unit_lines(manifest), faction_sid)
+        if moves:
+            item["fractionLawsLines"] = arranged
+            output[faction_member] = write_json(faction_doc)
+            moved.append(f"{faction_sid} {len(moves)}")
+    notes.append(
+        "Custom law trees: laws placed by effect (kingdom/army column, Resource Riches leading lines 1/3/5, "
+        "unit-line laws in their tier's band); moved " + (", ".join(moved) if moved else "none")
+    )
+
+
 def assert_enabled_law_overrides_reachable(output: dict[str, bytes], notes: list[str]) -> None:
     """Fail closed when an enabled law override is missing from its faction's fractionLawsLines.
 
@@ -15464,6 +15655,22 @@ def normalize_custom_unit_alternative_attack_cards(logic_item: dict[str, Any], v
             changed = True
     logic_alts = as_attack_list(logic_item.get("alternativeAttacks"))
     view_alts = view_item.get("alternativeAttacks")
+    # A passive card that repeats a shown alternate-attack card word for word lists the
+    # same skill twice on the unit panel (Tinker: Long Reach passive + Long Reach attack).
+    passives = view_item.get("passives")
+    if isinstance(passives, list) and isinstance(view_alts, list):
+        alt_cards = {
+            (alt.get("name"), alt.get("description"))
+            for alt in view_alts
+            if isinstance(alt, dict) and alt.get("canShowOnUI") is True and alt.get("name")
+        }
+        kept = [
+            row for row in passives
+            if not (isinstance(row, dict) and (row.get("name"), row.get("description")) in alt_cards)
+        ]
+        if len(kept) != len(passives):
+            view_item["passives"] = kept
+            changed = True
     if not isinstance(view_alts, list) or len(view_alts) != len(logic_alts):
         return changed
     for logic_alt, view_alt in zip(logic_alts, view_alts):
@@ -15518,7 +15725,7 @@ def shooter_has_no_range_falloff(logic_item: dict[str, Any]) -> bool:
     values = []
     for key in ("defaultAttacks", "alternativeAttacks"):
         for attack in as_attack_list(logic_item.get(key)):
-            if attack.get("attackType_") not in {"shoot", "range"}:
+            if attack.get("attackType_") != "shoot":
                 continue
             dealer = attack.get("damageDealer") if isinstance(attack.get("damageDealer"), dict) else {}
             values.append(dealer.get("shootDmgBuff"))
@@ -15537,7 +15744,9 @@ def normalize_custom_unit_ranged_cards(logic_item: dict[str, Any], view_item: di
     if not isinstance(passives, list):
         return False
     stats = logic_item.get("stats") if isinstance(logic_item.get("stats"), dict) else {}
-    is_shooter = find_attack(logic_item, "shoot") is not None or find_attack(logic_item, "range") is not None
+    # attackType_ "range" is the two-hex Long Reach melee (vanilla Druid, Tinker), not a
+    # shot: counting it as a shooter gave the Tinker Ranged Attack and Sharpshooter cards.
+    is_shooter = find_attack(logic_item, "shoot") is not None
     descriptions = [row.get("description") if isinstance(row, dict) else None for row in passives]
     before = json.dumps(passives, sort_keys=True, ensure_ascii=False)
     if not is_shooter:
@@ -16558,6 +16767,49 @@ def make_homm3_cove_treasure_hunting_magic_rows(release_zip: zipfile.ZipFile, ou
 
 
 
+def make_homm3_cove_dig_magic_row(release_zip: zipfile.ZipFile, output: dict[str, bytes]) -> dict[str, Any]:
+    """Clone of the native Necromancer Will world magic; Homm3CoveTreasureDig intercepts its [mode] parameter."""
+    source_doc = read_overlay_or_release_json(release_zip, output, HOMM3_COVE_TREASURE_HUNTING_MAGIC_PATH)
+    source_rows = source_doc.get("array") if isinstance(source_doc, dict) else None
+    if not isinstance(source_rows, list):
+        raise RuntimeError(f"malformed Cove Dig magic source {HOMM3_COVE_TREASURE_HUNTING_MAGIC_PATH}")
+    base_row = next((row for row in source_rows if isinstance(row, dict) and row.get("id") == HOMM3_NECROMANCY_TOGGLE_MAGIC_SID), None)
+    if not isinstance(base_row, dict):
+        raise RuntimeError(f"missing Cove Dig magic source {HOMM3_NECROMANCY_TOGGLE_MAGIC_SID}")
+    row = copy.deepcopy(base_row)
+    sid = HOMM3_COVE_DIG_MAGIC_SID
+    row["id"] = sid
+    row["name"] = f"{sid}_name"
+    row["description"] = [f"{sid}_description"] * 4
+    row["bonusDescriptions"] = []
+    row["upEffectDescription"] = ""
+    row["manaCost"] = [0, 0, 0, 0]
+    row["upgradeCost"] = [0]
+    row["rank"] = 1
+    row["school_"] = "neutral"
+    row["usedOnMap"] = True
+    row["xHomm3SkillGrantedOnly"] = True
+    row["xHomm3RuntimeHook"] = (
+        "Cove Dig reuses the native Necromancer Will world-magic handler; Homm3CoveTreasureDig intercepts the "
+        "[mode] parameter row, suppresses the native toggle and digs on the caster's tile."
+    )
+    # Icon: homm3_skill_icons/homm3_cove_dig.png (tools/cove_treasure/build_dig_icon.py), served by
+    # Homm3FactionSkillIconSpriteCache under the spell's own sid.
+    row["icon"] = sid
+    world_magic = row.get("worldMagic")
+    magic_settings = world_magic.get("magicSettings") if isinstance(world_magic, dict) else None
+    if not isinstance(magic_settings, list) or not magic_settings:
+        raise RuntimeError(f"malformed Cove Dig worldMagic source {HOMM3_NECROMANCY_TOGGLE_MAGIC_SID}")
+    world_magic["settingPerLevels"] = [0, 0, 0, 0]
+    for setting in magic_settings:
+        if isinstance(setting, dict):
+            setting["mechType"] = HOMM3_NECROMANCY_TOGGLE_MAGIC_SID
+            setting["parameters"] = [HOMM3_COVE_DIG_MAGIC_MODE]
+            setting["usageLimit"] = -1
+            setting["castInfoSid"] = f"{sid}_cast"
+    return row
+
+
 def homm3_castle_elite_strategem_magic_lang_rows() -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
     for mode in HOMM3_CASTLE_ELITE_STRATEGEM_MAGIC_MODES:
@@ -16695,47 +16947,24 @@ def make_homm3_cove_treasure_hunting_subskills() -> list[dict[str, Any]]:
                 {"type": "unitStat", "biomeType": "native", "fraction": "homm3_cove", "parameters": ["inAllDmgMod", "-0.1"]},
             ],
         },
-        {
-            "id": "sub_skill_faction_homm3_cove_treasure_hunting_charted_routes",
-            "name": "sub_skill_faction_homm3_cove_treasure_hunting_charted_routes_name",
-            "desc": "sub_skill_faction_homm3_cove_treasure_hunting_charted_routes_desc",
-            "icon": "sub_skill_scouting_2_icon",
-            "bonuses": [{"type": "heroStatMap", "actionArea": "allied", "parameters": ["movementBonus", "10"]}],
-        },
-        {
-            "id": "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_trails",
-            "name": "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_trails_name",
-            "desc": "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_trails_desc",
-            "icon": "sub_skill_scouting_3_icon",
-            "bonuses": [hero_stat_bonus("landscapePenaltyPerBonus", "-0.5")],
-        },
-        {
-            "id": "sub_skill_faction_homm3_cove_treasure_hunting_black_market_appraisers",
-            "name": "sub_skill_faction_homm3_cove_treasure_hunting_black_market_appraisers_name",
-            "desc": "sub_skill_faction_homm3_cove_treasure_hunting_black_market_appraisers_desc",
-            "icon": "skill_faction_homm3_cove_3",
-            "bonuses": [
-                hero_stat_bonus("coefPurchaseArtefact", "0.25"),
-                hero_stat_bonus("coefSaleArtefact", "0.25"),
-            ],
-        },
-        {
-            "id": "sub_skill_faction_homm3_cove_treasure_hunting_tavern_informants",
-            "name": "sub_skill_faction_homm3_cove_treasure_hunting_tavern_informants_name",
-            "desc": "sub_skill_faction_homm3_cove_treasure_hunting_tavern_informants_desc",
-            "icon": "skill_faction_homm3_cove_2",
-            "bonuses": [
-                hero_stat_bonus("enableEnemyHeroInfo", "true"),
-                {"type": "heroScouting", "parameters": ["1.5"]},
-            ],
-        },
-        {
-            "id": "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_paths",
-            "name": "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_paths_name",
-            "desc": "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_paths_desc",
-            "icon": "sub_skill_logistic_3_icon",
-            "bonuses": [hero_stat_bonus("movementRestoreBonus", "50")],
-        },
+        # Plugin-run picks (Homm3CoveTreasureSubskills): the rows only make them learnable.
+        *(
+            {
+                "id": f"sub_skill_faction_homm3_cove_treasure_hunting_{key}",
+                "name": f"sub_skill_faction_homm3_cove_treasure_hunting_{key}_name",
+                "desc": f"sub_skill_faction_homm3_cove_treasure_hunting_{key}_desc",
+                "icon": icon,
+                "bonuses": [],
+                "xHomm3RuntimeHook": "Homm3CoveTreasureSubskills",
+            }
+            for key, icon in (
+                ("archivist", "sub_skill_scouting_2_icon"),
+                ("lay_of_the_land", "sub_skill_logistic_3_icon"),
+                ("collector_of_secrets", "skill_faction_homm3_cove_3"),
+                ("tireless_captain", "sub_skill_scouting_3_icon"),
+                ("ancient_curses", "skill_faction_homm3_cove_2"),
+            )
+        ),
     ]
 
 
@@ -17517,12 +17746,13 @@ def add_release_generic_mechanic_support_rows(release_zip: zipfile.ZipFile, mani
         if not isinstance(magic_doc, dict):
             raise RuntimeError(f"malformed {faction_sid} Treasure Hunting magic target {magic_name}")
         changed = False
-        for row in make_homm3_cove_treasure_hunting_magic_rows(release_zip, output):
-            changed = upsert_array_row(magic_doc, row) or changed
+        # The Groundsight variants are retired: Dig is the skill's only spell.
+        changed = remove_array_rows_by_id(magic_doc, set(HOMM3_COVE_TREASURE_HUNTING_MAGIC_SIDS))
+        changed = upsert_array_row(magic_doc, make_homm3_cove_dig_magic_row(release_zip, output)) or changed
         changed = dedupe_array_rows_by_id(magic_doc) or changed
         if changed:
             output[magic_name] = write_json(magic_doc)
-            notes.append("merge homm3_cove neutral Treasure Hunting Groundsight variants")
+            notes.append("merge homm3_cove Dig world magic, remove retired Groundsight variants")
         primal_doc = json.loads(output[HOMM3_COVE_GROUNDSIGHT_SOURCE_MAGIC_PATH].decode("utf-8-sig")) if HOMM3_COVE_GROUNDSIGHT_SOURCE_MAGIC_PATH in output else read_json(release_zip, HOMM3_COVE_GROUNDSIGHT_SOURCE_MAGIC_PATH)
         if not isinstance(primal_doc, dict):
             raise RuntimeError(f"malformed {faction_sid} Treasure Hunting Primal cleanup target {HOMM3_COVE_GROUNDSIGHT_SOURCE_MAGIC_PATH}")
@@ -17531,6 +17761,29 @@ def add_release_generic_mechanic_support_rows(release_zip: zipfile.ZipFile, mani
         if changed:
             output[HOMM3_COVE_GROUNDSIGHT_SOURCE_MAGIC_PATH] = write_json(primal_doc)
             notes.append("remove stale homm3_cove Treasure Hunting variants from Primal research table")
+
+        for buffs_path, buff_rows in (
+            (HOMM3_COVE_HERO_BUFFS_PATH, make_homm3_cove_treasure_hunting_hero_buff_rows()),
+            (HOMM3_COVE_BATTLE_BUFFS_PATH, [make_homm3_cove_lay_of_the_land_speed_buff_row()]),
+        ):
+            pick_buffs_doc = read_overlay_or_release_json(release_zip, output, buffs_path)
+            if not isinstance(pick_buffs_doc, dict) or not isinstance(pick_buffs_doc.get("array"), list):
+                raise RuntimeError(f"malformed {faction_sid} Treasure Hunting buff target {buffs_path}")
+            changed = False
+            for row in buff_rows:
+                changed = upsert_array_row(pick_buffs_doc, row) or changed
+            changed = dedupe_array_rows_by_id(pick_buffs_doc) or changed
+            if changed:
+                output[buffs_path] = write_json(pick_buffs_doc)
+                notes.append(f"merge homm3_cove Treasure Hunting pick buffs into {buffs_path}")
+        store_doc = read_overlay_or_release_json(release_zip, output, HOMM3_COVE_SIDE_BUFFS_PATH)
+        if not isinstance(store_doc, dict) or not isinstance(store_doc.get("array"), list):
+            raise RuntimeError(f"malformed {faction_sid} Treasure Hunting store target {HOMM3_COVE_SIDE_BUFFS_PATH}")
+        changed = upsert_array_row(store_doc, make_homm3_cove_treasure_store_side_buff_row(store_doc["array"]))
+        changed = dedupe_array_rows_by_id(store_doc) or changed
+        if changed:
+            output[HOMM3_COVE_SIDE_BUFFS_PATH] = write_json(store_doc)
+            notes.append("merge homm3_cove Treasure Hunting save-record side buff")
 
         ability_name = "DB/heroes_abilities/heroes_abilities_base/hero_abilities.json"
         try:
@@ -17552,7 +17805,9 @@ def add_release_generic_mechanic_support_rows(release_zip: zipfile.ZipFile, mani
         try:
             subskills_doc = json.loads(output[subskills_name].decode("utf-8-sig")) if subskills_name in output else read_json(release_zip, subskills_name)
             if isinstance(subskills_doc, dict):
-                changed = remove_array_rows_by_id(subskills_doc, HOMM3_COVE_STALE_CANNONEERING_SUBSKILLS)
+                changed = remove_array_rows_by_id(
+                    subskills_doc, HOMM3_COVE_STALE_CANNONEERING_SUBSKILLS | HOMM3_COVE_STALE_TREASURE_HUNTING_SUBSKILLS
+                )
                 for row in make_homm3_cove_treasure_hunting_subskills():
                     changed = upsert_array_row(subskills_doc, row) or changed
                 changed = dedupe_array_rows_by_id(subskills_doc) or changed
@@ -17965,8 +18220,12 @@ CUSTOM_LAW_PROFILES: dict[str, dict[str, Any]] = {
         "theme": [
             ("Elemental Convergence", "Elemental lines gain 10% of hero Spell Power as Attack.", [("unitStatTiers", [2, 3, 4, 5, 6], "heroSpellPowerModifier", "0.10")]),
             ("Planar Channels", "Your heroes start battles with 1 additional Focus Charge.", [("heroStat", ["startEnergyLevelsBonus", "1"])]),
-            None,
-            ("Phoenix Omen", "Firebird and Phoenix lines gain 1 Initiative and 1 Speed.", [("unitStatTier", [7, "initiative", "1"]), ("unitStatTier", [7, "speed", "1"])]),
+            # Slot 26. A 2026-06-15 filler copied Planar Channels here, so the tree held the
+            # same +1 Focus law twice and it stacked; this is the law the slot had before.
+            ("Elemental Balance", "Friendly creatures deal 5% more damage and take 5% less damage.", [("unitStatAllSimple", ["outAllDmgMod", "0.05"]), ("unitStatAllSimple", ["inAllDmgMod", "-0.05"])]),
+            # Slot 31. It used to copy Phoenix Mandate (slot 30, +1 Speed/Initiative to the
+            # Firebird line), so the tree stacked that law twice; owner chose +2 Luck 2026-11-17.
+            ("Phoenix Omen", "Firebird and Phoenix lines gain +2 Luck.", [("unitStatTier", [7, "luck", "2"])]),
         ],
     },
     "homm3_cove": {
@@ -18079,14 +18338,6 @@ RESOURCE_RICHES_LAW_ICONS: dict[int, str] = {
     3: "fraction_law_human_3_icon",
     16: "fraction_law_human_16_icon",
     29: "fraction_law_human_29_icon",
-}
-DIRECT_RESOURCE_LAW_ICONS: dict[str, str] = {
-    "gold": "fraction_law_human_1_icon",
-    "gems": "fraction_law_human_14_icon",
-    "gemstones": "fraction_law_human_14_icon",
-    "crystal": "fraction_law_nature_14_icon",
-    "crystals": "fraction_law_nature_14_icon",
-    "mercury": "fraction_law_dungeon_14_icon",
 }
 ASTROLOGY_LAW_ICON = "fraction_law_human_34_icon"
 CUSTOM_LAW_CREATURE_PORTRAIT_ICONS: dict[str, dict[int, str]] = {
@@ -18314,11 +18565,6 @@ def custom_filled_law_slot_definition(manifest: dict[str, Any], index: int) -> t
                     (3, [("unitStatAll", ["inDmgMods", "magic_damage", "-0.15"])]),
                 ],
             ),
-            26: (
-                "Planar Channels",
-                "Heroes start battles with 1 additional Focus Charge.",
-                [(4, [("heroStat", ["startEnergyLevelsBonus", "1"])])],
-            ),
             30: (
                 "Phoenix Mandate",
                 "Firebird and Phoenix lines gain +1 Speed and +1 Initiative.",
@@ -18438,13 +18684,13 @@ def custom_filled_law_slot_definition(manifest: dict[str, Any], index: int) -> t
             ),
         },
         "homm3_stronghold": {
+            # Slot 5 used to copy Goblin Muster (unit law 4: +4 growth, +1/+2 max Damage), so the
+            # tree stacked that law twice; owner chose a hiring discount 2026-11-17. Rank 1 of
+            # vanilla undead_22 (cost 4), without its faction filter, like Dungeon's Black Market Pacts.
             5: (
                 "Goblin Pressgang",
-                "Goblin lines gain +4 growth and +1/+2 maximum Damage by rank.",
-                [
-                    (3, [("cityUnitsIncrement", ["h3_goblin", 4]), ("unitStatTier", [1, "damageMax", "1"])]),
-                    (2, [("cityUnitsIncrement", ["h3_goblin", 4]), ("unitStatTier", [1, "damageMax", "2"])]),
-                ],
+                "Recruiting creatures costs 10% less.",
+                [(4, [("unitHiringDiscount", ["-0.10"])])],
             ),
             17: (
                 "Raider Momentum",
@@ -18660,7 +18906,14 @@ def custom_law_indices_to_emit(manifest: dict[str, Any], count: int) -> tuple[tu
 
 
 
-def custom_law_levels_direct_resource_icon(levels: list[dict[str, Any]], index: int) -> str | None:
+def custom_law_levels_direct_resource_icon(
+    levels: list[dict[str, Any]], index: int, override_icon: str | None = None
+) -> str | None:
+    """Icon owed to a pure resource/astrology law; `override_icon` is the override's iconKey.
+
+    Resource Riches outside the reserved 3/16/29 slots (Bulwark keeps the nature donor's)
+    takes its override icon: the index anchors below it are for other kinds of law.
+    """
     bonuses: list[dict[str, Any]] = []
     for level in levels:
         if not isinstance(level, dict):
@@ -18691,7 +18944,7 @@ def custom_law_levels_direct_resource_icon(levels: list[dict[str, Any]], index: 
             if isinstance(parameters, list) and parameters and isinstance(parameters[0], str):
                 resources.add(parameters[0])
         if {"gold", "wood", "ore"}.issubset(resources):
-            return RESOURCE_RICHES_LAW_ICONS.get(index)
+            return RESOURCE_RICHES_LAW_ICONS.get(index) or override_icon
     return None
 
 
@@ -18726,12 +18979,15 @@ def custom_law_icon(manifest: dict[str, Any], donor_rows: list[Any], index: int)
         override_definition = None
         levels = []
 
-    resource_icon = custom_law_levels_direct_resource_icon(levels, index)
+    faction_sid = manifest["identity"]["factionSid"]
+    override = custom_law_override_entry(manifest, index)
+    override_icon = override.get("iconKey") if isinstance(override, dict) and override.get("enabled") is not False else None
+    resource_icon = custom_law_levels_direct_resource_icon(
+        levels, index, override_icon.strip() if isinstance(override_icon, str) and override_icon.strip() else None
+    )
     if isinstance(resource_icon, str) and resource_icon:
         return resource_icon
 
-    faction_sid = manifest["identity"]["factionSid"]
-    override = custom_law_override_entry(manifest, index)
     if isinstance(override, dict) and override.get("enabled") is not False:
         homm4_icon_path = override.get("homm4IconPath")
         icon = override.get("iconKey")
@@ -18740,6 +18996,11 @@ def custom_law_icon(manifest: dict[str, Any], donor_rows: list[Any], index: int)
         portrait_icon = override.get("portraitIconSid")
         if isinstance(portrait_icon, str) and portrait_icon.strip():
             return portrait_icon.strip()
+        # Art of the live vanilla law with the same effect; outranks the index anchors
+        # (CUSTOM_LAW_EXPLICIT_INDEX_ICONS), which are art for the generic family at that index.
+        effect_icon = override.get("effectIconKey")
+        if isinstance(effect_icon, str) and effect_icon.strip():
+            return effect_icon.strip()
 
     if override_definition is None:
         unit_law_by_index = {law_index: tier for tier, law_index in enumerate(custom_unit_law_indices(manifest), start=1)}
@@ -18854,12 +19115,11 @@ def make_specialized_generic_skill_row(manifest: dict[str, Any], skill_sid: str)
         source_difference = conflux_fusion.SOURCE_DIFFERENCE
     elif faction_sid == "homm3_cove":
         levels = [
-            [{"type": "heroMagicAddition", "parameters": [HOMM3_COVE_TREASURE_HUNTING_MAGIC_SIDS[0], "false"]}],
-            [{"type": "heroMagicAddition", "parameters": [HOMM3_COVE_TREASURE_HUNTING_MAGIC_SIDS[1], "false"]}],
-            [{"type": "heroMagicAddition", "parameters": [HOMM3_COVE_TREASURE_HUNTING_MAGIC_SIDS[2], "false"]}],
+            [{"type": "heroMagicAddition", "parameters": [HOMM3_COVE_DIG_MAGIC_SID, "false"]}]
+            for _ in range(3)
         ]
-        implemented = "Treasure Hunting: Basic/Advanced/Expert grant Cove-owned 0-mana native Groundsight variants pinned to native reveal settings 0/1/2."
-        source_difference = "Treasure Hunting replaces the unstable Cannon deployment skill with native world Groundsight access and vanilla-shaped exploration subskills."
+        implemented = "Treasure Hunting: every rank grants the Dig world magic; Homm3CoveTreasureRuntime plants one buried treasure and five map pieces per map region, reveals pieces near Cove heroes and pays out the treasure on a correct Dig."
+        source_difference = "Treasure Hunting replaces the unstable Cannon deployment skill with a region-wide buried-treasure hunt run by the plugin; the Groundsight variants and Plunder are retired."
     elif faction_sid == "homm3_inferno":
         levels = homm3_inferno_gating_core_overlay.faction_skill_levels()
         implemented = homm3_inferno_gating_core_overlay.IMPLEMENTED
@@ -19379,44 +19639,35 @@ def add_release_generic_lang(release_zip: zipfile.ZipFile, manifest: dict[str, A
             output,
             "Lang/english/texts/magics.json",
             [
-                {"sid": "homm3_cove_treasure_hunting_1_name", "text": "Treasure Hunting I"},
-                {
-                    "sid": "homm3_cove_treasure_hunting_1_description",
-                    "text": "Cast native Groundsight for 0 mana to reveal nearby neutral squads.",
-                },
-                {"sid": "homm3_cove_treasure_hunting_2_name", "text": "Treasure Hunting II"},
-                {
-                    "sid": "homm3_cove_treasure_hunting_2_description",
-                    "text": "Cast native Groundsight for 0 mana to reveal nearby neutral squads, resources, and artifacts.",
-                },
-                {"sid": "homm3_cove_treasure_hunting_3_name", "text": "Treasure Hunting III"},
-                {
-                    "sid": "homm3_cove_treasure_hunting_3_description",
-                    "text": "Cast native Groundsight for 0 mana with the strongest native reveal tier.",
-                },
+                *HOMM3_COVE_DIG_LANG_ROWS,
             ],
+            notes,
+        )
+        add_lang_args_overlay_rows(
+            release_zip,
+            output,
+            "Lang/args/magic.json",
+            [{"sid": row["sid"], "args": []} for row in HOMM3_COVE_DIG_LANG_ROWS],
             notes,
         )
         remove_lang_overlay_rows(
             release_zip,
             output,
             "Lang/english/texts/heroSkills.json",
-            HOMM3_COVE_STALE_CANNONEERING_LANG_SIDS,
+            HOMM3_COVE_STALE_CANNONEERING_LANG_SIDS | HOMM3_COVE_STALE_TREASURE_HUNTING_LANG_SIDS,
             notes,
         )
+        retired_magic_lang_sids = {
+            f"{sid}_{kind}" for sid in HOMM3_COVE_TREASURE_HUNTING_MAGIC_SIDS for kind in ("name", "description")
+        }
+        remove_lang_overlay_rows(release_zip, output, "Lang/english/texts/magics.json", retired_magic_lang_sids, notes)
+        add_lang_overlay_rows(
+            release_zip, output, "Lang/english/texts/mapObjects.json", homm3_cove_treasure_hunting_hero_buff_lang_rows(), notes
+        )
+        for lang_path in ("Lang/english/texts/magic_buff.json", "Lang/english/texts/unitsBuff.json"):
+            add_lang_overlay_rows(release_zip, output, lang_path, list(HOMM3_COVE_LAY_OF_THE_LAND_SPEED_BUFF_LANG_ROWS), notes)
         hero_skill_rows += [
-            {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_home_waters_name", "text": "Home Waters"},
-            {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_home_waters_desc", "text": "Cove creatures deal 10% more damage and take 10% less damage on native terrain."},
-            {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_charted_routes_name", "text": "Charted Routes"},
-            {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_charted_routes_desc", "text": "Allied heroes gain +10 movement in allied map areas."},
-            {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_trails_name", "text": "Smuggler Trails"},
-            {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_trails_desc", "text": "Reduces rough-terrain movement penalties by 50%."},
-            {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_black_market_appraisers_name", "text": "Black Market Appraisers"},
-            {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_black_market_appraisers_desc", "text": "Improves artifact purchase and sale rates."},
-            {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_tavern_informants_name", "text": "Tavern Informants"},
-            {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_tavern_informants_desc", "text": "Reveals enemy hero information and increases scouting strength."},
-            {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_paths_name", "text": "Smuggler Paths"},
-            {"sid": "sub_skill_faction_homm3_cove_treasure_hunting_smuggler_paths_desc", "text": "Restores 50 movement through the native logistics restoration bonus."},
+            *HOMM3_COVE_TREASURE_HUNTING_SUBSKILL_LANG_ROWS,
         ]
     if faction_sid == "homm3_tower":
         tower_stale_skill_lang_sids = (
@@ -19867,15 +20118,71 @@ def humanize_magic_sid(magic_sid: str) -> str:
 
 def humanize_damage_modifier_sid(value: str) -> str:
     labels = {
-        "basic_attack": "basic attack",
-        "range_attack": "ranged attack",
-        "shoot_attack": "shooting attack",
-        "magic_damage": "spell damage",
+        "basic_attack": "basic attacks",
+        "melee_attack": "melee attacks",
+        "range_attack": "ranged attacks",
+        "shoot_attack": "shooting attacks",
+        "magic_damage": "spells",
     }
-    return labels.get(value, humanize_custom_sid(value).lower())
+    return labels.get(value, humanize_custom_sid(value).lower() + " attacks")
+
+
+def spec_text_join(parts: list[str]) -> str:
+    parts = [part for part in parts if part]
+    if len(parts) <= 1:
+        return "".join(parts)
+    if len(parts) == 2:
+        return parts[0] + " and " + parts[1]
+    return ", ".join(parts[:-1]) + ", and " + parts[-1]
+
+
+def spec_text_magnitude(value: Any, percent: bool = False) -> str:
+    """Unsigned amount: the surrounding words carry the direction."""
+    try:
+        number = abs(float(value))
+    except (TypeError, ValueError):
+        return str(value).lstrip("+-")
+    if percent:
+        return format_bonus_percent(number)
+    if abs(number - round(number)) < 0.0001:
+        return str(int(round(number)))
+    return f"{number:g}"
+
+
+def spec_text_is_negative(value: Any) -> bool:
+    try:
+        return float(value) < 0
+    except (TypeError, ValueError):
+        return str(value).startswith("-")
+
+
+def spec_text_per_levels(level_step: Any) -> str:
+    return "every hero level" if str(level_step) == "1" else f"every {level_step} hero levels"
+
+
+def spec_text_scaling(bonus: dict[str, Any], percent: bool = False, signed: bool = False) -> str:
+    """Vanilla-style level scaling clause: ', plus another 1% for every 2 hero levels'."""
+    upgrade = bonus.get("upgrade")
+    if not isinstance(upgrade, dict) or upgrade.get("levelStep") is None:
+        return ""
+    increment = upgrade.get("increment")
+    # Reductions keep their sign, as in vanilla ("-10% Damage ..., plus another -1% ...").
+    if signed:
+        amount = signed_bonus_value(increment, percent)
+    else:
+        amount = ("-" if spec_text_is_negative(increment) else "") + spec_text_magnitude(increment, percent)
+    return f", plus another {amount} for {spec_text_per_levels(upgrade.get('levelStep'))}"
 
 
 def describe_custom_specialization_bonus_row(row: dict[str, Any]) -> str | None:
+    """Player-facing specialization text, derived from the bonus rows.
+
+    This is the single owner of custom hero specialization descriptions: whatever
+    it returns replaces the hero override's descriptionText in heroInfo.json, so
+    the text always states the numbers the bonuses really apply. Wording follows
+    the vanilla specialization strings. The override descriptionText only ships
+    for rows this function cannot describe (it returns None).
+    """
     if row.get("xHomm3ChangeDisposition") == "explicit_masterful_spell_variant":
         base_sid = row.get("xHomm3MasterfulSpellBaseSid")
         variant = MASTERFUL_MAGIC_VARIANTS.get(base_sid) if isinstance(base_sid, str) else None
@@ -19892,54 +20199,59 @@ def describe_custom_specialization_bonus_row(row: dict[str, Any]) -> str | None:
     if not meaningful:
         return None
 
-    def first_bonus(bonus_type: str, stat: str | None = None) -> dict[str, Any] | None:
+    def is_enemy(bonus: dict[str, Any]) -> bool:
+        return bonus.get("receiverAllegiance") == "enemy"
+
+    def first_bonus(bonus_type: str, stat: str | None = None, enemy: bool = False) -> dict[str, Any] | None:
         for bonus in meaningful:
             params = bonus.get("parameters") or []
-            if bonus.get("type") == bonus_type and (stat is None or (params and params[0] == stat)):
+            if bonus.get("type") == bonus_type and is_enemy(bonus) == enemy and (stat is None or (params and params[0] == stat)):
                 return bonus
         return None
+
+    def param(bonus: dict[str, Any], index: int, default: str = "0") -> str:
+        params = bonus.get("parameters") or []
+        return str(params[index]) if len(params) > index else default
+
+    def per_level_stats(pairs: list[tuple[str, dict[str, Any]]]) -> str:
+        """'+1 Attack and +1 Defense for every 5 hero levels', grouped by level step."""
+        by_step: dict[str, list[str]] = {}
+        for label, bonus in pairs:
+            upgrade = bonus["upgrade"]
+            by_step.setdefault(str(upgrade.get("levelStep")), []).append(f"{signed_bonus_value(upgrade.get('increment'))} {label}")
+        return spec_text_join([f"{spec_text_join(bits)} for {spec_text_per_levels(step)}" for step, bits in by_step.items()])
 
     city_growth = first_bonus("cityUnitsIncrement")
     if city_growth:
         params = city_growth.get("parameters") or []
-        unit = humanize_custom_sid(str(params[0])) if params else "the specialized unit"
-        growth = signed_bonus_value(params[1] if len(params) > 1 else "1")
-        parts = [f"{unit} growth in each owned city is {growth} per week."]
-        stat_bits: list[str] = []
+        unit = humanize_custom_sid(str(params[0])) if params else "The specialized creature"
+        parts = [f"{unit} growth in your cities increases by {spec_text_magnitude(param(city_growth, 1, '1'))}."]
+        flat_bits: list[str] = []
         for stat, label, is_percent in (("speed", "Speed", False), ("initiative", "Initiative", False), ("hpPerc", "Health", True)):
             bonus = first_bonus("unitStat", stat)
             if bonus:
-                bonus_params = bonus.get("parameters") or []
-                stat_bits.append(signed_bonus_value(bonus_params[1] if len(bonus_params) > 1 else "0", is_percent) + f" {label}")
-        for stat, label in (("offence", "Attack"), ("defence", "Defense")):
-            bonus = first_bonus("unitStat", stat)
-            if bonus and isinstance(bonus.get("upgrade"), dict):
-                upgrade = bonus["upgrade"]
-                stat_bits.append(f"{signed_bonus_value(upgrade.get('increment'))} {label} per {upgrade.get('levelStep')} hero levels")
-        if stat_bits:
-            parts.append(f"Friendly {unit} lines gain " + ", ".join(stat_bits) + ".")
-        enemy_offence = next(
-            (
-                bonus
-                for bonus in meaningful
-                if bonus.get("type") == "unitStat"
-                and bonus.get("receiverAllegiance") == "enemy"
-                and (bonus.get("parameters") or [None])[0] == "offence"
-            ),
-            None,
-        )
-        enemy_defence = next(
-            (
-                bonus
-                for bonus in meaningful
-                if bonus.get("type") == "unitStat"
-                and bonus.get("receiverAllegiance") == "enemy"
-                and (bonus.get("parameters") or [None])[0] == "defence"
-            ),
-            None,
-        )
-        if enemy_offence and enemy_defence and isinstance(enemy_offence.get("upgrade"), dict):
-            parts.append(f"Enemy {unit} lines get -1 Attack and -1 Defense per {enemy_offence['upgrade'].get('levelStep')} hero levels.")
+                flat_bits.append(signed_bonus_value(param(bonus, 1), is_percent) + f" {label}")
+        level_pairs = [
+            (label, bonus)
+            for stat, label in (("offence", "Attack"), ("defence", "Defense"))
+            for bonus in [first_bonus("unitStat", stat)]
+            if bonus and isinstance(bonus.get("upgrade"), dict)
+        ]
+        clauses: list[str] = []
+        if flat_bits:
+            clauses.append("have " + spec_text_join(flat_bits))
+        if level_pairs:
+            clauses.append("gain " + per_level_stats(level_pairs))
+        if clauses:
+            parts.append(f"{unit} stacks and their upgrades in this hero's army " + (", and " if len(flat_bits) > 1 else " and ").join(clauses) + ".")
+        enemy_pairs = [
+            (label, bonus)
+            for stat, label in (("offence", "Attack"), ("defence", "Defense"))
+            for bonus in [first_bonus("unitStat", stat, enemy=True)]
+            if bonus and isinstance(bonus.get("upgrade"), dict)
+        ]
+        if enemy_pairs:
+            parts.append(f"Enemy {unit} stacks and their upgrades get " + per_level_stats(enemy_pairs) + ".")
         return " ".join(parts)
 
     magic_replace = first_bonus("heroMagicReplace")
@@ -19951,184 +20263,238 @@ def describe_custom_specialization_bonus_row(row: dict[str, Any]) -> str | None:
         replace_text = f"Replaces {source} with specialized {target}" if source == target else f"Replaces {source} with {target}"
         if spell_power and isinstance(spell_power.get("upgrade"), dict):
             upgrade = spell_power["upgrade"]
-            return f"{replace_text}. {target} gets {signed_bonus_value(upgrade.get('increment'))} effective Spell Power per {upgrade.get('levelStep')} hero levels."
+            return (
+                f"{replace_text}. {target} is cast with {signed_bonus_value(upgrade.get('increment'))} Spell Power "
+                f"for {spec_text_per_levels(upgrade.get('levelStep'))}."
+            )
         return replace_text + "."
 
     heroic = [bonus for bonus in meaningful if bonus.get("type") == "battleSubskillBonus"]
     if heroic:
         levels = [str(bonus.get("activationLevel")) for bonus in heroic if bonus.get("activationLevel") is not None]
         if levels:
-            return "Improves Heroic Strike at battle start and again at hero levels " + ", ".join(levels) + "."
-        return "Improves Heroic Strike."
+            return (
+                "Heroic Strike is improved from the start, and again at hero "
+                + ("level " if len(levels) == 1 else "levels ")
+                + spec_text_join(levels)
+                + "."
+            )
+        return "Heroic Strike is improved."
 
     side_res = first_bonus("sideRes")
     if side_res:
-        params = side_res.get("parameters") or []
-        resource = humanize_resource_sid(str(params[0])) if params else "resource"
-        amount = params[1] if len(params) > 1 else "0"
-        text = f"Produces {signed_bonus_value(amount)} {resource} per day."
-        if isinstance(side_res.get("upgrade"), dict):
-            upgrade = side_res["upgrade"]
-            text += f" Production increases by {signed_bonus_value(upgrade.get('increment'))} every {upgrade.get('levelStep')} hero levels."
+        resource = humanize_resource_sid(param(side_res, 0, "resource"))
+        text = f"Produces {signed_bonus_value(param(side_res, 1))} {resource} per day{spec_text_scaling(side_res, signed=True)}."
         res_percent = first_bonus("heroStat", "heroResPercentSet")
-        if res_percent:
-            pct_params = res_percent.get("parameters") or []
-            if len(pct_params) > 2:
-                text += f" Also applies a {format_bonus_percent(pct_params[2])} {resource} income modifier."
+        if res_percent and len(res_percent.get("parameters") or []) > 2:
+            text += f" Increases the amount of {resource} found on the map by {spec_text_magnitude(param(res_percent, 2), percent=True)}."
         return text
+
+    def landscape_text(bonus: dict[str, Any]) -> str:
+        try:
+            full = float(param(bonus, 1)) <= -1.0
+        except ValueError:
+            full = False
+        if full:
+            return "Movement takes no terrain penalties."
+        return f"Terrain movement penalties are reduced by {spec_text_magnitude(param(bonus, 1), percent=True)}."
+
+    def after_battle_text(bonus: dict[str, Any]) -> str:
+        return f"Restores {spec_text_magnitude(param(bonus, 1))} Movement points after each battle."
 
     movement = first_bonus("heroStat", "movementPerBonus")
     if movement:
-        params = movement.get("parameters") or []
-        text = f"Adventure movement is {signed_bonus_value(params[1] if len(params) > 1 else '0', percent=True)}"
+        text = f"{signed_bonus_value(param(movement, 1), percent=True)} Movement points{spec_text_scaling(movement, percent=True)}"
         if movement.get("activationLevel") is not None:
-            text += f" starting at hero level {movement.get('activationLevel')}"
-        if isinstance(movement.get("upgrade"), dict):
-            upgrade = movement["upgrade"]
-            text += f", then {signed_bonus_value(upgrade.get('increment'), percent=True)} every {upgrade.get('levelStep')} hero levels"
+            text = f"From hero level {movement.get('activationLevel')}: " + text
         text += "."
-        road = first_bonus("heroStat", "roadPerBonus")
-        if road:
-            road_params = road.get("parameters") or []
-            text += f" Road movement is {signed_bonus_value(road_params[1] if len(road_params) > 1 else '0', percent=True)}."
+        if first_bonus("heroStat", "roadPerBonus"):
+            text += " Moves significantly more efficiently on roads."
         return text
 
     view = first_bonus("heroStat", "viewRadius")
     if view:
-        params = view.get("parameters") or []
-        text = f"View radius is {signed_bonus_value(params[1] if len(params) > 1 else '0')}"
-        if isinstance(view.get("upgrade"), dict):
-            upgrade = view["upgrade"]
-            text += f", plus {signed_bonus_value(upgrade.get('increment'))} every {upgrade.get('levelStep')} hero levels"
-        text += "."
+        text = f"{signed_bonus_value(param(view, 1))} Sight Radius{spec_text_scaling(view, signed=True)}."
+        reveals = []
         if first_bonus("heroStat", "enableEnemyHeroInfo"):
-            text += " Enemy hero details are revealed."
+            reveals.append("enemy hero details")
         if first_bonus("heroStat", "enableSquadCounts"):
-            text += " Enemy army stack counts are revealed."
+            reveals.append("the exact size of enemy armies")
+        if reveals:
+            text += " Reveals " + spec_text_join(reveals) + "."
         landscape = first_bonus("heroStat", "landscapePenaltyPerBonus")
         if landscape:
-            land_params = landscape.get("parameters") or []
-            text += f" Rough-terrain movement penalty modifier is {signed_bonus_value(land_params[1] if len(land_params) > 1 else '0', percent=True)}."
+            text += " " + landscape_text(landscape)
         after_battle = first_bonus("heroStat", "movementAfterBattleBonus")
         if after_battle:
-            after_params = after_battle.get("parameters") or []
-            text += f" Restores {signed_bonus_value(after_params[1] if len(after_params) > 1 else '0')} movement after battles."
+            text += " " + after_battle_text(after_battle)
         return text
 
     landscape = first_bonus("heroStat", "landscapePenaltyPerBonus")
     if landscape:
-        land_params = landscape.get("parameters") or []
-        text = f"Rough-terrain movement penalty modifier is {signed_bonus_value(land_params[1] if len(land_params) > 1 else '0', percent=True)}."
+        text = landscape_text(landscape)
         after_battle = first_bonus("heroStat", "movementAfterBattleBonus")
         if after_battle:
-            after_params = after_battle.get("parameters") or []
-            text += f" Restores {signed_bonus_value(after_params[1] if len(after_params) > 1 else '0')} movement after battles."
+            text += " " + after_battle_text(after_battle)
         return text
 
     moral = first_bonus("heroStat", "moral")
     if moral:
-        params = moral.get("parameters") or []
+        text = f"Friendly creatures have {signed_bonus_value(param(moral, 1))} Morale."
         action = first_bonus("unitStat", "additionalActionChanceModifier")
-        text = f"Army Morale is {signed_bonus_value(params[1] if len(params) > 1 else '0')}."
         if action:
-            action_params = action.get("parameters") or []
-            text += f" Friendly units have {signed_bonus_value(action_params[1] if len(action_params) > 1 else '0', percent=True)} additional action chance"
-            if isinstance(action.get("upgrade"), dict):
-                upgrade = action["upgrade"]
-                text += f", plus {signed_bonus_value(upgrade.get('increment'), percent=True)} every {upgrade.get('levelStep')} hero levels"
-            text += "."
+            text += (
+                f" They also have {signed_bonus_value(param(action, 1), percent=True)} chance to act again"
+                f"{spec_text_scaling(action, percent=True)}."
+            )
         return text
 
     luck = first_bonus("heroStat", "luck")
     if luck:
-        params = luck.get("parameters") or []
+        text = f"Friendly creatures have {signed_bonus_value(param(luck, 1))} Luck."
         crit = first_bonus("unitStat", "critChanceModifier")
-        text = f"Army Luck is {signed_bonus_value(params[1] if len(params) > 1 else '0')}."
         if crit:
-            crit_params = crit.get("parameters") or []
-            text += f" Friendly units have {signed_bonus_value(crit_params[1] if len(crit_params) > 1 else '0', percent=True)} critical chance"
-            if isinstance(crit.get("upgrade"), dict):
-                upgrade = crit["upgrade"]
-                text += f", plus {signed_bonus_value(upgrade.get('increment'), percent=True)} every {upgrade.get('levelStep')} hero levels"
-            text += "."
+            text += (
+                f" They also have {signed_bonus_value(param(crit, 1), percent=True)} critical hit chance"
+                f"{spec_text_scaling(crit, percent=True)}."
+            )
         return text
 
     mana = first_bonus("heroStat", "manaBonusPercent")
     if mana:
-        params = mana.get("parameters") or []
-        text = f"Maximum Mana is {signed_bonus_value(params[1] if len(params) > 1 else '0', percent=True)}"
-        if isinstance(mana.get("upgrade"), dict):
-            upgrade = mana["upgrade"]
-            text += f", plus {signed_bonus_value(upgrade.get('increment'), percent=True)} every {upgrade.get('levelStep')} hero levels"
-        text += "."
+        text = f"Maximum Mana increases by {spec_text_magnitude(param(mana, 1), percent=True)}{spec_text_scaling(mana, percent=True)}."
         magic_limit = first_bonus("heroStat", "magicUsageLimitBonus")
         if magic_limit:
-            limit_params = magic_limit.get("parameters") or []
-            text += f" Spell uses per round are {signed_bonus_value(limit_params[1] if len(limit_params) > 1 else '0')}."
+            uses = spec_text_magnitude(param(magic_limit, 1))
+            text += f" Can use each Global Map spell {uses} additional time{'' if uses == '1' else 's'} per day."
         return text
 
     spell_power = first_bonus("heroStat", "spellPowerSidSet")
     if spell_power:
-        params = spell_power.get("parameters") or []
-        spell = humanize_magic_sid(str(params[1])) if len(params) > 1 else "the specialized spell"
+        has_spell = len(spell_power.get("parameters") or []) > 1
+        spell = humanize_magic_sid(param(spell_power, 1, "")) if has_spell else "The specialized spell"
         if isinstance(spell_power.get("upgrade"), dict):
             upgrade = spell_power["upgrade"]
-            return f"{spell} gets {signed_bonus_value(upgrade.get('increment'))} effective Spell Power per {upgrade.get('levelStep')} hero levels."
-        return f"{spell} uses the specialized spell-power override."
+            return (
+                f"{spell} is cast with {signed_bonus_value(upgrade.get('increment'))} Spell Power "
+                f"for {spec_text_per_levels(upgrade.get('levelStep'))}."
+            )
+        return f"{spell} is cast with improved Spell Power."
 
     magic_attack = first_bonus("heroStat", "magicAttackPerBonus")
     if magic_attack:
-        params = magic_attack.get("parameters") or []
-        text = f"Hero spell damage is {signed_bonus_value(params[1] if len(params) > 1 else '0', percent=True)}"
-        if isinstance(magic_attack.get("upgrade"), dict):
-            upgrade = magic_attack["upgrade"]
-            text += f", plus {signed_bonus_value(upgrade.get('increment'), percent=True)} every {upgrade.get('levelStep')} hero levels"
-        text += "."
-        enemy_magic = first_bonus("heroStatBattle", "magicAttackPerBonus")
+        text = f"Deals {signed_bonus_value(param(magic_attack, 1), percent=True)} Damage with spells{spec_text_scaling(magic_attack, percent=True)}."
+        enemy_magic = first_bonus("heroStatBattle", "magicAttackPerBonus", enemy=True)
         if enemy_magic:
-            enemy_params = enemy_magic.get("parameters") or []
-            text += f" Enemy hero spell damage is {signed_bonus_value(enemy_params[1] if len(enemy_params) > 1 else '0', percent=True)}"
-            if isinstance(enemy_magic.get("upgrade"), dict):
-                upgrade = enemy_magic["upgrade"]
-                text += f", plus {signed_bonus_value(upgrade.get('increment'), percent=True)} every {upgrade.get('levelStep')} hero levels"
-            text += "."
+            enemy_reduced = spec_text_is_negative(param(enemy_magic, 1))
+            mirrored = (
+                enemy_reduced
+                and spec_text_magnitude(param(enemy_magic, 1), percent=True) == spec_text_magnitude(param(magic_attack, 1), percent=True)
+                and spec_text_scaling(enemy_magic, percent=True).replace("-", "") == spec_text_scaling(magic_attack, percent=True)
+            )
+            if mirrored:
+                text += " The Damage from the enemy hero's spells is reduced by the same value."
+            else:
+                text += (
+                    f" The Damage from the enemy hero's spells is {'reduced' if enemy_reduced else 'increased'} by "
+                    f"{spec_text_magnitude(param(enemy_magic, 1), percent=True)}"
+                    f"{spec_text_scaling(enemy_magic, percent=True).replace('-', '')}."
+                )
         return text
 
     tactics = first_bonus("heroStat", "enableTactics")
     if tactics:
-        text = "Enables Tactics deployment."
+        text = "Can place creatures in the Tactics Phase."
         placement = first_bonus("heroStat", "tacticsPlacementSize")
         if placement:
-            placement_params = placement.get("parameters") or []
-            text += f" Friendly deployment size is {signed_bonus_value(placement_params[1] if len(placement_params) > 1 else '0')}."
-        enemy_placement = first_bonus("heroStatBattle", "tacticsPlacementSize")
+            size = spec_text_magnitude(param(placement, 1))
+            text = (
+                f"In the Tactics Phase, has {signed_bonus_value(param(placement, 1))} hex{'' if size == '1' else 'es'} "
+                "to the creature placement range."
+            )
+        enemy_placement = first_bonus("heroStatBattle", "tacticsPlacementSize", enemy=True)
         if enemy_placement:
-            enemy_params = enemy_placement.get("parameters") or []
-            text += f" Enemy deployment size is {signed_bonus_value(enemy_params[1] if len(enemy_params) > 1 else '0')}."
+            size = spec_text_magnitude(param(enemy_placement, 1))
+            verb = "reduced" if spec_text_is_negative(param(enemy_placement, 1)) else "increased"
+            text += f" The enemy's placement range is {verb} by {size} hex{'' if size == '1' else 'es'}."
         return text
+
+    def modifier_group_key(bonus: dict[str, Any]) -> tuple[Any, ...]:
+        params = bonus["parameters"]
+        upgrade = bonus.get("upgrade") if isinstance(bonus.get("upgrade"), dict) else {}
+        return (
+            is_enemy(bonus),
+            params[1],
+            str(params[3]),
+            bonus.get("activationLevel"),
+            str(upgrade.get("increment")),
+            str(upgrade.get("levelStep")),
+        )
 
     modifier_bonuses = [
         bonus
         for bonus in meaningful
-        if bonus.get("type") == "unitStat" and (bonus.get("parameters") or [None])[0] == "modifierSet"
+        if bonus.get("type") == "unitStat"
+        and (bonus.get("parameters") or [None])[0] == "modifierSet"
+        and len(bonus.get("parameters") or []) >= 4
     ]
     if modifier_bonuses:
-        fragments: list[str] = []
+        # Bonuses that differ only in damage type share one sentence.
+        groups: dict[tuple[Any, ...], list[str]] = {}
         for bonus in modifier_bonuses:
-            params = bonus.get("parameters") or []
-            if len(params) < 4:
+            groups.setdefault(modifier_group_key(bonus), []).append(str(bonus["parameters"][2]))
+        sentences: list[str] = []
+        for bonus in modifier_bonuses:
+            damage_sids = groups.pop(modifier_group_key(bonus), None)
+            if not damage_sids:
                 continue
-            direction = "dealt" if params[1] == "outDmgMods" else "taken"
-            damage_type = humanize_damage_modifier_sid(str(params[2]))
-            fragment = f"{damage_type} {direction} {signed_bonus_value(params[3], percent=True)}"
+            params = bonus["parameters"]
+            if {"range_attack", "shoot_attack"} <= set(damage_sids):
+                # Vanilla names this pair "Ranged and Long Reach".
+                damage_types = [
+                    humanize_damage_modifier_sid(sid) for sid in damage_sids if sid not in {"range_attack", "shoot_attack"}
+                ] + ["Ranged and Long Reach attacks"]
+            else:
+                damage_types = [humanize_damage_modifier_sid(sid) for sid in damage_sids]
+            subject = "Enemy creatures" if is_enemy(bonus) else "Friendly creatures"
+            amount = signed_bonus_value(params[3], percent=True)
+            if params[1] == "outDmgMods":
+                sentence = f"{subject} deal {amount} Damage with {spec_text_join(damage_types)}"
+            else:
+                sentence = f"{subject} take {amount} Damage from {spec_text_join(damage_types)}"
             if bonus.get("activationLevel") is not None:
-                fragment += f" from hero level {bonus.get('activationLevel')}"
-            if isinstance(bonus.get("upgrade"), dict):
-                upgrade = bonus["upgrade"]
-                fragment += f", plus {signed_bonus_value(upgrade.get('increment'), percent=True)} every {upgrade.get('levelStep')} hero levels"
-            fragments.append(fragment)
-        if fragments:
-            return "Friendly units have " + "; ".join(fragments) + "."
+                sentence = f"From hero level {bonus.get('activationLevel')}, " + sentence[0].lower() + sentence[1:]
+            sentences.append(sentence + spec_text_scaling(bonus, percent=True) + ".")
+        if sentences:
+            return " ".join(sentences)
+
+    mana_cost = first_bonus("heroStat", "manaCostBonusPercent")
+    if mana_cost:
+        direction = "less" if spec_text_is_negative(param(mana_cost, 1)) else "more"
+        return (
+            f"Spells cost {spec_text_magnitude(param(mana_cost, 1), percent=True)} {direction} Mana"
+            f"{spec_text_scaling(mana_cost, percent=True).replace('-', '')}."
+        )
+
+    start_focus = first_bonus("heroStat", "startEnergyLevelsBonus")
+    if start_focus:
+        return f"Starts each battle with {signed_bonus_value(param(start_focus, 1))} Focus{spec_text_scaling(start_focus, signed=True)}."
+
+    # Army-wide stats that only grow with hero level (no creature line attached).
+    army_pairs = [
+        (label, bonus)
+        for stat, label in (
+            ("maxHealth", "Health"),
+            ("speed", "Speed"),
+            ("initiative", "Initiative"),
+            ("offence", "Attack"),
+            ("defence", "Defense"),
+        )
+        for bonus in [first_bonus("unitStat", stat)]
+        if bonus and isinstance(bonus.get("upgrade"), dict) and spec_text_magnitude(param(bonus, 1)) == "0"
+    ]
+    if army_pairs:
+        return "Friendly creatures gain " + per_level_stats(army_pairs) + "."
 
     return None
 
@@ -20947,6 +21313,16 @@ def build_overlay(
             stamp_source_mechanics_on_custom_faction_skill_rows(release_zip, output, notes)
             add_custom_law_visual_marker_buffs(release_zip, output, notes)
             apply_homm3_unit_balance_adjustments_to_output(release_zip, output, notes)
+            # Vanilla upgrade-pair bookkeeping (alt = upg cost/squadValue, no stat below base, expBonus by
+            # tier). After the balance contract it supersedes; before fusion and reward units read the rows.
+            upgrade_pair_parity.apply_homm3_upgrade_pair_parity(
+                release_zip,
+                output,
+                notes,
+                [manifest for manifest in CUSTOM_FACTION_MANIFESTS if manifest_core_overlay_enabled(manifest)],
+                read_json,
+                write_json,
+            )
             # After the balance contract: fused stats re-derive from the final parent rows.
             conflux_fusion.finalize_conflux_fusion_units(release_zip, output, notes, conflux_fusion_helpers())
             pin_homm3_shared_vanilla_buff_values(release_zip, output, notes)
@@ -20962,6 +21338,7 @@ def build_overlay(
             refresh_homm3_derived_city_docs(release_zip, output, notes)
             apply_live_vanilla_law_clone_costs(release_zip, output, notes)
             add_custom_hero_ai_world_values(release_zip, output, notes)
+            arrange_custom_law_trees(output, notes)
             assert_enabled_law_overrides_reachable(output, notes)
             # Last Lang writer: after the artifact English rows and after multilingual
             # sync, so translations win over sync drafts and English fallbacks.
@@ -21010,6 +21387,17 @@ def run_homm3_attack_animation_slot_validation(stage: str, core: Path) -> None:
         raise RuntimeError(f"HoMM3 attack animation slot validation failed on {stage}: {core}")
 
 
+def run_custom_law_tree_layout_validation(stage: str, core: Path) -> None:
+    cmd = [sys.executable, str(CUSTOM_LAW_TREE_LAYOUT_VALIDATOR), "--core", str(core), "--quiet-warnings"]
+    print(f"Running custom law tree layout validation ({stage})...", flush=True)
+    try:
+        result = subprocess.run(cmd, cwd=REPO_ROOT, timeout=VALIDATION_TIMEOUT_SECONDS)
+    except subprocess.TimeoutExpired as ex:
+        raise RuntimeError(f"custom law tree layout validation timed out ({stage})") from ex
+    if result.returncode != 0:
+        raise RuntimeError(f"custom law tree layout validation failed on {stage}: {core}")
+
+
 def run_city_construction_tree_layout_validation(stage: str, core: Path) -> None:
     cmd = [sys.executable, str(CITY_CONSTRUCTION_TREE_LAYOUT_VALIDATOR), "--core", str(core)]
     print(f"Running city construction-tree layout validation ({stage})...", flush=True)
@@ -21035,6 +21423,17 @@ def run_city_construction_tree_layout_validation(stage: str, core: Path) -> None
         raise RuntimeError(f"HoMM3 city building descriptions validation timed out ({stage})") from ex
     if result.returncode != 0:
         raise RuntimeError(f"HoMM3 city building descriptions validation failed on {stage}: {core}")
+
+
+def run_homm3_upgrade_pair_parity_validation(stage: str, core: Path) -> None:
+    cmd = [sys.executable, str(HOMM3_UPGRADE_PAIR_PARITY_VALIDATOR), "--core", str(core)]
+    print(f"Running HoMM3 upgrade pair parity validation ({stage})...", flush=True)
+    try:
+        result = subprocess.run(cmd, cwd=REPO_ROOT, timeout=VALIDATION_TIMEOUT_SECONDS)
+    except subprocess.TimeoutExpired as ex:
+        raise RuntimeError(f"HoMM3 upgrade pair parity validation timed out ({stage})") from ex
+    if result.returncode != 0:
+        raise RuntimeError(f"HoMM3 upgrade pair parity validation failed on {stage}: {core}")
 
 
 def run_custom_faction_reward_units_validation(core: Path) -> None:
@@ -21284,8 +21683,10 @@ def rewrite_zip(
         run_custom_law_strict_row_validation("candidate Core.zip", tmp_zip)
     log_overlay_phase("candidate validation start")
     run_custom_faction_validation("candidate Core.zip", tmp_zip)
+    run_homm3_upgrade_pair_parity_validation("candidate Core.zip", tmp_zip)
     run_homm3_attack_animation_slot_validation("candidate Core.zip", tmp_zip)
     run_city_construction_tree_layout_validation("candidate Core.zip", tmp_zip)
+    run_custom_law_tree_layout_validation("candidate Core.zip", tmp_zip)
     log_overlay_phase("candidate validation complete")
     if dry_run:
         return None
@@ -21528,8 +21929,10 @@ def main() -> int:
             print(f"Backup: {backup}")
             run_custom_faction_validation("updated release Core.zip", release_core)
             run_custom_faction_reward_units_validation(release_core)
+            run_homm3_upgrade_pair_parity_validation("updated release Core.zip", release_core)
             run_homm3_attack_animation_slot_validation("updated release Core.zip", release_core)
             run_city_construction_tree_layout_validation("updated release Core.zip", release_core)
+            run_custom_law_tree_layout_validation("updated release Core.zip", release_core)
         return 0
     except RuntimeError as ex:
         print("ERROR: " + str(ex))

@@ -146,6 +146,15 @@ internal static class Homm3TowerArtificingPickerInputBlock
 
 	private static bool Blocking => _active || Time.frameCount <= _blockUntilFrame;
 
+	/// <summary>The game's own "pointer is over UI" flag while no modal of ours holds it; false when unreadable.</summary>
+	internal static bool GamePointerOverUi()
+	{
+		if (_active || _isOverUi == null)
+			return false;
+		try { return (bool)_isOverUi.GetValue(null); }
+		catch { return false; }
+	}
+
 	private static bool PrefixTryToPush(ref bool __result)
 	{
 		if (!Blocking)

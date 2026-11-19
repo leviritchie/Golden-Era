@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Golden Era Codex</title>
+<meta name="description" content="Searchable guide to every custom creature, upgrade and town building in the Golden Era mod for Heroes of Might and Magic: Olden Era.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@500;700&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="codex.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23d9b46a' d='M12 2l8 3v6c0 5-3.4 9.2-8 11-4.6-1.8-8-6-8-11V5z'/%3E%3C/svg%3E">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- stats (gold glyphs, after the in-game unit window) -->
+    <symbol id="g-hp" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21s-7.4-4.6-9.5-9.1C1 8.4 3.1 4.5 6.7 4.5c2.1 0 3.5 1.1 4.3 2.5.8-1.4 2.2-2.5 4.3-2.5 3.6 0 5.7 3.9 4.2 7.4C19.4 16.4 12 21 12 21z"/><path fill="#13203a" d="M11 8.5h2v2.5h2.5v2H13v2.5h-2V13H8.5v-2H11z"/></symbol>
+    <symbol id="g-offence" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l11 11M20 4L9 15"/><path d="M13 17l4-4M11 17l-4-4M6.5 17.5l-2.5 2.5M17.5 17.5l2.5 2.5"/></g></symbol>
+    <symbol id="g-defence" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l8 3v6c0 5-3.4 9.2-8 11-4.6-1.8-8-6-8-11V5z"/><path fill="#13203a" d="M12 5.2v14.1c-3-1.6-5-4.8-5-8.3V7.1z" opacity=".55"/></symbol>
+    <symbol id="g-damage" viewBox="0 0 24 24"><path fill="currentColor" d="M8 10V5.5a1.5 1.5 0 0 1 3 0V9h.5V4.5a1.5 1.5 0 0 1 3 0V9h.5V5.5a1.5 1.5 0 0 1 3 0V13c0 4.4-2.8 8-7 8-3.2 0-5.5-2.2-6.4-5.2L3.7 12a1.6 1.6 0 0 1 2.8-1.4z"/></symbol>
+    <symbol id="g-moral" viewBox="0 0 24 24"><path fill="currentColor" d="M12 7c-1.5-3-5-4.5-9-4 1 3 2.6 4.5 4.5 5.2C5.6 8.5 4 9.5 3 11.5c2.5.5 4.6 0 6-1.2-.6 1.5-.6 3.3.2 5.2l2.8-3 2.8 3c.8-1.9.8-3.7.2-5.2 1.4 1.2 3.5 1.7 6 1.2-1-2-2.6-3-4.5-3.3C18.4 7.5 20 6 21 3c-4-.5-7.5 1-9 4z"/><circle cx="12" cy="18.5" r="2.2" fill="currentColor"/></symbol>
+    <symbol id="g-luck" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="12" cy="7" r="3.6"/><circle cx="7" cy="12" r="3.6"/><circle cx="17" cy="12" r="3.6"/><circle cx="12" cy="17" r="3.6"/></g><path d="M12 12l4 9" stroke="currentColor" stroke-width="1.8" fill="none"/></symbol>
+    <symbol id="g-initiative" viewBox="0 0 24 24"><path fill="currentColor" d="M14 2L4.5 13.5h6.5L9.5 22 19.5 9.5H13z"/></symbol>
+    <symbol id="g-speed" viewBox="0 0 24 24"><path fill="currentColor" d="M7 2.5h6v7.5l5.6 2.6c1.6.8 2.4 2 2.4 3.6V19H4.5l.8-6.5z"/><path fill="#13203a" d="M6 20.2h15v1.3H6z"/></symbol>
+    <symbol id="g-numCounters" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12a7.5 7.5 0 0 1 13-5.1M19.5 12a7.5 7.5 0 0 1-13 5.1"/><path d="M18 3v4.2h-4.2M6 21v-4.2h4.2"/></g></symbol>
+    <symbol id="g-shots" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20L18 6"/><path d="M13 5h6v6"/><path d="M4 16v4h4M7 13l-2 2M11 17l-2 2"/></g></symbol>
+    <symbol id="g-growth" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2.5 19c0-3.6 2.5-6 5.5-6s5.5 2.4 5.5 6zM10.5 19c.3-2.3-.4-4.2-1.6-5.5 1.8-1.4 3.8-1.6 5.6-1.6 3.2 0 6 2.6 6 7.1z"/></g></symbol>
+    <!-- card glyphs, used when the game icon is not shipped with the mod -->
+    <symbol id="c-swords" viewBox="0 0 24 24"><use href="#g-offence"/></symbol>
+    <symbol id="c-bow" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 3c6 3 9 9 6 18M6 3l3 9-3 9"/><path d="M3 12h17M17 9l3 3-3 3"/></g></symbol>
+    <symbol id="c-wing" viewBox="0 0 24 24"><path fill="currentColor" d="M2 6c4 0 8 1.5 10 5 2-3.5 6-5 10-5-.6 3.3-2.4 5.2-4.6 6 1.8.3 3 1 3.8 2-2.6 1.2-5.4 1-7.4-.3L12 18l-1.8-4.3C8.2 15 5.4 15.2 2.8 14c.8-1 2-1.7 3.8-2C4.4 11.2 2.6 9.3 2 6z"/></symbol>
+    <symbol id="c-ward" viewBox="0 0 24 24"><use href="#g-defence"/></symbol>
+    <symbol id="c-heart" viewBox="0 0 24 24"><use href="#g-hp"/></symbol>
+    <symbol id="c-flame" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c1 4 5 5.5 5 11a5 5 0 0 1-10 0c0-2.5 1.2-4 2.5-5 .1 1.6.8 2.7 2 3.2C11 8.5 11 5 12 2z"/></symbol>
+    <symbol id="c-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l2.2 6.6L21 9.2l-5.3 4.4 1.7 7-5.4-3.8-5.4 3.8 1.7-7L3 9.2l6.8-.6z"/></symbol>
+    <symbol id="c-rune" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2l8 10-8 10-8-10z"/><path d="M12 7v10M8.5 12h7"/></g></symbol>
+    <symbol id="c-class" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5c3 3.5 5 6.4 5 10.2A5 5 0 0 1 12 18a5 5 0 0 1-5-5.3c0-3.8 2-6.7 5-10.2z"/><path d="M12 6v15" stroke="#13203a" stroke-width="1.4"/></symbol>
+    <!-- resources -->
+    <symbol id="r-gold" viewBox="0 0 24 24"><g fill="#e8c15a" stroke="#7a5a1c" stroke-width="1"><ellipse cx="12" cy="17" rx="8" ry="3"/><ellipse cx="12" cy="13" rx="8" ry="3"/><ellipse cx="12" cy="9" rx="8" ry="3"/></g></symbol>
+    <symbol id="r-wood" viewBox="0 0 24 24"><g stroke="#4a2e14" stroke-width="1"><rect x="3" y="9" width="17" height="6" rx="3" fill="#a0703f"/><ellipse cx="20" cy="12" rx="2" ry="3" fill="#d9b07a"/><rect x="5" y="14.5" width="14" height="5" rx="2.5" fill="#8a5d31"/></g></symbol>
+    <symbol id="r-ore" viewBox="0 0 24 24"><path fill="#8f97a3" stroke="#3c4250" d="M4 17l3-8 5-3 6 3 2 7-6 3z"/><path fill="#c3c9d2" d="M7 9l5-3 2 4-4 3z"/></symbol>
+    <symbol id="r-mercury" viewBox="0 0 24 24"><path fill="#cfd6e4" stroke="#5a6478" d="M12 3c3 4.5 6 7.6 6 11a6 6 0 0 1-12 0c0-3.4 3-6.5 6-11z"/><ellipse cx="10" cy="13" rx="1.6" ry="2.6" fill="#fff" opacity=".8"/></symbol>
+    <symbol id="r-crystals" viewBox="0 0 24 24"><g stroke="#5c1414" stroke-width=".8"><path fill="#e0524c" d="M11 21l-4-9 4-9 4 9z"/><path fill="#b8322e" d="M15 21l-2.5-6 3-5 3 5z"/><path fill="#c23c37" d="M7 21l-2.5-5 2.2-4 2.6 5z"/></g></symbol>
+    <symbol id="r-gemstones" viewBox="0 0 24 24"><g stroke="#1d2a3f" stroke-width=".8"><path fill="#5bc3d9" d="M6 9l3-4h6l3 4-6 11z"/><path fill="#9be0ee" d="M9 5l3 4 3-4z"/></g></symbol>
+    <symbol id="r-dust" viewBox="0 0 24 24"><g fill="#b98be0"><circle cx="8" cy="15" r="4"/><circle cx="15" cy="13" r="5"/></g><g fill="#efe0ff"><circle cx="9" cy="6" r="1.2"/><circle cx="16" cy="5" r="1"/><circle cx="19" cy="9" r="1"/></g></symbol>
+    <!-- building sections -->
+    <symbol id="b-mains" viewBox="0 0 24 24"><path fill="currentColor" d="M3 20h18v2H3zM5 10h2v9H5zm4 0h2v9H9zm4 0h2v9h-2zm4 0h2v9h-2zM12 2l10 6v1H2V8z"/></symbol>
+    <symbol id="b-taverns" viewBox="0 0 24 24"><path fill="currentColor" d="M5 6h11v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2zm11 3h2.5a2.5 2.5 0 0 1 2.5 2.5v2a2.5 2.5 0 0 1-2.5 2.5H16v-2h2.5a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5H16z"/><path fill="currentColor" opacity=".55" d="M4.5 3.5c2 0 2.5-1 4.5-1s2.5 1 4.5 1 2.5-1 3-1V6h-12z"/></symbol>
+    <symbol id="b-markets" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v18M7 21h10M4 6h16"/><path d="M4 6l-3 7h6zM20 6l-3 7h6z"/></g></symbol>
+    <symbol id="b-artifactMarkets" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3c0 5 2.5 7 6 7s6-2 6-7"/><circle cx="12" cy="16" r="5"/></g><circle cx="12" cy="16" r="2" fill="currentColor"/></symbol>
+    <symbol id="b-magicGuilds" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1l4 7H8zM8.5 9h7l1.5 13H7z"/><path fill="#13203a" d="M11 13h2v3h-2z"/></symbol>
+    <symbol id="b-banks" viewBox="0 0 24 24"><path fill="currentColor" d="M9 3h6l-1.5 3c3.5 1.5 6.5 5 6.5 9.5C20 19.5 16.5 21 12 21s-8-1.5-8-5.5C4 11 7 7.5 10.5 6z"/><path fill="#13203a" d="M11.2 10h1.6v1.2c1 .2 1.8.8 2 1.8h-1.6c-.2-.4-.6-.6-1.2-.6-.7 0-1.1.3-1.1.7 0 .5.5.6 1.6.9 1.4.3 2.5.8 2.5 2.1 0 1-.8 1.8-2.2 2v1.2h-1.6v-1.2c-1.2-.2-2.1-.9-2.2-2h1.6c.1.5.6.8 1.4.8.8 0 1.2-.3 1.2-.7 0-.5-.5-.6-1.7-.9-1.3-.3-2.3-.8-2.3-2.1 0-.9.7-1.7 2-1.9z"/></symbol>
+    <symbol id="b-walls" viewBox="0 0 24 24"><path fill="currentColor" d="M4 3h3v2h2V3h2v2h2V3h2v2h2V3h3v6l-2 1v11H6V10L4 9z"/><path fill="#13203a" d="M10 15a2 2 0 0 1 4 0v6h-4z"/></symbol>
+    <symbol id="b-graals" viewBox="0 0 24 24"><path fill="currentColor" d="M5 3h14c0 5-2.5 8.5-6 9.3V17h3v2H8v-2h3v-4.7C7.5 11.5 5 8 5 3zM6 21h12v1.5H6z"/></symbol>
+    <symbol id="b-default" viewBox="0 0 24 24"><path fill="currentColor" d="M4 21h16v1.5H4zM6 8h12v12H6zM12 1.5L21 7H3z"/><path fill="#13203a" d="M10 13h4v7h-4z"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <a class="brand" href="#" aria-label="Golden Era Codex home">
+    <svg class="brand-mark" aria-hidden="true"><use href="#g-defence"/></svg>
+    <span class="brand-text"><span class="brand-title">Golden Era</span><span class="brand-sub">Codex</span></span>
+  </a>
+  <div class="search">
+    <svg class="search-ico" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></g></svg>
+    <input id="q" type="search" placeholder="Search creatures, abilities, buildings…" autocomplete="off" spellcheck="false" aria-label="Search the codex">
+    <kbd class="search-key" aria-hidden="true">/</kbd>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" id="rail" aria-label="Factions"></nav>
+  <main id="main" tabindex="-1"><p class="loading">Loading the codex…</p></main>
+</div>
+
+<footer class="foot" id="foot"></footer>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="dialog" id="dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-title" hidden></div>
+
+<script src="codex.js"></script>
+</body>
+</html>

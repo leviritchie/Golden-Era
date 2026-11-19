@@ -160,10 +160,10 @@ internal static class Homm3FactoryLogisticsDigest
 				lines.RemoveRange(MaxLines - 1, lines.Count - (MaxLines - 1));
 				lines.Add("... and " + more + " more (open the Logistics Network spell).");
 			}
-			// The banner wraps long lines (760 px plate); size it for the wrapped line count.
+			// The banner wraps long lines (760 px plate less its 22 px pads); size it for the wrapped line count.
 			var rows = 0;
 			foreach (var line in lines)
-				rows += Math.Max(1, (int)Math.Ceiling(Homm3FactoryLogisticsUi.TextWidth(line, 18f) / 680f));
+				rows += Homm3PanelTextMetrics.Lines(Homm3TowerArtificingPickerLayout.FontMedium, Homm3TowerArtificingPickerLayout.SizeMain, line, Homm3DungeonWarCaptivesWindow.BannerTextWidth);
 			Homm3DungeonWarCaptivesWindow.ShowBanner(string.Join("\n", lines), rows);
 			Homm3FactoryLogisticsRuntime.LogEvent("notice shown: " + string.Join(" | ", lines));
 		}

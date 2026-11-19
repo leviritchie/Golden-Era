@@ -107,7 +107,7 @@ internal static class Homm3AdventureAiDecisionProbe
 		foreach (var hint in GameSymbols.AdventureAiDecision.DayControllerTypeHints)
 		{
 			var type = GameMember.FindType(GameSymbols.AdventureAiDecision.DayControllerTypeId + "." + hint, hint)
-				?? AccessTools.TypeByName(hint);
+				?? GameMember.TypeByName(hint);
 			if (type == null || !type.IsClass)
 				continue;
 			if (CollectVoidNoArgInstanceMethods(type).Count == 0)

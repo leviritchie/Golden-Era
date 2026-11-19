@@ -56,7 +56,7 @@ EXPECTED_FOCUS: dict[str, dict[str, Any]] = {
         "effectKey": "space_6_magic_blink:level:1",
         "energyLevel": 1,
         "cooldown": 2,
-        "turnBehavior": "ends",
+        "turnBehavior": "free",
         "targetMode": "self",
         "orderedDistance": 4,
         "offensive": False,

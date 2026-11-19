@@ -139,7 +139,7 @@ internal static class Homm3AdventureAiWeightBridge
 		foreach (var hint in GameSymbols.AdventureAiDecision.DayControllerTypeHints)
 		{
 			var type = GameMember.FindType(GameSymbols.AdventureAiDecision.DayControllerTypeId + "." + hint, hint)
-				?? AccessTools.TypeByName(hint);
+				?? GameMember.TypeByName(hint);
 			if (type == null || !type.IsClass)
 				continue;
 			if (ResolveOnStartDay(type) == null)
@@ -181,7 +181,7 @@ internal static class Homm3AdventureAiWeightBridge
 		foreach (var hint in GameSymbols.AdventureAiDecision.TaskScorerTypeHints)
 		{
 			var type = GameMember.FindType(GameSymbols.AdventureAiDecision.TaskScorerTypeId + "." + hint, hint)
-				?? AccessTools.TypeByName(hint);
+				?? GameMember.TypeByName(hint);
 			if (type != null && CollectScoreMethods(type).Count > 0)
 				return type;
 		}
@@ -225,7 +225,7 @@ internal static class Homm3AdventureAiWeightBridge
 			var hint = hints[i];
 			if (string.IsNullOrWhiteSpace(hint))
 				continue;
-			var type = GameMember.FindType(typeId + "." + hint, hint) ?? AccessTools.TypeByName(hint);
+			var type = GameMember.FindType(typeId + "." + hint, hint) ?? GameMember.TypeByName(hint);
 			if (type != null)
 				return type;
 		}

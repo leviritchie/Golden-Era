@@ -101,7 +101,7 @@ internal static class Homm3BattleEventLawDiagnostics
 		foreach (var typeHint in GameSymbols.BattleEventLaws.BattleEventDispatcherTypeHints)
 		{
 			var type = GameMember.FindType(GameSymbols.BattleEventLaws.BattleEventDispatcherTypeId + "." + typeHint, typeHint);
-			type ??= AccessTools.TypeByName(typeHint);
+			type ??= GameMember.TypeByName(typeHint);
 			if (type == null)
 			{
 				log?.LogWarning("HoMM3 battle-event law diagnostics: dispatcher type " + typeHint + " not found.");

@@ -186,6 +186,7 @@ internal static class GoldenEraGameplayOptions
 	/// <summary>Called every main-menu frame; re-applies only after a settings change or a config reload.</summary>
 	internal static void ApplyIfNeeded()
 	{
+		using var loadTiming = Homm3LoadTiming.Scope("menu.gameplayOptions.apply", 20);
 		try
 		{
 			var root = FindConfigRoot();
@@ -203,6 +204,17 @@ internal static class GoldenEraGameplayOptions
 			_dirty = false;
 			_appliedRoot = native.Pointer;
 			var settings = Current;
+			// All multipliers at x1 with nothing changed earlier this session: every write would store the value
+			// already there (424 hero configs on the first menu frame), so skip them.
+			if (Math.Abs(settings.MovementMultiplier - 1f) < 0.0001f
+			    && Math.Abs(settings.ExperienceMultiplier - 1f) < 0.0001f
+			    && Math.Abs(settings.NeutralStrength - 1f) < 0.0001f
+			    && _originalMovement.Count == 0 && _originalExp.Count == 0 && _originalSquadPower.Count == 0)
+			{
+				Plugin.LogSource?.LogInfo(LogPrefix + "movement, experience and neutral strength are all x1; config left as loaded. Site reset "
+					+ settings.SiteReset + ", monster gold " + settings.MonsterGoldPercent + "%.");
+				return;
+			}
 			var heroes = ApplyMovement(root, settings.MovementMultiplier);
 			var levels = ApplyExperience(root, settings.ExperienceMultiplier);
 			var squads = ApplyNeutralStrength(root, settings.NeutralStrength);

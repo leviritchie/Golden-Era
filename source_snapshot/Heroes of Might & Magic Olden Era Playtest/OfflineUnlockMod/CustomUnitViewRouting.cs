@@ -332,7 +332,7 @@ internal static class CustomUnitViewRouting
 			return null;
 		}
 
-		var hinted = AccessTools.TypeByName(typeName);
+		var hinted = GameMember.TypeByName(typeName);
 		if (hinted != null && hinted.Assembly == GameAssembly)
 		{
 			return hinted;

@@ -113,7 +113,8 @@ internal static class Homm3FactionSkillIconSpriteCache
 		var key = sid.Trim();
 		return (string.Equals(key, "homm3_castle_elite_strategem_spread_out", StringComparison.Ordinal)
 		        || string.Equals(key, "homm3_castle_elite_strategem_compress", StringComparison.Ordinal)
-		        || string.Equals(key, "homm3_castle_elite_strategem_ambush", StringComparison.Ordinal))
+		        || string.Equals(key, "homm3_castle_elite_strategem_ambush", StringComparison.Ordinal)
+		        || string.Equals(key, "homm3_cove_dig", StringComparison.Ordinal))
 		       && ResolveIconPath(key) != null;
 	}
 

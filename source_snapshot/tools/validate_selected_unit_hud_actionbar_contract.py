@@ -184,8 +184,6 @@ def main() -> int:
         ("TryClearReleaseControlsSelectedViewField", "no-action cleanup"),
         ("var hidden = HideReleaseNoActionBarAbilityViews(controlsView, sid, source);", "no-action cleanup"),
         ("hidden += ClearSelectedBattleActionBarAbilityViews(sid, source);", "no-action cleanup"),
-        ("controlsView.Clear();", "no-action cleanup"),
-        ("LogReleaseNoAbilityCleanupWarning(sid, \"native controls clear\", ex);", "no-action cleanup"),
         ("InvokeReleaseControlsClickEnabled(controlsView, false);", "no-action cleanup"),
         ("LogReleaseNoAbilityCleanupWarning(sid, \"click disable\", ex);", "no-action cleanup"),
         ("Homm3CustomUiIconHook.ClearBattleAbilityIconsIn(controlsView);", "no-action cleanup"),
@@ -195,18 +193,18 @@ def main() -> int:
     ]:
         require_contains(cleanup, needle, label)
     reject_empty_catch(cleanup, "no-action cleanup")
-    first_selected_clear = cleanup.find("ClearSelectedBattleActionBarAbilityViews(sid, source)")
-    native_clear = cleanup.find("controlsView.Clear();")
-    second_selected_clear = cleanup.find("ClearSelectedBattleActionBarAbilityViews(sid, source)", native_clear)
-    if first_selected_clear < 0 or native_clear < 0 or second_selected_clear < 0:
-        fail("no-action cleanup must clear selected battle action-bar views before and after native Clear")
-    if not first_selected_clear < native_clear < second_selected_clear:
-        fail("selected battle action-bar cleanup must run on both sides of native controls clear")
+    # BhUnitControlsView.Clear() only unsubscribes the view's battle events (number-key hotkeys included) on the
+    # live build and nothing re-runs Init, so the plugin must never call it (26615913 decompile, 2026-11-16).
+    if "controlsView.Clear()" in text:
+        fail("selected-unit HUD fix must not call BhUnitControlsView.Clear(): it unsubscribes ability hotkeys")
+    hotkey_view = method_body(text, "private static BhBattleAbilityView FindReleaseHotkeyView")
+    if "idButton - 1" in hotkey_view:
+        fail("release hotkey slot lookup must be zero-based like the native handler")
     require_contains(text, "SelectedBattleActionBarAbilityPathFragment", "selected battle action-bar cleanup")
     require_contains(text, "BattleBottomHudCanvas/BottomGroupPanel/UNITPart/UNIT ABILITIES/", "selected battle action-bar cleanup")
     battle_cleanup = method_body(text, "private static int ClearSelectedBattleActionBarAbilityViews")
     for needle, label in [
-        ("Resources.FindObjectsOfTypeAll<BhUnitAbilityView>()", "selected battle action-bar cleanup"),
+        ("Resources.FindObjectsOfTypeAll<BhBattleAbilityView>()", "selected battle action-bar cleanup"),
         ("path.IndexOf(SelectedBattleActionBarAbilityPathFragment, StringComparison.Ordinal) < 0", "selected battle action-bar cleanup"),
         ("ClearReleaseAbilityViewState(view, sid);", "selected battle action-bar cleanup"),
         ("Homm3CustomUiIconHook.ClearBattleAbilityIconsIn(view);", "selected battle action-bar cleanup"),
@@ -218,7 +216,7 @@ def main() -> int:
     controls_cleanup = method_body(text, "private static void ClearReleaseAbilityViewState(BhUnitControlsView controlsView, string sid)")
     require_contains(controls_cleanup, "LogReleaseNoAbilityCleanupWarning(sid, \"ability view list cleanup\", ex);", "controls cleanup")
     reject_empty_catch(controls_cleanup, "controls cleanup")
-    view_cleanup = method_body(text, "private static void ClearReleaseAbilityViewState(BhUnitAbilityView view, string sid)")
+    view_cleanup = method_body(text, "private static void ClearReleaseAbilityViewState(BhBattleAbilityView view, string sid)")
     for needle, label in [
         ("RememberReleaseAbilityViewAbility(view, null);", "view cleanup"),
         ("AbilityViewEnabledByInstanceId.Remove", "view cleanup"),

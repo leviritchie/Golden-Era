@@ -71,7 +71,7 @@ internal static class Homm3MarshalSuppressingFireTrapBridge
 		Type trapType = null;
 		foreach (var hint in GameSymbols.MarshalSuppressingFireTrap.TrapRuntimeTypeHints)
 		{
-			trapType = AccessTools.TypeByName(hint);
+			trapType = GameMember.TypeByName(hint);
 			if (trapType != null)
 				break;
 		}

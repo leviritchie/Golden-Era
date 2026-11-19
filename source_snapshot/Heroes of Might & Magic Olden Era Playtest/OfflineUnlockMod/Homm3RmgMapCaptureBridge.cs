@@ -66,7 +66,7 @@ internal static class Homm3RmgMapCaptureBridge
 				var rendererType = GameMember.FindType(
 					GameSymbols.TerrainMaterial.RendererTypeId + "." + hint,
 					hint,
-					() => AccessTools.TypeByName(hint) ?? AccessTools.TypeByName("Hex." + hint),
+					() => GameMember.TypeByName(hint) ?? GameMember.TypeByName("Hex." + hint),
 					logMiss: false);
 				if (rendererType == null)
 					continue;
@@ -924,7 +924,7 @@ internal static class Homm3RmgMapCaptureBridge
 
 	private static Type GetTypeByName(string name)
 	{
-		var type = AccessTools.TypeByName(name) ?? AccessTools.TypeByName("Hex." + name);
+		var type = GameMember.TypeByName(name) ?? GameMember.TypeByName("Hex." + name);
 		if (type != null)
 			return type;
 		foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())

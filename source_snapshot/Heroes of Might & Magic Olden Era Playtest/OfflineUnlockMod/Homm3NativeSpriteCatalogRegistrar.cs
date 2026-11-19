@@ -77,7 +77,14 @@ internal static class Homm3NativeSpriteCatalogRegistrar
 	/// <summary>
 	/// Asks the native sprite resolver itself for <paramref name="key"/> (vanilla unit portraits are keyed by unit sid there;
 	/// custom keys go through the mod's resolver prefix as usual). Null-safe and logs nothing on a miss.
+	/// The native method never misses on its own: for a key that is not in its dictionary it returns the sprite of a
+	/// built-in default key (an orange swirl placeholder; 26615913 coh$$tpg, Ghidra). That placeholder is reported as a
+	/// miss here, so callers get null and draw their own fallback instead of the swirl.
 	/// </summary>
+	// A key no catalog can hold: what the resolver returns for it is its miss placeholder.
+	private const string MissProbeKey = "homm3_native_sprite_miss_probe";
+	private static Sprite _missPlaceholder;
+
 	internal static bool TryResolveNative(string key, out Sprite sprite)
 	{
 		sprite = null;
@@ -100,7 +107,19 @@ internal static class Homm3NativeSpriteCatalogRegistrar
 			if (method == null || method.ReturnType != typeof(Sprite))
 				return false;
 			sprite = method.Invoke(resolver, new object[] { key.Trim() }) as Sprite;
-			return sprite;
+			if (!sprite)
+			{
+				sprite = null;
+				return false;
+			}
+			if (!_missPlaceholder)
+				_missPlaceholder = method.Invoke(resolver, new object[] { MissProbeKey }) as Sprite;
+			if (_missPlaceholder && _missPlaceholder.Pointer == sprite.Pointer)
+			{
+				sprite = null;
+				return false;
+			}
+			return true;
 		}
 		catch
 		{

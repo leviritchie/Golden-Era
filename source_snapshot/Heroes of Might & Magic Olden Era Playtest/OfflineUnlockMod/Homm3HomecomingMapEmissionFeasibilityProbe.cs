@@ -161,7 +161,7 @@ internal static class Homm3HomecomingMapEmissionFeasibilityProbe
 	{
 		if (string.IsNullOrWhiteSpace(name))
 			return null;
-		return AccessTools.TypeByName(name) ?? AccessTools.TypeByName("Hex." + name);
+		return GameMember.TypeByName(name) ?? GameMember.TypeByName("Hex." + name);
 	}
 
 	private static int? TryReadArgInt(object[] args, int index)

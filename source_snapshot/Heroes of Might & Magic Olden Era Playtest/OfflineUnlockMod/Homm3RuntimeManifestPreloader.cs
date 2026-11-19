@@ -13,8 +13,26 @@ internal static class Homm3RuntimeManifestPreloader
 {
 	private static bool _completed;
 
+	/// <summary>
+	/// Starts the off-thread part of the prewarm (file reads and JSON parses only; no Unity object, no shared cache
+	/// written until the main thread takes the results). Idempotent. Call from plugin load so the work is finished
+	/// by the time the main menu validates; <see cref="PrewarmAtMainMenuOrFail"/> starts it itself otherwise.
+	/// </summary>
+	internal static void StartBackgroundPrefetch()
+	{
+		try
+		{
+			Homm3ImportPortraitAnimationCache.StartArrayBattleManifestPrefetch();
+		}
+		catch
+		{
+			// Optimisation only: the menu validation reads anything that was not prefetched.
+		}
+	}
+
 	internal static void PrewarmAtMainMenuOrFail(ManualLogSource log)
 	{
+		using var loadTiming = Homm3LoadTiming.Scope("menu.manifestPrewarm", 20);
 		if (_completed)
 			return;
 

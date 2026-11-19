@@ -73,7 +73,7 @@ internal static class Homm3CampaignWaterEmptyTerrainCursorBridge
 		Type owner = null;
 		foreach (var hint in GameSymbols.HomecomingWaterPresentation.EmptyTerrainCursorOwnerTypeHints)
 		{
-			owner = AccessTools.TypeByName(hint);
+			owner = GameMember.TypeByName(hint);
 			if (owner != null)
 				break;
 		}
@@ -360,7 +360,7 @@ internal static class Homm3CampaignWaterEmptyTerrainCursorBridge
 		Type type = null;
 		foreach (var hint in GameSymbols.HomecomingWaterPresentation.CursorStackTypeHints)
 		{
-			type = AccessTools.TypeByName(hint);
+			type = GameMember.TypeByName(hint);
 			if (type != null)
 				break;
 		}

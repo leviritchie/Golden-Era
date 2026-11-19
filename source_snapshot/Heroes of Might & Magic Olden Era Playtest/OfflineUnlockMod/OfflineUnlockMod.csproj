@@ -630,6 +630,13 @@
     <Error Text="Missing HoMM3 battle ability icon contract validator: $(Homm3BattleAbilityIconValidator)" Condition="!Exists('$(Homm3BattleAbilityIconValidator)')" />
     <Exec Command="python &quot;$(Homm3BattleAbilityIconValidator)&quot; --plugin-dir &quot;$(MSBuildThisFileDirectory).&quot;" Timeout="300000" />
   </Target>
+  <Target Name="ValidateHomm3UnitPortraitCoverageContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <Homm3UnitPortraitCoverageValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_unit_portrait_coverage_contract.py</Homm3UnitPortraitCoverageValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 unit portrait coverage contract validator: $(Homm3UnitPortraitCoverageValidator)" Condition="!Exists('$(Homm3UnitPortraitCoverageValidator)')" />
+    <Exec Command="python &quot;$(Homm3UnitPortraitCoverageValidator)&quot; --plugin-dir &quot;$(MSBuildThisFileDirectory).&quot;" Timeout="60000" />
+  </Target>
   <Target Name="ValidateHomm3CastleEliteStrategemRuntimeContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
     <PropertyGroup>
       <Homm3CastleEliteStrategemRuntimeValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_castle_elite_strategem_runtime_contract.py</Homm3CastleEliteStrategemRuntimeValidator>

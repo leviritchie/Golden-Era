@@ -853,6 +853,15 @@ internal static class GameMember
 	{
 		if (string.IsNullOrEmpty(nameHint))
 			return null;
+		// The index is built once; rescanning every Hex type's attributes per lookup cost 5-7 ms each.
+		try
+		{
+			if (GetHexTypesByObfuscatedName().TryGetValue(nameHint, out var indexed) && indexed.Count > 0)
+				return indexed[0];
+			if (_hexTypesByObfuscatedName != null && _hexTypesByObfuscatedName.Count > 0)
+				return null;
+		}
+		catch { }
 		foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
 		{
 			if (asm == null || !string.Equals(asm.GetName().Name, "Hex", StringComparison.OrdinalIgnoreCase))
@@ -1214,6 +1223,53 @@ internal static class GameMember
 				+ " on " + (record.DeclaringType?.Name ?? "?")
 				+ " resolved " + record.Matches + " (hint hits=" + record.HintHits + "): "
 				+ picks + ".");
+	}
+
+	private static readonly System.Collections.Generic.Dictionary<string, Type> TypeByNameFound = new(StringComparer.Ordinal);
+	private static readonly System.Collections.Generic.Dictionary<string, int> TypeByNameMissAtAssemblyCount = new(StringComparer.Ordinal);
+	private static readonly object TypeByNameGate = new();
+
+	/// <summary>
+	/// Cached replacement for AccessTools.TypeByName. That call scans every type of every loaded assembly on a
+	/// miss (and logs a type-load warning per broken assembly); callers used it as a fallback for hints that often
+	/// miss, so startup paid for the same scans repeatedly. Results are identical: a full name is first tried as a
+	/// per-assembly lookup, anything else goes to AccessTools once. A miss is remembered until another assembly loads.
+	/// </summary>
+	internal static Type TypeByName(string name)
+	{
+		if (string.IsNullOrEmpty(name))
+			return null;
+		lock (TypeByNameGate)
+		{
+			if (TypeByNameFound.TryGetValue(name, out var cached))
+				return cached;
+			var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+			if (TypeByNameMissAtAssemblyCount.TryGetValue(name, out var missCount) && missCount == assemblies.Length)
+				return null;
+
+			Type type = null;
+			try { type = Type.GetType(name, false); } catch { }
+			for (var i = 0; type == null && i < assemblies.Length; i++)
+			{
+				try { type = assemblies[i]?.GetType(name, false); } catch { }
+			}
+			if (type == null)
+			{
+				using var timing = Homm3LoadTiming.Sum("typeByName.fullScan");
+				try { type = HarmonyLib.AccessTools.TypeByName(name); } catch { }
+			}
+
+			if (type != null)
+			{
+				TypeByNameFound[name] = type;
+				TypeByNameMissAtAssemblyCount.Remove(name);
+			}
+			else
+			{
+				TypeByNameMissAtAssemblyCount[name] = assemblies.Length;
+			}
+			return type;
+		}
 	}
 
 	internal static IEnumerable<Type> EnumerateHexTypes()

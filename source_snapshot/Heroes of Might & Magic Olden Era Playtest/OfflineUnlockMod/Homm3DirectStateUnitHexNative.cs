@@ -432,7 +432,7 @@ internal static class Homm3DirectStateUnitHexNative
 	{
 		try
 		{
-			return HarmonyLib.AccessTools.TypeByName(name);
+			return GameMember.TypeByName(name);
 		}
 		catch
 		{

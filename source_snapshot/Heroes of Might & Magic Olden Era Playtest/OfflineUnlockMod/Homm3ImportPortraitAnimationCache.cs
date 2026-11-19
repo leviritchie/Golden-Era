@@ -492,6 +492,116 @@ internal static class Homm3ImportPortraitAnimationCache
 		var path = ResolveArrayBattleManifestPath(sid);
 		if (string.IsNullOrEmpty(path) || !File.Exists(path))
 			return false;
+		if (!TryTakePrefetchedArrayBattleManifest(path, out var parsed))
+			parsed = ParseArrayBattleManifestFile(path);
+		if (parsed.Error != null)
+		{
+			Plugin.LogSource?.LogWarning("Homm3 portrait RIFE showcase cache: manifest parse failed for sid='" + sid + "': " + parsed.Error.Message);
+			return false;
+		}
+		if (parsed.MissReason != null)
+		{
+			LogUnityShowcaseMiss(sid, parsed.MissReason);
+			return false;
+		}
+		info = parsed.Info;
+		return info != null;
+	}
+
+	private sealed class ParsedArrayBattleManifest
+	{
+		internal RifeBattleManifestInfo Info;
+		internal string MissReason;
+		internal Exception Error;
+	}
+
+	// Menu validation parses one array battle manifest per custom unit. The parses are a pure function of the file,
+	// so they run on worker threads ahead of the menu and the main thread takes each finished result by path.
+	// A result is handed out once; every other read parses the file itself, as before.
+	private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, ParsedArrayBattleManifest> PrefetchedArrayBattleManifests =
+		new(StringComparer.OrdinalIgnoreCase);
+	private static readonly object ArrayBattleManifestPrefetchGate = new();
+	private static System.Threading.Tasks.Task _arrayBattleManifestPrefetch;
+
+	/// <summary>Starts the background manifest parse once. Safe to call from plugin load; touches no Unity object.</summary>
+	private const bool ArrayBattleManifestPrefetchEnabled = false;
+
+	internal static void StartArrayBattleManifestPrefetch()
+	{
+		// Disabled 2026-11-18: the JSON types here are the game's IL2CPP Newtonsoft, and using them on a worker
+		// thread the game's collector does not know about kills the process ("Fatal error in GC"). Manifests are
+		// parsed on demand on the main thread, as before, until the parse uses a managed-only reader.
+		if (!ArrayBattleManifestPrefetchEnabled)
+			return;
+		lock (ArrayBattleManifestPrefetchGate)
+		{
+			if (_arrayBattleManifestPrefetch != null)
+				return;
+			string pluginPath;
+			try { pluginPath = BepInEx.Paths.PluginPath; }
+			catch { return; }
+			if (string.IsNullOrEmpty(pluginPath))
+				return;
+			_arrayBattleManifestPrefetch = System.Threading.Tasks.Task.Run(() => PrefetchArrayBattleManifests(pluginPath));
+		}
+	}
+
+	private static void PrefetchArrayBattleManifests(string pluginPath)
+	{
+		try
+		{
+			var paths = new List<string>();
+			foreach (var labRoot in new[] { Path.Combine(pluginPath, "homm3_lab"), Path.Combine(pluginPath, "OfflineUnlockMod", "homm3_lab") })
+			{
+				if (!Directory.Exists(labRoot))
+					continue;
+				foreach (var unitDir in Directory.GetDirectories(labRoot))
+				{
+					var manifest = Path.Combine(unitDir, "Generated", "BillboardAnim", "array_battle_manifest.json");
+					if (File.Exists(manifest))
+						paths.Add(manifest);
+				}
+			}
+			System.Threading.Tasks.Parallel.ForEach(paths, manifest =>
+			{
+				var key = ArrayBattleManifestPrefetchKey(manifest);
+				if (key != null)
+					PrefetchedArrayBattleManifests[key] = ParseArrayBattleManifestFile(manifest);
+			});
+		}
+		catch
+		{
+			// Prefetch is an optimisation only: anything it did not produce is parsed on demand.
+		}
+	}
+
+	private static string ArrayBattleManifestPrefetchKey(string path)
+	{
+		try { return Path.GetFullPath(path); }
+		catch { return null; }
+	}
+
+	private static bool TryTakePrefetchedArrayBattleManifest(string path, out ParsedArrayBattleManifest parsed)
+	{
+		parsed = null;
+		if (PrefetchedArrayBattleManifests.IsEmpty)
+			return false;
+		var key = ArrayBattleManifestPrefetchKey(path);
+		return key != null && PrefetchedArrayBattleManifests.TryRemove(key, out parsed) && parsed != null;
+	}
+
+	private static void WaitForArrayBattleManifestPrefetch()
+	{
+		var task = _arrayBattleManifestPrefetch;
+		if (task == null)
+			return;
+		try { task.Wait(); }
+		catch { }
+	}
+
+	/// <summary>Pure file read + parse; no logging and no shared state, so it may run on any thread.</summary>
+	private static ParsedArrayBattleManifest ParseArrayBattleManifestFile(string path)
+	{
 		try
 		{
 			var root = JObject.Parse(File.ReadAllText(path));
@@ -501,10 +611,7 @@ internal static class Homm3ImportPortraitAnimationCache
 				chunkSize = 2048;
 			var clipsToken = root["clips"];
 			if (clipsToken == null || clipsToken.Type != JTokenType.Array || !TryParseJsonArray(clipsToken, out var clips) || clips.Count == 0)
-			{
-				LogUnityShowcaseMiss(sid, "array battle manifest has no clips");
-				return false;
-			}
+				return new ParsedArrayBattleManifest { MissReason = "array battle manifest has no clips" };
 			var result = new List<RifeClipDef>();
 			for (var i = 0; i < clips.Count; i++)
 			{
@@ -533,24 +640,22 @@ internal static class Homm3ImportPortraitAnimationCache
 				result.Add(new RifeClipDef { Name = name, Indices = indices.ToArray(), Fps = fps });
 			}
 			if (result.Count == 0)
+				return new ParsedArrayBattleManifest { MissReason = "array battle manifest clips contain no usable indices" };
+			return new ParsedArrayBattleManifest
 			{
-				LogUnityShowcaseMiss(sid, "array battle manifest clips contain no usable indices");
-				return false;
-			}
-			info = new RifeBattleManifestInfo
-			{
-				Clips = result,
-				ChunkSize = chunkSize,
-				FrameCount = int.TryParse(root["frameCount"]?.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var frameCount)
-					? frameCount
-					: 0
+				Info = new RifeBattleManifestInfo
+				{
+					Clips = result,
+					ChunkSize = chunkSize,
+					FrameCount = int.TryParse(root["frameCount"]?.ToString(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var frameCount)
+						? frameCount
+						: 0
+				}
 			};
-			return true;
 		}
 		catch (Exception ex)
 		{
-			Plugin.LogSource?.LogWarning("Homm3 portrait RIFE showcase cache: manifest parse failed for sid='" + sid + "': " + ex.Message);
-			return false;
+			return new ParsedArrayBattleManifest { Error = ex };
 		}
 	}
 
@@ -818,6 +923,23 @@ internal static class Homm3ImportPortraitAnimationCache
 	}
 
 	internal static int ValidateRequiredIdleClipMetadata()
+	{
+		// The manifests are parsed on worker threads (started at plugin load when the host calls
+		// StartArrayBattleManifestPrefetch there, otherwise here); block until that pass has finished so every
+		// lookup below takes a finished result. Leftover results are dropped afterwards.
+		StartArrayBattleManifestPrefetch();
+		WaitForArrayBattleManifestPrefetch();
+		try
+		{
+			return ValidateRequiredIdleClipMetadataCore();
+		}
+		finally
+		{
+			PrefetchedArrayBattleManifests.Clear();
+		}
+	}
+
+	private static int ValidateRequiredIdleClipMetadataCore()
 	{
 		var required = new SortedSet<string>(Homm3CustomFactionRegistry.EnumerateCustomUnitSids(), StringComparer.Ordinal);
 		var count = 0;

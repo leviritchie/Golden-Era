@@ -121,6 +121,19 @@ internal static class Homm3FactoryLogisticsMap
 		return true;
 	}
 
+	/// <summary>Static MapData of the current map (objects, squads and tile maps as authored/generated).</summary>
+	internal static bool TryGetMapData(out Hex.Map.MapData mapData, out string fail)
+	{
+		mapData = null;
+		if (!TryResolveMap(out var map, out fail))
+			return false;
+		mapData = ReadMember(map, GameSymbols.HomecomingBoatTravel.MapData.NameHints) as Hex.Map.MapData;
+		if (mapData != null)
+			return true;
+		fail = "Map.data unresolved";
+		return false;
+	}
+
 	private static bool FailGrid(string fail, out StaticGrid grid)
 	{
 		grid = null;
@@ -160,7 +173,13 @@ internal static class Homm3FactoryLogisticsMap
 				}
 			}
 		}
-		fail = "session holder static Map unresolved (not on an adventure map?)";
+		map = Homm3FactoryLogisticsAdventureView.TryWorldCameraMap();
+		if (map != null)
+		{
+			fail = null;
+			return true;
+		}
+		fail = "session holder static Map and world camera map unresolved (not on an adventure map?)";
 		return false;
 	}
 
@@ -388,6 +407,12 @@ internal static class Homm3FactoryLogisticsMap
 					return true;
 				}
 			}
+		}
+		// Same fallback as the map: the holder statics can be null while the logic root still carries Data.
+		if (Homm3FactoryLogisticsEffects.TryGetData(out var root, out _) && root != null)
+		{
+			data = root;
+			return true;
 		}
 		return false;
 	}

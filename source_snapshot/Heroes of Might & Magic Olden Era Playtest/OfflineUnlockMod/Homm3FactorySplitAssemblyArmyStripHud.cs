@@ -843,7 +843,7 @@ internal static class Homm3FactorySplitAssemblyArmyStripHud
 
 	private static Type ResolveRequiredType(string fullName, string symbolId)
 	{
-		var type = AccessTools.TypeByName(fullName) ?? typeof(TransferSide).Assembly.GetType(fullName);
+		var type = GameMember.TypeByName(fullName) ?? typeof(TransferSide).Assembly.GetType(fullName);
 		if (type != null)
 			return type;
 		throw new MissingMemberException(symbolId + " type not found: " + fullName);

@@ -298,7 +298,7 @@ internal static class Homm3HomecomingWaterPresentationOverlay
 	{
 		if (string.IsNullOrWhiteSpace(name))
 			return null;
-		var type = AccessTools.TypeByName(name) ?? AccessTools.TypeByName("Hex." + name) ?? GetHexType(name);
+		var type = GameMember.TypeByName(name) ?? GameMember.TypeByName("Hex." + name) ?? GetHexType(name);
 		if (type != null)
 			return type;
 		foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())

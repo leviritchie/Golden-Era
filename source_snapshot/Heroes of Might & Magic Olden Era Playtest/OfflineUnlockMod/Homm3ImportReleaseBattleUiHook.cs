@@ -2393,9 +2393,12 @@ internal static class Homm3ImportReleaseBattleUiHook
 		return IsCustomUnitSid(key) ? key : null;
 	}
 
+	// Every unit the mod ships a portrait for, not only the manifest roster: Elemental Fusion units and the custom
+	// neutrals have no manifest donor line, and a registry-only gate left the native placeholder on their turn-order
+	// and selected-unit portraits.
 	private static bool IsCustomUnitSid(string sid)
 	{
-		return !string.IsNullOrWhiteSpace(sid) && Homm3CustomFactionRegistry.IsCustomUnitSid(sid.Trim());
+		return Homm3ImportPortraitSpriteCache.IsImportedUnitPortraitSid(sid);
 	}
 
 	private static bool LooksLikeSelectedUnitPortraitImage(Image image)
@@ -2645,7 +2648,15 @@ internal static class Homm3ImportReleaseBattleUiHook
 		var index = 0;
 		foreach (var item in EnumerateQueueItems(list))
 		{
-			var sid = index < unitSids.Length ? unitSids[index] : null;
+			if (index >= unitSids.Length)
+			{
+				// Slot views are reused across battles: an unoccupied slot must not fall back to the
+				// portrait remembered from the previous fight (stale Goblin Mechanic, 2026-11-18).
+				Homm3ImportTooltipPortraitHook.ClearPortraitForEmptySlot(item, "battle-result-empty-slot");
+				index++;
+				continue;
+			}
+			var sid = unitSids[index];
 			if (!string.IsNullOrWhiteSpace(sid)
 			    ? Homm3ImportTooltipPortraitHook.TryApplyPortraitForSid(item, sid, "battle-result-transfer-side")
 			      || Homm3ImportTooltipPortraitHook.TryApplyRememberedPortrait(item, "battle-result-remembered")

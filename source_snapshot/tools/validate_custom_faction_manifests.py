@@ -3257,6 +3257,8 @@ HOMM3_COVE_TREASURE_HUNTING_MAGIC_SIDS = (
     "homm3_cove_treasure_hunting_2",
     "homm3_cove_treasure_hunting_3",
 )
+# Dig: a Necromancer Will clone the plugin intercepts by its [mode] parameter (Homm3CoveTreasureDig.SpellMode).
+HOMM3_COVE_DIG_MAGIC_SID = "homm3_cove_dig"
 HOMM3_SKILL_GRANTED_MAGIC_TREE_KEYS = ("learnCost",)
 HOMM3_PRIMAL_MAGIC_EXPECTED_RANKS = {
     "primal_1_magic_thunderbolt": 1,
@@ -3396,42 +3398,34 @@ def validate_homm3_cove_treasure_hunting_magic_contract(
             and isinstance(bonus.get("parameters"), list)
             and bonus.get("parameters")
         ]
-        if level_grants != [expected_sid]:
-            v.error(f"homm3_cove: Treasure Hunting level {level_index} must grant only {expected_sid!r}, got {level_grants!r}")
-    for index, magic_sid in enumerate(HOMM3_COVE_TREASURE_HUNTING_MAGIC_SIDS):
-        row = rows_by_id.get(magic_sid)
-        if not isinstance(row, dict):
-            v.error(f"homm3_cove: missing skill-granted Treasure Hunting world magic row {magic_sid!r}")
-            continue
-        if row.get("xHomm3SkillGrantedOnly") is not True:
-            v.error(f"homm3_cove: {magic_sid} must be marked xHomm3SkillGrantedOnly=true")
-        for key in HOMM3_SKILL_GRANTED_MAGIC_TREE_KEYS:
-            if key in row:
-                v.error(f"homm3_cove: {magic_sid} must not carry tree/learn key {key!r}")
-        if row.get("school_") != "neutral":
-            v.error(f"homm3_cove: {magic_sid} must use neutral magic school so it cannot enter Primal spell research")
-        if row.get("usedOnMap") is not True:
-            v.error(f"homm3_cove: {magic_sid} must remain a world-map magic row")
-        if row.get("manaCost") != [0, 0, 0, 0]:
-            v.error(f"homm3_cove: {magic_sid} must remain 0-mana at all levels")
-        world_magic = row.get("worldMagic")
-        expected_settings = [index, index, index, index]
-        if not isinstance(world_magic, dict):
-            v.error(f"homm3_cove: {magic_sid} must have worldMagic Groundsight payload")
-            continue
-        if world_magic.get("settingPerLevels") != expected_settings:
-            v.error(f"homm3_cove: {magic_sid} must pin Groundsight settingPerLevels to {expected_settings!r}")
-        magic_settings = world_magic.get("magicSettings")
-        if not isinstance(magic_settings, list) or len(magic_settings) != 3:
-            v.error(f"homm3_cove: {magic_sid} must keep exactly three native Groundsight magicSettings")
-            continue
-        for setting_index, setting in enumerate(magic_settings):
-            if not isinstance(setting, dict) or setting.get("mechType") != "groundsight":
-                v.error(f"homm3_cove: {magic_sid} worldMagic.magicSettings[{setting_index}] must use native groundsight")
-                continue
-            parameters = setting.get("parameters")
-            if parameters != [str(setting_index)]:
-                v.error(f"homm3_cove: {magic_sid} worldMagic.magicSettings[{setting_index}] parameters must be {[str(setting_index)]!r}, got {parameters!r}")
+        if level_grants != [HOMM3_COVE_DIG_MAGIC_SID]:
+            v.error(
+                f"homm3_cove: Treasure Hunting level {level_index} must grant only {HOMM3_COVE_DIG_MAGIC_SID!r} "
+                f"(the Groundsight variants are retired), got {level_grants!r}"
+            )
+    dig_row = rows_by_id.get(HOMM3_COVE_DIG_MAGIC_SID)
+    if not isinstance(dig_row, dict):
+        v.error(f"homm3_cove: missing skill-granted Dig world magic row {HOMM3_COVE_DIG_MAGIC_SID!r}")
+    else:
+        dig_world = dig_row.get("worldMagic")
+        dig_settings = dig_world.get("magicSettings") if isinstance(dig_world, dict) else None
+        if dig_row.get("xHomm3SkillGrantedOnly") is not True or dig_row.get("school_") != "neutral":
+            v.error(f"homm3_cove: {HOMM3_COVE_DIG_MAGIC_SID} must be a neutral, skill-granted-only row")
+        if dig_row.get("usedOnMap") is not True or dig_row.get("manaCost") != [0, 0, 0, 0]:
+            v.error(f"homm3_cove: {HOMM3_COVE_DIG_MAGIC_SID} must be a 0-mana world-map magic row")
+        if not isinstance(dig_settings, list) or not dig_settings or any(
+            not isinstance(setting, dict)
+            or setting.get("mechType") != "change_use_necromancy"
+            or setting.get("parameters") != [HOMM3_COVE_DIG_MAGIC_SID]
+            for setting in dig_settings
+        ):
+            v.error(
+                f"homm3_cove: {HOMM3_COVE_DIG_MAGIC_SID} magicSettings must all be change_use_necromancy with "
+                f"parameters [{HOMM3_COVE_DIG_MAGIC_SID!r}] (the plugin's Dig mode)"
+            )
+    retired = [sid for sid in HOMM3_COVE_TREASURE_HUNTING_MAGIC_SIDS if sid in rows_by_id]
+    if retired:
+        v.error(f"homm3_cove: retired Groundsight Treasure Hunting magic rows are still present: {retired!r}")
     for magic_path in core_member_names(core, "DB/magics/", ".json"):
         if magic_path == HOMM3_COVE_TREASURE_HUNTING_MAGIC_PATH:
             continue
@@ -3603,7 +3597,7 @@ def validate_fortress_predator_instinct_rows(core: Path, skill_sid: str, row: di
         runtime_text = FORTRESS_PREDATOR_INSTINCT_RUNTIME.read_text(encoding="utf-8-sig")
     except OSError:
         runtime_text = ""
-    for needle in ("BonusPercentByRank = { 0, 10, 20, 30 }", '"homm3_fortress_predator_"', '"homm3_fortress_prey"', '"' + FORTRESS_PREDATOR_FRENZY_ABILITY + '"'):
+    for needle in ("BonusPercentByRank = { 0, 33, 66, 100 }", "PenaltyPercentByRank = { 0, 17, 33, 50 }", '"homm3_fortress_predator_"', '"homm3_fortress_prey"', '"' + FORTRESS_PREDATOR_FRENZY_ABILITY + '"'):
         if needle not in runtime_text:
             v.error(f"{label}: {FORTRESS_PREDATOR_INSTINCT_RUNTIME.name} must declare {needle}")
     levels = row.get("parametersPerLevel") or []
@@ -3636,9 +3630,10 @@ def validate_fortress_predator_instinct_rows(core: Path, skill_sid: str, row: di
     ):
         if skill_text.get(token) != expected_name:
             v.error(f"{label}: {token} must be {expected_name!r}, got {skill_text.get(token)!r}")
-    for index, percent in enumerate((10, 20, 30), start=1):
-        if f"+{percent}%" not in (skill_text.get(f"{skill_sid}_desc_{index}") or ""):
-            v.error(f"{label}: {skill_sid}_desc_{index} must state +{percent}%")
+    for index, (percent, penalty) in enumerate(((33, 17), (66, 33), (100, 50)), start=1):
+        desc = skill_text.get(f"{skill_sid}_desc_{index}") or ""
+        if f"+{percent}%" not in desc or f"{penalty}% less" not in desc:
+            v.error(f"{label}: {skill_sid}_desc_{index} must state +{percent}% and {penalty}% less")
 
 
 def validate_custom_faction_skill_row(

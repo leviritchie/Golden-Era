@@ -245,7 +245,8 @@ internal static class Homm3DungeonWarCaptivesWindow
 	private const string BannerObjectName = "OFFLINE_UNLOCK_MOD_DUNGEON_WAR_CAPTIVES_RESULT";
 	private const float BannerWidth = 760f;
 	private const float BannerHeight = 64f;
-	private const float BannerLineHeight = 28f;
+	/// <summary>Wrap width of the banner text (plate less the panel pads); callers size multi-line banners with it.</summary>
+	internal const float BannerTextWidth = BannerWidth - 2f * Homm3DungeonWarCaptivesWindowLayout.Pad;
 	private const float BannerTop = 150f;
 	private const float BannerHold = 3.5f;
 	private const float BannerFade = 1f;
@@ -285,7 +286,8 @@ internal static class Homm3DungeonWarCaptivesWindow
 			root.anchorMin = root.anchorMax = new Vector2(0.5f, 1f);
 			root.pivot = new Vector2(0.5f, 1f);
 			root.anchoredPosition = new Vector2(0f, -BannerTop);
-			var height = BannerHeight + Math.Max(0, lines - 1) * BannerLineHeight;
+			// One line per TMP line pitch (EN-Medium 18 px: 35.5 px); the old 28 px step cut the last lines of long banners.
+			var height = BannerHeight + Math.Max(0, lines - 1) * Homm3PanelTextMetrics.LinePitch(P.FontMedium, P.SizeMain);
 			root.sizeDelta = new Vector2(BannerWidth, height);
 			var plate = new Color(0.1f, 0.12f, 0.18f, 0.97f);
 			A.AddSliced(root, P.SpritePanelBody, 0f, 0f, BannerWidth, height, P.PanelSliceMultiplier, plate);

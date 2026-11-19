@@ -381,7 +381,7 @@ internal sealed class LauncherConfig
 	/// <summary>Release-safe HoMM3 Tower Arcane Battery Mana Well Aegis: mana-setting wells cleanse explicit dispellable hero-map curse buffs.</summary>
 	public bool Homm3TowerBottomlessKnowledgeManaWellAegis = true;
 
-	/// <summary>Release-safe HoMM3 Cove Treasure Hunting Plunder: chests add 1/2/3 rare resources; a hero's first capture of each mine adds a 100/150/200% resource pile.</summary>
+	/// <summary>Retired 2026-11-17 with the Treasure Hunting rebuild: Plunder (chest and mine bonuses) is no longer registered, so this gate does nothing. Kept so existing config files still parse.</summary>
 	public bool Homm3CovePlunder = true;
 
 

@@ -264,7 +264,7 @@ internal static class Homm3DirectStateMovementPublish
 
 				GameMember.FindType(GameSymbols.BattleEventLaws.UnitPosChangedEventArgsTypeId + "." + hint, hint)
 
-				?? AccessTools.TypeByName(hint);
+				?? GameMember.TypeByName(hint);
 
 			if (_unitPosChangedEventArgsType != null)
 

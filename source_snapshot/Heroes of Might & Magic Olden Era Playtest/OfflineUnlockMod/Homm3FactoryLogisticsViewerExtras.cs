@@ -286,7 +286,7 @@ internal static partial class Homm3FactoryLogisticsViewer
 		// Header buttons, left of Close: [Recruit all] [To-do] [?].
 		var right = L.Width - L.CloseSize - 16f;
 		var helpX = right - 40f;
-		var help = Ui.Image(_window, Ui.SpriteTab, helpX, 8f, 34f, 30f, new Color(0.12f, 0.16f, 0.26f, 1f));
+		var help = Ui.Sliced(_window, Ui.SpriteTab, helpX, 8f, 34f, 30f, 1f, new Color(0.12f, 0.16f, 0.26f, 1f));
 		Ui.Text(_window, P.FontBook, P.SizeSubHeader, "?", helpX, 8f, 34f, 30f, P.TipTitle, TextAlignmentOptions.Center);
 		ChromeButtons.Add(new Ui.Clickable { Rect = help.rectTransform, Image = help, Normal = Ui.Sprite(Ui.SpriteTab), Hover = Ui.Sprite(Ui.SpriteTabHover), Click = () => OpenPopup(PopupPrimer) });
 		ChromeTips.Add(new Tip { Rect = help.rectTransform, Title = "Logistics words (click for the full help)", Lines = GlossaryLines(), NearMouse = true });
@@ -468,7 +468,7 @@ internal static partial class Homm3FactoryLogisticsViewer
 			var (kind, b) = todos[j];
 			var key = b.ObjectKey;
 			var selected = _hasSelection && key == _selectedKey;
-			var row = Ui.Image(_panelRoot, Ui.SpriteRow, x + 8f, y, pw - 16f, 27f, selected ? new Color(0.14f, 0.22f, 0.36f, 1f) : new Color(0.09f, 0.12f, 0.19f, 1f));
+			var row = Ui.Sliced(_panelRoot, Ui.SpriteRow, x + 8f, y, pw - 16f, 27f, 1f, selected ? new Color(0.14f, 0.22f, 0.36f, 1f) : new Color(0.09f, 0.12f, 0.19f, 1f));
 			Ui.Text(_panelRoot, P.FontMedium, 13f, TodoLabel(kind), x + 16f, y, 120f, 27f, kind == TodoKind.Cut ? L.Red : kind == TodoKind.Switch ? P.CostOk : P.TipWarn);
 			Ui.Text(_panelRoot, P.FontMedium, 14f, b.DisplayName ?? "Building", x + 138f, y, pw - 154f, 27f, P.TipBody);
 			PanelButtons.Add(new Ui.Clickable { Rect = row.rectTransform, Image = row, Normal = Ui.Sprite(Ui.SpriteRow), Hover = Ui.Sprite(Ui.SpriteRowSelected), Click = () => FocusBuilding(key) });
@@ -885,13 +885,11 @@ internal static partial class Homm3FactoryLogisticsViewer
 
 	private static float PopupY(float h) => Math.Max(50f, (L.Height - h) / 2f);
 
-	private static float WrappedHeight(string text, float size, float width, float line) =>
-		Math.Max(1, Mathf.CeilToInt(Ui.TextWidth(text, size) / width)) * line;
 
 	/// <summary>Primer (item 1) with the glossary and the keys; "Got it" dismisses it for this session; "?" / H reopens.</summary>
 	private static void BuildPrimer()
 	{
-		const float w = 900f, size = 16f, line = 22f;
+		const float w = 900f, size = 16f;
 		var paras = new List<(string Text, Color Colour)>
 		{
 			("Enhancements turn your mines and dwellings into a network. A hero with Logistics Network builds them on site; after that visit you can manage the building from here.", P.TipBody),
@@ -903,14 +901,14 @@ internal static partial class Homm3FactoryLogisticsViewer
 			paras.Add((k, P.TipTitle));
 		var h = 64f + 60f;
 		foreach (var (text, _) in paras)
-			h += WrappedHeight(text, size, w - 48f, line) + 6f;
+			h += Ui.WrappedHeight(text, size, w - 48f) + 6f;
 		PopupFrame(w, h, "How the Logistics Network works");
 		var x = PopupX(w);
 		var y = PopupY(h) + 60f;
 		foreach (var (text, colour) in paras)
 		{
-			var ph = WrappedHeight(text, size, w - 48f, line);
-			Ui.Text(_popupRoot, P.FontMedium, size, text, x + 24f, y, w - 48f, ph, colour, TextAlignmentOptions.TopLeft, true);
+			var ph = Ui.WrappedHeight(text, size, w - 48f);
+			Ui.WrappedText(_popupRoot, P.FontMedium, size, text, x + 24f, y, w - 48f, ph, colour);
 			y += ph + 6f;
 		}
 		Ui.Button(_popupRoot, PopupButtons, "Got it", x + w / 2f - 80f, y + 10f, 160f, 36f, true, true, ClosePopup, P.SizeMain);
@@ -918,19 +916,19 @@ internal static partial class Homm3FactoryLogisticsViewer
 
 	private static void BuildCutPopup()
 	{
-		const float w = 760f, size = 16f, line = 22f;
+		const float w = 760f, size = 16f;
 		var lines = CutFixLines(out var title);
 		var h = 64f + 60f;
 		foreach (var l in lines)
-			h += WrappedHeight(l, size, w - 48f, line) + 4f;
+			h += Ui.WrappedHeight(l, size, w - 48f) + 4f;
 		PopupFrame(w, h, title);
 		var x = PopupX(w);
 		var y = PopupY(h) + 60f;
 		foreach (var l in lines)
 		{
-			var ph = WrappedHeight(l, size, w - 48f, line);
+			var ph = Ui.WrappedHeight(l, size, w - 48f);
 			var colour = l.StartsWith("  ->", StringComparison.Ordinal) ? L.Red : l.StartsWith("-", StringComparison.Ordinal) ? P.TipBody : P.TipTitle;
-			Ui.Text(_popupRoot, P.FontMedium, size, l, x + 24f, y, w - 48f, ph, colour, TextAlignmentOptions.TopLeft, true);
+			Ui.WrappedText(_popupRoot, P.FontMedium, size, l, x + 24f, y, w - 48f, ph, colour);
 			y += ph + 4f;
 		}
 		var cut = _cut;
@@ -980,7 +978,7 @@ internal static partial class Homm3FactoryLogisticsViewer
 	private static void PopupStep(string glyph, float x, float cy, Action change)
 	{
 		const float s = 28f;
-		var image = Ui.Image(_popupRoot, Ui.SpriteTab, x, cy - s / 2f, s, s, new Color(0.12f, 0.16f, 0.26f, 1f));
+		var image = Ui.Sliced(_popupRoot, Ui.SpriteTab, x, cy - s / 2f, s, s, 1f, new Color(0.12f, 0.16f, 0.26f, 1f));
 		Ui.Text(_popupRoot, P.FontBook, P.SizeSubHeader, glyph, x, cy - s / 2f, s, s, P.ButtonText, TextAlignmentOptions.Center);
 		PopupButtons.Add(new Ui.Clickable
 		{

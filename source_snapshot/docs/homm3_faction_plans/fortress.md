@@ -105,7 +105,7 @@ Economy note: Fortress should remain wood/ore and growth oriented, with lower ra
 Faction skill: `Predator Instinct` (`skill_faction_homm3_fortress`). It replaced Hunting Grounds on 2026-11-14, by user decision (Hunting Grounds had replaced the Swamp Tactics candidate on 2026-10-12).
 
 - At the start of each battle, each melee stack of the Fortress hero's army is paired 1-to-1 with a random enemy stack, its prey. Surplus stacks on either side stay unpaired.
-- Predators deal +10/20/30% damage to their prey (Basic/Advanced/Expert), through the single committed-damage owner (`Homm3CounterattackDoctrineMutationRuntime.PrefixUnitApplyDamage`).
+- Predators deal +33/66/100% damage to their prey (Basic/Advanced/Expert) and, while that prey is alive, 17/33/50% less damage to any other target (owner, 2026-11-17: half the bonus, 16.5 rounded to 17 because the owner sums whole percents). Counter hits count like attacks; after the prey dies the penalty is gone and the predator stays unpaired (no re-pairing). Both go through the single committed-damage owner (`Homm3CounterattackDoctrineMutationRuntime.PrefixUnitApplyDamage`); additive with other committed-damage percents, floored at 0.
 - Hovering a predator stack draws a wavy blood-red line to its prey, with ground rings on both ends and drifting droplets (`Homm3FortressPredatorLine`).
 - Advanced subskills (the subskill SIDs from Hunting Grounds are reused so old saves load):
   - Swamp Tactics (`swamp_advantage`): +10% damage on native terrain (Core `outAllDmgMod`).

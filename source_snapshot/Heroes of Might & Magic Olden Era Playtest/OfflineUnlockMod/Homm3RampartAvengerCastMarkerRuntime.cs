@@ -43,7 +43,7 @@ internal static class Homm3RampartAvengerCastMarkerRuntime
 			var patched = 0;
 			foreach (var typeHint in GameSymbols.BattleEventLaws.BattleEventDispatcherTypeHints)
 			{
-				var type = GameMember.FindType(GameSymbols.BattleEventLaws.BattleEventDispatcherTypeId + "." + typeHint, typeHint) ?? AccessTools.TypeByName(typeHint);
+				var type = GameMember.FindType(GameSymbols.BattleEventLaws.BattleEventDispatcherTypeId + "." + typeHint, typeHint) ?? GameMember.TypeByName(typeHint);
 				if (type == null)
 					continue;
 				foreach (var methodName in GameSymbols.BattleEventLaws.BattleEventDispatch.NameHints)

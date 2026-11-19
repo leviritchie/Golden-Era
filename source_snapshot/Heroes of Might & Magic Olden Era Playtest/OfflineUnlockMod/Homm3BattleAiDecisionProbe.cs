@@ -115,7 +115,7 @@ internal static class Homm3BattleAiDecisionProbe
 		foreach (var hint in GameSymbols.BattleAiDecision.BrainTypeHints)
 		{
 			var type = GameMember.FindType(GameSymbols.BattleAiDecision.BrainTypeId + "." + hint, hint)
-				?? AccessTools.TypeByName(hint);
+				?? GameMember.TypeByName(hint);
 			if (type == null)
 				continue;
 			if (CollectSignatureMatches(type, actionType, unitType).Count == 0)
@@ -160,7 +160,7 @@ internal static class Homm3BattleAiDecisionProbe
 			var hint = hints[i];
 			if (string.IsNullOrWhiteSpace(hint))
 				continue;
-			var type = GameMember.FindType(typeId + "." + hint, hint) ?? AccessTools.TypeByName(hint);
+			var type = GameMember.FindType(typeId + "." + hint, hint) ?? GameMember.TypeByName(hint);
 			if (type != null)
 				return type;
 		}

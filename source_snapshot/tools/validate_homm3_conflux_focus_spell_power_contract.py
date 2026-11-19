@@ -9,7 +9,9 @@ tools/port_current/run_core_validators.py call it). Checks, on the in-memory ove
 - the world spell row (Necromancer Will clone, [mode] parameters, mana 10, usage limit 1) + Lang rows;
 - subskills: no stale Summon Elementals rows; Stable Bond/Perfect Fusion target exactly the 105 fused units;
 - elemental Focus casts: spell-effect Focus receivers, per-creature damage for Thunderbolt/Chain
-  Lightning/Fireball, Blinding Strike 115%, elemental startEnergy 6/12;
+  Lightning/Fireball, Blinding Strike 115%;
+- no starting Focus (stats.startEnergy) on the 15 elementals or any fused unit unless the unit is in
+  START_ENERGY_ALLOWLIST (owner 2026-11-16: no family catch-all; each entry needs a carded passive);
 - the 105 fused unit rows: present, stat rule against the final parents, Lang names, never pooled.
 """
 
@@ -28,6 +30,9 @@ CONFLUX_FACTION = "homm3_conflux"
 CONFLUX_SKILL = "skill_faction_homm3_conflux"
 SPELL_SID = "homm3_conflux_elemental_fusion"
 SPELL_MEMBER = "DB/magics/world_neutral_magics.json"
+# sid -> startEnergy. Empty by owner decision 2026-11-16. Add a unit only together with a visible passive
+# card on it that states the starting Focus ("Brings N Focus at the start of battle").
+START_ENERGY_ALLOWLIST: dict[str, int] = {}
 SUBSKILLS_MEMBER = "DB/heroes_skills/sub_skills/sub_skills.json"
 FUSED_DEFENSE = "sub_skill_faction_homm3_conflux_elemental_conjury_spell_power"
 FUSED_ATTACK = "sub_skill_faction_homm3_conflux_elemental_conjury_expert_spell_tier"
@@ -215,7 +220,7 @@ def spell_focus_receivers(core_zip, overlay, unit_sids: list[str], issues: list[
     return result
 
 
-def validate_elemental_casts(core_zip, overlay, start_energy: dict[str, int], issues: list[str]) -> None:
+def validate_elemental_casts(core_zip, overlay, issues: list[str]) -> None:
     for (sid, index), (low, high) in EXPECTED_PER_CREATURE_CASTS.items():
         abilities = unit_row(core_zip, overlay, sid, "logics").get("abilities") or []
         dealer = abilities[index].get("damageDealer") if index < len(abilities) else None
@@ -227,10 +232,14 @@ def validate_elemental_casts(core_zip, overlay, start_energy: dict[str, int], is
     dealer = abilities[index].get("damageDealer") if index < len(abilities) else None
     if not isinstance(dealer, dict) or dealer.get("statDmgMult") != mult:
         issues.append(f"{sid}:abilities:{index}: Blinding Strike statDmgMult {(dealer or {}).get('statDmgMult')!r}, expected {mult}")
-    for sid, value in start_energy.items():
-        got = unit_row(core_zip, overlay, sid, "logics").get("stats", {}).get("startEnergy")
-        if got != value:
-            issues.append(f"{sid}: startEnergy={got!r}, expected {value}")
+
+
+def validate_start_energy(core_zip, overlay, sids: list[str], issues: list[str]) -> None:
+    for sid in sids:
+        got = int(unit_row(core_zip, overlay, sid, "logics").get("stats", {}).get("startEnergy") or 0)
+        expected = START_ENERGY_ALLOWLIST.get(sid, 0)
+        if got != expected:
+            issues.append(f"{sid}: startEnergy={got}, expected {expected} (no elemental/fusion starting Focus outside START_ENERGY_ALLOWLIST)")
 
 
 def half_up(value: float) -> int:
@@ -341,8 +350,9 @@ def main() -> int:
         actual_focus_receivers = spell_focus_receivers(core_zip, overlay, unit_sids, issues)
         if actual_focus_receivers != list(EXPECTED_FOCUS_SPELL_RECEIVERS):
             issues.append(f"spell-effect Focus receivers={actual_focus_receivers!r}, expected {list(EXPECTED_FOCUS_SPELL_RECEIVERS)!r}")
-        start_energy = {sid: int(v) for sid, v in fusion_module.load_units()["elementalStartEnergy"].items()}
-        validate_elemental_casts(core_zip, overlay, start_energy, issues)
+        validate_elemental_casts(core_zip, overlay, issues)
+        start_energy_sids = sorted(set(fusion_module.elemental_sids()) | set(fused_sids))
+        validate_start_energy(core_zip, overlay, start_energy_sids, issues)
         checked = validate_fused_units(core_zip, overlay, fusion_module, issues)
         validate_language_rows(core_zip, overlay, issues)
     if issues:
@@ -354,7 +364,7 @@ def main() -> int:
     print(
         "homm3-conflux-elemental-fusion-contract: validated the Elemental Fusion skill/spell/subskill rows, "
         f"{len(EXPECTED_FOCUS_SPELL_RECEIVERS)} spell-effect Focus receivers, per-creature elemental casts, "
-        f"{len(start_energy)} elemental startEnergy rows and {checked} fused unit rows"
+        f"{len(start_energy_sids)} elemental/fused startEnergy rows ({len(START_ENERGY_ALLOWLIST)} allow-listed) and {checked} fused unit rows"
     )
     return 0
 

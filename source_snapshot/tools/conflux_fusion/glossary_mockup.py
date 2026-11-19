@@ -2,7 +2,7 @@
 
 Data: tools/conflux_fusion/fusion_glossary.py output (built Core rows: names, stats, ability / passive cards, unlock rank).
 Look: the fusion panel's native shell (Homm3DungeonWarCaptivesWindowLayout sprites) plus native list sprites exported
-read-only from the installed game: Button_Database ("?" database button), KeyField (search field), Button_Tab_Dark*
+read-only from the installed game: Button_Database ("?" database button), KeyField (search field), tab_1 / tab_highlight_1 / tab_selected_1
 (filter tabs, column headers), tab_1 / tab_selected_1 (rows), scroll_background / scroll (scrollbar), Dropdown_arrow (sort).
 Stage 2 fusions use their own colour (name, row tint, badge) and the detail page shows a family tree.
 
@@ -22,7 +22,7 @@ from panel_mockup import MOD, PANEL_CS, PORTRAITS, SKILL_ICON, WINDOW_CS, meter,
 
 STAGE2 = (190, 150, 255, 255)        # stage 2: astral violet (names, badge, tree root)
 STAGE2_ROW = (170, 110, 255, 90)    # tint on the native row plate
-EXTRA = ["Button_Database", "Button_Database_MouseOver", "Button_Tab_Dark", "Button_Tab_Dark_MouseOver", "Button_Tab_Dark_Selected",
+EXTRA = ["Button_Database", "Button_Database_MouseOver", "tab_highlight_1",
          "scroll_background", "scroll", "KeyField", "KeyField_MouseOver", "Dropdown_arrow", "tab_1", "tab_selected_1"]
 WIN_W, WIN_H = 1520, 900
 ROW_H, HEAD_H = 50, 40
@@ -81,7 +81,7 @@ class Glossary:
         cv.text(P["FontBook"], P["SizeSubHeader"], title, w / 2 - 300, 0, 600, W["RecruitHeaderHeight"], P["TipTitle"], "center")
 
     def tab(self, label, x, y, w, h, selected=False, hover=False):
-        name = "Button_Tab_Dark_Selected" if selected else "Button_Tab_Dark_MouseOver" if hover else "Button_Tab_Dark"
+        name = "tab_selected_1" if selected else "tab_highlight_1" if hover else "tab_1"
         self.cv.sprite(name, x, y, w, h)
         self.cv.text(self.P["FontMedium"], self.P["SizeSmall"], label, x, y, w, h, self.P["TipTitle"] if selected else self.P["ButtonText"], "center")
 
@@ -122,10 +122,10 @@ class Glossary:
         # list header
         lx, ly = 30, top + 70
         x = lx + THUMB + 14
-        cv.sprite("Button_Tab_Dark", lx, ly, THUMB + 14, HEAD_H)
+        cv.sprite("tab_1", lx, ly, THUMB + 14, HEAD_H)
         for key, label, w, align in COLS:
             if key == sort:
-                cv.sprite("Button_Tab_Dark_Selected", x, ly, w - 2, HEAD_H)
+                cv.sprite("tab_selected_1", x, ly, w - 2, HEAD_H)
                 lw = cv.fonts[P["FontMedium"]].advance(label, P["SizeSmall"])
                 lx0 = x + (w - 2 - lw - 16) / 2
                 cv.text(P["FontMedium"], P["SizeSmall"], label, lx0, ly, lw + 2, HEAD_H, P["TipTitle"], "left")
@@ -198,7 +198,7 @@ class Glossary:
         cw = w / 3
         for i, (label, val) in enumerate(stats):
             cx, cy = x + (i % 3) * cw, sy + (i // 3) * 46
-            cv.sprite("Button_Tab_Dark", cx, cy, cw - 6, 40)
+            cv.sprite("tab_1", cx, cy, cw - 6, 40)
             cv.text(P["FontMedium"], P["SizeSmall"], label, cx + 10, cy, cw - 20, 40, P["TipNote"], "left")
             cv.text(P["FontMedium"], P["SizeMain"], str(val), cx + 10, cy, cw - 26, 40, P["TipBody"], "right")
         # family tree

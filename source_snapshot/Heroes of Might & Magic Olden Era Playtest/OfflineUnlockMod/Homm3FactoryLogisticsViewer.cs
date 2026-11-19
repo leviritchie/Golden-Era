@@ -1719,7 +1719,7 @@ internal static partial class Homm3FactoryLogisticsViewer
 			if (j == 2 && !hire)
 			{
 				// Hire greyed with its reason (item 14).
-				var grey = Ui.Image(_cardRoot, Ui.SpriteTab, ix + j * (tabW + 6f), ty, tabW, L.CardTabs - 6f, new Color(0.08f, 0.09f, 0.12f, 1f));
+				var grey = Ui.Sliced(_cardRoot, Ui.SpriteTab, ix + j * (tabW + 6f), ty, tabW, L.CardTabs - 6f, 1f, new Color(0.08f, 0.09f, 0.12f, 1f));
 				grey.color = new Color(0.55f, 0.55f, 0.55f, 0.7f);
 				Ui.Text(_cardRoot, P.FontMedium, P.SizeSmall, names[j], ix + j * (tabW + 6f), ty, tabW, L.CardTabs - 6f, P.ButtonTextDisabled, TextAlignmentOptions.Center);
 				AddTip(grey.rectTransform, "Hire (Rail Network)", new[] { "Hire needs the Rail Network as this dwelling's active enhancement.", "Build it under Remote build, then switch to it (takes effect tomorrow)." }, -1);
@@ -2175,8 +2175,7 @@ internal static partial class Homm3FactoryLogisticsViewer
 		var h = pad + 26f + 4f;
 		for (var i = 0; i < all.Length; i++)
 		{
-			var n = Math.Max(1, Mathf.CeilToInt(Ui.TextWidth(all[i], L.TipText) / textW));
-			rows[i] = string.IsNullOrEmpty(all[i]) ? 8f : n * L.TipLine + 4f;
+			rows[i] = string.IsNullOrEmpty(all[i]) ? 8f : Ui.WrappedHeight(all[i], L.TipText, textW);
 			h += rows[i];
 		}
 		h += pad - 4f;
@@ -2188,7 +2187,7 @@ internal static partial class Homm3FactoryLogisticsViewer
 		var ly = y + pad + 30f;
 		for (var i = 0; i < all.Length; i++)
 		{
-			Ui.Text(_tipRoot, P.FontMedium, L.TipText, all[i] ?? "", x + pad, ly, textW, rows[i], i == over.Highlight ? P.CostOk : P.TipBody, TextAlignmentOptions.TopLeft, true);
+			Ui.WrappedText(_tipRoot, P.FontMedium, L.TipText, all[i] ?? "", x + pad, ly, textW, rows[i], i == over.Highlight ? P.CostOk : P.TipBody);
 			ly += rows[i];
 		}
 	}
@@ -2226,7 +2225,7 @@ internal static partial class Homm3FactoryLogisticsViewer
 	private static void Step(string glyph, float x, float cy, Action change)
 	{
 		const float s = 30f;
-		var image = Ui.Image(_cardRoot, Ui.SpriteTab, x, cy - s / 2f, s, s, new Color(0.12f, 0.16f, 0.26f, 1f));
+		var image = Ui.Sliced(_cardRoot, Ui.SpriteTab, x, cy - s / 2f, s, s, 1f, new Color(0.12f, 0.16f, 0.26f, 1f));
 		Ui.Text(_cardRoot, P.FontBook, P.SizeSubHeader, glyph, x, cy - s / 2f, s, s, P.ButtonText, TextAlignmentOptions.Center);
 		CardButtons.Add(new Ui.Clickable
 		{
@@ -2300,7 +2299,6 @@ internal static class Homm3FactoryLogisticsViewerLayout
 	internal const float ChipText = 14f;
 	internal const float TipWidth = 380f;
 	internal const float TipText = 15f;
-	internal const float TipLine = 20f;
 	internal const float RemoteRow = 60f;
 
 	internal static readonly Color Red = new(1f, 0.25f, 0.22f, 1f);

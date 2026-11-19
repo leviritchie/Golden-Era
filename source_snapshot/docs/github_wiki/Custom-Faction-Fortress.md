@@ -29,7 +29,8 @@ Generated from live Core.zip on 2026-05-23.
 `skill_faction_homm3_fortress` (Basic / Advanced / Expert Predator Instinct) replaces Hunting Grounds.
 
 - At the start of each battle, each melee stack in the Fortress hero's army is randomly assigned one enemy stack as its prey. Pairing is 1-to-1: if you have more stacks, some have no prey; if the enemy has more, some enemy stacks have no predator.
-- Predators deal +10% / +20% / +30% damage to their prey (Basic / Advanced / Expert).
+- Predators deal +33% / +66% / +100% damage to their prey (Basic / Advanced / Expert).
+- While its prey is alive, a predator deals 17% / 33% / 50% less damage to every other target (half the bonus). The penalty ends when the prey dies; counterattacks count like attacks.
 - Hover one of the hero's stacks to see a glowing, slightly wavy blood-red line from the predator to its prey. Predator and prey also show marker buffs ("Predator" / "Hunted").
 - Advanced subskills:
   - Swamp Tactics: +10% damage on native terrain.

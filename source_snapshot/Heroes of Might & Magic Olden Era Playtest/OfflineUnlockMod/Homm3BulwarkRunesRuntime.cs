@@ -476,7 +476,7 @@ internal static class Homm3BulwarkRunesRuntime
 		{
 			var hint = GameSymbols.BulwarkRunesLaws.AbilityRuntimeTypeHints[i];
 			var type = GameMember.FindType(GameSymbols.BulwarkRunesLaws.AbilityRuntimeTypeId + "." + hint, hint)
-			           ?? AccessTools.TypeByName(hint);
+			           ?? GameMember.TypeByName(hint);
 			if (type != null)
 				return type;
 		}
@@ -522,7 +522,7 @@ internal static class Homm3BulwarkRunesRuntime
 			if (string.Equals(hint, "edb", StringComparison.OrdinalIgnoreCase))
 				continue;
 			var type = GameMember.FindType("directState.battleEventHub." + hint, hint)
-			           ?? AccessTools.TypeByName(hint);
+			           ?? GameMember.TypeByName(hint);
 			if (type != null)
 				return type;
 		}
@@ -880,6 +880,7 @@ internal static class Homm3BulwarkRunesRuntime
 	{
 		if (!EnterObserve())
 			return;
+		using var timing = Homm3LoadTiming.Scope("battle damage.bulwarkRunes", Homm3LoadTiming.BattleScopeMinMs);
 		try
 		{
 			var eventArgs = __args != null && __args.Length > 1 ? __args[1] : null;
@@ -1481,7 +1482,7 @@ internal static class Homm3BulwarkRunesRuntime
 	{
 		try
 		{
-			var type = AccessTools.TypeByName(GameSymbols.CastleEliteStrategem.LogicHeroTypeName)
+			var type = GameMember.TypeByName(GameSymbols.CastleEliteStrategem.LogicHeroTypeName)
 			           ?? GameMember.FindType(
 				           "homm3.runes.logicHero",
 				           GameSymbols.CastleEliteStrategem.LogicHeroTypeName);

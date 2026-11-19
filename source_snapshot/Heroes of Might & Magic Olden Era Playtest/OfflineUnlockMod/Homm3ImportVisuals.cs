@@ -215,6 +215,31 @@ internal static class Homm3ImportVisuals
 	static readonly Dictionary<int, HashSet<string>> ProjectileVisualsAttachedByShellId = new();
 	static int _projectileVisualPresentationDiagRemaining = 12;
 	static readonly Dictionary<int, Entry> MapTemplateEntriesByInstanceId = new();
+
+	/// <summary>
+	/// A finished owned-skinned adventure shell, frozen right after it was built (see
+	/// <see cref="TrySnapshotOwnedSkinnedMapShell"/>). Later map objects of the same unit clone it instead of
+	/// repeating the whole build.
+	/// </summary>
+	private sealed class OwnedSkinnedMapShellSnapshot
+	{
+		internal GameObject Pristine;
+		internal Entry Entry;
+		internal string ShellName;
+		internal bool SkinWeightsUnlimited;
+		internal bool RuntimeAttachEnabled;
+		internal Material HexLitSheet;
+	}
+
+	// Key: map template + vanilla donor instance ids (BuildOwnedSkinnedMapShellSnapshotKey). A null value marks a unit
+	// that must always take the full build.
+	static readonly Dictionary<string, OwnedSkinnedMapShellSnapshot> OwnedSkinnedMapShellSnapshots = new(StringComparer.Ordinal);
+	static GameObject _ownedSkinnedMapShellSnapshotHolder;
+	static int _nativeHexLitSheetAssignSerial;
+	static int _ownedSkinnedMapShellSnapshotLogs;
+	/// <summary>Flag file that switches the snapshot reuse off (every map object takes the full build again).</summary>
+	internal const string DisableOwnedSkinnedMapShellSnapshotFlag = "homm3_disable_map_shell_snapshot.flag";
+
 	static readonly Dictionary<string, List<Material>> MapFrameMaterialsByTemplateKey = new(StringComparer.Ordinal);
 	static readonly Dictionary<string, Texture2D[]> BundleFrameTexturesByKey = new(StringComparer.Ordinal);
 	static readonly Dictionary<string, Texture2D[]> MapFrameTexturesByBundleName = new(StringComparer.Ordinal);
@@ -1276,10 +1301,19 @@ internal static class Homm3ImportVisuals
 		GameObject visual = null;
 		try
 		{
+			// Second and later map objects of one owned-skinned unit: clone the frozen finished shell.
+			var snapshotKey = BuildOwnedSkinnedMapShellSnapshotKey(vanilla, homm3Template, entry);
+			if (TryCloneOwnedSkinnedMapShellSnapshot(snapshotKey, entry, log, out var snapshotClone))
+				return snapshotClone;
+			var hexLitSheetSerialBefore = _nativeHexLitSheetAssignSerial;
+
 			var mapArrayPilot = IsMapArrayPilotEntry(entry, log);
-			shell = mapArrayPilot
-				? CreateLightweightMapArrayShell(vanilla, homm3Template)
-				: UnityEngine.Object.Instantiate(vanilla);
+			using (Homm3LoadTiming.Sum("map.unitShell.create.instantiateShell"))
+			{
+				shell = mapArrayPilot
+					? CreateLightweightMapArrayShell(vanilla, homm3Template)
+					: UnityEngine.Object.Instantiate(vanilla);
+			}
 			if (!shell)
 			{
 				Homm3MapLoadFlightRecorder.MarkGameObject("native-shell.create.instantiate-shell-miss", homm3Template);
@@ -1291,7 +1325,8 @@ internal static class Homm3ImportVisuals
 			if (IsHomm3SkinnedBattleInstance(homm3Template))
 			{
 				RemoveTownStyleBillboardFromShell(shell);
-				visual = UnityEngine.Object.Instantiate(homm3Template);
+				using (Homm3LoadTiming.Sum("map.unitShell.create.instantiateVisual"))
+					visual = UnityEngine.Object.Instantiate(homm3Template);
 				if (!visual)
 				{
 					UnityEngine.Object.Destroy(shell);
@@ -1303,17 +1338,22 @@ internal static class Homm3ImportVisuals
 				visual.transform.SetSiblingIndex(shell.transform.childCount - 1);
 				visual.transform.localPosition = Vector3.zero;
 				visual.transform.localRotation = Quaternion.identity;
-				FinishOwnedSkinnedAdventureMapPresentation(shell, visual, homm3Template, vanilla, entry, log, fitScale: true);
+				using (Homm3LoadTiming.Sum("map.unitShell.skinned"))
+					FinishOwnedSkinnedAdventureMapPresentation(shell, visual, homm3Template, vanilla, entry, log, fitScale: true);
 				TryAttachMapSquadRuntimeAttach(shell, log);
 				PrepareReturnedNativeShellTemplate(shell, log);
+				TrySnapshotOwnedSkinnedMapShell(snapshotKey, shell, visual, entry, hexLitSheetSerialBefore, log);
 				Homm3MapLoadFlightRecorder.MarkGameObject("native-shell.create.skinned-idle-return", shell, census: true);
 				return shell;
 			}
 
 			// RIFE / map-array units must use map.prefab MapIdle (or Texture2DArray), not town-style disk tick.
 			// Town-style wins first otherwise and never reaches playback-timing / array attach.
-			if (!ShouldUseMapPrefabMapIdleAnimator(entry, log)
-			    && TryApplyTownStyleUnitBillboard(shell, homm3Template, entry, log))
+			bool townStyleApplied;
+			using (Homm3LoadTiming.Sum("map.unitShell.create.townStyle"))
+				townStyleApplied = !ShouldUseMapPrefabMapIdleAnimator(entry, log)
+				                   && TryApplyTownStyleUnitBillboard(shell, homm3Template, entry, log);
+			if (townStyleApplied)
 			{
 				Homm3MapLoadFlightRecorder.MarkGameObject("native-shell.create.town-style-return", shell, census: true);
 				TryAttachMapSquadRuntimeAttach(shell, log);
@@ -1321,6 +1361,7 @@ internal static class Homm3ImportVisuals
 				return shell;
 			}
 
+			using var mapPrefabTiming = Homm3LoadTiming.Sum("map.unitShell.create.mapPrefab");
 			RemoveTownStyleBillboardFromShell(shell);
 			visual = UnityEngine.Object.Instantiate(homm3Template);
 			if (!visual)
@@ -1386,6 +1427,200 @@ internal static class Homm3ImportVisuals
 			_mapLoadProfileShellTicks += Stopwatch.GetTimestamp() - profileStart;
 			MaybeLogMapLoadProfile(log, force: false);
 		}
+	}
+
+	/// <summary>
+	/// Snapshot key for one (cached map template, vanilla donor) pair, or null when this call cannot use a snapshot:
+	/// the kill-switch flag is present, or the template is not the cached bundle template (the narrow spawner
+	/// passes a fresh instance each time).
+	/// </summary>
+	static string BuildOwnedSkinnedMapShellSnapshotKey(GameObject vanilla, GameObject homm3Template, Entry entry)
+	{
+		if (entry == null || !vanilla || !homm3Template)
+			return null;
+		if (Homm3DiagnosticFlags.IsEnabled(DisableOwnedSkinnedMapShellSnapshotFlag))
+			return null;
+		var templateId = homm3Template.GetInstanceID();
+		if (!MapTemplateEntriesByInstanceId.ContainsKey(templateId))
+			return null;
+		return templateId + "|" + vanilla.GetInstanceID();
+	}
+
+	static Transform EnsureOwnedSkinnedMapShellSnapshotHolder()
+	{
+		if (!_ownedSkinnedMapShellSnapshotHolder)
+		{
+			// Scene-bound on purpose (no DontDestroyOnLoad): the snapshots die with the scene they were built in
+			// and every unit is rebuilt once on the next map load. Inactive, so a snapshot never wakes, renders
+			// or animates and stays exactly as built.
+			OwnedSkinnedMapShellSnapshots.Clear();
+			_ownedSkinnedMapShellSnapshotHolder = new GameObject("__homm3_owned_skinned_map_shell_snapshots");
+			_ownedSkinnedMapShellSnapshotHolder.SetActive(false);
+		}
+		return _ownedSkinnedMapShellSnapshotHolder.transform;
+	}
+
+	/// <summary>
+	/// Freeze a just-built owned-skinned shell: an unawakened copy under an inactive holder, taken in the same call
+	/// that returns the shell (the state the game's own Instantiate of the returned template sees). The copy gets
+	/// its own Hex/Lit sheets so nothing a live squad writes to its materials can reach later clones.
+	/// Not snapshotted: units with idle mesh-FX rows (their effect instances are created and driven per host, and
+	/// may arrive frames after the build).
+	/// </summary>
+	static void TrySnapshotOwnedSkinnedMapShell(
+		string key,
+		GameObject shell,
+		GameObject visual,
+		Entry entry,
+		int hexLitSheetSerialBefore,
+		ManualLogSource log)
+	{
+		if (key == null || !shell || !visual || entry == null)
+			return;
+		using var timing = Homm3LoadTiming.Sum("map.unitShell.snapshot");
+		GameObject pristine = null;
+		try
+		{
+			var holder = EnsureOwnedSkinnedMapShellSnapshotHolder();
+			if (OwnedSkinnedMapShellSnapshots.ContainsKey(key))
+				return;
+			if (visual.transform.parent != shell.transform
+			    || Homm3MeshFx.HasAdventureMapSkinnedPresentationRows(entry, log))
+			{
+				OwnedSkinnedMapShellSnapshots[key] = null;
+				return;
+			}
+
+			pristine = UnityEngine.Object.Instantiate(shell, holder, false);
+			if (!pristine)
+				return;
+			// Not "*_native_shell": name-based shell checks must never pick the frozen copy up.
+			pristine.name = shell.name + "__snapshot";
+			var pristineVisual = pristine.transform.Find(MapPrefabVisualChildName);
+			if (!pristineVisual)
+				throw new InvalidOperationException("snapshot copy has no '" + MapPrefabVisualChildName + "' child");
+			var sheets = PrivatizeOwnedSkinnedRuntimeMaterials(pristineVisual.gameObject);
+			var unlimitedMarker = visual.transform.Find(SkinWeightsUnlimitedMarkerName);
+			OwnedSkinnedMapShellSnapshots[key] = new OwnedSkinnedMapShellSnapshot
+			{
+				Pristine = pristine,
+				Entry = entry,
+				ShellName = shell.name,
+				SkinWeightsUnlimited = unlimitedMarker != null && unlimitedMarker,
+				RuntimeAttachEnabled = Homm3MapSquadRuntimeAttachEnabled,
+				HexLitSheet = _nativeHexLitSheetAssignSerial != hexLitSheetSerialBefore ? _cachedNativeHexLitSheet : null,
+			};
+			if (_ownedSkinnedMapShellSnapshotLogs < 12)
+			{
+				_ownedSkinnedMapShellSnapshotLogs++;
+				log?.LogInfo(
+					"Homm3Import: owned skinned map shell snapshot kept for '"
+					+ (shell.name ?? "?")
+					+ "' (own Hex/Lit sheets="
+					+ sheets
+					+ "); later map objects of this unit clone it. Disable with "
+					+ DisableOwnedSkinnedMapShellSnapshotFlag
+					+ ".");
+			}
+		}
+		catch (Exception ex)
+		{
+			OwnedSkinnedMapShellSnapshots[key] = null;
+			if (pristine)
+				UnityEngine.Object.Destroy(pristine);
+			log?.LogWarning("Homm3Import: owned skinned map shell snapshot failed; this unit keeps the full build: " + ex.Message);
+		}
+	}
+
+	/// <summary>
+	/// Clone the frozen shell for a later map object of the same unit. The clone is a new, separate template with
+	/// its own Hex/Lit sheets, exactly as a full build returns; the build's two global side effects (skin-weight
+	/// quality, shared native Hex/Lit sheet) are repeated.
+	/// </summary>
+	static bool TryCloneOwnedSkinnedMapShellSnapshot(string key, Entry entry, ManualLogSource log, out GameObject shell)
+	{
+		shell = null;
+		if (key == null
+		    || !OwnedSkinnedMapShellSnapshots.TryGetValue(key, out var snapshot)
+		    || snapshot == null)
+			return false;
+		if (!snapshot.Pristine
+		    || !ReferenceEquals(snapshot.Entry, entry)
+		    || snapshot.RuntimeAttachEnabled != Homm3MapSquadRuntimeAttachEnabled)
+		{
+			// Scene change destroyed the copy, or the inputs changed: rebuild and snapshot again.
+			if (snapshot.Pristine)
+				UnityEngine.Object.Destroy(snapshot.Pristine);
+			OwnedSkinnedMapShellSnapshots.Remove(key);
+			return false;
+		}
+
+		using var timing = Homm3LoadTiming.Sum("map.unitShell.create.clone");
+		GameObject clone = null;
+		try
+		{
+			clone = UnityEngine.Object.Instantiate(snapshot.Pristine);
+			if (!clone)
+				return false;
+			clone.name = snapshot.ShellName;
+			var visual = clone.transform.Find(MapPrefabVisualChildName);
+			if (!visual)
+				throw new InvalidOperationException("snapshot clone has no '" + MapPrefabVisualChildName + "' child");
+			PrivatizeOwnedSkinnedRuntimeMaterials(visual.gameObject);
+			if (snapshot.SkinWeightsUnlimited && QualitySettings.skinWeights != SkinWeights.Unlimited)
+				QualitySettings.skinWeights = SkinWeights.Unlimited;
+			if (snapshot.HexLitSheet)
+			{
+				_cachedNativeHexLitSheet = snapshot.HexLitSheet;
+				_nativeHexLitSheetAssignSerial++;
+			}
+			shell = clone;
+			Homm3MapLoadFlightRecorder.MarkGameObject("native-shell.create.snapshot-clone-return", shell, census: true);
+			return true;
+		}
+		catch (Exception ex)
+		{
+			OwnedSkinnedMapShellSnapshots[key] = null;
+			if (clone)
+				UnityEngine.Object.Destroy(clone);
+			shell = null;
+			log?.LogWarning("Homm3Import: owned skinned map shell snapshot clone failed; falling back to the full build: " + ex.Message);
+			return false;
+		}
+	}
+
+	/// <summary>
+	/// Give every rebound Hex/Lit sheet (<c>*_runtime_native</c>) under <paramref name="visual"/> its own copy, one
+	/// per renderer slot as the rebind creates them. Returns the number of copies.
+	/// </summary>
+	static int PrivatizeOwnedSkinnedRuntimeMaterials(GameObject visual)
+	{
+		if (!visual)
+			return 0;
+		var copies = 0;
+		var renderers = visual.GetComponentsInChildren<Renderer>(true);
+		for (var i = 0; renderers != null && i < renderers.Length; i++)
+		{
+			var renderer = renderers[i];
+			if (!renderer)
+				continue;
+			var materials = renderer.sharedMaterials;
+			if (materials == null || materials.Length == 0)
+				continue;
+			var changed = false;
+			for (var j = 0; j < materials.Length; j++)
+			{
+				var material = materials[j];
+				if (!material || !(material.name ?? string.Empty).EndsWith("_runtime_native", StringComparison.Ordinal))
+					continue;
+				materials[j] = new Material(material) { name = material.name };
+				changed = true;
+				copies++;
+			}
+			if (changed)
+				renderer.sharedMaterials = materials;
+		}
+		return copies;
 	}
 
 	static bool IsMapArrayPilotEntry(Entry entry, ManualLogSource log)
@@ -5370,6 +5605,7 @@ internal static class Homm3ImportVisuals
 		var fitApplied = false;
 		if (fitScale)
 		{
+			using var fitTiming = Homm3LoadTiming.Sum(cacheHit ? "map.unitShell.skinned.fitCached" : "map.unitShell.skinned.fitMeasured");
 			if (cacheHit)
 			{
 				visual.transform.localScale = Vector3.one;
@@ -5381,11 +5617,15 @@ internal static class Homm3ImportVisuals
 			else
 				fitApplied = ApplySkinnedAdventureMapVisualScale(scaleDonor ? scaleDonor : shell, visual, entry, log);
 		}
-		EnsureSkinnedAdventureMapIdle(visual, entry, log, hexLitDonor, preserveAdventureHexFog: true);
+		using (Homm3LoadTiming.Sum("map.unitShell.skinned.materials"))
+			EnsureSkinnedAdventureMapIdle(visual, entry, log, hexLitDonor, preserveAdventureHexFog: true);
 		var nativeFogShader = VerifyOwnedSkinnedMapUsesNativeHexLit(visual, log);
-		var feetAligned = cacheHit
-			? ApplyOwnedSkinnedFeetFloorOffset(visual, cachedFit.FeetOffsetFromFloor)
-			: AlignOwnedSkinnedFeetToDonor(null, visual);
+		bool feetAligned;
+		using (Homm3LoadTiming.Sum("map.unitShell.skinned.feet"))
+			feetAligned = cacheHit
+				? ApplyOwnedSkinnedFeetFloorOffset(visual, cachedFit.FeetOffsetFromFloor)
+				: AlignOwnedSkinnedFeetToDonor(null, visual);
+		using var tailTiming = Homm3LoadTiming.Sum("map.unitShell.skinned.finish");
 		if (cacheable && !cacheHit && fitApplied && feetAligned
 		    && TryGetOwnedSkinnedHexFloorY(visual, out var floorY))
 		{
@@ -5688,24 +5928,40 @@ internal static class Homm3ImportVisuals
 			_renderableBoundsBakeScratch.name = "__homm3_renderable_bounds_bake__";
 			_renderableBoundsBakeScratch.hideFlags = HideFlags.HideAndDontSave;
 		}
+		using var timing = Homm3LoadTiming.Sum("unitSkinned.bakeBounds");
 		skin.BakeMesh(_renderableBoundsBakeScratch, true);
 		var verts = _renderableBoundsBakeScratch.vertices;
-		if (verts == null || verts.Length == 0)
+		var count = verts != null ? verts.Length : 0;
+		if (count == 0)
 			return false;
+		// Same point transform and min/max as Matrix4x4.MultiplyPoint3x4 + Bounds.Encapsulate, done on the plain
+		// struct fields: through interop those two are a native call per vertex, which dominated the first fit of
+		// every unit. The result differs from the per-vertex Encapsulate chain by float rounding only.
 		var m = skin.transform.localToWorldMatrix;
-		var any = false;
-		for (var i = 0; i < verts.Length; i++)
+		float m00 = m.m00, m01 = m.m01, m02 = m.m02, m03 = m.m03;
+		float m10 = m.m10, m11 = m.m11, m12 = m.m12, m13 = m.m13;
+		float m20 = m.m20, m21 = m.m21, m22 = m.m22, m23 = m.m23;
+		float minX = float.PositiveInfinity, minY = float.PositiveInfinity, minZ = float.PositiveInfinity;
+		float maxX = float.NegativeInfinity, maxY = float.NegativeInfinity, maxZ = float.NegativeInfinity;
+		for (var i = 0; i < count; i++)
 		{
-			var p = m.MultiplyPoint3x4(verts[i]);
-			if (!any)
-			{
-				world = new Bounds(p, Vector3.zero);
-				any = true;
-			}
-			else
-				world.Encapsulate(p);
+			var v = verts[i];
+			var x = m00 * v.x + m01 * v.y + m02 * v.z + m03;
+			var y = m10 * v.x + m11 * v.y + m12 * v.z + m13;
+			var z = m20 * v.x + m21 * v.y + m22 * v.z + m23;
+			if (x < minX) minX = x;
+			if (x > maxX) maxX = x;
+			if (y < minY) minY = y;
+			if (y > maxY) maxY = y;
+			if (z < minZ) minZ = z;
+			if (z > maxZ) maxZ = z;
 		}
-		return any;
+		if (!(minX <= maxX) || !(minY <= maxY) || !(minZ <= maxZ))
+			return false;
+		world = new Bounds(
+			new Vector3((minX + maxX) * 0.5f, (minY + maxY) * 0.5f, (minZ + maxZ) * 0.5f),
+			new Vector3(maxX - minX, maxY - minY, maxZ - minZ));
+		return true;
 	}
 
 	internal static bool TryGetRenderableWorldBounds(GameObject go, out Bounds merged)
@@ -6198,6 +6454,7 @@ internal static class Homm3ImportVisuals
 		}
 		EnsureSkinnedBattleRuntimeCompatibility(visual, hexLitDonor, entry, log, preserveAdventureHexFog, attachUnitLookVfx: false, uiPreviewLane: uiPreviewLane);
 		// Idle vanilla-style particles play wherever the idle plays (user direction 2026-09-26).
+		using var meshFxTiming = Homm3LoadTiming.Sum("unitSkinned.meshFxAttach");
 		Homm3MeshFx.TryAttachForSkinnedPresentation(
 			visual, entry, uiPreviewLane ? "ui-preview" : "adventure-map", log);
 	}
@@ -6286,8 +6543,11 @@ internal static class Homm3ImportVisuals
 		// sheet that battle / adventure-map clones start from (2026-09-26: battle units invisible
 		// after a detail preview had cached its sheet).
 		if (!uiPreviewLane)
+		{
 			_cachedNativeHexLitSheet = donorMaterial;
-		var lane = uiPreviewLane ? "ui-preview" : preserveAdventureHexFog ? "adventure-map" : "battle";
+			_nativeHexLitSheetAssignSerial++;
+		}
+		var lane =uiPreviewLane ? "ui-preview" : preserveAdventureHexFog ? "adventure-map" : "battle";
 		LogOwnedSkinnedHexLitDonorState(donorMaterial, lane, log);
 
 		var changedMaterials = 0;
@@ -6909,6 +7169,8 @@ internal static class Homm3ImportVisuals
 			return null;
 		try
 		{
+			// Per-byte interop copy plus a PNG decode: timed so a load that leans on sidecars shows up.
+			using var sidecarTiming = Homm3LoadTiming.Sum("unitSkinned.sidecarTexture");
 			var bytes = File.ReadAllBytes(path);
 			if (bytes == null || bytes.Length == 0)
 				return null;
@@ -7688,6 +7950,7 @@ internal static class Homm3ImportVisuals
 
 	internal static bool TryGetMapTemplate(Entry e, ManualLogSource log, out GameObject template)
 	{
+		using var loadTimingTotal = Homm3LoadTiming.Sum("map.unitTemplate");
 		template = null;
 		var b = GetBundle(e.BundleName, log);
 		if (b == null)
@@ -7702,6 +7965,8 @@ internal static class Homm3ImportVisuals
 
 		try
 		{
+			// First use of a unit on this session: the synchronous bundle load of its map prefab and dependencies.
+			using var loadTiming = Homm3LoadTiming.Sum("map.unitTemplate.load");
 			var go = string.IsNullOrEmpty(e.MeshBundleName)
 				? LoadBundleGameObject(b, e.MapPrefabAssetPath, log, "map")
 				: TryBuildSharedMeshTemplate(e, b, e.MapPrefabAssetPath,
@@ -7832,6 +8097,7 @@ internal static class Homm3ImportVisuals
 
 	static AssetBundle GetBundle(string bundleName, ManualLogSource log)
 	{
+		using var loadTimingTotal = Homm3LoadTiming.Sum("unitBundle.get");
 		if (Bundles.TryGetValue(bundleName, out var existing) && existing)
 			return existing;
 		var path = Path.Combine(Paths.BepInExRootPath, "plugins", "OfflineUnlockMod", _bundleSubdir, bundleName);
@@ -8109,8 +8375,21 @@ public sealed class Homm3MapNativeShellTemplateGuard : MonoBehaviour
 		UpdateTemplateState();
 	}
 
+	// An unparented template only needs its renderers kept off. Parent changes arrive through
+	// OnTransformParentChanged, so after the first frames re-check a few times a second, not every frame.
+	private int _lateUpdates;
+
 	void LateUpdate()
 	{
+		if (_lateUpdates >= 30 && transform && !transform.parent)
+		{
+			if (((Time.frameCount + GetInstanceID()) & 15) != 0)
+				return;
+		}
+		else
+		{
+			_lateUpdates++;
+		}
 		UpdateTemplateState();
 	}
 

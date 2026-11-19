@@ -18,8 +18,10 @@ namespace OfflineUnlockMod;
 /// Design (owner, 2026-11-14):
 /// - At the start of each battle, each melee stack of a Fortress hero's army is paired 1-to-1 with a random enemy
 ///   stack (its prey). Surplus stacks on either side stay unpaired. Endurance Hunting lets ranged stacks hunt too.
-/// - Predators deal +10/20/30% damage to their prey (Basic/Advanced/Expert). The percent is contributed to the single
-///   committed-damage owner (<see cref="Homm3CounterattackDoctrineMutationRuntime"/> Unit damage prefix), so this
+/// - Predators deal +33/66/100% damage to their prey (Basic/Advanced/Expert) and, while that prey is alive, 17/33/50%
+///   less damage to every other target (half the bonus; 16.5 rounds away from zero to 17 because the owner sums whole
+///   percents). Counterattacks count like attacks. The penalty ends when the prey dies; pairs are never re-made. The
+///   percent is contributed to the single committed-damage owner (<see cref="Homm3CounterattackDoctrineMutationRuntime"/> Unit damage prefix), so this
 ///   class never patches the damage method itself.
 /// - Intimidation: prey hit by its predator gets native Ice Bolt slow (magic_ice_bolt_effect_0, -3 Initiative) for 2 rounds, applied after
 ///   the action ends (never inside the damage call).
@@ -55,7 +57,12 @@ internal static class Homm3FortressPredatorInstinctRuntime
 	/// <summary>Predator/prey marker buffs last the battle (duration 0 expired after round 1, playtest 2); 99 as Tower Artificing grafts.</summary>
 	internal const int MarkerDuration = 99;
 	/// <summary>Index = skill rank. Must match BONUS_PERCENT_BY_RANK in homm3_fortress_predator_instinct_core_overlay.py.</summary>
-	internal static readonly int[] BonusPercentByRank = { 0, 10, 20, 30 };
+	internal static readonly int[] BonusPercentByRank = { 0, 33, 66, 100 };
+	/// <summary>
+	/// Index = skill rank. Damage taken off a predator's hits on anything but its prey while the prey is alive: half the
+	/// bonus, 16.5 rounded away from zero. Must match PENALTY_PERCENT_BY_RANK in the Core overlay.
+	/// </summary>
+	internal static readonly int[] PenaltyPercentByRank = { 0, 17, 33, 50 };
 
 	private static class Pins
 	{
@@ -233,8 +240,10 @@ internal static class Homm3FortressPredatorInstinctRuntime
 	// ------------------------------------------------------------------ public queries
 
 	/// <summary>
-	/// Damage contribution for the committed-damage owner: +rank% when <paramref name="caster"/> is the predator of
-	/// <paramref name="receiver"/>. Also queues Intimidation's slow for the end of the action. Never adds buffs here.
+	/// Damage contribution for the committed-damage owner: +bonus% when <paramref name="caster"/> is the predator of
+	/// <paramref name="receiver"/>; -penalty% when <paramref name="caster"/> is a predator hitting anything else while its
+	/// prey is alive. Counter hits pass the counterattacker as caster, so they count the same. Also queues
+	/// Intimidation's slow for the end of the action. Never adds buffs here.
 	/// </summary>
 	internal static int DamagePercent(object caster, object receiver, out string detail)
 	{
@@ -245,20 +254,34 @@ internal static class Homm3FortressPredatorInstinctRuntime
 		var receiverKey = Homm3DirectStateIdentity.ResolveKeyOrZero(receiver);
 		if (casterKey == 0 || receiverKey == 0)
 			return 0;
+		Pair offPrey = null;
 		lock (Gate)
 		{
 			foreach (var battle in Battles)
 			{
-				if (!battle.ByPredator.TryGetValue(casterKey, out var pair) || pair.PreyKey != receiverKey)
+				if (!battle.ByPredator.TryGetValue(casterKey, out var pair))
 					continue;
-				var percent = BonusPercentByRank[Math.Max(0, Math.Min(3, pair.Side.Rank))];
+				var rank = Math.Max(0, Math.Min(3, pair.Side.Rank));
+				if (pair.PreyKey != receiverKey)
+				{
+					offPrey = pair;
+					break;
+				}
+				var percent = BonusPercentByRank[rank];
 				if (pair.Side.Intimidation && !PendingIntimidation.Contains(pair))
 					PendingIntimidation.Add(pair);
-				detail = "Fortress Predator Instinct +" + percent + "% (" + pair.Side.HeroDescription + " rank " + pair.Side.Rank + ")";
+				detail = "Fortress Predator Instinct +" + percent + "% vs prey (" + pair.Side.HeroDescription + " rank " + pair.Side.Rank + ")";
 				return percent;
 			}
 		}
-		return 0;
+		// Off-prey penalty only while the original prey lives (IsAlive reads native state; keep it outside the lock).
+		if (offPrey == null || !IsAlive(offPrey.Prey))
+			return 0;
+		var penalty = PenaltyPercentByRank[Math.Max(0, Math.Min(3, offPrey.Side.Rank))];
+		if (penalty == 0)
+			return 0;
+		detail = "Fortress Predator Instinct -" + penalty + "% off-prey while prey lives (" + offPrey.Side.HeroDescription + " rank " + offPrey.Side.Rank + ")";
+		return -penalty;
 	}
 
 	/// <summary>The pair whose predator is <paramref name="attacker"/> and prey is <paramref name="defender"/>, or null.</summary>

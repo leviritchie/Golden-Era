@@ -8,6 +8,7 @@ internal static class Homm3PcmWav
 {
 	internal static AudioClip Load(string path, string clipName)
 	{
+		using var loadTimingTotal = Homm3LoadTiming.Sum("sfx.wavLoad");
 		var bytes = File.ReadAllBytes(path);
 		if (bytes.Length < 44 || !HasTag(bytes, 0, "RIFF") || !HasTag(bytes, 8, "WAVE"))
 			throw new InvalidDataException("not a RIFF/WAVE file");

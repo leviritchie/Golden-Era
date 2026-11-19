@@ -578,26 +578,26 @@ internal static class Homm3DungeonCaptivesRuntime
 		}
 	}
 
-	/// <summary>Player-facing result of the last applied choice (the window shows it as a fading banner).</summary>
-	// Set by the payout itself, which runs when the native battle apply resumes (after the window closed), so the
-	// result banner is shown from here rather than from the window's Finish.
-	private static string _lastOutcome;
-	internal static string LastOutcome
+	/// <summary>Player-facing result of an applied choice, shown as a fading banner only to the local human who chose it.</summary>
+	// Called by the payout itself, which runs when the native battle apply resumes (after the window closed), so the
+	// result banner is shown from here rather than from the window's Finish. AI picks pay the same way but stay silent:
+	// their outcome goes to the log only.
+	private static void Report(Offer offer, string outcome)
 	{
-		get => _lastOutcome;
-		set
+		if (string.IsNullOrEmpty(outcome))
+			return;
+		if (offer == null || !offer.IsLocalHuman)
 		{
-			_lastOutcome = value;
-			if (string.IsNullOrEmpty(value))
-				return;
-			try
-			{
-				Homm3DungeonWarCaptivesWindow.ShowBanner(value);
-			}
-			catch (Exception ex)
-			{
-				LogSkip("result banner failed: " + ex.GetBaseException().Message);
-			}
+			LogEvent("battle " + offer?.BattleKey + ": AI outcome (no banner): " + outcome);
+			return;
+		}
+		try
+		{
+			Homm3DungeonWarCaptivesWindow.ShowBanner(outcome);
+		}
+		catch (Exception ex)
+		{
+			LogSkip("result banner failed: " + ex.GetBaseException().Message);
 		}
 	}
 
@@ -617,9 +617,9 @@ internal static class Homm3DungeonCaptivesRuntime
 		LogEvent("Execute: " + DescribeHero(offer.DataHero) + " captives=" + offer.Captives + " xp=+" + offer.ExecuteXp + " (exp " + expBefore + "->" + offer.DataHero.currentExp
 			+ ", level " + levelBefore + "->" + offer.DataHero.currentLevel + ") mana=+" + offer.ExecuteMana + ".");
 		var levelAfter = offer.DataHero.currentLevel;
-		LastOutcome = "Executed " + offer.Captives + " captives: +" + offer.ExecuteXp.ToString("N0") + " Experience"
+		Report(offer, "Executed " + offer.Captives + " captives: +" + offer.ExecuteXp.ToString("N0") + " Experience"
 			+ (levelAfter > levelBefore ? " (level " + levelBefore + " → " + levelAfter + ")" : "")
-			+ (offer.ExecuteMana > 0 ? ", +" + offer.ExecuteMana + " Mana" : "") + ".";
+			+ (offer.ExecuteMana > 0 ? ", +" + offer.ExecuteMana + " Mana" : "") + ".");
 	}
 
 	private static void PayRansom(Offer offer)
@@ -631,7 +631,7 @@ internal static class Homm3DungeonCaptivesRuntime
 		}
 		LogEvent("Ransom: " + DescribeHero(offer.DataHero) + " captives=" + offer.Captives + " gold=+" + offer.RansomGold + " (before " + before + ")"
 			+ (offer.SlaveMarkets ? " slaveMarkets x1.25" : "") + ".");
-		LastOutcome = "Ransomed " + offer.Captives + " captives: +" + offer.RansomGold.ToString("N0") + " Gold.";
+		Report(offer, "Ransomed " + offer.Captives + " captives: +" + offer.RansomGold.ToString("N0") + " Gold.");
 	}
 
 	private static void PayEnslave(Offer offer)
@@ -650,7 +650,7 @@ internal static class Homm3DungeonCaptivesRuntime
 		}
 		LogEvent("Enslave: " + DescribeHero(offer.DataHero) + " captives=" + offer.Captives + " enslaved " + before + "->" + after
 			+ " daily gold now " + ComputeEnslaveDailyGold(after, offer.Rank, offer.SlaveMarkets) + ".");
-		LastOutcome = "Enslaved " + offer.Captives + " captives (" + after + " in total): +" + ComputeEnslaveDailyGold(after, offer.Rank, offer.SlaveMarkets).ToString("N0") + " Gold per day.";
+		Report(offer, "Enslaved " + offer.Captives + " captives (" + after + " in total): +" + ComputeEnslaveDailyGold(after, offer.Rank, offer.SlaveMarkets).ToString("N0") + " Gold per day.");
 	}
 
 	// ---------------------------------------------------------------- recruit panel board
@@ -984,11 +984,11 @@ internal static class Homm3DungeonCaptivesRuntime
 				return false;
 			case Homm3PartyArmyWriter.WriteResult.WriteFailed:
 				_log?.LogError(LogPrefix + "Recruit: army write failed after [" + string.Join(", ", steps) + "]: " + writeFail + "; nothing charged.");
-				LastOutcome = "Recruit failed while arranging the army (see the log).";
+				Report(offer, "Recruit failed while arranging the army (see the log).");
 				return true;
 			case Homm3PartyArmyWriter.WriteResult.ReadBackMismatch:
 				_log?.LogError(LogPrefix + "Recruit: army reads back differently [" + writeFail + "] after [" + string.Join(", ", steps) + "]; nothing charged.");
-				LastOutcome = "Recruit: the army did not update as arranged (see the log).";
+				Report(offer, "Recruit: the army did not update as arranged (see the log).");
 				return true;
 		}
 		foreach (var pair in cost)
@@ -1020,7 +1020,7 @@ internal static class Homm3DungeonCaptivesRuntime
 			outcome.Add("Recruited " + string.Join(", ", parts) + " for " + FormatCost(cost));
 		if (released.Count > 0)
 			outcome.Add((parts.Count > 0 ? "released " : "Released ") + string.Join(", ", released));
-		LastOutcome = string.Join("; ", outcome) + ".";
+		Report(offer, string.Join("; ", outcome) + ".");
 		return true;
 	}
 
@@ -1038,7 +1038,7 @@ internal static class Homm3DungeonCaptivesRuntime
 		}
 		done?.Invoke();
 		LogEvent("Eat: " + DescribeHero(offer.DataHero) + " captives=" + offer.Captives + " restored [" + string.Join(",", parts) + "].");
-		LastOutcome = "Ate " + offer.Captives + " captives: restored " + DescribeLines(offer.Eat) + ".";
+		Report(offer, "Ate " + offer.Captives + " captives: restored " + DescribeLines(offer.Eat) + ".");
 	}
 
 	private static void ApplyRecruit(Offer offer, UnitAdder add, Action done)
@@ -1076,7 +1076,7 @@ internal static class Homm3DungeonCaptivesRuntime
 		}
 		done?.Invoke();
 		LogEvent("Recruit: " + DescribeHero(offer.DataHero) + " captives=" + offer.Captives + " recruited [" + string.Join(",", parts) + "] for " + FormatCost(offer.RecruitCost) + ".");
-		LastOutcome = "Recruited " + DescribeLines(offer.Recruit) + " for " + FormatCost(offer.RecruitCost) + ".";
+		Report(offer, "Recruited " + DescribeLines(offer.Recruit) + " for " + FormatCost(offer.RecruitCost) + ".");
 	}
 
 	private static string DescribeLines(List<UnitLine> lines)

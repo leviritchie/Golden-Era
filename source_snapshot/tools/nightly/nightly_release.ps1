@@ -11,6 +11,12 @@
                   set, quick tier (compile + live-interop refs + game-symbols hint gate), never deploys.
     stage         tools/nightly/stage_release_payload.ps1: full payload from the Golden Era install
                   plus the -Ref plugin DLL, with the leftover filters, JSON sanitizer and leak gate.
+    codex         tools/unit_codex rebuilds the public creature/building codex site from the same Golden Era
+                  Core.zip and the staged (scrubbed) plugin folder, then leak-scans it. It never fails the
+                  run; the result is recorded as `codex`. After a successful publish the site is pushed to
+                  the public gh-pages branch, only when tools/unit_codex/pages.json (read at -Ref) has
+                  publish=true: follow=release pushes on versioned -Latest releases, follow=nightly on
+                  every publish. Recorded as `codexPages`. Dry runs keep the site next to the assets.
     zip           payload zip (Fastest) written straight into the public clone's dist folder on N:,
                   sha256, structure check; the stage is deleted as soon as the zip checks out. The zip
                   is deterministic (ordinal path order, one fixed entry timestamp), so an unchanged
@@ -549,6 +555,42 @@ try {
     $summary.sizes.stageBytes = $stage.stageBytes
     $summary.sizes.stageFiles = $stage.stageFiles
     Remove-Tree $toolsSrc
+
+    # ---- codex ------------------------------------------------------------------------------------------
+    # Runs while the staged plugin folder still exists (zip deletes the stage). Never fails the release.
+    $codexSrc = Join-Path $WorkDir 'codex_src'
+    $codexSite = Join-Path $WorkDir 'codex'
+    Log '== codex'
+    $codexSw = [Diagnostics.Stopwatch]::StartNew()
+    $summary.steps['codex'] = [ordered]@{ status = 'running'; seconds = $null }
+    try {
+        [void](New-Item -ItemType Directory -Force -Path $codexSrc)
+        $tarball = Join-Path $WorkDir 'codex.tar'
+        & git -C $Repo archive --format=tar -o $tarball $sha -- tools/unit_codex 'custom_factions/homm3_*.json' custom_factions/conflux_fusion/fusion_units.json
+        if ($LASTEXITCODE -ne 0) { throw 'git archive of tools/unit_codex failed' }
+        & (Join-Path $env:SystemRoot 'System32\tar.exe') -xf $tarball -C $codexSrc
+        if ($LASTEXITCODE -ne 0) { throw 'tar extract of tools/unit_codex failed' }
+        Remove-Item -LiteralPath $tarball -Force
+        $r = Invoke-Child -File (Get-Command python).Source -LogBase (Join-Path $logDir 'codex') -TimeoutMinutes 15 -Arguments @(
+            (Join-Path $codexSrc 'tools\unit_codex\export_codex.py'), '--core', (Join-Path $GameRoot 'HeroesOldenEra_Data\StreamingAssets\Core.zip'),
+            '--plugin-dir', (Join-Path $stageRoot 'payload\BepInEx\plugins\OfflineUnlockMod'), '--label', $label, '--out', $codexSite)
+        if ($r.TimedOut) { throw 'exporter timed out' }
+        if ($r.ExitCode -ne 0) { throw "exporter exit $($r.ExitCode): $(Tail $r.Err 6)" }
+        $rep = ((Get-Content -LiteralPath $r.Out) | Where-Object { $_ -notlike 'CODEX:*' }) -join "`n" | ConvertFrom-Json
+        $termArgs = @(); foreach ($t in @($env:USERNAME, $env:COMPUTERNAME, (& git -C $Repo config user.email))) { if ($t) { $termArgs += @('--term', $t) } }
+        & python (Join-Path $here 'payload_leaks.py') scan --root $codexSite --report (Join-Path $logDir 'codex.leaks.json') @termArgs | Out-Null
+        if ($LASTEXITCODE -ne 0) { Remove-Tree $codexSite; throw 'the codex site failed the leak scan (see codex.leaks.json); site deleted' }
+        $summary.codex = [ordered]@{ status = 'pass'; units = $rep.units; buildingNodes = $rep.buildingNodes; images = $rep.images
+            portraitsMissing = @($rep.portraitsMissing).Count; unresolvedArgs = @($rep.unresolvedArgs).Count; siteBytes = Dir-Bytes $codexSite }
+        $summary.steps['codex'].status = 'pass'
+    } catch {
+        $summary.codex = [ordered]@{ status = 'fail'; error = $_.Exception.Message }
+        $summary.steps['codex'].status = 'fail'
+        Log "   codex failed (the release is not affected): $($_.Exception.Message)"
+    } finally {
+        $summary.steps['codex'].seconds = [Math]::Round($codexSw.Elapsed.TotalSeconds, 1)
+        Log ("   codex {0} in {1:N1}s" -f $summary.steps['codex'].status, $codexSw.Elapsed.TotalSeconds)
+    }
     if (-not $KeepWork) { Remove-Tree $buildOut }
 
     # Rewrites an installer's download footer (JSON, int64 length, 'GERADL01') to list the given parts,
@@ -1027,6 +1069,28 @@ try {
         ConvertTo-Json -Depth 3 -InputObject $builds | Set-Content -LiteralPath $BuildsPath -Encoding utf8
     }
 
+    # ---- codex pages: after a successful publish, only when the owner switched it on at -Ref ------------
+    if ($Publish -and $summary.codex.status -eq 'pass') {
+        try {
+            $pages = ((& git -C $Repo show "${sha}:tools/unit_codex/pages.json") -join "`n") | ConvertFrom-Json
+            $follow = if ($pages.follow) { "$($pages.follow)" } else { 'release' }
+            if (-not $pages.publish) { $summary.codexPages = 'off: tools/unit_codex/pages.json has publish=false' }
+            elseif ($pages.repo -ne $PublicRepo) { throw "pages.json names $($pages.repo), this run publishes to $PublicRepo" }
+            elseif ($follow -notin 'release', 'nightly') { throw "pages.json follow must be release or nightly, not '$follow'" }
+            elseif ($follow -eq 'release' -and -not ($ReleaseMode -and $Latest)) { $summary.codexPages = 'skipped: pages.json follows versioned Latest releases' }
+            else {
+                $r = Invoke-Child -File (Get-Command pwsh).Source -LogBase (Join-Path $logDir 'codex_pages') -TimeoutMinutes 20 -Arguments @(
+                    '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $codexSrc 'tools\unit_codex\publish_pages.ps1'),
+                    '-Site', $codexSite, '-Label', $label, '-Repo', $PublicRepo, '-Branch', $pages.branch, '-WorkDir', (Join-Path $WorkDir 'codex_pages'), '-Push')
+                if ($r.ExitCode -ne 0) { throw "publish_pages exit $($r.ExitCode): $(Tail $r.Err 6)" }
+                $summary.codexPages = @(Get-Content -LiteralPath $r.Out | Where-Object { $_ -like 'CODEX PAGES:*' })[-1]
+            }
+        } catch {
+            $summary.codexPages = "failed: $($_.Exception.Message)"
+        }
+        Log "   codex pages: $($summary.codexPages)"
+    }
+
     $summary.status = 'pass'
     $exitCode = 0
 } catch [NightlyFailure] {
@@ -1053,8 +1117,9 @@ try {
             if (Test-Path -LiteralPath $WorkDir) {
                 if ($KeepWork) { }
                 elseif ($keepAssets) {
-                    foreach ($item in Get-ChildItem -LiteralPath $WorkDir -Force) { if ($item.Name -ne 'assets') { Remove-Tree $item.FullName } }
+                    foreach ($item in Get-ChildItem -LiteralPath $WorkDir -Force) { if ($item.Name -notin 'assets', 'codex') { Remove-Tree $item.FullName } }
                     $summary.assetsDir = Join-Path $WorkDir 'assets'
+                    if (Test-Path -LiteralPath (Join-Path $WorkDir 'codex')) { $summary.codexDir = Join-Path $WorkDir 'codex' }
                 } else { Remove-Tree $WorkDir }
             }
         } catch { $summary.failures += "cleanup: $($_.Exception.Message)" }

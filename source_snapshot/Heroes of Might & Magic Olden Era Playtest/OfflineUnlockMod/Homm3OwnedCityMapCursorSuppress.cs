@@ -166,7 +166,7 @@ internal static class Homm3OwnedCityMapCursorSuppress
 		Type type = null;
 		foreach (var hint in GameSymbols.HomecomingWaterPresentation.CursorStackTypeHints)
 		{
-			type = AccessTools.TypeByName(hint);
+			type = GameMember.TypeByName(hint);
 			if (type != null)
 				break;
 		}
@@ -234,7 +234,7 @@ internal static class Homm3OwnedCityMapCursorSuppress
 		Type type = null;
 		foreach (var hint in GameSymbols.HomecomingWaterPresentation.CursorManagerTypeHints)
 		{
-			type = AccessTools.TypeByName(hint);
+			type = GameMember.TypeByName(hint);
 			if (type != null)
 				break;
 		}

@@ -249,6 +249,7 @@ internal static class Homm3ImportUnitViewHook
 
 	private static void PostfixMapMeshLoader(UnitViewConfig __instance, MapMeshLoaderState __state, ref GameObject __result)
 	{
+		using var loadTimingTotal = Homm3LoadTiming.Sum("map.unitShell.postfix");
 		if (__instance == null)
 			return;
 		try
@@ -306,7 +307,8 @@ internal static class Homm3ImportUnitViewHook
 					}
 					return;
 				}
-				Homm3ImportVisuals.RefreshNativeShellMapPrefabForAdventure(__result, existingTemplate, entry, Plugin.LogSource);
+				using (Homm3LoadTiming.Sum("map.unitShell.refresh"))
+					Homm3ImportVisuals.RefreshNativeShellMapPrefabForAdventure(__result, existingTemplate, entry, Plugin.LogSource);
 				return;
 			}
 
@@ -323,7 +325,8 @@ internal static class Homm3ImportUnitViewHook
 			if (!vanilla && Homm3ImportVisuals.IsSyntheticHomm3ImportEntry(entry))
 				Homm3ImportVisuals.TryGetMapShellTemplate(entry, Plugin.LogSource, out vanilla);
 			Homm3MapLoadFlightRecorder.MarkGameObject("unitview.postfix.create-native-shell.start", vanilla, "unitId=" + (unitId ?? "?"), census: true);
-			__result = Homm3ImportVisuals.CreateNativeShellMapPrefabForAdventure(vanilla, template, entry, Plugin.LogSource);
+			using (Homm3LoadTiming.Sum("map.unitShell.create"))
+				__result = Homm3ImportVisuals.CreateNativeShellMapPrefabForAdventure(vanilla, template, entry, Plugin.LogSource);
 			Homm3MapLoadFlightRecorder.MarkGameObject("unitview.postfix.create-native-shell.end", __result, "unitId=" + (unitId ?? "?"), census: true);
 			Plugin.LogSource?.LogInfo("Homm3Import UnitViewHook: swapped unitId='" + (unitId ?? "?") + "' map mesh '" + unitsPath + "' route='" + (route ?? "?") + "' using native shell.");
 		}

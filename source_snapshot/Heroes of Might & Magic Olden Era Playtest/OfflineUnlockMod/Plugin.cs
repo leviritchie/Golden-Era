@@ -48,7 +48,7 @@ public sealed class Plugin : BasePlugin
 {
 	internal const string PluginGuid = "levir.heroesoe.offlineunlock";
 	internal const string PluginName = "HeroesOE Offline Unlock";
-	internal const string PluginVersion = "0.1.328";
+	internal const string PluginVersion = "0.1.320";
 #if OFFICIAL_DEOBF_BUILD
 	internal const string OfficialDeobfBuildSentinel = "OFFLINE_UNLOCK_MOD_OFFICIAL_DEOBF_BUILD_SENTINEL_V1";
 #else
@@ -238,6 +238,7 @@ public sealed class Plugin : BasePlugin
 			GameBuild.LogIdentity(Log);
 		Homm3LoadTiming.Mark("Plugin.Load.begin");
 		Homm3LoadTiming.EnsureFrameProbe(Log);
+		Homm3LoadTiming.Mark("Plugin.Load.afterFrameProbe");
 		// Earliest practical CreateMarker intercept for olden_cs_recovery edb::.cctor call-trace.
 		Homm3CreateMarkerInterceptBootstrap.TryInstallAtPluginLoad(Log);
 		LogModDllProbe();
@@ -246,10 +247,12 @@ public sealed class Plugin : BasePlugin
 		    || Homm3DiagnosticFlags.IsEnabled("homm3_runtime_performance_profiler.flag")
 		    || Homm3DiagnosticFlags.IsEnabled("homm3_map_load_flight_recorder.flag"))
 			FrameStallMonitor.Ensure(Log);
+		Homm3MemoryTelemetry.Ensure(Log); // no-op without homm3_memory_telemetry.flag
 		LocKitDebugProbe.TryRun(Log);
 		// Resolve launcher + mod JSON merge before any [HarmonyPatch] Prepare() runs
 		// (histogram patches gate on this; a cold cache / wrong order can skip all hooks).
 		var cfg = LauncherConfigReader.TryLoad();
+		Homm3LoadTiming.Mark("Plugin.Load.afterLauncherConfig");
 		OfflinePerformanceProfiler.Configure(Log);
 		using var loadProfileScope = OfflinePerformanceProfiler.Scope("Plugin.Load.afterConfig");
 		_harmony = new Harmony(PluginGuid);
@@ -267,6 +270,7 @@ public sealed class Plugin : BasePlugin
 			Log.LogInfo("Homm3NativePreviewStartupDeferral skipped: homm3NativePreviewStartupDeferral=false (default). No hooks installed.");
 		}
 		Homm3HomecomingMapEmissionFeasibilityProbe.TryRegister(_harmony, Log);
+		Homm3LoadTiming.Mark("Plugin.Load.afterFirstPatch");
 		Homm3RmgMapCaptureBridge.TryRegister(_harmony, Log);
 		// Early, before any report can be submitted; fail-closed contract in docs/mod_bug_reporting.md.
 		ModBugReportRedirect.TryRegister(_harmony, Log, cfg);
@@ -276,6 +280,7 @@ public sealed class Plugin : BasePlugin
 		// the redirect is not Redirecting.
 		NativeAnalyticsHostGuard.TryRegister(_harmony, Log, cfg);
 		NativeAnalyticsHostGuard.ShowStateWarningIfNeeded(cfg);
+		Homm3LoadTiming.Mark("Plugin.Load.afterTelemetryGuards");
 		if (cfg.Homm3ReleaseCombatMusic)
 		{
 			try
@@ -306,6 +311,9 @@ public sealed class Plugin : BasePlugin
 			throw;
 		}
 		SuppressBhAppStartTypeInitLoop = cfg.SuppressBhAppStartTypeInitLoop;
+		Homm3LoadTiming.Mark("Plugin.Load.afterFactionRegistry");
+		// Battle manifest JSON is parsed on worker threads while the rest of Load runs; the menu prewarm collects it.
+		Homm3RuntimeManifestPreloader.StartBackgroundPrefetch();
 		var assembly = Assembly.GetExecutingAssembly();
 		if (cfg.Homm3UiInspector || Homm3DiagnosticFlags.IsEnabled("homm3UiInspector.flag"))
 		{
@@ -313,6 +321,7 @@ public sealed class Plugin : BasePlugin
 		}
 		Homm3HomecomingLayerViewToggleBootstrap.Ensure(Log);
 		Homm2ShadeObjectClassStamp.Ensure(Log);
+		Homm3LoadTiming.Mark("Plugin.Load.afterEarlyBootstraps");
 #if !RELEASE_CANDIDATE_BUILD
 		if (cfg.Homm3LiveProbeWorkbench
 		    || Homm3DiagnosticFlags.IsEnabled("homm3_runtime_probes_enabled.flag")
@@ -796,25 +805,8 @@ public sealed class Plugin : BasePlugin
 			{
 				Log.LogInfo("HoMM3 Tower Arcane Battery Mana Well Aegis cleanse slice skipped by bisection gate.");
 			}
-			if (cfg.Homm3CovePlunder)
-			{
-				try
-				{
-					Homm3CovePlunderHook.RegisterRequiredReleaseSafeSlice(_harmony, Log);
-				}
-				catch (Exception ex) when (PortRequiredFeatureOff("HoMM3 Cove Treasure Hunting Plunder slice", ex))
-				{
-				}
-				catch (Exception ex)
-				{
-					Log.LogFatal("HoMM3 Cove Treasure Hunting Plunder slice failed during startup: " + ex);
-					throw;
-				}
-			}
-			else
-			{
-				Log.LogInfo("HoMM3 Cove Treasure Hunting Plunder slice skipped by bisection gate.");
-			}
+			// Cove Plunder (chest and mine bonuses) is retired with the Treasure Hunting rebuild (owner, 2026-11-17): its
+			// patches are no longer registered. Homm3CovePlunderHook.Grant stays as the shared resource-grant path.
 			GoldenEraGameplayOptions.TryRegisterRuntimeHooks(_harmony, Log);
 			if (cfg.Homm3CoveAfterShotDisruptingRay)
 			{
@@ -1083,6 +1075,10 @@ public sealed class Plugin : BasePlugin
 			Homm3ConfluxFusionRuntime.TryRegister(_harmony, Log);
 			// Factory Logistics Network (replaces Split Assembly): mine/dwelling/day/week hooks + world spell -> network viewer (same Necromancer Will handler, own mode).
 			Homm3FactoryLogisticsRuntime.TryRegister(_harmony, Log);
+			// Cove Treasure Hunting: map pieces + search reveal (no cost unless a hero has the Cove faction skill).
+			Homm3CoveTreasureRuntime.TryRegister(Log);
+			Homm3CoveTreasureDig.TryRegister(_harmony, Log);
+			Homm3CoveTreasureSubskills.TryRegister(_harmony, Log);
 			// Factory Logistics Network panels (lane UI): the upgrade panel opens on the facade's VisitRequested event.
 			Homm3FactoryLogisticsUi.TryRegister();
 			// Diagnostic attribution scope for Artificing observation; gated by policy.observation.diagnostics, not Enabled.

@@ -12,22 +12,16 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from validate_custom_faction_manifests import DEFAULT_MANIFEST_DIR, core_overlay_enabled, load_json  # noqa: E402
+from custom_law_tree_layout import DIRECT_RESOURCE_LAW_ICONS  # noqa: E402
 
 
 DEFAULT_TARGETS_PATH = ROOT / "custom_factions" / "custom_law_targets.json"
 DEFAULT_OVERRIDE_DIR = ROOT / "custom_factions" / "law_overrides"
 ENGLISH_FACTION_LAW_TEXT_MEMBER = "Lang/english/texts/factionLaws.json"
 RESOURCE_RICHES_LAW_ICONS: dict[int, str] = {3: "fraction_law_human_3_icon", 16: "fraction_law_human_16_icon", 29: "fraction_law_human_29_icon"}
-DIRECT_RESOURCE_LAW_ICONS: dict[str, str] = {
-    "gold": "fraction_law_human_1_icon",
-    "gems": "fraction_law_human_14_icon",
-    "gemstones": "fraction_law_human_14_icon",
-    "crystal": "fraction_law_nature_14_icon",
-    "crystals": "fraction_law_nature_14_icon",
-    "mercury": "fraction_law_dungeon_14_icon",
-}
 ASTROLOGY_LAW_ICON = "fraction_law_human_34_icon"
 CUSTOM_LAW_EXPLICIT_INDEX_ICONS: dict[int, str] = {
     # Shared generic law families whose visual identity is not derivable from
@@ -344,7 +338,7 @@ def donor_fraction_sid(manifest: dict[str, Any]) -> str:
     return DONOR_FRACTION_ID_BY_RUNTIME.get(donor, donor)
 
 
-def direct_resource_icon(row: dict[str, Any], index: int | None) -> str | None:
+def direct_resource_icon(row: dict[str, Any], index: int | None, override_icon: str | None = None) -> str | None:
     levels = row.get("parametersPerLevel")
     if not isinstance(levels, list):
         return None
@@ -374,7 +368,8 @@ def direct_resource_icon(row: dict[str, Any], index: int | None) -> str | None:
             if isinstance(parameters, list) and parameters and isinstance(parameters[0], str):
                 resources.add(parameters[0])
         if index is not None and {"gold", "wood", "ore"}.issubset(resources):
-            return RESOURCE_RICHES_LAW_ICONS.get(index)
+            # Resource Riches outside the reserved slots takes its override icon (generator rule).
+            return RESOURCE_RICHES_LAW_ICONS.get(index) or override_icon
     return None
 
 
@@ -412,7 +407,10 @@ def law_index(law_sid: str) -> int | None:
 
 def source_icon_contract(law_sid: str, row: dict[str, Any], source_row: dict[str, Any] | None) -> tuple[str | None, str | None]:
     index = law_index(law_sid)
-    resource_icon = direct_resource_icon(row, index)
+    override_icon = source_row.get("iconKey") if isinstance(source_row, dict) and source_row.get("enabled") is not False else None
+    resource_icon = direct_resource_icon(
+        row, index, override_icon.strip() if isinstance(override_icon, str) and override_icon.strip() else None
+    )
     if isinstance(resource_icon, str) and resource_icon:
         return resource_icon, "direct resource or astrology production mechanics"
     if isinstance(source_row, dict) and source_row.get("enabled") is not False:
@@ -423,6 +421,9 @@ def source_icon_contract(law_sid: str, row: dict[str, Any], source_row: dict[str
         portrait_icon = source_row.get("portraitIconSid")
         if isinstance(portrait_icon, str) and portrait_icon.strip():
             return portrait_icon.strip(), "portraitIconSid"
+        effect_icon = source_row.get("effectIconKey")
+        if isinstance(effect_icon, str) and effect_icon.strip():
+            return effect_icon.strip(), "effectIconKey (vanilla law with the same effect)"
     unit_icon = city_units_increment_icon(row)
     if isinstance(unit_icon, str) and unit_icon:
         return unit_icon, "cityUnitsIncrement custom unit portrait"

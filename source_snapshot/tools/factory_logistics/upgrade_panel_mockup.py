@@ -47,7 +47,7 @@ RES = {"gold": "Icon_Resource_Gold", "wood": "Icon_Resource_Wood", "ore": "Icon_
 ICONS = {"byproduct": "H_build_Treasury", "export": "H_build_Merchant", "power": "N_build_Resource_Silo", "hub": "H_build_Resource_Depot", "arcane": "U_build_Mage_Guild_Level_3",
          "food": "H_build_Tavern", "housing": "H_build_Main_Level_1", "rail": "U_build_Portal_Summoning", "merc": "H_build_Training_Range"}
 MINES = {"crystal": "mine_crystals", "gold": "mine_gold", "gems": "mine_gemstones"}
-EXTRA = ["tab_1", "tab_selected_1", "Button_Tab_Dark", "Button_Tab_Dark_Selected", "Button_Tab_Dark_MouseOver", "Frame_LawLevel (1)", "Icon_Scroll_LevelLock",
+EXTRA = ["tab_1", "tab_selected_1", "tab_highlight_1", "Frame_LawLevel (1)", "Icon_Scroll_LevelLock",
          "Overlay_Law_NotOpen", "Frame_Law_Top", "U_build_Mage_Guild_Level_3", "FullSkreanExitButton", "button_plus", "button_minus"]
 SPRITES = EXTRA + list(RES.values()) + list(ICONS.values()) + list(MINES.values())
 RANKS = {1: "Basic", 2: "Advanced", 3: "Expert"}
@@ -367,7 +367,8 @@ class Panel:
                 cv.text(P["FontMedium"], P["SizeSmall"], "Active", tx, cy - 8, Lay.ToggleWidth, 26, P["ButtonText"], "center")
             else:
                 hov = hover == ("toggle", o["key"])
-                cv.sprite("Button_Tab_Dark_MouseOver" if hov else "Button_Tab_Dark", tx, cy - 8, Lay.ToggleWidth, 26)
+                # The runtime's Ui.Tab: the native dark tab set, sliced (Button_Tab_Dark* is not loaded in a session).
+                cv.sliced("tab_highlight_1" if hov else "tab_1", tx, cy - 8, Lay.ToggleWidth, 26, 1.0)
                 cv.text(P["FontMedium"], P["SizeSmall"], "Set active", tx, cy - 8, Lay.ToggleWidth, 26, P["ButtonText"], "center")
         else:
             cv.text(P["FontMedium"], P["SizeSmall"], "Not built", Lay.NameX, cy - 8, Lay.NameWidth, 26, P["TipNote"])

@@ -137,6 +137,21 @@ internal static class Homm3ConfluxFusionGlossary
 		return e;
 	}
 
+	/// <summary>
+	/// The glossary's own entry for a fused unit (null: not a fusion), for the fusion panel's result tooltip, so the
+	/// tooltip and the glossary read one model.
+	/// </summary>
+	internal static Entry TryGetEntry(Homm3ConfluxFusionConfig config, string sid)
+	{
+		if (config == null || string.IsNullOrWhiteSpace(sid))
+			return null;
+		EnsureEntries(config);
+		return _bySid.TryGetValue(sid, out var e) ? e : null;
+	}
+
+	/// <summary>An ability card's icon as the glossary draws it (null: none resolved).</summary>
+	internal static Sprite AbilityIcon(string key) => IconSprite(key);
+
 	// ---------------------------------------------------------------- the panel's "?" button
 
 	/// <summary>
@@ -233,6 +248,24 @@ internal static class Homm3ConfluxFusionGlossary
 			Close();
 			return false;
 		}
+	}
+
+	/// <summary>Opens on <paramref name="selectSid"/>'s entry, scrolled into view (the panel's result right-click).</summary>
+	internal static bool Open(Transform canvas, Homm3ConfluxFusionConfig config, string selectSid)
+	{
+		if (_root != null)
+			return false;
+		_selected = selectSid;
+		if (!Open(canvas, config))
+			return false;
+		for (var i = 0; i < _rows.Count; i++)
+		{
+			if (!string.Equals(_rows[i].Sid, selectSid, StringComparison.Ordinal))
+				continue;
+			ScrollTo(i - 2);
+			break;
+		}
+		return true;
 	}
 
 	internal static void Close()
@@ -630,14 +663,14 @@ internal static class Homm3ConfluxFusionGlossary
 		// Column headers.
 		var lx = G.ListX;
 		var hy = G.HeaderY;
-		Img(layer, G.SpriteTab, lx, hy, G.ThumbColumn, G.HeaderHeight, new Color(0.1f, 0.13f, 0.2f, 1f));
+		Sliced(layer, G.SpriteTab, lx, hy, G.ThumbColumn - 2f, G.HeaderHeight, 1f, G.PlateFallback);
 		var x = lx + G.ThumbColumn;
 		foreach (var col in Columns)
 		{
 			var key = col.Key;
 			if (key == _sort)
 			{
-				var image = Img(layer, G.SpriteTabSelected, x, hy, col.Width - 2f, G.HeaderHeight, new Color(0.3f, 0.26f, 0.15f, 1f));
+				var image = Sliced(layer, G.SpriteTabSelected, x, hy, col.Width - 2f, G.HeaderHeight, 1f, G.PlateSelectedFallback);
 				var label = A.AddText(layer, P.FontMedium, P.SizeSmall, col.Label, x, hy, col.Width - 2f, G.HeaderHeight, P.TipTitle, TextAlignmentOptions.Center);
 				var lw = PreferredWidth(label, col.Label);
 				var lx0 = x + (col.Width - 2f - lw - G.ArrowGap - G.ArrowWidth) / 2f;
@@ -712,7 +745,7 @@ internal static class Homm3ConfluxFusionGlossary
 						text = e.HasStats ? StatText(e, col.Key) : "–";
 						break;
 				}
-				A.AddText(layer, P.FontMedium, P.SizeSmall, text, x + 8f, y, col.Width - 14f, rowH, color, col.Align, col.Wrap);
+				CellText(layer, text, x + 8f, y, col.Width - 14f, rowH, color, col.Align, col.Wrap);
 				x += col.Width;
 			}
 			RowHits.Add((y, hover, e.Sid));
@@ -746,9 +779,22 @@ internal static class Homm3ConfluxFusionGlossary
 
 	private static void Tab(RectTransform parent, string label, float x, float y, float w, float h, bool selected, Action click)
 	{
-		var image = Img(parent, selected ? G.SpriteTabSelected : G.SpriteTab, x, y, w, h, selected ? new Color(0.3f, 0.26f, 0.15f, 1f) : new Color(0.1f, 0.13f, 0.2f, 1f));
+		var image = Sliced(parent, selected ? G.SpriteTabSelected : G.SpriteTab, x, y, w, h, 1f, selected ? G.PlateSelectedFallback : G.PlateFallback);
 		A.AddText(parent, P.FontMedium, P.SizeSmall, label, x, y, w, h, selected ? P.TipTitle : P.ButtonText, TextAlignmentOptions.Center);
 		Buttons.Add((image, selected ? null : Sprite(G.SpriteTab), selected ? null : Sprite(G.SpriteTabHover), click));
+	}
+
+	/// <summary>
+	/// A list cell. EN-Medium's line is about twice its size, so a 16 px label cannot take two lines in a row: a wrapping
+	/// cell whose text is wider than its column is drawn in the smaller regular face, where two lines fit.
+	/// </summary>
+	private static void CellText(RectTransform layer, string text, float x, float y, float w, float h, Color color, TextAlignmentOptions align, bool wrap)
+	{
+		var label = A.AddText(layer, P.FontMedium, P.SizeSmall, text, x, y, w, h, color, align, wrap);
+		if (!wrap || label == null || PreferredWidth(label, text ?? "") <= w)
+			return;
+		UnityObject.Destroy(label.gameObject);
+		A.AddText(layer, P.FontRegular, G.CellWrapSize, text, x, y, w, h, color, align, true);
 	}
 
 	/// <summary>The selected fusion: card, name, kind, traits, rank, stats, family tree and abilities.</summary>
@@ -785,7 +831,7 @@ internal static class Homm3ConfluxFusionGlossary
 		{
 			var cx = x + (i % 3) * cw;
 			var cy = sy + (i / 3) * G.StatPitch;
-			Img(layer, G.SpriteTab, cx, cy, cw - 6f, G.StatHeight, new Color(0.1f, 0.13f, 0.2f, 1f));
+			Sliced(layer, G.SpriteTab, cx, cy, cw - 6f, G.StatHeight, 1f, G.PlateFallback);
 			A.AddText(layer, P.FontMedium, P.SizeSmall, stats[i].Item1, cx + 10f, cy, cw - 20f, G.StatHeight, P.TipNote, TextAlignmentOptions.Left);
 			A.AddText(layer, P.FontMedium, P.SizeMain, stats[i].Item2, cx + 10f, cy, cw - 26f, G.StatHeight, P.TipBody, TextAlignmentOptions.Right);
 		}
@@ -875,7 +921,7 @@ internal static class Homm3ConfluxFusionGlossary
 				var label = ent != null ? ent.Name : Homm3UnitDisplayNames.Resolve(sid);
 				var color = ent != null && ent.Stage == 2 ? G.Stage2 : ent != null ? P.TipTitle : P.TipNote;
 				if (n <= 2)
-					A.AddText(layer, P.FontRegular, G.TreeLabelSize, label, cx + nw / 2f + 4f, cy, w / n / 2f - nw / 2f - 6f, 30f, color, TextAlignmentOptions.TopLeft, true);
+					A.AddText(layer, P.FontRegular, G.TreeLabelSize, label, cx + nw / 2f + 4f, cy, w / n / 2f - nw / 2f - 6f, G.TreeLabelHeight, color, TextAlignmentOptions.TopLeft, true);
 				else
 					A.AddText(layer, P.FontRegular, G.TreeLabelSizeSmall, label, cx - w / 8f, cy + nw * 1.2f, w / 4f, 16f, color, TextAlignmentOptions.Center);
 			}
@@ -1230,11 +1276,9 @@ internal static class Homm3ConfluxFusionGlossary
 		var missing = new List<string>();
 		foreach (var name in G.Sprites)
 		{
-			if (Sprites.ContainsKey(name))
-				continue;
-			if (Homm3NativeSpriteCatalogRegistrar.TryResolveNative(name, out var native) && native)
-				Sprites[name] = native;
-			else if (LoggedMissingSprites.Add(name))
+			// Loaded sprites only, by exact name. These are UI atlas names, not keys of the native sprite catalog: asking the
+			// catalog for one returns its placeholder swirl, which is what the tabs, headers and stat tiles used to draw.
+			if (!Sprites.ContainsKey(name) && LoggedMissingSprites.Add(name))
 				missing.Add(name);
 		}
 		if (missing.Count > 0)
@@ -1359,15 +1403,21 @@ internal static class Homm3ConfluxFusionGlossaryLayout
 	internal const float TreeNode = 54f;
 	internal const float TreeGap = 74f;
 	internal const float TreeLabelSize = 13f;
+	/// <summary>Two EN-Regular lines at <see cref="TreeLabelSize"/> (line = 1.63 x size).</summary>
+	internal const float TreeLabelHeight = 46f;
+	/// <summary>Row cells that need two lines: EN-Regular at this size fits two lines in a 46 px row.</summary>
+	internal const float CellWrapSize = 13f;
 	internal const float TreeLabelSizeSmall = 12f;
 	internal const float AbilityIcon = 40f;
 	internal const float AbilityTextX = 52f;
 
 	internal const string SpriteDatabase = "Button_Database";
 	internal const string SpriteDatabaseHover = "Button_Database_MouseOver";
-	internal const string SpriteTab = "Button_Tab_Dark";
-	internal const string SpriteTabHover = "Button_Tab_Dark_MouseOver";
-	internal const string SpriteTabSelected = "Button_Tab_Dark_Selected";
+	// Stage tabs, column headers and stat tiles share the native dark tab set with the rows (sharedassets3, 3 px sliced
+	// borders). The dark button-tab set of the first mockup lives in sharedassets4, which is not loaded during a session.
+	internal const string SpriteTab = "tab_1";
+	internal const string SpriteTabHover = "tab_highlight_1";
+	internal const string SpriteTabSelected = "tab_selected_1";
 	internal const string SpriteScrollTrack = "scroll_background";
 	internal const string SpriteScrollThumb = "scroll";
 	internal const string SpriteKeyField = "KeyField";
@@ -1381,6 +1431,10 @@ internal static class Homm3ConfluxFusionGlossaryLayout
 		SpriteDatabase, SpriteDatabaseHover, SpriteTab, SpriteTabHover, SpriteTabSelected, SpriteScrollTrack, SpriteScrollThumb,
 		SpriteKeyField, SpriteKeyFieldHover, SpriteArrow, SpriteRow, SpriteRowSelected,
 	};
+
+	/// <summary>Flat plates drawn when a native tab sprite is not loaded.</summary>
+	internal static readonly Color PlateFallback = new(0.1f, 0.13f, 0.2f, 1f);
+	internal static readonly Color PlateSelectedFallback = new(0.16f, 0.25f, 0.4f, 1f);
 
 	/// <summary>Stage II: astral violet (names, tree nodes, edge bar).</summary>
 	internal static readonly Color Stage2 = new(190f / 255f, 150f / 255f, 1f, 1f);

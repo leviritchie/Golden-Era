@@ -778,6 +778,9 @@ internal static class Homm3TowerArtificingPicker
 			Plugin.LogSource?.LogWarning(LogPrefix + "native sprites not loaded, using flat fallbacks: " + string.Join(", ", missing));
 	}
 
+	/// <summary>Resolves a font ahead of use. The first lookup scans every loaded font asset, which is slow.</summary>
+	internal static void WarmFont(string name) => Font(name);
+
 	private static TMP_FontAsset Font(string name)
 	{
 		if (Fonts.TryGetValue(name, out var font) && font)
@@ -1048,35 +1051,46 @@ internal static class Homm3TowerArtificingPicker
 		// wrapped description rendered, so the box-height check is what culls them. Overflow mode always draws; long
 		// strings are shortened by hand against the measured width instead.
 		tmp.overflowMode = wrap ? TextOverflowModes.Ellipsis : TextOverflowModes.Overflow;
-		tmp.text = wrap ? text ?? "" : FitSingleLine(tmp, text ?? "", w);
+		tmp.text = wrap ? text ?? "" : FitSingleLine(tmp, font, text ?? "", w);
 		Place(tmp.rectTransform, x, y, w, h);
 		LogTextDiagnostic(tmp, font, size, w, h);
 		return tmp;
 	}
 
-	private static string FitSingleLine(TextMeshProUGUI tmp, string text, float width)
+	private static string FitSingleLine(TextMeshProUGUI tmp, string font, string text, float width)
 	{
 		if (string.IsNullOrEmpty(text) || width <= 0f)
 			return text;
+		if (SingleLineWidth(tmp, font, text) <= width)
+			return text;
+		var lo = 0;
+		var hi = text.Length;
+		while (lo < hi)
+		{
+			var mid = (lo + hi + 1) / 2;
+			if (SingleLineWidth(tmp, font, text.Substring(0, mid).TrimEnd() + "...") <= width)
+				lo = mid;
+			else
+				hi = mid - 1;
+		}
+		return lo <= 0 ? text : text.Substring(0, lo).TrimEnd() + "...";
+	}
+
+	/// <summary>
+	/// The wider of TMP's measure and the font-table measure (<see cref="Homm3PanelTextMetrics"/>). TMP's string measure is
+	/// not proven through the live interop: Logistics level lines that should have been shortened here ran off the upgrade
+	/// panel in game (2026-11-16 owner report), so a zero or failed TMP answer no longer lets a long label through.
+	/// </summary>
+	private static float SingleLineWidth(TextMeshProUGUI tmp, string font, string text)
+	{
+		var table = Homm3PanelTextMetrics.Knows(font) ? Homm3PanelTextMetrics.Width(font, tmp.fontSize, text) : 0f;
 		try
 		{
-			if (tmp.GetPreferredValues(text, 100000f, 100000f).x <= width)
-				return text;
-			var lo = 0;
-			var hi = text.Length;
-			while (lo < hi)
-			{
-				var mid = (lo + hi + 1) / 2;
-				if (tmp.GetPreferredValues(text.Substring(0, mid).TrimEnd() + "...", 100000f, 100000f).x <= width)
-					lo = mid;
-				else
-					hi = mid - 1;
-			}
-			return lo <= 0 ? text : text.Substring(0, lo).TrimEnd() + "...";
+			return Math.Max(table, tmp.GetPreferredValues(text, 100000f, 100000f).x);
 		}
 		catch
 		{
-			return text;
+			return table;
 		}
 	}
 

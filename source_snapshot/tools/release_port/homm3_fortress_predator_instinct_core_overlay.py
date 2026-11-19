@@ -4,7 +4,8 @@ Design (owner, 2026-11-14):
 - At the start of each battle, each melee stack of a Fortress hero's army is randomly paired 1-to-1 with an enemy
   stack: its prey. Surplus stacks on either side stay unpaired.
 - Hovering a Fortress stack draws a wavy, glowing blood-red line from that predator to its prey.
-- Predators deal +10/20/30% damage to their prey (Basic/Advanced/Expert).
+- Predators deal +33/66/100% damage to their prey (Basic/Advanced/Expert) and, while that prey is alive, 17/33/50% less
+  damage to every other target (owner, 2026-11-17: half the bonus; 16.5 rounds to 17). Counterattacks count too.
 - Advanced: Swamp Tactics (+10% damage on native terrain), Intimidation (prey hit by its predator gets Ice Bolt's -3 Initiative),
   Endurance Hunting (ranged stacks can be predators too).
 - Expert: Frenzy (1-Focus hero action: every predator gains Haste and is taunted by its prey), Cautious (predators
@@ -23,7 +24,9 @@ from typing import Any, Callable
 FACTION_SID = "homm3_fortress"
 SKILL_SID = "skill_faction_homm3_fortress"
 SKILL_NAME = "Predator Instinct"
-BONUS_PERCENT_BY_RANK = (10, 20, 30)
+BONUS_PERCENT_BY_RANK = (33, 66, 100)
+# Off-prey penalty while the prey lives: half the bonus, 16.5 rounded away from zero (the runtime sums whole percents).
+PENALTY_PERCENT_BY_RANK = (17, 33, 50)
 
 # Subskill ids are kept from the retired Hunting Grounds design so saved heroes keep their picks; their meaning changed.
 SUBSKILL_SWAMP_TACTICS = "sub_skill_faction_homm3_fortress_swamp_advantage"
@@ -74,16 +77,16 @@ SKILL_DESC = (
     "At the start of each battle, each melee stack in this hero's army is paired with a random enemy stack: its prey. "
     "Each predator has one prey and each enemy has at most one predator. Hover a stack to see its prey."
 )
-RANK_DESCS = (
-    "Predators deal +10% damage to their prey.",
-    "Predators deal +20% damage to their prey.",
-    "Predators deal +30% damage to their prey.",
+RANK_DESCS = tuple(
+    f"Predators deal +{bonus}% damage to their prey. While its prey lives, a predator deals {penalty}% less damage to other targets."
+    for bonus, penalty in zip(BONUS_PERCENT_BY_RANK, PENALTY_PERCENT_BY_RANK)
 )
 
 IMPLEMENTED = (
     "Predator Instinct: Homm3FortressPredatorInstinctRuntime pairs Fortress-hero melee stacks 1-to-1 with random enemy "
     "stacks at BattleLogic.Init, adds visible predator/prey marker buffs, scales committed predator-to-prey damage by "
-    "+10/20/30% inside the single committed-damage owner, and draws the hover blood line. Subskills: Swamp Tactics "
+    "+33/66/100% and a predator's damage to other targets by -17/33/50% while its prey lives, inside the single "
+    "committed-damage owner (counter hits included), and draws the hover blood line. Subskills: Swamp Tactics "
     "(native-terrain outAllDmgMod data), Intimidation (native Ice Bolt initiative-down on hit), Endurance Hunting (ranged predators), "
     "Frenzy (1-Focus hero action: native Haste + taunt-by-prey), Cautious (native parry vs prey), Pounce (no retaliation "
     "from prey)."
@@ -318,13 +321,13 @@ def hero_skill_lang_rows() -> list[dict[str, str]]:
 
 def battle_buff_lang_rows() -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
-    for rank, percent in zip((1, 2, 3), BONUS_PERCENT_BY_RANK):
+    for rank, percent, penalty in zip((1, 2, 3), BONUS_PERCENT_BY_RANK, PENALTY_PERCENT_BY_RANK):
         sid = f"{PREDATOR_BUFF_PREFIX}{rank}"
         rows.append({"sid": f"{sid}_name", "text": "Predator"})
         rows.append(
             {
                 "sid": f"{sid}_description",
-                "text": f"Deals +{percent}% damage to its prey. Hover this stack to see its prey.",
+                "text": f"Deals +{percent}% damage to its prey and {penalty}% less damage to other targets while its prey lives. Hover this stack to see its prey.",
             }
         )
     rows.append({"sid": f"{PREY_BUFF_SID}_name", "text": "Hunted"})

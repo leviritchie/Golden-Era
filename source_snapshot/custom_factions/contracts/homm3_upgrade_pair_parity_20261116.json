@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "status": "active",
+  "approval": "Owner, 2026-11-16: 'Yes, mechanical pass' (match vanilla's upgrade-pair bookkeeping; no design changes).",
+  "appliesTo": "Every manifest unit line (unitLines + additionalRecruitmentLines) of the core-enabled HoMM3 factions: base, upgrade, alternate upgrade. Vanilla units, neutrals and Conflux fusion units are not touched.",
+  "vanillaReference": {
+    "steamBuild": 26615913,
+    "measured": "42 vanilla faction lines: upgrade and alternate upgrade share gold, rare resources, squadValue and expBonus on 42/42 lines; no upgrade has a stat below its base form; expBonus is squadValue times a per-tier ratio (112/129 line units exact, 124/129 within 1).",
+    "statBudget": "sum of 100*ln(upgrade/base) over hp, mean damage, offence, defence, initiative, speed",
+    "statBudgetBaseToUpgRange": [6.5, 200.2],
+    "statBudgetBaseToAltRange": [0.0, 213.3],
+    "goldUpliftBaseToUpgPctRange": [28.6, 67.9]
+  },
+  "rules": {
+    "order": [
+      "lineStatOverrides",
+      "statFloor",
+      "pairParity",
+      "expBonus"
+    ],
+    "statFloor": "An upgrade or alternate upgrade stat below its base form is raised to the base value. Nothing is lowered to pay for it.",
+    "pairParity": "The alternate upgrade takes the upgrade's squadValue and whole unitCost (gold and rare resources). The upgrade side is the line's source-derived value (HoMM3 aiValue/price or the 20260625 balance contract); on every line that differed the alternate side was a donor leftover, a side-branch estimate, or left the upgrade/base relation outside vanilla's range, so no line takes the alternate side.",
+    "expBonus": "expBonus = max(1, round_half_up(squadValue * expBonusPerSquadValueByTier[tier])) for base, upgrade and alternate upgrade. Replaces the value inherited from the vanilla donor row."
+  },
+  "floorStats": [
+    "hp",
+    "offence",
+    "defence",
+    "damageMin",
+    "damageMax",
+    "initiative",
+    "speed"
+  ],
+  "expBonusPerSquadValueByTier": {
+    "1": 0.1322,
+    "2": 0.1281,
+    "3": 0.121,
+    "4": 0.1163,
+    "5": 0.11,
+    "6": 0.1049,
+    "7": 0.1
+  },
+  "lineStatOverrides": [
+    {
+      "unitSid": "h3_giant",
+      "statOverrides": {
+        "initiative": 8,
+        "speed": 8,
+        "cost": {
+          "gold": 2400,
+          "gemstones": 1
+        }
+      },
+      "reason": "Giant line stat budget was 224 (Titan) / 250 (Colossus) against vanilla maxima 200.2 / 213.3, almost all of it the 7 -> 11/12 initiative and speed jump. Base 7 -> 8 puts Titan at 197 without touching Titan. Gold 2000 -> 2400 with Titan 5000 -> 4000 turns the +150% upgrade uplift into +66.7% (vanilla tier 7 maximum +67.9%); 2400/4000 with gemstones 1 -> 2 is the vanilla tier 7 line whose base squadValue (3682) is nearest the Giant's 3718."
+    },
+    {
+      "unitSid": "h3_giant_upg",
+      "statOverrides": {
+        "squadValue": 6580,
+        "cost": {
+          "gold": 4000,
+          "gemstones": 2
+        }
+      },
+      "reason": "Titan gold 5000 -> 4000: see h3_giant. squadValue 7500 -> 6580: the base -> upgrade squadValue uplift was +101.7% against vanilla's +27.8% to +77.3%; 6580 is +77.0% on the Giant's 3718 and matches the vanilla tier 7 line at the same 2400/4000 price (upgrade squadValue 6530). Lowering the Titan (-12%) rather than raising the Giant (+14%) is the smaller move and keeps squadValue in step with the lowered price. The Colossus inherits price and squadValue through pairParity."
+    },
+    {
+      "unitSid": "h3_giant_upg_alt",
+      "statOverrides": {
+        "initiative": 11,
+        "speed": 11
+      },
+      "reason": "Colossus initiative and speed 12 -> 11: with the base at 8 its stat budget is 206, inside vanilla's base-to-alternate maximum 213.3 (it was 250)."
+    },
+    {
+      "unitSid": "h3_firebird",
+      "statOverrides": {
+        "initiative": 11,
+        "speed": 11
+      },
+      "reason": "Firebird base initiative and speed 15 -> 11. The 20260625 balance contract capped Phoenix at 12 and Sacred Phoenix at 11 and recommended the same cap for the base ('capping speed/initiative near 11-12') but never applied it, which left both upgrades slower than their base. Applying the recorded cap is the smallest change that puts the line back inside vanilla's range; flooring the upgrades to 15 instead would undo the deliberate Phoenix cap (vanilla tier 7 base maxima are initiative 14, speed 8)."
+    }
+  ],
+  "notes": [
+    "Pixie and Genie lines need no entry: the statFloor rule alone brings them inside vanilla's stat-budget range.",
+    "This pass runs after homm3_unit_balance_adjustments_20260625.json and wins. That contract's 59 statOverrides values these rules moved (alternate squadValue/cost, floored stats) were rewritten to the resulting values on 2026-11-16, so its own readback validator fails if either contract drifts from the other."
+  ]
+}

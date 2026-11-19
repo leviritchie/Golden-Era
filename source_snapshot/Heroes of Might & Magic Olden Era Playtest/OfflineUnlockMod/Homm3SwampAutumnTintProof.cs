@@ -108,6 +108,7 @@ internal static class Homm3SwampAutumnTintProof
 			throw new InvalidOperationException("Harmony is required for custom biome registration.");
 		_log = log;
 		_definitions = LoadDefinitions();
+		StartTextureBytesPrefetch(_definitions);
 		// Homecoming native water uses tilesMap ids 18-22 plus MapData.waterMap bytes for the mesh overlay.
 		var skipTerrainRendererRegistration = Homm3MapLoadFlightRecorder.DisableTerrainRendererRegistration;
 		var skipTerrainSoundRegistration = Homm3MapLoadFlightRecorder.DisableTerrainSoundRegistration;
@@ -3045,7 +3046,7 @@ internal static class Homm3SwampAutumnTintProof
 			var type = GameMember.FindType(
 				GameSymbols.RmgMapCapture.GeneratorTypeId + "." + hint,
 				hint,
-				() => AccessTools.TypeByName(hint) ?? AccessTools.TypeByName("Hex." + hint));
+				() => GameMember.TypeByName(hint) ?? GameMember.TypeByName("Hex." + hint));
 			if (type == null)
 				continue;
 			foreach (var name in GameSymbols.RmgMapCapture.GenerateMap.NameHints)
@@ -3071,7 +3072,7 @@ internal static class Homm3SwampAutumnTintProof
 				}
 			}
 		}
-		var blcType = AccessTools.TypeByName("blc");
+		var blcType = GameMember.TypeByName("blc");
 		if (blcType == null)
 			return null;
 		return AccessTools.Method(blcType, "GenerateMap");
@@ -5546,7 +5547,7 @@ internal static class Homm3SwampAutumnTintProof
 			filterMode = FilterMode.Bilinear,
 			wrapMode = TextureWrapMode.Repeat
 		};
-		if (!TryLoadTextureImage(texture, File.ReadAllBytes(path)))
+		if (!TryLoadTextureImage(texture, TakePrefetchedTextureBytes(path) ?? File.ReadAllBytes(path)))
 		{
 			UnityEngine.Object.Destroy(texture);
 			throw new InvalidOperationException("Failed to load custom biome texture: " + path);
@@ -5569,10 +5570,62 @@ internal static class Homm3SwampAutumnTintProof
 	{
 		if (!texture || bytes == null || bytes.Length == 0)
 			return false;
-		var il2cppBytes = new Il2CppStructArray<byte>(bytes.Length);
-		for (var i = 0; i < bytes.Length; i++)
-			il2cppBytes[i] = bytes[i];
+		var il2cppBytes = new Il2CppStructArray<byte>(bytes.LongLength);
+		// One block copy into the array's data (after the four-pointer IL2CPP array header); the per-element indexer
+		// is an interop call per byte. Same copy as Homm3CoveTreasureMarkers.
+		Marshal.Copy(bytes, 0, il2cppBytes.Pointer + IntPtr.Size * 4, bytes.Length);
 		return ImageConversion.LoadImage(texture, il2cppBytes);
+	}
+
+	// Terrain texture files are read on worker threads from plugin load, so the main thread only decodes them.
+	// Each entry is taken once by LoadTexture; a path that was not prefetched (or whose read failed) is read
+	// synchronously there, exactly as before.
+	private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, System.Threading.Tasks.Task<byte[]>> TextureBytesPrefetch =
+		new(StringComparer.OrdinalIgnoreCase);
+
+	private static void StartTextureBytesPrefetch(CustomBiomeDefinition[] definitions)
+	{
+		try
+		{
+			var root = Path.Combine(Paths.BepInExRootPath, "plugins", "OfflineUnlockMod");
+			foreach (var definition in definitions ?? Array.Empty<CustomBiomeDefinition>())
+			{
+				if (definition == null || definition.TextureFiles == null)
+					continue;
+				foreach (var assetDir in new[] { definition.TextureAssetDir, definition.MarkerTextureAssetDir })
+				{
+					if (string.IsNullOrWhiteSpace(assetDir))
+						continue;
+					foreach (var fileName in definition.TextureFiles)
+					{
+						if (string.IsNullOrWhiteSpace(fileName))
+							continue;
+						var path = Path.Combine(root, assetDir, fileName);
+						TextureBytesPrefetch.GetOrAdd(
+							path,
+							key => System.Threading.Tasks.Task.Run(() => File.Exists(key) ? File.ReadAllBytes(key) : null));
+					}
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+			_log?.LogDebug("HoMM3 custom biome registration texture prefetch not started: " + ex.Message);
+		}
+	}
+
+	private static byte[] TakePrefetchedTextureBytes(string path)
+	{
+		if (string.IsNullOrEmpty(path) || !TextureBytesPrefetch.TryRemove(path, out var task) || task == null)
+			return null;
+		try
+		{
+			return task.GetAwaiter().GetResult();
+		}
+		catch
+		{
+			return null;
+		}
 	}
 
 	internal sealed class CustomBiomeDefinition

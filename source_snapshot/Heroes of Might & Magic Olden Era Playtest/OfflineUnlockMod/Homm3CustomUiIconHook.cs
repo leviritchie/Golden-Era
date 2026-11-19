@@ -270,6 +270,9 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 			return false;
 		var sid = key.Trim();
 		return Homm3CustomFactionRegistry.IsCustomUnitSid(sid)
+			// Units outside the manifest roster with a shipped portrait (Elemental Fusion, custom neutrals): the native
+			// resolver otherwise answers their sid with its miss placeholder.
+			|| Homm3ImportPortraitSpriteCache.IsImportedUnitPortraitSid(sid)
 			|| !string.IsNullOrWhiteSpace(ResolveStrongholdAbilitySemanticIconKey(sid))
 			|| Homm3CustomFactionRegistry.IsCustomHeroSid(sid)
 			|| Homm3DialogPortraitCatalog.IsCustomDialogPortraitKey(sid)
@@ -406,7 +409,40 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		var sid = key.Trim();
 		if (LoadedSpriteByKey.TryGetValue(sid, out sprite) && sprite)
 			return true;
+		sprite = null;
 
+		// Negative cache: a miss costs seven Resources.Load calls plus a scan of every loaded sprite, and callers
+		// ask again on each UI refresh. A missed key is not looked up again until the retry time passes or the
+		// active scene changes, so a sprite that loads later is still found.
+		var now = Time.realtimeSinceStartup;
+		var sceneHandle = 0;
+		try { sceneHandle = UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle; }
+		catch { }
+		if (sceneHandle != _loadedSpriteMissSceneHandle)
+		{
+			_loadedSpriteMissSceneHandle = sceneHandle;
+			LoadedSpriteMissRetryAtByKey.Clear();
+		}
+		else if (LoadedSpriteMissRetryAtByKey.TryGetValue(sid, out var retryAt) && now < retryAt)
+		{
+			return false;
+		}
+
+		var found = TryFindLoadedSpriteUncached(sid, out sprite);
+		if (found)
+			LoadedSpriteMissRetryAtByKey.Remove(sid);
+		else
+			LoadedSpriteMissRetryAtByKey[sid] = now + LoadedSpriteMissRetrySeconds;
+		return found;
+	}
+
+	private const float LoadedSpriteMissRetrySeconds = 2f;
+	private static readonly Dictionary<string, float> LoadedSpriteMissRetryAtByKey = new(StringComparer.Ordinal);
+	private static int _loadedSpriteMissSceneHandle;
+
+	private static bool TryFindLoadedSpriteUncached(string sid, out Sprite sprite)
+	{
+		sprite = null;
 		try
 		{
 			foreach (var prefix in new[]
@@ -2612,14 +2648,34 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 		LogSurfaceDiag(__instance, null, FormatMethod(__originalMethod), "postfix fired");
 	}
 
+	// Live BhCityUIElement instances, filled from their Init/Refresh postfixes, so applying to all of them does
+	// not need a scan of every loaded MonoBehaviour (one scan per town element on each HUD build).
+	private static readonly Dictionary<int, MonoBehaviour> CityUiElementsById = new();
+
+	private static void RememberCityUiElement(object instance)
+	{
+		try
+		{
+			var behaviour = instance as MonoBehaviour
+			                ?? (instance as Il2CppInterop.Runtime.InteropTypes.Il2CppObjectBase)?.TryCast<MonoBehaviour>();
+			if (behaviour)
+				CityUiElementsById[behaviour.GetInstanceID()] = behaviour;
+		}
+		catch
+		{
+		}
+	}
+
 	private static void PostfixCityUiElementInit(object __instance, [HarmonyArgument(0)] object city, MethodBase __originalMethod)
 	{
+		RememberCityUiElement(__instance);
 		TryApplyCityUiElement(__instance, city, FormatMethod(__originalMethod));
 		TryApplyAllCityUiElements(FormatMethod(__originalMethod) + ".sweep");
 	}
 
 	private static void PostfixCityUiElementRefresh(object __instance, MethodBase __originalMethod)
 	{
+		RememberCityUiElement(__instance);
 		TryApplyCityUiElement(__instance, null, FormatMethod(__originalMethod));
 	}
 
@@ -2909,6 +2965,26 @@ int RequiredExactAnyBySymbolWithPrefix(string label, string typeName, GameSymbol
 
 	private static void TryApplyAllCityUiElements(string source, string knownKey, Sprite knownSprite)
 	{
+		if (CityUiElementsById.Count > 0)
+		{
+			List<int> dead = null;
+			var live = new List<MonoBehaviour>(CityUiElementsById.Count);
+			foreach (var pair in CityUiElementsById)
+			{
+				if (pair.Value)
+					live.Add(pair.Value);
+				else
+					(dead ??= new List<int>()).Add(pair.Key);
+			}
+			for (var i = 0; dead != null && i < dead.Count; i++)
+				CityUiElementsById.Remove(dead[i]);
+			for (var i = 0; i < live.Count; i++)
+				TryApplyCityUiElement(live[i], null, source, knownKey, knownSprite);
+			if (live.Count > 0)
+				return;
+		}
+
+		// No element has passed through Init/Refresh yet: fall back to the scene scan.
 		MonoBehaviour[] objects;
 		try { objects = Resources.FindObjectsOfTypeAll<MonoBehaviour>(); }
 		catch (Exception ex)

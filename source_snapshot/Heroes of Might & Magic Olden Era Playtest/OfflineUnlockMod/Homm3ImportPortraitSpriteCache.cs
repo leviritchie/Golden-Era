@@ -28,6 +28,36 @@ internal static class Homm3ImportPortraitSpriteCache
 		return sid != null && TryGetOrCreateSprite(sid, out sprite) && sprite;
 	}
 
+	private static readonly Dictionary<string, bool> ShippedUnitPortraitBySid = new(StringComparer.Ordinal);
+
+	/// <summary>
+	/// True for every unit sid the mod serves a portrait for: the manifest roster
+	/// (<see cref="Homm3CustomFactionRegistry.IsCustomUnitSid"/>) and the <c>h3_</c> units that exist only as generated
+	/// Core rows with a shipped portrait PNG (Elemental Fusion units, custom neutrals). Portrait surfaces gate on this,
+	/// not on the registry alone: the registry lists only units with a manifest donor line, so a registry-only gate
+	/// leaves the native placeholder on fusion units and neutrals (2026-11-16 playtest: fusion portraits in battle).
+	/// The file probe runs once per sid; vanilla sids fail the prefix test without touching the disk.
+	/// </summary>
+	internal static bool IsImportedUnitPortraitSid(string sid)
+	{
+		if (string.IsNullOrWhiteSpace(sid))
+			return false;
+		var key = sid.Trim();
+		if (Homm3CustomFactionRegistry.IsCustomUnitSid(key))
+			return true;
+		if (!key.StartsWith("h3_", StringComparison.Ordinal))
+			return false;
+		lock (ShippedUnitPortraitBySid)
+		{
+			if (!ShippedUnitPortraitBySid.TryGetValue(key, out var shipped))
+			{
+				shipped = ResolvePluginAssetPath(Path.Combine("homm3_portraits", key + ".png")) != null;
+				ShippedUnitPortraitBySid[key] = shipped;
+			}
+			return shipped;
+		}
+	}
+
 	internal static bool TryGetOrCreateSprite(string sid, out Sprite sprite)
 	{
 		sprite = null;

@@ -214,6 +214,7 @@ internal static class Homm3FactoryLogisticsEffects
 				if (map != null)
 					break;
 			}
+			map ??= Homm3FactoryLogisticsAdventureView.TryWorldCameraMap();
 			var mapData = map == null ? null : Homm3TowerArtificingRuntime.ReadMember(map, GameSymbols.HomecomingBoatTravel.MapData.NameHints);
 			var rows = mapData == null ? null : Homm3TowerArtificingRuntime.ReadMember(mapData, GameSymbols.CampaignSpawnParity.MapDataObjectsListMemberHints);
 			foreach (var row in Enumerate(rows))

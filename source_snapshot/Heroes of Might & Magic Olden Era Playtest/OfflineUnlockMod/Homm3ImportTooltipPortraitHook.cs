@@ -20,6 +20,7 @@ internal static class Homm3ImportTooltipPortraitHook
 	private static int _loggedReplace;
 	private static int _loggedUnitImageTree;
 	private static readonly Dictionary<long, string> LastCustomUnitSidByTooltip = new();
+	private static readonly HashSet<int> HiddenEmptySlotPortraits = new();
 
 	internal static void TryRegister(Harmony h, ManualLogSource log)
 	{
@@ -110,6 +111,37 @@ internal static class Homm3ImportTooltipPortraitHook
 			&& TryApply(tooltip, sid, source);
 	}
 
+	/// <summary>
+	/// A reused slot view that no unit occupies this time (e.g. battle-result slot past the army size).
+	/// Forget the custom SID it showed before and drop our sprite so the previous unit does not linger.
+	/// </summary>
+	internal static void ClearPortraitForEmptySlot(object tooltip, string source)
+	{
+		if (tooltip == null)
+			return;
+		var key = Homm3DirectStateIdentity.ResolveKeyOrZero(tooltip);
+		var hadRemembered = LastCustomUnitSidByTooltip.Remove(key);
+		var portrait = TryGetImageField(tooltip, GameSymbols.TooltipPortrait.PortraitImageFields);
+		if (portrait != null)
+			portrait = ResolveVisiblePortraitImage(portrait) ?? portrait;
+		if (portrait == null && tooltip is Component component)
+			portrait = FindPortraitImage(component);
+		if (portrait == null)
+			return;
+		var hadOverride = Homm3ImportPortraitSpriteCache.IsHomm3PortraitSprite(portrait.overrideSprite)
+		                  || Homm3ImportPortraitSpriteCache.IsHomm3PortraitSprite(portrait.sprite);
+		if (!hadOverride && !hadRemembered)
+			return;
+		ClearHomm3PortraitOverride(portrait);
+		// Our earlier apply forced the image on; with no sprite left it would draw a white box.
+		if (!portrait.sprite && portrait.enabled)
+		{
+			portrait.enabled = false;
+			HiddenEmptySlotPortraits.Add(portrait.GetInstanceID());
+		}
+		LogUiCardDiagnostic(source, "unit-portrait-empty-slot-cleared", "image='" + portrait.name + "'");
+	}
+
 	internal static bool TryApplyPortraitForSid(object tooltip, string sid)
 	{
 		return TryApplyPortraitForSid(tooltip, sid, "explicit-sid");
@@ -142,8 +174,11 @@ internal static class Homm3ImportTooltipPortraitHook
 			LogUiCardDiagnostic(source, "unit-portrait-clear", "sid='" + (sid ?? "?") + "' image='" + portrait.name + "'");
 			LastCustomUnitSidByTooltip.Remove(key);
 			ClearHomm3PortraitOverride(portrait);
+			if (!string.IsNullOrWhiteSpace(sid) && HiddenEmptySlotPortraits.Remove(portrait.GetInstanceID()) && portrait.sprite)
+				portrait.enabled = true;
 			return false;
 		}
+		HiddenEmptySlotPortraits.Remove(portrait.GetInstanceID());
 
 		if (!Homm3ImportPortraitSpriteCache.TryGetOrCreateSprite(normalizedSid, out var sprite) || sprite == null)
 		{

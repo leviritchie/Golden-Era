@@ -85,7 +85,7 @@ internal static class Homm3WarcryConfigInjectorProbe
 	{
 		try
 		{
-			var t = AccessTools.TypeByName("cjv");
+			var t = GameMember.TypeByName("cjv");
 			if (t == null)
 				return;
 			var hooked = 0;
@@ -116,7 +116,7 @@ internal static class Homm3WarcryConfigInjectorProbe
 	{
 		try
 		{
-			var t = AccessTools.TypeByName("Hex.GameHub.UICommon.SoFractions");
+			var t = GameMember.TypeByName("Hex.GameHub.UICommon.SoFractions");
 			if (t == null)
 			{
 				log?.LogInfo("Homm3WarcryConfigInjectorProbe: type not found 'Hex.GameHub.UICommon.SoFractions'.");
@@ -156,7 +156,7 @@ internal static class Homm3WarcryConfigInjectorProbe
 			return;
 		try
 		{
-			var t = AccessTools.TypeByName(typeName);
+			var t = GameMember.TypeByName(typeName);
 			if (t == null)
 			{
 				log?.LogInfo("Homm3WarcryConfigInjectorProbe: type not found '" + typeName + "' (prop " + propertyName + ").");
@@ -183,7 +183,7 @@ internal static class Homm3WarcryConfigInjectorProbe
 			return;
 		try
 		{
-			var t = AccessTools.TypeByName(typeName);
+			var t = GameMember.TypeByName(typeName);
 			if (t == null)
 			{
 				log?.LogInfo("Homm3WarcryConfigInjectorProbe: type not found '" + typeName + "'.");
@@ -211,7 +211,7 @@ internal static class Homm3WarcryConfigInjectorProbe
 
 		try
 		{
-			var cjvType = AccessTools.TypeByName("cjv");
+			var cjvType = GameMember.TypeByName("cjv");
 			if (cjvType == null)
 				return;
 

@@ -7,6 +7,7 @@ using W = OfflineUnlockMod.Homm3DungeonWarCaptivesWindowLayout;
 using L = OfflineUnlockMod.Homm3FactoryLogisticsUpgradePanelLayout;
 using Ui = OfflineUnlockMod.Homm3FactoryLogisticsUi;
 using Info = OfflineUnlockMod.Homm3FactoryLogisticsPanelInfo;
+using M = OfflineUnlockMod.Homm3PanelTextMetrics;
 
 namespace OfflineUnlockMod;
 
@@ -38,6 +39,9 @@ internal static class Homm3FactoryLogisticsUpgradePanel
 	private static string _status;
 	private static bool _confirmDemolish;
 	private static int _tickFrame;
+	private static int _firstRow;      // first enhancement row drawn when the rows do not all fit (mouse wheel scrolls)
+	private static int _rowCount;
+	private static int _rowsShown;
 	private static readonly List<Ui.Clickable> Buttons = new();
 	private static readonly List<(RectTransform Rect, string Id)> Rows = new();
 
@@ -79,6 +83,7 @@ internal static class Homm3FactoryLogisticsUpgradePanel
 			_selected = null;
 			_status = null;
 			_confirmDemolish = false;
+			_firstRow = 0;
 			_networkLine = Homm3FactoryLogistics.TryGetNetwork(out var net, out _) && net != null
 				? "Network: " + (net.Buildings?.Count ?? 0) + ((net.Buildings?.Count ?? 0) == 1 ? " building" : " buildings") + " \u00b7 range " + Info.RangeDays(net.LogisticsLevel, net.RangeMpPerLevel)
 				: "";
@@ -184,6 +189,17 @@ internal static class Homm3FactoryLogisticsUpgradePanel
 				return;
 			}
 			var mouse = (Vector2)Input.mousePosition;
+			var wheel = Input.mouseScrollDelta.y;
+			if (wheel != 0f && _rowsShown < _rowCount)
+			{
+				var first = Mathf.Clamp(_firstRow + (wheel < 0f ? 1 : -1), 0, _rowCount - _rowsShown);
+				if (first != _firstRow)
+				{
+					_firstRow = first;
+					Build();
+					return;
+				}
+			}
 			Ui.HoverButtons(Buttons, mouse);
 			if (!Input.GetMouseButtonDown(0))
 				return;
@@ -270,12 +286,56 @@ internal static class Homm3FactoryLogisticsUpgradePanel
 		Ui.ClearChildren(_window);
 		var v = _view;
 		var w = L.Width;
-		var rowsHeight = 0f;
+		var options = new List<LogisticsOption>();
 		foreach (var o in v.Options)
-			rowsHeight += RowHeight(o) + L.RowGap;
+		{
+			if (o != null)
+				options.Add(o);
+		}
 		var stock = v.UpgradedStock ?? Array.Empty<LogisticsUpgradedStockView>();
 		var stockHeight = stock.Count == 0 ? 0f : L.StockHeader + stock.Count * (L.StockRow + L.RowGap);
-		var h = L.RowsTop + rowsHeight + stockHeight + L.StatusGap + L.StatusHeight + L.ButtonAreaHeight;
+		var chrome = L.RowsTop + stockHeight + L.StatusGap + L.StatusHeight + L.ButtonAreaHeight;
+		var rowsHeight = 0f;
+		foreach (var o in options)
+			rowsHeight += RowHeight(o) + L.RowGap;
+		// Rows that do not fit the 1080 reference canvas scroll by whole rows (mouse wheel), as the Artificing picker's
+		// schematic list; the window keeps its full height while scrolling so it does not jump.
+		_rowCount = options.Count;
+		var available = L.MaxHeight - chrome;
+		var scrolling = rowsHeight > available && options.Count > 1;
+		var shownFrom = 0;
+		var shownCount = options.Count;
+		if (scrolling)
+		{
+			var fits = 0;
+			var used = 0f;
+			for (var i = options.Count - 1; i >= 0; i--)
+			{
+				used += RowHeight(options[i]) + L.RowGap;
+				if (used > available && fits > 0)
+					break;
+				fits++;
+			}
+			_firstRow = Mathf.Clamp(_firstRow, 0, options.Count - fits);
+			shownFrom = _firstRow;
+			used = 0f;
+			shownCount = 0;
+			for (var i = shownFrom; i < options.Count; i++)
+			{
+				var rh = RowHeight(options[i]) + L.RowGap;
+				if (used + rh > available && shownCount > 0)
+					break;
+				used += rh;
+				shownCount++;
+			}
+			rowsHeight = Math.Max(available, used);
+		}
+		else
+		{
+			_firstRow = 0;
+		}
+		_rowsShown = shownCount;
+		var h = chrome + rowsHeight;
 		var buttonY = h - L.ButtonAreaHeight / 2f - 4f;
 		Ui.Shell(_window, w, h, "Logistics Network", buttonY - 4f);
 
@@ -315,13 +375,22 @@ internal static class Homm3FactoryLogisticsUpgradePanel
 		}
 
 		var y = L.RowsTop;
-		foreach (var o in v.Options)
+		for (var i = shownFrom; i < shownFrom + shownCount; i++)
 		{
-			if (o == null)
-				continue;
-			var rh = RowHeight(o);
-			BuildRow(o, L.Pad, y, w - 2f * L.Pad, rh);
+			var rh = RowHeight(options[i]);
+			BuildRow(options[i], L.Pad, y, w - 2f * L.Pad, rh);
 			y += rh + L.RowGap;
+		}
+		if (scrolling)
+		{
+			// Track and handle right of the rows, inside the frame.
+			var trackX = w - L.Pad + 8f;
+			var trackH = rowsHeight - L.RowGap;
+			Ui.Flat(_window, trackX, L.RowsTop, L.ScrollTrackWidth, trackH, L.ScrollTrack);
+			var handleH = Math.Max(40f, trackH * shownCount / options.Count);
+			var maxFirst = Math.Max(1, options.Count - shownCount);
+			Ui.Flat(_window, trackX, L.RowsTop + (trackH - handleH) * Math.Min(1f, shownFrom / (float)maxFirst), L.ScrollTrackWidth, handleH, L.ScrollHandle);
+			y = L.RowsTop + rowsHeight;
 		}
 		if (stock.Count > 0)
 			y = BuildStock(stock, L.Pad, y, w - 2f * L.Pad);
@@ -350,6 +419,9 @@ internal static class Homm3FactoryLogisticsUpgradePanel
 					? "Only the active enhancement works. Switch used this week; next switch: start of next week."
 					: "Only the active enhancement works. 1 switch left this week; a switch applies next day."
 				: sel == null ? "Select an enhancement. Builds and upgrades by a visiting hero apply immediately." : "";
+			var hidden = options.Count - shownCount;
+			if (scrolling && status.Length == 0)
+				status = "Mouse wheel: " + hidden + " more enhancement" + (hidden == 1 ? "" : "s") + ".";
 		}
 		y += L.StatusGap;
 		Ui.Text(_window, P.FontMedium, P.SizeSmall, status, W.RecruitTextInset, y, w - 2f * W.RecruitTextInset, L.StatusHeight, warn ? P.TipWarn : P.TipNote, TextAlignmentOptions.Center);
@@ -442,8 +514,47 @@ internal static class Homm3FactoryLogisticsUpgradePanel
 		return y;
 	}
 
-	private static float RowHeight(LogisticsOption o) =>
-		L.RowHeight + (o != null && _view.PowerStationBonusLevels > 0 && o.Id == _view.ActiveEnhancementId ? L.RowExtra : 0f);
+	private static bool Powered(LogisticsOption o) => o != null && _view.PowerStationBonusLevels > 0 && o.Id == _view.ActiveEnhancementId;
+
+	/// <summary>The row grows with its level lines (wrapped ones take two lines) and the Power Station line; never below the approved 112 px.</summary>
+	private static float RowHeight(LogisticsOption o)
+	{
+		var levels = 0f;
+		for (var i = 0; i < 3; i++)
+			levels += LevelLayout(o, i).Slot;
+		return Math.Max(L.RowHeight, L.LevelTop + levels + (Powered(o) ? L.RowExtra : 0f) + L.LevelBottom);
+	}
+
+	/// <summary>"Built" / "Requires Expert" on a level line, or null (the line may then use the tag column too).</summary>
+	private static string LevelTag(LogisticsOption o, int level)
+	{
+		if (level <= o.BuiltLevel)
+			return "Built";
+		return level <= o.MaxLevelNow ? null : "Requires " + Ranks[level];
+	}
+
+	/// <summary>
+	/// How one level line is drawn, from the font tables (<see cref="Homm3PanelTextMetrics"/>), never from TMP at runtime: one
+	/// line in the panel's 16 px face when it fits, else wrapped in the smaller regular face (14 px, 13 px when 14 needs a
+	/// third line), as the Fusion Glossary's long cells. Config level lines run to 135 characters (about 860 px at 16 px)
+	/// against a 380-488 px column; drawn on one line they ran off the panel (owner report 2026-11-16).
+	/// </summary>
+	private static (string Font, float Size, float Width, float Slot, bool Wrap) LevelLayout(LogisticsOption o, int i)
+	{
+		var lines = o?.LevelLines;
+		var text = lines != null && i < lines.Length ? lines[i] ?? "" : "";
+		var width = L.LevelTextWidth + (o != null && LevelTag(o, i + 1) == null ? L.LockWidth - 12f : 0f);
+		if (M.Width(P.FontMedium, P.SizeSmall, text) <= width)
+			return (P.FontMedium, P.SizeSmall, width, L.LevelPitch, false);
+		var size = L.LevelWrapSize;
+		var n = M.Lines(P.FontRegular, size, text, width);
+		if (n > 2)
+		{
+			size = L.LevelWrapSizeMin;
+			n = M.Lines(P.FontRegular, size, text, width);
+		}
+		return (P.FontRegular, size, width, Math.Max(L.LevelPitch, Mathf.Ceil(n * M.LinePitch(P.FontRegular, size)) + L.LevelWrapPad), true);
+	}
 
 	private static void BuildRow(LogisticsOption o, float x, float y, float w, float h)
 	{
@@ -485,7 +596,10 @@ internal static class Homm3FactoryLogisticsUpgradePanel
 		}
 		else
 		{
-			Ui.Text(_window, P.FontMedium, P.SizeSmall, pending > 0 ? "Under construction - active tomorrow" : "Not built", L.NameX, cy - 8f, L.NameWidth, 26f, pending > 0 ? P.TipWarn : P.TipNote);
+			// Same width as the output tag below (up to the level badges); the long state steps down to 15 px to stay on one line.
+			var state = pending > 0 ? "Under construction - active tomorrow" : "Not built";
+			var stateW = L.LevelX - L.NameX - 10f;
+			Ui.Text(_window, P.FontMedium, Ui.FitSize(state, P.SizeSmall, stateW), state, L.NameX, cy - 8f, stateW, 26f, pending > 0 ? P.TipWarn : P.TipNote);
 		}
 		// Replaces output / Adds to output (UX item 3): whether the building keeps producing while this one is active.
 		var outputTag = Info.OutputTag(o.Id);
@@ -495,11 +609,12 @@ internal static class Homm3FactoryLogisticsUpgradePanel
 		// Level lines.
 		var lines = o.LevelLines ?? Array.Empty<string>();
 		var lineW = L.LockX - L.LevelX + L.LockWidth - 6f;
+		var ly = y + L.LevelTop;
 		for (var i = 0; i < 3; i++)
 		{
 			var lvl = i + 1;
-			var ly = y + L.LevelTop + i * L.LevelPitch;
-			var lh = L.LevelPitch - 4f;
+			var layout = LevelLayout(o, i);
+			var lh = layout.Slot - 4f;
 			var reach = lvl <= o.MaxLevelNow;
 			var done = lvl <= o.BuiltLevel;
 			if (reach && !done)
@@ -509,14 +624,19 @@ internal static class Homm3FactoryLogisticsUpgradePanel
 			if (!reach && !done)
 				badge.color = L.LockedTint;
 			Ui.Text(_window, P.FontBook, P.SizeSmall, lvl.ToString(), L.LevelX, ly, L.BadgeSize, lh, P.Ink, TextAlignmentOptions.Center);
-			var tag = done ? "Built" : reach ? null : "Requires " + Ranks[lvl];
-			Ui.Text(_window, P.FontMedium, P.SizeSmall, i < lines.Length ? lines[i] : "", L.LevelTextX, ly, L.LevelTextWidth + (tag == null ? L.LockWidth - 12f : 0f), lh, col);
+			var tag = LevelTag(o, lvl);
+			var label = Ui.Text(_window, layout.Font, layout.Size, i < lines.Length ? lines[i] : "", L.LevelTextX, ly, layout.Width, lh, col, TextAlignmentOptions.Left, layout.Wrap);
+			// Wrapped lines draw with Overflow: the box comes from the font tables, and TMP's Ellipsis cuts a line whose box
+			// is a few px short of TMP's own line height.
+			if (layout.Wrap && label != null)
+				label.overflowMode = TextOverflowModes.Overflow;
 			if (tag != null)
-				Ui.Text(_window, P.FontMedium, P.SizeSmall, tag, L.LockX, ly, L.LockWidth - 12f, lh, done ? (active ? P.CostOk : P.TipNote) : P.TipWarn, TextAlignmentOptions.Right);
+				Ui.Text(_window, P.FontMedium, Ui.FitSize(tag, P.SizeSmall, L.LockWidth - 12f), tag, L.LockX, ly, L.LockWidth - 12f, lh, done ? (active ? P.CostOk : P.TipNote) : P.TipWarn, TextAlignmentOptions.Right);
+			ly += layout.Slot;
 		}
-		if (active && v.PowerStationBonusLevels > 0)
+		if (Powered(o))
 			Ui.Text(_window, P.FontMedium, P.SizeSmall, "Powered level " + (o.BuiltLevel + v.PowerStationBonusLevels) + ": +" + v.PowerStationBonusLevels + " from a Power Station in range",
-				L.LevelTextX, y + L.LevelTop + 3f * L.LevelPitch, L.LevelTextWidth + L.LockWidth, L.LevelPitch - 4f, P.TipTitle);
+				L.LevelTextX, ly, L.LevelTextWidth + L.LockWidth, L.LevelPitch - 4f, P.TipTitle);
 
 		// Suggested enhancement (UX item 5), under the cost column.
 		if (o.Id == _recId)
@@ -569,6 +689,17 @@ internal static class Homm3FactoryLogisticsUpgradePanelLayout
 	internal const float LockWidth = 120f;
 	internal const float LevelTop = 12f;
 	internal const float LevelPitch = 28f;
+	/// <summary>Space under the last level line (112 = 12 + 3 x 28 + 16, the approved row).</summary>
+	internal const float LevelBottom = 16f;
+	/// <summary>Wrapped level lines: EN-Regular at this size (line pitch 1.63 x size), down to the floor when a third line would be needed.</summary>
+	internal const float LevelWrapSize = 14f;
+	internal const float LevelWrapSizeMin = 13f;
+	internal const float LevelWrapPad = 6f;
+	/// <summary>Tallest window: the 1080 reference canvas less 10 px top and bottom; enhancement rows past it scroll.</summary>
+	internal const float MaxHeight = 1060f;
+	internal const float ScrollTrackWidth = 6f;
+	internal static readonly Color ScrollTrack = new(0.05f, 0.06f, 0.1f, 0.9f);
+	internal static readonly Color ScrollHandle = new(0.84f, 0.74f, 0.49f, 0.85f);
 	internal const float CostX = 948f;
 	internal const float CostWidth = 262f;
 	internal const float CostIcon = 28f;

@@ -68,6 +68,19 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 	private static long _lastBoundReleaseControlsUnitKey;
 	private static string _lastNoReleaseControlsSid;
 	private static long _lastNoReleaseControlsUnitKey;
+	// Contact-hitch fix (2026-11-18): the no-action-bar cleanup ran in full on every selected-HUD event for a unit
+	// without action-bar abilities, including two whole-scene object scans. It is now skipped while the same unit's
+	// views are still hidden, and the scan is replaced by the action bar's own container once that is known.
+	private static long _noActionBarCleanUnitKey;
+	private static long _noActionBarCleanViewKey;
+	private static Transform _actionBarAbilityContainer;
+	private static int _actionBarContainerMissFrame = int.MinValue;
+	private const int ActionBarContainerRescanFrames = 300;
+	private const string ActionBarAbilityContainerName = "UNIT ABILITIES";
+	private static bool _releaseAbilityViewFieldClearUnavailable;
+	private static bool _loggedActionBarContainerLookup;
+	private static long _eventBindStartTicks;
+	private static long _directBindStartTicks;
 	private static string _lastTurnViewUnitSid;
 	private static Unit _lastTurnViewUnit;
 	private static long _lastTurnViewUnitKey;
@@ -963,6 +976,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 	private static bool PrefixBeetRelease(BhSelectedUnitHud __instance, BattleEventArgs __1, ref SelectedUnitHudCustomSidState __state, MethodBase __originalMethod)
 	{
 		__state = null;
+		_eventBindStartTicks = System.Diagnostics.Stopwatch.GetTimestamp();
 		try
 		{
 			var unit = __1?.target;
@@ -1001,6 +1015,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 	private static bool PrefixBegsRelease(BhSelectedUnitHud __instance, Unit __1, ref SelectedUnitHudCustomSidState __state, MethodBase __originalMethod)
 	{
 		__state = null;
+		_directBindStartTicks = System.Diagnostics.Stopwatch.GetTimestamp();
 		try
 		{
 			var unit = __1;
@@ -1075,6 +1090,12 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 			LogCustomSidMissSuppressed("beet-recovery", null, sid, sid, recoveryFailure);
 			return null;
 		}
+		finally
+		{
+			// Whole event handler: native bind plus this class's prefix, postfix and finalizer.
+			Homm3LoadTiming.ReportSince("battle hud.eventBind.total", _eventBindStartTicks, Homm3LoadTiming.BattleScopeMinMs);
+			_eventBindStartTicks = 0;
+		}
 	}
 
 	private static Exception FinalizerBeetReleaseCore(Exception __exception, BhSelectedUnitHud __instance, BattleEventArgs __1, SelectedUnitHudCustomSidState __state)
@@ -1126,6 +1147,11 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 				return __exception;
 			LogCustomSidMissSuppressed("begs-recovery", null, sid, sid, recoveryFailure);
 			return null;
+		}
+		finally
+		{
+			Homm3LoadTiming.ReportSince("battle hud.directBind.total", _directBindStartTicks, Homm3LoadTiming.BattleScopeMinMs);
+			_directBindStartTicks = 0;
 		}
 	}
 
@@ -1700,13 +1726,16 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 					ClearCachedReleaseControls();
 				}
 				CacheNoReleaseControls(sid, unitKey);
+				if (IsReleaseNoActionBarAlreadyClean(controlsView, unitKey))
+					return;
 				var hidden = ClearReleaseNoActionBarControls(controlsView, sid, result.Source);
+				_noActionBarCleanUnitKey = unitKey;
+				_noActionBarCleanViewKey = GetIl2CppObjectKey(controlsView);
 				LogDirectReleaseControlsBind("kept: no live release action-bar abilities; hid staleViews=" + hidden, sid, result.Source, result.Abilities);
 				return;
 			}
 
 			var selected = unitChanged ? null : FindCurrentSelectedReleaseAbility(controlsView, result.Abilities);
-			controlsView.Clear();
 			InvokeReleaseControlsBind(controlsView, result.Abilities, selected);
 			if (unitChanged)
 				TryClearReleaseControlsSelectedViewField(controlsView, sid, "unit transition");
@@ -1758,7 +1787,6 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 				return true;
 			}
 
-			controlsView.Clear();
 			InvokeReleaseControlsBind(controlsView, abilities, null);
 			InvokeReleaseControlsClickEnabled(controlsView, true);
 			Homm3CustomUiIconHook.RefreshBattleAbilityIconsIn(controlsView);
@@ -1816,7 +1844,6 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 				return true;
 			}
 
-			controlsView.Clear();
 			InvokeReleaseControlsBind(controlsView, abilities, null);
 			InvokeReleaseControlsClickEnabled(controlsView, true);
 			Homm3CustomUiIconHook.RefreshBattleAbilityIconsIn(controlsView);
@@ -1974,18 +2001,20 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 	{
 		if (controlsView == null)
 			return 0;
+		using var timing = Homm3LoadTiming.Scope("battle hud.noActionBarCleanup sid=" + (sid ?? "?"), Homm3LoadTiming.BattleScopeMinMs);
+		_noActionBarCleanUnitKey = 0;
 		ClearCachedReleaseControls();
 		ClearReleaseAbilityViewState(controlsView, sid);
 		TryClearReleaseControlsSelectedViewField(controlsView, sid, "no action-bar abilities: " + (source ?? "?"));
 		var hidden = HideReleaseNoActionBarAbilityViews(controlsView, sid, source);
-		hidden += ClearSelectedBattleActionBarAbilityViews(sid, source);
-		try { controlsView.Clear(); }
-		catch (Exception ex) { LogReleaseNoAbilityCleanupWarning(sid, "native controls clear", ex); }
+		hidden += ClearSelectedBattleActionBarAbilityViews(controlsView, sid, source);
+		// No native BhUnitControlsView.Clear() here: on the live build it only unsubscribes the view's battle
+		// events (number-key hotkeys included) and nothing re-runs Init, so it killed hotkeys for the battle.
 		try { InvokeReleaseControlsClickEnabled(controlsView, false); }
 		catch (Exception ex) { LogReleaseNoAbilityCleanupWarning(sid, "click disable", ex); }
 		Homm3CustomUiIconHook.ClearBattleAbilityIconsIn(controlsView);
 		hidden += HideReleaseNoActionBarAbilityViews(controlsView, sid, source);
-		hidden += ClearSelectedBattleActionBarAbilityViews(sid, source);
+		hidden += ClearSelectedBattleActionBarAbilityViews(controlsView, sid, source);
 		return hidden;
 	}
 
@@ -2014,9 +2043,216 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		catch (Exception ex) { LogReleaseNoAbilityCleanupWarning(sid, "ability view enabled-state cleanup", ex); }
 		var abilityType = GameInteropTypes.ReleaseAbilityWrapperType;
 		if (abilityType != null
+		    && !_releaseAbilityViewFieldClearUnavailable
 		    && !TrySetFirstMemberValue(view, GameSymbols.BattleAbilityView.UnitAbilityField, abilityType, null))
 		{
-			LogReleaseNoAbilityCleanupWarning(sid, "ability view native wrapper field cleanup", null);
+			// The lookup is by type, so one miss means every later view misses the same way: stop retrying.
+			_releaseAbilityViewFieldClearUnavailable = true;
+			LogReleaseNoAbilityCleanupWarning(sid, "ability view native wrapper field cleanup (not retried)", null);
+		}
+	}
+
+	/// <summary>
+	/// True when this unit's no-action-bar cleanup already ran on this controls view and nothing has shown an
+	/// action-bar view since. Any other bind (native or custom) activates a view, which fails this check.
+	/// </summary>
+	private static bool IsReleaseNoActionBarAlreadyClean(BhUnitControlsView controlsView, long unitKey)
+	{
+		if (unitKey == 0 || unitKey != _noActionBarCleanUnitKey)
+			return false;
+		if (GetIl2CppObjectKey(controlsView) != _noActionBarCleanViewKey)
+			return false;
+		try
+		{
+			var views = GetReleaseControlsAbilityViews(controlsView);
+			if (views != null)
+			{
+				for (var i = 0; i < views.Count; i++)
+				{
+					var view = views[i];
+					var go = view != null ? view.gameObject : null;
+					if (go != null && go.activeSelf)
+						return false;
+				}
+			}
+			var container = _actionBarAbilityContainer;
+			if (container != null && container)
+			{
+				var contained = container.GetComponentsInChildren<BhBattleAbilityView>(true);
+				for (var i = 0; i < contained.Length; i++)
+				{
+					var view = contained[i];
+					var go = view != null ? view.gameObject : null;
+					if (go != null && go.activeSelf && IsUnitSlotAbilityView(view))
+						return false;
+				}
+			}
+			return true;
+		}
+		catch
+		{
+			return false;
+		}
+	}
+
+	/// <summary>
+	/// Unit-slot ability views under the selected unit's action bar. The first call finds the bar's container with
+	/// one whole-scene scan; later calls read the container's children. A scan that finds no container is not
+	/// repeated for <see cref="ActionBarContainerRescanFrames"/> frames.
+	/// </summary>
+	private static List<BhBattleAbilityView> GetSelectedBattleActionBarAbilityViews(BhUnitControlsView controlsView)
+	{
+		var result = new List<BhBattleAbilityView>();
+		var container = _actionBarAbilityContainer;
+		var frame = Time.frameCount;
+		var recentMiss = _actionBarContainerMissFrame != int.MinValue
+		                 && frame >= _actionBarContainerMissFrame
+		                 && frame - _actionBarContainerMissFrame < ActionBarContainerRescanFrames;
+		if ((container == null || !container) && !recentMiss)
+		{
+			// An empty action bar has no ability views for the scene scan to find, so look the container up
+			// by name under the controls view's own canvas first.
+			// The action bar sits under its own root canvas, not the controls view's, so a miss there falls
+			// through to a lookup by the bar's known hierarchy path.
+			container = FindActionBarAbilityContainerNear(controlsView);
+			if (container == null || !container)
+				container = FindActionBarAbilityContainerByPath();
+			_actionBarAbilityContainer = container;
+		}
+		if (container != null && container)
+		{
+			_actionBarContainerMissFrame = int.MinValue;
+			_actionBarContainerScanMissSceneHandle = int.MinValue;
+			var contained = container.GetComponentsInChildren<BhBattleAbilityView>(true);
+			for (var i = 0; i < contained.Length; i++)
+			{
+				var view = contained[i];
+				if (view != null && IsUnitSlotAbilityView(view))
+					result.Add(view);
+			}
+			return result;
+		}
+		_actionBarAbilityContainer = null;
+		if (recentMiss)
+			return result;
+
+		// The whole-scene scan runs once per scene: after a scan that found no container, only the cheap lookups
+		// above are retried (every ActionBarContainerRescanFrames) until the active scene changes.
+		var sceneHandle = GetActiveSceneHandleSafe();
+		if (_actionBarContainerScanMissSceneHandle == sceneHandle)
+		{
+			_actionBarContainerMissFrame = frame;
+			return result;
+		}
+
+		using var timing = Homm3LoadTiming.Scope("battle hud.actionBarContainerScan", Homm3LoadTiming.BattleScopeMinMs);
+		var all = Resources.FindObjectsOfTypeAll<BhBattleAbilityView>();
+		for (var i = 0; i < all.Length; i++)
+		{
+			var view = all[i];
+			var go = view != null ? view.gameObject : null;
+			if (go == null)
+				continue;
+			var isUnitSlot = IsUnitSlotAbilityView(view);
+			// Any ability view under the action bar identifies the container, unit-slot or not.
+			if (!isUnitSlot && _actionBarAbilityContainer != null)
+				continue;
+			if (GetPath(go.transform).IndexOf(SelectedBattleActionBarAbilityPathFragment, StringComparison.Ordinal) < 0)
+				continue;
+			if (isUnitSlot)
+				result.Add(view);
+			if (_actionBarAbilityContainer != null)
+				continue;
+			for (var current = go.transform.parent; current != null; current = current.parent)
+			{
+				if (!string.Equals(current.name, ActionBarAbilityContainerName, StringComparison.Ordinal))
+					continue;
+				_actionBarAbilityContainer = current;
+				break;
+			}
+		}
+		if (_actionBarAbilityContainer == null)
+		{
+			_actionBarContainerMissFrame = frame;
+			_actionBarContainerScanMissSceneHandle = sceneHandle;
+		}
+		else
+		{
+			_actionBarContainerMissFrame = int.MinValue;
+			_actionBarContainerScanMissSceneHandle = int.MinValue;
+		}
+		return result;
+	}
+
+	private static int _actionBarContainerScanMissSceneHandle = int.MinValue;
+
+	private static int GetActiveSceneHandleSafe()
+	{
+		try { return UnityEngine.SceneManagement.SceneManager.GetActiveScene().handle; }
+		catch { return 0; }
+	}
+
+	/// <summary>
+	/// Finds the action bar's ability container by its hierarchy path: the named canvas through the active-object
+	/// name lookup, then the remaining path through <c>Transform.Find</c>, which also reaches inactive children.
+	/// </summary>
+	private static Transform FindActionBarAbilityContainerByPath()
+	{
+		try
+		{
+			var path = SelectedBattleActionBarAbilityPathFragment.TrimEnd('/');
+			var slash = path.IndexOf('/');
+			if (slash <= 0)
+				return null;
+			var canvas = GameObject.Find(path.Substring(0, slash));
+			if (!canvas)
+				return null;
+			var found = canvas.transform.Find(path.Substring(slash + 1));
+			return found ? found : null;
+		}
+		catch
+		{
+			return null;
+		}
+	}
+
+	private static Transform FindActionBarAbilityContainerNear(BhUnitControlsView controlsView)
+	{
+		try
+		{
+			var own = controlsView != null ? controlsView.transform : null;
+			var root = own != null ? own.root : null;
+			if (root == null)
+				return null;
+			Transform found = null;
+			var all = root.GetComponentsInChildren<Transform>(true);
+			for (var i = 0; i < all.Length; i++)
+			{
+				var candidate = all[i];
+				if (candidate == null || !string.Equals(candidate.name, ActionBarAbilityContainerName, StringComparison.Ordinal))
+					continue;
+				found = candidate;
+				break;
+			}
+			if (!_loggedActionBarContainerLookup)
+			{
+				_loggedActionBarContainerLookup = true;
+				Plugin.LogSource?.LogInfo(
+					"Homm3Import selected-unit HUD: action-bar container lookup under root='"
+					+ root.name
+					+ "' transforms="
+					+ all.Length
+					+ " found="
+					+ (found != null ? "'" + GetPath(found) + "'" : "none")
+					+ " controlsView='"
+					+ GetPath(own)
+					+ "'.");
+			}
+			return found;
+		}
+		catch
+		{
+			return null;
 		}
 	}
 
@@ -2078,21 +2314,19 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		return hidden;
 	}
 
-	private static int ClearSelectedBattleActionBarAbilityViews(string sid, string source)
+	private static int ClearSelectedBattleActionBarAbilityViews(BhUnitControlsView controlsView, string sid, string source)
 	{
 		var hidden = 0;
 		try
 		{
-			var views = Resources.FindObjectsOfTypeAll<BhBattleAbilityView>();
-			for (var i = 0; i < views.Length; i++)
+			var views = GetSelectedBattleActionBarAbilityViews(controlsView);
+			for (var i = 0; i < views.Count; i++)
 			{
 				var view = views[i];
 				var go = view != null ? view.gameObject : null;
-				if (go == null || !go.activeSelf || !IsUnitSlotAbilityView(view))
+				if (go == null || !go.activeSelf)
 					continue;
-				var path = GetPath(go.transform);
-				if (path.IndexOf(SelectedBattleActionBarAbilityPathFragment, StringComparison.Ordinal) < 0)
-					continue;
+				var path = IsDiagnosticEnabled() ? GetPath(go.transform) : null;
 
 				ClearReleaseAbilityViewState(view, sid);
 				Homm3CustomUiIconHook.ClearBattleAbilityIconsIn(view);
@@ -2187,7 +2421,6 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 			}
 
 			var selected = FindCurrentSelectedReleaseAbility(controlsView, _lastBoundReleaseControlsAbilities);
-			controlsView.Clear();
 			InvokeReleaseControlsBind(controlsView, _lastBoundReleaseControlsAbilities, selected);
 			InvokeReleaseControlsClickEnabled(controlsView, true);
 			Homm3CustomUiIconHook.RefreshBattleAbilityIconsIn(controlsView);
@@ -2425,12 +2658,6 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 		var hidden = 0;
 		try
 		{
-			controlsView.Clear();
-		}
-		catch { }
-
-		try
-		{
 			var views = GetReleaseControlsAbilityViews(controlsView);
 			if (views == null)
 				return hidden;
@@ -2504,12 +2731,7 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 
 	private static BhBattleAbilityView FindReleaseHotkeyView(BhUnitControlsView controlsView, int idButton)
 	{
-		if (idButton > 0)
-		{
-			var shiftedIndex = idButton - 1;
-			if (IsReleaseHotkeyActionBarSlot(controlsView, shiftedIndex))
-				return TryGetReleaseHotkeyViewAt(controlsView, shiftedIndex);
-		}
+		// The native handler indexes abilities[idButton] directly (zero-based; live 26615913 decompile).
 		return TryGetReleaseHotkeyViewAt(controlsView, idButton);
 	}
 
@@ -2541,29 +2763,6 @@ internal static class Homm3ImportBhSelectedUnitHudFix
 			return ability != null
 				&& CanShowOnActionBar(ability)
 				&& IsReleaseAbilityViewClickReady(abilityView)
-				&& ReleaseHotkeyControlsContainAbility(controlsView, ability);
-		}
-		catch
-		{
-			return false;
-		}
-	}
-
-	private static bool IsReleaseHotkeyActionBarSlot(BhUnitControlsView controlsView, int index)
-	{
-		try
-		{
-			var views = GetReleaseControlsAbilityViews(controlsView);
-			if (views == null || index < 0 || index >= views.Count)
-				return false;
-			var view = views[index];
-			var go = view != null ? view.gameObject : null;
-			if (!IsReleaseHotkeyControlsContext(controlsView) || go == null || !go.activeInHierarchy)
-				return false;
-
-			var ability = GetReleaseAbility(view);
-			return ability != null
-				&& CanShowOnActionBar(ability)
 				&& ReleaseHotkeyControlsContainAbility(controlsView, ability);
 		}
 		catch

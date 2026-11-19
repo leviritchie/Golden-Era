@@ -14,6 +14,12 @@ public sealed class Homm3BattleDonorVisualSuppressor : MonoBehaviour
 	private Transform _scanRoot;
 	private string _unitSid;
 	private bool _skinnedDiagDumped;
+	// The sweep walks the whole unit hierarchy three times. Donor visuals appear in the first frames after the
+	// unit spawns, so sweep every frame then, and afterwards a few times a second for late-spawned effects.
+	private const int EveryFrameSweeps = 45;
+	private const float LaterSweepSeconds = 0.2f;
+	private int _sweeps;
+	private float _nextSweep;
 
 	public Homm3BattleDonorVisualSuppressor(IntPtr ptr) : base(ptr) { }
 
@@ -33,6 +39,7 @@ public sealed class Homm3BattleDonorVisualSuppressor : MonoBehaviour
 			var existing = replacementRoot.GetComponent<Homm3BattleDonorVisualSuppressor>();
 			var suppressor = existing != null && existing ? existing : replacementRoot.AddComponent<Homm3BattleDonorVisualSuppressor>();
 			suppressor._scanRoot = scanRoot;
+		suppressor._sweeps = 0;
 			suppressor._unitSid = unitSid;
 			if (_attachDiagRemaining > 0)
 			{
@@ -65,6 +72,18 @@ public sealed class Homm3BattleDonorVisualSuppressor : MonoBehaviour
 				+ (_unitSid ?? "?")
 				+ "' "
 				+ Homm3ImportVisuals.DescribeSkinnedBattleLaneState(gameObject));
+		}
+
+		if (_sweeps >= EveryFrameSweeps)
+		{
+			var now = Time.unscaledTime;
+			if (now < _nextSweep)
+				return;
+			_nextSweep = now + LaterSweepSeconds;
+		}
+		else
+		{
+			_sweeps++;
 		}
 
 		Homm3ImportReleaseBattleVisualHook.SuppressDonorVisuals(

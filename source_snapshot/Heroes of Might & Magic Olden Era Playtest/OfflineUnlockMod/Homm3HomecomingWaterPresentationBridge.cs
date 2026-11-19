@@ -78,7 +78,7 @@ internal static class Homm3HomecomingWaterPresentationBridge
 		var type = GameMember.FindTypeFromHints(
 			GameSymbols.HomecomingWaterPresentation.PathDrawerTypeId,
 			GameSymbols.HomecomingWaterPresentation.PathDrawerTypeHints,
-			hint => AccessTools.TypeByName(hint));
+			hint => GameMember.TypeByName(hint));
 		if (type == null)
 			throw new MissingMemberException(LogPrefix + " path drawer type not found.");
 		return type;

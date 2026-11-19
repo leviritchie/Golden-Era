@@ -518,6 +518,7 @@ internal static class Homm3CounterattackDoctrineMutationRuntime
 		if (_inHook)
 			return;
 		_inHook = true;
+		using var timing = Homm3LoadTiming.Scope("battle damage.counterattackDoctrine", Homm3LoadTiming.BattleScopeMinMs);
 		try
 		{
 			if (__3 <= 0 || __5)
@@ -580,8 +581,8 @@ internal static class Homm3CounterattackDoctrineMutationRuntime
 				}
 			}
 
-			// Fortress Predator Instinct: predator -> its prey (any hit, counters included). Contributed here so the
-			// committed damage keeps a single owner.
+			// Fortress Predator Instinct: +bonus predator -> its prey, -penalty predator -> anything else while the prey
+			// lives (any hit, counters included). Contributed here so the committed damage keeps a single owner.
 			var predatorPercent = Homm3FortressPredatorInstinctRuntime.DamagePercent(counterattacker ?? TryWrapUnit(__0), __instance, out var predatorDetail);
 			if (predatorPercent != 0)
 			{

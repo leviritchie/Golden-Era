@@ -725,7 +725,7 @@ internal static class Homm3BattleUnitLawOwnerRegistry
 		failReason = null;
 		foreach (var typeName in GameSymbols.CustomFactionLawRuntime.GlobalLogicRootTypeHints)
 		{
-			var type = GameMember.FindType("customFactionLawRuntime.globalLogicRoot." + typeName, typeName) ?? AccessTools.TypeByName(typeName);
+			var type = GameMember.FindType("customFactionLawRuntime.globalLogicRoot." + typeName, typeName) ?? GameMember.TypeByName(typeName);
 			if (type == null)
 			{
 				failReason = "global logic root type not found: " + typeName;
