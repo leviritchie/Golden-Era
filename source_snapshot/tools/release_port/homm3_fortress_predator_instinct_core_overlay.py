@@ -98,9 +98,10 @@ SOURCE_DIFFERENCE = (
 
 
 def faction_skill_levels() -> list[list[dict[str, Any]]]:
-    # Ranks keep the runtime-owned faction-skill load shape (ignoreFractionsCount), like Dungeon/Factory/Bulwark:
-    # native HeroSkill apply needs non-empty bonuses; the predator bonus itself is runtime-owned.
-    return [[{"type": "unitBoolStat", "parameters": ["ignoreFractionsCount", "true"]}] for _ in range(3)]
+    # Runtime-owned: the ranks carry no bonuses (the old ignoreFractionsCount carrier removed the mixed-faction
+    # Morale penalty); the runtime reads the rank from the hero's skill list.
+    # (empty ranks load: the July 2026 map-load NRE came from empty Adv/Exp subSkills, see docs/factory_bulwark_implementation_handoff.md 15b-16; Inferno Gating ships empty ranks since 2026-11-14)
+    return [[], [], []]
 
 
 def make_skill_row() -> dict[str, Any]:

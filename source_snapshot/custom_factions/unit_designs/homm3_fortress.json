@@ -1,0 +1,1171 @@
+{
+ "schemaVersion": 1,
+ "faction": "homm3_fortress",
+ "approval": "Owner, 2026-11-20 goal: all factions, autonomous (no per-faction card review).",
+ "tradeAxis": "Hunter (fast, single-target burst that reaches one enemy: charges, dives, strikes without retaliation) versus Warden (durable control and retaliation: petrify, poison, slow, extra counterattacks, taunt, whose value does not come from the damage dealt). Hunters shine against their one mark; Wardens hold the line against everything else.",
+ "buffFile": "DB/buffs/units_buffs_nature.json",
+ "buffs": [
+  {
+   "id": "h3_kit_fortress_slowed_effect",
+   "cloneOf": "minos_debuff",
+   "name": "Slowed",
+   "text": "-1 Speed.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "data": {
+     "stats": {
+      "speed": -1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_fortress_crippled_effect",
+   "cloneOf": "minos_debuff",
+   "name": "Crippled",
+   "text": "-2 Speed.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "data": {
+     "stats": {
+      "speed": -2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_fortress_lizard_venom_effect",
+   "cloneOf": "frog_poison",
+   "name": "Lizard Venom",
+   "text": "Takes 4 Magic Damage plus 1 per creature in the poisoner's stack at the start of its turn.",
+   "set": {
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive",
+        "magic_damage",
+        "overTime_effect",
+        "overTime_effect_poison",
+        "activate_all_buff_actions_damage"
+       ],
+       "triggerCounter": false,
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "statDmgMult": 0.0,
+       "minBaseDmg": 4,
+       "maxBaseDmg": 4,
+       "minStackDmg": 1,
+       "maxStackDmg": 1
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_fortress_wyvern_venom_effect",
+   "cloneOf": "frog_poison",
+   "name": "Wyvern Venom",
+   "text": "Takes 10 Magic Damage plus 5 per creature in the poisoner's stack at the start of its turn.",
+   "set": {
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive",
+        "magic_damage",
+        "overTime_effect",
+        "overTime_effect_poison",
+        "activate_all_buff_actions_damage"
+       ],
+       "triggerCounter": false,
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "statDmgMult": 0.0,
+       "minBaseDmg": 10,
+       "maxBaseDmg": 10,
+       "minStackDmg": 5,
+       "maxStackDmg": 5
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_fortress_corroded_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Corroded",
+   "text": "-3 Defense.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "data": {
+     "stats": {
+      "defence": -3
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_fortress_acid_blood_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Acid Blood",
+   "text": "Deals -25% Damage.",
+   "set": {}
+  },
+  {
+   "id": "h3_kit_fortress_menacing_hiss_effect",
+   "cloneOf": "ent_taunt_buff",
+   "name": "Menacing Hiss",
+   "text": "Enemy creatures within 2 hexes can target only this creature.",
+   "set": {}
+  },
+  {
+   "id": "h3_kit_fortress_wyvern_sting_effect",
+   "cloneOf": "frog_poison",
+   "name": "Wyvern Sting",
+   "text": "Takes 6 Magic Damage plus 3 per creature in the poisoner's stack at the start of its turn.",
+   "set": {
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive",
+        "magic_damage",
+        "overTime_effect",
+        "overTime_effect_poison",
+        "activate_all_buff_actions_damage"
+       ],
+       "triggerCounter": false,
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "statDmgMult": 0.0,
+       "minBaseDmg": 6,
+       "maxBaseDmg": 6,
+       "minStackDmg": 3,
+       "maxStackDmg": 3
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_fortress_shatter_stone_effect",
+   "cloneOf": "medusa_stone",
+   "name": "Petrified",
+   "text": "Skips its turn and cannot counterattack. Takes +100% physical Damage, +50% more from the Basilisk that petrified it. Immune to Magic Damage.",
+   "set": {
+    "data": {
+     "sequenceEffect": "skip_turn",
+     "disablers": [
+      {
+       "ability": "counter_attack",
+       "attack": "all"
+      }
+     ],
+     "stats": {
+      "inDmgMods": {
+       "list": [
+        {
+         "t": "normal_damage",
+         "v": 1.0
+        }
+       ]
+      },
+      "inDmgModsByCasterTags": {
+       "list": [
+        {
+         "t": "h3_kit_shatter",
+         "v": 0.5
+        }
+       ]
+      }
+     },
+     "immunities": [
+      {
+       "type": "damage",
+       "tags": [
+        "magic_damage"
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "h3_kit_fortress_quarry_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Quarry",
+   "text": "Marked as a Wyvern's quarry: it deals +35% Damage to this creature.",
+   "set": {
+    "icon": "magic_taunt_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "infinite": true,
+    "maxDuration": 99,
+    "data": {}
+   }
+  },
+  {
+   "id": "h3_kit_fortress_deadly_sting_effect",
+   "cloneOf": "magic_sharp_edge_effect_0_special",
+   "name": "Deadly Sting",
+   "text": "Always deals maximum Damage.",
+   "set": {
+    "tags": [
+     "positive"
+    ],
+    "infinite": true,
+    "canDispel": false,
+    "maxDuration": 99,
+    "data": {
+     "stats": {
+      "alwaysMaxDmg": true
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_fortress_updraft_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Updraft",
+   "text": "Takes -40% Ranged Damage.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "magic_favorable_wind_effect_icon",
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "inDmgMods": {
+       "list": [
+        {
+         "t": "shoot_attack",
+         "v": -0.4
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_fortress_climb_away_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Climb Away",
+   "text": "Takes -40% Ranged Damage.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "magic_favorable_wind_effect_icon",
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "inDmgMods": {
+       "list": [
+        {
+         "t": "shoot_attack",
+         "v": -0.4
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_fortress_iron_rush_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Iron Rush",
+   "text": "+2 Speed. Takes -30% Melee Damage.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "sunlightCavalry_buff_icon",
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "speed": 2,
+      "inDmgMods": {
+       "list": [
+        {
+         "t": "melee_attack",
+         "v": -0.3
+        }
+       ]
+      }
+     }
+    }
+   }
+  }
+ ],
+ "units": {
+  "h3_gnoll": {
+   "role": "base",
+   "stats": {
+    "hp": 12,
+    "offence": 4,
+    "defence": 4,
+    "damageMin": 3,
+    "damageMax": 5,
+    "speed": 4,
+    "initiative": 4
+   },
+   "gold": 50,
+   "squadValue": 94,
+   "kit": [
+    {
+     "k": "fortress_scavenge",
+     "focus": 1,
+     "cd": 2,
+     "percent": 50,
+     "name": "Scavenge",
+     "text": "Devours a corpse on an adjacent hex and restores Health equal to 50% of one creature's maximum Health. This does not revive fallen creatures."
+    }
+   ],
+   "powerTarget": 0.91
+  },
+  "h3_gnoll_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 12,
+    "offence": 5,
+    "defence": 4,
+    "damageMin": 3,
+    "damageMax": 6,
+    "speed": 6,
+    "initiative": 6
+   },
+   "gold": 70,
+   "squadValue": 124,
+   "kit": [
+    {
+     "k": "fortress_scavenge",
+     "focus": 1,
+     "cd": 2,
+     "percent": 50,
+     "name": "Scavenge",
+     "text": "Devours a corpse on an adjacent hex and restores Health equal to 50% of one creature's maximum Health. This does not revive fallen creatures."
+    },
+    {
+     "k": "fortress_stat",
+     "stats": {
+      "outDmgModsByTargetTags": [
+       {
+        "t": "h3_kit_shooter",
+        "v": 0.3
+       }
+      ]
+     },
+     "name": "Raider",
+     "text": "Deals +30% Damage to creatures that can shoot."
+    }
+   ]
+  },
+  "h3_gnoll_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 15,
+    "offence": 4,
+    "defence": 6,
+    "damageMin": 4,
+    "damageMax": 6,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 70,
+   "squadValue": 124,
+   "kit": [
+    {
+     "k": "fortress_scavenge",
+     "focus": 1,
+     "cd": 2,
+     "percent": 50,
+     "name": "Scavenge",
+     "text": "Devours a corpse on an adjacent hex and restores Health equal to 50% of one creature's maximum Health. This does not revive fallen creatures."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_gnoll_upg_alt_redesign_ability_name"
+    },
+    {
+     "k": "when_damaged_adjacent_debuff",
+     "buff": "h3_kit_fortress_slowed_effect",
+     "duration": 2,
+     "icon": "magic_web_effect_icon",
+     "name": "Bog Curse",
+     "text": "Whenever this creature takes Damage, all adjacent enemies have -1 Speed until the end of the next round."
+    }
+   ]
+  },
+  "h3_lizardman": {
+   "role": "base",
+   "stats": {
+    "hp": 14,
+    "offence": 5,
+    "defence": 4,
+    "damageMin": 3,
+    "damageMax": 6,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 110,
+   "squadValue": 158,
+   "kit": [
+    {
+     "k": "shot",
+     "focus": 1,
+     "cd": 1,
+     "mult": 1.0,
+     "counter": true,
+     "buff": "h3_kit_fortress_lizard_venom_effect",
+     "duration": 2,
+     "icon": "magic_fatal_decay_effect_icon",
+     "name": "Venom Shot",
+     "text": "Performs a Ranged attack and poisons the target for 2 rounds. At the start of its turn the poisoned creature takes 4 Magic Damage plus 1 per creature in this stack."
+    }
+   ]
+  },
+  "h3_lizardman_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 17,
+    "offence": 6,
+    "defence": 7,
+    "damageMin": 3,
+    "damageMax": 6,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 140,
+   "squadValue": 209,
+   "kit": [
+    {
+     "k": "skirmisher",
+     "name": "Skirmisher",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "shot",
+     "focus": 1,
+     "cd": 1,
+     "mult": 0.5,
+     "counter": false,
+     "buff": "h3_kit_fortress_crippled_effect",
+     "duration": 2,
+     "name": "Crippling Shot",
+     "text": "Performs a Ranged attack that deals 50% Damage. The target has -2 Speed until the end of the next round."
+    }
+   ]
+  },
+  "h3_lizardman_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 14,
+    "offence": 8,
+    "defence": 4,
+    "damageMin": 3,
+    "damageMax": 6,
+    "speed": 6,
+    "initiative": 8
+   },
+   "gold": 140,
+   "squadValue": 209,
+   "kit": [
+    {
+     "k": "sharpshooter"
+    },
+    {
+     "k": "shot",
+     "focus": 1,
+     "cd": 1,
+     "mult": 1.0,
+     "counter": true,
+     "buff": "h3_kit_fortress_lizard_venom_effect",
+     "duration": 2,
+     "icon": "magic_fatal_decay_effect_icon",
+     "name": "Venom Shot",
+     "text": "Performs a Ranged attack and poisons the target for 2 rounds. At the start of its turn the poisoned creature takes 4 Magic Damage plus 1 per creature in this stack."
+    },
+    {
+     "k": "fortress_stat",
+     "stats": {
+      "damagePerDeltaLevel": 0.05
+     },
+     "offMult": 1.1,
+     "name": "Giant Slayer",
+     "text": "Deals +5% Damage for each tier the target is above this creature."
+    }
+   ],
+   "powerTarget": 0.93
+  },
+  "h3_serpent_fly": {
+   "role": "base",
+   "stats": {
+    "hp": 29,
+    "offence": 6,
+    "defence": 8,
+    "damageMin": 4,
+    "damageMax": 8,
+    "speed": 7,
+    "initiative": 9
+   },
+   "gold": 220,
+   "squadValue": 287,
+   "kit": [
+    {
+     "k": "keep_ability",
+     "view": "h3_fortress_ability_dispel_strike_name"
+    }
+   ]
+  },
+  "h3_serpent_fly_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 31,
+    "offence": 7,
+    "defence": 11,
+    "damageMin": 4,
+    "damageMax": 10,
+    "speed": 8,
+    "initiative": 10
+   },
+   "gold": 240,
+   "squadValue": 415,
+   "kit": [
+    {
+     "k": "keep_ability",
+     "view": "h3_serpent_fly_upg_weakening_dispel_name"
+    },
+    {
+     "k": "stat_aura",
+     "radius": 1,
+     "target": "enemy",
+     "stats": {
+      "blockEnergyRegen": true
+     },
+     "toughMult": 1.06,
+     "name": "Droning Wings",
+     "text": "Adjacent enemy creatures gain no Focus."
+    }
+   ]
+  },
+  "h3_serpent_fly_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 29,
+    "offence": 10,
+    "defence": 8,
+    "damageMin": 4,
+    "damageMax": 8,
+    "speed": 10,
+    "initiative": 12
+   },
+   "gold": 240,
+   "squadValue": 415,
+   "kit": [
+    {
+     "k": "keep_ability",
+     "view": "h3_fortress_ability_dispel_strike_name"
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "start_buff",
+     "buff": "h3_kit_fortress_deadly_sting_effect",
+     "offMult": 1.1,
+     "icon": "magic_sharp_edge_effect_icon_special",
+     "name": "Deadly Sting",
+     "text": "Always deals maximum Damage."
+    }
+   ]
+  },
+  "h3_basilisk": {
+   "role": "base",
+   "stats": {
+    "hp": 50,
+    "offence": 12,
+    "defence": 14,
+    "damageMin": 10,
+    "damageMax": 14,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 325,
+   "squadValue": 414,
+   "kit": [
+    {
+     "k": "keep_ability",
+     "view": "h3_basilisk_stone_gaze_name"
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_basilisk_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 50,
+    "offence": 13,
+    "defence": 18,
+    "damageMin": 11,
+    "damageMax": 14,
+    "speed": 5,
+    "initiative": 7
+   },
+   "gold": 400,
+   "squadValue": 630,
+   "kit": [
+    {
+     "k": "keep_ability",
+     "view": "h3_basilisk_upg_stone_gaze_name"
+    },
+    {
+     "k": "stat_aura",
+     "radius": 1,
+     "target": "enemy",
+     "stats": {
+      "initiative": -2
+     },
+     "toughMult": 1.04,
+     "name": "Basilisk Stare",
+     "text": "Adjacent enemy creatures have -2 Initiative."
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_basilisk_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 50,
+    "offence": 15,
+    "defence": 14,
+    "damageMin": 10,
+    "damageMax": 14,
+    "speed": 7,
+    "initiative": 9
+   },
+   "gold": 400,
+   "squadValue": 630,
+   "kit": [
+    {
+     "k": "fortress_stone_gaze",
+     "focus": 2,
+     "cd": 3,
+     "buff": "h3_kit_fortress_shatter_stone_effect",
+     "name": "Stone Gaze",
+     "text": "Performs a Melee attack that petrifies the target for 1 round: it skips its turn, cannot counterattack, takes +100% physical Damage and is immune to Magic Damage. Does not end this creature's turn."
+    },
+    {
+     "k": "fortress_stat",
+     "unitTags": [
+      "h3_kit_shatter"
+     ],
+     "offMult": 1.1,
+     "name": "Shatter",
+     "text": "Deals +50% Damage to creatures it has petrified."
+    }
+   ],
+   "powerTarget": 0.97
+  },
+  "h3_gorgon": {
+   "role": "base",
+   "stats": {
+    "hp": 82,
+    "offence": 14,
+    "defence": 16,
+    "damageMin": 13,
+    "damageMax": 20,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 525,
+   "squadValue": 678,
+   "kit": [
+    {
+     "k": "when_damaged_adjacent_debuff",
+     "buff": "h3_kit_fortress_corroded_effect",
+     "duration": 1,
+     "icon": "magic_shorten_shadow_effect_icon",
+     "name": "Corroding Hide",
+     "text": "Whenever this creature takes Damage, adjacent enemies are Corroded: -3 Defence until the end of the round."
+    },
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "movementNegative"
+     ],
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Unstoppable",
+     "text": "Immune to effects that reduce Speed or prevent movement."
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_gorgon_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 85,
+    "offence": 15,
+    "defence": 18,
+    "damageMin": 14,
+    "damageMax": 21,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 600,
+   "squadValue": 1137,
+   "kit": [
+    {
+     "k": "when_damaged_adjacent_debuff",
+     "buff": "h3_kit_fortress_corroded_effect",
+     "duration": 2,
+     "icon": "magic_shorten_shadow_effect_icon",
+     "name": "Corroding Hide",
+     "text": "Whenever this creature takes Damage, adjacent enemies are Corroded: -3 Defence until the end of the next round."
+    },
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "movementNegative"
+     ],
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Unstoppable",
+     "text": "Immune to effects that reduce Speed or prevent movement."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_fortress_ability_death_stare_name"
+    },
+    {
+     "k": "fortress_counter_kill",
+     "n": 1,
+     "offMult": 1.15,
+     "name": "Withering Gaze",
+     "text": "Counterattacks also kill 1 creature in the attacking stack."
+    }
+   ],
+   "powerTarget": 0.97
+  },
+  "h3_gorgon_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 82,
+    "offence": 16,
+    "defence": 16,
+    "damageMin": 13,
+    "damageMax": 20,
+    "speed": 7,
+    "initiative": 9
+   },
+   "gold": 600,
+   "squadValue": 1137,
+   "kit": [
+    {
+     "k": "fortress_opening_buff",
+     "buff": "h3_kit_fortress_iron_rush_effect",
+     "duration": 1,
+     "name": "Iron Rush",
+     "text": "During the first round of battle, this creature has +2 Speed and takes -30% Melee Damage."
+    },
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "movementNegative"
+     ],
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Unstoppable",
+     "text": "Immune to effects that reduce Speed or prevent movement."
+    },
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_fortress_corroded_effect",
+     "duration": 2,
+     "icon": "magic_shorten_shadow_effect_icon",
+     "name": "Corrosive Breath",
+     "text": "Basic attacks and counterattacks corrode the target. It has -3 Defense until the end of the next round."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "name": "Gore",
+     "text": "Performs a Melee attack. Deals +40% Damage if the target is Corroded."
+    },
+    {
+     "k": "runtime",
+     "rule": "damage_vs_buff",
+     "percent": 40,
+     "buffs": [
+      "h3_kit_fortress_corroded_effect"
+     ],
+     "abilityOnly": true,
+     "name": "Gore",
+     "nameSid": "h3_kit_ability_gorgon_upg_alt_gore_name",
+     "descSid": "h3_kit_ability_gorgon_upg_alt_gore_description"
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_wyvern": {
+   "role": "base",
+   "stats": {
+    "hp": 110,
+    "offence": 21,
+    "defence": 19,
+    "damageMin": 20,
+    "damageMax": 28,
+    "speed": 8,
+    "initiative": 9
+   },
+   "gold": 800,
+   "squadValue": 1214,
+   "kit": [
+    {
+     "k": "fortress_self_trigger_buff",
+     "trigger": "unit_wait",
+     "buff": "h3_kit_fortress_updraft_effect",
+     "duration": 1,
+     "name": "Updraft",
+     "text": "When it Waits, it takes -40% Ranged Damage until its next turn."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "buff": "h3_kit_fortress_wyvern_sting_effect",
+     "duration": 2,
+     "icon": "magic_fatal_decay_effect_icon",
+     "offMult": 1.08,
+     "name": "Tail Sting",
+     "text": "Performs a Melee attack and poisons the target for 2 rounds. At the start of its turn the poisoned creature takes 6 Magic Damage plus 3 per creature in this stack."
+    }
+   ]
+  },
+  "h3_wyvern_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 135,
+    "offence": 22,
+    "defence": 25,
+    "damageMin": 20,
+    "damageMax": 28,
+    "speed": 8,
+    "initiative": 9
+   },
+   "gold": 1100,
+   "squadValue": 2014,
+   "kit": [
+    {
+     "k": "aura",
+     "radius": 1,
+     "target": "allynoself",
+     "t": "shoot_attack",
+     "v": -0.2,
+     "name": "Wing Shield",
+     "text": "Adjacent friendly creatures take -20% Ranged Damage."
+    },
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_fortress_wyvern_venom_effect",
+     "duration": 2,
+     "icon": "magic_fatal_decay_effect_icon",
+     "name": "Venomous Sting",
+     "text": "Basic attacks and counterattacks poison the target for 2 rounds. At the start of its turn the poisoned creature takes 10 Magic Damage plus 5 per creature in this stack."
+    },
+    {
+     "k": "fortress_venom_burst",
+     "focus": 2,
+     "cd": 3,
+     "buff": "h3_kit_fortress_wyvern_venom_effect",
+     "duration": 2,
+     "offMult": 1.08,
+     "name": "Toxic Cloud",
+     "text": "Poisons every adjacent enemy with Wyvern Venom for 2 rounds. Does not end this creature's turn."
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_wyvern_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 110,
+    "offence": 26,
+    "defence": 19,
+    "damageMin": 21,
+    "damageMax": 30,
+    "speed": 10,
+    "initiative": 11
+   },
+   "gold": 1100,
+   "squadValue": 2014,
+   "kit": [
+    {
+     "k": "fortress_after_ability_buff",
+     "buff": "h3_kit_fortress_climb_away_effect",
+     "duration": 1,
+     "name": "Climb Away",
+     "text": "After it uses Quarry, takes -40% Ranged Damage until its next turn."
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "fortress_quarry_mark",
+     "focus": 2,
+     "cd": 1,
+     "buff": "h3_kit_fortress_quarry_effect",
+     "duration": -1,
+     "name": "Quarry",
+     "text": "Marks an enemy creature as this stack's quarry until it dies or another is marked. This creature deals +35% Damage to its quarry. Does not end this creature's turn."
+    },
+    {
+     "k": "runtime",
+     "rule": "quarry",
+     "percent": 35,
+     "buff": "h3_kit_fortress_quarry_effect",
+     "offMult": 1.2,
+     "name": "Quarry",
+     "nameSid": "h3_kit_ability_wyvern_upg_alt_quarry_name",
+     "descSid": "h3_kit_ability_wyvern_upg_alt_quarry_description"
+    }
+   ]
+  },
+  "h3_hydra": {
+   "role": "base",
+   "stats": {
+    "hp": 290,
+    "offence": 26,
+    "defence": 26,
+    "damageMin": 40,
+    "damageMax": 60,
+    "speed": 5,
+    "initiative": 8
+   },
+   "gold": 2200,
+   "squadValue": 3788,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_swipe_1_name",
+     "descSid": "base_passive_strike_swipe_1_description_alt"
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "alt_swirl",
+     "mult": 0.5,
+     "name": "Whirlwind of Heads",
+     "text": "Strikes all adjacent enemies for 50% Damage. Enemies do not counterattack."
+    }
+   ]
+  },
+  "h3_hydra_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 320,
+    "offence": 28,
+    "defence": 34,
+    "damageMin": 42,
+    "damageMax": 62,
+    "speed": 5,
+    "initiative": 9
+   },
+   "gold": 3500,
+   "squadValue": 6995,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_swipe_1_name",
+     "descSid": "base_passive_strike_swipe_1_description_alt"
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "alt_swirl",
+     "mult": 0.5,
+     "name": "Whirlwind of Heads",
+     "text": "Strikes all adjacent enemies for 50% Damage. Enemies do not counterattack."
+    },
+    {
+     "k": "counters",
+     "n": 999,
+     "name": "Many Heads",
+     "text": "Can counterattack unlimited times per round."
+    },
+    {
+     "k": "when_damaged_adjacent_debuff",
+     "buff": "h3_kit_fortress_acid_blood_effect",
+     "duration": 2,
+     "icon": "hydra_debuff_icon",
+     "name": "Acid Blood",
+     "text": "Whenever this creature takes Damage, all adjacent enemies deal -25% Damage until the end of the next round."
+    },
+    {
+     "k": "self_buff",
+     "focus": 3,
+     "cd": 3,
+     "buff": "h3_kit_fortress_menacing_hiss_effect",
+     "duration": 2,
+     "icon": "ent_taunt_buff_icon",
+     "name": "Menacing Hiss",
+     "text": "All enemies within a 2-hex radius can target only this creature until the end of the next round. Does not end this creature's turn."
+    }
+   ],
+   "powerTarget": 0.97
+  },
+  "h3_hydra_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 310,
+    "offence": 32,
+    "defence": 26,
+    "damageMin": 46,
+    "damageMax": 68,
+    "speed": 8,
+    "initiative": 12
+   },
+   "gold": 3500,
+   "squadValue": 6995,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_swipe_1_name",
+     "descSid": "base_passive_strike_swipe_1_description_alt"
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "alt_swirl",
+     "mult": 0.5,
+     "name": "Whirlwind of Heads",
+     "text": "Strikes all adjacent enemies for 50% Damage. Enemies do not counterattack."
+    },
+    {
+     "k": "fortress_regeneration",
+     "percent": 50,
+     "name": "Regeneration",
+     "text": "At the start of its turn, restores Health equal to 50% of one creature's maximum Health. This does not revive fallen creatures."
+    },
+    {
+     "k": "fortress_drain_strike",
+     "focus": 3,
+     "cd": 3,
+     "mult": 1.5,
+     "counter": true,
+     "drain": 0.5,
+     "name": "Devour",
+     "nameSid": "h3_kit_ability_hydra_upg_alt_devour_bite_name",
+     "descSid": "h3_kit_ability_hydra_upg_alt_devour_bite_description",
+     "text": "Performs a Melee attack that deals +50% Damage. This creature restores Health equal to half the Damage dealt, up to its starting number of creatures."
+    }
+   ],
+   "powerTarget": 0.97
+  }
+ }
+}

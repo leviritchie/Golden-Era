@@ -1,0 +1,757 @@
+{
+ "schemaVersion": 1,
+ "faction": "homm3_cove",
+ "approval": "Owner, 2026-11-20 goal: all factions, autonomous (no per-faction card review).",
+ "tradeAxis": "Boarding (striker: Speed, Initiative and melee riders that pin a target and rush it) versus Broadside (ward: sturdier bodies that spend Focus on shots, or pure gun lines). Boarders want to close fast; gunners want the fight to stay at range. Treasure Hunting does not act in combat, so the axis is the faction's pirate character.",
+ "buffFile": "DB/buffs/units_buffs_nature.json",
+ "buffs": [
+  {
+   "id": "h3_kit_cove_rising_tide_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Rising Tide",
+   "text": "+2 Speed.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive",
+     "movementPositive"
+    ],
+    "isPositive": true,
+    "maxDuration": 2,
+    "icon": "magic_favorable_wind_effect_icon",
+    "data": {
+     "stats": {
+      "speed": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_cove_venom_effect",
+   "cloneOf": "magic_fatal_decay_effect_1",
+   "name": "Serpent Venom",
+   "text": "-10% maximum Health.",
+   "set": {
+    "data": {
+     "stats": {
+      "hpPerc": -0.1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_cove_coiled_effect",
+   "cloneOf": "ent_root",
+   "name": "Coiled",
+   "text": "Cannot move and cannot counterattack.",
+   "set": {
+    "data": {
+     "disablers": [
+      {
+       "ability": "counter_attack",
+       "attack": "all"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "h3_kit_cove_siren_song_effect",
+   "cloneOf": "ent_taunt_buff",
+   "name": "Siren Song",
+   "text": "Enemy creatures within 3 hexes can target only this creature.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "data": {
+     "stats": {
+      "tauntRadius": 3
+     }
+    }
+   }
+  }
+ ],
+ "units": {
+  "h3_nymph": {
+   "role": "base",
+   "stats": {
+    "hp": 10,
+    "offence": 4,
+    "defence": 2,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 35,
+   "squadValue": 72,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_blink_name",
+     "descSid": "base_passive_blink_description",
+     "icon": "space_6_magic_blink"
+    },
+    {
+     "k": "card",
+     "nameSid": "h3_common_passive_ice_damage_immunity_name",
+     "descSid": "h3_common_passive_ice_damage_immunity_description",
+     "icon": "sub_skill_resistance_1_icon"
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_oceanid": {
+   "role": "striker",
+   "stats": {
+    "hp": 10,
+    "offence": 6,
+    "defence": 2,
+    "damageMin": 2,
+    "damageMax": 5,
+    "speed": 6,
+    "initiative": 6
+   },
+   "gold": 45,
+   "squadValue": 101,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_blink_name",
+     "descSid": "base_passive_blink_description",
+     "icon": "space_6_magic_blink"
+    },
+    {
+     "k": "card",
+     "nameSid": "h3_common_passive_ice_damage_immunity_name",
+     "descSid": "h3_common_passive_ice_damage_immunity_description",
+     "icon": "sub_skill_resistance_1_icon"
+    },
+    {
+     "k": "cove_reposition",
+     "focus": 1,
+     "cd": 2,
+     "range": 3,
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Riptide",
+     "text": "Moves a friendly creature to a free hex within 3 hexes of its position. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_nymph_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 11,
+    "offence": 4,
+    "defence": 4,
+    "damageMin": 2,
+    "damageMax": 5,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 45,
+   "squadValue": 101,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_blink_name",
+     "descSid": "base_passive_blink_description",
+     "icon": "space_6_magic_blink"
+    },
+    {
+     "k": "card",
+     "nameSid": "h3_common_passive_ice_damage_immunity_name",
+     "descSid": "h3_common_passive_ice_damage_immunity_description",
+     "icon": "sub_skill_resistance_1_icon"
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_nymph_upg_alt_redesign_ability_name"
+    }
+   ]
+  },
+  "h3_crew_mate": {
+   "role": "base",
+   "stats": {
+    "hp": 14,
+    "offence": 5,
+    "defence": 4,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 110,
+   "squadValue": 105,
+   "kit": [
+    {
+     "k": "cove_scrappers",
+     "offMult": 1.05,
+     "icon": "sub_skill_assault_1_icon",
+     "name": "Scrappers",
+     "text": "If the target counterattacks, this creature attacks it again after the counterattack."
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_seaman": {
+   "role": "striker",
+   "stats": {
+    "hp": 14,
+    "offence": 7,
+    "defence": 4,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 140,
+   "squadValue": 154,
+   "kit": [
+    {
+     "k": "cove_scrappers",
+     "offMult": 1.05,
+     "icon": "sub_skill_assault_1_icon",
+     "name": "Scrappers",
+     "text": "If the target counterattacks, this creature attacks it again after the counterattack."
+    },
+    {
+     "k": "cove_pull",
+     "focus": 1,
+     "cd": 2,
+     "icon": "crossbowman_debuff_icon",
+     "name": "Grappling Hook",
+     "text": "Targets an adjacent empty hex and pulls the enemy creature directly behind it into that hex. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_crew_mate_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 17,
+    "offence": 5,
+    "defence": 6,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 4,
+    "initiative": 7
+   },
+   "gold": 140,
+   "squadValue": 154,
+   "kit": [
+    {
+     "k": "cove_scrappers",
+     "offMult": 1.05,
+     "icon": "sub_skill_assault_1_icon",
+     "name": "Scrappers",
+     "text": "If the target counterattacks, this creature attacks it again after the counterattack."
+    },
+    {
+     "k": "card",
+     "nameSid": "h3_cove_passive_swashbuckler_gold_name",
+     "descSid": "h3_cove_passive_swashbuckler_gold_description",
+     "icon": "skill_faction_law_human_economy_icon"
+    },
+    {
+     "k": "cove_focus_shot",
+     "focus": 1,
+     "cd": 1,
+     "mult": 1.0,
+     "projectileFrom": "h3_pirate",
+     "name": "Pistol Shot",
+     "text": "Performs a Ranged attack that deals basic attack Damage."
+    }
+   ]
+  },
+  "h3_pirate": {
+   "role": "base",
+   "stats": {
+    "hp": 24,
+    "offence": 7,
+    "defence": 6,
+    "damageMin": 3,
+    "damageMax": 8,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 225,
+   "squadValue": 229,
+   "kit": [
+    {
+     "k": "cove_duelist",
+     "nameSid": "base_passive_duelist_name",
+     "descSid": "base_passive_duelist_description"
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_corsair": {
+   "role": "striker",
+   "stats": {
+    "hp": 28,
+    "offence": 9,
+    "defence": 7,
+    "damageMin": 3,
+    "damageMax": 8,
+    "speed": 6,
+    "initiative": 8
+   },
+   "gold": 275,
+   "squadValue": 344,
+   "kit": [
+    {
+     "k": "cove_duelist",
+     "noCounter": true,
+     "icon": "assassin_buff_icon",
+     "name": "Swashbuckling",
+     "text": "Receives no penalty in Melee range, dealing full Damage. Enemies do not counterattack its Melee attacks."
+    },
+    {
+     "k": "cove_steal_on_hit",
+     "values": [
+      "true"
+     ],
+     "offMult": 1.05,
+     "icon": "angel_buff_icon",
+     "name": "Pilfer",
+     "text": "Its Melee attacks steal the positive effects of the target and give them to this creature."
+    },
+    {
+     "k": "dive",
+     "range": 4,
+     "mult": 1.0,
+     "focus": 1,
+     "cd": 2,
+     "name": "Swing Aboard",
+     "text": "Leaps onto an enemy creature up to 4 hexes away, ignoring obstacles and creatures in between, and performs a Melee attack. Enemies do not counterattack."
+    }
+   ]
+  },
+  "h3_sea_dog": {
+   "role": "ward",
+   "stats": {
+    "hp": 24,
+    "offence": 11,
+    "defence": 6,
+    "damageMin": 4,
+    "damageMax": 9,
+    "speed": 4,
+    "initiative": 7
+   },
+   "gold": 275,
+   "squadValue": 344,
+   "kit": [
+    {
+     "k": "cove_duelist",
+     "nameSid": "base_passive_duelist_name",
+     "descSid": "base_passive_duelist_description"
+    },
+    {
+     "k": "sharpshooter"
+    },
+    {
+     "k": "cove_pierce_shot",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "pattern": "attack_reach_x1_x100_x50",
+     "name": "Raking Shot",
+     "text": "Performs a Ranged attack that also hits the creature directly behind the target for 50% Damage."
+    }
+   ]
+  },
+  "h3_stormbird": {
+   "role": "base",
+   "stats": {
+    "hp": 40,
+    "offence": 11,
+    "defence": 8,
+    "damageMin": 6,
+    "damageMax": 9,
+    "speed": 6,
+    "initiative": 8
+   },
+   "gold": 275,
+   "squadValue": 287,
+   "kit": [
+    {
+     "k": "cove_push_on_hit",
+     "bucket": "defaultAttacks",
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Gust",
+     "text": "Basic attacks push the target 1 hex directly away, if that hex is free."
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_ayssid": {
+   "role": "striker",
+   "stats": {
+    "hp": 41,
+    "offence": 12,
+    "defence": 8,
+    "damageMin": 6,
+    "damageMax": 9,
+    "speed": 8,
+    "initiative": 11
+   },
+   "gold": 325,
+   "squadValue": 416,
+   "kit": [
+    {
+     "k": "cove_push_on_hit",
+     "bucket": "defaultAttacks",
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Gust",
+     "text": "Basic attacks push the target 1 hex directly away, if that hex is free."
+    },
+    {
+     "k": "cove_ferocity",
+     "name": "Ferocity",
+     "text": "Upon killing an enemy stack during its own turn, this creature immediately takes one more turn. Once per round."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_ayssid_thunderbolt_name"
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_stormbird_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 45,
+    "offence": 11,
+    "defence": 12,
+    "damageMin": 6,
+    "damageMax": 10,
+    "speed": 6,
+    "initiative": 9
+   },
+   "gold": 325,
+   "squadValue": 416,
+   "kit": [
+    {
+     "k": "cove_push_on_hit",
+     "bucket": "defaultAttacks",
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Gust",
+     "text": "Basic attacks push the target 1 hex directly away, if that hex is free."
+    },
+    {
+     "k": "cove_push_on_hit",
+     "bucket": "counterAttacks",
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Gale Guard",
+     "text": "Its counterattacks push the attacker 1 hex directly away, if that hex is free."
+    }
+   ]
+  },
+  "h3_sea_witch": {
+   "role": "base",
+   "stats": {
+    "hp": 70,
+    "offence": 16,
+    "defence": 12,
+    "damageMin": 12,
+    "damageMax": 19,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 515,
+   "squadValue": 665,
+   "kit": [
+    {
+     "k": "cove_shot_buff",
+     "buff": "magic_unnatural_calm_effect_0",
+     "duration": 3,
+     "nameSid": "h3_common_passive_after_shot_weakness_name",
+     "descSid": "h3_sea_witch_after_shot_weakness_description"
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_sorceress": {
+   "role": "ward",
+   "stats": {
+    "hp": 70,
+    "offence": 18,
+    "defence": 12,
+    "damageMin": 12,
+    "damageMax": 19,
+    "speed": 4,
+    "initiative": 8
+   },
+   "gold": 565,
+   "squadValue": 1039,
+   "kit": [
+    {
+     "k": "cove_shot_buff",
+     "buff": "magic_unnatural_calm_effect_1",
+     "duration": 3,
+     "nameSid": "h3_common_passive_after_shot_weakness_name",
+     "descSid": "h3_sorceress_after_shot_weakness_description"
+    },
+    {
+     "k": "sharpshooter"
+    },
+    {
+     "k": "self_buff",
+     "focus": 2,
+     "cd": 3,
+     "buff": "h3_kit_cove_siren_song_effect",
+     "duration": 2,
+     "icon": "magic_taunt_effect_icon",
+     "name": "Siren Song",
+     "text": "Until the end of the next round, enemy creatures within 3 hexes can target only this creature. Does not end this creature's turn."
+    }
+   ],
+   "powerTarget": 0.93
+  },
+  "h3_sea_witch_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 70,
+    "offence": 16,
+    "defence": 15,
+    "damageMin": 12,
+    "damageMax": 19,
+    "speed": 6,
+    "initiative": 7
+   },
+   "gold": 565,
+   "squadValue": 1039,
+   "kit": [
+    {
+     "k": "cove_shot_buff",
+     "buff": "magic_unnatural_calm_effect_0",
+     "duration": 3,
+     "nameSid": "h3_common_passive_after_shot_weakness_name",
+     "descSid": "h3_sea_witch_upg_alt_after_shot_weakness_description"
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_cove_ability_summon_fangarms_name"
+    },
+    {
+     "k": "rally",
+     "focus": 2,
+     "cd": 2,
+     "buff": "h3_kit_cove_rising_tide_effect",
+     "duration": 2,
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Rising Tide",
+     "text": "Adjacent friendly creatures gain +2 Speed until the end of the next round. Does not end this creature's turn."
+    }
+   ],
+   "powerTarget": 0.93
+  },
+  "h3_nix": {
+   "role": "base",
+   "stats": {
+    "hp": 120,
+    "offence": 21,
+    "defence": 24,
+    "damageMin": 19,
+    "damageMax": 26,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 1000,
+   "squadValue": 1138,
+   "kit": [
+    {
+     "k": "cove_attack_ignore",
+     "v": 0.3,
+     "nameSid": "h3_common_passive_attack_ignore_30_name",
+     "descSid": "h3_common_passive_attack_ignore_30_description"
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_nix_warrior": {
+   "role": "ward",
+   "stats": {
+    "hp": 136,
+    "offence": 22,
+    "defence": 28,
+    "damageMin": 19,
+    "damageMax": 27,
+    "speed": 5,
+    "initiative": 7
+   },
+   "gold": 1300,
+   "squadValue": 1923,
+   "kit": [
+    {
+     "k": "cove_attack_ignore",
+     "v": 0.6,
+     "nameSid": "h3_common_passive_attack_ignore_60_name",
+     "descSid": "h3_common_passive_attack_ignore_60_description"
+    },
+    {
+     "k": "cove_overwatch",
+     "offMult": 1.1,
+     "icon": "sub_skill_formation_4_overwatch_buff_icon",
+     "name": "Harpoon Watch",
+     "text": "Remains on Overwatch: strikes every enemy that moves into a hex next to it, any number of times per round."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_nix_warrior_stunning_blow_name"
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_nix_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 120,
+    "offence": 27,
+    "defence": 24,
+    "damageMin": 19,
+    "damageMax": 26,
+    "speed": 7,
+    "initiative": 9
+   },
+   "gold": 1300,
+   "squadValue": 1923,
+   "kit": [
+    {
+     "k": "cove_attack_ignore",
+     "v": 0.3,
+     "nameSid": "h3_common_passive_attack_ignore_30_name",
+     "descSid": "h3_common_passive_attack_ignore_30_description"
+    },
+    {
+     "k": "runtime",
+     "rule": "damage_vs_buff",
+     "percent": 25,
+     "buffs": [
+      "ent_root",
+      "h3_kit_cove_coiled_effect"
+     ],
+     "icon": "ent_root_icon",
+     "name": "Run Aground",
+     "text": "Deals +25% Damage to rooted enemies."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_nix_upg_alt_root_bind_name"
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_sea_serpent": {
+   "role": "base",
+   "stats": {
+    "hp": 290,
+    "offence": 27,
+    "defence": 25,
+    "damageMin": 40,
+    "damageMax": 66,
+    "speed": 7,
+    "initiative": 10
+   },
+   "gold": 2200,
+   "squadValue": 3473,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_cove_venom_effect",
+     "duration": 2,
+     "icon": "magic_fatal_decay_effect_icon",
+     "name": "Venom",
+     "text": "Basic attacks and counterattacks poison the target: it has -10% maximum Health until the end of the next round."
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_haspid": {
+   "role": "striker",
+   "stats": {
+    "hp": 300,
+    "offence": 37,
+    "defence": 27,
+    "damageMin": 42,
+    "damageMax": 70,
+    "speed": 10,
+    "initiative": 14
+   },
+   "gold": 4000,
+   "squadValue": 6705,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_cove_venom_effect",
+     "duration": 2,
+     "icon": "magic_fatal_decay_effect_icon",
+     "name": "Venom",
+     "text": "Basic attacks and counterattacks poison the target: it has -10% maximum Health until the end of the next round."
+    },
+    {
+     "k": "runtime",
+     "rule": "loss_fury",
+     "percent": 100,
+     "cap": 50,
+     "icon": "hydra_selfbuff_icon",
+     "name": "Revenge",
+     "text": "Deals +1% Damage for every 1% of this stack that has fallen in this battle, up to +50%."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 3,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "buff": "h3_kit_cove_coiled_effect",
+     "duration": 2,
+     "icon": "ent_root_icon",
+     "name": "Crushing Coils",
+     "text": "Performs a Melee attack and roots the target until the end of the next round. Until then the target cannot counterattack."
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_sea_serpent_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 375,
+    "offence": 28,
+    "defence": 36,
+    "damageMin": 46,
+    "damageMax": 75,
+    "speed": 7,
+    "initiative": 11
+   },
+   "gold": 4000,
+   "squadValue": 6705,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_cove_venom_effect",
+     "duration": 2,
+     "icon": "magic_fatal_decay_effect_icon",
+     "name": "Venom",
+     "text": "Basic attacks and counterattacks poison the target: it has -10% maximum Health until the end of the next round."
+    },
+    {
+     "k": "cove_whirlpool",
+     "focus": 3,
+     "cd": 3,
+     "mult": 0.6,
+     "dropEffectImmunity": [
+      "homm3_cove_fearsome_effect"
+     ],
+     "icon": "aqualotl_debuff_1_icon",
+     "name": "Whirlpool",
+     "text": "Targets a hex. Pulls every creature within 2 hexes of it toward that hex, if possible, and deals 60% of this stack's basic attack Damage as Magic Damage to each enemy there."
+    }
+   ],
+   "powerTarget": 0.92
+  }
+ }
+}

@@ -245,6 +245,8 @@ def check_rows(rows: dict[str, dict[str, Any]], lines: list[Line], contract: dic
             errors.append(f"{sid}: upgrade pair parity override does not name a built faction line unit")
             continue
         item = rows[sid]
+        if isinstance(item.get("xHomm3UnitDesign"), dict):
+            continue  # stats and value are owned by the unit design table (custom_factions/unit_designs), gated there
         for key, value in entry["statOverrides"].items():
             if key == "cost":
                 actual = cost_map(item, sid)

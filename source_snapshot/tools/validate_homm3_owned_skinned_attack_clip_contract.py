@@ -75,6 +75,7 @@ def required_slots(sid: str, view: dict, errors: list[str]) -> dict[str, tuple[s
     # Abilities play the same tree. One with a projectile is a shot; a projectile-less ability on the
     # attack/shot slots (0, 1) is a swing (index 1 played Unit_Mouseover before 2026-09-27). Abilities on
     # 2..5 play the stock Mouseover fallback and are not claimed here.
+    unit_shoots = any(attack.get("projectile") for key in ATTACK_LISTS for attack in view.get(key) or [])
     for i, ability in enumerate(view.get("abilities") or []):
         if not isinstance(ability, dict):
             continue
@@ -85,7 +86,9 @@ def required_slots(sid: str, view: dict, errors: list[str]) -> dict[str, tuple[s
         if not isinstance(index, int) or not 0 <= index < len(SLOTS):
             errors.append(f"{where}: outside the stock attack tree (0..{len(SLOTS) - 1})")
             continue
-        clip = SHOOT if ability.get("projectile") else MELEE
+        # A melee unit (no projectile on any basic attack) that throws something as a Focus ability has no
+        # shot clip to play: StockMap puts Unit_AttackFront on 15.Skill_1 for it, so the throw is its swing.
+        clip = SHOOT if ability.get("projectile") and (unit_shoots or index != 1) else MELEE
         slot = SLOTS[index]
         prior = need.get(slot)
         if prior and prior[0] != clip:

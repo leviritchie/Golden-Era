@@ -808,6 +808,8 @@ public sealed class Plugin : BasePlugin
 			// Cove Plunder (chest and mine bonuses) is retired with the Treasure Hunting rebuild (owner, 2026-11-17): its
 			// patches are no longer registered. Homm3CovePlunderHook.Grant stays as the shared resource-grant path.
 			GoldenEraGameplayOptions.TryRegisterRuntimeHooks(_harmony, Log);
+			// Unit design kits: rotating / escalating buffs (Wish, Frostbite into Frozen). Optional, fails closed.
+			Homm3UnitKitBuffSwapHook.TryRegister(_harmony, Log);
 			if (cfg.Homm3CoveAfterShotDisruptingRay)
 			{
 				try
@@ -1094,6 +1096,8 @@ public sealed class Plugin : BasePlugin
 			// Stronghold Warcry (replaced the three Warcries hero actions 2026-11-17): attack/ability chain, turn-start Attack bonus, on-screen chain counter.
 			Homm3StrongholdWarcryRuntime.TryRegister(_harmony, Log);
 			Homm3StrongholdWarcryCounter.TryRegister(Log);
+			// Rampart Avenger (reworked 2026-11-19): allied avenging strikes in response to attacks on the army.
+			Homm3RampartAvengerStrikeRuntime.TryRegister(_harmony, Log);
 			Homm3FactoryBulwarkCombatForceSetupPilot.TryRegister(_harmony, Log);
 			Homm3BulwarkUnitAbilityRuntime.TryRegister(_harmony, Log);
 			Homm3BulwarkRunesRuntime.TryRegister(_harmony, Log);
@@ -2975,6 +2979,9 @@ internal static class ModActions
 				return TryHandleReleaseCityTownExitControl(button, originalMethod, "generic-button");
 			var isArrow = IsReleaseCityExitHudArrowButton(button);
 			var isBuildingTooltipBack = IsReleaseCityBuildingTooltipBackButton(button);
+			// Every town button click lands here; log only real back candidates so the capped budget lasts.
+			if (!isArrow && !isBuildingTooltipBack)
+				return false;
 			LogReleaseTownUiBackMainDiagnostic(
 				"back-generic-button-candidate",
 				"method:" + DescribeMethod(originalMethod)
@@ -3806,6 +3813,19 @@ internal static class ModActions
 						+ "|path:" + DescribeUnityPath(source.gameObject));
 				return false;
 			}
+			// The door doubles as "back" while a town screen is up: close that screen and stay in town.
+			if (TryCloseOpenReleaseCityScreenForBack(out var closedTarget))
+			{
+				LogReleaseTownUiBackMainDiagnostic(
+					"town-exit-closed-screen",
+					"method:" + DescribeMethod(originalMethod)
+						+ "|sourceKind:" + sourceKind
+						+ "|target:" + closedTarget
+						+ "|path:" + DescribeUnityPath(source.gameObject));
+				ApplyCustomCityBackdrop();
+				Homm3StrongholdTownLayers.SyncCurrentCityLayers();
+				return true;
+			}
 			LogReleaseTownUiBackMainDiagnostic(
 				"town-exit-routed",
 				"method:" + DescribeMethod(originalMethod)
@@ -3823,6 +3843,76 @@ internal static class ModActions
 					+ "|error:" + ex.GetType().Name + ":" + ex.Message);
 			return false;
 		}
+	}
+
+	private static IntPtr _releaseCityBackStuckScreen;
+	private static float _releaseCityBackStuckTime;
+
+	/// <summary>
+	/// Closes a visibly open construction, hire or unit-upgrade screen. Closed CityUI screens stay
+	/// activeInHierarchy, so this needs both the CanvasGroup and Canvas checks. If a close left the
+	/// screen reading open and the door is pressed again within a few seconds, the read is stale:
+	/// return false and let the door leave town rather than trap the player.
+	/// </summary>
+	private static bool TryCloseOpenReleaseCityScreenForBack(out string closedTarget)
+	{
+		closedTarget = null;
+		try
+		{
+			foreach (var session in EnumerateReleaseCitySessions())
+			{
+				if (session == null)
+					continue;
+				var buildingSession = TryReadMember(session, typeof(BhCityUISession), "buildingSession") as BhUIBuildingSession;
+				if (TryCloseReleaseCityScreenForBack(buildingSession, "building", out closedTarget))
+					return true;
+				var hireView = TryReadMember(session, typeof(BhCityUISession), "hire") as BhHireCityView;
+				if (TryCloseReleaseCityScreenForBack(hireView, "hire", out closedTarget))
+					return true;
+			}
+			foreach (var upgrade in Resources.FindObjectsOfTypeAll<ScUpgradeUnits>())
+			{
+				if (!IsActiveGameObject(upgrade) || !IsReleaseTownPanelVisuallyOpen(upgrade))
+					continue;
+				CloseReleaseCityUpgradeSubwindows();
+				closedTarget = "upgrade";
+				return true;
+			}
+		}
+		catch (Exception ex)
+		{
+			LogReleaseTownUiBackMainDiagnostic(
+				"town-exit-close-screen-failed",
+				"error:" + ex.GetType().Name + ":" + ex.Message);
+		}
+		return false;
+	}
+
+	private static bool TryCloseReleaseCityScreenForBack(BhScreen screen, string kind, out string closedTarget)
+	{
+		closedTarget = null;
+		if (!IsActiveComponent(screen) || !IsReleaseCityBackScreenCandidate(screen) || !IsReleaseTownPanelVisuallyOpen(screen))
+			return false;
+		var ptr = IL2CPP.Il2CppObjectBaseToPtr(screen);
+		if (ptr == _releaseCityBackStuckScreen && Time.realtimeSinceStartup - _releaseCityBackStuckTime < 5f)
+		{
+			LogReleaseTownUiBackMainDiagnostic(
+				"town-exit-stale-open-screen",
+				"target:" + kind + "|path:" + DescribeUnityPath(screen.gameObject));
+			_releaseCityBackStuckScreen = IntPtr.Zero;
+			return false;
+		}
+		if (screen is BhUIBuildingSession building)
+			building.OnExitBtn();
+		else if (screen is BhHireCityView hire)
+			hire.OnExitBtn();
+		else
+			return false;
+		var stillOpen = IsActiveComponent(screen) && IsReleaseCityBackScreenCandidate(screen) && IsReleaseTownPanelVisuallyOpen(screen);
+		_releaseCityBackStuckScreen = stillOpen ? ptr : IntPtr.Zero;
+		_releaseCityBackStuckTime = Time.realtimeSinceStartup;
+		closedTarget = stillOpen ? kind + "(still-reads-open)" : kind;
+		return true;
 	}
 
 	private static bool IsReleaseCityExitHudArrowButton(BhGenericButton button)

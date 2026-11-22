@@ -267,6 +267,7 @@ internal static class Homm3CounterattackDoctrineMutationRuntime
 			EnsureBattleScope(unit);
 			lock (Sync)
 			{
+				Homm3UnitKitRuntime.ForgetUnit(unitKey);
 				CounterInstanceByUnit.Remove(unitKey);
 				BloodFeudPercentByUnit.Remove(unitKey);
 				WeaknessByUnit.Remove(unitKey);
@@ -286,6 +287,7 @@ internal static class Homm3CounterattackDoctrineMutationRuntime
 		BloodFeudPercentByUnit.Clear();
 		WeaknessByUnit.Clear();
 		CoveFocusGrantedBySide.Clear();
+		Homm3UnitKitRuntime.ClearForBattle();
 		_hasPersistentState = false;
 		_scopeSession = 0;
 		_scopeBattleLogic = 0;
@@ -590,12 +592,28 @@ internal static class Homm3CounterattackDoctrineMutationRuntime
 				detail = detail == null ? predatorDetail : detail + "; " + predatorDetail;
 			}
 
+			// Unit design kits (Strangle, Grudge, Shield Wall): per-unit rules keyed by unit SID, any army.
+			var kitPercent = Homm3UnitKitRuntime.DamagePercent(counterattacker ?? TryWrapUnit(__0), __instance, out var kitDetail);
+			if (kitPercent != 0)
+			{
+				percent += kitPercent;
+				detail = detail == null ? kitDetail : detail + "; " + kitDetail;
+			}
+
 			if (percent != 0)
 			{
 				var before = __3;
 				__3 = ScaleDamage(before, percent);
 				LogLimited("HoMM3 counterattack doctrine damage " + before + " -> " + __3 + " (" + percent.ToString("+0;-0", CultureInfo.InvariantCulture) + "%): " + detail + ".");
 			}
+			// Unit design kits: per-hit cap of the receiver (Diamond Scales), after every percent rule.
+			var capped = Homm3UnitKitRuntime.CapDamage(__instance, __3, out var capDetail);
+			if (capped != __3)
+			{
+				LogLimited("HoMM3 unit kit damage " + __3 + " -> " + capped + ": " + capDetail + ".");
+				__3 = capped;
+			}
+			Homm3UnitKitRuntime.NoteCommittedDamage(__instance, __3);
 			if (__state != null)
 				__state.FinalDamage = __3;
 		}

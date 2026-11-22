@@ -53,7 +53,12 @@ RUNTIME_KEYS = {
     "onHit", "berserkOnHit", "vampirism", "battleStart", "factions", "faction", "buff", "duration", "oncePerBattle",
     # Map grafts: a hero buff held while a carrier is in the army, daily gold per carrier, injected battle abilities.
     "heroBuff", "nativeUnitSet", "dailyGold", "abilities",
+    # Unit design kit rule (Homm3UnitKitRuntime damage rules) held by the carrier while it has the graft buff.
+    "kitRule",
 }
+# kitRule.rule -> Homm3UnitKitRules.RuleKind (same names as tools/release_port/build_unit_kit_runtime_table.py).
+KIT_RULE_KINDS = {"damage_vs_buff": "DamageVsBuff", "grudge": "Grudge", "adjacent_ally_ward": "AdjacentAllyWard", "hit_cap": "HitCap",
+                  "loss_fury": "LossFury", "death_toll": "DeathToll"}
 # The battle HUD shows alternative attacks + abilities in 5 fixed skill slots (BhUnitControlsView.SetSkills).
 HUD_SKILL_SLOTS = 5
 ON_HIT_TAGS = {"melee_attack", "shoot_attack", "range_attack"}
@@ -154,6 +159,20 @@ def check_runtime(key: str, runtime: dict[str, Any]) -> None:
     gold = runtime.get("dailyGold")
     if gold is not None and not (isinstance(gold.get("gold"), int) and gold["gold"] > 0 and isinstance(gold.get("sourceUnit"), str)):
         fail("dailyGold needs a positive integer gold and a sourceUnit (its weekly growth vs the Tier 1 line's sets the flat rate)")
+    rule = runtime.get("kitRule")
+    if rule is not None:
+        if rule.get("rule") not in KIT_RULE_KINDS or not isinstance(rule.get("name"), str):
+            fail(f"kitRule needs a name and rule in {sorted(KIT_RULE_KINDS)}")
+        if not isinstance(rule.get("percent"), int) or rule["percent"] <= 0:
+            fail("kitRule needs a positive integer percent")
+        if rule["rule"] in ("adjacent_ally_ward", "death_toll") and not (isinstance(rule.get("cap"), int) and rule["cap"] >= rule["percent"]):
+            fail(f"kitRule {rule['rule']} needs an integer cap >= percent")
+        if rule["rule"] == "loss_fury" and not (isinstance(rule.get("cap"), int) and 0 < rule["cap"] <= rule["percent"]):
+            fail("kitRule loss_fury needs an integer cap in 1..percent")
+        if rule["rule"] == "hit_cap" and rule["percent"] >= 100:
+            fail("kitRule hit_cap percent must be below 100")
+        if rule["rule"] == "damage_vs_buff" and not rule.get("buffs"):
+            fail("kitRule damage_vs_buff needs a buffs list")
     abilities = runtime.get("abilities")
     if abilities is not None:
         indices = abilities.get("indices")
@@ -312,6 +331,8 @@ def check_references(rows: list[dict[str, Any]], core_buffs: dict[str, Any]) -> 
             need(r["key"], runtime["buff"], "buff")
         if runtime.get("heroBuff"):
             need(r["key"], runtime["heroBuff"], "hero_buff")
+        for sid in (runtime.get("kitRule") or {}).get("buffs") or []:
+            need(r["key"], sid, "buff")
         payloads = [r["payload"]] + [v["payload"] for v in r.get("variants") or []]
         for payload in payloads:
             for action in payload.get("actions") or []:
@@ -818,6 +839,20 @@ def render_cs(catalog: dict[str, Any], policy: dict[str, Any]) -> str:
             for a in row["injectedAbilities"]
         )
         lines.append(f"\t\t[{row['index']}] = new[] {{ {entries} }},")
+    lines += [
+        "\t};",
+        "",
+        "\t/// <summary>Schematic -> unit design kit damage rule the carrier holds while grafted (Homm3UnitKitRuntime).</summary>",
+        "\tinternal static readonly Dictionary<int, Homm3UnitKitRules.Rule> KitRuleBySchematic = new()",
+        "\t{",
+    ]
+    for row, rule in runtime_rows("kitRule"):
+        buffs = rule.get("buffs") or []
+        buff_array = "new[] { " + ", ".join(cs_string(b) for b in buffs) + " }" if buffs else "System.Array.Empty<string>()"
+        lines.append(
+            f"\t\t[{row['index']}] = new Homm3UnitKitRules.Rule {{ Kind = Homm3UnitKitRules.RuleKind.{KIT_RULE_KINDS[rule['rule']]}, "
+            f"Name = {cs_string(rule['name'])}, Percent = {rule['percent']}, Cap = {rule.get('cap', 0)}, BuffSids = {buff_array} }},"
+        )
     lines += [
         "\t};",
         "",

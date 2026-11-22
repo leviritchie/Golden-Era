@@ -1,0 +1,967 @@
+{
+ "schemaVersion": 1,
+ "faction": "homm3_castle",
+ "approval": "Owner, 2026-11-20 goal: all factions, autonomous (no per-faction card review).",
+ "tradeAxis": "Cleave (role striker: shaped basic attacks, whirlwinds and area shots that pay off against many small or bunched stacks) versus Lance (role ward: Double Strike, Defence-ignoring blows, dives and 2-hex thrusts that pay off against one big stack). Both are useful in any army; the choice only gets sharper when the player decides how the enemy deploys.",
+ "buffFile": "DB/buffs/units_buffs_nature.json",
+ "buffs": [
+  {
+   "id": "h3_kit_castle_marked_effect",
+   "cloneOf": "crossbowman_debuff",
+   "name": "Marked",
+   "text": "Takes +20% Damage.",
+   "set": {
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "inAllDmgMod": 0.2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_castle_benediction_effect",
+   "cloneOf": "lightweaver_buff",
+   "name": "Benediction",
+   "text": "+4 Attack and +4 Defence.",
+   "set": {
+    "tags": [
+     "positive"
+    ],
+    "data": {
+     "stats": {
+      "offence": 4,
+      "defence": 4
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_castle_set_pikes_effect",
+   "cloneOf": "assassin_buff_start",
+   "name": "Set Pikes",
+   "text": "Counterattacks strike before the attacker's blow until this creature acts.",
+   "set": {
+    "icon": "magic_masterful_parry_effect_icon",
+    "vfxList": [
+     "effects/status/buff_counterstrike_unit"
+    ],
+    "tags": [
+     "positive",
+     "h3_kit_castle_set_pikes_effect"
+    ],
+    "aiValue": 3000,
+    "aiValuePerDuration": 300,
+    "data": {
+     "sequenceEffect": "counter_before_attack"
+    },
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive"
+       ],
+       "triggerCounter": false,
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "damageTarget_": "none",
+       "targetMechanics": [
+        {
+         "mech": "dispel",
+         "values": [
+          "h3_kit_castle_set_pikes_effect"
+         ]
+        }
+       ]
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_castle_challenged_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Challenged",
+   "text": "Deals -50% Damage to creatures other than Crusaders.",
+   "set": {
+    "icon": "magic_taunt_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "outAllDmgMod": -0.5,
+      "outDmgModsByTargetTags": {
+       "list": [
+        {
+         "t": "h3_kit_challenger",
+         "v": 0.5
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_castle_brand_effect",
+   "cloneOf": "crossbowman_debuff",
+   "name": "Brand of Faith",
+   "text": "Whenever this creature takes Damage from an attack, every creature of its side adjacent to it takes 25% of that Damage.",
+   "set": {
+    "icon": "magic_vulnerability_effect_icon",
+    "maxDuration": 2,
+    "data": {
+     "stats": {}
+    }
+   }
+  },
+  {
+   "id": "h3_kit_castle_vengeance_effect",
+   "cloneOf": "avatar_of_war_additionbuff",
+   "name": "Vengeance of Heaven",
+   "text": "+4 Attack for each friendly stack destroyed in this battle.",
+   "set": {
+    "icon": "magic_vengeance_effect_icon",
+    "hidden": false,
+    "addition": "data",
+    "data": {
+     "stats": {
+      "offence": 4
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_castle_shield_of_faith_effect",
+   "cloneOf": "sentinel_buff_2",
+   "name": "Shield of Faith",
+   "text": "Immune to negative effects.",
+   "set": {
+    "icon": "magic_radiant_armor_effect_icon",
+    "maxDuration": 2,
+    "data": {
+     "immunities": [
+      {
+       "type": "effect",
+       "tags": [
+        "negative"
+       ]
+      }
+     ]
+    }
+   }
+  }
+ ],
+ "units": {
+  "h3_pikeman": {
+   "role": "base",
+   "stats": {
+    "hp": 10,
+    "offence": 3,
+    "defence": 4,
+    "damageMin": 2,
+    "damageMax": 3,
+    "speed": 4,
+    "initiative": 4
+   },
+   "gold": 60,
+   "squadValue": 73,
+   "powerTarget": 0.9,
+   "kit": [
+    {
+     "k": "castle_set_pikes",
+     "buff": "h3_kit_castle_set_pikes_effect",
+     "name": "Set Pikes",
+     "text": "Until this creature acts in a round, its counterattack strikes before the attacker's blow. Waiting and Defending do not count as acting."
+    },
+    {
+     "k": "brace",
+     "v": -0.25,
+     "name": "Braced Pikes",
+     "text": "Takes -25% Damage from creatures whose Damage grows with the distance they move before attacking."
+    }
+   ]
+  },
+  "h3_pikeman_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 10,
+    "offence": 5,
+    "defence": 4,
+    "damageMin": 2,
+    "damageMax": 3,
+    "speed": 5,
+    "initiative": 5
+   },
+   "gold": 75,
+   "squadValue": 101,
+   "kit": [
+    {
+     "k": "castle_set_pikes",
+     "buff": "h3_kit_castle_set_pikes_effect",
+     "name": "Set Pikes",
+     "text": "Until this creature acts in a round, its counterattack strikes before the attacker's blow. Waiting and Defending do not count as acting."
+    },
+    {
+     "k": "brace",
+     "v": -0.25,
+     "name": "Braced Pikes",
+     "text": "Takes -25% Damage from creatures whose Damage grows with the distance they move before attacking."
+    },
+    {
+     "k": "castle_strike",
+     "focus": 1,
+     "cd": 1,
+     "mult": 1.0,
+     "pattern": "attack_swirl_with_target_x100_x50",
+     "counter": false,
+     "name": "Reaping Arc",
+     "text": "Attacks an enemy and strikes every other adjacent enemy for 50% Damage. Enemies do not counterattack."
+    }
+   ]
+  },
+  "h3_pikeman_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 10,
+    "offence": 4,
+    "defence": 6,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 4,
+    "initiative": 4
+   },
+   "gold": 75,
+   "squadValue": 101,
+   "kit": [
+    {
+     "k": "castle_set_pikes",
+     "buff": "h3_kit_castle_set_pikes_effect",
+     "name": "Set Pikes",
+     "text": "Until this creature acts in a round, its counterattack strikes before the attacker's blow. Waiting and Defending do not count as acting."
+    },
+    {
+     "k": "brace",
+     "v": -0.25,
+     "name": "Braced Pikes",
+     "text": "Takes -25% Damage from creatures whose Damage grows with the distance they move before attacking."
+    },
+    {
+     "k": "castle_stat",
+     "stats": {
+      "armorPen": 0.3
+     },
+     "name": "Impale",
+     "text": "Attacks ignore 30% of the target's Defence."
+    },
+    {
+     "k": "castle_guillotine",
+     "focus": 1,
+     "cd": 1,
+     "name": "Guillotine",
+     "text": "Deals Pure Damage equal to 30% of the target creature's maximum Health, limited by the number of creatures in this stack. Each Guillotine on the same target makes the next one deal +100% Damage. Enemies do not counterattack."
+    }
+   ]
+  },
+  "h3_archer": {
+   "role": "base",
+   "stats": {
+    "hp": 10,
+    "offence": 5,
+    "defence": 3,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 100,
+   "squadValue": 101,
+   "powerTarget": 0.9,
+   "kit": [
+    {
+     "k": "runtime",
+     "rule": "turn_state",
+     "fact": "stood_ground",
+     "attack": "ranged",
+     "percent": 25,
+     "offMult": 1.15,
+     "name": "Stand Ground",
+     "text": "Ranged attacks deal +25% Damage if this creature did not move during its previous turn."
+    }
+   ]
+  },
+  "h3_archer_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 10,
+    "offence": 6,
+    "defence": 3,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 5,
+    "initiative": 7
+   },
+   "gold": 150,
+   "squadValue": 152,
+   "kit": [
+    {
+     "k": "double_strike",
+     "mode": "shoot"
+    },
+    {
+     "k": "castle_shot",
+     "focus": 1,
+     "cd": 2,
+     "mult": 0.5,
+     "buff": "h3_kit_castle_marked_effect",
+     "duration": 2,
+     "name": "Marked Target",
+     "text": "Deals 50% basic attack Damage. The target takes +20% Damage until the end of the next round."
+    }
+   ]
+  },
+  "h3_archer_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 11,
+    "offence": 7,
+    "defence": 4,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 150,
+   "squadValue": 152,
+   "kit": [
+    {
+     "k": "sharpshooter"
+    },
+    {
+     "k": "castle_stat",
+     "stats": {
+      "ignoreShootingBlock": true
+     },
+     "icon": "crossbowman_buff_icon",
+     "name": "Point Blank",
+     "text": "Can perform Ranged attacks while an enemy is adjacent."
+    },
+    {
+     "k": "castle_shot",
+     "focus": 1,
+     "cd": 1,
+     "mult": 1.0,
+     "pattern": "attack_rumble_x1_x100_x50",
+     "name": "Scatter Shot",
+     "text": "Performs a Ranged attack that also hits every enemy adjacent to the target for 50% Damage."
+    }
+   ]
+  },
+  "h3_griffin": {
+   "role": "base",
+   "stats": {
+    "hp": 28,
+    "offence": 7,
+    "defence": 7,
+    "damageMin": 4,
+    "damageMax": 8,
+    "speed": 6,
+    "initiative": 7
+   },
+   "gold": 200,
+   "squadValue": 235,
+   "powerTarget": 0.9,
+   "kit": [
+    {
+     "k": "counters",
+     "n": 2,
+     "name": "Alert",
+     "text": "Can counterattack up to twice per round."
+    }
+   ]
+  },
+  "h3_griffin_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 30,
+    "offence": 8,
+    "defence": 8,
+    "damageMin": 4,
+    "damageMax": 8,
+    "speed": 8,
+    "initiative": 9
+   },
+   "gold": 240,
+   "squadValue": 358,
+   "kit": [
+    {
+     "k": "counters",
+     "n": 999,
+     "name": "Unlimited Retaliation",
+     "text": "Can counterattack unlimited times per round."
+    },
+    {
+     "k": "castle_cleave",
+     "pattern": "attack_swipe_x100_x50",
+     "buckets": [
+      "counterAttacks"
+     ],
+     "name": "Talon Riposte",
+     "text": "Counterattacks also hit the two enemies to the sides of the attacker for 50% Damage. Basic attacks do not."
+    }
+   ]
+  },
+  "h3_griffin_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 28,
+    "offence": 10,
+    "defence": 7,
+    "damageMin": 4,
+    "damageMax": 8,
+    "speed": 9,
+    "initiative": 10
+   },
+   "gold": 240,
+   "squadValue": 358,
+   "kit": [
+    {
+     "k": "counters",
+     "n": 2,
+     "name": "Alert",
+     "text": "Can counterattack up to twice per round."
+    },
+    {
+     "k": "castle_pinning_talons",
+     "n": 1,
+     "offMult": 1.05,
+     "name": "Pinning Talons",
+     "text": "Basic attacks and counterattacks remove 1 of the target's counterattacks for this round."
+    },
+    {
+     "k": "dive",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.5,
+     "range": 99,
+     "name": "Battle Dive",
+     "text": "Flies to any enemy on the battlefield and strikes it for +50% Damage. The enemy does not counterattack."
+    }
+   ]
+  },
+  "h3_swordsman": {
+   "role": "base",
+   "stats": {
+    "hp": 38,
+    "offence": 9,
+    "defence": 12,
+    "damageMin": 6,
+    "damageMax": 9,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 300,
+   "squadValue": 273,
+   "powerTarget": 0.88,
+   "kit": [
+    {
+     "k": "runtime",
+     "rule": "guard_strike",
+     "percent": 50,
+     "perRound": 1,
+     "offMult": 1.08,
+     "name": "Shield Brother",
+     "text": "Once per round, when an enemy attacks an adjacent friendly creature in Melee and this creature also stands next to that enemy, it strikes the enemy for 50% Damage."
+    }
+   ]
+  },
+  "h3_swordsman_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 38,
+    "offence": 11,
+    "defence": 12,
+    "damageMin": 6,
+    "damageMax": 9,
+    "speed": 5,
+    "initiative": 7
+   },
+   "gold": 400,
+   "squadValue": 423,
+   "kit": [
+    {
+     "k": "double_strike",
+     "mode": "melee"
+    },
+    {
+     "k": "castle_strike",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "buff": "h3_kit_castle_challenged_effect",
+     "duration": 2,
+     "unitTag": "h3_kit_challenger",
+     "toughMult": 1.05,
+     "name": "Challenge",
+     "text": "Performs a Melee attack. Until the end of the next round, the target deals -50% Damage to creatures other than Crusaders."
+    }
+   ]
+  },
+  "h3_swordsman_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 44,
+    "offence": 9,
+    "defence": 15,
+    "damageMin": 8,
+    "damageMax": 12,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 400,
+   "squadValue": 423,
+   "kit": [
+    {
+     "k": "runtime",
+     "rule": "guard_strike",
+     "percent": 50,
+     "perRound": 2,
+     "offMult": 1.12,
+     "name": "Shield Brother",
+     "text": "Twice per round, when an enemy attacks an adjacent friendly creature in Melee and this creature also stands next to that enemy, it strikes the enemy for 50% Damage."
+    },
+    {
+     "k": "castle_extra_turn",
+     "offMult": 1.05,
+     "name": "Follow Through",
+     "text": "When this creature's attack destroys an enemy stack during its turn, it can act again. Once per round."
+    }
+   ]
+  },
+  "h3_monk": {
+   "role": "base",
+   "stats": {
+    "hp": 62,
+    "offence": 14,
+    "defence": 12,
+    "damageMin": 13,
+    "damageMax": 18,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 400,
+   "squadValue": 670,
+   "powerTarget": 0.9,
+   "kit": [
+    {
+     "k": "runtime",
+     "rule": "retribution",
+     "percent": 25,
+     "offMult": 1.12,
+     "name": "Retribution",
+     "text": "Deals +25% Damage to enemies that damaged a friendly creature this round."
+    }
+   ]
+  },
+  "h3_monk_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 64,
+    "offence": 15,
+    "defence": 14,
+    "damageMin": 14,
+    "damageMax": 19,
+    "speed": 5,
+    "initiative": 7
+   },
+   "gold": 450,
+   "squadValue": 1080,
+   "kit": [
+    {
+     "k": "skirmisher",
+     "name": "Duelist",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "runtime",
+     "rule": "retribution",
+     "percent": 25,
+     "offMult": 1.12,
+     "name": "Retribution",
+     "text": "Deals +25% Damage to enemies that damaged a friendly creature this round."
+    },
+    {
+     "k": "castle_shot",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "buff": "h3_kit_castle_brand_effect",
+     "duration": 2,
+     "name": "Brand of Faith",
+     "text": "Performs a Ranged attack and brands the target until the end of the next round."
+    },
+    {
+     "k": "runtime",
+     "rule": "brand_splash",
+     "buff": "h3_kit_castle_brand_effect",
+     "percent": 25,
+     "offMult": 1.08,
+     "name": "Searing Brand",
+     "text": "Whenever an enemy branded by Brand of Faith takes Damage from an attack, every enemy adjacent to it takes 25% of that Damage."
+    }
+   ]
+  },
+  "h3_monk_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 70,
+    "offence": 17,
+    "defence": 12,
+    "damageMin": 18,
+    "damageMax": 24,
+    "speed": 4,
+    "initiative": 8
+   },
+   "gold": 450,
+   "squadValue": 1080,
+   "kit": [
+    {
+     "k": "castle_stat",
+     "stats": {
+      "outDmgModsByTargetTags": [
+       {
+        "t": "h3_kit_undead",
+        "v": 0.3
+       },
+       {
+        "t": "h3_kit_demon",
+        "v": 0.3
+       }
+      ]
+     },
+     "offMult": 1.06,
+     "name": "Smite",
+     "text": "Deals +30% Damage to undead and demons."
+    },
+    {
+     "k": "castle_ally_buff",
+     "focus": 2,
+     "cd": 2,
+     "buff": "h3_kit_castle_benediction_effect",
+     "duration": 2,
+     "icon": "lightweaver_buff_icon",
+     "name": "Benediction",
+     "text": "One friendly creature gains +4 Attack and +4 Defence until the end of the next round."
+    }
+   ],
+   "powerTarget": 0.93
+  },
+  "h3_cavalier": {
+   "role": "base",
+   "stats": {
+    "hp": 112,
+    "offence": 21,
+    "defence": 20,
+    "damageMin": 17,
+    "damageMax": 28,
+    "speed": 7,
+    "initiative": 7
+   },
+   "gold": 1000,
+   "squadValue": 1223,
+   "powerTarget": 0.95,
+   "kit": [
+    {
+     "k": "gallop",
+     "v": 0.05,
+     "name": "Jousting",
+     "text": "Moving before an attack increases Damage by 5% per hex moved."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_cavalier_attack_defense_debuff_name"
+    }
+   ]
+  },
+  "h3_cavalier_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 112,
+    "offence": 25,
+    "defence": 20,
+    "damageMin": 18,
+    "damageMax": 28,
+    "speed": 9,
+    "initiative": 9
+   },
+   "gold": 1200,
+   "squadValue": 2103,
+   "kit": [
+    {
+     "k": "gallop",
+     "v": 0.1,
+     "name": "Jousting",
+     "text": "Moving before an attack increases Damage by 10% per hex moved."
+    },
+    {
+     "k": "runtime",
+     "rule": "charge_no_counter",
+     "percent": 1,
+     "hexes": 4,
+     "offMult": 1.05,
+     "name": "Unhorse",
+     "text": "After moving 4 or more hexes before a Melee attack, the target cannot counterattack."
+    },
+    {
+     "k": "castle_keep_from",
+     "from": "h3_cavalier",
+     "view": "h3_cavalier_attack_defense_debuff_name"
+    }
+   ]
+  },
+  "h3_cavalier_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 128,
+    "offence": 21,
+    "defence": 24,
+    "damageMin": 18,
+    "damageMax": 30,
+    "speed": 7,
+    "initiative": 8
+   },
+   "gold": 1200,
+   "squadValue": 2103,
+   "kit": [
+    {
+     "k": "gallop",
+     "v": 0.05,
+     "name": "Jousting",
+     "text": "Moving before an attack increases Damage by 5% per hex moved."
+    },
+    {
+     "k": "castle_strike",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "pattern": "attack_reach_x2_x100_x100_x100",
+     "counter": false,
+     "name": "Trample",
+     "text": "Attacks an enemy and every enemy within two hexes in a line behind it for full Damage. Enemies do not counterattack."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_cavalier_upg_alt_redesign_ability_name"
+    }
+   ]
+  },
+  "h3_angel": {
+   "role": "base",
+   "stats": {
+    "hp": 224,
+    "offence": 28,
+    "defence": 28,
+    "damageMin": 56,
+    "damageMax": 56,
+    "speed": 8,
+    "initiative": 12
+   },
+   "gold": 3000,
+   "squadValue": 3731,
+   "powerTarget": 0.95,
+   "kit": [
+    {
+     "k": "army_stat",
+     "target": "ally",
+     "stats": {
+      "moral": 1
+     },
+     "icon": "skill_tactics",
+     "name": "Aura of Valor",
+     "text": "All friendly creatures have +1 Morale. This effect does not stack; only the strongest one is active."
+    },
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_angels",
+     "v": 0.5,
+     "targets": [
+      "h3_devil",
+      "h3_devil_upg",
+      "h3_devil_upg_alt"
+     ],
+     "name": "Hatred of Devils",
+     "text": "Deals +50% Damage to Devils, Arch Devils and their kin."
+    },
+    {
+     "k": "castle_free_ally_buff",
+     "focus": 3,
+     "cd": 3,
+     "range": 4,
+     "buff": "h3_kit_castle_shield_of_faith_effect",
+     "duration": 2,
+     "toughMult": 1.04,
+     "name": "Shield of Faith",
+     "text": "A friendly creature within 4 hexes is immune to negative effects until the end of the next round. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_angel_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 224,
+    "offence": 36,
+    "defence": 32,
+    "damageMin": 56,
+    "damageMax": 56,
+    "speed": 11,
+    "initiative": 15
+   },
+   "gold": 5000,
+   "squadValue": 7113,
+   "kit": [
+    {
+     "k": "army_stat",
+     "target": "ally",
+     "stats": {
+      "moral": 1
+     },
+     "icon": "skill_tactics",
+     "name": "Aura of Valor",
+     "text": "All friendly creatures have +1 Morale. This effect does not stack; only the strongest one is active."
+    },
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "sleep_effect",
+      "berserk"
+     ],
+     "icon": "magic_nairas_kiss_effect_icon",
+     "name": "Fearless",
+     "text": "Immune to Sleep, Blind and Berserk effects."
+    },
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_angels",
+     "v": 0.5,
+     "targets": [
+      "h3_devil",
+      "h3_devil_upg",
+      "h3_devil_upg_alt"
+     ],
+     "name": "Hatred of Devils",
+     "text": "Deals +50% Damage to Devils, Arch Devils and their kin."
+    },
+    {
+     "k": "revive",
+     "focus": 3,
+     "cd": 3,
+     "charges": 1,
+     "values": [
+      "100",
+      "1",
+      "20",
+      "until start amount"
+     ],
+     "name": "Resurrection",
+     "text": "Restores HP to another friendly living creature. This can revive fallen units. Usable once per battle."
+    },
+    {
+     "k": "castle_ally_death_buff",
+     "buff": "h3_kit_castle_vengeance_effect",
+     "duration": 1,
+     "offMult": 1.08,
+     "name": "Vengeance of Heaven",
+     "text": "Whenever a friendly creature stack is destroyed, this creature gains +4 Attack until the end of the battle."
+    }
+   ]
+  },
+  "h3_angel_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 255,
+    "offence": 31,
+    "defence": 34,
+    "damageMin": 60,
+    "damageMax": 60,
+    "speed": 10,
+    "initiative": 14
+   },
+   "gold": 5000,
+   "squadValue": 7113,
+   "kit": [
+    {
+     "k": "army_stat",
+     "target": "ally",
+     "stats": {
+      "moral": 1
+     },
+     "icon": "skill_tactics",
+     "name": "Aura of Valor",
+     "text": "All friendly creatures have +1 Morale. This effect does not stack; only the strongest one is active."
+    },
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "sleep_effect",
+      "berserk"
+     ],
+     "icon": "magic_nairas_kiss_effect_icon",
+     "name": "Fearless",
+     "text": "Immune to Sleep, Blind and Berserk effects."
+    },
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_angels",
+     "v": 0.5,
+     "targets": [
+      "h3_devil",
+      "h3_devil_upg",
+      "h3_devil_upg_alt"
+     ],
+     "name": "Hatred of Devils",
+     "text": "Deals +50% Damage to Devils, Arch Devils and their kin."
+    },
+    {
+     "k": "castle_steal_area",
+     "focus": 3,
+     "cd": 3,
+     "offMult": 1.05,
+     "name": "Wrathful Chalice",
+     "text": "Removes all positive effects from enemies within 1 hex of the chosen hex and applies them to this creature."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_angel_upg_alt_redesign_ability_name"
+    }
+   ],
+   "powerTarget": 0.95
+  }
+ }
+}

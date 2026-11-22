@@ -1,0 +1,1626 @@
+{
+ "schemaVersion": 1,
+ "faction": "homm3_conflux",
+ "approval": "Owner, 2026-11-20 goal: all factions, autonomous (no per-faction card review).",
+ "tradeAxis": "Host (role striker: an excellent attack shape on a plain, even stat block; ranged fire, sweeping or unretaliated strikes, armour piercing, extra counterattacks) versus Donor (role ward: lopsided stat spikes in Attack, Defence, Speed or Initiative with on-hit riders, resistances, immunities and support casts). Each side is a complete unit on its own; merged units keep the host's attack rows and the better stats and passives of both, so one side happens to be the better body and the other the better gift.",
+ "buffFile": "DB/buffs/units_buffs_nature.json",
+ "buffs": [
+  {
+   "id": "h3_kit_conflux_scorched_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Scorched",
+   "text": "-2 Defence.",
+   "set": {
+    "icon": "magic_fire_trap_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "data": {
+     "stats": {
+      "defence": -2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_conflux_molten_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Molten",
+   "text": "-3 Defence.",
+   "set": {
+    "icon": "magic_fire_trap_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "data": {
+     "stats": {
+      "defence": -3
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_conflux_chilled_effect",
+   "cloneOf": "minos_debuff",
+   "name": "Chilled",
+   "text": "-2 Speed.",
+   "set": {
+    "icon": "magic_ice_bolt_effect_icon",
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "data": {
+     "stats": {
+      "speed": -2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_conflux_mind_fray_effect",
+   "cloneOf": "succubus_debuff_3",
+   "name": "Mind Fray",
+   "text": "Cannot gain Focus.",
+   "set": {
+    "icon": "magic_nairas_kiss_effect_icon"
+   }
+  },
+  {
+   "id": "h3_kit_conflux_thawed_effect",
+   "cloneOf": "magic_sleep_ignore",
+   "name": "Thawed",
+   "text": "Cannot be Frozen.",
+   "set": {
+    "icon": "magic_ice_bolt_effect_icon",
+    "data": {
+     "immunities": [
+      {
+       "type": "effect",
+       "tags": [
+        "h3_freeze_effect"
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "h3_kit_conflux_frozen_effect",
+   "cloneOf": "gorilla_stun",
+   "name": "Frozen",
+   "text": "Skips its turn, cannot counterattack and takes +25% Damage.",
+   "set": {
+    "icon": "magic_ice_bolt_effect_icon",
+    "tags": [
+     "negative",
+     "movementNegative",
+     "h3_freeze_effect"
+    ],
+    "maxDuration": 1,
+    "timeoutActions": [
+     {
+      "trigger": "buff_timeout",
+      "damageDealer": {
+       "tags": [
+        "buff"
+       ],
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self"
+       },
+       "attackPatternSid": "attack_single_x100",
+       "damageTarget_": "none",
+       "damageType_": "none",
+       "buffTarget_": "all",
+       "buff": {
+        "sid": "h3_kit_conflux_thawed_effect",
+        "duration": 3
+       },
+       "targetMechanics": []
+      }
+     }
+    ],
+    "data": {
+     "sequenceEffect": "skip_turn",
+     "disablers": [
+      {
+       "ability": "counter_attack",
+       "attack": "all"
+      }
+     ],
+     "stats": {
+      "inAllDmgMod": 0.25
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_conflux_ignite_effect_10",
+   "cloneOf": "phoenix_ignition",
+   "name": "Ignite",
+   "text": "Takes 10 Magic Damage at the start of each of its turns.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive",
+        "magic_damage",
+        "overTime_effect",
+        "overTime_effect_fire",
+        "activate_all_buff_actions_damage"
+       ],
+       "triggerCounter": false,
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "statDmgMult": 0.0,
+       "minBaseDmg": 10,
+       "maxBaseDmg": 10,
+       "minStackDmg": 0,
+       "maxStackDmg": 0
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_conflux_ignite_effect_20",
+   "cloneOf": "phoenix_ignition",
+   "name": "Ignite",
+   "text": "Takes 20 Magic Damage at the start of each of its turns.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive",
+        "magic_damage",
+        "overTime_effect",
+        "overTime_effect_fire",
+        "activate_all_buff_actions_damage"
+       ],
+       "triggerCounter": false,
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "statDmgMult": 0.0,
+       "minBaseDmg": 20,
+       "maxBaseDmg": 20,
+       "minStackDmg": 0,
+       "maxStackDmg": 0
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_conflux_ignite_effect_35",
+   "cloneOf": "phoenix_ignition",
+   "name": "Ignite",
+   "text": "Takes 35 Magic Damage at the start of each of its turns.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive",
+        "magic_damage",
+        "overTime_effect",
+        "overTime_effect_fire",
+        "activate_all_buff_actions_damage"
+       ],
+       "triggerCounter": false,
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "statDmgMult": 0.0,
+       "minBaseDmg": 35,
+       "maxBaseDmg": 35,
+       "minStackDmg": 0,
+       "maxStackDmg": 0
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_conflux_ignite_effect",
+   "cloneOf": "phoenix_ignition",
+   "name": "Ignite",
+   "text": "Takes 60 Magic Damage at the start of each of its turns.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive",
+        "magic_damage",
+        "overTime_effect",
+        "overTime_effect_fire",
+        "activate_all_buff_actions_damage"
+       ],
+       "triggerCounter": false,
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "statDmgMult": 0.0,
+       "minBaseDmg": 60,
+       "maxBaseDmg": 60,
+       "minStackDmg": 0,
+       "maxStackDmg": 0
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_conflux_ignite_effect_100",
+   "cloneOf": "phoenix_ignition",
+   "name": "Ignite",
+   "text": "Takes 100 Magic Damage at the start of each of its turns.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive",
+        "magic_damage",
+        "overTime_effect",
+        "overTime_effect_fire",
+        "activate_all_buff_actions_damage"
+       ],
+       "triggerCounter": false,
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "statDmgMult": 0.0,
+       "minBaseDmg": 100,
+       "maxBaseDmg": 100,
+       "minStackDmg": 0,
+       "maxStackDmg": 0
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_conflux_ignite_effect_160",
+   "cloneOf": "phoenix_ignition",
+   "name": "Ignite",
+   "text": "Takes 160 Magic Damage at the start of each of its turns.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive",
+        "magic_damage",
+        "overTime_effect",
+        "overTime_effect_fire",
+        "activate_all_buff_actions_damage"
+       ],
+       "triggerCounter": false,
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "statDmgMult": 0.0,
+       "minBaseDmg": 160,
+       "maxBaseDmg": 160,
+       "minStackDmg": 0,
+       "maxStackDmg": 0
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_conflux_ignite_effect_250",
+   "cloneOf": "phoenix_ignition",
+   "name": "Ignite",
+   "text": "Takes 250 Magic Damage at the start of each of its turns.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive",
+        "magic_damage",
+        "overTime_effect",
+        "overTime_effect_fire",
+        "activate_all_buff_actions_damage"
+       ],
+       "triggerCounter": false,
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "statDmgMult": 0.0,
+       "minBaseDmg": 250,
+       "maxBaseDmg": 250,
+       "minStackDmg": 0,
+       "maxStackDmg": 0
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_conflux_ignite_effect_400",
+   "cloneOf": "phoenix_ignition",
+   "name": "Ignite",
+   "text": "Takes 400 Magic Damage at the start of each of its turns.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive",
+        "magic_damage",
+        "overTime_effect",
+        "overTime_effect_fire",
+        "activate_all_buff_actions_damage"
+       ],
+       "triggerCounter": false,
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "statDmgMult": 0.0,
+       "minBaseDmg": 400,
+       "maxBaseDmg": 400,
+       "minStackDmg": 0,
+       "maxStackDmg": 0
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_conflux_ignite_effect_650",
+   "cloneOf": "phoenix_ignition",
+   "name": "Ignite",
+   "text": "Takes 650 Magic Damage at the start of each of its turns.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive",
+        "magic_damage",
+        "overTime_effect",
+        "overTime_effect_fire",
+        "activate_all_buff_actions_damage"
+       ],
+       "triggerCounter": false,
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "statDmgMult": 0.0,
+       "minBaseDmg": 650,
+       "maxBaseDmg": 650,
+       "minStackDmg": 0,
+       "maxStackDmg": 0
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "units": {
+  "h3_pixie": {
+   "role": "base",
+   "stats": {
+    "hp": 12,
+    "offence": 4,
+    "defence": 3,
+    "damageMin": 3,
+    "damageMax": 5,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 25,
+   "squadValue": 95,
+   "kit": [
+    {
+     "k": "runtime",
+     "rule": "scatter",
+     "hexes": 1,
+     "percent": 1,
+     "toughMult": 1.05,
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Flutter Away",
+     "text": "After surviving a Melee attack, this creature flies 1 hex directly away from the attacker if that hex is free."
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_pixie_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 13,
+    "offence": 5,
+    "defence": 4,
+    "damageMin": 3,
+    "damageMax": 5,
+    "speed": 6,
+    "initiative": 6
+   },
+   "gold": 30,
+   "squadValue": 128,
+   "kit": [
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "runtime",
+     "rule": "scatter",
+     "hexes": 1,
+     "percent": 1,
+     "toughMult": 1.05,
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Flutter Away",
+     "text": "After surviving a Melee attack, this creature flies 1 hex directly away from the attacker if that hex is free."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 1,
+     "cd": 1,
+     "return": true,
+     "counter": false,
+     "name": "Flit",
+     "text": "Performs a Melee attack, then returns to its original position."
+    }
+   ],
+   "powerTarget": 0.98
+  },
+  "h3_pixie_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 12,
+    "offence": 4,
+    "defence": 3,
+    "damageMin": 3,
+    "damageMax": 6,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 30,
+   "squadValue": 128,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_swipe_1_name",
+     "descSid": "base_passive_strike_swipe_1_description_alt",
+     "icon": "skill_tactics"
+    },
+    {
+     "k": "runtime",
+     "rule": "scatter",
+     "hexes": 2,
+     "percent": 1,
+     "toughMult": 1.08,
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Flutter Away",
+     "text": "After surviving a Melee attack, this creature flies up to 2 hexes directly away from the attacker, as far as the hexes are free."
+    },
+    {
+     "k": "keep_ability",
+     "view": "twinkle_ability_1_name"
+    }
+   ],
+   "powerTarget": 0.97
+  },
+  "h3_air_elemental": {
+   "role": "base",
+   "stats": {
+    "hp": 16,
+    "offence": 5,
+    "defence": 4,
+    "damageMin": 2,
+    "damageMax": 6,
+    "speed": 5,
+    "initiative": 7
+   },
+   "gold": 190,
+   "squadValue": 148,
+   "kit": [
+    {
+     "k": "conflux_weak_card",
+     "weak": [
+      "primal_1_magic_thunderbolt_damage",
+      "primal_12_magic_chain_lightning_damage"
+     ],
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Body of Air",
+     "text": "Takes double Damage from Lightning Bolt and Chain Lightning."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_air_elemental_thunderbolt_name"
+    }
+   ],
+   "powerTarget": 0.93
+  },
+  "h3_air_elemental_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 16,
+    "offence": 6,
+    "defence": 5,
+    "damageMin": 2,
+    "damageMax": 6,
+    "speed": 5,
+    "initiative": 7
+   },
+   "gold": 275,
+   "squadValue": 214,
+   "kit": [
+    {
+     "k": "conflux_weak_card",
+     "weak": [
+      "primal_1_magic_thunderbolt_damage",
+      "primal_12_magic_chain_lightning_damage"
+     ],
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Body of Air",
+     "text": "Takes double Damage from Lightning Bolt and Chain Lightning."
+    },
+    {
+     "k": "sharpshooter"
+    },
+    {
+     "k": "conflux_spell",
+     "view": "h3_air_elemental_upg_abilities_0_name",
+     "focus": 2,
+     "cd": 2,
+     "mult": 0.8,
+     "free": true,
+     "name": "Thunderbolt",
+     "text": "Strikes any enemy for 80% of this stack's basic attack Damage as pure Magic Damage. Does not end this creature's turn."
+    }
+   ],
+   "powerTarget": 1.0
+  },
+  "h3_air_elemental_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 18,
+    "offence": 8,
+    "defence": 5,
+    "damageMin": 4,
+    "damageMax": 6,
+    "speed": 7,
+    "initiative": 8
+   },
+   "gold": 275,
+   "squadValue": 214,
+   "kit": [
+    {
+     "k": "conflux_weak_card",
+     "weak": [
+      "primal_1_magic_thunderbolt_damage",
+      "primal_12_magic_chain_lightning_damage"
+     ],
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Body of Air",
+     "text": "Takes double Damage from Lightning Bolt and Chain Lightning."
+    },
+    {
+     "k": "runtime",
+     "rule": "first_hit",
+     "side": "attacker",
+     "percent": 25,
+     "offMult": 1.12,
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Opening Gust",
+     "text": "The first attack or counterattack this creature makes each round deals +25% Damage."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_air_elemental_upg_alt_abilities_0_name"
+    }
+   ],
+   "powerTarget": 0.96
+  },
+  "h3_water_elemental": {
+   "role": "base",
+   "stats": {
+    "hp": 37,
+    "offence": 6,
+    "defence": 8,
+    "damageMin": 5,
+    "damageMax": 9,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 300,
+   "squadValue": 257,
+   "kit": [
+    {
+     "k": "conflux_immunity",
+     "damage": [
+      "primal_6_magic_ice_bolt_damage",
+      "primal_13_magic_avalanche_damage"
+     ],
+     "effect": [
+      "primal_6_magic_ice_bolt_effect",
+      "primal_13_magic_avalanche_effect"
+     ],
+     "icon": "magic_ice_bolt_effect_icon",
+     "name": "Living Water",
+     "text": "Leaves no body upon death. Immune to Ice Bolt and Circle of Winter. Takes double Damage from Fireball, Firewall and Armageddon.",
+     "weak": [
+      "primal_4_magic_fire_globe_damage",
+      "primal_7_magic_wall_of_flame_damage",
+      "primal_11_magic_armageddon_damage"
+     ]
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_water_elemental_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 37,
+    "offence": 8,
+    "defence": 9,
+    "damageMin": 5,
+    "damageMax": 9,
+    "speed": 5,
+    "initiative": 7
+   },
+   "gold": 375,
+   "squadValue": 421,
+   "kit": [
+    {
+     "k": "conflux_immunity",
+     "damage": [
+      "primal_6_magic_ice_bolt_damage",
+      "primal_13_magic_avalanche_damage"
+     ],
+     "effect": [
+      "primal_6_magic_ice_bolt_effect",
+      "primal_13_magic_avalanche_effect"
+     ],
+     "icon": "magic_ice_bolt_effect_icon",
+     "name": "Living Water",
+     "text": "Leaves no body upon death. Immune to Ice Bolt and Circle of Winter. Takes double Damage from Fireball, Firewall and Armageddon.",
+     "weak": [
+      "primal_4_magic_fire_globe_damage",
+      "primal_7_magic_wall_of_flame_damage",
+      "primal_11_magic_armageddon_damage"
+     ]
+    },
+    {
+     "k": "skirmisher",
+     "name": "Ice Blades",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "shot",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.2,
+     "counter": true,
+     "buff": "h3_kit_conflux_chilled_effect",
+     "duration": 2,
+     "icon": "magic_ice_bolt_effect_icon",
+     "name": "Ice Bolt",
+     "text": "Performs a Ranged attack that deals +20% Damage. The target has -2 Speed until the end of the next round."
+    }
+   ],
+   "powerTarget": 1.06
+  },
+  "h3_water_elemental_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 37,
+    "offence": 6,
+    "defence": 11,
+    "damageMin": 6,
+    "damageMax": 11,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 375,
+   "squadValue": 421,
+   "kit": [
+    {
+     "k": "conflux_immunity",
+     "damage": [
+      "primal_6_magic_ice_bolt_damage",
+      "primal_13_magic_avalanche_damage"
+     ],
+     "effect": [
+      "primal_6_magic_ice_bolt_effect",
+      "primal_13_magic_avalanche_effect"
+     ],
+     "icon": "magic_ice_bolt_effect_icon",
+     "name": "Living Water",
+     "text": "Leaves no body upon death. Immune to Ice Bolt and Circle of Winter. Takes double Damage from Fireball, Firewall and Armageddon.",
+     "weak": [
+      "primal_4_magic_fire_globe_damage",
+      "primal_7_magic_wall_of_flame_damage",
+      "primal_11_magic_armageddon_damage"
+     ]
+    },
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_frostbite_effect",
+     "duration": 2,
+     "escalate": {
+      "to": "h3_kit_conflux_frozen_effect",
+      "unless": "h3_kit_conflux_thawed_effect"
+     },
+     "offMult": 1.06,
+     "icon": "aqualotl_debuff_2_icon",
+     "name": "Frostbite",
+     "text": "Basic attacks and counterattacks stop the target from restoring Health or being revived until the end of the next round. A target that already has Frostbite is Frozen instead: it skips its next turn and takes +25% Damage while Frozen. A creature cannot be Frozen again for 3 rounds."
+    }
+   ],
+   "powerTarget": 1.01
+  },
+  "h3_fire_elemental": {
+   "role": "base",
+   "stats": {
+    "hp": 50,
+    "offence": 13,
+    "defence": 12,
+    "damageMin": 10,
+    "damageMax": 14,
+    "speed": 6,
+    "initiative": 8
+   },
+   "gold": 350,
+   "squadValue": 430,
+   "kit": [
+    {
+     "k": "conflux_immunity",
+     "damage": [
+      "primal_4_magic_fire_globe_damage",
+      "primal_7_magic_wall_of_flame_damage",
+      "primal_11_magic_armageddon_damage"
+     ],
+     "icon": "magic_fire_trap_effect_icon",
+     "name": "Born of Flame",
+     "text": "Leaves no body upon death. Immune to Fireball, Firewall and Armageddon. Takes double Damage from Ice Bolt and Circle of Winter.",
+     "weak": [
+      "primal_6_magic_ice_bolt_damage",
+      "primal_13_magic_avalanche_damage"
+     ]
+    },
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_conflux_scorched_effect",
+     "duration": 2,
+     "icon": "magic_fire_trap_effect_icon",
+     "name": "Searing Touch",
+     "text": "Basic attacks and counterattacks give the target -2 Defence until the end of the next round."
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_fire_elemental_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 50,
+    "offence": 14,
+    "defence": 13,
+    "damageMin": 10,
+    "damageMax": 14,
+    "speed": 6,
+    "initiative": 8
+   },
+   "gold": 400,
+   "squadValue": 602,
+   "kit": [
+    {
+     "k": "conflux_immunity",
+     "damage": [
+      "primal_4_magic_fire_globe_damage",
+      "primal_7_magic_wall_of_flame_damage",
+      "primal_11_magic_armageddon_damage"
+     ],
+     "icon": "magic_fire_trap_effect_icon",
+     "name": "Born of Flame",
+     "text": "Leaves no body upon death. Immune to Fireball, Firewall and Armageddon. Takes double Damage from Ice Bolt and Circle of Winter.",
+     "weak": [
+      "primal_6_magic_ice_bolt_damage",
+      "primal_13_magic_avalanche_damage"
+     ]
+    },
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_conflux_scorched_effect",
+     "duration": 2,
+     "icon": "magic_fire_trap_effect_icon",
+     "name": "Searing Touch",
+     "text": "Basic attacks and counterattacks give the target -2 Defence until the end of the next round."
+    },
+    {
+     "k": "conflux_swipe"
+    },
+    {
+     "k": "conflux_focus_on_damage",
+     "focus": 1,
+     "icon": "magic_energyze_effect_icon",
+     "name": "Static Build-up",
+     "text": "Whenever this creature takes Damage, it gains 1 extra Focus."
+    },
+    {
+     "k": "conflux_spell",
+     "view": "h3_fire_elemental_upg_alt_abilities_0_name",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "name": "Chain Lightning",
+     "text": "Strikes any creature for 100% of this stack's basic attack Damage as pure Magic Damage, then jumps to one more creature within 3 hexes for 50%."
+    }
+   ],
+   "powerTarget": 0.97
+  },
+  "h3_fire_elemental_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 50,
+    "offence": 16,
+    "defence": 12,
+    "damageMin": 10,
+    "damageMax": 15,
+    "speed": 8,
+    "initiative": 11
+   },
+   "gold": 400,
+   "squadValue": 602,
+   "kit": [
+    {
+     "k": "conflux_immunity",
+     "damage": [
+      "primal_4_magic_fire_globe_damage",
+      "primal_7_magic_wall_of_flame_damage",
+      "primal_11_magic_armageddon_damage"
+     ],
+     "icon": "magic_fire_trap_effect_icon",
+     "name": "Born of Flame",
+     "text": "Leaves no body upon death. Immune to Fireball, Firewall and Armageddon. Takes double Damage from Ice Bolt and Circle of Winter.",
+     "weak": [
+      "primal_6_magic_ice_bolt_damage",
+      "primal_13_magic_avalanche_damage"
+     ]
+    },
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_conflux_scorched_effect",
+     "duration": 2,
+     "icon": "magic_fire_trap_effect_icon",
+     "name": "Searing Touch",
+     "text": "Basic attacks and counterattacks give the target -2 Defence until the end of the next round."
+    },
+    {
+     "k": "reflect",
+     "perCreature": 5,
+     "icon": "magic_vengeance_effect_icon",
+     "name": "Fire Shield",
+     "text": "Each enemy that attacks this creature in Melee takes 5 Magic Damage per creature in this stack."
+    },
+    {
+     "k": "conflux_dot_cast",
+     "focus": 2,
+     "cd": 2,
+     "range": 6,
+     "buff": "h3_kit_conflux_ignite_effect",
+     "duration": 2,
+     "scale_by_caster": {
+      "percent": 40,
+      "tiers": [
+       [
+        10,
+        "h3_kit_conflux_ignite_effect_10"
+       ],
+       [
+        20,
+        "h3_kit_conflux_ignite_effect_20"
+       ],
+       [
+        35,
+        "h3_kit_conflux_ignite_effect_35"
+       ],
+       [
+        60,
+        "h3_kit_conflux_ignite_effect"
+       ],
+       [
+        100,
+        "h3_kit_conflux_ignite_effect_100"
+       ],
+       [
+        160,
+        "h3_kit_conflux_ignite_effect_160"
+       ],
+       [
+        250,
+        "h3_kit_conflux_ignite_effect_250"
+       ],
+       [
+        400,
+        "h3_kit_conflux_ignite_effect_400"
+       ],
+       [
+        650,
+        "h3_kit_conflux_ignite_effect_650"
+       ]
+      ]
+     },
+     "offMult": 1.08,
+     "icon": "phoenix_ignition_icon",
+     "name": "Ignite",
+     "text": "Sets an enemy creature within 6 hexes on fire. At the start of each of its next 2 turns it takes Magic Damage equal to 40% of this stack's basic attack Damage. Does not end this creature's turn."
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_earth_elemental": {
+   "role": "base",
+   "stats": {
+    "hp": 82,
+    "offence": 13,
+    "defence": 16,
+    "damageMin": 13,
+    "damageMax": 21,
+    "speed": 3,
+    "initiative": 4
+   },
+   "gold": 400,
+   "squadValue": 652,
+   "kit": [
+    {
+     "k": "conflux_bedrock",
+     "v": -0.3,
+     "icon": "sub_skill_faction_homm3_castle_elite_strategem_shield_wall",
+     "name": "Bedrock",
+     "text": "Takes -30% Damage from flying creatures.",
+     "toughMult": 1.08
+    },
+    {
+     "k": "conflux_immunity",
+     "damage": [
+      "primal_1_magic_thunderbolt_damage",
+      "primal_12_magic_chain_lightning_damage"
+     ],
+     "icon": "primal_1_magic_thunderbolt",
+     "name": "Grounded",
+     "text": "Leaves no body upon death. Immune to Thunderbolt and Chain Lightning. Takes double Damage from Cave In and Stone Fangs.",
+     "weak": [
+      "primal_8_magic_cave_in_damage",
+      "primal_16_magic_stone_fangs_damage"
+     ]
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_earth_elemental_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 82,
+    "offence": 15,
+    "defence": 16,
+    "damageMin": 13,
+    "damageMax": 21,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 500,
+   "squadValue": 1085,
+   "kit": [
+    {
+     "k": "conflux_bedrock",
+     "v": -0.3,
+     "icon": "sub_skill_faction_homm3_castle_elite_strategem_shield_wall",
+     "name": "Bedrock",
+     "text": "Takes -30% Damage from flying creatures.",
+     "toughMult": 1.08
+    },
+    {
+     "k": "conflux_immunity",
+     "damage": [
+      "primal_1_magic_thunderbolt_damage",
+      "primal_12_magic_chain_lightning_damage",
+      "primal_4_magic_fire_globe_damage",
+      "primal_7_magic_wall_of_flame_damage",
+      "primal_11_magic_armageddon_damage"
+     ],
+     "icon": "magic_fire_trap_effect_icon",
+     "name": "Magma Heart",
+     "text": "Leaves no body upon death. Immune to Thunderbolt, Chain Lightning, Fireball, Firewall and Armageddon. Takes double Damage from Cave In and Stone Fangs.",
+     "weak": [
+      "primal_8_magic_cave_in_damage",
+      "primal_16_magic_stone_fangs_damage"
+     ]
+    },
+    {
+     "k": "conflux_stat",
+     "stat": "armorPen",
+     "v": 0.25,
+     "name": "Molten Fists",
+     "text": "Attacks ignore 25% of the target's Defence."
+    },
+    {
+     "k": "conflux_spell",
+     "view": "h3_earth_elemental_upg_abilities_0_name",
+     "focus": 2,
+     "cd": 2,
+     "mult": 0.8,
+     "name": "Fireball",
+     "text": "Deals 80% of this stack's basic attack Damage as pure Magic Damage to every creature on the target hex and the hexes around it."
+    }
+   ],
+   "powerTarget": 1.0
+  },
+  "h3_earth_elemental_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 85,
+    "offence": 16,
+    "defence": 18,
+    "damageMin": 16,
+    "damageMax": 24,
+    "speed": 3,
+    "initiative": 5
+   },
+   "gold": 500,
+   "squadValue": 1085,
+   "kit": [
+    {
+     "k": "conflux_bedrock",
+     "v": -0.4,
+     "icon": "sub_skill_faction_homm3_castle_elite_strategem_shield_wall",
+     "name": "Bedrock",
+     "text": "Takes -40% Damage from flying creatures.",
+     "toughMult": 1.11
+    },
+    {
+     "k": "conflux_immunity",
+     "damage": [
+      "primal_1_magic_thunderbolt_damage",
+      "primal_12_magic_chain_lightning_damage",
+      "primal_4_magic_fire_globe_damage",
+      "primal_7_magic_wall_of_flame_damage",
+      "primal_11_magic_armageddon_damage"
+     ],
+     "icon": "magic_fire_trap_effect_icon",
+     "name": "Lava Heart",
+     "text": "Leaves no body upon death. Immune to Thunderbolt, Chain Lightning, Fireball, Firewall and Armageddon. Takes double Damage from Cave In and Stone Fangs.",
+     "weak": [
+      "primal_8_magic_cave_in_damage",
+      "primal_16_magic_stone_fangs_damage"
+     ]
+    },
+    {
+     "k": "when_damaged_adjacent_debuff",
+     "buff": "h3_kit_conflux_molten_effect",
+     "duration": 2,
+     "icon": "magic_fire_trap_effect_icon",
+     "name": "Molten Skin",
+     "text": "Whenever this creature takes Damage, all adjacent enemies have -3 Defence until the end of the next round."
+    },
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "movementNegative"
+     ],
+     "icon": "ent_root_icon",
+     "name": "Unstoppable Flow",
+     "text": "Immune to effects that slow or root it."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_earth_elemental_upg_alt_abilities_0_name"
+    }
+   ],
+   "powerTarget": 0.94
+  },
+  "h3_psychic_elemental": {
+   "role": "base",
+   "stats": {
+    "hp": 115,
+    "offence": 21,
+    "defence": 19,
+    "damageMin": 17,
+    "damageMax": 27,
+    "speed": 6,
+    "initiative": 7
+   },
+   "gold": 750,
+   "squadValue": 1201,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_swipe_1_name",
+     "descSid": "base_passive_strike_swipe_1_description_alt",
+     "icon": "skill_tactics"
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "alt_swirl",
+     "mult": 0.5,
+     "name": "Mind Blast",
+     "text": "Strikes all adjacent enemies for 50% Damage. Enemies do not counterattack."
+    }
+   ],
+   "powerTarget": 0.93
+  },
+  "h3_psychic_elemental_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 115,
+    "offence": 23,
+    "defence": 23,
+    "damageMin": 17,
+    "damageMax": 27,
+    "speed": 7,
+    "initiative": 8
+   },
+   "gold": 800,
+   "squadValue": 1872,
+   "powerTarget": 0.91,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_swipe_1_name",
+     "descSid": "base_passive_strike_swipe_1_description_alt",
+     "icon": "skill_tactics"
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "alt_swirl",
+     "mult": 0.5,
+     "name": "Mind Blast",
+     "text": "Strikes all adjacent enemies for 50% Damage. Enemies do not counterattack."
+    },
+    {
+     "k": "spell_immunity",
+     "level": 5
+    },
+    {
+     "k": "runtime",
+     "rule": "ability_feedback",
+     "radius": 3,
+     "percent": 30,
+     "offMult": 1.08,
+     "icon": "magic_nairas_kiss_effect_icon",
+     "name": "Psychic Feedback",
+     "text": "Whenever an enemy creature within 3 hexes hits with an ability, it takes Damage equal to 30% of this stack's basic attack Damage."
+    }
+   ]
+  },
+  "h3_psychic_elemental_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 115,
+    "offence": 29,
+    "defence": 19,
+    "damageMin": 18,
+    "damageMax": 30,
+    "speed": 8,
+    "initiative": 10
+   },
+   "gold": 800,
+   "squadValue": 1872,
+   "powerTarget": 0.89,
+   "kit": [
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "sleep_effect",
+      "berserk"
+     ],
+     "icon": "magic_nairas_kiss_effect_icon",
+     "name": "Unbound Mind",
+     "text": "Immune to Sleep, Blind and Berserk effects."
+    },
+    {
+     "k": "magic_damper",
+     "v": 2,
+     "name": "Astral Interference",
+     "text": "Enemy hero's spells cost +2 mana. This effect does not stack; only the strongest one is active."
+    },
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_conflux_mind_fray_effect",
+     "duration": 2,
+     "icon": "magic_nairas_kiss_effect_icon",
+     "name": "Mind Fray",
+     "text": "Basic attacks and counterattacks stop the target from gaining Focus until the end of the next round."
+    },
+    {
+     "k": "conflux_spell",
+     "view": "h3_common_ability_misfortune_name",
+     "focus": 2,
+     "cd": 3,
+     "name": "Misfortune",
+     "text": "Sets an enemy's Morale and Luck to minimum and its Attack and Defence to 0 until the end of the next round."
+    }
+   ]
+  },
+  "h3_firebird": {
+   "role": "base",
+   "stats": {
+    "hp": 255,
+    "offence": 28,
+    "defence": 25,
+    "damageMin": 50,
+    "damageMax": 71,
+    "speed": 8,
+    "initiative": 13
+   },
+   "gold": 1500,
+   "squadValue": 3942,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_reach_1_name",
+     "descSid": "base_passive_strike_reach_1_description"
+    },
+    {
+     "k": "conflux_immunity",
+     "damage": [
+      "primal_4_magic_fire_globe_damage",
+      "primal_7_magic_wall_of_flame_damage",
+      "primal_11_magic_armageddon_damage"
+     ],
+     "icon": "magic_fire_trap_effect_icon",
+     "name": "Born of Flame",
+     "text": "Immune to Fireball, Firewall and Armageddon."
+    }
+   ],
+   "powerTarget": 1.0
+  },
+  "h3_firebird_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 267,
+    "offence": 35,
+    "defence": 26,
+    "damageMin": 52,
+    "damageMax": 74,
+    "speed": 11,
+    "initiative": 16
+   },
+   "gold": 2000,
+   "squadValue": 6824,
+   "powerTarget": 0.95,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_reach_1_name",
+     "descSid": "base_passive_strike_reach_1_description"
+    },
+    {
+     "k": "conflux_immunity",
+     "damage": [
+      "primal_4_magic_fire_globe_damage",
+      "primal_7_magic_wall_of_flame_damage",
+      "primal_11_magic_armageddon_damage"
+     ],
+     "icon": "magic_fire_trap_effect_icon",
+     "name": "Born of Flame",
+     "text": "Immune to Fireball, Firewall and Armageddon."
+    },
+    {
+     "k": "conflux_rebirth",
+     "name": "Rebirth",
+     "text": "Leaves a pile of ash upon death. At the start of the following round, 50% of the stack is revived from that pile. Each stack can only be revived once per battle this way. The pile is destroyed upon taking Damage 3 times."
+    }
+   ]
+  },
+  "h3_firebird_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 285,
+    "offence": 28,
+    "defence": 36,
+    "damageMin": 50,
+    "damageMax": 71,
+    "speed": 9,
+    "initiative": 13
+   },
+   "gold": 2000,
+   "squadValue": 6824,
+   "powerTarget": 0.94,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_reach_1_name",
+     "descSid": "base_passive_strike_reach_1_description"
+    },
+    {
+     "k": "conflux_immunity",
+     "damage": [
+      "primal_4_magic_fire_globe_damage",
+      "primal_7_magic_wall_of_flame_damage",
+      "primal_11_magic_armageddon_damage"
+     ],
+     "icon": "magic_fire_trap_effect_icon",
+     "name": "Born of Flame",
+     "text": "Immune to Fireball, Firewall and Armageddon."
+    },
+    {
+     "k": "conflux_rebirth",
+     "name": "Rebirth",
+     "text": "Leaves a pile of ash upon death. At the start of the following round, 50% of the stack is revived from that pile. Each stack can only be revived once per battle this way. The pile is destroyed upon taking Damage 3 times."
+    },
+    {
+     "k": "conflux_round_pulse",
+     "share": 0.1,
+     "icon": "magic_healing_water_effect_icon",
+     "name": "Renewing Flame",
+     "text": "At the start of this creature's turn, adjacent friendly creatures restore Health equal to 10% of their stack's full Health. This can revive fallen creatures up to the stack's starting size."
+    },
+    {
+     "k": "cleanse",
+     "focus": 3,
+     "cd": 3,
+     "range": 1,
+     "name": "Purifying Fire",
+     "text": "Dispels all negative effects from one adjacent friendly creature."
+    }
+   ]
+  }
+ }
+}

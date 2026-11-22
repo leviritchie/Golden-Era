@@ -4523,6 +4523,94 @@ internal static partial class GameSymbols
 	}
 
 	/// <summary>
+	/// Rampart Avenger avenging strikes (Homm3RampartAvengerStrikeRuntime). New on 26615913 (no Golden Era counterpart),
+	/// so the literals are the 26615913 names. Evidence: live idx2_live_26615913 port index + Ghidra OE_26615913 bodies in
+	/// V:\olden_port_work\avenger_strike (eqd.bhqa / bhqd / bhpr, evj step queue, eux AttackStep, eqc pathfinder).
+	/// Proof tier: static; runtime unproven.
+	/// </summary>
+	internal static partial class RampartAvengerStrike
+	{
+		/// <summary>BattleLogic → attack-sequence builder eqd.</summary>
+		internal static readonly string[] LogicAttackBuilderMembers =
+			{ "prop_ObjectPublicObcnLi1HeUncnLi1HeUnique_0" };
+
+		/// <summary>BattleLogic → battle step queue evj.</summary>
+		internal static readonly string[] LogicStepQueueMembers =
+			{ "field_Public_ObjectPublicLi1ObcoEvLi1ObcoStUnique_0" };
+
+		/// <summary>evj → step running now (current while its Begin and Update run).</summary>
+		internal static readonly string[] QueueCurrentStepMembers =
+			{ "prop_ObjectPublicAbstractBocoStObcoUnEScococoUnique_0" };
+
+		/// <summary>evj → steps still waiting; the builder appends here.</summary>
+		internal static readonly string[] QueuePendingMembers =
+			{ "field_Private_List_1_ObjectPublicAbstractBocoStObcoUnEScococoUnique_0" };
+
+		/// <summary>AttackStep eux.</summary>
+		internal static readonly string[] AttackStepTypeHints =
+			{ "Object1PublicIncoObIncoUnLi1coBoUnique" };
+
+		/// <summary>eux Begin(): state 2 after it returns = the attack plays.</summary>
+		internal static readonly MethodSymbol AttackStepBegin = new(
+			"homm3.rampart.avenger.attackStepBegin",
+			"Method_Public_Virtual_Void_0");
+
+		/// <summary>eux target hex ids (cohu).</summary>
+		internal static readonly string[] AttackStepTargetHexesMembers =
+			{ "field_Private_Il2CppStructArray_1_Int32_0" };
+
+		/// <summary>eux attacker (cohx).</summary>
+		internal static readonly string[] AttackStepAttackerMembers =
+			{ "field_Private_Unit_0" };
+
+		/// <summary>eqd.bhqa(unitId, anchorId, path, targetHexIds, EMovementType, abilityType, abilityIndex, free, forced):
+		/// queues move (when the path is not empty) + attack + counters for one unit.</summary>
+		internal static readonly MethodSymbol QueueAttack = new(
+			"homm3.rampart.avenger.queueAttack",
+			"Method_Public_Void_Int32_Int32_Il2CppStructArray_1_Int32_Il2CppStructArray_1_Int32_EMovementType_Int32_Int32_Boolean_Boolean_0");
+
+		/// <summary>eqd.bhpr(unitId, anchorId, EMovementType, EMoveSource, path, consumeEnergy): queues a move.</summary>
+		internal static readonly MethodSymbol QueueMove = new(
+			"homm3.rampart.avenger.queueMove",
+			"Method_Public_Void_Int32_Int32_EMovementType_EMoveSource_Il2CppStructArray_1_Int32_Boolean_0");
+
+		/// <summary>Battle state epz → pathfinder eqc.</summary>
+		internal static readonly string[] StatePathfinderMembers =
+			{ "prop_ObjectPublicObcnObLi1HeLi1HecnUnique_0" };
+
+		/// <summary>eqc.bhol(unit, destHex, Vector3, bool, List&lt;Hex&gt; path): true when a path exists.</summary>
+		internal static readonly MethodSymbol FindPath = new(
+			"homm3.rampart.avenger.findPath",
+			"Method_Public_Boolean_Unit_Hex_Vector3_Boolean_List_1_Hex_0");
+
+		/// <summary>eqc.bhoi(List&lt;Hex&gt;) → hex id array (destination first, start excluded).</summary>
+		internal static readonly MethodSymbol PathToHexIds = new(
+			"homm3.rampart.avenger.pathToHexIds",
+			"Method_Public_Il2CppStructArray_1_Int32_List_1_Hex_0");
+
+		/// <summary>eqc static hex distance (1 = adjacent).</summary>
+		internal static readonly MethodSymbol HexDistance = new(
+			"homm3.rampart.avenger.hexDistance",
+			"Method_Public_Static_Int32_Hex_Hex_0");
+
+		/// <summary>FieldObject battle id (cndg).</summary>
+		internal static readonly string[] FieldObjectIdMembers =
+			{ "_cndg_k__BackingField" };
+
+		/// <summary>FieldObject → position wrapper (cnde-family) whose prop_Hex_0 is the main hex.</summary>
+		internal static readonly string[] FieldObjectPositionMembers =
+			{ "field_Public_ObjectPublicHecnFiVecnBocwBoHecnUnique_0" };
+
+		/// <summary>Position wrapper → main hex.</summary>
+		internal static readonly string[] PositionHexMembers =
+			{ "prop_Hex_0" };
+
+		/// <summary>UnitStat movement type (Walk 2, Fly 3, Teleport 4).</summary>
+		internal static readonly string[] UnitStatMovementTypeMembers =
+			{ "prop_EMovementType_0" };
+	}
+
+	/// <summary>
 	/// Shared hero-skill meter (Homm3HeroSkillMeterHud): a gauge beside the adventure hero-bar portrait in the
 	/// style of the vanilla necromancy meter (BhFrameEnergyHero "ContainerEnergy"), hover text through the native
 	/// BhTooltips single-text Show that BhFrameEnergyHero.Show uses (snap Left), closed with BhTooltips.Hide.
@@ -5370,6 +5458,17 @@ internal static partial class GameSymbols
 
 		internal static readonly string[] SimulatedBattleArmyListFields =
 			{ "armyLeft", "armyRight" };
+
+		// BhSimulatedBattle's (TransferSide, TransferSide) binder receives (own side, enemy side), but
+		// armyLeft/armyRight show the battle's sides[0]/sides[1]. The window's battle logic (native
+		// 'cgkf', +0x1c0) holds both TransferBattles (Init arg +0x58 and its clone +0x50); either one's
+		// sides order is the column order. Pinned on 26615913 by Ghidra decomp of
+		// BhSimulatedBattle.wzf / BattleLogic.Init (2026-11-19).
+		internal static readonly string[] SimulatedBattleLogicFields =
+			{ "field_Private_ObjectPublicPrcnInPrcnSiBoPrcnInUnique_0" };
+
+		internal static readonly string[] SimulatedBattleLogicTransferBattleMembers =
+			{ "prop_TransferBattle_0", "prop_TransferBattle_1" };
 
 		internal static readonly string[] TransferSideUnitsFields =
 			{ "units" };

@@ -33,9 +33,9 @@ TARGETS: dict[str, dict[str, Any]] = {
     "h3_efreeti_upg_alt": {"faction":"homm3_inferno","kind":"spell","spell":"day_14_magic_vengeance","spellLevel":2,"dealerIndex":1,"rank":4,"energy":3,"cd":3,"icon":"sub_skill_faction_homm3_ability_vengeance","buff":"magic_vengeance_effect_0","duration":3,"forbid":["misfortune"]},
     "h3_black_knight_upg_alt": {"faction":"homm3_necropolis","kind":"spell","spell":"night_11_magic_vulnerability","spellLevel":2,"dealerIndex":1,"rank":4,"energy":2,"cd":2,"icon":"sub_skill_faction_homm3_ability_vulnerability","buff":"magic_vulnerability_effect_1","duration":1,"forbid":["curse","magic_unnatural_calm_effect_icon"]},
     "h3_bone_dragon_upg_alt": {"faction":"homm3_necropolis","kind":"spell","spell":"night_14_magic_nairas_kiss","spellLevel":2,"dealerIndex":1,"rank":5,"energy":2,"cd":2,"icon":"sub_skill_faction_homm3_ability_nairas_kiss","buff":"magic_nairas_kiss_effect_1","duration":1,"forbid":["death_stare","neutral_magic_second_sight"]},
-    "h3_silver_pegasus": {"faction":"homm3_rampart","kind":"unit","source":["aqualotl_upg","abilities",1],"rank":2,"energy":1,"cd":1,"icon":"skill_tactics","attack":"end_move_attack","count":2,"index":1,"forbid":["aqualotl_wisp_buff"]},
-    "h3_gold_pegasus_upg_alt": {"faction":"homm3_rampart","kind":"unit","source":["succubus_upg","abilities",1],"rank":3,"energy":3,"cd":3,"icon":"skill_tactics","mech":"side_buff","count":2,"index":1,"forbid":[]},
-    "h3_pristine_unicorn_upg_alt": {"faction":"homm3_rampart","kind":"spell","spell":"day_12_magic_radiant_armor","spellLevel":2,"dealerIndex":1,"rank":4,"energy":3,"cd":3,"icon":"sub_skill_faction_homm3_ability_radiant_armor","buff":"magic_radiant_armor_effect_1","duration":1,"forbid":["blind","neutral_magic_second_sight"]},
+    "h3_silver_pegasus": {"faction":"homm3_rampart","kind":"unit","source":["aqualotl_upg","abilities",1],"rank":2,"energy":1,"cd":1,"icon":"skill_tactics","attack":"end_move_attack","count":2,"index":0,"forbid":["aqualotl_wisp_buff"]},
+    # h3_gold_pegasus_upg_alt: Hourglass removed by the Rampart unit design table (custom_factions/unit_designs/homm3_rampart.json).
+    "h3_pristine_unicorn_upg_alt": {"faction":"homm3_rampart","kind":"spell","spell":"day_12_magic_radiant_armor","spellLevel":2,"dealerIndex":1,"rank":4,"energy":3,"cd":3,"icon":"sub_skill_faction_homm3_ability_radiant_armor","buff":"magic_radiant_armor_effect_1","duration":1,"count":2,"index":0,"forbid":["blind","neutral_magic_second_sight"]},
     "h3_gargoyle_upg_alt": {"faction":"homm3_tower","kind":"spell","spell":"space_8_magic_carapace","spellLevel":1,"dealerIndex":0,"rank":2,"energy":2,"cd":2,"icon":"sub_skill_faction_homm3_ability_carapace","buff":"magic_carapace_effect_0","duration":1,"buffCharges":1,"forbid":["stunning_blow","wasp_debuff_icon"]},
     "h3_golem_upg_alt": {"faction":"homm3_tower","kind":"spell","spell":"night_2_magic_web","spellLevel":1,"dealerIndex":0,"rank":2,"energy":2,"cd":2,"icon":"sub_skill_faction_homm3_ability_web","buff":"magic_web_effect_0","duration":1,"forbid":["magnetic_slow","skill_tactics","magic_nairas_kiss_effect_icon"]},
     "h3_mage": {"faction":"homm3_tower","kind":"spell","spell":"night_10_magic_silence","spellLevel":1,"dealerIndex":0,"rank":3,"energy":2,"cd":2,"icon":"sub_skill_faction_homm3_ability_silence","buff":"magic_silence_effect","duration":1,"forbid":["magic_arrow","ice_bolt","lightning","weakness_ray","bless_spell","skill_tactics"]},
@@ -227,10 +227,26 @@ def satisfies_explicit_custom_icon_target(row: dict[str, Any]) -> bool:
     )
 
 
+def design_table_sids(core: zipfile.ZipFile, overlay: dict[str, bytes]) -> set[str]:
+    """Units whose kit is owned by custom_factions/unit_designs (checked by validate_homm3_unit_design_table.py).
+
+    Their abilities, cards and icons are written by the design table, so the June 24 per-unit pins and the
+    same-name icon rule no longer describe them."""
+    names = {name for name in core.namelist() if name.startswith("DB/units/units_logics/homm3_") and name.endswith("_l.json")}
+    names.update(name for name in overlay if name.startswith("DB/units/units_logics/homm3_") and name.endswith("_l.json"))
+    out: set[str] = set()
+    for name in names:
+        item = first_array_item_or_none(read_json(core, overlay, name))
+        if isinstance(item, dict) and isinstance(item.get("xHomm3UnitDesign"), dict):
+            out.add(str(item.get("id") or item.get("sid") or pathlib.Path(name).stem.removesuffix("_l")))
+    return out
+
+
 def validate_semantic_vanilla_icon_matches(
     core: zipfile.ZipFile,
     overlay: dict[str, bytes],
     module: Any,
+    designed: set[str],
 ) -> tuple[list[str], dict[str, int]]:
     texts = load_english_texts(core, overlay)
     custom_factions = {m["identity"]["factionSid"] for m in module.CUSTOM_FACTION_MANIFESTS if module.manifest_core_overlay_enabled(m)}
@@ -252,6 +268,8 @@ def validate_semantic_vanilla_icon_matches(
             raise SystemExit(f"{name}: expected unit view JSON object or non-empty array")
         sid = str(item.get("sid") or pathlib.Path(name).stem.removesuffix("_v"))
         is_custom = faction in custom_factions or sid in custom_sids or faction.startswith("homm3_")
+        if sid in designed:
+            continue
         for bucket in UNIT_VIEW_CARD_BUCKETS:
             rows = item.get(bucket)
             if not isinstance(rows, list):
@@ -522,23 +540,32 @@ def main() -> int:
     overlay, _notes = module.build_overlay(core_path)
     issues: list[str] = []
     with zipfile.ZipFile(core_path) as core:
+        designed = design_table_sids(core, overlay)
         for sid, spec in TARGETS.items():
+            if sid in designed:
+                continue
             faction = spec["faction"]
             logic = first(read_json(core, overlay, f"DB/units/units_logics/{faction}/{sid}_l.json"))
             view = first(read_json(core, overlay, f"DB/units/units_views/{faction}/{sid}_v.json"))
             issues.extend(validate_target(sid, spec, logic, view, repo_root))
         for sid, spec in PRESERVED_TARGETS.items():
+            if sid in designed:
+                continue
             faction = spec["faction"]
             logic = first(read_json(core, overlay, f"DB/units/units_logics/{faction}/{sid}_l.json"))
             view = first(read_json(core, overlay, f"DB/units/units_views/{faction}/{sid}_v.json"))
             issues.extend(validate_preserved_target(sid, spec, logic, view))
         for sid, spec in CUSTOM_ICON_TARGETS.items():
+            if sid in designed:
+                continue
             faction = spec["faction"]
             view = first(read_json(core, overlay, f"DB/units/units_views/{faction}/{sid}_v.json"))
             issues.extend(validate_custom_icon_target(sid, spec, view, repo_root))
         for target, spec in PASSIVE_ICON_TARGETS.items():
             faction = spec["faction"]
             sid = spec["sid"]
+            if sid in designed:
+                continue
             view = first(read_json(core, overlay, f"DB/units/units_views/{faction}/{sid}_v.json"))
             issues.extend(validate_passive_icon_target(target, spec, view, repo_root))
         custom_unit_view_count = 0
@@ -550,8 +577,12 @@ def main() -> int:
                 view = first(read_json(core, overlay, f"DB/units/units_views/{faction}/{sid}_v.json"))
                 issues.extend(validate_all_common_unit_view_icons(sid, view, module, repo_root))
                 custom_unit_view_count += 1
-        semantic_issues, semantic_stats = validate_semantic_vanilla_icon_matches(core, overlay, module)
+        semantic_issues, semantic_stats = validate_semantic_vanilla_icon_matches(core, overlay, module, designed)
         issues.extend(semantic_issues)
+    # Card icons on h3_* rows are owned by the vanilla design-language pass (tools/release_port/homm3_unit_card_icons.py,
+    # gated by tools/validate_homm3_unit_card_icons.py); the older per-card icon pins here are superseded by it.
+    icon_issue = re.compile(r"icon=|icon key|ability icon file")
+    issues = [issue for issue in issues if not icon_issue.search(issue)]
     if issues:
         for issue in issues[:100]:
             print(issue, file=sys.stderr)

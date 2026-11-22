@@ -643,6 +643,14 @@ internal static class Homm3StrongholdWarcryRuntime
 			var state = unit == null ? null : FindSide(battle, unit);
 			if (state == null)
 				return;
+			// A unit that already used an ability in this action (one that does not end its turn) and then waits or
+			// defends has acted: the chain holds and ActionEnded extends it.
+			var key = Homm3DirectStateIdentity.ResolveKeyOrZero(unit);
+			if (state.Side.Extended && key != 0 && state.Side.ActingKey == key)
+			{
+				LogEvent("Skip/Wait " + Describe(unit) + " after its ability: the chain holds");
+				return;
+			}
 			LogEvent("Skip/Wait " + Describe(unit));
 			state.Side.Extended = false;
 			state.Side.DeferredBreakKey = 0;

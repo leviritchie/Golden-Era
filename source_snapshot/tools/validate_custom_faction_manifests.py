@@ -3683,24 +3683,26 @@ def validate_custom_faction_skill_row(
                     v.error(f"{faction_sid}: faction skill rank {index} icon must be {expected_icon!r}")
                 if level.get("name") != f"{skill_sid}_name_{index}" or level.get("desc") != f"{skill_sid}_desc_{index}":
                     v.error(f"{faction_sid}: faction skill rank {index} must reference exact owned rank text")
-                # Match the working HoMM3 faction-skill load contract (Dungeon shape):
-                # ignoreFractionsCount at every rank, empty Basic subSkills, and exactly
-                # three Advanced/Expert subSkill SIDs that resolve in sub_skills.json.
+                # Working HoMM3 faction-skill load contract: empty Basic subSkills and exactly
+                # three Advanced/Expert subSkill SIDs that resolve in sub_skills.json (empty Adv/Exp
+                # subSkills caused the July 2026 map-load NRE; empty rank bonuses load fine, as
+                # Inferno Gating). Runtime-owned ranks must not carry the ignoreFractionsCount
+                # carrier: it removed the mixed-faction Morale penalty (owner, 2026-11-19).
                 # Factory ranks also grant the Logistics Network world spell (heroMagicAddition).
                 bonuses = level.get("bonuses")
-                has_ignore = (
-                    isinstance(bonuses, list)
-                    and any(
-                        isinstance(bonus, dict)
-                        and bonus.get("type") == "unitBoolStat"
-                        and bonus.get("parameters") == ["ignoreFractionsCount", "true"]
-                        for bonus in bonuses
-                    )
-                )
-                if not has_ignore:
+                if not isinstance(bonuses, list):
+                    v.error(f"{faction_sid}: faction skill rank {index} bonuses must be a list")
+                    bonuses = []
+                if any(
+                    isinstance(bonus, dict)
+                    and bonus.get("type") == "unitBoolStat"
+                    and isinstance(bonus.get("parameters"), list)
+                    and bonus["parameters"][:1] == ["ignoreFractionsCount"]
+                    for bonus in bonuses
+                ):
                     v.error(
-                        f"{faction_sid}: runtime-owned faction skill rank {index} must carry "
-                        "unitBoolStat ignoreFractionsCount=true like working faction skills"
+                        f"{faction_sid}: runtime-owned faction skill rank {index} must not carry "
+                        "unitBoolStat ignoreFractionsCount (it removes the mixed-faction Morale penalty)"
                     )
                 if faction_sid == "homm3_factory":
                     has_logistics_spell = isinstance(bonuses, list) and any(
@@ -4323,13 +4325,15 @@ def validate_core_members(
                 validate_unit_attack_view_parity(faction_sid, custom_sid, logic_item, item, v)
                 validate_ranged_attack_contract(faction_sid, custom_sid, logic_item, item, v)
             if faction_sid == "homm3_fortress":
+                # Card `icon` values are sprite names picked by the vanilla design language
+                # (tools/release_port/homm3_unit_card_icons.py), not mechanics, so they are left out of the scan.
                 token = json_contains_token(
                     {
-                        "abilities": item.get("abilities"),
-                        "passives": item.get("passives"),
-                        "defaultAttacks": item.get("defaultAttacks"),
-                        "alternativeAttacks": item.get("alternativeAttacks"),
-                        "counterAttacks": item.get("counterAttacks"),
+                        key: [
+                            {k: val for k, val in card.items() if k != "icon"} if isinstance(card, dict) else card
+                            for card in (item.get(key) or [])
+                        ]
+                        for key in ("abilities", "passives", "defaultAttacks", "alternativeAttacks", "counterAttacks")
                     },
                     FORTRESS_DONOR_MECHANIC_TOKENS,
                 )

@@ -190,6 +190,12 @@
     <EmbeddedResource Remove="publish_plugin\Hex.Sound.Runtime.dll" />
   </ItemGroup>
   <ItemGroup>
+    <!-- Tool build outputs under tools (a 2026-04 _dump_types Hex.dll) must never be
+         {CandidateAssemblyFiles} for reference resolution: RAR checks them before HintPath. -->
+    <None Remove="tools\**\*.dll" />
+    <Content Remove="tools\**\*.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\tools\olden_ai_sim\OldenAiSim.csproj">
       <Private>true</Private>
     </ProjectReference>
@@ -687,6 +693,13 @@
     </PropertyGroup>
     <Error Text="Missing HoMM3 no-donor identity rewrite validator: $(Homm3NoDonorIdentityRewriteValidator)" Condition="!Exists('$(Homm3NoDonorIdentityRewriteValidator)')" />
     <Exec Command="python &quot;$(Homm3NoDonorIdentityRewriteValidator)&quot; --plugin-dir &quot;$(MSBuildThisFileDirectory).&quot;" Timeout="300000" />
+  </Target>
+  <Target Name="ValidateCustomUnitFocusGenerationContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true'">
+    <PropertyGroup>
+      <CustomUnitFocusGenerationValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_custom_unit_focus_generation_contract.py</CustomUnitFocusGenerationValidator>
+    </PropertyGroup>
+    <Error Text="Missing custom unit Focus generation contract validator: $(CustomUnitFocusGenerationValidator)" Condition="!Exists('$(CustomUnitFocusGenerationValidator)')" />
+    <Exec Command="python &quot;$(CustomUnitFocusGenerationValidator)&quot;" Timeout="120000" />
   </Target>
   <Target Name="ValidateHomm3UnitAbilityRedesignContract" BeforeTargets="BeforeBuild" Condition="'$(RunExpensiveArtifactAudits)' == 'true'">
     <PropertyGroup>
@@ -1616,6 +1629,7 @@
       <DeployHomm3SkinnedPbr Include="$(MSBuildThisFileDirectory)homm3_skinned_pbr\**\*" />
       <DeployHomm3ArtifactMeshesBundle Include="$(MSBuildThisFileDirectory)homm3_artifact_meshes\**\*" />
       <DeployHomm3TownSceneMeshesBundle Include="$(MSBuildThisFileDirectory)homm3_town_scene_meshes\**\*" />
+      <DeployFluidFusion Include="$(MSBuildThisFileDirectory)fluid_fusion\*.json;$(MSBuildThisFileDirectory)fluid_fusion\*.fluidseeds;$(MSBuildThisFileDirectory)fluid_fusion\*.bundle" />
       <DeployHomm3HeroMapSprite Include="$(MSBuildThisFileDirectory)homm3_hero_map_sprites\**\*.*" />
       <DeployHomm3BoatMapSprite Include="$(MSBuildThisFileDirectory)homm3_boat_map_sprites\**\*.*" />
       <DeployHomm3AdventureCursor Include="$(MSBuildThisFileDirectory)homm3_adventure_cursors\cradvntr_go_ship\**\*.*" />
@@ -1661,6 +1675,7 @@
     <Copy SourceFiles="@(DeployHomm3MeshFx)" DestinationFiles="@(DeployHomm3MeshFx-&gt;'$(PluginDeployDir)homm3_mesh_fx\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3MeshFx)' != ''" />
     <Copy SourceFiles="@(DeployHomm3SkinnedPbr)" DestinationFiles="@(DeployHomm3SkinnedPbr-&gt;'$(PluginDeployDir)homm3_skinned_pbr\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3SkinnedPbr)' != ''" />
     <Copy SourceFiles="@(DeployHomm3ArtifactMeshesBundle)" DestinationFiles="@(DeployHomm3ArtifactMeshesBundle-&gt;'$(PluginDeployDir)homm3_artifact_meshes\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3ArtifactMeshesBundle)' != ''" />
+    <Copy SourceFiles="@(DeployFluidFusion)" DestinationFolder="$(PluginDeployDir)fluid_fusion" SkipUnchangedFiles="true" Condition="'@(DeployFluidFusion)' != ''" />
     <Copy SourceFiles="@(DeployHomm3TownSceneMeshesBundle)" DestinationFiles="@(DeployHomm3TownSceneMeshesBundle-&gt;'$(PluginDeployDir)homm3_town_scene_meshes\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3TownSceneMeshesBundle)' != ''" />
     <Copy SourceFiles="@(DeployHomm3HeroMapSprite)" DestinationFiles="@(DeployHomm3HeroMapSprite-&gt;'$(PluginDeployDir)homm3_hero_map_sprites\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3HeroMapSprite)' != ''" />
     <Copy SourceFiles="@(DeployHomm3BoatMapSprite)" DestinationFiles="@(DeployHomm3BoatMapSprite-&gt;'$(PluginDeployDir)homm3_boat_map_sprites\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" Condition="'@(DeployHomm3BoatMapSprite)' != ''" />

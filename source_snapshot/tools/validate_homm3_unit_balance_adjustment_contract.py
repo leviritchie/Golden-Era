@@ -431,6 +431,11 @@ def validate_candidate_core(repo_root: pathlib.Path, core_path: pathlib.Path, en
         obstacle_targets = obstacle_rebirth_targets(core_zip, overlay)
         validate_upgrade_alt_cost_parity(core_zip, overlay, logic_members)
         validate_no_negative_upgrade_cost_delta(core_zip, overlay)
+        design_sids = {
+            sid
+            for path in sorted((repo_root / "custom_factions" / "unit_designs").glob("*.json"))
+            for sid in load_json(path)["units"]
+        }
         for entry in entries:
             overrides = entry.get("statOverrides")
             mechanics = entry.get("mechanicOverrides")
@@ -444,6 +449,12 @@ def validate_candidate_core(repo_root: pathlib.Path, core_path: pathlib.Path, en
             stats = row.get("stats")
             if not isinstance(stats, dict):
                 fail(f"{unit_sid}: candidate unit logic row has no stats object")
+            if unit_sid in design_sids:
+                # Superseded: the unit design table owns this unit's final stats, price and kit
+                # (validator: tools/validate_homm3_unit_design_table.py).
+                if not isinstance(row.get("xHomm3UnitDesign"), dict):
+                    fail(f"{unit_sid}: listed in a unit design table but the candidate row has no xHomm3UnitDesign marker")
+                continue
             marker = row.get("xHomm3BalanceRecommendation20260625")
             if isinstance(status, dict) and status.get("kind") == "blockedNativeContract" and isinstance(mechanics, dict):
                 fail(f"{unit_sid}: blocked native-contract row must not ship mechanicOverrides")

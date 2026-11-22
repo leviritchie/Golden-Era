@@ -136,7 +136,7 @@ Commit `76ef786af5` strips the scaling keys when `effectDuration` is set, and al
 | `inDmgMods shoot_attack -0.3` | 30% less ranged damage taken | Pikeman ×3, Halfling ×3, Crew Mate ×3, Gnoll Marauder (h3_gnoll_upg) |
 | `stats.crit 1.0` | +100% damage on lucky strikes | Harpy Hag, Fury, Wolf Raider ×2 |
 | `additionalActionChanceModifier 0.05` | 5% extra-action chance | Minotaur King / Taskmaster, Ogre Mage / Brute, Mighty / Corrosive Gorgon, Naga Queen / Rani |
-| `energyPerRound 2` | +2 Focus per round | War Mammoth, Magma Elemental, Basilisk Flamespitter (h3_basilisk_upg) |
+| `energyPerRound 2` | +2 Focus per round | War Mammoth, Magma Elemental, Basilisk Flamespitter (h3_basilisk_upg) Superseded 2026-11-19: every h3_* row now gets vanilla Focus generation ([custom_unit_focus_generation.md](custom_unit_focus_generation.md)) |
 | `damagePerHex` | jousting bonus | Sandworm line |
 | `damagePerDeltaLevel` | Topple the Strong | Familiar, Vermin |
 | `damagePerDeltaLevelLower` | Squash the Weak | Pit Lord, Pit Spawn |

@@ -1,0 +1,1231 @@
+{
+ "schemaVersion": 1,
+ "faction": "homm3_inferno",
+ "approval": "Owner, 2026-11-20 goal: all factions, autonomous (no per-faction card review).",
+ "tradeAxis": "Breacher (role striker: area around itself, no retaliation, Fire Shield, short reach; best when it stands among enemies) versus Holder (role ward: ranged, durable, high Initiative, extra counterattacks, ally support; carries a round fought short-handed). Both are useful in any army; Gating only sharpens the choice of which stack to hold back.",
+ "buffFile": "DB/buffs/units_buffs_demon.json",
+ "buffs": [
+  {
+   "id": "h3_kit_inferno_burning_effect",
+   "cloneOf": "magic_nairas_kiss_effect_1",
+   "name": "Burning",
+   "text": "Takes Magic Damage each time it moves.",
+   "set": {
+    "icon": "magic_fire_wall_effect_icon",
+    "tags": [
+     "negative",
+     "burning_effect"
+    ],
+    "maxDuration": 2,
+    "actions": [
+     {
+      "trigger": "unit_end_move",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "magic_damage"
+       ],
+       "triggerCounter": false,
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "attackPatternSid": "attack_single_x100",
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "buffTarget_": "none",
+       "minBaseDmg": 0,
+       "maxBaseDmg": 0,
+       "minStackDmg": 3,
+       "maxStackDmg": 3,
+       "targetMechanics": []
+      }
+     }
+    ],
+    "data": {
+     "stats": {
+      "inDmgModsByCasterTags": {
+       "list": [
+        {
+         "t": "h3_kit_fan_the_flames",
+         "v": 0.25
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_burning_lesser_effect",
+   "cloneOf": "magic_nairas_kiss_effect_1",
+   "name": "Burning",
+   "text": "Takes Magic Damage each time it moves.",
+   "set": {
+    "icon": "magic_fire_wall_effect_icon",
+    "tags": [
+     "negative",
+     "burning_effect"
+    ],
+    "maxDuration": 2,
+    "actions": [
+     {
+      "trigger": "unit_end_move",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "magic_damage"
+       ],
+       "triggerCounter": false,
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "attackPatternSid": "attack_single_x100",
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "buffTarget_": "none",
+       "minBaseDmg": 0,
+       "maxBaseDmg": 0,
+       "minStackDmg": 2,
+       "maxStackDmg": 2,
+       "targetMechanics": []
+      }
+     }
+    ],
+    "data": {
+     "stats": {
+      "inDmgModsByCasterTags": {
+       "list": [
+        {
+         "t": "h3_kit_fan_the_flames",
+         "v": 0.25
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_scorched_effect",
+   "cloneOf": "magic_nairas_kiss_effect_1",
+   "name": "Burning",
+   "text": "Takes Magic Damage each time it moves.",
+   "set": {
+    "icon": "magic_fire_wall_effect_icon",
+    "tags": [
+     "negative",
+     "burning_effect"
+    ],
+    "maxDuration": 2,
+    "actions": [
+     {
+      "trigger": "unit_end_move",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "magic_damage"
+       ],
+       "triggerCounter": false,
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "attackPatternSid": "attack_single_x100",
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "buffTarget_": "none",
+       "minBaseDmg": 0,
+       "maxBaseDmg": 0,
+       "minStackDmg": 2,
+       "maxStackDmg": 2,
+       "targetMechanics": []
+      }
+     }
+    ],
+    "data": {
+     "stats": {
+      "inDmgModsByCasterTags": {
+       "list": [
+        {
+         "t": "h3_kit_fan_the_flames",
+         "v": 0.25
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_heckled_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Heckled",
+   "text": "-1 Morale.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "moral": -1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_gored_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Gored",
+   "text": "-3 Defence.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "defence": -3
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_bargain_effect",
+   "cloneOf": "magic_reality_distortion_effect_1",
+   "name": "Infernal Bargain",
+   "text": "Loses no creatures when hit. At the end of the round, takes 80% of the Damage dealt to it this round.",
+   "set": {
+    "maxDuration": 1
+   }
+  },
+  {
+   "id": "h3_kit_inferno_driven_effect",
+   "cloneOf": "jaw_buff_2_upg",
+   "name": "Driven",
+   "text": "+3 Attack, +2 Initiative.",
+   "set": {
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "offence": 3,
+      "initiative": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_exchanged_effect",
+   "cloneOf": "medusa_stone",
+   "name": "Displaced",
+   "text": "Cannot counterattack.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "maxDuration": 1,
+    "aiValue": 3000,
+    "aiValuePerDuration": 300,
+    "vfxList": [],
+    "visualMechanics": [],
+    "addition": "duration",
+    "data": {
+     "disablers": [
+      {
+       "ability": "counter_attack",
+       "attack": "all"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_bloodied_fury_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Bloodied Fury",
+   "text": "+5% Damage for each time it took Damage, up to +40%.",
+   "set": {
+    "hidden": false,
+    "addition": "duration",
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.05
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_bloodied_fury_2_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Bloodied Fury",
+   "text": "+5% Damage for each time it took Damage, up to +40%.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.05
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_bloodied_fury_3_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Bloodied Fury",
+   "text": "+5% Damage for each time it took Damage, up to +40%.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.05
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_bloodied_fury_4_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Bloodied Fury",
+   "text": "+5% Damage for each time it took Damage, up to +40%.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.05
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_bloodied_fury_5_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Bloodied Fury",
+   "text": "+5% Damage for each time it took Damage, up to +40%.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.05
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_bloodied_fury_6_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Bloodied Fury",
+   "text": "+5% Damage for each time it took Damage, up to +40%.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.05
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_bloodied_fury_7_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Bloodied Fury",
+   "text": "+5% Damage for each time it took Damage, up to +40%.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.05
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_bloodied_fury_8_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Bloodied Fury",
+   "text": "+5% Damage for each time it took Damage, up to +40%.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.05
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_inferno_hardened_effect",
+   "cloneOf": "pet_buff",
+   "name": "Hardened",
+   "text": "+1 Defence until the end of the battle. This effect stacks.",
+   "set": {
+    "hidden": false,
+    "data": {
+     "stats": {
+      "defence": 1
+     }
+    }
+   }
+  }
+ ],
+ "units": {
+  "h3_imp": {
+   "role": "base",
+   "stats": {
+    "hp": 9,
+    "offence": 3,
+    "defence": 2,
+    "damageMin": 1,
+    "damageMax": 4,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 50,
+   "squadValue": 61,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_inferno_heckled_effect",
+     "duration": 2,
+     "name": "Heckle",
+     "text": "Basic attacks and counterattacks give the target -1 Morale until the end of the next round.",
+     "offMult": 1.0,
+     "toughMult": 1.03
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_imp_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 11,
+    "offence": 3,
+    "defence": 4,
+    "damageMin": 1,
+    "damageMax": 5,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 60,
+   "squadValue": 84,
+   "kit": [
+    {
+     "k": "inferno_mana_echo",
+     "mana": 2,
+     "name": "Magic Channel",
+     "text": "Whenever the enemy hero casts a spell, your hero gains 2 mana.",
+     "offMult": 1.03,
+     "toughMult": 1.03
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_imp_upg_redesign_ability_name"
+    }
+   ]
+  },
+  "h3_imp_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 9,
+    "offence": 5,
+    "defence": 2,
+    "damageMin": 1,
+    "damageMax": 5,
+    "speed": 6,
+    "initiative": 6
+   },
+   "gold": 60,
+   "squadValue": 84,
+   "kit": [
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "when_damaged_adjacent_debuff",
+     "buff": "h3_kit_inferno_burning_lesser_effect",
+     "duration": 2,
+     "name": "Cinder Skin",
+     "text": "Whenever this creature takes Damage, adjacent enemies are set Burning until the end of the next round: each time a Burning creature moves, it takes 2 Magic Damage per Imp in this stack.",
+     "offMult": 1.1
+    }
+   ]
+  },
+  "h3_gog": {
+   "role": "base",
+   "stats": {
+    "hp": 9,
+    "offence": 4,
+    "defence": 3,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 3,
+    "initiative": 5
+   },
+   "gold": 125,
+   "squadValue": 99,
+   "kit": [
+    {
+     "k": "shot",
+     "focus": 1,
+     "cd": 1,
+     "mult": 1.15,
+     "counter": true,
+     "buff": "h3_kit_inferno_burning_effect",
+     "duration": 2,
+     "name": "Fire Bolt",
+     "text": "Performs a Ranged attack that deals +15% Damage and sets the target Burning for 2 rounds: each time it moves, it takes 3 Magic Damage per Gog in the attacking stack.",
+     "offMult": 1.08
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_gog_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 11,
+    "offence": 6,
+    "defence": 3,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 3,
+    "initiative": 7
+   },
+   "gold": 175,
+   "squadValue": 156,
+   "kit": [
+    {
+     "k": "inferno_attack_shape",
+     "donor": "lich_upg",
+     "donorPattern": "attack_rumble_x1_x100",
+     "pattern": "attack_rumble_x1_x100_x25",
+     "name": "Fireball",
+     "text": "Ranged attacks also hit every enemy adjacent to the target for 25% Damage."
+    },
+    {
+     "k": "sharpshooter"
+    },
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_inferno_burning_lesser_effect",
+     "duration": 2,
+     "name": "Brimstone",
+     "text": "Every enemy hit by a Ranged attack is set Burning until the end of the next round: each time it moves, it takes 2 Magic Damage per Magog in the attacking stack.",
+     "offMult": 1.1
+    }
+   ]
+  },
+  "h3_gog_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 13,
+    "offence": 5,
+    "defence": 5,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 175,
+   "squadValue": 156,
+   "kit": [
+    {
+     "k": "skirmisher",
+     "name": "Brawler",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "inferno_point_blank",
+     "name": "Point Blank",
+     "text": "Can make Ranged attacks while enemies stand adjacent to it."
+    },
+    {
+     "k": "inferno_nova",
+     "focus": 1,
+     "cd": 2,
+     "mult": 0.4,
+     "name": "Hellfire Burst",
+     "text": "Deals Magic Damage to every adjacent enemy: 40% of a basic attack for each adjacent enemy, up to 160%. Enemies do not counterattack."
+    },
+    {
+     "k": "runtime",
+     "rule": "crowd",
+     "percent": 100,
+     "cap": 300,
+     "abilityOnly": true,
+     "name": "Hellfire Burst",
+     "nameSid": "h3_kit_ability_gog_upg_alt_hellfire_burst_name",
+     "descSid": "h3_kit_ability_gog_upg_alt_hellfire_burst_description",
+     "offMult": 1.05
+    }
+   ]
+  },
+  "h3_hell_hound": {
+   "role": "base",
+   "stats": {
+    "hp": 27,
+    "offence": 7,
+    "defence": 6,
+    "damageMin": 4,
+    "damageMax": 9,
+    "speed": 6,
+    "initiative": 8
+   },
+   "gold": 200,
+   "squadValue": 225,
+   "kit": [
+    {
+     "k": "runtime",
+     "rule": "turn_state",
+     "fact": "moved_target",
+     "percent": 20,
+     "name": "Run Down",
+     "text": "Deals +20% Damage to stacks that moved this round.",
+     "offMult": 1.09
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_hell_hound_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 29,
+    "offence": 9,
+    "defence": 6,
+    "damageMin": 4,
+    "damageMax": 10,
+    "speed": 8,
+    "initiative": 9
+   },
+   "gold": 250,
+   "squadValue": 357,
+   "kit": [
+    {
+     "k": "runtime",
+     "rule": "turn_state",
+     "fact": "moved_target",
+     "percent": 25,
+     "name": "Run Down",
+     "text": "Deals +25% Damage to stacks that moved this round.",
+     "offMult": 1.11
+    },
+    {
+     "k": "inferno_attack_shape",
+     "donor": "hydra",
+     "donorPattern": "attack_swipe_x100_x100",
+     "name": "Three Heads",
+     "text": "Basic attacks deal Damage to the target and to the two adjacent enemies at its sides."
+    },
+    {
+     "k": "no_retaliation"
+    }
+   ]
+  },
+  "h3_hell_hound_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 27,
+    "offence": 7,
+    "defence": 9,
+    "damageMin": 4,
+    "damageMax": 9,
+    "speed": 6,
+    "initiative": 10
+   },
+   "gold": 250,
+   "squadValue": 357,
+   "kit": [
+    {
+     "k": "runtime",
+     "rule": "turn_state",
+     "fact": "moved_target",
+     "percent": 15,
+     "name": "Run Down",
+     "text": "Deals +15% Damage to stacks that moved this round.",
+     "offMult": 1.07
+    },
+    {
+     "k": "inferno_attack_shape",
+     "donor": "dragon",
+     "donorPattern": "attack_reach_x1_x100_x100_with_delay",
+     "name": "Fire Breath",
+     "text": "Basic attacks deal Damage to the target and to any creature on the hex directly behind it."
+    },
+    {
+     "k": "inferno_first_strike",
+     "name": "Snapping Jaws",
+     "text": "Counterattacks before the attacker strikes."
+    }
+   ]
+  },
+  "h3_demon": {
+   "role": "base",
+   "stats": {
+    "hp": 46,
+    "offence": 9,
+    "defence": 10,
+    "damageMin": 9,
+    "damageMax": 13,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 250,
+   "squadValue": 340,
+   "kit": [
+    {
+     "k": "inferno_death_mana",
+     "mana": 3,
+     "name": "Soul Tithe",
+     "text": "When this stack is destroyed, your hero gains 3 mana.",
+     "offMult": 1.02
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_demon_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 50,
+    "offence": 9,
+    "defence": 13,
+    "damageMin": 11,
+    "damageMax": 16,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 270,
+   "squadValue": 516,
+   "kit": [
+    {
+     "k": "inferno_death_mana",
+     "mana": 3,
+     "name": "Soul Tithe",
+     "text": "When this stack is destroyed, your hero gains 3 mana.",
+     "offMult": 1.02
+    },
+    {
+     "k": "self_buff",
+     "focus": 1,
+     "cd": 3,
+     "buff": "h3_kit_inferno_bargain_effect",
+     "duration": 1,
+     "name": "Infernal Bargain",
+     "text": "Until the end of the round, this creature loses no creatures when hit. At the end of the round it takes 80% of the Damage dealt to it this round, all at once. Does not end this creature's turn.",
+     "toughMult": 1.12
+    }
+   ]
+  },
+  "h3_demon_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 50,
+    "offence": 11,
+    "defence": 10,
+    "damageMin": 10,
+    "damageMax": 15,
+    "speed": 6,
+    "initiative": 8
+   },
+   "gold": 270,
+   "squadValue": 516,
+   "kit": [
+    {
+     "k": "inferno_death_mana",
+     "mana": 3,
+     "name": "Soul Tithe",
+     "text": "When this stack is destroyed, your hero gains 3 mana.",
+     "offMult": 1.02
+    },
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_inferno_gored_effect",
+     "duration": 2,
+     "icon": "magic_shorten_shadow_effect_icon",
+     "name": "Gore",
+     "text": "Basic attacks and counterattacks give the target -3 Defence until the end of the next round."
+    },
+    {
+     "k": "when_damaged_self_buff",
+     "buff": "h3_kit_inferno_bloodied_fury_effect",
+     "duration": -1,
+     "escalate": {
+      "chain": [
+       "h3_kit_inferno_bloodied_fury_2_effect",
+       "h3_kit_inferno_bloodied_fury_3_effect",
+       "h3_kit_inferno_bloodied_fury_4_effect",
+       "h3_kit_inferno_bloodied_fury_5_effect",
+       "h3_kit_inferno_bloodied_fury_6_effect",
+       "h3_kit_inferno_bloodied_fury_7_effect",
+       "h3_kit_inferno_bloodied_fury_8_effect"
+      ]
+     },
+     "name": "Bloodied Fury",
+     "text": "Whenever this creature takes Damage, it deals +5% Damage until the end of the battle, up to +40%.",
+     "offMult": 1.1
+    }
+   ]
+  },
+  "h3_pit_fiend": {
+   "role": "base",
+   "stats": {
+    "hp": 74,
+    "offence": 14,
+    "defence": 13,
+    "damageMin": 16,
+    "damageMax": 24,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 500,
+   "squadValue": 688,
+   "kit": [
+    {
+     "k": "inferno_drive",
+     "focus": 2,
+     "cd": 2,
+     "range": 1,
+     "buff": "h3_kit_inferno_driven_effect",
+     "duration": 1,
+     "name": "Crack the Whip",
+     "text": "An adjacent friendly stack gets +3 Attack and +2 Initiative until the end of the round. Does not end this creature's turn.",
+     "offMult": 1.05
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_pit_fiend_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 80,
+    "offence": 15,
+    "defence": 16,
+    "damageMin": 16,
+    "damageMax": 25,
+    "speed": 5,
+    "initiative": 8
+   },
+   "gold": 700,
+   "squadValue": 1118,
+   "kit": [
+    {
+     "k": "inferno_drive",
+     "focus": 2,
+     "cd": 2,
+     "range": 2,
+     "buff": "h3_kit_inferno_driven_effect",
+     "duration": 1,
+     "name": "Crack the Whip",
+     "text": "A friendly stack gets +3 Attack and +2 Initiative until the end of the round. Does not end this creature's turn.",
+     "offMult": 1.06
+    },
+    {
+     "k": "inferno_raise_demons",
+     "focus": 2,
+     "cd": 3,
+     "charges": 2,
+     "range": 3,
+     "unit": "h3_demon",
+     "factor": 0.2,
+     "name": "Raise Demons",
+     "text": "Twice per battle: consumes a corpse within 3 hexes and raises 1 Demon for every 5 creatures that stack started the battle with. The Demons join your army for this battle.",
+     "toughMult": 1.15
+    }
+   ]
+  },
+  "h3_pit_fiend_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 80,
+    "offence": 17,
+    "defence": 13,
+    "damageMin": 17,
+    "damageMax": 26,
+    "speed": 7,
+    "initiative": 7
+   },
+   "gold": 700,
+   "squadValue": 1118,
+   "kit": [
+    {
+     "k": "inferno_drive",
+     "focus": 2,
+     "cd": 2,
+     "range": 1,
+     "buff": "h3_kit_inferno_driven_effect",
+     "duration": 1,
+     "name": "Crack the Whip",
+     "text": "An adjacent friendly stack gets +3 Attack and +2 Initiative until the end of the round. Does not end this creature's turn.",
+     "offMult": 1.05
+    },
+    {
+     "k": "inferno_flay",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "name": "Flay",
+     "text": "Performs a Melee attack that strips every positive effect from the target before the Damage is dealt.",
+     "offMult": 1.05
+    }
+   ]
+  },
+  "h3_efreeti": {
+   "role": "base",
+   "stats": {
+    "hp": 113,
+    "offence": 21,
+    "defence": 18,
+    "damageMin": 18,
+    "damageMax": 27,
+    "speed": 7,
+    "initiative": 8
+   },
+   "gold": 900,
+   "squadValue": 1154,
+   "kit": [
+    {
+     "k": "resist",
+     "t": "magic_damage",
+     "v": -0.25,
+     "name": "Born of Flame",
+     "text": "Takes -25% Magic Damage."
+    },
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_efreet",
+     "v": 0.5,
+     "targets": [
+      "h3_genie",
+      "h3_genie_upg",
+      "h3_genie_upg_alt"
+     ],
+     "name": "Hatred of Genies",
+     "text": "Deals +50% Damage to Genies, Master Genies and their kin."
+    },
+    {
+     "k": "inferno_tag_card",
+     "tag": "h3_kit_fan_the_flames",
+     "buffs": [
+      "h3_kit_inferno_burning_effect",
+      "h3_kit_inferno_burning_lesser_effect",
+      "h3_kit_inferno_scorched_effect"
+     ],
+     "name": "Fan the Flames",
+     "text": "Deals +25% Damage to Burning creatures.",
+     "offMult": 1.08
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_efreeti_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 125,
+    "offence": 25,
+    "defence": 18,
+    "damageMin": 20,
+    "damageMax": 30,
+    "speed": 9,
+    "initiative": 9
+   },
+   "gold": 1100,
+   "squadValue": 1977,
+   "kit": [
+    {
+     "k": "resist",
+     "t": "magic_damage",
+     "v": -0.25,
+     "name": "Born of Flame",
+     "text": "Takes -25% Magic Damage."
+    },
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_efreet",
+     "v": 0.5,
+     "targets": [
+      "h3_genie",
+      "h3_genie_upg",
+      "h3_genie_upg_alt"
+     ],
+     "name": "Hatred of Genies",
+     "text": "Deals +50% Damage to Genies, Master Genies and their kin."
+    },
+    {
+     "k": "reflect",
+     "perCreature": 12,
+     "name": "Fire Shield",
+     "text": "Each enemy that attacks this creature in Melee takes 12 Magic Damage per creature in this stack.",
+     "toughMult": 1.06
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_efreeti_upg_thunderbolt_name"
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_efreeti_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 131,
+    "offence": 21,
+    "defence": 23,
+    "damageMin": 20,
+    "damageMax": 29,
+    "speed": 7,
+    "initiative": 11
+   },
+   "gold": 1100,
+   "squadValue": 1977,
+   "kit": [
+    {
+     "k": "resist",
+     "t": "magic_damage",
+     "v": -0.4,
+     "name": "Born of Flame",
+     "text": "Takes -40% Magic Damage."
+    },
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_efreet",
+     "v": 0.5,
+     "targets": [
+      "h3_genie",
+      "h3_genie_upg",
+      "h3_genie_upg_alt"
+     ],
+     "name": "Hatred of Genies",
+     "text": "Deals +50% Damage to Genies, Master Genies and their kin."
+    },
+    {
+     "k": "runtime",
+     "rule": "arrival_buff",
+     "percent": 1,
+     "buff": "h3_kit_inferno_scorched_effect",
+     "radius": 1,
+     "name": "Scorched Earth",
+     "text": "Enemies that end their movement adjacent to this creature are set Burning until the end of the next round: each time a Burning creature moves, it takes 2 Magic Damage per Efreeti in this stack.",
+     "offMult": 1.06,
+     "toughMult": 1.04
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_efreeti_upg_alt_redesign_ability_name"
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_devil": {
+   "role": "base",
+   "stats": {
+    "hp": 260,
+    "offence": 27,
+    "defence": 26,
+    "damageMin": 43,
+    "damageMax": 65,
+    "speed": 8,
+    "initiative": 11
+   },
+   "gold": 2700,
+   "squadValue": 3601,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_blink_name",
+     "descSid": "base_passive_blink_description"
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "inferno_ill_omen",
+     "v": 1,
+     "name": "Ill Omen",
+     "text": "Reduces the Luck of all enemy creatures by 1. This effect does not stack; only the strongest one is active."
+    },
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_devils",
+     "v": 0.5,
+     "targets": [
+      "h3_angel",
+      "h3_angel_upg",
+      "h3_angel_upg_alt"
+     ],
+     "name": "Hatred of Angels",
+     "text": "Deals +50% Damage to Angels, Archangels and their kin."
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_devil_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 350,
+    "offence": 34,
+    "defence": 28,
+    "damageMin": 50,
+    "damageMax": 75,
+    "speed": 11,
+    "initiative": 14
+   },
+   "gold": 4500,
+   "squadValue": 6952,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_blink_name",
+     "descSid": "base_passive_blink_description"
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "inferno_ill_omen",
+     "v": 2,
+     "name": "Ill Omen",
+     "text": "Reduces the Luck of all enemy creatures by 2. This effect does not stack; only the strongest one is active."
+    },
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_devils",
+     "v": 0.5,
+     "targets": [
+      "h3_angel",
+      "h3_angel_upg",
+      "h3_angel_upg_alt"
+     ],
+     "name": "Hatred of Angels",
+     "text": "Deals +50% Damage to Angels, Archangels and their kin."
+    },
+    {
+     "k": "inferno_exchange",
+     "focus": 3,
+     "cd": 3,
+     "range": 6,
+     "buff": "h3_kit_inferno_exchanged_effect",
+     "duration": 1,
+     "name": "Hellish Exchange",
+     "text": "Swaps places with an enemy stack within 6 hexes. That stack cannot counterattack until the end of the round.",
+     "offMult": 1.06
+    }
+   ]
+  },
+  "h3_devil_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 309,
+    "offence": 28,
+    "defence": 34,
+    "damageMin": 45,
+    "damageMax": 68,
+    "speed": 8,
+    "initiative": 16
+   },
+   "gold": 4500,
+   "squadValue": 6952,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_blink_name",
+     "descSid": "base_passive_blink_description"
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "inferno_ill_omen",
+     "v": 2,
+     "name": "Ill Omen",
+     "text": "Reduces the Luck of all enemy creatures by 2. This effect does not stack; only the strongest one is active."
+    },
+    {
+     "k": "overkill",
+     "name": "Unholy Resilience",
+     "text": "Once per battle, when an attack would destroy this stack, the stack loses no creatures to that attack."
+    },
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_devils",
+     "v": 0.5,
+     "targets": [
+      "h3_angel",
+      "h3_angel_upg",
+      "h3_angel_upg_alt"
+     ],
+     "name": "Hatred of Angels",
+     "text": "Deals +50% Damage to Angels, Archangels and their kin."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_devil_upg_alt_redesign_ability_name"
+    }
+   ],
+   "powerTarget": 0.95
+  }
+ }
+}

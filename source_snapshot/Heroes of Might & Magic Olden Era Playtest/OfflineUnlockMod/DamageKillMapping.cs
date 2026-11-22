@@ -369,6 +369,44 @@ internal static class DamageKillMapping
 		return true;
 	}
 
+	/// <summary>
+	/// Current total health of a battle stack: the wounded top creature plus every other living creature at full
+	/// health. False when any part cannot be read (callers fail closed).
+	/// </summary>
+	internal static bool TryReadStackHealth(object target, out int total)
+	{
+		total = 0;
+		try
+		{
+			if (!TryGetUnitData(target, out var data))
+				return false;
+			if (!TryReadHpLastUnit(data, out var hpLastUnit) || hpLastUnit <= 0f)
+				return false;
+			if (!TryReadAliveCreatureCount(data, out var alive) || alive <= 0)
+				return false;
+			var stats = TryGetStats(target);
+			var hpPer = stats != null
+			            && DeobfInteropCompat.TryGetInt32Member(stats, out var statHp, GameSymbols.LiveRenamedMembers.UnitStatHp)
+			            && statHp > 0
+				? statHp
+				: 0;
+			if (hpPer <= 0)
+				TryReadHpPerFallback(data, out hpPer);
+			if (hpPer <= 0)
+				return false;
+			var sum = (long)Mathf.CeilToInt(hpLastUnit) + (long)(alive - 1) * hpPer;
+			if (sum <= 0 || sum > int.MaxValue)
+				return false;
+			total = (int)sum;
+			return true;
+		}
+		catch
+		{
+			total = 0;
+			return false;
+		}
+	}
+
 	private static bool TryGetUnitData(object target, out object data)
 	{
 		data = null;

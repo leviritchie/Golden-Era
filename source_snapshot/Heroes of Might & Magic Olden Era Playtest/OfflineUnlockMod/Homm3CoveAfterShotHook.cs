@@ -153,7 +153,7 @@ internal static class Homm3CoveAfterShotHook
 		return methods.ToArray();
 	}
 
-	private static MethodInfo[] ResolveRequiredBuffAddMethods(Type buffManagerType)
+	internal static MethodInfo[] ResolveRequiredBuffAddMethods(Type buffManagerType)
 	{
 		var methods = new List<MethodInfo>();
 		var missing = 0;

@@ -1184,14 +1184,75 @@ internal static class Homm3ImportReleaseBattleUiHook
 		{
 			var source = FormatMethod(__originalMethod);
 			LogBattleResultBinderHit(__instance, a, b, source);
-			RememberBattleResultSides(__instance, a, b);
-			ApplyBattleResultUnitPortraits(__instance, a, b, source);
+			// The binder's args are (own side, enemy side), not (left, right): when the player is
+			// battle side 1 (Castle Elite Strategem ambush, or defending) the old code painted the
+			// player's unit portraits over the enemy column and its loss counts (2026-11-19).
+			if (!TryOrderBattleResultSidesByColumn(__instance, a, b, out var left, out var right, out var orderFail))
+			{
+				if (_loggedBattleResultColumnMiss++ < 6)
+					Plugin.LogSource?.LogWarning("Homm3Import release battle UI: battle result column order unresolved ("
+						+ orderFail + "); unit portraits not reapplied from transfer sides.");
+				ApplyBattleResultHeroPortrait(__instance, source);
+				return;
+			}
+			RememberBattleResultSides(__instance, left, right);
+			ApplyBattleResultUnitPortraits(__instance, left, right, source);
 			ApplyBattleResultHeroPortrait(__instance, source);
 		}
 		catch (Exception ex)
 		{
 			LogMiss("battle result army bind portrait failed: " + ex.Message);
 		}
+	}
+
+	private static int _loggedBattleResultColumnMiss;
+
+	/// <summary>
+	/// Maps the binder's (own, enemy) TransferSide pair onto the window's (armyLeft, armyRight)
+	/// columns, which follow the battle's sides[0]/sides[1]. Identity is by native pointer, never
+	/// managed proxy identity. Source/static (Ghidra decomp, 26615913); runtime unproven.
+	/// </summary>
+	private static bool TryOrderBattleResultSidesByColumn(Component root, TransferSide a, TransferSide b,
+		out TransferSide left, out TransferSide right, out string failReason)
+	{
+		left = null;
+		right = null;
+		failReason = null;
+		if (a == null || b == null)
+		{
+			failReason = "binder side missing";
+			return false;
+		}
+		var logic = TryGetFirstMemberValue(root, root.GetType(), GameSymbols.ReleaseTownUi.SimulatedBattleLogicFields);
+		if (logic == null)
+		{
+			failReason = "window battle logic missing";
+			return false;
+		}
+		var aPtr = a.Pointer;
+		var bPtr = b.Pointer;
+		foreach (var member in GameSymbols.ReleaseTownUi.SimulatedBattleLogicTransferBattleMembers)
+		{
+			var sides = (TryGetMemberValue(logic, logic.GetType(), member) as TransferBattle)?.sides;
+			if (sides == null || sides.Length < 2 || sides[0] == null || sides[1] == null)
+				continue;
+			var p0 = sides[0].Pointer;
+			var p1 = sides[1].Pointer;
+			if (p0 == aPtr && p1 == bPtr)
+			{
+				left = a;
+				right = b;
+				return true;
+			}
+			if (p0 == bPtr && p1 == aPtr)
+			{
+				left = b;
+				right = a;
+				return true;
+			}
+		}
+		failReason = "binder sides not found in the window battle's TransferBattle sides";
+		return false;
 	}
 
 	private static void PostfixBattleResultHeroPortraitBind(Component __instance, object[] __args, MethodBase __originalMethod)

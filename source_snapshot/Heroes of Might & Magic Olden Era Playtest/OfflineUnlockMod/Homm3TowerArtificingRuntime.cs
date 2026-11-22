@@ -1021,6 +1021,32 @@ internal static class Homm3TowerArtificingRuntime
 		LogEvent("first round " + schematic + " (" + synergy.Kind + ") for " + carrier.UnitSid + ": " + detail + " -> [" + string.Join(",", applied) + "].");
 	}
 
+	/// <summary>
+	/// Unit design kit damage rules (Shield Wall, Strangle, Grudge, Diamond Scales) a grafted unit holds right now:
+	/// one per kitRule schematic whose graft buff is still on it. Null when the unit carries none.
+	/// </summary>
+	internal static List<Homm3UnitKitRules.Rule> KitRulesForCarrier(object unit, long unitKey)
+	{
+		if (Homm3TowerArtificingCatalog.KitRuleBySchematic.Count == 0 || unit == null)
+			return null;
+		Dictionary<int, string> grafts;
+		lock (Gate)
+		{
+			if (!CarriersByKey.TryGetValue(unitKey, out var held))
+				return null;
+			grafts = new Dictionary<int, string>(held);
+		}
+		List<Homm3UnitKitRules.Rule> rules = null;
+		foreach (var pair in grafts)
+		{
+			if (!Homm3TowerArtificingCatalog.KitRuleBySchematic.TryGetValue(pair.Key, out var rule)
+			    || !CarrierStillGrafted(unit, pair.Value))
+				continue;
+			(rules ??= new List<Homm3UnitKitRules.Rule>()).Add(rule);
+		}
+		return rules;
+	}
+
 	private static bool CarrierStillGrafted(object unit, string graftSid)
 	{
 		return Homm3BuffDebuffNativeAdapter.TryResolveBuffManagerFromReceiver(unit, out var manager, out _)

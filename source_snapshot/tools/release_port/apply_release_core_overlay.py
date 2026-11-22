@@ -60,10 +60,14 @@ from homm3_neutral_core_overlay import add_homm3_neutral_core_overlay, homm3_neu
 import homm3_inferno_gating_core_overlay
 import homm3_fortress_predator_instinct_core_overlay
 import homm3_stronghold_warcry_core_overlay
+import homm3_rampart_avenger_core_overlay
 import homm3_conflux_fusion_core_overlay as conflux_fusion
 import homm3_factory_logistics_core_overlay as factory_logistics
 from homm3_reward_units_core_overlay import add_custom_faction_reward_units
 import homm3_upgrade_pair_parity as upgrade_pair_parity
+import homm3_unit_design_table as unit_design_table
+import homm3_unit_card_icons
+from homm3_attack_timing_overlay import assign_homm3_attack_timings
 from homm3_city_building_descriptions import (
     derive_city_description_rows,
     derive_city_description_sentences,
@@ -74,6 +78,7 @@ from homm3_city_building_descriptions import (
 import homm3_city_building_description_locales as city_building_locales
 CUSTOM_FACTION_VALIDATOR = REPO_ROOT / "tools" / "validate_custom_faction_manifests.py"
 HOMM3_ATTACK_ANIMATION_SLOT_VALIDATOR = REPO_ROOT / "tools" / "validate_homm3_owned_attack_animation_slots.py"
+HOMM3_ATTACK_TIMING_VALIDATOR = REPO_ROOT / "tools" / "validate_homm3_attack_timing.py"
 CITY_CONSTRUCTION_TREE_LAYOUT_VALIDATOR = REPO_ROOT / "tools" / "release_port" / "validate_city_construction_tree_layout.py"
 CUSTOM_LAW_TREE_LAYOUT_VALIDATOR = REPO_ROOT / "tools" / "release_port" / "validate_custom_law_tree_layout.py"
 HOMM3_CITY_BUILDING_TREE_VALIDATOR = REPO_ROOT / "tools" / "release_port" / "validate_homm3_city_building_tree_contract.py"
@@ -2632,7 +2637,10 @@ def dedupe_unit_view_card_rows(item: dict[str, Any]) -> int:
             if not isinstance(row, dict):
                 kept.append(row)
                 continue
-            key = json.dumps(row, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+            # The icon is not part of a card's identity: the final card-icon pass (homm3_unit_card_icons) sets it,
+            # so a rebuild over an already built Core must still fold a re-added card into the existing one.
+            key = json.dumps({k: v for k, v in row.items() if k != "icon"}, sort_keys=True, ensure_ascii=False,
+                             separators=(",", ":"))
             if key in seen:
                 removed += 1
                 continue
@@ -7414,13 +7422,9 @@ GENERIC_FACTION_SKILL_TEXT: dict[str, tuple[str, str, list[str]]] = {
         ],
     ),
     "homm3_rampart": (
-        "Avenger",
-        "Rampart heroes can spend Focus to mark an enemy, making that enemy suffer more damage for a short time.",
-        [
-            "Spend 2 Focus to mark an enemy for 1 round. The marked enemy takes 20% more damage from all sources.",
-            "Spend 2 Focus to mark an enemy for 1 round. The marked enemy takes 30% more damage from all sources.",
-            "Spend 2 Focus to mark an enemy for 1 round. The marked enemy takes 50% more damage from all sources.",
-        ],
+        homm3_rampart_avenger_core_overlay.SKILL_NAME,
+        homm3_rampart_avenger_core_overlay.SKILL_DESC,
+        list(homm3_rampart_avenger_core_overlay.RANK_DESCS),
     ),
     "homm3_tower": (
         "Arcane Battery",
@@ -15157,57 +15161,6 @@ def add_homm3_stronghold_warcries_lang_rows(
     notes.append(f"merge HoMM3 Stronghold Warcries localization ({len(HOMM3_STRONGHOLD_WARCRIES_LANG_ROWS)} rows)")
 
 
-def refresh_homm3_stronghold_warcry_locale_rows(
-    release_zip: zipfile.ZipFile,
-    output: dict[str, bytes],
-    notes: list[str],
-) -> None:
-    """Replace every locale's retired Warcries skill text with the English Warcry text.
-
-    The Warcry rework (2026-11-17) has no translations yet. An installed Core already carries the old
-    translated Warcries rows, and neither multilingual sync nor add_custom_lang_translations touches a
-    row the Core carries, so without this the other locales would keep describing the removed hero
-    actions. Remove this once the Warcry rows are translated in localization_translations/.
-    """
-    english = read_overlay_or_release_json(release_zip, output, "Lang/english/texts/heroSkills.json")
-    wanted = {
-        token["sid"]: token.get("text")
-        for token in lang_doc_tokens(english)
-        if isinstance(token, dict)
-        and isinstance(token.get("sid"), str)
-        and (
-            token["sid"].startswith("sub_skill_faction_homm3_stronghold_")
-            or token["sid"].startswith("skill_faction_homm3_stronghold_name")
-            or token["sid"].startswith("skill_faction_homm3_stronghold_desc")
-        )
-    }
-    if len(wanted) < 20:
-        raise RuntimeError(f"homm3_stronghold Warcry english text incomplete ({len(wanted)} rows)")
-    names = {name for name in set(release_zip.namelist()) | set(output) if name.startswith("Lang/") and name.endswith("/texts/heroSkills.json")}
-    refreshed = 0
-    for name in sorted(names):
-        if name.split("/")[1] == "english":
-            continue
-        doc = read_overlay_or_release_json(release_zip, output, name)
-        tokens = lang_doc_tokens(doc)
-        seen: set[str] = set()
-        changed = False
-        for token in tokens:
-            if isinstance(token, dict) and token.get("sid") in wanted:
-                seen.add(token["sid"])
-                if token.get("text") != wanted[token["sid"]]:
-                    token["text"] = wanted[token["sid"]]
-                    changed = True
-        for sid, text in wanted.items():
-            if sid not in seen:
-                tokens.append({"sid": sid, "text": text})
-                changed = True
-        if changed:
-            output[name] = write_json(doc)
-            refreshed += 1
-    notes.append(f"refresh homm3_stronghold Warcry text in {refreshed} non-English locale(s) (English until translated)")
-
-
 # Remaining custom LOC misses from the 2026-10-05 Core coverage audit
 # (tools/validate_localization_coverage_contract.py, missing.custom):
 # - mapObjects: the HoMM3 exact-footprint mine clones (homm3_xfp_f_*, made by
@@ -15379,7 +15332,9 @@ def add_custom_lang_translations(
                     current = tokens[index[sid]].get("text")
                     # Inserted by this build (sync draft / English copy), or an own row
                     # whose release-Core text is still the English fallback.
-                    fallback = sid not in base_sids or (
+                    # A row still showing the English text is a fallback too, also when the base Core
+                    # (an installed Golden Era Core) already carries that English copy.
+                    fallback = sid not in base_sids or current == english_text.get(sid) or (
                         sid in own_rows and current in (own_rows[sid], english_text.get(sid))
                     )
                     if current != text and fallback:
@@ -15423,7 +15378,6 @@ CUSTOM_UNIT_HIDDEN_STAT_STRIP_BY_SID: dict[str, tuple[str, ...]] = {
     "h3_dwarf": ("inDmgMods",),
     "h3_battle_dwarf": ("inDmgMods",),
     "h3_dwarf_battlerager_upg_alt": ("inDmgMods",),
-    "h3_war_unicorn": ("energyPerRound",),
     "h3_wolf_rider": ("crit",),
     "h3_ogre": ("additionalActionChanceModifier",),
     "h3_naga": ("additionalActionChanceModifier",),
@@ -15462,9 +15416,6 @@ CUSTOM_UNIT_HIDDEN_STAT_STRIP_BY_SID: dict[str, tuple[str, ...]] = {
     "h3_ogre_upg_alt": ("additionalActionChanceModifier",),
     "h3_naga_upg": ("additionalActionChanceModifier",),
     "h3_naga_upg_alt": ("additionalActionChanceModifier",),
-    "h3_war_mammoth": ("energyPerRound",),
-    "h3_earth_elemental_upg": ("energyPerRound",),
-    "h3_basilisk_upg": ("energyPerRound",),
     "h3_sandworm": ("damagePerHex",),
     "h3_olgoi_khorkhoi": ("damagePerHex",),
     "h3_sandworm_upg_alt": ("damagePerHex",),
@@ -15545,6 +15496,78 @@ def normalize_custom_unit_logic_redundant_flags(
     if removed_flags:
         notes.append(f"remove/reset stale custom unit donor ability flags ({removed_flags} flags across {changed_members} logic rows)")
 
+
+
+# Vanilla Focus generation (installed Core readback 2026-11-19, 155 vanilla rows): contact-melee
+# units earn 2 Focus per action, shooters and reach attackers ("range") earn 1; every unit earns
+# 1 when it takes damage and 0 per round. Every vanilla deviation carries a card that says so
+# (inquisitor_upg take 2, succubus_upg cast 3, qilin_upg_alt round 2). Custom rows used to keep
+# whatever their donor had, so 103 of 414 rows broke the rule with no card
+# (docs/custom_unit_focus_generation.md). The rule is applied to every h3_* logic row after all
+# unit producers (faction, neutral, Conflux fusion) have run.
+CUSTOM_UNIT_FOCUS_PER_ACTION = {"melee": 2, "ranged": 1}
+CUSTOM_UNIT_FOCUS_STAT_DEFAULTS = {"energyPerTakeDamage": 1, "energyPerRound": 0}
+# sid -> {stat: value}. Add a unit only together with a visible card that explains the Focus gain.
+CUSTOM_UNIT_FOCUS_GENERATION_EXCEPTIONS: dict[str, dict[str, int]] = {}
+
+
+def custom_unit_focus_attack_class(item: dict[str, Any]) -> str:
+    for attack in as_attack_list(item.get("defaultAttacks")):
+        if attack.get("attackType_") in ("shoot", "range"):
+            return "ranged"
+    return "melee"
+
+
+def expected_custom_unit_focus_stats(item: dict[str, Any]) -> dict[str, int]:
+    expected = {"energyPerCast": CUSTOM_UNIT_FOCUS_PER_ACTION[custom_unit_focus_attack_class(item)]}
+    expected.update(CUSTOM_UNIT_FOCUS_STAT_DEFAULTS)
+    expected.update(CUSTOM_UNIT_FOCUS_GENERATION_EXCEPTIONS.get(str(item.get("id") or ""), {}))
+    return expected
+
+
+def is_custom_unit_logic_member(name: str) -> bool:
+    return (
+        name.startswith("DB/units/units_logics/")
+        and name.endswith("_l.json")
+        and name.rsplit("/", 1)[-1].startswith("h3_")
+    )
+
+
+def normalize_custom_unit_focus_generation(
+    release_zip: zipfile.ZipFile,
+    output: dict[str, bytes],
+    notes: list[str],
+) -> None:
+    members = sorted({n for n in output if is_custom_unit_logic_member(n)}
+                     | {n for n in release_zip.namelist() if is_custom_unit_logic_member(n)})
+    changed_rows = 0
+    changed_stats = 0
+    for name in members:
+        doc = read_overlay_or_release_json(release_zip, output, name)
+        item = first_array_item(doc)
+        if not isinstance(item, dict) or not str(item.get("id") or "").startswith("h3_"):
+            raise RuntimeError(f"{name}: custom unit logic member has no h3_* array row")
+        stats = item.get("stats")
+        if not isinstance(stats, dict):
+            raise RuntimeError(f"{name}: custom unit logic row has no stats")
+        changed = 0
+        for key, value in expected_custom_unit_focus_stats(item).items():
+            if stats.get(key) != value:
+                stats[key] = value
+                changed += 1
+        if changed:
+            output[name] = write_json(doc)
+            changed_rows += 1
+            changed_stats += changed
+    unknown = set(CUSTOM_UNIT_FOCUS_GENERATION_EXCEPTIONS) - {
+        n.rsplit("/", 1)[-1][: -len("_l.json")] for n in members
+    }
+    if unknown:
+        raise RuntimeError(f"Focus generation exceptions name units with no logic row: {sorted(unknown)}")
+    notes.append(
+        f"normalize custom unit Focus generation to vanilla melee 2 / ranged 1 per action "
+        f"({changed_stats} stats across {changed_rows} of {len(members)} logic rows)"
+    )
 
 # Ability rows a previous install wrote that the current generator no longer emits;
 # the overlay builds on the installed Core, so they must be removed explicitly
@@ -16447,7 +16470,7 @@ def make_homm3_cove_fangarm_unit_logic() -> dict[str, Any]:
                     "moveType": "fly",
                     "luck": 0,
                     "moral": 0,
-                    "energyPerCast": 1,
+                    "energyPerCast": 2,
                     "energyPerRound": 0,
                     # Native default Focus income; 0 left the 2-Focus Hypnotic Strike uncastable.
                     "energyPerTakeDamage": 1,
@@ -16715,53 +16738,8 @@ def make_homm3_rampart_avenger_hero_ability() -> dict[str, Any]:
 
 
 def make_homm3_rampart_avenger_subskills() -> list[dict[str, Any]]:
-    return [
-        {
-            "id": "sub_skill_faction_homm3_rampart_avenger_weakening_ray",
-            "name": "sub_skill_faction_homm3_rampart_avenger_weakening_ray_name",
-            "desc": "sub_skill_faction_homm3_rampart_avenger_weakening_ray_desc",
-            "icon": "magic_shorten_shadow_effect_icon",
-            "bonuses": [{"type": "heroBattleAbility", "parameters": [HOMM3_RAMPART_AVENGER_ABILITY_SID, "3"]}],
-        },
-        {
-            "id": "sub_skill_faction_homm3_rampart_avenger_fatal_decay",
-            "name": "sub_skill_faction_homm3_rampart_avenger_fatal_decay_name",
-            "desc": "sub_skill_faction_homm3_rampart_avenger_fatal_decay_desc",
-            "icon": "magic_fatal_decay_effect_icon",
-            "bonuses": [{"type": "heroBattleAbility", "parameters": [HOMM3_RAMPART_AVENGER_ABILITY_SID, "4"]}],
-        },
-        {
-            "id": "sub_skill_faction_homm3_rampart_avenger_long_mark",
-            "name": "sub_skill_faction_homm3_rampart_avenger_long_mark_name",
-            "desc": "sub_skill_faction_homm3_rampart_avenger_long_mark_desc",
-            "icon": HOMM3_RAMPART_AVENGER_ICON,
-            "bonuses": [{"type": "heroBattleAbility", "parameters": [HOMM3_RAMPART_AVENGER_ABILITY_SID, "5"]}],
-        },
-        {
-            "id": "sub_skill_faction_homm3_rampart_avenger_native_terrain",
-            "name": "sub_skill_faction_homm3_rampart_avenger_native_terrain_name",
-            "desc": "sub_skill_faction_homm3_rampart_avenger_native_terrain_desc",
-            "icon": "sub_skill_faction_nature_1_icon",
-            "bonuses": [
-                {"type": "unitStat", "biomeType": "native", "fraction": "homm3_rampart", "parameters": ["outAllDmgMod", "0.1"]},
-                {"type": "unitStat", "biomeType": "native", "fraction": "homm3_rampart", "parameters": ["inAllDmgMod", "-0.1"]},
-            ],
-        },
-        {
-            "id": "sub_skill_faction_homm3_rampart_avenger_wide_mark",
-            "name": "sub_skill_faction_homm3_rampart_avenger_wide_mark_name",
-            "desc": "sub_skill_faction_homm3_rampart_avenger_wide_mark_desc",
-            "icon": HOMM3_RAMPART_AVENGER_ICON,
-            "bonuses": [{"type": "heroBattleAbility", "parameters": [HOMM3_RAMPART_AVENGER_ABILITY_SID, "6"]}],
-        },
-        {
-            "id": "sub_skill_faction_homm3_rampart_avenger_focus_efficiency",
-            "name": "sub_skill_faction_homm3_rampart_avenger_focus_efficiency_name",
-            "desc": "sub_skill_faction_homm3_rampart_avenger_focus_efficiency_desc",
-            "icon": HOMM3_RAMPART_AVENGER_ICON,
-            "bonuses": [hero_stat_bonus("startEnergyLevelsBonus", "1")],
-        },
-    ]
+    # Avenging strikes rework (2026-11-19): same SIDs and tier slots, new effects (runtime-owned except native terrain).
+    return homm3_rampart_avenger_core_overlay.make_subskills()
 
 
 def heroic_strike_specialization_level_bonuses(*levels: int) -> list[dict[str, Any]]:
@@ -19175,13 +19153,11 @@ def make_specialized_generic_skill_row(manifest: dict[str, Any], skill_sid: str)
         implemented = "Skeletal Necromancy: the runtime apply-result hook grants post-battle h3_skeleton stacks to winning HoMM3 Necropolis heroes from eligible defeated enemy squad value. necromancyPerBonus still marks Basic/Advanced/Expert rank (0.10/0.20/0.30); the hook converts at 5%/10%/15%."
         source_difference = "HoMM3 Necropolis uses post-battle Skeleton recovery only; it does not use native Necromantic Energy, corpse targeting, or in-combat resurrection for Skeletal Necromancy."
     elif faction_sid == "homm3_rampart":
-        levels = [
-            [{"type": "heroBattleAbility", "parameters": [HOMM3_RAMPART_AVENGER_ABILITY_SID, "0"]}],
-            [{"type": "heroBattleAbility", "parameters": [HOMM3_RAMPART_AVENGER_ABILITY_SID, "1"]}],
-            [{"type": "heroBattleAbility", "parameters": [HOMM3_RAMPART_AVENGER_ABILITY_SID, "2"]}],
-        ]
-        implemented = "Avenger: 1-Focus hero action marks enemies with Rampart-owned damage-taken debuffs, with unique Avenger subskills for extra effects."
-        source_difference = "Avenger subskill effect combinations use native heroBattleAbility level overrides; selected subskill precedence is part of the current supported design."
+        # Avenger avenging strikes (2026-11-19) are runtime-owned: the ranks carry no bonuses, so the hero no longer
+        # gets the mark hero action and the army keeps the mixed-faction Morale penalty. Subskill and arena rows: homm3_rampart_avenger_core_overlay.
+        levels = homm3_rampart_avenger_core_overlay.faction_skill_levels()
+        implemented = homm3_rampart_avenger_core_overlay.IMPLEMENTED
+        source_difference = homm3_rampart_avenger_core_overlay.SOURCE_DIFFERENCE
     elif faction_sid == "homm3_tower":
         levels = [
             [{"type": "heroBattleAbility", "parameters": [HOMM3_TOWER_ARCANE_BATTERY_ABILITY_SID, "0"]}],
@@ -19204,10 +19180,9 @@ def make_specialized_generic_skill_row(manifest: dict[str, Any], skill_sid: str)
             levels = tower_artificing_faction_skill_levels(artificing_policy)
             implemented, source_difference = tower_artificing_faction_skill_texts(artificing_policy)
     elif faction_sid == "homm3_dungeon":
-        levels = [
-            [unit_bool_stat_bonus("ignoreFractionsCount")]
-            for index in range(3)
-        ]
+        # Runtime-owned: no rank bonuses (the old ignoreFractionsCount carrier removed the mixed-faction Morale
+        # penalty, 2026-11-19); the runtimes read the rank from the hero's skill list.
+        levels = [[], [], []]
         implemented = (
             "War Captives: Homm3DungeonCaptivesRuntime reads the won battle at the shared exact battle-result prefix "
             "(captives = defeated enemy squadValue / 100, +15% Dungeon Cells) and the post-battle captives screen "
@@ -19217,29 +19192,27 @@ def make_specialized_generic_skill_row(manifest: dict[str, Any], skill_sid: str)
         )
         source_difference = (
             "Replaces Draconic Dominion and the flee-bank Captives; no Diplomacy buy UI and no spells (legacy Execute/Ransom "
-            "rows stay defined for old saves). The rank data preserves native unitBoolStat ignoreFractionsCount; subskills "
+            "rows stay defined for old saves). The ranks carry no native bonuses; subskills "
             "reuse the old Draconic Diplomacy SID slug for save compatibility."
         )
     elif faction_sid == "homm3_stronghold":
-        # Warcry (2026-11-17) is runtime-owned: the ranks carry the native load shape only, so the hero no longer
-        # gets the three Warcries buttons. Subskill and arena rows: homm3_stronghold_warcry_core_overlay.
+        # Warcry (2026-11-17) is runtime-owned: the ranks carry no bonuses, so the hero no longer gets the three
+        # Warcries buttons. Subskill and arena rows: homm3_stronghold_warcry_core_overlay.
         levels = homm3_stronghold_warcry_core_overlay.faction_skill_levels()
         implemented = homm3_stronghold_warcry_core_overlay.IMPLEMENTED
         source_difference = homm3_stronghold_warcry_core_overlay.SOURCE_DIFFERENCE
     elif faction_sid == "homm3_factory":
-        # Keep the proven Dungeon load shape (ignoreFractionsCount at every rank) and add the
-        # Logistics Network world spell; Field Triage is no longer granted.
-        levels = [[unit_bool_stat_bonus("ignoreFractionsCount"), *rank] for rank in factory_logistics.faction_skill_levels()]
+        # Every rank grants the Logistics Network world spell; Field Triage is no longer granted. No
+        # ignoreFractionsCount carrier any more (it removed the mixed-faction Morale penalty, 2026-11-19).
+        levels = factory_logistics.faction_skill_levels()
         implemented = factory_logistics.IMPLEMENTED
         source_difference = factory_logistics.SOURCE_DIFFERENCE
     elif faction_sid == "homm3_bulwark":
-        levels = [
-            [unit_bool_stat_bonus("ignoreFractionsCount")],
-            [unit_bool_stat_bonus("ignoreFractionsCount")],
-            [unit_bool_stat_bonus("ignoreFractionsCount")],
-        ]
+        # No rank bonuses (the old ignoreFractionsCount carrier removed the mixed-faction Morale penalty, 2026-11-19).
+        # Native HeroSkill apply needs the three Adv/Exp subskills, not rank bonuses (handoff 15b-16).
+        levels = [[], [], []]
         implemented = ""
-        source_difference = "Core ranks reuse the proven Dungeon faction-skill load shape (ignoreFractionsCount + three Adv/Exp subskills) so native HeroSkill apply can load the row; per-stack Rune accounting stays runtime-pending and must not claim implemented Core mechanics."
+        source_difference = "Core ranks carry no bonuses and three Adv/Exp subskills so native HeroSkill apply can load the row; per-stack Rune accounting stays runtime-pending and must not claim implemented Core mechanics."
     else:
         return None
     row = {
@@ -19984,18 +19957,7 @@ def add_release_generic_lang(release_zip: zipfile.ZipFile, manifest: dict[str, A
                 "sid": f"{HOMM3_RAMPART_AVENGER_ABILITY_SID}_description",
                 "text": "Spend Focus to mark an enemy. Marked enemies take more damage from all sources.",
             },
-            {"sid": "sub_skill_faction_homm3_rampart_avenger_weakening_ray_name", "text": "Crippling Mark"},
-            {"sid": "sub_skill_faction_homm3_rampart_avenger_weakening_ray_desc", "text": "Avenger also reduces the marked enemy's retaliation potential by 1."},
-            {"sid": "sub_skill_faction_homm3_rampart_avenger_fatal_decay_name", "text": "Withering Mark"},
-            {"sid": "sub_skill_faction_homm3_rampart_avenger_fatal_decay_desc", "text": "Avenger also prevents HP restoration and reduces the marked enemy's maximum HP by 20%."},
-            {"sid": "sub_skill_faction_homm3_rampart_avenger_long_mark_name", "text": "Lingering Mark"},
-            {"sid": "sub_skill_faction_homm3_rampart_avenger_long_mark_desc", "text": "Avenger lasts 1 additional round."},
-            {"sid": "sub_skill_faction_homm3_rampart_avenger_native_terrain_name", "text": "Forest Advantage"},
-            {"sid": "sub_skill_faction_homm3_rampart_avenger_native_terrain_desc", "text": "Rampart creatures on native terrain deal 10% more damage and take 10% less damage."},
-            {"sid": "sub_skill_faction_homm3_rampart_avenger_wide_mark_name", "text": "Shared Quarry"},
-            {"sid": "sub_skill_faction_homm3_rampart_avenger_wide_mark_desc", "text": "Avenger's damage-taken mark reaches enemies adjacent to the target."},
-            {"sid": "sub_skill_faction_homm3_rampart_avenger_focus_efficiency_name", "text": "Efficient Hunt"},
-            {"sid": "sub_skill_faction_homm3_rampart_avenger_focus_efficiency_desc", "text": "Your hero starts battle with +1 Focus for Avenger."},
+            *homm3_rampart_avenger_core_overlay.subskill_lang_rows(),
         ]
     for class_type in ("might", "magic"):
         class_name = manifest_hero_class_name(manifest, class_type)
@@ -20688,6 +20650,16 @@ def add_release_generic_custom_faction_core_rows(
             notes=notes,
         )
     if faction_sid == "homm3_rampart":
+        def _avenger_write_doc(name: str, doc: Any) -> None:
+            output[name] = write_json(doc)
+
+        homm3_rampart_avenger_core_overlay.merge_rampart_avenger_arena_into_overlay(
+            read_doc=lambda name: read_overlay_or_release_json(release_zip, output, name),
+            write_doc=_avenger_write_doc,
+            upsert_array_row=upsert_array_row,
+            dedupe_array_rows_by_id=dedupe_array_rows_by_id,
+            notes=notes,
+        )
         ability_bonuses_name = "DB/heroes_abilities/heroes_abilities_bonuses/hero_abilities_bonuses.json"
         try:
             ability_bonuses_doc = json.loads(output[ability_bonuses_name].decode("utf-8-sig")) if ability_bonuses_name in output else read_json(release_zip, ability_bonuses_name)
@@ -21332,6 +21304,16 @@ def build_overlay(
                 upsert_lang_rows,
             )
             add_homm3_stronghold_warcries_lang_rows(release_zip, output, notes)
+            # Unit design tables (custom_factions/unit_designs): card text and buff rows, before the lang sync.
+            unit_design_table.add_design_lang_and_buffs(
+                release_zip,
+                output,
+                notes,
+                read_overlay_or_release_json=read_overlay_or_release_json,
+                write_json=write_json,
+                upsert_array_row=upsert_array_row,
+                add_lang_overlay_rows=add_lang_overlay_rows,
+            )
             add_homm3_missing_custom_lang_rows(release_zip, output, notes)
             sync_multilingual_custom_lang_rows(release_zip, output, notes, read_json, write_json, upsert_lang_rows)
             # Prefer donor-locale text for any landon keys still missing after sync.
@@ -21360,11 +21342,31 @@ def build_overlay(
                 read_json,
                 write_json,
             )
+            # Unit design tables own the listed factions' final stats, price and kit: after the older balance
+            # contract and parity (which they supersede for those units), before anything reads the final rows.
+            _parity_contract = upgrade_pair_parity.load_contract()
+            unit_design_table.apply_design_units(
+                release_zip,
+                output,
+                notes,
+                read_overlay_or_release_json=read_overlay_or_release_json,
+                write_json=write_json,
+                expected_exp_bonus=lambda tier, squad_value, sid: upgrade_pair_parity.expected_exp_bonus(
+                    _parity_contract, tier, squad_value, sid
+                ),
+                ensure_unit_view_card_icons=ensure_unit_view_card_icons,
+            )
             # After the balance contract: fused stats re-derive from the final parent rows.
             conflux_fusion.finalize_conflux_fusion_units(release_zip, output, notes, conflux_fusion_helpers())
+            # After every unit producer and the fused-row rebuild: one Focus generation rule for all h3_* rows.
+            normalize_custom_unit_focus_generation(release_zip, output, notes)
             pin_homm3_shared_vanilla_buff_values(release_zip, output, notes)
             assign_homm3_battle_ai_types(release_zip, output, notes)
             assign_homm3_attack_animation_slots(output, notes)
+            # After the slots are final: contact / shot release times from the clips each slot plays.
+            assign_homm3_attack_timings(output, notes, write_json)
+            # After every unit view producer (design tables, fusion): card icons by the vanilla design language.
+            homm3_unit_card_icons.apply_card_icons(output, notes, write_json)
             # After every unit logic row (incl. balance squadValue) is final:
             # native Pandora/chest unit boxes only draw from reward_units_container.
             add_custom_faction_reward_units(
@@ -21380,7 +21382,6 @@ def build_overlay(
             # Last Lang writer: after the artifact English rows and after multilingual
             # sync, so translations win over sync drafts and English fallbacks.
             add_custom_lang_translations(release_zip, output, notes)
-            refresh_homm3_stronghold_warcry_locale_rows(release_zip, output, notes)
 
         if strip_nonfinal_no_compromise_law_bonuses:
             strip_nonfinal_no_compromise_law_bonuses_from_overlay(output, notes)
@@ -21423,6 +21424,17 @@ def run_homm3_attack_animation_slot_validation(stage: str, core: Path) -> None:
         raise RuntimeError(f"HoMM3 attack animation slot validation timed out ({stage})") from ex
     if result.returncode != 0:
         raise RuntimeError(f"HoMM3 attack animation slot validation failed on {stage}: {core}")
+
+
+def run_homm3_attack_timing_validation(stage: str, core: Path) -> None:
+    cmd = [sys.executable, str(HOMM3_ATTACK_TIMING_VALIDATOR), "--core", str(core)]
+    print(f"Running HoMM3 attack timing validation ({stage})...", flush=True)
+    try:
+        result = subprocess.run(cmd, cwd=REPO_ROOT, timeout=VALIDATION_TIMEOUT_SECONDS)
+    except subprocess.TimeoutExpired as ex:
+        raise RuntimeError(f"HoMM3 attack timing validation timed out ({stage})") from ex
+    if result.returncode != 0:
+        raise RuntimeError(f"HoMM3 attack timing validation failed on {stage}: {core}")
 
 
 def run_custom_law_tree_layout_validation(stage: str, core: Path) -> None:
@@ -21723,6 +21735,7 @@ def rewrite_zip(
     run_custom_faction_validation("candidate Core.zip", tmp_zip)
     run_homm3_upgrade_pair_parity_validation("candidate Core.zip", tmp_zip)
     run_homm3_attack_animation_slot_validation("candidate Core.zip", tmp_zip)
+    run_homm3_attack_timing_validation("candidate Core.zip", tmp_zip)
     run_city_construction_tree_layout_validation("candidate Core.zip", tmp_zip)
     run_custom_law_tree_layout_validation("candidate Core.zip", tmp_zip)
     log_overlay_phase("candidate validation complete")
@@ -21969,6 +21982,7 @@ def main() -> int:
             run_custom_faction_reward_units_validation(release_core)
             run_homm3_upgrade_pair_parity_validation("updated release Core.zip", release_core)
             run_homm3_attack_animation_slot_validation("updated release Core.zip", release_core)
+            run_homm3_attack_timing_validation("updated release Core.zip", release_core)
             run_city_construction_tree_layout_validation("updated release Core.zip", release_core)
             run_custom_law_tree_layout_validation("updated release Core.zip", release_core)
         return 0

@@ -1,0 +1,895 @@
+{
+ "schemaVersion": 1,
+ "faction": "homm3_dungeon",
+ "approval": "Owner, 2026-11-20 goal: all factions, autonomous (no per-faction card review).",
+ "tradeAxis": "Reckless (striker: the hardest hitters of the tier, paid for with thin bodies and self-inflicted exposure, so they win by trading creatures) versus Sustained (ward: life drain, regeneration, strikes that draw no counterattack and control, so they finish a fight near full strength). Both are useful in any army; a hero who eats captives after battle simply gets more back from the side that bled.",
+ "buffFile": "DB/buffs/units_buffs_dungeon.json",
+ "buffs": [
+  {
+   "id": "h3_kit_h3dungeon_exposed_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Exposed",
+   "text": "Takes +25% Damage.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "inAllDmgMod": 0.25
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_h3dungeon_stiffened_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Stiffened",
+   "text": "-2 Speed and -2 Initiative.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "speed": -2,
+      "initiative": -2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_dungeon_fouled_effect",
+   "cloneOf": "magic_twilight_effect",
+   "name": "Fouled",
+   "text": "Cannot make Ranged attacks.",
+   "set": {
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 1,
+    "data": {
+     "disablers": [
+      {
+       "ability": "all",
+       "attack": "shoot"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "h3_kit_h3dungeon_serpent_wrath_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Serpent's Wrath",
+   "text": "+1 Attack.",
+   "set": {
+    "data": {
+     "stats": {
+      "offence": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_h3dungeon_shadow_rage_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Shadow Rage",
+   "text": "+2 Attack.",
+   "set": {
+    "data": {
+     "stats": {
+      "offence": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_h3dungeon_venom_effect",
+   "cloneOf": "frog_poison",
+   "name": "Manticore Venom",
+   "text": "Takes 30 Magic Damage plus 7 for each creature in the attacking stack at the start of its turn.",
+   "set": {
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive",
+        "magic_damage",
+        "overTime_effect",
+        "overTime_effect_poison",
+        "activate_all_buff_actions_damage"
+       ],
+       "triggerCounter": false,
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "damageTarget_": "all",
+       "damageType_": "magic_pure",
+       "statDmgMult": 0.0,
+       "minBaseDmg": 30,
+       "maxBaseDmg": 30,
+       "minStackDmg": 7,
+       "maxStackDmg": 7
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "units": {
+  "h3_troglodyte": {
+   "role": "base",
+   "stats": {
+    "hp": 7,
+    "offence": 4,
+    "defence": 3,
+    "damageMin": 1,
+    "damageMax": 3,
+    "speed": 4,
+    "initiative": 4
+   },
+   "gold": 50,
+   "squadValue": 48,
+   "kit": [
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "sleep_effect"
+     ],
+     "icon": "magic_nairas_kiss_effect_icon",
+     "name": "Sightless",
+     "text": "Immune to Blind and Sleep effects."
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_troglodyte_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 10,
+    "offence": 6,
+    "defence": 3,
+    "damageMin": 1,
+    "damageMax": 3,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 65,
+   "squadValue": 65,
+   "kit": [
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "sleep_effect"
+     ],
+     "icon": "magic_nairas_kiss_effect_icon",
+     "name": "Sightless",
+     "text": "Immune to Blind and Sleep effects."
+    },
+    {
+     "k": "h3dungeon_exposed",
+     "taken": 0.15,
+     "icon": "hydra_selfbuff_icon",
+     "name": "Ambush",
+     "text": "Deals +30% Damage to stacks that have not acted yet this round. Takes +15% Damage from basic attacks.",
+     "toughMult": 0.95
+    },
+    {
+     "k": "runtime",
+     "rule": "turn_state",
+     "fact": "unacted_target",
+     "percent": 30,
+     "name": "Ambush",
+     "nameSid": "h3_kit_ability_troglodyte_upg_ambush_name",
+     "descSid": "h3_kit_ability_troglodyte_upg_ambush_description",
+     "offMult": 1.12
+    }
+   ]
+  },
+  "h3_troglodyte_upg_alt": {
+   "role": "ward",
+   "powerTarget": 0.93,
+   "stats": {
+    "hp": 9,
+    "offence": 4,
+    "defence": 5,
+    "damageMin": 1,
+    "damageMax": 3,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 65,
+   "squadValue": 65,
+   "kit": [
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "sleep_effect"
+     ],
+     "icon": "magic_nairas_kiss_effect_icon",
+     "name": "Sightless",
+     "text": "Immune to Blind and Sleep effects."
+    },
+    {
+     "k": "card",
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Burrow",
+     "text": "Moves underground: movement ignores obstacles, traps and other creatures."
+    },
+    {
+     "k": "h3dungeon_cave_in",
+     "focus": 2,
+     "cd": 3,
+     "range": 4,
+     "name": "Cave-In",
+     "text": "Collapses the ceiling around an enemy stack within 4 hexes: rubble fills the free hexes next to it for 2 rounds, blocking movement."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_troglodyte_upg_alt_abilities_0_name"
+    }
+   ]
+  },
+  "h3_harpy": {
+   "role": "base",
+   "stats": {
+    "hp": 14,
+    "offence": 5,
+    "defence": 4,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 6,
+    "initiative": 6
+   },
+   "gold": 130,
+   "squadValue": 111,
+   "kit": [
+    {
+     "k": "always_return",
+     "name": "Hit and Run",
+     "text": "After every Melee attack, returns to its original position."
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_harpy_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 18,
+    "offence": 5,
+    "defence": 6,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 7,
+    "initiative": 8
+   },
+   "gold": 170,
+   "squadValue": 166,
+   "kit": [
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_dungeon_fouled_effect",
+     "duration": 1,
+     "icon": "magic_twilight_effect_icon",
+     "name": "Foul Swoop",
+     "text": "Basic attacks stop the target from making Ranged attacks until the end of the round.",
+     "offMult": 1.04
+    },
+    {
+     "k": "always_return",
+     "name": "Hit and Run",
+     "text": "After every Melee attack, returns to its original position."
+    }
+   ]
+  },
+  "h3_harpy_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 14,
+    "offence": 8,
+    "defence": 4,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 7,
+    "initiative": 7
+   },
+   "gold": 170,
+   "squadValue": 166,
+   "kit": [
+    {
+     "k": "double_strike",
+     "mode": "melee"
+    },
+    {
+     "k": "melee_strike",
+     "focus": 1,
+     "cd": 1,
+     "mult": 1.5,
+     "counter": true,
+     "selfBuff": {
+      "buff": "h3_kit_h3dungeon_exposed_effect",
+      "duration": 1
+     },
+     "name": "Reckless Dive",
+     "text": "Performs a Melee attack that deals +50% Damage. This creature then takes +25% Damage until its next turn."
+    }
+   ]
+  },
+  "h3_beholder": {
+   "role": "base",
+   "stats": {
+    "hp": 25,
+    "offence": 7,
+    "defence": 7,
+    "damageMin": 4,
+    "damageMax": 7,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 250,
+   "squadValue": 237,
+   "kit": [
+    {
+     "k": "skirmisher",
+     "name": "Many Eyes",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_beholder_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 27,
+    "offence": 10,
+    "defence": 7,
+    "damageMin": 5,
+    "damageMax": 8,
+    "speed": 5,
+    "initiative": 7
+   },
+   "gold": 280,
+   "squadValue": 349,
+   "kit": [
+    {
+     "k": "skirmisher",
+     "name": "Many Eyes",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "h3dungeon_reckless",
+     "outType": "shoot_attack",
+     "out": 0.25,
+     "taken": 0.2,
+     "name": "Unblinking",
+     "text": "Deals +25% Ranged Damage. Takes +20% Damage from basic attacks."
+    },
+    {
+     "k": "h3dungeon_ray_barrage",
+     "focus": 2,
+     "cd": 2,
+     "mult": 0.5,
+     "counter": false,
+     "targets": 3,
+     "name": "Ray Barrage",
+     "text": "Fires rays at up to 3 enemy stacks, each taking 50% Ranged Damage. They do not counterattack."
+    }
+   ]
+  },
+  "h3_beholder_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 27,
+    "offence": 7,
+    "defence": 10,
+    "damageMin": 4,
+    "damageMax": 7,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 280,
+   "squadValue": 349,
+   "kit": [
+    {
+     "k": "skirmisher",
+     "name": "Many Eyes",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "sharpshooter"
+    },
+    {
+     "k": "runtime",
+     "rule": "zone_shot",
+     "percent": 60,
+     "radius": 3,
+     "perRound": 1,
+     "icon": "skill_tactics",
+     "name": "Vigilant Eye",
+     "text": "Once per round, shoots the first enemy stack that ends its move within 3 hexes, dealing 60% Damage before it can attack.",
+     "offMult": 1.1
+    }
+   ]
+  },
+  "h3_medusa": {
+   "role": "base",
+   "powerTarget": 0.92,
+   "stats": {
+    "hp": 37,
+    "offence": 9,
+    "defence": 10,
+    "damageMin": 7,
+    "damageMax": 10,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 300,
+   "squadValue": 345,
+   "kit": [
+    {
+     "k": "skirmisher",
+     "name": "Serpent Coils",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_medusa_stone_gaze_name"
+    }
+   ]
+  },
+  "h3_medusa_upg": {
+   "role": "ward",
+   "powerTarget": 0.95,
+   "stats": {
+    "hp": 37,
+    "offence": 9,
+    "defence": 11,
+    "damageMin": 7,
+    "damageMax": 10,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 400,
+   "squadValue": 490,
+   "kit": [
+    {
+     "k": "skirmisher",
+     "name": "Serpent Coils",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "sharpshooter"
+    },
+    {
+     "k": "h3dungeon_counter_buff",
+     "buff": "h3_kit_h3dungeon_stiffened_effect",
+     "duration": 2,
+     "name": "Stiffening Glare",
+     "text": "Counterattacks give the attacker -2 Speed and -2 Initiative until the end of the next round.",
+     "toughMult": 1.04
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_medusa_upg_stone_gaze_name"
+    }
+   ]
+  },
+  "h3_medusa_upg_alt": {
+   "role": "striker",
+   "powerTarget": 0.95,
+   "stats": {
+    "hp": 46,
+    "offence": 13,
+    "defence": 10,
+    "damageMin": 8,
+    "damageMax": 14,
+    "speed": 7,
+    "initiative": 8
+   },
+   "gold": 400,
+   "squadValue": 490,
+   "kit": [
+    {
+     "k": "when_damaged_self_buff",
+     "buff": "h3_kit_h3dungeon_serpent_wrath_effect",
+     "duration": -1,
+     "name": "Serpent's Wrath",
+     "text": "Whenever this creature takes Damage, it gains 1 Attack until the end of the battle."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 2,
+     "cd": 3,
+     "mult": 0.5,
+     "counter": false,
+     "buff": "medusa_stone",
+     "duration": 1,
+     "icon": "medusa_stone_icon",
+     "name": "Petrifying Strike",
+     "text": "Performs a Melee attack that deals 50% Damage and petrifies the target until the end of the round. Petrified targets take double Damage from basic attacks, are immune to Magic Damage, and skip their turn. Enemies do not counterattack."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_medusa_upg_alt_redesign_ability_name"
+    }
+   ]
+  },
+  "h3_minotaur": {
+   "role": "base",
+   "stats": {
+    "hp": 70,
+    "offence": 15,
+    "defence": 13,
+    "damageMin": 15,
+    "damageMax": 25,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 500,
+   "squadValue": 695,
+   "kit": [
+    {
+     "k": "h3dungeon_bravery",
+     "min": 1,
+     "name": "Bravery",
+     "text": "Morale is never lower than +1."
+    },
+    {
+     "k": "h3dungeon_bull_rush",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": false,
+     "name": "Bull Rush",
+     "text": "Performs a Melee attack and pushes the target 1 hex directly away. The target does not counterattack."
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_minotaur_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 75,
+    "offence": 17,
+    "defence": 13,
+    "damageMin": 15,
+    "damageMax": 25,
+    "speed": 6,
+    "initiative": 8
+   },
+   "gold": 575,
+   "squadValue": 1101,
+   "kit": [
+    {
+     "k": "h3dungeon_bravery",
+     "min": 1,
+     "name": "Bravery",
+     "text": "Morale is never lower than +1."
+    },
+    {
+     "k": "h3dungeon_bull_rush",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": false,
+     "name": "Wall Slam",
+     "text": "Performs a Melee attack and pushes the target 1 hex away. If an obstacle, a stack or the battlefield edge stands right behind the target, the attack deals +50% Damage. The target does not counterattack."
+    },
+    {
+     "k": "runtime",
+     "rule": "wall_slam",
+     "percent": 50,
+     "abilityOnly": true,
+     "name": "Wall Slam",
+     "nameSid": "h3_kit_ability_minotaur_upg_wall_slam_name",
+     "descSid": "h3_kit_ability_minotaur_upg_wall_slam_description",
+     "offMult": 1.05
+    },
+    {
+     "k": "h3dungeon_reckless",
+     "outType": "melee_attack",
+     "out": 0.15,
+     "taken": 0.15,
+     "name": "Headlong",
+     "text": "Deals +15% Melee Damage. Takes +15% Damage from basic attacks."
+    }
+   ]
+  },
+  "h3_minotaur_upg_alt": {
+   "role": "ward",
+   "powerTarget": 0.95,
+   "stats": {
+    "hp": 80,
+    "offence": 15,
+    "defence": 17,
+    "damageMin": 15,
+    "damageMax": 25,
+    "speed": 5,
+    "initiative": 7
+   },
+   "gold": 575,
+   "squadValue": 1101,
+   "kit": [
+    {
+     "k": "h3dungeon_bravery",
+     "min": 1,
+     "name": "Bravery",
+     "text": "Morale is never lower than +1."
+    },
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "movementNegative"
+     ],
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Immovable",
+     "text": "Cannot be pushed, pulled, swapped or rooted.",
+     "toughMult": 1.03
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_minotaur_upg_alt_redesign_ability_name"
+    }
+   ]
+  },
+  "h3_manticore": {
+   "role": "base",
+   "powerTarget": 0.92,
+   "stats": {
+    "hp": 128,
+    "offence": 20,
+    "defence": 18,
+    "damageMin": 20,
+    "damageMax": 28,
+    "speed": 7,
+    "initiative": 8
+   },
+   "gold": 850,
+   "squadValue": 1168,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_h3dungeon_venom_effect",
+     "duration": 2,
+     "icon": "frog_poison_icon",
+     "name": "Venomous Sting",
+     "text": "Basic attacks and counterattacks poison the target for 2 rounds. A poisoned creature takes 30 Magic Damage plus 7 for each creature in the attacking stack at the start of its turn. This effect is stackable."
+    }
+   ]
+  },
+  "h3_manticore_upg": {
+   "role": "ward",
+   "powerTarget": 0.92,
+   "stats": {
+    "hp": 144,
+    "offence": 21,
+    "defence": 22,
+    "damageMin": 21,
+    "damageMax": 30,
+    "speed": 8,
+    "initiative": 10
+   },
+   "gold": 1050,
+   "squadValue": 1933,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_h3dungeon_venom_effect",
+     "duration": 2,
+     "icon": "frog_poison_icon",
+     "name": "Venomous Sting",
+     "text": "Basic attacks and counterattacks poison the target for 2 rounds. A poisoned creature takes 30 Magic Damage plus 7 for each creature in the attacking stack at the start of its turn. This effect is stackable."
+    },
+    {
+     "k": "h3dungeon_life_drain",
+     "v": 0.2,
+     "name": "Blood Feast",
+     "text": "Each attack and counterattack restores 20% of Damage dealt as HP to this creature. This can revive fallen units."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 2,
+     "cd": 3,
+     "mult": 0.75,
+     "counter": false,
+     "buff": "h3_stunned_effect",
+     "duration": 1,
+     "icon": "gorilla_stun_icon",
+     "name": "Paralyzing Sting",
+     "text": "Performs a Melee attack that deals 75% Damage and paralyzes the target: it skips its turn until the end of the round. Enemies do not counterattack."
+    }
+   ]
+  },
+  "h3_manticore_upg_alt": {
+   "role": "striker",
+   "powerTarget": 0.95,
+   "stats": {
+    "hp": 128,
+    "offence": 25,
+    "defence": 18,
+    "damageMin": 20,
+    "damageMax": 28,
+    "speed": 8,
+    "initiative": 9
+   },
+   "gold": 1050,
+   "squadValue": 1933,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_h3dungeon_venom_effect",
+     "duration": 2,
+     "icon": "frog_poison_icon",
+     "name": "Venomous Sting",
+     "text": "Basic attacks and counterattacks poison the target for 2 rounds. A poisoned creature takes 30 Magic Damage plus 7 for each creature in the attacking stack at the start of its turn. This effect is stackable."
+    },
+    {
+     "k": "card",
+     "name": "Triple Maw",
+     "text": "Attacks deal Damage to the target and any creature, friend or foe, on the two hexes behind it."
+    },
+    {
+     "k": "h3dungeon_venom_burst",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "icon": "frog_poison_icon",
+     "name": "Venom Burst",
+     "text": "Performs a Melee attack. Afterwards every Damage-over-time effect on the target deals its Damage immediately."
+    }
+   ]
+  },
+  "h3_red_dragon": {
+   "role": "base",
+   "stats": {
+    "hp": 238,
+    "offence": 28,
+    "defence": 26,
+    "damageMin": 48,
+    "damageMax": 60,
+    "speed": 8,
+    "initiative": 12
+   },
+   "gold": 2500,
+   "squadValue": 3632,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_reach_1_name",
+     "descSid": "base_passive_strike_reach_1_description"
+    },
+    {
+     "k": "spell_immunity",
+     "level": 3
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_red_dragon_upg": {
+   "role": "ward",
+   "powerTarget": 0.95,
+   "stats": {
+    "hp": 300,
+    "offence": 30,
+    "defence": 34,
+    "damageMin": 48,
+    "damageMax": 60,
+    "speed": 9,
+    "initiative": 14
+   },
+   "gold": 4000,
+   "squadValue": 7112,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_reach_1_name",
+     "descSid": "base_passive_strike_reach_1_description"
+    },
+    {
+     "k": "spell_immunity",
+     "level": 5
+    },
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_black_dragons",
+     "v": 0.5,
+     "targets": [
+      "h3_giant_upg",
+      "h3_giant_upg_alt"
+     ],
+     "name": "Hatred of Titans",
+     "text": "Deals +50% Damage to Titans and their kin."
+    },
+    {
+     "k": "landing",
+     "focus": 3,
+     "cd": 3,
+     "enemiesOnly": true,
+     "push": true,
+     "name": "Dragonflight",
+     "text": "Flies to any free hex and deals basic attack Damage to every adjacent enemy, pushing them away. Enemies do not counterattack."
+    }
+   ]
+  },
+  "h3_red_dragon_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 354,
+    "offence": 33,
+    "defence": 26,
+    "damageMin": 56,
+    "damageMax": 70,
+    "speed": 10,
+    "initiative": 15
+   },
+   "gold": 4000,
+   "squadValue": 7112,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_reach_1_name",
+     "descSid": "base_passive_strike_reach_1_description"
+    },
+    {
+     "k": "spell_immunity",
+     "level": 4
+    },
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_black_dragons",
+     "v": 0.5,
+     "targets": [
+      "h3_giant_upg",
+      "h3_giant_upg_alt"
+     ],
+     "name": "Hatred of Titans",
+     "text": "Deals +50% Damage to Titans and their kin."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 3,
+     "cd": 3,
+     "mult": 1.2,
+     "counter": true,
+     "buff": "magic_fatal_decay_effect_1",
+     "duration": 2,
+     "icon": "magic_fatal_decay_effect_icon",
+     "name": "Withering Bite",
+     "text": "Performs a Melee attack that deals +20% Damage. Until the end of the next round the target has -20% maximum HP and cannot restore HP."
+    }
+   ]
+  }
+ }
+}

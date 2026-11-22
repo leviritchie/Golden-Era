@@ -1,0 +1,971 @@
+{
+ "schemaVersion": 1,
+ "faction": "homm3_tower",
+ "approval": "Owner, 2026-11-20 goal: all factions, autonomous (no per-faction card review).",
+ "tradeAxis": "Chassis (role striker: a multi-hit, ranged or large-HP body with a lean kit, so anything added to it pays off on every hit and for a long time) versus Specialist (role ward: a single-hit body that pays for a strong native kit of control, support and burst). The Chassis is the better plain fighter and the better carrier; the Specialist brings tools no other stack has.",
+ "buffFile": "DB/buffs/units_buffs_neutral.json",
+ "buffs": [
+  {
+   "id": "h3_kit_tower_chained_effect",
+   "cloneOf": "minos_debuff",
+   "name": "Chained",
+   "text": "-1 Speed.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "tags": [
+     "negative",
+     "movementNegative"
+    ],
+    "data": {
+     "stats": {
+      "speed": -1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_tower_loosened_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Loosened Plates",
+   "text": "-1 Defence.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "defence": -1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_tower_wish_might_effect",
+   "cloneOf": "sunlightCavalry_buff_1",
+   "name": "Wish of Might",
+   "text": "+4 Attack.",
+   "set": {
+    "icon": "skill_tactics",
+    "tags": [
+     "positive"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "offence": 4
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_tower_wish_shelter_effect",
+   "cloneOf": "sunlightCavalry_buff_1",
+   "name": "Wish of Shelter",
+   "text": "Takes -20% Damage.",
+   "set": {
+    "icon": "sub_skill_resistance_1_icon",
+    "tags": [
+     "positive"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "inAllDmgMod": -0.2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_tower_wish_effect",
+   "cloneOf": "sunlightCavalry_buff_1",
+   "name": "Wish",
+   "text": "+4 Attack.",
+   "set": {
+    "icon": "skill_tactics",
+    "tags": [
+     "positive"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "offence": 4
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_tower_wish_haste_effect",
+   "cloneOf": "sunlightCavalry_buff_1",
+   "name": "Wish of Haste",
+   "text": "+2 Initiative.",
+   "set": {
+    "icon": "magic_haste_effect_icon",
+    "tags": [
+     "positive"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "initiative": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_tower_perch_30_effect",
+   "cloneOf": "sunlightCavalry_buff_1",
+   "name": "Perch",
+   "text": "+30% Damage.",
+   "set": {
+    "icon": "magic_sharp_edge_effect_icon",
+    "tags": [
+     "positive"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.3
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_tower_perch_40_effect",
+   "cloneOf": "sunlightCavalry_buff_1",
+   "name": "Perch",
+   "text": "+40% Damage.",
+   "set": {
+    "icon": "magic_sharp_edge_effect_icon",
+    "tags": [
+     "positive"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.4
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_tower_granite_riposte_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Granite Riposte",
+   "text": "-25% Damage.",
+   "set": {
+    "icon": "medusa_stone_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "outAllDmgMod": -0.25
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_tower_momentum_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Gathering Momentum",
+   "text": "+2 Attack for each round of battle, up to +10.",
+   "set": {
+    "hidden": false,
+    "addition": "duration",
+    "canDispel": false,
+    "data": {
+     "stats": {
+      "offence": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_tower_momentum_2_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Gathering Momentum",
+   "text": "+2 Attack for each round of battle, up to +10.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "canDispel": false,
+    "data": {
+     "stats": {
+      "offence": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_tower_momentum_3_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Gathering Momentum",
+   "text": "+2 Attack for each round of battle, up to +10.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "canDispel": false,
+    "data": {
+     "stats": {
+      "offence": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_tower_momentum_4_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Gathering Momentum",
+   "text": "+2 Attack for each round of battle, up to +10.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "canDispel": false,
+    "data": {
+     "stats": {
+      "offence": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_tower_momentum_5_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Gathering Momentum",
+   "text": "+2 Attack for each round of battle, up to +10.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "canDispel": false,
+    "data": {
+     "stats": {
+      "offence": 2
+     }
+    }
+   }
+  }
+ ],
+ "units": {
+  "h3_gremlin": {
+   "role": "base",
+   "stats": {
+    "hp": 10,
+    "offence": 3,
+    "defence": 3,
+    "damageMin": 1,
+    "damageMax": 4,
+    "speed": 4,
+    "initiative": 4
+   },
+   "gold": 35,
+   "squadValue": 73,
+   "kit": [
+    {
+     "k": "melee_strike",
+     "focus": 1,
+     "cd": 1,
+     "mult": 1.0,
+     "counter": true,
+     "buff": "h3_kit_tower_chained_effect",
+     "duration": 2,
+     "name": "Ball and Chain",
+     "text": "Performs a Melee attack. The target has -1 Speed until the end of the next round."
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_gremlin_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 11,
+    "offence": 4,
+    "defence": 3,
+    "damageMin": 2,
+    "damageMax": 5,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 40,
+   "squadValue": 101,
+   "powerTarget": 1.03,
+   "kit": [
+    {
+     "k": "runtime",
+     "rule": "hit_this_round",
+     "percent": 10,
+     "cap": 30,
+     "offMult": 1.08,
+     "name": "Swarm Fire",
+     "text": "Deals +10% Damage to a target for each other friendly stack that has damaged it this round, up to +30%."
+    },
+    {
+     "k": "shot",
+     "focus": 1,
+     "cd": 1,
+     "mult": 0.75,
+     "counter": false,
+     "buff": "h3_kit_tower_chained_effect",
+     "duration": 2,
+     "name": "Chain Toss",
+     "text": "Deals 75% basic attack Damage. The target has -1 Speed until the end of the next round."
+    }
+   ]
+  },
+  "h3_gremlin_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 14,
+    "offence": 4,
+    "defence": 4,
+    "damageMin": 2,
+    "damageMax": 5,
+    "speed": 5,
+    "initiative": 4
+   },
+   "gold": 40,
+   "squadValue": 101,
+   "powerTarget": 0.97,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_tower_loosened_effect",
+     "duration": 2,
+     "icon": "magic_shorten_shadow_effect_icon",
+     "name": "Sabotage",
+     "text": "Basic attacks and counterattacks give the target -1 Defence until the end of the next round."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_repair_active_ability_name"
+    }
+   ]
+  },
+  "h3_gargoyle": {
+   "role": "base",
+   "stats": {
+    "hp": 12,
+    "offence": 5,
+    "defence": 6,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 6,
+    "initiative": 6
+   },
+   "gold": 130,
+   "squadValue": 108,
+   "kit": [
+    {
+     "k": "tower_wait_buff",
+     "buff": "h3_kit_tower_perch_30_effect",
+     "duration": 2,
+     "offMult": 1.08,
+     "name": "Perch",
+     "text": "When this creature Waits or Defends, it deals +30% Damage until the end of its next turn."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_gargoyle_stunning_blow_name"
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_gargoyle_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 12,
+    "offence": 7,
+    "defence": 6,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 7,
+    "initiative": 8
+   },
+   "gold": 160,
+   "squadValue": 158,
+   "powerTarget": 0.97,
+   "kit": [
+    {
+     "k": "tower_wait_buff",
+     "buff": "h3_kit_tower_perch_40_effect",
+     "duration": 2,
+     "offMult": 1.1,
+     "name": "Perch",
+     "text": "When this creature Waits or Defends, it deals +40% Damage until the end of its next turn."
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_gargoyle_upg_stunning_blow_name"
+    }
+   ]
+  },
+  "h3_gargoyle_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 15,
+    "offence": 5,
+    "defence": 8,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 6,
+    "initiative": 6
+   },
+   "gold": 160,
+   "squadValue": 158,
+   "powerTarget": 1.03,
+   "kit": [
+    {
+     "k": "tower_wait_buff",
+     "buff": "h3_kit_tower_perch_30_effect",
+     "duration": 2,
+     "offMult": 1.08,
+     "name": "Perch",
+     "text": "When this creature Waits or Defends, it deals +30% Damage until the end of its next turn."
+    },
+    {
+     "k": "tower_counter_buff",
+     "buff": "h3_kit_tower_granite_riposte_effect",
+     "duration": 1,
+     "toughMult": 1.05,
+     "name": "Granite Riposte",
+     "text": "Counterattacks make the attacker deal -25% Damage until the end of the round."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_gargoyle_upg_alt_redesign_ability_name"
+    }
+   ]
+  },
+  "h3_golem": {
+   "role": "base",
+   "stats": {
+    "hp": 30,
+    "offence": 6,
+    "defence": 10,
+    "damageMin": 4,
+    "damageMax": 6,
+    "speed": 3,
+    "initiative": 3
+   },
+   "gold": 150,
+   "squadValue": 227,
+   "kit": [
+    {
+     "k": "resist",
+     "t": "magic_damage",
+     "v": -0.5,
+     "name": "Spell Damage Reduction",
+     "text": "Takes -50% Magic Damage."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_golem_repair_name"
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_golem_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 35,
+    "offence": 7,
+    "defence": 12,
+    "damageMin": 4,
+    "damageMax": 6,
+    "speed": 4,
+    "initiative": 4
+   },
+   "gold": 200,
+   "squadValue": 348,
+   "powerTarget": 1.03,
+   "kit": [
+    {
+     "k": "resist",
+     "t": "magic_damage",
+     "v": -0.75,
+     "name": "Spell Damage Reduction",
+     "text": "Takes -75% Magic Damage."
+    },
+    {
+     "k": "tower_round_ramp",
+     "buff": "h3_kit_tower_momentum_effect",
+     "duration": -1,
+     "escalate": {
+      "chain": [
+       "h3_kit_tower_momentum_2_effect",
+       "h3_kit_tower_momentum_3_effect",
+       "h3_kit_tower_momentum_4_effect",
+       "h3_kit_tower_momentum_5_effect"
+      ]
+     },
+     "offMult": 1.1,
+     "name": "Gathering Momentum",
+     "text": "At the start of each round, gains +2 Attack until the end of the battle, up to +10."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_golem_upg_repair_name"
+    }
+   ]
+  },
+  "h3_golem_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 32,
+    "offence": 8,
+    "defence": 11,
+    "damageMin": 5,
+    "damageMax": 7,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 200,
+   "squadValue": 348,
+   "powerTarget": 0.97,
+   "kit": [
+    {
+     "k": "resist",
+     "t": "magic_damage",
+     "v": -0.5,
+     "name": "Spell Damage Reduction",
+     "text": "Takes -50% Magic Damage."
+    },
+    {
+     "k": "stat_aura",
+     "radius": 1,
+     "target": "enemy",
+     "stats": {
+      "alwaysMinDmg": true
+     },
+     "toughMult": 1.06,
+     "name": "Lodestone Field",
+     "text": "Adjacent enemy creatures always deal minimum Damage."
+    },
+    {
+     "k": "tower_lodestone_draw",
+     "focus": 1,
+     "cd": 2,
+     "toughMult": 1.03,
+     "name": "Lodestone Draw",
+     "text": "Moves every negative effect on friendly creatures within 2 hexes onto this creature. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_mage": {
+   "role": "base",
+   "stats": {
+    "hp": 30,
+    "offence": 9,
+    "defence": 8,
+    "damageMin": 5,
+    "damageMax": 8,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 350,
+   "squadValue": 284,
+   "kit": [
+    {
+     "k": "tower_battle_caster",
+     "name": "Battle Caster",
+     "text": "Ranged attacks deal full Damage at any range and adjacent enemies do not stop it from shooting. Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "tower_channeler",
+     "v": 1,
+     "name": "Magic Channeler",
+     "text": "Friendly hero's spells cost -1 mana. This effect does not stack; only the strongest one is active."
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_mage_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 30,
+    "offence": 11,
+    "defence": 9,
+    "damageMin": 6,
+    "damageMax": 9,
+    "speed": 5,
+    "initiative": 8
+   },
+   "gold": 450,
+   "squadValue": 426,
+   "powerTarget": 0.99,
+   "kit": [
+    {
+     "k": "tower_battle_caster",
+     "name": "Battle Caster",
+     "text": "Ranged attacks deal full Damage at any range and adjacent enemies do not stop it from shooting. Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "tower_channeler",
+     "v": 2,
+     "name": "Magic Channeler",
+     "text": "Friendly hero's spells cost -2 mana. This effect does not stack; only the strongest one is active."
+    },
+    {
+     "k": "runtime",
+     "rule": "spell_echo",
+     "percent": 50,
+     "perRound": 1,
+     "offMult": 1.08,
+     "name": "Arcane Volley",
+     "text": "Once per round, when the friendly hero casts a spell on an enemy creature, this creature also shoots that creature for 50% Damage."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_mage_upg_silence_ability_name"
+    }
+   ]
+  },
+  "h3_mage_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 30,
+    "offence": 12,
+    "defence": 8,
+    "damageMin": 5,
+    "damageMax": 8,
+    "speed": 4,
+    "initiative": 7
+   },
+   "gold": 450,
+   "squadValue": 426,
+   "powerTarget": 1.03,
+   "kit": [
+    {
+     "k": "double_strike",
+     "mode": "shoot"
+    },
+    {
+     "k": "sharpshooter"
+    },
+    {
+     "k": "tower_channeler",
+     "v": 1,
+     "name": "Magic Channeler",
+     "text": "Friendly hero's spells cost -1 mana. This effect does not stack; only the strongest one is active."
+    }
+   ]
+  },
+  "h3_genie": {
+   "role": "base",
+   "stats": {
+    "hp": 73,
+    "offence": 13,
+    "defence": 12,
+    "damageMin": 14,
+    "damageMax": 20,
+    "speed": 7,
+    "initiative": 8
+   },
+   "gold": 550,
+   "squadValue": 657,
+   "kit": [
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_genies",
+     "v": 0.5,
+     "targets": [
+      "h3_efreeti",
+      "h3_efreeti_upg",
+      "h3_efreeti_upg_alt"
+     ],
+     "name": "Hatred of Efreet",
+     "text": "Deals +50% Damage to Efreet, Efreet Sultans and their kin."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_genie_redesign_ability_name"
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_genie_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 74,
+    "offence": 15,
+    "defence": 14,
+    "damageMin": 15,
+    "damageMax": 21,
+    "speed": 8,
+    "initiative": 10
+   },
+   "gold": 600,
+   "squadValue": 1115,
+   "powerTarget": 0.97,
+   "kit": [
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_genies",
+     "v": 0.5,
+     "targets": [
+      "h3_efreeti",
+      "h3_efreeti_upg",
+      "h3_efreeti_upg_alt"
+     ],
+     "name": "Hatred of Efreet",
+     "text": "Deals +50% Damage to Efreet, Efreet Sultans and their kin."
+    },
+    {
+     "k": "tower_ally_buff",
+     "focus": 2,
+     "cd": 1,
+     "buff": "h3_kit_tower_wish_effect",
+     "duration": 2,
+     "rotate": [
+      "h3_kit_tower_wish_might_effect",
+      "h3_kit_tower_wish_shelter_effect",
+      "h3_kit_tower_wish_haste_effect"
+     ],
+     "icon": "skill_tactics",
+     "name": "Wish",
+     "text": "Grants another friendly creature a wish until the end of the next round. The wish changes with every use: first +4 Attack, then -20% Damage taken, then +2 Initiative, then +4 Attack again. Does not end this creature's turn."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_genie_upg_redesign_ability_name"
+    }
+   ]
+  },
+  "h3_genie_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 80,
+    "offence": 14,
+    "defence": 12,
+    "damageMin": 14,
+    "damageMax": 20,
+    "speed": 7,
+    "initiative": 9
+   },
+   "gold": 600,
+   "squadValue": 1115,
+   "powerTarget": 1.03,
+   "kit": [
+    {
+     "k": "double_strike",
+     "mode": "melee"
+    },
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_genies",
+     "v": 0.5,
+     "targets": [
+      "h3_efreeti",
+      "h3_efreeti_upg",
+      "h3_efreeti_upg_alt"
+     ],
+     "name": "Hatred of Efreet",
+     "text": "Deals +50% Damage to Efreet, Efreet Sultans and their kin."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_genie_upg_alt_redesign_ability_name"
+    }
+   ]
+  },
+  "h3_naga": {
+   "role": "base",
+   "stats": {
+    "hp": 125,
+    "offence": 20,
+    "defence": 20,
+    "damageMin": 24,
+    "damageMax": 24,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 1100,
+   "squadValue": 1128,
+   "kit": [
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "card",
+     "icon": "sub_skill_assault_1_icon",
+     "name": "Six Blades",
+     "text": "Always deals fixed Damage: its minimum and maximum Damage are equal."
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_naga_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 135,
+    "offence": 24,
+    "defence": 21,
+    "damageMin": 29,
+    "damageMax": 29,
+    "speed": 6,
+    "initiative": 8
+   },
+   "gold": 1600,
+   "squadValue": 2089,
+   "powerTarget": 1.0,
+   "kit": [
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "card",
+     "icon": "sub_skill_assault_1_icon",
+     "name": "Six Blades",
+     "text": "Always deals fixed Damage: its minimum and maximum Damage are equal."
+    },
+    {
+     "k": "runtime",
+     "rule": "same_target_streak",
+     "percent": 15,
+     "cap": 45,
+     "offMult": 1.08,
+     "name": "Relentless Blades",
+     "text": "Each attack on the same enemy stack as its previous attack deals +15% more Damage, up to +45%. Attacking another stack resets it."
+    }
+   ]
+  },
+  "h3_naga_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 155,
+    "offence": 21,
+    "defence": 23,
+    "damageMin": 27,
+    "damageMax": 27,
+    "speed": 7,
+    "initiative": 7
+   },
+   "gold": 1600,
+   "squadValue": 2089,
+   "powerTarget": 1.0,
+   "kit": [
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "card",
+     "icon": "sub_skill_assault_1_icon",
+     "name": "Six Blades",
+     "text": "Always deals fixed Damage: its minimum and maximum Damage are equal."
+    },
+    {
+     "k": "card",
+     "icon": "sub_skill_assault_2_icon",
+     "name": "Three-Headed Attack",
+     "text": "Deals Damage to the target and any creature on the two hexes behind it."
+    }
+   ]
+  },
+  "h3_giant": {
+   "role": "base",
+   "stats": {
+    "hp": 280,
+    "offence": 28,
+    "defence": 25,
+    "damageMin": 45,
+    "damageMax": 65,
+    "speed": 6,
+    "initiative": 8
+   },
+   "gold": 2400,
+   "squadValue": 3426,
+   "kit": [
+    {
+     "k": "card",
+     "icon": "magic_nairas_kiss_effect_icon",
+     "name": "Mind Immunity",
+     "text": "Immune to Sleep, Silence and Berserk effects."
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_giant_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 300,
+    "offence": 31,
+    "defence": 30,
+    "damageMin": 50,
+    "damageMax": 70,
+    "speed": 6,
+    "initiative": 11
+   },
+   "gold": 4000,
+   "squadValue": 7267,
+   "powerTarget": 1.03,
+   "kit": [
+    {
+     "k": "card",
+     "icon": "magic_nairas_kiss_effect_icon",
+     "name": "Mind Immunity",
+     "text": "Immune to Sleep, Silence and Berserk effects."
+    },
+    {
+     "k": "tower_battle_caster",
+     "name": "Lightning Hurler",
+     "text": "Ranged attacks deal full Damage at any range and adjacent enemies do not stop it from shooting. Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_titans",
+     "v": 0.5,
+     "targets": [
+      "h3_red_dragon_upg",
+      "h3_red_dragon_upg_alt"
+     ],
+     "name": "Hatred of Black Dragons",
+     "text": "Deals +50% Damage to Black Dragons and their kin."
+    }
+   ]
+  },
+  "h3_giant_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 330,
+    "offence": 35,
+    "defence": 28,
+    "damageMin": 62,
+    "damageMax": 75,
+    "speed": 7,
+    "initiative": 10
+   },
+   "gold": 4000,
+   "squadValue": 7267,
+   "powerTarget": 0.97,
+   "kit": [
+    {
+     "k": "card",
+     "icon": "magic_nairas_kiss_effect_icon",
+     "name": "Mind Immunity",
+     "text": "Immune to Sleep, Silence and Berserk effects."
+    },
+    {
+     "k": "hatred",
+     "tag": "h3_kit_hated_by_titans",
+     "v": 0.5,
+     "targets": [
+      "h3_red_dragon_upg",
+      "h3_red_dragon_upg_alt"
+     ],
+     "name": "Hatred of Black Dragons",
+     "text": "Deals +50% Damage to Black Dragons and their kin."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_giant_upg_alt_redesign_ability_name"
+    }
+   ]
+  }
+ }
+}

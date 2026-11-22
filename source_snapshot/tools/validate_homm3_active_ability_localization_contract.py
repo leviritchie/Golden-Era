@@ -375,6 +375,10 @@ def validate_audited_effect_contracts(
             return None
         return rows[index]
 
+    def designed(logic: dict[str, Any] | None) -> bool:
+        # Kit owned by custom_factions/unit_designs: validate_homm3_unit_design_table.py pins it instead.
+        return isinstance(logic, dict) and isinstance(logic.get("xHomm3UnitDesign"), dict)
+
     def ability_cost(row: dict[str, Any] | None, expected: int, label: str) -> None:
         if row is not None:
             _expect_equal(row.get("energyLevel"), expected, f"{label} Focus cost", issues)
@@ -417,6 +421,8 @@ def validate_audited_effect_contracts(
     ):
         member = f"DB/units/units_views/{faction}/{unit_sid}_v.json"
         view, logic = unit(member)
+        if designed(logic):
+            continue
         ability = slot_row(logic, "abilities", 0, label)
         _buff_id(ability, label, "magic_shorten_shadow_effect_1", issues)
         text = _view_description(view, "abilities", 0, language_rows)
@@ -443,17 +449,20 @@ def validate_audited_effect_contracts(
     _expect_taunt_radius_text(_view_description(taunt_view, "abilities", 0, language_rows), radius, "Earthshatter", issues)
 
     goblin_view, goblin_logic = unit("DB/units/units_views/homm3_stronghold/h3_goblin_upg_v.json")
+    # The 2026-11-21 ability variety pass removed the Goblin's Alert card; the text check applies only while the
+    # unit still counterattacks twice.
     counters = _nested_value(goblin_logic, ("stats", "numCounters"))
-    _expect_equal(counters, 2, "Stronghold Goblin Alert I configured counters per round", issues)
     passive_text = " ".join(
         filter(None, (_view_description(goblin_view, "passives", index, language_rows) for index in range(len(goblin_view.get("passives", [])))))
     ) if isinstance(goblin_view, dict) and isinstance(goblin_view.get("passives"), list) else ""
-    if re.search(r"counterattack.{0,30}(?:twice|2)", passive_text, re.IGNORECASE) is None:
+    if isinstance(counters, (int, float)) and counters >= 2 and re.search(r"counterattack.{0,30}(?:twice|2)", passive_text, re.IGNORECASE) is None:
         issues.append("Stronghold Goblin Alert I: passive text does not disclose two counterattacks per round")
 
     for unit_sid, expected_fraction in (("h3_behemoth", 0.4), ("h3_behemoth_upg", 0.8), ("h3_behemoth_upg_alt", 0.6)):
         member = f"DB/units/units_views/homm3_stronghold/{unit_sid}_v.json"
         view, logic = unit(member)
+        if designed(logic):
+            continue
         passives = logic.get("passives") if isinstance(logic, dict) else None
         armor_pen = next(
             (_nested_value(row, ("data", "stats", "armorPen")) for row in passives if isinstance(row, dict) and _nested_value(row, ("data", "stats", "armorPen")) is not None),
@@ -471,10 +480,11 @@ def validate_audited_effect_contracts(
             issues.append(f"{unit_sid} Armor Rend: description incorrectly names Attack")
 
     dragon_view, dragon_logic = unit("DB/units/units_views/homm3_fortress/h3_wyvern_upg_alt_v.json")
-    dragon = slot_row(dragon_logic, "abilities", 0, "Dragonflight")
-    _expect_equal(_nested_value(dragon, ("damageDealer", "damageTarget_")), "all", "Dragonflight configured damage target", issues)
-    _expect_equal(_nested_value(dragon, ("damageDealer", "affectTargetParams", "castTarget_")), "noself", "Dragonflight configured affected target", issues)
-    _expect_terms(_view_description(dragon_view, "abilities", 0, language_rows), ("all nearby creatures", "including allies"), "Dragonflight", issues)
+    if not designed(dragon_logic):
+        dragon = slot_row(dragon_logic, "abilities", 0, "Dragonflight")
+        _expect_equal(_nested_value(dragon, ("damageDealer", "damageTarget_")), "all", "Dragonflight configured damage target", issues)
+        _expect_equal(_nested_value(dragon, ("damageDealer", "affectTargetParams", "castTarget_")), "noself", "Dragonflight configured affected target", issues)
+        _expect_terms(_view_description(dragon_view, "abilities", 0, language_rows), ("all nearby creatures", "including allies"), "Dragonflight", issues)
 
     dragonfly_view, dragonfly_logic = unit("DB/units/units_views/homm3_fortress/h3_serpent_fly_upg_v.json")
     dispel = slot_row(dragonfly_logic, "abilities", 0, "Dragon Fly Weakening Dispel")
@@ -483,14 +493,15 @@ def validate_audited_effect_contracts(
     _expect_terms(_view_description(dragonfly_view, "abilities", 0, language_rows), ("strike for 50% normal damage",), "Dragon Fly Weakening Dispel", issues)
 
     ironclad_view, ironclad_logic = unit("DB/units/units_views/homm3_factory/h3_dreadnought_upg_alt_v.json")
-    ironclad = slot_row(ironclad_logic, "abilities", 0, "Ironclad Fortress Mode")
-    _buff_id(ironclad, "Ironclad Fortress Mode", "magic_carapace_effect_0", issues)
-    if ironclad is not None:
-        _expect_equal(_nested_value(ironclad, ("damageDealer", "buff", "duration")), 1, "Ironclad Fortress Mode configured duration", issues)
-    ironclad_text = _view_description(ironclad_view, "abilities", 0, language_rows) or ""
-    _expect_terms(ironclad_text, ("Carapace", "barrier"), "Ironclad Fortress Mode", issues)
-    if re.search(r"\b(stationary|bunker|immobile|immobilized|cannot move)\b", ironclad_text, re.IGNORECASE):
-        issues.append("Ironclad Fortress Mode: description promises an unconfigured movement lock")
+    if not designed(ironclad_logic):
+        ironclad = slot_row(ironclad_logic, "abilities", 0, "Ironclad Fortress Mode")
+        _buff_id(ironclad, "Ironclad Fortress Mode", "magic_carapace_effect_0", issues)
+        if ironclad is not None:
+            _expect_equal(_nested_value(ironclad, ("damageDealer", "buff", "duration")), 1, "Ironclad Fortress Mode configured duration", issues)
+        ironclad_text = _view_description(ironclad_view, "abilities", 0, language_rows) or ""
+        _expect_terms(ironclad_text, ("Carapace", "barrier"), "Ironclad Fortress Mode", issues)
+        if re.search(r"\b(stationary|bunker|immobile|immobilized|cannot move)\b", ironclad_text, re.IGNORECASE):
+            issues.append("Ironclad Fortress Mode: description promises an unconfigured movement lock")
 
     fairy_view, fairy_logic = unit("DB/units/units_views/neutral/h3_faerie_dragon_v.json")
     _expect_equal(_nested_value(fairy_logic, ("stats", "moveType")), "fly", "Faerie Dragon configured move type", issues)

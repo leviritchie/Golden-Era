@@ -134,6 +134,8 @@ internal static class Homm3TownScene3d
 	/// <summary>Hex/Lit's per-material weight for the ContourLines pass (installed shader default 1).</summary>
 	private const string HexLitContourOpacityProperty = "_ContourLinesOpacity";
 	private static readonly List<Material> OwnedSkyMaterials = new();
+	// Fraction whose pieces (environment, layers, sky materials, pan clone) the root currently holds; null = none.
+	private static string _rootFraction;
 	private static Camera _farClipCamera;
 	private static float _farClipOriginal;
 	// SSR water: the camera whose depthTextureMode we widened, and its mode before.
@@ -340,6 +342,11 @@ internal static class Homm3TownScene3d
 			root = new GameObject(RootName);
 			SceneManager.MoveGameObjectToScene(root, scene);
 		}
+		else if (!string.Equals(_rootFraction, fraction, StringComparison.Ordinal))
+		{
+			ResetRootForFraction(root, fraction);
+		}
+		_rootFraction = fraction;
 		EnsureFraming(camera, catalog);
 		PlaceRoot(root.transform, camera, catalog);
 		if (catalog.ClothByPiece.Count > 0)
@@ -350,6 +357,33 @@ internal static class Homm3TownScene3d
 			EnsureCameraDepthTexture(camera);
 		return root;
 	}
+
+	/// <summary>
+	/// Town-to-town switch inside the city screen: the root survives (no suspend/Clear in between), so everything under
+	/// it belongs to the previous fraction. Without this the old environment (sky, terrain) stayed under the new town's
+	/// buildings, because EnsureEnvironment reuses an existing instance by name. Destroy is deferred to end of frame, so
+	/// each child is renamed and deactivated now or Find and the pick occluders would still see it during this apply.
+	/// The pan clone carries the old catalog's rest pose and pan scale, so it is restored and EnsureFraming re-clones.
+	/// </summary>
+	private static void ResetRootForFraction(GameObject root, string fraction)
+	{
+		var count = root.transform.childCount;
+		for (var i = count - 1; i >= 0; i--)
+		{
+			var child = root.transform.GetChild(i);
+			if (child == null)
+				continue;
+			child.name = child.name + StaleSuffix;
+			child.gameObject.SetActive(false);
+			UnityEngine.Object.Destroy(child.gameObject);
+		}
+		DestroyOwnedSkyMaterials();
+		RestorePanSettings();
+		Plugin.LogSource?.LogInfo(LogPrefix + "town switch '" + (_rootFraction ?? "<unknown>") + "' -> '" + fraction
+			+ "': discarded " + count + " scene piece(s) of the previous town.");
+	}
+
+	private const string StaleSuffix = ".stale";
 
 	/// <summary>
 	/// SSR water reads _CameraDepthTexture: request it on the town camera while the scene is shown (restored in Clear).
@@ -531,6 +565,7 @@ internal static class Homm3TownScene3d
 		var catalog = Catalogs[fraction];
 		if (!catalog.FullScene3d)
 			throw new InvalidOperationException(LogPrefix + "'" + fraction + "' is not a full-3D catalog.");
+		// EnsureRoot empties the root when the town's fraction changes, so a kept environment is this fraction's.
 		var existing = root.transform.Find(EnvironmentInstanceName);
 		if (existing != null)
 			return existing.gameObject;
@@ -1021,10 +1056,16 @@ internal static class Homm3TownScene3d
 			o.Settings.lightZenithAngle.value = zenith;
 			o.Settings.lightAzimuthAngle.overrideState = true;
 			o.Settings.lightAzimuthAngle.value = azimuth;
+			// Written both ways: a town switch keeps the volumes, so a fog-off town must not leave fog off for the next.
 			if (catalog.FogOff)
 			{
 				o.Settings.fogEnabled.overrideState = true;
 				o.Settings.fogEnabled.value = false;
+			}
+			else
+			{
+				o.Settings.fogEnabled.overrideState = o.FogState;
+				o.Settings.fogEnabled.value = o.Fog;
 			}
 		}
 
@@ -1033,17 +1074,20 @@ internal static class Homm3TownScene3d
 		{
 			fill = new GameObject(FillLightName);
 			SceneManager.MoveGameObjectToScene(fill, scene);
-			var light = fill.AddComponent<Light>();
-			light.type = LightType.Directional;
-			light.shadows = LightShadows.None;
-			var c = catalog.FillLinear;
-			var intensity = Mathf.Max(c.r, Mathf.Max(c.g, c.b));
-			if (intensity <= 0f)
-				throw new InvalidOperationException(LogPrefix + "fill light colour is black.");
-			// lightsUseLinearIntensity: final = color.linear * intensity.
-			light.color = new Color(c.r / intensity, c.g / intensity, c.b / intensity, 1f).gamma;
-			light.intensity = intensity;
+			var created = fill.AddComponent<Light>();
+			created.type = LightType.Directional;
+			created.shadows = LightShadows.None;
 		}
+		// Colour every apply, not only at creation: the fill light survives a town switch.
+		var light = fill.GetComponent<Light>()
+			?? throw new InvalidOperationException(LogPrefix + "fill light '" + FillLightName + "' has no Light.");
+		var c = catalog.FillLinear;
+		var intensity = Mathf.Max(c.r, Mathf.Max(c.g, c.b));
+		if (intensity <= 0f)
+			throw new InvalidOperationException(LogPrefix + "fill light colour is black.");
+		// lightsUseLinearIntensity: final = color.linear * intensity.
+		light.color = new Color(c.r / intensity, c.g / intensity, c.b / intensity, 1f).gamma;
+		light.intensity = intensity;
 		fill.transform.rotation = Quaternion.LookRotation(CameraToWorld(frame, catalog.FillLocalDir), Vector3.up);
 	}
 
@@ -1130,7 +1174,12 @@ internal static class Homm3TownScene3d
 				var root = roots[i];
 				if (root != null && (string.Equals(root.name, RootName, StringComparison.Ordinal)
 					|| string.Equals(root.name, FillLightName, StringComparison.Ordinal)))
+				{
+					// Destroy is deferred: rename and deactivate so a same-frame re-apply cannot FindRoot the dying root.
+					root.name = root.name + StaleSuffix;
+					root.SetActive(false);
 					UnityEngine.Object.Destroy(root);
+				}
 			}
 		}
 		for (var i = 0; i < VolumeOverrides.Count; i++)
@@ -1158,6 +1207,12 @@ internal static class Homm3TownScene3d
 		_farClipCamera = null;
 		RestoreCameraDepthTexture();
 		RestoreFraming();
+		DestroyOwnedSkyMaterials();
+		_rootFraction = null;
+	}
+
+	private static void DestroyOwnedSkyMaterials()
+	{
 		for (var i = 0; i < OwnedSkyMaterials.Count; i++)
 		{
 			if (OwnedSkyMaterials[i] != null)

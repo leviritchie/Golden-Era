@@ -1,0 +1,1172 @@
+{
+ "schemaVersion": 1,
+ "faction": "homm3_stronghold",
+ "approval": "Owner, 2026-11-20 goal: all factions, autonomous (no per-faction card review).",
+ "tradeAxis": "Opener (role striker: reaches melee or acts from where it stands on turn one, so an attack chain starts and never has to pause) versus Finisher (role ward: slower, higher Attack, a heavy Attack-scaling strike that is worth most late in a round). Both are useful in any army; no card reads the faction ability.",
+ "buffFile": "DB/buffs/units_buffs_nature.json",
+ "buffs": [
+  {
+   "id": "h3_kit_stronghold_hamstring_effect",
+   "cloneOf": "minos_debuff",
+   "name": "Hamstrung",
+   "text": "-2 Speed.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "data": {
+     "stats": {
+      "speed": -2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_crippled_effect",
+   "cloneOf": "minos_debuff",
+   "name": "Crippled",
+   "text": "-3 Speed.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "data": {
+     "stats": {
+      "speed": -3
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_gored_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Gored",
+   "text": "Takes +15% Damage.",
+   "set": {
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "inAllDmgMod": 0.15
+     }
+    },
+    "icon": "magic_shorten_shadow_effect_icon"
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_cowed_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Cowed",
+   "text": "-4 Attack.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "offence": -4
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_blood_rage_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Blood Rage",
+   "text": "+3 Attack.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "hydra_selfbuff_icon",
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "offence": 3
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_bloodlust_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Bloodlust",
+   "text": "+6 Attack.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "blade_dancer_buff_icon",
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "offence": 6
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_gang_mark_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Gang Mark",
+   "text": "-2 Defence.",
+   "set": {
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "defence": -2
+     }
+    },
+    "icon": "magic_shorten_shadow_effect_icon"
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_cripple_1_effect",
+   "cloneOf": "minos_debuff",
+   "name": "Crippled",
+   "text": "-1 Speed.",
+   "set": {
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "speed": -1
+     }
+    },
+    "ignoreDurationBuffs": true
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_cripple_2_effect",
+   "cloneOf": "minos_debuff",
+   "name": "Crippled",
+   "text": "-1 Speed.",
+   "set": {
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "speed": -1
+     }
+    },
+    "ignoreDurationBuffs": true
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_cripple_3_effect",
+   "cloneOf": "minos_debuff",
+   "name": "Crippled",
+   "text": "-1 Speed.",
+   "set": {
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "speed": -1
+     }
+    },
+    "ignoreDurationBuffs": true
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_expendable_effect",
+   "cloneOf": "sunlightCavalry_buff_1",
+   "name": "Expendable",
+   "text": "+2 Attack.",
+   "set": {
+    "tags": [
+     "positive"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "offence": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_surprise_attack_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Surprise Attack",
+   "text": "Deals +30% Damage. Enemies do not counterattack.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "assassin_buff_icon",
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.3
+     },
+     "sequenceEffect": "disable_counter"
+    }
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_war_drums_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "War Drums",
+   "text": "+1 Speed.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "sunlightCavalry_buff_icon",
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "speed": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_tailwind_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Tailwind",
+   "text": "+2 Speed.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "magic_favorable_wind_effect_icon",
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "speed": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_tailwind_strong_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Tailwind",
+   "text": "+3 Speed, +2 Initiative.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "magic_favorable_wind_effect_icon",
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "speed": 3,
+      "initiative": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_gathering_storm_1_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Gathering Storm",
+   "text": "Deals +10% Damage.",
+   "set": {
+    "hidden": false,
+    "infinite": true,
+    "canDispel": false,
+    "tags": [
+     "positive",
+     "h3_kit_gathering_storm"
+    ],
+    "isPositive": true,
+    "icon": "magic_favorable_wind_effect_icon",
+    "maxDuration": 99,
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_gathering_storm_2_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Gathering Storm",
+   "text": "Deals +10% Damage.",
+   "set": {
+    "hidden": false,
+    "infinite": true,
+    "canDispel": false,
+    "tags": [
+     "positive",
+     "h3_kit_gathering_storm"
+    ],
+    "isPositive": true,
+    "icon": "magic_favorable_wind_effect_icon",
+    "maxDuration": 99,
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_gathering_storm_3_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Gathering Storm",
+   "text": "Deals +10% Damage.",
+   "set": {
+    "hidden": false,
+    "infinite": true,
+    "canDispel": false,
+    "tags": [
+     "positive",
+     "h3_kit_gathering_storm"
+    ],
+    "isPositive": true,
+    "icon": "magic_favorable_wind_effect_icon",
+    "maxDuration": 99,
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_stronghold_rampage_spent_effect",
+   "cloneOf": "unspeakable_debuff",
+   "name": "Rampage",
+   "text": "Rampage is spent for this battle.",
+   "set": {
+    "infinite": true,
+    "hidden": true,
+    "canDispel": false,
+    "keepOnDeath": false,
+    "maxDuration": 99,
+    "data": {
+     "stats": {
+      "maxAddedApPerRound": -99
+     }
+    }
+   }
+  }
+ ],
+ "units": {
+  "h3_goblin": {
+   "role": "base",
+   "stats": {
+    "hp": 6,
+    "offence": 3,
+    "defence": 2,
+    "damageMin": 2,
+    "damageMax": 3,
+    "speed": 4,
+    "initiative": 4
+   },
+   "gold": 40,
+   "squadValue": 51,
+   "kit": [
+    {
+     "k": "stronghold_death_rally",
+     "buff": "h3_kit_stronghold_expendable_effect",
+     "duration": 2,
+     "name": "Expendable",
+     "text": "When this stack is destroyed, adjacent friendly creatures gain +2 Attack until the end of the next round."
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_goblin_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 7,
+    "offence": 5,
+    "defence": 4,
+    "damageMin": 2,
+    "damageMax": 3,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 50,
+   "squadValue": 68,
+   "kit": [
+    {
+     "k": "stronghold_death_rally",
+     "buff": "h3_kit_stronghold_expendable_effect",
+     "duration": 2,
+     "name": "Expendable",
+     "text": "When this stack is destroyed, adjacent friendly creatures gain +2 Attack until the end of the next round."
+    },
+    {
+     "k": "stronghold_attack_rider",
+     "buff": "h3_kit_stronghold_gang_mark_effect",
+     "duration": 1,
+     "offMult": 1.08,
+     "name": "Gang Mark",
+     "text": "Basic attacks give the target -2 Defence until the end of the round. Does not stack."
+    }
+   ]
+  },
+  "h3_goblin_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 7,
+    "offence": 3,
+    "defence": 3,
+    "damageMin": 2,
+    "damageMax": 3,
+    "speed": 6,
+    "initiative": 6
+   },
+   "gold": 50,
+   "squadValue": 68,
+   "kit": [
+    {
+     "k": "stronghold_death_rally",
+     "buff": "h3_kit_stronghold_expendable_effect",
+     "duration": 2,
+     "name": "Expendable",
+     "text": "When this stack is destroyed, adjacent friendly creatures gain +2 Attack until the end of the next round."
+    },
+    {
+     "k": "stronghold_opening_buff",
+     "buff": "h3_kit_stronghold_surprise_attack_effect",
+     "duration": 1,
+     "offMult": 1.05,
+     "name": "Surprise Attack",
+     "text": "During the first round of battle, this creature deals +30% Damage and enemies do not counterattack its attacks."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_goblin_ability_2_name"
+    }
+   ]
+  },
+  "h3_wolf_rider": {
+   "role": "base",
+   "stats": {
+    "hp": 12,
+    "offence": 6,
+    "defence": 3,
+    "damageMin": 3,
+    "damageMax": 4,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 100,
+   "squadValue": 106,
+   "kit": [
+    {
+     "k": "runtime",
+     "rule": "adjacency",
+     "mode": "flank",
+     "percent": 20,
+     "offMult": 1.12,
+     "name": "Pack Hunt",
+     "text": "Deals +20% Damage to an enemy that is adjacent to another friendly creature."
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_wolf_rider_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 12,
+    "offence": 7,
+    "defence": 3,
+    "damageMin": 3,
+    "damageMax": 4,
+    "speed": 7,
+    "initiative": 8
+   },
+   "gold": 140,
+   "squadValue": 169,
+   "kit": [
+    {
+     "k": "runtime",
+     "rule": "adjacency",
+     "mode": "flank",
+     "percent": 20,
+     "offMult": 1.12,
+     "name": "Pack Hunt",
+     "text": "Deals +20% Damage to an enemy that is adjacent to another friendly creature."
+    },
+    {
+     "k": "double_strike",
+     "mode": "melee"
+    }
+   ]
+  },
+  "h3_wolf_rider_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 12,
+    "offence": 8,
+    "defence": 5,
+    "damageMin": 3,
+    "damageMax": 4,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 140,
+   "squadValue": 169,
+   "kit": [
+    {
+     "k": "runtime",
+     "rule": "adjacency",
+     "mode": "flank",
+     "percent": 20,
+     "offMult": 1.12,
+     "name": "Pack Hunt",
+     "text": "Deals +20% Damage to an enemy that is adjacent to another friendly creature."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 1,
+     "cd": 1,
+     "mult": 1.0,
+     "counter": true,
+     "buff": "h3_kit_stronghold_gored_effect",
+     "duration": 2,
+     "name": "Gore",
+     "text": "Performs a Melee attack. The target takes +15% Damage from all sources until the end of the next round."
+    }
+   ]
+  },
+  "h3_orc": {
+   "role": "base",
+   "stats": {
+    "hp": 26,
+    "offence": 7,
+    "defence": 6,
+    "damageMin": 4,
+    "damageMax": 8,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 150,
+   "squadValue": 223,
+   "kit": [
+    {
+     "k": "shot",
+     "focus": 1,
+     "cd": 1,
+     "mult": 0.5,
+     "counter": false,
+     "buff": "h3_kit_stronghold_hamstring_effect",
+     "duration": 2,
+     "name": "Hamstring",
+     "text": "Performs a Ranged attack that deals 50% Damage. The target has -2 Speed until the end of the next round."
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_orc_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 30,
+    "offence": 8,
+    "defence": 6,
+    "damageMin": 4,
+    "damageMax": 9,
+    "speed": 4,
+    "initiative": 7
+   },
+   "gold": 165,
+   "squadValue": 343,
+   "kit": [
+    {
+     "k": "shot",
+     "focus": 2,
+     "cd": 1,
+     "mult": 1.0,
+     "counter": false,
+     "buff": "h3_kit_stronghold_crippled_effect",
+     "duration": 2,
+     "name": "Hamstring",
+     "text": "Performs a Ranged attack that deals full Damage. The target has -3 Speed until the end of the next round."
+    },
+    {
+     "k": "stronghold_shot",
+     "focus": 2,
+     "cd": 2,
+     "mult": 0.6,
+     "counter": false,
+     "mech": [
+      {
+       "mech": "reduce_counters",
+       "values": [
+        "99"
+       ]
+      }
+     ],
+     "name": "Pinning Volley",
+     "text": "Performs a Ranged attack that deals 60% Damage. The target cannot counterattack until the end of the round."
+    }
+   ]
+  },
+  "h3_orc_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 31,
+    "offence": 11,
+    "defence": 7,
+    "damageMin": 4,
+    "damageMax": 10,
+    "speed": 5,
+    "initiative": 5
+   },
+   "gold": 165,
+   "squadValue": 343,
+   "kit": [
+    {
+     "k": "when_damaged_self_buff",
+     "buff": "h3_kit_stronghold_blood_rage_effect",
+     "duration": 2,
+     "name": "Blood Rage",
+     "text": "Whenever this creature takes Damage, it gains +3 Attack until the end of the next round."
+    },
+    {
+     "k": "stronghold_attack_rider",
+     "buff": "h3_kit_stronghold_cripple_1_effect",
+     "duration": 2,
+     "escalate": {
+      "chain": [
+       "h3_kit_stronghold_cripple_2_effect",
+       "h3_kit_stronghold_cripple_3_effect"
+      ]
+     },
+     "offMult": 1.06,
+     "name": "Cripple",
+     "text": "Ranged attacks give the target -1 Speed until the end of the next round, stacking up to -3."
+    }
+   ]
+  },
+  "h3_ogre": {
+   "role": "base",
+   "stats": {
+    "hp": 50,
+    "offence": 12,
+    "defence": 8,
+    "damageMin": 8,
+    "damageMax": 13,
+    "speed": 3,
+    "initiative": 4
+   },
+   "gold": 300,
+   "squadValue": 329,
+   "kit": [
+    {
+     "k": "stronghold_strike",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "mech": [
+      {
+       "mech": "force_unit_cd",
+       "values": [
+        "0"
+       ]
+      }
+     ],
+     "name": "Clobber",
+     "text": "Performs a Melee attack. The target's abilities go on cooldown."
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_ogre_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 50,
+    "offence": 13,
+    "defence": 13,
+    "damageMin": 10,
+    "damageMax": 14,
+    "speed": 4,
+    "initiative": 7
+   },
+   "gold": 400,
+   "squadValue": 512,
+   "kit": [
+    {
+     "k": "stronghold_bloodlust",
+     "focus": 2,
+     "cd": 2,
+     "buff": "h3_kit_stronghold_bloodlust_effect",
+     "duration": 2,
+     "name": "Bloodlust",
+     "text": "Another friendly creature gains +6 Attack until the end of the next round. Does not end this creature's turn.",
+     "free": true
+    },
+    {
+     "k": "stronghold_opening_rally",
+     "buff": "h3_kit_stronghold_war_drums_effect",
+     "duration": 1,
+     "name": "War Drums",
+     "text": "At the start of battle, friendly creatures within 2 hexes gain +1 Speed until the end of the first round."
+    },
+    {
+     "k": "stronghold_strike",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "mech": [
+      {
+       "mech": "force_unit_cd",
+       "values": [
+        "0"
+       ]
+      }
+     ],
+     "name": "Clobber",
+     "text": "Performs a Melee attack. The target's abilities go on cooldown."
+    }
+   ]
+  },
+  "h3_ogre_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 50,
+    "offence": 15,
+    "defence": 9,
+    "damageMin": 8,
+    "damageMax": 13,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 400,
+   "squadValue": 512,
+   "kit": [
+    {
+     "k": "stronghold_strike",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "mech": [
+      {
+       "mech": "force_unit_cd",
+       "values": [
+        "0"
+       ]
+      }
+     ],
+     "name": "Clobber",
+     "text": "Performs a Melee attack. The target's abilities go on cooldown."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "name": "Pulverize",
+     "text": "Performs a Melee attack. Against an enemy that has no counterattack left this round, it deals +50% Damage."
+    },
+    {
+     "k": "runtime",
+     "rule": "counter_state",
+     "state": "left0",
+     "percent": 50,
+     "abilityOnly": true,
+     "offMult": 1.15,
+     "name": "Pulverize",
+     "nameSid": "h3_kit_ability_ogre_upg_alt_pulverize_name",
+     "descSid": "h3_kit_ability_ogre_upg_alt_pulverize_description"
+    }
+   ]
+  },
+  "h3_roc": {
+   "role": "base",
+   "stats": {
+    "hp": 70,
+    "offence": 15,
+    "defence": 13,
+    "damageMin": 13,
+    "damageMax": 19,
+    "speed": 6,
+    "initiative": 8
+   },
+   "gold": 600,
+   "squadValue": 667,
+   "kit": [
+    {
+     "k": "stronghold_self_trigger_buff",
+     "trigger": "unit_skip",
+     "buff": "h3_kit_stronghold_tailwind_effect",
+     "duration": 2,
+     "name": "Tailwind",
+     "text": "When it Defends, gains +2 Speed until the end of its next turn."
+    },
+    {
+     "k": "stronghold_push_burst",
+     "focus": 2,
+     "cd": 2,
+     "toughMult": 1.05,
+     "name": "Buffeting Wings",
+     "text": "Pushes every adjacent enemy 1 hex away. Does not end this creature's turn."
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_roc_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 70,
+    "offence": 20,
+    "defence": 14,
+    "damageMin": 13,
+    "damageMax": 19,
+    "speed": 6,
+    "initiative": 9
+   },
+   "gold": 700,
+   "squadValue": 1166,
+   "kit": [
+    {
+     "k": "stronghold_self_trigger_buff",
+     "trigger": "start_round",
+     "buff": "h3_kit_stronghold_gathering_storm_1_effect",
+     "duration": -1,
+     "escalate": {
+      "chain": [
+       "h3_kit_stronghold_gathering_storm_2_effect",
+       "h3_kit_stronghold_gathering_storm_3_effect"
+      ]
+     },
+     "offMult": 1.1,
+     "name": "Gathering Storm",
+     "text": "At the start of each round, gains +10% Damage, up to +30%. Using Lightning Strike resets it."
+    },
+    {
+     "k": "stronghold_push_burst",
+     "focus": 2,
+     "cd": 2,
+     "toughMult": 1.05,
+     "name": "Buffeting Wings",
+     "text": "Pushes every adjacent enemy 1 hex away. Does not end this creature's turn."
+    },
+    {
+     "k": "stronghold_strike",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "magic": true,
+     "selfMech": [
+      {
+       "mech": "dispel",
+       "values": [
+        "h3_kit_gathering_storm"
+       ]
+      }
+     ],
+     "icon": "magic_favorable_wind_effect_icon",
+     "name": "Lightning Strike",
+     "text": "Performs a Melee attack that deals Magic Damage: the target's Defence does not reduce it, but Magic resistances and immunities do."
+    }
+   ]
+  },
+  "h3_roc_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 70,
+    "offence": 15,
+    "defence": 13,
+    "damageMin": 15,
+    "damageMax": 22,
+    "speed": 8,
+    "initiative": 12
+   },
+   "gold": 700,
+   "squadValue": 1166,
+   "kit": [
+    {
+     "k": "stronghold_self_trigger_buff",
+     "trigger": "unit_skip",
+     "buff": "h3_kit_stronghold_tailwind_strong_effect",
+     "duration": 2,
+     "name": "Tailwind",
+     "text": "When it Defends, gains +3 Speed and +2 Initiative until the end of its next turn."
+    },
+    {
+     "k": "stronghold_push_burst",
+     "focus": 2,
+     "cd": 2,
+     "toughMult": 1.05,
+     "name": "Buffeting Wings",
+     "text": "Pushes every adjacent enemy 1 hex away. Does not end this creature's turn."
+    },
+    {
+     "k": "dive",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "range": 99,
+     "name": "Stoop",
+     "text": "Flies to any enemy on the battlefield and strikes it for full Damage. The enemy does not counterattack."
+    }
+   ]
+  },
+  "h3_cyclops": {
+   "role": "base",
+   "stats": {
+    "hp": 90,
+    "offence": 21,
+    "defence": 18,
+    "damageMin": 18,
+    "damageMax": 24,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 750,
+   "squadValue": 1151,
+   "kit": [
+    {
+     "k": "stronghold_area_shot",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "name": "Rockslide",
+     "text": "Performs a Ranged attack that deals full Damage to the target and 50% Damage to every enemy adjacent to it."
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_cyclops_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 90,
+    "offence": 27,
+    "defence": 20,
+    "damageMin": 18,
+    "damageMax": 24,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 1100,
+   "squadValue": 2028,
+   "kit": [
+    {
+     "k": "skirmisher",
+     "name": "Stone Fists",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "stronghold_area_shot",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "name": "Rockslide",
+     "text": "Performs a Ranged attack that deals full Damage to the target and 50% Damage to every enemy adjacent to it."
+    },
+    {
+     "k": "stronghold_defend_breaker",
+     "offMult": 1.08,
+     "name": "Siege Breaker",
+     "tags": [
+      "skill_hero_skip_turn_buff",
+      "skill_formation_1_defence_buff",
+      "skill_formation_2_defence_buff",
+      "skill_formation_3_defence_buff",
+      "skill_faction_human_ability_defence_1_buff",
+      "skill_faction_human_ability_defence_2_buff",
+      "skill_faction_human_ability_defence_3_buff"
+     ],
+     "text": "Ranged attacks end the target's Defend stance and remove its Defence bonuses from hero skills."
+    }
+   ]
+  },
+  "h3_cyclops_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 114,
+    "offence": 22,
+    "defence": 19,
+    "damageMin": 20,
+    "damageMax": 27,
+    "speed": 6,
+    "initiative": 9
+   },
+   "gold": 1100,
+   "squadValue": 2028,
+   "kit": [
+    {
+     "k": "sharpshooter"
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_cyclops_upg_alt_redesign_ability_name"
+    },
+    {
+     "k": "shot",
+     "focus": 2,
+     "cd": 1,
+     "mult": 0.8,
+     "counter": false,
+     "buff": "h3_kit_stronghold_cowed_effect",
+     "duration": 2,
+     "icon": "neutral_magic_second_sight",
+     "name": "Baleful Gaze",
+     "text": "Performs a Ranged attack that deals 80% Damage. The target has -4 Attack until the end of the next round."
+    }
+   ],
+   "powerTarget": 0.94
+  },
+  "h3_behemoth": {
+   "role": "base",
+   "stats": {
+    "hp": 200,
+    "offence": 30,
+    "defence": 26,
+    "damageMin": 40,
+    "damageMax": 60,
+    "speed": 6,
+    "initiative": 8
+   },
+   "gold": 1500,
+   "squadValue": 3451,
+   "kit": [
+    {
+     "k": "stronghold_armor_rend",
+     "v": 0.3,
+     "name": "Armor Rend",
+     "text": "Attacks ignore 30% of the target's Defence."
+    },
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "movementNegative"
+     ],
+     "name": "Unstoppable",
+     "text": "Immune to all effects that restrict movement."
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_behemoth_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 270,
+    "offence": 35,
+    "defence": 28,
+    "damageMin": 44,
+    "damageMax": 66,
+    "speed": 6,
+    "initiative": 9
+   },
+   "gold": 3000,
+   "squadValue": 7216,
+   "kit": [
+    {
+     "k": "stronghold_armor_rend",
+     "v": 0.5,
+     "name": "Armor Rend",
+     "text": "Attacks ignore 50% of the target's Defence."
+    },
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "movementNegative"
+     ],
+     "name": "Unstoppable",
+     "text": "Immune to all effects that restrict movement."
+    },
+    {
+     "k": "stat_aura",
+     "radius": 1,
+     "target": "enemy",
+     "stats": {
+      "offence": -3
+     },
+     "icon": "magic_shorten_shadow_effect_icon",
+     "name": "Terrifying Presence",
+     "text": "Adjacent enemy creatures have -3 Attack."
+    },
+    {
+     "k": "stronghold_rampage",
+     "spentBuff": "h3_kit_stronghold_rampage_spent_effect",
+     "offMult": 1.08,
+     "name": "Rampage",
+     "text": "When this creature destroys an enemy stack during its turn, it immediately takes another turn. Once per battle."
+    }
+   ]
+  },
+  "h3_behemoth_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 250,
+    "offence": 31,
+    "defence": 26,
+    "damageMin": 44,
+    "damageMax": 65,
+    "speed": 10,
+    "initiative": 13
+   },
+   "gold": 3000,
+   "squadValue": 7216,
+   "kit": [
+    {
+     "k": "stronghold_armor_rend",
+     "v": 0.45,
+     "name": "Armor Rend",
+     "text": "Attacks ignore 45% of the target's Defence."
+    },
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "movementNegative"
+     ],
+     "name": "Unstoppable",
+     "text": "Immune to all effects that restrict movement."
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "stronghold_phase_step",
+     "focus": 3,
+     "cd": 3,
+     "range": 99,
+     "offMult": 1.08,
+     "name": "Phase Step",
+     "text": "Moves to any free hex on the battlefield. Does not end this creature's turn."
+    }
+   ]
+  }
+ }
+}

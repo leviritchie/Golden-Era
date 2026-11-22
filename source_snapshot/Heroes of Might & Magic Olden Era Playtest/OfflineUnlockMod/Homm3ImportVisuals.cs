@@ -6469,6 +6469,15 @@ internal static class Homm3ImportVisuals
 	/// </summary>
 	internal static bool EnsureSkinnedBattleRuntimeCompatibility(GameObject instance, GameObject donor, Entry entry, ManualLogSource log, bool preserveAdventureHexFog = false, bool attachUnitLookVfx = true, bool uiPreviewLane = false)
 	{
+		var ok = EnsureSkinnedBattleRuntimeCompatibilityCore(instance, donor, entry, log, preserveAdventureHexFog, attachUnitLookVfx, uiPreviewLane);
+		// Elemental Fusion: fused units get a runtime fluid body (fluid_fusion/fluid_fusion.json lists them; "enabled" gates all).
+		if (ok && !preserveAdventureHexFog)
+			Homm3FluidFusionRuntime.TryAttach(instance, entry, uiPreviewLane ? "ui-preview" : "battle", log);
+		return ok;
+	}
+
+	private static bool EnsureSkinnedBattleRuntimeCompatibilityCore(GameObject instance, GameObject donor, Entry entry, ManualLogSource log, bool preserveAdventureHexFog, bool attachUnitLookVfx, bool uiPreviewLane)
+	{
 		if (!IsHomm3SkinnedBattleInstance(instance))
 			return false;
 

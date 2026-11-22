@@ -1,0 +1,1084 @@
+{
+ "schemaVersion": 1,
+ "faction": "homm3_bulwark",
+ "approval": "Owner, 2026-11-20 goal: all factions, autonomous (no per-faction card review).",
+ "tradeAxis": "Tempo (striker: higher Initiative and Speed, extra counterattacks, free and repeatable small actions) versus Bastion (ward: front-loaded HP and Defence, payoffs for Defending and for being hit). Both are useful in any army; Runes only makes the choice sharper, because Tempo climbs levels by acting often and Bastion by Defending and soaking.",
+ "buffFile": "DB/buffs/units_buffs_nature.json",
+ "buffs": [
+  {
+   "id": "h3_kit_bulwark_dig_in_effect",
+   "cloneOf": "sub_skill_formation_2_buff",
+   "name": "Dug In",
+   "text": "Takes -25% Damage.",
+   "set": {
+    "hidden": false,
+    "canDispel": true,
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "data": {
+     "stats": {
+      "inAllDmgMod": -0.25
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_bulwark_rune_brand_effect",
+   "cloneOf": "pet_buff",
+   "name": "Rune Brand",
+   "text": "+1 Defence.",
+   "set": {
+    "data": {
+     "stats": {
+      "defence": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_bulwark_cadence_effect",
+   "cloneOf": "sub_skill_formation_2_buff",
+   "name": "Cadence",
+   "text": "+1 Initiative and +1 Speed.",
+   "set": {
+    "hidden": false,
+    "canDispel": true,
+    "maxDuration": 1,
+    "ignoreDurationBuffs": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "data": {
+     "stats": {
+      "initiative": 1,
+      "speed": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_bulwark_steady_aim_effect",
+   "cloneOf": "sub_skill_formation_2_buff",
+   "name": "Steady Aim",
+   "text": "+3 Attack. Ranged attacks deal full Damage at any range.",
+   "set": {
+    "hidden": false,
+    "canDispel": true,
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "data": {
+     "stats": {
+      "offence": 3,
+      "ignoreShootDmgBuff": true
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_bulwark_chilled_effect",
+   "cloneOf": "magic_ice_bolt_effect_0",
+   "name": "Chilled",
+   "text": "-2 Initiative.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "data": {
+     "stats": {
+      "initiative": -2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_bulwark_storm_fury_effect",
+   "cloneOf": "avatar_of_war_buff",
+   "name": "Storm Fury",
+   "text": "+1 Attack.",
+   "set": {
+    "data": {
+     "stats": {
+      "offence": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_bulwark_glacier_stance_effect",
+   "cloneOf": "sub_skill_formation_2_buff",
+   "name": "Glacier Stance",
+   "text": "+5 Defence and 2 more counterattacks per round.",
+   "set": {
+    "hidden": false,
+    "canDispel": true,
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "data": {
+     "stats": {
+      "defence": 5,
+      "numCounters": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_bulwark_scurry_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Scurry",
+   "text": "+2 Speed.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "magic_haste_effect_icon",
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "speed": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_bulwark_scurry_strong_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Scurry",
+   "text": "+2 Speed, +2 Initiative.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "magic_haste_effect_icon",
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "speed": 2,
+      "initiative": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_bulwark_duck_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Duck Behind Shields",
+   "text": "Takes -50% Ranged Damage.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "sub_skill_tactics_4_defence_buff_icon",
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "inDmgMods": {
+       "list": [
+        {
+         "t": "shoot_attack",
+         "v": -0.5
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_bulwark_momentum_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Momentum Hide",
+   "text": "Takes -25% Ranged Damage.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "sub_skill_tactics_4_defence_buff_icon",
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "inDmgMods": {
+       "list": [
+        {
+         "t": "shoot_attack",
+         "v": -0.25
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_bulwark_momentum_strong_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Momentum Hide",
+   "text": "Takes -35% Ranged Damage.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "sub_skill_tactics_4_defence_buff_icon",
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "inDmgMods": {
+       "list": [
+        {
+         "t": "shoot_attack",
+         "v": -0.35
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_bulwark_glacial_rune_effect",
+   "cloneOf": "magic_reality_distortion_effect_0",
+   "name": "Glacial Rune",
+   "text": "Damage taken is held back and dealt all at once at the end of the round.",
+   "set": {
+    "maxDuration": 1,
+    "canDispel": false,
+    "icon": "magic_ice_bolt_effect_icon",
+    "data": {
+     "stats": {
+      "accumulateDamage": true
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_bulwark_command_effect",
+   "cloneOf": "unspeakable_buff",
+   "name": "Warlord's Command",
+   "text": "Takes one more turn this round.",
+   "set": {}
+  }
+ ],
+ "units": {
+  "h3_kobold": {
+   "role": "base",
+   "stats": {
+    "hp": 12,
+    "offence": 4,
+    "defence": 4,
+    "damageMin": 3,
+    "damageMax": 5,
+    "speed": 4,
+    "initiative": 4
+   },
+   "gold": 40,
+   "squadValue": 94,
+   "kit": [
+    {
+     "k": "bulwark_self_trigger_buff",
+     "trigger": "unit_took_damage",
+     "conditions": [
+      {
+       "checkFunction": "allegiance_receiving_tags",
+       "values": [
+        "self",
+        "receiving",
+        "shoot_attack"
+       ]
+      }
+     ],
+     "buff": "h3_kit_bulwark_scurry_effect",
+     "duration": 2,
+     "name": "Scurry",
+     "text": "After a Ranged attack hits it, gains +2 Speed until the end of its next turn."
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_kobold_foreman": {
+   "role": "striker",
+   "stats": {
+    "hp": 14,
+    "offence": 5,
+    "defence": 4,
+    "damageMin": 4,
+    "damageMax": 6,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 60,
+   "squadValue": 132,
+   "kit": [
+    {
+     "k": "bulwark_self_trigger_buff",
+     "trigger": "unit_took_damage",
+     "conditions": [
+      {
+       "checkFunction": "allegiance_receiving_tags",
+       "values": [
+        "self",
+        "receiving",
+        "shoot_attack"
+       ]
+      }
+     ],
+     "buff": "h3_kit_bulwark_scurry_strong_effect",
+     "duration": 2,
+     "name": "Scurry",
+     "text": "After a Ranged attack hits it, gains +2 Speed and +2 Initiative until the end of its next turn."
+    },
+    {
+     "k": "rally",
+     "focus": 1,
+     "cd": 2,
+     "buff": "h3_kit_bulwark_cadence_effect",
+     "duration": 1,
+     "name": "Foreman Cadence",
+     "text": "Adjacent friendly creatures gain +1 Initiative and +1 Speed until the end of the round. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_kobold_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 15,
+    "offence": 4,
+    "defence": 6,
+    "damageMin": 4,
+    "damageMax": 6,
+    "speed": 4,
+    "initiative": 4
+   },
+   "gold": 60,
+   "squadValue": 132,
+   "kit": [
+    {
+     "k": "bulwark_self_trigger_buff",
+     "trigger": "unit_took_damage",
+     "conditions": [
+      {
+       "checkFunction": "allegiance_receiving_tags",
+       "values": [
+        "self",
+        "receiving",
+        "shoot_attack"
+       ]
+      }
+     ],
+     "buff": "h3_kit_bulwark_duck_effect",
+     "duration": 1,
+     "name": "Duck Behind Shields",
+     "text": "After a Ranged attack hits it, takes -50% Ranged Damage until the end of the round."
+    },
+    {
+     "k": "when_damaged_self_buff",
+     "buff": "h3_kit_bulwark_rune_brand_effect",
+     "duration": -1,
+     "name": "Rune Brand",
+     "text": "Whenever this creature takes Damage, it gains +1 Defence until the end of the battle."
+    },
+    {
+     "k": "bulwark_on_defend_buff",
+     "buff": "h3_kit_bulwark_dig_in_effect",
+     "duration": 2,
+     "name": "Dig In",
+     "text": "When this creature Defends, it takes -25% Damage until the end of the next round."
+    }
+   ]
+  },
+  "h3_mountain_ram": {
+   "role": "base",
+   "stats": {
+    "hp": 18,
+    "offence": 5,
+    "defence": 4,
+    "damageMin": 2,
+    "damageMax": 6,
+    "speed": 6,
+    "initiative": 6
+   },
+   "gold": 135,
+   "squadValue": 149,
+   "kit": [
+    {
+     "k": "bulwark_stat",
+     "stats": {
+      "ignoreObstacles": true
+     },
+     "name": "Sure-Footed",
+     "text": "Moves over obstacles."
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_argali": {
+   "role": "striker",
+   "stats": {
+    "hp": 18,
+    "offence": 7,
+    "defence": 4,
+    "damageMin": 3,
+    "damageMax": 6,
+    "speed": 7,
+    "initiative": 8
+   },
+   "gold": 170,
+   "squadValue": 213,
+   "kit": [
+    {
+     "k": "bulwark_ice_immunity",
+     "name": "Ice Immunity",
+     "text": "Immune to Ice Bolt Damage and its Initiative reduction, and to Avalanche Damage."
+    },
+    {
+     "k": "bulwark_stat",
+     "stats": {
+      "ignoreObstacles": true
+     },
+     "name": "Sure-Footed",
+     "text": "Moves over obstacles."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 1,
+     "cd": 1,
+     "return": true,
+     "name": "Butt and Bound",
+     "text": "Performs a Melee attack, then returns to its original position."
+    }
+   ]
+  },
+  "h3_mountain_ram_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 18,
+    "offence": 5,
+    "defence": 7,
+    "damageMin": 3,
+    "damageMax": 6,
+    "speed": 6,
+    "initiative": 6
+   },
+   "gold": 170,
+   "squadValue": 213,
+   "kit": [
+    {
+     "k": "bulwark_ice_immunity",
+     "name": "Ice Immunity",
+     "text": "Immune to Ice Bolt Damage and its Initiative reduction, and to Avalanche Damage."
+    },
+    {
+     "k": "bulwark_stat",
+     "stats": {
+      "ignoreObstacles": true
+     },
+     "name": "Sure-Footed",
+     "text": "Moves over obstacles."
+    },
+    {
+     "k": "runtime",
+     "rule": "first_hit",
+     "side": "defender",
+     "percent": 50,
+     "toughMult": 1.15,
+     "name": "Stubborn Fleece",
+     "text": "The first attack against this creature each round deals -50% Damage."
+    }
+   ]
+  },
+  "h3_snow_elf": {
+   "role": "base",
+   "stats": {
+    "hp": 26,
+    "offence": 7,
+    "defence": 6,
+    "damageMin": 5,
+    "damageMax": 9,
+    "speed": 5,
+    "initiative": 7
+   },
+   "gold": 230,
+   "squadValue": 272,
+   "kit": [
+    {
+     "k": "bulwark_duelist",
+     "name": "Duelist",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_steel_elf": {
+   "role": "ward",
+   "stats": {
+    "hp": 29,
+    "offence": 7,
+    "defence": 11,
+    "damageMin": 5,
+    "damageMax": 9,
+    "speed": 5,
+    "initiative": 7
+   },
+   "gold": 260,
+   "squadValue": 396,
+   "kit": [
+    {
+     "k": "bulwark_duelist",
+     "name": "Duelist",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "bulwark_free_shooting",
+     "name": "Free Shooting",
+     "text": "Can shoot while an enemy creature is adjacent."
+    },
+    {
+     "k": "bulwark_on_defend_buff",
+     "buff": "h3_kit_bulwark_steady_aim_effect",
+     "duration": 2,
+     "name": "Steady Aim",
+     "text": "When this creature Defends, it gains +3 Attack and its Ranged attacks deal full Damage at any range until the end of the next round."
+    }
+   ]
+  },
+  "h3_snow_elf_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 27,
+    "offence": 10,
+    "defence": 6,
+    "damageMin": 6,
+    "damageMax": 10,
+    "speed": 6,
+    "initiative": 11
+   },
+   "gold": 260,
+   "squadValue": 396,
+   "kit": [
+    {
+     "k": "bulwark_duelist",
+     "name": "Duelist",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_bulwark_chilled_effect",
+     "duration": 2,
+     "icon": "magic_ice_bolt_effect_icon",
+     "name": "Frost Shot",
+     "text": "Basic attacks and counterattacks chill the target: -2 Initiative until the end of the next round."
+    },
+    {
+     "k": "bulwark_free_shooting",
+     "name": "Free Shooting",
+     "text": "Can shoot while an enemy creature is adjacent."
+    },
+    {
+     "k": "bulwark_countershot"
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_yeti": {
+   "role": "base",
+   "stats": {
+    "hp": 50,
+    "offence": 12,
+    "defence": 11,
+    "damageMin": 11,
+    "damageMax": 14,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 325,
+   "squadValue": 408,
+   "kit": [
+    {
+     "k": "bulwark_regeneration",
+     "name": "Regeneration",
+     "text": "Restores to full HP at the start of its turn. This cannot revive fallen units."
+    },
+    {
+     "k": "short_debuffs",
+     "rounds": 1,
+     "name": "Shrug Off",
+     "text": "Negative effects on this creature last at most 1 round."
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_yeti_runemaster": {
+   "role": "ward",
+   "stats": {
+    "hp": 50,
+    "offence": 13,
+    "defence": 18,
+    "damageMin": 11,
+    "damageMax": 15,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 400,
+   "squadValue": 620,
+   "kit": [
+    {
+     "k": "bulwark_regeneration",
+     "name": "Regeneration",
+     "text": "Restores to full HP at the start of its turn. This cannot revive fallen units."
+    },
+    {
+     "k": "short_debuffs",
+     "rounds": 1,
+     "name": "Shrug Off",
+     "text": "Negative effects on this creature last at most 1 round."
+    },
+    {
+     "k": "bulwark_stat",
+     "stats": {
+      "energyPerTakeDamage": 2
+     },
+     "name": "Runic Feedback",
+     "text": "Gains 1 more Focus each time it takes Damage."
+    },
+    {
+     "k": "self_buff",
+     "focus": 2,
+     "cd": 3,
+     "buff": "h3_kit_bulwark_glacial_rune_effect",
+     "duration": 1,
+     "toughMult": 1.12,
+     "icon": "magic_ice_bolt_effect_icon",
+     "name": "Glacial Rune",
+     "text": "Until the end of the round, Damage this creature takes is held back and dealt to it all at once when the round ends. Does not end this creature's turn."
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_yeti_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 50,
+    "offence": 14,
+    "defence": 11,
+    "damageMin": 11,
+    "damageMax": 14,
+    "speed": 6,
+    "initiative": 9
+   },
+   "gold": 400,
+   "squadValue": 620,
+   "kit": [
+    {
+     "k": "bulwark_regeneration",
+     "name": "Regeneration",
+     "text": "Restores to full HP at the start of its turn. This cannot revive fallen units."
+    },
+    {
+     "k": "short_debuffs",
+     "rounds": 1,
+     "name": "Shrug Off",
+     "text": "Negative effects on this creature last at most 1 round."
+    },
+    {
+     "k": "bulwark_on_attack_buff",
+     "buff": "h3_kit_bulwark_storm_fury_effect",
+     "duration": -1,
+     "name": "Storm Fury",
+     "text": "Each basic attack and counterattack this creature makes gives it +1 Attack until the end of the battle."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_yeti_upg_alt_abilities_0_name"
+    }
+   ]
+  },
+  "h3_shaman": {
+   "role": "base",
+   "stats": {
+    "hp": 67,
+    "offence": 17,
+    "defence": 12,
+    "damageMin": 16,
+    "damageMax": 25,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 450,
+   "squadValue": 699,
+   "kit": [
+    {
+     "k": "resist",
+     "t": "magic_damage",
+     "v": -0.2,
+     "name": "Spirit Ward",
+     "text": "Takes -20% Magic Damage."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_shaman_abilities_0_name"
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_great_shaman": {
+   "role": "ward",
+   "stats": {
+    "hp": 67,
+    "offence": 17,
+    "defence": 15,
+    "damageMin": 16,
+    "damageMax": 25,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 600,
+   "squadValue": 1089,
+   "kit": [
+    {
+     "k": "resist",
+     "t": "magic_damage",
+     "v": -0.25,
+     "name": "Spirit Ward",
+     "text": "Takes -25% Magic Damage."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_great_shaman_abilities_0_name"
+    },
+    {
+     "k": "cleanse",
+     "focus": 2,
+     "cd": 3,
+     "range": 3,
+     "name": "Spirit Wash",
+     "text": "Dispels all negative effects from one friendly creature within 3 hexes."
+    },
+    {
+     "k": "stat_aura",
+     "radius": 1,
+     "target": "allynoself",
+     "stats": {
+      "healthLimitMinPercent": 0.5
+     },
+     "toughMult": 1.05,
+     "icon": "magic_arinas_chosen_effect_icon",
+     "name": "Spirit Anchor",
+     "text": "The number of creatures in each adjacent friendly stack cannot fall below half of what it had at the start of the round."
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_shaman_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 67,
+    "offence": 20,
+    "defence": 12,
+    "damageMin": 16,
+    "damageMax": 25,
+    "speed": 5,
+    "initiative": 9
+   },
+   "gold": 600,
+   "squadValue": 1089,
+   "kit": [
+    {
+     "k": "resist",
+     "t": "magic_damage",
+     "v": -0.2,
+     "name": "Spirit Ward",
+     "text": "Takes -20% Magic Damage."
+    },
+    {
+     "k": "bulwark_stat",
+     "stats": {
+      "energyPerRound": 1
+     },
+     "name": "Wind Shear",
+     "text": "Gains 1 Focus at the start of each round."
+    },
+    {
+     "k": "bulwark_focus_gift",
+     "focus": 2,
+     "cd": 1,
+     "range": 4,
+     "focusGain": 2,
+     "name": "Spirit Gift",
+     "text": "Another friendly creature within 4 hexes gains 2 Focus. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_mammoth": {
+   "role": "base",
+   "stats": {
+    "hp": 125,
+    "offence": 20,
+    "defence": 22,
+    "damageMin": 16,
+    "damageMax": 24,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 850,
+   "squadValue": 1107,
+   "kit": [
+    {
+     "k": "bulwark_self_trigger_buff",
+     "trigger": "unit_end_move",
+     "buff": "h3_kit_bulwark_momentum_effect",
+     "duration": 1,
+     "name": "Momentum Hide",
+     "text": "After it moves, takes -25% Ranged Damage until its next turn."
+    },
+    {
+     "k": "bulwark_pierce_attack",
+     "offMult": 1.12,
+     "name": "Trample",
+     "text": "Basic attacks also hit the creature directly behind the target for 50% Damage.",
+     "nameSid": "h3_kit_ability_mammoth_trample_pierce_name",
+     "descSid": "h3_kit_ability_mammoth_trample_pierce_description"
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_war_mammoth": {
+   "role": "ward",
+   "stats": {
+    "hp": 150,
+    "offence": 20,
+    "defence": 30,
+    "damageMin": 16,
+    "damageMax": 24,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 1000,
+   "squadValue": 2060,
+   "kit": [
+    {
+     "k": "bulwark_pierce_attack",
+     "offMult": 1.12,
+     "name": "Trample",
+     "text": "Basic attacks also hit the creature directly behind the target for 50% Damage.",
+     "nameSid": "h3_kit_ability_war_mammoth_trample_pierce_name",
+     "descSid": "h3_kit_ability_war_mammoth_trample_pierce_description"
+    },
+    {
+     "k": "bulwark_self_trigger_buff",
+     "trigger": "unit_took_damage",
+     "dispel": [
+      "negative"
+     ],
+     "name": "Shake Off",
+     "text": "Whenever it takes Damage, all negative effects on it end."
+    },
+    {
+     "k": "overkill",
+     "name": "Unyielding",
+     "text": "Once per battle, when an attack would destroy this stack, the number of creatures in it stays as it was before that attack."
+    },
+    {
+     "k": "runtime",
+     "rule": "stored_fury",
+     "percent": 10,
+     "cap": 50,
+     "offMult": 1.05,
+     "name": "Pent-up Fury",
+     "text": "Each attack this creature takes adds +10% Damage to its next attack, up to +50%. The bonus is used up when it attacks or counterattacks."
+    }
+   ]
+  },
+  "h3_mammoth_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 125,
+    "offence": 25,
+    "defence": 22,
+    "damageMin": 19,
+    "damageMax": 28,
+    "speed": 6,
+    "initiative": 9
+   },
+   "gold": 1000,
+   "squadValue": 2060,
+   "kit": [
+    {
+     "k": "bulwark_self_trigger_buff",
+     "trigger": "unit_end_move",
+     "buff": "h3_kit_bulwark_momentum_strong_effect",
+     "duration": 1,
+     "name": "Momentum Hide",
+     "text": "After it moves, takes -35% Ranged Damage until its next turn."
+    },
+    {
+     "k": "bulwark_pierce_attack",
+     "offMult": 1.12,
+     "name": "Trample",
+     "text": "Basic attacks also hit the creature directly behind the target for 50% Damage.",
+     "nameSid": "h3_kit_ability_mammoth_upg_alt_trample_pierce_name",
+     "descSid": "h3_kit_ability_mammoth_upg_alt_trample_pierce_description"
+    },
+    {
+     "k": "bulwark_overwatch",
+     "name": "Run Them Down",
+     "text": "Attacks any enemy that walks or flies away from a hex next to this creature. This works like a counterattack but does not use one up."
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_jotunn": {
+   "role": "base",
+   "stats": {
+    "hp": 266,
+    "offence": 27,
+    "defence": 27,
+    "damageMin": 48,
+    "damageMax": 66,
+    "speed": 6,
+    "initiative": 9
+   },
+   "gold": 2000,
+   "squadValue": 3605,
+   "kit": [
+    {
+     "k": "card",
+     "icon": "magic_ice_bolt_effect_icon",
+     "name": "Frostbound Skies",
+     "text": "Enemy flying creatures have -1 Speed for the whole battle while this creature is in the army."
+    },
+    {
+     "k": "bulwark_ice_immunity",
+     "name": "Ice Immunity",
+     "text": "Immune to Ice Bolt Damage and its Initiative reduction, and to Avalanche Damage."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_jotunn_abilities_0_name"
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_jotunn_warlord": {
+   "role": "striker",
+   "stats": {
+    "hp": 270,
+    "offence": 36,
+    "defence": 27,
+    "damageMin": 57,
+    "damageMax": 75,
+    "speed": 8,
+    "initiative": 12
+   },
+   "gold": 3500,
+   "squadValue": 6849,
+   "kit": [
+    {
+     "k": "card",
+     "icon": "magic_ice_bolt_effect_icon",
+     "name": "Frostbound Skies",
+     "text": "Enemy flying creatures have -2 Speed for the whole battle while this creature is in the army."
+    },
+    {
+     "k": "bulwark_ice_immunity",
+     "name": "Ice Immunity",
+     "text": "Immune to Ice Bolt Damage and its Initiative reduction, and to Avalanche Damage."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_jotunn_warlord_abilities_0_name"
+    },
+    {
+     "k": "bulwark_grant_turn",
+     "focus": 3,
+     "cd": 3,
+     "buff": "h3_kit_bulwark_command_effect",
+     "duration": 1,
+     "offMult": 1.15,
+     "name": "Warlord's Command",
+     "text": "Another friendly creature gains one more turn this round. Does not end this creature's turn."
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_jotunn_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 305,
+    "offence": 27,
+    "defence": 36,
+    "damageMin": 48,
+    "damageMax": 66,
+    "speed": 6,
+    "initiative": 9
+   },
+   "gold": 3500,
+   "squadValue": 6849,
+   "kit": [
+    {
+     "k": "card",
+     "icon": "magic_ice_bolt_effect_icon",
+     "name": "Frostbound Skies",
+     "text": "Enemy flying creatures have -2 Speed for the whole battle while this creature is in the army."
+    },
+    {
+     "k": "bulwark_ice_immunity",
+     "name": "Ice Immunity",
+     "text": "Immune to Ice Bolt Damage and its Initiative reduction, and to Avalanche Damage."
+    },
+    {
+     "k": "stat_aura",
+     "radius": 1,
+     "target": "enemy",
+     "stats": {
+      "initiative": -2,
+      "speed": -1
+     },
+     "name": "Winter's Grasp",
+     "text": "Adjacent enemy creatures have -2 Initiative and -1 Speed."
+    },
+    {
+     "k": "bulwark_on_defend_buff",
+     "buff": "h3_kit_bulwark_glacier_stance_effect",
+     "duration": 2,
+     "name": "Glacier Stance",
+     "text": "When this creature Defends, it gains +5 Defence and 2 more counterattacks per round until the end of the next round."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_jotunn_upg_alt_abilities_0_name"
+    }
+   ],
+   "powerTarget": 0.95
+  }
+ }
+}

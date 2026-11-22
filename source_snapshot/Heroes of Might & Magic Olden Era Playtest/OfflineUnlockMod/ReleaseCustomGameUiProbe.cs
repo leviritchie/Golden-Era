@@ -8,6 +8,8 @@ using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using Hex.GameHub.UICommon;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.Runtime;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -614,6 +616,7 @@ internal static class ReleaseCustomGameUiProbe
 
 	private static void PostfixStrongholdPickFactionButton(object __instance, object[] __args)
 	{
+		RememberRuntimeWrapperType(__instance);
 		var factionSid = GetHomm3FactionSidFromConfig(Arg(__args, 0));
 		if (factionSid == null)
 			return;
@@ -629,11 +632,13 @@ internal static class ReleaseCustomGameUiProbe
 
 	private static void PostfixHomm3PickFactionButtonRefresh(object __instance)
 	{
+		RememberRuntimeWrapperType(__instance);
 		CompactHomm3PickFactionGrid(__instance);
 	}
 
 	private static void PostfixScQuickStartRectLayout(object __instance, object[] __args, MethodBase __originalMethod)
 	{
+		RememberRuntimeWrapperType(__instance);
 		CompactHomm3QuickStartFactionGrid(__instance, "ScQuickStart." + (__originalMethod?.Name ?? "?"));
 	}
 
@@ -1363,8 +1368,11 @@ internal static class ReleaseCustomGameUiProbe
 
 	private static List<RectTransform> GetQuickPlayFactionButtons(RectTransform parent, Component quickStart)
 	{
+		// The native list is authoritative: ScQuickStart clears it before rebuilding, while the buttons it
+		// Object.Destroy()s stay children of factionsRoot until the end of the frame. A child scan counts those
+		// stale buttons on every re-entry to the faction stage and lays the new ones out in a grid twice as big.
 		var nativeButtons = TryGetNativeQuickPlayFactionButtons(parent, quickStart, out var nativeCount);
-		if (nativeButtons.Count == nativeCount && nativeCount > 0)
+		if (nativeCount >= 0 && nativeButtons.Count == nativeCount)
 			return nativeButtons;
 		if (nativeCount > 0)
 			LogQuickPlayFactionNativeListFallback(parent, quickStart, nativeCount, nativeButtons.Count);
@@ -1388,7 +1396,7 @@ internal static class ReleaseCustomGameUiProbe
 		nativeCount = -1;
 		if (!parent || !quickStart)
 			return buttons;
-		var nativeButtons = GetMemberValue(quickStart, "bslq");
+		var nativeButtons = GetQuickPlayNativeFactionButtonList(quickStart);
 		nativeCount = GetCount(nativeButtons);
 		if (nativeCount <= 0)
 			return buttons;
@@ -1404,6 +1412,51 @@ internal static class ReleaseCustomGameUiProbe
 			buttons.Add(rect);
 		}
 		return buttons;
+	}
+
+	private static readonly Dictionary<Type, PropertyInfo> _quickPlayFactionButtonListMembers = new();
+
+	/// <summary>
+	/// ScQuickStart's List&lt;BhFactionSelectButton&gt;. Golden named it bslq; 26615913 exposes it as
+	/// field_Private_List_1_BhFactionSelectButton_0, so it is found by element type rather than by name.
+	/// </summary>
+	private static object GetQuickPlayNativeFactionButtonList(Component quickStart)
+	{
+		if (!quickStart)
+			return null;
+		var legacy = GetMemberValue(quickStart, "bslq");
+		if (legacy != null)
+			return legacy;
+		var type = quickStart.GetType();
+		if (!_quickPlayFactionButtonListMembers.TryGetValue(type, out var member))
+		{
+			member = null;
+			foreach (var prop in type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+			{
+				var propertyType = prop.PropertyType;
+				if (!propertyType.IsGenericType || prop.GetIndexParameters().Length != 0)
+					continue;
+				if (!propertyType.Name.StartsWith("List`1", StringComparison.Ordinal))
+					continue;
+				var args = propertyType.GetGenericArguments();
+				if (args.Length == 1 && string.Equals(args[0].Name, "BhFactionSelectButton", StringComparison.Ordinal))
+				{
+					member = prop;
+					break;
+				}
+			}
+			_quickPlayFactionButtonListMembers[type] = member;
+		}
+		if (member == null)
+			return null;
+		try
+		{
+			return member.GetValue(quickStart);
+		}
+		catch
+		{
+			return null;
+		}
 	}
 
 	private static RectTransform GetRectTransformForQuickPlayFactionButton(object button)
@@ -1545,10 +1598,8 @@ internal static class ReleaseCustomGameUiProbe
 			var component = components[i];
 			if (!component)
 				continue;
-			var name = component.GetType().Name;
-			var fullName = component.GetType().FullName ?? name;
-			if (string.Equals(name, "BhFactionSelectButton", StringComparison.Ordinal) || fullName.EndsWith(".BhFactionSelectButton", StringComparison.Ordinal))
-				return component;
+			if (ComponentTypeNameMatches(component, "BhFactionSelectButton"))
+				return AsRuntimeTypedComponent(component);
 		}
 		return null;
 	}
@@ -1740,10 +1791,8 @@ internal static class ReleaseCustomGameUiProbe
 				var component = components[i];
 				if (!component)
 					continue;
-				var name = component.GetType().Name;
-				var fullName = component.GetType().FullName ?? name;
-				if (string.Equals(name, typeName, StringComparison.Ordinal) || fullName.EndsWith("." + typeName, StringComparison.Ordinal))
-					return component;
+				if (ComponentTypeNameMatches(component, typeName))
+					return AsRuntimeTypedComponent(component);
 			}
 		}
 		return null;
@@ -1759,12 +1808,92 @@ internal static class ReleaseCustomGameUiProbe
 			var component = components[i];
 			if (!component)
 				continue;
-			var name = component.GetType().Name;
-			var fullName = component.GetType().FullName ?? name;
-			if (string.Equals(name, typeName, StringComparison.Ordinal) || fullName.EndsWith("." + typeName, StringComparison.Ordinal))
+			if (ComponentTypeNameMatches(component, typeName))
 				return true;
 		}
 		return false;
+	}
+
+	// GetComponents<Component>() hands back plain Component wrappers unless Il2CppObjectPool still holds a live
+	// derived wrapper for that pointer, and the pool only keeps weak references. Matching on the managed wrapper
+	// type therefore depended on GC timing: once the wrappers made for the bind postfixes were collected, the
+	// faction buttons and ScQuickStart stopped matching and the Quick Play grid pass silently skipped them.
+	// The IL2CPP runtime type does not depend on the wrapper.
+	private static bool ComponentTypeNameMatches(Component component, string typeName)
+	{
+		if (!component || string.IsNullOrEmpty(typeName))
+			return false;
+		var managed = component.GetType();
+		if (TypeNameMatches(managed.Name, managed.FullName, typeName))
+			return true;
+		var runtimeFullName = GetRuntimeTypeFullName(component);
+		if (string.IsNullOrEmpty(runtimeFullName))
+			return false;
+		var dot = runtimeFullName.LastIndexOf('.');
+		var runtimeName = dot >= 0 ? runtimeFullName.Substring(dot + 1) : runtimeFullName;
+		return TypeNameMatches(runtimeName, runtimeFullName, typeName);
+	}
+
+	private static bool TypeNameMatches(string name, string fullName, string typeName)
+		=> string.Equals(name, typeName, StringComparison.Ordinal)
+			|| (fullName ?? name ?? string.Empty).EndsWith("." + typeName, StringComparison.Ordinal);
+
+	private static string GetRuntimeTypeFullName(Component component)
+	{
+		try
+		{
+			var type = component.GetIl2CppType();
+			return type == null ? null : type.FullName ?? type.Name;
+		}
+		catch
+		{
+			return null;
+		}
+	}
+
+	// IL2CPP runtime type full name -> Il2CppObjectPool.Get<T> for the managed wrapper type Harmony handed a postfix.
+	private static readonly Dictionary<string, MethodInfo> _runtimeWrapperFactories = new(StringComparer.Ordinal);
+
+	/// <summary>Records the typed wrapper a Harmony postfix received so later lookups can re-wrap plain Components.</summary>
+	private static void RememberRuntimeWrapperType(object instance)
+	{
+		if (instance is not Component component || !component)
+			return;
+		var managed = component.GetType();
+		if (managed == typeof(Component))
+			return;
+		var runtimeFullName = GetRuntimeTypeFullName(component);
+		if (string.IsNullOrEmpty(runtimeFullName) || _runtimeWrapperFactories.ContainsKey(runtimeFullName))
+			return;
+		try
+		{
+			_runtimeWrapperFactories[runtimeFullName] = typeof(Il2CppObjectPool)
+				.GetMethod(nameof(Il2CppObjectPool.Get), BindingFlags.Public | BindingFlags.Static)
+				?.MakeGenericMethod(managed);
+		}
+		catch
+		{
+		}
+	}
+
+	/// <summary>Re-wraps a Component as its IL2CPP runtime type so reflection sees the derived members.</summary>
+	private static Component AsRuntimeTypedComponent(Component component)
+	{
+		if (!component)
+			return component;
+		var runtimeFullName = GetRuntimeTypeFullName(component);
+		if (string.IsNullOrEmpty(runtimeFullName) || string.Equals(component.GetType().FullName, runtimeFullName, StringComparison.Ordinal))
+			return component;
+		if (!_runtimeWrapperFactories.TryGetValue(runtimeFullName, out var factory) || factory == null)
+			return component;
+		try
+		{
+			return factory.Invoke(null, new object[] { component.Pointer }) as Component ?? component;
+		}
+		catch
+		{
+			return component;
+		}
 	}
 
 	private static string DescribeQuickStartLayout(Component quickStart)
@@ -1772,7 +1901,7 @@ internal static class ReleaseCustomGameUiProbe
 		if (!quickStart)
 			return "none";
 		var root = GetMemberValue(quickStart, "factionsRoot") as RectTransform;
-		var buttons = GetMemberValue(quickStart, "bslq");
+		var buttons = GetQuickPlayNativeFactionButtonList(quickStart);
 		var spacing = GetMemberValue(quickStart, "factionButtonSpacing");
 		var layoutMap = GetMemberValue(quickStart, "bsly");
 		return DescribeComponent(quickStart)

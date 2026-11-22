@@ -17,7 +17,7 @@ internal static partial class GameSymbols
 		// GameBuild selects GameBuildKind.Current by this hash (the remap target), so the build the plugin
 		// rewrites for can never differ from the build these scopes were generated for.
 		internal const string GameAssemblySha256 = "7CC2DE0D14A6FF98880A78C457385992D0D8BA294F991C689C5122AFA464D47E";
-		internal const int Scoped = 1501;
+		internal const int Scoped = 1521;
 		internal const int Refused = 6;
 		internal const int TypeGroupsScoped = 51;
 	}
@@ -1780,6 +1780,33 @@ internal static partial class GameSymbols
 		}
 	}
 
+	internal static partial class RampartAvengerStrike
+	{
+		static RampartAvengerStrike()
+		{
+			if (!GameSymbolScope.RewriteForCurrentBuild)
+				return;
+			LogicAttackBuilderMembers = GameSymbolScope.Members("RampartAvengerStrike.LogicAttackBuilderMembers", LogicAttackBuilderMembers, 0x8AE82F4Fu, new string[] { "prop_ObjectPublicObcnLi1HeUncnLi1HeUnique_0" }, "ObjectPublicPrcnInPrcnSiBoPrcnInUnique");
+			LogicStepQueueMembers = GameSymbolScope.Members("RampartAvengerStrike.LogicStepQueueMembers", LogicStepQueueMembers, 0x87B47770u, new string[] { "field_Public_ObjectPublicLi1ObcoEvLi1ObcoStUnique_0" }, "ObjectPublicPrcnInPrcnSiBoPrcnInUnique");
+			QueueCurrentStepMembers = GameSymbolScope.Members("RampartAvengerStrike.QueueCurrentStepMembers", QueueCurrentStepMembers, 0x096DFFA9u, new string[] { "prop_ObjectPublicAbstractBocoStObcoUnEScococoUnique_0" }, "ObjectPublicLi1ObcoEvLi1ObcoStUnique");
+			QueuePendingMembers = GameSymbolScope.Members("RampartAvengerStrike.QueuePendingMembers", QueuePendingMembers, 0xE31E7459u, new string[] { "field_Private_List_1_ObjectPublicAbstractBocoStObcoUnEScococoUnique_0" }, "ObjectPublicLi1ObcoEvLi1ObcoStUnique");
+			AttackStepTypeHints = GameSymbolScope.Members("RampartAvengerStrike.AttackStepTypeHints", AttackStepTypeHints, 0x5F2D2646u, new string[] { "Object1PublicIncoObIncoUnLi1coBoUnique" }, null);
+			AttackStepBegin = GameSymbolScope.Method("RampartAvengerStrike.AttackStepBegin", AttackStepBegin, 0x95806404u, new string[] { "Method_Public_Virtual_Void_0" }, "Object1PublicIncoObIncoUnLi1coBoUnique");
+			AttackStepTargetHexesMembers = GameSymbolScope.Members("RampartAvengerStrike.AttackStepTargetHexesMembers", AttackStepTargetHexesMembers, 0xDC2C53CCu, new string[] { "field_Private_Il2CppStructArray_1_Int32_0" }, "Object1PublicIncoObIncoUnLi1coBoUnique");
+			AttackStepAttackerMembers = GameSymbolScope.Members("RampartAvengerStrike.AttackStepAttackerMembers", AttackStepAttackerMembers, 0x5B85A16Du, new string[] { "field_Private_Unit_0" }, "Object1PublicIncoObIncoUnLi1coBoUnique");
+			QueueAttack = GameSymbolScope.Method("RampartAvengerStrike.QueueAttack", QueueAttack, 0xA42F0665u, new string[] { "Method_Public_Void_Int32_Int32_Il2CppStructArray_1_Int32_Il2CppStructArray_1_Int32_EMovementType_Int32_Int32_Boolean_Boolean_0" }, "ObjectPublicObcnLi1HeUncnLi1HeUnique");
+			QueueMove = GameSymbolScope.Method("RampartAvengerStrike.QueueMove", QueueMove, 0xF1CD33D2u, new string[] { "Method_Public_Void_Int32_Int32_EMovementType_EMoveSource_Il2CppStructArray_1_Int32_Boolean_0" }, "ObjectPublicObcnLi1HeUncnLi1HeUnique");
+			StatePathfinderMembers = GameSymbolScope.Members("RampartAvengerStrike.StatePathfinderMembers", StatePathfinderMembers, 0xFAAD9949u, new string[] { "prop_ObjectPublicObcnObLi1HeLi1HecnUnique_0" }, "ObjectPublicObHaOb1InObcnDi2UnUnique");
+			FindPath = GameSymbolScope.Method("RampartAvengerStrike.FindPath", FindPath, 0x49FB57A0u, new string[] { "Method_Public_Boolean_Unit_Hex_Vector3_Boolean_List_1_Hex_0" }, "ObjectPublicObcnObLi1HeLi1HecnUnique");
+			PathToHexIds = GameSymbolScope.Method("RampartAvengerStrike.PathToHexIds", PathToHexIds, 0xB8045414u, new string[] { "Method_Public_Il2CppStructArray_1_Int32_List_1_Hex_0" }, "ObjectPublicObcnObLi1HeLi1HecnUnique");
+			HexDistance = GameSymbolScope.Method("RampartAvengerStrike.HexDistance", HexDistance, 0xFD399017u, new string[] { "Method_Public_Static_Int32_Hex_Hex_0" }, "ObjectPublicObcnObLi1HeLi1HecnUnique");
+			FieldObjectIdMembers = GameSymbolScope.Members("RampartAvengerStrike.FieldObjectIdMembers", FieldObjectIdMembers, 0xF08813DDu, new string[] { "_cndg_k__BackingField" }, "Hex.Session.Battle.FieldObject");
+			FieldObjectPositionMembers = GameSymbolScope.Members("RampartAvengerStrike.FieldObjectPositionMembers", FieldObjectPositionMembers, 0xE98F76A7u, new string[] { "field_Public_ObjectPublicHecnFiVecnBocwBoHecnUnique_0" }, "Hex.Session.Battle.FieldObject");
+			PositionHexMembers = GameSymbolScope.Members("RampartAvengerStrike.PositionHexMembers", PositionHexMembers, 0x9CFB3F2Du, new string[] { "prop_Hex_0" }, "ObjectPublicHecnFiVecnBocwBoHecnUnique");
+			UnitStatMovementTypeMembers = GameSymbolScope.Members("RampartAvengerStrike.UnitStatMovementTypeMembers", UnitStatMovementTypeMembers, 0x97D60282u, new string[] { "prop_EMovementType_0" }, "Hex.Configs.UnitStat");
+		}
+	}
+
 	internal static partial class ReleaseTownUi
 	{
 		static ReleaseTownUi()
@@ -1860,6 +1887,8 @@ internal static partial class GameSymbols
 			HeroStatRewardHideOrApply = GameSymbolScope.Method("ReleaseTownUi.HeroStatRewardHideOrApply", HeroStatRewardHideOrApply, 0xF3CA5248u, new string[] { "Method_Private_Void_0" }, "Hex.UI.City.BhRewardNotificationHeroStat");
 			SimulatedBattleResultRefresh = GameSymbolScope.Method("ReleaseTownUi.SimulatedBattleResultRefresh", SimulatedBattleResultRefresh, 0x8F853890u, new string[] { "Update", "Method_Public_Virtual_Void_0", "Hide", "OnApplyBtn", "OnFakeWin", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null }, "Hex.UI.SimBattle.BhSimulatedBattle");
 			SimulatedBattleArmyListFields = GameSymbolScope.Members("ReleaseTownUi.SimulatedBattleArmyListFields", SimulatedBattleArmyListFields, 0x4B4CB61Fu, new string[] { "armyLeft", "armyRight" }, "Hex.UI.SimBattle.BhSimulatedBattle");
+			SimulatedBattleLogicFields = GameSymbolScope.Members("ReleaseTownUi.SimulatedBattleLogicFields", SimulatedBattleLogicFields, 0xC6EE617Au, new string[] { "field_Private_ObjectPublicPrcnInPrcnSiBoPrcnInUnique_0" }, "Hex.UI.SimBattle.BhSimulatedBattle");
+			SimulatedBattleLogicTransferBattleMembers = GameSymbolScope.Members("ReleaseTownUi.SimulatedBattleLogicTransferBattleMembers", SimulatedBattleLogicTransferBattleMembers, 0xF305D2DBu, new string[] { "prop_TransferBattle_0", "prop_TransferBattle_1" }, "ObjectPublicPrcnInPrcnSiBoPrcnInUnique");
 			TransferSideUnitsFields = GameSymbolScope.Members("ReleaseTownUi.TransferSideUnitsFields", TransferSideUnitsFields, 0xC918A49Cu, new string[] { "units" }, "Hex.Session.Battle.TransferSide");
 			TransferUnitConfigSidFields = GameSymbolScope.Members("ReleaseTownUi.TransferUnitConfigSidFields", TransferUnitConfigSidFields, 0x339EF1D6u, new string[] { "configSid", null }, "Hex.Session.Battle.TransferUnit");
 			BuildingViewModel = GameSymbolScope.Field("ReleaseTownUi.BuildingViewModel", BuildingViewModel, 0xDB2D1940u, new string[] { "NativeFieldInfoPtr_field_Private_a_0", "field_Private_a_0" }, "cxg`1");

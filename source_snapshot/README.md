@@ -5,8 +5,8 @@ asset and animation pipelines, the campaign and town converters, the validators,
 Day-to-day development happens in a private workspace. This snapshot is exported from it by
 `tools/public_source_export/export_public_source.py` (included here).
 
-- Source commit (private workspace): `59333e8447ac8b35549369481d0bf57c34e075ea`
-- Files: 5229 (about 74 MB of text)
+- Source commit (private workspace): `840398e54643ac95d240057f5384ce29a0995822`
+- Files: 5301 (about 76 MB of text)
 
 ## Releases do not use this folder
 
@@ -48,11 +48,11 @@ The export starts from every file tracked in the private workspace and leaves ou
 
 | Reason | Files | What it covers |
 | --- | ---: | --- |
-| `assets` | 3780 | Game and HoMM3 assets, and mod payload data generated from them (sprites, meshes, portraits, generated Core overlays, VCMI/HotA reference configs), plus verbatim game text: HoMM3 campaign prologues, scenario descriptions, objectives and their translations (experiments/campaign_port_poc/*localization*, *_video_prologue_transcripts*). |
-| `binary_or_media` | 3031 | Binaries and media: images, GIFs, video, DEF/PCX, GLB/FBX, NumPy arrays, NuGet packages, DLLs. |
+| `assets` | 4083 | Game and HoMM3 assets, and mod payload data generated from them (sprites, meshes, portraits, generated Core overlays, VCMI/HotA reference configs), plus verbatim game text: HoMM3 campaign prologues, scenario descriptions, objectives and their translations (experiments/campaign_port_poc/*localization*, *_video_prologue_transcripts*). |
+| `binary_or_media` | 3047 | Binaries and media: images, GIFs, video, DEF/PCX, GLB/FBX, NumPy arrays, NuGet packages, DLLs. |
 | `decompiled` | 1655 | Decompiled, disassembled or recovered game code, plus data derived from it (rename maps, IR, proof ledgers, symbol diffs, xref trees). |
 | `generated` | 1003 | Generated artifacts and run output (the artifacts/ tree, build_out, benches, handoffs, logs, dated reports). |
-| `oversize` | 43 | Data tables (json/csv/tsv) over 256 KB and docs over 1000 KB. Most are generated (symbol remaps, town-bench edits, name indexes); a few are large hand-kept tables such as tools/homm3_import/owned_unit_presentation.json. |
+| `oversize` | 44 | Data tables (json/csv/tsv) over 256 KB and docs over 1000 KB. Most are generated (symbol remaps, town-bench edits, name indexes); a few are large hand-kept tables such as tools/homm3_import/owned_unit_presentation.json. |
 | `third_party` | 27 | Third-party trees and tool stores (external repos, VCMI, dotnet tool stores, BepInEx docs). |
 | `scratch` | 23 | Root-level and tools/ scratch files (tmp*, _*). |
 | `superseded` | 20 | The private repo's old tools/release_installer copy; the live installer is this repo's own tools/release_installer. |

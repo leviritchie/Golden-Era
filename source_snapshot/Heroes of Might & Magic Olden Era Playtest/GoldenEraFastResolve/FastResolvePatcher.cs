@@ -27,12 +27,20 @@ public sealed class FastResolvePatcher : BasePatcher
 	private static long _requests;
 	private static long _ticks;
 	private static int _summaryLogged;
+	private static long _lastLoadTicks;
+	private static string _lastLoadName = "(start)";
+	private static int _pluginLoadLogged;
+	private const long GapLogMs = 1000;
+	private const long SlowResolveMs = 200;
 
 	public override void Initialize()
 	{
 		try
 		{
 			_log = Log;
+			Crumb("patcher.initialize");
+			_lastLoadTicks = Stopwatch.GetTimestamp();
+			AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoad;
 			const BindingFlags flags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 			Type runner = null;
 			Type interop = null;
@@ -69,9 +77,64 @@ public sealed class FastResolvePatcher : BasePatcher
 		}
 	}
 
+	public override void Finalizer()
+	{
+		Crumb("patcher.finalizer");
+	}
+
+	/// <summary>
+	/// Launch timing crumbs (2026-11-20): process uptime and CPU split at fixed points, so a slow launch shows
+	/// which stretch between the preloader and the plugin's Load is slow without a sampled launch.
+	/// Pure System.Diagnostics; safe on any thread (no IL2CPP objects).
+	/// </summary>
+	private static void Crumb(string label, string extra = null)
+	{
+		try
+		{
+			using var process = Process.GetCurrentProcess();
+			var uptime = (long)(DateTime.Now - process.StartTime).TotalMilliseconds;
+			_log?.LogInfo("Timing: " + label + " uptimeMs=" + uptime
+				+ " cpuUserMs=" + (long)process.UserProcessorTime.TotalMilliseconds
+				+ " cpuKernelMs=" + (long)process.PrivilegedProcessorTime.TotalMilliseconds
+				+ " threads=" + process.Threads.Count
+				+ " resolves=" + Interlocked.Read(ref _requests)
+				+ (string.IsNullOrEmpty(extra) ? "" : " " + extra));
+		}
+		catch
+		{
+			// Timing is diagnostic only.
+		}
+	}
+
+	private static void OnAssemblyLoad(object sender, AssemblyLoadEventArgs args)
+	{
+		try
+		{
+			var name = args.LoadedAssembly.GetName().Name;
+			var now = Stopwatch.GetTimestamp();
+			var previous = Interlocked.Exchange(ref _lastLoadTicks, now);
+			var gapMs = (now - previous) * 1000 / Stopwatch.Frequency;
+			var previousName = _lastLoadName;
+			_lastLoadName = name;
+			if (name == "OfflineUnlockMod")
+			{
+				if (Interlocked.Exchange(ref _pluginLoadLogged, 1) == 0)
+					Crumb("pluginAssembly.loaded", "gapMs=" + gapMs + " after=" + previousName);
+				return;
+			}
+			if (gapMs >= GapLogMs)
+				Crumb("assemblyLoad.afterGap", "name=" + name + " gapMs=" + gapMs + " after=" + previousName);
+		}
+		catch
+		{
+			// Timing is diagnostic only.
+		}
+	}
+
 	private static Assembly Resolve(object sender, ResolveEventArgs args)
 	{
 		var started = Stopwatch.GetTimestamp();
+		string requested = args?.Name;
 		try
 		{
 			var name = new AssemblyName(args.Name).Name;
@@ -109,7 +172,11 @@ public sealed class FastResolvePatcher : BasePatcher
 		}
 		finally
 		{
-			Interlocked.Add(ref _ticks, Stopwatch.GetTimestamp() - started);
+			var elapsed = Stopwatch.GetTimestamp() - started;
+			Interlocked.Add(ref _ticks, elapsed);
+			var elapsedMs = elapsed * 1000 / Stopwatch.Frequency;
+			if (elapsedMs >= SlowResolveMs)
+				Crumb("resolve.slow", "ms=" + elapsedMs + " name=" + requested);
 			var count = Interlocked.Increment(ref _requests);
 			if (count == 150 && Interlocked.Exchange(ref _summaryLogged, 1) == 0)
 				_log?.LogInfo("First 150 resolve requests took " + (Interlocked.Read(ref _ticks) * 1000 / Stopwatch.Frequency) + " ms in total.");
@@ -118,6 +185,7 @@ public sealed class FastResolvePatcher : BasePatcher
 
 	private static Dictionary<string, List<string>> BuildIndex()
 	{
+		Crumb("index.begin");
 		var watch = Stopwatch.StartNew();
 		var index = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
 		var files = 0;
@@ -147,6 +215,7 @@ public sealed class FastResolvePatcher : BasePatcher
 			}
 		}
 		_log?.LogInfo("Indexed " + files + " assembly files in " + watch.ElapsedMilliseconds + " ms.");
+		Crumb("index.end");
 		return index;
 	}
 }

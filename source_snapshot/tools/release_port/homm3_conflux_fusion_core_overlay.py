@@ -339,6 +339,18 @@ class _Rows:
     def view(self, sid: str) -> dict[str, Any]:
         return copy.deepcopy(self._load(self._find(sid, "views"))["array"][0])
 
+    # Signature references ("sid:kind:index") were curated against the rows as they stood before the unit
+    # design tables rebuilt them; resolve those against the pre-design snapshot when there is one.
+    def sig_logic(self, sid: str) -> dict[str, Any]:
+        import homm3_unit_design_table as unit_design_table
+        snapshot = unit_design_table.PRE_DESIGN_ROWS.get(sid)
+        return copy.deepcopy(snapshot[0]) if snapshot else self.logic(sid)
+
+    def sig_view(self, sid: str) -> dict[str, Any]:
+        import homm3_unit_design_table as unit_design_table
+        snapshot = unit_design_table.PRE_DESIGN_ROWS.get(sid)
+        return copy.deepcopy(snapshot[1]) if snapshot else self.view(sid)
+
 
 def _ref(value: str) -> tuple[str, str, int]:
     sid, kind, index = value.split(":")
@@ -454,7 +466,11 @@ def derive_stats(host: dict[str, Any], guest: dict[str, Any]) -> dict[str, Any]:
         stats["moveType"] = fs["moveType"]
     else:
         stats.pop("moveType", None)
-    stats["energyPerRound"] = max(int(hs.get("energyPerRound") or 0), int(gs.get("energyPerRound") or 0))
+    # Focus generation (energyPerCast / energyPerTakeDamage / energyPerRound) is not inherited: the
+    # generator's normalize_custom_unit_focus_generation pass sets it from the fused unit's own attack
+    # class after this module runs (vanilla melee 2 / ranged 1 per action, 1 when hit, 0 per round).
+    for key in ("energyPerCast", "energyPerTakeDamage", "energyPerRound"):
+        stats.pop(key, None)
     # No inherited starting Focus (owner 2026-11-16): starting Focus is only a deliberate, carded passive
     # on a named unit, never a family default passed on by fusion.
     stats.pop("startEnergy", None)
@@ -463,8 +479,26 @@ def derive_stats(host: dict[str, Any], guest: dict[str, Any]) -> dict[str, Any]:
     return stats
 
 
+DAMAGE_MOD_KEYS = ("inDmgMods", "outDmgMods", "inDmgModsByCasterTags", "outDmgModsByTargetTags")
+
+
+def runtime_card_names() -> set[str]:
+    """Card name sids of plugin-side (runtime) kit rules on the elemental parents. Fusions inherit native data only
+    (owner decision 2026-11-21, option A): the plugin keys these rules by unit SID, so a fused row would show the
+    card with nothing behind it."""
+    import homm3_unit_design_table as design  # same folder; loaded by the overlay before this module runs
+
+    names: set[str] = set()
+    for doc in design.load_designs().values():
+        for sid, unit in doc["units"].items():
+            for entry in unit["kit"]:
+                if entry.get("k") == "runtime" and ("name" in entry or "nameSid" in entry):
+                    names.add(design.kit_sids(sid, entry)[0])
+    return names
+
+
 def _merge_damage_mods(stats: dict[str, Any], guest_stats: dict[str, Any]) -> None:
-    for key in ("inDmgMods", "outDmgMods"):
+    for key in DAMAGE_MOD_KEYS:
         guest_rows = ((guest_stats.get(key) or {}).get("list")) or []
         if not guest_rows:
             continue
@@ -553,8 +587,8 @@ def _build_signature_active(fused, signature, rows: _Rows, release_zip, helpers,
     if build == "unit_special":
         sid, kind, index = _ref(signature["source"])
         if sid.startswith("h3_"):
-            logic_row = copy.deepcopy(rows.logic(sid)[kind][index])
-            view_row = copy.deepcopy(rows.view(sid)[kind][index])
+            logic_row = copy.deepcopy(rows.sig_logic(sid)[kind][index])
+            view_row = copy.deepcopy(rows.sig_view(sid)[kind][index])
         else:
             logic_row, view_row = _resolve_vanilla_special(release_zip, helpers, sid, kind, index)
         logic_row["xHomm3AbilityOverride"] = marker
@@ -600,7 +634,7 @@ def _apply_signature_passive(fused, signature, logic, view, rows: _Rows, helpers
     passives = logic.setdefault("passives", [])
     for ref in signature.get("logicPassives") or []:
         sid, _kind, index = _ref(ref)
-        row = copy.deepcopy(rows.logic(sid)["passives"][index])
+        row = copy.deepcopy(rows.sig_logic(sid)["passives"][index])
         patch = signature.get("logicPassiveDealerPatch")
         if isinstance(patch, dict):
             for action in row.get("actions") or []:
@@ -609,13 +643,13 @@ def _apply_signature_passive(fused, signature, logic, view, rows: _Rows, helpers
         passives.append(row)
     if signature.get("attackBuff"):
         sid, kind, index = _ref(signature["attackBuff"])
-        donor = rows.logic(sid)[kind][index]["damageDealer"]
+        donor = rows.sig_logic(sid)[kind][index]["damageDealer"]
         for dealer in _attack_dealers(logic):
             dealer["buff"] = copy.deepcopy(donor["buff"])
             dealer["buffTarget_"] = donor.get("buffTarget_", "enemy")
     if signature.get("attackMechanics"):
         sid, kind, index = _ref(signature["attackMechanics"])
-        donor = rows.logic(sid)[kind][index]["damageDealer"]
+        donor = rows.sig_logic(sid)[kind][index]["damageDealer"]
         for attack in logic.get("defaultAttacks") or []:
             if isinstance(attack.get("damageDealer"), dict):
                 attack["damageDealer"]["targetMechanics"] = copy.deepcopy(donor.get("targetMechanics") or [])
@@ -631,7 +665,7 @@ def _apply_signature_passive(fused, signature, logic, view, rows: _Rows, helpers
     cards = view.setdefault("passives", [])
     for position, ref in enumerate(signature.get("cards") or []):
         sid, _kind, index = _ref(ref)
-        card = copy.deepcopy(rows.view(sid)["passives"][index])
+        card = copy.deepcopy(rows.sig_view(sid)["passives"][index])
         suffix = SIGNATURE_PASSIVE_KEY if position == 0 else f"{SIGNATURE_PASSIVE_KEY}_{position}"
         name_token = override_text_token(fused, None, signature.get("nameText"), f"{suffix}_name", lang_rows)
         desc_token = override_text_token(fused, None, signature.get("descriptionText"), f"{suffix}_description", lang_rows)
@@ -653,7 +687,10 @@ def _merge_helper_rows(release_zip, output, notes, helpers, signature, fused) ->
             notes.append(f"merge Conflux fusion signature helper {row.get('id')} into {path}")
 
 
-def build_fused_unit(fused, entry, rows: _Rows, release_zip, output, notes, helpers, lang_rows, ability_names):
+def build_fused_unit(fused, entry, rows: _Rows, release_zip, output, notes, helpers, lang_rows, ability_names,
+                     runtime_names: frozenset[str] = frozenset(), dropped: set[str] | None = None):
+    if dropped is None:
+        dropped = set()
     host_sid, guest_sid = entry["host"], entry["guest"]
     host_logic, guest_logic = rows.logic(host_sid), rows.logic(guest_sid)
     host_view, guest_view = rows.view(host_sid), rows.view(guest_sid)
@@ -686,7 +723,7 @@ def build_fused_unit(fused, entry, rows: _Rows, release_zip, output, notes, help
         for dealer in _attack_dealers(logic):
             dealer.pop("buff", None)
             dealer.pop("buffTarget_", None)
-        for key in ("inDmgMods", "outDmgMods"):
+        for key in DAMAGE_MOD_KEYS:
             logic["stats"][key] = {"list": []}
     else:
         passives = logic.setdefault("passives", [])
@@ -718,6 +755,9 @@ def build_fused_unit(fused, entry, rows: _Rows, release_zip, output, notes, help
         names = {c.get("name") for c in cards}
         for card in host_cards + guest_cards:
             if card.get("name") in ATTACK_SHAPE_CARDS or card.get("name") in names:
+                continue
+            if card.get("name") in runtime_names:
+                dropped.add(card.get("name"))
                 continue
             names.add(card.get("name"))
             cards.append(copy.deepcopy(card))
@@ -779,12 +819,15 @@ def add_conflux_fusion_units(release_zip, output, notes, helpers) -> None:
     ability_lang_rows: list[dict[str, str]] = []
     unit_lang_rows: list[dict[str, str]] = []
     write_json = helpers["write_json"]
+    runtime_names = frozenset(runtime_card_names())
+    dropped: set[str] = set()
     for pair in pairs:
         fused = pair["fused"]
         entry = units[fused]
         if entry["host"] != pair["host"] or entry["guest"] != pair["guest"] or entry["name"] != pair["name"]:
             raise RuntimeError(f"Conflux fusion data mismatch for {fused}")
-        logic, view = build_fused_unit(fused, entry, rows, release_zip, output, notes, helpers, ability_lang_rows, ability_names)
+        logic, view = build_fused_unit(fused, entry, rows, release_zip, output, notes, helpers, ability_lang_rows, ability_names,
+                                       runtime_names, dropped)
         _fill_placeholder_texts(fused, logic, view, ability_names, ability_lang_rows)
         logic_name, view_name = _unit_paths(fused)
         output[logic_name] = write_json({"array": [logic]})
@@ -802,6 +845,8 @@ def add_conflux_fusion_units(release_zip, output, notes, helpers) -> None:
         helpers["add_lang_overlay_rows"](release_zip, output, ABILITY_LANG_PATH, ability_lang_rows, notes)
     signatures = sum(1 for u in units.values() if (u.get("signature") or {}).get("build") not in (None, "fallback"))
     notes.append(f"add {len(pairs)} Conflux Elemental Fusion unit rows ({signatures} signatures)")
+    notes.append("Conflux fusions drop plugin-only parent cards (native inheritance only): "
+                 + (", ".join(sorted(dropped)) or "none"))
     add_conflux_fusion_stage2_units(release_zip, output, notes, helpers, rows, ability_names)
 
 

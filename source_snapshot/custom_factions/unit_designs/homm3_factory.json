@@ -1,0 +1,1181 @@
+{
+ "schemaVersion": 1,
+ "faction": "homm3_factory",
+ "approval": "Owner, 2026-11-20 goal: all factions, autonomous (no per-faction card review).",
+ "tradeAxis": "Crewed (role striker) versus automated (role ward). The crewed side Repairs constructs, buffs, shelters and marks targets for the rest of the army and is worth more the more army stands around it. The automated side is self-contained: its own resistances, self buffs, extra counterattacks and sustain, strong when it fights alone or far from the line.",
+ "buffFile": "DB/buffs/units_buffs_nature.json",
+ "buffs": [
+  {
+   "id": "h3_kit_factory_marked_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Bombardier Mark",
+   "text": "-3 Defense.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "defence": -3
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_factory_overclock_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Overclock",
+   "text": "+3 Initiative, +2 Attack.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "skill_tactics",
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "initiative": 3,
+      "offence": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_factory_curl_up_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Curl Up",
+   "text": "+3 Defense.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "sub_skill_resistance_1_icon",
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "defence": 3
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_factory_shattered_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Shattered",
+   "text": "-4 Attack, -4 Defense.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "offence": -4,
+      "defence": -4
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_factory_glass_shards_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Glass Shards",
+   "text": "Takes +10% Damage.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "inAllDmgMod": 0.1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_factory_deputized_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Deputized",
+   "text": "+3 Attack, +2 Initiative.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "skill_tactics",
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "offence": 3,
+      "initiative": 2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_factory_meditation_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Meditation",
+   "text": "Takes -60% Damage.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "sub_skill_resistance_1_icon",
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "inAllDmgMod": -0.6
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_factory_jade_ward_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Jade Ward",
+   "text": "Takes -50% Damage.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "sub_skill_resistance_1_icon",
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "inAllDmgMod": -0.5
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_factory_overheated_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Overheated",
+   "text": "-4 Defense.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "defence": -4
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_factory_spotting_scope_effect",
+   "cloneOf": "living_arrows_shroomwood_bow_law_unit_bonus",
+   "name": "Spotting Scope",
+   "text": "Deals full Ranged Damage at any range.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "keepOnDeath": false,
+    "dontTriggerAction": false,
+    "icon": "sub_skill_siege_2_icon",
+    "maxDuration": 1
+   }
+  },
+  {
+   "id": "h3_kit_factory_huddle_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Huddle",
+   "text": "+3 Defense.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "sub_skill_tactics_4_defence_buff_icon",
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "defence": 3
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_factory_huddle_5_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Huddle",
+   "text": "+5 Defense.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "icon": "sub_skill_tactics_4_defence_buff_icon",
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "defence": 5
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_factory_burrow_effect",
+   "cloneOf": "magic_shade_cloak_effect_0",
+   "name": "Burrowed",
+   "text": "Cannot be targeted until it acts or takes Damage.",
+   "set": {
+    "maxDuration": 2,
+    "mechanics": [
+     {
+      "trigger": "unit_took_damage",
+      "mech": "zero_duration_on_damage",
+      "values": [
+       "self",
+       "all"
+      ]
+     },
+     {
+      "trigger": "unit_skip",
+      "mech": "zero_duration_on_damage",
+      "values": [
+       "self"
+      ]
+     },
+     {
+      "trigger": "unit_end_move",
+      "mech": "zero_duration_on_damage",
+      "values": [
+       "self"
+      ]
+     },
+     {
+      "trigger": "unit_cast_ability",
+      "mech": "zero_duration_on_damage",
+      "values": [
+       "self"
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "units": {
+  "h3_halfling": {
+   "role": "base",
+   "stats": {
+    "hp": 7,
+    "offence": 4,
+    "defence": 2,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 3,
+    "initiative": 5
+   },
+   "gold": 40,
+   "squadValue": 78,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "h3_common_passive_positive_luck_name",
+     "descSid": "h3_common_passive_positive_luck_description",
+     "icon": "sub_skill_luck_1_icon"
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_halfling_grenadier": {
+   "role": "striker",
+   "stats": {
+    "hp": 9,
+    "offence": 6,
+    "defence": 2,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 3,
+    "initiative": 5
+   },
+   "gold": 60,
+   "squadValue": 102,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "h3_common_passive_positive_luck_name",
+     "descSid": "h3_common_passive_positive_luck_description",
+     "icon": "sub_skill_luck_1_icon"
+    },
+    {
+     "k": "factory_stat",
+     "stats": {
+      "armorPen": 0.3
+     },
+     "nameSid": "h3_common_passive_defense_pierce_30_name",
+     "descSid": "h3_common_passive_defense_pierce_30_description"
+    },
+    {
+     "k": "shot",
+     "focus": 1,
+     "cd": 1,
+     "mult": 0.5,
+     "counter": false,
+     "buff": "h3_kit_factory_marked_effect",
+     "duration": 2,
+     "name": "Bombardier Mark",
+     "text": "Deals 50% basic attack Damage. The target has -3 Defense until the end of the next round."
+    }
+   ]
+  },
+  "h3_halfling_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 8,
+    "offence": 4,
+    "defence": 4,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 60,
+   "squadValue": 102,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "h3_common_passive_positive_luck_name",
+     "descSid": "h3_common_passive_positive_luck_description",
+     "icon": "sub_skill_luck_1_icon"
+    },
+    {
+     "k": "skirmisher",
+     "name": "Flamethrower",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "factory_pattern_shot",
+     "focus": 1,
+     "cd": 2,
+     "mult": 0.8,
+     "counter": false,
+     "pattern": "attack_rumble_x1_x100_x50",
+     "name": "Ember Canister",
+     "text": "Performs a Ranged attack that deals 80% Damage to the target and 40% Damage to every enemy adjacent to it."
+    }
+   ]
+  },
+  "h3_mechanic": {
+   "role": "base",
+   "stats": {
+    "hp": 13,
+    "offence": 5,
+    "defence": 4,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 140,
+   "squadValue": 105,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_reach_1_name",
+     "descSid": "base_passive_strike_reach_1_description"
+    },
+    {
+     "k": "factory_repair",
+     "focus": 1,
+     "cd": 2,
+     "charges": 1,
+     "values": [
+      "10",
+      "1",
+      "5",
+      "until start amount"
+     ],
+     "name": "Repair",
+     "text": "Restores HP to another friendly construct. This can revive fallen units. Usable once per battle."
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_engineer": {
+   "role": "striker",
+   "stats": {
+    "hp": 16,
+    "offence": 6,
+    "defence": 6,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 170,
+   "squadValue": 155,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_reach_1_name",
+     "descSid": "base_passive_strike_reach_1_description"
+    },
+    {
+     "k": "factory_repair",
+     "focus": 1,
+     "cd": 2,
+     "charges": 2,
+     "values": [
+      "20",
+      "1",
+      "10",
+      "until start amount"
+     ],
+     "name": "Repair",
+     "text": "Restores HP to another friendly construct. This can revive fallen units. Usable twice per battle."
+    },
+    {
+     "k": "factory_cast_buff",
+     "focus": 1,
+     "cd": 2,
+     "target": "allynoself",
+     "free": true,
+     "range": 4,
+     "buff": "h3_kit_factory_spotting_scope_effect",
+     "duration": 1,
+     "icon": "sub_skill_siege_2_icon",
+     "name": "Spotting Scope",
+     "text": "A friendly creature within 4 hexes deals full Ranged Damage at any range until the end of the round. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_mechanic_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 14,
+    "offence": 7,
+    "defence": 4,
+    "damageMin": 3,
+    "damageMax": 4,
+    "speed": 4,
+    "initiative": 8
+   },
+   "gold": 170,
+   "squadValue": 155,
+   "kit": [
+    {
+     "k": "factory_reach_attack",
+     "nameSid": "base_passive_strike_reach_1_name",
+     "descSid": "base_passive_strike_reach_1_description"
+    },
+    {
+     "k": "factory_repair",
+     "focus": 1,
+     "cd": 2,
+     "charges": 1,
+     "values": [
+      "10",
+      "1",
+      "5",
+      "until start amount"
+     ],
+     "name": "Repair",
+     "text": "Restores HP to another friendly construct. This can revive fallen units. Usable once per battle."
+    },
+    {
+     "k": "self_buff",
+     "focus": 1,
+     "cd": 1,
+     "buff": "h3_kit_factory_overclock_effect",
+     "duration": 1,
+     "name": "Overclock",
+     "text": "Gains +3 Initiative and +2 Attack until the end of the round. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_armadillo": {
+   "role": "base",
+   "stats": {
+    "hp": 39,
+    "offence": 4,
+    "defence": 11,
+    "damageMin": 4,
+    "damageMax": 7,
+    "speed": 3,
+    "initiative": 4
+   },
+   "gold": 200,
+   "squadValue": 233,
+   "kit": [
+    {
+     "k": "factory_defend_pulse",
+     "buff": "h3_kit_factory_huddle_effect",
+     "duration": 1,
+     "icon": "sub_skill_tactics_4_defence_buff_icon",
+     "name": "Huddle",
+     "text": "When this creature Defends, friendly creatures adjacent to it gain +3 Defense until the end of the round."
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_bellwether_armadillo": {
+   "role": "striker",
+   "stats": {
+    "hp": 40,
+    "offence": 6,
+    "defence": 11,
+    "damageMin": 5,
+    "damageMax": 8,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 230,
+   "squadValue": 358,
+   "kit": [
+    {
+     "k": "factory_defend_pulse",
+     "buff": "h3_kit_factory_huddle_5_effect",
+     "duration": 1,
+     "icon": "sub_skill_tactics_4_defence_buff_icon",
+     "name": "Huddle",
+     "text": "When this creature Defends, friendly creatures adjacent to it gain +5 Defense until the end of the round."
+    },
+    {
+     "k": "factory_rally_dispel",
+     "focus": 1,
+     "cd": 2,
+     "tag": "movementNegative",
+     "icon": "magic_inner_light_effect_icon",
+     "name": "Rally Bell",
+     "text": "Removes every slowing and movement-preventing effect from adjacent friendly creatures. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_armadillo_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 40,
+    "offence": 5,
+    "defence": 12,
+    "damageMin": 5,
+    "damageMax": 8,
+    "speed": 3,
+    "initiative": 4
+   },
+   "gold": 230,
+   "squadValue": 358,
+   "kit": [
+    {
+     "k": "factory_defend_pulse",
+     "buff": "h3_kit_factory_huddle_effect",
+     "duration": 1,
+     "icon": "sub_skill_tactics_4_defence_buff_icon",
+     "name": "Huddle",
+     "text": "When this creature Defends, friendly creatures adjacent to it gain +3 Defense until the end of the round."
+    },
+    {
+     "k": "when_damaged_self_buff",
+     "buff": "h3_kit_factory_curl_up_effect",
+     "duration": 2,
+     "name": "Curl Up",
+     "text": "Whenever this creature takes Damage, it has +3 Defense until the end of the next round."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_armadillo_upg_alt_abilities_0_name"
+    }
+   ]
+  },
+  "h3_automaton": {
+   "role": "base",
+   "stats": {
+    "hp": 35,
+    "offence": 11,
+    "defence": 10,
+    "damageMin": 8,
+    "damageMax": 10,
+    "speed": 5,
+    "initiative": 8
+   },
+   "gold": 350,
+   "squadValue": 285,
+   "kit": [
+    {
+     "k": "card",
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Construct",
+     "text": "Immune to Poison and Bleeding. Healing and resurrection meant for living creatures have no effect on it; Repair restores it."
+    },
+    {
+     "k": "factory_death_blast",
+     "damage": 10,
+     "name": "Volatile Reactor",
+     "text": "Upon death, this creature explodes, dealing 10 Magic Damage to all adjacent creatures, multiplied by the level of its hero."
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_sentinel_automaton": {
+   "role": "striker",
+   "stats": {
+    "hp": 42,
+    "offence": 13,
+    "defence": 14,
+    "damageMin": 9,
+    "damageMax": 11,
+    "speed": 5,
+    "initiative": 8
+   },
+   "gold": 450,
+   "squadValue": 419,
+   "kit": [
+    {
+     "k": "card",
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Construct",
+     "text": "Immune to Poison and Bleeding. Healing and resurrection meant for living creatures have no effect on it; Repair restores it."
+    },
+    {
+     "k": "factory_death_blast",
+     "damage": 10,
+     "name": "Volatile Reactor",
+     "text": "Upon death, this creature explodes, dealing 10 Magic Damage to all adjacent creatures, multiplied by the level of its hero."
+    },
+    {
+     "k": "runtime",
+     "rule": "bodyguard",
+     "percent": 30,
+     "toughMult": 0.95,
+     "icon": "sub_skill_tactics_4_defence_buff_icon",
+     "name": "Guardian Protocol",
+     "text": "Takes 30% of the Damage dealt to adjacent friendly creatures in their place."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_sentinel_automaton_abilities_0_name"
+    }
+   ]
+  },
+  "h3_automaton_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 37,
+    "offence": 14,
+    "defence": 10,
+    "damageMin": 9,
+    "damageMax": 11,
+    "speed": 7,
+    "initiative": 10
+   },
+   "gold": 450,
+   "squadValue": 419,
+   "kit": [
+    {
+     "k": "card",
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Construct",
+     "text": "Immune to Poison and Bleeding. Healing and resurrection meant for living creatures have no effect on it; Repair restores it."
+    },
+    {
+     "k": "factory_death_blast",
+     "damage": 10,
+     "name": "Volatile Reactor",
+     "text": "Upon death, this creature explodes, dealing 10 Magic Damage to all adjacent creatures, multiplied by the level of its hero."
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_automaton_upg_alt_abilities_0_name"
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_sandworm": {
+   "role": "base",
+   "stats": {
+    "hp": 73,
+    "offence": 15,
+    "defence": 13,
+    "damageMin": 14,
+    "damageMax": 21,
+    "speed": 6,
+    "initiative": 7
+   },
+   "gold": 575,
+   "squadValue": 662,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_blink_name",
+     "descSid": "base_passive_blink_description",
+     "icon": "space_6_magic_blink"
+    },
+    {
+     "k": "spell_immunity",
+     "level": 3
+    },
+    {
+     "k": "factory_wait_burrow",
+     "buff": "h3_kit_factory_burrow_effect",
+     "duration": 2,
+     "toughMult": 1.05,
+     "icon": "magic_shade_cloak_effect_icon",
+     "name": "Burrow",
+     "text": "When this creature Waits, it burrows: it cannot be targeted until its next action or until it takes Damage."
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_olgoi_khorkhoi": {
+   "role": "ward",
+   "stats": {
+    "hp": 74,
+    "offence": 18,
+    "defence": 15,
+    "damageMin": 14,
+    "damageMax": 21,
+    "speed": 7,
+    "initiative": 9
+   },
+   "gold": 650,
+   "squadValue": 1090,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_blink_name",
+     "descSid": "base_passive_blink_description",
+     "icon": "space_6_magic_blink"
+    },
+    {
+     "k": "spell_immunity",
+     "level": 3
+    },
+    {
+     "k": "factory_wait_burrow",
+     "buff": "h3_kit_factory_burrow_effect",
+     "duration": 2,
+     "toughMult": 1.05,
+     "icon": "magic_shade_cloak_effect_icon",
+     "name": "Burrow",
+     "text": "When this creature Waits, it burrows: it cannot be targeted until its next action or until it takes Damage."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_olgoi_khorkhoi_abilities_0_name"
+    }
+   ]
+  },
+  "h3_sandworm_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 77,
+    "offence": 16,
+    "defence": 13,
+    "damageMin": 15,
+    "damageMax": 22,
+    "speed": 8,
+    "initiative": 11
+   },
+   "gold": 650,
+   "squadValue": 1090,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_blink_name",
+     "descSid": "base_passive_blink_description",
+     "icon": "space_6_magic_blink"
+    },
+    {
+     "k": "spell_immunity",
+     "level": 3
+    },
+    {
+     "k": "factory_wait_burrow",
+     "buff": "h3_kit_factory_burrow_effect",
+     "duration": 2,
+     "toughMult": 1.05,
+     "icon": "magic_shade_cloak_effect_icon",
+     "name": "Burrow",
+     "text": "When this creature Waits, it burrows: it cannot be targeted until its next action or until it takes Damage."
+    },
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_factory_glass_shards_effect",
+     "duration": 2,
+     "name": "Glass Shards",
+     "text": "Basic attacks and counterattacks leave shards in the target. It takes +10% Damage until the end of the next round."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "buff": "h3_kit_factory_shattered_effect",
+     "duration": 2,
+     "name": "Shatter",
+     "text": "Performs a Melee attack. The target has -4 Attack and -4 Defense until the end of the next round."
+    }
+   ],
+   "powerTarget": 0.95
+  },
+  "h3_gunslinger": {
+   "role": "base",
+   "stats": {
+    "hp": 80,
+    "offence": 22,
+    "defence": 18,
+    "damageMin": 16,
+    "damageMax": 26,
+    "speed": 4,
+    "initiative": 8
+   },
+   "gold": 800,
+   "squadValue": 1190,
+   "kit": [
+    {
+     "k": "factory_first_strike"
+    },
+    {
+     "k": "factory_countershot"
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_bounty_hunter": {
+   "role": "ward",
+   "stats": {
+    "hp": 88,
+    "offence": 27,
+    "defence": 18,
+    "damageMin": 20,
+    "damageMax": 31,
+    "speed": 5,
+    "initiative": 10
+   },
+   "gold": 1100,
+   "squadValue": 2086,
+   "kit": [
+    {
+     "k": "factory_first_strike"
+    },
+    {
+     "k": "factory_countershot"
+    },
+    {
+     "k": "sharpshooter"
+    },
+    {
+     "k": "runtime",
+     "rule": "bounty",
+     "percent": 30,
+     "offMult": 1.12,
+     "icon": "sub_skill_assault_1_icon",
+     "name": "Bounty",
+     "text": "Deals +30% Damage to the enemy stack with the most total Health on the battlefield."
+    }
+   ]
+  },
+  "h3_gunslinger_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 97,
+    "offence": 24,
+    "defence": 21,
+    "damageMin": 17,
+    "damageMax": 28,
+    "speed": 5,
+    "initiative": 9
+   },
+   "gold": 1100,
+   "squadValue": 2086,
+   "kit": [
+    {
+     "k": "factory_first_strike"
+    },
+    {
+     "k": "factory_countershot"
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_gunslinger_upg_alt_abilities_0_name"
+    },
+    {
+     "k": "factory_cast_buff",
+     "focus": 2,
+     "cd": 2,
+     "target": "allynoself",
+     "free": true,
+     "buff": "h3_kit_factory_deputized_effect",
+     "duration": 2,
+     "name": "Deputize",
+     "text": "Target friendly creature has +3 Attack and +2 Initiative until the end of the next round. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_couatl": {
+   "role": "base",
+   "stats": {
+    "hp": 236,
+    "offence": 29,
+    "defence": 26,
+    "damageMin": 36,
+    "damageMax": 60,
+    "speed": 8,
+    "initiative": 12
+   },
+   "gold": 2000,
+   "squadValue": 3453,
+   "kit": [
+    {
+     "k": "stat_aura",
+     "radius": 1,
+     "target": "enemy",
+     "stats": {
+      "offence": -2
+     },
+     "toughMult": 1.08,
+     "icon": "magic_shorten_shadow_effect_icon",
+     "name": "Radiant Plumage",
+     "text": "Enemy creatures adjacent to this creature have -2 Attack."
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_crimson_couatl": {
+   "role": "ward",
+   "stats": {
+    "hp": 236,
+    "offence": 34,
+    "defence": 28,
+    "damageMin": 38,
+    "damageMax": 63,
+    "speed": 11,
+    "initiative": 16
+   },
+   "gold": 3500,
+   "squadValue": 7244,
+   "kit": [
+    {
+     "k": "stat_aura",
+     "radius": 1,
+     "target": "enemy",
+     "stats": {
+      "offence": -4
+     },
+     "toughMult": 1.15,
+     "icon": "magic_shorten_shadow_effect_icon",
+     "name": "Radiant Plumage",
+     "text": "Enemy creatures adjacent to this creature have -4 Attack."
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "self_buff",
+     "focus": 3,
+     "cd": 3,
+     "buff": "h3_kit_factory_meditation_effect",
+     "duration": 1,
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Meditation",
+     "text": "Takes -60% Damage until the end of the round. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_couatl_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 277,
+    "offence": 29,
+    "defence": 34,
+    "damageMin": 45,
+    "damageMax": 74,
+    "speed": 9,
+    "initiative": 14
+   },
+   "gold": 3500,
+   "squadValue": 7244,
+   "kit": [
+    {
+     "k": "stat_aura",
+     "radius": 1,
+     "target": "enemy",
+     "stats": {
+      "offence": -2
+     },
+     "toughMult": 1.08,
+     "icon": "magic_shorten_shadow_effect_icon",
+     "name": "Radiant Plumage",
+     "text": "Enemy creatures adjacent to this creature have -2 Attack."
+    },
+    {
+     "k": "factory_cast_buff",
+     "focus": 3,
+     "cd": 3,
+     "target": "allynoself",
+     "free": true,
+     "buff": "h3_kit_factory_jade_ward_effect",
+     "duration": 1,
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Jade Ward",
+     "text": "Target friendly creature takes -50% Damage until the end of the round. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_dreadnought": {
+   "role": "base",
+   "stats": {
+    "hp": 244,
+    "offence": 28,
+    "defence": 30,
+    "damageMin": 40,
+    "damageMax": 53,
+    "speed": 5,
+    "initiative": 8
+   },
+   "gold": 2200,
+   "squadValue": 3607,
+   "kit": [
+    {
+     "k": "card",
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Construct",
+     "text": "Immune to Poison and Bleeding. Healing and resurrection meant for living creatures have no effect on it; Repair restores it."
+    },
+    {
+     "k": "factory_pattern_strike",
+     "focus": 3,
+     "cd": 3,
+     "mult": 1.0,
+     "counter": false,
+     "pattern": "attack_swipe_x100_x100",
+     "buff": "h3_kit_factory_overheated_effect",
+     "duration": 2,
+     "name": "Heat Stroke",
+     "text": "Performs a Melee attack that hits the target and the two enemies to its sides. Enemies hit have -4 Defense until the end of the next round. Enemies do not counterattack."
+    }
+   ],
+   "powerTarget": 0.92
+  },
+  "h3_juggernaut": {
+   "role": "striker",
+   "stats": {
+    "hp": 320,
+    "offence": 34,
+    "defence": 31,
+    "damageMin": 55,
+    "damageMax": 71,
+    "speed": 6,
+    "initiative": 9
+   },
+   "gold": 3500,
+   "squadValue": 7233,
+   "kit": [
+    {
+     "k": "card",
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Construct",
+     "text": "Immune to Poison and Bleeding. Healing and resurrection meant for living creatures have no effect on it; Repair restores it."
+    },
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_swipe_1_name",
+     "descSid": "base_passive_strike_swipe_1_description_alt",
+     "icon": "skill_tactics"
+    },
+    {
+     "k": "factory_pattern_strike",
+     "focus": 3,
+     "cd": 3,
+     "mult": 1.0,
+     "counter": false,
+     "pattern": "attack_swirl_with_target_x100",
+     "buff": "h3_kit_factory_overheated_effect",
+     "duration": 2,
+     "name": "Heat Stroke",
+     "text": "Performs a Melee attack that hits every adjacent enemy. Enemies hit have -4 Defense until the end of the next round. Enemies do not counterattack."
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_juggernaut_abilities_0_name"
+    }
+   ]
+  },
+  "h3_dreadnought_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 310,
+    "offence": 29,
+    "defence": 39,
+    "damageMin": 46,
+    "damageMax": 62,
+    "speed": 5,
+    "initiative": 9
+   },
+   "gold": 3500,
+   "squadValue": 7233,
+   "kit": [
+    {
+     "k": "card",
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Construct",
+     "text": "Immune to Poison and Bleeding. Healing and resurrection meant for living creatures have no effect on it; Repair restores it."
+    },
+    {
+     "k": "short_debuffs",
+     "rounds": 1,
+     "toughMult": 1.05,
+     "icon": "sub_skill_resistance_3_icon",
+     "name": "Sealed Hull",
+     "text": "Negative effects on this creature last at most 1 round."
+    },
+    {
+     "k": "factory_pattern_strike",
+     "focus": 3,
+     "cd": 3,
+     "mult": 1.0,
+     "counter": false,
+     "pattern": "attack_swipe_x100_x100",
+     "buff": "h3_kit_factory_overheated_effect",
+     "duration": 2,
+     "name": "Heat Stroke",
+     "text": "Performs a Melee attack that hits the target and the two enemies to its sides. Enemies hit have -4 Defense until the end of the next round. Enemies do not counterattack."
+    }
+   ]
+  }
+ }
+}

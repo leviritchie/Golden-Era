@@ -70,6 +70,8 @@ VALIDATORS: tuple[tuple[str, ...], ...] = (
     ("tools/validate_homm3_unit_ability_redesign_contract.py", "--core", "--repo-root", "."),
     ("tools/validate_homm3_unit_balance_adjustment_contract.py", "--core-zip"),
     ("tools/validate_homm3_upgrade_pair_parity_contract.py", "--core"),
+    ("tools/validate_homm3_unit_design_table.py", "--core"),
+    ("tools/validate_homm3_unit_card_icons.py", "--core"),
     ("tools/validate_homm3_unit_buff_sid_contract.py", "--core"),
     ("tools/validate_homm3_unit_presentation_stopgap_contract.py", "--core"),
     ("tools/validate_scenery_footprint_oe_larger_contract.py", "--core"),

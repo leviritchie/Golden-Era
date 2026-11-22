@@ -375,6 +375,8 @@ def validate_installed_units(core: zipfile.ZipFile) -> None:
         row = (doc.get("array") or [None])[0]
         if not isinstance(row, dict):
             fail(f"installed {sid} logic row missing")
+        if isinstance(row.get("xHomm3UnitDesign"), dict):
+            continue  # kit owned by custom_factions/unit_designs (validate_homm3_unit_design_table.py)
         abilities = row.get("abilities") or []
         if not isinstance(abilities, list) or not abilities:
             fail(f"installed {sid} must have Focus abilities")
@@ -395,6 +397,8 @@ def validate_installed_units(core: zipfile.ZipFile) -> None:
         present += 1
         logic = json.loads(core.read(logic_name).decode("utf-8-sig"))
         row = (logic.get("array") or [None])[0]
+        if isinstance(row, dict) and isinstance(row.get("xHomm3UnitDesign"), dict):
+            continue
         stats = row.get("stats") if isinstance(row, dict) else None
         if not isinstance(stats, dict) or stats.get("ignoreShootingBlock") is not True:
             fail(f"installed {sid} must set ignoreShootingBlock")
@@ -419,6 +423,8 @@ def validate_installed_units(core: zipfile.ZipFile) -> None:
         present += 1
         logic = json.loads(core.read(logic_name).decode("utf-8-sig"))
         row = (logic.get("array") or [None])[0]
+        if isinstance(row, dict) and isinstance(row.get("xHomm3UnitDesign"), dict):
+            continue
         passives = row.get("passives") if isinstance(row, dict) else None
         found_damage = False
         found_effect = False

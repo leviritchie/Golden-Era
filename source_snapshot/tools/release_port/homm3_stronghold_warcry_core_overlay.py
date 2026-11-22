@@ -3,8 +3,8 @@
 Warcry is runtime-owned: OfflineUnlockMod/Homm3StrongholdWarcryRuntime.cs runs the attack/ability chain, the
 turn-start Attack bonus and every subskill effect except the native-terrain one. The Core rows here are carriers:
 
-- the skill row keeps the proven faction-skill load shape (unitBoolStat ignoreFractionsCount at every rank), so the
-  hero gets no Warcries buttons any more;
+- the skill row's ranks carry no bonuses, so the hero gets no Warcries buttons any more and the army keeps the
+  mixed-faction Morale penalty (the old ignoreFractionsCount carrier removed it, 2026-11-19);
 - the six subskills keep their old SIDs (sub_skill_faction_homm3_stronghold_1..6) and tier slots for save
   compatibility; only Native Drums carries a native bonus;
 - the arena skill and arena subskills get the same shape (the generator wrote them; the overlay never did).
@@ -52,7 +52,8 @@ SKILL_DESC = (
     "Each attack or ability used by a friendly stack, one after another, adds 1 to the Warcry counter. Every stack "
     "that attacks in melee joins the Warcry. A Stronghold creature beginning its turn gains Attack for that turn "
     "equal to the counter multiplied by the number of stacks in the Warcry. Moving without attacking, waiting or "
-    "defending breaks the Warcry. Ranged attacks raise the counter but do not join the Warcry."
+    "defending breaks the Warcry, unless the creature used an ability first in that turn. Ranged attacks raise the "
+    "counter but do not join the Warcry."
 )
 RANK_DESCS = [
     "Your army can build a Warcry.",
@@ -66,8 +67,8 @@ IMPLEMENTED = (
     "The on-screen chain counter is Homm3StrongholdWarcryCounter."
 )
 SOURCE_DIFFERENCE = (
-    "Replaces the three Warcries hero actions (Rallying, Fortune, Tempo Cry). The rank data is the native "
-    "unitBoolStat ignoreFractionsCount load shape; the retired hero ability, delta, side-buff and unit-buff rows stay "
+    "Replaces the three Warcries hero actions (Rallying, Fortune, Tempo Cry). The ranks carry no native "
+    "bonuses; the retired hero ability, delta, side-buff and unit-buff rows stay "
     "defined but nothing grants them. Subskills reuse the Warcries subskill SIDs for save compatibility."
 )
 
@@ -96,8 +97,11 @@ SUBSKILL_ICONS = {
 
 
 def faction_skill_levels() -> list[list[dict[str, Any]]]:
-    """Runtime-owned load shape: every rank carries only the harmless native carrier bonus."""
-    return [[{"type": "unitBoolStat", "parameters": ["ignoreFractionsCount", "true"]}] for _ in range(3)]
+    """Runtime-owned: the ranks carry no bonuses; the runtime reads the rank from the hero's skill list.
+
+    (empty ranks load: the July 2026 map-load NRE came from empty Adv/Exp subSkills, see docs/factory_bulwark_implementation_handoff.md 15b-16; Inferno Gating ships empty ranks since 2026-11-14)
+    """
+    return [[], [], []]
 
 
 def _arena(sid: str) -> str:

@@ -1,0 +1,915 @@
+{
+ "schemaVersion": 1,
+ "faction": "homm3_rampart",
+ "approval": "Owner, 2026-11-20: 'Yes, start Rampart' (plan docs/unit_rebalance_plan_20261120.md, all five decisions accepted).",
+ "tradeAxis": "Striker (high Initiative, on-hit riders, wants to be the stack that answers) versus Ward (durable bait that wants to be the stack attacked). Both sides are useful in any army; Avenger only makes the choice sharper.",
+ "buffFile": "DB/buffs/units_buffs_nature.json",
+ "buffs": [
+  {
+   "id": "h3_kit_pinned_effect",
+   "cloneOf": "minos_debuff",
+   "name": "Pinned",
+   "text": "-2 Speed.",
+   "set": {
+    "maxDuration": 2,
+    "ignoreDurationBuffs": true,
+    "data": {
+     "stats": {
+      "speed": -2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_dazzle_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Dazzled",
+   "text": "-2 Attack.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "data": {
+     "stats": {
+      "offence": -2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_covering_fire_effect",
+   "cloneOf": "ent_taunt_buff",
+   "name": "Covering Fire",
+   "text": "Shoots the next enemy that attacks an adjacent friendly creature.",
+   "set": {
+    "icon": "crossbowman_buff_icon",
+    "maxDuration": 1,
+    "canDispel": true,
+    "data": {
+     "stats": {}
+    }
+   }
+  },
+  {
+   "id": "h3_kit_lead_the_charge_effect",
+   "cloneOf": "sub_skill_tactics_2_initiative_buff",
+   "name": "Lead the Charge",
+   "text": "+1 Initiative.",
+   "set": {
+    "hidden": false,
+    "infinite": false,
+    "canDispel": true,
+    "tags": [
+     "positive"
+    ],
+    "isPositive": true,
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "initiative": 1
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_reckless_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Off Balance",
+   "text": "Takes +25% Damage.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "inAllDmgMod": 0.25
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_guardian_roar_effect",
+   "cloneOf": "ent_taunt_buff",
+   "name": "Guardian Roar",
+   "text": "Enemy creatures within 2 hexes can target only this creature.",
+   "set": {}
+  },
+  {
+   "id": "h3_kit_rampart_bound_effect",
+   "cloneOf": "ent_root",
+   "name": "Rooted",
+   "text": "Cannot move. Takes +30% Damage from Dendroid Soldiers.",
+   "set": {
+    "data": {
+     "stats": {
+      "inDmgModsByCasterTags": {
+       "list": [
+        {
+         "t": "h3_kit_strangler",
+         "v": 0.3
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_rampart_grudge_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Grudge",
+   "text": "Takes +25% Damage from Battleragers for the rest of the battle.",
+   "set": {
+    "icon": "magic_vulnerability_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "infinite": true,
+    "data": {
+     "stats": {
+      "inDmgModsByCasterTags": {
+       "list": [
+        {
+         "t": "h3_kit_grudge",
+         "v": 0.25
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_rampart_sapped_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Sapped",
+   "text": "-2 Attack.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "data": {
+     "stats": {
+      "offence": -2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_rampart_radiant_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Radiant Horn",
+   "text": "-2 Initiative.",
+   "set": {
+    "icon": "magic_unnatural_calm_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "data": {
+     "stats": {
+      "initiative": -2
+     }
+    }
+   }
+  }
+ ],
+ "units": {
+  "h3_centaur": {
+   "role": "base",
+   "stats": {
+    "hp": 11,
+    "offence": 4,
+    "defence": 4,
+    "damageMin": 3,
+    "damageMax": 5,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 75,
+   "squadValue": 94,
+   "kit": [
+    {
+     "k": "rampart_stat",
+     "stats": {
+      "armorPen": 0.2
+     },
+     "name": "Hunter's Eye",
+     "text": "Attacks ignore 20% of the target's Defence."
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_centaur_captain": {
+   "role": "striker",
+   "stats": {
+    "hp": 13,
+    "offence": 5,
+    "defence": 4,
+    "damageMin": 3,
+    "damageMax": 6,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 100,
+   "squadValue": 134,
+   "kit": [
+    {
+     "k": "rampart_stat",
+     "stats": {
+      "armorPen": 0.3
+     },
+     "name": "Hunter's Eye",
+     "text": "Attacks ignore 30% of the target's Defence."
+    },
+    {
+     "k": "rally",
+     "focus": 1,
+     "cd": 2,
+     "buff": "h3_kit_lead_the_charge_effect",
+     "duration": 1,
+     "name": "Lead the Charge",
+     "text": "Adjacent friendly creatures gain +1 Initiative until the end of the round. Does not end this creature's turn."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 1,
+     "cd": 1,
+     "return": true,
+     "name": "Wheeling Charge",
+     "text": "Performs a Melee attack, then returns to its original position."
+    }
+   ]
+  },
+  "h3_centaur_ranger_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 11,
+    "offence": 4,
+    "defence": 4,
+    "damageMin": 3,
+    "damageMax": 5,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 100,
+   "squadValue": 134,
+   "kit": [
+    {
+     "k": "skirmisher",
+     "name": "Skirmisher",
+     "text": "Receives no penalty in Melee range, dealing full Damage."
+    },
+    {
+     "k": "shot",
+     "focus": 1,
+     "cd": 1,
+     "mult": 0.5,
+     "counter": false,
+     "buff": "h3_kit_pinned_effect",
+     "duration": 2,
+     "name": "Pinning Shot",
+     "text": "Deals 50% basic attack Damage. The target has -2 Speed until the end of the next round."
+    }
+   ]
+  },
+  "h3_dwarf": {
+   "role": "base",
+   "stats": {
+    "hp": 16,
+    "offence": 5,
+    "defence": 6,
+    "damageMin": 4,
+    "damageMax": 6,
+    "speed": 3,
+    "initiative": 4
+   },
+   "gold": 110,
+   "squadValue": 147,
+   "kit": [
+    {
+     "k": "resist",
+     "t": "magic_damage",
+     "v": -0.2,
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Magic Resistance",
+     "text": "Takes -20% Magic Damage."
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_battle_dwarf": {
+   "role": "ward",
+   "stats": {
+    "hp": 18,
+    "offence": 6,
+    "defence": 8,
+    "damageMin": 4,
+    "damageMax": 6,
+    "speed": 3,
+    "initiative": 4
+   },
+   "gold": 150,
+   "squadValue": 221,
+   "kit": [
+    {
+     "k": "resist",
+     "t": "magic_damage",
+     "v": -0.4,
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Magic Resistance",
+     "text": "Takes -40% Magic Damage."
+    },
+    {
+     "k": "runtime",
+     "rule": "adjacent_ally_ward",
+     "percent": 10,
+     "cap": 30,
+     "icon": "sub_skill_faction_homm3_castle_elite_strategem_shield_wall",
+     "name": "Shield Wall",
+     "text": "Takes -10% Damage for each adjacent friendly creature, up to -30%."
+    },
+    {
+     "k": "self_buff",
+     "focus": 2,
+     "cd": 2,
+     "buff": "h3_runic_guard_effect",
+     "duration": 1,
+     "icon": "sub_skill_faction_homm3_castle_elite_strategem_shield_wall",
+     "name": "Runic Guard",
+     "text": "Fully ignores attackers' Attack values until the end of the round."
+    }
+   ]
+  },
+  "h3_dwarf_battlerager_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 16,
+    "offence": 5,
+    "defence": 6,
+    "damageMin": 4,
+    "damageMax": 6,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 150,
+   "squadValue": 221,
+   "kit": [
+    {
+     "k": "resist",
+     "t": "magic_damage",
+     "v": -0.2,
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Magic Resistance",
+     "text": "Takes -20% Magic Damage."
+    },
+    {
+     "k": "rampart_grudge",
+     "buff": "h3_kit_rampart_grudge_effect",
+     "duration": 1,
+     "unitTag": "h3_kit_grudge",
+     "offMult": 1.08,
+     "name": "Grudge",
+     "text": "Whenever this creature takes Damage, adjacent enemies bear its Grudge for the rest of the battle: they take +25% Damage from Battleragers."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 1,
+     "cd": 1,
+     "mult": 1.5,
+     "counter": true,
+     "selfBuff": {
+      "buff": "h3_kit_reckless_effect",
+      "duration": 1
+     },
+     "name": "Reckless Swing",
+     "text": "Performs a Melee attack that deals +50% Damage. This creature then takes +25% Damage until its next turn."
+    }
+   ]
+  },
+  "h3_wood_elf": {
+   "role": "base",
+   "stats": {
+    "hp": 26,
+    "offence": 7,
+    "defence": 6,
+    "damageMin": 5,
+    "damageMax": 9,
+    "speed": 5,
+    "initiative": 7
+   },
+   "gold": 205,
+   "squadValue": 266,
+   "kit": [
+    {
+     "k": "rampart_stat",
+     "stats": {
+      "outDmgModsByTargetTags": [
+       {
+        "t": "h3_kit_flyer",
+        "v": 0.25
+       }
+      ]
+     },
+     "offMult": 1.06,
+     "name": "Wind Reader",
+     "text": "Deals +25% Damage to flying creatures."
+    }
+   ],
+   "powerTarget": 0.88
+  },
+  "h3_grand_elf": {
+   "role": "ward",
+   "stats": {
+    "hp": 26,
+    "offence": 7,
+    "defence": 6,
+    "damageMin": 5,
+    "damageMax": 9,
+    "speed": 5,
+    "initiative": 8
+   },
+   "gold": 300,
+   "squadValue": 413,
+   "kit": [
+    {
+     "k": "double_strike",
+     "mode": "shoot"
+    },
+    {
+     "k": "sharpshooter"
+    },
+    {
+     "k": "self_buff",
+     "runtime": "covering_fire",
+     "focus": 2,
+     "cd": 2,
+     "buff": "h3_kit_covering_fire_effect",
+     "duration": 1,
+     "icon": "crossbowman_buff_icon",
+     "name": "Covering Fire",
+     "text": "Until the end of the round, shoots the next enemy that attacks an adjacent friendly creature. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_elf_wardancer_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 30,
+    "offence": 9,
+    "defence": 6,
+    "damageMin": 6,
+    "damageMax": 10,
+    "speed": 7,
+    "initiative": 10
+   },
+   "gold": 300,
+   "squadValue": 413,
+   "kit": [
+    {
+     "k": "double_strike",
+     "mode": "melee"
+    },
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_rampart_sapped_effect",
+     "duration": 2,
+     "toughMult": 1.05,
+     "name": "Sap the Strength",
+     "text": "Basic attacks and counterattacks give the target -2 Attack until the end of the next round. Does not stack."
+    }
+   ]
+  },
+  "h3_pegasus": {
+   "role": "base",
+   "stats": {
+    "hp": 50,
+    "offence": 13,
+    "defence": 12,
+    "damageMin": 11,
+    "damageMax": 14,
+    "speed": 6,
+    "initiative": 8
+   },
+   "gold": 340,
+   "squadValue": 473,
+   "kit": [
+    {
+     "k": "magic_damper",
+     "v": 1,
+     "name": "Magic Damper",
+     "text": "Enemy hero's spells cost +1 mana. This effect does not stack; only the strongest one is active."
+    }
+   ]
+  },
+  "h3_silver_pegasus": {
+   "role": "ward",
+   "stats": {
+    "hp": 50,
+    "offence": 13,
+    "defence": 13,
+    "damageMin": 12,
+    "damageMax": 16,
+    "speed": 8,
+    "initiative": 9
+   },
+   "gold": 490,
+   "squadValue": 639,
+   "kit": [
+    {
+     "k": "magic_damper",
+     "v": 2,
+     "name": "Magic Damper",
+     "text": "Enemy hero's spells cost +2 mana. This effect does not stack; only the strongest one is active."
+    },
+    {
+     "k": "swap",
+     "focus": 2,
+     "cd": 2,
+     "range": 4,
+     "name": "Carry Off",
+     "text": "Select this creature, then a friendly creature within 4 hexes. The two swap places."
+    },
+    {
+     "k": "rampart_shepherd",
+     "n": 1,
+     "name": "Shepherd",
+     "text": "Using Carry Off generates 1 Focus Point."
+    }
+   ]
+  },
+  "h3_gold_pegasus_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 50,
+    "offence": 13,
+    "defence": 12,
+    "damageMin": 12,
+    "damageMax": 16,
+    "speed": 7,
+    "initiative": 10
+   },
+   "gold": 490,
+   "squadValue": 639,
+   "kit": [
+    {
+     "k": "magic_damper",
+     "v": 2,
+     "name": "Magic Damper",
+     "text": "Enemy hero's spells cost +2 mana. This effect does not stack; only the strongest one is active."
+    },
+    {
+     "k": "no_retaliation"
+    }
+   ]
+  },
+  "h3_dendroid_guard": {
+   "role": "base",
+   "stats": {
+    "hp": 82,
+    "offence": 13,
+    "defence": 15,
+    "damageMin": 15,
+    "damageMax": 25,
+    "speed": 3,
+    "initiative": 4
+   },
+   "gold": 525,
+   "squadValue": 686,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_rampart_bound_effect",
+     "duration": 2,
+     "name": "Binding",
+     "text": "Basic attacks and counterattacks root the target. It cannot move until the end of the next round."
+    }
+   ],
+   "powerTarget": 0.9
+  },
+  "h3_dendroid_soldier": {
+   "role": "striker",
+   "stats": {
+    "hp": 84,
+    "offence": 14,
+    "defence": 15,
+    "damageMin": 17,
+    "damageMax": 28,
+    "speed": 3,
+    "initiative": 5
+   },
+   "gold": 760,
+   "squadValue": 1163,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_rampart_bound_effect",
+     "duration": 2,
+     "name": "Binding",
+     "text": "Basic attacks and counterattacks root the target. It cannot move until the end of the next round."
+    },
+    {
+     "k": "rampart_tag_card",
+     "unitTag": "h3_kit_strangler",
+     "offMult": 1.12,
+     "name": "Strangle",
+     "text": "Deals +30% Damage to creatures rooted by Dendroids."
+    },
+    {
+     "k": "rampart_overgrowth",
+     "focus": 2,
+     "cd": 2,
+     "buff": "h3_kit_rampart_bound_effect",
+     "duration": 2,
+     "toughMult": 1.05,
+     "name": "Overgrowth",
+     "text": "Roots every enemy adjacent to this creature until the end of the next round. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_dendroid_shaman_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 85,
+    "offence": 13,
+    "defence": 18,
+    "damageMin": 16,
+    "damageMax": 27,
+    "speed": 3,
+    "initiative": 5
+   },
+   "gold": 760,
+   "squadValue": 1163,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_rampart_bound_effect",
+     "duration": 2,
+     "name": "Binding",
+     "text": "Basic attacks and counterattacks root the target. It cannot move until the end of the next round."
+    },
+    {
+     "k": "stat_aura",
+     "radius": 1,
+     "target": "allynoself",
+     "stats": {
+      "alwaysTakeMinDmg": true
+     },
+     "toughMult": 1.04,
+     "name": "Living Cover",
+     "text": "Adjacent friendly creatures always take minimum Damage."
+    },
+    {
+     "k": "revive",
+     "focus": 2,
+     "cd": 2,
+     "charges": 2,
+     "values": [
+      "40",
+      "1",
+      "20",
+      "until start amount"
+     ],
+     "name": "Sap Mend",
+     "text": "Restores HP to another friendly living creature. This can revive fallen units. Usable twice per battle."
+    }
+   ]
+  },
+  "h3_unicorn": {
+   "role": "base",
+   "stats": {
+    "hp": 116,
+    "offence": 20,
+    "defence": 21,
+    "damageMin": 22,
+    "damageMax": 28,
+    "speed": 6,
+    "initiative": 7
+   },
+   "gold": 1095,
+   "squadValue": 1284,
+   "kit": [
+    {
+     "k": "aura",
+     "radius": 1,
+     "target": "ally",
+     "t": "magic_damage",
+     "v": -0.2,
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Aura of Resistance",
+     "text": "This creature and adjacent friendly creatures take -20% Magic Damage."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 3,
+     "cd": 3,
+     "counter": false,
+     "buff": "unicorn_blind",
+     "duration": 2,
+     "icon": "neutral_magic_second_sight",
+     "name": "Blinding Strike",
+     "text": "Performs a Melee attack that blinds the target: it skips its turns and cannot counterattack until the end of the next round or until it takes Damage. Enemies do not counterattack."
+    }
+   ]
+  },
+  "h3_war_unicorn": {
+   "role": "striker",
+   "stats": {
+    "hp": 130,
+    "offence": 23,
+    "defence": 21,
+    "damageMin": 25,
+    "damageMax": 32,
+    "speed": 8,
+    "initiative": 9
+   },
+   "gold": 1575,
+   "squadValue": 2070,
+   "kit": [
+    {
+     "k": "aura",
+     "radius": 1,
+     "target": "ally",
+     "t": "magic_damage",
+     "v": -0.2,
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Aura of Resistance",
+     "text": "This creature and adjacent friendly creatures take -20% Magic Damage."
+    },
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_rampart_radiant_effect",
+     "duration": 2,
+     "toughMult": 1.04,
+     "name": "Radiant Horn",
+     "text": "Basic attacks and counterattacks give the target -2 Initiative until the end of the next round."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 2,
+     "cd": 3,
+     "counter": false,
+     "buff": "unicorn_blind",
+     "duration": 2,
+     "icon": "neutral_magic_second_sight",
+     "name": "Blinding Strike",
+     "text": "Performs a Melee attack that blinds the target: it skips its turns and cannot counterattack until the end of the next round or until it takes Damage. Enemies do not counterattack."
+    }
+   ]
+  },
+  "h3_pristine_unicorn_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 153,
+    "offence": 20,
+    "defence": 26,
+    "damageMin": 25,
+    "damageMax": 32,
+    "speed": 6,
+    "initiative": 8
+   },
+   "gold": 1575,
+   "squadValue": 2070,
+   "kit": [
+    {
+     "k": "keep_ability",
+     "view": "h3_pristine_unicorn_upg_alt_redesign_ability_name"
+    },
+    {
+     "k": "aura",
+     "radius": 2,
+     "target": "ally",
+     "t": "magic_damage",
+     "v": -0.3,
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Aura of Resistance",
+     "text": "This creature and friendly creatures within 2 hexes take -30% Magic Damage."
+    },
+    {
+     "k": "when_damaged_adjacent_debuff",
+     "buff": "h3_kit_dazzle_effect",
+     "duration": 2,
+     "name": "Dazzle",
+     "text": "Whenever this creature takes Damage, all adjacent enemies have -2 Attack until the end of the next round."
+    },
+    {
+     "k": "cleanse",
+     "focus": 2,
+     "cd": 3,
+     "range": 1,
+     "name": "Purifying Horn",
+     "text": "Dispels all negative effects from one adjacent friendly creature."
+    }
+   ]
+  },
+  "h3_green_dragon": {
+   "role": "base",
+   "stats": {
+    "hp": 244,
+    "offence": 29,
+    "defence": 29,
+    "damageMin": 47,
+    "damageMax": 58,
+    "speed": 7,
+    "initiative": 10
+   },
+   "gold": 2265,
+   "squadValue": 3910,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_reach_1_name",
+     "descSid": "base_passive_strike_reach_1_description"
+    },
+    {
+     "k": "spell_immunity",
+     "level": 3
+    }
+   ]
+  },
+  "h3_gold_dragon": {
+   "role": "striker",
+   "stats": {
+    "hp": 265,
+    "offence": 36,
+    "defence": 32,
+    "damageMin": 50,
+    "damageMax": 63,
+    "speed": 9,
+    "initiative": 13
+   },
+   "gold": 3730,
+   "squadValue": 7309,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_reach_1_name",
+     "descSid": "base_passive_strike_reach_1_description"
+    },
+    {
+     "k": "spell_immunity",
+     "level": 4
+    },
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "effect_immunity",
+     "tags": [
+      "sleep_effect",
+      "berserk"
+     ],
+     "icon": "magic_nairas_kiss_effect_icon",
+     "name": "Fearless",
+     "text": "Immune to Sleep, Blind and Berserk effects."
+    }
+   ]
+  },
+  "h3_diamond_dragon_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 244,
+    "offence": 30,
+    "defence": 38,
+    "damageMin": 48,
+    "damageMax": 58,
+    "speed": 7,
+    "initiative": 11
+   },
+   "gold": 3730,
+   "squadValue": 7309,
+   "kit": [
+    {
+     "k": "card",
+     "nameSid": "base_passive_strike_reach_1_name",
+     "descSid": "base_passive_strike_reach_1_description"
+    },
+    {
+     "k": "spell_immunity",
+     "level": 3
+    },
+    {
+     "k": "runtime",
+     "rule": "hit_cap",
+     "percent": 20,
+     "icon": "sub_skill_resistance_1_icon",
+     "name": "Diamond Scales",
+     "text": "No single hit can deal more than 20% of this stack's full Health."
+    },
+    {
+     "k": "self_buff",
+     "focus": 3,
+     "cd": 3,
+     "buff": "h3_kit_guardian_roar_effect",
+     "duration": 2,
+     "icon": "ent_taunt_buff_icon",
+     "name": "Guardian Roar",
+     "text": "All enemies within a 2-hex radius can target only this creature until the end of the next round."
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,1255 @@
+{
+ "schemaVersion": 1,
+ "faction": "homm3_necropolis",
+ "approval": "Owner, 2026-11-20 goal: all factions, autonomous (no per-faction card review).",
+ "tradeAxis": "Reaper (role 'striker': melee pressure, life and mana drain, feeds on corpses to heal, grow or explode them) versus Gravekeeper (role 'ward': ranged or curse side that weakens what it touches and keeps the army standing: debuff auras, hexes, ally healing, Animate Dead). Necromancy only pays after a won battle, so both are useful: the Reaper ends fights and turns the dead into fuel, the Gravekeeper keeps the ever-growing Skeleton horde alive.",
+ "buffFile": "DB/buffs/units_buffs_undead.json",
+ "buffs": [
+  {
+   "id": "h3_kit_necropolis_disease_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Disease",
+   "text": "-2 Attack and -2 Defense.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 3,
+    "data": {
+     "stats": {
+      "offence": -2,
+      "defence": -2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_disease_upg_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Disease",
+   "text": "-2 Attack and -2 Defense.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 3,
+    "data": {
+     "stats": {
+      "offence": -2,
+      "defence": -2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_plague_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Plague",
+   "text": "-4 Attack and -4 Defense. Cannot restore Health.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 3,
+    "data": {
+     "stats": {
+      "offence": -4,
+      "defence": -4
+     },
+     "immunities": [
+      {
+       "type": "mechanic",
+       "tags": [
+        "heal"
+       ]
+      },
+      {
+       "type": "mechanic",
+       "tags": [
+        "heal_percent"
+       ]
+      },
+      {
+       "type": "mechanic",
+       "tags": [
+        "vampirism"
+       ]
+      },
+      {
+       "type": "mechanic",
+       "tags": [
+        "revive"
+       ]
+      },
+      {
+       "type": "mechanic",
+       "tags": [
+        "destroy_corpse_and_heal"
+       ]
+      },
+      {
+       "type": "mechanic",
+       "tags": [
+        "destroy_corpse_and_change_mana"
+       ]
+      }
+     ],
+     "disablers": [
+      {
+       "mech": "vampirism"
+      },
+      {
+       "mech": "destroy_corpse_and_heal"
+      },
+      {
+       "mech": "destroy_corpse_and_change_mana"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_contagion_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Contagious Disease",
+   "text": "-2 Attack and -2 Defense. At the start of its turn, spreads to adjacent creatures of its own side.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "offence": -2,
+      "defence": -2
+     }
+    },
+    "actions": [
+     {
+      "trigger": "start_turn",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive"
+       ],
+       "triggerCounter": false,
+       "damageTarget_": "none",
+       "statDmgMult": 0.0,
+       "attackPatternSid": "attack_swirl_x1_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "ally",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "buffTarget_": "ally",
+       "buff": {
+        "sid": "h3_kit_necropolis_contagion_effect",
+        "duration": 2
+       },
+       "targetMechanics": []
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_rattled_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Rattled",
+   "text": "-2 Morale.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "moral": -2
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_wail_effect",
+   "cloneOf": "hydra_debuff",
+   "name": "Wail",
+   "text": "-4 Initiative.",
+   "set": {
+    "icon": "magic_shorten_shadow_effect_icon",
+    "tags": [
+     "negative"
+    ],
+    "maxDuration": 2,
+    "data": {
+     "stats": {
+      "initiative": -4
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_bone_cage_effect",
+   "cloneOf": "ent_root",
+   "name": "Bone Cage",
+   "text": "Cannot move.",
+   "set": {
+    "maxDuration": 2
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_marked_effect",
+   "cloneOf": "magic_deaths_call_effect_0",
+   "name": "Mark of Death",
+   "text": "Dies if the stack falls to 25% or less of its starting number.",
+   "set": {
+    "maxDuration": 2,
+    "actions": [
+     {
+      "trigger": "unit_took_damage",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance",
+        "values": [
+         "self"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [],
+       "triggerCounter": false,
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "targetCondition_": "alive",
+        "selection": "object"
+       },
+       "attackPatternSid": "attack_single_x100",
+       "damageTarget_": "none",
+       "damageType_": "none",
+       "buffTarget_": "none",
+       "targetMechanics": [
+        {
+         "mech": "assasinate",
+         "values": [
+          "0.25",
+          "0.0"
+         ]
+        }
+       ]
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_plunge_effect",
+   "cloneOf": "jaw_buff_2_upg",
+   "name": "Deathly Plunge",
+   "text": "Can act again this round.",
+   "set": {
+    "maxDuration": 1,
+    "icon": "magic_favorable_wind_effect_icon",
+    "canDispel": false,
+    "tags": [
+     "positive",
+     "h3_kit_deathly_plunge"
+    ],
+    "data": {
+     "stats": {
+      "maxAddedApPerRound": 1
+     }
+    },
+    "actions": [
+     {
+      "trigger": "unit_got_buff",
+      "triggerConditions": [
+       {
+        "checkFunction": "allegiance_receiving_tags",
+        "values": [
+         "self",
+         "receiving",
+         "h3_kit_deathly_plunge"
+        ]
+       }
+      ],
+      "damageDealer": {
+       "tags": [
+        "passive"
+       ],
+       "triggerCounter": false,
+       "damageTarget_": "none",
+       "statDmgMult": 0.0,
+       "buffTarget_": "none",
+       "attackPatternSid": "attack_single_x100",
+       "castTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "selection": "object"
+       },
+       "affectTargetParams": {
+        "targetTags": [
+         "unit"
+        ],
+        "castTarget_": "self",
+        "selection": "object"
+       },
+       "targetMechanics": [
+        {
+         "mech": "add_action_points",
+         "values": [
+          "1"
+         ]
+        }
+       ]
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_grave_tide_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Grave Tide",
+   "text": "+5% Damage for each stack that has fallen, up to +30%.",
+   "set": {
+    "hidden": false,
+    "addition": "duration",
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.05
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_grave_tide_2_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Grave Tide",
+   "text": "+5% Damage for each stack that has fallen, up to +30%.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.05
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_grave_tide_3_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Grave Tide",
+   "text": "+5% Damage for each stack that has fallen, up to +30%.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.05
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_grave_tide_4_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Grave Tide",
+   "text": "+5% Damage for each stack that has fallen, up to +30%.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.05
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_grave_tide_5_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Grave Tide",
+   "text": "+5% Damage for each stack that has fallen, up to +30%.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.05
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_grave_tide_6_effect",
+   "cloneOf": "hydra_selfbuff_1",
+   "name": "Grave Tide",
+   "text": "+5% Damage for each stack that has fallen, up to +30%.",
+   "set": {
+    "hidden": true,
+    "addition": "duration",
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.05
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_aged_effect",
+   "cloneOf": "magic_vulnerability_effect_1",
+   "name": "Aged",
+   "text": "-40% maximum Health.",
+   "set": {
+    "icon": "magic_fatal_decay_effect_icon",
+    "data": {
+     "stats": {
+      "hpPerc": -0.4
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_harvest_of_souls_effect",
+   "cloneOf": "pet_additionbuff",
+   "name": "Harvest of Souls",
+   "text": "+3 Attack until the end of the battle. Stacks.",
+   "set": {
+    "hidden": false,
+    "icon": "avatar_of_war_additionbuff_icon",
+    "data": {
+     "stats": {
+      "offence": 3
+     }
+    }
+   }
+  },
+  {
+   "id": "h3_kit_necropolis_corpse_eater_effect",
+   "cloneOf": "lich_dragon_corpse_buff",
+   "name": "Corpse Eater",
+   "text": "+2 Attack and +2 Defense until the end of the battle. Stacks.",
+   "set": {
+    "hidden": false,
+    "data": {
+     "stats": {
+      "offence": 2,
+      "defence": 2
+     }
+    }
+   }
+  }
+ ],
+ "units": {
+  "h3_skeleton": {
+   "role": "base",
+   "stats": {
+    "hp": 6,
+    "offence": 3,
+    "defence": 2,
+    "damageMin": 1,
+    "damageMax": 3,
+    "speed": 4,
+    "initiative": 4
+   },
+   "gold": 60,
+   "squadValue": 44,
+   "powerTarget": 0.92,
+   "kit": [
+    {
+     "k": "necropolis_reassemble",
+     "percent": 0.1,
+     "name": "Reassemble",
+     "text": "At the end of each round, restores Health equal to 10% of the stack's full Health. This can revive fallen units.",
+     "toughMult": 1.04
+    }
+   ]
+  },
+  "h3_skeleton_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 6,
+    "offence": 5,
+    "defence": 5,
+    "damageMin": 2,
+    "damageMax": 3,
+    "speed": 5,
+    "initiative": 5
+   },
+   "gold": 70,
+   "squadValue": 63,
+   "kit": [
+    {
+     "k": "necropolis_reassemble",
+     "percent": 0.1,
+     "name": "Reassemble",
+     "text": "At the end of each round, restores Health equal to 10% of the stack's full Health. This can revive fallen units.",
+     "toughMult": 1.04
+    },
+    {
+     "k": "necropolis_bone_harvest",
+     "hp": 6,
+     "perStack": 1,
+     "name": "Bone Harvest",
+     "text": "If the destination hex contains a corpse, it is devoured, restoring 6 HP plus 1 HP per creature in this stack. This can revive fallen units."
+    },
+    {
+     "k": "necropolis_on_death",
+     "who": [
+      "self",
+      "enemy"
+     ],
+     "effect": "buff",
+     "buff": "h3_kit_necropolis_grave_tide_effect",
+     "duration": -1,
+     "escalate": {
+      "chain": [
+       "h3_kit_necropolis_grave_tide_2_effect",
+       "h3_kit_necropolis_grave_tide_3_effect",
+       "h3_kit_necropolis_grave_tide_4_effect",
+       "h3_kit_necropolis_grave_tide_5_effect",
+       "h3_kit_necropolis_grave_tide_6_effect"
+      ]
+     },
+     "icon": "magic_fatal_decay_effect_icon",
+     "name": "Grave Tide",
+     "text": "Whenever any stack dies, deals +5% Damage until the end of the battle, up to +30%.",
+     "offMult": 1.08
+    }
+   ]
+  },
+  "h3_skeleton_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 6,
+    "offence": 4,
+    "defence": 2,
+    "damageMin": 1,
+    "damageMax": 3,
+    "speed": 4,
+    "initiative": 4
+   },
+   "gold": 70,
+   "squadValue": 63,
+   "kit": [
+    {
+     "k": "necropolis_reassemble",
+     "percent": 0.15,
+     "name": "Reassemble",
+     "text": "At the end of each round, restores Health equal to 15% of the stack's full Health. This can revive fallen units.",
+     "toughMult": 1.06
+    },
+    {
+     "k": "corpse_ward",
+     "target": "ally",
+     "mechs": [
+      "destroy_corpse_and_heal",
+      "destroy_corpse_and_change_mana"
+     ],
+     "name": "Grave Watch",
+     "text": "While this creature is alive, the corpses of friendly creatures cannot be consumed."
+    },
+    {
+     "k": "necropolis_shot",
+     "focus": 1,
+     "cd": 1,
+     "mult": 0.8,
+     "counter": true,
+     "buff": "h3_kit_necropolis_rattled_effect",
+     "duration": 2,
+     "name": "Bone Rattle",
+     "text": "Performs a Ranged attack that deals 80% Damage. The target has -2 Morale until the end of the next round."
+    }
+   ]
+  },
+  "h3_walking_dead": {
+   "role": "base",
+   "stats": {
+    "hp": 10,
+    "offence": 5,
+    "defence": 5,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 3,
+    "initiative": 4
+   },
+   "gold": 100,
+   "squadValue": 82,
+   "powerTarget": 0.9,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_necropolis_disease_effect",
+     "duration": 3,
+     "icon": "magic_shorten_shadow_effect_icon",
+     "name": "Disease",
+     "text": "Basic attacks and counterattacks infect the target: -2 Attack and -2 Defense for 3 rounds."
+    }
+   ]
+  },
+  "h3_walking_dead_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 10,
+    "offence": 5,
+    "defence": 7,
+    "damageMin": 3,
+    "damageMax": 4,
+    "speed": 3,
+    "initiative": 4
+   },
+   "gold": 125,
+   "squadValue": 117,
+   "powerTarget": 0.95,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_necropolis_disease_upg_effect",
+     "duration": 3,
+     "escalate": {
+      "to": "h3_kit_necropolis_plague_effect"
+     },
+     "name": "Disease into Plague",
+     "text": "Basic attacks and counterattacks infect the target with Disease: -2 Attack and -2 Defense for 3 rounds. Hitting an already Diseased stack turns it into Plague: -4 Attack, -4 Defense, and it cannot restore Health, for 3 rounds.",
+     "offMult": 1.04,
+     "toughMult": 1.04
+    },
+    {
+     "k": "necropolis_corpse_cast",
+     "effect": "heal",
+     "percent": 0.25,
+     "range": 1,
+     "focus": 1,
+     "cd": 1,
+     "anim": 1,
+     "name": "Feast",
+     "text": "Devours an adjacent corpse and restores 25% of this stack's full Health. This can revive fallen units."
+    }
+   ]
+  },
+  "h3_walking_dead_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 12,
+    "offence": 7,
+    "defence": 5,
+    "damageMin": 2,
+    "damageMax": 4,
+    "speed": 4,
+    "initiative": 5
+   },
+   "gold": 125,
+   "squadValue": 117,
+   "powerTarget": 0.95,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "h3_kit_necropolis_contagion_effect",
+     "duration": 2,
+     "name": "Contagious Disease",
+     "text": "Basic attacks and counterattacks infect the target with Disease: -2 Attack and -2 Defense until the end of the next round. At the start of a Diseased creature's turn, the Disease spreads to every creature of its own side standing next to it.",
+     "offMult": 1.03,
+     "toughMult": 1.05
+    },
+    {
+     "k": "keep_ability",
+     "view": "h3_walking_dead_upg_alt_abilities_0_name"
+    }
+   ]
+  },
+  "h3_wight": {
+   "role": "base",
+   "stats": {
+    "hp": 14,
+    "offence": 7,
+    "defence": 7,
+    "damageMin": 3,
+    "damageMax": 5,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 200,
+   "squadValue": 127,
+   "powerTarget": 0.92,
+   "kit": [
+    {
+     "k": "necropolis_regeneration",
+     "v": 1.0,
+     "name": "Regeneration",
+     "text": "At the start of its turn, the wounded creature of this stack is restored to full Health. This cannot revive fallen units."
+    }
+   ]
+  },
+  "h3_wight_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 16,
+    "offence": 9,
+    "defence": 7,
+    "damageMin": 3,
+    "damageMax": 5,
+    "speed": 7,
+    "initiative": 8
+   },
+   "gold": 230,
+   "squadValue": 188,
+   "kit": [
+    {
+     "k": "necropolis_regeneration",
+     "v": 1.0,
+     "name": "Regeneration",
+     "text": "At the start of its turn, the wounded creature of this stack is restored to full Health. This cannot revive fallen units."
+    },
+    {
+     "k": "necropolis_mana_drain",
+     "mana": 2,
+     "name": "Mana Drain",
+     "text": "At the start of each of its turns, takes 2 mana from the enemy hero and gives it to your hero.",
+     "offMult": 1.03,
+     "toughMult": 1.03
+    },
+    {
+     "k": "necropolis_corpse_cast",
+     "effect": "mana",
+     "mana": 4,
+     "range": 3,
+     "focus": 1,
+     "cd": 1,
+     "free": true,
+     "name": "Spirit Feast",
+     "text": "Destroys a corpse within 3 hexes and restores 4 temporary mana to this creature's hero. Does not end this creature's turn."
+    }
+   ]
+  },
+  "h3_wight_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 19,
+    "offence": 7,
+    "defence": 9,
+    "damageMin": 3,
+    "damageMax": 5,
+    "speed": 6,
+    "initiative": 9
+   },
+   "gold": 230,
+   "squadValue": 188,
+   "kit": [
+    {
+     "k": "necropolis_regeneration",
+     "v": 1.0,
+     "name": "Regeneration",
+     "text": "At the start of its turn, the wounded creature of this stack is restored to full Health. This cannot revive fallen units."
+    },
+    {
+     "k": "necropolis_wail",
+     "focus": 2,
+     "cd": 2,
+     "buff": "h3_kit_necropolis_wail_effect",
+     "duration": 2,
+     "name": "Wail",
+     "text": "Every adjacent enemy gets -4 Initiative until the end of the next round. Does not end this creature's turn.",
+     "toughMult": 1.04
+    }
+   ]
+  },
+  "h3_vampire": {
+   "role": "base",
+   "stats": {
+    "hp": 30,
+    "offence": 6,
+    "defence": 8,
+    "damageMin": 5,
+    "damageMax": 8,
+    "speed": 5,
+    "initiative": 6
+   },
+   "gold": 360,
+   "squadValue": 213,
+   "powerTarget": 0.92,
+   "kit": [
+    {
+     "k": "no_retaliation"
+    }
+   ]
+  },
+  "h3_vampire_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 30,
+    "offence": 6,
+    "defence": 8,
+    "damageMin": 5,
+    "damageMax": 8,
+    "speed": 7,
+    "initiative": 8
+   },
+   "gold": 500,
+   "squadValue": 275,
+   "powerTarget": 0.9,
+   "kit": [
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "necropolis_vampirism",
+     "v": 0.5,
+     "target": "self",
+     "revive": true,
+     "overflow": true,
+     "name": "Life Drain",
+     "text": "Each attack restores 50% of Damage dealt as HP to this creature. This can revive fallen units. Creatures raised beyond the stack's starting number stay until the end of the battle.",
+     "toughMult": 1.04
+    },
+    {
+     "k": "melee_strike",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "name": "Exsanguinate",
+     "text": "Performs a Melee attack. Deals +50% Damage if the target has lost more than half of its full Health."
+    },
+    {
+     "k": "runtime",
+     "rule": "damage_vs_hp",
+     "percent": 50,
+     "below": 50,
+     "abilityOnly": true,
+     "name": "Exsanguinate",
+     "nameSid": "h3_kit_ability_vampire_upg_exsanguinate_name",
+     "descSid": "h3_kit_ability_vampire_upg_exsanguinate_description",
+     "offMult": 1.06
+    }
+   ]
+  },
+  "h3_vampire_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 32,
+    "offence": 6,
+    "defence": 11,
+    "damageMin": 5,
+    "damageMax": 8,
+    "speed": 6,
+    "initiative": 7
+   },
+   "gold": 500,
+   "squadValue": 275,
+   "powerTarget": 0.93,
+   "kit": [
+    {
+     "k": "no_retaliation"
+    },
+    {
+     "k": "necropolis_vampirism",
+     "v": 0.3,
+     "target": "allynoself",
+     "revive": false,
+     "name": "Blood Tithe",
+     "text": "Each attack restores 30% of Damage dealt as HP to all other friendly creatures. This cannot revive fallen units."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 2,
+     "cd": 3,
+     "counter": false,
+     "buff": "unicorn_blind",
+     "duration": 2,
+     "icon": "neutral_magic_second_sight",
+     "name": "Hypnotic Gaze",
+     "text": "Performs a Melee attack that entrances the target: it skips its turns and cannot counterattack until the end of the next round or until it takes Damage. Enemies do not counterattack."
+    }
+   ]
+  },
+  "h3_lich": {
+   "role": "base",
+   "stats": {
+    "hp": 45,
+    "offence": 13,
+    "defence": 12,
+    "damageMin": 10,
+    "damageMax": 14,
+    "speed": 4,
+    "initiative": 6
+   },
+   "gold": 550,
+   "squadValue": 566,
+   "powerTarget": 0.92,
+   "kit": [
+    {
+     "k": "necropolis_death_cloud",
+     "mult": 0.6,
+     "friendlyFire": true,
+     "name": "Death Cloud",
+     "text": "Ranged attacks deal 60% Damage to the target and to every creature around it, friend or foe. Undead, constructs and elementals are not harmed by it."
+    }
+   ]
+  },
+  "h3_lich_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 45,
+    "offence": 15,
+    "defence": 12,
+    "damageMin": 10,
+    "damageMax": 14,
+    "speed": 4,
+    "initiative": 7
+   },
+   "gold": 600,
+   "squadValue": 807,
+   "kit": [
+    {
+     "k": "necropolis_death_cloud",
+     "mult": 0.6,
+     "friendlyFire": true,
+     "name": "Death Cloud",
+     "text": "Ranged attacks deal 60% Damage to the target and to every creature around it, friend or foe. Undead, constructs and elementals are not harmed by it."
+    },
+    {
+     "k": "necropolis_on_death",
+     "who": "enemy",
+     "effect": "focus",
+     "n": 1,
+     "name": "Death Harvest",
+     "text": "Whenever an enemy stack is destroyed, generates 1 Focus Point."
+    },
+    {
+     "k": "necropolis_corpse_cast",
+     "effect": "explode",
+     "mult": 1.0,
+     "focus": 2,
+     "cd": 2,
+     "name": "Corpse Explosion",
+     "text": "Detonates a chosen corpse: every enemy on the hexes around it takes this creature's full basic attack Damage. The corpse and any corpses next to it are destroyed."
+    }
+   ]
+  },
+  "h3_lich_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 46,
+    "offence": 13,
+    "defence": 14,
+    "damageMin": 10,
+    "damageMax": 14,
+    "speed": 5,
+    "initiative": 8
+   },
+   "gold": 600,
+   "squadValue": 807,
+   "powerTarget": 0.95,
+   "kit": [
+    {
+     "k": "necropolis_death_cloud",
+     "mult": 0.6,
+     "friendlyFire": true,
+     "name": "Death Cloud",
+     "text": "Ranged attacks deal 60% Damage to the target and to every creature around it, friend or foe. Undead, constructs and elementals are not harmed by it."
+    },
+    {
+     "k": "necropolis_hex",
+     "focus": 2,
+     "cd": 2,
+     "range": 5,
+     "buff": "h3_kit_necropolis_bone_cage_effect",
+     "duration": 2,
+     "name": "Bone Cage",
+     "text": "An enemy stack within 5 hexes cannot move until the end of the next round. It can still attack and shoot.",
+     "toughMult": 1.05
+    },
+    {
+     "k": "necropolis_animate_dead",
+     "focus": 2,
+     "cd": 2,
+     "charges": 2,
+     "values": [
+      "40",
+      "1",
+      "20",
+      "until start amount"
+     ],
+     "name": "Animate Dead",
+     "text": "Restores HP to another friendly creature. This can revive fallen units. Usable twice per battle."
+    }
+   ]
+  },
+  "h3_black_knight": {
+   "role": "base",
+   "stats": {
+    "hp": 84,
+    "offence": 20,
+    "defence": 20,
+    "damageMin": 13,
+    "damageMax": 19,
+    "speed": 6,
+    "initiative": 7
+   },
+   "gold": 1200,
+   "squadValue": 767,
+   "powerTarget": 0.9,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "wasp_debuff",
+     "duration": 2,
+     "icon": "magic_unnatural_calm_effect_icon",
+     "name": "Cursed Blade",
+     "text": "Basic attacks and counterattacks curse the target: it always deals minimum Damage until the end of the next round."
+    }
+   ]
+  },
+  "h3_black_knight_upg": {
+   "role": "striker",
+   "stats": {
+    "hp": 88,
+    "offence": 23,
+    "defence": 22,
+    "damageMin": 16,
+    "damageMax": 20,
+    "speed": 7,
+    "initiative": 8
+   },
+   "gold": 1500,
+   "squadValue": 1357,
+   "powerTarget": 0.97,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "wasp_debuff",
+     "duration": 2,
+     "icon": "magic_unnatural_calm_effect_icon",
+     "name": "Cursed Blade",
+     "text": "Basic attacks and counterattacks curse the target: it always deals minimum Damage until the end of the next round."
+    },
+    {
+     "k": "necropolis_on_death",
+     "who": "enemy",
+     "effect": "buff",
+     "buff": "h3_kit_necropolis_harvest_of_souls_effect",
+     "name": "Harvest of Souls",
+     "text": "Whenever an enemy stack is destroyed, this creature gains +3 Attack until the end of the battle."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 2,
+     "cd": 2,
+     "mult": 1.0,
+     "counter": true,
+     "name": "Death Blow",
+     "text": "Performs a Melee attack. Deals double Damage if the target is Cursed."
+    },
+    {
+     "k": "runtime",
+     "rule": "damage_vs_buff",
+     "percent": 100,
+     "buffs": [
+      "wasp_debuff"
+     ],
+     "abilityOnly": true,
+     "name": "Death Blow",
+     "nameSid": "h3_kit_ability_black_knight_upg_death_blow_name",
+     "descSid": "h3_kit_ability_black_knight_upg_death_blow_description"
+    }
+   ]
+  },
+  "h3_black_knight_upg_alt": {
+   "role": "ward",
+   "stats": {
+    "hp": 110,
+    "offence": 21,
+    "defence": 23,
+    "damageMin": 16,
+    "damageMax": 24,
+    "speed": 9,
+    "initiative": 10
+   },
+   "gold": 1500,
+   "squadValue": 1357,
+   "powerTarget": 0.97,
+   "kit": [
+    {
+     "k": "on_hit_buff",
+     "buff": "wasp_debuff",
+     "duration": 2,
+     "icon": "magic_unnatural_calm_effect_icon",
+     "name": "Cursed Blade",
+     "text": "Basic attacks and counterattacks curse the target: it always deals minimum Damage until the end of the next round."
+    },
+    {
+     "k": "stat_aura",
+     "radius": 1,
+     "target": "enemy",
+     "stats": {
+      "offence": -3
+     },
+     "name": "Aura of Dread",
+     "text": "Adjacent enemy creatures have -3 Attack."
+    },
+    {
+     "k": "necropolis_hex",
+     "focus": 2,
+     "cd": 2,
+     "range": 4,
+     "buff": "h3_kit_necropolis_marked_effect",
+     "duration": 2,
+     "name": "Mark of Death",
+     "text": "Marks an enemy stack within 4 hexes for 2 rounds. While marked, the stack dies outright if it falls to 25% or less of its starting number.",
+     "offMult": 1.08
+    }
+   ]
+  },
+  "h3_bone_dragon": {
+   "role": "base",
+   "stats": {
+    "hp": 150,
+    "offence": 27,
+    "defence": 26,
+    "damageMin": 25,
+    "damageMax": 27,
+    "speed": 7,
+    "initiative": 9
+   },
+   "gold": 1800,
+   "squadValue": 1849,
+   "powerTarget": 0.92,
+   "kit": [
+    {
+     "k": "necropolis_dread",
+     "n": 1,
+     "name": "Dread Presence",
+     "text": "All enemy creatures have -1 Morale. This effect does not stack; only the strongest one is active."
+    }
+   ]
+  },
+  "h3_bone_dragon_upg": {
+   "role": "ward",
+   "stats": {
+    "hp": 174,
+    "offence": 29,
+    "defence": 32,
+    "damageMin": 30,
+    "damageMax": 36,
+    "speed": 9,
+    "initiative": 12
+   },
+   "gold": 3000,
+   "squadValue": 3474,
+   "powerTarget": 0.95,
+   "kit": [
+    {
+     "k": "necropolis_dread",
+     "n": 2,
+     "name": "Dread Presence",
+     "text": "All enemy creatures have -2 Morale. This effect does not stack; only the strongest one is active."
+    },
+    {
+     "k": "stat_aura",
+     "radius": 1,
+     "target": "enemy",
+     "stats": {
+      "speed": -2
+     },
+     "name": "Chill of the Grave",
+     "text": "Adjacent enemy creatures have -2 Speed."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 3,
+     "cd": 3,
+     "mult": 1.0,
+     "counter": false,
+     "buff": "h3_kit_necropolis_aged_effect",
+     "duration": 2,
+     "icon": "magic_fatal_decay_effect_icon",
+     "name": "Aging Touch",
+     "text": "Performs a Melee attack that ages the target: -40% maximum Health until the end of the next round. Enemies do not counterattack."
+    }
+   ]
+  },
+  "h3_bone_dragon_upg_alt": {
+   "role": "striker",
+   "stats": {
+    "hp": 159,
+    "offence": 33,
+    "defence": 27,
+    "damageMin": 30,
+    "damageMax": 39,
+    "speed": 10,
+    "initiative": 11
+   },
+   "gold": 3000,
+   "squadValue": 3474,
+   "powerTarget": 0.95,
+   "kit": [
+    {
+     "k": "necropolis_dread",
+     "n": 1,
+     "name": "Dread Presence",
+     "text": "All enemy creatures have -1 Morale. This effect does not stack; only the strongest one is active."
+    },
+    {
+     "k": "necropolis_corpse_eater",
+     "buff": "h3_kit_necropolis_corpse_eater_effect",
+     "name": "Corpse Eater",
+     "text": "After moving, absorbs all corpses on its hex and all adjacent hexes. For each corpse, this creature gains +2 Attack and +2 Defense until the end of the battle."
+    },
+    {
+     "k": "melee_strike",
+     "focus": 3,
+     "cd": 3,
+     "mult": 1.0,
+     "counter": true,
+     "name": "Deathly Plunge",
+     "text": "Performs a Melee attack. If it destroys the target stack, this creature can act again this round."
+    },
+    {
+     "k": "runtime",
+     "rule": "kill_extra_action",
+     "percent": 1,
+     "buff": "h3_kit_necropolis_plunge_effect",
+     "name": "Deathly Plunge",
+     "nameSid": "h3_kit_ability_bone_dragon_upg_alt_deathly_plunge_name",
+     "descSid": "h3_kit_ability_bone_dragon_upg_alt_deathly_plunge_description",
+     "offMult": 1.08
+    }
+   ]
+  }
+ }
+}

@@ -284,7 +284,6 @@ def main() -> None:
         (
             'faction_sid == "homm3_factory"',
             'faction_sid == "homm3_bulwark"',
-            'unit_bool_stat_bonus("ignoreFractionsCount")',
             "HOMM3_FACTORY_SPLIT_ASSEMBLY_SUBSKILLS_BY_LEVEL",
             "HOMM3_BULWARK_RUNES_SUBSKILLS_BY_LEVEL",
             "factory_logistics.faction_skill_levels()",
@@ -293,8 +292,10 @@ def main() -> None:
             'source_mechanic_for_surface_row(faction_sid, "faction_skill", skill_sid)',
         ),
     )
-    if "levels = [[], [], []]" in specialized:
-        fail("Factory/Bulwark faction skills must not ship empty Core bonus arrays; native HeroSkill apply NREs on map load")
+    # Empty rank bonuses load (the July 2026 NRE was empty Adv/Exp subSkills, handoff 15b-16); the
+    # ignoreFractionsCount carrier is banned because it removed the mixed-faction Morale penalty (2026-11-19).
+    if 'unit_bool_stat_bonus("ignoreFractionsCount")' in specialized:
+        fail("runtime-owned faction skills must not carry the ignoreFractionsCount rank carrier")
     if "HOMM3_FACTORY_FIELD_TRIAGE_ABILITY_SID" in specialized:
         fail("Logistics Network replaced Split Assembly: the Factory skill must not grant Field Triage")
     for helper_name, tokens in (
