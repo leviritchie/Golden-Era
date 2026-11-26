@@ -56,6 +56,9 @@ EXPECTED_NATIVE_LEVEL_COUNTS = {
     **{f"Build_Tier_{i}": 2 for i in range(1, 8)},
 }
 
+# Building pass 2026-11-22: Factory alone also maps the loan Bank (shares the HotA Bank art).
+FACTORY_EXTRA_NATIVE_LEVEL_COUNTS = {"Build_Factory_Loan_Bank": 1}
+
 
 def _append_peer_generic_native_level_errors(
     errors: list[str],
@@ -74,12 +77,15 @@ def _append_peer_generic_native_level_errors(
     source_levels = layer_map.get("levels") or {}
     native_levels = layer_map.get("nativeLevels") or {}
     label = "Factory" if faction_sid == "homm3_factory" else faction_sid
-    if set(native_levels) != set(EXPECTED_NATIVE_LEVEL_COUNTS):
+    expected_counts = dict(EXPECTED_NATIVE_LEVEL_COUNTS)
+    if faction_sid == "homm3_factory":
+        expected_counts.update(FACTORY_EXTRA_NATIVE_LEVEL_COUNTS)
+    if set(native_levels) != set(expected_counts):
         errors.append(
             f"{label} nativeLevels SID set drifted from the supported Castle graph: "
             f"{sorted(native_levels)}"
         )
-    for sid, expected_count in EXPECTED_NATIVE_LEVEL_COUNTS.items():
+    for sid, expected_count in expected_counts.items():
         actual = native_levels.get(sid) or {}
         expected_keys = {str(level) for level in range(1, expected_count + 1)}
         if set(actual) != expected_keys:
@@ -120,7 +126,8 @@ def _append_peer_generic_native_level_errors(
         errors.append("Factory C# sceneSlot-to-SID map is missing")
     else:
         csharp_sids = set(re.findall(r'\["[^"]+"\]\s*=\s*"([^"]+)"', slot_block.group("body")))
-        if csharp_sids != set(native_levels):
+        # The C# map is shared by Factory and Bulwark, so it carries the Factory-only extras too.
+        if csharp_sids != (set(native_levels) | set(FACTORY_EXTRA_NATIVE_LEVEL_COUNTS)):
             errors.append(
                 f"{label} C# sceneSlot SIDs drifted from nativeLevels: "
                 f"C#={sorted(csharp_sids)} JSON={sorted(native_levels)}"

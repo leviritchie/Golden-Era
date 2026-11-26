@@ -320,7 +320,10 @@ internal static partial class Homm3FactoryLogistics
 		if (raw == null)
 			return null;
 		var discount = e.Effect == "warehouse" ? 0.0 : c.Net.WarehouseDiscountPct;
-		return Homm3FactoryLogisticsEffects.Discounted(raw, discount);
+		var cost = Homm3FactoryLogisticsEffects.Discounted(raw, discount);
+		// law pass 2026-11-21: Standard Parts (#12), applied after the Warehouse discount
+		var parts = Homm3FactoryLawHooks.StandardPartsPercent(c.Side);
+		return parts > 0 && cost != null ? Homm3FactoryLogisticsEffects.Discounted(cost, parts) : cost;
 	}
 
 	private static int HeroRank(Ctx c, object heroOrNull, out DataHero hero)
@@ -335,6 +338,8 @@ internal static partial class Homm3FactoryLogistics
 	private static int RemoteLevel(Ctx c, out bool viaCommand)
 	{
 		var command = c.Net.CommandCenterLevel.TryGetValue(c.ObjectId, out var lv) ? lv : 0;
+		// law pass 2026-11-21: Telegraph Lines (#5) acts as a remote command level (Basic/Advanced) everywhere
+		command = Math.Max(command, Homm3FactoryLawHooks.TelegraphLevel(c.Side));
 		viaCommand = command > c.Obj.UpgradeCenter;
 		return Math.Max(c.Obj.UpgradeCenter, command);
 	}

@@ -7,34 +7,25 @@
       "id": "conflux.magic_university",
       "surface": "building",
       "sourceName": "Magic University",
-      "status": "substituted",
-      "reason": "Generated city row uses a proven +1 Spell Power visit bonus until school-purchase UI is traced.",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: Magic University has its own row (Build_Magic_University). Its window (Homm3ConfluxMagicUniversityWindow) lets a hero in town learn Daylight, Nightshade, Arcane or Primal Magic for 2500 Gold each, the four Olden Era schools standing in for HoMM3's Air/Earth/Fire/Water.",
       "playerTextPolicy": "must_match_current_behavior",
       "currentRows": [
-        "Build_Bank"
+        "Build_Magic_University"
       ],
-      "forbiddenPlayerText": [
-        "school",
-        "Air Magic",
-        "Earth Magic",
-        "Fire Magic",
-        "Water Magic"
-      ]
+      "validationOwner": "validate_source_mechanics_contract"
     },
     {
       "id": "conflux.resource_silo",
       "surface": "building",
       "sourceName": "Resource Silo",
-      "status": "substituted",
-      "reason": "Generated row grants fixed mercury income; exact source economy still needs final audit signoff.",
+      "status": "exact",
+      "reason": "The HoMM3 Conflux Resource Silo makes 1 Mercury daily; the row matches.",
       "playerTextPolicy": "must_match_current_behavior",
       "currentRows": [
         "Build_Resource_Depot"
       ],
-      "forbiddenPlayerText": [
-        "random resource",
-        "exact source economy"
-      ]
+      "validationOwner": "validate_source_mechanics_contract"
     },
     {
       "id": "conflux.garden_of_life",
@@ -76,22 +67,13 @@
       "id": "conflux.aurora_borealis",
       "surface": "building",
       "sourceName": "Aurora Borealis",
-      "status": "substituted",
-      "reason": "All-spells grail behavior needs a traced spellbook/library route.",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: the grail carries the native magicGuildExpandMagics city bonus (the vanilla Frigid Firmament lever), so every Mage Guild level built here offers all spells of its tier; it keeps +1 empire growth and +100% city growth (owner answer 3).",
       "playerTextPolicy": "must_match_current_behavior",
-      "forbiddenPlayerText": [
-        "all spells",
-        "every spell",
-        "Aurora Borealis"
-      ],
       "currentRows": [
         "Build_Spring_of_Life"
       ],
-      "playerTextTokens": [
-        "Homm3Conflux_Build_Spring_of_Life_description",
-        "Homm3Conflux_Build_Spring_of_Life_name",
-        "Homm3Conflux_Build_Spring_of_Life_narrativeDescription"
-      ]
+      "validationOwner": "validate_source_mechanics_contract"
     },
     {
       "id": "conflux.elemental_conjury",

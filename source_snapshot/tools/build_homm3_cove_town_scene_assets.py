@@ -63,7 +63,7 @@ HALL_SLOT_TO_OLDEN: dict[str, tuple[str, int]] = {
     "special3": ("Build_Bank", 1),
     "shipyard": ("Build_Artifact_Market", 1),
     "horde1Upgr": ("Build_Resource_Depot_level_2", 1),
-    "special4": ("Build_Mother_Nature", 1),
+    "special4": ("Build_Grotto", 1),
     "dwellingLvl1": ("Build_Tier_1", 1),
     "dwellingUpLvl1": ("Build_Tier_1", 2),
     "dwellingLvl2": ("Build_Tier_2", 1),
@@ -127,7 +127,7 @@ LAYER_SOURCE_CROSSWALK = {
     "Build_Treasury": "Cove Blacksmith/Cannon Yard visual from blacksmith; retained donor economy SID.",
     "Build_Bank": "Cove Thieves' Guild visual from special3; retained donor special-building SID.",
     "Build_Artifact_Market": "Cove Shipyard visual from shipyard; retained donor artifact-market SID.",
-    "Build_Mother_Nature": "Cove Grotto visual from special4; retained donor special-building SID.",
+    "Build_Grotto": "Cove Grotto visual from special4 (building pass 2026-11-22: its own building row; Build_Mother_Nature is the Roost and has no layer).",
     "Build_Resource_Depot_level_2": "Cove Pub horde-upgrade visual from horde1Upgr; retained donor resource-upgrade SID.",
 }
 

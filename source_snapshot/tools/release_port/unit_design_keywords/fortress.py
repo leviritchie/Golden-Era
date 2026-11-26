@@ -28,12 +28,19 @@ def kw_fortress_regeneration(ctx, sid, logic, view, entry):  # donor: hydra_upg 
 
 # --- 2026-11-21 ability variety pass -------------------------------------------------------------
 
-def _hydra_regen_values(ctx, percent):
+def _hydra_regen_values(ctx, percent, revive=False, stack=False):
+    """hydra_upg's heal_percent values at `percent` of one creature. `revive` swaps the mode to "until start amount"
+    (raises fallen creatures up to the stack's starting size) and `stack` the basis to "max_squad" (percent of the
+    stack's full Health); both as h3_walking_dead_upg's corpse eating uses them."""
     mechanics = ctx.donor("hydra_upg")["passives"][0]["actions"][1]["damageDealer"].get("targetMechanics") or []
     if [m.get("mech") for m in mechanics] != ["heal_percent"] or mechanics[0]["values"][:2] != ["without respawn", "max_unit"]:
         raise RuntimeError("hydra_upg regeneration layout changed")
     values = list(mechanics[0]["values"])
     values[2] = f"{percent / 100.0:.2f}"
+    if revive:
+        values[0] = "until start amount"
+    if stack:
+        values[1] = "max_squad"
     return values
 
 
@@ -47,8 +54,10 @@ def _require_escalate(ctx, sid, entry):
 
 
 def kw_fortress_scavenge(ctx, sid, logic, view, entry):
-    """Eat an adjacent corpse and heal `percent` of one creature (no revive). Envelope: lich_upg_alt ability 1 (cast on
-    any corpse + destroy_corpse); heal: hydra_upg's regeneration heal_percent values as a self mechanic (the shape
+    """Eat an adjacent corpse and heal `percent` of one creature, or of the stack's full Health with `basis: stack`;
+    `revive` (default on) lets the heal raise fallen creatures up to the starting size (owner 2026-11-22: revive, then
+    20% of stack). Envelope: lich_upg_alt ability 1 (cast on any corpse +
+    destroy_corpse); heal: hydra_upg's regeneration heal_percent values as a self mechanic (the shape
     h3_walking_dead_upg's corpse eating uses)."""
     ability = ctx.donor("lich_upg_alt")["abilities"][1]
     dealer = ability["damageDealer"]
@@ -61,7 +70,7 @@ def kw_fortress_scavenge(ctx, sid, logic, view, entry):
         dealer[key]["selection"] = "object"
     dealer["targetMechanics"] = [{"mech": "destroy_corpse", "values": []}]
     dealer["shootRange"] = 1
-    ability["selfMechanics"] = [{"mech": "heal_percent", "values": _hydra_regen_values(ctx, entry["percent"])}]
+    ability["selfMechanics"] = [{"mech": "heal_percent", "values": _hydra_regen_values(ctx, entry["percent"], entry.get("revive", True), entry.get("basis") == "stack")}]
     logic["abilities"].append(ability)
     view["abilities"].append(dt._ability_card(sid, entry, "Ability_type_special", "magic_healing_water_effect_icon", 2))
 

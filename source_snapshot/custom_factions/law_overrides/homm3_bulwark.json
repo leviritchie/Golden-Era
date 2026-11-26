@@ -1,125 +1,1731 @@
 {
   "lawOverrides": {
-    "fraction_law_homm3_bulwark_1": {"iconKey": "fraction_law_nature_1_icon"},
-    "fraction_law_homm3_bulwark_2": {"iconKey": "fraction_law_nature_2_icon"},
-    "fraction_law_homm3_bulwark_3": {"iconKey": "fraction_law_nature_3_icon"},
-    "fraction_law_homm3_bulwark_5": {"iconKey": "fraction_law_nature_5_icon"},
-    "fraction_law_homm3_bulwark_6": {"iconKey": "fraction_law_nature_6_icon"},
-    "fraction_law_homm3_bulwark_7": {"iconKey": "fraction_law_nature_7_icon"},
-    "fraction_law_homm3_bulwark_8": {"iconKey": "fraction_law_nature_8_icon"},
-    "fraction_law_homm3_bulwark_9": {"iconKey": "fraction_law_nature_9_icon"},
-    "fraction_law_homm3_bulwark_10": {"iconKey": "fraction_law_nature_10_icon"},
-    "fraction_law_homm3_bulwark_12": {"iconKey": "fraction_law_nature_12_icon"},
-    "fraction_law_homm3_bulwark_13": {"iconKey": "fraction_law_human_13_icon"},
-    "fraction_law_homm3_bulwark_14": {"iconKey": "fraction_law_nature_14_icon"},
-    "fraction_law_homm3_bulwark_15": {"iconKey": "fraction_law_human_15_icon"},
-    "fraction_law_homm3_bulwark_16": {"iconKey": "fraction_law_nature_16_icon"},
-    "fraction_law_homm3_bulwark_18": {"iconKey": "fraction_law_nature_18_icon"},
-    "fraction_law_homm3_bulwark_19": {"iconKey": "fraction_law_nature_19_icon"},
-    "fraction_law_homm3_bulwark_21": {"iconKey": "fraction_law_nature_21_icon"},
-    "fraction_law_homm3_bulwark_22": {"iconKey": "fraction_law_nature_22_icon"},
-    "fraction_law_homm3_bulwark_23": {"iconKey": "fraction_law_nature_23_icon"},
-    "fraction_law_homm3_bulwark_25": {"iconKey": "fraction_law_nature_25_icon"},
-    "fraction_law_homm3_bulwark_27": {"iconKey": "fraction_law_nature_27_icon"},
-    "fraction_law_homm3_bulwark_28": {"iconKey": "fraction_law_nature_28_icon"},
-    "fraction_law_homm3_bulwark_29": {"iconKey": "fraction_law_nature_29_icon"},
-    "fraction_law_homm3_bulwark_32": {"iconKey": "fraction_law_nature_32_icon"},
-    "fraction_law_homm3_bulwark_33": {"iconKey": "fraction_law_nature_33_icon"},
-    "fraction_law_homm3_bulwark_34": {"iconKey": "fraction_law_unfrozen_36_icon"},
+    "fraction_law_homm3_bulwark_1": {
+      "enabled": true,
+      "nameText": "Tax Collectors",
+      "descriptionText": "Produces {0} Gold daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "gold",
+                250
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "gold",
+                500
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: vanilla Tax Collectors shape (sideRes gold 250/500).",
+      "iconNotes": "law pass 2026-11-21: resource law; the icon resolves from its resource."
+    },
+    "fraction_law_homm3_bulwark_2": {
+      "enabled": true,
+      "nameText": "Frontier Scouts",
+      "descriptionText": "Your heroes gain {0} Sight radius.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "viewRadius",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: vanilla Training: Scouting shape at +1.",
+      "effectIconKey": "fraction_law_human_2_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_human_2_icon)."
+    },
     "fraction_law_homm3_bulwark_4": {
       "enabled": true,
-      "nameText": "Resource Riches I",
-      "descriptionText": "Provides 2500 Gold, 5 Wood, and 5 Ore when enacted.",
-      "parametersPerLevel": [{"cost": 1, "bonuses": [
-        {"type": "sideOneTimeAddRes", "parameters": ["gold", "2500"]},
-        {"type": "sideOneTimeAddRes", "parameters": ["wood", "5"]},
-        {"type": "sideOneTimeAddRes", "parameters": ["ore", "5"]}
-      ]}],
-      "iconKey": "fraction_law_nature_4_icon",
-      "notes": "Olden Era integration law copied from the Nature donor's Core-native row. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+      "nameText": "Elite Rams",
+      "descriptionText": "Mountain Ram growth in your cities increases by {0}. They gain {1} Initiative.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_mountain_ram",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "initiative",
+                "1"
+              ],
+              "receivers": [
+                "h3_mountain_ram",
+                "h3_argali",
+                "h3_mountain_ram_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_mountain_ram",
+                "8"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "initiative",
+                "2"
+              ],
+              "receivers": [
+                "h3_mountain_ram",
+                "h3_argali",
+                "h3_mountain_ram_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite law (index 4: Resource Riches I is generated at 3).",
+      "portraitIconSid": "h3_mountain_ram",
+      "iconNotes": "law pass 2026-11-21: unit-line law, portrait h3_mountain_ram."
+    },
+    "fraction_law_homm3_bulwark_5": {
+      "enabled": true,
+      "nameText": "Elite Kobolds",
+      "descriptionText": "Kobold growth in your cities increases by {0}. They can counterattack twice.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_kobold",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "numCounters",
+                "1"
+              ],
+              "receivers": [
+                "h3_kobold",
+                "h3_kobold_foreman",
+                "h3_kobold_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_kobold",
+                "8"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "numCounters",
+                "1"
+              ],
+              "receivers": [
+                "h3_kobold",
+                "h3_kobold_foreman",
+                "h3_kobold_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite law, counterattacks-twice rider.",
+      "portraitIconSid": "h3_kobold",
+      "iconNotes": "law pass 2026-11-21: unit-line law, portrait h3_kobold."
+    },
+    "fraction_law_homm3_bulwark_6": {
+      "enabled": true,
+      "nameText": "Stone Bastions",
+      "descriptionText": "Your heroes gain {0} Defense.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "defence",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "defence",
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "defence",
+                "3"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: vanilla primary-stat shape.",
+      "effectIconKey": "fraction_law_human_7_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_human_7_icon)."
+    },
+    "fraction_law_homm3_bulwark_7": {
+      "enabled": true,
+      "nameText": "Runes Carved in Advance",
+      "descriptionText": "Friendly creatures start each battle at Rune Level {0}.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_kobold",
+                "h3_kobold_foreman",
+                "h3_kobold_upg_alt",
+                "h3_mountain_ram",
+                "h3_argali",
+                "h3_mountain_ram_upg_alt",
+                "h3_snow_elf",
+                "h3_steel_elf",
+                "h3_snow_elf_upg_alt",
+                "h3_yeti",
+                "h3_yeti_runemaster",
+                "h3_yeti_upg_alt",
+                "h3_shaman",
+                "h3_great_shaman",
+                "h3_shaman_upg_alt",
+                "h3_mammoth",
+                "h3_war_mammoth",
+                "h3_mammoth_upg_alt",
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "1"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_kobold",
+                "h3_kobold_foreman",
+                "h3_kobold_upg_alt",
+                "h3_mountain_ram",
+                "h3_argali",
+                "h3_mountain_ram_upg_alt",
+                "h3_snow_elf",
+                "h3_steel_elf",
+                "h3_snow_elf_upg_alt",
+                "h3_yeti",
+                "h3_yeti_runemaster",
+                "h3_yeti_upg_alt",
+                "h3_shaman",
+                "h3_great_shaman",
+                "h3_shaman_upg_alt",
+                "h3_mammoth",
+                "h3_war_mammoth",
+                "h3_mammoth_upg_alt",
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "2"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Runes Carved in Advance: display carrier 1/2 = Homm3BulwarkRunesRuntime.ApplyCarvedInAdvance min(level, 2); text style only.",
+      "effectIconKey": "fraction_law_unfrozen_4_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_unfrozen_4_icon)."
+    },
+    "fraction_law_homm3_bulwark_8": {
+      "enabled": true,
+      "nameText": "Clan Oath",
+      "descriptionText": "Defend grants {0} Rune Levels instead of 3, and taking Damage grants 3 instead of 2.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_kobold",
+                "h3_kobold_foreman",
+                "h3_kobold_upg_alt",
+                "h3_mountain_ram",
+                "h3_argali",
+                "h3_mountain_ram_upg_alt",
+                "h3_snow_elf",
+                "h3_steel_elf",
+                "h3_snow_elf_upg_alt",
+                "h3_yeti",
+                "h3_yeti_runemaster",
+                "h3_yeti_upg_alt",
+                "h3_shaman",
+                "h3_great_shaman",
+                "h3_shaman_upg_alt",
+                "h3_mammoth",
+                "h3_war_mammoth",
+                "h3_mammoth_upg_alt",
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "4"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_kobold",
+                "h3_kobold_foreman",
+                "h3_kobold_upg_alt",
+                "h3_mountain_ram",
+                "h3_argali",
+                "h3_mountain_ram_upg_alt",
+                "h3_snow_elf",
+                "h3_steel_elf",
+                "h3_snow_elf_upg_alt",
+                "h3_yeti",
+                "h3_yeti_runemaster",
+                "h3_yeti_upg_alt",
+                "h3_shaman",
+                "h3_great_shaman",
+                "h3_shaman_upg_alt",
+                "h3_mammoth",
+                "h3_war_mammoth",
+                "h3_mammoth_upg_alt",
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "5"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Clan Oath restructured so both levels are the same effect (SPEC 1, no level-conditional riders): Defend gain 3 -> 4/5, and the first damage taken in an action gives 3 instead of 2 at both levels (was level 2 only; Homm3BulwarkLawHooks.DefendGain/DamageGain). Display carrier 4/5; native bonus is a zero anchor.",
+      "effectIconKey": "fraction_law_human_26_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_human_26_icon)."
+    },
+    "fraction_law_homm3_bulwark_9": {
+      "enabled": true,
+      "nameText": "Elite Yetis",
+      "descriptionText": "Yeti growth in your cities increases by {0}. Their ability cooldowns are reduced by {1} round(s).",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_yeti",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "abilityCdBonus",
+                "-1"
+              ],
+              "receivers": [
+                "h3_yeti",
+                "h3_yeti_runemaster",
+                "h3_yeti_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_yeti",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "abilityCdBonus",
+                "-1"
+              ],
+              "receivers": [
+                "h3_yeti",
+                "h3_yeti_runemaster",
+                "h3_yeti_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite law, ability cooldown rider.",
+      "portraitIconSid": "h3_yeti",
+      "iconNotes": "law pass 2026-11-21: unit-line law, portrait h3_yeti."
+    },
+    "fraction_law_homm3_bulwark_10": {
+      "enabled": true,
+      "nameText": "Elite Snow Elves",
+      "descriptionText": "Snow Elf growth in your cities increases by {0}. They gain {1} Attack.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_snow_elf",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "offence",
+                "3"
+              ],
+              "receivers": [
+                "h3_snow_elf",
+                "h3_steel_elf",
+                "h3_snow_elf_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_snow_elf",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "offence",
+                "6"
+              ],
+              "receivers": [
+                "h3_snow_elf",
+                "h3_steel_elf",
+                "h3_snow_elf_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite law, Attack rider.",
+      "portraitIconSid": "h3_snow_elf",
+      "iconNotes": "law pass 2026-11-21: unit-line law, portrait h3_snow_elf."
     },
     "fraction_law_homm3_bulwark_11": {
       "enabled": true,
-      "nameText": "Mountain Wildness",
-      "descriptionText": "Friendly creatures deal 25%/50% more damage with Lucky Strikes by rank.",
-      "parametersPerLevel": [
-        {"cost": 2, "bonuses": [{"type": "unitStat", "parameters": ["crit", "0.25"]}]},
-        {"cost": 2, "bonuses": [{"type": "unitStat", "parameters": ["crit", "0.50"]}]}
+      "nameText": "Winter’s Bite",
+      "descriptionText": "When battling in the area you control, enemy creatures lose {0} Initiative.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
       ],
-      "iconKey": "fraction_law_nature_11_icon",
-      "notes": "Olden Era integration law using exact Core-native Nature bonus rows. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "initiative",
+                "-1"
+              ],
+              "receiverAllegiance": "enemy",
+              "actionArea": "allied"
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: draft fallback: a terrain qualifier on enemy receivers is unproven, so the area qualifier of Hold the High Ground is used.",
+      "effectIconKey": "fraction_law_unfrozen_33_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_unfrozen_33_icon)."
+    },
+    "fraction_law_homm3_bulwark_12": {
+      "enabled": true,
+      "nameText": "Shared Runes",
+      "descriptionText": "When a friendly stack reaches Rune Level 3, 6, 9 or 12, each adjacent friendly stack gains 1 Rune Level.",
+      "descriptionArgs": [],
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "hpPerc",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_kobold",
+                "h3_kobold_foreman",
+                "h3_kobold_upg_alt",
+                "h3_mountain_ram",
+                "h3_argali",
+                "h3_mountain_ram_upg_alt",
+                "h3_snow_elf",
+                "h3_steel_elf",
+                "h3_snow_elf_upg_alt",
+                "h3_yeti",
+                "h3_yeti_runemaster",
+                "h3_yeti_upg_alt",
+                "h3_shaman",
+                "h3_great_shaman",
+                "h3_shaman_upg_alt",
+                "h3_mammoth",
+                "h3_war_mammoth",
+                "h3_mammoth_upg_alt",
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: (S) share +1 to the six hex neighbours, never chaining; Homm3BulwarkLawHooks.ShareRunes from TryApplyGain. Native bonus is a zero-strength anchor.",
+      "effectIconKey": "fraction_law_nature_24_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_nature_24_icon)."
+    },
+    "fraction_law_homm3_bulwark_13": {
+      "enabled": false
+    },
+    "fraction_law_homm3_bulwark_14": {
+      "enabled": true,
+      "nameText": "Mining: Gems",
+      "descriptionText": "Produces {0} Gem(s) daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "gemstones",
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "gemstones",
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: vanilla Mining shape (sideRes gemstones 1/2); the tier-7 upgrades cost Gems.",
+      "iconNotes": "law pass 2026-11-21: resource law; the icon resolves from its resource."
+    },
+    "fraction_law_homm3_bulwark_15": {
+      "enabled": true,
+      "nameText": "Primal Study",
+      "descriptionText": "Primal spells of your heroes gain {0} level(s).",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_3"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "magicSchoolSet",
+                "primal",
+                "0",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: vanilla Ancient Power shape.",
+      "effectIconKey": "fraction_law_demon_14_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_demon_14_icon)."
     },
     "fraction_law_homm3_bulwark_17": {
       "enabled": true,
       "nameText": "Hold the High Ground",
-      "descriptionText": "When battling in the area you control, friendly creatures gain +1/+2/+3 Attack and Defense by rank.",
-      "parametersPerLevel": [
-        {"cost": 2, "bonuses": [
-          {"type": "unitStat", "receiverAllegiance": "ally", "actionArea": "allied", "parameters": ["offence", "1"]},
-          {"type": "unitStat", "receiverAllegiance": "ally", "actionArea": "allied", "parameters": ["defence", "1"]}
-        ]},
-        {"cost": 2, "bonuses": [
-          {"type": "unitStat", "receiverAllegiance": "ally", "actionArea": "allied", "parameters": ["offence", "2"]},
-          {"type": "unitStat", "receiverAllegiance": "ally", "actionArea": "allied", "parameters": ["defence", "2"]}
-        ]},
-        {"cost": 2, "bonuses": [
-          {"type": "unitStat", "receiverAllegiance": "ally", "actionArea": "allied", "parameters": ["offence", "3"]},
-          {"type": "unitStat", "receiverAllegiance": "ally", "actionArea": "allied", "parameters": ["defence", "3"]}
-        ]}
+      "descriptionText": "When battling in the area you control, friendly creatures gain {0} Attack and Defense.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
       ],
-      "iconKey": "fraction_law_nature_17_icon",
-      "notes": "Olden Era integration law using exact Core-native territorial stat rows. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "receiverAllegiance": "ally",
+              "actionArea": "allied",
+              "parameters": [
+                "offence",
+                "1"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "receiverAllegiance": "ally",
+              "actionArea": "allied",
+              "parameters": [
+                "defence",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "receiverAllegiance": "ally",
+              "actionArea": "allied",
+              "parameters": [
+                "offence",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "receiverAllegiance": "ally",
+              "actionArea": "allied",
+              "parameters": [
+                "defence",
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "receiverAllegiance": "ally",
+              "actionArea": "allied",
+              "parameters": [
+                "offence",
+                "3"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "receiverAllegiance": "ally",
+              "actionArea": "allied",
+              "parameters": [
+                "defence",
+                "3"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: kept (existing row).",
+      "effectIconKey": "fraction_law_nature_17_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_nature_17_icon)."
+    },
+    "fraction_law_homm3_bulwark_18": {
+      "enabled": false
+    },
+    "fraction_law_homm3_bulwark_19": {
+      "enabled": false
     },
     "fraction_law_homm3_bulwark_20": {
       "enabled": true,
       "nameText": "Mountain Homesteads",
-      "descriptionText": "Creature growth of your external dwellings increases by 50%/100% by rank.",
-      "parametersPerLevel": [
-        {"cost": 4, "bonuses": [{"type": "barrackUnitsIncrementPer", "parameters": ["all", "0.5"]}]},
-        {"cost": 4, "bonuses": [{"type": "barrackUnitsIncrementPer", "parameters": ["all", "1.0"]}]}
+      "descriptionText": "Creature growth of your external dwellings increases by +{0}%.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_1"
       ],
-      "iconKey": "fraction_law_nature_20_icon",
-      "notes": "Olden Era integration law using exact Core-native external-dwelling growth rows. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "barrackUnitsIncrementPer",
+              "parameters": [
+                "all",
+                "0.5"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "barrackUnitsIncrementPer",
+              "parameters": [
+                "all",
+                "1.0"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: vanilla Fertile Ground shape (barrackUnitsIncrementPer).",
+      "effectIconKey": "fraction_law_nature_20_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_nature_20_icon)."
+    },
+    "fraction_law_homm3_bulwark_21": {
+      "enabled": true,
+      "nameText": "Prosperous Holdings",
+      "descriptionText": "Your sources of Gold produce +{0}% Gold.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_2"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "resPercentIncrementSet",
+                "gold",
+                "0.10"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "resPercentIncrementSet",
+                "gold",
+                "0.15"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "resPercentIncrementSet",
+                "gold",
+                "0.20"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: vanilla Coinage Reform shape.",
+      "effectIconKey": "fraction_law_human_21_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_human_21_icon)."
+    },
+    "fraction_law_homm3_bulwark_22": {
+      "enabled": false
+    },
+    "fraction_law_homm3_bulwark_23": {
+      "enabled": true,
+      "nameText": "Elite Mammoths",
+      "descriptionText": "Mammoth growth in your cities increases by {0}. They gain {1} HP.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_mammoth",
+                "1"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "hp",
+                "15"
+              ],
+              "receivers": [
+                "h3_mammoth",
+                "h3_war_mammoth",
+                "h3_mammoth_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_mammoth",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "hp",
+                "30"
+              ],
+              "receivers": [
+                "h3_mammoth",
+                "h3_war_mammoth",
+                "h3_mammoth_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite law, HP rider.",
+      "portraitIconSid": "h3_mammoth",
+      "iconNotes": "law pass 2026-11-21: unit-line law, portrait h3_mammoth."
     },
     "fraction_law_homm3_bulwark_24": {
       "enabled": true,
-      "nameText": "Fortune of the Clans",
-      "descriptionText": "Friendly creatures gain +1%/+2%/+3% Lucky Strike chance per point of Luck by rank.",
-      "parametersPerLevel": [
-        {"cost": 2, "bonuses": [{"type": "unitStat", "parameters": ["critChanceModifier", "0.01"]}]},
-        {"cost": 2, "bonuses": [{"type": "unitStat", "parameters": ["critChanceModifier", "0.02"]}]},
-        {"cost": 2, "bonuses": [{"type": "unitStat", "parameters": ["critChanceModifier", "0.03"]}]}
+      "nameText": "Elite Jotunns",
+      "descriptionText": "Jotunn growth in your cities increases by {0}. They gain {1} Attack and Defense and {2} Speed.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1",
+        "current_law_modInt_bonuses_3_parameters_1"
       ],
-      "iconKey": "fraction_law_nature_24_icon",
-      "notes": "Olden Era integration law using exact Core-native Luck rows. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_jotunn",
+                "1"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "offence",
+                "3"
+              ],
+              "receivers": [
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "3"
+              ],
+              "receivers": [
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "speed",
+                "1"
+              ],
+              "receivers": [
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_jotunn",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "offence",
+                "6"
+              ],
+              "receivers": [
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "6"
+              ],
+              "receivers": [
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "speed",
+                "1"
+              ],
+              "receivers": [
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite law, Cavalry rider.",
+      "portraitIconSid": "h3_jotunn",
+      "iconNotes": "law pass 2026-11-21: unit-line law, portrait h3_jotunn."
+    },
+    "fraction_law_homm3_bulwark_25": {
+      "enabled": true,
+      "nameText": "Winter Stores",
+      "descriptionText": "Produces {0} Wood and {1} Ore daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "wood",
+                1
+              ]
+            },
+            {
+              "type": "sideRes",
+              "parameters": [
+                "ore",
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "wood",
+                2
+              ]
+            },
+            {
+              "type": "sideRes",
+              "parameters": [
+                "ore",
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: two-resource mining at r3.",
+      "effectIconKey": "fraction_law_unfrozen_8_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_unfrozen_8_icon)."
     },
     "fraction_law_homm3_bulwark_26": {
       "enabled": true,
-      "nameText": "Resource Riches III",
-      "descriptionText": "Provides 7500 Gold, 15 Wood, and 15 Ore when enacted.",
-      "parametersPerLevel": [{"cost": 3, "bonuses": [
-        {"type": "sideOneTimeAddRes", "parameters": ["gold", "7500"]},
-        {"type": "sideOneTimeAddRes", "parameters": ["wood", "15"]},
-        {"type": "sideOneTimeAddRes", "parameters": ["ore", "15"]}
-      ]}],
-      "iconKey": "fraction_law_nature_26_icon",
-      "notes": "Olden Era integration law copied from the Nature donor's Core-native row. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+      "nameText": "Elite Shamans",
+      "descriptionText": "Shaman growth in your cities increases by {0}. Their abilities do not end their turn.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_shaman",
+                "1"
+              ]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": [
+                "ignoreAbilityActionCost",
+                "true"
+              ],
+              "receivers": [
+                "h3_shaman",
+                "h3_great_shaman",
+                "h3_shaman_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_shaman",
+                "2"
+              ]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": [
+                "ignoreAbilityActionCost",
+                "true"
+              ],
+              "receivers": [
+                "h3_shaman",
+                "h3_great_shaman",
+                "h3_shaman_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite law (index 26: Resource Riches III is generated at 29).",
+      "portraitIconSid": "h3_shaman",
+      "iconNotes": "law pass 2026-11-21: unit-line law, portrait h3_shaman."
+    },
+    "fraction_law_homm3_bulwark_27": {
+      "enabled": true,
+      "nameText": "Mountain Passes",
+      "descriptionText": "Your heroes gain {0} Movement points.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 5,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "movementBonus",
+                "15"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 5,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "movementBonus",
+                "30"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: movementBonus is flat points (vanilla Jadame Maps / Children of the Wild); the draft's '%' was wrong.",
+      "effectIconKey": "fraction_law_dungeon_8_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_dungeon_8_icon)."
+    },
+    "fraction_law_homm3_bulwark_28": {
+      "enabled": true,
+      "nameText": "Kobold Work Crews",
+      "descriptionText": "You can construct +{0} building(s) daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_0"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "constructionDailyLimit",
+              "parameters": [
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: vanilla Architect's Mastery shape at 3.",
+      "effectIconKey": "fraction_law_human_28_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_human_28_icon)."
     },
     "fraction_law_homm3_bulwark_30": {
       "enabled": true,
-      "nameText": "Clear Mountain Sky",
-      "descriptionText": "Produces 250 Astrology Points daily.",
-      "parametersPerLevel": [{"cost": 1, "bonuses": [{"type": "astrologyExp", "parameters": ["250", "0.0"]}]}],
-      "iconKey": "fraction_law_nature_30_icon",
-      "notes": "Olden Era integration law using the exact Core-native Astrology row. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+      "nameText": "Elder Runes",
+      "descriptionText": "With Expert Runes, friendly creatures can reach Rune Level 12. Rune Levels 10, 11 and 12 add 2 Attack, 2 Defense and 1 Speed, in that order.",
+      "descriptionArgs": [],
+      "parametersPerLevel": [
+        {
+          "cost": 5,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "basic_attack",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_kobold",
+                "h3_kobold_foreman",
+                "h3_kobold_upg_alt",
+                "h3_mountain_ram",
+                "h3_argali",
+                "h3_mountain_ram_upg_alt",
+                "h3_snow_elf",
+                "h3_steel_elf",
+                "h3_snow_elf_upg_alt",
+                "h3_yeti",
+                "h3_yeti_runemaster",
+                "h3_yeti_upg_alt",
+                "h3_shaman",
+                "h3_great_shaman",
+                "h3_shaman_upg_alt",
+                "h3_mammoth",
+                "h3_war_mammoth",
+                "h3_mammoth_upg_alt",
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Elder Runes made law-only (SPEC 2 duplicate scan): the +3 cap used to apply at every skill rank, so a Basic or Advanced hero got the next skill rank's cap from the law. It now applies only at Expert Runes (cap 9 -> 12; Homm3BulwarkRunesRuntime TryApplyGain). Levels 10-12 dispatch lawBuffs h3_law_bulwark_rune_level_10..12.",
+      "effectIconKey": "fraction_law_demon_4_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_demon_4_icon)."
     },
     "fraction_law_homm3_bulwark_31": {
       "enabled": true,
-      "nameText": "Runic Serenity",
-      "descriptionText": "The cooldowns of all battle spells of your heroes are reduced by 1 round.",
-      "parametersPerLevel": [{"cost": 4, "bonuses": [{"type": "heroStat", "parameters": ["magicCdBonus", "-1"]}]}],
-      "iconKey": "fraction_law_nature_31_icon",
-      "notes": "Olden Era integration law using the exact Core-native cooldown row. This is not claimed as a HotA-authentic Bulwark law; candidate, deploy, and runtime validation remain pending."
+      "nameText": "Shield Wall",
+      "descriptionText": "When your Bulwark creatures Defend, they gain {0} Attack until their next turn.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "battleSubskillBonus",
+              "parameters": [
+                "unit_buff",
+                "h3_law_bulwark_shield_wall_1"
+              ],
+              "receivers": [
+                "h3_kobold",
+                "h3_kobold_foreman",
+                "h3_kobold_upg_alt",
+                "h3_mountain_ram",
+                "h3_argali",
+                "h3_mountain_ram_upg_alt",
+                "h3_snow_elf",
+                "h3_steel_elf",
+                "h3_snow_elf_upg_alt",
+                "h3_yeti",
+                "h3_yeti_runemaster",
+                "h3_yeti_upg_alt",
+                "h3_shaman",
+                "h3_great_shaman",
+                "h3_shaman_upg_alt",
+                "h3_mammoth",
+                "h3_war_mammoth",
+                "h3_mammoth_upg_alt",
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "2"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "battleSubskillBonus",
+              "parameters": [
+                "unit_buff",
+                "h3_law_bulwark_shield_wall_2"
+              ],
+              "receivers": [
+                "h3_kobold",
+                "h3_kobold_foreman",
+                "h3_kobold_upg_alt",
+                "h3_mountain_ram",
+                "h3_argali",
+                "h3_mountain_ram_upg_alt",
+                "h3_snow_elf",
+                "h3_steel_elf",
+                "h3_snow_elf_upg_alt",
+                "h3_yeti",
+                "h3_yeti_runemaster",
+                "h3_yeti_upg_alt",
+                "h3_shaman",
+                "h3_great_shaman",
+                "h3_shaman_upg_alt",
+                "h3_mammoth",
+                "h3_war_mammoth",
+                "h3_mammoth_upg_alt",
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "4"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Shield Wall: display carrier 2/4 = lawBuffs h3_law_bulwark_shield_wall_attack_1/2 offence; text style only.",
+      "effectIconKey": "fraction_law_demon_5_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_demon_5_icon)."
+    },
+    "fraction_law_homm3_bulwark_32": {
+      "enabled": true,
+      "nameText": "Stand Unbroken",
+      "descriptionText": "Your Bulwark creatures can make +{0} counterattacks per round.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "numCounters",
+                "1"
+              ],
+              "receivers": [
+                "h3_kobold",
+                "h3_kobold_foreman",
+                "h3_kobold_upg_alt",
+                "h3_mountain_ram",
+                "h3_argali",
+                "h3_mountain_ram_upg_alt",
+                "h3_snow_elf",
+                "h3_steel_elf",
+                "h3_snow_elf_upg_alt",
+                "h3_yeti",
+                "h3_yeti_runemaster",
+                "h3_yeti_upg_alt",
+                "h3_shaman",
+                "h3_great_shaman",
+                "h3_shaman_upg_alt",
+                "h3_mammoth",
+                "h3_war_mammoth",
+                "h3_mammoth_upg_alt",
+                "h3_jotunn",
+                "h3_jotunn_warlord",
+                "h3_jotunn_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: vanilla Morituri te Salutant shape on all Bulwark.",
+      "effectIconKey": "fraction_law_undead_30_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_undead_30_icon)."
+    },
+    "fraction_law_homm3_bulwark_33": {
+      "enabled": true,
+      "nameText": "Clear Mountain Sky",
+      "descriptionText": "Produces {0} Astrology points daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_0"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "250",
+                "0.0"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "500",
+                "0.0"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: vanilla astrology shape (astrologyExp 250/500); the old third level is cut.",
+      "iconNotes": "law pass 2026-11-21: vanilla astrology art (nature_30 Clear Sky).",
+      "effectIconKey": "fraction_law_nature_30_icon"
+    },
+    "fraction_law_homm3_bulwark_34": {
+      "enabled": true,
+      "nameText": "Rune-Fed Focus",
+      "descriptionText": "Your Focus Charge limit increases by {0}.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "maxEnergyLevelsBonus",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: vanilla Saturation shape.",
+      "effectIconKey": "fraction_law_dungeon_29_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_dungeon_29_icon)."
     }
-  }
+  },
+  "lawTree": [
+    {
+      "kingdom": [
+        3,
+        2,
+        33
+      ],
+      "army": [
+        5,
+        4,
+        7
+      ]
+    },
+    {
+      "kingdom": [
+        1,
+        14,
+        6
+      ],
+      "army": [
+        10,
+        8,
+        17
+      ]
+    },
+    {
+      "kingdom": [
+        16,
+        20,
+        28
+      ],
+      "army": [
+        9,
+        26,
+        11
+      ]
+    },
+    {
+      "kingdom": [
+        21,
+        15,
+        25
+      ],
+      "army": [
+        23,
+        12,
+        31
+      ]
+    },
+    {
+      "kingdom": [
+        29,
+        34,
+        27
+      ],
+      "army": [
+        24,
+        30,
+        32
+      ]
+    }
+  ],
+  "lawBuffs": [
+    {
+      "id": "h3_law_bulwark_rune_level_10",
+      "cloneOf": "sunlightCavalry_buff_1",
+      "set": {
+        "aiValue": 5000,
+        "aiValuePerDuration": 40,
+        "infinite": true,
+        "icon": "magic_radiant_armor_effect_icon",
+        "tags": [
+          "positive",
+          "homm3_bulwark_runes",
+          "homm3_bulwark_rune_level_10"
+        ],
+        "isPositive": true,
+        "addition": "data",
+        "data": {
+          "stats": {
+            "offence": 2
+          }
+        }
+      },
+      "name": "Rune Level 10",
+      "text": "Elder Runes: +2 Attack."
+    },
+    {
+      "id": "h3_law_bulwark_rune_level_11",
+      "cloneOf": "sunlightCavalry_buff_1",
+      "set": {
+        "aiValue": 5100,
+        "aiValuePerDuration": 40,
+        "infinite": true,
+        "icon": "magic_radiant_armor_effect_icon",
+        "tags": [
+          "positive",
+          "homm3_bulwark_runes",
+          "homm3_bulwark_rune_level_11"
+        ],
+        "isPositive": true,
+        "addition": "data",
+        "data": {
+          "stats": {
+            "defence": 2
+          }
+        }
+      },
+      "name": "Rune Level 11",
+      "text": "Elder Runes: +2 Defense."
+    },
+    {
+      "id": "h3_law_bulwark_rune_level_12",
+      "cloneOf": "sunlightCavalry_buff_1",
+      "set": {
+        "aiValue": 5200,
+        "aiValuePerDuration": 40,
+        "infinite": true,
+        "icon": "magic_radiant_armor_effect_icon",
+        "tags": [
+          "positive",
+          "movementPositive",
+          "hasteEffect",
+          "haste",
+          "homm3_bulwark_runes",
+          "homm3_bulwark_rune_level_12"
+        ],
+        "isPositive": true,
+        "addition": "data",
+        "data": {
+          "stats": {
+            "speed": 1
+          }
+        }
+      },
+      "name": "Rune Level 12",
+      "text": "Elder Runes: +1 Speed."
+    },
+    {
+      "id": "h3_law_bulwark_shield_wall_attack_1",
+      "cloneOf": "skill_formation_1_offence_buff",
+      "set": {
+        "hidden": false,
+        "icon": "skill_formation_1_offence_buff_icon",
+        "tags": [
+          "positive",
+          "h3_law_bulwark_shield_wall_attack_1"
+        ],
+        "isPositive": true,
+        "data": {
+          "stats": {
+            "offence": 2
+          }
+        }
+      },
+      "name": "Shield Wall",
+      "text": "+2 Attack until this creature’s next turn."
+    },
+    {
+      "id": "h3_law_bulwark_shield_wall_1",
+      "cloneOf": "skill_formation_1_unit_bonus",
+      "set": {
+        "actions": [
+          {
+            "trigger": "unit_skip",
+            "triggerConditions": [
+              {
+                "checkFunction": "allegiance",
+                "values": [
+                  "self"
+                ]
+              }
+            ],
+            "damageDealer": {
+              "attackPatternSid": "attack_single_x100",
+              "castTargetParams": {
+                "castTarget_": "self"
+              },
+              "affectTargetParams": {
+                "castTarget_": "self"
+              },
+              "buffTarget_": "all",
+              "buff": {
+                "sid": "h3_law_bulwark_shield_wall_attack_1",
+                "duration": 1
+              }
+            }
+          }
+        ]
+      },
+      "name": "Shield Wall",
+      "text": "When this creature Defends, it gains +2 Attack until its next turn."
+    },
+    {
+      "id": "h3_law_bulwark_shield_wall_attack_2",
+      "cloneOf": "skill_formation_1_offence_buff",
+      "set": {
+        "hidden": false,
+        "icon": "skill_formation_1_offence_buff_icon",
+        "tags": [
+          "positive",
+          "h3_law_bulwark_shield_wall_attack_2"
+        ],
+        "isPositive": true,
+        "data": {
+          "stats": {
+            "offence": 4
+          }
+        }
+      },
+      "name": "Shield Wall",
+      "text": "+4 Attack until this creature’s next turn."
+    },
+    {
+      "id": "h3_law_bulwark_shield_wall_2",
+      "cloneOf": "skill_formation_1_unit_bonus",
+      "set": {
+        "actions": [
+          {
+            "trigger": "unit_skip",
+            "triggerConditions": [
+              {
+                "checkFunction": "allegiance",
+                "values": [
+                  "self"
+                ]
+              }
+            ],
+            "damageDealer": {
+              "attackPatternSid": "attack_single_x100",
+              "castTargetParams": {
+                "castTarget_": "self"
+              },
+              "affectTargetParams": {
+                "castTarget_": "self"
+              },
+              "buffTarget_": "all",
+              "buff": {
+                "sid": "h3_law_bulwark_shield_wall_attack_2",
+                "duration": 1
+              }
+            }
+          }
+        ]
+      },
+      "name": "Shield Wall",
+      "text": "When this creature Defends, it gains +4 Attack until its next turn."
+    }
+  ]
 }

@@ -1,0 +1,256 @@
+{
+  "factionSid": "homm3_fortress",
+  "rows": [
+    {
+      "sid": "Build_Gymnasium",
+      "section": "heroBonusBanks",
+      "template": "self:Build_Bank",
+      "replace": false,
+      "costs": [
+        {
+          "gold": 1000
+        }
+      ],
+      "bonuses": [
+        [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "defence",
+              "1"
+            ]
+          }
+        ]
+      ],
+      "nameText": "Cage of Warlords",
+      "descriptionText": "Grants +1 Defense to any visiting hero.",
+      "iconFrom": "self:Build_Bank",
+      "notes": "building pass 2026-11-22: fortress.cage_of_warlords moved off the Bank slot to its own row (vanilla heroBonusBanks SID Build_Gymnasium). Template is the pre-pass Core Build_Bank row (the Cage), so it keeps the Cage icon. Tree agent: HoMM3 requires the Fort, so suggest prereq Build_Wall:1.",
+      "nameTextLocales": {
+        "BRportugese": "Jaula dos Senhores da Guerra",
+        "czech": "Klec válečníků",
+        "french": "Cage des seigneurs de guerre",
+        "german": "Käfig der Kriegsherren",
+        "hungarian": "Hadurak kalitkája",
+        "italian": "Gabbia dei signori della guerra",
+        "japanese": "武将の檻",
+        "korean": "군벌의 우리",
+        "polish": "Klatka wodzów",
+        "russian": "Клетка полководцев",
+        "spanish": "Jaula de señores de la guerra",
+        "turkish": "Savaş Beyleri Kafesi",
+        "ukrainian": "Клітка полководців",
+        "zhCN": "军阀之笼",
+        "zhTW": "軍閥之籠"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Concede +1 de Defesa a qualquer herói visitante.",
+        "czech": "Uděluje +1 Obrana každému navštěvujícímu hrdinovi.",
+        "french": "Accorde +1 en Défense à tout héros visiteur.",
+        "german": "Verleiht jedem besuchenden Helden +1 Verteidigung.",
+        "hungarian": "+1 Védelmet ad minden látogató hősnek.",
+        "italian": "Concede +1 Difesa a ogni eroe in visita.",
+        "japanese": "訪れた英雄に防御力+1を与える。",
+        "korean": "방문한 모든 영웅에게 방어력 +1을 부여한다.",
+        "polish": "Daje +1 Obrony każdemu odwiedzającemu bohaterowi.",
+        "russian": "Даёт +1 к Защите любому посетившему герою.",
+        "spanish": "Otorga +1 de Defensa a cualquier héroe visitante.",
+        "turkish": "Ziyaret eden her kahramana +1 Savunma verir.",
+        "ukrainian": "Дає +1 до Захисту будь-якому герою-відвідувачу.",
+        "zhCN": "使任何到访的英雄获得+1防御。",
+        "zhTW": "使任何到訪的英雄獲得+1防禦。"
+      }
+    },
+    {
+      "sid": "Build_Bank",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 2500,
+          "wood": 5,
+          "ore": 5
+        }
+      ],
+      "bonuses": [
+        [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              1000
+            ]
+          }
+        ]
+      ],
+      "nameText": "Bank",
+      "descriptionText": "Produces 1000 Gold daily.",
+      "iconFrom": "nature_city:Build_Bank",
+      "notes": "building pass 2026-11-22: plain economy Bank restored (REVIEW 1). Moves heroBonusBanks -> banks; values match vanilla Build_Bank (2500 Gold, 5 Wood, 5 Ore; 1000 Gold daily). If the applier cannot move sections on replace, apply as remove + add from template human_city:Build_Bank.",
+      "nameTextLocales": {
+        "BRportugese": "Banco",
+        "czech": "Banka",
+        "french": "Banque",
+        "german": "Bank",
+        "hungarian": "Bank",
+        "italian": "Banca",
+        "japanese": "銀行",
+        "korean": "은행",
+        "polish": "Bank",
+        "russian": "Банк",
+        "spanish": "Banco",
+        "turkish": "Banka",
+        "ukrainian": "Банк",
+        "zhCN": "银行",
+        "zhTW": "銀行"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Produz 1000 de Ouro por dia.",
+        "czech": "Denně vyprodukuje 1000 Zlata.",
+        "french": "Produit 1000 d’or par jour.",
+        "german": "Produziert täglich 1000 Gold.",
+        "hungarian": "Naponta 1000 Aranyat termel.",
+        "italian": "Produce 1000 Oro al giorno.",
+        "japanese": "毎日1000ゴールドを生産する。",
+        "korean": "매일 금 1000을 생산합니다.",
+        "polish": "Produkuje 1000 Złota dziennie.",
+        "russian": "Приносит 1000 Золота в день.",
+        "spanish": "Produce 1000 de oro al día.",
+        "turkish": "Günde 1000 Altın üretir.",
+        "ukrainian": "Приносить 1000 Золота на день.",
+        "zhCN": "每天产出1000黄金。",
+        "zhTW": "每天產出1000黃金。"
+      }
+    },
+    {
+      "sid": "Build_Mother_Nature",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 1000
+        }
+      ],
+      "bonuses": [
+        []
+      ],
+      "nameText": "Glyphs of Fear",
+      "descriptionText": "The hero defending this city in a siege gets +2 Defense.",
+      "notes": "building pass 2026-11-22: fortress.glyphs_of_fear. Visiting-hero +1 Morale removed; the +2 Defense siege effect is the runtime agent's hook. Moves heroBonusBanks -> banks so it is not a visit-bonus building; falls back to heroBonusBanks with empty bonuses if the move is refused.",
+      "nameTextLocales": {
+        "BRportugese": "Glifos do Medo",
+        "czech": "Glyfy strachu",
+        "french": "Glyphes de peur",
+        "german": "Glyphen der Furcht",
+        "hungarian": "Félelem rúnái",
+        "italian": "Glifi della paura",
+        "japanese": "恐怖の紋章",
+        "korean": "공포의 문양",
+        "polish": "Glify strachu",
+        "russian": "Знаки страха",
+        "spanish": "Glifos del miedo",
+        "turkish": "Korku Yazıtları",
+        "ukrainian": "Знаки страху",
+        "zhCN": "恐惧符文",
+        "zhTW": "恐懼符文"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "O herói que defende esta cidade em um cerco recebe +2 de Defesa.",
+        "czech": "Hrdina bránící toto město při obléhání získá +2 Obrana.",
+        "french": "Le héros qui défend cette ville lors d’un siège obtient +2 en Défense.",
+        "german": "Der Held, der diese Stadt bei einer Belagerung verteidigt, erhält +2 Verteidigung.",
+        "hungarian": "Az a hős, aki ostrom közben védi ezt a várost, +2 Védelmet kap.",
+        "italian": "L’eroe che difende questa città durante un assedio ottiene +2 Difesa.",
+        "japanese": "攻城戦でこの都市を防衛する英雄は防御力+2を得る。",
+        "korean": "공성전에서 이 도시를 방어하는 영웅은 방어력 +2를 얻는다.",
+        "polish": "Bohater broniący tego miasta podczas oblężenia otrzymuje +2 Obrony.",
+        "russian": "Герой, защищающий этот город при осаде, получает +2 к Защите.",
+        "spanish": "El héroe que defiende esta ciudad en un asedio obtiene +2 de Defensa.",
+        "turkish": "Bir kuşatmada bu şehri savunan kahraman +2 Savunma kazanır.",
+        "ukrainian": "Герой, що захищає це місто під час облоги, отримує +2 до Захисту.",
+        "zhCN": "在围城战中防守此城镇的英雄获得+2防御。",
+        "zhTW": "在圍城戰中防守此城鎮的英雄獲得+2防禦。"
+      }
+    },
+    {
+      "sid": "Build_Mycelium_Roots",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 1000
+        }
+      ],
+      "bonuses": [
+        []
+      ],
+      "nameText": "Blood Obelisk",
+      "descriptionText": "The hero defending this city in a siege gets +2 Attack.",
+      "notes": "building pass 2026-11-22: fortress.blood_obelisk replaces the invented Hydra Marsh (+1 Hydra growth removed). Siege +2 Attack is the runtime agent's hook. Scene slot kept (Build_Mycelium_Roots).",
+      "nameTextLocales": {
+        "BRportugese": "Obelisco de Sangue",
+        "czech": "Krvavý obelisk",
+        "french": "Obélisque de sang",
+        "german": "Blutobelisk",
+        "hungarian": "Vér-obeliszk",
+        "italian": "Obelisco di sangue",
+        "japanese": "血のオベリスク",
+        "korean": "피의 오벨리스크",
+        "polish": "Krwawy obelisk",
+        "russian": "Кровавый обелиск",
+        "spanish": "Obelisco de sangre",
+        "turkish": "Kan Dikilitaşı",
+        "ukrainian": "Кривавий обеліск",
+        "zhCN": "鲜血方尖碑",
+        "zhTW": "鮮血方尖碑"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "O herói que defende esta cidade em um cerco recebe +2 de Ataque.",
+        "czech": "Hrdina bránící toto město při obléhání získá +2 Útok.",
+        "french": "Le héros qui défend cette ville lors d’un siège obtient +2 en Attaque.",
+        "german": "Der Held, der diese Stadt bei einer Belagerung verteidigt, erhält +2 Angriff.",
+        "hungarian": "Az a hős, aki ostrom közben védi ezt a várost, +2 Támadóerőt kap.",
+        "italian": "L’eroe che difende questa città durante un assedio ottiene +2 Attacco.",
+        "japanese": "攻城戦でこの都市を防衛する英雄は攻撃力+2を得る。",
+        "korean": "공성전에서 이 도시를 방어하는 영웅은 공격력 +2를 얻는다.",
+        "polish": "Bohater broniący tego miasta podczas oblężenia otrzymuje +2 Ataku.",
+        "russian": "Герой, защищающий этот город при осаде, получает +2 к Атаке.",
+        "spanish": "El héroe que defiende esta ciudad en un asedio obtiene +2 de Ataque.",
+        "turkish": "Bir kuşatmada bu şehri savunan kahraman +2 Saldırı kazanır.",
+        "ukrainian": "Герой, що захищає це місто під час облоги, отримує +2 до Атаки.",
+        "zhCN": "在围城战中防守此城镇的英雄获得+2攻击力。",
+        "zhTW": "在圍城戰中防守此城鎮的英雄獲得+2攻擊力。"
+      }
+    },
+    {
+      "sid": "Build_Spring_of_Life",
+      "section": "graals",
+      "replace": true,
+      "descriptionText": "+1 to all creature growth in all your cities. This city's dwellings produce +100% units. The hero defending this city in a siege gets +10 Attack and +10 Defense.",
+      "notes": "building pass 2026-11-22: fortress.carnivorous_plant. Keeps empire +1 growth and +100% city growth (owner answer 3); the +10/+10 siege bonus is the runtime agent's hook.",
+      "costs": [
+        {
+          "graal": 1
+        }
+      ],
+      "descriptionTextLocales": {
+        "BRportugese": "+1 ao crescimento de todas as criaturas em todas as suas cidades. As moradias desta cidade produzem +100% de unidades. O herói que defende esta cidade em um cerco recebe +10 de Ataque e +10 de Defesa.",
+        "czech": "+1 k přírůstku všech jednotek ve všech vašich městech. Obydlí tohoto města produkují +100% jednotek. Hrdina bránící toto město při obléhání získá +10 Útok a +10 Obrana.",
+        "french": "+1 à la croissance de toutes les créatures dans toutes vos villes. Les habitations de cette ville produisent +100 % d’unités. Le héros qui défend cette ville lors d’un siège obtient +10 en Attaque et +10 en Défense.",
+        "german": "+1 auf das Wachstum aller Kreaturen in allen Euren Städten. Die Behausungen dieser Stadt produzieren +100 % Einheiten. Der Held, der diese Stadt bei einer Belagerung verteidigt, erhält +10 Angriff und +10 Verteidigung.",
+        "hungarian": "+1 minden lény szaporulatához minden városodban. A város szállásai +100% egységet termelnek. Az a hős, aki ostrom közben védi ezt a várost, +10 Támadóerőt és +10 Védelmet kap.",
+        "italian": "+1 alla crescita di tutte le creature in tutte le tue città. Le dimore di questa città producono +100% unità. L’eroe che difende questa città durante un assedio ottiene +10 Attacco e +10 Difesa.",
+        "japanese": "すべての都市で全クリーチャーの増加数+1。この都市の住居は+100%の部隊を生産する。攻城戦でこの都市を防衛する英雄は攻撃力+10と防御力+10を得る。",
+        "korean": "모든 도시에서 모든 크리처의 증가량 +1. 이 도시의 거주지는 부대를 +100% 생산한다. 공성전에서 이 도시를 방어하는 영웅은 공격력 +10과 방어력 +10을 얻는다.",
+        "polish": "+1 do przyrostu wszystkich stworzeń we wszystkich twoich miastach. Siedliska w tym mieście produkują +100% jednostek. Bohater broniący tego miasta podczas oblężenia otrzymuje +10 Ataku i +10 Obrony.",
+        "russian": "+1 к приросту всех существ во всех ваших городах. Жилища этого города производят +100% существ. Герой, защищающий этот город при осаде, получает +10 к Атаке и +10 к Защите.",
+        "spanish": "+1 al crecimiento de todas las criaturas en todas tus ciudades. Las viviendas de esta ciudad producen +100% de unidades. El héroe que defiende esta ciudad en un asedio obtiene +10 de Ataque y +10 de Defensa.",
+        "turkish": "Tüm şehirlerinizdeki tüm yaratıkların üretimine +1. Bu şehrin konutları +%100 birim üretir. Bir kuşatmada bu şehri savunan kahraman +10 Saldırı ve +10 Savunma kazanır.",
+        "ukrainian": "+1 до приросту всіх істот в усіх ваших містах. Оселі цього міста виробляють +100% істот. Герой, що захищає це місто під час облоги, отримує +10 до Атаки та +10 до Захисту.",
+        "zhCN": "你所有城镇中所有生物的增长+1。此城镇的巢穴产出+100%的单位。在围城战中防守此城镇的英雄获得+10攻击力和+10防御。",
+        "zhTW": "你所有城鎮中所有生物的增長+1。此城鎮的巢穴產出+100%的單位。在圍城戰中防守此城鎮的英雄獲得+10攻擊力和+10防禦。"
+      }
+    }
+  ],
+  "remove": []
+}

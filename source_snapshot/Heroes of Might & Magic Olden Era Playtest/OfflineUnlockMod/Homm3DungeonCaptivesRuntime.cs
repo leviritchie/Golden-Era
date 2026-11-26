@@ -139,6 +139,17 @@ internal static class Homm3DungeonCaptivesRuntime
 		/// <summary>True only for the AI's automatic pick, made before the native result applies (Eat writes the winner
 		/// TransferSide). The human's window opens after the result, so its Eat/Recruit add units through the logic party.</summary>
 		internal bool ArmyWritable;
+		// law pass 2026-11-21 / 2026-11-25: the owning hero's Dungeon law levels, read once when the offer is built.
+		internal int BlackMarketLevel;
+		internal int CouriersLevel;
+		internal int TaskmastersLevel;
+		internal bool OverlordsDue;
+		/// <summary>law pass 2026-11-25: Captive Couriers (#7) paid once per battle, whatever the fate (or fallback).</summary>
+		internal bool CouriersPaid;
+		/// <summary>law pass 2026-11-21: Overlord's Due (#30) second fate: half strength, Execute/Ransom/Eat only,
+		/// never the fate in <see cref="Excluded"/>.</summary>
+		internal bool SecondFate;
+		internal Choice Excluded;
 	}
 
 	private static bool _registrationAttempted;
@@ -350,6 +361,8 @@ internal static class Homm3DungeonCaptivesRuntime
 				ApplyDirect(offer, choice);
 				break;
 		}
+		// law pass 2026-11-25: Captive Couriers (#7)
+		GrantCaptiveCouriers(offer);
 		return true;
 	}
 
@@ -357,6 +370,20 @@ internal static class Homm3DungeonCaptivesRuntime
 	internal static bool IsChoiceAvailable(Offer offer, Choice choice, out string reason)
 	{
 		reason = null;
+		// law pass 2026-11-21: Overlord's Due (#30) second fate: Execute, Ransom or Eat, never the fate already taken.
+		if (offer != null && offer.SecondFate)
+		{
+			if (!IsSecondFateChoice(choice))
+			{
+				reason = "Not offered as a second fate";
+				return false;
+			}
+			if (choice == offer.Excluded)
+			{
+				reason = "Already chosen";
+				return false;
+			}
+		}
 		switch (choice)
 		{
 			case Choice.Eat:
@@ -396,6 +423,81 @@ internal static class Homm3DungeonCaptivesRuntime
 		return reason == null;
 	}
 
+	// ---------------------------------------------------------------- law pass 2026-11-21: Overlord's Due (#30)
+
+	internal static bool IsSecondFateChoice(Choice choice) => choice == Choice.Execute || choice == Choice.Ransom || choice == Choice.Eat;
+
+	/// <summary>The fallback when a window choice is refused or the window fails: Ransom, or Execute when a second
+	/// fate already excludes Ransom.</summary>
+	internal static Choice FallbackChoice(Offer offer)
+	{
+		return offer != null && offer.SecondFate && offer.Excluded == Choice.Ransom ? Choice.Execute : Choice.Ransom;
+	}
+
+	/// <summary>
+	/// The half-strength second offer after a first fate was applied, when the hero owns Overlord's Due. Half the
+	/// captives, half the Experience/Mana/Gold, half of each Eat stack; Enslave and Recruit are never offered (they
+	/// persist), and the fate already taken is excluded. False when the law is not owned or this is already the second.
+	/// </summary>
+	internal static bool TryBuildSecondFate(Offer first, Choice applied, out Offer second)
+	{
+		second = null;
+		if (first == null || first.SecondFate || !first.OverlordsDue)
+			return false;
+		var o = new Offer
+		{
+			BattleKey = first.BattleKey,
+			LogicHero = first.LogicHero,
+			DataHero = first.DataHero,
+			HeroSid = first.HeroSid,
+			Rank = first.Rank,
+			IsLocalHuman = first.IsLocalHuman,
+			DefeatedValue = first.DefeatedValue,
+			Captives = Math.Max(1, Homm3DungeonLawHooks.Half(first.Captives)),
+			Interrogation = first.Interrogation,
+			HasEnslave = false,
+			HasRecruit = false,
+			SlaveMarkets = first.SlaveMarkets,
+			DungeonCells = first.DungeonCells,
+			ExecuteXp = Homm3DungeonLawHooks.Half(first.ExecuteXp),
+			ExecuteMana = Homm3DungeonLawHooks.Half(first.ExecuteMana),
+			RansomGold = Homm3DungeonLawHooks.Half(first.RansomGold),
+			EnslavedBefore = first.EnslavedBefore,
+			EnslaveDailyGoldAfter = first.EnslaveDailyGoldAfter,
+			RecruitBlocked = "Not offered as a second fate",
+			ArmyWritable = first.ArmyWritable,
+			BlackMarketLevel = first.BlackMarketLevel,
+			CouriersLevel = first.CouriersLevel,
+			TaskmastersLevel = first.TaskmastersLevel,
+			OverlordsDue = first.OverlordsDue,
+			CouriersPaid = true,
+			SecondFate = true,
+			Excluded = applied,
+		};
+		foreach (var line in first.Eat)
+		{
+			var count = Homm3DungeonLawHooks.Half(line.Count);
+			if (count <= 0)
+				continue;
+			o.Eat.Add(new UnitLine { Sid = line.Sid, Count = count, SlotPos = line.SlotPos, SquadValue = line.SquadValue });
+			o.EatCreatures += count;
+		}
+		second = o;
+		LogEvent("battle " + first.BattleKey + ": Overlord's Due second fate built (excluding " + applied + "). " + DescribeOffer(o));
+		return true;
+	}
+
+	/// <summary>Second fate without a window (AI, or a window that failed): Ransom, or Execute when Ransom was the first
+	/// fate. Pays straight into the hero; no army writes.</summary>
+	internal static void ApplySecondFateDirect(Offer first, Choice applied)
+	{
+		if (!TryBuildSecondFate(first, applied, out var second))
+			return;
+		var pick = second.Excluded == Choice.Ransom ? Choice.Execute : Choice.Ransom;
+		LogEvent("battle " + first.BattleKey + ": Overlord's Due second fate applied directly: " + pick + ".");
+		ApplyDirect(second, pick);
+	}
+
 	// ---------------------------------------------------------------- battle result
 
 	/// <summary>
@@ -428,6 +530,10 @@ internal static class Homm3DungeonCaptivesRuntime
 				{
 					_log?.LogError(LogPrefix + "choice window could not be queued for battle " + key + " (" + fail + "); paying Ransom.");
 					ApplyDirect(offer, Choice.Ransom);
+					// law pass 2026-11-25: Captive Couriers (#7)
+					GrantCaptiveCouriers(offer);
+					// law pass 2026-11-21: Overlord's Due (#30) still pays its half-strength second fate.
+					ApplySecondFateDirect(offer, Choice.Ransom);
 				}
 				else
 				{
@@ -436,7 +542,12 @@ internal static class Homm3DungeonCaptivesRuntime
 				return;
 			}
 			offer.ArmyWritable = true;
-			Apply(battleLogic, offer, offer.EatCreatures > 0 ? Choice.Eat : Choice.Ransom);
+			var aiChoice = offer.EatCreatures > 0 ? Choice.Eat : Choice.Ransom;
+			Apply(battleLogic, offer, aiChoice);
+			// law pass 2026-11-25: Captive Couriers (#7)
+			GrantCaptiveCouriers(offer);
+			// law pass 2026-11-21: Overlord's Due (#30): AI takes Ransom after Eat, Execute after Ransom, at half strength.
+			ApplySecondFateDirect(offer, aiChoice);
 		}
 		catch (Exception ex)
 		{
@@ -629,9 +740,39 @@ internal static class Homm3DungeonCaptivesRuntime
 			_log?.LogError(LogPrefix + "Ransom: " + fail + " (" + DescribeHero(offer.DataHero) + ", gold +" + offer.RansomGold + " not paid).");
 			return;
 		}
+		// law pass 2026-11-25: Black Market Ransoms (#5): 1 Mercury per 20 / 10 captives ransomed.
+		var mercury = PayBlackMarketMercury(offer);
 		LogEvent("Ransom: " + DescribeHero(offer.DataHero) + " captives=" + offer.Captives + " gold=+" + offer.RansomGold + " (before " + before + ")"
-			+ (offer.SlaveMarkets ? " slaveMarkets x1.25" : "") + ".");
-		Report(offer, "Ransomed " + offer.Captives + " captives: +" + offer.RansomGold.ToString("N0") + " Gold.");
+			+ (offer.SlaveMarkets ? " slaveMarkets x1.25" : "") + (mercury > 0 ? " blackMarket mercury=+" + mercury : "") + ".");
+		Report(offer, "Ransomed " + offer.Captives + " captives: +" + offer.RansomGold.ToString("N0") + " Gold" + (mercury > 0 ? ", +" + mercury + " Mercury" : "") + ".");
+	}
+
+	/// <summary>law pass 2026-11-25: Black Market Ransoms (#5). Pays the Mercury and returns it (0 when not owned or on any failure).</summary>
+	private static int PayBlackMarketMercury(Offer offer)
+	{
+		var mercury = Homm3DungeonLawHooks.BlackMarketMercury(offer.BlackMarketLevel, offer.Captives);
+		if (mercury <= 0)
+			return 0;
+		try
+		{
+			if (!TryResolveHeroSide(offer.LogicHero, out var dataSide, out var sideFail))
+			{
+				_log?.LogError(LogPrefix + "Black Market Ransoms: hero side unresolved (" + sideFail + "); no Mercury.");
+				return 0;
+			}
+			if (!Homm3RewardEconomyNativeAdapter.TryResolveResourceFromSide(dataSide, "mercury", out var resource, out _, out var fail)
+				|| !Homm3RewardEconomyNativeAdapter.TryAddResourceValue(resource, mercury, out fail))
+			{
+				_log?.LogError(LogPrefix + "Black Market Ransoms: +" + mercury + " Mercury not paid (" + fail + ").");
+				return 0;
+			}
+			return mercury;
+		}
+		catch (Exception ex)
+		{
+			_log?.LogError(LogPrefix + "Black Market Ransoms failed closed: " + ex.GetBaseException().Message);
+			return 0;
+		}
 	}
 
 	private static void PayEnslave(Offer offer)
@@ -1161,6 +1302,13 @@ internal static class Homm3DungeonCaptivesRuntime
 			SlaveMarkets = HasSubSkill(dataHero, SlaveMarketsSubSkillSid),
 			DungeonCells = HasSubSkill(dataHero, DungeonCellsSubSkillSid),
 		};
+		// law pass 2026-11-25: Dungeon laws #5 Black Market Ransoms, #7 Captive Couriers, #9 Taskmasters and #30 Overlord's Due
+		// on the winner's logic hero. Taskmasters no longer grants Recruit (the Recruit Captives subskill does).
+		o.BlackMarketLevel = Homm3DungeonLawHooks.Rank(logicHero, Homm3DungeonLawHooks.BlackMarketRansomsLaw);
+		o.CouriersLevel = Homm3DungeonLawHooks.Rank(logicHero, Homm3DungeonLawHooks.CaptiveCouriersLaw);
+		o.TaskmastersLevel = Homm3DungeonLawHooks.Rank(logicHero, Homm3DungeonLawHooks.TaskmastersLaw);
+		o.OverlordsDue = Homm3DungeonLawHooks.HasOverlordsDue(logicHero);
+		NoteDailyMovement(dataHero);
 
 		// Defeated enemies: every other side, started minus remaining, by sid.
 		var killedBySid = new Dictionary<string, int>(StringComparer.Ordinal);
@@ -1189,8 +1337,9 @@ internal static class Homm3DungeonCaptivesRuntime
 		}
 
 		var index = rank - 1;
-		o.ExecuteXp = (int)Math.Min(int.MaxValue, (long)o.Captives * ExecuteXpPerCaptive[index]);
-		o.ExecuteMana = o.Interrogation ? (int)Math.Round(o.ExecuteXp * InterrogationManaPerXp, MidpointRounding.AwayFromZero) : 0;
+		var baseExecuteXp = (int)Math.Min(int.MaxValue, (long)o.Captives * ExecuteXpPerCaptive[index]);
+		o.ExecuteXp = baseExecuteXp;
+		o.ExecuteMana = o.Interrogation ? (int)Math.Round(baseExecuteXp * InterrogationManaPerXp, MidpointRounding.AwayFromZero) : 0;
 		o.RansomGold = (int)Math.Min(int.MaxValue, Math.Floor((long)o.Captives * RansomGoldPerCaptive[index] * (o.SlaveMarkets ? SlaveMarketsGoldMultiplier : 1.0)));
 		if (TryReadEnslaved(logicHero, out var enslaved, out _))
 			o.EnslavedBefore = enslaved;
@@ -1251,8 +1400,10 @@ internal static class Homm3DungeonCaptivesRuntime
 			if (o.Recruit.Count >= MaxArmySlots)
 				break;
 			var config = Homm3DungeonDraconicDominionHook.ResolveUnitLogicConfigBySid(line.Sid);
-			foreach (var (name, cost) in UnitCost(config))
+			foreach (var (name, listCost) in UnitCost(config))
 			{
+				// law pass 2026-11-25: Taskmasters (#9): Recruit costs 25% / 50% less Gold.
+				var cost = string.Equals(name, "gold", StringComparison.Ordinal) ? Homm3DungeonLawHooks.TaskmastersGoldCost(o.TaskmastersLevel, listCost) : listCost;
 				line.Cost.Add((name, cost));
 				o.RecruitCost.TryGetValue(name, out var have);
 				o.RecruitCost[name] = (int)Math.Min(int.MaxValue, have + (long)cost * line.Count);
@@ -1348,7 +1499,11 @@ internal static class Homm3DungeonCaptivesRuntime
 
 	private static string DescribeOffer(Offer o)
 	{
-		return "hero=" + DescribeHero(o.DataHero) + " rank=" + o.Rank + " defeatedValue=" + o.DefeatedValue + " captives=" + o.Captives
+		return "hero=" + DescribeHero(o.DataHero) + " rank=" + o.Rank + (o.SecondFate ? " secondFate(excl " + o.Excluded + ")" : "")
+			+ (o.BlackMarketLevel > 0 || o.CouriersLevel > 0 || o.TaskmastersLevel > 0 || o.OverlordsDue
+				? " laws[blackMarket L" + o.BlackMarketLevel + " couriers L" + o.CouriersLevel + " taskmasters L" + o.TaskmastersLevel + (o.OverlordsDue ? " overlord" : "") + "]"
+				: "")
+			+ " defeatedValue=" + o.DefeatedValue + " captives=" + o.Captives
 			+ " execute=+" + o.ExecuteXp + "xp/+" + o.ExecuteMana + "mana ransom=+" + o.RansomGold + "g eat=" + o.EatCreatures
 			+ (o.HasEnslave ? " enslave->" + o.EnslaveDailyGoldAfter + "g/day" : "")
 			+ (o.HasRecruit ? " recruit=" + o.RecruitCreatures + " for " + FormatCost(o.RecruitCost) + (o.RecruitBlocked != null ? " (" + o.RecruitBlocked + ")" : "") : "");
@@ -1378,6 +1533,8 @@ internal static class Homm3DungeonCaptivesRuntime
 		try
 		{
 			var dataHero = ResolveDataHero(entry);
+			// law pass 2026-11-25: Captive Couriers (#7): the day-start movement is the hero's daily movement.
+			NoteDailyMovement(dataHero);
 			var manager = ResolveBuffManager(entry, out _);
 			if (dataHero == null || manager == null)
 				return 0;
@@ -1576,6 +1733,145 @@ internal static class Homm3DungeonCaptivesRuntime
 			LogSkip("legacy spell inspection failed; native handler remains responsible: " + ex.GetBaseException().Message);
 			return true;
 		}
+	}
+
+	// ---------------------------------------------------------------- law pass 2026-11-25: Captive Couriers (#7)
+
+	/// <summary>Highest movement seen per data hero today (day start runs after the native movement refill).</summary>
+	private static readonly Dictionary<int, (int Day, int Max)> DailyMovement = new();
+	private static MethodInfo _setMovePoints;
+	private static Type _setMovePointsOwner;
+
+	private static void NoteDailyMovement(DataHero hero)
+	{
+		try
+		{
+			if (hero == null || !Homm3FactoryLogisticsEffects.TryGetData(out var data, out _) || data == null)
+				return;
+			var day = data.daysInGameCount;
+			var move = hero.worldMovePoints;
+			lock (DailyMovement)
+			{
+				if (!DailyMovement.TryGetValue(hero.field_Public_Int32_0, out var seen) || seen.Day != day || move > seen.Max)
+					DailyMovement[hero.field_Public_Int32_0] = (day, move);
+			}
+		}
+		catch
+		{
+			// Diagnostic cache only: a miss leaves the current movement as the daily figure (grants less, never more).
+		}
+	}
+
+	/// <summary>
+	/// After the hero's fate choice (once per battle; never on the Overlord's Due second fate), restores the level's
+	/// share of the hero's daily movement through the native move-point controller, capped at the daily movement.
+	/// Fails closed: no world hero, controller or readback means no movement and a log line.
+	/// </summary>
+	private static void GrantCaptiveCouriers(Offer offer)
+	{
+		if (offer == null || offer.CouriersPaid || offer.SecondFate || offer.CouriersLevel <= 0)
+			return;
+		offer.CouriersPaid = true;
+		try
+		{
+			var hero = ResolveDataHero(offer.LogicHero) ?? offer.DataHero;
+			if (hero == null || !Homm3FactoryLogisticsEffects.TryGetData(out var data, out var dataFail) || data == null)
+			{
+				LogSkip("Captive Couriers: hero or session data unreadable; no movement.");
+				return;
+			}
+			var now = hero.worldMovePoints;
+			var max = now;
+			lock (DailyMovement)
+			{
+				if (DailyMovement.TryGetValue(hero.field_Public_Int32_0, out var seen) && seen.Day == data.daysInGameCount)
+					max = Math.Max(seen.Max, now);
+			}
+			var target = (int)Math.Min(max, now + Math.Floor(max * Homm3DungeonLawHooks.CaptiveCouriersShare(offer.CouriersLevel)));
+			if (target <= now)
+			{
+				LogEvent("Captive Couriers: " + DescribeHero(hero) + " movement " + now + " of " + max + "; nothing to restore.");
+				return;
+			}
+			if (!TrySetWorldMovement(offer.LogicHero, hero, target, out var fail))
+			{
+				_log?.LogWarning(LogPrefix + "Captive Couriers: movement not restored (" + fail + ").");
+				return;
+			}
+			LogEvent("Captive Couriers L" + offer.CouriersLevel + ": " + DescribeHero(hero) + " movement " + now + " -> " + target + " (daily " + max + ").");
+		}
+		catch (Exception ex)
+		{
+			LogSkip("Captive Couriers failed closed: " + ex.GetBaseException().Message);
+		}
+	}
+
+	/// <summary>Sets a hero's world movement through its world hero's native move-point controller and reads it back.</summary>
+	private static bool TrySetWorldMovement(object logicHero, DataHero hero, int target, out string fail)
+	{
+		fail = null;
+		var worldHero = FindWorldHero(logicHero);
+		if (worldHero == null)
+		{
+			fail = "world hero not in the session hero registry";
+			return false;
+		}
+		var controller = ReadMember(worldHero, GameSymbols.HomecomingBoatTravel.WorldHeroMovePointControllerMembers);
+		if (controller == null)
+		{
+			fail = "move-point controller unreadable (HomecomingBoatTravel.WorldHeroMovePointControllerMembers)";
+			return false;
+		}
+		var type = controller.GetType();
+		if (_setMovePointsOwner != type)
+		{
+			_setMovePointsOwner = type;
+			_setMovePoints = GameMember.FindFirstMethodByNames(type, new[] { typeof(int) }, GameSymbols.HomecomingBoatTravel.MovePointControllerSetWorldMovePoints);
+			if (_setMovePoints != null && _setMovePoints.ReturnType != typeof(void))
+				_setMovePoints = null;
+		}
+		if (_setMovePoints == null)
+		{
+			fail = "set-move-points unresolved on " + type.Name + " (HomecomingBoatTravel.MovePointControllerSetWorldMovePoints)";
+			return false;
+		}
+		var before = hero.worldMovePoints;
+		_setMovePoints.Invoke(controller, new object[] { target });
+		var after = hero.worldMovePoints;
+		if (after != target)
+		{
+			fail = "readback " + before + "->" + after + " is not " + target;
+			return false;
+		}
+		return true;
+	}
+
+	/// <summary>The world hero whose logic hero is <paramref name="logicHero"/>, from the session hero registry (null when absent).</summary>
+	private static object FindWorldHero(object logicHero)
+	{
+		if (logicHero == null || _worldHeroLogicHeroProperty == null)
+			return null;
+		var target = logicHero is Il2CppObjectBase native ? native.Pointer : IntPtr.Zero;
+		var entries = new List<object>();
+		Homm3AiDriverLogicHeroRegistry.CopyEntriesTo(entries);
+		foreach (var entry in entries)
+		{
+			try
+			{
+				if (entry == null || !_worldHeroLogicHeroProperty.DeclaringType.IsInstanceOfType(entry))
+					continue;
+				var candidate = _worldHeroLogicHeroProperty.GetValue(entry);
+				if (candidate == null)
+					continue;
+				if (ReferenceEquals(candidate, logicHero) || (target != IntPtr.Zero && candidate is Il2CppObjectBase c && c.Pointer == target))
+					return entry;
+			}
+			catch
+			{
+				// A stale registry row: skip it.
+			}
+		}
+		return null;
 	}
 
 	// ---------------------------------------------------------------- helpers

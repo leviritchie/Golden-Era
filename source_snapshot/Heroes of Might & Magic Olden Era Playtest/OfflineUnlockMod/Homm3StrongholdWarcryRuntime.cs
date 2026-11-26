@@ -22,14 +22,16 @@ namespace OfflineUnlockMod;
 ///   abilities keep the chain alive but do not add a contributor or tick the counter (user, 2026-11-18); a shooter
 ///   that attacks in melee does both.
 /// - When a friendly unit begins its turn after the chain was extended, the warcry bonus grows by the number of
-///   contributors; a Stronghold unit then has +bonus Attack for that turn. With 6 warcrying units the bonus grows by
+///   contributors; the unit then has +bonus Attack for that turn. With 6 warcrying units the bonus grows by
 ///   6 per extension.
+/// - Law pass 2026-11-25 (owner): the Warcry Attack and the Battle Tempo Initiative reach every friendly creature in the
+///   Stronghold hero's army, not only Stronghold units (the former Tribes United law is retired).
 /// - Advanced subskills: +10% damage on native terrain (data row only), the bonus also adds to the hero's Spell Power,
-///   +2 Initiative for the round to Stronghold units that start a round with the warcry active.
+///   +2 Initiative for the round to friendly units that start a round with the warcry active.
 /// - Expert subskills: a friendly retaliation makes that unit a contributor; killing an enemy stack adds 5 to the
 ///   bonus at once; dead allied stacks count as contributors for the rest of the battle (they survive a break).
 /// - Model since 2026-11-18 (user; supersedes the growth wording above): the combo counter (WarSide.Bonus) goes up by
-///   exactly 1 for each action that extends the chain. The Attack a Stronghold unit gets at its turn start is
+///   exactly 1 for each action that extends the chain. The Attack a friendly unit gets at its turn start is
 ///   counter x warcrying stacks x 1 / 1.5 / 2 at Basic / Advanced / Expert (rounded down), plus the flat kill bonus.
 ///
 /// Mechanics (build 26615913): the Attack bonus is a direct write to the acting unit's live stat block
@@ -107,6 +109,16 @@ internal static class Homm3StrongholdWarcryRuntime
 		internal bool Retaliation;
 		internal bool Kill;
 		internal bool DeadAllies;
+		// law pass 2026-11-21: faction law levels, read once when the side is armed (Homm3StrongholdLawHooks).
+		/// <summary>Drums of Krewlod (#5): starting counter 0/1/2.</summary>
+		internal int DrumsStart;
+		/// <summary>Smouldering Rage (#9): share of the counter a break keeps, 0/25/50 %.</summary>
+		internal int SmoulderPct;
+		/// <summary>law pass 2026-11-25: Unending Warcry (#13): 0 or 1; when 1, waiting or defending no longer breaks the chain.</summary>
+		internal int Unending;
+		/// <summary>law pass 2026-11-25: Unending Warcry (#13): the unit whose wait/defend the law held this action, so its
+		/// ActionEnded does not defer a break either. Cleared when the next action starts.</summary>
+		internal long WaitHeldKey;
 		internal string HeroDescription;
 		internal IntPtr SideWrapperPointer;
 		internal object TransferSide;
@@ -193,6 +205,8 @@ internal static class Homm3StrongholdWarcryRuntime
 			return;
 		_attempted = true;
 		_log = log;
+		// law pass 2026-11-25: War Festival (#33) weekly Gold; independent of the battle surfaces below.
+		Homm3StrongholdLawHooks.TryRegisterWarFestival(harmony, log);
 		var hexAssembly = typeof(TransferBattle).Assembly;
 		try
 		{
@@ -438,11 +452,21 @@ internal static class Homm3StrongholdWarcryRuntime
 					SideWrapperPointer = wrapper.Pointer,
 					TransferSide = clone.sides[sideIndex],
 				};
+				// law pass 2026-11-21: Drums of Krewlod (#5), Smouldering Rage (#9).
+				// law pass 2026-11-25: Unending Warcry (#13) (Tribes United retired: the Warcry reaches every friendly creature).
+				// Rank 0 (law not taken or unreadable) keeps the current behaviour.
+				war.DrumsStart = Math.Min(2, Homm3StrongholdLawHooks.Rank(Homm3StrongholdLawHooks.DrumsOfKrewlod, side, side.logicHero));
+				war.SmoulderPct = Homm3StrongholdLawHooks.Level(Homm3StrongholdLawHooks.SmoulderPercentByLevel,
+					Homm3StrongholdLawHooks.Rank(Homm3StrongholdLawHooks.SmoulderingRage, side, side.logicHero));
+				war.Unending = Homm3StrongholdLawHooks.Rank(Homm3StrongholdLawHooks.UnendingWarcry, side, side.logicHero) > 0 ? 1 : 0;
+				war.Bonus = war.DrumsStart; // contributors start empty: the counter turns into Attack only once a stack joins in melee
 				battle ??= new BattleState { Logic = __instance, LogicPointer = (__instance as Il2CppObjectBase)?.Pointer ?? IntPtr.Zero, HubPointer = hub.Pointer };
 				battle.Sides.Add(new SideState { Side = war });
 				_log?.LogInfo("HoMM3 Stronghold Warcry armed for " + war.HeroDescription + " rank " + war.Rank
 				              + (war.SpellPower ? " +SpellPower" : "") + (war.Initiative ? " +Initiative" : "") + (war.Retaliation ? " +Retaliation" : "")
-				              + (war.Kill ? " +KillBonus" : "") + (war.DeadAllies ? " +DeadAllies" : "") + ".");
+				              + (war.Kill ? " +KillBonus" : "") + (war.DeadAllies ? " +DeadAllies" : "")
+				              + (war.DrumsStart > 0 ? " law:Drums=" + war.DrumsStart : "") + (war.SmoulderPct > 0 ? " law:Smoulder=" + war.SmoulderPct + "%" : "")
+				              + (war.Unending > 0 ? " law:Unending" : "") + ".");
 			}
 			if (battle == null)
 				return;
@@ -467,8 +491,6 @@ internal static class Homm3StrongholdWarcryRuntime
 
 	private static void EndBattle(BattleState battle)
 	{
-		lock (StrongholdByKey)
-			StrongholdByKey.Clear();
 		if (battle == null || battle.Ended)
 			return;
 		battle.Ended = true;
@@ -510,7 +532,7 @@ internal static class Homm3StrongholdWarcryRuntime
 		}
 	}
 
-	/// <summary>Round end: last round's Initiative comes off, then Stronghold units get it for the next round while the warcry is active.</summary>
+	/// <summary>Round end: last round's Initiative comes off, then friendly units get it for the next round while the warcry is active.</summary>
 	private static void PostfixRoundEnded(object __instance)
 	{
 		try
@@ -530,7 +552,8 @@ internal static class Homm3StrongholdWarcryRuntime
 				var count = 0;
 				foreach (var (unit, sidePointer) in units)
 				{
-					if (sidePointer != side.SideWrapperPointer || !IsStronghold(unit))
+					// law pass 2026-11-25: Battle Tempo reaches every friendly creature (no Stronghold gate).
+					if (sidePointer != side.SideWrapperPointer)
 						continue;
 					if (!Homm3BuffDebuffNativeAdapter.TryAdjustUnitIntStat(unit, "initiative", RoundInitiative, out var before, out _, out var fail))
 					{
@@ -574,6 +597,7 @@ internal static class Homm3StrongholdWarcryRuntime
 				return;
 			if (state.Side.ActingKey == key)
 				return; // nested start inside the same action
+			state.Side.WaitHeldKey = 0; // law pass 2026-11-25: Unending Warcry (#13): a new action starts
 			BeginTurn(battle, unit, predicted: false);
 			state.Side.ActingKey = key;
 			state.Side.Extended = false;
@@ -610,12 +634,18 @@ internal static class Homm3StrongholdWarcryRuntime
 					ApplySpellPower(state);
 					Refresh(battle, state, changed: true);
 				}
+				else if (side.Unending > 0 && key != 0 && side.WaitHeldKey == key)
+				{
+					// law pass 2026-11-25: Unending Warcry (#13): the action was a wait or defend; the chain holds.
+					LogEvent("ActionEnded " + Describe(unit) + ": wait/defend, the chain holds (Unending Warcry)");
+				}
 				else
 				{
 					LogEvent("ActionEnded " + Describe(unit) + ": no attack or ability (the chain breaks unless this unit attacks next)");
 					side.DeferredBreakKey = key;
 					side.DeferredBreakReason = "action without attack or ability by " + Describe(unit);
 				}
+				side.WaitHeldKey = 0;
 				side.Extended = false;
 				side.HitTicks = 0;
 				side.HitTarget = 0;
@@ -649,6 +679,16 @@ internal static class Homm3StrongholdWarcryRuntime
 			if (state.Side.Extended && key != 0 && state.Side.ActingKey == key)
 			{
 				LogEvent("Skip/Wait " + Describe(unit) + " after its ability: the chain holds");
+				return;
+			}
+			if (state.Side.Unending > 0)
+			{
+				// law pass 2026-11-25: Unending Warcry (#13): waiting or defending no longer breaks the Warcry. The counter
+				// does not grow either; a plain move without an attack still breaks it.
+				LogEvent("Skip/Wait " + Describe(unit) + ": the chain holds (Unending Warcry)");
+				if (key != 0 && state.Side.DeferredBreakKey == key)
+					state.Side.DeferredBreakKey = 0;
+				state.Side.WaitHeldKey = key;
 				return;
 			}
 			LogEvent("Skip/Wait " + Describe(unit));
@@ -873,7 +913,7 @@ internal static class Homm3StrongholdWarcryRuntime
 
 	/// <summary>
 	/// A friendly unit begins its turn: the bonus grows by the contributor count when the chain was extended since the
-	/// last growth, and a Stronghold unit gets the bonus as Attack. A wrong prediction is undone first.
+	/// last growth, and the unit gets the bonus as Attack. A wrong prediction is undone first.
 	/// </summary>
 	private static void BeginTurn(BattleState battle, Unit unit, bool predicted)
 	{
@@ -900,7 +940,9 @@ internal static class Homm3StrongholdWarcryRuntime
 		var pendingBefore = side.Pending;
 		const int growth = 0; // the counter grows when an action extends the chain, not at turn start
 		var bonus = AttackBonus(side);
-		var amount = bonus > 0 && IsStronghold(unit) ? bonus : 0;
+		// law pass 2026-11-25: every friendly creature receives the Warcry Attack (owner: the Warcry works natively with
+		// non-Stronghold units; the Tribes United law that lifted this gate is retired).
+		var amount = bonus > 0 ? bonus : 0;
 		var before = 0;
 		if (amount > 0 && !Homm3BuffDebuffNativeAdapter.TryAdjustUnitIntStat(unit, "offence", amount, out before, out _, out var fail))
 		{
@@ -964,8 +1006,12 @@ internal static class Homm3StrongholdWarcryRuntime
 		var side = state.Side;
 		if (side.Bonus == 0 && side.KillFlat == 0 && !side.Pending && side.Contributors.Count == 0)
 			return;
-		LogEvent("chain broken for " + side.HeroDescription + " (" + reason + "): counter " + side.Bonus + " lost");
-		side.Bonus = 0;
+		// law pass 2026-11-21: Smouldering Rage (#9) keeps 25%/50% of the counter (rounded down); Attack from kills and
+		// the contributors still clear.
+		var keep = side.SmoulderPct > 0 ? side.Bonus * side.SmoulderPct / 100 : 0;
+		LogEvent("chain broken for " + side.HeroDescription + " (" + reason + "): counter " + side.Bonus + " lost"
+		         + (keep > 0 ? ", " + keep + " kept (Smouldering Rage)" : ""));
+		side.Bonus = keep;
 		side.KillFlat = 0;
 		side.Pending = false;
 		side.Contributors.Clear();
@@ -988,6 +1034,7 @@ internal static class Homm3StrongholdWarcryRuntime
 
 	/// <summary>Living contributors, plus every dead allied stack with the expert subskill.</summary>
 	/// <summary>counter x warcrying stacks x (1, 1.5, 2 by rank), rounded down, plus the flat kill bonus.</summary>
+	// law pass 2026-11-25: Unending Warcry (#13) no longer changes the multiplier (it now keeps the chain through waits/defends).
 	private static int AttackBonus(WarSide side)
 		=> side.Bonus * CountContributors(side) * (Math.Clamp(side.Rank, 1, 3) + 1) / 2 + side.KillFlat;
 
@@ -1175,78 +1222,10 @@ internal static class Homm3StrongholdWarcryRuntime
 		return false;
 	}
 
-	// Stronghold creature lines (base sids; upgrades are "<base>_upg", "<base>_upg_alt" or their own base sid).
-	private static readonly string[] StrongholdUnitSids =
-	{
-		"h3_goblin", "h3_hobgoblin", "h3_wolf_rider", "h3_wolf_raider", "h3_orc", "h3_orc_chieftain", "h3_ogre", "h3_ogre_mage",
-		"h3_roc", "h3_thunderbird", "h3_cyclops", "h3_cyclops_king", "h3_behemoth",
-	};
-
-	private static readonly Dictionary<long, bool> StrongholdByKey = new();
-
-	/// <summary>
-	/// Stronghold creature test. The first in-game run (2026-11-18) showed the classifier's faction read does not
-	/// answer "homm3_stronghold" for these units, so the unit config id is matched against the Stronghold lines as
-	/// well. Each unit's resolution is logged once.
-	/// </summary>
-	private static bool IsStronghold(Unit unit)
-	{
-		var key = Homm3DirectStateIdentity.ResolveKeyOrZero(unit);
-		lock (StrongholdByKey)
-		{
-			if (key != 0 && StrongholdByKey.TryGetValue(key, out var known))
-				return known;
-		}
-		var result = false;
-		string faction = null, classSid = null, source = null, configId = null;
-		try
-		{
-			var classification = Homm3UnitLawClassifier.Classify(unit);
-			faction = classification.Faction;
-			classSid = classification.Sid;
-			source = classification.IdentitySource;
-			result = faction != null && faction.IndexOf(FactionSid, StringComparison.OrdinalIgnoreCase) >= 0;
-		}
-		catch (Exception ex)
-		{
-			source = "classify threw " + ex.GetBaseException().GetType().Name;
-		}
-		try
-		{
-			configId = UnitConfigId(unit);
-		}
-		catch
-		{
-		}
-		if (!result)
-			result = IsStrongholdSid(configId) || IsStrongholdSid(classSid);
-		LogEvent("unit " + (configId ?? classSid ?? "?") + "#" + (key & 0xFFFF).ToString("x4") + ": Stronghold=" + result
-			+ " (faction '" + faction + "', sid '" + classSid + "', config '" + configId + "', " + source + ")");
-		if (key != 0)
-		{
-			lock (StrongholdByKey)
-				StrongholdByKey[key] = result;
-		}
-		return result;
-	}
-
 	private static string UnitConfigId(Unit unit)
 	{
 		var config = unit?.prop_UnitLogicConfig_0;
 		return config == null ? null : DeobfInteropCompat.GetConfigElementId(config)?.Trim();
-	}
-
-	private static bool IsStrongholdSid(string sid)
-	{
-		if (string.IsNullOrEmpty(sid))
-			return false;
-		foreach (var line in StrongholdUnitSids)
-		{
-			if (sid.Equals(line, StringComparison.OrdinalIgnoreCase)
-				|| (sid.StartsWith(line + "_upg", StringComparison.OrdinalIgnoreCase)))
-				return true;
-		}
-		return false;
 	}
 
 	/// <summary>Every living unit on the grid, once (large units cover two hexes), with its side wrapper pointer.</summary>

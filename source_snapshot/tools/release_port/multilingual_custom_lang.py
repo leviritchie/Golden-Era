@@ -609,6 +609,9 @@ def canonical_custom_text_files_for_sid(
         "_split_assembly_" in sid
         or "_rune_level_" in sid
         or "_frostbound_skies_" in sid
+        # Runes subskill buffs (2026-11-25).
+        or "_rune_ward_" in sid
+        or sid.startswith(("homm3_bulwark_elder_mark_", "homm3_bulwark_frost_tempo_", "homm3_bulwark_stone_circle_"))
     ):
         return {"magic_buff.json", "unitsBuff.json", "heroSkills.json"}
 

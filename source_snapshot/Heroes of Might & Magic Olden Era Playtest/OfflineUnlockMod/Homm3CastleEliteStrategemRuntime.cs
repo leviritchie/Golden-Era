@@ -157,6 +157,8 @@ internal static class Homm3CastleEliteStrategemRuntime
 			PatchPrefix(harmony, battleLogicInitMethod, nameof(PrefixBattleLogicInit));
 			_registered = true;
 			Homm3CastleEliteStrategemIndicatorBootstrap.Ensure();
+			// law pass 2026-11-21: Drilled Deployment (#20) / Ambush Doctrine (#8) round-1 buffs.
+			Homm3CastleLawHooks.TryRegister(harmony, log);
 			_log?.LogInfo("HoMM3 Castle Elite Strategem runtime registered on " + FormatMethod(castMethod) + " and " + FormatMethod(battleLogicInitMethod) + ". Spellbook selection is native-handler-compatible; start-combat slot placement remains runtime-unvalidated until live proof.");
 		}
 		catch (Exception ex)
@@ -258,8 +260,18 @@ internal static class Homm3CastleEliteStrategemRuntime
 			return;
 		}
 
+		var mode = ownerState.Mode;
+		var revision = ownerState.Revision;
+		var isAmbush = string.Equals(mode, ModeAmbush, StringComparison.Ordinal);
+		// law pass 2026-11-25: Grand Strategem (#31), one level: every mode (Spread Out, Compress, Ambush) works against
+		// armies led by enemy heroes on the adventure map. Towns, garrisons and sieges stay excluded.
+		var grandRank = Homm3CastleLawHooks.Rank(Homm3CastleLawHooks.GrandStrategem, ownerSide, ownerSide.logicHero);
+		var isSiege = (transferBattle.arenaLogicSid ?? "").IndexOf("siege", StringComparison.OrdinalIgnoreCase) >= 0;
+
 		// The skill promises control over NEUTRAL enemy deployment. Against a hero army, a town garrison or
 		// a siege, leave the battle untouched (no re-split, no arena swap) and keep the token for later.
+		// law pass 2026-11-25: Spoils of Command (#5) pays only when every opponent is a neutral army.
+		var opponentNeutral = true;
 		foreach (var side in sides)
 		{
 			if (ReferenceEquals(side, ownerSide))
@@ -267,13 +279,19 @@ internal static class Homm3CastleEliteStrategemRuntime
 			// EType is Type_Hero / Type_Squad / Type_Garnison; neutral stacks and banks are Type_Squad.
 			if (side.typeInWorld != TransferSide.EType.Type_Squad || side.hero != null)
 			{
-				LogLimited("stored Elite Strategem mode kept: opponent is not a neutral army (typeInWorld=" + side.typeInWorld + ", hero=" + (side.hero != null) + ").");
+				var heroArmyAllowed = grandRank >= 1
+				                      && !isSiege
+				                      && side.typeInWorld == TransferSide.EType.Type_Hero
+				                      && side.hero != null;
+				if (heroArmyAllowed)
+				{
+					opponentNeutral = false;
+					continue;
+				}
+				LogLimited("stored Elite Strategem mode kept: opponent is not a neutral army (typeInWorld=" + side.typeInWorld + ", hero=" + (side.hero != null) + ", Grand Strategem " + grandRank + ").");
 				return;
 			}
 		}
-
-		var mode = ownerState.Mode;
-		var revision = ownerState.Revision;
 
 		// Claim the one-shot token before mutating TransferBattle. If a later write
 		// throws after a partial mutation, a future battle must not repeat that mode.
@@ -327,8 +345,12 @@ internal static class Homm3CastleEliteStrategemRuntime
 			return;
 		}
 
+		// law pass 2026-11-21: Drilled Deployment (#20), Ambush Doctrine (#8): round-1 buffs for this battle.
+		// law pass 2026-11-25: Spoils of Command (#5): Gold after a won battle against neutrals.
+		Homm3CastleLawHooks.NoteStrategemApplied(transferBattle, ownerSide, isAmbush, opponentNeutral);
+
 		if (_loggedApplications++ < 24)
-			_log?.LogInfo("HoMM3 Castle Elite Strategem claimed and applied mode=" + mode + " heroSid=" + (ownerState.HeroSid ?? "null") + " heroId=" + ownerHeroId + " revision=" + revision + " before BattleLogic.Init; " + string.Join(" | ", summaries));
+			_log?.LogInfo("HoMM3 Castle Elite Strategem " + "claimed and applied" + " mode=" + mode + " heroSid=" + (ownerState.HeroSid ?? "null") + " heroId=" + ownerHeroId + " revision=" + revision + " before BattleLogic.Init; " + string.Join(" | ", summaries));
 	}
 
 	private static bool TryReadEliteStrategemMode(MagicSetting setting, out string mode, out string sidOrReason)

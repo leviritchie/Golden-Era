@@ -75,53 +75,6 @@ internal static class Homm3DirectStateUnitHexNative
 		return true;
 	}
 
-	/// <summary>
-	/// Diagnostic / legacy dual-write only. Do not call from production TryCommitUnitHexMove.
-	/// Writes helper hex + <c>_cfqf</c> (lastCorpse — NOT movement occupancy).
-	/// </summary>
-	internal static bool TryMoveUnitHexLegacyDualWrite(
-		object unit,
-		object fromHex,
-		object toHex,
-		out string failReason)
-	{
-		if (unit == null || toHex == null)
-		{
-			failReason = "unit hex move requires unit and destination hex";
-			return false;
-		}
-		if (unit is not Il2CppObjectBase)
-		{
-			failReason = "unit hex move requires an IL2CPP unit";
-			return false;
-		}
-
-		if (!TryReadManagedMember(unit, GameSymbols.DirectStateLaws.FieldObjectPositionHelperMembers, out var helper)
-		    || helper == null)
-		{
-			failReason = "unit position helper unavailable";
-			return false;
-		}
-
-		if (!TryWriteNativeReference(helper, GameSymbols.DirectStateLaws.FieldObjectHexWriteMembers, toHex, out failReason))
-			return false;
-
-		if (fromHex != null
-		    && TryReadManagedMember(fromHex, GameSymbols.BattleEventLaws.HexOccupantMembers, out var fromOccupant)
-		    && fromOccupant != null
-		    && SameNativeObject(fromOccupant, unit))
-		{
-			if (!TryWriteNativeReference(fromHex, GameSymbols.DirectStateLaws.HexOccupantWriteMembers, null, out failReason))
-				return false;
-		}
-
-		if (!TryWriteNativeReference(toHex, GameSymbols.DirectStateLaws.HexOccupantWriteMembers, unit, out failReason))
-			return false;
-
-		failReason = null;
-		return true;
-	}
-
 	private static MethodInfo ResolveInstanceMethod(Type type, string[] names, int parameterCount)
 	{
 		if (type == null || names == null)
@@ -268,48 +221,6 @@ internal static class Homm3DirectStateUnitHexNative
 		return false;
 	}
 
-	private static bool TryWriteNativeReference(object owner, string[] logicalNames, object value, out string failReason)
-	{
-		failReason = null;
-		if (owner is not Il2CppObjectBase il2Cpp || il2Cpp.Pointer == IntPtr.Zero)
-		{
-			failReason = "native reference write requires an IL2CPP owner";
-			return false;
-		}
-
-		var ownerType = owner.GetType();
-		TryInitializeIl2CppType(ownerType);
-		for (var i = 0; i < logicalNames.Length; i++)
-		{
-			var logical = logicalNames[i];
-			if (string.IsNullOrWhiteSpace(logical))
-				continue;
-			var fieldPtr = ResolveNativeFieldPointer(ownerType, logical);
-			if (fieldPtr == IntPtr.Zero)
-				continue;
-			try
-			{
-				var objectPtr = IL2CPP.Il2CppObjectBaseToPtrNotNull(il2Cpp);
-				var address = IntPtr.Add(objectPtr, (int)IL2CPP.il2cpp_field_get_offset(fieldPtr));
-				var valuePtr = value is Il2CppObjectBase valueNative
-					? IL2CPP.Il2CppObjectBaseToPtr(valueNative)
-					: IntPtr.Zero;
-				IL2CPP.il2cpp_gc_wbarrier_set_field(objectPtr, address, valuePtr);
-				failReason = null;
-				return true;
-			}
-			catch (Exception ex)
-			{
-				failReason = "native reference write failed (" + logical + "): "
-				             + ex.GetType().Name + ": " + ex.Message;
-				return false;
-			}
-		}
-
-		failReason = "native reference field unresolved: " + string.Join(",", logicalNames);
-		return false;
-	}
-
 	private static bool TryReadManagedMember(object target, string[] names, out object value)
 	{
 		value = null;
@@ -438,16 +349,6 @@ internal static class Homm3DirectStateUnitHexNative
 		{
 			return null;
 		}
-	}
-
-	private static bool SameNativeObject(object left, object right)
-	{
-		if (ReferenceEquals(left, right))
-			return true;
-		return left is Il2CppObjectBase a
-		       && right is Il2CppObjectBase b
-		       && a.Pointer != IntPtr.Zero
-		       && a.Pointer == b.Pointer;
 	}
 
 	private static void TryInitializeIl2CppType(Type managedType)

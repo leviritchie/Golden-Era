@@ -452,6 +452,12 @@ internal static class Homm3FactoryLogisticsRuntime
 			if (owner != state.SideIndex)
 			{
 				RestoreHousing(world, o);
+				// law pass 2026-11-21: Insured Plants (#32): keep the record dormant until the side retakes the building.
+				if (Homm3FactoryLawHooks.InsuredPlantsActive(state.SideIndex))
+				{
+					LogOncePerDay("insured-" + state.SideIndex + "-" + o.ObjectId, "insured: object " + o.ObjectId + " now owned by side " + owner + " (was " + state.SideIndex + "); " + o.Built.Count + " enhancement(s) kept dormant.");
+					continue;
+				}
 				remove.Add(o.ObjectId);
 				if (o.Built.Count > 0 || o.UpgradeCenter > 0)
 					Homm3FactoryLogisticsDigest.NoteCaptureLoss(world, config, o);
@@ -551,6 +557,9 @@ internal static class Homm3FactoryLogisticsRuntime
 		foreach (var o in state.Objects.Values)
 		{
 			if (!world.Dwellings.TryGetValue(o.ObjectId, out var dwelling) || dwelling.assortmentData == null)
+				continue;
+			// law pass 2026-11-21: Insured Plants (#32): a dormant record (building held by another side) never sets housing.
+			if (Homm3FactoryLogisticsEffects.OwnerOf(world, o.ObjectId) != state.SideIndex)
 				continue;
 			var e = Homm3FactoryLogisticsEffects.ActiveEnhancement(config, o);
 			if (e == null || e.Effect != "housing")
@@ -709,6 +718,8 @@ internal static class Homm3FactoryLogisticsRuntime
 				side = _sideDataProperty.GetValue(logic) as DataSide;
 			if (side == null)
 				return;
+			// Building pass 2026-11-22 (bulwark.fair): +1 per owned Bulwark town with Market + Fair, independent of Trade Contracts.
+			__result += Homm3BulwarkFairRuntime.ExtraMarkets(side.index);
 			var now = Environment.TickCount;
 			if (!_tradeContractCache.TryGetValue(side.index, out var cached) || unchecked(now - cached.tick) > 1000)
 			{

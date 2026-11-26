@@ -12,6 +12,12 @@ here, the 15 other locales render from ``homm3_city_building_description_locales
 (own machine translations, or the vanilla locale row for a sentence vanilla OE already
 has).
 
+An authored description wins: a row carrying ``xHomm3DescriptionText`` (written by
+``homm3_city_building_overrides.py`` from a building override's ``descriptionText``)
+renders that text per level, and its locales from ``xHomm3DescriptionTextLocales``; a
+locale it lacks raises ``MissingExplicitTranslation``, which the locale producer skips
+and the validator reports.
+
 Producer: ``apply_release_core_overlay.apply_homm3_city_building_descriptions`` (English,
 before multilingual sync) and ``apply_homm3_city_building_description_locales`` (all
 other locales, after sync).
@@ -211,9 +217,33 @@ class Sentence:
     res: tuple[tuple[str, str], ...] = ()
     stats: tuple[tuple[str, str], ...] = ()
     vanilla: tuple[str, ...] = ()
+    explicit: tuple[tuple[str, str], ...] = ()  # (locale, text) for an authored description
 
     def num(self, key: str) -> str:
         return dict(self.nums)[key]
+
+
+class MissingExplicitTranslation(ValueError):
+    """An authored description (building override ``descriptionText``) has no text for a locale."""
+
+
+# Row fields written by homm3_city_building_overrides.py: an authored description wins over
+# the computed one (building pass 2026-11-22). Per level; locales optional.
+EXPLICIT_DESCRIPTION_FIELD = "xHomm3DescriptionText"
+EXPLICIT_DESCRIPTION_LOCALES_FIELD = "xHomm3DescriptionTextLocales"
+
+
+def _explicit_sentence(row: dict[str, Any], level_index: int) -> Sentence | None:
+    texts = row.get(EXPLICIT_DESCRIPTION_FIELD)
+    if texts is None:
+        return None
+    if not isinstance(texts, list) or level_index >= len(texts) or not isinstance(texts[level_index], str):
+        raise ValueError(f"{row.get('sid')}: {EXPLICIT_DESCRIPTION_FIELD} does not cover level {level_index + 1}")
+    pairs = [("english", texts[level_index])]
+    for lang, values in sorted((row.get(EXPLICIT_DESCRIPTION_LOCALES_FIELD) or {}).items()):
+        if isinstance(values, list) and level_index < len(values) and isinstance(values[level_index], str):
+            pairs.append((str(lang), values[level_index]))
+    return Sentence("explicit", explicit=tuple(pairs))
 
 
 @dataclass
@@ -437,6 +467,16 @@ def _converter_sentences(row: dict[str, Any]) -> list[Sentence]:
 def derive_building_sentences(
     section: str, row: dict[str, Any], level_index: int, level_count: int, ctx: CityContext
 ) -> list[Sentence]:
+    explicit = _explicit_sentence(row, level_index)
+    if explicit is not None:
+        if section in NATIVE_SECTION_BONUS_TYPES:
+            for bonus in row.get("bonuses") or []:
+                btype, _params = _bonus_type_params(bonus)
+                if btype not in NATIVE_SECTION_BONUS_TYPES[section]:
+                    raise ValueError(f"{section} bonus {btype!r} is not applied by the game")
+        if section == "myceliumRoots" and row.get("bonuses"):
+            raise ValueError(f"{row.get('sid')}: myceliumRoots has no bonuses field in game; its bonuses do nothing")
+        return [explicit]
     if section == "mains":
         return _main_sentences(row, level_index)
     if section == "taverns":
@@ -507,6 +547,8 @@ _ENGLISH_FIXED = {
 
 
 def _render_english(s: Sentence, unit_name: Callable[[str], str]) -> str:
+    if s.tid == "explicit":
+        return dict(s.explicit)["english"]
     if s.tid in _ENGLISH_FIXED:
         return _ENGLISH_FIXED[s.tid]
     n = dict(s.nums)
@@ -584,6 +626,11 @@ def _render_locale(
     unit_name: Callable[[str], str],
     vanilla_text: Callable[[str], str],
 ) -> str:
+    if s.tid == "explicit":
+        texts = dict(s.explicit)
+        if lang not in texts:
+            raise MissingExplicitTranslation(f"authored description has no {lang} text: {texts['english']!r}")
+        return texts[lang]
     key = L.VANILLA_SENTENCE_KEYS.get(s.tid)
     if key is not None:
         return _fill_vanilla(vanilla_text(key), s.vanilla, key)

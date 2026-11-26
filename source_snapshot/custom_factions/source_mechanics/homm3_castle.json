@@ -28,46 +28,66 @@
       "validationOwner": "validate_source_mechanics_contract"
     },
     {
+      "id": "castle.stables",
+      "surface": "building",
+      "sourceName": "Stables",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: own row Build_Stables (heroBonusBanks carrier, no native bonus). Homm3CastleStablesRuntime gives each visiting hero the vanilla stable_buff (+20% movement points, until the end of the week) once per week, as the HoMM3 Stables does. The Cavalier upgrade link is not part of the building. The Bank slot is a plain economy Bank again.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Stables"
+      ],
+      "forbiddenPlayerText": [
+        "Cavalier",
+        "Champion upgrade"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "castle.brotherhood_of_the_sword",
+      "surface": "building",
+      "sourceName": "Brotherhood of the Sword",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: new banks carrier Build_Mother_Nature; the hero defending this city in a siege gets +2 Morale through the runtime agent's Homm3TownSiegeDefenseRuntime, the HoMM3 effect. A heroless garrison gets nothing (no hero to carry the stat).",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Mother_Nature"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
       "id": "castle.lighthouse",
       "surface": "building",
       "sourceName": "Lighthouse",
       "status": "substituted",
-      "reason": "Olden Era has no proven water/shipyard city mechanic path for Castle in this port.",
+      "reason": "Building pass 2026-11-22: Olden Era has no ships, so the HoMM3 Lighthouse (+ship movement, needs Shipyard) cannot exist. Its land-safe equivalent is the Signal Beacon (Build_Mycelium_Roots): every hero of a side owning a Castle city with it keeps a +10% movement points buff (Homm3CastleSignalBeaconRuntime, refreshed at each day start). The old +1-of-each-resource grail substitute is no longer this mechanic.",
       "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Mycelium_Roots"
+      ],
       "forbiddenPlayerText": [
         "ship",
         "water movement",
         "Lighthouse"
       ],
-      "currentRows": [
-        "Build_Golden_Calf"
-      ],
+      "validationOwner": "validate_source_mechanics_contract",
       "playerTextTokens": [
-        "Homm3Castle_Build_Golden_Calf_description",
-        "Homm3Castle_Build_Golden_Calf_name",
-        "Homm3Castle_Build_Golden_Calf_narrativeDescription"
+        "Homm3Castle_Build_Mycelium_Roots_description",
+        "Homm3Castle_Build_Mycelium_Roots_name",
+        "Homm3Castle_Build_Mycelium_Roots_narrativeDescription"
       ]
     },
     {
-      "id": "castle.stables",
+      "id": "castle.colossus",
       "surface": "building",
-      "sourceName": "Stables",
-      "status": "substituted",
-      "reason": "Adventure-map movement and Cavalier upgrade source behavior need a traced city/session route before being promised.",
+      "sourceName": "Colossus",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: the grail keeps its current extras (HumanGraal gold + 5 resources, +100% city growth; owner answer 3) and adds the HoMM3 +2 Morale for all the owner's heroes as a native graal side heroStat.",
       "playerTextPolicy": "must_match_current_behavior",
-      "forbiddenPlayerText": [
-        "Cavalier",
-        "Champion upgrade",
-        "movement"
-      ],
       "currentRows": [
-        "Build_Bank"
+        "Build_Golden_Calf"
       ],
-      "playerTextTokens": [
-        "Homm3Castle_Build_Bank_description",
-        "Homm3Castle_Build_Bank_name",
-        "Homm3Castle_Build_Bank_narrativeDescription"
-      ]
+      "validationOwner": "validate_source_mechanics_contract"
     }
   ]
 }

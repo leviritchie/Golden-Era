@@ -36,6 +36,30 @@ internal static class Homm3SkeletalNecromancyProbe
 	private const float AdvancedConversionPercent = 0.10f;
 	private const float ExpertConversionPercent = 0.15f;
 
+	// law pass 2026-11-21: Necropolis faction laws that change Necromancy (docs/faction_law_pass_20261121/necropolis.md).
+	// No law or a read failure gives rank 0 and the current reward.
+	// law pass 2026-11-25: Bone Tithe (#7) replaces Bone Conductors (+2%/+4% share); Grave Robbers (#9) replaces
+	// Skeleton Transformer (repeated Warrior Levy); Unearthed Graves (#8) also gives a defending hero +5%.
+	private const int LawBoneTithe = 7;
+	private const int LawUnearthedGraves = 8;
+	private const int LawGraveRobbers = 9;
+	private const int LawBoneHarvest = 12;
+	private const int LawDarkAscension = 30;
+	private static readonly double[] BoneTitheGoldShare = { 0.25, 0.50 };
+	private const float UnearthedGravesHeroPercent = 0.05f;
+	private const string GoldResourceName = "gold";
+	private const float BoneHarvestPercent = BasicConversionPercent;
+	private const float DarkAscensionPercentPerLevel = 0.05f;
+	private const string DarkAscensionRewardUnitSid = "h3_wight";
+
+	// building pass 2026-11-22 (docs/building_pass_20261122/necropolis.md): town buildings that raise the share.
+	// Values are HoMM3's halved, like the 5/10/15% buckets above. Read through Homm3TownBuildingReader (fails closed).
+	private const string NecropolisCitySid = "homm3_necropolis_city";
+	private const string AmplifierBuildingSid = "Build_Mother_Nature";
+	private const string SoulPrisonBuildingSid = "Build_Gaping_Maw";
+	private const float AmplifierBuildingPercent = 0.05f;
+	private const float SoulPrisonPercent = 0.10f;
+
 	private static bool _registered;
 	private static ManualLogSource _log;
 	private static MethodInfo _transferSideAddSpawnedUnitMethod;
@@ -206,8 +230,15 @@ internal static class Homm3SkeletalNecromancyProbe
 
 		var winner = transferBattle.sides[winnerIndex];
 		var winnerStarted = winnerIndex < startedTransferBattle.sides.Length ? startedTransferBattle.sides[winnerIndex] : null;
+		// law pass 2026-11-21: Unearthed Graves (#8): a hero-less garrison of a player holding the law raises at the Basic share.
+		var garrisonGraves = false;
 		if (!IsNecropolisHeroSide(winnerStarted ?? winner, out var heroSid))
-			return false;
+		{
+			if (!IsUnearthedGravesGarrison(transferBattle, winnerStarted ?? winner))
+				return false;
+			garrisonGraves = true;
+			heroSid = "garrison(Unearthed Graves)";
+		}
 
 		var loserIndices = ResolveLoserIndices(resultInfo);
 		if (loserIndices.Count == 0)
@@ -216,6 +247,7 @@ internal static class Homm3SkeletalNecromancyProbe
 			return false;
 		}
 
+		var graveRobbers = !garrisonGraves && NecropolisLawRank(LawGraveRobbers, winner, winnerStarted) > 0;
 		var eligibleValue = 0;
 		var enemyStacks = 0;
 		var blockedStacks = 0;
@@ -226,19 +258,54 @@ internal static class Homm3SkeletalNecromancyProbe
 				continue;
 			var loserStarted = startedTransferBattle.sides[loserIndex];
 			var loserAfter = loserIndex < transferBattle.sides.Length ? transferBattle.sides[loserIndex] : null;
-			eligibleValue += SumEligibleLostSquadValue(loserStarted, loserAfter, out var sideEnemyStacks, out var sideBlockedStacks, blockedDetails);
+			// law pass 2026-11-25: Grave Robbers (#9): defeated Undead enemies count too (heroes only).
+			eligibleValue += SumEligibleLostSquadValue(loserStarted, loserAfter, out var sideEnemyStacks, out var sideBlockedStacks, blockedDetails, graveRobbers);
 			enemyStacks += sideEnemyStacks;
 			blockedStacks += sideBlockedStacks;
 		}
 
-		var conversionPercent = ResolveNecromancyConversionPercent(winner, winnerStarted);
+		var conversionPercent = garrisonGraves ? BasicConversionPercent : ResolveNecromancyConversionPercent(winner, winnerStarted);
 		if (conversionPercent <= 0f)
 		{
 			LogPostBattle("skip missing necromancy rank hero=" + heroSid + " source=" + source);
 			return false;
 		}
+		var lawNotes = new StringBuilder();
+		var ownLostValue = 0;
+		var darkAscension = 0;
+		if (!garrisonGraves)
+		{
+			if (graveRobbers)
+				lawNotes.Append(" graveRobbers");
+			// law pass 2026-11-25: Unearthed Graves (#8): a Necropolis hero who wins as the town's siege defender gets +5%.
+			if (NecropolisLawRank(LawUnearthedGraves, winner, winnerStarted) > 0 && IsSiegeDefender(startedTransferBattle, transferBattle, winnerIndex))
+			{
+				conversionPercent += UnearthedGravesHeroPercent;
+				lawNotes.Append(" unearthedGravesHero=+" + UnearthedGravesHeroPercent.ToString("0.##"));
+			}
+			// building pass 2026-11-22: Necromancy Amplifier building (+5%, once per side however many towns have it)
+			// and the Soul Prison grail (+10%). Both stack with each other and with the law.
+			if (NecropolisSideOwnsBuilding(AmplifierBuildingSid, winner, winnerStarted))
+			{
+				conversionPercent += AmplifierBuildingPercent;
+				lawNotes.Append(" amplifierBuilding=+" + AmplifierBuildingPercent.ToString("0.##"));
+			}
+			if (NecropolisSideOwnsBuilding(SoulPrisonBuildingSid, winner, winnerStarted))
+			{
+				conversionPercent += SoulPrisonPercent;
+				lawNotes.Append(" soulPrison=+" + SoulPrisonPercent.ToString("0.##"));
+			}
+			// law pass 2026-11-21: Bone Harvest (#12): the winner's own fallen living creatures also count, at 5%.
+			if (NecropolisLawRank(LawBoneHarvest, winner, winnerStarted) > 0)
+			{
+				ownLostValue = SumEligibleLostSquadValue(winnerStarted, winner, out var ownStacks, out _, null);
+				lawNotes.Append(" boneHarvestValue=" + ownLostValue + " (" + ownStacks + " stacks)");
+			}
+			// law pass 2026-11-21: Dark Ascension (#30): also raise Wights worth 5%/10% of the fallen.
+			darkAscension = Math.Min(NecropolisLawRank(LawDarkAscension, winner, winnerStarted), 2);
+		}
 
-		var rewardUnitSid = ResolveRewardUnitSid(winner, winnerStarted);
+		var rewardUnitSid = garrisonGraves ? SkeletonRewardUnitSid : ResolveRewardUnitSid(winner, winnerStarted);
 		var rewardUnitValue = ResolveRewardUnitSquadValue(rewardUnitSid);
 		if (rewardUnitValue <= 0)
 		{
@@ -247,7 +314,12 @@ internal static class Homm3SkeletalNecromancyProbe
 		}
 
 		var reward = CalculateReward(eligibleValue, conversionPercent, rewardUnitValue);
-		if (reward <= 0)
+		if (ownLostValue > 0)
+			reward = Math.Max(0, (int)Math.Floor((eligibleValue * (double)conversionPercent + ownLostValue * (double)BoneHarvestPercent) / rewardUnitValue));
+		var wights = 0;
+		if (darkAscension > 0)
+			wights = CalculateReward(eligibleValue, DarkAscensionPercentPerLevel * darkAscension, ResolveRewardUnitSquadValue(DarkAscensionRewardUnitSid));
+		if (reward <= 0 && wights <= 0)
 		{
 			LogPostBattle(
 				"skip zero reward hero="
@@ -260,15 +332,25 @@ internal static class Homm3SkeletalNecromancyProbe
 				+ eligibleValue
 				+ " blockedDetails="
 				+ (blockedDetails.Length > 0 ? blockedDetails.ToString() : "none")
+				+ lawNotes
 				+ " source="
 				+ source);
 			return false;
 		}
 
 		var before = CountUnitStacks(winner, rewardUnitSid);
-		var invoked = GrantSkeletonsToWinner(winner, rewardUnitSid, reward);
+		var invoked = reward > 0 && GrantSkeletonsToWinner(winner, rewardUnitSid, reward);
 		var after = CountUnitStacks(winner, rewardUnitSid);
-		if (!invoked || after <= before)
+		var skeletonsGranted = invoked && after > before;
+		var wightsGranted = false;
+		if (wights > 0)
+		{
+			var wightsBefore = CountUnitStacks(winner, DarkAscensionRewardUnitSid);
+			wightsGranted = GrantSkeletonsToWinner(winner, DarkAscensionRewardUnitSid, wights)
+			                && CountUnitStacks(winner, DarkAscensionRewardUnitSid) > wightsBefore;
+			lawNotes.Append(" darkAscension=L" + darkAscension + " wights=" + wights + (wightsGranted ? "" : " FAILED"));
+		}
+		if (!skeletonsGranted && !wightsGranted)
 		{
 			LogPostBattle(
 				"grant failed hero="
@@ -281,11 +363,16 @@ internal static class Homm3SkeletalNecromancyProbe
 				+ before
 				+ " after="
 				+ after
+				+ lawNotes
 				+ " source="
 				+ source);
 			return false;
 		}
 
+		// law pass 2026-11-25: Bone Tithe (#7): Gold equal to 25%/50% of the Gold cost of the creatures just raised.
+		var titheRank = garrisonGraves ? GarrisonOwnerLawRank(transferBattle, winnerStarted ?? winner, LawBoneTithe) : NecropolisLawRank(LawBoneTithe, winner, winnerStarted);
+		if (titheRank > 0)
+			lawNotes.Append(" " + PayBoneTithe(titheRank, winner, winnerStarted, skeletonsGranted ? reward : 0, rewardUnitSid, wightsGranted ? wights : 0));
 		LogPostBattle(
 			"granted hero="
 			+ heroSid
@@ -305,13 +392,183 @@ internal static class Homm3SkeletalNecromancyProbe
 			+ eligibleValue
 			+ " conversionPercent="
 			+ conversionPercent.ToString("0.##")
+			+ lawNotes
 			+ " source="
 			+ source);
 		// Only the local player's own raise gets the popup; AI necromancers raise silently (user 2026-11-13: the popup
 		// kept appearing at turn end while playing Tower).
 		if (showNotification && winnerStarted != null && winnerStarted.controlType == TransferSide.EControlType.ME)
-			Homm3SkeletalNecromancyNotificationBootstrap.Show(reward, rewardUnitSid);
+		{
+			if (skeletonsGranted)
+				Homm3SkeletalNecromancyNotificationBootstrap.Show(reward, rewardUnitSid);
+			else if (wightsGranted)
+				Homm3SkeletalNecromancyNotificationBootstrap.Show(wights, DarkAscensionRewardUnitSid);
+		}
 		return true;
+	}
+
+	/// <summary>law pass 2026-11-21: Necropolis law level (0 = not taken) for a battle side; tries each owner in turn, fail closed.</summary>
+	private static int NecropolisLawRank(int lawIndex, params TransferSide[] sides)
+	{
+		if (sides == null)
+			return 0;
+		foreach (var side in sides)
+		{
+			if (side == null)
+				continue;
+			foreach (var owner in new object[] { side, side.logicHero })
+			{
+				if (owner == null)
+					continue;
+				try
+				{
+					var rank = Homm3CustomFactionLawRuntime.CustomLawRank(owner, lawIndex, NecropolisFactionSid);
+					if (rank > 0)
+						return rank;
+				}
+				catch
+				{
+					// fail closed: try the next owner
+				}
+			}
+		}
+		return 0;
+	}
+
+	/// <summary>
+	/// building pass 2026-11-22: true when the side (or its hero) owns at least one Necropolis with the building
+	/// constructed. Tries each owner in turn; any read error counts as not owned.
+	/// </summary>
+	private static bool NecropolisSideOwnsBuilding(string buildingSid, params TransferSide[] sides)
+	{
+		if (sides == null)
+			return false;
+		foreach (var side in sides)
+		{
+			if (side == null)
+				continue;
+			foreach (var owner in new object[] { side, side.logicHero })
+			{
+				if (owner == null)
+					continue;
+				try
+				{
+					if (Homm3TownBuildingReader.SideHasBuilding(owner, buildingSid, NecropolisCitySid))
+						return true;
+				}
+				catch
+				{
+					// fail closed: try the next owner
+				}
+			}
+		}
+		return false;
+	}
+
+	/// <summary>
+	/// law pass 2026-11-21: Unearthed Graves (#8). The winner is a garrison with no hero, and the player who owns it holds
+	/// the law. The owner is read from the side itself, or from its side id when that id is unique in the battle
+	/// (a garrison side carries no hero to resolve laws through). Any doubt: no reward.
+	/// </summary>
+	private static bool IsUnearthedGravesGarrison(TransferBattle transferBattle, TransferSide side)
+	{
+		try
+		{
+			if (side == null || side.hero != null || side.logicHero != null || side.typeInWorld != TransferSide.EType.Type_Garnison)
+				return false;
+			return GarrisonOwnerLawRank(transferBattle, side, LawUnearthedGraves) > 0;
+		}
+		catch
+		{
+			return false;
+		}
+	}
+
+	/// <summary>
+	/// Law level of the player who owns a hero-less side (0 = not taken or unknown): read from the side itself, or from its
+	/// side id when that id is unique in the battle. law pass 2026-11-25: shared by Unearthed Graves (#8) and Bone Tithe (#7).
+	/// </summary>
+	private static int GarrisonOwnerLawRank(TransferBattle transferBattle, TransferSide side, int lawIndex)
+	{
+		try
+		{
+			if (side == null)
+				return 0;
+			var direct = NecropolisLawRank(lawIndex, side);
+			if (direct > 0)
+				return direct;
+			if (!TryReadIntMember(side, GameSymbols.BattleEventLaws.TransferSideSideIdMembers, out var sideId) || sideId < 0)
+				return 0;
+			if (transferBattle?.sides == null)
+				return 0;
+			foreach (var other in transferBattle.sides)
+			{
+				if (other == null || ReferenceEquals(other, side) || other.Pointer == side.Pointer)
+					continue;
+				if (TryReadIntMember(other, GameSymbols.BattleEventLaws.TransferSideSideIdMembers, out var otherId) && otherId == sideId)
+					return 0;
+			}
+			if (!Homm3BattleUnitLawOwnerRegistry.TryResolveGlobalDataSide(sideId, out var dataSide, out _) || dataSide == null)
+				return 0;
+			return Math.Max(0, Homm3CustomFactionLawRuntime.CustomLawRank(dataSide, lawIndex, NecropolisFactionSid));
+		}
+		catch
+		{
+			return 0;
+		}
+	}
+
+	/// <summary>law pass 2026-11-25: Unearthed Graves (#8) hero part. True when the winner defended a town in a siege; fail closed.</summary>
+	private static bool IsSiegeDefender(TransferBattle startedTransferBattle, TransferBattle transferBattle, int winnerIndex)
+	{
+		try
+		{
+			if (Homm3TownBuildingReader.TryGetSiegeDefender(startedTransferBattle, out _, out var defenderIndex, out _))
+				return defenderIndex == winnerIndex;
+			return Homm3TownBuildingReader.TryGetSiegeDefender(transferBattle, out _, out defenderIndex, out _) && defenderIndex == winnerIndex;
+		}
+		catch
+		{
+			return false;
+		}
+	}
+
+	/// <summary>
+	/// law pass 2026-11-25: Bone Tithe (#7). Pays the winner's side Gold equal to the level's share of the Gold cost of the
+	/// creatures just raised; returns a log note. Any read or grant failure pays nothing.
+	/// </summary>
+	private static string PayBoneTithe(int rank, TransferSide winner, TransferSide winnerStarted, int raised, string raisedSid, int wights)
+	{
+		try
+		{
+			var share = BoneTitheGoldShare[Math.Min(rank, BoneTitheGoldShare.Length) - 1];
+			var cost = (long)raised * UnitGoldCost(raisedSid) + (long)wights * UnitGoldCost(DarkAscensionRewardUnitSid);
+			var gold = (int)Math.Min(int.MaxValue, Math.Floor(cost * share));
+			if (gold <= 0)
+				return "boneTithe=L" + rank + " gold=0 (cost " + cost + ")";
+			var owner = winnerStarted ?? winner;
+			if (!TryReadIntMember(owner, GameSymbols.BattleEventLaws.TransferSideSideIdMembers, out var sideId) || sideId < 0)
+				return "boneTithe=L" + rank + " FAILED (side id unreadable)";
+			return Homm3CovePlunderHook.Grant(sideId, GoldResourceName, gold, out var before, out var after, out var fail)
+				? "boneTithe=L" + rank + " +" + gold + " gold (" + before + "->" + after + ")"
+				: "boneTithe=L" + rank + " FAILED (" + fail + ")";
+		}
+		catch (Exception ex)
+		{
+			return "boneTithe FAILED (" + ex.GetBaseException().Message + ")";
+		}
+	}
+
+	/// <summary>law pass 2026-11-25: Bone Tithe (#7). Gold in a unit's recruitment cost (0 when unreadable).</summary>
+	private static int UnitGoldCost(string sid)
+	{
+		var costs = ResolveUnitLogicConfigBySid(sid)?.unitCost?.costResArray;
+		for (var i = 0; costs != null && i < costs.Length; i++)
+		{
+			if (string.Equals(NormalizeSid(costs[i]?.name), GoldResourceName, StringComparison.Ordinal))
+				return ReadMember(costs[i], GameSymbols.DraconicDominion.ResNameAndCostCostMembers) is int cost ? Math.Max(0, cost) : 0;
+		}
+		return 0;
 	}
 
 	private static string ResolveRewardUnitSid(TransferSide winner, TransferSide winnerStarted)
@@ -434,7 +691,7 @@ internal static class Homm3SkeletalNecromancyProbe
 		return result;
 	}
 
-	private static int SumEligibleLostSquadValue(TransferSide started, TransferSide after, out int enemyStacks, out int blockedStacks, StringBuilder blockedDetails)
+	private static int SumEligibleLostSquadValue(TransferSide started, TransferSide after, out int enemyStacks, out int blockedStacks, StringBuilder blockedDetails, bool allowUndead = false)
 	{
 		enemyStacks = 0;
 		blockedStacks = 0;
@@ -455,6 +712,9 @@ internal static class Homm3SkeletalNecromancyProbe
 			enemyStacks++;
 			var config = ResolveUnitLogicConfig(beforeUnit);
 			var blockedReason = GetBlockedReason(config) ?? GetBlockedHomm3SidReason(beforeUnit.configSid);
+			// law pass 2026-11-25: Grave Robbers (#9): Undead losses count (constructs and elementals stay out).
+			if (blockedReason != null && allowUndead && IsGraveRobbersUndead(config, beforeUnit.configSid))
+				blockedReason = null;
 			if (blockedReason != null)
 			{
 				blockedStacks++;
@@ -539,6 +799,29 @@ internal static class Homm3SkeletalNecromancyProbe
 		    || sid.StartsWith("h3_gargoyle", StringComparison.Ordinal))
 			return "homm3NonLiving:" + sid;
 		return null;
+	}
+
+	/// <summary>law pass 2026-11-25: Grave Robbers (#9). An Undead creature (HoMM3 Necropolis line or undead tag), never a construct, embodiment or elemental.</summary>
+	private static bool IsGraveRobbersUndead(UnitLogicConfig config, string configSid)
+	{
+		if (config == null)
+			return false;
+		var sidReason = GetBlockedHomm3SidReason(configSid);
+		if (sidReason != null)
+			return sidReason.StartsWith("homm3Undead:", StringComparison.Ordinal);
+		var undead = false;
+		for (var i = 0; config.tags != null && i < config.tags.Length; i++)
+		{
+			var tag = NormalizeSid(config.tags[i]);
+			if (string.Equals(tag, "construct", StringComparison.Ordinal)
+			    || string.Equals(tag, "embodiment", StringComparison.Ordinal)
+			    || string.Equals(tag, "base_class_construct", StringComparison.Ordinal)
+			    || string.Equals(tag, "base_class_embodiment", StringComparison.Ordinal))
+				return false;
+			if (string.Equals(tag, "undead", StringComparison.Ordinal) || string.Equals(tag, "base_class_undead", StringComparison.Ordinal))
+				undead = true;
+		}
+		return undead;
 	}
 
 	private static string GetBlockedReason(UnitLogicConfig config)

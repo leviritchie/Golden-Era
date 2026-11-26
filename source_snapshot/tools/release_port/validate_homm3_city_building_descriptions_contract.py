@@ -130,32 +130,38 @@ def treasury_errors(city: str, item: dict[str, Any], vanilla: dict[str, Any]) ->
 
 
 def converter_errors(city: str, item: dict[str, Any]) -> list[str]:
+    """Skeleton Transformer (building pass 2026-11-22): tiers 1-6 -> Skeleton, tier 7 -> Bone Dragon.
+
+    Only the Skeleton and Bone Dragon lines are banned from conversion (HoMM3: other undead convert too).
+    """
     converters = [r for r in (item.get("unitsConverters") or []) if isinstance(r, dict)]
     if not converters:
-        return [f"{city}: Bone Foundry units converter missing"]
+        return [f"{city}: Skeleton Transformer units converter missing"]
     errors: list[str] = []
-    want_pairs: list[dict[str, Any]] = []
-    want_banned: list[str] = []
-    for tier in range(1, 8):
-        lines = [
-            line
+
+    def line_sids(tier: int) -> list[str]:
+        return [
+            sid
             for row in (item.get("hires") or [])
             if isinstance(row, dict) and row.get("sid") == f"Build_Tier_{tier}"
             for line in ((row.get("unitsHire") or {}).get("units") or [])
             if isinstance(line, dict) and line.get("sids")
+            for sid in line["sids"]
         ]
-        if len(lines) != 1:
-            errors.append(f"{city}: tier {tier} has {len(lines)} hire lines")
-            continue
-        want_pairs.append({"tier": tier, "sid": lines[0]["sids"][0]})
-        want_banned.extend(lines[0]["sids"])
+
+    skeleton_line = line_sids(1)
+    bone_dragon_line = line_sids(7)
+    if len(skeleton_line) < 1 or len(bone_dragon_line) < 1:
+        return [f"{city}: tier 1 or tier 7 hire line missing for the Skeleton Transformer"]
+    want_pairs = [{"tier": tier, "sid": skeleton_line[0]} for tier in range(1, 7)] + [{"tier": 7, "sid": bone_dragon_line[0]}]
+    want_banned = skeleton_line + bone_dragon_line
     for row in converters:
         if _canon(row.get("conversionPairs")) != _canon(want_pairs):
-            errors.append(f"{city}: converter pairs {row.get('conversionPairs')} != own tier 1-7 units {want_pairs}")
+            errors.append(f"{city}: converter pairs {row.get('conversionPairs')} != Skeleton/Bone Dragon pairs {want_pairs}")
         banned = set(row.get("bannedUnits") or [])
         missing = [sid for sid in want_banned if sid not in banned]
         if missing:
-            errors.append(f"{city}: converter does not ban own units {missing}")
+            errors.append(f"{city}: converter does not ban the Skeleton and Bone Dragon lines {missing}")
     return errors
 
 
@@ -177,7 +183,15 @@ def mechanics_errors(zf: zipfile.ZipFile) -> list[str]:
             errors.append(f"{faction}: no city row")
             continue
         rows = _rows_by_sid(item)
+        # Building pass 2026-11-22: a building_overrides row (or removal) owns that sid, so the
+        # older CITY_BUILDING_MECHANICS_BY_FACTION spec no longer describes it.
+        import homm3_city_building_overrides as BO
+
+        override_doc = BO.faction_override(faction) or {}
+        overridden = BO.overridden_sids(faction) | set(override_doc.get("remove", []))
         for building_sid, spec in O.CITY_BUILDING_MECHANICS_BY_FACTION.get(faction, {}).items():
+            if building_sid in overridden:
+                continue
             found = rows.get(building_sid, [])
             if len(found) != 1:
                 errors.append(f"{faction}: mechanics building {building_sid} found {len(found)} times")

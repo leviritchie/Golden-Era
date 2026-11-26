@@ -242,25 +242,9 @@ internal static class Homm3DirectStateM6BfdiTeleportDiagnostic
 
 	private static bool IsDestinationAcceptable(object hex, object unit)
 	{
-		// Mirror NativeCombatWriteGateway.ValidateDestination without inventing a second path.
-		if (!NativeCombatWriteGateway.TryReadExactMemberPublic(
-			    hex,
-			    GameSymbols.DirectStateLaws.HexBlockedMembers,
-			    out var blockedObj))
-			return false;
-		if (blockedObj is bool blocked && blocked)
-			return false;
-		if (!NativeCombatWriteGateway.TryReadExactMemberPublic(
-			    hex,
-			    GameSymbols.BattleEventLaws.HexOccupantMembers,
-			    out var occupant))
-			return false;
-		if (occupant == null || ReferenceEquals(occupant, unit))
-			return true;
-		return occupant is Il2CppInterop.Runtime.InteropTypes.Il2CppObjectBase occNative
-		       && unit is Il2CppInterop.Runtime.InteropTypes.Il2CppObjectBase unitNative
-		       && occNative.Pointer != IntPtr.Zero
-		       && occNative.Pointer == unitNative.Pointer;
+		// The commit's own gate (blocked flags + Hex.fieldObjects). The old mirror read Hex lastCorpse as occupancy,
+		// so it accepted occupied hexes and refused hexes holding a corpse (2026-11-22 audit).
+		return NativeCombatWriteGateway.ValidateDestinationPublic(hex, unit, out _);
 	}
 
 	private static bool FinishDualReadback(

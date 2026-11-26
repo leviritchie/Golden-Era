@@ -341,6 +341,84 @@ internal static class Homm3CustomFactionLawRuntime
 		return TryBuildActiveLawState(dataLaw, factionSid, expectedLawSid, lawIndex, out state);
 	}
 
+	internal const string DesignedLawFamily = "Designed law (law pass 2026-11-21)";
+
+	// law pass 2026-11-21: every faction's law tree was redesigned, so the old per-index runtime families
+	// (counterattack doctrine, morale triggers, gold income, ...) no longer match the law text at those indices.
+	// A family only stays live where the new law at that index still is that family; every other index resolves
+	// as a designed law (read by CustomLawRank), so retired profiles never fire under new text.
+	private static readonly HashSet<string> KeptLawFamilies = new HashSet<string>(StringComparer.Ordinal)
+	{
+		"homm3_tower:13",      // Reactive Wards
+		"homm3_necropolis:13", // Death Grip
+		"homm3_cove:13",       // Boarding Hooks
+	};
+
+	internal static bool IsLawFamilyKept(string factionSid, int lawIndex)
+	{
+		return factionSid != null && KeptLawFamilies.Contains(factionSid + ":" + lawIndex.ToString(System.Globalization.CultureInfo.InvariantCulture));
+	}
+
+	/// <summary>
+	/// Rank (0 when not taken) of custom law <paramref name="lawIndex"/> for the custom faction
+	/// that owns <paramref name="sideOrLawOwner"/>, for any index: the law pass reads
+	/// skill-interaction laws through this instead of the family-gated reader.
+	/// <paramref name="factionSid"/> limits the read to one faction (null: any custom faction).
+	/// </summary>
+	internal static int CustomLawRank(object sideOrLawOwner, int lawIndex, string factionSid = null)
+	{
+		if (sideOrLawOwner == null || lawIndex <= 0)
+			return 0;
+		try
+		{
+			ActiveLawState state;
+			if (!TryResolveCustomLawAnyIndex(sideOrLawOwner, lawIndex, out state))
+				return 0;
+			if (factionSid != null && !string.Equals(state.FactionSid, factionSid, StringComparison.Ordinal))
+				return 0;
+			return state.Rank;
+		}
+		catch
+		{
+			return 0;
+		}
+	}
+
+	private static bool TryResolveCustomLawAnyIndex(object sideOrLawOwner, int lawIndex, out ActiveLawState state)
+	{
+		state = default;
+		object dataFractionLaws;
+		object dataLaw = null;
+		string factionSid;
+		string expectedLawSid;
+		if (TryResolveLogicFractionLaws(sideOrLawOwner, out var logicFractionLaws, out dataFractionLaws)
+		    && TryReadExactString(dataFractionLaws, GameSymbols.CustomFactionLawRuntime.DataFractionLawsFactionMembers, out factionSid)
+		    && Homm3CustomFactionRegistry.IsCustomFactionSid(factionSid))
+		{
+			expectedLawSid = MakeLawId(factionSid, lawIndex);
+			if (!string.IsNullOrEmpty(expectedLawSid)
+			    && TryInvokeExactObjectMethod(logicFractionLaws, GameSymbols.CustomFactionLawRuntime.LogicFractionLawBySidMethods, new object[] { expectedLawSid }, out var logicLaw)
+			    && logicLaw != null
+			    && TryReadExactObject(logicLaw, GameSymbols.CustomFactionLawRuntime.LawDataGetters, out dataLaw)
+			    && TryBuildActiveLawState(dataLaw, factionSid, expectedLawSid, lawIndex, false, out state))
+				return true;
+		}
+		if (!TryResolveDataFractionLaws(sideOrLawOwner, out dataFractionLaws))
+			return false;
+		if (!TryReadExactString(dataFractionLaws, GameSymbols.CustomFactionLawRuntime.DataFractionLawsFactionMembers, out factionSid))
+			return false;
+		if (!Homm3CustomFactionRegistry.IsCustomFactionSid(factionSid))
+			return false;
+		expectedLawSid = MakeLawId(factionSid, lawIndex);
+		if (string.IsNullOrEmpty(expectedLawSid))
+			return false;
+		if (!TryReadExactObject(dataFractionLaws, GameSymbols.CustomFactionLawRuntime.DataFractionLawsListMembers, out var lawsList))
+			return false;
+		if (!TryFindDataFractionLaw(lawsList, expectedLawSid, out dataLaw))
+			return false;
+		return TryBuildActiveLawState(dataLaw, factionSid, expectedLawSid, lawIndex, false, out state);
+	}
+
 	internal static ActiveLawResolutionKind ResolveActiveKnownCustomLawState(
 		object sideOrLawOwner,
 		int lawIndex,
@@ -1329,8 +1407,10 @@ internal static class Homm3CustomFactionLawRuntime
 			if (!TryReadExactObject(source, GameSymbols.BattleEventLaws.BattleObjectHexMembers, out var hex)
 			    || hex == null)
 				return false;
-			if (!TryReadExactObject(hex, GameSymbols.BattleEventLaws.HexOccupantMembers, out unit)
-			    || unit == null)
+			// Occupancy is Hex.fieldObjects; BattleEventLaws.HexOccupantMembers is the hex's last corpse, which could
+			// credit a dead stack's side (2026-11-22 audit).
+			unit = NativeCombatWriteGateway.FindUnitOccupantPublic(hex, source);
+			if (unit == null)
 				return false;
 			if (!TryReadExactObject(unit, GameSymbols.BattleEventLaws.UnitTransferUnitMembers, out transferUnit)
 			    || transferUnit == null)
@@ -1386,10 +1466,10 @@ internal static class Homm3CustomFactionLawRuntime
 				failReason = "battle object " + DescribeObject(source) + " exposed battle logic " + DescribeObject(battleLogic) + " but no exact hex and no direct transfer unit";
 				return false;
 			}
-			if (!TryReadExactObject(hex, GameSymbols.BattleEventLaws.HexOccupantMembers, out unit)
-			    || unit == null)
+			unit = NativeCombatWriteGateway.FindUnitOccupantPublic(hex, source);
+			if (unit == null)
 			{
-				failReason = "hex " + DescribeObject(hex) + " exposed no exact occupant unit and source had no direct transfer unit";
+				failReason = "hex " + DescribeObject(hex) + " has no unit in Hex.fieldObjects and source had no direct transfer unit";
 				return false;
 			}
 			if (!TryReadExactObject(unit, GameSymbols.BattleEventLaws.UnitTransferUnitMembers, out transferUnit)
@@ -1764,6 +1844,11 @@ internal static class Homm3CustomFactionLawRuntime
 	}
 	private static bool TryBuildActiveLawState(object dataLaw, string factionSid, string expectedLawSid, int lawIndex, out ActiveLawState state)
 	{
+		return TryBuildActiveLawState(dataLaw, factionSid, expectedLawSid, lawIndex, true, out state);
+	}
+
+	private static bool TryBuildActiveLawState(object dataLaw, string factionSid, string expectedLawSid, int lawIndex, bool requireKnownFamily, out ActiveLawState state)
+	{
 		state = default;
 		if (dataLaw == null)
 			return false;
@@ -1779,8 +1864,12 @@ internal static class Homm3CustomFactionLawRuntime
 			return false;
 		if (!TryReadExactInt(dataLaw, GameSymbols.CustomFactionLawRuntime.DataFractionLawGroupMembers, out var group))
 			return false;
-		if (!TryGetKnownLawFamily(lawIndex, out var family))
-			return false;
+		if (!TryGetKnownLawFamily(lawIndex, out var family) || !IsLawFamilyKept(factionSid, lawIndex))
+		{
+			if (requireKnownFamily)
+				return false;
+			family = DesignedLawFamily;
+		}
 		state = new ActiveLawState
 		{
 			FactionSid = factionSid,

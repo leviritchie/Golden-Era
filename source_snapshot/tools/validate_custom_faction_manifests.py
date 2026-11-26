@@ -3248,7 +3248,7 @@ FORTRESS_DONOR_MECHANIC_TOKENS = (
 )
 REQUIRED_UNIT_STAT_FIELDS = ("hp", "offence", "defence", "damageMin", "damageMax", "speed")
 REQUIRED_UNIT_STAT_MODIFIER_SETS = ("inDmgMods", "outDmgMods")
-BAD_RESOURCE_ALIASES = {"crystal", "gems", "sulfur"}
+BAD_RESOURCE_ALIASES = {"crystal", "gems", "sulfur", "stone"}
 BAD_HERO_STAT_FIELDS = {"finalAbilityDamageBonusPercent", "abilityEnergyLevelsCostBonus"}
 HOMM3_COVE_GROUNDSIGHT_SOURCE_MAGIC_PATH = "DB/magics/world_primal_magics.json"
 HOMM3_COVE_TREASURE_HUNTING_MAGIC_PATH = "DB/magics/world_neutral_magics.json"

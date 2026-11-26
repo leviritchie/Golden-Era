@@ -1,260 +1,51 @@
 {
   "lawOverrides": {
-    "fraction_law_homm3_tower_13": {
+    "fraction_law_homm3_tower_1": {
       "enabled": true,
-      "nameText": "Reactive Wards",
-      "descriptionText": "Your creatures' counterattacks deal 4%/6% more damage for each point of your hero's Spell Power, by rank (max +60%/+100%). No bonus if the army has no hero.",
+      "nameText": "Tax Collectors",
+      "descriptionText": "Produces {0} Gold daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
       "parametersPerLevel": [
         {
-          "cost": 3,
+          "cost": 2,
           "bonuses": [
             {
-              "type": "unitStat",
+              "type": "sideRes",
               "parameters": [
-                "modifierSet",
-                "outDmgMods",
-                "counter_attack",
-                "0.00"
-              ],
-              "receivers": [
-                "h3_gremlin",
-                "h3_gargoyle",
-                "h3_golem",
-                "h3_mage",
-                "h3_genie",
-                "h3_naga",
-                "h3_giant"
+                "gold",
+                250
               ]
             }
           ]
         },
         {
-          "cost": 3,
+          "cost": 2,
           "bonuses": [
             {
-              "type": "unitStat",
+              "type": "sideRes",
               "parameters": [
-                "modifierSet",
-                "outDmgMods",
-                "counter_attack",
-                "0.00"
-              ],
-              "receivers": [
-                "h3_gremlin",
-                "h3_gargoyle",
-                "h3_golem",
-                "h3_mage",
-                "h3_genie",
-                "h3_naga",
-                "h3_giant"
+                "gold",
+                500
               ]
             }
           ]
         }
       ],
-      "notes": "Runtime law 2026-11-10 (user: switch counterattack laws to runtime): the native bonus is a zero-strength loader anchor (unitStat modifierSet outDmgMods counter_attack 0.00) so Core keeps a valid law row; the effect described above is applied by the plugin (Homm3CounterattackDoctrineMutationRuntime) on native counterattacks only. Replaces the 2026-06-21 generic +50% counterattack-damage placeholder, which is removed so the two never stack. Runtime proof pending.",
-      "iconNotes": "HOMM4 art-source candidate: Retribution (schools/life/retribution.jpg). Runtime icon key: fraction_law_homm3_tower_13_icon. Runtime rendering remains unproven until law-tree smoke.",
-      "homm4IconLabel": "Retribution",
-      "homm4IconPath": "schools/life/retribution.jpg",
-      "iconKey": "fraction_law_homm3_tower_13_icon"
-    },
-    "fraction_law_homm3_tower_18": {
-      "enabled": true,
-      "nameText": "Automaton Phalanx",
-      "descriptionText": "Tower creatures deal 5%/10% more melee damage and take 5%/10% less melee damage, by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "outDmgMods",
-                "melee_attack",
-                "0.05"
-              ],
-              "receivers": [
-                "h3_gremlin",
-                "h3_gargoyle",
-                "h3_golem",
-                "h3_mage",
-                "h3_genie",
-                "h3_naga",
-                "h3_giant"
-              ]
-            },
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "inDmgMods",
-                "melee_attack",
-                "-0.05"
-              ],
-              "receivers": [
-                "h3_gremlin",
-                "h3_gargoyle",
-                "h3_golem",
-                "h3_mage",
-                "h3_genie",
-                "h3_naga",
-                "h3_giant"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "outDmgMods",
-                "melee_attack",
-                "0.10"
-              ],
-              "receivers": [
-                "h3_gremlin",
-                "h3_gargoyle",
-                "h3_golem",
-                "h3_mage",
-                "h3_genie",
-                "h3_naga",
-                "h3_giant"
-              ]
-            },
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "inDmgMods",
-                "melee_attack",
-                "-0.10"
-              ],
-              "receivers": [
-                "h3_gremlin",
-                "h3_gargoyle",
-                "h3_golem",
-                "h3_mage",
-                "h3_genie",
-                "h3_naga",
-                "h3_giant"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Creature portrait law icon pass: uses h3_golem.png for this creature-function law under runtime icon key fraction_law_homm3_tower_18_icon. Static/deploy proven only; law-tree visual smoke still required.",
-      "homm4IconLabel": "Mass slayer",
-      "homm4IconPath": "schools/chaos/mass_slayer.jpg",
-      "iconKey": "fraction_law_homm3_tower_18_icon",
-      "portraitIconSid": "h3_golem"
-    },
-    "fraction_law_homm3_tower_19": {
-      "enabled": true,
-      "nameText": "Automaton Crossfire",
-      "descriptionText": "Tower creatures deal 5%/10% more ranged damage and take 5%/10% less ranged damage, by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "outDmgMods",
-                "shoot_attack",
-                "0.05"
-              ],
-              "receivers": [
-                "h3_gremlin",
-                "h3_gargoyle",
-                "h3_golem",
-                "h3_mage",
-                "h3_genie",
-                "h3_naga",
-                "h3_giant"
-              ]
-            },
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "inDmgMods",
-                "shoot_attack",
-                "-0.05"
-              ],
-              "receivers": [
-                "h3_gremlin",
-                "h3_gargoyle",
-                "h3_golem",
-                "h3_mage",
-                "h3_genie",
-                "h3_naga",
-                "h3_giant"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "outDmgMods",
-                "shoot_attack",
-                "0.10"
-              ],
-              "receivers": [
-                "h3_gremlin",
-                "h3_gargoyle",
-                "h3_golem",
-                "h3_mage",
-                "h3_genie",
-                "h3_naga",
-                "h3_giant"
-              ]
-            },
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "inDmgMods",
-                "shoot_attack",
-                "-0.10"
-              ],
-              "receivers": [
-                "h3_gremlin",
-                "h3_gargoyle",
-                "h3_golem",
-                "h3_mage",
-                "h3_genie",
-                "h3_naga",
-                "h3_giant"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Creature portrait law icon pass: uses h3_mage.png for this creature-function law under runtime icon key fraction_law_homm3_tower_19_icon. Static/deploy proven only; law-tree visual smoke still required.",
-      "homm4IconLabel": "Precision",
-      "homm4IconPath": "schools/order/precision.jpg",
-      "iconKey": "fraction_law_homm3_tower_19_icon",
-      "portraitIconSid": "h3_mage"
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: vanilla Tax Collectors shape (sideRes gold 250/500).",
+      "iconNotes": "law pass 2026-11-21: resource law; the icon resolves from its resource."
     },
     "fraction_law_homm3_tower_2": {
       "enabled": true,
-      "nameText": "Observatory Network",
-      "descriptionText": "Each time you build a Mage Guild level in a Tower city, 1/2 extra spells are unlocked in the Magic Observatory, by rank.",
+      "nameText": "Library of the Clouds",
+      "descriptionText": "Each time you improve a Mage Guild in your Tower cities, +{0} spell(s) is unlocked in the Observatory.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_0"
+      ],
       "parametersPerLevel": [
         {
-          "cost": 4,
+          "cost": 3,
           "bonuses": [
             {
               "type": "magicGuildIncrement",
@@ -273,7 +64,7 @@
           ]
         },
         {
-          "cost": 4,
+          "cost": 3,
           "bonuses": [
             {
               "type": "magicGuildIncrement",
@@ -292,17 +83,717 @@
           ]
         }
       ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "iconNotes": "Canonical shared-law icon pass: plain hero Sight laws use the same vanilla scouting icon across custom factions. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_2_icon"
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: vanilla Forest Magic shape; moved r0 -> r2, cost 3/3.",
+      "effectIconKey": "fraction_law_nature_14_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_nature_14_icon)."
+    },
+    "fraction_law_homm3_tower_4": {
+      "enabled": true,
+      "nameText": "Elite Gremlins",
+      "descriptionText": "Gremlin growth in your cities increases by {0}. They can counterattack twice.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_gremlin",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "numCounters",
+                "1"
+              ],
+              "receivers": [
+                "h3_gremlin",
+                "h3_gremlin_upg",
+                "h3_gremlin_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_gremlin",
+                "8"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "numCounters",
+                "1"
+              ],
+              "receivers": [
+                "h3_gremlin",
+                "h3_gremlin_upg",
+                "h3_gremlin_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Elite law, T1 rider counterattacks twice (numCounters 1).",
+      "portraitIconSid": "h3_gremlin",
+      "iconNotes": "law pass 2026-11-21: unit-line law, portrait h3_gremlin."
+    },
+    "fraction_law_homm3_tower_5": {
+      "enabled": true,
+      "nameText": "Scrying Lenses",
+      "descriptionText": "Each enemy passive your heroes learn with Artificing also yields {0} Arcane Essence.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "viewRadius",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "10"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "viewRadius",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "20"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: redesigned (a chance bonus read as more Artificing rank). Each passive recorded in the Schematic Book (new, or at a lower tier) also yields 10/20 Arcane Essence (cheapest graft 25): Homm3TowerArtificingRuntime.ObserveEnemyArmies via Homm3TowerLawHooks.ScryingEssence. Zero-strength anchor kept; display carrier holds the essence.",
+      "effectIconKey": "fraction_law_demon_8_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_demon_8_icon)."
+    },
+    "fraction_law_homm3_tower_6": {
+      "enabled": true,
+      "nameText": "Wall of Knowledge",
+      "descriptionText": "Your heroes gain {0} Knowledge.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "intelligence",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "intelligence",
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "intelligence",
+                "3"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: vanilla r1 primary-stat shape (heroStat intelligence 1/2/3).",
+      "effectIconKey": "fraction_law_human_9_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_human_9_icon)."
+    },
+    "fraction_law_homm3_tower_7": {
+      "enabled": true,
+      "nameText": "Essence Distillery",
+      "descriptionText": "Your heroes gain +{0}% Arcane Essence from won battles.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "expPerBonus",
+                "0.0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.25"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "expPerBonus",
+                "0.0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.50"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: (S) Artificing essence award x (1 + 0.25 x level), still capped; Homm3TowerLawHooks.EssenceAward. Native bonus is a zero-strength anchor.",
+      "effectIconKey": "fraction_law_undead_7_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_undead_7_icon)."
+    },
+    "fraction_law_homm3_tower_8": {
+      "enabled": true,
+      "nameText": "Resonant Grafts",
+      "descriptionText": "Your Tower creatures gain {0} Attack and Defense for each graft they carry.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "offence",
+                "2"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: replaces Twin Grafts (second slot at Basic duplicated Expert Artificing). Each grafted Tower stack gets law buff h3_law_tower_resonant_<grafts> (+2 Attack and Defense per graft carried) at battle start: Homm3TowerArtificingRuntime.OnSharedUnitInit via Homm3TowerLawHooks.HasResonantGrafts. Moved r2K -> r2A, cost 4 (was 5). Display carrier holds the per-graft stat.",
+      "effectIconKey": "fraction_law_nature_18_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_nature_18_icon)."
+    },
+    "fraction_law_homm3_tower_9": {
+      "enabled": true,
+      "nameText": "Warded Grafts",
+      "descriptionText": "Grafts removed from your creatures by enemy effects return at the start of the next round.",
+      "descriptionArgs": [],
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "movementBonus",
+                "0"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: (S) new rule: each round start re-adds missing graft buffs on living carriers of the owning side; Homm3TowerLawHooks.RestoreWardedGrafts from PostfixRoundStarted. Native bonus is a zero-strength anchor.",
+      "effectIconKey": "fraction_law_human_32_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_human_32_icon)."
+    },
+    "fraction_law_homm3_tower_10": {
+      "enabled": true,
+      "nameText": "Elite Gargoyles",
+      "descriptionText": "Stone Gargoyle growth in your cities increases by {0}. They gain {1} Defense.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_gargoyle",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "2"
+              ],
+              "receivers": [
+                "h3_gargoyle",
+                "h3_gargoyle_upg",
+                "h3_gargoyle_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_gargoyle",
+                "8"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "4"
+              ],
+              "receivers": [
+                "h3_gargoyle",
+                "h3_gargoyle_upg",
+                "h3_gargoyle_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Elite law, Elite Swordsmen rider (+2/+4 Defense).",
+      "portraitIconSid": "h3_gargoyle",
+      "iconNotes": "law pass 2026-11-21: unit-line law, portrait h3_gargoyle."
+    },
+    "fraction_law_homm3_tower_11": {
+      "enabled": true,
+      "nameText": "Elite Golems",
+      "descriptionText": "Stone Golem growth in your cities increases by {0}. They gain {1} HP, and their healing abilities restore {2}% more HP.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_2_parameters_1",
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_golem",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "finalHealingBonusPercent",
+                "0.2"
+              ],
+              "receivers": [
+                "h3_golem",
+                "h3_golem_upg",
+                "h3_golem_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "hp",
+                "5"
+              ],
+              "receivers": [
+                "h3_golem",
+                "h3_golem_upg",
+                "h3_golem_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_golem",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "finalHealingBonusPercent",
+                "0.4"
+              ],
+              "receivers": [
+                "h3_golem",
+                "h3_golem_upg",
+                "h3_golem_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "hp",
+                "10"
+              ],
+              "receivers": [
+                "h3_golem",
+                "h3_golem_upg",
+                "h3_golem_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Elite law; finalHealingBonusPercent is the caster-side stat of vanilla Elite Liches.",
+      "portraitIconSid": "h3_golem",
+      "iconNotes": "law pass 2026-11-21: unit-line law, portrait h3_golem."
+    },
+    "fraction_law_homm3_tower_12": {
+      "enabled": true,
+      "nameText": "Unravelling Wards",
+      "descriptionText": "All positive effects on enemy creatures last {0} fewer round(s).",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inComingBuffDuration",
+                "-1"
+              ],
+              "receiverAllegiance": "enemy"
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: REVIEW 2: replaces Overclocked Spellworks (collided with Castle). Enemy inComingBuffDuration -1 (vanilla human_5 shape, inverted).",
+      "homm4IconLabel": "Power drain",
+      "homm4IconPath": "schools/order/power_drain.jpg",
+      "iconKey": "fraction_law_homm3_tower_34_icon",
+      "iconNotes": "law pass 2026-11-21: keeps the shipped HOMM4 art schools/order/power_drain.jpg (fraction_law_homm3_tower_34_icon); same effect role."
+    },
+    "fraction_law_homm3_tower_13": {
+      "enabled": true,
+      "nameText": "Reactive Wards",
+      "descriptionText": "Friendly creatures\u2019 counterattacks deal +{0}% Damage per point of your hero\u2019s Spell Power, up to +{1}%.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1",
+        "current_law_modPercent_bonuses_1_parameters_2"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "counter_attack",
+                "0.00"
+              ],
+              "receivers": [
+                "h3_gremlin",
+                "h3_gargoyle",
+                "h3_golem",
+                "h3_mage",
+                "h3_genie",
+                "h3_naga",
+                "h3_giant"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.04",
+                "0.60"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "counter_attack",
+                "0.00"
+              ],
+              "receivers": [
+                "h3_gremlin",
+                "h3_gargoyle",
+                "h3_golem",
+                "h3_mage",
+                "h3_genie",
+                "h3_naga",
+                "h3_giant"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.06",
+                "1.00"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: kept unchanged (runtime row 13, Homm3CounterattackDoctrineMutationRuntime). Native bonus is the zero-strength counter_attack anchor.",
+      "homm4IconLabel": "Retribution",
+      "homm4IconPath": "schools/life/retribution.jpg",
+      "iconKey": "fraction_law_homm3_tower_13_icon",
+      "iconNotes": "law pass 2026-11-21: keeps the shipped HOMM4 art schools/life/retribution.jpg (fraction_law_homm3_tower_13_icon); same effect role."
+    },
+    "fraction_law_homm3_tower_14": {
+      "enabled": true,
+      "nameText": "Mining: Gems",
+      "descriptionText": "Produces {0} Gem(s) daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "gemstones",
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "gemstones",
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: vanilla Mining shape (sideRes gemstones 1/2); the tier-7 upgrades cost Gems.",
+      "iconNotes": "law pass 2026-11-21: resource law; the icon resolves from its resource."
+    },
+    "fraction_law_homm3_tower_15": {
+      "enabled": true,
+      "nameText": "Wizards\u2019 Patronage",
+      "descriptionText": "Upgrading your Tower creatures costs \u2013{0}% Gold. Recruiting upgraded creatures is discounted by the same amount.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 5,
+          "bonuses": [
+            {
+              "type": "unitUpgradingDiscount",
+              "fraction": "homm3_tower",
+              "parameters": [
+                "gold",
+                "-0.1"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 5,
+          "bonuses": [
+            {
+              "type": "unitUpgradingDiscount",
+              "fraction": "homm3_tower",
+              "parameters": [
+                "gold",
+                "-0.2"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: vanilla Evolve, Adapt, Overcome shape. Placed in the army column: law_tree_problems classifies unitUpgradingDiscount as army (not in _KINGDOM_BONUS_TYPES); move to kingdom once the validator lists it.",
+      "effectIconKey": "fraction_law_demon_20_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_demon_20_icon)."
+    },
+    "fraction_law_homm3_tower_17": {
+      "enabled": true,
+      "nameText": "Elite Mages",
+      "descriptionText": "Mage growth in your cities increases by {0}. Their attacks ignore {1}% of the target\u2019s Defense.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_mage",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "armorPen",
+                "0.1"
+              ],
+              "receivers": [
+                "h3_mage",
+                "h3_mage_upg",
+                "h3_mage_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_mage",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "armorPen",
+                "0.2"
+              ],
+              "receivers": [
+                "h3_mage",
+                "h3_mage_upg",
+                "h3_mage_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Elite law, Elite Angels armour-pen rider.",
+      "portraitIconSid": "h3_mage",
+      "iconNotes": "law pass 2026-11-21: unit-line law, portrait h3_mage."
+    },
+    "fraction_law_homm3_tower_18": {
+      "enabled": false
+    },
+    "fraction_law_homm3_tower_19": {
+      "enabled": false
+    },
+    "fraction_law_homm3_tower_20": {
+      "enabled": true,
+      "nameText": "Specialist Arcana",
+      "descriptionText": "The ability cooldowns of Gremlin Mechanics, Obsidian Gargoyles, Magnetic Golems, Arch Mages and Colossi are reduced by {0} round(s).",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "abilityCdBonus",
+                "-1"
+              ],
+              "receivers": [
+                "h3_gremlin_upg_alt",
+                "h3_gargoyle_upg",
+                "h3_golem_upg_alt",
+                "h3_mage_upg",
+                "h3_giant_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: abilityCdBonus -1 on the five Specialist upgrades.",
+      "effectIconKey": "fraction_law_nature_29_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_nature_29_icon)."
     },
     "fraction_law_homm3_tower_21": {
       "enabled": true,
       "nameText": "Transmutation Ledger",
-      "descriptionText": "Your sources of Gold produce 10% more Gold.",
+      "descriptionText": "Your sources of Gold produce +{0}% Gold.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_2"
+      ],
       "parametersPerLevel": [
         {
-          "cost": 3,
+          "cost": 4,
           "bonuses": [
             {
               "type": "sideStat",
@@ -313,183 +804,485 @@
               ]
             }
           ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "resPercentIncrementSet",
+                "gold",
+                "0.15"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "resPercentIncrementSet",
+                "gold",
+                "0.20"
+              ]
+            }
+          ]
         }
       ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "HOMM4 art-source candidate: Fortune (schools/nature/fortune.jpg). Runtime icon key: fraction_law_homm3_tower_21_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: vanilla Coinage Reform shape (4/2/2).",
       "homm4IconLabel": "Fortune",
       "homm4IconPath": "schools/nature/fortune.jpg",
-      "iconKey": "fraction_law_homm3_tower_21_icon"
+      "iconKey": "fraction_law_homm3_tower_21_icon",
+      "iconNotes": "law pass 2026-11-21: keeps the shipped HOMM4 art schools/nature/fortune.jpg (fraction_law_homm3_tower_21_icon); same effect role."
     },
     "fraction_law_homm3_tower_22": {
-      "enabled": true,
-      "nameText": "Synchronized Morale",
-      "descriptionText": "Heroes gain +1/+2 Morale by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "heroStat",
-              "parameters": [
-                "moral",
-                "1"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "heroStat",
-              "parameters": [
-                "moral",
-                "2"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Canonical shared-law icon pass: hero Morale laws use the same vanilla morale icon across custom factions. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_22_icon"
+      "enabled": false
     },
-    "fraction_law_homm3_tower_28": {
+    "fraction_law_homm3_tower_23": {
       "enabled": true,
-      "nameText": "Grand Workshop",
-      "descriptionText": "Spell upgrades in the Magic Observatory cost 20%/30%/40% less Alchemical Dust, by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "sideStat",
-              "parameters": [
-                "magicUpgradeCostPerBonus",
-                "-0.2"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 1,
-          "bonuses": [
-            {
-              "type": "sideStat",
-              "parameters": [
-                "magicUpgradeCostPerBonus",
-                "-0.3"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 1,
-          "bonuses": [
-            {
-              "type": "sideStat",
-              "parameters": [
-                "magicUpgradeCostPerBonus",
-                "-0.4"
-              ]
-            }
-          ]
-        }
+      "nameText": "Elite Genies",
+      "descriptionText": "Genie growth in your cities increases by {0}. Using their abilities does not end their turn.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
       ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_28_icon"
-    },
-    "fraction_law_homm3_tower_33": {
-      "enabled": true,
-      "nameText": "Celestial Calculus",
-      "descriptionText": "Produces 250/500/750 Astrology points daily by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "astrologyExp",
-              "parameters": [
-                "250"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "astrologyExp",
-              "parameters": [
-                "500"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "astrologyExp",
-              "parameters": [
-                "750"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_34_icon"
-    },
-    "fraction_law_homm3_tower_34": {
-      "enabled": true,
-      "nameText": "Overclocked Spellworks",
-      "descriptionText": "All positive effects on Tower creatures last 1 additional round.",
       "parametersPerLevel": [
         {
           "cost": 3,
           "bonuses": [
             {
-              "type": "unitStat",
+              "type": "cityUnitsIncrement",
               "parameters": [
-                "inComingBuffDuration",
+                "h3_genie",
                 "1"
+              ]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": [
+                "ignoreAbilityActionCost",
+                "true"
               ],
               "receivers": [
-                "h3_gremlin",
-                "h3_gargoyle",
-                "h3_golem",
-                "h3_mage",
                 "h3_genie",
-                "h3_naga",
-                "h3_giant"
+                "h3_genie_upg",
+                "h3_genie_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_genie",
+                "2"
+              ]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": [
+                "ignoreAbilityActionCost",
+                "true"
+              ],
+              "receivers": [
+                "h3_genie",
+                "h3_genie_upg",
+                "h3_genie_upg_alt"
               ]
             }
           ]
         }
       ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "HOMM4 art-source candidate: Power drain (schools/order/power_drain.jpg). Runtime icon key: fraction_law_homm3_tower_34_icon. Runtime rendering remains unproven until law-tree smoke.",
-      "homm4IconLabel": "Power drain",
-      "homm4IconPath": "schools/order/power_drain.jpg",
-      "iconKey": "fraction_law_homm3_tower_34_icon"
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Elite law, Elite Mancers rider.",
+      "portraitIconSid": "h3_genie",
+      "iconNotes": "law pass 2026-11-21: unit-line law, portrait h3_genie."
     },
-    "fraction_law_homm3_tower_6": {
+    "fraction_law_homm3_tower_24": {
       "enabled": true,
-      "nameText": "Arcane Conduits",
-      "descriptionText": "Tower creatures gain 25% of their hero's Spell Power as Attack and 25% of their hero's Knowledge as Defense.",
+      "nameText": "Elite Nagas",
+      "descriptionText": "Naga growth in your cities increases by {0}. They always deal maximum Damage.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
       "parametersPerLevel": [
         {
-          "cost": 6,
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_naga",
+                "1"
+              ]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": [
+                "alwaysMaxDmg",
+                "true"
+              ],
+              "receivers": [
+                "h3_naga",
+                "h3_naga_upg",
+                "h3_naga_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_naga",
+                "2"
+              ]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": [
+                "alwaysMaxDmg",
+                "true"
+              ],
+              "receivers": [
+                "h3_naga",
+                "h3_naga_upg",
+                "h3_naga_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Elite law, Elite Hoplets rider.",
+      "portraitIconSid": "h3_naga",
+      "iconNotes": "law pass 2026-11-21: unit-line law, portrait h3_naga."
+    },
+    "fraction_law_homm3_tower_25": {
+      "enabled": false
+    },
+    "fraction_law_homm3_tower_26": {
+      "enabled": true,
+      "nameText": "Golem Factory",
+      "descriptionText": "Your Gargoyles and Golems gain +{0}% HP and take \u2013{1}% Damage from basic attacks.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_1",
+        "current_law_modPercent_bonuses_1_parameters_3"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 4,
           "bonuses": [
             {
               "type": "unitStat",
               "parameters": [
-                "heroSpellPowerModifier",
-                "0.25"
+                "hpPerc",
+                "0.1"
+              ],
+              "receivers": [
+                "h3_gargoyle",
+                "h3_gargoyle_upg",
+                "h3_gargoyle_upg_alt",
+                "h3_golem",
+                "h3_golem_upg",
+                "h3_golem_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "basic_attack",
+                "-0.1"
+              ],
+              "receivers": [
+                "h3_gargoyle",
+                "h3_gargoyle_upg",
+                "h3_gargoyle_upg_alt",
+                "h3_golem",
+                "h3_golem_upg",
+                "h3_golem_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: two lines (6 sids): hpPerc 0.1 and inDmgMods basic_attack -0.1.",
+      "homm4IconLabel": "Mass slayer",
+      "homm4IconPath": "schools/chaos/mass_slayer.jpg",
+      "iconKey": "fraction_law_homm3_tower_18_icon",
+      "iconNotes": "law pass 2026-11-21: keeps the shipped HOMM4 art schools/chaos/mass_slayer.jpg (fraction_law_homm3_tower_18_icon); same effect role."
+    },
+    "fraction_law_homm3_tower_27": {
+      "enabled": true,
+      "nameText": "High Arcana",
+      "descriptionText": "Your Tower heroes can learn spells of any tier from every school.",
+      "descriptionArgs": [],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStatMap",
+              "fraction": "homm3_tower",
+              "parameters": [
+                "magicSchoolSet",
+                "day",
+                "5",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStatMap",
+              "fraction": "homm3_tower",
+              "parameters": [
+                "magicSchoolSet",
+                "night",
+                "5",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStatMap",
+              "fraction": "homm3_tower",
+              "parameters": [
+                "magicSchoolSet",
+                "space",
+                "5",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStatMap",
+              "fraction": "homm3_tower",
+              "parameters": [
+                "magicSchoolSet",
+                "primal",
+                "5",
+                "0"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: vanilla Power of Faith shape, restricted to Tower heroes.",
+      "effectIconKey": "fraction_law_human_27_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_human_27_icon)."
+    },
+    "fraction_law_homm3_tower_28": {
+      "enabled": true,
+      "nameText": "Grand Schematic",
+      "descriptionText": "Grafts cost your heroes \u2013{0}% Arcane Essence.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "defence",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.20"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "defence",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.40"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: (S) graft cost x (1 - 0.2 x level), rounded to 5, minimum 5; Homm3TowerLawHooks.GraftCost in TryGraft and the picker. Native bonus is a zero-strength anchor.",
+      "effectIconKey": "fraction_law_undead_14_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_undead_14_icon)."
+    },
+    "fraction_law_homm3_tower_30": {
+      "enabled": true,
+      "nameText": "Elite Giants",
+      "descriptionText": "Giant growth in your cities increases by {0}. They gain {1} Attack and Defense and {2} Speed.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1",
+        "current_law_modInt_bonuses_3_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_giant",
+                "1"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "offence",
+                "3"
+              ],
+              "receivers": [
+                "h3_giant",
+                "h3_giant_upg",
+                "h3_giant_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "3"
+              ],
+              "receivers": [
+                "h3_giant",
+                "h3_giant_upg",
+                "h3_giant_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "speed",
+                "1"
+              ],
+              "receivers": [
+                "h3_giant",
+                "h3_giant_upg",
+                "h3_giant_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_giant",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "offence",
+                "6"
+              ],
+              "receivers": [
+                "h3_giant",
+                "h3_giant_upg",
+                "h3_giant_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "6"
+              ],
+              "receivers": [
+                "h3_giant",
+                "h3_giant_upg",
+                "h3_giant_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "speed",
+                "1"
+              ],
+              "receivers": [
+                "h3_giant",
+                "h3_giant_upg",
+                "h3_giant_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Elite law, Elite Cavalry rider.",
+      "portraitIconSid": "h3_giant",
+      "iconNotes": "law pass 2026-11-21: unit-line law, portrait h3_giant."
+    },
+    "fraction_law_homm3_tower_31": {
+      "enabled": true,
+      "nameText": "Arcane Battery",
+      "descriptionText": "Your Focus Charge limit increases by {0}.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "maxEnergyLevelsBonus",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: vanilla Saturation shape.",
+      "effectIconKey": "fraction_law_dungeon_29_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_dungeon_29_icon)."
+    },
+    "fraction_law_homm3_tower_32": {
+      "enabled": true,
+      "nameText": "Wards of the Magi",
+      "descriptionText": "Your Tower creatures take \u2013{0}% Magic Damage, and negative effects on them last {1} fewer round(s).",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_3",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 5,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "magic_damage",
+                "-0.1"
               ],
               "receivers": [
                 "h3_gremlin",
@@ -518,8 +1311,8 @@
             {
               "type": "unitStat",
               "parameters": [
-                "heroIntelligenceModifier",
-                "0.25"
+                "inComingDebuffDuration",
+                "-1"
               ],
               "receivers": [
                 "h3_gremlin",
@@ -548,242 +1341,165 @@
           ]
         }
       ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "iconNotes": "HOMM4 art-source candidate: Spell shackle (schools/chaos/spell_shackle.jpg). Runtime icon key: fraction_law_homm3_tower_6_icon. Runtime rendering remains unproven until law-tree smoke.",
-      "homm4IconLabel": "Spell shackle",
-      "homm4IconPath": "schools/chaos/spell_shackle.jpg",
-      "iconKey": "fraction_law_homm3_tower_6_icon"
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: all 21 Tower sids.",
+      "effectIconKey": "fraction_law_dungeon_5_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_dungeon_5_icon)."
     },
-    "fraction_law_homm3_tower_4": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_4_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_4_icon"
-    },
-    "fraction_law_homm3_tower_5": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_5_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_5_icon"
-    },
-    "fraction_law_homm3_tower_10": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_10_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_10_icon"
-    },
-    "fraction_law_homm3_tower_11": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_11_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_11_icon"
-    },
-    "fraction_law_homm3_tower_14": {
-      "iconNotes": "Canonical resource icon pass: mining laws use the vanilla icon matching the produced special resource instead of donor-faction inheritance. Static/deploy validation pending.",
-      "iconKey": "fraction_law_nature_14_icon"
-    },
-    "fraction_law_homm3_tower_15": {
-      "iconNotes": "HOMM4 art-source candidate: Dispel (schools/order/dispel.jpg). Runtime icon key: fraction_law_homm3_tower_15_icon. Runtime rendering remains unproven until law-tree smoke.",
+    "fraction_law_homm3_tower_33": {
       "enabled": true,
-      "nameText": "Formula Mastery",
-      "descriptionText": "Your heroes' spells cost 1/2/3 less Mana by rank.",
+      "nameText": "Cloud Observatory",
+      "descriptionText": "Produces {0} Astrology points daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_0"
+      ],
       "parametersPerLevel": [
         {
           "cost": 2,
           "bonuses": [
             {
+              "type": "astrologyExp",
+              "parameters": [
+                "250",
+                "0.0"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "astrologyExp",
+              "parameters": [
+                "500",
+                "0.0"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: vanilla astrology shape (astrologyExp 250/500); the old third level is cut.",
+      "iconNotes": "law pass 2026-11-21: vanilla astrology art (human_34).",
+      "effectIconKey": "fraction_law_human_34_icon"
+    },
+    "fraction_law_homm3_tower_34": {
+      "enabled": true,
+      "nameText": "Wizards\u2019 Cadence",
+      "descriptionText": "The cooldowns of all the battle spells of your heroes are reduced by {0} round(s).",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
               "type": "heroStat",
               "parameters": [
-                "manaCostBonus",
+                "magicCdBonus",
                 "-1"
               ]
             }
           ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "heroStat",
-              "parameters": [
-                "manaCostBonus",
-                "-2"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "heroStat",
-              "parameters": [
-                "manaCostBonus",
-                "-3"
-              ]
-            }
-          ]
         }
       ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "homm4IconLabel": "Dispel",
-      "homm4IconPath": "schools/order/dispel.jpg",
-      "iconKey": "fraction_law_homm3_tower_15_icon"
-    },
-    "fraction_law_homm3_tower_17": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_17_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_17_icon"
-    },
-    "fraction_law_homm3_tower_20": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_20_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_20_icon"
-    },
-    "fraction_law_homm3_tower_23": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_23_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_23_icon"
-    },
-    "fraction_law_homm3_tower_24": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_24_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_24_icon"
-    },
-    "fraction_law_homm3_tower_26": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_26_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_26_icon"
-    },
-    "fraction_law_homm3_tower_27": {
-      "iconNotes": "HOMM4 art-source candidate: Mass dispel (schools/order/mass_dispel.jpg). Runtime icon key: fraction_law_homm3_tower_27_icon. Runtime rendering remains unproven until law-tree smoke.",
-      "enabled": true,
-      "nameText": "High Arcana",
-      "descriptionText": "Your heroes can learn Arcane spells of every tier.",
-      "parametersPerLevel": [
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "heroStat",
-              "parameters": [
-                "magicSchoolSet",
-                "space",
-                "5",
-                "0"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "homm4IconLabel": "Mass dispel",
-      "homm4IconPath": "schools/order/mass_dispel.jpg",
-      "iconKey": "fraction_law_homm3_tower_27_icon"
-    },
-    "fraction_law_homm3_tower_30": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_30_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_30_icon"
-    },
-    "fraction_law_homm3_tower_31": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_31_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_31_icon"
-    },
-    "fraction_law_homm3_tower_32": {
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_32_icon"
-    },
-    "fraction_law_homm3_tower_25": {
-      "enabled": true,
-      "nameText": "Synchronized Response",
-      "descriptionText": "Tower creatures' chance to trigger Morale increases by 1%/2%/3% for each point of their Morale, by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 1,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "additionalActionChanceModifier",
-                "0.01"
-              ],
-              "receivers": [
-                "h3_gremlin",
-                "h3_gargoyle",
-                "h3_golem",
-                "h3_mage",
-                "h3_genie",
-                "h3_naga",
-                "h3_giant"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 1,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "additionalActionChanceModifier",
-                "0.02"
-              ],
-              "receivers": [
-                "h3_gremlin",
-                "h3_gargoyle",
-                "h3_golem",
-                "h3_mage",
-                "h3_genie",
-                "h3_naga",
-                "h3_giant"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 1,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "additionalActionChanceModifier",
-                "0.03"
-              ],
-              "receivers": [
-                "h3_gremlin",
-                "h3_gargoyle",
-                "h3_golem",
-                "h3_mage",
-                "h3_genie",
-                "h3_naga",
-                "h3_giant"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_25_icon"
-    },
-    "fraction_law_homm3_tower_1": {
-      "iconKey": "fraction_law_human_1_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_tower_3": {
-      "iconKey": "fraction_law_human_3_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_tower_7": {
-      "iconKey": "fraction_law_human_7_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_tower_8": {
-      "iconKey": "fraction_law_human_8_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_tower_9": {
-      "iconKey": "fraction_law_human_9_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_tower_12": {
-      "iconKey": "fraction_law_human_12_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_tower_16": {
-      "iconKey": "fraction_law_human_16_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_tower_29": {
-      "iconKey": "fraction_law_human_29_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+      "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: vanilla Natural Serenity shape (heroStat magicCdBonus -1).",
+      "effectIconKey": "fraction_law_nature_31_icon",
+      "iconNotes": "law pass 2026-11-21: art of the vanilla law with the same effect role (fraction_law_nature_31_icon)."
     }
-  }
+  },
+  "lawTree": [
+    {
+      "kingdom": [
+        3,
+        5,
+        33
+      ],
+      "army": [
+        4,
+        10,
+        12
+      ]
+    },
+    {
+      "kingdom": [
+        1,
+        14,
+        6,
+        7
+      ],
+      "army": [
+        11,
+        17
+      ]
+    },
+    {
+      "kingdom": [
+        16,
+        2,
+        21
+      ],
+      "army": [
+        23,
+        26,
+        8
+      ]
+    },
+    {
+      "kingdom": [
+        9,
+        34,
+        15
+      ],
+      "army": [
+        24,
+        13,
+        20
+      ]
+    },
+    {
+      "kingdom": [
+        29,
+        27,
+        28,
+        31
+      ],
+      "army": [
+        30,
+        32
+      ]
+    }
+  ],
+  "lawBuffs": [
+    {
+      "id": "h3_law_tower_resonant_1",
+      "cloneOf": "fraction_law_demon_6_unit_bonus",
+      "set": {
+        "infinite": true,
+        "data": {
+          "stats": {
+            "offence": 2,
+            "defence": 2
+          }
+        }
+      },
+      "name": "Resonant Grafts",
+      "text": "+2 Attack and Defense."
+    },
+    {
+      "id": "h3_law_tower_resonant_2",
+      "cloneOf": "fraction_law_demon_6_unit_bonus",
+      "set": {
+        "infinite": true,
+        "data": {
+          "stats": {
+            "offence": 4,
+            "defence": 4
+          }
+        }
+      },
+      "name": "Resonant Grafts",
+      "text": "+4 Attack and Defense."
+    }
+  ]
 }

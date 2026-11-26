@@ -22,6 +22,10 @@ This tool measures every shipped unit's own clips, from the sources the clips we
     within REACH_TOL_PX of its furthest point toward the target (DEF battle sprites face right). A creature with no
     climax and a shot clip falls back to the same reach rule on the shot group.
 
+Rebuild slices (*_rebuild_v1.json, re-authored 30 fps clips) override the slice_v1 row of the same unit. A rebuild
+row may carry ``attackTiming: {clip: {"hit": seconds}}``, the impact its animator measured on the new clip; that
+wins over the DEF frame rule (source ``authored_rebuild``). Without it the DEF frame is scaled onto the new length.
+
 Contact time = frame / 12 scaled by clip length / (frames / 12), so a clip whose length is not its frame count
 (none today) still lands on the same pose. ``attackTimeAfter`` = clip length - contact.
 
@@ -49,7 +53,8 @@ from PIL import Image
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 OUT = ROOT / "custom_factions/contracts/homm3_attack_timing.json"
-SLICES = sorted(HERE.glob("*_slice_v1.json"))
+# rebuild slices (re-authored 30 fps clips) redeliver units first shipped by a *_slice_v1; listed last so they win
+SLICES = sorted(HERE.glob("*_slice_v1.json")) + sorted(HERE.glob("*_rebuild_v1.json"))
 RETARGET = ROOT / "artifacts/homm3_def_retarget"
 LAB = Path("V:/homm3_unity_work/Assets/CustomUnits/homm3_lab")
 FUSION_UNITS = ROOT / "custom_factions/conflux_fusion/fusion_units.json"
@@ -184,7 +189,8 @@ def shipped_units() -> dict[str, dict]:
             if not glb.exists():
                 continue
             units[r.get("gameSid") or r["labSid"]] = {"labSid": r["labSid"], "slice": sf.name, "glb": glb,
-                                                       "glbSha256": r["frozen"]["idleRetimedGlbSha256"]}
+                                                       "glbSha256": r["frozen"]["idleRetimedGlbSha256"],
+                                                       "authored": r.get("attackTiming") or {}}
     return units
 
 
@@ -265,7 +271,7 @@ def measure(sid: str, row: dict, vc: dict, cr: dict) -> dict:
                     frame, source = vals[0], "vcmi_climax:" + hits[0][1]
                 else:
                     # same DEF basename in several mods: take the one whose path names the unit's faction folder
-                    fac = re.sub(r"_slice_v1\.json$", "", row["slice"]).split("_")[0]
+                    fac = re.sub(r"_(slice|rebuild)_v1\.json$", "", row["slice"]).split("_")[0]
                     pick = [h for h in hits if f"/{fac}/" in h[1].replace("\\", "/")]
                     if len({h[0] for h in pick}) == 1:
                         frame, source = pick[0][0], "vcmi_climax:" + pick[0][1]
@@ -295,6 +301,13 @@ def measure(sid: str, row: dict, vc: dict, cr: dict) -> dict:
             entry["climaxClamped"] = frame
             frame = n - 1
         hit = round(frame / FPS * (length / (n / FPS)), 4)
+        authored = (row.get("authored") or {}).get(clip)
+        if authored is not None:
+            # a re-authored clip (rebuild slice) strikes where its animator measured the impact, not on a DEF frame
+            hit = round(float(authored["hit"]), 4)
+            if not 0 < hit < length:
+                raise SystemExit(f"{sid}: authored {clip} hit {hit} outside the clip (0, {length})")
+            source = "authored_rebuild:" + row["slice"]
         entry.update({"hitFrame": int(frame), "hit": hit, "after": round(max(0.0, length - hit), 4), "source": source})
         clips[clip] = entry
     return {"labSid": lab, "slice": row["slice"], "glbSha256": row["glbSha256"], "framesManifest": frames_src,

@@ -176,6 +176,10 @@ internal static class Homm3ConfluxFusionRuntime
 				Homm3DungeonWarCaptivesWindow.ShowBanner("Elemental Fusion is unavailable: its configuration did not load (see the log).");
 				return false;
 			}
+			// law pass 2026-11-25: Perfect Conjunction (#28) on a per-cast copy (#8 and #9 no longer change the cast).
+			config = ApplyFusionLaws(config, side, logicHero, out var lawNote);
+			if (lawNote != null)
+				LogEvent("fusion laws for " + hero + ": " + lawNote + ".");
 			var mana = dataHero.mana;
 			var mapMagic = LookupMapMagic(dataHero, config.SpellSid, out var magicFail);
 			var usageLimit = setting.usageLimit;
@@ -614,6 +618,52 @@ internal static class Homm3ConfluxFusionRuntime
 
 	internal static string RankName(int rank) => rank switch { 1 => "Basic", 2 => "Advanced", 3 => "Expert", _ => "higher" };
 
+	// law pass 2026-11-21: Perfect Conjunction (#28). law pass 2026-11-25: Elemental Attunement (#8) is now an Initiative
+	// bonus on the fused sids (law data, no lever) and #9 is Reforming Elements (Homm3ConfluxLawHooks), so neither changes
+	// the cast any more.
+	internal const string ConfluxFactionSid = "homm3_conflux";
+	internal const int PerfectConjunctionLaw = 28;
+	/// <summary>Index = law level. Must match the #28 display carrier in homm3_conflux.json (default penalty 0.9 in fusion_config.json).</summary>
+	private static readonly decimal[] PerfectConjunctionPenalty = { 0m, 0.95m, 1.0m };
+
+	/// <summary>
+	/// The caster's Conflux fusion laws applied to a per-cast copy of the config (the cached config is never changed).
+	/// A law only ever loosens the base values. Fail closed: a read failure keeps the base config.
+	/// </summary>
+	internal static Homm3ConfluxFusionConfig ApplyFusionLaws(Homm3ConfluxFusionConfig config, object side, object logicHero, out string note)
+	{
+		note = null;
+		if (config == null)
+			return config;
+		var conj = Math.Min(2, LawRank(PerfectConjunctionLaw, side, logicHero));
+		if (conj <= 0)
+			return config;
+		// law pass 2026-11-25: Perfect Conjunction (#28)
+		var penalty = Math.Max(config.Penalty, PerfectConjunctionPenalty[conj]);
+		note = "Perfect Conjunction L" + conj + " (penalty " + penalty.ToString(CultureInfo.InvariantCulture) + ")";
+		return config.WithLaws(penalty, config.MinShare, 0);
+	}
+
+	private static int LawRank(int lawIndex, params object[] owners)
+	{
+		foreach (var owner in owners)
+		{
+			if (owner == null)
+				continue;
+			try
+			{
+				var rank = Homm3CustomFactionLawRuntime.CustomLawRank(owner, lawIndex, ConfluxFactionSid);
+				if (rank > 0)
+					return rank;
+			}
+			catch
+			{
+				// fail closed: try the next owner
+			}
+		}
+		return 0;
+	}
+
 	internal static string UnlockedLinesText(Homm3ConfluxFusionConfig config, int rank)
 	{
 		var names = new List<string>();
@@ -880,13 +930,27 @@ internal sealed class Homm3ConfluxFusionConfig
 
 	internal bool TryGetPair(string a, string b, out Pair pair) => _pairByKey.TryGetValue(PairKey(a, b), out pair);
 
-	/// <summary>Lines unlocked at a rank: the union of tierLines[1..rank].</summary>
+	/// <summary>law pass 2026-11-21: Elemental Attunement (#8): lines unlock this many ranks earlier (per-cast copy only).</summary>
+	internal int LineRankBonus;
+
+	/// <summary>law pass 2026-11-21: a per-cast copy with law values; collections stay shared and are never written.</summary>
+	internal Homm3ConfluxFusionConfig WithLaws(decimal penalty, decimal minShare, int lineRankBonus)
+	{
+		var copy = (Homm3ConfluxFusionConfig)MemberwiseClone();
+		copy.Penalty = penalty;
+		copy.MinShare = minShare;
+		copy.LineRankBonus = Math.Max(0, lineRankBonus);
+		return copy;
+	}
+
+	/// <summary>Lines unlocked at a rank: the union of tierLines[1..rank + LineRankBonus].</summary>
 	internal HashSet<string> UnlockedLines(int rank)
 	{
 		var set = new HashSet<string>(StringComparer.Ordinal);
+		var effective = rank + LineRankBonus;
 		foreach (var pair in TierLines)
 		{
-			if (pair.Key <= rank)
+			if (pair.Key <= effective)
 				set.UnionWith(pair.Value);
 		}
 		return set;
@@ -901,7 +965,7 @@ internal sealed class Homm3ConfluxFusionConfig
 			if (pair.Value.Contains(line) && pair.Key < best)
 				best = pair.Key;
 		}
-		return best;
+		return Math.Max(1, best - LineRankBonus); // 0 since law pass 2026-11-25 (Elemental Attunement no longer unlocks lines)
 	}
 
 	private static Homm3ConfluxFusionConfig _cached;

@@ -540,6 +540,36 @@ internal static class NativeCombatWriteGateway
 		return TryFieldObjectsContainsUnit(hex, unit, out contains, out failReason);
 	}
 
+	/// <summary>
+	/// The Unit standing on <paramref name="hex"/> (Hex.fieldObjects), skipping <paramref name="exclude"/>; null when none.
+	/// Use this, never Hex lastCorpse (current build cnfx, GameSymbols.BattleEventLaws.HexOccupantMembers), as occupancy.
+	/// </summary>
+	internal static global::Hex.Session.Battle.Unit FindUnitOccupantPublic(object hex, object exclude)
+	{
+		if (hex == null
+		    || !TryReadExactMember(hex, GameSymbols.DirectStateLaws.HexFieldObjectsMembers, out var listObj)
+		    || listObj == null
+		    || !TryEnumerateFieldObjects(listObj, out var items, out _))
+			return null;
+		for (var i = 0; i < items.Count; i++)
+		{
+			if (items[i] is not Il2CppObjectBase native || native.Pointer == IntPtr.Zero)
+				continue;
+			if (exclude != null && NativeUnitIdentityEquals(items[i], exclude))
+				continue;
+			var unit = native as global::Hex.Session.Battle.Unit ?? native.TryCast<global::Hex.Session.Battle.Unit>();
+			if (unit != null)
+				return unit;
+		}
+		return null;
+	}
+
+	/// <summary>Native destination gate (blocked flags + Hex.fieldObjects occupancy) for diagnostics that pick hexes.</summary>
+	internal static bool ValidateDestinationPublic(object destinationHex, object movingUnit, out string failReason)
+	{
+		return ValidateDestination(destinationHex, movingUnit, out failReason);
+	}
+
 	internal static bool NativeHexIdentityEqualsPublic(object left, object right)
 	{
 		return NativeHexIdentityEquals(left, right);

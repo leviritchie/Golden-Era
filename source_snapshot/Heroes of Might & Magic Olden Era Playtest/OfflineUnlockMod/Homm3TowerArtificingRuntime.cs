@@ -137,6 +137,7 @@ internal static class Homm3TowerArtificingRuntime
 	{
 		internal string HeroSid;
 		internal int Rank;
+		internal int Slots;
 		internal Dictionary<int, List<int>> GraftsByLine;
 	}
 
@@ -330,7 +331,7 @@ internal static class Homm3TowerArtificingRuntime
 					continue;
 				var info = new BattleSideInfo { SideIndex = sideIndex, LogicHero = side.logicHero, DataHero = dataHero, Rank = rank };
 				if (TryReadState(side.logicHero, out var state, out var readFail))
-					info.GraftsByLine = ActiveGrafts(state, rank);
+					info.GraftsByLine = ActiveGrafts(state, rank, side.logicHero);
 				else
 					LogSkip("side " + sideIndex + " hero " + DescribeHero(dataHero) + " ledger unreadable (" + readFail + "); no grafts this battle.");
 				lock (Gate)
@@ -347,10 +348,10 @@ internal static class Homm3TowerArtificingRuntime
 	}
 
 	/// <summary>Line -> schematic indices in the first SlotsForRank(rank) slots (graftable, deduped).</summary>
-	internal static Dictionary<int, List<int>> ActiveGrafts(ArtificingState state, int rank)
+	internal static Dictionary<int, List<int>> ActiveGrafts(ArtificingState state, int rank, object logicHero = null)
 	{
 		var result = new Dictionary<int, List<int>>();
-		var slots = SlotsForRank(rank);
+		var slots = Homm3TowerLawHooks.SlotsFor(rank, logicHero);
 		for (var line = 0; line < Homm3TowerArtificingCatalog.Lines; line++)
 		{
 			for (var slot = 0; slot < slots; slot++)
@@ -432,6 +433,16 @@ internal static class Homm3TowerArtificingRuntime
 			}
 			lock (Gate)
 				CarriersByKey[unitKey] = carried;
+			// law pass 2026-11-25: Resonant Grafts (#8): the carrier gains 2 Attack and Defense per graft it carries
+			// (buff row h3_law_tower_resonant_<count>, same duration as the grafts, dispelled with them).
+			if (carried.Count > 0 && Homm3TowerLawHooks.HasResonantGrafts(info.LogicHero))
+			{
+				var resonantSid = Homm3TowerLawHooks.ResonantBuffPrefix + Math.Min(carried.Count, Homm3TowerArtificingCatalog.MaxSlots);
+				if (Homm3BuffDebuffNativeAdapter.TryAddBuffSidFromReceiver(unit, resonantSid, unit, GraftBuffLevel, GraftBuffDuration, GraftBuffValue, true, out _, out var resonantFail))
+					applied.Add(resonantSid);
+				else
+					_log?.LogError(LogPrefix + "Resonant Grafts " + resonantSid + " on " + unitSid + " failed: " + resonantFail);
+			}
 			LogEvent("grafted " + unitSid + " (line " + line + ", side " + sideIndex + "): [" + string.Join(",", applied) + "]"
 				+ (skipped.Count == 0 ? "" : " skipped [" + string.Join(",", skipped) + "]") + " of " + schematics.Count + ".");
 		}
@@ -732,16 +743,17 @@ internal static class Homm3TowerArtificingRuntime
 			return null;
 		var key = il2Cpp.Pointer.ToInt64();
 		var heroSid = DescribeHero(dataHero);
+		// The cache follows the slot count (law pass 2026-11-25: Twin Grafts retired; slots follow the skill rank).
+		var slots = Homm3TowerLawHooks.SlotsFor(rank, logicHero);
 		lock (Gate)
 		{
-			if (!refresh && MapGraftsByHero.TryGetValue(key, out var cached) && cached.Rank == rank && string.Equals(cached.HeroSid, heroSid, StringComparison.Ordinal))
+			if (!refresh && MapGraftsByHero.TryGetValue(key, out var cached) && cached.Rank == rank && cached.Slots == slots && string.Equals(cached.HeroSid, heroSid, StringComparison.Ordinal))
 				return cached.GraftsByLine;
 		}
 		var manager = ResolveHeroBuffManager(logicHero, out _);
 		if (manager == null)
 			return null;
 		var grafts = new Dictionary<int, List<int>>();
-		var slots = SlotsForRank(rank);
 		for (var line = 0; line < Homm3TowerArtificingCatalog.Lines; line++)
 		{
 			for (var slot = 0; slot < slots; slot++)
@@ -756,7 +768,7 @@ internal static class Homm3TowerArtificingRuntime
 			}
 		}
 		lock (Gate)
-			MapGraftsByHero[key] = new MapHeroGrafts { HeroSid = heroSid, Rank = rank, GraftsByLine = grafts };
+			MapGraftsByHero[key] = new MapHeroGrafts { HeroSid = heroSid, Rank = rank, Slots = slots, GraftsByLine = grafts };
 		return grafts;
 	}
 
@@ -925,11 +937,22 @@ internal static class Homm3TowerArtificingRuntime
 		List<KeyValuePair<long, Dictionary<int, string>>> carriers;
 		List<BattleUnitInfo> units;
 		Dictionary<long, BattleUnitInfo> unitsByKey;
+		bool firstRound;
 		lock (Gate)
 		{
-			if (_firstRoundStarted || SidesByIndex.Count == 0)
+			if (SidesByIndex.Count == 0)
 				return;
+			firstRound = !_firstRoundStarted;
 			_firstRoundStarted = true;
+		}
+		// law pass 2026-11-21: Warded Grafts (#9): every later round start re-adds purged grafts.
+		if (!firstRound)
+		{
+			RestoreWardedGrafts();
+			return;
+		}
+		lock (Gate)
+		{
 			if (CarriersByKey.Count == 0)
 				return;
 			carriers = new List<KeyValuePair<long, Dictionary<int, string>>>(CarriersByKey);
@@ -1047,6 +1070,58 @@ internal static class Homm3TowerArtificingRuntime
 		return rules;
 	}
 
+	/// <summary>
+	/// law pass 2026-11-21: Warded Grafts (#9). At each round start after the first, a living carrier on a side
+	/// whose hero owns the law gets back every graft buff it lost (purged by enemy effects). Fails closed per buff.
+	/// Kit rules and synergies gate on CarrierStillGrafted, so they resume with the buff.
+	/// </summary>
+	private static void RestoreWardedGrafts()
+	{
+		List<KeyValuePair<long, Dictionary<int, string>>> carriers;
+		Dictionary<long, BattleUnitInfo> unitsByKey;
+		Dictionary<int, BattleSideInfo> sides;
+		lock (Gate)
+		{
+			if (CarriersByKey.Count == 0)
+				return;
+			carriers = new List<KeyValuePair<long, Dictionary<int, string>>>(CarriersByKey);
+			unitsByKey = new Dictionary<long, BattleUnitInfo>(UnitsByKey);
+			sides = new Dictionary<int, BattleSideInfo>(SidesByIndex);
+		}
+		try
+		{
+			var warded = new Dictionary<int, bool>();
+			var restored = new List<string>();
+			foreach (var pair in carriers)
+			{
+				if (pair.Value == null || pair.Value.Count == 0 || !unitsByKey.TryGetValue(pair.Key, out var carrier))
+					continue;
+				if (!warded.TryGetValue(carrier.SideIndex, out var owned))
+				{
+					owned = sides.TryGetValue(carrier.SideIndex, out var side) && Homm3TowerLawHooks.HasWardedGrafts(side.LogicHero);
+					warded[carrier.SideIndex] = owned;
+				}
+				if (!owned || !Homm3FortressPredatorInstinctRuntime.IsAlive(carrier.Unit as Hex.Session.Battle.Unit))
+					continue;
+				foreach (var graft in pair.Value)
+				{
+					if (string.IsNullOrEmpty(graft.Value) || CarrierStillGrafted(carrier.Unit, graft.Value))
+						continue;
+					if (Homm3BuffDebuffNativeAdapter.TryAddBuffSidFromReceiver(carrier.Unit, graft.Value, carrier.Unit, GraftBuffLevel, GraftBuffDuration, GraftBuffValue, true, out _, out var addFail))
+						restored.Add(carrier.UnitSid + ":" + graft.Value);
+					else
+						LogSkip("warded graft " + graft.Value + " on " + carrier.UnitSid + " not restored: " + addFail);
+				}
+			}
+			if (restored.Count > 0)
+				LogEvent("warded grafts restored: [" + string.Join(",", restored) + "].");
+		}
+		catch (Exception ex)
+		{
+			LogSkip("warded grafts failed closed: " + ex.GetBaseException().Message);
+		}
+	}
+
 	private static bool CarrierStillGrafted(object unit, string graftSid)
 	{
 		return Homm3BuffDebuffNativeAdapter.TryResolveBuffManagerFromReceiver(unit, out var manager, out _)
@@ -1158,7 +1233,8 @@ internal static class Homm3TowerArtificingRuntime
 			if (rank <= 0)
 				continue;
 			var chances = Homm3TowerArtificingCatalog.ObservationChanceByRank;
-			var chance = chances[Math.Min(rank, chances.Length) - 1];
+			// law pass 2026-11-25: Scrying Lenses (#5) no longer raises the chance; it pays essence per recorded passive below.
+			var chance = Math.Min(100, Math.Max(0, chances[Math.Min(rank, chances.Length) - 1]));
 			var observed = new SortedDictionary<int, int>();
 			for (var enemyIndex = 0; enemyIndex < started.sides.Length; enemyIndex++)
 			{
@@ -1192,6 +1268,19 @@ internal static class Homm3TowerArtificingRuntime
 				_log?.LogError(LogPrefix + line + ": book write failed: " + detail);
 			if (written && showNotification && started.sides[sideIndex].controlType == TransferSide.EControlType.ME)
 				Homm3TowerArtificingLearnNotification.Show(applied);
+			// law pass 2026-11-25: Scrying Lenses (#5): each passive recorded (new, or at a lower tier) also yields 10/20 Arcane Essence.
+			if (written && applied.Count > 0)
+			{
+				var perPassive = Homm3TowerLawHooks.ScryingEssence(logicHero);
+				if (perPassive > 0)
+				{
+					var amount = (int)Math.Min(MaxEssence, (long)perPassive * applied.Count);
+					if (TryAddEssence(logicHero, amount, out var essenceBefore, out var essenceAfter, out var essenceFail))
+						LogEvent("Scrying Lenses: " + applied.Count + " recorded passive(s) x " + perPassive + " essence (" + essenceBefore + "->" + essenceAfter + ").");
+					else
+						_log?.LogError(LogPrefix + "Scrying Lenses essence for " + DescribeHero(dataHero) + " failed: " + essenceFail);
+				}
+			}
 		}
 	}
 
@@ -1316,6 +1405,11 @@ internal static class Homm3TowerArtificingRuntime
 				LogEvent("battle " + key + " won by " + DescribeHero(dataHero) + ": no essence (lost=[" + string.Join(",", parts) + "]).");
 				return;
 			}
+			// law pass 2026-11-21: Essence Distillery (#7): +25% per level, still capped by MaxEssence.
+			var baseEssence = essence;
+			essence = Homm3TowerLawHooks.EssenceAward(essence, logicHero, out var distillery);
+			if (distillery > 0)
+				parts.Add("distillery L" + distillery + " " + baseEssence + "->" + essence);
 			if (!TryAddEssence(logicHero, (int)Math.Min(MaxEssence, essence), out var before, out var after2, out var fail))
 			{
 				_log?.LogError(LogPrefix + "essence award for " + DescribeHero(dataHero) + " failed: " + fail);
@@ -1473,9 +1567,11 @@ internal static class Homm3TowerArtificingRuntime
 			failReason = "line " + line + " outside 0.." + (Homm3TowerArtificingCatalog.Lines - 1);
 			return false;
 		}
-		if (slot < 0 || slot >= SlotsForRank(rank))
+		// law pass 2026-11-21: Twin Grafts (#8) opens the second slot from Basic.
+		var unlockedSlots = Homm3TowerLawHooks.SlotsFor(rank, logicHero);
+		if (slot < 0 || slot >= unlockedSlots)
 		{
-			failReason = "slot " + slot + " not unlocked at rank " + rank + " (" + SlotsForRank(rank) + " slot(s))";
+			failReason = "slot " + slot + " not unlocked at rank " + rank + " (" + unlockedSlots + " slot(s))";
 			return false;
 		}
 		if (!Homm3TowerArtificingCatalog.SchematicKeyByIndex.ContainsKey(schematic) || schematic + 1 > MaxGraftValue)
@@ -1502,7 +1598,7 @@ internal static class Homm3TowerArtificingRuntime
 		// One Tower line per schematic (user 2026-11-13): an active graft on another line blocks this one.
 		for (var otherLine = 0; otherLine < Homm3TowerArtificingCatalog.Lines; otherLine++)
 		{
-			for (var other = 0; otherLine != line && other < SlotsForRank(rank) && other < Homm3TowerArtificingCatalog.MaxSlots; other++)
+			for (var other = 0; otherLine != line && other < unlockedSlots && other < Homm3TowerArtificingCatalog.MaxSlots; other++)
 			{
 				if (state.GraftSlots[otherLine, other] == schematic)
 				{
@@ -1511,7 +1607,8 @@ internal static class Homm3TowerArtificingRuntime
 				}
 			}
 		}
-		cost = Homm3TowerArtificingCatalog.GraftCost[sourceTier - 1, line];
+		// law pass 2026-11-21: Grand Schematic (#28): -20% per level, rounded to 5.
+		cost = Homm3TowerLawHooks.GraftCost(Homm3TowerArtificingCatalog.GraftCost[sourceTier - 1, line], logicHero);
 		if (state.Essence < cost)
 		{
 			failReason = "needs " + cost + " Arcane Essence, has " + state.Essence;

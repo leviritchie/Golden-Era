@@ -7,22 +7,20 @@
       "id": "fortress.cage_of_warlords",
       "surface": "building",
       "sourceName": "Cage of Warlords",
-      "status": "substituted",
-      "reason": "Generated city row uses the proven hero Defense bonus path.",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: the Cage has its own row (Build_Gymnasium, heroBonusBanks) granting +1 Defense to a visiting hero, as in HoMM3; the Bank slot is a plain economy Bank again.",
       "playerTextPolicy": "must_match_current_behavior",
       "currentRows": [
-        "Build_Bank"
+        "Build_Gymnasium"
       ],
-      "forbiddenPlayerText": [
-        "permanent Defense once"
-      ]
+      "validationOwner": "validate_source_mechanics_contract"
     },
     {
       "id": "fortress.field_infirmary",
       "surface": "building",
       "sourceName": "Field Infirmary",
       "status": "substituted",
-      "reason": "Generated city row uses a modest Knowledge bonus because war-machine purchase support is untraced.",
+      "reason": "Olden Era has no war machines, so there is no First Aid Tent to sell; the slot is the shared Treasury (2000 Gold daily).",
       "playerTextPolicy": "must_match_current_behavior",
       "currentRows": [
         "Build_Treasury"
@@ -36,31 +34,25 @@
       "id": "fortress.glyphs_of_fear",
       "surface": "building",
       "sourceName": "Glyphs of Fear",
-      "status": "substituted",
-      "reason": "Generated city row uses a native Morale bonus as a source-safe substitute.",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: the visiting-hero Morale substitute is gone; the row grants the HoMM3 +2 Defense to the hero defending this city in a siege through the runtime agent's siege hook.",
       "playerTextPolicy": "must_match_current_behavior",
       "currentRows": [
         "Build_Mother_Nature"
       ],
-      "forbiddenPlayerText": [
-        "fear aura",
-        "enemy morale"
-      ]
+      "validationOwner": "validate_source_mechanics_contract"
     },
     {
-      "id": "fortress.hydra_marsh",
+      "id": "fortress.blood_obelisk",
       "surface": "building",
-      "sourceName": "Hydra Marsh",
-      "status": "substituted",
-      "reason": "Generated city row grants Hydra-line weekly growth in the former special-building slot.",
+      "sourceName": "Blood Obelisk",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: replaces the invented Hydra Marsh (+1 Hydra growth removed). The row grants the HoMM3 +2 Attack to the hero defending this city in a siege through the runtime agent's siege hook.",
       "playerTextPolicy": "must_match_current_behavior",
       "currentRows": [
         "Build_Mycelium_Roots"
       ],
-      "forbiddenPlayerText": [
-        "Blood Obelisk",
-        "exact source building"
-      ]
+      "validationOwner": "validate_source_mechanics_contract"
     },
     {
       "id": "fortress.captains_quarters",
@@ -71,6 +63,18 @@
       "playerTextPolicy": "must_match_current_behavior",
       "currentRows": [
         "Build_Resource_Depot_level_2"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "fortress.carnivorous_plant",
+      "surface": "building",
+      "sourceName": "Carnivorous Plant",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: the grail keeps its +1 empire growth and +100% city growth (owner answer 3) and adds the HoMM3 +10 Attack / +10 Defense for the siege defender through the runtime agent's siege hook.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Spring_of_Life"
       ],
       "validationOwner": "validate_source_mechanics_contract"
     },

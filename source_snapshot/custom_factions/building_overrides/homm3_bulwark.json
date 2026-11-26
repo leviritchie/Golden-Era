@@ -1,0 +1,160 @@
+{
+  "factionSid": "homm3_bulwark",
+  "rows": [
+    {
+      "sid": "Build_Mother_Nature",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 2000,
+          "wood": 10
+        }
+      ],
+      "bonuses": [
+        []
+      ],
+      "nameText": "Fair",
+      "descriptionText": "Improves your trade rates as if this city had two Marketplaces.",
+      "plugin": "Homm3BulwarkFairRuntime",
+      "notes": "building pass 2026-11-22: bulwark.fair (REVIEW 2: +1 market count). The +1000 Gold daily donor income is removed. Homm3BulwarkFairRuntime adds +1 to the side's native market count (Homm3FactoryLogisticsRuntime.PostfixMarketsCount, GetMarketsCount on the world side) for each owned Bulwark town with both Build_Market and this building, so that town counts as two Marketplaces. HotA cost 2000 Gold, 10 Wood. Tree: Market (tree agent).",
+      "nameTextLocales": {
+        "BRportugese": "Feira",
+        "czech": "Veletrh",
+        "french": "Foire",
+        "german": "Jahrmarkt",
+        "hungarian": "Vásár",
+        "italian": "Fiera",
+        "japanese": "見本市",
+        "korean": "장터",
+        "polish": "Jarmark",
+        "russian": "Ярмарка",
+        "spanish": "Feria",
+        "turkish": "Fuar",
+        "ukrainian": "Ярмарок",
+        "zhCN": "集市",
+        "zhTW": "集市"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Melhora suas taxas de troca como se esta cidade tivesse dois Mercados.",
+        "czech": "Zlepšuje vaše směnné kurzy, jako by toto město mělo dvě tržiště.",
+        "french": "Améliore vos taux d’échange comme si cette ville possédait deux marchés.",
+        "german": "Verbessert deine Handelskurse, als hätte diese Stadt zwei Marktplätze.",
+        "hungarian": "Úgy javítja a kereskedelmi árfolyamaidat, mintha ennek a városnak két piaca lenne.",
+        "italian": "Migliora i tuoi tassi di scambio come se questa città avesse due Mercati.",
+        "japanese": "この都市に市場が2つあるかのように、交易レートが改善される。",
+        "korean": "이 도시에 시장이 두 개 있는 것처럼 교역 비율이 개선됩니다.",
+        "polish": "Poprawia twoje kursy handlowe, tak jakby to miasto miało dwa Targowiska.",
+        "russian": "Улучшает ваши торговые курсы так, будто в этом городе два рынка.",
+        "spanish": "Mejora tus tipos de intercambio como si esta ciudad tuviera dos mercados.",
+        "turkish": "Bu şehirde iki Pazar yeri varmış gibi ticaret oranlarınızı iyileştirir.",
+        "ukrainian": "Покращує ваші торгові курси так, ніби в цьому місті два ринки.",
+        "zhCN": "使你的交易比率得到改善，如同这座城镇拥有两座市场。",
+        "zhTW": "使你的交易比率得到改善，如同這座城鎮擁有兩座市場。"
+      }
+    },
+    {
+      "sid": "Build_Mycelium_Roots",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 2000,
+          "ore": 5,
+          "gemstones": 4,
+          "crystals": 4
+        }
+      ],
+      "bonuses": [
+        []
+      ],
+      "nameText": "Altar of the Runes",
+      "descriptionText": "At the start of every combat, your creatures that use Runes gain +1 Rune Level for each Altar of the Runes you own.",
+      "plugin": "Homm3BulwarkAltarRunesRuntime",
+      "notes": "building pass 2026-11-22: bulwark.altar_of_the_runes (REVIEW 2: replaces Clan Stockyards, ships with the Runes runtime). The +4 Kobolds weekly filler is removed. Round 1: Homm3BulwarkRunesRuntime.ApplyAltarOfRunes grants SideBuildingCount(hero, Build_Mycelium_Roots) Rune Levels to every stack Runes covers (reason 'altar', stacks with Carved in Advance). The Sieidi of the Runes is folded in: cost = Sieidi + Altar (2000 Gold, 5 Ore, 4 Gems, 4 Crystals); its 'learn Runes for free' clause is not built (Runes is the faction skill; OE has no learn-a-skill building section). Row id and section kept (banks) to keep its scene slot and icon.",
+      "nameTextLocales": {
+        "BRportugese": "Altar das Runas",
+        "czech": "Oltář run",
+        "french": "Autel des runes",
+        "german": "Runenaltar",
+        "hungarian": "Rúnák oltára",
+        "italian": "Altare delle Rune",
+        "japanese": "ルーンの祭壇",
+        "korean": "룬의 제단",
+        "polish": "Ołtarz Run",
+        "russian": "Алтарь рун",
+        "spanish": "Altar de las Runas",
+        "turkish": "Rünler Sunağı",
+        "ukrainian": "Вівтар рун",
+        "zhCN": "符文祭坛",
+        "zhTW": "符文祭壇"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "No início de cada combate, suas criaturas que usam Runas ganham +1 Nível de Runa para cada Altar das Runas que você possui.",
+        "czech": "Na začátku každé bitvy získají vaše jednotky používající runy +1 úroveň run za každý Oltář run, který vlastníte.",
+        "french": "Au début de chaque combat, vos créatures qui utilisent des runes gagnent +1 niveau de rune pour chaque autel des runes que vous possédez.",
+        "german": "Zu Beginn jedes Kampfes erhalten deine Kreaturen, die Runen einsetzen, +1 Runenstufe für jeden Runenaltar in deinem Besitz.",
+        "hungarian": "Minden csata kezdetén a rúnákat használó lényeid +1 Rúnaszintet kapnak minden birtokodban lévő Rúnák oltára után.",
+        "italian": "All’inizio di ogni combattimento, le tue creature che usano le Rune ottengono +1 Livello Runico per ogni Altare delle Rune che possiedi.",
+        "japanese": "各戦闘の開始時、ルーンを使うクリーチャーは、所有するルーンの祭壇1つにつきルーンレベルが+1される。",
+        "korean": "매 전투 시작 시, 룬을 사용하는 아군 생물은 보유한 룬의 제단 하나당 룬 레벨이 +1 증가합니다.",
+        "polish": "Na początku każdej walki twoje stwory korzystające z run zyskują +1 poziom run za każdy posiadany Ołtarz Run.",
+        "russian": "В начале каждого боя ваши существа, использующие руны, получают +1 уровень рун за каждый принадлежащий вам Алтарь рун.",
+        "spanish": "Al comienzo de cada combate, tus criaturas que usan runas obtienen +1 nivel de runa por cada Altar de las Runas que poseas.",
+        "turkish": "Her savaşın başında, rün kullanan yaratıklarınız sahip olduğunuz her Rünler Sunağı için +1 Rün Seviyesi kazanır.",
+        "ukrainian": "На початку кожного бою ваші істоти, що використовують руни, отримують +1 рівень рун за кожен Вівтар рун, яким ви володієте.",
+        "zhCN": "每场战斗开始时，你每拥有一座符文祭坛，使用符文的生物便获得+1符文等级。",
+        "zhTW": "每場戰鬥開始時，你每擁有一座符文祭壇，使用符文的生物便獲得+1符文等級。"
+      }
+    },
+    {
+      "sid": "Build_Spring_of_Life",
+      "section": "graals",
+      "replace": true,
+      "costs": [
+        {
+          "graal": 1
+        }
+      ],
+      "nameText": "Spirits of the Forebears",
+      "descriptionText": "+1 to all creature growth in all your cities. This city's dwellings produce +100% units. In a siege of this city, the defending hero gains +20 Defense.",
+      "plugin": "Homm3TownSiegeDefenseRuntime",
+      "notes": "building pass 2026-11-22: bulwark.spirits_of_the_forebears. Keeps the NatureGraal bonuses unchanged (answer 3). The +20 Defense siege clause is the runtime agent's Homm3TownSiegeDefenseRuntime entry (REVIEW 1), not a CFB file.",
+      "nameTextLocales": {
+        "BRportugese": "Espíritos dos Antepassados",
+        "czech": "Duchové předků",
+        "french": "Esprits des Ancêtres",
+        "german": "Geister der Vorfahren",
+        "hungarian": "Az ősök szellemei",
+        "italian": "Spiriti degli Antenati",
+        "japanese": "祖霊",
+        "korean": "선조의 영혼",
+        "polish": "Duchy Przodków",
+        "russian": "Духи предков",
+        "spanish": "Espíritus de los Antepasados",
+        "turkish": "Ataların Ruhları",
+        "ukrainian": "Духи пращурів",
+        "zhCN": "先祖之灵",
+        "zhTW": "先祖之靈"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "+1 no crescimento de todas as criaturas em todas as suas cidades. As moradias desta cidade produzem +100% de unidades. Em um cerco a esta cidade, o herói defensor ganha +20 de Defesa.",
+        "czech": "+1 k růstu všech jednotek ve všech vašich městech. Obydlí tohoto města produkují +100 % jednotek. Při obléhání tohoto města získá bránící hrdina +20 Obrany.",
+        "french": "+1 à la croissance de toutes les créatures dans toutes vos villes. Les habitations de cette ville produisent +100 % d’unités. Lors d’un siège de cette ville, le héros défenseur gagne +20 en Défense.",
+        "german": "+1 auf das Kreaturenwachstum in allen deinen Städten. Die Behausungen dieser Stadt produzieren +100 % Einheiten. Bei einer Belagerung dieser Stadt erhält der verteidigende Held +20 Verteidigung.",
+        "hungarian": "+1 a lények szaporodásához az összes városodban. A város lakóhelyei +100% egységet termelnek. A város ostroma során a védő hős +20 Védelmet kap.",
+        "italian": "+1 alla crescita di tutte le creature in tutte le tue città. Le abitazioni di questa città producono +100% di unità. In un assedio a questa città, l’eroe difensore ottiene +20 Difesa.",
+        "japanese": "所有するすべての都市でクリーチャーの増加数が+1される。この都市の居住施設は+100%のユニットを生産する。この都市が包囲された際、防衛するヒーローの防御力が+20される。",
+        "korean": "모든 도시의 생물 성장이 +1 증가합니다. 이 도시의 거주지는 유닛을 +100% 생산합니다. 이 도시가 공성당할 때 방어하는 영웅은 방어력이 +20 증가합니다.",
+        "polish": "+1 do przyrostu wszystkich stworów we wszystkich twoich miastach. Siedliska w tym mieście produkują +100% jednostek. Podczas oblężenia tego miasta broniący bohater zyskuje +20 Obrony.",
+        "russian": "+1 к приросту всех существ во всех ваших городах. Жилища этого города производят +100% существ. При осаде этого города защищающийся герой получает +20 к Защите.",
+        "spanish": "+1 al crecimiento de todas las criaturas en todas tus ciudades. Las viviendas de esta ciudad producen +100 % de unidades. En un asedio a esta ciudad, el héroe defensor obtiene +20 de Defensa.",
+        "turkish": "Tüm şehirlerinizdeki tüm yaratık üretimine +1. Bu şehrin konutları +%100 birim üretir. Bu şehrin kuşatılmasında savunan kahraman +20 Savunma kazanır.",
+        "ukrainian": "+1 до приросту всіх істот у всіх ваших містах. Житла цього міста виробляють +100% істот. Під час облоги цього міста герой-захисник отримує +20 до Захисту.",
+        "zhCN": "你所有城镇的生物增长+1。这座城镇的居所多生产+100%的单位。这座城镇遭到围攻时，防守的英雄获得+20防御。",
+        "zhTW": "你所有城鎮的生物增長+1。這座城鎮的居所多生產+100%的單位。這座城鎮遭到圍攻時，防守的英雄獲得+20防禦。"
+      }
+    }
+  ],
+  "remove": []
+}

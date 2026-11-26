@@ -678,6 +678,7 @@ def glb_morph_peak(path: Path) -> dict:
 
 
 DENSIFY_STAMP = "homm3DefRetargetDeliveryDensify"   # densify_clip_glb.STAMP
+AUTHORED_30FPS_STAMP = "homm3Authored30fps"   # flyer_articulation.AUTHORED_30FPS_STAMP
 
 
 def glb_densify_record(path: Path, unit: str) -> dict:
@@ -686,9 +687,13 @@ def glb_densify_record(path: Path, unit: str) -> dict:
     densify_clip_glb.py resamples a clip onto keysPerSpan intervals per original key interval and keeps every
     original key, so a densified track's DEF step keys are its keys 0, per, 2*per, ... and the in-between keys
     hold spline-blended morph weights that are not steps. Fails closed when the unit config asks for
-    deliveryDensify and the GLB carries no record, or the record names clips the config does not."""
+    deliveryDensify and the GLB carries no record, or the record names clips the config does not.  A rebuilt GLB
+    stamped as authored 30 fps has replaced the retarget clips the config describes, so it owes no record."""
     js, _b, _bin0 = read_glb(path)
-    st = js.get("asset", {}).get("extras", {}).get(DENSIFY_STAMP)
+    extras = js.get("asset", {}).get("extras", {})
+    st = extras.get(DENSIFY_STAMP)
+    if not st and AUTHORED_30FPS_STAMP in extras:
+        return {}
     cfg = load(ROOT / "tools/homm3_def_retarget/units" / f"{unit}.json").get("deliveryDensify")
     want = sorted(f"Unit_{c}" for c in cfg["clips"]) if cfg else []
     got = sorted(st["clips"]) if st else []
@@ -1094,11 +1099,27 @@ def _short(h: str | None) -> str:
     return h[:12] if h else "missing"
 
 
+def _head_checkout_bytes(blob: bytes, disk: bytes | None, git_clean: bool) -> bytes:
+    """Return checked-out CRLF bytes only when git confirms zero uncommitted diff and blob is pure-LF text smudged to CRLF."""
+    if (disk is not None and git_clean and disk != blob
+            and b"\x00" not in blob and b"\r" not in blob
+            and blob.replace(b"\n", b"\r\n") == disk):
+        return disk
+    return blob
+
+
 def head_blob_sha(path: Path) -> str | None:
-    """sha256 of the blob committed at HEAD for a repo path (None when HEAD has no such blob)."""
-    r = subprocess.run(["git", "show", f"HEAD:{path.resolve().relative_to(ROOT.resolve()).as_posix()}"],
-                       cwd=ROOT, capture_output=True)
-    return hashlib.sha256(r.stdout).hexdigest() if r.returncode == 0 else None
+    """sha256 of the HEAD-checked-out bytes for a repo path (None when HEAD has no such blob)."""
+    rel = path.resolve().relative_to(ROOT.resolve()).as_posix()
+    r = subprocess.run(["git", "show", f"HEAD:{rel}"], cwd=ROOT, capture_output=True)
+    if r.returncode != 0:
+        return None
+    blob = r.stdout
+    disk = path.read_bytes() if path.is_file() else None
+    git_clean = False
+    if disk is not None and disk != blob and b"\x00" not in blob and b"\r" not in blob:
+        git_clean = subprocess.run(["git", "diff", "--quiet", "HEAD", "--", rel], cwd=ROOT).returncode == 0
+    return hashlib.sha256(_head_checkout_bytes(blob, disk, git_clean)).hexdigest()
 
 
 def plan_repin(record: dict, rows: list, table: dict, worktree_sha, head_sha, installed_sha) -> dict:

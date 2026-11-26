@@ -47,7 +47,7 @@
       "surface": "building",
       "sourceName": "Shipyard",
       "status": "substituted",
-      "reason": "Water construction and ship purchase are not a proven custom city route in Olden Era.",
+      "reason": "Building pass 2026-11-22: ships and water travel cannot exist in Olden Era; this slot is the shared Artifact Market every vanilla town has, named for the wharf, and no ship purchase is offered or claimed.",
       "playerTextPolicy": "must_match_current_behavior",
       "forbiddenPlayerText": [
         "ship",
@@ -69,21 +69,55 @@
       "surface": "building",
       "sourceName": "Gunpowder Warehouse",
       "status": "substituted",
-      "reason": "Sea Dog double-upgrade prerequisite needs a real Cove building/prerequisite row, not a donor alias.",
+      "reason": "Building pass 2026-11-22: the HotA Gunpowder Warehouse is the Pirate dwelling's second upgrade (Sea Dogs). An OE dwelling upgrade unlocks both upgraded creatures (Corsair and Sea Dog) at once, so the Tier 3 dwelling carries it; there is no separate second-upgrade building. The tag no longer sits on the economy Treasury.",
       "playerTextPolicy": "must_match_current_behavior",
       "forbiddenPlayerText": [
-        "Sea Dog",
         "Gunpowder Warehouse",
         "double-upgrade"
       ],
       "currentRows": [
-        "Build_Treasury"
-      ],
-      "playerTextTokens": [
-        "Homm3Cove_Build_Treasury_description",
-        "Homm3Cove_Build_Treasury_name",
-        "Homm3Cove_Build_Treasury_narrativeDescription"
+        "Build_Tier_3"
       ]
+    },
+    {
+      "id": "cove.thieves_guild",
+      "surface": "building",
+      "sourceName": "Thieves' Guild",
+      "status": "absent",
+      "reason": "Building pass 2026-11-22: OE has no thieves' guild information screen. The Bank slot that carried the name is the plain economy Bank again, renamed Counting House.",
+      "playerTextPolicy": "must_not_claim_current_behavior_until_promoted",
+      "forbiddenPlayerText": [
+        "Thieves' Guild",
+        "Thieves Guild"
+      ],
+      "changeDisposition": "Keep absent: OE has no thieves' guild information screen; do not advertise it in player text.",
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "cove.grotto",
+      "surface": "building",
+      "sourceName": "Grotto",
+      "status": "substituted",
+      "reason": "Building pass 2026-11-22 (owner decision: build now): own row Build_Grotto (banks carrier, no native bonus, HotA cost 7500 Gold, 15 Wood, 15 Ore, needs Market). Homm3CoveGrottoRuntime and Homm3CoveGrottoWindow open an exchange window from a town-screen Grotto button: a visiting (else garrison) hero sacrifices creatures for floor(squadValue / 40) x 5 experience each (HoMM3 Altar of Sacrifice formula on OE squadValue) and keeps at least one creature. Substituted because the HotA artifact sacrifice is not offered: the plugin has no save-safe native artifact removal.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "artifact"
+      ],
+      "currentRows": [
+        "Build_Grotto"
+      ]
+    },
+    {
+      "id": "cove.lodestar",
+      "surface": "building",
+      "sourceName": "Lodestar",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: the grail keeps its HumanGraal extras (1000 Gold + 1 of each resource daily, +100% city growth; owner answer 3) and adds the HotA clause 'all terrain counts as native' as the native anyLandEqualNativeLandBonus graal side bonus (Unfrozen law 34's bonus). Homm3CoveLodestarRuntime forces the battle side and stack native flags at battle start for a side owning a Lodestar, because static evidence shows the native bonus reaches the creature check but not the side flag. Applies to the whole army: OE has no per-faction native qualifier.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Golden_Calf"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
     },
     {
       "id": "cove.treasure_hunting",

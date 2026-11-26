@@ -794,9 +794,50 @@ internal static class Homm3UnitKitRuntime
 			Homm3UnitKitRules.Rules.TryGetValue(sid, out rules);
 		else
 			return null; // SID not known yet: do not cache a miss
+		if (Homm3UnitKitRules.LawRules.Length > 0)
+		{
+			if (!TryAddLawRules(unit, sid, ref rules))
+				return rules; // law owner not resolved yet: do not cache
+		}
 		lock (Gate)
 			RulesByUnit[key] = rules;
 		return rules;
+	}
+
+	/// <summary>
+	/// Adds the rules faction laws switch on (law pass 2026-11-21) at the owner's law rank.
+	/// False when the unit's side cannot be resolved yet (the caller then skips caching).
+	/// </summary>
+	private static bool TryAddLawRules(object unit, string sid, ref Homm3UnitKitRules.Rule[] rules)
+	{
+		object dataSide;
+		try
+		{
+			if (!Homm3BattleUnitLawOwnerRegistry.TryResolveDataSide(unit, out dataSide) || dataSide == null)
+				return false;
+		}
+		catch
+		{
+			return false;
+		}
+		List<Homm3UnitKitRules.Rule> added = null;
+		foreach (var lawRule in Homm3UnitKitRules.LawRules)
+		{
+			if (lawRule.Units != null && !lawRule.Units.Contains(sid))
+				continue;
+			var rank = Homm3CustomFactionLawRuntime.CustomLawRank(dataSide, lawRule.LawIndex, lawRule.FactionSid);
+			if (rank <= 0 || lawRule.ByLevel.Length == 0)
+				continue;
+			added ??= new List<Homm3UnitKitRules.Rule>();
+			added.Add(lawRule.ByLevel[Math.Min(rank, lawRule.ByLevel.Length) - 1]);
+		}
+		if (added != null)
+		{
+			if (rules != null)
+				added.InsertRange(0, rules);
+			rules = added.ToArray();
+		}
+		return true;
 	}
 
 	internal static Unit AsUnit(object value)
@@ -821,6 +862,11 @@ internal static class Homm3UnitKitRuntime
 		foreach (var rules in Homm3UnitKitRules.Rules.Values)
 		{
 			foreach (var rule in rules)
+				kinds.Add(rule.Kind);
+		}
+		foreach (var lawRule in Homm3UnitKitRules.LawRules)
+		{
+			foreach (var rule in lawRule.ByLevel)
 				kinds.Add(rule.Kind);
 		}
 		// Tower Artificing grafts carry kit rules onto other units.

@@ -63,12 +63,15 @@ import homm3_stronghold_warcry_core_overlay
 import homm3_rampart_avenger_core_overlay
 import homm3_conflux_fusion_core_overlay as conflux_fusion
 import homm3_factory_logistics_core_overlay as factory_logistics
+import homm3_building_pass_core_overlay as building_pass_core
 from homm3_reward_units_core_overlay import add_custom_faction_reward_units
 import homm3_upgrade_pair_parity as upgrade_pair_parity
 import homm3_unit_design_table as unit_design_table
 import homm3_unit_card_icons
 from homm3_attack_timing_overlay import assign_homm3_attack_timings
+import homm3_city_building_overrides as building_overrides
 from homm3_city_building_descriptions import (
+    MissingExplicitTranslation as CityBuildingMissingExplicitTranslation,
     derive_city_description_rows,
     derive_city_description_sentences,
     locale_text_problems as city_building_locale_text_problems,
@@ -1625,6 +1628,8 @@ HOMM3_RESOURCE_SID_MAP = {
     "mercury": "mercury",
     # Olden Era has no sulfur resource. Fold HoMM3 sulfur into mercury.
     "sulfur": "mercury",
+    # Olden Era has no stone resource either; HoMM3 ore carts and ore specialists use ore.
+    "stone": "ore",
     "crystal": "crystals",
     "gems": "gemstones",
     "dust": "dust",
@@ -3901,8 +3906,10 @@ def normalize_fortress_city_doc(doc: Any, manifest: dict[str, Any]) -> Any:
                     if 1 <= tier <= len(FORTRESS_UNIT_LINES):
                         normalize_unit_hire_payload(row.get("unitsHire"), FORTRESS_UNIT_LINES[tier - 1])
         apply_city_building_mechanics(doc, manifest)
+        apply_homm3_city_building_overrides(doc, manifest)
         align_owned_world_city_scene_slots(doc, manifest)
         strip_unbound_castle_slot_buildings_from_owned_world_city(doc, manifest)
+        building_overrides.assert_city_building_overrides_kept(doc, manifest)
         apply_homm3_city_building_tree(doc, manifest)
     return doc
 
@@ -5579,6 +5586,7 @@ def sync_custom_law_lang_overlay_rows(release_zip: zipfile.ZipFile, output: dict
     if changed:
         output[target_name] = write_json(doc)
         notes.append("sync custom law Lang rows " + target_name)
+    add_lang_args_overlay_rows(release_zip, output, "Lang/args/factionLaws.json", custom_law_lang_arg_rows(manifest, release_zip), notes)
 
 
 def remove_lang_overlay_rows(release_zip: zipfile.ZipFile, output: dict[str, bytes], target_name: str, sids: set[str], notes: list[str]) -> None:
@@ -6595,8 +6603,10 @@ def normalize_castle_city_doc(doc: Any, manifest: dict[str, Any]) -> Any:
                     if 1 <= tier <= len(CASTLE_UNIT_LINES):
                         normalize_unit_hire_payload(row.get("unitsHire"), CASTLE_UNIT_LINES[tier - 1])
         apply_city_building_mechanics(doc, manifest)
+        apply_homm3_city_building_overrides(doc, manifest)
         align_owned_world_city_scene_slots(doc, manifest)
         strip_unbound_castle_slot_buildings_from_owned_world_city(doc, manifest)
+        building_overrides.assert_city_building_overrides_kept(doc, manifest)
         apply_homm3_city_building_tree(doc, manifest)
     return doc
 
@@ -6924,6 +6934,7 @@ def add_release_castle_lang(release_zip: zipfile.ZipFile, output: dict[str, byte
     faction_rows += homm3_town_name_lang_rows(identity, "Castle")
     add_lang_overlay_rows(release_zip, output, "Lang/english/texts/fractions.json", faction_rows, notes)
     add_lang_overlay_rows(release_zip, output, "Lang/english/texts/factionLaws.json", custom_law_lang_rows(manifest, release_zip), notes)
+    add_lang_args_overlay_rows(release_zip, output, "Lang/args/factionLaws.json", custom_law_lang_arg_rows(manifest, release_zip), notes)
     unit_rows: list[dict[str, str]] = []
     for line in CASTLE_UNIT_LINES:
         for suffix, name in zip(CASTLE_SUFFIXES, line["names"]):
@@ -7827,6 +7838,7 @@ HOMM3_FACTORY_FIELD_TRIAGE_ABILITY_SID = "skill_faction_homm3_factory_ability_fi
 HOMM3_FACTORY_SPLIT_ASSEMBLY_SUBSKILLS_BY_LEVEL = factory_logistics.SUBSKILLS_BY_LEVEL
 HOMM3_FACTORY_NATURAL_OVERCLOCK_SUBSKILL_SID = "sub_skill_faction_homm3_factory_gantry_reserve"
 HOMM3_FACTORY_INDUSTRIAL_OVERCLOCK_SUBSKILL_SID = "sub_skill_faction_homm3_factory_industrial_tempo"
+HOMM3_BULWARK_MAX_RUNE_LEVEL = 12
 HOMM3_BULWARK_RUNES_SUBSKILLS_BY_LEVEL = {
     2: (
         "sub_skill_faction_homm3_bulwark_snow_advantage",
@@ -8202,6 +8214,57 @@ def apply_homm3_mage_guild_level_5_extension(doc: Any, manifest: dict[str, Any])
             if not isinstance(value, list) or len(value) < 5:
                 raise RuntimeError(f"{faction_sid}: Mage Guild {key} has no level-5 entry")
     return doc
+
+
+def apply_homm3_city_building_overrides(doc: Any, manifest: dict[str, Any]) -> Any:
+    """Apply custom_factions/building_overrides/<factionSid>.json (building pass 2026-11-22).
+
+    Runs after the per-faction mechanics tables (the override is the last word on a row's
+    section, fields, bonuses, costs, icons and text) and before the cityFactory slot
+    alignment, the Castle-slot strip and the canonical tree (which owns prerequisites).
+    Owner: tools/release_port/homm3_city_building_overrides.py.
+    """
+    faction_sid = manifest["identity"]["factionSid"]
+    result = building_overrides.apply_city_building_overrides(
+        doc,
+        manifest,
+        key_func=lambda sid, kind, level, count: city_building_text_key_for_manifest(manifest, sid, kind, level, count),
+        native_bonus_types=NATIVE_CITY_BUILDING_BONUS_TYPES,
+        mechanics_spec_sids=CITY_BUILDING_MECHANICS_BY_FACTION.get(faction_sid, {}).keys(),
+    )
+    # New and replaced rows need their source_mechanics stamp too (the first stamp ran before the overrides).
+    stamp_city_building_source_mechanics_metadata(result, manifest)
+    return result
+
+
+def _homm3_city_items_from_output(release_zip: zipfile.ZipFile, output: dict[str, bytes]) -> list[dict[str, Any]]:
+    items: list[dict[str, Any]] = []
+    for manifest in CUSTOM_FACTION_MANIFESTS:
+        if not manifest_core_overlay_enabled(manifest):
+            continue
+        item = first_array_item(read_overlay_or_release_json(release_zip, output, manifest_core_member(manifest, "cityLogic")))
+        if isinstance(item, dict):
+            items.append(item)
+    return items
+
+
+def add_homm3_city_building_override_name_rows(
+    release_zip: zipfile.ZipFile, output: dict[str, bytes], notes: list[str]
+) -> None:
+    """English names of override rows; after every per-faction name table, before the description pass."""
+    rows = building_overrides.override_name_lang_rows(_homm3_city_items_from_output(release_zip, output))
+    if rows:
+        add_lang_overlay_rows(release_zip, output, "Lang/english/texts/cities.json", rows, notes)
+        notes.append(f"write {len(rows)} building override name rows")
+
+
+def add_homm3_city_building_override_locale_name_rows(
+    release_zip: zipfile.ZipFile, output: dict[str, bytes], notes: list[str]
+) -> None:
+    """Authored translations (nameTextLocales) of override names; after the multilingual sync."""
+    by_lang = building_overrides.override_locale_name_rows(_homm3_city_items_from_output(release_zip, output))
+    for lang, rows in sorted(by_lang.items()):
+        add_lang_overlay_rows(release_zip, output, f"Lang/{lang}/texts/cities.json", rows, notes)
 
 
 def apply_homm3_city_building_tree(doc: Any, manifest: dict[str, Any]) -> Any:
@@ -9222,7 +9285,12 @@ def homm3_city_building_locale_rows(
         rows: dict[str, str] = {}
         for item in city_items:
             for key, sentences in derive_city_description_sentences(item).items():
-                text = render_city_building_sentences(lang, sentences, unit_name, vanilla_text)
+                try:
+                    text = render_city_building_sentences(lang, sentences, unit_name, vanilla_text)
+                except CityBuildingMissingExplicitTranslation:
+                    # Authored override text without this locale: leave the sync's row;
+                    # validate_homm3_city_building_descriptions_contract.py reports it.
+                    continue
                 problems = city_building_locale_text_problems(lang, text, english_cities.get(key), key)
                 if problems:
                     raise RuntimeError("; ".join(problems))
@@ -9389,8 +9457,10 @@ def normalize_generic_city_doc(doc: Any, manifest: dict[str, Any]) -> Any:
                             f"{identity['factionSid']}: primary city building {row['sid']}",
                         )
         apply_city_building_mechanics(doc, manifest)
+        apply_homm3_city_building_overrides(doc, manifest)
         align_owned_world_city_scene_slots(doc, manifest)
         strip_unbound_castle_slot_buildings_from_owned_world_city(doc, manifest)
+        building_overrides.assert_city_building_overrides_kept(doc, manifest)
         apply_homm3_city_building_tree(doc, manifest)
     return doc
 
@@ -12828,25 +12898,8 @@ def apply_custom_law_line_placements(item: dict[str, Any], manifest: dict[str, A
 # can leave this list. The reachability check fails on any other unreachable override
 # and on an entry here that has become reachable, so the list only shrinks.
 DORMANT_LAW_OVERRIDE_SIDS_OUTSIDE_LAW_LINES: frozenset[str] = frozenset(
-    {
-        "fraction_law_homm3_conflux_32",
-        "fraction_law_homm3_conflux_33",
-        "fraction_law_homm3_conflux_34",
-        "fraction_law_homm3_factory_20",
-        "fraction_law_homm3_factory_31",
-        "fraction_law_homm3_fortress_32",
-        "fraction_law_homm3_fortress_33",
-        "fraction_law_homm3_fortress_34",
-        "fraction_law_homm3_inferno_31",
-        "fraction_law_homm3_inferno_32",
-        "fraction_law_homm3_inferno_33",
-        "fraction_law_homm3_inferno_34",
-        "fraction_law_homm3_necropolis_25",
-        "fraction_law_homm3_necropolis_33",
-        "fraction_law_homm3_rampart_32",
-        "fraction_law_homm3_rampart_33",
-        "fraction_law_homm3_rampart_34",
-    }
+    # law pass 2026-11-21: every enabled law sits in its faction's explicit lawTree.
+    set()
 )
 
 
@@ -12865,6 +12918,57 @@ def enabled_law_override_sids(manifest: dict[str, Any]) -> list[str]:
             continue
         sids.append(key if key.startswith(law_prefix) else f"{law_prefix}{key}")
     return sids
+
+
+def explicit_law_tree_lines(
+    manifest: dict[str, Any], lines: list[Any], rows_by_id: dict[str, dict[str, Any]]
+) -> list[dict[str, Any]] | None:
+    """fractionLawsLines from the law override's `lawTree`, or None when it has none.
+
+    `lawTree` is a list of 5 ranks, each {"kingdom": [index, ...], "army": [index, ...]}
+    (law pass 2026-11-21). It replaces the effect-based arrangement: the designer sets the
+    rank and column of every law. countToUnlock comes from the donor lines. Every listed
+    index must be a generated row with a gameplay override, appear once, and each column
+    holds 2-4 laws.
+    """
+    faction_sid = manifest["identity"]["factionSid"]
+    override = load_law_override(faction_sid)
+    tree = override.get("lawTree") if isinstance(override, dict) else None
+    if tree is None:
+        return None
+    prefix = manifest_law_prefix(manifest)
+    if not isinstance(tree, list) or len(tree) != len(lines):
+        raise RuntimeError(f"{faction_sid}: lawTree must list {len(lines)} ranks")
+    enabled = set(enabled_law_override_sids(manifest))
+    seen: set[str] = set()
+    result: list[dict[str, Any]] = []
+    for rank, (spec, donor_line) in enumerate(zip(tree, lines)):
+        if not isinstance(spec, dict) or not isinstance(donor_line, dict):
+            raise RuntimeError(f"{faction_sid}: lawTree rank {rank} must be an object")
+        groups = []
+        for role in ("kingdom", "army"):
+            indices = spec.get(role)
+            if not isinstance(indices, list) or not 2 <= len(indices) <= 4:
+                raise RuntimeError(f"{faction_sid}: lawTree rank {rank} {role} must hold 2-4 law indices")
+            sids = []
+            for index in indices:
+                sid = f"{prefix}{index}"
+                if sid in seen:
+                    raise RuntimeError(f"{faction_sid}: lawTree lists {sid} twice")
+                if sid not in rows_by_id:
+                    raise RuntimeError(f"{faction_sid}: lawTree names {sid}, which was not generated")
+                if sid not in enabled and index not in RESOURCE_RICHES_LAW_ICONS:
+                    raise RuntimeError(f"{faction_sid}: lawTree names {sid}, which has no gameplay override")
+                seen.add(sid)
+                sids.append(sid)
+            groups.append({"laws": sids})
+        line = copy.deepcopy(donor_line)
+        line["groups"] = groups
+        result.append(line)
+    dormant = enabled - seen - DORMANT_LAW_OVERRIDE_SIDS_OUTSIDE_LAW_LINES
+    if dormant:
+        raise RuntimeError(f"{faction_sid}: enabled law overrides missing from lawTree: {sorted(dormant)}")
+    return result
 
 
 def arrange_custom_law_trees(output: dict[str, bytes], notes: list[str]) -> None:
@@ -12894,6 +12998,12 @@ def arrange_custom_law_trees(output: dict[str, bytes], notes: list[str]) -> None
             for row in json.loads(output[laws_member].decode("utf-8-sig")).get("array") or []
             if isinstance(row, dict)
         }
+        explicit = explicit_law_tree_lines(manifest, lines, rows_by_id)
+        if explicit is not None:
+            item["fractionLawsLines"] = explicit
+            output[faction_member] = write_json(faction_doc)
+            moved.append(f"{faction_sid} explicit lawTree")
+            continue
         arranged, moves = arrange_law_lines(lines, rows_by_id, manifest_unit_lines(manifest), faction_sid)
         if moves:
             item["fractionLawsLines"] = arranged
@@ -12963,21 +13073,19 @@ def assert_enabled_law_overrides_reachable(output: dict[str, bytes], notes: list
 # Rows equal only to a retired vanilla law (factory_5 and castle_5 vs human_5) are GE
 # designs now and are deliberately absent.
 VANILLA_LAW_CLONE_SOURCES: dict[str, str] = {
+    # law pass 2026-11-21: only the redesigned trees' laws that still equal a vanilla law row exactly.
     **{
         f"fraction_law_homm3_{slug}_1": "fraction_law_dungeon_1"
         for slug in (
-            "bulwark", "castle", "conflux", "cove", "dungeon", "factory",
-            "fortress", "inferno", "necropolis", "rampart", "stronghold", "tower",
+            "bulwark", "conflux", "cove", "dungeon", "factory",
+            "fortress", "rampart", "stronghold", "tower",
         )
     },
-    "fraction_law_homm3_bulwark_11": "fraction_law_nature_11",
     "fraction_law_homm3_bulwark_17": "fraction_law_nature_17",
     "fraction_law_homm3_bulwark_21": "fraction_law_human_21",
     "fraction_law_homm3_castle_21": "fraction_law_human_21",
     "fraction_law_homm3_cove_21": "fraction_law_human_21",
-    "fraction_law_homm3_factory_21": "fraction_law_human_21",
     "fraction_law_homm3_dungeon_34": "fraction_law_nature_21",
-    "fraction_law_homm3_fortress_32": "fraction_law_undead_20",
 }
 
 
@@ -15305,12 +15413,32 @@ def add_custom_lang_translations(
                 created += 1
             if not isinstance(doc, dict) or not isinstance(doc.get("tokens"), list):
                 raise RuntimeError(f"{target_name} has no tokens list")
-            base_sids = _lang_token_sids(read_json(release_zip, target_name)) if target_name in release_names else set()
+            base_locale_text = (
+                {
+                    token["sid"]: token.get("text")
+                    for token in lang_doc_tokens(read_json(release_zip, target_name))
+                    if isinstance(token, dict) and isinstance(token.get("sid"), str)
+                }
+                if target_name in release_names
+                else {}
+            )
+            base_sids = set(base_locale_text)
             english_text = {
                 token["sid"]: token.get("text")
                 for token in lang_doc_tokens(english_doc)
                 if isinstance(token, dict) and isinstance(token.get("sid"), str)
             }
+            # English text as the base Core had it: a sid whose English changed in this build has a stale
+            # translation in the base Core, so the translation file wins (2026-11-22: Gnoll Scavenge revive).
+            base_english_text = (
+                {
+                    token["sid"]: token.get("text")
+                    for token in lang_doc_tokens(read_json(release_zip, english_name))
+                    if isinstance(token, dict) and isinstance(token.get("sid"), str)
+                }
+                if english_name in release_names
+                else {}
+            )
             own_rows = own.get(file_name, {})
             tokens: list[Any] = doc["tokens"]
             index = {
@@ -15334,7 +15462,9 @@ def add_custom_lang_translations(
                     # whose release-Core text is still the English fallback.
                     # A row still showing the English text is a fallback too, also when the base Core
                     # (an installed Golden Era Core) already carries that English copy.
-                    fallback = sid not in base_sids or current == english_text.get(sid) or (
+                    english_changed = sid in base_english_text and base_english_text[sid] != english_text.get(sid)
+                    build_overwrote = sid in base_locale_text and current != base_locale_text[sid]
+                    fallback = sid not in base_sids or current == english_text.get(sid) or english_changed or build_overwrote or (
                         sid in own_rows and current in (own_rows[sid], english_text.get(sid))
                     )
                     if current != text and fallback:
@@ -17137,6 +17267,21 @@ def make_homm3_bulwark_frostbound_skies_buff_rows() -> list[dict[str, Any]]:
     return rows
 
 
+def homm3_bulwark_rune_subskill_buff_lang_rows() -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    for level in range(1, HOMM3_BULWARK_MAX_RUNE_LEVEL + 1):
+        rows.append({"sid": f"homm3_bulwark_rune_ward_{level}_name", "text": "Rune Ward"})
+        rows.append({"sid": f"homm3_bulwark_rune_ward_{level}_desc", "text": "\u20134% Magic Damage taken."})
+    for sid, name, text in (
+        ("homm3_bulwark_elder_mark", "Elder Mark", "This creature gains twice as many Rune Levels."),
+        ("homm3_bulwark_frost_tempo_chill", "Frost Tempo", "\u20133 Initiative and \u20131 Speed."),
+        ("homm3_bulwark_stone_circle", "Stone Circle", "\u201320% Damage taken."),
+    ):
+        rows.append({"sid": f"{sid}_name", "text": name})
+        rows.append({"sid": f"{sid}_desc", "text": text})
+    return rows
+
+
 def make_homm3_bulwark_rune_level_buff_rows() -> list[dict[str, Any]]:
     """Incremental Rune Level threshold buffs (no removal API required).
 
@@ -17377,22 +17522,89 @@ def make_homm3_factory_split_assembly_subskills() -> list[dict[str, Any]]:
 
 
 def make_homm3_bulwark_runes_subskills() -> list[dict[str, Any]]:
-    # Integration subskills only: match the working Adv/Exp Core contract. Per-stack
-    # Rune accounting stays runtime-pending in Homm3BulwarkRunesRuntime.
-    return [
-        make_homm3_native_terrain_subskill(
-            sid,
-            fraction_sid="homm3_bulwark",
-            icon=f"sub_skill_faction_nature_{index}_icon",
+    # Snow Advantage is Core data; Rune Ward, Clan March, Frost Tempo, Elder Mark and Stone Circle are owned by
+    # Homm3BulwarkRuneSubskills (empty bonus arrays, same shape as the runtime-owned Dungeon rows).
+    sids = (*HOMM3_BULWARK_RUNES_SUBSKILLS_BY_LEVEL[2], *HOMM3_BULWARK_RUNES_SUBSKILLS_BY_LEVEL[3])
+    rows: list[dict[str, Any]] = []
+    for index, sid in enumerate(sids, start=1):
+        row = make_homm3_native_terrain_subskill(
+            sid, fraction_sid="homm3_bulwark", icon=f"sub_skill_faction_nature_{index}_icon"
         )
-        for index, sid in enumerate(
-            (
-                *HOMM3_BULWARK_RUNES_SUBSKILLS_BY_LEVEL[2],
-                *HOMM3_BULWARK_RUNES_SUBSKILLS_BY_LEVEL[3],
-            ),
-            start=1,
+        if not sid.endswith("_snow_advantage"):
+            row["bonuses"] = []
+            row["xHomm3RuntimeHook"] = "Homm3BulwarkRuneSubskills"
+        rows.append(row)
+    return rows
+
+
+def make_homm3_bulwark_rune_subskill_buff_rows() -> list[dict[str, Any]]:
+    """Buffs added by Homm3BulwarkRuneSubskills (sids and durations must match the plugin)."""
+    rows: list[dict[str, Any]] = []
+    # Rune Ward: one hidden stacking row per Rune Level (12 with the Elder Runes law).
+    for level in range(1, HOMM3_BULWARK_MAX_RUNE_LEVEL + 1):
+        sid = f"homm3_bulwark_rune_ward_{level}"
+        rows.append(
+            {
+                "id": sid,
+                "hidden": True,
+                "aiValue": 4000,
+                "aiValuePerDuration": 40,
+                "infinite": True,
+                "icon": "magic_radiant_armor_effect_icon",
+                "name_": f"{sid}_name",
+                "description_": f"{sid}_desc",
+                "tags": ["positive", "homm3_bulwark_runes", sid],
+                "isPositive": True,
+                "addition": "data",
+                "data": {"stats": {"inDmgMods": {"list": [{"t": "magic_damage", "v": -0.04}]}}},
+            }
         )
-    ]
+    rows.append(
+        {
+            "id": "homm3_bulwark_elder_mark",
+            "aiValue": 4000,
+            "aiValuePerDuration": 40,
+            "infinite": True,
+            "icon": "magic_arinas_chosen_effect_icon",
+            "name_": "homm3_bulwark_elder_mark_name",
+            "description_": "homm3_bulwark_elder_mark_desc",
+            "tags": ["positive", "homm3_bulwark_runes", "homm3_bulwark_elder_mark"],
+            "isPositive": True,
+            "addition": "data",
+            "data": {"stats": {}},
+        }
+    )
+    rows.append(
+        {
+            "id": "homm3_bulwark_frost_tempo_chill",
+            "aiValue": 4300,
+            "aiValuePerDuration": 215,
+            "icon": "magic_ice_bolt_effect_icon",
+            "name_": "homm3_bulwark_frost_tempo_chill_name",
+            "description_": "homm3_bulwark_frost_tempo_chill_desc",
+            "tags": ["negative", "movementNegative", "homm3_bulwark_frost_tempo_chill"],
+            "isPositive": False,
+            "addition": "duration",
+            "maxDuration": 2,
+            "data": {"stats": {"initiative": -3, "speed": -1}},
+        }
+    )
+    rows.append(
+        {
+            "id": "homm3_bulwark_stone_circle",
+            "aiValue": 4300,
+            "aiValuePerDuration": 215,
+            "icon": "magic_thick_hide_effect_icon",
+            "name_": "homm3_bulwark_stone_circle_name",
+            "description_": "homm3_bulwark_stone_circle_desc",
+            "tags": ["positive", "homm3_bulwark_stone_circle"],
+            "isPositive": True,
+            "addition": "duration",
+            "maxDuration": 1,
+            "data": {"stats": {"inAllDmgMod": -0.2}},
+        }
+    )
+    return rows
 
 
 def make_homm3_dungeon_draconic_dominion_subskills() -> list[dict[str, Any]]:
@@ -17973,6 +18185,19 @@ def add_release_generic_mechanic_support_rows(release_zip: zipfile.ZipFile, mani
                     notes.append("merge homm3_factory Split Assembly subskills")
         except (json.JSONDecodeError, UnicodeDecodeError, KeyError) as ex:
             notes.append(f"warn missing {faction_sid} Split Assembly subskill target: {ex}")
+        building_pass_core.merge_building_pass_rows_into_overlay(
+            release_zip,
+            output,
+            notes,
+            {
+                "read_overlay_or_release_json": read_overlay_or_release_json,
+                "write_json": write_json,
+                "upsert_array_row": upsert_array_row,
+                "dedupe_array_rows_by_id": dedupe_array_rows_by_id,
+                "add_lang_overlay_rows": add_lang_overlay_rows,
+                "add_lang_args_overlay_rows": add_lang_args_overlay_rows,
+            },
+        )
         # Logistics Network rows are load-bearing for the runtime (spell, carrier, arcane buffs): fail closed.
         factory_logistics.merge_logistics_skill_rows_into_overlay(
             release_zip,
@@ -18048,6 +18273,8 @@ def add_release_generic_mechanic_support_rows(release_zip: zipfile.ZipFile, mani
                 for row in make_homm3_bulwark_frostbound_skies_buff_rows():
                     changed = upsert_array_row(buffs_doc, row) or changed
                 for row in make_homm3_bulwark_rune_level_buff_rows():
+                    changed = upsert_array_row(buffs_doc, row) or changed
+                for row in make_homm3_bulwark_rune_subskill_buff_rows():
                     changed = upsert_array_row(buffs_doc, row) or changed
                 changed = dedupe_array_rows_by_id(buffs_doc) or changed
                 if changed:
@@ -18470,19 +18697,19 @@ def custom_resource_riches_law(manifest: dict[str, Any], index: int) -> tuple[st
     if index == 3:
         return (
             "Resource Riches I",
-            "Provides 2500 Gold, 5 Wood, and 5 Ore when enacted.",
+            "Provides a one‑time allotment of 2500 Gold, 5 Wood, and 5 Ore when enacted.",
             [law_level(None, [("sideOneTimeAddRes", ["gold", 2500]), ("sideOneTimeAddRes", ["wood", 5]), ("sideOneTimeAddRes", ["ore", 5])], manifest)],
         )
     if index == 16:
         return (
             "Resource Riches II",
-            "Provides 5000 Gold, 10 Wood, and 10 Ore when enacted.",
+            "Provides a one‑time allotment of 5000 Gold, 10 Wood, and 10 Ore when enacted.",
             [law_level(None, [("sideOneTimeAddRes", ["gold", 5000]), ("sideOneTimeAddRes", ["wood", 10]), ("sideOneTimeAddRes", ["ore", 10])], manifest)],
         )
     if index == 29:
         return (
             "Resource Riches III",
-            "Provides 7500 Gold, 15 Wood, and 15 Ore when enacted.",
+            "Provides a one‑time allotment of 7500 Gold, 15 Wood, and 15 Ore when enacted.",
             [law_level(None, [("sideOneTimeAddRes", ["gold", 7500]), ("sideOneTimeAddRes", ["wood", 15]), ("sideOneTimeAddRes", ["ore", 15])], manifest)],
         )
     return None
@@ -18910,10 +19137,19 @@ def custom_law_indices_to_emit(manifest: dict[str, Any], count: int) -> tuple[tu
     omitted_allowed = set(CUSTOM_LAW_EXPLICITLY_OMITTED_INDICES.get(faction_sid, ()))
     emitted: list[int] = []
     omitted: list[int] = []
+    override_doc = load_law_override(faction_sid)
+    has_law_tree = isinstance(override_doc, dict) and override_doc.get("lawTree") is not None
     for index in custom_law_candidate_indices(manifest, count):
         if custom_law_override_definition(manifest, index) is not None:
             emitted.append(index)
             continue
+        if has_law_tree and index not in RESOURCE_RICHES_LAW_ICONS:
+            # law pass 2026-11-21: a faction with an explicit lawTree emits only its designed laws (and Resource
+            # Riches); an index it disables must not fall back to the old built-in definition.
+            entry = custom_law_override_entry(manifest, index)
+            if isinstance(entry, dict) and entry.get("enabled") is False:
+                omitted.append(index)
+                continue
         try:
             custom_law_definition(manifest, index)
             emitted.append(index)
@@ -19109,6 +19345,62 @@ def custom_law_lang_rows(manifest: dict[str, Any], release_zip: zipfile.ZipFile 
         name, desc, _levels = override_definition or custom_law_definition(manifest, index)
         rows.append({"sid": f"{law_prefix}{index}_name", "text": name})
         rows.append({"sid": f"{law_prefix}{index}_desc", "text": desc})
+    return rows
+
+
+LAWS_SCRIPT_MEMBER = "DB/info/info_laws/laws.script"
+_LAW_ARG_PLACEHOLDER = re.compile(r"\{(\d+)\}")
+
+
+def laws_script_function_names(release_zip: zipfile.ZipFile) -> set[str]:
+    """Names of the text functions laws.script defines (the only legal law description args)."""
+    text = release_zip.read(LAWS_SCRIPT_MEMBER).decode("utf-8-sig")
+    return set(re.findall(r"(?m)^\s*\w+\s+(\w+)\s*$\s*\{", text))
+
+
+def custom_law_override_args(manifest: dict[str, Any], index: int) -> list[str]:
+    """descriptionArgs of an enabled override: laws.script functions that fill {0}, {1}, ... per law level.
+
+    The game fills a law description from Lang/args/factionLaws.json; each function reads the enacted
+    level's parametersPerLevel entry (vanilla shape), so every level shows its own numbers. Plugin-driven
+    laws carry their numbers in display-only bonuses (activationLevel 99, never active)."""
+    override = custom_law_override_entry(manifest, index)
+    if not isinstance(override, dict) or override.get("enabled") is False:
+        return []
+    args = override.get("descriptionArgs")
+    if args is None:
+        return []
+    faction_sid = manifest["identity"]["factionSid"]
+    if not isinstance(args, list) or not all(isinstance(arg, str) and arg.strip() for arg in args):
+        raise RuntimeError(f"{faction_sid}: law override {index} descriptionArgs must be a list of laws.script function names")
+    return [arg.strip() for arg in args]
+
+
+def custom_law_lang_arg_rows(manifest: dict[str, Any], release_zip: zipfile.ZipFile) -> list[dict[str, Any]]:
+    """Lang/args rows for every emitted custom law description (empty args when the text has no placeholders)."""
+    donor_fraction_sid = manifest_donor_fraction_sid(manifest)
+    donor_doc = read_json(release_zip, f"DB/fractions_laws/fractions_laws_table_{donor_fraction_sid}.json")
+    rows_value = donor_doc.get("array") if isinstance(donor_doc, dict) else None
+    faction_sid = manifest["identity"]["factionSid"]
+    if not isinstance(rows_value, list):
+        raise RuntimeError(f"{faction_sid}: donor law table {donor_fraction_sid} is missing array rows for law args")
+    known = laws_script_function_names(release_zip)
+    law_prefix = manifest_law_prefix(manifest)
+    indices, _omitted_indices = custom_law_indices_to_emit(manifest, len(rows_value))
+    rows: list[dict[str, Any]] = []
+    for index in indices:
+        override_definition = custom_law_override_definition(manifest, index)
+        _name, desc, levels = override_definition or custom_law_definition(manifest, index)
+        args = custom_law_override_args(manifest, index) if override_definition is not None else []
+        used = {int(n) for n in _LAW_ARG_PLACEHOLDER.findall(desc)}
+        if used != set(range(len(args))):
+            raise RuntimeError(
+                f"{faction_sid}: law {law_prefix}{index} description placeholders {sorted(used)} do not match its {len(args)} descriptionArgs"
+            )
+        unknown = [arg for arg in args if arg not in known]
+        if unknown:
+            raise RuntimeError(f"{faction_sid}: law {law_prefix}{index} descriptionArgs not defined in {LAWS_SCRIPT_MEMBER}: {unknown}")
+        rows.append({"sid": f"{law_prefix}{index}_desc", "args": args})
     return rows
 
 
@@ -19872,15 +20164,16 @@ def add_release_generic_lang(release_zip: zipfile.ZipFile, manifest: dict[str, A
             {"sid": "sub_skill_faction_homm3_bulwark_snow_advantage_name", "text": "Snow Advantage"},
             {"sid": "sub_skill_faction_homm3_bulwark_snow_advantage_desc", "text": "Friendly HoMM3 Bulwark creatures deal 10% more damage and take 10% less damage on native terrain."},
             {"sid": "sub_skill_faction_homm3_bulwark_rune_ward_name", "text": "Rune Ward"},
-            {"sid": "sub_skill_faction_homm3_bulwark_rune_ward_desc", "text": "Advanced/Expert load-shape slot: currently grants the same native-terrain combat bonus as Snow Advantage. Per-stack Runes battle accounting is runtime-pending and is not granted by this subskill."},
+            {"sid": "sub_skill_faction_homm3_bulwark_rune_ward_desc", "text": "Friendly creatures take \u20134% Magic Damage for each of their Rune Levels."},
             {"sid": "sub_skill_faction_homm3_bulwark_clan_march_name", "text": "Clan March"},
-            {"sid": "sub_skill_faction_homm3_bulwark_clan_march_desc", "text": "Advanced/Expert load-shape slot: currently grants the same native-terrain combat bonus as Snow Advantage. Per-stack Runes battle accounting is runtime-pending and is not granted by this subskill."},
+            {"sid": "sub_skill_faction_homm3_bulwark_clan_march_desc", "text": "At the start of each round, friendly creatures that moved during the previous round gain 1 Rune Level."},
             {"sid": "sub_skill_faction_homm3_bulwark_frost_tempo_name", "text": "Frost Tempo"},
-            {"sid": "sub_skill_faction_homm3_bulwark_frost_tempo_desc", "text": "Advanced/Expert load-shape slot: currently grants the same native-terrain combat bonus as Snow Advantage. Per-stack Runes battle accounting is runtime-pending and is not granted by this subskill."},
+            {"sid": "sub_skill_faction_homm3_bulwark_frost_tempo_desc", "text": "When a\u00a0friendly creature reaches Rune Level 3, 6, 9 or 12, the nearest enemy creature loses 3 Initiative and 1 Speed for 2 rounds."},
             {"sid": "sub_skill_faction_homm3_bulwark_elder_mark_name", "text": "Elder Mark"},
-            {"sid": "sub_skill_faction_homm3_bulwark_elder_mark_desc", "text": "Advanced/Expert load-shape slot: currently grants the same native-terrain combat bonus as Snow Advantage. Per-stack Runes battle accounting is runtime-pending and is not granted by this subskill."},
+            {"sid": "sub_skill_faction_homm3_bulwark_elder_mark_desc", "text": "At the start of each battle, your highest\u2011tier creature receives the Elder Mark (the first in your army on a tie). It gains twice as many Rune Levels."},
             {"sid": "sub_skill_faction_homm3_bulwark_stone_circle_name", "text": "Stone Circle"},
-            {"sid": "sub_skill_faction_homm3_bulwark_stone_circle_desc", "text": "Advanced/Expert load-shape slot: currently grants the same native-terrain combat bonus as Snow Advantage. Per-stack Runes battle accounting is runtime-pending and is not granted by this subskill."},
+            {"sid": "sub_skill_faction_homm3_bulwark_stone_circle_desc", "text": "When a\u00a0friendly creature Defends, adjacent friendly creatures take \u201320% Damage until the end of the round."},
+            *homm3_bulwark_rune_subskill_buff_lang_rows(),
             {"sid": "homm3_bulwark_frostbound_skies_speed_1_name", "text": "Frostbound Skies"},
             {"sid": "homm3_bulwark_frostbound_skies_speed_1_desc", "text": "-1 Speed."},
             {"sid": "homm3_bulwark_frostbound_skies_speed_2_name", "text": "Frostbound Skies"},
@@ -19908,6 +20201,7 @@ def add_release_generic_lang(release_zip: zipfile.ZipFile, manifest: dict[str, A
         # (heroSkills alone leaves combat buff tooltips missing LOC). Same path as
         # Avenger effect rows and custom-law visual markers.
         bulwark_combat_buff_lang_rows = [
+            *homm3_bulwark_rune_subskill_buff_lang_rows(),
             {"sid": "homm3_bulwark_frostbound_skies_speed_1_name", "text": "Frostbound Skies"},
             {"sid": "homm3_bulwark_frostbound_skies_speed_1_desc", "text": "-1 Speed."},
             {"sid": "homm3_bulwark_frostbound_skies_speed_2_name", "text": "Frostbound Skies"},
@@ -21235,6 +21529,8 @@ def build_overlay(
             notes.append(f"using law override directory {law_override_dir.relative_to(REPO_ROOT)}")
 
         with zipfile.ZipFile(release_core) as release_zip:
+            # Building override templates (<vanilla city>:<sid>) read the pending overlay, then the Core.
+            building_overrides.bind_template_reader(building_overrides.zip_template_reader(release_zip, output))
             data_member = "DB/data.json"
             output[data_member] = write_json(merge_data_json(read_json(release_zip, data_member)))
             notes.append("merge core-enabled custom factions into DB/data.json")
@@ -21293,6 +21589,8 @@ def build_overlay(
             conflux_fusion.add_conflux_fusion_units(release_zip, output, notes, conflux_fusion_helpers())
             # After the neutral rows: they rewrite neutral view rows (moveSpeed included) from their own catalog.
             normalize_custom_unit_view_move_speeds(release_zip, output, notes)
+            # Override names win over the per-faction name tables; before the description pass.
+            add_homm3_city_building_override_name_rows(release_zip, output, notes)
             # After every city-row mutation that feeds tooltip text, before multilingual sync.
             apply_homm3_city_building_descriptions(release_zip, output, notes)
             mirror_landon_barracks_lang_rows(
@@ -21314,6 +21612,15 @@ def build_overlay(
                 upsert_array_row=upsert_array_row,
                 add_lang_overlay_rows=add_lang_overlay_rows,
             )
+            unit_design_table.add_law_buffs(
+                release_zip,
+                output,
+                notes,
+                read_overlay_or_release_json=read_overlay_or_release_json,
+                write_json=write_json,
+                upsert_array_row=upsert_array_row,
+                add_lang_overlay_rows=add_lang_overlay_rows,
+            )
             add_homm3_missing_custom_lang_rows(release_zip, output, notes)
             sync_multilingual_custom_lang_rows(release_zip, output, notes, read_json, write_json, upsert_lang_rows)
             # Prefer donor-locale text for any landon keys still missing after sync.
@@ -21327,6 +21634,7 @@ def build_overlay(
             )
             # After sync: the derived city building rows own their 15 locale translations.
             apply_homm3_city_building_description_locales(release_zip, output, notes)
+            add_homm3_city_building_override_locale_name_rows(release_zip, output, notes)
             clean_multilingual_custom_ability_debt_text(release_zip, output, notes)
             add_custom_active_ability_localization_rows(release_zip, output, notes)
             stamp_source_mechanics_on_custom_faction_skill_rows(release_zip, output, notes)
@@ -21387,8 +21695,84 @@ def build_overlay(
             strip_nonfinal_no_compromise_law_bonuses_from_overlay(output, notes)
     finally:
         _ACTIVE_LAW_OVERRIDE_DIR = previous_law_override_dir
+        building_overrides.bind_template_reader(None)
 
     return output, notes
+
+
+def check_homm3_city_building_overrides(release_core: Path) -> int:
+    """--check-building-overrides: run every override file through its real city normalizer.
+
+    Reads the release Core only (no overlay build, no write). Each faction with an override
+    file gets its donor city normalized exactly as the build does (mechanics, overrides,
+    slot strip, canonical tree), then its descriptions derived, English and locales.
+    """
+    errors: list[str] = []
+    try:
+        docs = building_overrides.load_override_docs(use_cache=False)
+    except building_overrides.OverrideError as ex:
+        print("ERROR: " + str(ex))
+        return 1
+    print(f"Building overrides: {len(docs)} file(s) in {building_overrides.overrides_dir()}")
+    with zipfile.ZipFile(release_core) as release_zip:
+        building_overrides.bind_template_reader(building_overrides.zip_template_reader(release_zip))
+        try:
+            for faction_sid, entry in sorted(docs.items()):
+                for warning in entry["warnings"]:
+                    print("warning: " + warning)
+                manifest = CUSTOM_FACTION_MANIFEST_BY_SID.get(faction_sid)
+                if manifest is None or not manifest_core_overlay_enabled(manifest):
+                    errors.append(f"{faction_sid}: no core-enabled custom faction manifest")
+                    continue
+                normalizer = {
+                    "homm3_castle": normalize_castle_city_doc,
+                    "homm3_fortress": normalize_fortress_city_doc,
+                }.get(faction_sid, normalize_generic_city_doc)
+                donor = read_json(release_zip, f"DB/objects_logic/cities/{manifest['identity']['donorCitySid']}.json")
+                try:
+                    item = first_array_item(normalizer(donor, manifest))
+                except (RuntimeError, ValueError, KeyError) as ex:
+                    errors.append(f"{faction_sid}: {ex}")
+                    continue
+                if not isinstance(item, dict):
+                    errors.append(f"{faction_sid}: normalizer produced no city row")
+                    continue
+                wanted = building_overrides.overridden_sids(faction_sid)
+                untranslated = 0
+                try:
+                    sentences = derive_city_description_sentences(item)
+                except ValueError as ex:
+                    errors.append(f"{faction_sid}: descriptions: {ex}")
+                    continue
+                for section in building_overrides.CITY_SECTIONS:
+                    for row in item.get(section) or []:
+                        if not (isinstance(row, dict) and row.get("sid") in wanted):
+                            continue
+                        for key in row.get("descriptions") or []:
+                            text = render_city_building_sentences("english", sentences[key], lambda sid: sid)
+                            problems = city_building_text_problems(text, key, kind="description")
+                            errors.extend(f"{faction_sid}: {p}" for p in problems)
+                            for lang in city_building_locales.LOCALES:
+                                try:
+                                    render_city_building_sentences(lang, sentences[key], lambda sid: sid, lambda k: "{0}")
+                                except CityBuildingMissingExplicitTranslation:
+                                    untranslated += 1
+                                except (ValueError, KeyError):
+                                    pass  # computed sentences need the locale Lang rows; checked at build time
+                        print(
+                            f"  {faction_sid}: {section} {row['sid']} levels={len(row.get('parametersPerLevel') or [])} "
+                            f"costs={[lvl.get('costs') for lvl in row.get('parametersPerLevel') or []]} "
+                            f"bonuses={row.get('bonuses', row.get('bonusesPerLevel'))}"
+                        )
+                if untranslated:
+                    print(f"warning: {faction_sid}: {untranslated} authored description locale(s) missing (descriptionTextLocales)")
+                print(f"{faction_sid}: OK ({len(wanted)} row(s), {len(entry['doc'].get('remove') or [])} removal(s))")
+        finally:
+            building_overrides.bind_template_reader(None)
+    for line in errors:
+        print("ERROR: " + line)
+    print("Building override check: " + ("FAIL" if errors else "OK"))
+    return 1 if errors else 0
 
 
 # Game build the --release-core is for (--game-target); selects target-pinned Core readbacks
@@ -21685,6 +22069,30 @@ def require_existing_path(label: str, path: Path, is_dir: bool = False) -> None:
         raise RuntimeError(f"{label} {kind} does not exist: {path}")
 
 
+_SIDE_RES_FIRST_PARAM_RE = re.compile(rb'"type"\s*:\s*"sideRes"\s*,\s*"parameters"\s*:\s*\[\s*"([^"]*)"')
+
+
+def assert_canonical_side_res(overlay: dict[str, bytes]) -> None:
+    """Fail the build when a sideRes bonus names a resource Olden Era does not have.
+
+    The game's AI economy scorer indexes a resource dictionary by this SID; an unknown key
+    ("stone", "sulfur") throws KeyNotFoundException every frame and the AI turn never ends
+    (v0.1.331 "AI freezes on day 2" report).
+    """
+    bad: list[str] = []
+    for name, data in overlay.items():
+        if not name.endswith(".json"):
+            continue
+        for match in _SIDE_RES_FIRST_PARAM_RE.finditer(data):
+            resource = match.group(1).decode("utf-8", "replace")
+            if resource not in CANONICAL_RESOURCE_SIDS:
+                bad.append(f"{name}: sideRes {resource!r}")
+    if bad:
+        raise RuntimeError(
+            "sideRes bonus uses a resource Olden Era does not have (AI turn freeze): " + "; ".join(sorted(set(bad))[:20])
+        )
+
+
 def rewrite_zip(
     release_core: Path,
     overlay: dict[str, bytes],
@@ -21702,6 +22110,7 @@ def rewrite_zip(
         shutil.rmtree(work_dir)
     work_dir.mkdir(parents=True, exist_ok=True)
     tmp_zip = work_dir / release_core.name
+    assert_canonical_side_res(overlay)
     log_overlay_phase(f"candidate Core.zip write start ({len(overlay)} overlay member(s))")
     with zipfile.ZipFile(release_core, "r") as src, zipfile.ZipFile(
         tmp_zip, "w", compression=zipfile.ZIP_DEFLATED
@@ -21832,6 +22241,24 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--release-plugin-root", type=Path, default=None)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument(
+        "--building-overrides-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Directory of homm3_<faction>.json city building overrides (default "
+            "custom_factions/building_overrides). Applies to a build and to --check-building-overrides."
+        ),
+    )
+    parser.add_argument(
+        "--check-building-overrides",
+        action="store_true",
+        help=(
+            "Dry-run check only: validate every building override file and run it through its real city "
+            "normalizer (mechanics, overrides, slot strip, canonical tree, descriptions) against --release-core, "
+            "then exit. Builds no overlay and writes nothing."
+        ),
+    )
+    parser.add_argument(
         "--game-target",
         choices=GAME_TARGETS,
         default="golden_era",
@@ -21917,6 +22344,13 @@ def main() -> int:
         or args.strip_nonfinal_no_compromise_law_bonuses
         or args.use_strict_no_compromise_law_overrides
     )
+    if args.building_overrides_dir is not None:
+        building_overrides.set_overrides_dir(args.building_overrides_dir.resolve())
+    if args.check_building_overrides:
+        if not release_core.is_file():
+            print(f"ERROR: release Core not found: {release_core}")
+            return 1
+        return check_homm3_city_building_overrides(release_core)
     try:
         require_existing_path("release Core", release_core)
         require_existing_path("source plugin root", source_plugin_root, is_dir=True)

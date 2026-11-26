@@ -78,6 +78,28 @@ class PlanRepin(unittest.TestCase):
         self.assertEqual(rec["meshFx"]["fx/catalog.json"], "old")   # the input is not mutated
 
 
+class HeadCheckoutBytes(unittest.TestCase):
+    def test_clean_lf_smudged_to_crlf_returns_disk(self):
+        blob = b"{\n  \"a\": 1\n}\n"
+        disk = b"{\r\n  \"a\": 1\r\n}\r\n"
+        self.assertEqual(S._head_checkout_bytes(blob, disk, True), disk)
+
+    def test_dirty_git_returns_blob(self):
+        blob = b"{\n  \"a\": 1\n}\n"
+        disk = b"{\r\n  \"a\": 1\r\n}\r\n"
+        self.assertEqual(S._head_checkout_bytes(blob, disk, False), blob)
+
+    def test_real_text_edit_returns_blob(self):
+        blob = b"{\n  \"a\": 1\n}\n"
+        disk = b"{\r\n  \"a\": 2\r\n}\r\n"
+        self.assertEqual(S._head_checkout_bytes(blob, disk, True), blob)
+
+    def test_binary_with_nul_returns_blob(self):
+        blob = b"\x00a\nb\n"
+        disk = b"\x00a\r\nb\r\n"
+        self.assertEqual(S._head_checkout_bytes(blob, disk, True), blob)
+
+
 class RepinStage(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp(dir=S.ROOT / "artifacts"))

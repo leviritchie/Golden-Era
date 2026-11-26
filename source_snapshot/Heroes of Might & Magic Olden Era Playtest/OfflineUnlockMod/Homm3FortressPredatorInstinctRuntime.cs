@@ -53,9 +53,12 @@ internal static class Homm3FortressPredatorInstinctRuntime
 	internal const string FrenzyHasteSid = "magic_haste_effect_1";
 	internal const int IntimidationSlowRounds = 2;
 	internal const int FrenzyRounds = 1;
+	/// <summary>law pass 2026-11-25: Stalkers (#9) lawBuff (homm3_fortress.json lawBuffs): 1 Speed, 1 Initiative for one round, dispellable.</summary>
+	internal const string StalkersBuffSid = "h3_law_fortress_stalkers";
 
 	/// <summary>Predator/prey marker buffs last the battle (duration 0 expired after round 1, playtest 2); 99 as Tower Artificing grafts.</summary>
 	internal const int MarkerDuration = 99;
+	private const int StalkersRounds = 1;
 	/// <summary>Index = skill rank. Must match BONUS_PERCENT_BY_RANK in homm3_fortress_predator_instinct_core_overlay.py.</summary>
 	internal static readonly int[] BonusPercentByRank = { 0, 33, 66, 100 };
 	/// <summary>
@@ -105,6 +108,17 @@ internal static class Homm3FortressPredatorInstinctRuntime
 		internal bool Frenzy;
 		internal bool Cautious;
 		internal bool Pounce;
+		// law pass 2026-11-21: faction law levels, read once when the side is recorded (Homm3FortressLawHooks).
+		/// <summary>Beastmaster's Eye (#5): pairing sorted by stack Health instead of shuffled.</summary>
+		internal bool BeastmasterEye;
+		/// <summary>law pass 2026-11-25: Stalkers (#9, was Scent of Blood): at round start, predators whose prey lives gain 1 Speed and 1 Initiative for the round.</summary>
+		internal bool Stalkers;
+		/// <summary>Fresh Quarry (#12): re-pair predators whose prey died, at each round start after the first.</summary>
+		internal bool FreshQuarry;
+		/// <summary>Pack Kill (#13): +0/10/20 % for any friendly hit on another pair's prey.</summary>
+		internal int PackKillPercent;
+		/// <summary>law pass 2026-11-25: Pack Discipline (#32), one rank: no off-prey penalty.</summary>
+		internal bool PackDiscipline;
 		internal string HeroDescription;
 		internal object SideWrapper;
 		internal IntPtr SideWrapperPointer;
@@ -255,10 +269,15 @@ internal static class Homm3FortressPredatorInstinctRuntime
 		if (casterKey == 0 || receiverKey == 0)
 			return 0;
 		Pair offPrey = null;
+		Pair hunted = null;
 		lock (Gate)
 		{
 			foreach (var battle in Battles)
 			{
+				// law pass 2026-11-21: Pack Kill (#13) candidate: the receiver is another pair's prey.
+				if (hunted == null && battle.ByPrey.TryGetValue(receiverKey, out var preyPair) && preyPair.Side.PackKillPercent > 0
+				    && preyPair.PredatorKey != casterKey)
+					hunted = preyPair;
 				if (!battle.ByPredator.TryGetValue(casterKey, out var pair))
 					continue;
 				var rank = Math.Max(0, Math.Min(3, pair.Side.Rank));
@@ -267,6 +286,7 @@ internal static class Homm3FortressPredatorInstinctRuntime
 					offPrey = pair;
 					break;
 				}
+				// law pass 2026-11-25: Scent of Blood's +10/+20 % prey bonus is gone (#9 is now Stalkers, a buff in SyncStalkers).
 				var percent = BonusPercentByRank[rank];
 				if (pair.Side.Intimidation && !PendingIntimidation.Contains(pair))
 					PendingIntimidation.Add(pair);
@@ -275,13 +295,26 @@ internal static class Homm3FortressPredatorInstinctRuntime
 			}
 		}
 		// Off-prey penalty only while the original prey lives (IsAlive reads native state; keep it outside the lock).
-		if (offPrey == null || !IsAlive(offPrey.Prey))
-			return 0;
-		var penalty = PenaltyPercentByRank[Math.Max(0, Math.Min(3, offPrey.Side.Rank))];
-		if (penalty == 0)
-			return 0;
-		detail = "Fortress Predator Instinct -" + penalty + "% off-prey while prey lives (" + offPrey.Side.HeroDescription + " rank " + offPrey.Side.Rank + ")";
-		return -penalty;
+		var penalty = 0;
+		if (offPrey != null && IsAlive(offPrey.Prey))
+		{
+			// law pass 2026-11-25: Pack Discipline (#32), one rank, removes the off-prey penalty.
+			penalty = offPrey.Side.PackDiscipline ? 0 : PenaltyPercentByRank[Math.Max(0, Math.Min(3, offPrey.Side.Rank))];
+			if (penalty != 0)
+				detail = "Fortress Predator Instinct -" + penalty + "% off-prey while prey lives (" + offPrey.Side.HeroDescription + " rank " + offPrey.Side.Rank + ")";
+		}
+		// law pass 2026-11-21: Pack Kill (#13): a hit by any unit of the hunting side (not that pair's predator) on a
+		// living prey gains +10/+20 %, summed with the caster's own off-prey result. Side read outside the lock.
+		var packKill = 0;
+		if (hunted != null && caster is Unit casterUnit && IsAlive(hunted.Prey)
+		    && ReadProperty(casterUnit, Pins.FieldObjectSide) is Il2CppObjectBase casterSide
+		    && casterSide.Pointer == hunted.Side.SideWrapperPointer)
+		{
+			packKill = hunted.Side.PackKillPercent;
+			var packDetail = "Fortress Pack Kill +" + packKill + "% on another hunter's prey (" + hunted.Side.HeroDescription + ")";
+			detail = detail == null ? packDetail : detail + "; " + packDetail;
+		}
+		return packKill - penalty;
 	}
 
 	/// <summary>The pair whose predator is <paramref name="attacker"/> and prey is <paramref name="defender"/>, or null.</summary>
@@ -405,11 +438,22 @@ internal static class Homm3FortressPredatorInstinctRuntime
 					SideWrapper = wrapper,
 					SideWrapperPointer = wrapper.Pointer,
 				};
+				// law pass 2026-11-21: Beastmaster's Eye (#5), Fresh Quarry (#12), Pack Kill (#13). law pass 2026-11-25:
+				// Stalkers (#9), Pack Discipline (#32). Rank 0 (law not taken or unreadable) keeps the current behaviour.
+				hunter.BeastmasterEye = Homm3FortressLawHooks.Rank(Homm3FortressLawHooks.BeastmastersEye, side, side.logicHero) > 0;
+				hunter.Stalkers = Homm3FortressLawHooks.Rank(Homm3FortressLawHooks.Stalkers, side, side.logicHero) > 0;
+				hunter.FreshQuarry = Homm3FortressLawHooks.Rank(Homm3FortressLawHooks.FreshQuarry, side, side.logicHero) > 0;
+				hunter.PackKillPercent = Homm3FortressLawHooks.Level(Homm3FortressLawHooks.PackKillPercentByLevel,
+					Homm3FortressLawHooks.Rank(Homm3FortressLawHooks.PackKill, side, side.logicHero));
+				hunter.PackDiscipline = Homm3FortressLawHooks.Rank(Homm3FortressLawHooks.PackDiscipline, side, side.logicHero) > 0;
 				battle ??= new BattleState { Logic = __instance, HubPointer = hub.Pointer };
 				battle.Sides.Add(hunter);
 				_log?.LogInfo("HoMM3 Fortress Predator Instinct armed for " + hunter.HeroDescription + " rank " + hunter.Rank
 				              + (hunter.Intimidation ? " +Intimidation" : "") + (hunter.EnduranceHunting ? " +EnduranceHunting" : "")
-				              + (hunter.Frenzy ? " +Frenzy" : "") + (hunter.Cautious ? " +Cautious" : "") + (hunter.Pounce ? " +Pounce" : "") + ".");
+				              + (hunter.Frenzy ? " +Frenzy" : "") + (hunter.Cautious ? " +Cautious" : "") + (hunter.Pounce ? " +Pounce" : "")
+				              + (hunter.BeastmasterEye ? " law:BeastmasterEye" : "") + (hunter.Stalkers ? " law:Stalkers" : "")
+				              + (hunter.FreshQuarry ? " law:FreshQuarry" : "") + (hunter.PackKillPercent > 0 ? " law:PackKill+" + hunter.PackKillPercent + "%" : "")
+				              + (hunter.PackDiscipline ? " law:PackDiscipline" : "") + ".");
 			}
 			if (battle == null)
 				return;
@@ -436,6 +480,9 @@ internal static class Homm3FortressPredatorInstinctRuntime
 			battle.Round = args.roundNumber;
 			if (!battle.Paired && args.roundNumber >= 1)
 				BuildPairs(battle);
+			else if (battle.Paired)
+				RepairDeadPrey(battle); // law pass 2026-11-21: Fresh Quarry (#12)
+			SyncStalkers(battle); // law pass 2026-11-25: Stalkers (#9)
 			foreach (var side in battle.Sides)
 			{
 				if (side.FrenzyRound >= 0 && args.roundNumber > side.FrenzyRound)
@@ -506,8 +553,18 @@ internal static class Homm3FortressPredatorInstinctRuntime
 					prey.Add((entry.Unit, entry.Key));
 				}
 			}
-			Shuffle(predators);
-			Shuffle(prey);
+			if (side.BeastmasterEye)
+			{
+				// law pass 2026-11-21: Beastmaster's Eye (#5): strongest hunter takes the strongest enemy stack (total Health,
+				// descending; ties keep grid order). Unreadable Health counts as 0.
+				SortByHealth(predators);
+				SortByHealth(prey);
+			}
+			else
+			{
+				Shuffle(predators);
+				Shuffle(prey);
+			}
 			var count = Math.Min(predators.Count, prey.Count);
 			var parts = new List<string>();
 			for (var i = 0; i < count; i++)
@@ -543,7 +600,8 @@ internal static class Homm3FortressPredatorInstinctRuntime
 	{
 		try
 		{
-			if (FindBattleByHub(__instance) == null)
+			var battle = FindBattleByHub(__instance);
+			if (battle == null)
 				return;
 			List<Pair> pending;
 			lock (Gate)
@@ -836,6 +894,124 @@ internal static class Homm3FortressPredatorInstinctRuntime
 		catch
 		{
 			return "?";
+		}
+	}
+
+	/// <summary>law pass 2026-11-21: Beastmaster's Eye (#5). Stable sort by current total stack Health, descending.</summary>
+	private static void SortByHealth(List<(Unit Unit, long Key)> list)
+	{
+		var health = new Dictionary<long, int>();
+		var order = new Dictionary<long, int>();
+		for (var i = 0; i < list.Count; i++)
+		{
+			health[list[i].Key] = DamageKillMapping.TryReadStackHealth(list[i].Unit, out var total) ? total : 0;
+			order[list[i].Key] = i;
+		}
+		list.Sort((a, b) =>
+		{
+			var byHealth = health[b.Key].CompareTo(health[a.Key]);
+			return byHealth != 0 ? byHealth : order[a.Key].CompareTo(order[b.Key]);
+		});
+	}
+
+	/// <summary>
+	/// law pass 2026-11-21: Fresh Quarry (#12). At a round start after pairing, each living predator of a side with the
+	/// law whose prey is dead takes the living enemy stack with the most total Health that no living predator hunts.
+	/// Predators that find none keep their dead prey (no bonus, no penalty, as before). A new prey mark is added; the
+	/// dead prey's mark needs no removal.
+	/// </summary>
+	private static void RepairDeadPrey(BattleState battle)
+	{
+		var any = false;
+		foreach (var side in battle.Sides)
+			any |= side.FreshQuarry;
+		if (!any)
+			return;
+		var grid = ReadProperty(battle.Logic, Pins.LogicGrid);
+		if (ReadProperty(grid, Pins.GridHexes) is not Il2CppReferenceArray<BattleHex> hexes)
+			return;
+		var units = new List<(Unit Unit, long Key, IntPtr Side)>();
+		var seen = new HashSet<long>();
+		foreach (var hex in hexes)
+		{
+			if (hex?.fieldObjects == null)
+				continue;
+			for (var i = 0; i < hex.fieldObjects.Count; i++)
+			{
+				var unit = hex.fieldObjects[i]?.TryCast<Unit>();
+				if (unit == null || !IsAlive(unit) || ReadProperty(unit, Pins.FieldObjectSide) is not Il2CppObjectBase wrapper)
+					continue;
+				var key = Homm3DirectStateIdentity.ResolveKeyOrZero(unit);
+				if (key == 0 || !seen.Add(key))
+					continue;
+				units.Add((unit, key, wrapper.Pointer));
+			}
+		}
+		List<Pair> pairs;
+		lock (Gate)
+			pairs = new List<Pair>(battle.Pairs);
+		foreach (var pair in pairs)
+		{
+			if (!pair.Side.FreshQuarry || !IsAlive(pair.Predator) || IsAlive(pair.Prey))
+				continue;
+			Unit best = null;
+			long bestKey = 0;
+			var bestHealth = -1;
+			foreach (var entry in units)
+			{
+				if (entry.Side == pair.Side.SideWrapperPointer)
+					continue;
+				Pair holder;
+				lock (Gate)
+					battle.ByPrey.TryGetValue(entry.Key, out holder);
+				if (holder != null && IsAlive(holder.Predator))
+					continue;
+				var health = DamageKillMapping.TryReadStackHealth(entry.Unit, out var total) ? total : 0;
+				if (health > bestHealth)
+				{
+					best = entry.Unit;
+					bestKey = entry.Key;
+					bestHealth = health;
+				}
+			}
+			if (best == null)
+				continue;
+			var oldKey = pair.PreyKey;
+			lock (Gate)
+			{
+				if (battle.ByPrey.TryGetValue(oldKey, out var old) && ReferenceEquals(old, pair))
+					battle.ByPrey.Remove(oldKey);
+				pair.Prey = best;
+				pair.PreyKey = bestKey;
+				battle.ByPrey[bestKey] = pair;
+			}
+			var marked = TryBuff(best, PreyBuffSid, 0, MarkerDuration);
+			LogLimited("Fresh Quarry: " + DescribeUnit(pair.Predator) + " now hunts " + DescribeUnit(best) + (marked ? "" : " (prey-mark FAILED)") + ".");
+		}
+	}
+
+	/// <summary>
+	/// law pass 2026-11-25: Stalkers (#9). At every round start (after pairing or a Fresh Quarry re-pair) each living
+	/// predator of a side with the law whose prey lives gets <see cref="StalkersBuffSid"/> (1 Speed, 1 Initiative) for one
+	/// round; the native end-of-round duration tick removes it. No explicit removal: the live unit buff manager has no
+	/// pinned Remove method. A failed add gives no buff (fail closed, logged).
+	/// </summary>
+	private static void SyncStalkers(BattleState battle)
+	{
+		var any = false;
+		foreach (var side in battle.Sides)
+			any |= side.Stalkers;
+		if (!any)
+			return;
+		List<Pair> pairs;
+		lock (Gate)
+			pairs = new List<Pair>(battle.Pairs);
+		foreach (var pair in pairs)
+		{
+			if (!pair.Side.Stalkers || !IsAlive(pair.Predator) || !IsAlive(pair.Prey))
+				continue;
+			var ok = TryBuff(pair.Predator, StalkersBuffSid, 0, StalkersRounds);
+			LogLimited("Stalkers: " + DescribeUnit(pair.Predator) + " stalks " + DescribeUnit(pair.Prey) + (ok ? "" : " (buff FAILED)") + ".");
 		}
 	}
 

@@ -103,6 +103,23 @@ internal static partial class GameSymbols
 		}
 	}
 
+	/// <summary>Cove Lodestar (building pass 2026-11-22): native-terrain flags on the battle side and the unit.</summary>
+	internal static partial class CoveLodestar
+	{
+		/// <summary>Battle side euj +0xE8 native-terrain flag. 26615913.</summary>
+		internal static readonly string[] BattleSideNativeMembers = { "_coer_k__BackingField" };
+		/// <summary>Hex.Session.Battle.Unit +0xE8 native flag. 26615913.</summary>
+		internal static readonly string[] UnitNativeMembers = { "_cphr_k__BackingField" };
+	}
+
+	/// <summary>Building pass 2026-11-22: Escape Tunnel and Freelancer's Guild names. 26615913.</summary>
+	internal static partial class TownBuildingPass
+	{
+		internal const string BattleCompletionUtilityTypeName = "ObjectPublicAbstractSealedbf57aInESbf6abidUnique";
+		internal const string CanEscapeNamePrefix = "Method_Public_Static_ESideCommandsState_";
+		internal static readonly string[] FreelancerPayResources = { "gold", "wood", "ore", "mercury", "crystals", "gemstones" };
+	}
+
 	/// <summary>Known game builds, keyed by GameAssembly.dll SHA-256 (see GameBuild).</summary>
 	internal static partial class Builds
 	{
@@ -4485,7 +4502,9 @@ internal static partial class GameSymbols
 		internal static readonly string[] HeroAbilitySidMembers =
 			{ "_sid_k__BackingField", "prop_String_0" };
 
-		/// <summary>Hex.Session.Battle.Hex occupant (native cnfx): the Unit standing on the hex.</summary>
+		/// <summary>ERRATUM 2026-11-21: Hex.Session.Battle.Hex native cnfx is the hex's last CORPSE (mono lastCorpse, the
+		/// Unit auto-property after fieldObjects), not the unit standing on it. Unused: the Frenzy taunt reads
+		/// Hex.fieldObjects like native bjug. Do not use as occupancy.</summary>
 		internal static readonly string[] HexOccupantMembers =
 			{ "prop_Unit_0", "_cnfx_k__BackingField" };
 

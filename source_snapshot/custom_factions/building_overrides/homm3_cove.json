@@ -1,0 +1,235 @@
+{
+  "factionSid": "homm3_cove",
+  "rows": [
+    {
+      "sid": "Build_Bank",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 2500,
+          "wood": 5,
+          "ore": 5
+        }
+      ],
+      "bonuses": [
+        [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              1000
+            ]
+          }
+        ]
+      ],
+      "nameText": "Counting House",
+      "descriptionText": "Produces 1000 Gold daily.",
+      "notes": "building pass 2026-11-22: rename only. The Cove economy Bank was named 'Thieves' Guild'; HotA's Thieves' Guild is an information screen Olden Era does not have (cove.thieves_guild absent). Cost and income unchanged (vanilla Bank values).",
+      "nameTextLocales": {
+        "BRportugese": "Casa de Contagem",
+        "czech": "Účtárna",
+        "french": "Comptoir",
+        "german": "Kontor",
+        "hungarian": "Számolóház",
+        "italian": "Casa dei Conti",
+        "japanese": "会計所",
+        "korean": "회계소",
+        "polish": "Kantor",
+        "russian": "Счётная палата",
+        "spanish": "Contaduría",
+        "turkish": "Sayım Evi",
+        "ukrainian": "Лічильня",
+        "zhCN": "账房",
+        "zhTW": "帳房"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Produz 1000 de Ouro por dia.",
+        "czech": "Denně vyprodukuje 1000 Zlata.",
+        "french": "Produit 1000 d’or par jour.",
+        "german": "Produziert täglich 1000 Gold.",
+        "hungarian": "Naponta 1000 Aranyat termel.",
+        "italian": "Produce 1000 Oro al giorno.",
+        "japanese": "毎日1000ゴールドを生産する。",
+        "korean": "매일 금 1000을 생산합니다.",
+        "polish": "Produkuje 1000 Złota dziennie.",
+        "russian": "Приносит 1000 Золота в день.",
+        "spanish": "Produce 1000 de oro al día.",
+        "turkish": "Günde 1000 Altın üretir.",
+        "ukrainian": "Приносить 1000 Золота на день.",
+        "zhCN": "每天产出1000黄金。",
+        "zhTW": "每天產出1000黃金。"
+      }
+    },
+    {
+      "sid": "Build_Grotto",
+      "section": "banks",
+      "template": "human_city:Build_Bank",
+      "replace": false,
+      "sceneSlot": "Grotto",
+      "costs": [
+        {
+          "gold": 7500,
+          "wood": 15,
+          "ore": 15
+        }
+      ],
+      "fields": {
+        "isConstructedOnStart": false,
+        "backgroundImages": [
+          "build_fon_unic"
+        ]
+      },
+      "bonuses": [
+        []
+      ],
+      "nameText": "Grotto",
+      "descriptionText": "Visiting heroes may sacrifice creatures in exchange for experience.",
+      "iconFrom": "undead_city:Build_Skeleton_Converter",
+      "plugin": "Homm3CoveGrottoRuntime",
+      "notes": "building pass 2026-11-22: cove.grotto (owner decision 2: build the window now). Plugin-only banks carrier, no native bonus. Homm3CoveGrottoRuntime/Window open an exchange window from a town-screen 'Grotto' button: each creature gives floor(squadValue / 40) x 5 experience (HoMM3 Altar of Sacrifice formula on OE squadValue); the hero keeps at least one creature. Artifact sacrifice is not offered (no save-safe native artifact removal), so the text says creatures only. HotA cost 7500 Gold, 15 Wood, 15 Ore. Tree: Market (tree agent).",
+      "nameTextLocales": {
+        "BRportugese": "Gruta",
+        "czech": "Jeskyně",
+        "french": "Grotte",
+        "german": "Grotte",
+        "hungarian": "Barlang",
+        "italian": "Grotta",
+        "japanese": "洞窟",
+        "korean": "동굴",
+        "polish": "Grota",
+        "russian": "Грот",
+        "spanish": "Gruta",
+        "turkish": "Mağara",
+        "ukrainian": "Грот",
+        "zhCN": "洞窟",
+        "zhTW": "洞窟"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Heróis visitantes podem sacrificar criaturas em troca de experiência.",
+        "czech": "Navštěvující hrdinové mohou obětovat jednotky výměnou za zkušenosti.",
+        "french": "Les héros en visite peuvent sacrifier des créatures en échange d’expérience.",
+        "german": "Besuchende Helden können Kreaturen gegen Erfahrung opfern.",
+        "hungarian": "A látogató hősök lényeket áldozhatnak fel tapasztalatért cserébe.",
+        "italian": "Gli eroi in visita possono sacrificare creature in cambio di esperienza.",
+        "japanese": "訪問したヒーローは、経験値と引き換えにクリーチャーを生贄に捧げることができる。",
+        "korean": "방문한 영웅은 경험치를 받는 대가로 생물을 희생할 수 있습니다.",
+        "polish": "Odwiedzający bohaterowie mogą poświęcać stwory w zamian za doświadczenie.",
+        "russian": "Посещающие герои могут приносить существ в жертву в обмен на опыт.",
+        "spanish": "Los héroes visitantes pueden sacrificar criaturas a cambio de experiencia.",
+        "turkish": "Ziyaret eden kahramanlar tecrübe karşılığında yaratıkları kurban edebilir.",
+        "ukrainian": "Герої, що відвідують, можуть жертвувати істот в обмін на досвід.",
+        "zhCN": "到访的英雄可以牺牲生物以换取经验。",
+        "zhTW": "到訪的英雄可以犧牲生物以換取經驗。"
+      }
+    },
+    {
+      "sid": "Build_Golden_Calf",
+      "section": "graals",
+      "replace": true,
+      "costs": [
+        {
+          "graal": 1
+        }
+      ],
+      "fields": {
+        "graalType": "HumanGraal",
+        "sideBonuses": [
+          {
+            "type": "sideResHumGraal",
+            "parameters": [
+              "gold",
+              "1000"
+            ]
+          },
+          {
+            "type": "sideResHumGraal",
+            "parameters": [
+              "wood",
+              "1"
+            ]
+          },
+          {
+            "type": "sideResHumGraal",
+            "parameters": [
+              "ore",
+              "1"
+            ]
+          },
+          {
+            "type": "sideResHumGraal",
+            "parameters": [
+              "gemstones",
+              "1"
+            ]
+          },
+          {
+            "type": "sideResHumGraal",
+            "parameters": [
+              "crystals",
+              "1"
+            ]
+          },
+          {
+            "type": "sideResHumGraal",
+            "parameters": [
+              "mercury",
+              "1"
+            ]
+          },
+          {
+            "type": "anyLandEqualNativeLandBonus"
+          }
+        ],
+        "cityBonuses": [
+          {
+            "type": "cityUnitsIncrementPer",
+            "parameters": [
+              "all",
+              "1.0"
+            ]
+          }
+        ]
+      },
+      "nameText": "Lodestar",
+      "descriptionText": "The owner's cities produce 1000 Gold and 1 of each other resource daily. All terrain counts as native terrain for your armies. This city's dwellings produce +100% units.",
+      "plugin": "Homm3CoveLodestarRuntime",
+      "notes": "building pass 2026-11-22: cove.lodestar. Keeps the HumanGraal economy (answer 3) and adds the HotA terrain clause as the native anyLandEqualNativeLandBonus (Unfrozen law 34's bonus, no parameters). Static evidence (26615913): graal side bonuses share the law bonus path, and the bonus reaches the creature native check but not the battle side's own native flag, so Homm3CoveLodestarRuntime forces the side and stack native flags at BattleLogic.Init for a side owning a Lodestar (one switch, FallbackEnabled, logged per side). Covers every unit of the army: OE has no per-faction native qualifier.",
+      "nameTextLocales": {
+        "BRportugese": "Estrela-guia",
+        "czech": "Vůdčí hvězda",
+        "french": "Étoile polaire",
+        "german": "Leitstern",
+        "hungarian": "Vezércsillag",
+        "italian": "Stella Polare",
+        "japanese": "導きの星",
+        "korean": "길잡이 별",
+        "polish": "Gwiazda Przewodnia",
+        "russian": "Путеводная звезда",
+        "spanish": "Estrella guía",
+        "turkish": "Kutup Yıldızı",
+        "ukrainian": "Дороговказ",
+        "zhCN": "北极星",
+        "zhTW": "北極星"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "As cidades do dono produzem por dia 1000 de Ouro e 1 de cada um dos outros recursos. Todo terreno conta como terreno nativo para seus exércitos. As moradias desta cidade produzem +100% de unidades.",
+        "czech": "Města majitele denně vyprodukují 1000 Zlata a po 1 z každé další suroviny. Veškerý terén se pro vaše armády počítá jako domovský. Obydlí tohoto města produkují +100 % jednotek.",
+        "french": "Les villes du propriétaire produisent chaque jour 1000 d’or et 1 de chacune des autres ressources. Tous les terrains comptent comme terrain natal pour vos armées. Les habitations de cette ville produisent +100 % d’unités.",
+        "german": "Die Städte des Besitzers produzieren täglich 1000 Gold und je 1 von jeder anderen Ressource. Jedes Gelände zählt für deine Armeen als Heimatgelände. Die Behausungen dieser Stadt produzieren +100 % Einheiten.",
+        "hungarian": "A tulajdonos városai naponta 1000 Aranyat és 1-1 egyéb nyersanyagot termelnek. Minden terep őshonos terepnek számít a hadseregeid számára. A város lakóhelyei +100% egységet termelnek.",
+        "italian": "Le città del proprietario producono ogni giorno 1000 Oro e 1 di ogni altra risorsa. Tutti i terreni contano come terreno nativo per i tuoi eserciti. Le abitazioni di questa città producono +100% di unità.",
+        "japanese": "所有者の都市は毎日1000ゴールドと、他の各資源を1ずつ生産する。すべての地形が自軍にとっての本拠地地形として扱われる。この都市の居住施設は+100%のユニットを生産する。",
+        "korean": "소유자의 도시는 매일 금 1000과 다른 각 자원을 1씩 생산합니다. 모든 지형이 아군에게 고향 지형으로 취급됩니다. 이 도시의 거주지는 유닛을 +100% 생산합니다.",
+        "polish": "Miasta właściciela produkują dziennie 1000 Złota oraz po 1 sztuce każdego innego surowca. Każdy teren jest dla twoich armii terenem rodzimym. Siedliska w tym mieście produkują +100% jednostek.",
+        "russian": "Города владельца производят в день 1000 Золота и по 1 единице каждого другого ресурса. Любая местность считается родной для ваших армий. Жилища этого города производят +100% существ.",
+        "spanish": "Las ciudades del propietario producen cada día 1000 de oro y 1 de cada uno de los demás recursos. Todo el terreno cuenta como terreno nativo para tus ejércitos. Las viviendas de esta ciudad producen +100 % de unidades.",
+        "turkish": "Sahibinin şehirleri günde 1000 Altın ve diğer her kaynaktan birer tane üretir. Tüm araziler ordularınız için yerli arazi sayılır. Bu şehrin konutları +%100 birim üretir.",
+        "ukrainian": "Міста власника щодня виробляють 1000 Золота та по 1 одиниці кожного іншого ресурсу. Будь-яка місцевість вважається рідною для ваших армій. Житла цього міста виробляють +100% істот.",
+        "zhCN": "所有者的城镇每天产出1000黄金，以及其他每种资源各1。所有地形对你的军队都视为原生地形。这座城镇的居所多生产+100%的单位。",
+        "zhTW": "所有者的城鎮每天產出1000黃金，以及其他每種資源各1。所有地形對你的軍隊都視為原生地形。這座城鎮的居所多生產+100%的單位。"
+      }
+    }
+  ],
+  "remove": []
+}

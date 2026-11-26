@@ -8,8 +8,10 @@ campaign clones (`homm3_landon_castle_city`, `homm3_landon_dungeon_city`).
 
 - The table lives in `tools/release_port/homm3_city_building_tree.py`. `COMMON_LEVEL_REQS`
   holds the shared buildings and `FACTION_LEVEL_REQS` holds the per-faction entries. Each
-  key is `SID:level` and maps to the direct HoMM3 requirements. A level above 1 always
-  requires the level before it as well.
+  key is `SID:level` and maps to the direct requirements. A level above 1 always
+  requires the level before it as well. Since the building pass of 2026-11-22
+  (`docs/building_pass_20261122/`), the HoMM3 requirements are trimmed to the vanilla OE
+  conventions (see "Adaptations to Olden Era" below).
 - The table is applied by `apply_release_core_overlay.py`, in
   `apply_homm3_city_building_tree`. That step runs last in each city normalizer, after
   every row has been added, trimmed (Mage Guild caps) or stripped (unbound Castle slots).
@@ -38,6 +40,16 @@ campaign clones (`homm3_landon_castle_city`, `homm3_landon_dungeon_city`).
   - grail at (0,4).
 
   An upgrade prefers the cell directly under its base level.
+- `FACTION_PREFERRED_CELLS` (same module) holds preferred cells for two groups:
+  - the special rows the 2026-11-22 pass adds;
+  - the dwellings of the towns whose lanes changed (Rampart, Inferno, Necropolis,
+    Dungeon, Fortress, Conflux).
+
+  It wins over the row's own `nodePos`, so a new row deep-copied from a template does not
+  inherit the template's cell. `COMMON_PREFERRED_CELLS` still wins over both.
+- The solver places levels in the reading order of their preferred cells. If that greedy
+  pass leaves a deep chain without a free cell, it retries once, placing first the levels
+  with the earliest last legal row. It fails closed only if both passes fail.
 
 ## Clickable columns
 
@@ -79,13 +91,22 @@ beside it, and Dungeon MG5 stays under MG4.
   - a build-order entry comes before its prerequisites or names an absent level;
   - a landon clone differs from its stock city beyond `id`.
 
-  Its static half also requires the following:
-  - every dwelling above tier 1 is gated on another dwelling (or, for Castle, the
-    Stables);
-  - Town Hall requires the Tavern;
-  - City Hall requires MG1 and the Marketplace;
-  - the Blacksmith (`Build_Treasury`) requires exactly the Bank and the Fort, like the
-    vanilla Treasury, and no building requires it.
+  It also fails when a city's prerequisite chain is deeper than the 5 native rows. Every
+  vanilla city draws strictly, and since 2026-11-22 no HoMM3 town needs the layout
+  validator's beside-cell relaxation.
+
+  Its static half enforces the vanilla conventions on the table:
+  - the shared economy equals the vanilla template exactly, and no faction overrides it.
+    The one exception is Inferno's `Build_Resource_Depot`, which holds the Birthing Pools
+    horde;
+  - no building requires the Blacksmith (`Build_Treasury`, the OE Treasury);
+  - nothing requires an upgraded level except Town Hall, Mage Guild and Wall levels;
+  - a dwelling upgrade needs only its own L1, except a T7 upgrade, which may take one
+    Mage Guild level;
+  - a dwelling L1 takes at most 2 dwellings plus one Mage Guild level (MG1 or MG2).
+    Castle Training Grounds may take the Stables instead;
+  - no dwelling L1 sits deeper than 4 in the chain;
+  - a special building takes at most one prerequisite.
 - Where it runs:
   - OfflineUnlockMod csproj target `ValidateHomm3CityBuildingTreeContract`, gated on
     `FullValidationNormalized` (skip with `SkipHomm3CityBuildingTreeContract=true`);
@@ -109,21 +130,25 @@ panel.
   Barracks, Stronghold Upg. Orc Tower, Cove Frigate, and Factory Upg. Halfling Adobe,
   Upg. Foundry and Manufactory. Keeping them would also close cycles (Castle Bank <-
   Barracks, Tower Bank <- City Hall).
-- `Build_Resource_Depot_level_2` is usually the tier horde building.
-- `Build_Bank` changes meaning by town:
+- `Build_Resource_Depot_level_2` is usually the tier horde building. In Inferno it is
+  Brimstone Stormclouds, and in Stronghold it is the Freelancer's Guild.
+- `Build_Bank` is the plain economy Bank in every town (building pass 2026-11-22, REVIEW
+  §1). The specials it used to carry have their own rows:
 
-| Town | `Build_Bank` stands for |
+| Town | Special rows (requirement) |
 | --- | --- |
-| Castle | Mounted Guard Yard, used as the Stables |
-| Tower | Capitol Vault, used as the Capitol |
-| Necropolis | Bone Archive, used as the Necromancy Amplifier |
-| Dungeon | Spellwell, used as the Mana Vortex |
-| Inferno | Castle Gate |
-| Conflux | Magic University |
-| Rampart | Mystic Pond |
-| Cove | Thieves' Guild |
-| Fortress | Cage of Warlords |
-| Stronghold, Factory, Bulwark | Income rows |
+| Castle | `Build_Stables` Stables (root; gates Training Grounds), `Build_Mother_Nature` Brotherhood of the Sword (Tavern), `Build_Mycelium_Roots` Signal Beacon (root) |
+| Rampart | `Build_Mystic_Pond` (root), `Build_Mother_Nature` Fountain of Fortune (Mystic Pond), `Build_Rampart_Treasury` Treasury (root) |
+| Tower | `Build_Library` (MG1), `Build_Intelligence_Academy` Lookout Tower (root), `Build_Training_Range` Wall of Knowledge (MG1) |
+| Inferno | `Build_Mycelium_Roots` Castle Gate (Wall L2), `Build_Mother_Nature` Order of Fire (MG1) |
+| Necropolis | `Build_Mother_Nature` Necromancy Amplifier (MG1), `Build_Mycelium_Roots` Cover of Darkness (root), `Build_Skeleton_Converter` (root) |
+| Dungeon | `Build_Well_Of_Souls` Mana Vortex (MG1), `Build_Portal_Summoning` (root; replaces the Lyceum) |
+| Stronghold | `Build_Resource_Depot_level_2` Freelancer's Guild (Marketplace). The Escape Tunnel comes with the Fort and has no row. |
+| Fortress | `Build_Gymnasium` Cage of Warlords (Town Hall L2), `Build_Mother_Nature` Glyphs of Fear (Fort), `Build_Mycelium_Roots` Blood Obelisk (Fort) |
+| Conflux | `Build_Magic_University` (MG1), `Build_Mycelium_Roots` Elemental Conflux (MG1) |
+| Cove | `Build_Grotto` (Marketplace) |
+| Factory | `Build_Factory_Loan_Bank`, the HotA loan Bank (root); `Build_Mother_Nature` Mana Generator (Fort) |
+| Bulwark | `Build_Mother_Nature` Fair (Marketplace), `Build_Mycelium_Roots` Altar of the Runes (root) |
 
 The table's inline comments give the identity of every entry.
 
@@ -135,15 +160,28 @@ The authoritative list is `ADAPTATIONS` in the module. In summary:
   and OE's `Build_Wall` is the siege-wall line.
 - **The hall has three levels: Village, Town and City.** The Capitol exists only where a
   row names it (Tower's Capitol Vault requires City Hall and the Castle).
-- **The Marketplace is a root, as in HoMM3.** Vanilla OE gates it on the Tavern.
-- **Income-only `Build_Bank` rows keep OE's Town Hall gate** when HoMM3 has no rule for
-  them.
+- **The economy is the vanilla OE template (2026-11-22).** Town Hall and City Hall
+  require only the previous hall level. The Marketplace requires the Tavern, the
+  Artifact Merchants the Marketplace, the Bank Town Hall, the Blacksmith (Treasury) the
+  Bank and the Fort, and the Resource Silo the Marketplace and the Bank. HoMM3's hall,
+  Marketplace and Blacksmith gates are dropped.
+- **Dwellings follow the vanilla shape (2026-11-22).** These rules apply:
+  - a dwelling upgrade needs only its own L1. A T7 upgrade may add one Mage Guild level
+    (the HoMM3 Dragon/Black Dragon/Titan MG gates);
+  - a dwelling L1 takes at most 2 dwellings and one Mage Guild level;
+  - no upgraded dwelling is ever a prerequisite;
+  - the chains are trimmed so that no dwelling L1 sits deeper than 4, as in vanilla.
+    Rampart T3, Tower T2/T3, Conflux T2/T3 and Cove/Factory/Bulwark T2 lose their
+    HoMM3 gates for this reason.
+- **Specials take at most one prerequisite**, chosen from the HoMM3 rule.
 - **Buildings that have no OE row are not reproduced, and requirements on them are
-  dropped.** These include the Shipyard, Lighthouse, Brotherhood, Grotto, Sieidi and
-  second hordes. For example, Bulwark's Upg. Mountain Embassy and Upg. Frosthome lose
-  their Sieidi requirement.
+  dropped.** These include the Shipyard, Lighthouse, Sieidi and second hordes. For
+  example, Bulwark's Upg. Mountain Embassy and Upg. Frosthome lose their Sieidi
+  requirement. Since 2026-11-22 the Brotherhood, Stables, Grotto, Library, Mystic Pond,
+  Portal of Summoning and Cage of Warlords have their own rows (see Reference).
 - **OE-native specials with no HoMM3 counterpart keep their vanilla OE gates.** These are
-  Lyceum, Beelzebub's Hand, the Rebirth Shrine and the Well of Souls.
+  Beelzebub's Hand, the Rebirth Shrine and Stronghold's Lyceum. The Dungeon Lyceum is
+  removed; the Portal of Summoning takes its place.
 - **Conflux Vault of Ashes requires the Altar of Thought, not the Pyre.** It is an OE-only
   Firebird horde. Gating it on the Pyre would make a 6-row chain, and the native panel
   has 5 rows.
@@ -212,3 +250,18 @@ In the city files, the candidate changes `nodePos` and permutes `buildOrders`. I
 not change prerequisites. The overlay also drops the campaign Lang rows (`homm3_ab_*`,
 `h3_campaign_placed_*`) that the StoryHub weave adds, so re-run the weave after
 installing the overlay (see `docs/port_to_current_game_version.md`, layer 11).
+
+**Building pass tree: offline fit validated, not installed (2026-11-22).** The
+simulation `V:/olden_port_work/building_pass/tree/simulate.py` took the installed GE
+Core's 14 city files, added each new special SID as a one-level row, removed the Dungeon
+Lyceum, applied the table and re-derived the landon clones. The results:
+
+- All 12 towns lay out on the first solver pass, at strict depth 5 and max column 8.
+  Before, 9 towns needed the beside-cell relaxation.
+- The landon clones pass.
+- The layout validator with `--include-derived` passes (14 cities, 0 failing).
+- This contract passes (`--core` simulation and `--static-only`, 0 errors).
+
+The installed Core fails the new contract until the applier adds the new rows. The
+overlay fails closed if a row is missing. Per-town counts are in
+`docs/building_pass_20261122/build_tree.md`.

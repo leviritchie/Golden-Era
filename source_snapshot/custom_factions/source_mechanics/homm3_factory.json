@@ -46,18 +46,40 @@
       "id": "factory.mana_generator",
       "surface": "building",
       "sourceName": "Mana Generator",
-      "status": "substituted",
-      "reason": "Siege temporary mana has no proven Olden Era city field; current row is a native Knowledge visit bonus (Mana Dynamo).",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: Build_Mother_Nature moves from the +1 Knowledge visit donor (heroBonusBanks) to a plugin-only banks carrier at the HotA cost (1000 Gold, 5 Ore, needs Fort). Homm3FactoryManaGeneratorRuntime gives the defending hero in a siege of this town +20 mana for the battle and removes whatever is left of those 20 after the battle result, as the HotA Mana Generator does.",
       "playerTextPolicy": "must_match_current_behavior",
-      "forbiddenPlayerText": [
-        "siege mana",
-        "20 additional spell points",
-        "Mana Generator"
-      ],
       "currentRows": [
         "Build_Mother_Nature"
       ],
       "validationOwner": "validate_homm3_city_building_contracts"
+    },
+    {
+      "id": "factory.lightning_rod",
+      "surface": "building",
+      "sourceName": "Lightning Rod",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: the grail keeps its HumanGraal extras (owner answer 3) and adds the HotA strike: Homm3FactoryLightningRodRuntime, at round 1 of every battle with a friendly hero, hits each enemy stack once for the sum over the side's Factory towns with the grail of 7 x (4 + distinct built buildings, upgrades not counted). Several Rods add up.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Golden_Calf"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
+    },
+    {
+      "id": "factory.bank",
+      "surface": "building",
+      "sourceName": "Bank",
+      "status": "substituted",
+      "reason": "Building pass 2026-11-22: own row Build_Factory_Loan_Bank (banks carrier, HotA cost 500 Gold, 5 Ore, no requirement). Homm3FactoryLoanBankRuntime pays 2500 Gold when the Bank is built and takes 500 Gold at each of the next 5 day starts (debt kept in the save). Substituted because, by owner decision (REVIEW 2), the loan comes once with construction instead of a repeatable take-a-loan action in the building. The economy Build_Bank is renamed Counting House so the names differ.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "any time",
+        "again after"
+      ],
+      "currentRows": [
+        "Build_Factory_Loan_Bank"
+      ]
     }
   ]
 }

@@ -1,0 +1,192 @@
+{
+  "factionSid": "homm3_conflux",
+  "rows": [
+    {
+      "sid": "Build_Magic_University",
+      "section": "heroBonusBanks",
+      "template": "self:Build_Bank",
+      "replace": false,
+      "costs": [
+        {
+          "gold": 2500,
+          "wood": 5,
+          "ore": 5
+        }
+      ],
+      "bonuses": [
+        []
+      ],
+      "nameText": "Magic University",
+      "descriptionText": "Lets a hero in this town learn Daylight Magic, Nightshade Magic, Arcane Magic or Primal Magic for 2500 Gold each. Open it with the Magic University button on the town screen.",
+      "iconFrom": "self:Build_Bank",
+      "plugin": "Homm3ConfluxMagicUniversityRuntime",
+      "notes": "building pass 2026-11-22: conflux.magic_university on its own row. Template is the pre-pass Core Build_Bank row (the University icon). The visit +1 Spell Power is dropped. HoMM3 schools map to the four Olden Era school skills; 2500 Gold matches the map University's rewardCost.",
+      "nameTextLocales": {
+        "BRportugese": "Universidade da Magia",
+        "czech": "Magická univerzita",
+        "french": "Université de magie",
+        "german": "Magieuniversität",
+        "hungarian": "Mágiaegyetem",
+        "italian": "Università della Magia",
+        "japanese": "魔法大学",
+        "korean": "마법 대학",
+        "polish": "Uniwersytet Magii",
+        "russian": "Магический университет",
+        "spanish": "Universidad de Magia",
+        "turkish": "Büyü Üniversitesi",
+        "ukrainian": "Магічний університет",
+        "zhCN": "魔法大学",
+        "zhTW": "魔法大學"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Permite que um herói nesta cidade aprenda Magia Diurna, Magia da Beladona, Magia Arcana ou Magia Primal por 2500 de Ouro cada. Abra-a com o botão Universidade da Magia na tela da cidade.",
+        "czech": "Umožňuje hrdinovi v tomto městě naučit se Magii dne, Magii rulíku, Arkánní magii nebo Prapůvodní magii za 2500 Zlata každou. Otevřete ji tlačítkem Magická univerzita na obrazovce města.",
+        "french": "Permet à un héros de cette ville d’apprendre la magie du jour, la magie de la belladone, la magie arcanique ou la magie primordiale pour 2500 d’or chacune. Ouvrez-la avec le bouton Université de magie de l’écran de la ville.",
+        "german": "Erlaubt einem Helden in dieser Stadt, für je 2500 Gold Tagmagie, Nachtschattenmagie, Arkane Magie oder Urmagie zu erlernen. Öffne sie mit der Schaltfläche „Magieuniversität“ auf dem Stadtbildschirm.",
+        "hungarian": "Lehetővé teszi, hogy egy ebben a városban tartózkodó hős megtanulja a Nappali mágiát, az Éjvirág-mágiát, az Arkánus mágiát vagy az Őselemi mágiát darabonként 2500 Aranyért. Nyisd meg a városképernyő Mágiaegyetem gombjával.",
+        "italian": "Permette a un eroe in questa città di apprendere la Magia Diurna, la Magia della Belladonna, la Magia Arcana o la Magia Primordiale per 2500 Oro ciascuna. Aprila con il pulsante Università della Magia nella schermata della città.",
+        "japanese": "この都市にいるヒーローは、昼光魔法、ベラドンナ魔法、秘術魔法、原初魔法を各2500ゴールドで習得できる。都市画面の「魔法大学」ボタンで開く。",
+        "korean": "이 도시에 있는 영웅이 낮의 마법, 벨라도나 마법, 비전 마법, 원초 마법을 각각 금 2500에 배울 수 있습니다. 도시 화면의 마법 대학 버튼으로 엽니다.",
+        "polish": "Pozwala bohaterowi w tym mieście nauczyć się Magii Dnia, Magii Pokrzyku, Magii Tajemnej lub Magii Pierwotnej za 2500 Złota każda. Otwórz go przyciskiem Uniwersytet Magii na ekranie miasta.",
+        "russian": "Позволяет герою в этом городе изучить магию Дня, магию Паслёна, тайную магию или первозданную магию по 2500 Золота за каждую. Откройте его кнопкой «Магический университет» на экране города.",
+        "spanish": "Permite que un héroe de esta ciudad aprenda Magia diurna, Magia de belladona, Magia arcana o Magia primigenia por 2500 de oro cada una. Ábrela con el botón Universidad de Magia de la pantalla de la ciudad.",
+        "turkish": "Bu şehirdeki bir kahramanın Gündüz Büyüsü, Güzelavrat Büyüsü, Gizemli Büyü veya İlkel Büyü öğrenmesini tanesi 2500 Altın karşılığında sağlar. Şehir ekranındaki Büyü Üniversitesi düğmesiyle açın.",
+        "ukrainian": "Дозволяє герою в цьому місті вивчити магію Дня, магію Паслену, таємну магію або первісну магію по 2500 Золота за кожну. Відкрийте його кнопкою «Магічний університет» на екрані міста.",
+        "zhCN": "允许这座城镇中的英雄以每种2500黄金的价格学习日光魔法、颠茄魔法、奥术魔法或原初魔法。通过城镇界面的“魔法大学”按钮打开。",
+        "zhTW": "允許這座城鎮中的英雄以每種2500黃金的價格學習日光魔法、顛茄魔法、奧術魔法或原初魔法。透過城鎮介面的「魔法大學」按鈕開啟。"
+      }
+    },
+    {
+      "sid": "Build_Bank",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 2500,
+          "wood": 5,
+          "ore": 5
+        }
+      ],
+      "bonuses": [
+        [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              1000
+            ]
+          }
+        ]
+      ],
+      "nameText": "Bank",
+      "descriptionText": "Produces 1000 Gold daily.",
+      "iconFrom": "unfrozen_city:Build_Bank",
+      "notes": "building pass 2026-11-22: plain economy Bank restored (REVIEW 1). Moves heroBonusBanks -> banks; values match vanilla Build_Bank. If the applier cannot move sections on replace, apply as remove + add from template human_city:Build_Bank.",
+      "nameTextLocales": {
+        "BRportugese": "Banco",
+        "czech": "Banka",
+        "french": "Banque",
+        "german": "Bank",
+        "hungarian": "Bank",
+        "italian": "Banca",
+        "japanese": "銀行",
+        "korean": "은행",
+        "polish": "Bank",
+        "russian": "Банк",
+        "spanish": "Banco",
+        "turkish": "Banka",
+        "ukrainian": "Банк",
+        "zhCN": "银行",
+        "zhTW": "銀行"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Produz 1000 de Ouro por dia.",
+        "czech": "Denně vyprodukuje 1000 Zlata.",
+        "french": "Produit 1000 d’or par jour.",
+        "german": "Produziert täglich 1000 Gold.",
+        "hungarian": "Naponta 1000 Aranyat termel.",
+        "italian": "Produce 1000 Oro al giorno.",
+        "japanese": "毎日1000ゴールドを生産する。",
+        "korean": "매일 금 1000을 생산합니다.",
+        "polish": "Produkuje 1000 Złota dziennie.",
+        "russian": "Приносит 1000 Золота в день.",
+        "spanish": "Produce 1000 de oro al día.",
+        "turkish": "Günde 1000 Altın üretir.",
+        "ukrainian": "Приносить 1000 Золота на день.",
+        "zhCN": "每天产出1000黄金。",
+        "zhTW": "每天產出1000黃金。"
+      }
+    },
+    {
+      "sid": "Build_Spring_of_Life",
+      "section": "graals",
+      "replace": true,
+      "fields": {
+        "sideBonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "all",
+              "1"
+            ]
+          }
+        ],
+        "cityBonuses": [
+          {
+            "type": "magicGuildExpandMagics"
+          },
+          {
+            "type": "cityUnitsIncrementPer",
+            "parameters": [
+              "all",
+              "1.0"
+            ]
+          }
+        ]
+      },
+      "nameText": "Aurora Borealis",
+      "descriptionText": "Building a Mage Guild in this city unlocks all spells of the corresponding tier. +1 to all creature growth in all your cities. This city's dwellings produce +100% units.",
+      "notes": "building pass 2026-11-22: conflux.aurora_borealis. Native magicGuildExpandMagics (the vanilla Frigid Firmament lever, unfrozen_city:Build_Frigid_Firmament) gives every spell; empire +1 growth and +100% city growth kept (owner answer 3). graalType stays NatureGraal: BuildingGraal.OnConstruct adds every cityBonus to the city regardless of graalType, and BuildingMagicGuild reads cityBonuses.magicGuildExpandMagicsBonuses.",
+      "costs": [
+        {
+          "graal": 1
+        }
+      ],
+      "nameTextLocales": {
+        "BRportugese": "Aurora Boreal",
+        "czech": "Polární záře",
+        "french": "Aurore boréale",
+        "german": "Nordlicht",
+        "hungarian": "Északi fény",
+        "italian": "Aurora Boreale",
+        "japanese": "オーロラ",
+        "korean": "오로라",
+        "polish": "Zorza Polarna",
+        "russian": "Северное сияние",
+        "spanish": "Aurora boreal",
+        "turkish": "Kuzey Işıkları",
+        "ukrainian": "Північне сяйво",
+        "zhCN": "极光",
+        "zhTW": "極光"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Construir uma Guilda de Magos nesta cidade desbloqueia todas as magias do nível correspondente. +1 no crescimento de todas as criaturas em todas as suas cidades. As moradias desta cidade produzem +100% de unidades.",
+        "czech": "Stavba Gildy mágů v tomto městě odemkne všechna kouzla odpovídající úrovně. +1 k růstu všech jednotek ve všech vašich městech. Obydlí tohoto města produkují +100 % jednotek.",
+        "french": "Construire une guilde des mages dans cette ville débloque tous les sortilèges du niveau correspondant. +1 à la croissance de toutes les créatures dans toutes vos villes. Les habitations de cette ville produisent +100 % d’unités.",
+        "german": "Der Bau einer Magiergilde in dieser Stadt schaltet alle Zauber der entsprechenden Stufe frei. +1 auf das Kreaturenwachstum in allen deinen Städten. Die Behausungen dieser Stadt produzieren +100 % Einheiten.",
+        "hungarian": "Ha ebben a városban Mágusok Céhét építesz, feloldja a megfelelő szint összes varázslatát. +1 a lények szaporodásához az összes városodban. A város lakóhelyei +100% egységet termelnek.",
+        "italian": "Costruire una Gilda dei Maghi in questa città sblocca tutti gli incantesimi del livello corrispondente. +1 alla crescita di tutte le creature in tutte le tue città. Le abitazioni di questa città producono +100% di unità.",
+        "japanese": "この都市にメイジギルドを建てると、対応するレベルの呪文がすべて解禁される。所有するすべての都市でクリーチャーの増加数が+1される。この都市の居住施設は+100%のユニットを生産する。",
+        "korean": "이 도시에 마법사 길드를 지으면 해당 단계의 모든 주문이 해금됩니다. 모든 도시의 생물 성장이 +1 증가합니다. 이 도시의 거주지는 유닛을 +100% 생산합니다.",
+        "polish": "Zbudowanie Gildii Magów w tym mieście odblokowuje wszystkie zaklęcia odpowiedniego poziomu. +1 do przyrostu wszystkich stworów we wszystkich twoich miastach. Siedliska w tym mieście produkują +100% jednostek.",
+        "russian": "Постройка Гильдии магов в этом городе открывает все заклинания соответствующего уровня. +1 к приросту всех существ во всех ваших городах. Жилища этого города производят +100% существ.",
+        "spanish": "Construir un Gremio de Magos en esta ciudad desbloquea todos los hechizos del nivel correspondiente. +1 al crecimiento de todas las criaturas en todas tus ciudades. Las viviendas de esta ciudad producen +100 % de unidades.",
+        "turkish": "Bu şehirde Büyücüler Loncası inşa etmek, ilgili seviyedeki tüm büyülerin kilidini açar. Tüm şehirlerinizdeki tüm yaratık üretimine +1. Bu şehrin konutları +%100 birim üretir.",
+        "ukrainian": "Побудова Гільдії магів у цьому місті відкриває всі закляття відповідного рівня. +1 до приросту всіх істот у всіх ваших містах. Житла цього міста виробляють +100% істот.",
+        "zhCN": "在这座城镇建造法师公会，会解锁对应阶位的全部法术。你所有城镇的生物增长+1。这座城镇的居所多生产+100%的单位。",
+        "zhTW": "在這座城鎮建造法師公會，會解鎖對應階位的全部法術。你所有城鎮的生物增長+1。這座城鎮的居所多生產+100%的單位。"
+      }
+    }
+  ],
+  "remove": []
+}

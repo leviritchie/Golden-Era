@@ -102,6 +102,21 @@ internal static class Homm3BulwarkRunesRuntime
 		internal readonly HashSet<int> AppliedThresholds = new();
 		internal string UnitSid;
 		internal int SkillRank;
+		// law pass 2026-11-21: the owner's Bulwark law levels, refreshed on every live eligibility read.
+		internal bool LawsRead;
+		internal int CapBonus;
+		internal int ClanOath;
+		internal int Carved;
+		internal bool Shared;
+		/// <summary>Runes Carved in Advance (#7) was granted (or found not owned) for this stack.</summary>
+		internal bool CarvedChecked;
+		/// <summary>building pass 2026-11-22: Altar of the Runes was granted (or found not owned) for this stack.</summary>
+		internal bool AltarChecked;
+		// Runes subskills (2026-11-25), refreshed with the laws.
+		internal bool Ward;
+		internal bool Frost;
+		/// <summary>Elder Mark: this stack gains double Rune Levels.</summary>
+		internal bool Marked;
 	}
 
 	private sealed class ActionCorrelation
@@ -154,6 +169,8 @@ internal static class Homm3BulwarkRunesRuntime
 				return;
 			}
 
+			// law pass 2026-11-21: Carved in Advance round-1 grant and Shared Runes adjacency.
+			Homm3BulwarkLawHooks.TryRegister(harmony, _log);
 			_log?.LogInfo(
 				"HoMM3 Bulwark Runes logic-hub owner registered patches="
 				+ _patched.ToString(CultureInfo.InvariantCulture)
@@ -181,25 +198,25 @@ internal static class Homm3BulwarkRunesRuntime
 	/// <summary>Incremental Offence granted when crossing threshold level.</summary>
 	internal static int IncrementalOffenceForThreshold(int threshold)
 	{
-		return threshold == 1 || threshold == 4 || threshold == 7 ? 2 : 0;
+		return threshold == 1 || threshold == 4 || threshold == 7 || threshold == 10 ? 2 : 0;
 	}
 
 	/// <summary>Incremental Defence granted when crossing threshold level.</summary>
 	internal static int IncrementalDefenceForThreshold(int threshold)
 	{
-		return threshold == 2 || threshold == 5 || threshold == 8 ? 2 : 0;
+		return threshold == 2 || threshold == 5 || threshold == 8 || threshold == 11 ? 2 : 0;
 	}
 
 	/// <summary>Incremental Speed granted when crossing threshold level.</summary>
 	internal static int IncrementalSpeedForThreshold(int threshold)
 	{
-		return threshold == 3 || threshold == 6 || threshold == 9 ? 1 : 0;
+		return threshold == 3 || threshold == 6 || threshold == 9 || threshold == 12 ? 1 : 0;
 	}
 
 	internal static int AttackBonusForLevel(int level)
 	{
 		var total = 0;
-		for (var t = 1; t <= level && t <= CapExpert; t++)
+		for (var t = 1; t <= level && t <= Homm3BulwarkLawHooks.MaxRuneLevel; t++)
 			total += IncrementalOffenceForThreshold(t);
 		return total;
 	}
@@ -207,7 +224,7 @@ internal static class Homm3BulwarkRunesRuntime
 	internal static int DefenseBonusForLevel(int level)
 	{
 		var total = 0;
-		for (var t = 1; t <= level && t <= CapExpert; t++)
+		for (var t = 1; t <= level && t <= Homm3BulwarkLawHooks.MaxRuneLevel; t++)
 			total += IncrementalDefenceForThreshold(t);
 		return total;
 	}
@@ -215,13 +232,16 @@ internal static class Homm3BulwarkRunesRuntime
 	internal static int SpeedBonusForLevel(int level)
 	{
 		var total = 0;
-		for (var t = 1; t <= level && t <= CapExpert; t++)
+		for (var t = 1; t <= level && t <= Homm3BulwarkLawHooks.MaxRuneLevel; t++)
 			total += IncrementalSpeedForThreshold(t);
 		return total;
 	}
 
 	internal static string BuffSidForLevel(int level)
 	{
+		// law pass 2026-11-21: Elder Runes (#30): levels 10-12 use the law's buff rows.
+		if (level > CapExpert && level <= Homm3BulwarkLawHooks.MaxRuneLevel)
+			return Homm3BulwarkLawHooks.ElderBuffSidPrefix + level;
 		if (level < 1 || level > CapExpert)
 			return null;
 		return RuneBuffSidPrefix + level;
@@ -1018,7 +1038,10 @@ internal static class Homm3BulwarkRunesRuntime
 				+ " method="
 				+ (__originalMethod?.Name ?? "?"));
 			if (gain > 0)
+			{
 				TryApplyGain(target, unitKey, gain, "defend");
+				Homm3BulwarkRuneSubskills.OnDefend(target);
+			}
 		}
 		catch (Exception ex)
 		{
@@ -1094,7 +1117,7 @@ internal static class Homm3BulwarkRunesRuntime
 		// The ability-runtime caster arrives as its declared FieldObject interop proxy, so reflection
 		// member reads miss the Unit members (sid null => every stack looked like a war machine).
 		unit = TryWrapBattleUnit(unit) ?? unit;
-		if (!TryResolveEligibleStack(unit, unitKey, out var unitSid, out var skillRank, out var failReason))
+		if (!TryResolveEligibleStack(unit, unitKey, out var unitSid, out var skillRank, out var logicHero, out var failReason))
 		{
 			// Registry GetHashCode caches can stick a TransferSide whose logicHero is
 			// null under re-wrap. After this native stack already proved Bulwark
@@ -1119,8 +1142,20 @@ internal static class Homm3BulwarkRunesRuntime
 				+ unitKey);
 		}
 
+		// law pass 2026-11-21: read the owner's Bulwark laws outside the lock (null hero = cached path keeps the last read).
+		var lawsLive = logicHero != null;
+		var lawCap = lawsLive ? Homm3BulwarkLawHooks.CapBonus(logicHero) : 0;
+		var lawClan = lawsLive ? Homm3BulwarkLawHooks.Rank(logicHero, Homm3BulwarkLawHooks.ClanOathLaw) : 0;
+		var lawCarved = lawsLive ? Homm3BulwarkLawHooks.Rank(logicHero, Homm3BulwarkLawHooks.CarvedInAdvanceLaw) : 0;
+		var lawShared = lawsLive && Homm3BulwarkLawHooks.Rank(logicHero, Homm3BulwarkLawHooks.SharedRunesLaw) > 0;
+		var ward = lawsLive && Homm3BulwarkRuneSubskills.Has(logicHero, Homm3BulwarkRuneSubskills.RuneWard);
+		var frost = lawsLive && Homm3BulwarkRuneSubskills.Has(logicHero, Homm3BulwarkRuneSubskills.FrostTempo);
+		var sharedGain = string.Equals(reason, SharedReason, StringComparison.Ordinal);
+		var carvedGain = string.Equals(reason, CarvedReason, StringComparison.Ordinal);
+
 		var crossed = new List<int>();
 		int newLevel;
+		var share = false;
 		lock (Gate)
 		{
 			if (!StackStateByNativeKey.TryGetValue(unitKey, out var state) || state == null)
@@ -1135,12 +1170,48 @@ internal static class Homm3BulwarkRunesRuntime
 			state.SkillRank = skillRank;
 			if (!string.IsNullOrWhiteSpace(unitSid))
 				state.UnitSid = unitSid;
+			if (lawsLive)
+			{
+				state.LawsRead = true;
+				state.CapBonus = lawCap;
+				state.ClanOath = lawClan;
+				state.Carved = lawCarved;
+				state.Shared = lawShared;
+				state.Ward = ward;
+				state.Frost = frost;
+			}
+			ward = state.Ward;
+			frost = state.Frost;
 			var cap = ResolveCap(skillRank);
 			if (cap < 1)
 			{
 				LogLimited("Rune gain withheld: skill rank grants no cap");
 				return;
 			}
+			// law pass 2026-11-25: Elder Runes (#30): cap + 3 only at the Expert cap (9 -> 12), so a Basic or Advanced
+			// hero never gets the next skill rank's limit from the law.
+			if (cap >= CapExpert)
+				cap = Math.Min(Homm3BulwarkLawHooks.MaxRuneLevel, cap + state.CapBonus);
+			// law pass 2026-11-25: Clan Oath (#8): Defend 4/5, first damage 3 at both levels.
+			if (string.Equals(reason, "defend", StringComparison.Ordinal))
+				gain = Homm3BulwarkLawHooks.DefendGain(state.ClanOath, gain);
+			else if (string.Equals(reason, "damage", StringComparison.Ordinal))
+				gain = Homm3BulwarkLawHooks.DamageGain(state.ClanOath, gain);
+			// law pass 2026-11-21: Runes Carved in Advance (#7): a stack the round-1 grant missed (summoned later)
+			// gets its levels with its first Rune event.
+			if (!state.CarvedChecked && state.LawsRead)
+			{
+				state.CarvedChecked = true;
+				if (!carvedGain && state.Carved > 0)
+				{
+					gain += state.Carved;
+					reason += "+carved L" + state.Carved;
+				}
+			}
+			// Elder Mark: double every gain, after the law adjustments.
+			if (state.Marked)
+				gain *= Homm3BulwarkRuneSubskills.ElderMarkFactor;
+			share = state.Shared && !sharedGain;
 			var before = state.Level;
 			state.Level = Math.Min(cap, Math.Max(0, state.Level + gain));
 			newLevel = state.Level;
@@ -1173,6 +1244,25 @@ internal static class Homm3BulwarkRunesRuntime
 			}
 		}
 
+		if (ward)
+			Homm3BulwarkRuneSubskills.ApplyRuneWard(unit, crossed);
+		if (frost && crossed.Exists(Homm3BulwarkRuneSubskills.IsFrostThreshold))
+			Homm3BulwarkRuneSubskills.ApplyFrostTempo(unit);
+
+		// law pass 2026-11-21: Shared Runes (#12): each crossed 3/6/9/12 gives adjacent friendly stacks +1; a shared
+		// gain never shares again.
+		if (share)
+		{
+			var shares = 0;
+			foreach (var threshold in crossed)
+			{
+				if (Homm3BulwarkLawHooks.IsShareThreshold(threshold))
+					shares++;
+			}
+			if (shares > 0)
+				ShareRunes(unit, shares);
+		}
+
 		LogLimited(
 			"Rune gain applied reason="
 			+ reason
@@ -1187,6 +1277,179 @@ internal static class Homm3BulwarkRunesRuntime
 			+ " thresholds=["
 			+ string.Join(",", crossed)
 			+ "]");
+	}
+
+	private const string SharedReason = "shared";
+	private const string CarvedReason = "carved";
+	private const string AltarReason = "altar";
+	private const string MarchReason = "march";
+
+	// law pass 2026-11-21: Shared Runes (#12).
+	private static void ShareRunes(object unit, int shares)
+	{
+		try
+		{
+			var allies = Homm3BulwarkLawHooks.AdjacentFriendlyUnits(unit);
+			foreach (var ally in allies)
+			{
+				if (!TryResolveUnitKey(ally, out var allyKey, out _))
+					continue;
+				TryApplyGain(ally, allyKey, shares, SharedReason);
+			}
+			LogLimited("Shared Runes: +" + shares + " to " + allies.Count + " adjacent stack(s).");
+		}
+		catch (Exception ex)
+		{
+			LogLimited("Shared Runes failed closed: " + ex.GetBaseException().Message);
+		}
+	}
+
+	/// <summary>
+	/// law pass 2026-11-21: Runes Carved in Advance (#7). Round-1 grant from <see cref="Homm3BulwarkLawHooks"/>:
+	/// an eligible stack whose owner holds the law gains min(level, cap) Rune Levels through the normal gain path.
+	/// True when levels were granted.
+	/// </summary>
+	internal static bool ApplyCarvedInAdvance(object unit)
+	{
+		if (_probeOnly || unit == null)
+			return false;
+		try
+		{
+			unit = TryWrapBattleUnit(unit) ?? unit;
+			if (!TryResolveUnitKey(unit, out var unitKey, out _))
+				return false;
+			lock (Gate)
+			{
+				if (StackStateByNativeKey.TryGetValue(unitKey, out var known) && known != null && known.CarvedChecked)
+					return false;
+			}
+			if (!TryResolveEligibleStack(unit, unitKey, out _, out _, out var logicHero, out _) || logicHero == null)
+				return false;
+			var level = Math.Min(2, Homm3BulwarkLawHooks.Rank(logicHero, Homm3BulwarkLawHooks.CarvedInAdvanceLaw));
+			if (level <= 0)
+				return false;
+			TryApplyGain(unit, unitKey, level, CarvedReason);
+			return true;
+		}
+		catch (Exception ex)
+		{
+			LogLimited("Carved in Advance failed closed: " + ex.GetBaseException().Message);
+			return false;
+		}
+	}
+
+	/// <summary>
+	/// building pass 2026-11-22: Altar of the Runes (<see cref="Homm3BulwarkAltarRunesRuntime"/>). Round-1 grant of
+	/// <paramref name="altarLevelsForHero"/>(owner hero) Rune Levels to a stack Runes already covers, through the normal
+	/// gain path with its own reason. Once per stack per battle. True when levels were granted.
+	/// </summary>
+	internal static bool ApplyAltarOfRunes(object unit, Func<object, int> altarLevelsForHero)
+	{
+		if (_probeOnly || unit == null || altarLevelsForHero == null)
+			return false;
+		try
+		{
+			unit = TryWrapBattleUnit(unit) ?? unit;
+			if (!TryResolveUnitKey(unit, out var unitKey, out _))
+				return false;
+			lock (Gate)
+			{
+				if (StackStateByNativeKey.TryGetValue(unitKey, out var known) && known != null && known.AltarChecked)
+					return false;
+			}
+			if (!TryResolveEligibleStack(unit, unitKey, out _, out _, out var logicHero, out _) || logicHero == null)
+				return false;
+			var levels = altarLevelsForHero(logicHero);
+			if (levels > 0)
+				TryApplyGain(unit, unitKey, levels, AltarReason);
+			lock (Gate)
+			{
+				if (!StackStateByNativeKey.TryGetValue(unitKey, out var state) || state == null)
+					StackStateByNativeKey[unitKey] = state = new StackRuneState();
+				state.AltarChecked = true;
+			}
+			return levels > 0;
+		}
+		catch (Exception ex)
+		{
+			LogLimited("Altar of the Runes failed closed: " + ex.GetBaseException().Message);
+			return false;
+		}
+	}
+
+	/// <summary>An eligible Bulwark Runes stack and its owner hero, for the Runes subskills.</summary>
+	internal static bool TryResolveSubskillOwner(object value, out Unit unit, out long unitKey, out string unitSid, out object logicHero)
+	{
+		unitKey = 0;
+		unitSid = null;
+		logicHero = null;
+		unit = (TryWrapBattleUnit(value) ?? value) as Unit;
+		return !_probeOnly
+		       && unit != null
+		       && TryResolveUnitKey(unit, out unitKey, out _)
+		       && TryResolveEligibleStack(unit, unitKey, out unitSid, out _, out logicHero, out _)
+		       && logicHero != null;
+	}
+
+	/// <summary>Clan March: +1 Rune Level for a stack that changed hex during the previous round.</summary>
+	internal static bool ApplyClanMarch(object value)
+	{
+		try
+		{
+			if (!TryResolveSubskillOwner(value, out var unit, out var unitKey, out _, out var logicHero)
+			    || !Homm3BulwarkRuneSubskills.Has(logicHero, Homm3BulwarkRuneSubskills.ClanMarch))
+				return false;
+			TryApplyGain(unit, unitKey, Homm3BulwarkRuneSubskills.ClanMarchGain, MarchReason);
+			return true;
+		}
+		catch (Exception ex)
+		{
+			LogLimited("Clan March failed closed: " + ex.GetBaseException().Message);
+			return false;
+		}
+	}
+
+	/// <summary>Elder Mark: later gains of this stack are doubled.</summary>
+	internal static void MarkElder(long unitKey)
+	{
+		lock (Gate)
+		{
+			if (!StackStateByNativeKey.TryGetValue(unitKey, out var state) || state == null)
+				StackStateByNativeKey[unitKey] = state = new StackRuneState();
+			state.Marked = true;
+		}
+	}
+
+	/// <summary>Army slot of a battle stack (Elder Mark tie break); int.MaxValue when unreadable.</summary>
+	internal static int TryResolveArmySlot(object unit)
+	{
+		try
+		{
+			var transfer = ReadMember(unit, GameSymbols.BattleEventLaws.UnitTransferUnitMembers) as Il2CppInterop.Runtime.InteropTypes.Il2CppObjectBase;
+			var typed = transfer?.TryCast<TransferUnit>();
+			return typed == null ? int.MaxValue : typed.slotPos;
+		}
+		catch
+		{
+			return int.MaxValue;
+		}
+	}
+
+	internal static DataHero ResolveDataHero(object logicHero)
+	{
+		if (logicHero == null
+		    || _logicHeroDataHeroGetter?.DeclaringType == null
+		    || !_logicHeroDataHeroGetter.DeclaringType.IsInstanceOfType(logicHero))
+			return null;
+		try
+		{
+			return _logicHeroDataHeroGetter.Invoke(logicHero, Array.Empty<object>()) as DataHero;
+		}
+		catch (Exception ex)
+		{
+			LogLimited("hero read failed: " + ex.GetBaseException().Message);
+			return null;
+		}
 	}
 
 	private static bool TryReuseCachedEligibleRank(
@@ -1259,10 +1522,12 @@ internal static class Homm3BulwarkRunesRuntime
 		long unitKey,
 		out string unitSid,
 		out int skillRank,
+		out object logicHero,
 		out string failReason)
 	{
 		unitSid = null;
 		skillRank = 0;
+		logicHero = null;
 		failReason = null;
 		unitSid = TryResolveBattleUnitSid(unit);
 		if (IsWarMachineExcluded(unitSid))
@@ -1283,6 +1548,11 @@ internal static class Homm3BulwarkRunesRuntime
 			failReason = "Runes skill rank grants no cap";
 			return false;
 		}
+		// law pass 2026-11-21: the owner for the Bulwark law reads.
+		if (transferSide is TransferSide typedSide)
+			logicHero = typedSide.logicHero;
+		else
+			TryReadMember(transferSide, GameSymbols.SkeletalNecromancy.TransferSideLogicHeroMembers, out logicHero);
 		return true;
 	}
 
@@ -1463,7 +1733,7 @@ internal static class Homm3BulwarkRunesRuntime
 		}
 	}
 
-	private static string TryResolveBattleUnitSid(object unit)
+	internal static string TryResolveBattleUnitSid(object unit)
 	{
 		if (unit == null)
 			return null;
@@ -1594,7 +1864,7 @@ internal static class Homm3BulwarkRunesRuntime
 		return string.IsNullOrWhiteSpace(sid) ? null : sid.Trim();
 	}
 
-	private static void LogLimited(string message)
+	internal static void LogLimited(string message)
 	{
 		if (_logged++ >= LogCap)
 			return;

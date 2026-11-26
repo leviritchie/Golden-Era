@@ -260,6 +260,8 @@ FREEZE_EPS_REL = 1e-4
 FREEZE_EPS_SCALE = 1e-4
 # key spacing under this = a resample (idle retime: 1/30 s); a stride-matched Move keeps >= 1/12/1.6 = 0.052 s
 FREEZE_MIN_SPACING_S = 0.045
+AUTHORED_30FPS_STAMP = "homm3Authored30fps"
+AUTHORED_30FPS_SCHEMA = "homm3_unit_rebuild.authored_30fps.v1"
 MASTER_RUNS = ROOT / "artifacts/homm3_mocap_v2/full_set_mocap_idle0_v1/runs"
 TELEPORT_EFFECT_WINDOWS = HERE / "reference/teleport_effect_windows.json"
 # inferno_teleport.py keys the hidden body at 0.001. This only establishes invisibility for the exact
@@ -411,18 +413,34 @@ def freeze_metrics(js, acc, anim, idx: dict, extent: float, def_segs: list | Non
     if not sets:
         return {"frames": 2 if chans else 0, "freezeRun": 1 if chans else 0, "rawFreezeRun": 1 if chans else 0}
     dh = None
-    segs = [[as_def_frame(f) for f in h] for h in (def_segs or [])]
-    cand = [(k, h) for h in sorted(segs, key=len, reverse=True) for k in sets if len(k) in (len(h), len(h) + 1)]
-    if cand:
-        times, dh = np.array(cand[0][0]), list(cand[0][1])
-        if len(times) == len(dh) + 1:
-            dh.append(dh[0])                     # the loop key repeats frame 0
-    else:
-        # keys off the DEF grid (emphasis adds keys; no DEF segment): measured strictly on the sparsest key set,
-        # unless that set is a resample (idle retime, 1/30 s), which freeze_check measures on its input instead
+    extras = js.get("asset", {}).get("extras") or {}
+    authored_30fps = extras.get(AUTHORED_30FPS_STAMP) if isinstance(extras, dict) else None
+    if authored_30fps is not None:
+        try:
+            fps_val = float(authored_30fps.get("fps", 0)) if isinstance(authored_30fps, dict) else 0.0
+        except (TypeError, ValueError):
+            fps_val = 0.0
+        if not isinstance(authored_30fps, dict) or authored_30fps.get("schema") != AUTHORED_30FPS_SCHEMA or fps_val != 30.0:
+            return {"freezeEvidence": f"{anim['name']}: invalid {AUTHORED_30FPS_STAMP} stamp"}
         times = np.array(sets[0])
-        if float(np.median(np.diff(times))) < FREEZE_MIN_SPACING_S:
-            return {"freezeResampled": f"keys every {float(np.median(np.diff(times))):.3f} s ({len(times)} keys)"}
+        dt = float(np.median(np.diff(times)))
+        if not (0.025 <= dt <= 0.045):
+            return {"freezeResampled": f"authored 30fps key spacing {dt:.4f} s outside [0.025, 0.045] ({len(times)} keys)"}
+        n_steps = max(2, int(round((times[-1] - times[0]) * 12.0)) + 1)
+        times = np.linspace(times[0], times[-1], n_steps)
+    else:
+        segs = [[as_def_frame(f) for f in h] for h in (def_segs or [])]
+        cand = [(k, h) for h in sorted(segs, key=len, reverse=True) for k in sets if len(k) in (len(h), len(h) + 1)]
+        if cand:
+            times, dh = np.array(cand[0][0]), list(cand[0][1])
+            if len(times) == len(dh) + 1:
+                dh.append(dh[0])                     # the loop key repeats frame 0
+        else:
+            # keys off the DEF grid (emphasis adds keys; no DEF segment): measured strictly on the sparsest key set,
+            # unless that set is a resample (idle retime, 1/30 s), which freeze_check measures on its input instead
+            times = np.array(sets[0])
+            if float(np.median(np.diff(times))) < FREEZE_MIN_SPACING_S:
+                return {"freezeResampled": f"keys every {float(np.median(np.diff(times))):.3f} s ({len(times)} keys)"}
     ang = np.zeros(len(times) - 1); mov = np.zeros(len(times) - 1); scl = np.zeros(len(times) - 1)
     absent = np.array([f.absent for f in dh]) if dh is not None else np.zeros(len(times), bool)
     body_scale_counts = effect_window is not None or bool(absent.any())

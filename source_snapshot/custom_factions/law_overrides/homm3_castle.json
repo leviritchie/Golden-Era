@@ -1,692 +1,1515 @@
 {
-  "lawOverrides": {
-    "fraction_law_homm3_castle_13": {
-      "enabled": true,
-      "nameText": "Royal Retaliation",
-      "descriptionText": "Castle creatures gain 1 additional counterattack charge.",
-      "parametersPerLevel": [
-        {
-          "cost": 4,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "numCounters",
-                "1"
-              ],
-              "receivers": [
-                "h3_pikeman",
-                "h3_pikeman_upg",
-                "h3_pikeman_upg_alt",
-                "h3_archer",
-                "h3_archer_upg",
-                "h3_archer_upg_alt",
-                "h3_griffin",
-                "h3_griffin_upg",
-                "h3_griffin_upg_alt",
-                "h3_swordsman",
-                "h3_swordsman_upg",
-                "h3_swordsman_upg_alt",
-                "h3_monk",
-                "h3_monk_upg",
-                "h3_monk_upg_alt",
-                "h3_cavalier",
-                "h3_cavalier_upg",
-                "h3_cavalier_upg_alt",
-                "h3_angel",
-                "h3_angel_upg",
-                "h3_angel_upg_alt"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "iconKey": "fraction_law_human_13_icon",
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_13_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required."
+ "lawOverrides": {
+  "fraction_law_homm3_castle_1": {
+   "enabled": true,
+   "nameText": "Tax Collectors",
+   "descriptionText": "Produces {0} Gold daily.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "sideRes",
+       "parameters": [
+        "gold",
+        "250"
+       ]
+      }
+     ]
     },
-    "fraction_law_homm3_castle_15": {
-      "enabled": true,
-      "nameText": "Daylight Liturgy",
-      "descriptionText": "Heroes can learn tier 1 Day spells.",
-      "parametersPerLevel": [
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "heroStat",
-              "parameters": [
-                "magicSchoolSet",
-                "day",
-                "0",
-                "1"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconKey": "fraction_law_human_15_icon",
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_15_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required."
-    },
-    "fraction_law_homm3_castle_18": {
-      "enabled": true,
-      "nameText": "Line Doctrine",
-      "descriptionText": "Friendly creatures deal 5%/10% more melee damage and take 5%/10% less melee damage by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "outDmgMods",
-                "melee_attack",
-                "0.05"
-              ],
-              "receivers": [
-                "h3_pikeman",
-                "h3_archer",
-                "h3_griffin",
-                "h3_swordsman",
-                "h3_monk",
-                "h3_cavalier",
-                "h3_angel"
-              ]
-            },
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "inDmgMods",
-                "melee_attack",
-                "-0.05"
-              ],
-              "receivers": [
-                "h3_pikeman",
-                "h3_archer",
-                "h3_griffin",
-                "h3_swordsman",
-                "h3_monk",
-                "h3_cavalier",
-                "h3_angel"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "outDmgMods",
-                "melee_attack",
-                "0.10"
-              ],
-              "receivers": [
-                "h3_pikeman",
-                "h3_archer",
-                "h3_griffin",
-                "h3_swordsman",
-                "h3_monk",
-                "h3_cavalier",
-                "h3_angel"
-              ]
-            },
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "inDmgMods",
-                "melee_attack",
-                "-0.10"
-              ],
-              "receivers": [
-                "h3_pikeman",
-                "h3_archer",
-                "h3_griffin",
-                "h3_swordsman",
-                "h3_monk",
-                "h3_cavalier",
-                "h3_angel"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconKey": "fraction_law_human_18_icon",
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_18_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required."
-    },
-    "fraction_law_homm3_castle_19": {
-      "enabled": true,
-      "nameText": "Volley Doctrine",
-      "descriptionText": "Friendly creatures deal 5%/10% more ranged damage and take 5%/10% less ranged damage by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "outDmgMods",
-                "shoot_attack",
-                "0.05"
-              ],
-              "receivers": [
-                "h3_pikeman",
-                "h3_archer",
-                "h3_griffin",
-                "h3_swordsman",
-                "h3_monk",
-                "h3_cavalier",
-                "h3_angel"
-              ]
-            },
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "inDmgMods",
-                "shoot_attack",
-                "-0.05"
-              ],
-              "receivers": [
-                "h3_pikeman",
-                "h3_archer",
-                "h3_griffin",
-                "h3_swordsman",
-                "h3_monk",
-                "h3_cavalier",
-                "h3_angel"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "outDmgMods",
-                "shoot_attack",
-                "0.10"
-              ],
-              "receivers": [
-                "h3_pikeman",
-                "h3_archer",
-                "h3_griffin",
-                "h3_swordsman",
-                "h3_monk",
-                "h3_cavalier",
-                "h3_angel"
-              ]
-            },
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "inDmgMods",
-                "shoot_attack",
-                "-0.10"
-              ],
-              "receivers": [
-                "h3_pikeman",
-                "h3_archer",
-                "h3_griffin",
-                "h3_swordsman",
-                "h3_monk",
-                "h3_cavalier",
-                "h3_angel"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconKey": "fraction_law_human_20_icon",
-      "iconNotes": "Icon of the live vanilla law with this effect, instead of the donor-index icon fraction_law_human_19_icon: human_19_icon is not drawn by any live vanilla law."
-    },
-    "fraction_law_homm3_castle_2": {
-      "enabled": true,
-      "nameText": "Road Wardens",
-      "descriptionText": "Heroes gain +2/+4 Sight radius by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "heroStat",
-              "parameters": [
-                "viewRadius",
-                "2"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "heroStat",
-              "parameters": [
-                "viewRadius",
-                "4"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconKey": "fraction_law_human_2_icon",
-      "iconNotes": "Canonical shared-law icon pass: plain hero Sight laws use the same vanilla scouting icon across custom factions. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_21": {
-      "enabled": true,
-      "nameText": "Prosperous Holdings",
-      "descriptionText": "Gold income from your sources increases by +10%/+15%/+20% by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 4,
-          "bonuses": [
-            {
-              "type": "sideStat",
-              "parameters": [
-                "resPercentIncrementSet",
-                "gold",
-                "0.10"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "sideStat",
-              "parameters": [
-                "resPercentIncrementSet",
-                "gold",
-                "0.15"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "sideStat",
-              "parameters": [
-                "resPercentIncrementSet",
-                "gold",
-                "0.20"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconKey": "fraction_law_human_21_icon",
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_21_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required."
-    },
-    "fraction_law_homm3_castle_22": {
-      "enabled": true,
-      "nameText": "Righteous Zeal",
-      "descriptionText": "Heroes gain +1/+2 Morale by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "heroStat",
-              "parameters": [
-                "moral",
-                "1"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "heroStat",
-              "parameters": [
-                "moral",
-                "2"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconKey": "fraction_law_human_22_icon",
-      "iconNotes": "Canonical shared-law icon pass: hero Morale laws use the same vanilla morale icon across custom factions. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_25": {
-      "enabled": true,
-      "nameText": "Encouragement",
-      "descriptionText": "Morale trigger chance for friendly creatures increases by +1%/+2%/+3% per Morale point by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 1,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "additionalActionChanceModifier",
-                "0.01"
-              ],
-              "receivers": [
-                "h3_pikeman",
-                "h3_archer",
-                "h3_griffin",
-                "h3_swordsman",
-                "h3_monk",
-                "h3_cavalier",
-                "h3_angel"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 1,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "additionalActionChanceModifier",
-                "0.02"
-              ],
-              "receivers": [
-                "h3_pikeman",
-                "h3_archer",
-                "h3_griffin",
-                "h3_swordsman",
-                "h3_monk",
-                "h3_cavalier",
-                "h3_angel"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 1,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "additionalActionChanceModifier",
-                "0.03"
-              ],
-              "receivers": [
-                "h3_pikeman",
-                "h3_archer",
-                "h3_griffin",
-                "h3_swordsman",
-                "h3_monk",
-                "h3_cavalier",
-                "h3_angel"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconKey": "fraction_law_human_25_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_27": {
-      "enabled": true,
-      "nameText": "High Daylight",
-      "descriptionText": "Heroes can learn any tier of Day spells.",
-      "parametersPerLevel": [
-        {
-          "cost": 4,
-          "bonuses": [
-            {
-              "type": "heroStat",
-              "parameters": [
-                "magicSchoolSet",
-                "day",
-                "5",
-                "0"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconKey": "fraction_law_human_27_icon",
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_27_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required."
-    },
-    "fraction_law_homm3_castle_28": {
-      "enabled": true,
-      "nameText": "Mason's Charter",
-      "descriptionText": "Buildings cost 20%/40% less Ore.",
-      "parametersPerLevel": [
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "constructionDiscount",
-              "parameters": [
-                "ore",
-                "-0.20"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "constructionDiscount",
-              "parameters": [
-                "ore",
-                "-0.40"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "iconKey": "fraction_law_human_28_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_33": {
-      "enabled": true,
-      "nameText": "Chapel Calendar",
-      "descriptionText": "Produces 250/500/750 Astrology points daily by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "astrologyExp",
-              "parameters": [
-                "250"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "astrologyExp",
-              "parameters": [
-                "500"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "astrologyExp",
-              "parameters": [
-                "750"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconKey": "fraction_law_human_34_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_34": {
-      "enabled": true,
-      "nameText": "Liturgical Rhythm",
-      "descriptionText": "Positive effects on friendly creatures last +1/+2 additional rounds by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "inComingBuffDuration",
-                "1"
-              ],
-              "receivers": [
-                "h3_pikeman",
-                "h3_pikeman_upg",
-                "h3_pikeman_upg_alt",
-                "h3_archer",
-                "h3_archer_upg",
-                "h3_archer_upg_alt",
-                "h3_griffin",
-                "h3_griffin_upg",
-                "h3_griffin_upg_alt",
-                "h3_swordsman",
-                "h3_swordsman_upg",
-                "h3_swordsman_upg_alt",
-                "h3_monk",
-                "h3_monk_upg",
-                "h3_monk_upg_alt",
-                "h3_cavalier",
-                "h3_cavalier_upg",
-                "h3_cavalier_upg_alt",
-                "h3_angel",
-                "h3_angel_upg",
-                "h3_angel_upg_alt"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "inComingBuffDuration",
-                "2"
-              ],
-              "receivers": [
-                "h3_pikeman",
-                "h3_pikeman_upg",
-                "h3_pikeman_upg_alt",
-                "h3_archer",
-                "h3_archer_upg",
-                "h3_archer_upg_alt",
-                "h3_griffin",
-                "h3_griffin_upg",
-                "h3_griffin_upg_alt",
-                "h3_swordsman",
-                "h3_swordsman_upg",
-                "h3_swordsman_upg_alt",
-                "h3_monk",
-                "h3_monk_upg",
-                "h3_monk_upg_alt",
-                "h3_cavalier",
-                "h3_cavalier_upg",
-                "h3_cavalier_upg_alt",
-                "h3_angel",
-                "h3_angel_upg",
-                "h3_angel_upg_alt"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "iconKey": "fraction_law_human_5_icon",
-      "iconNotes": "Mechanic-aligned icon contract: buff-duration laws use the vanilla positive-effect duration icon instead of the Astrology production icon. Candidate/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_6": {
-      "enabled": true,
-      "nameText": "Battle Readiness",
-      "descriptionText": "Your heroes start each battle with 1 additional Focus Charge.",
-      "parametersPerLevel": [
-        {
-          "cost": 4,
-          "bonuses": [
-            {
-              "type": "heroStat",
-              "parameters": [
-                "startEnergyLevelsBonus",
-                "1"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "homm4IconLabel": "Mirth",
-      "homm4IconPath": "schools/life/mirth.jpg",
-      "iconNotes": "HOMM4 art-source candidate: Mirth (schools/life/mirth.jpg). Runtime icon key: fraction_law_homm3_castle_6_icon. Runtime rendering remains unproven until law-tree smoke.",
-      "iconKey": "fraction_law_homm3_castle_6_icon"
-    },
-    "fraction_law_homm3_castle_1": {
-      "iconKey": "fraction_law_human_1_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_3": {
-      "iconKey": "fraction_law_human_3_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_7": {
-      "iconKey": "fraction_law_human_7_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_8": {
-      "iconKey": "fraction_law_human_8_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_9": {
-      "iconKey": "fraction_law_human_9_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_12": {
-      "iconKey": "fraction_law_human_12_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_16": {
-      "iconKey": "fraction_law_human_16_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_29": {
-      "iconKey": "fraction_law_human_29_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_32": {
-      "iconKey": "fraction_law_human_32_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_castle_14": {
-      "iconKey": "fraction_law_human_14_icon",
-      "iconNotes": "Canonical resource icon pass: mining laws use the vanilla icon matching the produced special resource instead of donor-faction inheritance. Static/deploy validation pending."
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "sideRes",
+       "parameters": [
+        "gold",
+        "500"
+       ]
+      }
+     ]
     }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: scaffold"
+  },
+  "fraction_law_homm3_castle_2": {
+   "enabled": true,
+   "nameText": "Royal Scouts",
+   "descriptionText": "Your heroes gain {0} Sight radius.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "viewRadius",
+        "1"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: vanilla Sight (human_2)",
+   "effectIconKey": "fraction_law_human_2_icon"
+  },
+  "fraction_law_homm3_castle_3": {
+   "enabled": false
+  },
+  "fraction_law_homm3_castle_4": {
+   "enabled": true,
+   "nameText": "Elite Pikemen",
+   "descriptionText": "Pikeman growth in your cities increases by {0}. They can counterattack twice.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "cityUnitsIncrement",
+       "parameters": [
+        "h3_pikeman",
+        "4"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "numCounters",
+        "1"
+       ],
+       "receivers": [
+        "h3_pikeman",
+        "h3_pikeman_upg",
+        "h3_pikeman_upg_alt"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "cityUnitsIncrement",
+       "parameters": [
+        "h3_pikeman",
+        "8"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "numCounters",
+        "1"
+       ],
+       "receivers": [
+        "h3_pikeman",
+        "h3_pikeman_upg",
+        "h3_pikeman_upg_alt"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Elite T1, rider counterattacks twice",
+   "portraitIconSid": "h3_pikeman"
+  },
+  "fraction_law_homm3_castle_5": {
+   "enabled": true,
+   "nameText": "Spoils of Command",
+   "descriptionText": "After a won battle against neutral creatures in which your Elite Strategem took effect, you gain {0} Gold.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "luck",
+        "150"
+       ],
+       "activationLevel": 99
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "luck",
+        "300"
+       ],
+       "activationLevel": 99
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: replaces Standing Orders (the order was already free). Gold after a won battle against neutral armies in which Elite Strategem took effect: Homm3CastleLawHooks.ObserveBeforeBattleResult (SpoilsGoldByLevel 150/300), noted by Homm3CastleEliteStrategemRuntime via NoteStrategemApplied(opponentNeutral). Display carrier holds the Gold.",
+   "effectIconKey": "fraction_law_human_25_icon"
+  },
+  "fraction_law_homm3_castle_6": {
+   "enabled": true,
+   "nameText": "Knightly Training",
+   "descriptionText": "Your heroes gain {0} Attack.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "offence",
+        "1"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "offence",
+        "2"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "offence",
+        "3"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: hero Attack (human_6 role); shipped Mirth pair kept",
+   "homm4IconLabel": "Mirth",
+   "homm4IconPath": "schools/life/mirth.jpg",
+   "iconKey": "fraction_law_homm3_castle_6_icon"
+  },
+  "fraction_law_homm3_castle_7": {
+   "enabled": true,
+   "nameText": "War College",
+   "descriptionText": "Your heroes gain +{0}% XP.",
+   "descriptionArgs": [
+    "current_law_modPercent_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 4,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "expPerBonus",
+        "0.10"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 4,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "expPerBonus",
+        "0.20"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: kept: the generic vanilla XP law; vanilla text.",
+   "effectIconKey": "fraction_law_unfrozen_2_icon"
+  },
+  "fraction_law_homm3_castle_8": {
+   "enabled": true,
+   "nameText": "Ambush Doctrine",
+   "descriptionText": "When your Ambush takes effect, enemy creatures lose {0} Initiative and Defense in round 1.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 4,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "luck",
+        "2"
+       ],
+       "activationLevel": 99
+      }
+     ]
+    },
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "luck",
+        "4"
+       ],
+       "activationLevel": 99
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: text rewrite; carrier = the h3_law_castle_ambushed_effect_<level> Initiative/Defense loss (2/4). Lever unchanged (Homm3CastleLawHooks round-1 buffs).",
+   "effectIconKey": "fraction_law_unfrozen_33_icon"
+  },
+  "fraction_law_homm3_castle_9": {
+   "enabled": true,
+   "nameText": "Crown Contracts",
+   "descriptionText": "Your Castle creatures cost \u2013{0}% Gold.",
+   "descriptionArgs": [
+    "current_law_modPercent_bonuses_0_parameters_0"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 4,
+     "bonuses": [
+      {
+       "type": "unitHiringDiscount",
+       "fraction": "homm3_castle",
+       "parameters": [
+        "-0.10"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "unitHiringDiscount",
+       "fraction": "homm3_castle",
+       "parameters": [
+        "-0.15"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "unitHiringDiscount",
+       "fraction": "homm3_castle",
+       "parameters": [
+        "-0.20"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: vanilla Creature cost (undead_22)",
+   "effectIconKey": "fraction_law_undead_22_icon"
+  },
+  "fraction_law_homm3_castle_10": {
+   "enabled": true,
+   "nameText": "Elite Archers",
+   "descriptionText": "Archer growth in your cities increases by {0}. They always deal maximum Damage.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "cityUnitsIncrement",
+       "parameters": [
+        "h3_archer",
+        "4"
+       ]
+      },
+      {
+       "type": "unitBoolStat",
+       "parameters": [
+        "alwaysMaxDmg",
+        "true"
+       ],
+       "receivers": [
+        "h3_archer",
+        "h3_archer_upg",
+        "h3_archer_upg_alt"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "cityUnitsIncrement",
+       "parameters": [
+        "h3_archer",
+        "8"
+       ]
+      },
+      {
+       "type": "unitBoolStat",
+       "parameters": [
+        "alwaysMaxDmg",
+        "true"
+       ],
+       "receivers": [
+        "h3_archer",
+        "h3_archer_upg",
+        "h3_archer_upg_alt"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Elite T2, rider always max Damage",
+   "portraitIconSid": "h3_archer"
+  },
+  "fraction_law_homm3_castle_11": {
+   "enabled": true,
+   "nameText": "Elite Griffins",
+   "descriptionText": "Griffin growth in your cities increases by {0}. They gain {1} Initiative.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1",
+    "current_law_modInt_bonuses_1_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "cityUnitsIncrement",
+       "parameters": [
+        "h3_griffin",
+        "2"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "initiative",
+        "2"
+       ],
+       "receivers": [
+        "h3_griffin",
+        "h3_griffin_upg",
+        "h3_griffin_upg_alt"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "cityUnitsIncrement",
+       "parameters": [
+        "h3_griffin",
+        "4"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "initiative",
+        "2"
+       ],
+       "receivers": [
+        "h3_griffin",
+        "h3_griffin_upg",
+        "h3_griffin_upg_alt"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Elite T3, rider +2 Initiative",
+   "portraitIconSid": "h3_griffin"
+  },
+  "fraction_law_homm3_castle_12": {
+   "enabled": true,
+   "nameText": "Holy Crusade",
+   "descriptionText": "Your Castle creatures deal +{0}% Damage to undead and demons.",
+   "descriptionArgs": [
+    "current_law_modPercent_bonuses_1_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "battleSubskillBonus",
+       "receivers": [
+        "h3_angel",
+        "h3_angel_upg",
+        "h3_angel_upg_alt",
+        "h3_archer",
+        "h3_archer_upg",
+        "h3_archer_upg_alt",
+        "h3_cavalier",
+        "h3_cavalier_upg",
+        "h3_cavalier_upg_alt",
+        "h3_griffin",
+        "h3_griffin_upg",
+        "h3_griffin_upg_alt",
+        "h3_monk",
+        "h3_monk_upg",
+        "h3_monk_upg_alt",
+        "h3_pikeman",
+        "h3_pikeman_upg",
+        "h3_pikeman_upg_alt",
+        "h3_swordsman",
+        "h3_swordsman_upg",
+        "h3_swordsman_upg_alt"
+       ],
+       "parameters": [
+        "unit_buff",
+        "h3_law_castle_holy_crusade_1"
+       ]
+      },
+      {
+       "type": "heroStat",
+       "parameters": [
+        "luck",
+        "0.05"
+       ],
+       "activationLevel": 99
+      }
+     ]
+    },
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "battleSubskillBonus",
+       "receivers": [
+        "h3_angel",
+        "h3_angel_upg",
+        "h3_angel_upg_alt",
+        "h3_archer",
+        "h3_archer_upg",
+        "h3_archer_upg_alt",
+        "h3_cavalier",
+        "h3_cavalier_upg",
+        "h3_cavalier_upg_alt",
+        "h3_griffin",
+        "h3_griffin_upg",
+        "h3_griffin_upg_alt",
+        "h3_monk",
+        "h3_monk_upg",
+        "h3_monk_upg_alt",
+        "h3_pikeman",
+        "h3_pikeman_upg",
+        "h3_pikeman_upg_alt",
+        "h3_swordsman",
+        "h3_swordsman_upg",
+        "h3_swordsman_upg_alt"
+       ],
+       "parameters": [
+        "unit_buff",
+        "h3_law_castle_holy_crusade_2"
+       ]
+      },
+      {
+       "type": "heroStat",
+       "parameters": [
+        "luck",
+        "0.10"
+       ],
+       "activationLevel": 99
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: law buff outDmgModsByTargetTags h3_kit_undead/h3_kit_demon 0.05/0.10",
+   "effectIconKey": "fraction_law_undead_31_icon"
+  },
+  "fraction_law_homm3_castle_13": {
+   "enabled": false
+  },
+  "fraction_law_homm3_castle_14": {
+   "enabled": true,
+   "nameText": "Mining: Gems",
+   "descriptionText": "Produces {0} Gem(s) daily.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "sideRes",
+       "parameters": [
+        "gemstones",
+        "1"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "sideRes",
+       "parameters": [
+        "gemstones",
+        "2"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: scaffold"
+  },
+  "fraction_law_homm3_castle_15": {
+   "enabled": true,
+   "nameText": "Daylight Liturgy",
+   "descriptionText": "Daylight spells of your heroes gain {0} level(s).",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_3"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "magicSchoolSet",
+        "day",
+        "0",
+        "1"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: one school +1 level (human_15)",
+   "effectIconKey": "fraction_law_human_15_icon"
+  },
+  "fraction_law_homm3_castle_16": {
+   "enabled": false
+  },
+  "fraction_law_homm3_castle_17": {
+   "enabled": true,
+   "nameText": "Elite Swordsmen",
+   "descriptionText": "Swordsman growth in your cities increases by {0}. They gain {1} Attack and Defense.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1",
+    "current_law_modInt_bonuses_1_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "cityUnitsIncrement",
+       "parameters": [
+        "h3_swordsman",
+        "2"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "offence",
+        "3"
+       ],
+       "receivers": [
+        "h3_swordsman",
+        "h3_swordsman_upg",
+        "h3_swordsman_upg_alt"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "defence",
+        "3"
+       ],
+       "receivers": [
+        "h3_swordsman",
+        "h3_swordsman_upg",
+        "h3_swordsman_upg_alt"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "cityUnitsIncrement",
+       "parameters": [
+        "h3_swordsman",
+        "4"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "offence",
+        "6"
+       ],
+       "receivers": [
+        "h3_swordsman",
+        "h3_swordsman_upg",
+        "h3_swordsman_upg_alt"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "defence",
+        "6"
+       ],
+       "receivers": [
+        "h3_swordsman",
+        "h3_swordsman_upg",
+        "h3_swordsman_upg_alt"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Elite T4, rider +3/+6 A/D",
+   "portraitIconSid": "h3_swordsman"
+  },
+  "fraction_law_homm3_castle_18": {
+   "enabled": false
+  },
+  "fraction_law_homm3_castle_19": {
+   "enabled": false
+  },
+  "fraction_law_homm3_castle_20": {
+   "enabled": true,
+   "nameText": "Drilled Deployment",
+   "descriptionText": "In battles where your Elite Strategem took effect, friendly creatures deal +{0}% Damage in round 1.",
+   "descriptionArgs": [
+    "current_law_modPercent_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "luck",
+        "0.10"
+       ],
+       "activationLevel": 99
+      }
+     ]
+    },
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "luck",
+        "0.20"
+       ],
+       "activationLevel": 99
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: text rewrite; carrier = the h3_law_castle_drilled_effect_<level> Damage bonus (10/20%). Lever unchanged (Homm3CastleLawHooks round-1 buffs).",
+   "effectIconKey": "fraction_law_human_18_icon"
+  },
+  "fraction_law_homm3_castle_21": {
+   "enabled": true,
+   "nameText": "Prosperous Holdings",
+   "descriptionText": "Your sources of Gold produce +{0}% Gold.",
+   "descriptionArgs": [
+    "current_law_modPercent_bonuses_0_parameters_2"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 4,
+     "bonuses": [
+      {
+       "type": "sideStat",
+       "parameters": [
+        "resPercentIncrementSet",
+        "gold",
+        "0.10"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "sideStat",
+       "parameters": [
+        "resPercentIncrementSet",
+        "gold",
+        "0.15"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "sideStat",
+       "parameters": [
+        "resPercentIncrementSet",
+        "gold",
+        "0.20"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Gold % (human_21)",
+   "effectIconKey": "fraction_law_human_21_icon"
+  },
+  "fraction_law_homm3_castle_22": {
+   "enabled": true,
+   "nameText": "Brotherhood of the Sword",
+   "descriptionText": "Your heroes gain {0} Morale.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "moral",
+        "1"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: vanilla Morale (human_22)",
+   "effectIconKey": "fraction_law_human_22_icon"
+  },
+  "fraction_law_homm3_castle_23": {
+   "enabled": true,
+   "nameText": "Elite Monks",
+   "descriptionText": "Monk growth in your cities increases by {0}. Using their abilities does not end their turn.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "cityUnitsIncrement",
+       "parameters": [
+        "h3_monk",
+        "1"
+       ]
+      },
+      {
+       "type": "unitBoolStat",
+       "parameters": [
+        "ignoreAbilityActionCost",
+        "true"
+       ],
+       "receivers": [
+        "h3_monk",
+        "h3_monk_upg",
+        "h3_monk_upg_alt"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "cityUnitsIncrement",
+       "parameters": [
+        "h3_monk",
+        "2"
+       ]
+      },
+      {
+       "type": "unitBoolStat",
+       "parameters": [
+        "ignoreAbilityActionCost",
+        "true"
+       ],
+       "receivers": [
+        "h3_monk",
+        "h3_monk_upg",
+        "h3_monk_upg_alt"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Elite T5, rider ability does not end the turn",
+   "portraitIconSid": "h3_monk"
+  },
+  "fraction_law_homm3_castle_24": {
+   "enabled": true,
+   "nameText": "Elite Cavaliers",
+   "descriptionText": "Cavalier growth in your cities increases by {0}. They gain {1} Attack and Defense and {2} Speed.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1",
+    "current_law_modInt_bonuses_1_parameters_1",
+    "current_law_modInt_bonuses_3_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "cityUnitsIncrement",
+       "parameters": [
+        "h3_cavalier",
+        "1"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "offence",
+        "3"
+       ],
+       "receivers": [
+        "h3_cavalier",
+        "h3_cavalier_upg",
+        "h3_cavalier_upg_alt"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "defence",
+        "3"
+       ],
+       "receivers": [
+        "h3_cavalier",
+        "h3_cavalier_upg",
+        "h3_cavalier_upg_alt"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "speed",
+        "1"
+       ],
+       "receivers": [
+        "h3_cavalier",
+        "h3_cavalier_upg",
+        "h3_cavalier_upg_alt"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "cityUnitsIncrement",
+       "parameters": [
+        "h3_cavalier",
+        "2"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "offence",
+        "6"
+       ],
+       "receivers": [
+        "h3_cavalier",
+        "h3_cavalier_upg",
+        "h3_cavalier_upg_alt"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "defence",
+        "6"
+       ],
+       "receivers": [
+        "h3_cavalier",
+        "h3_cavalier_upg",
+        "h3_cavalier_upg_alt"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "speed",
+        "1"
+       ],
+       "receivers": [
+        "h3_cavalier",
+        "h3_cavalier_upg",
+        "h3_cavalier_upg_alt"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Elite T6, rider +3/+6 A/D, +1 Speed",
+   "portraitIconSid": "h3_cavalier"
+  },
+  "fraction_law_homm3_castle_25": {
+   "enabled": false
+  },
+  "fraction_law_homm3_castle_26": {
+   "enabled": true,
+   "nameText": "Stables",
+   "descriptionText": "Your heroes gain {0} Movement points.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 5,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "movementBonus",
+        "10"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 5,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "movementBonus",
+        "20"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: vanilla Movement (dungeon_8)",
+   "effectIconKey": "fraction_law_dungeon_8_icon"
+  },
+  "fraction_law_homm3_castle_27": {
+   "enabled": true,
+   "nameText": "High Daylight",
+   "descriptionText": "Your heroes can learn Daylight spells of any tier.",
+   "descriptionArgs": [],
+   "parametersPerLevel": [
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "heroStat",
+       "parameters": [
+        "magicSchoolSet",
+        "day",
+        "5",
+        "0"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: learn a whole school, Daylight only (human_27)",
+   "effectIconKey": "fraction_law_human_27_icon"
+  },
+  "fraction_law_homm3_castle_28": {
+   "enabled": true,
+   "nameText": "Mason\u2019s Charter",
+   "descriptionText": "Your buildings cost \u2013{0}% Ore to construct.",
+   "descriptionArgs": [
+    "current_law_modPercent_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "constructionDiscount",
+       "parameters": [
+        "ore",
+        "-0.20"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "constructionDiscount",
+       "parameters": [
+        "ore",
+        "-0.40"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Ore discount (dungeon_7)",
+   "effectIconKey": "fraction_law_dungeon_7_icon"
+  },
+  "fraction_law_homm3_castle_29": {
+   "enabled": false
+  },
+  "fraction_law_homm3_castle_30": {
+   "enabled": true,
+   "nameText": "Elite Angels",
+   "descriptionText": "Angel growth in your cities increases by {0}. The cooldowns of their abilities are reduced by {1} round(s).",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1",
+    "current_law_modInt_bonuses_1_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "cityUnitsIncrement",
+       "parameters": [
+        "h3_angel",
+        "1"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "abilityCdBonus",
+        "-1"
+       ],
+       "receivers": [
+        "h3_angel",
+        "h3_angel_upg",
+        "h3_angel_upg_alt"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "cityUnitsIncrement",
+       "parameters": [
+        "h3_angel",
+        "2"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "parameters": [
+        "abilityCdBonus",
+        "-2"
+       ],
+       "receivers": [
+        "h3_angel",
+        "h3_angel_upg",
+        "h3_angel_upg_alt"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: Elite T7, rider ability cooldown -1/-2",
+   "portraitIconSid": "h3_angel"
+  },
+  "fraction_law_homm3_castle_31": {
+   "enabled": true,
+   "nameText": "Grand Strategem",
+   "descriptionText": "Your heroes\u2019 Spread Out, Compress and Ambush also work against armies led by enemy heroes, except in towns and garrisons.",
+   "descriptionArgs": [],
+   "parametersPerLevel": [
+    {
+     "cost": 6,
+     "bonuses": []
+    }
+   ],
+   "notes": "law pass 2026-11-25: cut to one level (cost 6, was 5+4): Spread Out, Compress and Ambush all work against hero armies on the map; towns, garrisons and sieges stay excluded (Homm3CastleEliteStrategemRuntime.ApplySelectedModeToBattle).",
+   "effectIconKey": "fraction_law_demon_25_icon"
+  },
+  "fraction_law_homm3_castle_32": {
+   "enabled": true,
+   "nameText": "Defend the Realm",
+   "descriptionText": "When battling in the area you control, friendly creatures gain {0} Attack and Defense.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "unitStat",
+       "receiverAllegiance": "ally",
+       "actionArea": "allied",
+       "parameters": [
+        "offence",
+        "1"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "receiverAllegiance": "ally",
+       "actionArea": "allied",
+       "parameters": [
+        "defence",
+        "1"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "unitStat",
+       "receiverAllegiance": "ally",
+       "actionArea": "allied",
+       "parameters": [
+        "offence",
+        "2"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "receiverAllegiance": "ally",
+       "actionArea": "allied",
+       "parameters": [
+        "defence",
+        "2"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "unitStat",
+       "receiverAllegiance": "ally",
+       "actionArea": "allied",
+       "parameters": [
+        "offence",
+        "3"
+       ]
+      },
+      {
+       "type": "unitStat",
+       "receiverAllegiance": "ally",
+       "actionArea": "allied",
+       "parameters": [
+        "defence",
+        "3"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: allied-area A/D (nature_17)",
+   "effectIconKey": "fraction_law_nature_17_icon"
+  },
+  "fraction_law_homm3_castle_33": {
+   "enabled": true,
+   "nameText": "Chapel Calendar",
+   "descriptionText": "Produces {0} Astrology points daily.",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_0"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "astrologyExp",
+       "parameters": [
+        "250",
+        "0.0"
+       ]
+      }
+     ]
+    },
+    {
+     "cost": 2,
+     "bonuses": [
+      {
+       "type": "astrologyExp",
+       "parameters": [
+        "500",
+        "0.0"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: astrology (human_34 shape)",
+   "effectIconKey": "fraction_law_human_34_icon"
+  },
+  "fraction_law_homm3_castle_34": {
+   "enabled": true,
+   "nameText": "Liturgical Rhythm",
+   "descriptionText": "All positive effects on friendly Castle creatures last {0} additional round(s).",
+   "descriptionArgs": [
+    "current_law_modInt_bonuses_0_parameters_1"
+   ],
+   "parametersPerLevel": [
+    {
+     "cost": 3,
+     "bonuses": [
+      {
+       "type": "unitStat",
+       "receivers": [
+        "h3_angel",
+        "h3_angel_upg",
+        "h3_angel_upg_alt",
+        "h3_archer",
+        "h3_archer_upg",
+        "h3_archer_upg_alt",
+        "h3_cavalier",
+        "h3_cavalier_upg",
+        "h3_cavalier_upg_alt",
+        "h3_griffin",
+        "h3_griffin_upg",
+        "h3_griffin_upg_alt",
+        "h3_monk",
+        "h3_monk_upg",
+        "h3_monk_upg_alt",
+        "h3_pikeman",
+        "h3_pikeman_upg",
+        "h3_pikeman_upg_alt",
+        "h3_swordsman",
+        "h3_swordsman_upg",
+        "h3_swordsman_upg_alt"
+       ],
+       "parameters": [
+        "inComingBuffDuration",
+        "1"
+       ]
+      }
+     ]
+    }
+   ],
+   "notes": "law pass 2026-11-25: vanilla-style text with descriptionArgs. law pass 2026-11-21: buff duration +1 on Castle creatures (human_5)",
+   "effectIconKey": "fraction_law_human_5_icon"
   }
+ },
+ "lawTree": [
+  {
+   "kingdom": [
+    3,
+    2,
+    33,
+    5
+   ],
+   "army": [
+    4,
+    10,
+    34
+   ]
+  },
+  {
+   "kingdom": [
+    1,
+    14,
+    6,
+    22
+   ],
+   "army": [
+    11,
+    17
+   ]
+  },
+  {
+   "kingdom": [
+    16,
+    21,
+    15,
+    26
+   ],
+   "army": [
+    23,
+    20
+   ]
+  },
+  {
+   "kingdom": [
+    7,
+    9,
+    28
+   ],
+   "army": [
+    24,
+    8,
+    32
+   ]
+  },
+  {
+   "kingdom": [
+    29,
+    27,
+    31
+   ],
+   "army": [
+    30,
+    12
+   ]
+  }
+ ],
+ "lawBuffs": [
+  {
+   "id": "h3_law_castle_drilled_effect_1",
+   "cloneOf": "jaw_buff_2_upg",
+   "set": {
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.1
+     }
+    }
+   },
+   "name": "Drilled Deployment",
+   "text": "+10% Damage."
+  },
+  {
+   "id": "h3_law_castle_drilled_effect_2",
+   "cloneOf": "jaw_buff_2_upg",
+   "set": {
+    "maxDuration": 1,
+    "data": {
+     "stats": {
+      "outAllDmgMod": 0.2
+     }
+    }
+   },
+   "name": "Drilled Deployment",
+   "text": "+20% Damage."
+  },
+  {
+   "id": "h3_law_castle_ambushed_effect_1",
+   "cloneOf": "magic_ice_bolt_effect_0",
+   "set": {
+    "maxDuration": 1,
+    "tags": [
+     "negative"
+    ],
+    "data": {
+     "stats": {
+      "initiative": -2,
+      "defence": -2
+     }
+    }
+   },
+   "name": "Ambushed",
+   "text": "\u20132 Initiative and Defense."
+  },
+  {
+   "id": "h3_law_castle_ambushed_effect_2",
+   "cloneOf": "magic_ice_bolt_effect_0",
+   "set": {
+    "maxDuration": 1,
+    "tags": [
+     "negative"
+    ],
+    "data": {
+     "stats": {
+      "initiative": -4,
+      "defence": -4
+     }
+    }
+   },
+   "name": "Ambushed",
+   "text": "\u20134 Initiative and Defense."
+  },
+  {
+   "id": "h3_law_castle_holy_crusade_1",
+   "cloneOf": "fraction_law_demon_6_unit_bonus",
+   "set": {
+    "infinite": true,
+    "data": {
+     "stats": {
+      "outDmgModsByTargetTags": {
+       "list": [
+        {
+         "t": "h3_kit_undead",
+         "v": 0.05
+        },
+        {
+         "t": "h3_kit_demon",
+         "v": 0.05
+        }
+       ]
+      }
+     }
+    }
+   },
+   "name": "Holy Crusade",
+   "text": "Deals +5% Damage to undead and demons."
+  },
+  {
+   "id": "h3_law_castle_holy_crusade_2",
+   "cloneOf": "fraction_law_demon_6_unit_bonus",
+   "set": {
+    "infinite": true,
+    "data": {
+     "stats": {
+      "outDmgModsByTargetTags": {
+       "list": [
+        {
+         "t": "h3_kit_undead",
+         "v": 0.1
+        },
+        {
+         "t": "h3_kit_demon",
+         "v": 0.1
+        }
+       ]
+      }
+     }
+    }
+   },
+   "name": "Holy Crusade",
+   "text": "Deals +10% Damage to undead and demons."
+  }
+ ]
 }

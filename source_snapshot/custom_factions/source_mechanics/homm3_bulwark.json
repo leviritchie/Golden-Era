@@ -44,21 +44,39 @@
       "id": "bulwark.fair",
       "surface": "building",
       "sourceName": "Fair",
-      "status": "substituted",
-      "reason": "Marketplace-rate improvement has no proven city field; current row is native gold income (Trade Carnival).",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: the +1000 Gold donor income is gone (HotA cost 2000 Gold, 10 Wood, needs Market). Homm3BulwarkFairRuntime adds +1 to the side's native market count for each owned Bulwark town with Market + Fair (via the GetMarketsCount postfix in Homm3FactoryLogisticsRuntime), so the town trades as if it had two Marketplaces (REVIEW 2: +1).",
       "playerTextPolicy": "must_match_current_behavior",
-      "forbiddenPlayerText": [
-        "market rate",
-        "two Marketplaces",
-        "Fairgrounds"
-      ],
       "currentRows": [
         "Build_Mother_Nature"
       ],
-      "playerTextTokens": [
-        "Homm3Bulwark_Build_Mother_Nature_name",
-        "Homm3Bulwark_Build_Mother_Nature_description",
-        "Homm3Bulwark_Build_Mother_Nature_narrativeDescription"
+      "validationOwner": "validate_homm3_city_building_contracts"
+    },
+    {
+      "id": "bulwark.altar_of_the_runes",
+      "surface": "building",
+      "sourceName": "Altar of the Runes",
+      "status": "substituted",
+      "reason": "Building pass 2026-11-22: Build_Mycelium_Roots (was the sourceless Clan Stockyards, +4 Kobolds weekly) becomes the Altar of the Runes with the Sieidi of the Runes folded in (cost 2000 Gold, 5 Ore, 4 Gems, 4 Crystals). At round 1, Homm3BulwarkRunesRuntime.ApplyAltarOfRunes grants each stack the Runes skill covers +1 Rune Level per Altar the side owns. Substituted because the Sieidi 'learn Runes for free' clause is not built (Runes is the faction skill; OE has no learn-a-skill building), and Yeti Runemasters under a hero without Runes are not covered. Live only when the Runes runtime is live (bulwark.runes is runtime-pending).",
+      "playerTextPolicy": "must_match_current_behavior",
+      "forbiddenPlayerText": [
+        "learn Runes",
+        "Sieidi",
+        "Kobold"
+      ],
+      "currentRows": [
+        "Build_Mycelium_Roots"
+      ]
+    },
+    {
+      "id": "bulwark.spirits_of_the_forebears",
+      "surface": "building",
+      "sourceName": "Spirits of the Forebears",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: the grail keeps its NatureGraal extras (+1 growth in all cities, +100% city growth; owner answer 3) and adds the HotA +20 Defense for the hero defending a siege of this town through the runtime agent's Homm3TownSiegeDefenseRuntime.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Spring_of_Life"
       ],
       "validationOwner": "validate_homm3_city_building_contracts"
     },

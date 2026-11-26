@@ -17,7 +17,7 @@ internal static class Homm3ConstructionBuildingCategoryRegistry
 		[new Key("homm3_conflux", "Build_Resource_Depot_level_2")] = new Entry("elemental-building", "conflux.vault_of_ashes"),
 		[new Key("homm3_conflux", "Build_Mycelium_Roots")] = new Entry("elemental-building", "conflux.elemental_conflux"),
 		[new Key("homm3_cove", "Build_Artifact_Market")] = new Entry("market", "cove.shipyard"),
-		[new Key("homm3_cove", "Build_Treasury")] = new Entry("pirate-infrastructure", "cove.gunpowder_warehouse"),
+		[new Key("homm3_cove", "Build_Tier_3")] = new Entry("pirate-infrastructure", "cove.gunpowder_warehouse"),
 		[new Key("homm3_cove", "Build_Resource_Depot_level_2")] = new Entry("tavern", "cove.pub"),
 		[new Key("homm3_fortress", "Build_Treasury")] = new Entry("defensive-support", "fortress.field_infirmary"),
 		[new Key("homm3_fortress", "Build_Mother_Nature")] = new Entry("defensive-support", "fortress.glyphs_of_fear"),

@@ -1,0 +1,202 @@
+{
+  "factionSid": "homm3_stronghold",
+  "rows": [
+    {
+      "sid": "Build_Bank",
+      "section": "banks",
+      "replace": true,
+      "nameText": "Bank",
+      "notes": "building pass 2026-11-22: economy Bank kept (REVIEW 1); only the invented 'Muster Yard' name goes. Data unchanged: 1000 Gold daily.",
+      "costs": [
+        {
+          "gold": 2500,
+          "wood": 5,
+          "ore": 5
+        }
+      ],
+      "nameTextLocales": {
+        "BRportugese": "Banco",
+        "czech": "Banka",
+        "french": "Banque",
+        "german": "Bank",
+        "hungarian": "Bank",
+        "italian": "Banca",
+        "japanese": "銀行",
+        "korean": "은행",
+        "polish": "Bank",
+        "russian": "Банк",
+        "spanish": "Banco",
+        "turkish": "Banka",
+        "ukrainian": "Банк",
+        "zhCN": "银行",
+        "zhTW": "銀行"
+      }
+    },
+    {
+      "sid": "Build_Resource_Depot",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 5000,
+          "ore": 5
+        }
+      ],
+      "bonuses": [
+        [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "wood",
+              1
+            ]
+          },
+          {
+            "type": "sideRes",
+            "parameters": [
+              "ore",
+              1
+            ]
+          }
+        ]
+      ],
+      "nameText": "Resource Silo",
+      "descriptionText": "Produces 1 Wood and 1 Ore daily.",
+      "notes": "building pass 2026-11-22: stronghold.resource_silo. HoMM3 Stronghold silo makes 1 Wood + 1 Ore (was 1 Crystals); cost matches HoMM3 5000 Gold + 5 Ore.",
+      "nameTextLocales": {
+        "BRportugese": "Silo de Recursos",
+        "czech": "Zásobárna surovin",
+        "french": "Silo de ressources",
+        "german": "Ressourcensilo",
+        "hungarian": "Nyersanyagsiló",
+        "italian": "Silo delle Risorse",
+        "japanese": "資源サイロ",
+        "korean": "자원 저장고",
+        "polish": "Silos surowców",
+        "russian": "Хранилище ресурсов",
+        "spanish": "Silo de Recursos",
+        "turkish": "Kaynak Silosu",
+        "ukrainian": "Сховище ресурсів",
+        "zhCN": "资源仓",
+        "zhTW": "資源倉"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Produz 1 de Madeira e 1 de Minério por dia.",
+        "czech": "Denně vyprodukuje 1 Dřevo a 1 Kámen.",
+        "french": "Produit 1 Bois et 1 Minerai par jour.",
+        "german": "Produziert täglich 1 Holz und 1 Erz.",
+        "hungarian": "Naponta 1 Fát és 1 Ércet termel.",
+        "italian": "Produce 1 Legname e 1 Minerali al giorno.",
+        "japanese": "毎日、木材1と鉱石1を生産する。",
+        "korean": "매일 나무 1과 광석 1을 생산합니다.",
+        "polish": "Codziennie produkuje 1 Drewno i 1 Rudy.",
+        "russian": "Ежедневно производит 1 Дерево и 1 Руду.",
+        "spanish": "Produce 1 de Madera y 1 de Mineral al día.",
+        "turkish": "Günlük 1 Odun ve 1 Maden üretir.",
+        "ukrainian": "Щодня виробляє 1 Деревину та 1 Руди.",
+        "zhCN": "每天生产1木材和1矿石。",
+        "zhTW": "每天生產1木材和1礦石。"
+      }
+    },
+    {
+      "sid": "Build_Resource_Depot_level_2",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 1000
+        }
+      ],
+      "bonuses": [
+        []
+      ],
+      "nameText": "Freelancer's Guild",
+      "descriptionText": "Lets you sell creatures from this town's garrison or a hero in town for gold or resources at the Marketplace rate. Open it with the Freelancer's Guild button on the town screen.",
+      "iconFrom": "self:Build_Resource_Depot_level_2",
+      "plugin": "Homm3StrongholdFreelancersGuildRuntime",
+      "notes": "building pass 2026-11-22: stronghold.freelancers_guild on the Silo II slot (owner); HoMM3 cost 1000 Gold. Sale value = half the creature's recruit cost, converted at the Factory-logistics market sell rate. Scene slot unchanged (Resource_Depot_2).",
+      "nameTextLocales": {
+        "BRportugese": "Guilda dos Mercenários",
+        "czech": "Cech žoldnéřů",
+        "french": "Guilde des mercenaires",
+        "german": "Söldnergilde",
+        "hungarian": "Zsoldosok céhe",
+        "italian": "Gilda dei Mercenari",
+        "japanese": "傭兵ギルド",
+        "korean": "용병 길드",
+        "polish": "Gildia najemników",
+        "russian": "Гильдия наёмников",
+        "spanish": "Gremio de Mercenarios",
+        "turkish": "Paralı Askerler Loncası",
+        "ukrainian": "Гільдія найманців",
+        "zhCN": "佣兵公会",
+        "zhTW": "傭兵公會"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Permite vender criaturas da guarnição desta cidade ou de um herói na cidade por ouro ou recursos pela taxa do Mercado. Abra-a com o botão da Guilda dos Mercenários na tela da cidade.",
+        "czech": "Umožňuje prodávat stvoření z posádky tohoto města nebo z hrdiny ve městě za zlato nebo suroviny za kurz tržiště. Otevřete jej tlačítkem Cechu žoldnéřů na obrazovce města.",
+        "french": "Permet de vendre des créatures de la garnison de cette ville ou d’un héros présent en ville contre de l’or ou des ressources au taux du marché. Ouvrez-la avec le bouton de la Guilde des mercenaires sur l’écran de la ville.",
+        "german": "Ermöglicht es, Kreaturen aus der Garnison dieser Stadt oder von einem Helden in der Stadt zum Marktplatzkurs gegen Gold oder Ressourcen zu verkaufen. Öffnen Sie sie mit der Schaltfläche der Söldnergilde im Stadtbildschirm.",
+        "hungarian": "Lehetővé teszi, hogy a város helyőrségének vagy a városban tartózkodó hősnek a lényeit Aranyért vagy nyersanyagokért add el a Piac árfolyamán. A városképernyőn a Zsoldosok céhe gombbal nyithatod meg.",
+        "italian": "Permette di vendere creature della guarnigione di questa città o di un eroe in città in cambio di oro o risorse al tasso del Mercato. Si apre con il pulsante della Gilda dei Mercenari nella schermata della città.",
+        "japanese": "この都市の守備隊または街にいる英雄のクリーチャーを、市場のレートでゴールドまたは資源と引き換えに売却できる。都市画面の傭兵ギルドボタンから開く。",
+        "korean": "이 도시의 수비대 또는 도시에 있는 영웅의 크리처를 시장 시세로 금이나 자원과 바꿔 판매할 수 있습니다. 도시 화면의 용병 길드 버튼으로 엽니다.",
+        "polish": "Pozwala sprzedawać stworzenia z garnizonu tego miasta lub z bohatera w mieście za złoto lub surowce po kursie Targowiska. Otwórz ją przyciskiem Gildii najemników na ekranie miasta.",
+        "russian": "Позволяет продавать существ из гарнизона этого города или героя в городе за золото или ресурсы по курсу Рынка. Откройте её кнопкой Гильдии наёмников на экране города.",
+        "spanish": "Permite vender criaturas de la guarnición de esta ciudad o de un héroe en la ciudad por oro o recursos a la tasa del Mercado. Ábrelo con el botón del Gremio de Mercenarios en la pantalla de la ciudad.",
+        "turkish": "Bu şehrin garnizonundaki veya şehirdeki bir kahramanın yaratıklarını Pazar kuruyla altın veya kaynaklar karşılığında satmanızı sağlar. Şehir ekranındaki Paralı Askerler Loncası düğmesiyle açılır.",
+        "ukrainian": "Дає змогу продавати істот із гарнізону цього міста або героя в місті за золото чи ресурси за курсом Ринку. Відкрийте її кнопкою Гільдії найманців на екрані міста.",
+        "zhCN": "可按市场汇率，将本城驻军或城内英雄的生物出售，换取黄金或资源。通过城镇界面的佣兵公会按钮打开。",
+        "zhTW": "可按市場匯率，將本城駐軍或城內英雄的生物出售，換取黃金或資源。透過城鎮介面的傭兵公會按鈕開啟。"
+      }
+    },
+    {
+      "sid": "Build_Spy_Network",
+      "section": "graals",
+      "replace": true,
+      "nameText": "Warlords' Monument",
+      "descriptionText": "Completely removes the fog of war. This city's dwellings produce +100% units. The hero defending this city in a siege gets +20 Attack.",
+      "notes": "building pass 2026-11-22: stronghold.warlords_monument. Grail keeps its fog reveal and +100% growth fields (owner answer 3); the +20 Attack siege bonus is the runtime agent's siege hook, not a native field.",
+      "costs": [
+        {
+          "graal": 1
+        }
+      ],
+      "nameTextLocales": {
+        "BRportugese": "Monumento dos Senhores da Guerra",
+        "czech": "Pomník válečníků",
+        "french": "Monument des seigneurs de guerre",
+        "german": "Denkmal der Kriegsherren",
+        "hungarian": "Hadurak emlékműve",
+        "italian": "Monumento dei Signori della Guerra",
+        "japanese": "武将の記念碑",
+        "korean": "군벌의 기념비",
+        "polish": "Pomnik wodzów",
+        "russian": "Монумент полководцев",
+        "spanish": "Monumento de los Señores de la Guerra",
+        "turkish": "Savaş Beylerinin Anıtı",
+        "ukrainian": "Монумент воєвод",
+        "zhCN": "军阀纪念碑",
+        "zhTW": "軍閥紀念碑"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Remove completamente a névoa de guerra. As moradias desta cidade produzem +100% de unidades. O herói que defende esta cidade em um cerco recebe +20 de Ataque.",
+        "czech": "Zcela odstraní mlhu války. Obydlí tohoto města produkují +100 % jednotek. Hrdina bránící toto město při obléhání získá +20 Útoku.",
+        "french": "Supprime entièrement le brouillard de guerre. Les habitations de cette ville produisent +100 % d’unités. Le héros qui défend cette ville lors d’un siège gagne +20 en Attaque.",
+        "german": "Entfernt den Kriegsnebel vollständig. Die Behausungen dieser Stadt produzieren +100 % Einheiten. Der Held, der diese Stadt bei einer Belagerung verteidigt, erhält +20 Angriff.",
+        "hungarian": "Teljesen eltávolítja a háború ködét. A város lakhelyei +100% egységet termelnek. Az a hős, aki ostrom közben védi a várost, +20 Támadóerőt kap.",
+        "italian": "Rimuove completamente la nebbia di guerra. Le abitazioni di questa città producono +100% di unità. L’eroe che difende questa città durante un assedio ottiene +20 Attacco.",
+        "japanese": "戦争の霧を完全に消し去る。この都市の住居は+100%の部隊を生産する。攻城戦でこの都市を防衛する英雄は攻撃力+20を得る。",
+        "korean": "전장의 안개를 완전히 걷어냅니다. 이 도시의 거주지는 +100%의 부대를 생산합니다. 공성전에서 이 도시를 방어하는 영웅은 공격력 +20을 얻습니다.",
+        "polish": "Całkowicie usuwa mgłę wojny. Siedliska w tym mieście produkują +100% jednostek. Bohater broniący tego miasta podczas oblężenia zyskuje +20 Ataku.",
+        "russian": "Полностью убирает туман войны. Жилища этого города производят на 100% больше существ. Герой, защищающий этот город при осаде, получает +20 к Атаке.",
+        "spanish": "Elimina por completo la niebla de guerra. Las viviendas de esta ciudad producen +100% de unidades. El héroe que defiende esta ciudad durante un asedio obtiene +20 de Ataque.",
+        "turkish": "Savaş sisini tamamen kaldırır. Bu şehrin konutları +%100 birim üretir. Kuşatma sırasında bu şehri savunan kahraman +20 Saldırı kazanır.",
+        "ukrainian": "Повністю прибирає туман війни. Житла цього міста виробляють на 100% більше істот. Герой, що обороняє це місто під час облоги, отримує +20 до Атаки.",
+        "zhCN": "完全驱散战争迷雾。这座城市的住所产量+100%。围攻中防守这座城市的英雄获得+20攻击力。",
+        "zhTW": "完全驅散戰爭迷霧。這座城市的住所產量+100%。圍攻中防守這座城市的英雄獲得+20攻擊力。"
+      }
+    }
+  ],
+  "remove": []
+}

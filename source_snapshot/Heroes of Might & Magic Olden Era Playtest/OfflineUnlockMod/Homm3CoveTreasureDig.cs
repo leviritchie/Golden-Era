@@ -139,6 +139,8 @@ internal static class Homm3CoveTreasureDig
 		var max = R.MaxMoveToday(data, hero);
 		// Rounded up: with 2000 a day, 1334 are needed.
 		var need = (max * MoveNumerator + MoveDenominator - 1) / MoveDenominator;
+		// law pass 2026-11-25: Quick Shovels (#20) is replaced by Treasure Fever, so the dig cost is the skill's again
+		// (Tireless Captain is the only way to dig cheaper).
 		if (!tireless && (now < need || now <= 0))
 		{
 			Banner("Digging takes most of a day. This hero needs at least two thirds of its daily movement left.");
@@ -160,6 +162,10 @@ internal static class Homm3CoveTreasureDig
 				var collector = Homm3CoveTreasureSubskills.OnTreasureDug(logicHero, hero);
 				if (collector != null)
 					found.Add(collector);
+				// law pass 2026-11-25: Treasure Fever (#20)
+				var fever = Homm3CoveLawHooks.GrantTreasureFeverXp(logicHero, hero, Warn);
+				if (fever != null)
+					found.Add(fever);
 				Homm3CoveTreasurePopup.ShowTreasure(found, movementSpent: !tireless);
 				break;
 			case R.DigOutcome.Hole:
@@ -180,9 +186,14 @@ internal static class Homm3CoveTreasureDig
 	// ---------------------------------------------------------------- movement
 
 	/// <summary>Sets the hero's movement to 0 through the native move-point controller (refreshes the HUD and path).</summary>
-	private static bool TrySpendAllMovement(object worldHero, DataHero hero, out string fail)
+	private static bool TrySpendAllMovement(object worldHero, DataHero hero, out string fail) => TrySetMovement(worldHero, hero, 0, out fail);
+
+	/// <summary>Sets the hero's movement points through its controller and reads them back (only TrySpendAllMovement calls it since Quick Shovels was replaced, law pass 2026-11-25).</summary>
+	private static bool TrySetMovement(object worldHero, DataHero hero, int target, out string fail)
 	{
 		fail = null;
+		if (target < 0)
+			target = 0;
 		var controller = worldHero == null ? null : Homm3TowerArtificingRuntime.ReadMember(worldHero, GameSymbols.HomecomingBoatTravel.WorldHeroMovePointControllerMembers);
 		if (controller == null)
 		{
@@ -203,11 +214,11 @@ internal static class Homm3CoveTreasureDig
 			return false;
 		}
 		var before = hero.worldMovePoints;
-		_setMovePoints.Invoke(controller, new object[] { 0 });
+		_setMovePoints.Invoke(controller, new object[] { target });
 		var after = hero.worldMovePoints;
-		if (after != 0)
+		if (after != target)
 		{
-			fail = "readback " + N(before) + "->" + N(after) + " is not 0";
+			fail = "readback " + N(before) + "->" + N(after) + " is not " + N(target);
 			return false;
 		}
 		return true;
@@ -220,7 +231,12 @@ internal static class Homm3CoveTreasureDig
 	{
 		var found = new List<string>();
 		var side = hero.sideId;
-		var gold = contents.Gold;
+		// law pass 2026-11-21: King's Ransom (#27). Applied at payout (the region value is stored in the save) to the
+		// rolled Gold and resources only; units, artifacts and their gold fallbacks are unchanged.
+		var ransom = Homm3CoveLawHooks.KingsRansomPercent(side);
+		var gold = Homm3CoveLawHooks.ApplyRansom(contents.Gold, ransom);
+		if (ransom > 0)
+			Info("King's Ransom +" + N(ransom) + "%: gold " + N(contents.Gold) + " -> " + N(gold) + ".");
 
 		if (contents.UnitSid != null && contents.UnitCount > 0)
 		{
@@ -251,8 +267,9 @@ internal static class Homm3CoveTreasureDig
 			else
 				Warn("gold " + N(gold) + " not paid to side " + N(side) + ": " + goldFail);
 		}
-		foreach (var (name, amount) in contents.Resources)
+		foreach (var (name, rolled) in contents.Resources)
 		{
+			var amount = Homm3CoveLawHooks.ApplyRansom(rolled, ransom);
 			if (amount <= 0)
 				continue;
 			if (Homm3CovePlunderHook.Grant(side, name, amount, out _, out _, out var resFail))
@@ -274,6 +291,8 @@ internal static class Homm3CoveTreasureDig
 			{
 				Pay(worldHero, logicHero, hero, contents);
 				Homm3CoveTreasureSubskills.OnTreasureDug(logicHero, hero);
+				// law pass 2026-11-25: Treasure Fever (#20)
+				Homm3CoveLawHooks.GrantTreasureFeverXp(logicHero, hero, Warn);
 				return;
 			}
 			var gold = contents.Total();

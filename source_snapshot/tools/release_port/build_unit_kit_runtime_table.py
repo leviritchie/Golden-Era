@@ -27,6 +27,12 @@ Buff rewrites the plugin makes when a buff is added (any kit entry with "buff"; 
   "scale_by_caster": {"percent": P, "tiers": [[damage, sid], ...]}  adds the tier whose damage is the largest not
                             above P% of the caster's basic attack damage (stack x average damage)
 
+Law-switched rules (faction law pass 2026-11-21): custom_factions/law_overrides/<faction>.json may carry
+"lawRules": [{"law": <law index>, "rule": <kind>, "name": ..., "percent": [level 1, level 2, ...],
+"cap": int or [per level], "receivers": "faction" | "all" | [unit sid, ...], <rule parameters>}]. The plugin adds the
+rule at the level matching the owning side's rank in that law (Homm3UnitKitRules.LawRules). "faction" = every unit of
+that faction's design table; "all" = every unit on the law owner's side.
+
 A `self_buff` kit entry with `"runtime": "covering_fire"` names the armed buff of the reaction shot; one buff SID
 serves every unit that has it.
 
@@ -35,6 +41,7 @@ serves every unit that has it.
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -42,6 +49,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import homm3_unit_design_table as design  # noqa: E402
 
+LAW_OVERRIDE_DIR = REPO_ROOT / "custom_factions" / "law_overrides"
 OUTPUT = REPO_ROOT / "Heroes of Might & Magic Olden Era Playtest" / "OfflineUnlockMod" / "Homm3UnitKitRules.g.cs"
 
 FACTS = ("stood_ground", "unacted_target", "moved_target", "waited_target")
@@ -258,6 +266,43 @@ def collect(designs: dict[str, dict]) -> tuple[dict[str, list[dict]], str]:
     return rules, next(iter(covering), "")
 
 
+def collect_law_rules(designs: dict[str, dict]) -> list[tuple[str, int, str, list[dict]]]:
+    """(faction, law index, receivers mode, per-level rule entries) from law_overrides lawRules."""
+    out: list[tuple[str, int, str, list[dict]]] = []
+    for path in sorted(LAW_OVERRIDE_DIR.glob("*.json")):
+        doc = json.loads(path.read_text(encoding="utf-8-sig"))
+        faction = path.stem
+        for spec in doc.get("lawRules") or []:
+            where = f"{path.name} lawRules law {spec.get('law')}"
+            law = spec.get("law")
+            if not _int(law) or not 1 <= law <= 99:
+                raise RuntimeError(f"{where}: law must be a law index")
+            percents = spec.get("percent")
+            if not isinstance(percents, list) or not percents or not all(_int(p) and p > 0 for p in percents):
+                raise RuntimeError(f"{where}: percent must be a list of positive ints, one per law level")
+            caps = spec.get("cap")
+            receivers = spec.get("receivers", "faction")
+            if receivers == "faction":
+                mode = "units:" + ",".join(sorted(designs[faction]["units"]))
+            elif receivers == "all":
+                mode = "all"
+            elif isinstance(receivers, list) and receivers and all(isinstance(r, str) and r for r in receivers):
+                mode = "units:" + ",".join(sorted(receivers))
+            else:
+                raise RuntimeError(f"{where}: receivers must be \"faction\", \"all\" or a unit sid list")
+            levels = []
+            for i, pct in enumerate(percents):
+                entry = {k: v for k, v in spec.items() if k not in ("law", "receivers", "percent", "cap")}
+                entry["k"] = "runtime"
+                entry["percent"] = pct
+                if caps is not None:
+                    entry["cap"] = caps[i] if isinstance(caps, list) else caps
+                validate_rule(where, entry)
+                levels.append(entry)
+            out.append((faction, law, mode, levels))
+    return out
+
+
 def _choice(entry: dict) -> int:
     """The rule's enumerated choice (fact / state / mode / side) as its index, 0 when the rule has none."""
     for key, values in (("fact", FACTS), ("state", COUNTER_STATES), ("mode", ADJACENCY_MODES), ("side", SIDES)):
@@ -346,6 +391,25 @@ def render(designs: dict[str, dict]) -> str:
         for entry in rules[sid]:
             lines.append(_rule_line(entry))
         lines.append("\t\t},")
+    lines += ["\t};", "",
+              "\t/// <summary>Rules a faction law switches on (law_overrides lawRules). ByLevel[rank - 1]; Units null = every unit of the owner's side.</summary>",
+              "\tinternal sealed class LawRule",
+              "\t{",
+              "\t\tinternal string FactionSid;",
+              "\t\tinternal int LawIndex;",
+              "\t\tinternal HashSet<string> Units;",
+              "\t\tinternal Rule[] ByLevel;",
+              "\t}",
+              "",
+              "\tinternal static readonly LawRule[] LawRules =",
+              "\t{"]
+    for faction, law, mode, levels in collect_law_rules(designs):
+        units = "null" if mode == "all" else "new HashSet<string>(StringComparer.Ordinal) { " + ", ".join(_quote(u) for u in mode[6:].split(",")) + " }"
+        lines.append(f"\t\tnew LawRule {{ FactionSid = {_quote(faction)}, LawIndex = {law}, Units = {units}, ByLevel = new[]")
+        lines.append("\t\t{")
+        for entry in levels:
+            lines.append("\t" + _rule_line(entry))
+        lines.append("\t\t} },")
     lines += ["\t};", "", "\t/// <summary>Applied buff SID to the buffs its uses cycle through.</summary>",
               "\tinternal static readonly Dictionary<string, string[]> BuffRotations = new(StringComparer.Ordinal)", "\t{"]
     for buff in sorted(rotations):

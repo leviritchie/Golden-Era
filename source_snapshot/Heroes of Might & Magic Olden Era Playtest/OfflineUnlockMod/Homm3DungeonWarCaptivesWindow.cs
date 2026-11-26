@@ -108,8 +108,12 @@ internal static class Homm3DungeonWarCaptivesWindow
 			Plugin.LogSource?.LogWarning(LogPrefix + "battle " + offer.BattleKey + " waited " + age.ToString("0.0", CultureInfo.InvariantCulture) + "s for the window.");
 		if (!Open(offer, out var fail))
 		{
-			Plugin.LogSource?.LogError(LogPrefix + "choice window did not open for battle " + offer.BattleKey + " (" + fail + "); paying Ransom.");
-			Homm3DungeonCaptivesRuntime.Choose(offer, Homm3DungeonCaptivesRuntime.Choice.Ransom, out _);
+			// law pass 2026-11-21: a second fate that excludes Ransom falls back to Execute.
+			var fallback = Homm3DungeonCaptivesRuntime.FallbackChoice(offer);
+			Plugin.LogSource?.LogError(LogPrefix + "choice window did not open for battle " + offer.BattleKey + " (" + fail + "); paying " + fallback + ".");
+			Homm3DungeonCaptivesRuntime.Choose(offer, fallback, out _);
+			if (!offer.SecondFate)
+				Homm3DungeonCaptivesRuntime.ApplySecondFateDirect(offer, fallback);
 		}
 	}
 
@@ -193,8 +197,9 @@ internal static class Homm3DungeonWarCaptivesWindow
 		}
 		catch (Exception ex)
 		{
-			Plugin.LogSource?.LogError(LogPrefix + "input failed; closing with Ransom: " + ex.GetBaseException().Message);
-			Finish(Homm3DungeonCaptivesRuntime.Choice.Ransom);
+			var fallback = Homm3DungeonCaptivesRuntime.FallbackChoice(_offer);
+			Plugin.LogSource?.LogError(LogPrefix + "input failed; closing with " + fallback + ": " + ex.GetBaseException().Message);
+			Finish(fallback);
 		}
 	}
 
@@ -231,13 +236,32 @@ internal static class Homm3DungeonWarCaptivesWindow
 			return;
 		// The payout reports itself on the result banner (LastOutcome); only a refused choice is reported here.
 		var accepted = Homm3DungeonCaptivesRuntime.Choose(offer, choice, out var fail, board);
-		if (!accepted && choice != Homm3DungeonCaptivesRuntime.Choice.Ransom)
+		var applied = choice;
+		// law pass 2026-11-21: a second fate that excludes Ransom falls back to Execute.
+		var fallback = Homm3DungeonCaptivesRuntime.FallbackChoice(offer);
+		if (!accepted && choice != fallback)
 		{
-			Plugin.LogSource?.LogWarning(LogPrefix + choice + " refused (" + fail + "); paying Ransom.");
-			accepted = Homm3DungeonCaptivesRuntime.Choose(offer, Homm3DungeonCaptivesRuntime.Choice.Ransom, out fail);
+			Plugin.LogSource?.LogWarning(LogPrefix + choice + " refused (" + fail + "); paying " + fallback + ".");
+			accepted = Homm3DungeonCaptivesRuntime.Choose(offer, fallback, out fail);
+			applied = fallback;
 		}
 		if (!accepted)
+		{
 			ShowBanner("The captives could not be dealt with: " + fail);
+			return;
+		}
+		QueueSecondFate(offer, applied);
+	}
+
+	/// <summary>law pass 2026-11-21: Overlord's Due (#30): after the first fate, queue the half-strength second window.</summary>
+	private static void QueueSecondFate(Homm3DungeonCaptivesRuntime.Offer offer, Homm3DungeonCaptivesRuntime.Choice applied)
+	{
+		if (!Homm3DungeonCaptivesRuntime.TryBuildSecondFate(offer, applied, out var second))
+			return;
+		if (OpenAfterResult(second, out var fail))
+			return;
+		Plugin.LogSource?.LogError(LogPrefix + "Overlord's Due window could not be queued for battle " + offer.BattleKey + " (" + fail + "); paying it directly.");
+		Homm3DungeonCaptivesRuntime.ApplySecondFateDirect(offer, applied);
 	}
 
 	// ---------------------------------------------------------------- result banner (non-blocking, fades out)
@@ -436,6 +460,9 @@ internal static class Homm3DungeonWarCaptivesWindow
 		var rows = new List<RowModel>();
 		void Add(Homm3DungeonCaptivesRuntime.Choice choice, string title, string effect, string detail)
 		{
+			// law pass 2026-11-21: Overlord's Due (#30) second window lists only the fates still on offer.
+			if (o.SecondFate && (!Homm3DungeonCaptivesRuntime.IsSecondFateChoice(choice) || choice == o.Excluded))
+				return;
 			Homm3DungeonCaptivesRuntime.IsChoiceAvailable(o, choice, out var reason);
 			rows.Add(new RowModel { Choice = choice, Title = title, Effect = effect, Detail = detail, Blocked = reason });
 		}
@@ -443,7 +470,9 @@ internal static class Homm3DungeonWarCaptivesWindow
 		Add(Homm3DungeonCaptivesRuntime.Choice.Execute, "Execute",
 			"+" + N(o.ExecuteXp) + " experience" + (o.ExecuteMana > 0 ? ", +" + N(o.ExecuteMana) + " mana (Interrogation)" : ""), null);
 		Add(Homm3DungeonCaptivesRuntime.Choice.Ransom, "Ransom",
-			"+" + N(o.RansomGold) + " gold" + (o.SlaveMarkets ? " (Slave Markets +25%)" : ""), null);
+			"+" + N(o.RansomGold) + " gold" + (o.SlaveMarkets ? " (Slave Markets +25%)" : "")
+			// law pass 2026-11-25: Black Market Ransoms (#5)
+			+ (Homm3DungeonLawHooks.BlackMarketMercury(o.BlackMarketLevel, o.Captives) > 0 ? ", +" + N(Homm3DungeonLawHooks.BlackMarketMercury(o.BlackMarketLevel, o.Captives)) + " mercury" : ""), null);
 		Add(Homm3DungeonCaptivesRuntime.Choice.Eat, "Eat",
 			o.EatCreatures > 0 ? "Restore " + N(o.EatCreatures) + " of your fallen creatures" : "Restore part of your losses",
 			o.Eat.Count > 0 ? Units(o.Eat) : null);
@@ -465,6 +494,9 @@ internal static class Homm3DungeonWarCaptivesWindow
 	private static string Intro(Homm3DungeonCaptivesRuntime.Offer o)
 	{
 		var hero = Homm3HeroDisplayNames.Resolve(o.HeroSid);
+		// law pass 2026-11-21: Overlord's Due (#30).
+		if (o.SecondFate)
+			return "Overlord's Due: " + hero + " may claim a second fate for the remaining captives, at half strength.";
 		return hero + " has taken prisoners. Decide their fate.";
 	}
 

@@ -133,6 +133,73 @@ def add_design_lang_and_buffs(
     notes.append(f"unit design tables: {len(ability_rows) // 2} card text pair(s), {count} buff row(s)")
 
 
+LAW_OVERRIDE_DIR = REPO_ROOT / "custom_factions" / "law_overrides"
+
+
+LAW_BUFF_INFOS_PATH = "DB/side_buffs/bonus_buff_infos/buff_infos.json"
+
+
+def add_law_buffs(
+    release_zip: zipfile.ZipFile,
+    output: dict[str, bytes],
+    notes: list[str],
+    *,
+    read_overlay_or_release_json: Callable[..., Any],
+    write_json: Callable[[Any], bytes],
+    upsert_array_row: Callable[..., bool],
+    add_lang_overlay_rows: Callable[..., None],
+) -> None:
+    """Buff rows faction laws grant (law_overrides "lawBuffs", law pass 2026-11-21).
+
+    Each spec {"id", "cloneOf", "set"?, "name", "text", "buffFile"?, "duration"?, "charges"?} clones a Core buff like the unit tables do; a law
+    bonus `battleSubskillBonus unit_buff <id>` hands it to the law's receivers. buffFile defaults to the faction's
+    unit design buff file.
+    """
+    designs = load_designs()
+    buff_index = _buff_index(release_zip, output, read_overlay_or_release_json)
+    lang_rows: list[dict[str, str]] = []
+    count = 0
+    for path in sorted(LAW_OVERRIDE_DIR.glob("*.json")):
+        doc = json.loads(path.read_text(encoding="utf-8-sig"))
+        specs = doc.get("lawBuffs") or []
+        if not specs:
+            continue
+        default_file = designs.get(path.stem, {}).get("buffFile")
+        for spec in specs:
+            target = spec.get("buffFile") or default_file
+            if not target:
+                raise RuntimeError(f"{path.name} lawBuffs {spec.get('id')}: no buffFile")
+            donor = buff_index.get(spec["cloneOf"])
+            if donor is None:
+                raise RuntimeError(f"{path.name} lawBuffs {spec['id']}: donor buff {spec['cloneOf']!r} not found")
+            buff_doc = read_overlay_or_release_json(release_zip, output, target)
+            row = copy.deepcopy(donor)
+            row["id"] = spec["id"]
+            row["name_"] = spec["id"] + "_name"
+            row["description_"] = spec["id"] + "_description"
+            _deep_set(row, spec.get("set", {}))
+            upsert_array_row(buff_doc, row)
+            output[target] = write_json(buff_doc)
+            buff_index[spec["id"]] = row
+            # The law bonus `unit_buff <id>` names a bonus_buff_infos row (vanilla fraction_law_demon_6_bonus ->
+            # fraction_law_demon_6_unit_bonus); the info row shares the buff's id. duration/charges per spec.
+            info_doc = read_overlay_or_release_json(release_zip, output, LAW_BUFF_INFOS_PATH)
+            upsert_array_row(info_doc, {
+                "id": spec["id"],
+                "sid": spec["id"],
+                "duration": int(spec.get("duration", 1)),
+                "charges": int(spec.get("charges", 1)),
+                "allegiance": spec.get("allegiance", "ally"),
+            })
+            output[LAW_BUFF_INFOS_PATH] = write_json(info_doc)
+            lang_rows.append({"sid": spec["id"] + "_name", "text": spec["name"]})
+            lang_rows.append({"sid": spec["id"] + "_description", "text": spec["text"]})
+            count += 1
+    if lang_rows:
+        add_lang_overlay_rows(release_zip, output, BUFF_LANG, lang_rows, notes)
+    notes.append(f"law buffs: {count} buff row(s) from law_overrides lawBuffs")
+
+
 def _buff_index(release_zip: zipfile.ZipFile, output: dict[str, bytes], read_json_fn: Callable[..., Any]) -> dict[str, dict[str, Any]]:
     index: dict[str, dict[str, Any]] = {}
     names = {n for n in release_zip.namelist() if n.startswith("DB/buffs/") and n.endswith(".json")}
@@ -624,8 +691,12 @@ def kw_corpse_ward(ctx, sid, logic, view, entry):
     view["passives"].append(_card(sid, entry, "magic_fatal_decay_effect_icon"))
 
 
-def kw_always_return(ctx, sid, logic, view, entry):  # donor: assassin_selfbuff_3 data.sequenceEffect, here as a unit passive
-    logic["passives"].append({"data": {"sequenceEffect": "return_to_start_after_attack"}})
+def kw_always_return(ctx, sid, logic, view, entry):  # donor: assassin / sunlight_cavalry_upg_alt AbilityLogicConfig.returnToStartAfterAttack
+    melee = [a for a in logic.get("defaultAttacks", []) if a.get("attackType_") == "melee"]
+    if not melee:
+        raise RuntimeError(f"{sid}: always_return requires at least one melee default attack")
+    for attack in melee:
+        attack["returnToStartAfterAttack"] = True
     view["passives"].append(_card(sid, entry, "magic_favorable_wind_effect_icon"))
 
 
@@ -701,6 +772,7 @@ def _rebuild_unit(ctx: _Ctx, sid: str, unit: dict[str, Any], logic: dict[str, An
     shooter = logic["defaultAttacks"][0].get("attackType_") == "shoot"
     for attack in logic["defaultAttacks"]:
         attack["damageDealer"]["triggerCounter"] = True
+        attack.pop("returnToStartAfterAttack", None)
     for bucket in ("defaultAttacks", "counterAttacks"):
         for attack in logic[bucket]:
             attack["damageDealer"].pop("buff", None)

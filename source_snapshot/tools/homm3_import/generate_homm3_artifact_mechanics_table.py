@@ -631,10 +631,10 @@ def build_table(catalog_sids: list[str]) -> dict[str, dict[str, Any]]:
         [side("mercury", 1)], "Provides +1 mercury per day."
     )
     t["homm3_artifact_112_inexhaustible_cart_of_ore"] = entry(
-        [side("stone", 1)], "Provides +1 stone per day."
+        [side("ore", 1)], "Provides +1 ore per day."
     )
     t["homm3_artifact_113_eversmoking_ring_of_sulfur"] = entry(
-        [side("sulfur", 1)], "Provides +1 sulfur per day."
+        [side("mercury", 1)], "Provides +1 mercury per day."
     )
     t["homm3_artifact_114_inexhaustible_cart_of_lumber"] = entry(
         [side("wood", 1)], "Provides +1 wood per day."

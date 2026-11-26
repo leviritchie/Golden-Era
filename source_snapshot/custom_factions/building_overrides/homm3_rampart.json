@@ -1,0 +1,351 @@
+{
+  "factionSid": "homm3_rampart",
+  "rows": [
+    {
+      "sid": "Build_Bank",
+      "section": "banks",
+      "template": "nature_city:Build_Bank",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 2500,
+          "wood": 5,
+          "ore": 5
+        }
+      ],
+      "fields": {
+        "isConstructedOnStart": true,
+        "backgroundImages": [
+          "build_fon_economy"
+        ]
+      },
+      "bonuses": [
+        [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              1000
+            ]
+          }
+        ]
+      ],
+      "nameText": "Bank",
+      "descriptionText": "Produces 1000 Gold daily.",
+      "iconFrom": "nature_city:Build_Bank",
+      "notes": "building pass 2026-11-22: plain economy Bank restored (REVIEW 1). Values equal the vanilla Bank. The rampart.mystic_pond tag moves to Build_Mystic_Pond; the pre-pass Pond icon moves with it (iconFrom self:Build_Bank on that row).",
+      "nameTextLocales": {
+        "BRportugese": "Banco",
+        "czech": "Banka",
+        "french": "Banque",
+        "german": "Bank",
+        "hungarian": "Bank",
+        "italian": "Banca",
+        "japanese": "銀行",
+        "korean": "은행",
+        "polish": "Bank",
+        "russian": "Банк",
+        "spanish": "Banco",
+        "turkish": "Banka",
+        "ukrainian": "Банк",
+        "zhCN": "银行",
+        "zhTW": "銀行"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Produz 1000 de Ouro por dia.",
+        "czech": "Denně vyprodukuje 1000 Zlata.",
+        "french": "Produit 1000 d’or par jour.",
+        "german": "Produziert täglich 1000 Gold.",
+        "hungarian": "Naponta 1000 Aranyat termel.",
+        "italian": "Produce 1000 Oro al giorno.",
+        "japanese": "毎日1000ゴールドを生産する。",
+        "korean": "매일 금 1000을 생산합니다.",
+        "polish": "Produkuje 1000 Złota dziennie.",
+        "russian": "Приносит 1000 Золота в день.",
+        "spanish": "Produce 1000 de oro al día.",
+        "turkish": "Günde 1000 Altın üretir.",
+        "ukrainian": "Приносить 1000 Золота на день.",
+        "zhCN": "每天产出1000黄金。",
+        "zhTW": "每天產出1000黃金。"
+      }
+    },
+    {
+      "sid": "Build_Mystic_Pond",
+      "section": "banks",
+      "template": "nature_city:Build_Bank",
+      "replace": false,
+      "sceneSlot": "Mystic_Pond",
+      "costs": [
+        {
+          "gold": 2000,
+          "mercury": 2,
+          "crystals": 2,
+          "gemstones": 2
+        }
+      ],
+      "fields": {
+        "isConstructedOnStart": false,
+        "backgroundImages": [
+          "build_fon_unic"
+        ]
+      },
+      "bonuses": [
+        []
+      ],
+      "nameText": "Mystic Pond",
+      "descriptionText": "Produces 1-4 units of a random rare resource (Mercury, Crystals or Gemstones) at the start of each week.",
+      "iconFrom": "self:Build_Bank",
+      "plugin": "Homm3RampartWeeklyIncomeRuntime",
+      "notes": "building pass 2026-11-22: rampart.mystic_pond. Plugin-only banks carrier. At the owner's first day of each week (day 8, 15, ...) every owned Rampart city with this row adds 1-4 (uniform) of one of mercury/crystals/gemstones; paid once per side per week, persisted in the store buff homm3_rampart_income_store (Core row requested in build_crt.md). HoMM3 cost 2000 Gold + 2 each of the rare set (sulfur -> mercury).",
+      "nameTextLocales": {
+        "BRportugese": "Lagoa Mística",
+        "czech": "Tajemný rybník",
+        "french": "Étang mystique",
+        "german": "Mystischer Teich",
+        "hungarian": "Misztikus tó",
+        "italian": "Stagno Mistico",
+        "japanese": "神秘の池",
+        "korean": "신비의 연못",
+        "polish": "Tajemniczy staw",
+        "russian": "Мистический пруд",
+        "spanish": "Estanque Místico",
+        "turkish": "Gizemli Gölet",
+        "ukrainian": "Містичний ставок",
+        "zhCN": "神秘池塘",
+        "zhTW": "神祕池塘"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Produz 1-4 unidades de um recurso raro aleatório (Mercúrio, Cristais ou Gemas) no início de cada semana.",
+        "czech": "Na začátku každého týdne vyprodukuje 1-4 jednotky náhodné vzácné suroviny (Rtuť, Krystaly nebo Drahokamy).",
+        "french": "Produit 1-4 unités d’une ressource rare aléatoire (Mercure, Cristal ou Gemmes) au début de chaque semaine.",
+        "german": "Produziert zu Beginn jeder Woche 1-4 Einheiten einer zufälligen seltenen Ressource (Quecksilber, Kristalle oder Edelsteine).",
+        "hungarian": "Minden hét elején 1-4 egységnyi véletlenszerű ritka nyersanyagot (Higany, Kristály vagy Drágakő) termel.",
+        "italian": "All’inizio di ogni settimana produce 1-4 unità di una risorsa rara casuale (Mercurio, Cristalli o Gemme).",
+        "japanese": "毎週の開始時に、ランダムなレア資源(水銀、クリスタル、宝石)を1-4個生産する。",
+        "korean": "매주 시작 시 무작위 희귀 자원(수은, 수정, 보석) 1-4개를 생산합니다.",
+        "polish": "Na początku każdego tygodnia produkuje 1-4 jednostki losowego rzadkiego surowca (Rtęć, Kryształy lub Klejnoty).",
+        "russian": "В начале каждой недели производит 1-4 единицы случайного редкого ресурса (Ртуть, Кристаллы или Самоцветы).",
+        "spanish": "Al comienzo de cada semana produce 1-4 unidades de un recurso raro aleatorio (Mercurio, Cristales o Gemas).",
+        "turkish": "Her haftanın başında rastgele bir nadir kaynaktan (Cıva, Kristal veya Mücevher) 1-4 birim üretir.",
+        "ukrainian": "На початку кожного тижня виробляє 1-4 одиниці випадкового рідкісного ресурсу (Ртуть, Кристали або Самоцвіти).",
+        "zhCN": "每周开始时随机生产1-4单位稀有资源（水银、水晶或宝石）。",
+        "zhTW": "每週開始時隨機生產1-4單位稀有資源（水銀、水晶或寶石）。"
+      }
+    },
+    {
+      "sid": "Build_Mother_Nature",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 5000
+        }
+      ],
+      "fields": {
+        "backgroundImages": [
+          "build_fon_unic"
+        ]
+      },
+      "bonuses": [
+        []
+      ],
+      "nameText": "Fountain of Fortune",
+      "descriptionText": "The hero defending this city in a siege gets +2 Luck.",
+      "plugin": "Homm3TownSiegeDefenseRuntime",
+      "notes": "building pass 2026-11-22: rampart.fountain_of_fortune. The visiting-hero +2 Spell Power substitute is removed; moves heroBonusBanks -> banks (plugin carrier, empty bonuses). The +2 Luck for the siege defender is the runtime agent's siege hook. Cost kept at 5000 Gold (draft). If the applier cannot move sections on replace, apply as remove + add from template nature_city:Build_Bank with iconFrom self:Build_Mother_Nature and sceneSlot Build_Mother_Nature. Tree: needs Build_Mystic_Pond (tree agent).",
+      "nameTextLocales": {
+        "BRportugese": "Fonte da Fortuna",
+        "czech": "Fontána štěstěny",
+        "french": "Fontaine de fortune",
+        "german": "Brunnen des Glücks",
+        "hungarian": "Szerencse kútja",
+        "italian": "Fontana della Fortuna",
+        "japanese": "幸運の泉",
+        "korean": "행운의 샘",
+        "polish": "Fontanna fortuny",
+        "russian": "Фонтан удачи",
+        "spanish": "Fuente de la Fortuna",
+        "turkish": "Talih Çeşmesi",
+        "ukrainian": "Фонтан долі",
+        "zhCN": "财富之泉",
+        "zhTW": "財富之泉"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "O herói que defende esta cidade em um cerco recebe +2 de Sorte.",
+        "czech": "Hrdina bránící toto město při obléhání získá +2 Štěstí.",
+        "french": "Le héros qui défend cette ville lors d’un siège gagne +2 en Chance.",
+        "german": "Der Held, der diese Stadt bei einer Belagerung verteidigt, erhält +2 Glück.",
+        "hungarian": "Az a hős, aki ostrom közben védi a várost, +2 Szerencsét kap.",
+        "italian": "L’eroe che difende questa città durante un assedio ottiene +2 Fortuna.",
+        "japanese": "攻城戦でこの都市を防衛する英雄は幸運+2を得る。",
+        "korean": "공성전에서 이 도시를 방어하는 영웅은 행운 +2를 얻습니다.",
+        "polish": "Bohater broniący tego miasta podczas oblężenia zyskuje +2 Szczęścia.",
+        "russian": "Герой, защищающий этот город при осаде, получает +2 к Удаче.",
+        "spanish": "El héroe que defiende esta ciudad durante un asedio obtiene +2 de Suerte.",
+        "turkish": "Kuşatma sırasında bu şehri savunan kahraman +2 Şans kazanır.",
+        "ukrainian": "Герой, що обороняє це місто під час облоги, отримує +2 до Талану.",
+        "zhCN": "围攻中防守这座城市的英雄获得+2幸运。",
+        "zhTW": "圍攻中防守這座城市的英雄獲得+2幸運。"
+      }
+    },
+    {
+      "sid": "Build_Rampart_Treasury",
+      "section": "banks",
+      "template": "nature_city:Build_Bank",
+      "replace": false,
+      "sceneSlot": "Rampart_Treasury",
+      "costs": [
+        {
+          "gold": 5000,
+          "ore": 5
+        }
+      ],
+      "fields": {
+        "isConstructedOnStart": false,
+        "backgroundImages": [
+          "build_fon_unic"
+        ]
+      },
+      "bonuses": [
+        []
+      ],
+      "nameText": "Treasury",
+      "descriptionText": "At the start of each week, you gain 10% of the Gold you hold.",
+      "iconFrom": "nature_city:Build_Treasury",
+      "plugin": "Homm3RampartWeeklyIncomeRuntime",
+      "notes": "building pass 2026-11-22: rampart.treasury. Plugin-only banks carrier. At the owner's first day of each week the side gains floor(10% of its gold as it stood before that day's income) per owned Rampart city with this row; uncapped (draft owner decision 1, recommended). Same exactly-once store as the Pond. HoMM3 cost 5000 Gold + 5 Ore.",
+      "nameTextLocales": {
+        "BRportugese": "Tesouraria",
+        "czech": "Pokladnice",
+        "french": "Trésorerie",
+        "german": "Schatzkammer",
+        "hungarian": "Kincstár",
+        "italian": "Tesoreria",
+        "japanese": "宝物庫",
+        "korean": "보물창고",
+        "polish": "Skarbiec",
+        "russian": "Казна",
+        "spanish": "Tesorería",
+        "turkish": "Hazine",
+        "ukrainian": "Скарбниця",
+        "zhCN": "国库",
+        "zhTW": "國庫"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "No início de cada semana, você ganha 10% do Ouro que possui.",
+        "czech": "Na začátku každého týdne získáte 10 % Zlata, které vlastníte.",
+        "french": "Au début de chaque semaine, vous gagnez 10 % de l’Or que vous possédez.",
+        "german": "Zu Beginn jeder Woche erhalten Sie 10 % des Goldes, das Sie besitzen.",
+        "hungarian": "Minden hét elején megkapod a birtokodban lévő Arany 10%-át.",
+        "italian": "All’inizio di ogni settimana ottieni il 10% dell’Oro che possiedi.",
+        "japanese": "毎週の開始時に、所持しているゴールドの10%を獲得する。",
+        "korean": "매주 시작 시 보유한 금의 10%를 얻습니다.",
+        "polish": "Na początku każdego tygodnia otrzymujesz 10% posiadanego Złota.",
+        "russian": "В начале каждой недели вы получаете 10% имеющегося у вас Золота.",
+        "spanish": "Al comienzo de cada semana, obtienes el 10% del Oro que posees.",
+        "turkish": "Her haftanın başında sahip olduğunuz Altının %10’unu kazanırsınız.",
+        "ukrainian": "На початку кожного тижня ви отримуєте 10% наявного у вас Золота.",
+        "zhCN": "每周开始时，你获得所持黄金的10%。",
+        "zhTW": "每週開始時，你獲得所持黃金的10%。"
+      }
+    },
+    {
+      "sid": "Build_Artifact_Market",
+      "section": "artifactMarkets",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 2500,
+          "wood": 5,
+          "ore": 5
+        }
+      ],
+      "nameText": "Artifact Merchants",
+      "notes": "building pass 2026-11-22: rename only. The Treasury name goes to the real Treasury row (Build_Rampart_Treasury); the shared Artifact Market keeps its effect.",
+      "nameTextLocales": {
+        "BRportugese": "Mercadores de Artefatos",
+        "czech": "Obchodníci s artefakty",
+        "french": "Marchands d’artefacts",
+        "german": "Artefakthändler",
+        "hungarian": "Műtárgykereskedők",
+        "italian": "Mercanti di Manufatti",
+        "japanese": "アーティファクト商人",
+        "korean": "유물 상인",
+        "polish": "Handlarze artefaktami",
+        "russian": "Торговцы артефактами",
+        "spanish": "Mercaderes de Artefactos",
+        "turkish": "Eser Tüccarları",
+        "ukrainian": "Торговці артефактами",
+        "zhCN": "神器商人",
+        "zhTW": "神器商人"
+      }
+    },
+    {
+      "sid": "Build_Spring_of_Life",
+      "section": "graals",
+      "replace": true,
+      "costs": [
+        {
+          "graal": 1
+        }
+      ],
+      "fields": {
+        "sideBonuses": [
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "all",
+              "1"
+            ]
+          },
+          {
+            "type": "heroStat",
+            "receiverAllegiance": "ally",
+            "parameters": [
+              "luck",
+              "2"
+            ]
+          }
+        ]
+      },
+      "nameText": "Spirit Guardian",
+      "descriptionText": "+1 to all creature growth in all your cities. All your heroes gain +2 Luck. This city's dwellings produce +100% units.",
+      "notes": "building pass 2026-11-22: rampart.spirit_guardian. Owner answer 3: keeps the side cityUnitsIncrement all 1 and the city cityUnitsIncrementPer all 1.0 (cityBonuses untouched) and adds the HoMM3 +2 Luck for all heroes as a native graal side heroStat (demon_city graal shape).",
+      "nameTextLocales": {
+        "BRportugese": "Guardião Espiritual",
+        "czech": "Strážný duch",
+        "french": "Esprit gardien",
+        "german": "Geisterwächter",
+        "hungarian": "Szellemőr",
+        "italian": "Spirito Guardiano",
+        "japanese": "守護霊",
+        "korean": "수호 정령",
+        "polish": "Duch opiekuńczy",
+        "russian": "Дух-хранитель",
+        "spanish": "Espíritu Guardián",
+        "turkish": "Ruh Muhafızı",
+        "ukrainian": "Дух-охоронець",
+        "zhCN": "守护灵",
+        "zhTW": "守護靈"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "+1 no crescimento de todas as criaturas em todas as suas cidades. Todos os seus heróis ganham +2 de Sorte. As moradias desta cidade produzem +100% de unidades.",
+        "czech": "+1 k růstu všech stvoření ve všech vašich městech. Všichni vaši hrdinové získají +2 Štěstí. Obydlí tohoto města produkují +100 % jednotek.",
+        "french": "+1 à la croissance de toutes les créatures dans toutes vos villes. Tous vos héros gagnent +2 en Chance. Les habitations de cette ville produisent +100 % d’unités.",
+        "german": "+1 auf das Wachstum aller Kreaturen in allen Ihren Städten. Alle Ihre Helden erhalten +2 Glück. Die Behausungen dieser Stadt produzieren +100 % Einheiten.",
+        "hungarian": "+1 minden lény növekedéséhez az összes városodban. Minden hősöd +2 Szerencsét kap. A város lakhelyei +100% egységet termelnek.",
+        "italian": "+1 alla crescita di tutte le creature in tutte le tue città. Tutti i tuoi eroi ottengono +2 Fortuna. Le abitazioni di questa città producono +100% di unità.",
+        "japanese": "すべての都市のクリーチャー増加数が+1される。すべての英雄が幸運+2を得る。この都市の住居は+100%の部隊を生産する。",
+        "korean": "모든 도시의 모든 크리처 증가량이 +1 됩니다. 모든 영웅이 행운 +2를 얻습니다. 이 도시의 거주지는 +100%의 부대를 생산합니다.",
+        "polish": "+1 do przyrostu wszystkich stworzeń we wszystkich twoich miastach. Wszyscy twoi bohaterowie zyskują +2 Szczęścia. Siedliska w tym mieście produkują +100% jednostek.",
+        "russian": "+1 к приросту всех существ во всех ваших городах. Все ваши герои получают +2 к Удаче. Жилища этого города производят на 100% больше существ.",
+        "spanish": "+1 al crecimiento de todas las criaturas en todas tus ciudades. Todos tus héroes obtienen +2 de Suerte. Las viviendas de esta ciudad producen +100% de unidades.",
+        "turkish": "Tüm şehirlerinizdeki tüm yaratıkların üremesine +1 ekler. Tüm kahramanlarınız +2 Şans kazanır. Bu şehrin konutları +%100 birim üretir.",
+        "ukrainian": "+1 до приросту всіх істот у всіх ваших містах. Усі ваші герої отримують +2 до Талану. Житла цього міста виробляють на 100% більше істот.",
+        "zhCN": "你所有城市中所有生物的增长量+1。你所有英雄获得+2幸运。这座城市的住所产量+100%。",
+        "zhTW": "你所有城市中所有生物的增長量+1。你所有英雄獲得+2幸運。這座城市的住所產量+100%。"
+      }
+    }
+  ],
+  "remove": []
+}

@@ -1,108 +1,1625 @@
 {
   "lawOverrides": {
-    "fraction_law_homm3_factory_1": {"iconKey": "fraction_law_human_1_icon"},
-    "fraction_law_homm3_factory_2": {"iconKey": "fraction_law_human_2_icon"},
-    "fraction_law_homm3_factory_3": {"iconKey": "fraction_law_human_3_icon"},
-    "fraction_law_homm3_factory_4": {"iconKey": "fraction_law_human_4_icon"},
-    "fraction_law_homm3_factory_6": {"iconKey": "fraction_law_human_6_icon"},
-    "fraction_law_homm3_factory_7": {"iconKey": "fraction_law_human_7_icon"},
-    "fraction_law_homm3_factory_8": {"iconKey": "fraction_law_human_8_icon"},
-    "fraction_law_homm3_factory_9": {"iconKey": "fraction_law_human_9_icon"},
-    "fraction_law_homm3_factory_10": {"iconKey": "fraction_law_human_10_icon"},
-    "fraction_law_homm3_factory_11": {"iconKey": "fraction_law_human_11_icon"},
-    "fraction_law_homm3_factory_12": {"iconKey": "fraction_law_human_12_icon"},
-    "fraction_law_homm3_factory_13": {"iconKey": "fraction_law_human_13_icon"},
-    "fraction_law_homm3_factory_14": {"iconKey": "fraction_law_human_14_icon"},
-    "fraction_law_homm3_factory_15": {"iconKey": "fraction_law_human_15_icon"},
-    "fraction_law_homm3_factory_16": {"iconKey": "fraction_law_human_16_icon"},
-    "fraction_law_homm3_factory_17": {"iconKey": "fraction_law_human_17_icon"},
-    "fraction_law_homm3_factory_18": {"iconKey": "fraction_law_human_18_icon"},
-    "fraction_law_homm3_factory_19": {"iconKey": "fraction_law_human_20_icon"},
-    "fraction_law_homm3_factory_21": {"iconKey": "fraction_law_human_21_icon"},
-    "fraction_law_homm3_factory_22": {"iconKey": "fraction_law_human_22_icon"},
-    "fraction_law_homm3_factory_23": {"iconKey": "fraction_law_human_23_icon"},
-    "fraction_law_homm3_factory_24": {"iconKey": "fraction_law_human_24_icon"},
-    "fraction_law_homm3_factory_25": {"iconKey": "fraction_law_human_25_icon"},
-    "fraction_law_homm3_factory_27": {"iconKey": "fraction_law_human_27_icon"},
-    "fraction_law_homm3_factory_28": {"iconKey": "fraction_law_human_28_icon"},
-    "fraction_law_homm3_factory_29": {"iconKey": "fraction_law_human_29_icon"},
-    "fraction_law_homm3_factory_30": {"iconKey": "fraction_law_human_30_icon"},
-    "fraction_law_homm3_factory_32": {"iconKey": "fraction_law_human_32_icon"},
-    "fraction_law_homm3_factory_33": {"iconKey": "fraction_law_human_33_icon"},
-    "fraction_law_homm3_factory_34": {"iconKey": "fraction_law_unfrozen_36_icon"},
-    "fraction_law_homm3_factory_5": {
+    "fraction_law_homm3_factory_1": {
       "enabled": true,
-      "nameText": "Assembly Calibration",
-      "descriptionText": "Positive effects on friendly creatures last +1/+2 additional rounds by rank.",
-      "parametersPerLevel": [
-        {"cost": 3, "bonuses": [{"type": "unitStat", "parameters": ["inComingBuffDuration", "1"]}]},
-        {"cost": 3, "bonuses": [{"type": "unitStat", "parameters": ["inComingBuffDuration", "2"]}]}
+      "nameText": "Tax Collectors",
+      "descriptionText": "Produces {0} Gold daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
       ],
-      "iconKey": "fraction_law_human_5_icon",
-      "notes": "Olden Era integration law using an exact Core-native bonus shape. This is not claimed as a HotA-authentic Factory law; candidate, deploy, and runtime validation remain pending."
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "gold",
+                250
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "gold",
+                500
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: scaffold income law."
     },
-    "fraction_law_homm3_factory_20": {
+    "fraction_law_homm3_factory_2": {
       "enabled": true,
-      "nameText": "Ballistics Calibration",
-      "descriptionText": "Friendly creatures deal 5%/10% more ranged damage and take 5%/10% less ranged damage by rank.",
+      "nameText": "Prospectors",
+      "descriptionText": "Your heroes gain {0} Sight radius.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "viewRadius",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: native sight (family row 2).",
+      "effectIconKey": "fraction_law_human_2_icon"
+    },
+    "fraction_law_homm3_factory_3": {
+      "enabled": false
+    },
+    "fraction_law_homm3_factory_4": {
+      "enabled": true,
+      "nameText": "Elite Halflings",
+      "descriptionText": "Halfling growth in your cities increases by {0}. They gain {1} Luck.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
       "parametersPerLevel": [
         {
           "cost": 3,
           "bonuses": [
-            {"type": "unitStat", "parameters": ["modifierSet", "outDmgMods", "shoot_attack", "0.05"]},
-            {"type": "unitStat", "parameters": ["modifierSet", "inDmgMods", "shoot_attack", "-0.05"]}
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_halfling",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "luck",
+                "1"
+              ],
+              "receivers": [
+                "h3_halfling",
+                "h3_halfling_grenadier",
+                "h3_halfling_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_halfling",
+                "8"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "luck",
+                "2"
+              ],
+              "receivers": [
+                "h3_halfling",
+                "h3_halfling_grenadier",
+                "h3_halfling_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T1, Luck.",
+      "portraitIconSid": "h3_halfling"
+    },
+    "fraction_law_homm3_factory_5": {
+      "enabled": true,
+      "nameText": "Telegraph Lines",
+      "descriptionText": "You can manage every mine and dwelling you own remotely up to enhancement level {0}, even if a Factory hero has not visited it.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "roadPerBonus",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "1"
+              ],
+              "activationLevel": 99
+            }
           ]
         },
         {
           "cost": 3,
           "bonuses": [
-            {"type": "unitStat", "parameters": ["modifierSet", "outDmgMods", "shoot_attack", "0.10"]},
-            {"type": "unitStat", "parameters": ["modifierSet", "inDmgMods", "shoot_attack", "-0.10"]}
+            {
+              "type": "heroStat",
+              "parameters": [
+                "roadPerBonus",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "2"
+              ],
+              "activationLevel": 99
+            }
           ]
         }
       ],
-      "iconKey": "fraction_law_human_20_icon",
-      "notes": "Olden Era integration law using exact Core-native ranged modifier rows. This is not claimed as a HotA-authentic Factory law; candidate, deploy, and runtime validation remain pending."
+      "notes": "law pass 2026-11-25: Telegraph Lines reworded (SPEC group D, owner): remote level = max(Upgrade Center, Command Center, law level 1/2) for every owned mine and dwelling (Homm3FactoryLogisticsFacade.RemoteLevel via Homm3FactoryLawHooks.TelegraphLevel). Display carrier 1/2; native bonus is a zero anchor.",
+      "effectIconKey": "fraction_law_dungeon_15_icon"
     },
-    "fraction_law_homm3_factory_26": {
+    "fraction_law_homm3_factory_6": {
       "enabled": true,
-      "nameText": "Engineering Doctrine",
-      "descriptionText": "Friendly creatures gain 25% of their hero's Spell Power and Knowledge as Attack and Defense respectively.",
+      "nameText": "Mercenary Pay",
+      "descriptionText": "Your heroes gain {0} Attack.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
       "parametersPerLevel": [
         {
-          "cost": 6,
+          "cost": 3,
           "bonuses": [
-            {"type": "unitStat", "parameters": ["heroSpellPowerModifier", "0.25"]},
-            {"type": "unitStat", "parameters": ["heroIntelligenceModifier", "0.25"]}
+            {
+              "type": "heroStat",
+              "parameters": [
+                "offence",
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "offence",
+                "4"
+              ]
+            }
           ]
         }
       ],
-      "iconKey": "fraction_law_human_26_icon",
-      "notes": "Olden Era integration law copied from exact Core-native modifier shapes. This is not claimed as a HotA-authentic Factory law; candidate, deploy, and runtime validation remain pending."
+      "notes": "law pass 2026-11-21: native hero Attack (primary stat family row 6).",
+      "effectIconKey": "fraction_law_human_6_icon"
     },
-    "fraction_law_homm3_factory_31": {
+    "fraction_law_homm3_factory_7": {
       "enabled": true,
-      "nameText": "Industrial Rhythm",
-      "descriptionText": "Industrial Factory creatures generate 1 Focus Point at the beginning of their turn.",
+      "nameText": "Surveyors’ Charter",
+      "descriptionText": "The base range of your Logistics Network increases by +{0}%.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "movementAfterBattleBonus",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.5"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Surveyors' Charter reworded (SPEC group D): the base network range (baseLogisticsLevel 2 x 100 MP = 1.0 day) rises by 50%, i.e. +1 range level (Homm3FactoryLawHooks.SurveyorsCharterPercentByLevel -> BaseLogisticsLevel). It was worded as a skill level; it never raised the enhancement level. Display carrier 50%; native bonus is a zero anchor.",
+      "effectIconKey": "fraction_law_nature_7_icon"
+    },
+    "fraction_law_homm3_factory_8": {
+      "enabled": true,
+      "nameText": "Smelting Works",
+      "descriptionText": "Your buildings cost –{0}% Ore to construct.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "constructionDiscount",
+              "parameters": [
+                "ore",
+                "-0.20"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "constructionDiscount",
+              "parameters": [
+                "ore",
+                "-0.40"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: native ore construction discount.",
+      "effectIconKey": "fraction_law_dungeon_7_icon"
+    },
+    "fraction_law_homm3_factory_9": {
+      "enabled": true,
+      "nameText": "Riveted Plating",
+      "descriptionText": "Your Armadillos, Automatons and Dreadnoughts take –{0}% Ranged Damage.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_3"
+      ],
       "parametersPerLevel": [
         {
           "cost": 2,
           "bonuses": [
             {
               "type": "unitStat",
-              "parameters": ["energyPerRound", "1"],
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "shoot_attack",
+                "-0.1"
+              ],
               "receivers": [
-                "h3_mechanic", "h3_engineer", "h3_mechanic_upg_alt",
-                "h3_automaton", "h3_sentinel_automaton", "h3_automaton_upg_alt",
-                "h3_gunslinger", "h3_bounty_hunter", "h3_gunslinger_upg_alt",
-                "h3_dreadnought", "h3_juggernaut", "h3_dreadnought_upg_alt"
+                "h3_armadillo",
+                "h3_bellwether_armadillo",
+                "h3_armadillo_upg_alt",
+                "h3_automaton",
+                "h3_sentinel_automaton",
+                "h3_automaton_upg_alt",
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "range_attack",
+                "-0.1"
+              ],
+              "receivers": [
+                "h3_armadillo",
+                "h3_bellwether_armadillo",
+                "h3_armadillo_upg_alt",
+                "h3_automaton",
+                "h3_sentinel_automaton",
+                "h3_automaton_upg_alt",
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "shoot_attack",
+                "-0.2"
+              ],
+              "receivers": [
+                "h3_armadillo",
+                "h3_bellwether_armadillo",
+                "h3_armadillo_upg_alt",
+                "h3_automaton",
+                "h3_sentinel_automaton",
+                "h3_automaton_upg_alt",
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "range_attack",
+                "-0.2"
+              ],
+              "receivers": [
+                "h3_armadillo",
+                "h3_bellwether_armadillo",
+                "h3_armadillo_upg_alt",
+                "h3_automaton",
+                "h3_sentinel_automaton",
+                "h3_automaton_upg_alt",
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
               ]
             }
           ]
         }
       ],
-      "iconKey": "fraction_law_human_31_icon",
-      "notes": "Olden Era integration law using an exact Core-native energyPerRound row and manifest-owned Industrial receivers. This is not claimed as a HotA-authentic Factory law; candidate, deploy, and runtime validation remain pending."
+      "notes": "law pass 2026-11-21: (I) native ranged damage taken, Armadillo, Automaton and Dreadnought lines.",
+      "effectIconKey": "fraction_law_human_20_icon"
+    },
+    "fraction_law_homm3_factory_10": {
+      "enabled": true,
+      "nameText": "Elite Mechanics",
+      "descriptionText": "Mechanic growth in your cities increases by {0}. Their healing abilities restore {1}% more HP.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_mechanic",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "finalHealingBonusPercent",
+                "0.25"
+              ],
+              "receivers": [
+                "h3_mechanic",
+                "h3_engineer",
+                "h3_mechanic_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_mechanic",
+                "8"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "finalHealingBonusPercent",
+                "0.5"
+              ],
+              "receivers": [
+                "h3_mechanic",
+                "h3_engineer",
+                "h3_mechanic_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T2, healing rider (verify Repair reads finalHealingBonusPercent).",
+      "portraitIconSid": "h3_mechanic"
+    },
+    "fraction_law_homm3_factory_11": {
+      "enabled": true,
+      "nameText": "Elite Armadillos",
+      "descriptionText": "Armadillo growth in your cities increases by {0}. They can counterattack twice.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_armadillo",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "numCounters",
+                "1"
+              ],
+              "receivers": [
+                "h3_armadillo",
+                "h3_bellwether_armadillo",
+                "h3_armadillo_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_armadillo",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "numCounters",
+                "1"
+              ],
+              "receivers": [
+                "h3_armadillo",
+                "h3_bellwether_armadillo",
+                "h3_armadillo_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T3, counterattacks twice.",
+      "portraitIconSid": "h3_armadillo"
+    },
+    "fraction_law_homm3_factory_12": {
+      "enabled": true,
+      "nameText": "Standard Parts",
+      "descriptionText": "Logistics Network enhancements cost –{0}% to build.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "movementRestoreBonus",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.15"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "movementRestoreBonus",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.3"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Standard Parts: display carrier 15/30% = Homm3FactoryLawHooks.StandardPartsPercentByLevel; text style only.",
+      "effectIconKey": "fraction_law_nature_8_icon"
+    },
+    "fraction_law_homm3_factory_13": {
+      "enabled": true,
+      "nameText": "Target Designation",
+      "descriptionText": "Your Factory creatures deal +{0}% Damage to enemies with Bombardier Mark, Glass Shards, Shattered or Overheated.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_halfling",
+                "h3_halfling_grenadier",
+                "h3_halfling_upg_alt",
+                "h3_mechanic",
+                "h3_engineer",
+                "h3_mechanic_upg_alt",
+                "h3_armadillo",
+                "h3_bellwether_armadillo",
+                "h3_armadillo_upg_alt",
+                "h3_automaton",
+                "h3_sentinel_automaton",
+                "h3_automaton_upg_alt",
+                "h3_sandworm",
+                "h3_olgoi_khorkhoi",
+                "h3_sandworm_upg_alt",
+                "h3_gunslinger",
+                "h3_bounty_hunter",
+                "h3_gunslinger_upg_alt",
+                "h3_couatl",
+                "h3_crimson_couatl",
+                "h3_couatl_upg_alt",
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.1"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_halfling",
+                "h3_halfling_grenadier",
+                "h3_halfling_upg_alt",
+                "h3_mechanic",
+                "h3_engineer",
+                "h3_mechanic_upg_alt",
+                "h3_armadillo",
+                "h3_bellwether_armadillo",
+                "h3_armadillo_upg_alt",
+                "h3_automaton",
+                "h3_sentinel_automaton",
+                "h3_automaton_upg_alt",
+                "h3_sandworm",
+                "h3_olgoi_khorkhoi",
+                "h3_sandworm_upg_alt",
+                "h3_gunslinger",
+                "h3_bounty_hunter",
+                "h3_gunslinger_upg_alt",
+                "h3_couatl",
+                "h3_crimson_couatl",
+                "h3_couatl_upg_alt",
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.2"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Target Designation: display carrier 10/20% = lawRules damage_vs_buff percent; text style only.",
+      "effectIconKey": "fraction_law_human_13_icon"
+    },
+    "fraction_law_homm3_factory_14": {
+      "enabled": true,
+      "nameText": "Mining: Crystals",
+      "descriptionText": "Produces {0} Crystal(s) daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "crystals",
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "crystals",
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: scaffold resource law."
+    },
+    "fraction_law_homm3_factory_15": {
+      "enabled": true,
+      "nameText": "Retrofit Bays",
+      "descriptionText": "Upgrading your Factory creatures costs –{0}% Gold.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitUpgradingDiscount",
+              "parameters": [
+                "gold",
+                "-0.25"
+              ],
+              "fraction": "homm3_factory"
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitUpgradingDiscount",
+              "parameters": [
+                "gold",
+                "-0.5"
+              ],
+              "fraction": "homm3_factory"
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: native upgrade discount (demon_20 shape), kingdom column like vanilla demon_20.",
+      "effectIconKey": "fraction_law_demon_20_icon"
+    },
+    "fraction_law_homm3_factory_16": {
+      "enabled": false
+    },
+    "fraction_law_homm3_factory_17": {
+      "enabled": true,
+      "nameText": "Elite Automatons",
+      "descriptionText": "Automaton growth in your cities increases by {0}. They gain {1} Attack and Defense.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_automaton",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "offence",
+                "3"
+              ],
+              "receivers": [
+                "h3_automaton",
+                "h3_sentinel_automaton",
+                "h3_automaton_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "3"
+              ],
+              "receivers": [
+                "h3_automaton",
+                "h3_sentinel_automaton",
+                "h3_automaton_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_automaton",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "offence",
+                "6"
+              ],
+              "receivers": [
+                "h3_automaton",
+                "h3_sentinel_automaton",
+                "h3_automaton_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "6"
+              ],
+              "receivers": [
+                "h3_automaton",
+                "h3_sentinel_automaton",
+                "h3_automaton_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T4, Attack and Defence.",
+      "portraitIconSid": "h3_automaton"
+    },
+    "fraction_law_homm3_factory_18": {
+      "enabled": false
+    },
+    "fraction_law_homm3_factory_19": {
+      "enabled": false
+    },
+    "fraction_law_homm3_factory_20": {
+      "enabled": true,
+      "nameText": "Railway Depots",
+      "descriptionText": "Your heroes gain {0} Movement points.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 5,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "movementBonus",
+                "10"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 5,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "movementBonus",
+                "20"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: native hero movement.",
+      "effectIconKey": "fraction_law_dungeon_8_icon"
+    },
+    "fraction_law_homm3_factory_21": {
+      "enabled": true,
+      "nameText": "Overclocked Plants",
+      "descriptionText": "Every enhancement in your Logistics Network works as if it were 1 level higher, up to level 3.",
+      "descriptionArgs": [],
+      "parametersPerLevel": [
+        {
+          "cost": 6,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "spellPowerPer",
+                "0"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: (S) Logistics Network EffectiveLevel +1 capped at maxLevel (Homm3FactoryLogisticsEffects). Native bonus is a zero anchor.",
+      "effectIconKey": "fraction_law_nature_18_icon"
+    },
+    "fraction_law_homm3_factory_22": {
+      "enabled": true,
+      "nameText": "Elite Dreadnoughts",
+      "descriptionText": "Dreadnought growth in your cities increases by {0}. They gain {1} Attack and Defense.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_dreadnought",
+                "1"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "offence",
+                "3"
+              ],
+              "receivers": [
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "3"
+              ],
+              "receivers": [
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_dreadnought",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "offence",
+                "6"
+              ],
+              "receivers": [
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "6"
+              ],
+              "receivers": [
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 1,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_dreadnought",
+                "3"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "offence",
+                "9"
+              ],
+              "receivers": [
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "9"
+              ],
+              "receivers": [
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite Dreadnought (8th line, not in manifest unitLines, so a vanilla effect icon instead of a portrait).",
+      "effectIconKey": "fraction_law_nature_17_icon"
+    },
+    "fraction_law_homm3_factory_23": {
+      "enabled": true,
+      "nameText": "Elite Sandworms",
+      "descriptionText": "Sandworm growth in your cities increases by {0}. Their abilities do not end their turn.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_sandworm",
+                "1"
+              ]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": [
+                "ignoreAbilityActionCost",
+                "true"
+              ],
+              "receivers": [
+                "h3_sandworm",
+                "h3_olgoi_khorkhoi",
+                "h3_sandworm_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_sandworm",
+                "2"
+              ]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": [
+                "ignoreAbilityActionCost",
+                "true"
+              ],
+              "receivers": [
+                "h3_sandworm",
+                "h3_olgoi_khorkhoi",
+                "h3_sandworm_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T5, abilities do not end the turn.",
+      "portraitIconSid": "h3_sandworm"
+    },
+    "fraction_law_homm3_factory_24": {
+      "enabled": true,
+      "nameText": "Elite Gunslingers",
+      "descriptionText": "Gunslinger growth in your cities increases by {0}. Their attacks ignore {1}% of the target’s Defense.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_gunslinger",
+                "1"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "armorPen",
+                "0.1"
+              ],
+              "receivers": [
+                "h3_gunslinger",
+                "h3_bounty_hunter",
+                "h3_gunslinger_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_gunslinger",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "armorPen",
+                "0.2"
+              ],
+              "receivers": [
+                "h3_gunslinger",
+                "h3_bounty_hunter",
+                "h3_gunslinger_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T6, armour pen.",
+      "portraitIconSid": "h3_gunslinger"
+    },
+    "fraction_law_homm3_factory_25": {
+      "enabled": true,
+      "nameText": "Salvage Crews",
+      "descriptionText": "After each battle you win, {0}% of your fallen Automatons and Dreadnoughts are rebuilt.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_automaton",
+                "h3_sentinel_automaton",
+                "h3_automaton_upg_alt",
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.2"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_automaton",
+                "h3_sentinel_automaton",
+                "h3_automaton_upg_alt",
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.4"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Salvage Crews: display carrier 20/40% = Homm3FactoryLawHooks.SalvagePercentByLevel; text style only.",
+      "effectIconKey": "fraction_law_undead_17_icon"
+    },
+    "fraction_law_homm3_factory_26": {
+      "enabled": true,
+      "nameText": "Coordinated Fire",
+      "descriptionText": "Your Factory creatures deal +{0}% Damage for each other friendly stack that has already damaged the target this round, up to +{1}%.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1",
+        "current_law_modPercent_bonuses_1_parameters_2"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_halfling",
+                "h3_halfling_grenadier",
+                "h3_halfling_upg_alt",
+                "h3_mechanic",
+                "h3_engineer",
+                "h3_mechanic_upg_alt",
+                "h3_armadillo",
+                "h3_bellwether_armadillo",
+                "h3_armadillo_upg_alt",
+                "h3_automaton",
+                "h3_sentinel_automaton",
+                "h3_automaton_upg_alt",
+                "h3_sandworm",
+                "h3_olgoi_khorkhoi",
+                "h3_sandworm_upg_alt",
+                "h3_gunslinger",
+                "h3_bounty_hunter",
+                "h3_gunslinger_upg_alt",
+                "h3_couatl",
+                "h3_crimson_couatl",
+                "h3_couatl_upg_alt",
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.05",
+                "0.15"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_halfling",
+                "h3_halfling_grenadier",
+                "h3_halfling_upg_alt",
+                "h3_mechanic",
+                "h3_engineer",
+                "h3_mechanic_upg_alt",
+                "h3_armadillo",
+                "h3_bellwether_armadillo",
+                "h3_armadillo_upg_alt",
+                "h3_automaton",
+                "h3_sentinel_automaton",
+                "h3_automaton_upg_alt",
+                "h3_sandworm",
+                "h3_olgoi_khorkhoi",
+                "h3_sandworm_upg_alt",
+                "h3_gunslinger",
+                "h3_bounty_hunter",
+                "h3_gunslinger_upg_alt",
+                "h3_couatl",
+                "h3_crimson_couatl",
+                "h3_couatl_upg_alt",
+                "h3_dreadnought",
+                "h3_juggernaut",
+                "h3_dreadnought_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.1",
+                "0.3"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Coordinated Fire: display carrier 5%/cap 15% and 10%/cap 30% = lawRules hit_this_round; text style only.",
+      "effectIconKey": "fraction_law_human_25_icon"
+    },
+    "fraction_law_homm3_factory_27": {
+      "enabled": false
+    },
+    "fraction_law_homm3_factory_28": {
+      "enabled": true,
+      "nameText": "Assembly Lines",
+      "descriptionText": "You can construct +{0} building(s) daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_0"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "constructionDailyLimit",
+              "parameters": [
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: (I) native extra building (family row 28), cost 3.",
+      "effectIconKey": "fraction_law_human_28_icon"
+    },
+    "fraction_law_homm3_factory_29": {
+      "enabled": false
+    },
+    "fraction_law_homm3_factory_30": {
+      "enabled": true,
+      "nameText": "Elite Couatls",
+      "descriptionText": "Couatl growth in your cities increases by {0}. Positive effects they apply last {1} additional round(s).",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_couatl",
+                "1"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outComingBuffDuration",
+                "1"
+              ],
+              "receivers": [
+                "h3_couatl",
+                "h3_crimson_couatl",
+                "h3_couatl_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_couatl",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outComingBuffDuration",
+                "1"
+              ],
+              "receivers": [
+                "h3_couatl",
+                "h3_crimson_couatl",
+                "h3_couatl_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T7, buff duration.",
+      "portraitIconSid": "h3_couatl"
+    },
+    "fraction_law_homm3_factory_31": {
+      "enabled": true,
+      "nameText": "Overpressure Rounds",
+      "descriptionText": "The first attack of your Halflings and Gunslingers each round deals +{0}% Damage.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_halfling",
+                "h3_halfling_grenadier",
+                "h3_halfling_upg_alt",
+                "h3_gunslinger",
+                "h3_bounty_hunter",
+                "h3_gunslinger_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.1"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_halfling",
+                "h3_halfling_grenadier",
+                "h3_halfling_upg_alt",
+                "h3_gunslinger",
+                "h3_bounty_hunter",
+                "h3_gunslinger_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.2"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Overpressure Rounds: display carrier 10/20% = lawRules first_hit percent; text style only.",
+      "effectIconKey": "fraction_law_nature_24_icon"
+    },
+    "fraction_law_homm3_factory_32": {
+      "enabled": true,
+      "nameText": "Insured Plants",
+      "descriptionText": "If an enemy captures one of your enhanced mines or dwellings, its enhancements are kept but stop working until you retake it.",
+      "descriptionArgs": [],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "defencePer",
+                "0"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: (S) Logistics Network capture keeps enhancements dormant (Homm3FactoryLogisticsRuntime.Maintain/ApplyHousing). Native bonus is a zero anchor.",
+      "effectIconKey": "fraction_law_human_32_icon"
+    },
+    "fraction_law_homm3_factory_33": {
+      "enabled": false
+    },
+    "fraction_law_homm3_factory_34": {
+      "enabled": true,
+      "nameText": "Signal Jammers",
+      "descriptionText": "The cooldowns of all the battle spells of enemy heroes are increased by {0} round(s).",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "heroStatBattle",
+              "parameters": [
+                "magicCdBonus",
+                "1"
+              ],
+              "receiverAllegiance": "enemy"
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: native enemy spell cooldown (family row 34), moved to r4, cost 4.",
+      "effectIconKey": "fraction_law_unfrozen_36_icon"
     }
-  }
+  },
+  "lawTree": [
+    {
+      "kingdom": [
+        3,
+        7,
+        2,
+        8
+      ],
+      "army": [
+        4,
+        10
+      ]
+    },
+    {
+      "kingdom": [
+        1,
+        14,
+        5
+      ],
+      "army": [
+        11,
+        17,
+        9
+      ]
+    },
+    {
+      "kingdom": [
+        16,
+        12,
+        28,
+        20
+      ],
+      "army": [
+        23,
+        26,
+        31
+      ]
+    },
+    {
+      "kingdom": [
+        32,
+        6,
+        15
+      ],
+      "army": [
+        24,
+        30,
+        13
+      ]
+    },
+    {
+      "kingdom": [
+        29,
+        21,
+        34
+      ],
+      "army": [
+        22,
+        25
+      ]
+    }
+  ],
+  "lawRules": [
+    {
+      "law": 26,
+      "rule": "hit_this_round",
+      "name": "Coordinated Fire",
+      "percent": [
+        5,
+        10
+      ],
+      "cap": [
+        15,
+        30
+      ],
+      "receivers": "faction"
+    },
+    {
+      "law": 31,
+      "rule": "first_hit",
+      "name": "Overpressure Rounds",
+      "side": "attacker",
+      "percent": [
+        10,
+        20
+      ],
+      "receivers": [
+        "h3_halfling",
+        "h3_halfling_grenadier",
+        "h3_halfling_upg_alt",
+        "h3_gunslinger",
+        "h3_bounty_hunter",
+        "h3_gunslinger_upg_alt"
+      ]
+    },
+    {
+      "law": 13,
+      "rule": "damage_vs_buff",
+      "name": "Target Designation",
+      "buffs": [
+        "h3_kit_factory_marked_effect",
+        "h3_kit_factory_glass_shards_effect",
+        "h3_kit_factory_shattered_effect",
+        "h3_kit_factory_overheated_effect"
+      ],
+      "percent": [
+        10,
+        20
+      ],
+      "receivers": "faction"
+    }
+  ],
+  "lawBuffs": []
 }

@@ -1,65 +1,51 @@
 # HoMM3 Necropolis: Meshy T2 town buildings (candidate t2_v1)
 
-**Proof tier: generated artifact.** The t2_v1 bundle was built offline through unitylock and rendered in the Unity
-editor. It passed three gates:
+**Proof tier: generated artifact.** The painted-front t2_v1 (restaged 2026-09-30) was bundled offline through
+unitylock and rendered in the Unity editor (`pan_*`). It passes three gates:
 
-- the see-through gate, no worse than baseline (976 px in total, against 6679 for the installed candidate);
+- the see-through gate, no worse than baseline `seam_v3` (976 px);
 - the framing gate;
-- `validate_town_scene3d_contract.py --catalog`.
+- `validate_town_scene3d_contract.py --catalog` (OK, 32 of 32 layers reachable).
+
+The bundle is 207,660,689 bytes, sha256 `ed49e66867ae13cc21b3608f2838529e49147f9f7046fb300f69311f3c75bb7d`. It supersedes
+the pre-painted-front bundle `c1c178e1...`.
 
 It is **not installed**. There is no startup, runtime or user-visible proof.
 
 - **Brief:** `artifacts/meshy_town_scene_meshes/_BRIEF_t2_towns.md`.
 - **Cap:** `townCaps.homm3_necropolis` = 600.
-- **Before:** the installed full-3D candidate `wall_v2`. Its catalog matched the Golden Era install when this work
-  started.
-- **Tool:** `tools/homm3_town_scene_meshes/town_full3d_t2_meshy.py`. Its commands are
-  `prep | generate | spent | fit | stage | sheet | mainsheet`.
+- **Before:** the installed full-3D candidate `wall_v2`.
+- **Tool:** `tools/homm3_town_scene_meshes/town_full3d_t2_meshy.py --faction necropolis`, with the commands
+  `prep | generate | spent | fit | stage | revert | sheet | mainsheet`.
 - **Meshy data:** `artifacts/meshy_town_scene_meshes/homm3_necropolis/<layer>/t2_a1/` holds `model.glb`, `task.json`,
   `fit.json` and `fit_viz.png`.
-- **Rest dE per layer:** `artifacts/meshy_town_scene_meshes/homm3_necropolis/rest_de.json`.
+- **Rest dE per layer:** `artifacts/meshy_town_scene_meshes/homm3_necropolis/rest_de.json` (diagnostic only).
 
-## Verdict
+## Verdict (user rule 2026-09-29: Meshy geometry beats the painted relief)
 
-> **Superseded rule, 2026-09-29.** The user decided that Meshy geometry beats the painted relief. Rest dE76 is now
-> diagnostic only and is never a revert gate.
->
-> The planned delivery is t2_v1 restaged with the painted front (as in `docs/homm3_bulwark_t2_town_buildings.md`),
-> with only genuinely broken meshes reverted.
->
-> **That restage has NOT been run yet.** The verdict below is the old rule's result, and t2_v1's staged bins are still
-> the pre-painted-front bake.
+**Deliver t2_v1.** All 29 meshed layers ship their Meshy body with a painted front.
+**No layer is reverted:** none is fragmented, a flat slab, or missing its main feature at the sweeps.
 
-**Do not install t2_v1.** The per-layer rest rule says a layer ships its Meshy body only if its rest dE76 against the
-painting beats the installed relief. **No layer wins.** All 29 keep the `wall_v2` relief, so the delivered per-layer
-mix is `wall_v2` itself. t2_v1 is kept as the measured all-Meshy candidate for review.
+- **At rest:** the frame reads as the painting. The painted front covers 99.2 to 100% of each layer's rest px.
+- **At the sweeps:** the castle levels, dwellings, mage guild, tavern, market, silo and obelisk are solid objects.
+  The relief before smeared on the dwellings and the cliff-side houses.
+- **Sideways-yaw check:** `tbncdw_4` (57 deg) and `tbncdw_5_2` (39 deg) were checked by eye at all three sweeps.
+  Neither shows a side or back where the painting has the front: the painted front carries the painting on the
+  camera-facing surface, and their sides read as plausible walls.
+- **Weakest layer:** `tbncdw_1`, the graveyard. It is thin (fit IoU 0.68) but still reads as the fence, tree and
+  graves, so it is kept.
 
-**At rest.** Every Meshy layer is 1.45x to 4.2x further from the painting than the relief:
+Rest dE76 is **diagnostic only**. The remaining distance to the painting comes from silhouette coverage (fit IoU 0.66 to
+0.91), not colour.
 
-- The relief is a projection of the painting at the rest camera, so it is near exact by construction.
-  Its mean dE76 is 1.8 to 4.1.
-- The Meshy layers score a mean dE76 of 5.3 to 14.7 (table below).
-- A Meshy body fitted to the sprite reaches a silhouette IoU of only 0.58 to 0.89.
-- As a result, 10 to 41% of each sprite's pixels go uncovered and show terrain.
-- The painted texels also land on surfaces that are not where the painter drew them.
+**Painted front** (as in `docs/homm3_bulwark_t2_town_buildings.md`):
 
-The worst layers:
+- Rest-seen faces are split to 4 px or less.
+- Those faces take the de-lit painting in screen space at SUPER=2, shaded with a smooth camera-facing normal.
+- The remainder keeps the Meshy atlas.
+- Both parts are two-sided.
 
-- `tbncblak`: the forge columns sit inward of the painted ones.
-- `tbncdw_1`: the graveyard came out as a thin fence on a mound (IoU 0.58).
-- `tbncdw_2`, `tbncdw_3` and `tbncdw_4`.
-- `tbncmark`: Meshy built a dark arched shrine where the painting has a lit white house.
-
-In `pan_default` the layout, palette and building identities still read as the Necropolis painting, but clearly
-below the relief. The castle and hall silhouettes differ, and the fits come out narrower than the sprites.
-
-**At the sweeps.** At `sweep_left`, `sweep_right` and `sweep_high` the Meshy buildings are solid objects. There are
-no rubber-sheet slabs. The castle levels, dwellings, mage guild tower and tavern keep real roofs and walls. The relief
-before visibly smears on the dwellings and the cliff-side houses. That is the gain the brief asked for, but by the
-rule above it does not pay for the rest regression.
-
-**Next step (not built).** A hybrid would keep the relief skirt on the sprite pixels the model does not cover, as
-Bulwark's stage has it. That would close most of the coverage part of the rest dE.
+The old rule's result (every layer kept the relief on rest dE76) is superseded.
 
 ## Spend (shared ledger `artifacts/meshy_town_scene_meshes/_ledger.jsonl`, faction `homm3_necropolis`)
 
@@ -80,37 +66,37 @@ Bulwark's stage has it. That would close most of the coverage part of the rest d
   were not touched. They are `tbncdw_*_3`, `tbnchall_4`, `tbncmage_5`, `tbncext*`, `tbncboat`, `tbnchrd1` and
   `tbnchrd3`.
 
-| layer | Meshy taskId | cr | fit IoU | rest silhouette IoU / sprite px covered | rest dE76 relief (wall_v2) | rest dE76 Meshy (t2_v1) | ships |
+| layer | Meshy taskId | cr | fit IoU | rest silhouette IoU / sprite px covered | rest dE76 relief (wall_v2) | rest dE76 t2_v1 (painted front) | ships |
 |---|---|---|---|---|---|---|---|
-| tbncblak | `01a0ef7d-19a2-704a-88b5-7d5afa576bd2` | 15 | 0.791 | 0.7174 / 0.731 | 4.08 | 14.73 | relief |
-| tbnccstl | `01a0ef7d-2534-7125-bc10-59cf3914c4eb` | 15 | 0.797 | 0.8153 / 0.8257 | 3.28 | 6.59 | relief |
-| tbnccstl_2 | `01a0ef7d-215b-73e7-9fdd-68fe24084fbe` | 15 | 0.76 | 0.8228 / 0.8361 | 2.78 | 7.1 | relief |
-| tbnccstl_3 | `01a0ef7d-1243-779b-8840-342a0240fe6e` | 15 | 0.809 | 0.8658 / 0.9014 | 2.77 | 5.87 | relief |
-| tbncdw_0 | `01a0ef7d-1db9-70ed-b546-67c42ce0f67b` | 15 | 0.784 | 0.8034 / 0.8206 | 2.5 | 6.49 | relief |
-| tbncdw_0_2 | `01a0ef7d-2c7b-75b2-9a91-c84e9176a252` | 15 | 0.777 | 0.8089 / 0.8332 | 2.81 | 8.61 | relief |
-| tbncdw_1 | `01a0ef7d-1647-7079-a456-d8734faed16b` | 15 | 0.683 | 0.5833 / 0.5929 | 2.62 | 11.1 | relief |
-| tbncdw_1_2 | `01a0ef7d-2927-74c9-9631-8d664138e620` | 15 | 0.789 | 0.7663 / 0.7909 | 2.38 | 6.12 | relief |
-| tbncdw_2 | `01a0ef7d-cbda-75e7-8196-4baea5309f0d` | 15 | 0.679 | 0.6549 / 0.6866 | 3.43 | 10.34 | relief |
-| tbncdw_2_2 | `01a0ef7d-d087-73cb-9d6d-ded561175f6b` | 15 | 0.734 | 0.7973 / 0.8483 | 4.13 | 6.0 | relief |
-| tbncdw_3 | `01a0ef7d-d460-76d4-a846-7ce8962ec8b4` | 15 | 0.871 | 0.8834 / 0.8937 | 2.7 | 10.09 | relief |
-| tbncdw_3_2 | `01a0ef7e-12a2-7267-a078-0fe8d3f2ce85` | 15 | 0.885 | 0.8652 / 0.8891 | 2.11 | 8.76 | relief |
-| tbncdw_4 | `01a0ef7e-185b-725a-b1d5-60737f20155b` | 15 | 0.82 | 0.8146 / 0.8341 | 3.51 | 10.93 | relief |
-| tbncdw_4_2 | `01a0ef7e-1c73-7465-b8cd-22129d081491` | 15 | 0.853 | 0.8241 / 0.8451 | 3.25 | 8.78 | relief |
-| tbncdw_5 | `01a0ef7e-2110-7150-b517-e9517261adcc` | 15 | 0.829 | 0.7935 / 0.8103 | 2.9 | 7.32 | relief |
-| tbncdw_5_2 | `01a0ef7e-2558-77f7-8911-ad011c710c57` | 15 | 0.8 | 0.812 / 0.8235 | 2.64 | 5.62 | relief |
-| tbnchall | `01a0ef7e-ff22-70ad-a1f9-2201b089f97f` | 15 | 0.844 | 0.8238 / 0.8495 | 2.35 | 6.23 | relief |
-| tbnchall_2 | `01a0ef7f-03cd-7092-add6-75c13050346e` | 15 | 0.768 | 0.7673 / 0.7748 | 2.3 | 6.3 | relief |
-| tbnchall_3 | `01a0ef7f-0885-7184-8658-0ff495f3233e` | 15 | 0.789 | 0.788 / 0.7984 | 2.18 | 7.35 | relief |
-| tbncholy | `01a0ef7f-421d-7130-a4b0-7c1417b5d824` | 15 | 0.661 | 0.7626 / 0.7683 | 1.84 | 7.65 | relief |
-| tbnchrd2 | `01a0ef7f-5191-7353-ade2-a696c78646bf` | 15 | 0.746 | 0.771 / 0.7894 | 2.41 | 7.8 | relief |
-| tbncmage | `01a0ef7f-84bc-74b1-ba55-ad255ac86ca6` | 15 | 0.913 | 0.8834 / 0.8916 | 1.97 | 5.95 | relief |
-| tbncmage_2 | `01a0ef7f-8991-747e-89a5-d90d05095471` | 15 | 0.901 | 0.878 / 0.8934 | 2.11 | 6.67 | relief |
-| tbncmage_3 | `01a0ef7f-938a-7626-a6e5-e9877d680c15` | 15 | 0.869 | 0.8596 / 0.8728 | 1.99 | 5.29 | relief |
-| tbncmage_4 | `01a0ef82-fb4d-7209-b2d7-d484df4347af` | 15 | 0.885 | 0.8896 / 0.9047 | 1.86 | 6.64 | relief |
-| tbncmark | `01a0ef83-00e5-7221-b97f-58b2219e50ca` | 15 | 0.839 | 0.7306 / 0.7418 | 2.21 | 8.88 | relief |
-| tbncsilo | `01a0ef83-3bc6-703f-9d1e-60055615f864` | 15 | 0.745 | 0.7221 / 0.7398 | 1.97 | 6.52 | relief |
-| tbncspec | `01a0ef83-3f53-77a0-88c6-b25c6ab25752` | 15 | 0.859 | 0.8493 / 0.871 | 3.38 | 5.84 | relief |
-| tbnctvrn | `01a0ef83-446c-71c1-b3cc-4c99dc4481fb` | 15 | 0.756 | 0.8113 / 0.8192 | 2.15 | 6.47 | relief |
+| tbncblak | `01a0ef7d-19a2-704a-88b5-7d5afa576bd2` | 15 | 0.791 | 0.7174 / 0.731 | 4.08 | 9.8 | Meshy + painted front |
+| tbnccstl | `01a0ef7d-2534-7125-bc10-59cf3914c4eb` | 15 | 0.797 | 0.8153 / 0.8257 | 3.28 | 3.49 | Meshy + painted front |
+| tbnccstl_2 | `01a0ef7d-215b-73e7-9fdd-68fe24084fbe` | 15 | 0.76 | 0.8228 / 0.8361 | 2.78 | 4.53 | Meshy + painted front |
+| tbnccstl_3 | `01a0ef7d-1243-779b-8840-342a0240fe6e` | 15 | 0.809 | 0.8658 / 0.9014 | 2.77 | 4.37 | Meshy + painted front |
+| tbncdw_0 | `01a0ef7d-1db9-70ed-b546-67c42ce0f67b` | 15 | 0.784 | 0.8034 / 0.8206 | 2.5 | 4.13 | Meshy + painted front |
+| tbncdw_0_2 | `01a0ef7d-2c7b-75b2-9a91-c84e9176a252` | 15 | 0.777 | 0.8089 / 0.8332 | 2.81 | 3.44 | Meshy + painted front |
+| tbncdw_1 | `01a0ef7d-1647-7079-a456-d8734faed16b` | 15 | 0.683 | 0.5833 / 0.5929 | 2.62 | 8.3 | Meshy + painted front |
+| tbncdw_1_2 | `01a0ef7d-2927-74c9-9631-8d664138e620` | 15 | 0.789 | 0.7663 / 0.7909 | 2.38 | 4.88 | Meshy + painted front |
+| tbncdw_2 | `01a0ef7d-cbda-75e7-8196-4baea5309f0d` | 15 | 0.679 | 0.6549 / 0.6866 | 3.43 | 6.89 | Meshy + painted front |
+| tbncdw_2_2 | `01a0ef7d-d087-73cb-9d6d-ded561175f6b` | 15 | 0.734 | 0.7973 / 0.8483 | 4.13 | 6.13 | Meshy + painted front |
+| tbncdw_3 | `01a0ef7d-d460-76d4-a846-7ce8962ec8b4` | 15 | 0.871 | 0.8834 / 0.8937 | 2.7 | 5.3 | Meshy + painted front |
+| tbncdw_3_2 | `01a0ef7e-12a2-7267-a078-0fe8d3f2ce85` | 15 | 0.885 | 0.8652 / 0.8891 | 2.11 | 4.03 | Meshy + painted front |
+| tbncdw_4 | `01a0ef7e-185b-725a-b1d5-60737f20155b` | 15 | 0.82 | 0.8146 / 0.8341 | 3.51 | 3.73 | Meshy + painted front |
+| tbncdw_4_2 | `01a0ef7e-1c73-7465-b8cd-22129d081491` | 15 | 0.853 | 0.8241 / 0.8451 | 3.25 | 4.31 | Meshy + painted front |
+| tbncdw_5 | `01a0ef7e-2110-7150-b517-e9517261adcc` | 15 | 0.829 | 0.7935 / 0.8103 | 2.9 | 4.53 | Meshy + painted front |
+| tbncdw_5_2 | `01a0ef7e-2558-77f7-8911-ad011c710c57` | 15 | 0.8 | 0.812 / 0.8235 | 2.64 | 4.51 | Meshy + painted front |
+| tbnchall | `01a0ef7e-ff22-70ad-a1f9-2201b089f97f` | 15 | 0.844 | 0.8238 / 0.8495 | 2.35 | 3.67 | Meshy + painted front |
+| tbnchall_2 | `01a0ef7f-03cd-7092-add6-75c13050346e` | 15 | 0.768 | 0.7673 / 0.7748 | 2.3 | 4.12 | Meshy + painted front |
+| tbnchall_3 | `01a0ef7f-0885-7184-8658-0ff495f3233e` | 15 | 0.789 | 0.788 / 0.7984 | 2.18 | 5.21 | Meshy + painted front |
+| tbncholy | `01a0ef7f-421d-7130-a4b0-7c1417b5d824` | 15 | 0.661 | 0.7626 / 0.7683 | 1.84 | 5.5 | Meshy + painted front |
+| tbnchrd2 | `01a0ef7f-5191-7353-ade2-a696c78646bf` | 15 | 0.746 | 0.771 / 0.7894 | 2.41 | 4.96 | Meshy + painted front |
+| tbncmage | `01a0ef7f-84bc-74b1-ba55-ad255ac86ca6` | 15 | 0.913 | 0.8834 / 0.8916 | 1.97 | 3.6 | Meshy + painted front |
+| tbncmage_2 | `01a0ef7f-8991-747e-89a5-d90d05095471` | 15 | 0.901 | 0.878 / 0.8934 | 2.11 | 3.68 | Meshy + painted front |
+| tbncmage_3 | `01a0ef7f-938a-7626-a6e5-e9877d680c15` | 15 | 0.869 | 0.8596 / 0.8728 | 1.99 | 3.93 | Meshy + painted front |
+| tbncmage_4 | `01a0ef82-fb4d-7209-b2d7-d484df4347af` | 15 | 0.885 | 0.8896 / 0.9047 | 1.86 | 4.55 | Meshy + painted front |
+| tbncmark | `01a0ef83-00e5-7221-b97f-58b2219e50ca` | 15 | 0.839 | 0.7306 / 0.7418 | 2.21 | 5.22 | Meshy + painted front |
+| tbncsilo | `01a0ef83-3bc6-703f-9d1e-60055615f864` | 15 | 0.745 | 0.7221 / 0.7398 | 1.97 | 6.11 | Meshy + painted front |
+| tbncspec | `01a0ef83-3f53-77a0-88c6-b25c6ab25752` | 15 | 0.859 | 0.8493 / 0.871 | 3.38 | 4.14 | Meshy + painted front |
+| tbnctvrn | `01a0ef83-446c-71c1-b3cc-4c99dc4481fb` | 15 | 0.756 | 0.8113 / 0.8192 | 2.15 | 4.3 | Meshy + painted front |
 | **total** | 29 calls | **435** | | | | | |
 
 **How rest dE76 is measured.** It is the mean CIELAB distance to the HoMM3 painting inside the layer's sprite mask
@@ -172,4 +158,12 @@ triangles are rewound. Before this fix, the tavern's right block rendered black 
   painting | before | after at rest, then before | after at each sweep.
 - **Renders:** `artifacts/homm3_necropolis_full3d/candidates/t2_v1/renders/`.
 - **Bundle:** `artifacts/homm3_necropolis_full3d/candidates/t2_v1/bundle/homm3_town_scene3d_necropolis`
-  (sha256 `c1c178e1...`). Not installed.
+  (sha256 `ed49e668...`, painted front).
+
+## Shared bake (2026-09-30)
+
+The painted-front bake is `tools/homm3_town_scene_meshes/town_full3d_t2_paint.py`, the one T2 bake for all eleven factions. On 2026-09-30 it absorbed the last four copies: `rampart_t2_buildings.stage_split` (Rampart, Dungeon), `inferno_t2_integrate.stage_layer`, `town_full3d_t2_meshy.painted_front` (Necropolis, Bulwark) and `t2_rest_geometry.stage_painted_layer` (Castle, Tower). Where a lane's bake differs by design, the difference is a named parameter of the shared module, set at this lane's call site; no output was changed to force identity.
+
+This lane's values (`town_full3d_t2_meshy.painted_front`): `subdivide_screen(seen_super=1)` (faces are split when drawn at frame px); the `sprite_fill` mask is the plate's opaque non-shadow alpha (`_plate_mask`); `sampler="scipy"`; `min_front_tris=50`; `meshy_albedo=` the atlas that `bake` colour-matched, so no gain is applied.
+
+Restaging the sample layer tbnctvrn with the shared module into a scratch stage gives files byte-identical to this candidate's (`t2_v1`) staged bins, and so did the old code before the fold (`tools/homm3_town_scene_meshes/t2_bake_restage_check.py`; results in `artifacts/town_t2_bake_consolidation/`). The bundle was not rebuilt. Proof tier of this note: generated artifact.

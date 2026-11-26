@@ -200,6 +200,113 @@ internal static class Homm3UnitKitRules
 		},
 	};
 
+	/// <summary>Rules a faction law switches on (law_overrides lawRules). ByLevel[rank - 1]; Units null = every unit of the owner's side.</summary>
+	internal sealed class LawRule
+	{
+		internal string FactionSid;
+		internal int LawIndex;
+		internal HashSet<string> Units;
+		internal Rule[] ByLevel;
+	}
+
+	internal static readonly LawRule[] LawRules =
+	{
+		new LawRule { FactionSid = "homm3_conflux", LawIndex = 13, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_air_elemental", "h3_air_elemental_upg", "h3_air_elemental_upg_alt", "h3_fire_elemental", "h3_fire_elemental_upg", "h3_fire_elemental_upg_alt", "h3_fusion_air_astral", "h3_fusion_air_magic", "h3_fusion_air_psychic", "h3_fusion_earth_air", "h3_fusion_earth_energy", "h3_fusion_earth_fire", "h3_fusion_earth_hurricane", "h3_fusion_earth_plasma", "h3_fusion_earth_storm", "h3_fusion_energy_air", "h3_fusion_energy_astral", "h3_fusion_energy_fire", "h3_fusion_energy_hurricane", "h3_fusion_energy_magic", "h3_fusion_energy_plasma", "h3_fusion_energy_psychic", "h3_fusion_energy_storm", "h3_fusion_fire_air", "h3_fusion_fire_astral", "h3_fusion_fire_hurricane", "h3_fusion_fire_magic", "h3_fusion_fire_psychic", "h3_fusion_fire_storm", "h3_fusion_frost_air", "h3_fusion_frost_energy", "h3_fusion_frost_fire", "h3_fusion_frost_hurricane", "h3_fusion_frost_plasma", "h3_fusion_frost_storm", "h3_fusion_hurricane_air", "h3_fusion_hurricane_astral", "h3_fusion_hurricane_magic", "h3_fusion_hurricane_psychic", "h3_fusion_ice_air", "h3_fusion_ice_energy", "h3_fusion_ice_fire", "h3_fusion_ice_hurricane", "h3_fusion_ice_plasma", "h3_fusion_ice_storm", "h3_fusion_ii_bolide", "h3_fusion_ii_borealis", "h3_fusion_ii_dirty_thunder", "h3_fusion_ii_dust_devil", "h3_fusion_ii_eclipse", "h3_fusion_ii_fever_dream", "h3_fusion_ii_fountain_of_youth", "h3_fusion_ii_fulgurite", "h3_fusion_ii_glass", "h3_fusion_ii_haboob", "h3_fusion_ii_hoarfrost", "h3_fusion_ii_illusionist", "h3_fusion_ii_jokulhlaup", "h3_fusion_ii_kaleidoscope", "h3_fusion_ii_lahar", "h3_fusion_ii_ley_line", "h3_fusion_ii_maelstrom", "h3_fusion_ii_meteor_shower", "h3_fusion_ii_philosophers_stone", "h3_fusion_ii_polar_vortex", "h3_fusion_ii_protostar", "h3_fusion_ii_pyrocumulus", "h3_fusion_ii_quicksilver", "h3_fusion_ii_rainbow", "h3_fusion_ii_singularity", "h3_fusion_ii_spring", "h3_fusion_ii_supercell", "h3_fusion_ii_supervolcano", "h3_fusion_ii_vengeance", "h3_fusion_ii_will_o_wisp", "h3_fusion_ii_wormhole", "h3_fusion_lava_air", "h3_fusion_lava_energy", "h3_fusion_lava_fire", "h3_fusion_lava_hurricane", "h3_fusion_lava_plasma", "h3_fusion_lava_storm", "h3_fusion_magma_air", "h3_fusion_magma_energy", "h3_fusion_magma_fire", "h3_fusion_magma_hurricane", "h3_fusion_magma_plasma", "h3_fusion_magma_storm", "h3_fusion_plasma_air", "h3_fusion_plasma_astral", "h3_fusion_plasma_fire", "h3_fusion_plasma_hurricane", "h3_fusion_plasma_magic", "h3_fusion_plasma_psychic", "h3_fusion_plasma_storm", "h3_fusion_storm_air", "h3_fusion_storm_astral", "h3_fusion_storm_hurricane", "h3_fusion_storm_magic", "h3_fusion_storm_psychic", "h3_fusion_water_air", "h3_fusion_water_energy", "h3_fusion_water_fire", "h3_fusion_water_hurricane", "h3_fusion_water_plasma", "h3_fusion_water_storm" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.Adjacency, Name = "Isolating Winds", Percent = 10, Cap = 0, BuffSids = Array.Empty<string>(), Choice = 1 },
+				new Rule { Kind = RuleKind.Adjacency, Name = "Isolating Winds", Percent = 20, Cap = 0, BuffSids = Array.Empty<string>(), Choice = 1 },
+		} },
+		new LawRule { FactionSid = "homm3_cove", LawIndex = 12, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_ayssid", "h3_corsair", "h3_crew_mate", "h3_crew_mate_upg_alt", "h3_haspid", "h3_nix", "h3_nix_upg_alt", "h3_nix_warrior", "h3_nymph", "h3_nymph_upg_alt", "h3_oceanid", "h3_pirate", "h3_sea_dog", "h3_sea_serpent", "h3_sea_serpent_upg_alt", "h3_sea_witch", "h3_sea_witch_upg_alt", "h3_seaman", "h3_sorceress", "h3_stormbird", "h3_stormbird_upg_alt" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.CounterState, Name = "Boarding Actions", Percent = 10, Cap = 0, BuffSids = Array.Empty<string>(), Attack = 1 },
+				new Rule { Kind = RuleKind.CounterState, Name = "Boarding Actions", Percent = 20, Cap = 0, BuffSids = Array.Empty<string>(), Attack = 1 },
+		} },
+		new LawRule { FactionSid = "homm3_cove", LawIndex = 26, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_ayssid", "h3_corsair", "h3_crew_mate", "h3_crew_mate_upg_alt", "h3_haspid", "h3_nix", "h3_nix_upg_alt", "h3_nix_warrior", "h3_nymph", "h3_nymph_upg_alt", "h3_oceanid", "h3_pirate", "h3_sea_dog", "h3_sea_serpent", "h3_sea_serpent_upg_alt", "h3_sea_witch", "h3_sea_witch_upg_alt", "h3_seaman", "h3_sorceress", "h3_stormbird", "h3_stormbird_upg_alt" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.TurnState, Name = "Broadside", Percent = 10, Cap = 0, BuffSids = Array.Empty<string>(), Choice = 1, Attack = 2 },
+				new Rule { Kind = RuleKind.TurnState, Name = "Broadside", Percent = 20, Cap = 0, BuffSids = Array.Empty<string>(), Choice = 1, Attack = 2 },
+		} },
+		new LawRule { FactionSid = "homm3_cove", LawIndex = 31, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_ayssid", "h3_corsair", "h3_crew_mate", "h3_crew_mate_upg_alt", "h3_haspid", "h3_nix", "h3_nix_upg_alt", "h3_nix_warrior", "h3_nymph", "h3_nymph_upg_alt", "h3_oceanid", "h3_pirate", "h3_sea_dog", "h3_sea_serpent", "h3_sea_serpent_upg_alt", "h3_sea_witch", "h3_sea_witch_upg_alt", "h3_seaman", "h3_sorceress", "h3_stormbird", "h3_stormbird_upg_alt" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.WallSlam, Name = "Keelhaul", Percent = 10, Cap = 0, BuffSids = Array.Empty<string>() },
+				new Rule { Kind = RuleKind.WallSlam, Name = "Keelhaul", Percent = 15, Cap = 0, BuffSids = Array.Empty<string>() },
+		} },
+		new LawRule { FactionSid = "homm3_dungeon", LawIndex = 25, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_beholder", "h3_beholder_upg", "h3_beholder_upg_alt", "h3_harpy", "h3_harpy_upg", "h3_harpy_upg_alt", "h3_manticore", "h3_manticore_upg", "h3_manticore_upg_alt", "h3_medusa", "h3_medusa_upg", "h3_medusa_upg_alt", "h3_minotaur", "h3_minotaur_upg", "h3_minotaur_upg_alt", "h3_red_dragon", "h3_red_dragon_upg", "h3_red_dragon_upg_alt", "h3_troglodyte", "h3_troglodyte_upg", "h3_troglodyte_upg_alt" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.TurnState, Name = "Ambush from the Dark", Percent = 5, Cap = 0, BuffSids = Array.Empty<string>(), Choice = 1 },
+				new Rule { Kind = RuleKind.TurnState, Name = "Ambush from the Dark", Percent = 10, Cap = 0, BuffSids = Array.Empty<string>(), Choice = 1 },
+		} },
+		new LawRule { FactionSid = "homm3_dungeon", LawIndex = 26, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_beholder", "h3_beholder_upg", "h3_beholder_upg_alt", "h3_harpy", "h3_harpy_upg", "h3_harpy_upg_alt", "h3_manticore", "h3_manticore_upg", "h3_manticore_upg_alt", "h3_medusa", "h3_medusa_upg", "h3_medusa_upg_alt", "h3_minotaur", "h3_minotaur_upg", "h3_minotaur_upg_alt", "h3_red_dragon", "h3_red_dragon_upg", "h3_red_dragon_upg_alt", "h3_troglodyte", "h3_troglodyte_upg", "h3_troglodyte_upg_alt" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.WallSlam, Name = "Kill Corridors", Percent = 10, Cap = 0, BuffSids = Array.Empty<string>() },
+				new Rule { Kind = RuleKind.WallSlam, Name = "Kill Corridors", Percent = 20, Cap = 0, BuffSids = Array.Empty<string>() },
+		} },
+		new LawRule { FactionSid = "homm3_dungeon", LawIndex = 8, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_beholder", "h3_beholder_upg", "h3_beholder_upg_alt", "h3_harpy", "h3_harpy_upg", "h3_harpy_upg_alt", "h3_manticore", "h3_manticore_upg", "h3_manticore_upg_alt", "h3_medusa", "h3_medusa_upg", "h3_medusa_upg_alt", "h3_minotaur", "h3_minotaur_upg", "h3_minotaur_upg_alt", "h3_red_dragon", "h3_red_dragon_upg", "h3_red_dragon_upg_alt", "h3_troglodyte", "h3_troglodyte_upg", "h3_troglodyte_upg_alt" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.Bounty, Name = "Hunt the Mighty", Percent = 15, Cap = 0, BuffSids = Array.Empty<string>() },
+		} },
+		new LawRule { FactionSid = "homm3_dungeon", LawIndex = 12, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_beholder", "h3_beholder_upg", "h3_beholder_upg_alt", "h3_harpy", "h3_harpy_upg", "h3_harpy_upg_alt", "h3_manticore", "h3_manticore_upg", "h3_manticore_upg_alt", "h3_medusa", "h3_medusa_upg", "h3_medusa_upg_alt", "h3_minotaur", "h3_minotaur_upg", "h3_minotaur_upg_alt", "h3_red_dragon", "h3_red_dragon_upg", "h3_red_dragon_upg_alt", "h3_troglodyte", "h3_troglodyte_upg", "h3_troglodyte_upg_alt" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.FirstHit, Name = "Twisting Corridors", Percent = 15, Cap = 0, BuffSids = Array.Empty<string>(), Choice = 1 },
+		} },
+		new LawRule { FactionSid = "homm3_factory", LawIndex = 26, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_armadillo", "h3_armadillo_upg_alt", "h3_automaton", "h3_automaton_upg_alt", "h3_bellwether_armadillo", "h3_bounty_hunter", "h3_couatl", "h3_couatl_upg_alt", "h3_crimson_couatl", "h3_dreadnought", "h3_dreadnought_upg_alt", "h3_engineer", "h3_gunslinger", "h3_gunslinger_upg_alt", "h3_halfling", "h3_halfling_grenadier", "h3_halfling_upg_alt", "h3_juggernaut", "h3_mechanic", "h3_mechanic_upg_alt", "h3_olgoi_khorkhoi", "h3_sandworm", "h3_sandworm_upg_alt", "h3_sentinel_automaton" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.HitThisRound, Name = "Coordinated Fire", Percent = 5, Cap = 15, BuffSids = Array.Empty<string>() },
+				new Rule { Kind = RuleKind.HitThisRound, Name = "Coordinated Fire", Percent = 10, Cap = 30, BuffSids = Array.Empty<string>() },
+		} },
+		new LawRule { FactionSid = "homm3_factory", LawIndex = 31, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_bounty_hunter", "h3_gunslinger", "h3_gunslinger_upg_alt", "h3_halfling", "h3_halfling_grenadier", "h3_halfling_upg_alt" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.FirstHit, Name = "Overpressure Rounds", Percent = 10, Cap = 0, BuffSids = Array.Empty<string>() },
+				new Rule { Kind = RuleKind.FirstHit, Name = "Overpressure Rounds", Percent = 20, Cap = 0, BuffSids = Array.Empty<string>() },
+		} },
+		new LawRule { FactionSid = "homm3_factory", LawIndex = 13, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_armadillo", "h3_armadillo_upg_alt", "h3_automaton", "h3_automaton_upg_alt", "h3_bellwether_armadillo", "h3_bounty_hunter", "h3_couatl", "h3_couatl_upg_alt", "h3_crimson_couatl", "h3_dreadnought", "h3_dreadnought_upg_alt", "h3_engineer", "h3_gunslinger", "h3_gunslinger_upg_alt", "h3_halfling", "h3_halfling_grenadier", "h3_halfling_upg_alt", "h3_juggernaut", "h3_mechanic", "h3_mechanic_upg_alt", "h3_olgoi_khorkhoi", "h3_sandworm", "h3_sandworm_upg_alt", "h3_sentinel_automaton" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.DamageVsBuff, Name = "Target Designation", Percent = 10, Cap = 0, BuffSids = new[] { "h3_kit_factory_marked_effect", "h3_kit_factory_glass_shards_effect", "h3_kit_factory_shattered_effect", "h3_kit_factory_overheated_effect" } },
+				new Rule { Kind = RuleKind.DamageVsBuff, Name = "Target Designation", Percent = 20, Cap = 0, BuffSids = new[] { "h3_kit_factory_marked_effect", "h3_kit_factory_glass_shards_effect", "h3_kit_factory_shattered_effect", "h3_kit_factory_overheated_effect" } },
+		} },
+		new LawRule { FactionSid = "homm3_inferno", LawIndex = 32, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_demon", "h3_demon_upg", "h3_demon_upg_alt", "h3_devil", "h3_devil_upg", "h3_devil_upg_alt", "h3_efreeti", "h3_efreeti_upg", "h3_efreeti_upg_alt", "h3_gog", "h3_gog_upg", "h3_gog_upg_alt", "h3_hell_hound", "h3_hell_hound_upg", "h3_hell_hound_upg_alt", "h3_imp", "h3_imp_upg", "h3_imp_upg_alt", "h3_pit_fiend", "h3_pit_fiend_upg", "h3_pit_fiend_upg_alt" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.DamageVsBuff, Name = "Hellforged", Percent = 10, Cap = 0, BuffSids = new[] { "h3_kit_inferno_burning_effect", "h3_kit_inferno_burning_lesser_effect", "h3_kit_inferno_scorched_effect" } },
+		} },
+		new LawRule { FactionSid = "homm3_necropolis", LawIndex = 25, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_black_knight", "h3_black_knight_upg", "h3_black_knight_upg_alt", "h3_bone_dragon", "h3_bone_dragon_upg", "h3_bone_dragon_upg_alt", "h3_lich", "h3_lich_upg", "h3_lich_upg_alt", "h3_skeleton", "h3_skeleton_upg", "h3_skeleton_upg_alt", "h3_vampire", "h3_vampire_upg", "h3_vampire_upg_alt", "h3_walking_dead", "h3_walking_dead_upg", "h3_walking_dead_upg_alt", "h3_wight", "h3_wight_upg", "h3_wight_upg_alt" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.DamageVsHp, Name = "Culling", Percent = 5, Cap = 0, BuffSids = Array.Empty<string>(), Below = 50 },
+				new Rule { Kind = RuleKind.DamageVsHp, Name = "Culling", Percent = 10, Cap = 0, BuffSids = Array.Empty<string>(), Below = 50 },
+		} },
+		new LawRule { FactionSid = "homm3_necropolis", LawIndex = 19, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_black_knight", "h3_black_knight_upg", "h3_black_knight_upg_alt", "h3_bone_dragon", "h3_bone_dragon_upg", "h3_bone_dragon_upg_alt", "h3_lich", "h3_lich_upg", "h3_lich_upg_alt", "h3_skeleton", "h3_skeleton_upg", "h3_skeleton_upg_alt", "h3_vampire", "h3_vampire_upg", "h3_vampire_upg_alt", "h3_walking_dead", "h3_walking_dead_upg", "h3_walking_dead_upg_alt", "h3_wight", "h3_wight_upg", "h3_wight_upg_alt" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.DeathToll, Name = "Death’s Toll", Percent = 3, Cap = 15, BuffSids = Array.Empty<string>() },
+				new Rule { Kind = RuleKind.DeathToll, Name = "Death’s Toll", Percent = 5, Cap = 25, BuffSids = Array.Empty<string>() },
+		} },
+		new LawRule { FactionSid = "homm3_rampart", LawIndex = 26, Units = null, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.TurnState, Name = "Dendroid Watch", Percent = 10, Cap = 0, BuffSids = Array.Empty<string>() },
+				new Rule { Kind = RuleKind.TurnState, Name = "Dendroid Watch", Percent = 20, Cap = 0, BuffSids = Array.Empty<string>() },
+		} },
+		new LawRule { FactionSid = "homm3_rampart", LawIndex = 18, Units = null, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.Retribution, Name = "Fury of the Glade", Percent = 10, Cap = 0, BuffSids = Array.Empty<string>() },
+				new Rule { Kind = RuleKind.Retribution, Name = "Fury of the Glade", Percent = 20, Cap = 0, BuffSids = Array.Empty<string>() },
+		} },
+		new LawRule { FactionSid = "homm3_stronghold", LawIndex = 12, Units = null, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.StoredFury, Name = "Pent-up Rage", Percent = 10, Cap = 40, BuffSids = Array.Empty<string>() },
+		} },
+		new LawRule { FactionSid = "homm3_stronghold", LawIndex = 25, Units = null, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.DamageVsHp, Name = "No Mercy", Percent = 5, Cap = 0, BuffSids = Array.Empty<string>(), Below = 50 },
+				new Rule { Kind = RuleKind.DamageVsHp, Name = "No Mercy", Percent = 10, Cap = 0, BuffSids = Array.Empty<string>(), Below = 50 },
+		} },
+		new LawRule { FactionSid = "homm3_stronghold", LawIndex = 31, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_behemoth", "h3_behemoth_upg", "h3_behemoth_upg_alt", "h3_cyclops", "h3_cyclops_upg", "h3_cyclops_upg_alt", "h3_goblin", "h3_goblin_upg", "h3_goblin_upg_alt", "h3_ogre", "h3_ogre_upg", "h3_ogre_upg_alt", "h3_orc", "h3_orc_upg", "h3_orc_upg_alt", "h3_roc", "h3_roc_upg", "h3_roc_upg_alt", "h3_wolf_rider", "h3_wolf_rider_upg", "h3_wolf_rider_upg_alt" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.Adjacency, Name = "Gang Up", Percent = 10, Cap = 0, BuffSids = Array.Empty<string>() },
+		} },
+		new LawRule { FactionSid = "homm3_stronghold", LawIndex = 32, Units = new HashSet<string>(StringComparer.Ordinal) { "h3_behemoth", "h3_behemoth_upg", "h3_behemoth_upg_alt", "h3_cyclops", "h3_cyclops_upg", "h3_cyclops_upg_alt", "h3_goblin", "h3_goblin_upg", "h3_goblin_upg_alt", "h3_ogre", "h3_ogre_upg", "h3_ogre_upg_alt", "h3_orc", "h3_orc_upg", "h3_orc_upg_alt", "h3_roc", "h3_roc_upg", "h3_roc_upg_alt", "h3_wolf_rider", "h3_wolf_rider_upg", "h3_wolf_rider_upg_alt" }, ByLevel = new[]
+		{
+				new Rule { Kind = RuleKind.DeathToll, Name = "Smell of Blood", Percent = 3, Cap = 15, BuffSids = Array.Empty<string>() },
+		} },
+	};
+
 	/// <summary>Applied buff SID to the buffs its uses cycle through.</summary>
 	internal static readonly Dictionary<string, string[]> BuffRotations = new(StringComparer.Ordinal)
 	{

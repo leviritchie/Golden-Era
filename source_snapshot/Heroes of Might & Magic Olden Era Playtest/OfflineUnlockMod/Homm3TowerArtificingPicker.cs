@@ -274,7 +274,7 @@ internal static class Homm3TowerArtificingPicker
 
 	private static void BuildLines()
 	{
-		var unlocked = Homm3TowerArtificingRuntime.SlotsForRank(_rank);
+		var unlocked = Homm3TowerLawHooks.SlotsFor(_rank, _logicHero);
 		for (var line = 0; line < Homm3TowerArtificingCatalog.Lines; line++)
 		{
 			var top = L.RowsTop + L.RowPitch * line;
@@ -323,13 +323,13 @@ internal static class Homm3TowerArtificingPicker
 			var chances = Homm3TowerArtificingCatalog.ObservationChanceByRank;
 			AddText(_content, L.FontMedium, L.SizeMain,
 				"The Schematic Book is empty.\n\nAt the end of every battle, each passive ability in the enemy army has a "
-				+ chances[0] + " / " + chances[1] + " / " + chances[2] + "% chance (Basic / Advanced / Expert) to be learned.",
+				+ chances[0] + " / " + chances[1] + " / " + chances[2] + "% chance (Basic / Advanced / Expert) to be learned." + ScryingNote(),
 				L.BookX + 20f, L.RowsTop + 40f, L.BookWidth - 60f, 200f, L.InkMuted, TextAlignmentOptions.Top, true);
 			return;
 		}
 		_scroll = Mathf.Clamp(_scroll, 0, Math.Max(0, Book.Count - L.BookRows));
 		var targetTier = _line + 1;
-		var unlocked = Homm3TowerArtificingRuntime.SlotsForRank(_rank);
+		var unlocked = Homm3TowerLawHooks.SlotsFor(_rank, _logicHero);
 		for (var r = 0; r < L.BookRows && _scroll + r < Book.Count; r++)
 		{
 			var schematic = Book[_scroll + r];
@@ -351,7 +351,8 @@ internal static class Homm3TowerArtificingPicker
 				var holderImage = AddSpriteImage(_content, "HeldBy", holder, L.PriceX - 40f, cy - 17f, 34f, 34f);
 				holderImage.preserveAspect = true;
 			}
-			var cost = Cost(_state.SchematicTiers[schematic], targetTier);
+			// law pass 2026-11-21: Grand Schematic (#28) price.
+			var cost = Homm3TowerLawHooks.GraftCost(Cost(_state.SchematicTiers[schematic], targetTier), _logicHero);
 			AddImage(_content, L.SpritePrice, L.PriceX, cy - L.PriceHeight / 2f, L.PriceWidth, L.PriceHeight, new Color(0.1f, 0.07f, 0.05f, 1f));
 			AddCentered(_content, L.SpriteEssence, L.PriceX + 4f, cy, L.PriceIconSize, L.PriceIconSize, L.EssenceTint);
 			AddText(_content, L.FontRegular, L.SizeMain, cost.ToString(), L.PriceX + 18f, cy - L.PriceHeight / 2f, L.PriceWidth - 26f, L.PriceHeight,
@@ -447,9 +448,10 @@ internal static class Homm3TowerArtificingPicker
 			var descHeight = MeasureHeight(desc, w - 2f * pad, afterTop - cy - 12f);
 			BuildGuide(x + pad, cy + descHeight + 18f, w - 2f * pad, afterTop - 12f, true);
 			AddImage(_content, L.SpriteSeparator, x + pad, afterTop, w - 2f * pad, 2f, L.TipNote);
-			var cost = Cost(_state.SchematicTiers[_pick], _line + 1);
+			// law pass 2026-11-21: Grand Schematic (#28) price.
+			var cost = Homm3TowerLawHooks.GraftCost(Cost(_state.SchematicTiers[_pick], _line + 1), _logicHero);
 			var after = _state.Essence - cost;
-			reason = BlockedReason(current, _pick, SlotOnLine(_pick, Homm3TowerArtificingRuntime.SlotsForRank(_rank)), after);
+			reason = BlockedReason(current, _pick, SlotOnLine(_pick, Homm3TowerLawHooks.SlotsFor(_rank, _logicHero)), after);
 			AddText(_content, L.FontBook, L.SizeMain, "After grafting", x + pad, afterTop + 12f, w - 2f * pad, 26f, L.TipTitle, TextAlignmentOptions.MidlineLeft);
 			AddText(_content, L.FontMedium, L.SizeSmall, "Cost", x + pad, afterTop + 46f, 160f, 24f, L.TipNote, TextAlignmentOptions.MidlineLeft);
 			AddText(_content, L.FontRegular, L.SizeMain, cost.ToString(), x + w - pad - 120f, afterTop + 46f, 92f, 24f, after >= 0 ? L.CostOk : L.CostBad, TextAlignmentOptions.MidlineRight);
@@ -509,7 +511,7 @@ internal static class Homm3TowerArtificingPicker
 		var lines = new List<string>
 		{
 			"Learn: after every battle, each passive in the enemy army has a " + chances[0] + " / " + chances[1] + " / " + chances[2]
-				+ "% chance (Basic / Advanced / Expert) to enter the Schematic Book.",
+				+ "% chance (Basic / Advanced / Expert) to enter the Schematic Book." + ScryingNote(),
 			"Essence: won battles give Arcane Essence for every enemy creature defeated; higher tiers give more.",
 			"Graft: pick a slot on a Tower line on the left, then a schematic from the book. Higher-tier lines cost more; "
 				+ "schematics learned from lower-tier creatures cost less.",
@@ -608,7 +610,7 @@ internal static class Homm3TowerArtificingPicker
 			return "Already grafted in this slot";
 		if (onLineSlot >= 0)
 			return "Already grafted on this line";
-		var heldBy = LineHolding(pick, Homm3TowerArtificingRuntime.SlotsForRank(_rank));
+		var heldBy = LineHolding(pick, Homm3TowerLawHooks.SlotsFor(_rank, _logicHero));
 		if (heldBy >= 0 && heldBy != _line)
 			return "Already grafted onto the " + LineName(heldBy) + " line";
 		if (after < 0)
@@ -645,6 +647,13 @@ internal static class Homm3TowerArtificingPicker
 				return slot;
 		}
 		return -1;
+	}
+
+	// law pass 2026-11-25: Scrying Lenses (#5): the essence per recorded passive is shown beside the base chances.
+	private static string ScryingNote()
+	{
+		var essence = Homm3TowerLawHooks.ScryingEssence(_logicHero);
+		return essence > 0 ? " Scrying Lenses: each one learned also yields " + essence + " Arcane Essence." : "";
 	}
 
 	internal static int Cost(int sourceTier, int targetTier)

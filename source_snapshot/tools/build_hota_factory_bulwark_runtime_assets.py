@@ -395,6 +395,10 @@ def build_town(spec: FactionSpec, zf: zipfile.ZipFile, index: dict[str, str], te
                     f"{spec.sid}: native {sid} level {native_level} requires missing source level {source_level}"
                 )
             native_levels[sid][native_level] = mapped[sid][source_level]
+    if spec.sid == "homm3_factory" and "Build_Bank" in native_levels:
+        # Building pass 2026-11-22: the HotA Bank art also serves the Factory loan Bank row.
+        mapped["Build_Factory_Loan_Bank"] = dict(mapped["Build_Bank"])
+        native_levels["Build_Factory_Loan_Bank"] = dict(native_levels["Build_Bank"])
     write_json(layers / "building_layer_map.json", {
         "buildingLayerIds": {sid: levels[min(levels)] for sid, levels in sorted(mapped.items())},
         "levels": {sid: {str(level): layer for level, layer in sorted(levels.items())} for sid, levels in sorted(mapped.items())},

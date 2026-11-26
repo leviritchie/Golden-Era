@@ -19,11 +19,13 @@ namespace OfflineUnlockMod;
 /// the bundle path is a "Missing prefab"), so the drawer slot is written as well
 /// (<see cref="GameSymbols.BattleVisual.DrawerViewHelperMembers"/>).
 ///
-/// Points come from the unit's own skeleton: spawn on the right hand (left if the rig has no right), end and
-/// shield on the chest (Spine2, else Spine1, else Spine). meshRenderer and idleVFX stay unset: every native
-/// consumer null-checks them, and setting meshRenderer would let vanilla hit timelines append materials to the
-/// owned skin. A rig without a hand or chest bone, or an unresolved helper type, gets no helper and one error
-/// log per unit; nothing is guessed. Proof: source/static only until a runtime record shows a projectile.
+/// Points come from the unit's own skeleton: spawn on the right hand (or left / wing hand; Beholder, Evil Eye,
+/// and Fargazer prefer Head so their eye-beam launches from the central eye rather than a low side tentacle),
+/// end and shield on the chest (Mixamo Spine2/1/Spine or Blender Rigify DEF-chest/upper_chest/spine/body/Hips).
+/// Legacy Mixamo names stay first in SpawnBoneNames and ChestBoneNames so no legacy rig changes behavior.
+/// meshRenderer and idleVFX stay unset: every native consumer null-checks them, and setting meshRenderer would let
+/// vanilla hit timelines append materials to the owned skin. A rig without a spawn or chest bone, or an unresolved
+/// helper type, gets no helper and one error log per unit; nothing is guessed.
 /// </summary>
 internal static class Homm3UnitViewHelperRuntime
 {
@@ -31,8 +33,26 @@ internal static class Homm3UnitViewHelperRuntime
 	internal const string EndPointName = "__homm3_projectile_end__";
 	internal const string ShieldPointName = "__homm3_shield_point__";
 
-	private static readonly string[] SpawnBoneNames = { "RightHand", "LeftHand" };
-	private static readonly string[] ChestBoneNames = { "Spine2", "Spine1", "Spine" };
+	private static readonly string[] SpawnBoneNames =
+	{
+		"RightHand", "LeftHand",
+		"DEF-hand.R", "DEF-hand.L",
+		"DEF-wing_hand.R", "DEF-wing_hand.L",
+		"Head", "DEF-head_C", "DEF-head_A", "DEF-head", "DEF-jaw",
+	};
+	private static readonly string[] HeadSpawnBoneNames =
+	{
+		"Head", "DEF-head_C", "DEF-head_A", "DEF-head", "DEF-jaw",
+		"RightHand", "LeftHand",
+		"DEF-hand.R", "DEF-hand.L",
+	};
+	private static readonly string[] HeadSpawnUnitHints = { "beholder", "evil_eye", "fargazer" };
+	private static readonly string[] ChestBoneNames =
+	{
+		"Spine2", "Spine1", "Spine",
+		"DEF-chest", "DEF-upper_chest", "DEF-spine.001", "DEF-spine",
+		"DEF-body.002", "DEF-body.001", "Hips",
+	};
 	private static readonly string[] PointProperties = { "projectileSpawnPoint", "projectileEndPoint", "shieldPoint" };
 
 	private static Type _helperType;
@@ -77,12 +97,13 @@ internal static class Homm3UnitViewHelperRuntime
 		if (type == null)
 			return null;
 		var key = unitKey ?? instance.name;
-		var spawnBone = FindBone(instance.transform, SpawnBoneNames);
+		var spawnNames = SelectSpawnBoneNames(key);
+		var spawnBone = FindBone(instance.transform, spawnNames);
 		var chestBone = FindBone(instance.transform, ChestBoneNames);
 		if (spawnBone == null || chestBone == null)
 		{
 			LogOnce(log, "bones:" + key, true,
-				"Homm3 unit view helper: '" + key + "' has no " + (spawnBone == null ? "hand bone (" + string.Join("/", SpawnBoneNames) + ")" : "chest bone (" + string.Join("/", ChestBoneNames) + ")")
+				"Homm3 unit view helper: '" + key + "' has no " + (spawnBone == null ? "spawn bone (" + string.Join("/", spawnNames) + ")" : "chest bone (" + string.Join("/", ChestBoneNames) + ")")
 				+ "; no helper attached, so this unit cannot spawn or receive projectiles at a body point.");
 			return null;
 		}
@@ -151,6 +172,19 @@ internal static class Homm3UnitViewHelperRuntime
 		go.transform.localPosition = Vector3.zero;
 		go.transform.localRotation = Quaternion.identity;
 		return go.transform;
+	}
+
+	private static string[] SelectSpawnBoneNames(string unitKey)
+	{
+		if (!string.IsNullOrEmpty(unitKey))
+		{
+			foreach (var hint in HeadSpawnUnitHints)
+			{
+				if (unitKey.IndexOf(hint, StringComparison.OrdinalIgnoreCase) >= 0)
+					return HeadSpawnBoneNames;
+			}
+		}
+		return SpawnBoneNames;
 	}
 
 	private static Transform FindBone(Transform root, string[] names)

@@ -1,0 +1,298 @@
+{
+  "factionSid": "homm3_dungeon",
+  "rows": [
+    {
+      "sid": "Build_Bank",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 2500,
+          "wood": 5,
+          "ore": 5
+        }
+      ],
+      "bonuses": [
+        [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              1000
+            ]
+          }
+        ]
+      ],
+      "nameText": "Bank",
+      "descriptionText": "Produces 1000 Gold daily.",
+      "iconFrom": "dungeon_city:Build_Bank",
+      "notes": "building pass 2026-11-22: plain economy Bank restored (REVIEW 1). It was 'Spellwell' tagged mana_vortex; Mana Vortex now has its own manaFountains row. Tree agent: gate on Build_Main:2 (the MG1 gate moves to Mana Vortex).",
+      "nameTextLocales": {
+        "BRportugese": "Banco",
+        "czech": "Banka",
+        "french": "Banque",
+        "german": "Bank",
+        "hungarian": "Bank",
+        "italian": "Banca",
+        "japanese": "銀行",
+        "korean": "은행",
+        "polish": "Bank",
+        "russian": "Банк",
+        "spanish": "Banco",
+        "turkish": "Banka",
+        "ukrainian": "Банк",
+        "zhCN": "银行",
+        "zhTW": "銀行"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Produz 1000 de Ouro por dia.",
+        "czech": "Denně vyprodukuje 1000 Zlata.",
+        "french": "Produit 1000 d’or par jour.",
+        "german": "Produziert täglich 1000 Gold.",
+        "hungarian": "Naponta 1000 Aranyat termel.",
+        "italian": "Produce 1000 Oro al giorno.",
+        "japanese": "毎日1000ゴールドを生産する。",
+        "korean": "매일 금 1000을 생산합니다.",
+        "polish": "Produkuje 1000 Złota dziennie.",
+        "russian": "Приносит 1000 Золота в день.",
+        "spanish": "Produce 1000 de oro al día.",
+        "turkish": "Günde 1000 Altın üretir.",
+        "ukrainian": "Приносить 1000 Золота на день.",
+        "zhCN": "每天产出1000黄金。",
+        "zhTW": "每天產出1000黃金。"
+      }
+    },
+    {
+      "sid": "Build_Well_Of_Souls",
+      "section": "manaFountains",
+      "template": "undead_city:Build_Well_Of_Souls",
+      "replace": false,
+      "sceneSlot": "Well_Of_Souls",
+      "costs": [
+        {
+          "gold": 2500,
+          "gemstones": 3,
+          "crystals": 3,
+          "mercury": 3
+        }
+      ],
+      "nameText": "Mana Vortex",
+      "descriptionText": "Once a week, doubles the mana of the first visiting hero. Restores all mana to any other visiting hero.",
+      "iconFrom": "undead_city:Build_Well_Of_Souls",
+      "plugin": "Homm3DungeonManaVortexRuntime",
+      "notes": "building pass 2026-11-22: dungeon.mana_vortex. Native manaFountains refill on every visit (vanilla Well of Souls, same price); Homm3DungeonManaVortexRuntime doubles the first visitor's mana once per week per town, saved in the side carrier homm3_ind_town_building_store. Tree agent: gate on Build_Magic_Guild:1 (HoMM3), not the vanilla MG3.",
+      "nameTextLocales": {
+        "BRportugese": "Vórtice de Mana",
+        "czech": "Vír many",
+        "french": "Vortex de mana",
+        "german": "Manastrudel",
+        "hungarian": "Mana-örvény",
+        "italian": "Vortice di mana",
+        "japanese": "マナの渦",
+        "korean": "마나 소용돌이",
+        "polish": "Wir many",
+        "russian": "Водоворот маны",
+        "spanish": "Vórtice de maná",
+        "turkish": "Mana Girdabı",
+        "ukrainian": "Вир мани",
+        "zhCN": "法力漩涡",
+        "zhTW": "法力漩渦"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Uma vez por semana, dobra a mana do primeiro herói visitante. Restaura toda a mana de qualquer outro herói visitante.",
+        "czech": "Jednou týdně zdvojnásobí manu prvního navštěvujícího hrdiny. Obnoví veškerou manu každému dalšímu navštěvujícímu hrdinovi.",
+        "french": "Une fois par semaine, double la mana du premier héros visiteur. Restaure toute la mana de tout autre héros visiteur.",
+        "german": "Verdoppelt einmal pro Woche das Mana des ersten besuchenden Helden. Füllt das Mana jedes weiteren besuchenden Helden vollständig auf.",
+        "hungarian": "Hetente egyszer megduplázza az első látogató hős manáját. Minden más látogató hősnek teljesen visszatölti a manáját.",
+        "italian": "Una volta a settimana, raddoppia il mana del primo eroe in visita. Ripristina tutto il mana a ogni altro eroe in visita.",
+        "japanese": "週に一度、最初に訪れた英雄のマナを2倍にする。他に訪れた英雄はマナが全回復する。",
+        "korean": "주 1회, 처음 방문한 영웅의 마나를 2배로 늘린다. 이후 방문하는 다른 영웅은 마나가 모두 회복된다.",
+        "polish": "Raz w tygodniu podwaja manę pierwszego odwiedzającego bohatera. Przywraca całą manę każdemu kolejnemu odwiedzającemu bohaterowi.",
+        "russian": "Раз в неделю удваивает ману первого посетившего героя. Полностью восстанавливает ману любому другому посетившему герою.",
+        "spanish": "Una vez por semana, duplica el maná del primer héroe visitante. Restaura todo el maná de cualquier otro héroe visitante.",
+        "turkish": "Haftada bir, ziyaret eden ilk kahramanın manasını ikiye katlar. Ziyaret eden diğer tüm kahramanların manasını tamamen yeniler.",
+        "ukrainian": "Раз на тиждень подвоює ману першого героя-відвідувача. Повністю відновлює ману будь-якому іншому герою-відвідувачу.",
+        "zhCN": "每周一次，使第一位到访英雄的法力翻倍。使其他到访英雄的法力完全恢复。",
+        "zhTW": "每週一次，使第一位到訪英雄的法力加倍。使其他到訪英雄的法力完全恢復。"
+      }
+    },
+    {
+      "sid": "Build_Portal_Summoning",
+      "section": "portalSummonings",
+      "template": "unfrozen_city:Build_Portal_Summoning",
+      "replace": false,
+      "sceneSlot": "Portal_Summoning",
+      "costs": [
+        {
+          "gold": 5000,
+          "gemstones": 3,
+          "crystals": 3,
+          "mercury": 3
+        }
+      ],
+      "fields": {
+        "numberPurchases": 1
+      },
+      "nameText": "Portal of Summoning",
+      "descriptionText": "Allows you to recruit creatures from the dwellings you own outside cities, once a week.",
+      "iconFrom": "unfrozen_city:Build_Portal_Summoning",
+      "notes": "building pass 2026-11-22: dungeon.portal_of_summoning. Native portalSummonings (vanilla Unfrozen row and price, numberPurchases 1). Covers every outside dwelling the side owns; HoMM3 rolls one at random. Replaces Build_Lyceum (REVIEW 2). Root, as in HoMM3.",
+      "nameTextLocales": {
+        "BRportugese": "Portal de Invocação",
+        "czech": "Portál přivolání",
+        "french": "Portail d’invocation",
+        "german": "Portal der Beschwörung",
+        "hungarian": "Idézés kapuja",
+        "italian": "Portale dell’evocazione",
+        "japanese": "召喚のポータル",
+        "korean": "소환의 관문",
+        "polish": "Portal przywołania",
+        "russian": "Портал призыва",
+        "spanish": "Portal de invocación",
+        "turkish": "Çağırma Portalı",
+        "ukrainian": "Портал виклику",
+        "zhCN": "召唤传送门",
+        "zhTW": "召喚傳送門"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Permite recrutar criaturas das moradias que você possui fora das cidades, uma vez por semana.",
+        "czech": "Umožňuje jednou týdně verbovat jednotky z obydlí, která vlastníte mimo města.",
+        "french": "Permet de recruter, une fois par semaine, des créatures dans les habitations que vous possédez en dehors des villes.",
+        "german": "Erlaubt es, einmal pro Woche Kreaturen aus den Behausungen zu rekrutieren, die Ihr außerhalb von Städten besitzt.",
+        "hungarian": "Hetente egyszer lehetővé teszi, hogy a városokon kívül birtokolt szállásokról lényeket toborozz.",
+        "italian": "Permette di reclutare, una volta a settimana, creature dalle dimore che possiedi fuori dalle città.",
+        "japanese": "週に一度、都市の外に所有する住居からクリーチャーを雇用できる。",
+        "korean": "주 1회, 도시 밖에 소유한 거주지에서 크리처를 모집할 수 있다.",
+        "polish": "Pozwala raz w tygodniu rekrutować stworzenia z siedlisk posiadanych poza miastami.",
+        "russian": "Раз в неделю позволяет нанимать существ из жилищ, которыми вы владеете за пределами городов.",
+        "spanish": "Permite reclutar criaturas, una vez por semana, de las viviendas que poseas fuera de las ciudades.",
+        "turkish": "Haftada bir, şehirlerin dışında sahip olduğunuz konutlardan yaratık devşirmenizi sağlar.",
+        "ukrainian": "Раз на тиждень дозволяє наймати істот із осель, якими ви володієте поза містами.",
+        "zhCN": "每周一次，可从城镇外你拥有的巢穴中招募生物。",
+        "zhTW": "每週一次，可從城鎮外你擁有的巢穴中招募生物。"
+      }
+    },
+    {
+      "sid": "Build_Gymnasium",
+      "section": "heroBonusBanks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 5000
+        }
+      ],
+      "nameText": "Battle Scholar Academy",
+      "notes": "building pass 2026-11-22: dungeon.battle_scholar_academy. Effect unchanged (native heroExp: one level per visiting hero, the port-pacing equivalent of HoMM3's 1000 experience); renamed only. Computed description kept.",
+      "nameTextLocales": {
+        "BRportugese": "Academia de Estudiosos de Batalha",
+        "czech": "Akademie bitevních učenců",
+        "french": "Académie des érudits de bataille",
+        "german": "Akademie der Schlachtgelehrten",
+        "hungarian": "Csatatudósok Akadémiája",
+        "italian": "Accademia degli studiosi di battaglia",
+        "japanese": "戦闘学者アカデミー",
+        "korean": "전투 학자 아카데미",
+        "polish": "Akademia uczonych bitewnych",
+        "russian": "Академия боевых учёных",
+        "spanish": "Academia de eruditos de batalla",
+        "turkish": "Savaş Âlimleri Akademisi",
+        "ukrainian": "Академія бойових учених",
+        "zhCN": "战斗学者学院",
+        "zhTW": "戰鬥學者學院"
+      }
+    },
+    {
+      "sid": "Build_Resource_Depot_level_2",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gemstones": 3,
+          "crystals": 3,
+          "mercury": 3
+        }
+      ],
+      "bonuses": [
+        [
+          {
+            "type": "cityUnitsIncrementPer",
+            "parameters": [
+              "h3_troglodyte",
+              "0.2596"
+            ]
+          }
+        ]
+      ],
+      "nameText": "Mushroom Rings",
+      "notes": "building pass 2026-11-22: dungeon.mushroom_rings. +7 Troglodytes a week (0.2596 x 27 = 7.01), the Birthing Pools / Unearthed Graves form. Replaces the +5 Dust 'Alchemic Depot' stand-in. Computed cityUnitsIncrementPer description. Prerequisite (T1) unchanged.",
+      "nameTextLocales": {
+        "BRportugese": "Círculos de Cogumelos",
+        "czech": "Houbové kruhy",
+        "french": "Cercles de champignons",
+        "german": "Pilzkreise",
+        "hungarian": "Gombakörök",
+        "italian": "Cerchi di funghi",
+        "japanese": "キノコの輪",
+        "korean": "버섯 고리",
+        "polish": "Grzybowe kręgi",
+        "russian": "Грибные кольца",
+        "spanish": "Círculos de setas",
+        "turkish": "Mantar Halkaları",
+        "ukrainian": "Грибні кола",
+        "zhCN": "蘑菇圈",
+        "zhTW": "蘑菇圈"
+      }
+    },
+    {
+      "sid": "Build_Spy_Network",
+      "section": "graals",
+      "replace": true,
+      "costs": [
+        {
+          "graal": 1
+        }
+      ],
+      "nameText": "Guardian of Earth",
+      "descriptionText": "Completely removes the fog of war. A hero defending this city in a siege gains +12 Spell Power. This city's dwellings produce +100% units.",
+      "plugin": "Homm3TownSiegeDefenseRuntime",
+      "notes": "building pass 2026-11-22: dungeon.guardian_of_earth. Owner answer 3: keeps the DungeonGraal full reveal (cityRadiusView 999) and +100% city growth; the +12 Spell Power siege effect is the runtime agent's Homm3TownSiegeDefenseRuntime entry.",
+      "nameTextLocales": {
+        "BRportugese": "Guardião da Terra",
+        "czech": "Strážce země",
+        "french": "Gardien de la terre",
+        "german": "Wächter der Erde",
+        "hungarian": "A Föld őrzője",
+        "italian": "Guardiano della terra",
+        "japanese": "大地の守護者",
+        "korean": "대지의 수호자",
+        "polish": "Strażnik ziemi",
+        "russian": "Страж земли",
+        "spanish": "Guardián de la tierra",
+        "turkish": "Toprağın Muhafızı",
+        "ukrainian": "Охоронець землі",
+        "zhCN": "大地守护者",
+        "zhTW": "大地守護者"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Remove completamente a névoa de guerra. Um herói que defende esta cidade em um cerco ganha +12 de Poder de Feitiço. As moradias desta cidade produzem +100% de unidades.",
+        "czech": "Zcela odstraní mlhu války. Hrdina bránící toto město při obléhání získá +12 Síla kouzel. Obydlí tohoto města produkují +100% jednotek.",
+        "french": "Supprime complètement le brouillard de guerre. Un héros qui défend cette ville lors d’un siège gagne +12 en Puissance de sorts. Les habitations de cette ville produisent +100 % d’unités.",
+        "german": "Entfernt den Kriegsnebel vollständig. Ein Held, der diese Stadt bei einer Belagerung verteidigt, erhält +12 Zauberkraft. Die Behausungen dieser Stadt produzieren +100 % Einheiten.",
+        "hungarian": "Teljesen eltávolítja a háború ködét. Az a hős, aki ostrom közben védi ezt a várost, +12 Varázserőt kap. A város szállásai +100% egységet termelnek.",
+        "italian": "Rimuove completamente la nebbia di guerra. Un eroe che difende questa città durante un assedio ottiene +12 Potere magico. Le dimore di questa città producono +100% unità.",
+        "japanese": "戦場の霧を完全に消し去る。攻城戦でこの都市を防衛する英雄は呪文力+12を得る。この都市の住居は+100%の部隊を生産する。",
+        "korean": "전장의 안개를 완전히 걷어낸다. 공성전에서 이 도시를 방어하는 영웅은 주문력 +12를 얻는다. 이 도시의 거주지는 부대를 +100% 생산한다.",
+        "polish": "Całkowicie usuwa mgłę wojny. Bohater broniący tego miasta podczas oblężenia zyskuje +12 Mocy zaklęć. Siedliska w tym mieście produkują +100% jednostek.",
+        "russian": "Полностью убирает туман войны. Герой, защищающий этот город при осаде, получает +12 к Силе магии. Жилища этого города производят +100% существ.",
+        "spanish": "Elimina por completo la niebla de guerra. Un héroe que defiende esta ciudad en un asedio obtiene +12 de Poder de hechizo. Las viviendas de esta ciudad producen +100% de unidades.",
+        "turkish": "Savaş sisini tamamen kaldırır. Bir kuşatmada bu şehri savunan kahraman +12 Büyü Gücü kazanır. Bu şehrin konutları +%100 birim üretir.",
+        "ukrainian": "Повністю прибирає туман війни. Герой, що захищає це місто під час облоги, отримує +12 до Сили чарів. Оселі цього міста виробляють +100% істот.",
+        "zhCN": "彻底驱散战争迷雾。在围城战中防守此城镇的英雄获得+12法术强度。此城镇的巢穴产出+100%的单位。",
+        "zhTW": "徹底驅散戰爭迷霧。在圍城戰中防守此城鎮的英雄獲得+12法術強度。此城鎮的巢穴產出+100%的單位。"
+      }
+    }
+  ],
+  "remove": [
+    "Build_Lyceum"
+  ]
+}

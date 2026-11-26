@@ -32,7 +32,7 @@
       "surface": "building",
       "sourceName": "Resource Silo",
       "status": "exact",
-      "reason": "Generated Stronghold city data owns fixed rare-resource income.",
+      "reason": "Building pass 2026-11-22: the Silo row makes 1 Wood and 1 Ore daily like the HoMM3 Stronghold silo (was 1 Crystals); cost 5000 Gold + 5 Ore.",
       "playerTextPolicy": "must_match_current_behavior",
       "currentRows": [
         "Build_Resource_Depot"
@@ -43,41 +43,38 @@
       "id": "stronghold.escape_tunnel",
       "surface": "building",
       "sourceName": "Escape Tunnel",
-      "status": "substituted",
-      "reason": "Town siege escape behavior has no proven Olden Era route.",
+      "status": "runtime-pending",
+      "reason": "Owner 2026-11-22: the Escape Tunnel comes with the Stronghold Fort (Build_Wall). The siege-escape hook is the building-pass runtime agent's work; the grail no longer stands in for it.",
       "playerTextPolicy": "must_match_current_behavior",
       "forbiddenPlayerText": [
-        "Escape Tunnel",
         "escape siege"
       ],
-      "currentRows": [
-        "Build_Spy_Network"
-      ],
-      "playerTextTokens": [
-        "Homm3Stronghold_Build_Spy_Network_description",
-        "Homm3Stronghold_Build_Spy_Network_name",
-        "Homm3Stronghold_Build_Spy_Network_narrativeDescription"
-      ]
+      "changeDisposition": "Runtime agent ships the Escape Tunnel on Build_Wall; when its hook lands, set status exact with currentRows [\"Build_Wall\"].",
+      "validationOwner": "validate_source_mechanics_contract"
     },
     {
       "id": "stronghold.freelancers_guild",
       "surface": "building",
       "sourceName": "Freelancer's Guild",
-      "status": "substituted",
-      "reason": "Creature-to-resource conversion has no proven custom city route.",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: Freelancer's Guild sits on the Silo II slot (owner). Its window (Homm3StrongholdFreelancersGuildWindow) sells garrison or hero creatures for gold or a resource at the Marketplace rate; the Bank stays a plain Bank.",
       "playerTextPolicy": "must_match_current_behavior",
-      "forbiddenPlayerText": [
-        "Freelancer",
-        "exchange creatures"
-      ],
       "currentRows": [
-        "Build_Bank"
+        "Build_Resource_Depot_level_2"
       ],
-      "playerTextTokens": [
-        "Homm3Stronghold_Build_Bank_description",
-        "Homm3Stronghold_Build_Bank_name",
-        "Homm3Stronghold_Build_Bank_narrativeDescription"
-      ]
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "stronghold.warlords_monument",
+      "surface": "building",
+      "sourceName": "Warlords' Monument",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: the grail row keeps its fog reveal and +100% city growth (owner answer 3) and adds the HoMM3 +20 Attack for the siege defender via the runtime agent's siege hook.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Spy_Network"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
     }
   ]
 }

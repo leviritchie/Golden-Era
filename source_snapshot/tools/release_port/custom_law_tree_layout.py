@@ -81,6 +81,7 @@ _KINGDOM_BONUS_TYPES = frozenset(
         "constructionDiscount",
         "constructionDailyLimit",
         "unitHiringDiscount",
+        "unitUpgradingDiscount",  # vanilla demon_20 sits in the kingdom column (law pass 2026-11-21)
         "magicGuildIncrement",
         "magicGuildLearnAdditionMagicAllOpenLevel",
         "barrackUnitsIncrementPer",
@@ -98,7 +99,9 @@ def law_bonuses(row: dict[str, Any]) -> list[dict[str, Any]]:
     bonuses: list[dict[str, Any]] = []
     for level in row.get("parametersPerLevel") or []:
         if isinstance(level, dict):
-            bonuses.extend(bonus for bonus in level.get("bonuses") or [] if isinstance(bonus, dict))
+            bonuses.extend(
+                bonus for bonus in level.get("bonuses") or [] if isinstance(bonus, dict) and not is_display_only_bonus(bonus)
+            )
     return bonuses
 
 
@@ -199,6 +202,17 @@ def law_signatures(row: dict[str, Any], *, allegiance: bool = True) -> frozenset
     return frozenset(bonus_signature(bonus, allegiance=allegiance) for bonus in law_bonuses(row))
 
 
+DISPLAY_ONLY_ACTIVATION_LEVEL = 99
+
+
+def is_display_only_bonus(bonus: dict[str, Any]) -> bool:
+    """A bonus that only carries a number for the law description ({0} via laws.script); the game never activates it."""
+    try:
+        return int(bonus.get("activationLevel", 1)) >= DISPLAY_ONLY_ACTIVATION_LEVEL
+    except (TypeError, ValueError):
+        return False
+
+
 def law_effect(row: dict[str, Any]) -> tuple[str, ...]:
     """Every bonus of every rank, exactly (receiver order ignored), as one comparable key."""
     effect: list[str] = []
@@ -206,7 +220,7 @@ def law_effect(row: dict[str, Any]) -> tuple[str, ...]:
         if not isinstance(level, dict):
             continue
         for bonus in level.get("bonuses") or []:
-            if isinstance(bonus, dict):
+            if isinstance(bonus, dict) and not is_display_only_bonus(bonus):
                 normalized = dict(bonus)
                 if isinstance(normalized.get("receivers"), list):
                     normalized["receivers"] = sorted(str(item) for item in normalized["receivers"])

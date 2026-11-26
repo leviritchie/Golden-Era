@@ -592,6 +592,14 @@ internal static class Homm3CounterattackDoctrineMutationRuntime
 				detail = detail == null ? predatorDetail : detail + "; " + predatorDetail;
 			}
 
+			// law pass 2026-11-21: Rampart Wardens' Oath (#5) / Elder's Ward (#13) on Avenger chains.
+			var avengerPercent = Homm3RampartAvengerStrikeRuntime.DamagePercent(counterattacker ?? TryWrapUnit(__0), __instance, out var avengerDetail);
+			if (avengerPercent != 0)
+			{
+				percent += avengerPercent;
+				detail = detail == null ? avengerDetail : detail + "; " + avengerDetail;
+			}
+
 			// Unit design kits (Strangle, Grudge, Shield Wall): per-unit rules keyed by unit SID, any army.
 			var kitPercent = Homm3UnitKitRuntime.DamagePercent(counterattacker ?? TryWrapUnit(__0), __instance, out var kitDetail);
 			if (kitPercent != 0)

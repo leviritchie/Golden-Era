@@ -26,6 +26,7 @@ from apply_release_core_overlay import (  # noqa: E402
     first_array_item,
     homm3_native_growth_bonuses,
 )
+import homm3_city_building_overrides as building_overrides  # noqa: E402
 from validate_city_construction_tree_layout import construction_tree_layout_errors  # noqa: E402
 from validate_homm3_city_building_tree_contract import city_errors as building_tree_city_errors  # noqa: E402
 from validate_custom_faction_manifests import (  # noqa: E402
@@ -58,7 +59,12 @@ def validate_faction(
     rows = {row["sid"]: row for row in collect_city_building_config_rows(doc) if isinstance(row.get("sid"), str)}
 
     specs = CITY_BUILDING_MECHANICS_BY_FACTION.get(faction, {})
+    # Rows the building overrides own (custom_factions/building_overrides) are checked by the override loader.
+    override_doc = building_overrides.faction_override(faction) or {}
+    owned = building_overrides.overridden_sids(faction) | set(override_doc.get("remove", []))
     for building_sid, spec in specs.items():
+        if building_sid in owned:
+            continue
         row = rows.get(building_sid)
         if row is None:
             v.error(f"{faction}: mechanics building missing from city: {building_sid}")

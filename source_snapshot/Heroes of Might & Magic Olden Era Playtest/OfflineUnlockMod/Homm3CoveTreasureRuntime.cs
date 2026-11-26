@@ -235,7 +235,9 @@ internal static partial class Homm3CoveTreasureRuntime
 			if (side < 0 || side > 31)
 				continue;
 			TickPicks(data, map, hero, node, side);
-			foreach (var areaId in AreasInSearchRange(map, node))
+			// law pass 2026-11-21: Spyglass Watch (#5)
+			var radius = Homm3CoveLawHooks.SearchRadius(side);
+			foreach (var areaId in AreasInSearchRange(map, node, radius))
 			{
 				var region = EnsureRegion(map, areaId);
 				if (region == null)
@@ -244,7 +246,7 @@ internal static partial class Homm3CoveTreasureRuntime
 				{
 					var h = region.Holders[i];
 					var bit = 1u << side;
-					if ((h.RevealedSides & bit) != 0 || Plan.Distance(node, h.Holder.Node, map.Width) > SearchRadius)
+					if ((h.RevealedSides & bit) != 0 || Plan.Distance(node, h.Holder.Node, map.Width) > radius)
 						continue;
 					h.RevealedSides |= bit;
 					Version++;
@@ -303,11 +305,11 @@ internal static partial class Homm3CoveTreasureRuntime
 			pieces++;
 			region.PiecesBySide[side] = pieces;
 			Version++;
-			var leads = LeadCount(pieces);
+			var leads = LeadCount(pieces, side);
 			Info("side " + N(side) + " hero " + hero.configSid + " (Archivist) gained a bonus map piece in area " + N(areaId)
 				+ ": pieces " + N(pieces) + ", possible treasure tiles now " + N(leads) + ".");
 			if (side == LocalSide(data))
-				Homm3CoveTreasurePopup.ShowPiece(areaId, pieces, Plan.PiecesPerRegion, leads, archivist: true);
+				Homm3CoveTreasurePopup.ShowPiece(areaId, pieces, Plan.PiecesPerRegion, leads, archivist: true, side: side);
 		}
 		Picks.RefreshLayOfTheLand(hero, pieces);
 	}
@@ -367,7 +369,7 @@ internal static partial class Homm3CoveTreasureRuntime
 			{
 				region.PiecesBySide.TryGetValue(side, out var pieces);
 				row.Pieces = Math.Min(pieces, Plan.PiecesPerRegion);
-				row.Leads = LeadCount(pieces);
+				row.Leads = LeadCount(pieces, side);
 				if (region.Plan.TrueNode < 0)
 					row.State = ChartState.NoTreasure;
 				else if (region.Dug)
@@ -516,15 +518,15 @@ internal static partial class Homm3CoveTreasureRuntime
 	private static readonly int[] RangeOffsets = { 0, 0, -1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1 };
 	private static readonly List<int> _areaScratch = new();
 
-	private static List<int> AreasInSearchRange(MapState map, int node)
+	private static List<int> AreasInSearchRange(MapState map, int node, int radius = SearchRadius)
 	{
 		_areaScratch.Clear();
 		var x = node % map.Width;
 		var z = node / map.Width;
 		for (var i = 0; i < RangeOffsets.Length; i += 2)
 		{
-			var px = x + RangeOffsets[i] * SearchRadius;
-			var pz = z + RangeOffsets[i + 1] * SearchRadius;
+			var px = x + RangeOffsets[i] * radius;
+			var pz = z + RangeOffsets[i + 1] * radius;
 			if (px < 0 || pz < 0 || px >= map.Width || pz >= map.Height)
 				continue;
 			if (map.AreaOfNode.TryGetValue(px + pz * map.Width, out var area) && !_areaScratch.Contains(area))
@@ -577,11 +579,37 @@ internal static partial class Homm3CoveTreasureRuntime
 		pieces++;
 		region.PiecesBySide[side] = pieces;
 		Version++;
-		var leads = LeadCount(pieces);
+		var leads = LeadCount(pieces, side);
 		Info("side " + N(side) + " hero " + hero.configSid + " took map piece " + N(pieces) + "/" + N(Plan.PiecesPerRegion)
 			+ " in area " + N(region.AreaId) + " at node " + N(h.Holder.Node) + "; possible treasure tiles now " + N(leads) + ".");
 		if (side == LocalSide(data))
-			Homm3CoveTreasurePopup.ShowPiece(region.AreaId, pieces, Plan.PiecesPerRegion, leads);
+			Homm3CoveTreasurePopup.ShowPiece(region.AreaId, pieces, Plan.PiecesPerRegion, leads, side: side);
+		// law pass 2026-11-21: Finder's Fee (#9). Collect runs inside the native move, so the Gold is queued and
+		// paid from the marker host's Update (FlushAiPayouts), like the computer's treasure payouts.
+		var fee = Homm3CoveLawHooks.FindersFeeGold(side);
+		if (fee > 0)
+		{
+			_findersFees.Add((side, fee));
+			Homm3CoveTreasureMarkers.EnsureHost();
+		}
+	}
+
+	private static readonly List<(int Side, int Gold)> _findersFees = new();
+
+	/// <summary>Pays queued Finder's Fee Gold (law pass 2026-11-21, #9). Called from FlushAiPayouts.</summary>
+	private static void FlushFindersFees()
+	{
+		if (_findersFees.Count == 0 || _inTick)
+			return;
+		var due = new List<(int Side, int Gold)>(_findersFees);
+		_findersFees.Clear();
+		foreach (var fee in due)
+		{
+			if (Homm3CovePlunderHook.Grant(fee.Side, GameSymbols.EconomyLaws.GoldResourceName, fee.Gold, out _, out _, out var fail))
+				Info("side " + N(fee.Side) + " Finder's Fee paid " + N(fee.Gold) + " Gold for a map piece.");
+			else
+				Warn("side " + N(fee.Side) + " Finder's Fee of " + N(fee.Gold) + " Gold not paid: " + fail);
+		}
 	}
 
 	/// <summary>How many candidate treasure tiles a side still sees with that many pieces (0 pieces: none shown).</summary>
@@ -591,6 +619,13 @@ internal static partial class Homm3CoveTreasureRuntime
 			return 0;
 		return Math.Max(1, 1 + Plan.FalseLeads - (pieces - 1));
 	}
+
+	// law pass 2026-11-21: Cartographers' Guild (#32). Each level removes one more false lead, as if the side held
+	// one more piece; 0 pieces still shows nothing.
+	internal static int LeadCount(int pieces, int side) => pieces <= 0 ? 0 : LeadCount(pieces + Homm3CoveLawHooks.FalseLeadsRemoved(side));
+
+	/// <summary>First false node the side still sees: piece 2 removes FalseNodes[0], piece 3 [1], piece 4 [2].</summary>
+	internal static int FalseLeadStart(int pieces, int side) => Math.Max(0, pieces - 1 + Homm3CoveLawHooks.FalseLeadsRemoved(side));
 
 	internal static int LocalSide(DataRoot data)
 	{
@@ -636,11 +671,11 @@ internal static partial class Homm3CoveTreasureRuntime
 			region.PiecesBySide.TryGetValue(side, out var pieces);
 			if (pieces <= 0 || region.Plan.TrueNode < 0)
 				continue;
-			var leads = LeadCount(pieces);
+			var leads = LeadCount(pieces, side);
 			into.Add(new Marker { Node = region.Plan.TrueNode, AreaId = region.AreaId, Kind = leads <= 1 ? MarkerKind.Treasure : MarkerKind.Lead });
 			var falseNodes = region.Plan.FalseNodes;
-			// Piece 2 removes FalseNodes[0], piece 3 removes [1], piece 4 removes [2].
-			for (var i = Math.Max(0, pieces - 1); i < falseNodes.Length && leads > 1; i++)
+			// Piece 2 removes FalseNodes[0], piece 3 removes [1], piece 4 removes [2] (Cartographers' Guild, #32, removes more).
+			for (var i = FalseLeadStart(pieces, side); i < falseNodes.Length && leads > 1; i++)
 				if (!map.Holes.Contains(falseNodes[i]))
 					into.Add(new Marker { Node = falseNodes[i], AreaId = region.AreaId, Kind = MarkerKind.Lead });
 		}

@@ -483,7 +483,7 @@ internal static partial class Homm3FactoryLogistics
 			foreach (var m in Fx.Members(c.Config, c.State, c.World, c.Side, null))
 				if (m.e.Effect == "rail_station")
 					rail += m.built;
-			return c.Config.BaseLogisticsLevel + rail;
+			return Homm3FactoryLawHooks.BaseLogisticsLevel(c.Config, c.Side) + rail; // law pass 2026-11-21: Surveyors' Charter (#7)
 		}
 		var own = e?.Effect == "rail_network" ? (int)Math.Round(e.ValueAt(eff)) : 0;
 		return c.Net.LogisticsLevel + own;

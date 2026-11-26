@@ -62,6 +62,19 @@ internal static class Homm3InfernoGatingRuntime
 	private const string NativeNecromancyMechType = "change_use_necromancy";
 	private const int EntryRound = 2;
 
+	// law pass 2026-11-21: Inferno faction laws that change Gating (docs/faction_law_pass_20261121/inferno.md).
+	// Ranks are read from the hero's side owner; no law or a read failure gives rank 0 and the skill's current behaviour.
+	internal const string InfernoFactionSid = "homm3_inferno";
+	internal const int LawGateSigils = 5;
+	// law pass 2026-11-25: Hellgate Furnace (#7) replaces Legion Gate (+1 reserved slot repeated Wider Gate).
+	internal const int LawHellgateFurnace = 7;
+	internal const int HellgateFurnaceFocus = 1;
+	internal const int LawInfernalArrival = 8;
+	internal const int LawOpenGateRites = 9;
+	internal const int LawBrimstoneVanguard = 31;
+	internal const string InfernalArrivalBuffSid = "h3_kit_inferno_burning_lesser_effect";
+	internal const string VanguardBuffPrefix = "h3_law_inferno_vanguard_effect_";
+
 	// Live interop member names (build 26615913) live in GameSymbols.InfernoGating (scoped by the current-build override).
 	private static class Pins
 	{
@@ -111,6 +124,11 @@ internal static class Homm3InfernoGatingRuntime
 		internal bool Rapid;
 		internal bool Shielded;
 		internal bool OpenGate;
+		internal int GateSigils; // law pass 2026-11-21: Gate Sigils (#5)
+		internal int InfernalArrival; // law pass 2026-11-21: Infernal Arrival (#8)
+		internal int OpenGateRites; // law pass 2026-11-21: Open Gate Rites (#9)
+		internal int Vanguard; // law pass 2026-11-21: Brimstone Vanguard (#31)
+		internal int Furnace; // law pass 2026-11-25: Hellgate Furnace (#7)
 		internal string HeroDescription;
 		internal object SideWrapper;
 		internal int HomeSign; // -1: home on the low-x half, +1: home on the high-x half, 0 unknown
@@ -135,6 +153,8 @@ internal static class Homm3InfernoGatingRuntime
 	private static readonly object Gate = new();
 	private static readonly List<BattleState> Battles = new();
 	private static readonly System.Random Rng = new();
+	// law pass 2026-11-21: DataHero -> LogicHero, once read for Legion Gate (#7); unused since Hellgate Furnace replaced it (2026-11-25).
+	private static readonly Dictionary<IntPtr, object> LogicHeroByDataHero = new();
 	private static ManualLogSource _log;
 	private static PropertyInfo[] _transferBattleProperties;
 	private static bool _loggedSnapshot;
@@ -293,7 +313,48 @@ internal static class Homm3InfernoGatingRuntime
 	{
 		if (logicHero == null || _logicHeroDataHeroGetter == null || !_logicHeroDataHeroGetter.DeclaringType.IsInstanceOfType(logicHero))
 			return null;
-		return _logicHeroDataHeroGetter.Invoke(logicHero, Array.Empty<object>()) as DataHero;
+		var dataHero = _logicHeroDataHeroGetter.Invoke(logicHero, Array.Empty<object>()) as DataHero;
+		if (dataHero != null)
+		{
+			lock (LogicHeroByDataHero)
+			{
+				if (LogicHeroByDataHero.Count > 256)
+					LogicHeroByDataHero.Clear();
+				LogicHeroByDataHero[dataHero.Pointer] = logicHero;
+			}
+		}
+		return dataHero;
+	}
+
+	/// <summary>law pass 2026-11-21: Inferno law level (0 = not taken) for a hero's side; tries each owner in turn, fail closed.</summary>
+	internal static int LawRank(int lawIndex, params object[] owners)
+	{
+		if (owners == null)
+			return 0;
+		foreach (var owner in owners)
+		{
+			if (owner == null)
+				continue;
+			try
+			{
+				var rank = Homm3CustomFactionLawRuntime.CustomLawRank(owner, lawIndex, InfernoFactionSid);
+				if (rank > 0)
+					return rank;
+			}
+			catch
+			{
+				// fail closed: try the next owner
+			}
+		}
+		return 0;
+	}
+
+	private static object CachedLogicHero(DataHero dataHero)
+	{
+		if (dataHero == null)
+			return null;
+		lock (LogicHeroByDataHero)
+			return LogicHeroByDataHero.TryGetValue(dataHero.Pointer, out var logicHero) ? logicHero : null;
 	}
 
 	internal static int ResolveRank(DataHero dataHero) => Homm3DungeonDraconicDominionHook.ResolveHeroSkillRank(dataHero, FactionSkillSid);
@@ -499,6 +560,14 @@ internal static class Homm3InfernoGatingRuntime
 					OpenGate = Homm3DungeonDraconicDominionHook.HasHeroSubSkill(dataHero, OpenGateSubSkillSid),
 					HeroDescription = heroText,
 				};
+				// law pass 2026-11-21: Gate Sigils (#5), Infernal Arrival (#8), Open Gate Rites (#9), Brimstone Vanguard (#31).
+				gating.GateSigils = LawRank(LawGateSigils, side, side.logicHero);
+				gating.InfernalArrival = LawRank(LawInfernalArrival, side, side.logicHero);
+				gating.OpenGateRites = LawRank(LawOpenGateRites, side, side.logicHero);
+				gating.Vanguard = LawRank(LawBrimstoneVanguard, side, side.logicHero);
+				// law pass 2026-11-25: Hellgate Furnace (#7). Open Gate Rites (#9) no longer grants the Open Gate action
+				// (it repeated the Open Gate subskill); it only refunds Focus after a cast.
+				gating.Furnace = LawRank(LawHellgateFurnace, side, side.logicHero);
 				foreach (var unit in reserved)
 				{
 					gating.Pending.Add(new PendingStack
@@ -571,7 +640,8 @@ internal static class Homm3InfernoGatingRuntime
 				if (gating.SideWrapper != null)
 					battle.Sides.Add(gating);
 				_log?.LogInfo("HoMM3 Inferno Gating armed for " + gating.HeroDescription + " rank " + gating.Rank + ": "
-				              + DescribePending(gating) + (gating.Rapid ? " +Rapid" : "") + (gating.Shielded ? " +Shielded" : "") + (gating.OpenGate ? " +OpenGate" : "") + ".");
+				              + DescribePending(gating) + (gating.Rapid ? " +Rapid" : "") + (gating.Shielded ? " +Shielded" : "") + (gating.OpenGate ? " +OpenGate" : "")
+				              + " laws[sigils " + gating.GateSigils + ", arrival " + gating.InfernalArrival + ", rites " + gating.OpenGateRites + ", vanguard " + gating.Vanguard + ", furnace " + gating.Furnace + "].");
 			}
 			SyncStartSnapshot(__instance, __1, clone, __state);
 			lock (Gate)
@@ -878,6 +948,16 @@ internal static class Homm3InfernoGatingRuntime
 						if (!pending.Done)
 							Enter(battle, side, pending, "Open Gate");
 					}
+					// law pass 2026-11-25: Open Gate Rites (#9): one level; Open Gate refunds 1 Focus Charge after the cast.
+					// Closest real version of "costs 1 Focus less": the native action still needs 2 Focus to start.
+					if (side.OpenGateRites >= 1)
+					{
+						string refundFail = null;
+						var refunded = (side.SideWrapper != null && Homm3FocusNativeAdapter.TryGrantFocusToSide(side.SideWrapper, 1, out refundFail))
+						               || (info.Caster != null && Homm3FocusNativeAdapter.TryGrantFocusToSide(info.Caster, 1, out refundFail));
+						if (!refunded)
+							LogLimited("Open Gate Rites refund failed for " + side.HeroDescription + ": " + refundFail);
+					}
 				}
 			}
 		}
@@ -950,7 +1030,16 @@ internal static class Homm3InfernoGatingRuntime
 			}
 			if (!battle.HomeResolved)
 				ResolveHomeHalves(battle);
-			var candidates = CollectEntryHexes(hexes, side.Rank >= 2 ? side.HomeSign : 0, side.Rank >= 2);
+			// law pass 2026-11-25: Gate Sigils (#5): one level; gated stacks prefer open hexes next to a living enemy stack,
+			// otherwise the skill's own entry hexes (no free enemy-half entry: that repeated Basic Gating's level 2).
+			var enemyHalf = side.Rank >= 2;
+			var candidates = CollectEntryHexes(hexes, enemyHalf ? side.HomeSign : 0, enemyHalf);
+			if (side.GateSigils >= 1 && candidates.Count > 0)
+			{
+				var nextToEnemy = FilterNextToEnemy(hexes, candidates, side);
+				if (nextToEnemy.Count > 0)
+					candidates = nextToEnemy;
+			}
 			if (candidates.Count == 0)
 			{
 				_log?.LogInfo("HoMM3 Inferno Gating: no eligible open hex for " + pending.Sid + " x" + pending.Stacks + " (" + side.HeroDescription + "); the stack never enters.");
@@ -992,8 +1081,21 @@ internal static class Homm3InfernoGatingRuntime
 			var applied = new List<string>();
 			if (side.Shielded)
 				applied.Add(TryBuff(spawned, BarrierBuffSid, 1) ? "barrier" : "barrier FAILED");
-			if (side.Rapid)
+				if (side.Rapid)
 				applied.Add(TryBuff(spawned, HasteBuffSid, 0) ? "haste" : "haste FAILED");
+			// law pass 2026-11-21: Brimstone Vanguard (#31): +15%/+30% Damage for the arrival round.
+			if (side.Vanguard >= 1)
+				applied.Add(TryBuff(spawned, VanguardBuffPrefix + Math.Min(side.Vanguard, 2), 0) ? "vanguard" : "vanguard FAILED");
+			// law pass 2026-11-21: Infernal Arrival (#8): adjacent enemy stacks are set Burning.
+			if (side.InfernalArrival >= 1)
+				applied.Add("arrival burn x" + BurnAdjacentEnemies(hexes, hex, side, spawned));
+			// law pass 2026-11-25: Hellgate Furnace (#7): each arrival through the Gate gives the hero 1 Focus Charge.
+			if (side.Furnace >= 1)
+			{
+				string furnaceFail = null;
+				var granted = side.SideWrapper != null && Homm3FocusNativeAdapter.TryGrantFocusToSide(side.SideWrapper, HellgateFurnaceFocus, out furnaceFail);
+				applied.Add(granted ? "furnace +" + HellgateFurnaceFocus + " Focus" : "furnace FAILED (" + furnaceFail + ")");
+			}
 			Homm3InfernoGatingPortal.Play(portal, hex.position);
 			_log?.LogInfo("HoMM3 Inferno Gating entry: " + pending.Sid + " x" + pending.Stacks + " (slot " + pending.Slot + ") for " + side.HeroDescription
 			              + " at hex (" + hex.x + "," + hex.z + ") — " + reason + (applied.Count > 0 ? "; " + string.Join(", ", applied) : "") + ".");
@@ -1011,6 +1113,108 @@ internal static class Homm3InfernoGatingRuntime
 			return true;
 		LogLimited("entry buff " + sid + " failed: " + fail);
 		return false;
+	}
+
+	/// <summary>law pass 2026-11-21: living enemy units of a gating side, with their hex positions.</summary>
+	private static List<(Unit Unit, Vector3 Position)> EnemyUnits(Il2CppReferenceArray<BattleHex> hexes, GatingSide side)
+	{
+		var result = new List<(Unit Unit, Vector3 Position)>();
+		if (side.SideWrapper is not Il2CppObjectBase own)
+			return result;
+		foreach (var hex in hexes)
+		{
+			if (hex?.fieldObjects == null)
+				continue;
+			for (var i = 0; i < hex.fieldObjects.Count; i++)
+			{
+				var unit = hex.fieldObjects[i]?.TryCast<Unit>();
+				if (unit == null || ReadProperty(unit, Pins.FieldObjectSide) is not Il2CppObjectBase wrapper || wrapper.Pointer == own.Pointer || !IsAlive(unit))
+					continue;
+				result.Add((unit, hex.position));
+			}
+		}
+		return result;
+	}
+
+	/// <summary>law pass 2026-11-21: neighbour distance = the smallest spacing between two board hexes, with 10% slack.</summary>
+	private static float NeighbourDistance(Il2CppReferenceArray<BattleHex> hexes)
+	{
+		var byCell = new Dictionary<(int, int), Vector3>();
+		foreach (var hex in hexes)
+		{
+			if (hex != null)
+				byCell[(hex.x, hex.z)] = hex.position;
+		}
+		var step = float.MaxValue;
+		var offsets = new[] { (1, 0), (0, 1), (1, 1), (-1, 1) };
+		foreach (var pair in byCell)
+		{
+			foreach (var (dx, dz) in offsets)
+			{
+				if (!byCell.TryGetValue((pair.Key.Item1 + dx, pair.Key.Item2 + dz), out var other))
+					continue;
+				var d = Vector3.Distance(pair.Value, other);
+				if (d > 0.01f)
+					step = Math.Min(step, d);
+			}
+		}
+		return step == float.MaxValue ? 0f : step * 1.1f;
+	}
+
+	/// <summary>law pass 2026-11-21: Gate Sigils (#5) level 2: entry hexes adjacent to a living enemy stack.</summary>
+	private static List<BattleHex> FilterNextToEnemy(Il2CppReferenceArray<BattleHex> hexes, List<BattleHex> candidates, GatingSide side)
+	{
+		var result = new List<BattleHex>();
+		try
+		{
+			var reach = NeighbourDistance(hexes);
+			var enemies = EnemyUnits(hexes, side);
+			if (reach <= 0f || enemies.Count == 0)
+				return result;
+			foreach (var hex in candidates)
+			{
+				foreach (var enemy in enemies)
+				{
+					if (Vector3.Distance(hex.position, enemy.Position) <= reach)
+					{
+						result.Add(hex);
+						break;
+					}
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+			LogLimited("Gate Sigils adjacency failed (any enemy-half hex used): " + ex.GetBaseException().Message);
+			result.Clear();
+		}
+		return result;
+	}
+
+	/// <summary>law pass 2026-11-21: Infernal Arrival (#8): set Burning on enemy stacks next to the entry hex. Returns how many.</summary>
+	private static int BurnAdjacentEnemies(Il2CppReferenceArray<BattleHex> hexes, BattleHex entry, GatingSide side, Unit caster)
+	{
+		var burned = 0;
+		try
+		{
+			var reach = NeighbourDistance(hexes);
+			if (reach <= 0f)
+				return 0;
+			foreach (var enemy in EnemyUnits(hexes, side))
+			{
+				if (Vector3.Distance(entry.position, enemy.Position) > reach)
+					continue;
+				if (Homm3BuffDebuffNativeAdapter.TryAddBuffSidFromReceiver(enemy.Unit, InfernalArrivalBuffSid, caster, 1, 1, 0, true, out _, out var fail))
+					burned++;
+				else
+					LogLimited("Infernal Arrival burn failed: " + fail);
+			}
+		}
+		catch (Exception ex)
+		{
+			LogLimited("Infernal Arrival failed closed: " + ex.GetBaseException().Message);
+		}
+		return burned;
 	}
 
 	/// <summary>

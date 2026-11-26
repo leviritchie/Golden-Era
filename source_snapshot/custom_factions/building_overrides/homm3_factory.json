@@ -1,0 +1,227 @@
+{
+  "factionSid": "homm3_factory",
+  "rows": [
+    {
+      "sid": "Build_Bank",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 2500,
+          "wood": 5,
+          "ore": 5
+        }
+      ],
+      "bonuses": [
+        [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              1000
+            ]
+          }
+        ]
+      ],
+      "nameText": "Counting House",
+      "descriptionText": "Produces 1000 Gold daily.",
+      "notes": "building pass 2026-11-22: rename only ('Town Bank' -> 'Counting House') so the economy Bank and the HotA loan Bank (Build_Factory_Loan_Bank) do not share the name Bank. Cost and income unchanged (vanilla Bank values).",
+      "nameTextLocales": {
+        "BRportugese": "Casa de Contagem",
+        "czech": "Účtárna",
+        "french": "Comptoir",
+        "german": "Kontor",
+        "hungarian": "Számolóház",
+        "italian": "Casa dei Conti",
+        "japanese": "会計所",
+        "korean": "회계소",
+        "polish": "Kantor",
+        "russian": "Счётная палата",
+        "spanish": "Contaduría",
+        "turkish": "Sayım Evi",
+        "ukrainian": "Лічильня",
+        "zhCN": "账房",
+        "zhTW": "帳房"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Produz 1000 de Ouro por dia.",
+        "czech": "Denně vyprodukuje 1000 Zlata.",
+        "french": "Produit 1000 d’or par jour.",
+        "german": "Produziert täglich 1000 Gold.",
+        "hungarian": "Naponta 1000 Aranyat termel.",
+        "italian": "Produce 1000 Oro al giorno.",
+        "japanese": "毎日1000ゴールドを生産する。",
+        "korean": "매일 금 1000을 생산합니다.",
+        "polish": "Produkuje 1000 Złota dziennie.",
+        "russian": "Приносит 1000 Золота в день.",
+        "spanish": "Produce 1000 de oro al día.",
+        "turkish": "Günde 1000 Altın üretir.",
+        "ukrainian": "Приносить 1000 Золота на день.",
+        "zhCN": "每天产出1000黄金。",
+        "zhTW": "每天產出1000黃金。"
+      }
+    },
+    {
+      "sid": "Build_Factory_Loan_Bank",
+      "section": "banks",
+      "template": "human_city:Build_Bank",
+      "replace": false,
+      "sceneSlot": "Factory_Loan_Bank",
+      "costs": [
+        {
+          "gold": 500,
+          "ore": 5
+        }
+      ],
+      "fields": {
+        "isConstructedOnStart": false,
+        "backgroundImages": [
+          "build_fon_unic"
+        ]
+      },
+      "bonuses": [
+        []
+      ],
+      "nameText": "Bank",
+      "descriptionText": "When built, lends you 2500 Gold. You then repay 500 Gold daily for 5 days.",
+      "iconFrom": "dungeon_city:Build_Bank",
+      "plugin": "Homm3FactoryLoanBankRuntime",
+      "notes": "building pass 2026-11-22: factory.bank (REVIEW 2: the loan is granted when the Bank is built). Plugin-only banks carrier. Homm3FactoryLoanBankRuntime sees the built transition (main-thread poll, town owned by the same local human side), pays +2500 Gold once, then takes 500 Gold at each of the next 5 side day starts (clamped at the side's gold); the outstanding loan persists in a hidden side buff carrier (homm3_factory_loan_store). HotA cost 500 Gold, 5 Ore; no requirement.",
+      "nameTextLocales": {
+        "BRportugese": "Banco",
+        "czech": "Banka",
+        "french": "Banque",
+        "german": "Bank",
+        "hungarian": "Bank",
+        "italian": "Banca",
+        "japanese": "銀行",
+        "korean": "은행",
+        "polish": "Bank",
+        "russian": "Банк",
+        "spanish": "Banco",
+        "turkish": "Banka",
+        "ukrainian": "Банк",
+        "zhCN": "银行",
+        "zhTW": "銀行"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Ao ser construído, empresta 2500 de Ouro a você. Depois você paga 500 de Ouro por dia durante 5 dias.",
+        "czech": "Po postavení vám půjčí 2500 Zlato. Poté splácíte 500 Zlato denně po dobu 5 dnů.",
+        "french": "À sa construction, vous prête 2500 Or. Vous remboursez ensuite 500 Or par jour pendant 5 jours.",
+        "german": "Verleiht nach dem Bau 2500 Gold als Darlehen. Danach zahlt Ihr 5 Tage lang täglich 500 Gold zurück.",
+        "hungarian": "Felépítésekor kölcsönad neked 2500 Aranyat. Ezután 5 napon át naponta 500 Aranyat törlesztesz.",
+        "italian": "Quando viene costruito, ti presta 2500 Oro. Poi restituisci 500 Oro al giorno per 5 giorni.",
+        "japanese": "建設時に2500ゴールドを貸し付ける。その後5日間、毎日500ゴールドを返済する。",
+        "korean": "건설 시 금 2500을 빌려준다. 이후 5일 동안 매일 금 500을 상환한다.",
+        "polish": "Po zbudowaniu pożycza ci 2500 Złota. Następnie spłacasz 500 Złota dziennie przez 5 dni.",
+        "russian": "При постройке даёт вам взаймы 2500 Золота. Затем вы возвращаете по 500 Золота в день в течение 5 дней.",
+        "spanish": "Al construirse, te presta 2500 de Oro. Después devuelves 500 de Oro al día durante 5 días.",
+        "turkish": "İnşa edildiğinde size 2500 Altın borç verir. Ardından 5 gün boyunca her gün 500 Altın geri ödersiniz.",
+        "ukrainian": "Після будівництва позичає вам 2500 Золота. Потім ви повертаєте по 500 Золота щодня протягом 5 днів.",
+        "zhCN": "建成时借给你2500黄金。之后你需连续5天每天偿还500黄金。",
+        "zhTW": "建成時借給你2500黃金。之後你需連續5天每天償還500黃金。"
+      }
+    },
+    {
+      "sid": "Build_Mother_Nature",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 1000,
+          "ore": 5
+        }
+      ],
+      "bonuses": [
+        []
+      ],
+      "nameText": "Mana Generator",
+      "descriptionText": "In a siege of this city, the defending hero gains 20 mana for the battle. Mana not spent is lost when the battle ends.",
+      "plugin": "Homm3FactoryManaGeneratorRuntime",
+      "notes": "building pass 2026-11-22: factory.mana_generator. Moved from heroBonusBanks (+1 Knowledge donor) to a plugin-only banks carrier. Homm3FactoryManaGeneratorRuntime: BattleLogic.Init prefix on a siege of a Factory town with this building adds 20 to the defending hero's mana; ApplyBattleResult removes min(20, mana above the pre-battle value). HotA cost 1000 Gold, 5 Ore (REVIEW 2). Tree: Wall L1 (tree agent).",
+      "nameTextLocales": {
+        "BRportugese": "Gerador de Mana",
+        "czech": "Generátor many",
+        "french": "Générateur de mana",
+        "german": "Managenerator",
+        "hungarian": "Mana-generátor",
+        "italian": "Generatore di mana",
+        "japanese": "マナ発生装置",
+        "korean": "마나 생성기",
+        "polish": "Generator many",
+        "russian": "Генератор маны",
+        "spanish": "Generador de maná",
+        "turkish": "Mana Üreteci",
+        "ukrainian": "Генератор мани",
+        "zhCN": "法力发生器",
+        "zhTW": "法力產生器"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Em um cerco a esta cidade, o herói defensor ganha 20 de mana para a batalha. A mana não gasta é perdida quando a batalha termina.",
+        "czech": "Při obléhání tohoto města získá bránící hrdina pro bitvu 20 many. Nevyužitá mana propadne, když bitva skončí.",
+        "french": "Lors d’un siège de cette ville, le héros défenseur gagne 20 de mana pour le combat. La mana non dépensée est perdue à la fin du combat.",
+        "german": "Bei einer Belagerung dieser Stadt erhält der verteidigende Held 20 Mana für den Kampf. Nicht verbrauchtes Mana verfällt, wenn der Kampf endet.",
+        "hungarian": "E város ostromakor a védő hős 20 manát kap a csatára. A fel nem használt mana a csata végén elvész.",
+        "italian": "Durante un assedio di questa città, l’eroe difensore ottiene 20 mana per la battaglia. Il mana non speso va perso al termine della battaglia.",
+        "japanese": "この都市への攻城戦では、防衛側の英雄が戦闘中マナ20を得る。使わなかったマナは戦闘終了時に失われる。",
+        "korean": "이 도시의 공성전에서 방어하는 영웅은 전투 동안 마나 20을 얻는다. 사용하지 않은 마나는 전투가 끝나면 사라진다.",
+        "polish": "Podczas oblężenia tego miasta broniący bohater zyskuje 20 many na czas bitwy. Niewykorzystana mana przepada po zakończeniu bitwy.",
+        "russian": "При осаде этого города защищающийся герой получает 20 маны на время боя. Неиспользованная мана пропадает по окончании боя.",
+        "spanish": "En un asedio a esta ciudad, el héroe defensor obtiene 20 de maná para la batalla. El maná no gastado se pierde al terminar la batalla.",
+        "turkish": "Bu şehrin kuşatılmasında savunan kahraman savaş boyunca 20 mana kazanır. Harcanmayan mana, savaş bittiğinde kaybolur.",
+        "ukrainian": "Під час облоги цього міста герой-захисник отримує 20 мани на час бою. Невикористана мана зникає наприкінці бою.",
+        "zhCN": "围攻此城镇时，防守方英雄在战斗中获得20点法力。未使用的法力在战斗结束时消失。",
+        "zhTW": "圍攻此城鎮時，防守方英雄在戰鬥中獲得20點法力。未使用的法力在戰鬥結束時消失。"
+      }
+    },
+    {
+      "sid": "Build_Golden_Calf",
+      "section": "graals",
+      "replace": true,
+      "costs": [
+        {
+          "graal": 1
+        }
+      ],
+      "nameText": "Lightning Rod",
+      "descriptionText": "The owner's cities produce 1000 Gold and 1 of each other resource daily. This city's dwellings produce +100% units. At the start of every battle fought by your heroes, lightning strikes each enemy stack for 7 x (4 + buildings in this city) damage.",
+      "plugin": "Homm3FactoryLightningRodRuntime",
+      "notes": "building pass 2026-11-22: factory.lightning_rod. Keeps the HumanGraal bonuses unchanged (answer 3). Homm3FactoryLightningRodRuntime: at round 1, for each side with a hero, total = sum over owned Factory towns with this grail of 7 x (4 + distinct built building SIDs, extra levels not counted); every enemy stack takes that total once through NativeCombatWriteGateway.TryInvokeRedirectedDamage. Several Rods add up.",
+      "nameTextLocales": {
+        "BRportugese": "Pára-raios",
+        "czech": "Hromosvod",
+        "french": "Paratonnerre",
+        "german": "Blitzableiter",
+        "hungarian": "Villámhárító",
+        "italian": "Parafulmine",
+        "japanese": "避雷針",
+        "korean": "피뢰침",
+        "polish": "Piorunochron",
+        "russian": "Громоотвод",
+        "spanish": "Pararrayos",
+        "turkish": "Paratoner",
+        "ukrainian": "Громовідвід",
+        "zhCN": "避雷针",
+        "zhTW": "避雷針"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "As cidades do dono produzem 1000 de Ouro e 1 de cada um dos outros recursos por dia. As moradias desta cidade produzem +100% de unidades. No início de toda batalha travada por seus heróis, um raio atinge cada grupo inimigo causando 7 x (4 + edifícios nesta cidade) de dano.",
+        "czech": "Města majitele denně produkují 1000 Zlato a 1 jednotku každé další suroviny. Obydlí tohoto města produkují +100% jednotek. Na začátku každé bitvy vedené vašimi hrdiny udeří blesk do každého nepřátelského oddílu za 7 x (4 + budovy v tomto městě) Poškození.",
+        "french": "Les villes du propriétaire produisent 1000 Or et 1 de chaque autre ressource par jour. Les habitations de cette ville produisent +100 % d’unités. Au début de chaque combat mené par vos héros, la foudre frappe chaque groupe ennemi et inflige 7 x (4 + bâtiments de cette ville) Dégâts.",
+        "german": "Die Städte des Besitzers produzieren täglich 1000 Gold und 1 von jeder anderen Ressource. Die Behausungen dieser Stadt produzieren +100 % Einheiten. Zu Beginn jedes Kampfes Eurer Helden schlägt ein Blitz in jeden gegnerischen Stapel ein und verursacht 7 x (4 + Gebäude in dieser Stadt) Schaden.",
+        "hungarian": "A tulajdonos városai naponta 1000 Aranyat és minden másik nyersanyagból 1-et termelnek. A város szállásai +100% egységet termelnek. Hőseid minden csatájának kezdetén villám csap minden ellenséges seregbe, 7 x (4 + a városban lévő épületek) Sebzést okozva.",
+        "italian": "Le città del proprietario producono ogni giorno 1000 Oro e 1 di ogni altra risorsa. Le dimore di questa città producono +100% unità. All’inizio di ogni battaglia combattuta dai tuoi eroi, un fulmine colpisce ogni schiera nemica infliggendo 7 x (4 + edifici in questa città) Danno.",
+        "japanese": "所有者の都市は毎日1000ゴールドと、他の各資源を1ずつ生産する。この都市の住居は+100%の部隊を生産する。味方の英雄が戦うすべての戦闘の開始時に、雷が敵の各部隊を撃ち、7 x (4 + この都市の建物数)のダメージを与える。",
+        "korean": "소유자의 도시는 매일 금 1000과 다른 자원 각 1을 생산한다. 이 도시의 거주지는 부대를 +100% 생산한다. 아군 영웅이 치르는 모든 전투가 시작될 때, 번개가 적 부대마다 내리쳐 7 x (4 + 이 도시의 건물 수)의 피해를 준다.",
+        "polish": "Miasta właściciela produkują dziennie 1000 Złota i po 1 sztuce każdego innego surowca. Siedliska w tym mieście produkują +100% jednostek. Na początku każdej bitwy toczonej przez twoich bohaterów piorun uderza w każdy oddział wroga, zadając 7 x (4 + budynki w tym mieście) obrażeń.",
+        "russian": "Города владельца ежедневно производят 1000 Золота и по 1 единице каждого другого ресурса. Жилища этого города производят +100% существ. В начале каждого боя, который ведут ваши герои, молния поражает каждый вражеский отряд, нанося 7 x (4 + здания в этом городе) Урона.",
+        "spanish": "Las ciudades del propietario producen 1000 de Oro y 1 de cada uno de los demás recursos al día. Las viviendas de esta ciudad producen +100% de unidades. Al comienzo de cada batalla librada por tus héroes, un rayo golpea a cada grupo enemigo y causa 7 x (4 + edificios de esta ciudad) de Daño.",
+        "turkish": "Sahibin şehirleri her gün 1000 Altın ve diğer her kaynaktan 1 adet üretir. Bu şehrin konutları +%100 birim üretir. Kahramanlarınızın yaptığı her savaşın başında şimşek her düşman yığınına çarpar ve 7 x (4 + bu şehirdeki yapılar) Hasar verir.",
+        "ukrainian": "Міста власника щодня виробляють 1000 Золота та по 1 одиниці кожного іншого ресурсу. Оселі цього міста виробляють +100% істот. На початку кожного бою, який ведуть ваші герої, блискавка вражає кожен ворожий загін, завдаючи 7 x (4 + будівлі в цьому місті) Шкоди.",
+        "zhCN": "所有者的城镇每天产出1000黄金，以及每种其他资源各1个。此城镇的巢穴产出+100%的单位。你的英雄每场战斗开始时，闪电会劈中每个敌方部队，造成7 x (4 + 此城镇中的建筑数)点伤害。",
+        "zhTW": "所有者的城鎮每天產出1000黃金，以及每種其他資源各1個。此城鎮的巢穴產出+100%的單位。你的英雄每場戰鬥開始時，閃電會劈中每個敵方部隊，造成7 x (4 + 此城鎮中的建築數)點傷害。"
+      }
+    }
+  ],
+  "remove": []
+}

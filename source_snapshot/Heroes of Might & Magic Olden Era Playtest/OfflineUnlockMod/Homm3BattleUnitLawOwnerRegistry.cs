@@ -396,11 +396,11 @@ internal static class Homm3BattleUnitLawOwnerRegistry
                 // Last exact alias route: if the event object is a field object that still
                 // has a current hex occupant, resolve that occupant through the normal
                 // registry. This is retained for non-counterattack field-object payloads.
+                // Occupancy is Hex.fieldObjects; BattleEventLaws.HexOccupantMembers is the hex's last corpse and
+                // could alias a dead stack of the other side (2026-11-22 audit).
                 if (TryReadObject(battleUnit, GameSymbols.BattleEventLaws.BattleObjectHexMembers, out var hex)
                     && hex != null
-                    && TryReadObject(hex, GameSymbols.BattleEventLaws.HexOccupantMembers, out var occupant)
-                    && occupant != null
-                    && !ReferenceEquals(occupant, battleUnit)
+                    && NativeCombatWriteGateway.FindUnitOccupantPublic(hex, battleUnit) is { } occupant
                     && TryResolveTransferSide(occupant, out transferSide)
                     && transferSide != null)
                 {

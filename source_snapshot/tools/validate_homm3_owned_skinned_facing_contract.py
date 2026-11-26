@@ -173,6 +173,16 @@ def _qmat(q):
             [2 * (x * z - y * w), 2 * (y * z + x * w), 1 - 2 * (x * x + y * y)]]
 
 
+def _wing_root_pairs(names) -> list[tuple[str, str]]:
+    """Ordered (left, right) wing-root bone pairs for limbless fliers (Wing*L_00/R_00 and DEF-wing*.L/.R)."""
+    name_set = {n for n in names if n}
+    pairs = [(n, n[:-4] + "R_00") for n in sorted(name_set)
+             if n.startswith("Wing") and n.endswith("L_00") and (n[:-4] + "R_00") in name_set]
+    pairs.extend((n, n[:-2] + ".R") for n in sorted(name_set)
+                 if n.lower().startswith("def-wing") and n.endswith(".L") and (n[:-2] + ".R") in name_set)
+    return pairs
+
+
 def bind_forward_yaw(nodes: dict, orientation) -> tuple[float | None, str | None]:
     """Idle-0 (rest) limb-line forward yaw in Unity degrees inside Orientation.
 
@@ -210,8 +220,8 @@ def bind_forward_yaw(nodes: dict, orientation) -> tuple[float | None, str | None
         dx, dz = b[0] - a[0], b[2] - a[2]
         return math.degrees(math.atan2(-dz, dx)), left
     # Limbless fliers (serpent fly): the same wing-root pair the delivery-GLB check measures (glb_idle0_forward).
-    for left in sorted(n for n in by_name if n.startswith("Wing") and n.endswith("L_00") and n[:-4] + "R_00" in by_name):
-        a, b = pos(left), pos(left[:-4] + "R_00")
+    for left, right in _wing_root_pairs(by_name):
+        a, b = pos(left), pos(right)
         if a is None or b is None:
             continue
         dx, dz = b[0] - a[0], b[2] - a[2]
@@ -343,7 +353,7 @@ def glb_idle0_forward(path: Path | bytes) -> tuple[float, float, float] | None:
 
 # Facing rules, one per rig class, first match wins (2026-09-27):
 #   lateralPair  LeftArm/RightArm, LeftUpLeg/RightUpLeg or LeftShoulder/RightShoulder: forward = up x (left - right)
-#   wingPair     no limb pair; a Wing*L_00 / Wing*R_00 pair (dragonfly line): the same cross product, first pair by name
+#   wingPair     no limb pair; a Wing*L_00 / Wing*R_00 or DEF-wing*.L / DEF-wing*.R pair (dragonfly line): the same cross product, first pair by name
 #   headAxis     no pair at all (serpents, sandworms): the Head bone's own +Y (the bone's direction) on XZ, only when at
 #                least HEAD_AXIS_MIN_HORIZONTAL of it is horizontal. Hips->Head is not used: a serpent's idle curls the
 #                neck back over the body (sea serpent Spine->Neck reads 175 deg off), while the head keeps pointing
@@ -400,9 +410,9 @@ def glb_idle0_forward_rule(path: Path | bytes) -> tuple[tuple[float, float, floa
     if left is not None and right is not None:
         rule = "lateralPair"
     else:
-        wings = sorted(n for n in idx if n and n.startswith("Wing") and n.endswith("L_00") and n[:-4] + "R_00" in idx)
+        wings = _wing_root_pairs(idx)
         if wings:
-            left, right, rule = idx[wings[0]], idx[wings[0][:-4] + "R_00"], "wingPair"
+            left, right, rule = idx[wings[0][0]], idx[wings[0][1]], "wingPair"
     if rule:
         L, R = world(left), world(right)
         lx, lz = L[0][3] - R[0][3], L[2][3] - R[2][3]

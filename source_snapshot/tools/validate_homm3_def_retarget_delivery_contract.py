@@ -29,6 +29,9 @@ For each selection whose output folder exists (generated artifacts, gitignored):
     and fails --require-installed.
   - a superseded selection (supersededBy) is never re-shipped: with --require-installed each bundle of its old
     readback must match a current (non-superseded) selection's readback of the installed file.
+  - a current selection's bundle may differ from its own readback only when another current selection that does not
+    cover all of its units was deployed later (backup folder stamp) and the installed file matches that readback.
+    Re-deploying a broader slice over a narrower re-delivery still fails the narrower one.
 An explicit --selection limits only per-selection generated-artifact and installed-readback checks; global static and
 repin checks still run. Without --selection, every selection JSON is checked (the release/full-validation default).
 Fails closed; prints one line per violation.
@@ -182,7 +185,13 @@ def static_checks(root: Path, errors: list[str]) -> None:
         errors.append("bundle builder: owned_skinned_basecolor.png is not accepted as the skinned albedo")
     if visuals:
         m = re.search(r"internal static bool EnsureSkinnedBattleRuntimeCompatibility\(.*?\n\t\}\n", visuals, re.S)
-        if not m or "Homm3UnitLookVfxRuntime.TryAttach(instance, log);" not in m.group(0):
+        mc = re.search(r"private static bool EnsureSkinnedBattleRuntimeCompatibilityCore\(.*?\n\t\}\n", visuals, re.S)
+        attached = (
+            (m and "Homm3UnitLookVfxRuntime.TryAttach(instance, log);" in m.group(0))
+            or (m and mc and "EnsureSkinnedBattleRuntimeCompatibilityCore(" in m.group(0)
+                and "Homm3UnitLookVfxRuntime.TryAttach(instance, log);" in mc.group(0))
+        )
+        if not attached:
             errors.append("plugin: EnsureSkinnedBattleRuntimeCompatibility does not attach Homm3UnitLookVfxRuntime")
         if "attachUnitLookVfx: false" not in visuals:
             errors.append("plugin: the adventure-map idle must not attach the unit-look VFX (battle only)")
@@ -232,6 +241,24 @@ def current_readbacks(root: Path) -> dict[str, dict[str, str]]:
             for b in json.loads(rb_p.read_text(encoding="utf-8")).get("bundles", []):
                 got.setdefault(b["bundle"], {})[sp.name] = b["sha256"]
     return got
+
+
+def deploy_stamp(readback: dict) -> str:
+    m = re.search(r"installed_backup_(\d{8}_\d{4,6})", readback.get("backup", ""))
+    return m.group(1) if m else ""
+
+
+def redelivered_later(root: Path, sel: dict, readback: dict, bundle: str, installed_sha: str) -> bool:
+    """True when a current selection that does not cover all of sel's units delivered the installed bundle later."""
+    mine = {u["labSid"] for u in sel["units"]}
+    for name, delivered in current_readbacks(root).get(bundle, {}).items():
+        if delivered != installed_sha:
+            continue
+        other = json.loads((root / "tools/homm3_def_retarget_delivery" / name).read_text(encoding="utf-8"))
+        theirs = json.loads((root / other["out"] / "installed_readback.json").read_text(encoding="utf-8"))
+        if not mine <= {u["labSid"] for u in other["units"]} and deploy_stamp(theirs) > deploy_stamp(readback) != "":
+            return True
+    return False
 
 
 def runtime_import_checks(root: Path, tag: str, sel: dict, out: Path, require_installed: bool, errors: list[str]) -> None:
@@ -458,7 +485,8 @@ def selection_checks(root: Path, sel_path: Path, require_installed: bool, errors
         if require_installed:
             for b in rb.get("bundles", []):
                 p = GOLDEN_BUNDLES / b["bundle"]
-                if not p.is_file() or sha(p) != b["sha256"]:
+                got = sha(p) if p.is_file() else ""
+                if got != b["sha256"] and not redelivered_later(root, sel, rb, b["bundle"], got):
                     errors.append(f"{tag}: installed bundle {b['bundle']} differs from the slice readback")
         state = "installed"
     elif require_installed:

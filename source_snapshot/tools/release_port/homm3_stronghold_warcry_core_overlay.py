@@ -50,7 +50,7 @@ ARENA_SUBSKILLS_PATH = "DB/heroes_skills/sub_skills/sub_skills_arena.json"
 SKILL_NAME = "Warcry"
 SKILL_DESC = (
     "Each attack or ability used by a friendly stack, one after another, adds 1 to the Warcry counter. Every stack "
-    "that attacks in melee joins the Warcry. A Stronghold creature beginning its turn gains Attack for that turn "
+    "that attacks in melee joins the Warcry. A friendly creature beginning its turn gains Attack for that turn "
     "equal to the counter multiplied by the number of stacks in the Warcry. Moving without attacking, waiting or "
     "defending breaks the Warcry, unless the creature used an ability first in that turn. Ranged attacks raise the "
     "counter but do not join the Warcry."
@@ -62,9 +62,10 @@ RANK_DESCS = [
 ]
 IMPLEMENTED = (
     "Warcry: runtime-owned chain (Homm3StrongholdWarcryRuntime). Attacks and active abilities by friendly stacks keep "
-    "the chain and add 1 to the counter; melee attackers become contributors; a Stronghold unit starting its turn gets "
+    "the chain and add 1 to the counter; melee attackers become contributors; any friendly unit starting its turn gets "
     "counter x contributors x 1/1.5/2 by rank (rounded down) as Attack for the turn; a move, wait or skip breaks it. "
-    "The on-screen chain counter is Homm3StrongholdWarcryCounter."
+    "The on-screen chain counter is Homm3StrongholdWarcryCounter. Law pass 2026-11-25: the Warcry Attack and the "
+    "Battle Tempo Initiative reach every friendly creature, not only Stronghold units (owner)."
 )
 SOURCE_DIFFERENCE = (
     "Replaces the three Warcries hero actions (Rallying, Fortune, Tempo Cry). The ranks carry no native "
@@ -77,7 +78,7 @@ SUBSKILL_TEXT = {
     SUBSKILL_SHAMANS_FURY: ("Shaman's Fury", "The Warcry Attack bonus is also added to the hero's Spell Power."),
     SUBSKILL_BATTLE_TEMPO: (
         "Battle Tempo",
-        f"Stronghold creatures that start a round with the Warcry active gain +{ROUND_INITIATIVE} Initiative for that round.",
+        f"Friendly creatures that start a round with the Warcry active gain +{ROUND_INITIATIVE} Initiative for that round.",
     ),
     SUBSKILL_ANSWERING_ROAR: ("Answering Roar", "A friendly stack that retaliates joins the Warcry."),
     SUBSKILL_BLOOD_RUSH: ("Blood Rush", f"Destroying an enemy stack adds {KILL_BONUS} to the Warcry Attack bonus until the Warcry breaks."),

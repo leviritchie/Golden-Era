@@ -261,12 +261,12 @@ internal static class Homm3CoveTreasurePopup
 	};
 
 	/// <summary>A local player's hero took a map piece: <paramref name="pieces"/> of <paramref name="total"/> held now.</summary>
-	internal static void ShowPiece(int areaId, int pieces, int total, int leads, bool archivist = false)
+	internal static void ShowPiece(int areaId, int pieces, int total, int leads, bool archivist = false, int side = -1)
 	{
 		Page page;
 		// With an Archivist bonus piece the site can be pinned down by any piece, and a side can hold more than the
 		// region's own pieces.
-		var marksTheSpot = leads <= 1 && R.LeadCount(pieces - 1) != 1;
+		var marksTheSpot = leads <= 1 && R.LeadCount(pieces - 1, side) != 1;
 		var count = archivist ? "Bonus map piece from your Archivist." : "Map piece " + N(Math.Min(pieces, total)) + " of " + N(total) + " for this region.";
 		if (marksTheSpot)
 		{
@@ -277,7 +277,8 @@ internal static class Homm3CoveTreasurePopup
 			};
 			page.Facts.Add((count, false));
 			page.Facts.Add(("The treasure site is marked on the map.", false));
-			page.Facts.Add(("Digging needs two thirds of a day's movement.", true));
+			// law pass 2026-11-25: Quick Shovels (#20) is gone, so this is the skill's own dig cost.
+			page.Facts.Add((Homm3CoveLawHooks.DigCostText(side), true));
 		}
 		else
 		{

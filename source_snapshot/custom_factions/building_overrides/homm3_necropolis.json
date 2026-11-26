@@ -1,0 +1,315 @@
+{
+  "factionSid": "homm3_necropolis",
+  "rows": [
+    {
+      "sid": "Build_Bank",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 2500,
+          "wood": 5,
+          "ore": 5
+        }
+      ],
+      "bonuses": [
+        [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              1000
+            ]
+          }
+        ]
+      ],
+      "nameText": "Bank",
+      "descriptionText": "Produces 1000 Gold daily.",
+      "iconFrom": "undead_city:Build_Bank",
+      "notes": "building pass 2026-11-22: plain economy Bank restored (REVIEW 1). It was 'Bone Archive' tagged necromancy_amplifier; the Amplifier now has its own row. Values match vanilla undead_city Build_Bank. Tree agent: gate on Build_Main:2 (the MG1 gate moves to the Amplifier).",
+      "nameTextLocales": {
+        "BRportugese": "Banco",
+        "czech": "Banka",
+        "french": "Banque",
+        "german": "Bank",
+        "hungarian": "Bank",
+        "italian": "Banca",
+        "japanese": "銀行",
+        "korean": "은행",
+        "polish": "Bank",
+        "russian": "Банк",
+        "spanish": "Banco",
+        "turkish": "Banka",
+        "ukrainian": "Банк",
+        "zhCN": "银行",
+        "zhTW": "銀行"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Produz 1000 de Ouro por dia.",
+        "czech": "Denně vyprodukuje 1000 Zlata.",
+        "french": "Produit 1000 d’or par jour.",
+        "german": "Produziert täglich 1000 Gold.",
+        "hungarian": "Naponta 1000 Aranyat termel.",
+        "italian": "Produce 1000 Oro al giorno.",
+        "japanese": "毎日1000ゴールドを生産する。",
+        "korean": "매일 금 1000을 생산합니다.",
+        "polish": "Produkuje 1000 Złota dziennie.",
+        "russian": "Приносит 1000 Золота в день.",
+        "spanish": "Produce 1000 de oro al día.",
+        "turkish": "Günde 1000 Altın üretir.",
+        "ukrainian": "Приносить 1000 Золота на день.",
+        "zhCN": "每天产出1000黄金。",
+        "zhTW": "每天產出1000黃金。"
+      }
+    },
+    {
+      "sid": "Build_Mother_Nature",
+      "section": "cityBonusBanks",
+      "template": "self:Build_Bank",
+      "replace": false,
+      "sceneSlot": "Mother_Nature",
+      "costs": [
+        {
+          "gold": 2500,
+          "gemstones": 3,
+          "crystals": 3,
+          "mercury": 3
+        }
+      ],
+      "bonuses": [
+        []
+      ],
+      "nameText": "Necromancy Amplifier",
+      "descriptionText": "Increases the Necromancy skill of all your heroes by 5%.",
+      "iconFrom": "self:Build_Bank",
+      "plugin": "Homm3SkeletalNecromancyProbe",
+      "notes": "building pass 2026-11-22: necropolis.necromancy_amplifier. Inert cityBonusBanks row; Homm3SkeletalNecromancyProbe adds +5% to the post-battle Necromancy share of a hero who has Necromancy when the side owns at least one Necropolis with this building (does not stack between towns; HoMM3 +10% halved like the port's Necromancy buckets). Template and icon are the pre-pass Bank row (the old Amplifier slot). Tree agent: gate on Build_Magic_Guild:1.",
+      "nameTextLocales": {
+        "BRportugese": "Amplificador de Necromancia",
+        "czech": "Zesilovač nekromancie",
+        "french": "Amplificateur de nécromancie",
+        "german": "Nekromantie-Verstärker",
+        "hungarian": "Nekromancia-erősítő",
+        "italian": "Amplificatore di Necromanzia",
+        "japanese": "ネクロマンシー増幅器",
+        "korean": "강령술 증폭기",
+        "polish": "Wzmacniacz nekromancji",
+        "russian": "Усилитель некромантии",
+        "spanish": "Amplificador de Nigromancia",
+        "turkish": "Ölü Çağırma Yükselticisi",
+        "ukrainian": "Підсилювач некромантії",
+        "zhCN": "死灵法术增幅器",
+        "zhTW": "死靈法術增幅器"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Aumenta a habilidade Necromancia de todos os seus heróis em 5%.",
+        "czech": "Zvyšuje dovednost Nekromancie všech vašich hrdinů o 5 %.",
+        "french": "Augmente de 5 % la compétence Nécromancie de tous vos héros.",
+        "german": "Erhöht die Fertigkeit Nekromantie aller Ihrer Helden um 5 %.",
+        "hungarian": "Minden hősöd Nekromancia képességét 5%-kal növeli.",
+        "italian": "Aumenta del 5% l’abilità Necromanzia di tutti i tuoi eroi.",
+        "japanese": "すべての英雄のネクロマンシースキルを5%上昇させる。",
+        "korean": "모든 영웅의 강령술 기술을 5% 증가시킵니다.",
+        "polish": "Zwiększa umiejętność Nekromancja wszystkich twoich bohaterów o 5%.",
+        "russian": "Повышает навык Некромантия всех ваших героев на 5%.",
+        "spanish": "Aumenta un 5% la habilidad Nigromancia de todos tus héroes.",
+        "turkish": "Tüm kahramanlarınızın Ölü Çağırma yeteneğini %5 artırır.",
+        "ukrainian": "Підвищує навичку Некромантія всіх ваших героїв на 5%.",
+        "zhCN": "使你所有英雄的死灵法术技能提高5%。",
+        "zhTW": "使你所有英雄的死靈法術技能提高5%。"
+      }
+    },
+    {
+      "sid": "Build_Mycelium_Roots",
+      "section": "cityBonusBanks",
+      "template": "self:Build_Bank",
+      "replace": false,
+      "sceneSlot": "Mycelium_Roots",
+      "costs": [
+        {
+          "gold": 2500
+        }
+      ],
+      "bonuses": [
+        []
+      ],
+      "nameText": "Cover of Darkness",
+      "descriptionText": "Covers the area around this city in darkness for enemy players.",
+      "iconFrom": "undead_city:Build_Well_Of_Souls",
+      "plugin": "Homm3NecropolisCoverOfDarknessRuntime",
+      "notes": "building pass 2026-11-22: necropolis.cover_of_darkness. Inert cityBonusBanks row; Homm3NecropolisCoverOfDarknessRuntime re-fogs the squares within 20 of this city for every other side at that side's day start (their own heroes and towns keep their sight). Price is the vanilla cheap-utility special (2500 Gold). Root, as in HoMM3.",
+      "nameTextLocales": {
+        "BRportugese": "Manto das Trevas",
+        "czech": "Rouška temnoty",
+        "french": "Voile des ténèbres",
+        "german": "Mantel der Dunkelheit",
+        "hungarian": "Sötétség leple",
+        "italian": "Manto di Tenebre",
+        "japanese": "闇のとばり",
+        "korean": "어둠의 장막",
+        "polish": "Całun mroku",
+        "russian": "Покров тьмы",
+        "spanish": "Manto de Oscuridad",
+        "turkish": "Karanlık Örtüsü",
+        "ukrainian": "Покрив темряви",
+        "zhCN": "黑暗之幕",
+        "zhTW": "黑暗之幕"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Cobre a região ao redor desta cidade em trevas para os jogadores inimigos.",
+        "czech": "Zahalí okolí tohoto města do tmy pro nepřátelské hráče.",
+        "french": "Plonge dans les ténèbres les environs de cette ville pour les joueurs ennemis.",
+        "german": "Hüllt die Umgebung dieser Stadt für gegnerische Spieler in Dunkelheit.",
+        "hungarian": "Sötétségbe borítja a város környékét az ellenséges játékosok számára.",
+        "italian": "Avvolge nell’oscurità l’area intorno a questa città per i giocatori nemici.",
+        "japanese": "この都市の周囲を敵プレイヤーから見えない闇で覆う。",
+        "korean": "적 플레이어에게 이 도시 주변 지역을 어둠으로 뒤덮습니다.",
+        "polish": "Spowija mrokiem okolice tego miasta dla wrogich graczy.",
+        "russian": "Окутывает тьмой окрестности этого города для вражеских игроков.",
+        "spanish": "Cubre de oscuridad la zona que rodea esta ciudad para los jugadores enemigos.",
+        "turkish": "Bu şehrin çevresini düşman oyunculara karşı karanlığa gömer.",
+        "ukrainian": "Огортає темрявою околиці цього міста для ворожих гравців.",
+        "zhCN": "对敌方玩家而言，这座城市周围的区域笼罩在黑暗之中。",
+        "zhTW": "對敵方玩家而言，這座城市周圍的區域籠罩在黑暗之中。"
+      }
+    },
+    {
+      "sid": "Build_Skeleton_Converter",
+      "section": "unitsConverters",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 1000,
+          "ore": 5,
+          "wood": 5
+        }
+      ],
+      "fields": {
+        "conversionPairs": [
+          {
+            "tier": 1,
+            "sid": "h3_skeleton"
+          },
+          {
+            "tier": 2,
+            "sid": "h3_skeleton"
+          },
+          {
+            "tier": 3,
+            "sid": "h3_skeleton"
+          },
+          {
+            "tier": 4,
+            "sid": "h3_skeleton"
+          },
+          {
+            "tier": 5,
+            "sid": "h3_skeleton"
+          },
+          {
+            "tier": 6,
+            "sid": "h3_skeleton"
+          },
+          {
+            "tier": 7,
+            "sid": "h3_bone_dragon"
+          }
+        ],
+        "bannedUnits": [
+          "h3_skeleton",
+          "h3_skeleton_upg",
+          "h3_skeleton_upg_alt",
+          "h3_bone_dragon",
+          "h3_bone_dragon_upg",
+          "h3_bone_dragon_upg_alt"
+        ]
+      },
+      "nameText": "Skeleton Transformer",
+      "descriptionText": "Converts creatures into Skeletons; 7th-level creatures become Bone Dragons.",
+      "notes": "building pass 2026-11-22: necropolis.skeleton_transformer. Native unitsConverters: tiers 1-6 -> h3_skeleton, tier 7 -> h3_bone_dragon; only the Skeleton and Bone Dragon lines are banned, so other undead convert too (HoMM3). Price unchanged. Tree agent: make it a root (drop the T1 gate).",
+      "nameTextLocales": {
+        "BRportugese": "Transformador de Esqueletos",
+        "czech": "Přeměňovač kostlivců",
+        "french": "Transformateur de squelettes",
+        "german": "Skelett-Transformator",
+        "hungarian": "Csontváz-átalakító",
+        "italian": "Trasformatore di Scheletri",
+        "japanese": "スケルトン変換器",
+        "korean": "스켈레톤 변환기",
+        "polish": "Transformator szkieletów",
+        "russian": "Преобразователь скелетов",
+        "spanish": "Transformador de Esqueletos",
+        "turkish": "İskelet Dönüştürücü",
+        "ukrainian": "Перетворювач скелетів",
+        "zhCN": "骷髅转化器",
+        "zhTW": "骷髏轉化器"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Converte criaturas em Esqueletos; criaturas de 7º nível se tornam Dragões de Ossos.",
+        "czech": "Přeměňuje stvoření na Kostlivce; stvoření 7. úrovně se mění na Kostěné draky.",
+        "french": "Transforme les créatures en Squelettes ; les créatures de niveau 7 deviennent des Dragons d’os.",
+        "german": "Verwandelt Kreaturen in Skelette; Kreaturen der 7. Stufe werden zu Knochendrachen.",
+        "hungarian": "A lényeket Csontvázakká alakítja; a 7. szintű lényekből Csontsárkányok lesznek.",
+        "italian": "Converte le creature in Scheletri; le creature di 7° livello diventano Draghi Ossei.",
+        "japanese": "クリーチャーをスケルトンに変換する。レベル7のクリーチャーはボーンドラゴンになる。",
+        "korean": "크리처를 스켈레톤으로 변환합니다. 7레벨 크리처는 본 드래곤이 됩니다.",
+        "polish": "Zamienia stworzenia w Szkielety; stworzenia 7. poziomu stają się Kościanymi smokami.",
+        "russian": "Превращает существ в Скелетов; существа 7-го уровня становятся Костяными драконами.",
+        "spanish": "Convierte criaturas en Esqueletos; las criaturas de nivel 7 se convierten en Dragones Óseos.",
+        "turkish": "Yaratıkları İskeletlere dönüştürür; 7. seviye yaratıklar Kemik Ejderhalarına dönüşür.",
+        "ukrainian": "Перетворює істот на Скелетів; істоти 7-го рівня стають Кістяними драконами.",
+        "zhCN": "将生物转化为骷髅;7级生物变为骨龙。",
+        "zhTW": "將生物轉化為骷髏;7級生物變為骨龍。"
+      }
+    },
+    {
+      "sid": "Build_Gaping_Maw",
+      "section": "graals",
+      "replace": true,
+      "costs": [
+        {
+          "graal": 1
+        }
+      ],
+      "nameText": "Soul Prison",
+      "descriptionText": "Increases the Necromancy skill of all your heroes by 10%. All friendly creatures gain +10 Defense and take −50% Lucky Strike Damage in battle (including from spells). This city's dwellings produce +100% units.",
+      "plugin": "Homm3SkeletalNecromancyProbe",
+      "notes": "building pass 2026-11-22: necropolis.soul_prison. Owner answer 3: keeps the UndeadGraal +10 Defense / -50% enemy crit side bonuses and the +100% city growth; Homm3SkeletalNecromancyProbe adds +10% Necromancy while the side owns it (HoMM3 +20% halved). Stacks with the Amplifier.",
+      "nameTextLocales": {
+        "BRportugese": "Prisão de Almas",
+        "czech": "Vězení duší",
+        "french": "Prison des âmes",
+        "german": "Seelengefängnis",
+        "hungarian": "Lélekbörtön",
+        "italian": "Prigione delle Anime",
+        "japanese": "魂の牢獄",
+        "korean": "영혼의 감옥",
+        "polish": "Więzienie dusz",
+        "russian": "Тюрьма душ",
+        "spanish": "Prisión de Almas",
+        "turkish": "Ruh Hapishanesi",
+        "ukrainian": "В’язниця душ",
+        "zhCN": "灵魂牢狱",
+        "zhTW": "靈魂牢獄"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Aumenta a habilidade Necromancia de todos os seus heróis em 10%. Todas as criaturas aliadas ganham +10 de Defesa e sofrem −50% de Dano de Golpe de Sorte em batalha (inclusive de magias). As moradias desta cidade produzem +100% de unidades.",
+        "czech": "Zvyšuje dovednost Nekromancie všech vašich hrdinů o 10 %. Všechna přátelská stvoření získají +10 Obrany a v bitvě utrpí −50 % Poškození šťastným zásahem (včetně kouzel). Obydlí tohoto města produkují +100 % jednotek.",
+        "french": "Augmente de 10 % la compétence Nécromancie de tous vos héros. Toutes les créatures alliées gagnent +10 en Défense et subissent −50 % de Dégâts de coup de chance au combat (sorts compris). Les habitations de cette ville produisent +100 % d’unités.",
+        "german": "Erhöht die Fertigkeit Nekromantie aller Ihrer Helden um 10 %. Alle verbündeten Kreaturen erhalten +10 Verteidigung und erleiden im Kampf −50 % Schaden durch Glückstreffer (auch durch Zauber). Die Behausungen dieser Stadt produzieren +100 % Einheiten.",
+        "hungarian": "Minden hősöd Nekromancia képességét 10%-kal növeli. Minden baráti lény +10 Védelmet kap, és csatában −50% Szerencsés találat sebzést szenved el (a varázslatokból is). A város lakhelyei +100% egységet termelnek.",
+        "italian": "Aumenta del 10% l’abilità Necromanzia di tutti i tuoi eroi. Tutte le creature alleate ottengono +10 Difesa e subiscono −50% di Danno da Colpo Fortunato in battaglia (incluso quello degli incantesimi). Le abitazioni di questa città producono +100% di unità.",
+        "japanese": "すべての英雄のネクロマンシースキルを10%上昇させる。味方のすべてのクリーチャーは防御力+10を得て、戦闘中に受ける幸運打ちのダメージが−50%になる(呪文によるものを含む)。この都市の住居は+100%の部隊を生産する。",
+        "korean": "모든 영웅의 강령술 기술을 10% 증가시킵니다. 모든 아군 크리처가 방어력 +10을 얻고, 전투 중 행운 일격 피해를 −50% 받습니다(주문 포함). 이 도시의 거주지는 +100%의 부대를 생산합니다.",
+        "polish": "Zwiększa umiejętność Nekromancja wszystkich twoich bohaterów o 10%. Wszystkie przyjazne stworzenia zyskują +10 Obrony i otrzymują −50% Zadawanych obrażeń od szczęśliwego trafienia w bitwie (także od czarów). Siedliska w tym mieście produkują +100% jednostek.",
+        "russian": "Повышает навык Некромантия всех ваших героев на 10%. Все дружественные существа получают +10 к Защите и получают на 50% меньше Урона от удачного удара в бою (включая заклинания). Жилища этого города производят на 100% больше существ.",
+        "spanish": "Aumenta un 10% la habilidad Nigromancia de todos tus héroes. Todas las criaturas aliadas obtienen +10 de Defensa y sufren un −50% de Daño de Golpe Afortunado en combate (incluido el de hechizos). Las viviendas de esta ciudad producen +100% de unidades.",
+        "turkish": "Tüm kahramanlarınızın Ölü Çağırma yeteneğini %10 artırır. Tüm dost yaratıklar +10 Savunma kazanır ve savaşta Şanslı Vuruş Hasarını −%50 oranında alır (büyülerden gelenler dahil). Bu şehrin konutları +%100 birim üretir.",
+        "ukrainian": "Підвищує навичку Некромантія всіх ваших героїв на 10%. Усі дружні істоти отримують +10 до Захисту та зазнають на 50% менше Шкоди від щасливого удару в бою (зокрема від заклинань). Житла цього міста виробляють на 100% більше істот.",
+        "zhCN": "使你所有英雄的死灵法术技能提高10%。所有友方生物获得+10防御，战斗中受到的幸运一击伤害−50%（包括法术）。这座城市的住所产量+100%。",
+        "zhTW": "使你所有英雄的死靈法術技能提高10%。所有友方生物獲得+10防禦，戰鬥中受到的幸運一擊傷害−50%（包括法術）。這座城市的住所產量+100%。"
+      }
+    }
+  ],
+  "remove": []
+}

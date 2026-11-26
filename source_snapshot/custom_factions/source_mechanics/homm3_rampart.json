@@ -43,29 +43,49 @@
       "id": "rampart.mystic_pond",
       "surface": "building",
       "sourceName": "Mystic Pond",
-      "status": "substituted",
-      "reason": "Random-resource source behavior is represented as a fixed native economy substitute until random income is traced.",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: own row Build_Mystic_Pond (banks carrier, no native bonus). Homm3RampartWeeklyIncomeRuntime adds 1-4 of one random rare resource (Mercury, Crystals or Gemstones) per owned Pond city at the owner's first day of each week, paid once per week (persisted in the save). The Bank slot is a plain economy Bank again.",
       "playerTextPolicy": "must_match_current_behavior",
       "currentRows": [
-        "Build_Bank"
+        "Build_Mystic_Pond"
       ],
-      "forbiddenPlayerText": [
-        "random resource"
-      ]
+      "validationOwner": "validate_source_mechanics_contract"
     },
     {
       "id": "rampart.fountain_of_fortune",
       "surface": "building",
       "sourceName": "Fountain of Fortune",
-      "status": "substituted",
-      "reason": "Luck/fountain source behavior is represented through a modest native-safe substitute until exact behavior is traced.",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: the visiting-hero Spell Power substitute is removed; Build_Mother_Nature is a banks carrier and the hero defending this city in a siege gets +2 Luck through the runtime agent's Homm3TownSiegeDefenseRuntime, the HoMM3 effect. A heroless garrison gets nothing.",
       "playerTextPolicy": "must_match_current_behavior",
       "currentRows": [
         "Build_Mother_Nature"
       ],
-      "forbiddenPlayerText": [
-        "Luck"
-      ]
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "rampart.treasury",
+      "surface": "building",
+      "sourceName": "Treasury",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: own row Build_Rampart_Treasury (banks carrier). Homm3RampartWeeklyIncomeRuntime adds 10% of the gold the side holds (before that day's income), rounded down, per owned Treasury city at the owner's first day of each week, uncapped as in HoMM3, paid once per week (persisted in the save).",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Rampart_Treasury"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
+    },
+    {
+      "id": "rampart.spirit_guardian",
+      "surface": "building",
+      "sourceName": "Spirit Guardian",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: the grail keeps its current extras (+1 growth in all cities, +100% city growth; owner answer 3) and adds the HoMM3 +2 Luck for all the owner's heroes as a native graal side heroStat.",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Spring_of_Life"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
     },
     {
       "id": "rampart.avenger",

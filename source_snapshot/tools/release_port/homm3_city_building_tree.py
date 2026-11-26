@@ -12,7 +12,14 @@ Reference: VCMI's SoD faction configs (``vcmi/vcmi`` ``config/factions/*.json`` 
 ``config/buildingsLibrary.json``) and the HotA mod (``vcmi-mods/horn-of-the-abyss``
 ``mods/{cove,factory,bulwark}/.../town``). Fetched 2026-10-01. ``upgrades`` in VCMI
 means "requires the building it upgrades"; here every level > 1 requires the level
-before it implicitly and the table lists only the extra HoMM3 requirements.
+before it implicitly and the table lists only the extra requirements.
+
+Building pass 2026-11-22 (``docs/building_pass_20261122/``): the HoMM3 requirements are
+trimmed to the vanilla OE conventions measured across the 6 stock cities - the shared
+economy is the vanilla template, dwelling upgrades need only their own L1 (a T7 upgrade
+may take one Mage Guild level), nothing requires an upgraded dwelling, a dwelling L1 has
+at most 2 base-level dwelling prerequisites and sits at most 4 deep, and a special takes
+at most one prerequisite. ``validate_homm3_city_building_tree_contract.py`` enforces them.
 
 OE SID -> HoMM3 building identity follows each city's English name row (the names
 the player sees in the build panel); see ``docs/homm3_city_building_tree.md`` for the
@@ -49,248 +56,349 @@ def HALL(level: int) -> Req:
     return (MAIN, level)
 
 
-# Level-1 prerequisites shared by every HoMM3 city (HoMM3 common buildings).
+# Shared economy, identical in every HoMM3 city and equal to the vanilla OE template
+# measured across all 6 stock cities (building pass 2026-11-22, BRIEF Part B):
+# Town Hall L2/L3 need only the previous level, Market <- Tavern, Artifact Market <-
+# Market, Bank <- Town Hall L2, Treasury <- Bank + Fort, Resource Depot <- Market + Bank;
+# Mage Guild, Wall, Tavern and the grail need only their own chain. Every city's
+# Build_Bank is the plain economy Bank (REVIEW §1), so no faction overrides these rows
+# except where the slot SID holds a different building (Inferno's Build_Resource_Depot
+# is the Birthing Pools horde).
 COMMON_LEVEL_REQS: dict[str, tuple[Req, ...]] = {
     "Build_Main:1": (),  # Village Hall
-    "Build_Main:2": (TAVERN,),  # Town Hall requires Tavern
-    "Build_Main:3": (MG(1), MARKET),  # City Hall requires MG1 + Marketplace (HoMM3 also needs the Blacksmith, which is OE's Treasury here)
+    "Build_Main:2": (),  # Town Hall: previous level only (vanilla; the HoMM3 Tavern gate is gone)
+    "Build_Main:3": (),  # City Hall: previous level only (vanilla; the HoMM3 MG1 + Marketplace gate is gone)
     "Build_Tavern:1": (),
-    "Build_Market:1": (),  # HoMM3 Marketplace has no requirement (vanilla OE gates it on Tavern; HoMM3 wins)
-    "Build_Artifact_Market:1": (MARKET,),  # Artifact Merchants require Marketplace
-    "Build_Resource_Depot:1": (MARKET,),  # Resource Silo requires Marketplace
+    "Build_Market:1": (TAVERN,),  # Market <- Tavern (vanilla)
+    "Build_Artifact_Market:1": (MARKET,),  # Artifact Market <- Market (vanilla)
+    "Build_Resource_Depot:1": (MARKET, BANK),  # Resource Silo <- Market + Bank (vanilla Resource Depot)
     "Build_Treasury:1": (BANK, WALL(1)),  # Blacksmith = vanilla OE Treasury: Bank + Fort, exactly as every vanilla city
     "Build_Wall:1": (),  # Fort
     "Build_Magic_Guild:1": (),
-    # OE daily-gold income rows on the donor Bank SID keep the vanilla OE Town Hall gate
-    # unless the faction table names a HoMM3 identity for them.
-    "Build_Bank:1": (HALL(2),),
-    # Dwelling 1 is a root (see ADAPTATIONS["*"]); every upgrade requires its base.
+    "Build_Bank:1": (HALL(2),),  # economy Bank <- Town Hall L2 (vanilla)
+    # Dwelling 1 is a root (see ADAPTATIONS["*"]); every upgrade requires only its base.
     "Build_Tier_1:1": (),
 }
 
 # Faction-specific entries. Keys are "SID:level"; values are the extra requirements
 # beyond the implicit previous level. A level-1 key with () is a declared root.
+# Dwelling L1 keeps the HoMM3 unlock order trimmed to vanilla density: at most 2
+# base-level dwellings (plus a Mage Guild level, or Castle's Stables), and no dwelling
+# L1 deeper than 4 in the chain, so every tree draws strictly in the 5 native rows as
+# every vanilla city does. Dwelling upgrades need only their own L1 except a T7 upgrade,
+# which may take one Mage Guild level. Nothing requires an upgraded dwelling. A special
+# takes at most one prerequisite; a horde keeps its own base dwelling.
 FACTION_LEVEL_REQS: dict[str, dict[str, tuple[Req, ...]]] = {
     "homm3_castle": {
         "Build_Tier_2:1": (T(1),),  # Archers' Tower <- Guardhouse
         "Build_Tier_3:1": (T(4),),  # Griffin Tower <- Barracks
         "Build_Tier_4:1": (T(1),),  # Barracks <- Guardhouse (HoMM3 Blacksmith gate dropped: OE Treasury)
-        "Build_Tier_5:1": (MG(1), T(4)),  # Monastery <- MG1 + Barracks
-        "Build_Tier_6:1": (BANK,),  # Training Grounds <- Stables (Mounted Guard Yard)
+        "Build_Tier_5:1": (T(4),),  # Monastery <- Barracks (HoMM3 MG1 gate dropped: dwellings below T7 take dwellings only)
+        "Build_Tier_6:1": (("Build_Stables", 1),),  # Training Grounds <- Stables
         "Build_Tier_7:1": (T(5),),  # Portal of Glory <- Monastery
-        "Build_Bank:1": (T(4),),  # Mounted Guard Yard = Stables <- Barracks
+        "Build_Stables:1": (),  # Stables (HoMM3: <- Barracks; rooted so the T1 -> T4 -> Stables -> T6 chain stays vanilla depth)
+        "Build_Mother_Nature:1": (TAVERN,),  # Brotherhood of the Sword <- Tavern
+        "Build_Mycelium_Roots:1": (),  # Signal Beacon (Lighthouse; its Shipyard gate cannot exist)
         "Build_Resource_Depot_level_2:1": (T(3),),  # Griffin Bastion (horde) <- Griffin Tower
-        "Build_Golden_Calf:1": (),  # grail
+        "Build_Golden_Calf:1": (),  # grail (Colossus)
     },
     "homm3_rampart": {
         "Build_Tier_2:1": (T(1),),  # Dwarf Cottage <- Centaur Stables
-        "Build_Tier_3:1": (T(1),),  # Homestead <- Centaur Stables
+        "Build_Tier_3:1": (),  # Homestead (HoMM3 <- Centaur Stables; rooted so Dragon Cliffs is a 4-deep dwelling, as in vanilla)
         "Build_Tier_4:1": (T(3),),  # Enchanted Spring <- Homestead
         "Build_Tier_5:1": (T(3),),  # Dendroid Arches <- Homestead
         "Build_Tier_6:1": (T(4), T(5)),  # Unicorn Glade <- Enchanted Spring + Dendroid Arches
         "Build_Tier_7:1": (T(6), MG(2)),  # Dragon Cliffs <- Unicorn Glade + MG2
-        "Build_Tier_7:2": (MG(3),),  # Upg. Dragon Cliffs <- MG3
-        "Build_Bank:1": (HALL(2),),  # Mystic Pond (HoMM3: none) keeps the OE income gate
-        "Build_Mother_Nature:1": (BANK,),  # Fountain of Fortune upgrades Mystic Pond
-        "Build_Artifact_Market:1": (MARKET, ("Build_Resource_Depot_level_2", 1)),  # Treasury <- Miners' Guild (+ market: it trades artifacts)
+        "Build_Tier_7:2": (MG(3),),  # Upg. Dragon Cliffs <- MG3 (the allowed T7-upgrade Mage Guild gate)
+        "Build_Mystic_Pond:1": (),  # Mystic Pond (HoMM3: none)
+        "Build_Mother_Nature:1": (("Build_Mystic_Pond", 1),),  # Fountain of Fortune upgrades the Mystic Pond
+        "Build_Rampart_Treasury:1": (),  # Treasury (HoMM3 <- Miners' Guild: a special-on-horde chain vanilla never uses)
         "Build_Resource_Depot_level_2:1": (T(2),),  # Miners' Guild (horde) <- Dwarf Cottage
         "Build_Mycelium_Roots:1": (T(5),),  # Dendroid Saplings (horde) <- Dendroid Arches
-        "Build_Spring_of_Life:1": (),  # grail
+        "Build_Spring_of_Life:1": (),  # grail (Spirit Guardian)
     },
     "homm3_tower": {
-        "Build_Tier_2:1": (T(1),),  # Parapet <- Workshop
-        "Build_Tier_3:1": (T(1),),  # Golem Factory <- Workshop
-        "Build_Tier_4:1": (MG(1), T(2), T(3)),  # Mage Tower <- MG1 + Parapet + Golem Factory
+        "Build_Tier_2:1": (),  # Parapet (HoMM3 <- Workshop; rooted so Cloud Temple is a 4-deep dwelling)
+        "Build_Tier_3:1": (),  # Golem Factory (HoMM3 <- Workshop; rooted for the same depth)
+        "Build_Tier_4:1": (T(2), T(3)),  # Mage Tower <- Parapet + Golem Factory (HoMM3 MG1 gate dropped)
         "Build_Tier_5:1": (T(4),),  # Altar of Wishes <- Mage Tower
         "Build_Tier_6:1": (T(4),),  # Golden Pavilion <- Mage Tower
         "Build_Tier_7:1": (T(5), T(6)),  # Cloud Temple <- Altar of Wishes + Golden Pavilion
-        "Build_Intelligence_Academy:1": (WALL(1),),  # Lookout Tower <- Fort
+        "Build_Intelligence_Academy:1": (),  # Lookout Tower (vanilla Intelligence Academy is a root)
         "Build_Training_Range:1": (MG(1),),  # Wall of Knowledge <- MG1
-        "Build_Bank:1": (HALL(3), WALL(3)),  # Capitol Vault = Capitol <- City Hall + Castle
+        "Build_Library:1": (MG(1),),  # Library <- MG1 (it no longer gates Upg. Mage Tower)
         "Build_Resource_Depot_level_2:1": (T(2),),  # Sculptor's Wings (horde) <- Parapet
-        "Build_Golden_Calf:1": (),  # grail
+        "Build_Golden_Calf:1": (),  # grail (Skyship)
     },
     "homm3_inferno": {
-        "Build_Tier_2:1": (T(1),),  # Hall of Sins <- Imp Crucible
+        "Build_Tier_2:1": (),  # Hall of Sins (HoMM3 <- Imp Crucible; rooted for vanilla depth, as vanilla Demon)
         "Build_Tier_3:1": (T(1),),  # Kennels <- Imp Crucible
         "Build_Tier_4:1": (T(2),),  # Demon Gate <- Hall of Sins
         "Build_Tier_5:1": (T(4),),  # Hell Hole <- Demon Gate
-        "Build_Tier_5:2": (MG(2),),  # Upg. Hell Hole <- MG2
         "Build_Tier_6:1": (MG(1), T(4)),  # Fire Lake <- MG1 + Demon Gate
         "Build_Tier_7:1": (T(5), T(6)),  # Forsaken Palace <- Hell Hole + Fire Lake
         "Build_Resource_Depot:1": (T(1),),  # Birthing Pools (horde) <- Imp Crucible
-        "Build_Resource_Depot_level_2:1": (WALL(1),),  # Brimstone Tolls = Brimstone Clouds <- Fort
-        "Build_Bank:1": (WALL(2),),  # Castle Gate <- Citadel
+        "Build_Resource_Depot_level_2:1": (WALL(1),),  # Brimstone Stormclouds <- Fort
+        "Build_Mycelium_Roots:1": (WALL(2),),  # Castle Gate <- Citadel (also the vanilla Mycelium Roots gate)
+        "Build_Mother_Nature:1": (MG(1),),  # Order of Fire <- MG1
         "Build_Beelzebubs_Hand:1": (),  # OE-native (vanilla demon root)
         "Build_Rebirth_Of_Shrine:1": (WALL(1),),  # OE-native (vanilla demon gate)
-        "Build_Eternal_Flame:1": (),  # grail
+        "Build_Eternal_Flame:1": (),  # grail (Deity of Fire)
     },
     "homm3_necropolis": {
-        "Build_Tier_2:1": (T(1),),  # Graveyard <- Cursed Temple
+        "Build_Tier_2:1": (),  # Graveyard (HoMM3 <- Cursed Temple; rooted for vanilla depth, as vanilla Undead)
         "Build_Tier_3:1": (T(1),),  # Tomb of Souls <- Cursed Temple
         "Build_Tier_4:1": (T(2),),  # Estate <- Graveyard
-        "Build_Tier_4:2": (BANK,),  # Upg. Estate <- Necromancy Amplifier (Bone Archive)
         "Build_Tier_5:1": (MG(1), T(2)),  # Mausoleum <- MG1 + Graveyard
         "Build_Tier_6:1": (T(4), T(5)),  # Hall of Darkness <- Estate + Mausoleum
         "Build_Tier_7:1": (T(6),),  # Dragon Vault <- Hall of Darkness
-        "Build_Bank:1": (MG(1),),  # Bone Archive = Necromancy Amplifier <- MG1
-        "Build_Skeleton_Converter:1": (T(1),),  # Bone Foundry = Skeleton Transformer <- Cursed Temple
-        "Build_Resource_Depot_level_2:1": (T(1), ("Build_Skeleton_Converter", 1)),  # Unearthed Graves (horde) <- Cursed Temple + Transformer
+        "Build_Mother_Nature:1": (MG(1),),  # Necromancy Amplifier <- MG1
+        "Build_Mycelium_Roots:1": (),  # Cover of Darkness (HoMM3: none)
+        "Build_Skeleton_Converter:1": (),  # Skeleton Transformer (HoMM3: none)
+        "Build_Resource_Depot_level_2:1": (T(1),),  # Unearthed Graves (horde) <- Cursed Temple
         "Build_Well_Of_Souls:1": (MG(3),),  # OE-native (vanilla undead gate)
-        "Build_Gaping_Maw:1": (),  # grail
+        "Build_Gaping_Maw:1": (),  # grail (Soul Prison)
     },
     "homm3_dungeon": {
-        "Build_Tier_2:1": (T(1),),  # Harpy Loft <- Warren
+        "Build_Tier_2:1": (),  # Harpy Loft (HoMM3 <- Warren; rooted for vanilla depth)
         "Build_Tier_3:1": (T(1),),  # Pillar of Eyes <- Warren
-        "Build_Tier_4:1": (T(2), T(3)),  # Chapel of Stilled Voices <- Harpy Loft + Pillar of Eyes
+        "Build_Tier_4:1": (T(2),),  # Chapel of Stilled Voices <- Harpy Loft
         "Build_Tier_5:1": (T(4),),  # Labyrinth <- Chapel
         "Build_Tier_6:1": (T(4),),  # Manticore Lair <- Chapel
-        "Build_Tier_7:1": (MG(2), T(5), T(6)),  # Dragon Cave <- MG2 + Labyrinth + Manticore Lair
-        "Build_Tier_7:2": (MG(3),),  # Upg. Dragon Cave <- MG3
-        "Build_Bank:1": (MG(1),),  # Spellwell = Mana Vortex <- MG1
+        "Build_Tier_7:1": (MG(2), T(6)),  # Dragon Cave <- MG2 + Manticore Lair
+        "Build_Tier_7:2": (MG(3),),  # Upg. Dragon Cave <- MG3 (as vanilla Dungeon)
+        "Build_Well_Of_Souls:1": (MG(1),),  # Mana Vortex <- MG1
+        "Build_Portal_Summoning:1": (),  # Portal of Summoning (HoMM3: none); replaces the Lyceum
         "Build_Resource_Depot_level_2:1": (T(1),),  # Mushroom Rings (horde) <- Warren
-        "Build_Gymnasium:1": (),  # Academy of Battle Scholars (HoMM3: none)
-        "Build_Lyceum:1": (),  # OE-native (vanilla dungeon root)
-        "Build_Spy_Network:1": (),  # grail
+        "Build_Gymnasium:1": (),  # Battle Scholar Academy (HoMM3: none)
+        "Build_Spy_Network:1": (),  # grail (Guardian of Earth)
     },
     "homm3_stronghold": {
         "Build_Tier_2:1": (T(1),),  # Wolf Pen <- Goblin Barracks
-        "Build_Tier_2:2": (T(1, 2),),  # Upg. Wolf Pen <- Upg. Goblin Barracks
         "Build_Tier_3:1": (T(1),),  # Orc Tower <- Goblin Barracks
-        "Build_Tier_3:2": (),  # Upg. Orc Tower (HoMM3 Blacksmith gate dropped: OE Treasury)
         "Build_Tier_4:1": (T(3),),  # Ogre Fort <- Orc Tower
-        "Build_Tier_4:2": (MG(1),),  # Upg. Ogre Fort <- MG1
         "Build_Tier_5:1": (T(2),),  # Cliff Nest <- Wolf Pen
         "Build_Tier_6:1": (T(4),),  # Cyclops Cave <- Ogre Fort
         "Build_Tier_7:1": (T(5),),  # Behemoth Lair <- Cliff Nest
-        "Build_Bank:1": (HALL(2),),  # Muster Yard (OE income row)
-        "Build_Resource_Depot_level_2:1": (SILO,),  # Resource Silo II (OE-only second silo)
+        "Build_Resource_Depot_level_2:1": (MARKET,),  # Freelancer's Guild <- Marketplace
         "Build_Gymnasium:1": (WALL(1),),  # Hall of Valhalla <- Fort
         "Build_Lyceum:1": (T(1),),  # Mess Hall (Goblin horde) <- Goblin Barracks
-        "Build_Spy_Network:1": (),  # grail slot (Escape Vault)
+        "Build_Spy_Network:1": (),  # grail (Warlords' Monument); the Escape Tunnel rides the Fort (Build_Wall L1)
     },
     "homm3_fortress": {
-        "Build_Tier_1:2": (TAVERN,),  # Upg. Gnoll Hut <- Tavern
         "Build_Tier_2:1": (T(1),),  # Lizard Den <- Gnoll Hut
         "Build_Tier_3:1": (T(1),),  # Serpent Fly Hive <- Gnoll Hut
         "Build_Tier_4:1": (T(3),),  # Basilisk Pit <- Serpent Fly Hive
         "Build_Tier_5:1": (T(2), T(3)),  # Gorgon Lair <- Lizard Den + Serpent Fly Hive
-        "Build_Tier_5:2": (SILO,),  # Upg. Gorgon Lair <- Resource Silo
         "Build_Tier_6:1": (T(2),),  # Wyvern Nest <- Lizard Den
         "Build_Tier_7:1": (T(4), T(6)),  # Hydra Pond <- Basilisk Pit + Wyvern Nest
-        "Build_Bank:1": (HALL(2), ("Build_Mother_Nature", 1)),  # Cage of Warlords <- Town Hall + Glyphs of Fear
+        "Build_Gymnasium:1": (HALL(2),),  # Cage of Warlords <- Town Hall (moved off Build_Bank, REVIEW §1)
         "Build_Mother_Nature:1": (WALL(1),),  # Glyphs of Fear <- Fort
-        "Build_Mycelium_Roots:1": (T(7),),  # Hydra Marsh (Hydra horde) <- Hydra Pond
+        "Build_Mycelium_Roots:1": (WALL(1),),  # Blood Obelisk <- Fort (HoMM3 via Glyphs; no special-on-special chain)
         "Build_Resource_Depot_level_2:1": (T(1),),  # Captain's Quarters (Gnoll horde) <- Gnoll Hut
-        "Build_Spring_of_Life:1": (),  # grail
+        "Build_Spring_of_Life:1": (),  # grail (Carnivorous Plant)
     },
     "homm3_conflux": {
-        "Build_Tier_2:1": (T(1), MG(1)),  # Altar of Air <- Magic Lantern + MG1
-        "Build_Tier_3:1": (T(1), MG(1)),  # Altar of Water <- Magic Lantern + MG1
+        "Build_Tier_2:1": (),  # Altar of Air (HoMM3 <- Magic Lantern + MG1; rooted so the Pyre is a 4-deep dwelling)
+        "Build_Tier_3:1": (),  # Altar of Water (HoMM3 <- Magic Lantern + MG1; rooted for the same depth)
         "Build_Tier_4:1": (T(2),),  # Altar of Fire <- Altar of Air
         "Build_Tier_5:1": (T(3),),  # Altar of Earth <- Altar of Water
         "Build_Tier_6:1": (T(4), T(5)),  # Altar of Thought <- Fire + Earth
-        "Build_Tier_6:2": (MG(2),),  # Upg. Altar of Thought <- MG2
         "Build_Tier_7:1": (T(6),),  # Pyre <- Altar of Thought
-        "Build_Bank:1": (MG(1),),  # Magic University <- MG1
+        "Build_Magic_University:1": (MG(1),),  # Magic University <- MG1 (moved off Build_Bank, REVIEW §1)
         "Build_Mother_Nature:1": (T(1),),  # Garden of Life (Pixie horde) <- Magic Lantern
-        "Build_Mycelium_Roots:1": (T(2), T(3), T(4), T(5)),  # Elemental Conflux (OE-only, all four altars)
-        "Build_Resource_Depot_level_2:1": (T(6),),  # Vault of Ashes (OE-only Firebird horde) <- Altar of Thought (grid depth, see ADAPTATIONS)
-        "Build_Spring_of_Life:1": (),  # grail
+        "Build_Mycelium_Roots:1": (MG(1),),  # Elemental Conflux (OE-only) <- MG1
+        "Build_Resource_Depot_level_2:1": (T(6),),  # Vault of Ashes (OE-only Firebird horde) <- Altar of Thought (see ADAPTATIONS)
+        "Build_Spring_of_Life:1": (),  # grail (Aurora Borealis)
     },
     "homm3_cove": {
-        "Build_Tier_2:1": (T(1),),  # Shack <- Nymph Waterfall
+        "Build_Tier_2:1": (),  # Shack (HoMM3 <- Nymph Waterfall; rooted so the Maelstrom is a 4-deep dwelling)
         "Build_Tier_3:1": (T(2),),  # Frigate <- Shack (HoMM3 Blacksmith gate dropped: OE Treasury)
         "Build_Tier_4:1": (T(2),),  # Nest <- Shack
         "Build_Tier_5:1": (MG(1), T(2)),  # Tower of the Seas <- MG1 + Shack
-        "Build_Tier_5:2": (MG(2),),  # Upg. Tower of the Seas <- MG2
         "Build_Tier_6:1": (T(4),),  # Nix Fort <- Nest
         "Build_Tier_7:1": (T(5), T(6)),  # Maelstrom <- Tower of the Seas + Nix Fort
-        "Build_Tier_7:2": (MG(2),),  # Upg. Maelstrom <- MG2
-        "Build_Bank:1": (HALL(2),),  # Thieves' Guild (HotA: Tavern, implied by Town Hall) + OE income gate
+        "Build_Tier_7:2": (MG(2),),  # Upg. Maelstrom <- MG2 (the allowed T7-upgrade Mage Guild gate)
+        "Build_Grotto:1": (MARKET,),  # Grotto <- Marketplace (HotA)
         "Build_Resource_Depot_level_2:1": (T(2),),  # Pub (Crew Mate horde) <- Shack
         "Build_Mother_Nature:1": (T(4),),  # Roost (Stormbird horde) <- Nest
-        "Build_Golden_Calf:1": (),  # grail
+        "Build_Golden_Calf:1": (),  # grail (Lodestar)
     },
     "homm3_factory": {
-        "Build_Tier_1:2": (),  # Upg. Halfling Adobe (HoMM3 Blacksmith gate dropped: OE Treasury)
-        "Build_Tier_2:1": (T(1),),  # Foundry <- Halfling Adobe
-        "Build_Tier_2:2": (),  # Upg. Foundry (HoMM3 Blacksmith gate dropped: OE Treasury)
+        "Build_Tier_2:1": (),  # Foundry (HoMM3 <- Halfling Adobe; rooted so the Gantry is a 4-deep dwelling)
         "Build_Tier_3:1": (T(1),),  # Ranch <- Halfling Adobe
         "Build_Tier_4:1": (T(2),),  # Manufactory <- Foundry (HoMM3 Blacksmith gate dropped: OE Treasury)
         "Build_Tier_5:1": (T(3),),  # Catacombs <- Ranch
-        "Build_Tier_5:2": (MG(1),),  # Upg. Catacombs <- MG1
         "Build_Tier_6:1": (T(4),),  # Watchtower <- Manufactory
-        "Build_Tier_6:2": (MARKET,),  # Upg. Watchtower <- Marketplace
         "Build_Tier_7:1": (T(5), MG(1)),  # Serpentarium <- Catacombs + MG1
-        "Build_Tier_7:2": (MG(2),),  # Upg. Serpentarium <- MG2
+        "Build_Tier_7:2": (MG(2),),  # Upg. Serpentarium <- MG2 (the allowed T7-upgrade Mage Guild gate)
         "Build_Factory_Gantry:1": (T(6),),  # Gantry (HotA dwelling 8) <- Watchtower
-        "Build_Factory_Gantry:2": (MARKET,),  # Upg. Gantry <- Marketplace
-        "Build_Bank:1": (HALL(2),),  # Town Bank (HotA Bank: none) keeps the OE income gate
-        "Build_Mother_Nature:1": (WALL(1),),  # Mana Dynamo = Mana Generator <- Fort
+        "Build_Factory_Loan_Bank:1": (),  # Bank (HotA loan; HotA: none)
+        "Build_Mother_Nature:1": (WALL(1),),  # Mana Generator <- Fort
         "Build_Resource_Depot_level_2:1": (T(3),),  # Pen (Armadillo horde) <- Ranch
-        "Build_Golden_Calf:1": (),  # grail
+        "Build_Golden_Calf:1": (),  # grail (Lightning Rod)
     },
     "homm3_bulwark": {
-        "Build_Tier_2:1": (T(1),),  # Frigid Spur <- Colliery
+        "Build_Tier_2:1": (),  # Frigid Spur (HotA <- Colliery; rooted so Frosthome is a 4-deep dwelling)
         "Build_Tier_3:1": (T(2),),  # Hall of the Bold <- Frigid Spur
         "Build_Tier_4:1": (T(3),),  # Mountain Embassy <- Hall of the Bold
         "Build_Tier_5:1": (MG(1), T(3)),  # Shaman Fane <- MG1 + Hall of the Bold
         "Build_Tier_6:1": (T(3),),  # Mammoth Stalls <- Hall of the Bold
         "Build_Tier_7:1": (T(5),),  # Frosthome <- Shaman Fane
-        "Build_Bank:1": (HALL(2),),  # Trade Hall (OE income row)
-        "Build_Mother_Nature:1": (HALL(2), MARKET),  # Trade Carnival = Fair <- Town Hall + Marketplace
-        "Build_Mycelium_Roots:1": (T(1),),  # Clan Stockyards (Kobold horde, OE-only) <- Colliery
+        "Build_Mother_Nature:1": (MARKET,),  # Fair <- Marketplace (HotA also names the Town Hall; one prerequisite per special)
+        "Build_Mycelium_Roots:1": (),  # Altar of the Runes (Sieidi folded in; HotA: no dwelling gate)
         "Build_Resource_Depot_level_2:1": (T(6),),  # Hay Bins (Mammoth horde) <- Mammoth Stalls
-        "Build_Spring_of_Life:1": (),  # grail
+        "Build_Spring_of_Life:1": (),  # grail (Spirits of the Forebears)
     },
+}
+
+# Preferred construction-tree cells for the special rows the 2026-11-22 building pass adds.
+# They are preferences only (the solver moves a level when the cell is illegal or taken);
+# without them a new row would inherit its template row's cell.
+FACTION_PREFERRED_CELLS: dict[str, dict[Key, tuple[int, int]]] = {
+    "homm3_castle": {
+        ("Build_Stables", 1): (2, 1),
+        ("Build_Mother_Nature", 1): (3, 3),
+        ("Build_Mycelium_Roots", 1): (2, 4),
+    },
+    "homm3_rampart": {
+        ("Build_Mystic_Pond", 1): (2, 1),
+        ("Build_Mother_Nature", 1): (3, 3),
+        ("Build_Rampart_Treasury", 1): (3, 4),
+        # Homestead is a root: the T3 -> T4/T5 -> T6 -> T7 lane takes rows 0..3.
+        ("Build_Tier_1", 1): (4, 0),
+        ("Build_Tier_2", 1): (4, 2),
+        ("Build_Tier_3", 1): (6, 0),
+        ("Build_Tier_4", 1): (5, 1),
+        ("Build_Tier_5", 1): (7, 1),
+        ("Build_Tier_6", 1): (6, 2),
+        ("Build_Tier_7", 1): (5, 3),
+    },
+    "homm3_tower": {("Build_Library", 1): (3, 3)},
+    "homm3_inferno": {
+        ("Build_Mycelium_Roots", 1): (2, 4),
+        ("Build_Mother_Nature", 1): (3, 3),
+        # Hall of Sins is a root: the T2 -> T4 -> T5/T6 -> T7 lane takes rows 0..3.
+        ("Build_Tier_1", 1): (4, 0),
+        ("Build_Beelzebubs_Hand", 1): (5, 0),
+        ("Build_Tier_2", 1): (6, 0),
+        ("Build_Tier_3", 1): (7, 1),
+        ("Build_Tier_4", 1): (5, 1),
+        ("Build_Tier_5", 1): (4, 2),
+        ("Build_Tier_6", 1): (6, 2),
+        ("Build_Tier_7", 1): (5, 3),
+        ("Build_Rebirth_Of_Shrine", 1): (7, 3),
+    },
+    "homm3_necropolis": {
+        ("Build_Mother_Nature", 1): (3, 3),
+        ("Build_Mycelium_Roots", 1): (3, 4),
+        # Graveyard is a root: the T2 -> T4/T5 -> T6 -> T7 lane takes rows 0..3.
+        ("Build_Tier_1", 1): (4, 0),
+        ("Build_Tier_2", 1): (6, 0),
+        ("Build_Tier_3", 1): (4, 2),
+        ("Build_Tier_4", 1): (5, 1),
+        ("Build_Tier_5", 1): (7, 1),
+        ("Build_Tier_6", 1): (6, 2),
+        ("Build_Tier_7", 1): (5, 3),
+    },
+    "homm3_dungeon": {
+        ("Build_Well_Of_Souls", 1): (7, 3),
+        ("Build_Portal_Summoning", 1): (2, 1),
+        # Harpy Loft is a root: the T2 -> T4 -> T5/T6 -> T7 lane takes rows 0..3.
+        ("Build_Tier_1", 1): (4, 0),
+        ("Build_Tier_2", 1): (6, 0),
+        ("Build_Tier_3", 1): (7, 1),
+        ("Build_Tier_4", 1): (5, 1),
+        ("Build_Tier_5", 1): (4, 2),
+        ("Build_Tier_6", 1): (6, 2),
+        ("Build_Tier_7", 1): (5, 3),
+    },
+    "homm3_fortress": {
+        # Cage of Warlords, Glyphs of Fear and Blood Obelisk sit in the economy columns so
+        # the T4/T6 row keeps clear of the Mage Guild column.
+        ("Build_Gymnasium", 1): (3, 4),
+        ("Build_Mother_Nature", 1): (3, 3),
+        ("Build_Mycelium_Roots", 1): (2, 4),
+        ("Build_Tier_1", 1): (5, 0),
+        ("Build_Tier_2", 1): (4, 1),
+        ("Build_Tier_3", 1): (6, 1),
+        ("Build_Tier_4", 1): (7, 2),
+        ("Build_Tier_5", 1): (4, 3),
+        ("Build_Tier_6", 1): (5, 2),
+        ("Build_Tier_7", 1): (6, 3),
+    },
+    "homm3_conflux": {
+        ("Build_Magic_University", 1): (3, 3),
+        # Altars of Air and Water are roots: each altar lane takes rows 0..3.
+        ("Build_Tier_1", 1): (5, 0),
+        ("Build_Tier_2", 1): (7, 0),
+        ("Build_Tier_3", 1): (4, 0),
+        ("Build_Tier_4", 1): (7, 1),
+        ("Build_Tier_5", 1): (4, 1),
+        ("Build_Tier_6", 1): (5, 2),
+        ("Build_Tier_7", 1): (6, 3),
+    },
+    "homm3_cove": {("Build_Grotto", 1): (4, 3)},
+    "homm3_factory": {("Build_Factory_Loan_Bank", 1): (2, 1)},
 }
 
 ADAPTATIONS: dict[str, list[str]] = {
     "*": [
         "Dwelling 1 is a root. HoMM3 gates it on the Fort; every vanilla OE faction roots tier 1 and OE's Fort (Build_Wall L1) is the siege-wall line, so the gate would block OE's first-week recruitment pacing.",
-        "The Blacksmith (Build_Treasury) is the vanilla OE Treasury in every HoMM3 city (2000 Gold daily, <- Bank + Fort; user decision 2026-10-01). Like the vanilla Treasury it gates nothing, so every HoMM3 Blacksmith requirement (City Hall, Castle Barracks, Stronghold Upg. Orc Tower, Cove Frigate, Factory Upg. Halfling Adobe / Upg. Foundry / Manufactory) is dropped; keeping them would also close cycles (Castle Bank <- Barracks, Tower Bank <- City Hall).",
-        "OE's hall has 3 levels (Village/Town/City). Town Hall <- Tavern and City Hall <- MG1 + Marketplace are HoMM3; the Capitol (<- Castle) exists only where a faction row names it (Tower Capitol Vault).",
-        "Marketplace is a root as in HoMM3 (vanilla OE gates it on the Tavern).",
-        "Rows on the donor Bank SID that only pay daily gold keep vanilla OE's Town Hall gate when HoMM3 names no requirement for them.",
-        "Shipyard, Lighthouse, Brotherhood of the Sword, Cover of Darkness, Freelancer's Guild, Ballista Yard, Grotto, Gunpowder Warehouse, Sieidi/Altar of Runes and second horde buildings have no OE row; their requirements are not reproduced, and requirements that point at them are dropped (listed per faction).",
-        "OE-native special buildings with no HoMM3 counterpart (Lyceum, Beelzebub's Hand, Rebirth Shrine, Well of Souls) keep their vanilla OE prerequisites.",
-        "Only direct HoMM3 requirements are listed; transitive ones (e.g. Gantry <- Halfling Adobe) are implied, which keeps the build panel's arrows readable.",
+        "The shared economy is the vanilla OE template in every town (building pass 2026-11-22): Town Hall L2/L3 need only the previous level, Market <- Tavern, Artifact Market <- Market, Bank <- Town Hall L2, Treasury <- Bank + Fort, Resource Depot <- Market + Bank. The HoMM3 Town Hall <- Tavern and City Hall <- MG1 + Marketplace gates are gone, and every Build_Bank is the plain economy Bank again; the specials it used to carry have their own rows.",
+        "The Blacksmith (Build_Treasury) is the vanilla OE Treasury in every HoMM3 city (2000 Gold daily, <- Bank + Fort; user decision 2026-10-01). Like the vanilla Treasury it gates nothing, so every HoMM3 Blacksmith requirement (Castle Barracks, Stronghold Upg. Orc Tower, Cove Frigate, Factory Upg. Halfling Adobe / Upg. Foundry / Manufactory) is dropped.",
+        "Dwellings follow the vanilla shape: a dwelling L1 needs at most 2 base-level dwellings plus at most one Mage Guild level (Castle Training Grounds takes the Stables instead), dwelling upgrades need only their own L1 except a T7 upgrade, which may take one Mage Guild level, and nothing requires an upgraded dwelling. HoMM3 upgrade gates (Stronghold Upg. Wolf Pen / Upg. Ogre Fort, Fortress Upg. Gnoll Hut / Upg. Gorgon Lair, Conflux Upg. Altar of Thought, Cove and Inferno T5 upgrades, Factory T5/T6/Gantry upgrades, Necropolis Upg. Estate, Tower Upg. Mage Tower's Library) are not applied.",
+        "No dwelling L1 sits deeper than 4 in the chain, as in every vanilla city, so every tree draws strictly in the 5 native rows. Where the HoMM3 order is deeper the link nearest the root is dropped (Rampart Homestead, Tower Parapet + Golem Factory, Inferno/Necropolis/Dungeon/Cove/Factory/Bulwark tier 2, Conflux Altars of Air and Water are roots).",
+        "A special building takes at most one prerequisite: a base-level shared building (Town Hall L2, Wall L1/L2, Mage Guild L1/L3, Tavern, Marketplace) or, for a horde, its own base dwelling. HoMM3 special-on-special chains (Rampart Treasury <- Miners' Guild, Fortress Blood Obelisk <- Glyphs and Cage <- Glyphs) are cut; the Rampart Fountain of Fortune keeps the Mystic Pond as its base because it upgrades it.",
+        "Shipyard, Thieves' Guild screen, Ballista Yard and second horde buildings have no OE row; requirements that point at them are dropped (Castle Signal Beacon is a root because its Shipyard gate cannot exist).",
+        "OE-native special buildings with no HoMM3 counterpart (Beelzebub's Hand, Rebirth Shrine, Well of Souls in Necropolis) keep their vanilla OE prerequisites.",
+        "Only direct requirements are listed; transitive ones (e.g. Gantry <- Halfling Adobe) are implied, which keeps the build panel's arrows readable.",
     ],
     "homm3_castle": [
-        "Training Grounds <- Stables: OE has no Stables row; the Castle 'Mounted Guard Yard' (Build_Bank) is the Stables and takes its HoMM3 requirement (Barracks).",
+        "Training Grounds <- Stables (HoMM3) on the real Build_Stables row. The Stables is a root (HoMM3: <- Barracks) so the chain stays vanilla depth.",
+        "Brotherhood of the Sword (Build_Mother_Nature) <- Tavern; Signal Beacon (Build_Mycelium_Roots, the land-safe Lighthouse) is a root.",
     ],
     "homm3_rampart": [
-        "The Rampart 'Treasury' row is an OE artifact market: it takes HoMM3 Treasury's Miners' Guild requirement plus the Marketplace its function needs.",
+        "Mystic Pond (Build_Mystic_Pond) is a root and the Fountain of Fortune (Build_Mother_Nature) requires it, the HoMM3 upgrade relation.",
+        "The HoMM3 Treasury is its own row (Build_Rampart_Treasury) and a root; the Artifact Market slot is the plain shared Artifact Market again.",
+        "Homestead is a root (HoMM3 <- Centaur Stables) so Dragon Cliffs is a 4-deep dwelling.",
     ],
     "homm3_tower": [
         "'Wall of Knowledge' lives on the Build_Training_Range row (+1 Knowledge to each visiting hero) and takes its requirement (MG1).",
-        "'Lookout Tower' (+15 sight radius) lives on the Build_Intelligence_Academy row and takes its requirement (Fort).",
-        "Library has no row (its spell effect is the Observatory Network law), so Upg. Mage Tower's Library requirement is dropped.",
+        "'Lookout Tower' lives on the Build_Intelligence_Academy row and is a root, as the vanilla Intelligence Academy.",
+        "Library (Build_Library) <- MG1; it does not gate Upg. Mage Tower (dwelling upgrades need only their L1).",
+        "Parapet and Golem Factory are roots (HoMM3 <- Workshop) so Cloud Temple is a 4-deep dwelling; Mage Tower keeps both as its prerequisites.",
     ],
     "homm3_inferno": [
-        "'Brimstone Tolls' stands in for Brimstone Clouds (<- Fort); Order of Fire and Cages have no row.",
+        "Castle Gate is the native Build_Mycelium_Roots row (<- Citadel); Order of Fire is Build_Mother_Nature (<- MG1); Brimstone Stormclouds stays on Build_Resource_Depot_level_2 (<- Fort). Cages has no row.",
     ],
     "homm3_necropolis": [
-        "'Bone Archive' (Build_Bank) is the Necromancy Amplifier (<- MG1) so Upg. Estate keeps its HoMM3 gate; 'Bone Foundry' is the Skeleton Transformer.",
+        "Necromancy Amplifier is Build_Mother_Nature (<- MG1) and Cover of Darkness is Build_Mycelium_Roots (root); the Skeleton Transformer is a root, as in HoMM3, and no longer gates Unearthed Graves.",
+    ],
+    "homm3_dungeon": [
+        "Mana Vortex is the native Build_Well_Of_Souls mana fountain (<- MG1, relaxed from the vanilla MG3); Portal of Summoning (Build_Portal_Summoning) is a root and replaces the Lyceum.",
     ],
     "homm3_stronghold": [
-        "Escape Tunnel's Fort requirement is not applied: the 'Escape Vault' row lives in the OE grail slot.",
+        "The Escape Tunnel comes with the Fort (Build_Wall L1; owner answer 2026-11-22) and has no row. Freelancer's Guild is Build_Resource_Depot_level_2 (<- Marketplace).",
     ],
     "homm3_fortress": [
-        "'Hydra Marsh' (Build_Mycelium_Roots) is an OE Hydra horde row and requires the Hydra Pond; Blood Obelisk has no row.",
+        "Cage of Warlords moves off Build_Bank to Build_Gymnasium (<- Town Hall L2); Blood Obelisk (Build_Mycelium_Roots) and Glyphs of Fear (Build_Mother_Nature) each require the Fort only.",
     ],
     "homm3_conflux": [
-        "'Elemental Conflux' is OE-only (+1 growth for all four elementals) and requires the four altars.",
-        "'Vault of Ashes' is an OE-only Firebird horde. Gating it on the Pyre would make Lantern -> Air -> Fire -> Thought -> Pyre -> Vault a 6-row chain, which the native 5-row build panel cannot draw; it requires the Altar of Thought instead (the Pyre's own requirement).",
+        "Magic University moves off Build_Bank to Build_Magic_University (<- MG1).",
+        "'Elemental Conflux' is OE-only (+1 growth for all four elementals) and requires MG1 (it used to need all four altars, denser than any vanilla special).",
+        "'Vault of Ashes' is an OE-only Firebird horde and requires the Altar of Thought (the Pyre's own requirement), keeping the tree inside 5 rows.",
+        "Altars of Air and Water are roots (HoMM3 <- Magic Lantern + MG1) so the Pyre is a 4-deep dwelling.",
     ],
     "homm3_cove": [
-        "Thieves' Guild requires Tavern in HotA; it is implied by the OE Town Hall income gate (Town Hall <- Tavern).",
+        "Grotto (Build_Grotto) <- Marketplace (HotA). Cove T3 level 2 has no Gunpowder Warehouse gate: one hire row covers both upgrades.",
     ],
-    "homm3_factory": [],
+    "homm3_factory": [
+        "The HotA loan Bank is its own row (Build_Factory_Loan_Bank, root); Build_Bank is the economy Bank.",
+    ],
     "homm3_bulwark": [
-        "Upg. Mountain Embassy and Upg. Frosthome require Sieidi of Runes in HotA; OE has no Sieidi row, so they require only their base dwelling.",
-        "'Trade Carnival' stands in for the Fair (<- Town Hall + Marketplace); 'Clan Stockyards' is an OE-only Kobold horde (<- Colliery).",
+        "Upg. Mountain Embassy and Upg. Frosthome require Sieidi of the Runes in HotA; dwelling upgrades need only their L1, so they do not.",
+        "Fair (Build_Mother_Nature) <- Marketplace; Altar of the Runes (Build_Mycelium_Roots, Sieidi folded in) is a root.",
     ],
 }
 
@@ -585,21 +693,45 @@ def solve_construction_tree_layout(
         if latest[key] < 0:
             raise ValueError(f"{key[0]}@{key[1]}: prerequisite chain does not fit the {GRID_ROWS}-row build grid")
 
-    # Topological order, preferring the reading order of the preferred cells.
-    order: list[Key] = []
-    indegree = {key: len(reqs_of[key]) for key in nodes}
-    ready = sorted((k for k in nodes if indegree[k] == 0), key=lambda k: (preferred[k][1], preferred[k][0], k))
-    while ready:
-        key = ready.pop(0)
-        order.append(key)
-        for dep in dependents[key]:
-            indegree[dep] -= 1
-            if indegree[dep] == 0:
-                ready.append(dep)
-        ready.sort(key=lambda k: (preferred[k][1], preferred[k][0], k))
-    if len(order) != len(nodes):
-        raise ValueError("prerequisite cycle; cannot lay out construction tree")
+    def topological(rank: Any) -> list[Key]:
+        order: list[Key] = []
+        indegree = {key: len(reqs_of[key]) for key in nodes}
+        ready = sorted((k for k in nodes if indegree[k] == 0), key=rank)
+        while ready:
+            key = ready.pop(0)
+            order.append(key)
+            for dep in dependents[key]:
+                indegree[dep] -= 1
+                if indegree[dep] == 0:
+                    ready.append(dep)
+            ready.sort(key=rank)
+        if len(order) != len(nodes):
+            raise ValueError("prerequisite cycle; cannot lay out construction tree")
+        return order
 
+    # First pass: the reading order of the preferred cells. When a greedy early placement
+    # fills a row a deep chain needs (2026-11-22 re-rooted dwellings), retry placing the
+    # levels with the earliest last legal row first.
+    reading = topological(lambda k: (preferred[k][1], preferred[k][0], k))
+    try:
+        return _place_construction_tree(reading, nodes, node_set, reqs_of, preferred, latest, relaxable)
+    except ValueError as first:
+        deadline = topological(lambda k: (latest[k], preferred[k][1], preferred[k][0], k))
+        try:
+            return _place_construction_tree(deadline, nodes, node_set, reqs_of, preferred, latest, relaxable)
+        except ValueError:
+            raise first from None
+
+
+def _place_construction_tree(
+    order: list[Key],
+    nodes: list[Key],
+    node_set: set[Key],
+    reqs_of: dict[Key, list[Key]],
+    preferred: dict[Key, tuple[int, int]],
+    latest: dict[Key, int],
+    relaxable: Any,
+) -> dict[Key, tuple[int, int]]:
     placed: dict[Key, tuple[int, int]] = {}
     occupied: set[tuple[int, int]] = set()
     wanted: dict[tuple[int, int], int] = {}
@@ -700,7 +832,11 @@ def apply_city_building_tree(city: dict[str, Any], faction: str) -> dict[Key, tu
     """Write canonical prevBuildings, derived nodePos and consistent buildOrders into ``city``."""
     prereqs = canonical_prereqs(faction, city_level_keys(city))
     current = city_node_positions(city)
-    preferred = {key: COMMON_PREFERRED_CELLS.get(key, current.get(key, (4, 0))) for key in prereqs}
+    faction_cells = FACTION_PREFERRED_CELLS.get(faction, {})
+    preferred = {
+        key: COMMON_PREFERRED_CELLS.get(key, faction_cells.get(key, current.get(key, (4, 0))))
+        for key in prereqs
+    }
     layout = solve_construction_tree_layout(prereqs, preferred)
     for section in city.values():
         if not isinstance(section, list):

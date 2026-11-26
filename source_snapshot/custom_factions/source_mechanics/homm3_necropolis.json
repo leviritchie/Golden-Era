@@ -7,36 +7,42 @@
       "id": "necropolis.necromancy_amplifier",
       "surface": "building",
       "sourceName": "Necromancy Amplifier",
-      "status": "substituted",
-      "reason": "Native Necromancy scaling is custom hero/combat logic, not proven city-building data.",
+      "status": "exact",
+      "reason": "Build_Mother_Nature is an inert cityBonusBanks row; Homm3SkeletalNecromancyProbe adds +5% to the post-battle Necromancy share of a hero who has Necromancy while the side owns at least one Necropolis with it (HoMM3 +10%, halved like the port Necromancy buckets; no stacking between towns) (building pass 2026-11-22). Proof tier: build; runtime unproven.",
       "playerTextPolicy": "must_match_current_behavior",
       "forbiddenPlayerText": [
-        "Necromancy Amplifier",
-        "Necromancy skill"
+        "per Amplifier",
+        "every hero gains Necromancy"
       ],
       "currentRows": [
-        "Build_Bank"
+        "Build_Mother_Nature"
       ],
       "playerTextTokens": [
-        "Homm3Necropolis_Build_Bank_description",
-        "Homm3Necropolis_Build_Bank_name",
-        "Homm3Necropolis_Build_Bank_narrativeDescription"
-      ]
+        "Homm3Necropolis_Build_Mother_Nature_description",
+        "Homm3Necropolis_Build_Mother_Nature_name",
+        "Homm3Necropolis_Build_Mother_Nature_narrativeDescription"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
     },
     {
       "id": "necropolis.cover_of_darkness",
       "surface": "building",
       "sourceName": "Cover of Darkness",
-      "status": "changed",
-      "reason": "Fog-of-war suppression needs map-visibility tracing before being promised.",
-      "playerTextPolicy": "source_changed_out",
-      "changeDisposition": "removed_from_current_city_design",
-      "implementationOwner": "no current generated city row",
+      "status": "exact",
+      "reason": "Build_Mycelium_Roots is an inert cityBonusBanks row; Homm3NecropolisCoverOfDarknessRuntime clears the visibility of map squares within 20 of the town for every other side at that side's day start, keeping the squares around that side's own heroes and towns (building pass 2026-11-22). No ally exclusion (the data side has no team field). Proof tier: build; runtime unproven.",
+      "playerTextPolicy": "must_match_current_behavior",
       "forbiddenPlayerText": [
-        "Cover of Darkness",
-        "fog of war",
-        "shroud",
-        "map visibility"
+        "permanently",
+        "whole map"
+      ],
+      "currentRows": [
+        "Build_Mycelium_Roots"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts",
+      "playerTextTokens": [
+        "Homm3Necropolis_Build_Mycelium_Roots_description",
+        "Homm3Necropolis_Build_Mycelium_Roots_name",
+        "Homm3Necropolis_Build_Mycelium_Roots_narrativeDescription"
       ]
     },
     {
@@ -59,13 +65,12 @@
     {
       "id": "necropolis.skeleton_converter",
       "surface": "building",
-      "sourceName": "Skeleton Converter",
-      "status": "substituted",
-      "reason": "The native unitsConverters config targets the Necropolis base creature of the same tier, not HoMM3 Skeleton Transformer rules. Opening the native conversion window and completing its transaction remain runtime-unproven; the Unique Building menu failed in the user's 2026-10-02 run.",
+      "sourceName": "Skeleton Transformer",
+      "status": "exact",
+      "reason": "Native unitsConverters row Build_Skeleton_Converter converts tiers 1-6 into h3_skeleton and tier 7 into h3_bone_dragon; only the Skeleton and Bone Dragon lines are banned, as in HoMM3's Skeleton Transformer (building pass 2026-11-22). The conversion window failed in the 2026-10-02 run and is unproven since. Proof tier: build; runtime unproven.",
       "playerTextPolicy": "must_match_current_behavior",
       "forbiddenPlayerText": [
-        "Skeleton Converter",
-        "convert creatures"
+        "units of the same tier"
       ],
       "currentRows": [
         "Build_Skeleton_Converter"
@@ -74,18 +79,18 @@
         "Homm3Necropolis_Build_Skeleton_Converter_description",
         "Homm3Necropolis_Build_Skeleton_Converter_name",
         "Homm3Necropolis_Build_Skeleton_Converter_narrativeDescription"
-      ]
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
     },
     {
       "id": "necropolis.soul_prison",
       "surface": "building",
       "sourceName": "Soul Prison",
-      "status": "substituted",
-      "reason": "Grail/source behavior is not verified as a custom city mechanic.",
+      "status": "exact",
+      "reason": "Homm3SkeletalNecromancyProbe adds +10% to the post-battle Necromancy share while the side owns grail Build_Gaping_Maw (HoMM3 +20%, halved), on top of its kept UndeadGraal +10 Defense / -50% enemy crit and +100% city growth (owner answer 3, building pass 2026-11-22). Proof tier: build; runtime unproven.",
       "playerTextPolicy": "must_match_current_behavior",
       "forbiddenPlayerText": [
-        "Soul Prison",
-        "Necromancy bonus"
+        "+20% Necromancy"
       ],
       "currentRows": [
         "Build_Gaping_Maw"
@@ -94,7 +99,8 @@
         "Homm3Necropolis_Build_Gaping_Maw_description",
         "Homm3Necropolis_Build_Gaping_Maw_name",
         "Homm3Necropolis_Build_Gaping_Maw_narrativeDescription"
-      ]
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
     },
     {
       "id": "necropolis.skeletal_necromancy",

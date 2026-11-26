@@ -306,6 +306,17 @@
     <Error Text="Missing HoMM3 UI scale validator: $(Homm3UiScaleValidator)" Condition="!Exists('$(Homm3UiScaleValidator)')" />
     <Exec Command="python &quot;$(Homm3UiScaleValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
   </Target>
+  <!-- Multilingual custom-Lang hard gate (docs/localization_lane_overlay_pipeline.md): fails on missing, placeholder,
+       mixed-language, or noncanonical rows in the installed Core. same_as_english is informational by owner decision. -->
+  <Target Name="ValidateMultilingualCustomLangContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipMultilingualCustomLangContract)' != 'true')">
+    <PropertyGroup>
+      <MultilingualCustomLangValidator>$(MSBuildThisFileDirectory)..\..\tools\release_port\validate_multilingual_custom_lang.py</MultilingualCustomLangValidator>
+      <MultilingualCustomLangCore>$(MSBuildThisFileDirectory)..\..\..\..\..\..\SteamLibrary\steamapps\common\Heroes of Might and Magic Olden Era - Golden Era\HeroesOldenEra_Data\StreamingAssets\Core.zip</MultilingualCustomLangCore>
+    </PropertyGroup>
+    <Error Text="Missing multilingual validator: $(MultilingualCustomLangValidator)" Condition="!Exists('$(MultilingualCustomLangValidator)')" />
+    <Warning Text="Skipping multilingual gate: installed Core not found at $(MultilingualCustomLangCore)" Condition="!Exists('$(MultilingualCustomLangCore)')" />
+    <Exec Condition="Exists('$(MultilingualCustomLangCore)')" Command="python &quot;$(MultilingualCustomLangValidator)&quot; --core &quot;$(MultilingualCustomLangCore)&quot;" Timeout="300000" />
+  </Target>
   <!-- HoMM3 map squad death (docs/homm3_map_squad_death_contract.md): source gate that owned-skinned map shells hand the
        native squad drawer the owned Animator (vanilla Die sets die/isDead on GetComponentInChildren<Animator>). The
        installed-bundle data half runs in the homm3_bundles readback. -->
@@ -1348,6 +1359,23 @@
     </PropertyGroup>
     <Error Text="Missing HoMM3 def_retarget delivery contract validator: $(Homm3DefRetargetDeliveryValidator)" Condition="!Exists('$(Homm3DefRetargetDeliveryValidator)')" />
     <Exec Command="python &quot;$(Homm3DefRetargetDeliveryValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="300000" />
+  </Target>
+  <!-- Crystallized Full-PBR multi-view retexture pipeline (tools/homm3_retexture_pbr, docs/homm3_full_pbr_retexture.md):
+       verifies package scripts/skill/doc, pre-AO signed-volume normal flip, UV seam filter, fail-closed coverage/AO guards,
+       and synthetic CPU vs CUDA UV rasterizer/gutter-dilation parity. -->
+  <Target Name="ValidateHomm3RetexturePbrContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3RetexturePbrContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3RetexturePbrValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_retexture_pbr_contract.py</Homm3RetexturePbrValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 Full-PBR retexture contract validator: $(Homm3RetexturePbrValidator)" Condition="!Exists('$(Homm3RetexturePbrValidator)')" />
+    <Exec Command="python &quot;$(Homm3RetexturePbrValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="120000" />
+  </Target>
+  <Target Name="ValidateHomm3UnitViewHelperContract" BeforeTargets="BeforeBuild" Condition="'$(FullValidationNormalized)' == 'true' and ('$(SkipHomm3UnitViewHelperContract)' != 'true')">
+    <PropertyGroup>
+      <Homm3UnitViewHelperValidator>$(MSBuildThisFileDirectory)..\..\tools\validate_homm3_unit_view_helper_contract.py</Homm3UnitViewHelperValidator>
+    </PropertyGroup>
+    <Error Text="Missing HoMM3 unit view helper contract validator: $(Homm3UnitViewHelperValidator)" Condition="!Exists('$(Homm3UnitViewHelperValidator)')" />
+    <Exec Command="python &quot;$(Homm3UnitViewHelperValidator)&quot; --repo-root &quot;$(MSBuildThisFileDirectory)..\..&quot;" Timeout="60000" />
   </Target>
   <Target Name="ValidateHotaFactoryBulwarkRuntimeAssetsAfterDeploy" AfterTargets="DeployPluginToGame" Condition="'$(FullValidationNormalized)' == 'true' and ('$(DeployPluginToGame)' != 'false' and '$(SkipHotaFactoryBulwarkRuntimeAssetValidation)' != 'true')">
     <PropertyGroup>

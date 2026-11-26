@@ -7,48 +7,54 @@
       "id": "inferno.castle_gate",
       "surface": "building",
       "sourceName": "Castle Gate",
-      "status": "substituted",
-      "reason": "Inter-town travel requires a traced map/city teleport route; current text must not imply it works.",
+      "status": "exact",
+      "reason": "Native myceliumRoots teleport row Build_Mycelium_Roots (vanilla Nature Mycelium Roots, 5000 Gold + 5 Gems/Crystals/Mercury). Homm3InfernoCastleGateRuntime blocks destination towns without their own Castle Gate when the travel window opens from an Inferno town, matching HoMM3 (building pass 2026-11-22). Proof tier: build; runtime unproven.",
       "playerTextPolicy": "must_match_current_behavior",
       "forbiddenPlayerText": [
-        "teleport",
-        "travel between towns",
-        "Castle Gate"
+        "any of your cities without",
+        "travel to any city"
       ],
       "currentRows": [
-        "Build_Treasury"
+        "Build_Mycelium_Roots"
       ],
       "playerTextTokens": [
-        "Homm3Inferno_Build_Treasury_description",
-        "Homm3Inferno_Build_Treasury_name",
-        "Homm3Inferno_Build_Treasury_narrativeDescription"
-      ]
+        "Homm3Inferno_Build_Mycelium_Roots_description",
+        "Homm3Inferno_Build_Mycelium_Roots_name",
+        "Homm3Inferno_Build_Mycelium_Roots_narrativeDescription"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
     },
     {
       "id": "inferno.order_of_fire",
       "surface": "building",
       "sourceName": "Order of Fire",
-      "status": "substituted",
-      "reason": "Current implementation should remain native stat/skill shaped until exact school behavior is traced.",
+      "status": "exact",
+      "reason": "Native heroBonusBanks row Build_Mother_Nature grants +1 Spell Power once per visiting hero, the HoMM3 Order of Fire effect (building pass 2026-11-22).",
       "playerTextPolicy": "must_match_current_behavior",
       "currentRows": [
-        "Build_Bank"
+        "Build_Mother_Nature"
       ],
       "forbiddenPlayerText": [
         "Fire Magic school"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts",
+      "playerTextTokens": [
+        "Homm3Inferno_Build_Mother_Nature_description",
+        "Homm3Inferno_Build_Mother_Nature_name",
+        "Homm3Inferno_Build_Mother_Nature_narrativeDescription"
       ]
     },
     {
       "id": "inferno.brimstone_stormclouds",
       "surface": "building",
       "sourceName": "Brimstone Stormclouds",
-      "status": "substituted",
-      "reason": "HotA fire-spell amplification has no proven city field; current row uses native gold income (Brimstone Tolls) and must not claim fire-spell damage.",
+      "status": "exact",
+      "reason": "Build_Resource_Depot_level_2 is an inert cityBonusBanks row; Homm3TownSiegeDefenseRuntime gives the hero defending a siege of this town +2 Spell Power for the battle, the SoD Brimstone Stormclouds effect (building pass 2026-11-22). Proof tier: build; runtime unproven.",
       "playerTextPolicy": "must_match_current_behavior",
       "forbiddenPlayerText": [
         "Fire spells",
         "extra damage",
-        "Brimstone Stormclouds"
+        "Gold daily"
       ],
       "currentRows": [
         "Build_Resource_Depot_level_2"
@@ -57,7 +63,8 @@
         "Homm3Inferno_Build_Resource_Depot_level_2_description",
         "Homm3Inferno_Build_Resource_Depot_level_2_name",
         "Homm3Inferno_Build_Resource_Depot_level_2_narrativeDescription"
-      ]
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
     },
     {
       "id": "inferno.birthing_pools",
@@ -80,12 +87,11 @@
       "id": "inferno.deity_of_fire",
       "surface": "building",
       "sourceName": "Deity of Fire",
-      "status": "substituted",
-      "reason": "Grail/fire spell source behavior needs a verified spellbook/combat route.",
+      "status": "exact",
+      "reason": "Grail Build_Eternal_Flame adds the HoMM3 Week of the Imp as a side cityUnitsIncrement h3_imp 22 (HoMM3 +15 on a 15 base, scaled to the GE 22 base) on top of its kept DemonGraal battle package and +100% city growth (owner answer 3, building pass 2026-11-22).",
       "playerTextPolicy": "must_match_current_behavior",
       "forbiddenPlayerText": [
-        "all Fire spells",
-        "Deity of Fire"
+        "all Fire spells"
       ],
       "currentRows": [
         "Build_Eternal_Flame"
@@ -94,7 +100,8 @@
         "Homm3Inferno_Build_Eternal_Flame_description",
         "Homm3Inferno_Build_Eternal_Flame_name",
         "Homm3Inferno_Build_Eternal_Flame_narrativeDescription"
-      ]
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
     },
     {
       "id": "inferno.gating",

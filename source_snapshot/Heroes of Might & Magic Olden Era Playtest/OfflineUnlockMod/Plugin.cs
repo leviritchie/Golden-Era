@@ -48,7 +48,7 @@ public sealed class Plugin : BasePlugin
 {
 	internal const string PluginGuid = "levir.heroesoe.offlineunlock";
 	internal const string PluginName = "HeroesOE Offline Unlock";
-	internal const string PluginVersion = "0.1.320";
+	internal const string PluginVersion = "0.1.332";
 #if OFFICIAL_DEOBF_BUILD
 	internal const string OfficialDeobfBuildSentinel = "OFFLINE_UNLOCK_MOD_OFFICIAL_DEOBF_BUILD_SENTINEL_V1";
 #else
@@ -1101,6 +1101,22 @@ public sealed class Plugin : BasePlugin
 			Homm3FactoryBulwarkCombatForceSetupPilot.TryRegister(_harmony, Log);
 			Homm3BulwarkUnitAbilityRuntime.TryRegister(_harmony, Log);
 			Homm3BulwarkRunesRuntime.TryRegister(_harmony, Log);
+			// Building pass 2026-11-22: real town-building effects (each fails closed on its own).
+			Homm3TownBuildingWindowKit.TryRegister(Log);
+			Homm3TownSiegeDefenseRuntime.TryRegister(_harmony, Log);
+			Homm3StrongholdEscapeTunnelRuntime.TryRegister(_harmony, Log);
+			Homm3CastleStablesRuntime.TryRegister(_harmony, Log);
+			Homm3CastleSignalBeaconRuntime.TryRegister(_harmony, Log);
+			Homm3RampartWeeklyIncomeRuntime.TryRegister(_harmony, Log);
+			Homm3TowerLibraryRuntime.TryRegister(_harmony, Log);
+			Homm3InfernoCastleGateRuntime.TryRegister(_harmony, Log);
+			Homm3NecropolisCoverOfDarknessRuntime.TryRegister(_harmony, Log);
+			Homm3DungeonManaVortexRuntime.TryRegister(_harmony, Log);
+			Homm3FactoryLoanBankRuntime.TryRegister(_harmony, Log);
+			Homm3FactoryManaGeneratorRuntime.TryRegister(_harmony, Log);
+			Homm3FactoryLightningRodRuntime.TryRegister(_harmony, Log);
+			Homm3CoveLodestarRuntime.TryRegister(_harmony, Log);
+			Homm3CoveGrottoRuntime.TryRegister(_harmony, Log);
 			Homm3MarshalSuppressingFireTrapBridge.TryRegister(_harmony, Log);
 			Homm3HeroSkillApplyDiag.TryRegister(_harmony, Log);
 			Homm3CounterstrokeDoctrineHook.TryRegister(_harmony, Log);

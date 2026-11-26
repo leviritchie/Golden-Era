@@ -1,75 +1,83 @@
 {
   "lawOverrides": {
-    "fraction_law_homm3_conflux_13": {
+    "fraction_law_homm3_conflux_1": {
       "enabled": true,
-      "nameText": "Elemental Backlash",
-      "descriptionText": "Friendly creatures' counterattacks unleash an elemental backlash and deal 35% more damage.",
+      "nameText": "Tax Collectors",
+      "descriptionText": "Produces {0} Gold daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
       "parametersPerLevel": [
         {
-          "cost": 3,
+          "cost": 2,
           "bonuses": [
             {
-              "type": "unitStat",
+              "type": "sideRes",
               "parameters": [
-                "modifierSet",
-                "outDmgMods",
-                "counter_attack",
-                "0.00"
-              ],
-              "receivers": [
-                "h3_pixie",
-                "h3_air_elemental",
-                "h3_water_elemental",
-                "h3_fire_elemental",
-                "h3_earth_elemental",
-                "h3_psychic_elemental",
-                "h3_firebird"
+                "gold",
+                250
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "gold",
+                500
               ]
             }
           ]
         }
       ],
-      "notes": "Runtime law 2026-11-10 (user: switch counterattack laws to runtime): the native bonus is a zero-strength loader anchor (unitStat modifierSet outDmgMods counter_attack 0.00) so Core keeps a valid law row; the effect described above is applied by the plugin (Homm3CounterattackDoctrineMutationRuntime) on native counterattacks only. Replaces the 2026-06-21 generic +50% counterattack-damage placeholder, which is removed so the two never stack. Runtime proof pending.",
-      "iconNotes": "HOMM4 art-source candidate: Retribution (schools/life/retribution.jpg). Runtime icon key: fraction_law_homm3_conflux_13_icon. Runtime rendering remains unproven until law-tree smoke.",
-      "homm4IconLabel": "Retribution",
-      "homm4IconPath": "schools/life/retribution.jpg",
-      "iconKey": "fraction_law_homm3_conflux_13_icon"
+      "notes": "law pass 2026-11-21: scaffold income law."
     },
-    "fraction_law_homm3_conflux_18": {
+    "fraction_law_homm3_conflux_2": {
       "enabled": true,
-      "nameText": "Opposed Elements",
-      "descriptionText": "Friendly creatures deal 10% more melee damage and take 10% less melee damage by rank.",
+      "nameText": "Planar Attunement",
+      "descriptionText": "Your heroes gain {0} Sight radius.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
       "parametersPerLevel": [
         {
-          "cost": 3,
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "viewRadius",
+                "1"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: native sight (family row 2).",
+      "effectIconKey": "fraction_law_human_2_icon"
+    },
+    "fraction_law_homm3_conflux_3": {
+      "enabled": false
+    },
+    "fraction_law_homm3_conflux_4": {
+      "enabled": true,
+      "nameText": "Spark Wardens",
+      "descriptionText": "Your Pixies and Air Elementals gain {0} Initiative. Fused elementals made from Air Elementals gain the same bonus.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
           "bonuses": [
             {
               "type": "unitStat",
               "parameters": [
-                "modifierSet",
-                "outDmgMods",
-                "melee_attack",
-                "0.10"
-              ],
-              "receivers": [
-                "h3_fire_elemental",
-                "h3_fire_elemental_upg",
-                "h3_fire_elemental_upg_alt",
-                "h3_earth_elemental",
-                "h3_earth_elemental_upg",
-                "h3_earth_elemental_upg_alt",
-                "h3_firebird",
-                "h3_firebird_upg",
-                "h3_firebird_upg_alt"
-              ]
-            },
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "inDmgMods",
-                "melee_attack",
-                "-0.10"
+                "initiative",
+                "1"
               ],
               "receivers": [
                 "h3_pixie",
@@ -78,25 +86,426 @@
                 "h3_air_elemental",
                 "h3_air_elemental_upg",
                 "h3_air_elemental_upg_alt",
-                "h3_water_elemental",
-                "h3_water_elemental_upg",
-                "h3_water_elemental_upg_alt"
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "initiative",
+                "2"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_pixie_upg",
+                "h3_pixie_upg_alt",
+                "h3_air_elemental",
+                "h3_air_elemental_upg",
+                "h3_air_elemental_upg_alt",
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_vengeance"
               ]
             }
           ]
         }
       ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "iconNotes": "Creature portrait law icon pass: uses h3_air_elemental.png for this creature-function law under runtime icon key fraction_law_homm3_conflux_18_icon. Static/deploy proven only; law-tree visual smoke still required.",
-      "homm4IconLabel": "Summon air elemental",
-      "homm4IconPath": "schools/nature/summon_air_elemental.jpg",
-      "iconKey": "fraction_law_homm3_conflux_18_icon",
+      "notes": "law pass 2026-11-25: Fusions inherit the bonus (SPEC group C): receivers include every fusion containing the Air Elemental line.",
+      "effectIconKey": "fraction_law_human_12_icon"
+    },
+    "fraction_law_homm3_conflux_5": {
+      "enabled": true,
+      "nameText": "Elite Pixies",
+      "descriptionText": "Pixie growth in your cities increases by {0}. They gain {1} Defense.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_pixie",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "2"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_pixie_upg",
+                "h3_pixie_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_pixie",
+                "8"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "4"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_pixie_upg",
+                "h3_pixie_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T1, Defence.",
+      "portraitIconSid": "h3_pixie"
+    },
+    "fraction_law_homm3_conflux_6": {
+      "enabled": true,
+      "nameText": "Elemental Lore",
+      "descriptionText": "Your heroes gain {0} Spell Power.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "spellPower",
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "spellPower",
+                "4"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: native hero Spell Power (primary stat family row 6).",
+      "effectIconKey": "fraction_law_human_8_icon"
+    },
+    "fraction_law_homm3_conflux_7": {
+      "enabled": true,
+      "nameText": "Elite Air Elementals",
+      "descriptionText": "Air Elemental growth in your cities increases by {0}. They and fused elementals made from them always deal maximum Damage.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_air_elemental",
+                "4"
+              ]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": [
+                "alwaysMaxDmg",
+                "true"
+              ],
+              "receivers": [
+                "h3_air_elemental",
+                "h3_air_elemental_upg",
+                "h3_air_elemental_upg_alt",
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_air_elemental",
+                "8"
+              ]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": [
+                "alwaysMaxDmg",
+                "true"
+              ],
+              "receivers": [
+                "h3_air_elemental",
+                "h3_air_elemental_upg",
+                "h3_air_elemental_upg_alt",
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Fusions inherit the bonus (SPEC group C): receivers include every fusion containing the Air Elemental line.",
       "portraitIconSid": "h3_air_elemental"
     },
-    "fraction_law_homm3_conflux_19": {
+    "fraction_law_homm3_conflux_8": {
       "enabled": true,
-      "nameText": "Elemental Ward",
-      "descriptionText": "Friendly creatures deal 10% more ranged damage and take 10% less ranged damage by rank.",
+      "nameText": "Elemental Attunement",
+      "descriptionText": "Fused elementals gain {0} Initiative.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
       "parametersPerLevel": [
         {
           "cost": 3,
@@ -104,53 +513,167 @@
             {
               "type": "unitStat",
               "parameters": [
-                "modifierSet",
-                "outDmgMods",
-                "shoot_attack",
-                "0.10"
+                "initiative",
+                "1"
               ],
               "receivers": [
-                "h3_pixie",
-                "h3_air_elemental",
-                "h3_water_elemental",
-                "h3_fire_elemental",
-                "h3_earth_elemental",
-                "h3_psychic_elemental",
-                "h3_firebird"
-              ]
-            },
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "inDmgMods",
-                "shoot_attack",
-                "-0.10"
-              ],
-              "receivers": [
-                "h3_pixie",
-                "h3_air_elemental",
-                "h3_water_elemental",
-                "h3_fire_elemental",
-                "h3_earth_elemental",
-                "h3_psychic_elemental",
-                "h3_firebird"
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_ice_water",
+                "h3_fusion_frost_water",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_frost",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_energy_fire",
+                "h3_fusion_plasma_fire",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_plasma",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_magma_earth",
+                "h3_fusion_lava_earth",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_lava",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_magic_psychic",
+                "h3_fusion_astral_psychic",
+                "h3_fusion_magic_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
               ]
             }
           ]
         }
       ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Creature portrait law icon pass: uses h3_earth_elemental.png for this creature-function law under runtime icon key fraction_law_homm3_conflux_19_icon. Static/deploy proven only; law-tree visual smoke still required.",
-      "homm4IconLabel": "Summon earth elemental",
-      "homm4IconPath": "schools/nature/summon_earth_elemental.jpg",
-      "iconKey": "fraction_law_homm3_conflux_19_icon",
-      "portraitIconSid": "h3_earth_elemental"
+      "notes": "law pass 2026-11-25: Elemental Attunement (SPEC group C): unitStat initiative 1 on every fused sid (same list as Stable Fusion), cost 3, moved r1K -> r1A. The plugin lever (lines unlock a rank earlier) is removed.",
+      "effectIconKey": "fraction_law_nature_28_icon"
     },
-    "fraction_law_homm3_conflux_2": {
+    "fraction_law_homm3_conflux_9": {
       "enabled": true,
-      "nameText": "Planar Attunement",
-      "descriptionText": "Heroes gain +2/+4/+6 Sight radius by rank.",
+      "nameText": "Reforming Elements",
+      "descriptionText": "After each battle you win, fused elementals restore {0}% of the creatures they lost.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
       "parametersPerLevel": [
         {
           "cost": 2,
@@ -158,20 +681,136 @@
             {
               "type": "heroStat",
               "parameters": [
-                "viewRadius",
+                "roadPerBonus",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.15"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "roadPerBonus",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.3"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Reforming Elements replaces Unequal Union (SPEC group C). Before the native battle result applies, the winning side's fused stacks get floor(lost x 15%/30%) back (Homm3ConfluxLawHooks.ObserveBeforeBattleResult, Salvage Crews pattern). The minShare lever is removed. Display carrier 15/30%; native bonus is a zero anchor.",
+      "effectIconKey": "fraction_law_dungeon_28_icon"
+    },
+    "fraction_law_homm3_conflux_10": {
+      "enabled": true,
+      "nameText": "Elite Water Elementals",
+      "descriptionText": "Water Elemental growth in your cities increases by {0}. Negative effects on them and on fused elementals made from them last {1} fewer round(s).",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_water_elemental",
                 "2"
               ]
-            }
-          ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
+            },
             {
-              "type": "heroStat",
+              "type": "unitStat",
               "parameters": [
-                "viewRadius",
-                "4"
+                "inComingDebuffDuration",
+                "-1"
+              ],
+              "receivers": [
+                "h3_water_elemental",
+                "h3_water_elemental_upg",
+                "h3_water_elemental_upg_alt",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_ice_water",
+                "h3_fusion_frost_water",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_frost",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line"
               ]
             }
           ]
@@ -180,23 +819,821 @@
           "cost": 2,
           "bonuses": [
             {
-              "type": "heroStat",
+              "type": "cityUnitsIncrement",
               "parameters": [
-                "viewRadius",
-                "6"
+                "h3_water_elemental",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inComingDebuffDuration",
+                "-1"
+              ],
+              "receivers": [
+                "h3_water_elemental",
+                "h3_water_elemental_upg",
+                "h3_water_elemental_upg_alt",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_ice_water",
+                "h3_fusion_frost_water",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_frost",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line"
               ]
             }
           ]
         }
       ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Canonical shared-law icon pass: external-building Sight laws use a shared structure/scouting vanilla icon. Static/deploy validation pending.",
-      "iconKey": "fraction_law_nature_2_icon"
+      "notes": "law pass 2026-11-25: Fusions inherit the bonus (SPEC group C): receivers include every fusion containing the Water Elemental line.",
+      "portraitIconSid": "h3_water_elemental"
     },
-    "fraction_law_homm3_conflux_21": {
+    "fraction_law_homm3_conflux_11": {
       "enabled": true,
-      "nameText": "Elemental Market",
-      "descriptionText": "Produces +1/+2 Crystal daily by rank.",
+      "nameText": "Tidal Binding",
+      "descriptionText": "Your Water and Earth Elementals, and fused elementals made from them, take –{0}% Damage.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_water_elemental",
+                "h3_water_elemental_upg",
+                "h3_water_elemental_upg_alt",
+                "h3_earth_elemental",
+                "h3_earth_elemental_upg",
+                "h3_earth_elemental_upg_alt",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_ice_water",
+                "h3_fusion_frost_water",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_frost",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_magma_earth",
+                "h3_fusion_lava_earth",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_lava",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "-0.15"
+              ],
+              "receivers": [
+                "h3_water_elemental",
+                "h3_water_elemental_upg",
+                "h3_water_elemental_upg_alt",
+                "h3_earth_elemental",
+                "h3_earth_elemental_upg",
+                "h3_earth_elemental_upg_alt",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_ice_water",
+                "h3_fusion_frost_water",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_frost",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_magma_earth",
+                "h3_fusion_lava_earth",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_lava",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Fusions inherit the bonus (SPEC group C): receivers include every fusion containing the Water or Earth Elemental line.",
+      "effectIconKey": "fraction_law_demon_5_icon"
+    },
+    "fraction_law_homm3_conflux_12": {
+      "enabled": true,
+      "nameText": "Elite Fire Elementals",
+      "descriptionText": "Fire Elemental growth in your cities increases by {0}. They and fused elementals made from them deal +{1}% Damage with Damage-over-time effects.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modPercent_bonuses_1_parameters_3"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_fire_elemental",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "overTime_effect",
+                "0.25"
+              ],
+              "receivers": [
+                "h3_fire_elemental",
+                "h3_fire_elemental_upg",
+                "h3_fire_elemental_upg_alt",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_energy_fire",
+                "h3_fusion_plasma_fire",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_plasma",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_fire_elemental",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "outDmgMods",
+                "overTime_effect",
+                "0.5"
+              ],
+              "receivers": [
+                "h3_fire_elemental",
+                "h3_fire_elemental_upg",
+                "h3_fire_elemental_upg_alt",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_energy_fire",
+                "h3_fusion_plasma_fire",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_plasma",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Fusions inherit the bonus (SPEC group C): receivers include every fusion containing the Fire Elemental line.",
+      "portraitIconSid": "h3_fire_elemental"
+    },
+    "fraction_law_homm3_conflux_13": {
+      "enabled": true,
+      "nameText": "Isolating Winds",
+      "descriptionText": "Your Air and Fire Elementals, and fused elementals made from them, deal +{0}% Damage to enemies that have no allies next to them.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_air_elemental",
+                "h3_air_elemental_upg",
+                "h3_air_elemental_upg_alt",
+                "h3_fire_elemental",
+                "h3_fire_elemental_upg",
+                "h3_fire_elemental_upg_alt",
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_energy_fire",
+                "h3_fusion_plasma_fire",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_plasma",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.1"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_air_elemental",
+                "h3_air_elemental_upg",
+                "h3_air_elemental_upg_alt",
+                "h3_fire_elemental",
+                "h3_fire_elemental_upg",
+                "h3_fire_elemental_upg_alt",
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_energy_fire",
+                "h3_fusion_plasma_fire",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_plasma",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.2"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Isolating Winds: display carrier 10/20% = lawRules adjacency isolated; fusions containing Air or Fire Elementals added to the bonus and lawRules receivers (SPEC group C).",
+      "effectIconKey": "fraction_law_dungeon_20_icon"
+    },
+    "fraction_law_homm3_conflux_14": {
+      "enabled": true,
+      "nameText": "Mining: Mercury",
+      "descriptionText": "Produces {0} Mercury daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
       "parametersPerLevel": [
         {
           "cost": 2,
@@ -204,7 +1641,7 @@
             {
               "type": "sideRes",
               "parameters": [
-                "crystals",
+                "mercury",
                 1
               ]
             }
@@ -216,247 +1653,22 @@
             {
               "type": "sideRes",
               "parameters": [
-                "crystals",
+                "mercury",
                 2
               ]
             }
           ]
         }
       ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "iconNotes": "Mechanic-derived icon contract: direct Crystal production uses the vanilla Crystal production/mining icon. Candidate/deploy validation pending.",
-      "homm4IconLabel": "Fortune",
-      "iconKey": "fraction_law_nature_14_icon"
-    },
-    "fraction_law_homm3_conflux_25": {
-      "enabled": true,
-      "nameText": "Elemental Exultation",
-      "descriptionText": "Morale trigger chance for friendly creatures increases by +1%/+2%/+3% per Morale point by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 1,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "additionalActionChanceModifier",
-                "0.01"
-              ],
-              "receivers": [
-                "h3_pixie",
-                "h3_air_elemental",
-                "h3_water_elemental",
-                "h3_fire_elemental",
-                "h3_earth_elemental",
-                "h3_psychic_elemental",
-                "h3_firebird"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 1,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "additionalActionChanceModifier",
-                "0.02"
-              ],
-              "receivers": [
-                "h3_pixie",
-                "h3_air_elemental",
-                "h3_water_elemental",
-                "h3_fire_elemental",
-                "h3_earth_elemental",
-                "h3_psychic_elemental",
-                "h3_firebird"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 1,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "additionalActionChanceModifier",
-                "0.03"
-              ],
-              "receivers": [
-                "h3_pixie",
-                "h3_air_elemental",
-                "h3_water_elemental",
-                "h3_fire_elemental",
-                "h3_earth_elemental",
-                "h3_psychic_elemental",
-                "h3_firebird"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_25_icon"
-    },
-    "fraction_law_homm3_conflux_28": {
-      "enabled": true,
-      "nameText": "Planar Alignment",
-      "descriptionText": "Your towns gain an additional daily construction allowance.",
-      "parametersPerLevel": [
-        {
-          "cost": 6,
-          "bonuses": [
-            {
-              "type": "constructionDailyLimit",
-              "parameters": [
-                "1"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_28_icon"
-    },
-    "fraction_law_homm3_conflux_33": {
-      "enabled": true,
-      "nameText": "Planar Calendar",
-      "descriptionText": "Produces 250/500/750 Astrology points daily by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "astrologyExp",
-              "parameters": [
-                "250"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "astrologyExp",
-              "parameters": [
-                "500"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "astrologyExp",
-              "parameters": [
-                "750"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconKey": "fraction_law_human_34_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_conflux_34": {
-      "enabled": true,
-      "nameText": "Aspect Cooldowns",
-      "descriptionText": "Positive effects on friendly creatures last +1 additional rounds by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "inComingBuffDuration",
-                "1"
-              ],
-              "receivers": [
-                "h3_pixie",
-                "h3_air_elemental",
-                "h3_water_elemental",
-                "h3_fire_elemental",
-                "h3_earth_elemental",
-                "h3_psychic_elemental",
-                "h3_firebird"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "homm4IconLabel": "Spell shackle",
-      "homm4IconPath": "schools/chaos/spell_shackle.jpg",
-      "iconNotes": "HOMM4 art-source candidate: Spell shackle (schools/chaos/spell_shackle.jpg). Runtime icon key: fraction_law_homm3_conflux_34_icon. Runtime rendering remains unproven until law-tree smoke.",
-      "iconKey": "fraction_law_homm3_conflux_34_icon"
-    },
-    "fraction_law_homm3_conflux_6": {
-      "enabled": true,
-      "nameText": "Elemental Aspect",
-      "descriptionText": "Friendly creatures deal +10% damage by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "outAllDmgMod",
-                "0.10"
-              ],
-              "receivers": [
-                "h3_pixie",
-                "h3_air_elemental",
-                "h3_water_elemental",
-                "h3_fire_elemental",
-                "h3_earth_elemental",
-                "h3_psychic_elemental",
-                "h3_firebird"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Creature portrait law icon pass: uses h3_fire_elemental.png for this creature-function law under runtime icon key fraction_law_homm3_conflux_6_icon. Static/deploy proven only; law-tree visual smoke still required.",
-      "homm4IconLabel": "Summon fire elemental",
-      "homm4IconPath": "schools/nature/summon_fire_elemental.jpg",
-      "iconKey": "fraction_law_homm3_conflux_6_icon",
-      "portraitIconSid": "h3_fire_elemental"
-    },
-    "fraction_law_homm3_conflux_4": {
-      "iconNotes": "Icon of the live vanilla law with this effect, instead of the donor-index icon fraction_law_nature_4_icon: nature_4_icon is riches art; the law is army.",
-      "iconKey": "fraction_law_nature_28_icon"
-    },
-    "fraction_law_homm3_conflux_5": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_5_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_nature_5_icon"
-    },
-    "fraction_law_homm3_conflux_10": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_10_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_nature_10_icon"
-    },
-    "fraction_law_homm3_conflux_11": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_11_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_nature_11_icon"
-    },
-    "fraction_law_homm3_conflux_14": {
-      "iconNotes": "Canonical resource icon pass: mining laws use the vanilla icon matching the produced special resource instead of donor-faction inheritance. Static/deploy validation pending.",
-      "iconKey": "fraction_law_dungeon_14_icon"
+      "notes": "law pass 2026-11-21: scaffold resource law."
     },
     "fraction_law_homm3_conflux_15": {
-      "iconNotes": "HOMM4 art-source candidate: Summon water elemental (schools/nature/summon_water_elemental.jpg). Runtime icon key: fraction_law_homm3_conflux_15_icon. Runtime rendering remains unproven until law-tree smoke.",
       "enabled": true,
       "nameText": "Primal Wheel",
-      "descriptionText": "Heroes can learn tier 1 Primal spells.",
+      "descriptionText": "Primal spells of your heroes gain {0} level(s).",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_3"
+      ],
       "parametersPerLevel": [
         {
           "cost": 3,
@@ -473,28 +1685,210 @@
           ]
         }
       ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
+      "notes": "law pass 2026-11-21: (I) spell school +1 level (school family row 15); text now matches the data.",
       "homm4IconLabel": "Summon water elemental",
       "homm4IconPath": "schools/nature/summon_water_elemental.jpg",
-      "iconKey": "fraction_law_homm3_conflux_15_icon"
+      "iconKey": "fraction_law_homm3_conflux_15_icon",
+      "iconNotes": "HOMM4 art-source candidate: Summon water elemental (schools/nature/summon_water_elemental.jpg). Runtime icon key: fraction_law_homm3_conflux_15_icon. Runtime rendering remains unproven until law-tree smoke."
     },
     "fraction_law_homm3_conflux_16": {
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_16_icon"
+      "enabled": false
     },
     "fraction_law_homm3_conflux_17": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_17_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_nature_17_icon"
+      "enabled": true,
+      "nameText": "Elite Earth Elementals",
+      "descriptionText": "Earth Elemental growth in your cities increases by {0}. They and fused elementals made from them can counterattack twice.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_earth_elemental",
+                "1"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "numCounters",
+                "1"
+              ],
+              "receivers": [
+                "h3_earth_elemental",
+                "h3_earth_elemental_upg",
+                "h3_earth_elemental_upg_alt",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_magma_earth",
+                "h3_fusion_lava_earth",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_lava",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_earth_elemental",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "numCounters",
+                "1"
+              ],
+              "receivers": [
+                "h3_earth_elemental",
+                "h3_earth_elemental_upg",
+                "h3_earth_elemental_upg_alt",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_magma_earth",
+                "h3_fusion_lava_earth",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_lava",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Fusions inherit the bonus (SPEC group C): receivers include every fusion containing the Earth Elemental line.",
+      "portraitIconSid": "h3_earth_elemental"
+    },
+    "fraction_law_homm3_conflux_18": {
+      "enabled": false
+    },
+    "fraction_law_homm3_conflux_19": {
+      "enabled": false
     },
     "fraction_law_homm3_conflux_20": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_20_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_nature_20_icon"
-    },
-    "fraction_law_homm3_conflux_22": {
-      "iconNotes": "Canonical shared-law icon pass: hero Morale laws use the same vanilla morale icon across custom factions. Static/deploy validation pending.",
       "enabled": true,
-      "nameText": "Elemental Poise",
-      "descriptionText": "Heroes gain +1/+2 Morale by rank.",
+      "nameText": "Ley Wells",
+      "descriptionText": "Your heroes restore +{0}% mana each morning.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_1"
+      ],
       "parametersPerLevel": [
         {
           "cost": 2,
@@ -502,8 +1896,8 @@
             {
               "type": "heroStat",
               "parameters": [
-                "moral",
-                "1"
+                "manaRestoreBonusPercent",
+                "0.25"
               ]
             }
           ]
@@ -514,33 +1908,1865 @@
             {
               "type": "heroStat",
               "parameters": [
-                "moral",
-                "2"
+                "manaRestoreBonusPercent",
+                "0.50"
               ]
             }
           ]
         }
       ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconKey": "fraction_law_human_22_icon"
+      "notes": "law pass 2026-11-21: native mana restore (fraction, as unfrozen_9: 0.25 = 25%).",
+      "effectIconKey": "fraction_law_unfrozen_9_icon"
+    },
+    "fraction_law_homm3_conflux_21": {
+      "enabled": true,
+      "nameText": "Planar Tithe",
+      "descriptionText": "Your Conflux creatures cost –{0}% Gold.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_0"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "unitHiringDiscount",
+              "parameters": [
+                "-0.10"
+              ],
+              "fraction": "homm3_conflux"
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitHiringDiscount",
+              "parameters": [
+                "-0.15"
+              ],
+              "fraction": "homm3_conflux"
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitHiringDiscount",
+              "parameters": [
+                "-0.20"
+              ],
+              "fraction": "homm3_conflux"
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: native hiring discount (undead_22 shape).",
+      "effectIconKey": "fraction_law_undead_22_icon"
+    },
+    "fraction_law_homm3_conflux_22": {
+      "enabled": true,
+      "nameText": "Stable Fusion",
+      "descriptionText": "Fused elementals gain +{0}% HP.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "hpPerc",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_ice_water",
+                "h3_fusion_frost_water",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_frost",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_energy_fire",
+                "h3_fusion_plasma_fire",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_plasma",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_magma_earth",
+                "h3_fusion_lava_earth",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_lava",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_magic_psychic",
+                "h3_fusion_astral_psychic",
+                "h3_fusion_magic_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "hpPerc",
+                "0.20"
+              ],
+              "receivers": [
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_ice_water",
+                "h3_fusion_frost_water",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_frost",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_energy_fire",
+                "h3_fusion_plasma_fire",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_plasma",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_magma_earth",
+                "h3_fusion_lava_earth",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_lava",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_magic_psychic",
+                "h3_fusion_astral_psychic",
+                "h3_fusion_magic_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: (S) native hpPerc on every fused SID in fusion_units.json (105 + 37).",
+      "effectIconKey": "fraction_law_nature_17_icon"
     },
     "fraction_law_homm3_conflux_23": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_23_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_nature_23_icon"
+      "enabled": true,
+      "nameText": "Elite Psychic Elementals",
+      "descriptionText": "Psychic Elemental growth in your cities increases by {0}. Their ability cooldowns, and those of fused elementals made from them, are reduced by {1} round(s).",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_psychic_elemental",
+                "1"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "abilityCdBonus",
+                "-1"
+              ],
+              "receivers": [
+                "h3_psychic_elemental",
+                "h3_psychic_elemental_upg",
+                "h3_psychic_elemental_upg_alt",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_magic_psychic",
+                "h3_fusion_astral_psychic",
+                "h3_fusion_magic_astral",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_psychic_elemental",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "abilityCdBonus",
+                "-1"
+              ],
+              "receivers": [
+                "h3_psychic_elemental",
+                "h3_psychic_elemental_upg",
+                "h3_psychic_elemental_upg_alt",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_magic_psychic",
+                "h3_fusion_astral_psychic",
+                "h3_fusion_magic_astral",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Fusions inherit the bonus (SPEC group C): receivers include every fusion containing the Psychic Elemental line.",
+      "portraitIconSid": "h3_psychic_elemental"
     },
     "fraction_law_homm3_conflux_24": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_24_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_nature_24_icon"
+      "enabled": true,
+      "nameText": "Prismatic Screen",
+      "descriptionText": "Your Conflux creatures take –{0}% Magic Damage.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_3"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "magic_damage",
+                "-0.05"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_pixie_upg",
+                "h3_pixie_upg_alt",
+                "h3_air_elemental",
+                "h3_air_elemental_upg",
+                "h3_air_elemental_upg_alt",
+                "h3_water_elemental",
+                "h3_water_elemental_upg",
+                "h3_water_elemental_upg_alt",
+                "h3_fire_elemental",
+                "h3_fire_elemental_upg_alt",
+                "h3_fire_elemental_upg",
+                "h3_earth_elemental",
+                "h3_earth_elemental_upg",
+                "h3_earth_elemental_upg_alt",
+                "h3_psychic_elemental",
+                "h3_psychic_elemental_upg",
+                "h3_psychic_elemental_upg_alt",
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt",
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_ice_water",
+                "h3_fusion_frost_water",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_frost",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_energy_fire",
+                "h3_fusion_plasma_fire",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_plasma",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_magma_earth",
+                "h3_fusion_lava_earth",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_lava",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_magic_psychic",
+                "h3_fusion_astral_psychic",
+                "h3_fusion_magic_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "magic_damage",
+                "-0.10"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_pixie_upg",
+                "h3_pixie_upg_alt",
+                "h3_air_elemental",
+                "h3_air_elemental_upg",
+                "h3_air_elemental_upg_alt",
+                "h3_water_elemental",
+                "h3_water_elemental_upg",
+                "h3_water_elemental_upg_alt",
+                "h3_fire_elemental",
+                "h3_fire_elemental_upg_alt",
+                "h3_fire_elemental_upg",
+                "h3_earth_elemental",
+                "h3_earth_elemental_upg",
+                "h3_earth_elemental_upg_alt",
+                "h3_psychic_elemental",
+                "h3_psychic_elemental_upg",
+                "h3_psychic_elemental_upg_alt",
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt",
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_ice_water",
+                "h3_fusion_frost_water",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_frost",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_energy_fire",
+                "h3_fusion_plasma_fire",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_plasma",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_magma_earth",
+                "h3_fusion_lava_earth",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_lava",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_magic_psychic",
+                "h3_fusion_astral_psychic",
+                "h3_fusion_magic_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "magic_damage",
+                "-0.15"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_pixie_upg",
+                "h3_pixie_upg_alt",
+                "h3_air_elemental",
+                "h3_air_elemental_upg",
+                "h3_air_elemental_upg_alt",
+                "h3_water_elemental",
+                "h3_water_elemental_upg",
+                "h3_water_elemental_upg_alt",
+                "h3_fire_elemental",
+                "h3_fire_elemental_upg_alt",
+                "h3_fire_elemental_upg",
+                "h3_earth_elemental",
+                "h3_earth_elemental_upg",
+                "h3_earth_elemental_upg_alt",
+                "h3_psychic_elemental",
+                "h3_psychic_elemental_upg",
+                "h3_psychic_elemental_upg_alt",
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt",
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_ice_water",
+                "h3_fusion_frost_water",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_frost",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_energy_fire",
+                "h3_fusion_plasma_fire",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_plasma",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_magma_earth",
+                "h3_fusion_lava_earth",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_lava",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_magic_psychic",
+                "h3_fusion_astral_psychic",
+                "h3_fusion_magic_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: (I) native magic damage taken; receivers include every fused elemental.",
+      "effectIconKey": "fraction_law_dungeon_5_icon"
+    },
+    "fraction_law_homm3_conflux_25": {
+      "enabled": true,
+      "nameText": "Elemental Constitution",
+      "descriptionText": "Your Conflux creatures take –{0}% Damage from Damage-over-time effects.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_3"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "overTime_effect",
+                "-0.25"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_pixie_upg",
+                "h3_pixie_upg_alt",
+                "h3_air_elemental",
+                "h3_air_elemental_upg",
+                "h3_air_elemental_upg_alt",
+                "h3_water_elemental",
+                "h3_water_elemental_upg",
+                "h3_water_elemental_upg_alt",
+                "h3_fire_elemental",
+                "h3_fire_elemental_upg_alt",
+                "h3_fire_elemental_upg",
+                "h3_earth_elemental",
+                "h3_earth_elemental_upg",
+                "h3_earth_elemental_upg_alt",
+                "h3_psychic_elemental",
+                "h3_psychic_elemental_upg",
+                "h3_psychic_elemental_upg_alt",
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt",
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_ice_water",
+                "h3_fusion_frost_water",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_frost",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_energy_fire",
+                "h3_fusion_plasma_fire",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_plasma",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_magma_earth",
+                "h3_fusion_lava_earth",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_lava",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_magic_psychic",
+                "h3_fusion_astral_psychic",
+                "h3_fusion_magic_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "modifierSet",
+                "inDmgMods",
+                "overTime_effect",
+                "-0.50"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_pixie_upg",
+                "h3_pixie_upg_alt",
+                "h3_air_elemental",
+                "h3_air_elemental_upg",
+                "h3_air_elemental_upg_alt",
+                "h3_water_elemental",
+                "h3_water_elemental_upg",
+                "h3_water_elemental_upg_alt",
+                "h3_fire_elemental",
+                "h3_fire_elemental_upg_alt",
+                "h3_fire_elemental_upg",
+                "h3_earth_elemental",
+                "h3_earth_elemental_upg",
+                "h3_earth_elemental_upg_alt",
+                "h3_psychic_elemental",
+                "h3_psychic_elemental_upg",
+                "h3_psychic_elemental_upg_alt",
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt",
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_ice_water",
+                "h3_fusion_frost_water",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_frost",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_energy_fire",
+                "h3_fusion_plasma_fire",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_plasma",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_magma_earth",
+                "h3_fusion_lava_earth",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_lava",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_magic_psychic",
+                "h3_fusion_astral_psychic",
+                "h3_fusion_magic_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: native DoT damage taken; receivers include every fused elemental.",
+      "effectIconKey": "fraction_law_undead_26_icon"
     },
     "fraction_law_homm3_conflux_26": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_nature_26_icon from the nature faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_nature_26_icon"
+      "enabled": true,
+      "nameText": "Elemental Balance",
+      "descriptionText": "Your Conflux creatures deal +{0}% and take –{1}% Damage.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_1",
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 5,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.05"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_pixie_upg",
+                "h3_pixie_upg_alt",
+                "h3_air_elemental",
+                "h3_air_elemental_upg",
+                "h3_air_elemental_upg_alt",
+                "h3_water_elemental",
+                "h3_water_elemental_upg",
+                "h3_water_elemental_upg_alt",
+                "h3_fire_elemental",
+                "h3_fire_elemental_upg_alt",
+                "h3_fire_elemental_upg",
+                "h3_earth_elemental",
+                "h3_earth_elemental_upg",
+                "h3_earth_elemental_upg_alt",
+                "h3_psychic_elemental",
+                "h3_psychic_elemental_upg",
+                "h3_psychic_elemental_upg_alt",
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt",
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_ice_water",
+                "h3_fusion_frost_water",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_frost",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_energy_fire",
+                "h3_fusion_plasma_fire",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_plasma",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_magma_earth",
+                "h3_fusion_lava_earth",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_lava",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_magic_psychic",
+                "h3_fusion_astral_psychic",
+                "h3_fusion_magic_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "-0.05"
+              ],
+              "receivers": [
+                "h3_pixie",
+                "h3_pixie_upg",
+                "h3_pixie_upg_alt",
+                "h3_air_elemental",
+                "h3_air_elemental_upg",
+                "h3_air_elemental_upg_alt",
+                "h3_water_elemental",
+                "h3_water_elemental_upg",
+                "h3_water_elemental_upg_alt",
+                "h3_fire_elemental",
+                "h3_fire_elemental_upg_alt",
+                "h3_fire_elemental_upg",
+                "h3_earth_elemental",
+                "h3_earth_elemental_upg",
+                "h3_earth_elemental_upg_alt",
+                "h3_psychic_elemental",
+                "h3_psychic_elemental_upg",
+                "h3_psychic_elemental_upg_alt",
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt",
+                "h3_fusion_storm_air",
+                "h3_fusion_hurricane_air",
+                "h3_fusion_water_air",
+                "h3_fusion_ice_air",
+                "h3_fusion_frost_air",
+                "h3_fusion_fire_air",
+                "h3_fusion_energy_air",
+                "h3_fusion_plasma_air",
+                "h3_fusion_earth_air",
+                "h3_fusion_magma_air",
+                "h3_fusion_lava_air",
+                "h3_fusion_air_psychic",
+                "h3_fusion_air_magic",
+                "h3_fusion_air_astral",
+                "h3_fusion_storm_hurricane",
+                "h3_fusion_water_storm",
+                "h3_fusion_ice_storm",
+                "h3_fusion_frost_storm",
+                "h3_fusion_fire_storm",
+                "h3_fusion_energy_storm",
+                "h3_fusion_plasma_storm",
+                "h3_fusion_earth_storm",
+                "h3_fusion_magma_storm",
+                "h3_fusion_lava_storm",
+                "h3_fusion_storm_psychic",
+                "h3_fusion_storm_magic",
+                "h3_fusion_storm_astral",
+                "h3_fusion_water_hurricane",
+                "h3_fusion_ice_hurricane",
+                "h3_fusion_frost_hurricane",
+                "h3_fusion_fire_hurricane",
+                "h3_fusion_energy_hurricane",
+                "h3_fusion_plasma_hurricane",
+                "h3_fusion_earth_hurricane",
+                "h3_fusion_magma_hurricane",
+                "h3_fusion_lava_hurricane",
+                "h3_fusion_hurricane_psychic",
+                "h3_fusion_hurricane_magic",
+                "h3_fusion_hurricane_astral",
+                "h3_fusion_ice_water",
+                "h3_fusion_frost_water",
+                "h3_fusion_water_fire",
+                "h3_fusion_water_energy",
+                "h3_fusion_water_plasma",
+                "h3_fusion_earth_water",
+                "h3_fusion_magma_water",
+                "h3_fusion_lava_water",
+                "h3_fusion_water_psychic",
+                "h3_fusion_water_magic",
+                "h3_fusion_water_astral",
+                "h3_fusion_ice_frost",
+                "h3_fusion_ice_fire",
+                "h3_fusion_ice_energy",
+                "h3_fusion_ice_plasma",
+                "h3_fusion_earth_ice",
+                "h3_fusion_magma_ice",
+                "h3_fusion_lava_ice",
+                "h3_fusion_ice_psychic",
+                "h3_fusion_ice_magic",
+                "h3_fusion_ice_astral",
+                "h3_fusion_frost_fire",
+                "h3_fusion_frost_energy",
+                "h3_fusion_frost_plasma",
+                "h3_fusion_earth_frost",
+                "h3_fusion_magma_frost",
+                "h3_fusion_lava_frost",
+                "h3_fusion_frost_psychic",
+                "h3_fusion_frost_magic",
+                "h3_fusion_frost_astral",
+                "h3_fusion_energy_fire",
+                "h3_fusion_plasma_fire",
+                "h3_fusion_earth_fire",
+                "h3_fusion_magma_fire",
+                "h3_fusion_lava_fire",
+                "h3_fusion_fire_psychic",
+                "h3_fusion_fire_magic",
+                "h3_fusion_fire_astral",
+                "h3_fusion_energy_plasma",
+                "h3_fusion_earth_energy",
+                "h3_fusion_magma_energy",
+                "h3_fusion_lava_energy",
+                "h3_fusion_energy_psychic",
+                "h3_fusion_energy_magic",
+                "h3_fusion_energy_astral",
+                "h3_fusion_earth_plasma",
+                "h3_fusion_magma_plasma",
+                "h3_fusion_lava_plasma",
+                "h3_fusion_plasma_psychic",
+                "h3_fusion_plasma_magic",
+                "h3_fusion_plasma_astral",
+                "h3_fusion_magma_earth",
+                "h3_fusion_lava_earth",
+                "h3_fusion_earth_psychic",
+                "h3_fusion_earth_magic",
+                "h3_fusion_earth_astral",
+                "h3_fusion_magma_lava",
+                "h3_fusion_magma_psychic",
+                "h3_fusion_magma_magic",
+                "h3_fusion_magma_astral",
+                "h3_fusion_lava_psychic",
+                "h3_fusion_lava_magic",
+                "h3_fusion_lava_astral",
+                "h3_fusion_magic_psychic",
+                "h3_fusion_astral_psychic",
+                "h3_fusion_magic_astral",
+                "h3_fusion_ii_dirty_thunder",
+                "h3_fusion_ii_pyrocumulus",
+                "h3_fusion_ii_supercell",
+                "h3_fusion_ii_maelstrom",
+                "h3_fusion_ii_polar_vortex",
+                "h3_fusion_ii_dust_devil",
+                "h3_fusion_ii_haboob",
+                "h3_fusion_ii_rainbow",
+                "h3_fusion_ii_borealis",
+                "h3_fusion_ii_lahar",
+                "h3_fusion_ii_supervolcano",
+                "h3_fusion_ii_fulgurite",
+                "h3_fusion_ii_glass",
+                "h3_fusion_ii_quicksilver",
+                "h3_fusion_ii_philosophers_stone",
+                "h3_fusion_ii_causeway",
+                "h3_fusion_ii_henge",
+                "h3_fusion_ii_permafrost",
+                "h3_fusion_ii_iceberg",
+                "h3_fusion_ii_hoarfrost",
+                "h3_fusion_ii_jokulhlaup",
+                "h3_fusion_ii_spring",
+                "h3_fusion_ii_fountain_of_youth",
+                "h3_fusion_ii_bolide",
+                "h3_fusion_ii_meteor_shower",
+                "h3_fusion_ii_protostar",
+                "h3_fusion_ii_singularity",
+                "h3_fusion_ii_eclipse",
+                "h3_fusion_ii_wormhole",
+                "h3_fusion_ii_illusionist",
+                "h3_fusion_ii_fever_dream",
+                "h3_fusion_ii_nightmare",
+                "h3_fusion_ii_kaleidoscope",
+                "h3_fusion_ii_black_mirror",
+                "h3_fusion_ii_will_o_wisp",
+                "h3_fusion_ii_ley_line",
+                "h3_fusion_ii_vengeance"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: (I) native, no composition condition (coordinator decision, BUILD_BRIEF 4); receivers include every fused elemental.",
+      "effectIconKey": "fraction_law_undead_31_icon"
     },
     "fraction_law_homm3_conflux_27": {
-      "iconNotes": "Creature portrait law icon pass: uses h3_psychic_elemental.png for this creature-function law under runtime icon key fraction_law_homm3_conflux_27_icon. Static/deploy proven only; law-tree visual smoke still required.",
+      "enabled": false
+    },
+    "fraction_law_homm3_conflux_28": {
       "enabled": true,
-      "nameText": "Celestial Wheel",
-      "descriptionText": "Your heroes can store 1 additional Focus Charge.",
+      "nameText": "Perfect Conjunction",
+      "descriptionText": "Fused elementals keep {0}% of the strength of the stacks that formed them instead of {1}%.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1",
+        "current_law_modPercent_bonuses_1_parameters_2"
+      ],
       "parametersPerLevel": [
         {
           "cost": 4,
@@ -548,88 +3774,445 @@
             {
               "type": "heroStat",
               "parameters": [
-                "maxEnergyLevelsBonus",
-                "1"
+                "movementRestoreBonus",
+                "0"
               ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.95",
+                "0.9"
+              ],
+              "activationLevel": 99
             }
           ]
-        }
-      ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "homm4IconLabel": "Mana flare",
-      "homm4IconPath": "schools/chaos/mana_flare.jpg",
-      "iconKey": "fraction_law_homm3_conflux_27_icon",
-      "portraitIconSid": "h3_psychic_elemental"
-    },
-    "fraction_law_homm3_conflux_30": {
-      "iconNotes": "Unit portrait instead of the donor-index icon fraction_law_nature_30_icon: nature_30_icon is astrology art; the law is army.",
-      "portraitIconSid": "h3_firebird"
-    },
-    "fraction_law_homm3_conflux_31": {
-      "iconNotes": "Phoenix Omen (+2 Luck to the Firebird line, 2026-11-17; it used to copy Phoenix Mandate): Phoenix portrait, so it reads apart from Phoenix Mandate's Firebird. A vanilla unit law's art never goes on a custom law.",
-      "portraitIconSid": "h3_firebird_upg"
-    },
-    "fraction_law_homm3_conflux_1": {
-      "iconKey": "fraction_law_human_1_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_conflux_3": {
-      "iconKey": "fraction_law_human_3_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_conflux_7": {
-      "iconKey": "fraction_law_human_7_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_conflux_8": {
-      "iconKey": "fraction_law_human_8_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_conflux_9": {
-      "iconKey": "fraction_law_human_9_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_conflux_12": {
-      "iconKey": "fraction_law_human_12_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_conflux_29": {
-      "iconKey": "fraction_law_human_29_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_conflux_32": {
-      "enabled": true,
-      "nameText": "Leyline Currents",
-      "descriptionText": "Your heroes gain +10/+20 Movement points.",
-      "parametersPerLevel": [
+        },
         {
-          "cost": 5,
+          "cost": 4,
           "bonuses": [
             {
               "type": "heroStat",
               "parameters": [
-                "movementBonus",
-                "10"
+                "movementRestoreBonus",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "1.0",
+                "0.9"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Perfect Conjunction states the default (SPEC group C): fusion_config.json penalty 0.9, law 0.95/1.0 (Homm3ConfluxFusionRuntime.ApplyFusionLaws). Display carrier (law value, default).",
+      "effectIconKey": "fraction_law_dungeon_22_icon"
+    },
+    "fraction_law_homm3_conflux_29": {
+      "enabled": false
+    },
+    "fraction_law_homm3_conflux_30": {
+      "enabled": true,
+      "nameText": "Elite Firebirds",
+      "descriptionText": "Firebird growth in your cities increases by {0}. They gain {1} Attack and Defense and {2} Speed.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1",
+        "current_law_modInt_bonuses_3_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_firebird",
+                "1"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "offence",
+                "3"
+              ],
+              "receivers": [
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "3"
+              ],
+              "receivers": [
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "speed",
+                "1"
+              ],
+              "receivers": [
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt"
               ]
             }
           ]
         },
         {
-          "cost": 5,
+          "cost": 2,
           "bonuses": [
             {
-              "type": "heroStat",
+              "type": "cityUnitsIncrement",
               "parameters": [
-                "movementBonus",
-                "20"
+                "h3_firebird",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "offence",
+                "6"
+              ],
+              "receivers": [
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "defence",
+                "6"
+              ],
+              "receivers": [
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "speed",
+                "1"
+              ],
+              "receivers": [
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt"
               ]
             }
           ]
         }
       ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "iconNotes": "Canonical shared-law icon pass: Native Mastery uses the same vanilla icon across custom factions. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_32_icon"
+      "notes": "law pass 2026-11-21: Elite T7.",
+      "portraitIconSid": "h3_firebird"
+    },
+    "fraction_law_homm3_conflux_31": {
+      "enabled": true,
+      "nameText": "Phoenix Omen",
+      "descriptionText": "Your Firebirds gain {0} Luck.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "luck",
+                "2"
+              ],
+              "receivers": [
+                "h3_firebird",
+                "h3_firebird_upg",
+                "h3_firebird_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: native Luck, Firebird line; moved to r4.",
+      "portraitIconSid": "h3_firebird_upg"
+    },
+    "fraction_law_homm3_conflux_32": {
+      "enabled": true,
+      "nameText": "Magic University",
+      "descriptionText": "Your spell upgrades cost –{0}% Alchemical Dust.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "magicUpgradeCostPerBonus",
+                "-0.2"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "sideStat",
+              "parameters": [
+                "magicUpgradeCostPerBonus",
+                "-0.4"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: (I) native spell upgrade discount (undead_14 shape: fraction).",
+      "effectIconKey": "fraction_law_undead_14_icon"
+    },
+    "fraction_law_homm3_conflux_33": {
+      "enabled": true,
+      "nameText": "Astral Conduit",
+      "descriptionText": "Your heroes’ spells cost –{0}% mana.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "manaCostBonusPercent",
+                "-0.10"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 4,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "manaCostBonusPercent",
+                "-0.20"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: replaces Planar Static (REVIEW 2). manaCostBonus is a flat reduction (demon_9 -1/-2/-3); the percent stat is manaCostBonusPercent (hero_stats_limits; Bulwark specialization -0.11, human subclass -1.0).",
+      "effectIconKey": "fraction_law_demon_9_icon"
+    },
+    "fraction_law_homm3_conflux_34": {
+      "enabled": false
     }
-  }
+  },
+  "lawTree": [
+    {
+      "kingdom": [
+        3,
+        2,
+        20
+      ],
+      "army": [
+        5,
+        7,
+        4
+      ]
+    },
+    {
+      "kingdom": [
+        1,
+        14,
+        32
+      ],
+      "army": [
+        10,
+        12,
+        24,
+        8
+      ]
+    },
+    {
+      "kingdom": [
+        16,
+        9,
+        15
+      ],
+      "army": [
+        17,
+        13,
+        11
+      ]
+    },
+    {
+      "kingdom": [
+        21,
+        6
+      ],
+      "army": [
+        23,
+        22,
+        25
+      ]
+    },
+    {
+      "kingdom": [
+        29,
+        28,
+        33
+      ],
+      "army": [
+        30,
+        26,
+        31
+      ]
+    }
+  ],
+  "lawRules": [
+    {
+      "law": 13,
+      "rule": "adjacency",
+      "name": "Isolating Winds",
+      "mode": "isolated",
+      "percent": [
+        10,
+        20
+      ],
+      "receivers": [
+        "h3_air_elemental",
+        "h3_air_elemental_upg",
+        "h3_air_elemental_upg_alt",
+        "h3_fire_elemental",
+        "h3_fire_elemental_upg",
+        "h3_fire_elemental_upg_alt",
+        "h3_fusion_storm_air",
+        "h3_fusion_hurricane_air",
+        "h3_fusion_water_air",
+        "h3_fusion_ice_air",
+        "h3_fusion_frost_air",
+        "h3_fusion_fire_air",
+        "h3_fusion_energy_air",
+        "h3_fusion_plasma_air",
+        "h3_fusion_earth_air",
+        "h3_fusion_magma_air",
+        "h3_fusion_lava_air",
+        "h3_fusion_air_psychic",
+        "h3_fusion_air_magic",
+        "h3_fusion_air_astral",
+        "h3_fusion_storm_hurricane",
+        "h3_fusion_water_storm",
+        "h3_fusion_ice_storm",
+        "h3_fusion_frost_storm",
+        "h3_fusion_fire_storm",
+        "h3_fusion_energy_storm",
+        "h3_fusion_plasma_storm",
+        "h3_fusion_earth_storm",
+        "h3_fusion_magma_storm",
+        "h3_fusion_lava_storm",
+        "h3_fusion_storm_psychic",
+        "h3_fusion_storm_magic",
+        "h3_fusion_storm_astral",
+        "h3_fusion_water_hurricane",
+        "h3_fusion_ice_hurricane",
+        "h3_fusion_frost_hurricane",
+        "h3_fusion_fire_hurricane",
+        "h3_fusion_energy_hurricane",
+        "h3_fusion_plasma_hurricane",
+        "h3_fusion_earth_hurricane",
+        "h3_fusion_magma_hurricane",
+        "h3_fusion_lava_hurricane",
+        "h3_fusion_hurricane_psychic",
+        "h3_fusion_hurricane_magic",
+        "h3_fusion_hurricane_astral",
+        "h3_fusion_water_fire",
+        "h3_fusion_water_energy",
+        "h3_fusion_water_plasma",
+        "h3_fusion_ice_fire",
+        "h3_fusion_ice_energy",
+        "h3_fusion_ice_plasma",
+        "h3_fusion_frost_fire",
+        "h3_fusion_frost_energy",
+        "h3_fusion_frost_plasma",
+        "h3_fusion_energy_fire",
+        "h3_fusion_plasma_fire",
+        "h3_fusion_earth_fire",
+        "h3_fusion_magma_fire",
+        "h3_fusion_lava_fire",
+        "h3_fusion_fire_psychic",
+        "h3_fusion_fire_magic",
+        "h3_fusion_fire_astral",
+        "h3_fusion_energy_plasma",
+        "h3_fusion_earth_energy",
+        "h3_fusion_magma_energy",
+        "h3_fusion_lava_energy",
+        "h3_fusion_energy_psychic",
+        "h3_fusion_energy_magic",
+        "h3_fusion_energy_astral",
+        "h3_fusion_earth_plasma",
+        "h3_fusion_magma_plasma",
+        "h3_fusion_lava_plasma",
+        "h3_fusion_plasma_psychic",
+        "h3_fusion_plasma_magic",
+        "h3_fusion_plasma_astral",
+        "h3_fusion_ii_dirty_thunder",
+        "h3_fusion_ii_pyrocumulus",
+        "h3_fusion_ii_supercell",
+        "h3_fusion_ii_maelstrom",
+        "h3_fusion_ii_polar_vortex",
+        "h3_fusion_ii_dust_devil",
+        "h3_fusion_ii_haboob",
+        "h3_fusion_ii_rainbow",
+        "h3_fusion_ii_borealis",
+        "h3_fusion_ii_lahar",
+        "h3_fusion_ii_supervolcano",
+        "h3_fusion_ii_fulgurite",
+        "h3_fusion_ii_glass",
+        "h3_fusion_ii_quicksilver",
+        "h3_fusion_ii_philosophers_stone",
+        "h3_fusion_ii_hoarfrost",
+        "h3_fusion_ii_jokulhlaup",
+        "h3_fusion_ii_spring",
+        "h3_fusion_ii_fountain_of_youth",
+        "h3_fusion_ii_bolide",
+        "h3_fusion_ii_meteor_shower",
+        "h3_fusion_ii_protostar",
+        "h3_fusion_ii_singularity",
+        "h3_fusion_ii_eclipse",
+        "h3_fusion_ii_wormhole",
+        "h3_fusion_ii_illusionist",
+        "h3_fusion_ii_fever_dream",
+        "h3_fusion_ii_kaleidoscope",
+        "h3_fusion_ii_will_o_wisp",
+        "h3_fusion_ii_ley_line",
+        "h3_fusion_ii_vengeance"
+      ]
+    }
+  ],
+  "lawBuffs": []
 }

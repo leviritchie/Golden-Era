@@ -7,66 +7,71 @@
       "id": "dungeon.mana_vortex",
       "surface": "building",
       "sourceName": "Mana Vortex",
-      "status": "substituted",
-      "reason": "Temporary mana-doubling source behavior requires hero/session resource tracing.",
+      "status": "exact",
+      "reason": "Native manaFountains row Build_Well_Of_Souls restores mana on every visit; Homm3DungeonManaVortexRuntime doubles the first visiting hero's mana once a week per town (week flag saved in the side carrier buff homm3_ind_town_building_store). The native refill on later visits is a small extra over HoMM3 (building pass 2026-11-22). Proof tier: build; runtime unproven.",
       "playerTextPolicy": "must_match_current_behavior",
       "forbiddenPlayerText": [
-        "doubles mana",
-        "Mana Vortex"
+        "every visit doubles"
       ],
       "currentRows": [
-        "Build_Bank"
+        "Build_Well_Of_Souls"
       ],
       "playerTextTokens": [
-        "Homm3Dungeon_Build_Bank_description",
-        "Homm3Dungeon_Build_Bank_name",
-        "Homm3Dungeon_Build_Bank_narrativeDescription"
-      ]
+        "Homm3Dungeon_Build_Well_Of_Souls_description",
+        "Homm3Dungeon_Build_Well_Of_Souls_name",
+        "Homm3Dungeon_Build_Well_Of_Souls_narrativeDescription"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
     },
     {
       "id": "dungeon.portal_of_summoning",
       "surface": "building",
       "sourceName": "Portal of Summoning",
-      "status": "substituted",
-      "reason": "Weekly external-dwelling recruitment needs a source-equivalent city/session route.",
+      "status": "exact",
+      "reason": "Native portalSummonings row Build_Portal_Summoning (vanilla Unfrozen row, numberPurchases 1) recruits from every outside dwelling the side owns; HoMM3 picks one at random each week, so native is the closer, kinder form. Replaces Build_Lyceum (building pass 2026-11-22).",
       "playerTextPolicy": "must_match_current_behavior",
       "forbiddenPlayerText": [
-        "Portal of Summoning",
-        "external dwelling"
+        "one random dwelling"
       ],
       "currentRows": [
-        "Build_Lyceum"
+        "Build_Portal_Summoning"
       ],
       "playerTextTokens": [
-        "Homm3Dungeon_Build_Lyceum_description",
-        "Homm3Dungeon_Build_Lyceum_name",
-        "Homm3Dungeon_Build_Lyceum_narrativeDescription"
-      ]
+        "Homm3Dungeon_Build_Portal_Summoning_description",
+        "Homm3Dungeon_Build_Portal_Summoning_name",
+        "Homm3Dungeon_Build_Portal_Summoning_narrativeDescription"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
     },
     {
       "id": "dungeon.gymnasium",
       "surface": "building",
-      "sourceName": "Gymnasium",
-      "status": "substituted",
-      "reason": "Current design keeps only native-safe hero progression/stat style behavior until exact source parity is traced.",
+      "sourceName": "Battle Scholar Academy",
+      "status": "exact",
+      "reason": "Native heroBonusBanks heroExp levels up each visiting hero once, the port-pacing equivalent of HoMM3's flat 1000 experience; renamed Battle Scholar Academy (building pass 2026-11-22).",
       "playerTextPolicy": "must_match_current_behavior",
       "currentRows": [
         "Build_Gymnasium"
       ],
       "forbiddenPlayerText": [
         "experience every week"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts",
+      "playerTextTokens": [
+        "Homm3Dungeon_Build_Gymnasium_description",
+        "Homm3Dungeon_Build_Gymnasium_name",
+        "Homm3Dungeon_Build_Gymnasium_narrativeDescription"
       ]
     },
     {
       "id": "dungeon.guardian_of_earth",
       "surface": "building",
       "sourceName": "Guardian of Earth",
-      "status": "substituted",
-      "reason": "Grail/source identity is represented through native city/grail-safe benefits rather than exact spell behavior.",
+      "status": "exact",
+      "reason": "Homm3TownSiegeDefenseRuntime gives the hero defending a siege of this town +12 Spell Power, on top of the kept DungeonGraal full map reveal and +100% city growth of grail Build_Spy_Network (owner answer 3, building pass 2026-11-22). Proof tier: build; runtime unproven.",
       "playerTextPolicy": "must_match_current_behavior",
       "forbiddenPlayerText": [
-        "Earth spells",
-        "Guardian of Earth"
+        "Earth spells"
       ],
       "currentRows": [
         "Build_Spy_Network"
@@ -75,6 +80,24 @@
         "Homm3Dungeon_Build_Spy_Network_description",
         "Homm3Dungeon_Build_Spy_Network_name",
         "Homm3Dungeon_Build_Spy_Network_narrativeDescription"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts"
+    },
+    {
+      "id": "dungeon.mushroom_rings",
+      "surface": "building",
+      "sourceName": "Mushroom Rings",
+      "status": "exact",
+      "reason": "Generated city row Build_Resource_Depot_level_2 grants +7 weekly growth to the Troglodyte line (cityUnitsIncrementPer 0.2596 of 27), replacing the +5 Dust stand-in (building pass 2026-11-22).",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Resource_Depot_level_2"
+      ],
+      "validationOwner": "validate_homm3_city_building_contracts",
+      "playerTextTokens": [
+        "Homm3Dungeon_Build_Resource_Depot_level_2_description",
+        "Homm3Dungeon_Build_Resource_Depot_level_2_name",
+        "Homm3Dungeon_Build_Resource_Depot_level_2_narrativeDescription"
       ]
     },
     {

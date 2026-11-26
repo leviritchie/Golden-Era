@@ -833,8 +833,9 @@ internal static class Homm3BattleEventLawDiagnostics
 			parts.Add("x=" + FormatShortValue(x));
 		if (TryReadExactMember(hex, type, GameSymbols.BattleEventLaws.HexZMembers, out var z) && z != null)
 			parts.Add("z=" + FormatShortValue(z));
-		if (TryReadExactMember(hex, type, GameSymbols.BattleEventLaws.HexOccupantMembers, out var occupant) && occupant != null)
-			parts.Add("occupant=" + DescribeObjectShallow(occupant));
+		// HexOccupantMembers is the hex's last corpse, not its occupant.
+		if (TryReadExactMember(hex, type, GameSymbols.BattleEventLaws.HexOccupantMembers, out var lastCorpse) && lastCorpse != null)
+			parts.Add("lastCorpse=" + DescribeObjectShallow(lastCorpse));
 		return "{" + string.Join(";", parts) + "}";
 	}
 

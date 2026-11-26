@@ -99,8 +99,29 @@ internal static class Homm3RampartAvengerStrikeRuntime
 		internal bool RangedFirst;
 		internal bool SwiftStrike;
 		internal bool RetaliationTrigger;
+		// law pass 2026-11-21: faction law levels, read once when the side is armed (Homm3RampartLawHooks).
+		/// <summary>Wardens' Oath (#5): avenging strikes deal +0/10/20 % Damage.</summary>
+		internal int OathPercent;
+		/// <summary>law pass 2026-11-25: Thorned Vengeance (#9) buff level 0/1/2: enemy stacks hit by an avenging strike lose 2/4 Initiative this round.</summary>
+		internal int ThornedLevel;
+		/// <summary>law pass 2026-11-25: Mighty Oaks (#11) buff level 0/1: the striking stack takes -20% Damage this round.</summary>
+		internal int OaksLevel;
+		/// <summary>Elder's Ward (#13): the avenged enemy attack deals -0/10/20 % Damage.</summary>
+		internal int WardPercent;
+		/// <summary>law pass 2026-11-25: Call of the Grove (#30): the striker heals 0/30 % of the Damage its avenging strike deals.</summary>
+		internal int GrovePercent;
+		internal bool HasHitLaws => ThornedLevel > 0 || GrovePercent > 0;
 		internal string HeroDescription;
 		internal IntPtr WrapperPointer;
+	}
+
+	/// <summary>law pass 2026-11-21: Elder's Ward (#13). An enemy attack (or retaliation) step that started a chain.</summary>
+	private sealed class AnsweredAttack
+	{
+		internal IntPtr Step;
+		internal IntPtr Attacker;
+		internal IntPtr Victim;
+		internal ArmedSide Side;
 	}
 
 	private sealed class BattleState
@@ -113,6 +134,16 @@ internal static class Homm3RampartAvengerStrikeRuntime
 		/// <summary>Avenging AttackStep pointer → the side whose chain queued it.</summary>
 		internal readonly Dictionary<IntPtr, ArmedSide> AvengingAttacks = new();
 		internal IntPtr SuppressFocusStep;
+		/// <summary>law pass 2026-11-21: Wardens' Oath (#5). The avenging AttackStep now playing and its side.</summary>
+		internal IntPtr CurrentAvengingStep;
+		internal ArmedSide CurrentAvengingSide;
+		/// <summary>law pass 2026-11-25: the striking unit of <see cref="CurrentAvengingStep"/> (Thorned Vengeance #9, Call of the Grove #30).</summary>
+		internal IntPtr CurrentStriker;
+		/// <summary>law pass 2026-11-25: Mighty Oaks (#11) striker to buff in the AttackStep Begin postfix, and its step.</summary>
+		internal Unit PendingOaksStriker;
+		internal IntPtr PendingOaksStep;
+		/// <summary>law pass 2026-11-21: Elder's Ward (#13). Answered enemy steps (a few at most; pruned when not current).</summary>
+		internal readonly List<AnsweredAttack> Answered = new();
 		internal int Chains;
 		/// <summary>Units whose armed Covering Fire buff has already fired; dropped once the buff is gone.</summary>
 		internal readonly Dictionary<IntPtr, Unit> CoveringFireSpent = new();
@@ -142,6 +173,11 @@ internal static class Homm3RampartAvengerStrikeRuntime
 	private static bool _swiftStrikeLive;
 	private static bool _focusLive;
 	private static bool _retaliationLive;
+	// law pass 2026-11-25: Thorned Vengeance (#9) / Call of the Grove (#30) on avenging hits (battle damage event).
+	private static bool _lawHitsLive;
+	private static MethodInfo _healMethod;
+	private static object _healType;
+	[ThreadStatic] private static bool _inLawHit;
 	private static int _logged;
 	private static int _infoLogged;
 	[ThreadStatic] private static bool _buildingSwift;
@@ -277,7 +313,26 @@ internal static class Homm3RampartAvengerStrikeRuntime
 			LogLimited("retaliation trigger not registered (Blood for Blood does nothing): " + ex.GetBaseException().Message);
 		}
 
-		_log?.LogInfo("HoMM3 Rampart Avenger strikes registered: attack trigger, Swift Strike=" + _swiftStrikeLive + ", Focus rule=" + _focusLive + ", retaliation trigger=" + _retaliationLive + ".");
+		// law pass 2026-11-25: Thorned Vengeance (#9) / Call of the Grove (#30): battle damage event postfix (the Tower /
+		// Stronghold / Bulwark pattern). Heal is UnitHealer.Heal WithRealUntilStart (the Necropolis counter-doctrine heal).
+		try
+		{
+			var hubType = Homm3TowerArtificingRuntime.ResolveLogicEventHubType()
+			              ?? throw new TypeLoadException("battle event hub type not found");
+			var damage = Homm3TowerArtificingRuntime.ResolveHubDispatcher(hubType, GameSymbols.BattleEventLaws.ObjectTookDamageDispatcher)
+			             ?? throw new MissingMethodException("ObjectTookDamage dispatcher");
+			if (!TryResolveHeal(out var healFail))
+				LogLimited("Call of the Grove heal off: " + healFail);
+			Patch(harmony, damage, null, nameof(PostfixObjectTookDamage));
+			_lawHitsLive = true;
+		}
+		catch (Exception ex)
+		{
+			LogLimited("law hit hook not registered (Thorned Vengeance and Call of the Grove do nothing): " + ex.GetBaseException().Message);
+		}
+
+		_log?.LogInfo("HoMM3 Rampart Avenger strikes registered: attack trigger, Swift Strike=" + _swiftStrikeLive + ", Focus rule=" + _focusLive + ", retaliation trigger=" + _retaliationLive
+		              + ", law hits=" + _lawHitsLive + " (heal " + (_healMethod != null) + ").");
 	}
 
 	// ------------------------------------------------------------------ battle start / end
@@ -325,12 +380,32 @@ internal static class Homm3RampartAvengerStrikeRuntime
 					HeroDescription = (dataHero?.configSid ?? "?") + " side " + sideIndex,
 					WrapperPointer = wrapper.Pointer,
 				};
+				if (armed.Rank > 0)
+				{
+					// law pass 2026-11-21: Wardens' Oath (#5), Elder's Ward (#13). law pass 2026-11-25: Thorned Vengeance (#9),
+					// Mighty Oaks (#11), Call of the Grove (#30). Only with the skill; rank 0 (law not taken or unreadable)
+					// keeps current behaviour.
+					armed.OathPercent = Homm3RampartLawHooks.Level(Homm3RampartLawHooks.OathPercentByLevel,
+						Homm3RampartLawHooks.Rank(Homm3RampartLawHooks.WardensOath, side, side.logicHero));
+					armed.ThornedLevel = Homm3RampartLawHooks.Level(Homm3RampartLawHooks.ThornedLevelByLevel,
+						Homm3RampartLawHooks.Rank(Homm3RampartLawHooks.ThornedVengeance, side, side.logicHero));
+					armed.OaksLevel = Homm3RampartLawHooks.Level(Homm3RampartLawHooks.OaksLevelByLevel,
+						Homm3RampartLawHooks.Rank(Homm3RampartLawHooks.MightyOaks, side, side.logicHero));
+					armed.WardPercent = Homm3RampartLawHooks.Level(Homm3RampartLawHooks.WardPercentByLevel,
+						Homm3RampartLawHooks.Rank(Homm3RampartLawHooks.EldersWard, side, side.logicHero));
+					armed.GrovePercent = Homm3RampartLawHooks.Level(Homm3RampartLawHooks.GrovePercentByLevel,
+						Homm3RampartLawHooks.Rank(Homm3RampartLawHooks.CallOfTheGrove, side, side.logicHero));
+				}
 				battle ??= new BattleState { Logic = __instance, LogicPointer = logicObject.Pointer };
 				battle.Sides.Add(armed);
 				if (armed.Rank > 0)
-					LogInfo("armed for " + armed.HeroDescription + " rank " + armed.Rank + " (" + StrikersByRank[armed.Rank] + " striker(s), " + MoveHexesByRank[armed.Rank] + " hex move)"
+					LogInfo("armed for " + armed.HeroDescription + " rank " + armed.Rank + " (" + StrikersByRank[armed.Rank] + " striker(s), "
+					        + MoveHexesByRank[armed.Rank] + " hex move)"
 				        + (armed.Focus ? " +Focus" : "") + (armed.Return ? " +Return" : "") + (armed.RangedFirst ? " +RangedFirst" : "")
-				        + (armed.SwiftStrike ? " +SwiftStrike" : "") + (armed.RetaliationTrigger ? " +RetaliationTrigger" : "") + ".");
+				        + (armed.SwiftStrike ? " +SwiftStrike" : "") + (armed.RetaliationTrigger ? " +RetaliationTrigger" : "")
+				        + (armed.OathPercent > 0 ? " law:Oath+" + armed.OathPercent + "%" : "") + (armed.ThornedLevel > 0 ? " law:Thorned L" + armed.ThornedLevel : "")
+				        + (armed.OaksLevel > 0 ? " law:Oaks L" + armed.OaksLevel : "") + (armed.WardPercent > 0 ? " law:Ward-" + armed.WardPercent + "%" : "")
+				        + (armed.GrovePercent > 0 ? " law:Grove " + armed.GrovePercent + "%" : "") + ".");
 			}
 			if (battle == null)
 				return;
@@ -375,10 +450,34 @@ internal static class Homm3RampartAvengerStrikeRuntime
 			{
 				foreach (var battle in Battles)
 				{
+					// law pass 2026-11-21: a new AttackStep ends the previous step's law windows (Wardens' Oath #5,
+					// Elder's Ward #13), so a reused native pointer never matches a finished step.
+					if (battle.CurrentAvengingStep != step.Pointer)
+					{
+						battle.CurrentAvengingStep = IntPtr.Zero;
+						battle.CurrentAvengingSide = null;
+						battle.CurrentStriker = IntPtr.Zero;
+					}
+					battle.Answered.RemoveAll(a => a.Step != step.Pointer);
+				}
+				foreach (var battle in Battles)
+				{
 					if (!battle.AvengingAttacks.TryGetValue(step.Pointer, out var side))
 						continue;
 					battle.AvengingAttacks.Remove(step.Pointer);
 					battle.SuppressFocusStep = side.Focus ? IntPtr.Zero : step.Pointer;
+					// law pass 2026-11-21: Wardens' Oath (#5) reads this while the step is the queue's current step.
+					battle.CurrentAvengingStep = step.Pointer;
+					battle.CurrentAvengingSide = side;
+					// law pass 2026-11-25: Thorned Vengeance (#9) / Call of the Grove (#30) match hits by this striker;
+					// Mighty Oaks (#11) buffs it in the Begin postfix, before the strike and its retaliation resolve.
+					var striker = ReadProperty(__instance, Pins.AttackAttacker) as Unit;
+					battle.CurrentStriker = striker?.Pointer ?? IntPtr.Zero;
+					if (side.OaksLevel > 0 && striker != null)
+					{
+						battle.PendingOaksStriker = striker;
+						battle.PendingOaksStep = step.Pointer;
+					}
 					return;
 				}
 			}
@@ -391,6 +490,7 @@ internal static class Homm3RampartAvengerStrikeRuntime
 
 	private static void PostfixAttackStepBegin(object __instance)
 	{
+		ApplyPendingMightyOaks(__instance);
 		try
 		{
 			if (__instance is not Il2CppObjectBase step || ReadInt(__instance, Pins.StepState, -1) != StatePlaying)
@@ -424,8 +524,8 @@ internal static class Homm3RampartAvengerStrikeRuntime
 				if (armed == null)
 					continue;
 				RunCoveringFire(battle, armed, attacker, target, hexes);
-				if (armed.Rank > 0)
-					RunChain(battle, armed, attacker, target, hexes, "attack");
+				if (armed.Rank > 0 && RunChain(battle, armed, attacker, target, hexes, "attack") > 0)
+					NoteAnswered(battle, armed, step.Pointer, attacker, target);
 				return;
 			}
 		}
@@ -460,8 +560,8 @@ internal static class Homm3RampartAvengerStrikeRuntime
 			if (armed == null || !armed.RetaliationTrigger)
 				return;
 			var hexes = ReadHexes(battle.Logic);
-			if (hexes != null)
-				RunChain(battle, armed, retaliator, victim, hexes, "retaliation");
+			if (hexes != null && RunChain(battle, armed, retaliator, victim, hexes, "retaliation") > 0)
+				NoteAnswered(battle, armed, step.Pointer, retaliator, victim);
 		}
 		catch (Exception ex)
 		{
@@ -683,9 +783,291 @@ internal static class Homm3RampartAvengerStrikeRuntime
 		return false;
 	}
 
+	// ------------------------------------------------------------------ law damage (law pass 2026-11-21)
+
+	/// <summary>law pass 2026-11-21: Elder's Ward (#13). Remembers an enemy step whose attack the side answered.</summary>
+	private static void NoteAnswered(BattleState battle, ArmedSide side, IntPtr step, Unit attacker, Unit victim)
+	{
+		if (side == null || side.WardPercent <= 0 || step == IntPtr.Zero || attacker == null || victim == null)
+			return;
+		lock (Gate)
+		{
+			battle.Answered.RemoveAll(a => a.Step == step);
+			battle.Answered.Add(new AnsweredAttack { Step = step, Attacker = attacker.Pointer, Victim = victim.Pointer, Side = side });
+			while (battle.Answered.Count > 8)
+				battle.Answered.RemoveAt(0);
+		}
+	}
+
+	/// <summary>
+	/// Damage contribution for the committed-damage owner (same contract as
+	/// <see cref="Homm3FortressPredatorInstinctRuntime.DamagePercent"/>):
+	/// - Wardens' Oath (#5): +10/+20 % on hits by a striker of the side whose avenging AttackStep is the queue's current
+	///   step. Retaliations against the strike come from the other side and get nothing.
+	/// - Elder's Ward (#13): -10/-20 % on hits from the answered attacker to its victim while the step that started the
+	///   chain (an attack, or a retaliation with Blood for Blood) is the queue's current step.
+	/// Fail closed: anything unreadable returns 0.
+	/// </summary>
+	internal static int DamagePercent(object caster, object receiver, out string detail)
+	{
+		detail = null;
+		if (!_registered || caster is not Unit casterUnit || receiver is not Il2CppObjectBase receiverObject)
+			return 0;
+		try
+		{
+			List<BattleState> battles;
+			lock (Gate)
+			{
+				if (Battles.Count == 0)
+					return 0;
+				battles = new List<BattleState>(Battles);
+			}
+			foreach (var battle in battles)
+			{
+				ArmedSide oathSide;
+				IntPtr oathStep;
+				List<AnsweredAttack> answered;
+				lock (Gate)
+				{
+					oathSide = battle.CurrentAvengingSide;
+					oathStep = battle.CurrentAvengingStep;
+					answered = battle.Answered.Count == 0 ? null : new List<AnsweredAttack>(battle.Answered);
+				}
+				if ((oathSide == null || oathSide.OathPercent <= 0) && answered == null)
+					continue;
+				var current = (ReadProperty(ReadProperty(battle.Logic, Pins.LogicQueue), Pins.QueueCurrent) as Il2CppObjectBase)?.Pointer ?? IntPtr.Zero;
+				if (current == IntPtr.Zero)
+					continue;
+				if (oathSide != null && oathSide.OathPercent > 0 && current == oathStep && SidePointer(casterUnit) == oathSide.WrapperPointer)
+				{
+					detail = "Rampart Wardens' Oath +" + oathSide.OathPercent + "% on an avenging strike (" + oathSide.HeroDescription + ")";
+					return oathSide.OathPercent;
+				}
+				if (answered == null)
+					continue;
+				foreach (var entry in answered)
+				{
+					if (entry.Step != current || entry.Attacker != casterUnit.Pointer || entry.Victim != receiverObject.Pointer)
+						continue;
+					detail = "Rampart Elder's Ward -" + entry.Side.WardPercent + "% on an avenged attack (" + entry.Side.HeroDescription + ")";
+					return -entry.Side.WardPercent;
+				}
+			}
+		}
+		catch
+		{
+			// fail closed: native damage
+		}
+		return 0;
+	}
+
+	// ------------------------------------------------------------------ law pass 2026-11-25: avenging-hit laws
+
+	/// <summary>
+	/// law pass 2026-11-25: Mighty Oaks (#11). The avenging AttackStep that the prefix marked is starting: the striking
+	/// stack takes -20% Damage until the end of the round (law buff, duration 1), so it covers the retaliation too.
+	/// </summary>
+	private static void ApplyPendingMightyOaks(object instance)
+	{
+		try
+		{
+			if (instance is not Il2CppObjectBase step)
+				return;
+			Unit striker = null;
+			int level = 0;
+			lock (Gate)
+			{
+				foreach (var battle in Battles)
+				{
+					if (battle.PendingOaksStriker == null || battle.PendingOaksStep != step.Pointer)
+						continue;
+					striker = battle.PendingOaksStriker;
+					level = battle.CurrentAvengingSide?.OaksLevel ?? 0;
+					battle.PendingOaksStriker = null;
+					battle.PendingOaksStep = IntPtr.Zero;
+					break;
+				}
+			}
+			if (striker == null || level <= 0 || !IsAlive(striker))
+				return;
+			var sid = Homm3RampartLawHooks.OaksBuffPrefix + level;
+			if (Homm3BuffDebuffNativeAdapter.TryAddBuffSidFromReceiver(striker, sid, striker, 1, 1, 0, true, out _, out var fail))
+				LogInfo("Mighty Oaks " + sid + " on the avenging striker.");
+			else
+				LogLimited("Mighty Oaks " + sid + " failed: " + fail);
+		}
+		catch (Exception ex)
+		{
+			LogLimited("Mighty Oaks failed closed: " + ex.GetBaseException().Message);
+		}
+	}
+
+	/// <summary>
+	/// law pass 2026-11-25: Thorned Vengeance (#9) and Call of the Grove (#30). A battle damage event whose caster is the
+	/// striker of the avenging AttackStep that is the queue's current step, on an enemy: the receiver loses 2/4 Initiative
+	/// until the end of the round (law buff, duration 1) and the striker heals 30% of the Damage dealt (UnitHealer.Heal
+	/// WithRealUntilStart: restores fallen creatures up to the starting stack size; a destroyed stack is not revived).
+	/// Fail closed: anything unreadable does nothing.
+	/// </summary>
+	private static void PostfixObjectTookDamage(object __instance, object[] __args)
+	{
+		if (!_lawHitsLive || _inLawHit || __args == null || __args.Length < 2)
+			return;
+		_inLawHit = true;
+		try
+		{
+			List<BattleState> battles = null;
+			lock (Gate)
+			{
+				foreach (var battle in Battles)
+				{
+					if (battle.CurrentStriker != IntPtr.Zero && battle.CurrentAvengingSide != null && battle.CurrentAvengingSide.HasHitLaws)
+						(battles ??= new List<BattleState>()).Add(battle);
+				}
+			}
+			if (battles == null)
+				return;
+			if (!Homm3BattleEventNativeAdapter.TryReadDamageEvent(__args[1], out var hit, out _))
+				return;
+			if (hit.Damage <= 0 || hit.ImmuneToDamage)
+				return;
+			var caster = AsUnit(hit.Caster);
+			var receiver = AsUnit(hit.Receiver);
+			if (caster == null || receiver == null)
+				return;
+			foreach (var battle in battles)
+			{
+				ArmedSide side;
+				IntPtr step;
+				lock (Gate)
+				{
+					side = battle.CurrentAvengingSide;
+					step = battle.CurrentAvengingStep;
+					if (side == null || battle.CurrentStriker != caster.Pointer)
+						continue;
+				}
+				var current = (ReadProperty(ReadProperty(battle.Logic, Pins.LogicQueue), Pins.QueueCurrent) as Il2CppObjectBase)?.Pointer ?? IntPtr.Zero;
+				if (current == IntPtr.Zero || current != step)
+					continue;
+				var receiverSide = SidePointer(receiver);
+				if (receiverSide == IntPtr.Zero || receiverSide == side.WrapperPointer || SidePointer(caster) != side.WrapperPointer)
+					continue;
+				if (side.ThornedLevel > 0 && IsAlive(receiver))
+				{
+					var sid = Homm3RampartLawHooks.ThornedBuffPrefix + side.ThornedLevel;
+					if (Homm3BuffDebuffNativeAdapter.TryAddBuffSidFromReceiver(receiver, sid, caster, 1, 1, 0, true, out _, out var buffFail))
+						LogInfo("Thorned Vengeance " + sid + " on the struck enemy (" + side.HeroDescription + ").");
+					else
+						LogLimited("Thorned Vengeance " + sid + " failed: " + buffFail);
+				}
+				if (side.GrovePercent > 0 && IsAlive(caster))
+				{
+					var amount = (int)Math.Round(hit.Damage * (side.GrovePercent / 100.0), MidpointRounding.AwayFromZero);
+					if (amount > 0)
+						LogInfo("Call of the Grove: " + Heal(caster, amount) + " (" + side.GrovePercent + "% of " + hit.Damage + ").");
+				}
+				return;
+			}
+		}
+		catch (Exception ex)
+		{
+			LogLimited("law hit postfix failed closed: " + ex.GetBaseException().Message);
+		}
+		finally
+		{
+			_inLawHit = false;
+		}
+	}
+
+	private static string Heal(Unit unit, int amount)
+	{
+		if (_healMethod == null || _healType == null)
+			return "heal skipped (UnitHealer.Heal unresolved)";
+		var parameterType = _healMethod.GetParameters()[0].ParameterType;
+		object unitArg = parameterType.IsInstanceOfType(unit) ? unit : null;
+		if (unitArg == null && typeof(Il2CppObjectBase).IsAssignableFrom(parameterType) && unit.Pointer != IntPtr.Zero)
+			unitArg = Activator.CreateInstance(parameterType, unit.Pointer);
+		if (unitArg == null)
+			return "heal skipped (striker is not a healable Unit)";
+		// revive=false: a destroyed stack stays dead; WithRealUntilStart restores fallen creatures up to the start size.
+		_healMethod.Invoke(null, new[] { unitArg, amount, _healType, false });
+		return "healed " + amount + " HP";
+	}
+
+	/// <summary>UnitHealer.Heal(this Unit, int, EHealType, bool) and EHealType.WithRealUntilStart (same lookup as the Necropolis counter doctrine).</summary>
+	private static bool TryResolveHeal(out string failReason)
+	{
+		var type = GameMember.FindTypeFromHints("homm3.rampart.avenger.unitHealer", GameSymbols.TowerArtificing.UnitHealerTypeHints);
+		if (type == null)
+		{
+			failReason = "UnitHealer type not found";
+			return false;
+		}
+		MethodInfo selected = null;
+		foreach (var name in GameSymbols.TowerArtificing.UnitHealerHeal.NameHints ?? Array.Empty<string>())
+		{
+			if (string.IsNullOrWhiteSpace(name) || GameSymbolScope.IsSentinel(name))
+				continue;
+			foreach (var method in type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
+			{
+				if (!string.Equals(method.Name, name, StringComparison.Ordinal) || method.ReturnType != typeof(void) || method.ContainsGenericParameters)
+					continue;
+				var p = method.GetParameters();
+				if (p.Length != 4
+				    || !typeof(Il2CppObjectBase).IsAssignableFrom(p[0].ParameterType)
+				    || p[1].ParameterType != typeof(int)
+				    || !p[2].ParameterType.IsEnum
+				    || p[3].ParameterType != typeof(bool))
+					continue;
+				if (selected != null && !ReferenceEquals(selected, method))
+				{
+					failReason = "UnitHealer.Heal ambiguous on " + type.FullName;
+					return false;
+				}
+				selected = method;
+			}
+			if (selected != null)
+				break;
+		}
+		if (selected == null)
+		{
+			failReason = "UnitHealer.Heal(Unit, int, EHealType, bool) not found on " + type.FullName;
+			return false;
+		}
+		try
+		{
+			_healType = Enum.Parse(selected.GetParameters()[2].ParameterType, "WithRealUntilStart");
+		}
+		catch (ArgumentException)
+		{
+			failReason = "EHealType.WithRealUntilStart not found";
+			return false;
+		}
+		_healMethod = selected;
+		failReason = null;
+		return true;
+	}
+
+	private static Unit AsUnit(object value)
+	{
+		if (value is Unit unit)
+			return unit;
+		if (value is not Il2CppObjectBase obj || obj.Pointer == IntPtr.Zero)
+			return null;
+		try
+		{
+			return obj.TryCast<Unit>();
+		}
+		catch
+		{
+			return null;
+		}
+	}
+
 	// ------------------------------------------------------------------ chain
 
-	private static void RunChain(BattleState battle, ArmedSide side, Unit attacker, Unit victim, BattleHex[] hexes, string cause)
+	/// <summary>Queues the avenging strikes; returns how many were queued (0 when none).</summary>
+	private static int RunChain(BattleState battle, ArmedSide side, Unit attacker, Unit victim, BattleHex[] hexes, string cause)
 	{
 		var builder = ReadProperty(battle.Logic, Pins.LogicBuilder);
 		var queue = ReadProperty(battle.Logic, Pins.LogicQueue);
@@ -694,11 +1076,11 @@ internal static class Homm3RampartAvengerStrikeRuntime
 		if (builder == null || pending == null || pathfinder == null)
 		{
 			LogLimited("chain skipped: builder/queue/pathfinder unreadable.");
-			return;
+			return 0;
 		}
 		var attackerId = ReadInt(attacker, Pins.FieldObjectId, -1);
 		if (attackerId < 0)
-			return;
+			return 0;
 
 		// Occupancy from the grid: unit pointer → its hexes (large units cover two).
 		var unitHexes = new Dictionary<IntPtr, List<BattleHex>>();
@@ -723,8 +1105,9 @@ internal static class Homm3RampartAvengerStrikeRuntime
 			}
 		}
 		if (!unitHexes.TryGetValue(attacker.Pointer, out var attackerHexes) || attackerHexes.Count == 0)
-			return;
+			return 0;
 
+		// law pass 2026-11-25: the old Call of the Grove (+1 striker) and Paths of the Glade (+1 hex) levers are retired.
 		var maxStrikers = StrikersByRank[side.Rank];
 		var moveHexes = MoveHexesByRank[side.Rank];
 		var candidates = new List<Candidate>();
@@ -738,7 +1121,7 @@ internal static class Homm3RampartAvengerStrikeRuntime
 				candidates.Add(candidate);
 		}
 		if (candidates.Count == 0)
-			return;
+			return 0;
 		candidates.Sort((a, b) => b.Initiative.CompareTo(a.Initiative));
 
 		var reserved = new HashSet<int>();
@@ -789,10 +1172,11 @@ internal static class Homm3RampartAvengerStrikeRuntime
 			struck.Add(DescribeUnit(candidate.Unit) + (shoot ? " shot" : path.Length > 0 ? " moved " + path.Length + (side.Return ? " +return" : "") : " in place"));
 		}
 		if (struck.Count == 0)
-			return;
+			return 0;
 		battle.Chains++;
 		LogInfo("chain " + battle.Chains + " (" + cause + ") for " + side.HeroDescription + ": " + DescribeUnit(victim) + " attacked by " + DescribeUnit(attacker)
 		        + " → " + string.Join(", ", struck) + (side.SwiftStrike ? " [Swift Strike]" : "") + (side.Focus ? "" : " [no Focus]") + ".");
+		return struck.Count;
 	}
 
 	private static Candidate BuildCandidate(Unit unit, List<BattleHex> ownHexes, List<BattleHex> attackerHexes, ArmedSide side, int moveHexes)
@@ -837,7 +1221,8 @@ internal static class Homm3RampartAvengerStrikeRuntime
 			candidate.TargetHexId = attackerHexes[0].index;
 			return candidate;
 		}
-		// Melee stacks out of reach can step in; large stacks only strike from where they stand.
+		// Melee stacks out of reach can step in; large stacks only strike from where they stand
+		// (law pass 2026-11-25: the old Mighty Oaks gate lift is retired).
 		return moveHexes > 0 && ownHexes.Count == 1 ? candidate : null;
 	}
 

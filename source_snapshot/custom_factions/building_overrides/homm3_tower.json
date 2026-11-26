@@ -1,0 +1,236 @@
+{
+  "factionSid": "homm3_tower",
+  "rows": [
+    {
+      "sid": "Build_Bank",
+      "section": "banks",
+      "template": "human_city:Build_Bank",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 2500,
+          "wood": 5,
+          "ore": 5
+        }
+      ],
+      "fields": {
+        "isConstructedOnStart": true,
+        "backgroundImages": [
+          "build_fon_economy"
+        ]
+      },
+      "bonuses": [
+        [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              1000
+            ]
+          }
+        ]
+      ],
+      "nameText": "Bank",
+      "descriptionText": "Produces 1000 Gold daily.",
+      "notes": "building pass 2026-11-22: plain economy Bank (REVIEW 1). Data was already the vanilla Bank; only the borrowed 'Capitol Vault' name goes. Icon kept. Tree gate moves to Main L2 (tree agent).",
+      "nameTextLocales": {
+        "BRportugese": "Banco",
+        "czech": "Banka",
+        "french": "Banque",
+        "german": "Bank",
+        "hungarian": "Bank",
+        "italian": "Banca",
+        "japanese": "銀行",
+        "korean": "은행",
+        "polish": "Bank",
+        "russian": "Банк",
+        "spanish": "Banco",
+        "turkish": "Banka",
+        "ukrainian": "Банк",
+        "zhCN": "银行",
+        "zhTW": "銀行"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Produz 1000 de Ouro por dia.",
+        "czech": "Denně vyprodukuje 1000 Zlata.",
+        "french": "Produit 1000 d’or par jour.",
+        "german": "Produziert täglich 1000 Gold.",
+        "hungarian": "Naponta 1000 Aranyat termel.",
+        "italian": "Produce 1000 Oro al giorno.",
+        "japanese": "毎日1000ゴールドを生産する。",
+        "korean": "매일 금 1000을 생산합니다.",
+        "polish": "Produkuje 1000 Złota dziennie.",
+        "russian": "Приносит 1000 Золота в день.",
+        "spanish": "Produce 1000 de oro al día.",
+        "turkish": "Günde 1000 Altın üretir.",
+        "ukrainian": "Приносить 1000 Золота на день.",
+        "zhCN": "每天产出1000黄金。",
+        "zhTW": "每天產出1000黃金。"
+      }
+    },
+    {
+      "sid": "Build_Library",
+      "section": "banks",
+      "template": "human_city:Build_Bank",
+      "replace": false,
+      "sceneSlot": "Library",
+      "costs": [
+        {
+          "gold": 1500,
+          "wood": 5,
+          "ore": 5,
+          "mercury": 5,
+          "crystals": 5,
+          "gemstones": 5
+        }
+      ],
+      "fields": {
+        "isConstructedOnStart": false,
+        "backgroundImages": [
+          "build_fon_unic"
+        ]
+      },
+      "bonuses": [
+        []
+      ],
+      "nameText": "Library",
+      "descriptionText": "Adds 1 extra spell to every Mage Guild level in this city.",
+      "iconFrom": "self:Build_Training_Range",
+      "plugin": "Homm3TowerLibraryRuntime",
+      "notes": "building pass 2026-11-22: tower.library. Plugin-only banks carrier. A postfix on the guild logic's GetMagicsCountForRank adds +1 when this city has the Library; on Library construction the city's guild runs LearnMagicAddition(1) so open levels get their spell at once. Stacks with the Observatory Network law (REVIEW 2). HoMM3 cost 1500 Gold + 5 each of Wood/Ore/Mercury/Crystals/Gemstones (sulfur -> mercury). Tree: needs MG L1 (tree agent). Icon placeholder: Wall of Knowledge art until a Library icon exists.",
+      "nameTextLocales": {
+        "BRportugese": "Biblioteca",
+        "czech": "Knihovna",
+        "french": "Bibliothèque",
+        "german": "Bibliothek",
+        "hungarian": "Könyvtár",
+        "italian": "Biblioteca",
+        "japanese": "図書館",
+        "korean": "도서관",
+        "polish": "Biblioteka",
+        "russian": "Библиотека",
+        "spanish": "Biblioteca",
+        "turkish": "Kütüphane",
+        "ukrainian": "Бібліотека",
+        "zhCN": "图书馆",
+        "zhTW": "圖書館"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Adiciona 1 magia extra a cada nível da Guilda de Magos desta cidade.",
+        "czech": "Přidá 1 kouzlo navíc do každé úrovně Cechu mágů v tomto městě.",
+        "french": "Ajoute 1 sort supplémentaire à chaque niveau de la Guilde des mages de cette ville.",
+        "german": "Fügt jeder Stufe der Magiergilde in dieser Stadt 1 zusätzlichen Zauber hinzu.",
+        "hungarian": "A város Mágusok céhének minden szintjéhez 1 további varázslatot ad.",
+        "italian": "Aggiunge 1 incantesimo extra a ogni livello della Gilda dei Maghi di questa città.",
+        "japanese": "この都市の魔術師ギルドの各レベルに呪文を1つ追加する。",
+        "korean": "이 도시의 마법사 길드 모든 레벨에 주문을 1개씩 추가합니다.",
+        "polish": "Dodaje 1 dodatkowy czar do każdego poziomu Gildii magów w tym mieście.",
+        "russian": "Добавляет 1 дополнительное заклинание на каждый уровень Гильдии магов в этом городе.",
+        "spanish": "Añade 1 hechizo adicional a cada nivel del Gremio de Magos de esta ciudad.",
+        "turkish": "Bu şehirdeki Büyücü Loncası’nın her seviyesine 1 ek büyü ekler.",
+        "ukrainian": "Додає 1 додаткове заклинання на кожен рівень Гільдії магів у цьому місті.",
+        "zhCN": "这座城市的法师公会每一级额外增加1个法术。",
+        "zhTW": "這座城市的法師公會每一級額外增加1個法術。"
+      }
+    },
+    {
+      "sid": "Build_Golden_Calf",
+      "section": "graals",
+      "replace": true,
+      "costs": [
+        {
+          "graal": 1
+        }
+      ],
+      "fields": {
+        "cityBonuses": [
+          {
+            "type": "cityRadiusView",
+            "parameters": [
+              999
+            ]
+          },
+          {
+            "type": "cityUnitsIncrementPer",
+            "parameters": [
+              "all",
+              "1.0"
+            ]
+          }
+        ]
+      },
+      "nameText": "Skyship",
+      "descriptionText": "Reveals the entire map. The hero defending this city in a siege gets +15 Knowledge. Your cities produce 1000 Gold and 1 each of Wood, Ore, Gemstones, Crystals and Mercury daily. This city's dwellings produce +100% units.",
+      "plugin": "Homm3TownSiegeDefenseRuntime",
+      "notes": "building pass 2026-11-22: tower.skyship. Owner answer 3: keeps the HumanGraal gold + 5 resources (sideBonuses untouched) and the +100% city growth, and adds the native map reveal cityRadiusView 999 (vanilla dungeon_city graal shape). The +15 Knowledge for the siege defender is the runtime agent's siege hook. Risk: cityRadiusView is proven on a DungeonGraal row only; check in game that a HumanGraal row applies it too.",
+      "nameTextLocales": {
+        "BRportugese": "Nau Aérea",
+        "czech": "Nebeská loď",
+        "french": "Vaisseau céleste",
+        "german": "Luftschiff",
+        "hungarian": "Égi hajó",
+        "italian": "Nave Volante",
+        "japanese": "飛行船",
+        "korean": "비행선",
+        "polish": "Okręt powietrzny",
+        "russian": "Воздушный корабль",
+        "spanish": "Nave Aérea",
+        "turkish": "Gökgemisi",
+        "ukrainian": "Повітряний корабель",
+        "zhCN": "天空飞艇",
+        "zhTW": "天空飛艇"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Revela o mapa inteiro. O herói que defende esta cidade em um cerco recebe +15 de Conhecimento. Suas cidades produzem 1000 de Ouro e 1 de cada: Madeira, Minério, Gemas, Cristais e Mercúrio por dia. As moradias desta cidade produzem +100% de unidades.",
+        "czech": "Odhalí celou mapu. Hrdina bránící toto město při obléhání získá +15 Znalostí. Vaše města denně vyprodukují 1000 Zlata a po 1 Dřevu, Kameni, Drahokamech, Krystalech a Rtuti. Obydlí tohoto města produkují +100 % jednotek.",
+        "french": "Révèle toute la carte. Le héros qui défend cette ville lors d’un siège gagne +15 en Savoir. Vos villes produisent chaque jour 1000 d’Or et 1 de chacun de ces éléments : Bois, Minerai, Gemmes, Cristal et Mercure. Les habitations de cette ville produisent +100 % d’unités.",
+        "german": "Enthüllt die gesamte Karte. Der Held, der diese Stadt bei einer Belagerung verteidigt, erhält +15 Wissen. Ihre Städte produzieren täglich 1000 Gold sowie je 1 Holz, Erz, Edelsteine, Kristalle und Quecksilber. Die Behausungen dieser Stadt produzieren +100 % Einheiten.",
+        "hungarian": "Felfedi a teljes térképet. Az a hős, aki ostrom közben védi a várost, +15 Bölcsességet kap. A városaid naponta 1000 Aranyat, valamint egyenként 1 Fát, Ércet, Drágakövet, Kristályt és Higanyt termelnek. A város lakhelyei +100% egységet termelnek.",
+        "italian": "Rivela l’intera mappa. L’eroe che difende questa città durante un assedio ottiene +15 Conoscenza. Le tue città producono ogni giorno 1000 Oro e 1 ciascuno di Legname, Minerali, Gemme, Cristalli e Mercurio. Le abitazioni di questa città producono +100% di unità.",
+        "japanese": "マップ全体を明らかにする。攻城戦でこの都市を防衛する英雄は知識+15を得る。あなたの都市は毎日、1000ゴールドと、木材・鉱石・宝石・クリスタル・水銀を各1生産する。この都市の住居は+100%の部隊を生産する。",
+        "korean": "지도 전체를 드러냅니다. 공성전에서 이 도시를 방어하는 영웅은 지식 +15를 얻습니다. 당신의 도시는 매일 금 1000과 나무, 광석, 보석, 수정, 수은을 각 1씩 생산합니다. 이 도시의 거주지는 +100%의 부대를 생산합니다.",
+        "polish": "Odsłania całą mapę. Bohater broniący tego miasta podczas oblężenia zyskuje +15 Wiedzy. Twoje miasta codziennie produkują 1000 Złota oraz po 1 Drewna, Rudy, Klejnotów, Kryształów i Rtęci. Siedliska w tym mieście produkują +100% jednostek.",
+        "russian": "Открывает всю карту. Герой, защищающий этот город при осаде, получает +15 к Знаниям. Ваши города ежедневно производят 1000 Золота и по 1 Дерева, Руды, Самоцветов, Кристаллов и Ртути. Жилища этого города производят на 100% больше существ.",
+        "spanish": "Revela todo el mapa. El héroe que defiende esta ciudad durante un asedio obtiene +15 de Conocimiento. Tus ciudades producen cada día 1000 de Oro y 1 de cada uno de estos: Madera, Mineral, Gemas, Cristales y Mercurio. Las viviendas de esta ciudad producen +100% de unidades.",
+        "turkish": "Haritanın tamamını açığa çıkarır. Kuşatma sırasında bu şehri savunan kahraman +15 İrfan kazanır. Şehirleriniz günlük 1000 Altın ile 1’er Odun, Maden, Mücevher, Kristal ve Cıva üretir. Bu şehrin konutları +%100 birim üretir.",
+        "ukrainian": "Відкриває всю карту. Герой, що обороняє це місто під час облоги, отримує +15 до Знань. Ваші міста щодня виробляють 1000 Золота та по 1 Деревини, Руди, Самоцвітів, Кристалів і Ртуті. Житла цього міста виробляють на 100% більше істот.",
+        "zhCN": "揭示整张地图。围攻中防守这座城市的英雄获得+15知识。你的城市每天生产1000黄金，以及木材、矿石、宝石、水晶和水银各1。这座城市的住所产量+100%。",
+        "zhTW": "揭示整張地圖。圍攻中防守這座城市的英雄獲得+15知識。你的城市每天生產1000黃金，以及木材、礦石、寶石、水晶和水銀各1。這座城市的住所產量+100%。"
+      }
+    },
+    {
+      "sid": "Build_Treasury",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 5000,
+          "gemstones": 5,
+          "crystals": 5,
+          "mercury": 5
+        }
+      ],
+      "nameText": "Blacksmith",
+      "descriptionText": "Produces 2000 Gold daily.",
+      "notes": "building pass 2026-11-22: rename only. The slot is the shared-economy Treasury (2000 Gold daily); the old 'Blacksmith' name promised a war-machine shop that does not exist.",
+      "descriptionTextLocales": {
+        "BRportugese": "Produz 2000 de Ouro por dia.",
+        "czech": "Denně vyprodukuje 2000 Zlata.",
+        "french": "Produit 2000 d’or par jour.",
+        "german": "Produziert täglich 2000 Gold.",
+        "hungarian": "Naponta 2000 Aranyat termel.",
+        "italian": "Produce 2000 Oro al giorno.",
+        "japanese": "毎日2000ゴールドを生産する。",
+        "korean": "매일 금 2000을 생산합니다.",
+        "polish": "Produkuje 2000 Złota dziennie.",
+        "russian": "Приносит 2000 Золота в день.",
+        "spanish": "Produce 2000 de oro al día.",
+        "turkish": "Günde 2000 Altın üretir.",
+        "ukrainian": "Приносить 2000 Золота на день.",
+        "zhCN": "每天产出2000黄金。",
+        "zhTW": "每天產出2000黃金。"
+      }
+    }
+  ],
+  "remove": []
+}

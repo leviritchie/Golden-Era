@@ -431,13 +431,19 @@ internal static class Homm3FactoryLogisticsEffects
 		internal List<Homm3FactoryLogisticsRange.Node> DisplaySources = new();
 		internal List<Homm3FactoryLogisticsRange.Node> DisplayTargets = new();
 
+		/// <summary>law pass 2026-11-21: Overclocked Plants (#21) extra levels and the config cap they stop at.</summary>
+		internal int Overclock;
+		internal int MaxLevel;
+
 		internal int EffectiveLevel(Homm3FactoryLogisticsConfig.Enhancement e, int objectId, int built)
 		{
 			if (built <= 0 || e == null)
 				return 0;
 			if (e.Effect == "power_station")
 				return built;
-			return built + (PowerBonus.TryGetValue(objectId, out var b) ? b : 0);
+			// law pass 2026-11-21: Overclocked Plants (#21): +Overclock levels, never past MaxLevel (Expert)
+			var clocked = Overclock > 0 && MaxLevel > 0 ? Math.Max(built, Math.Min(MaxLevel, built + Overclock)) : built;
+			return clocked + (PowerBonus.TryGetValue(objectId, out var b) ? b : 0);
 		}
 	}
 
@@ -501,7 +507,11 @@ internal static class Homm3FactoryLogisticsEffects
 			net.RangeFail = "config: " + cfgFail;
 			return net;
 		}
-		net.LogisticsLevel = config.BaseLogisticsLevel;
+		// law pass 2026-11-21: Surveyors' Charter (#7) base level, Overclocked Plants (#21)
+		var baseLogistics = Homm3FactoryLawHooks.BaseLogisticsLevel(config, sideIndex);
+		net.LogisticsLevel = baseLogistics;
+		net.MaxLevel = config.MaxLevel;
+		net.Overclock = Homm3FactoryLawHooks.OverclockLevels(sideIndex);
 		if (!Homm3FactoryLogisticsState.TryGet(sideIndex, out var state, out var stateFail) || !TryBuildWorld(out var world, out var worldFail))
 		{
 			net.RangeFail = stateFail ?? "world unreadable";
@@ -553,7 +563,7 @@ internal static class Homm3FactoryLogisticsEffects
 		}
 
 		// Pass 1: Power Stations (range from the unpowered logistics level) onto every other enhanced building.
-		var level0 = config.BaseLogisticsLevel + railBuilt;
+		var level0 = baseLogistics + railBuilt;
 		var powerSources = new List<Homm3FactoryLogisticsRange.Node>();
 		var powerLevels = new Dictionary<long, int>();
 		var powerTargets = new List<Homm3FactoryLogisticsRange.Node>();
@@ -605,7 +615,7 @@ internal static class Homm3FactoryLogisticsEffects
 					break;
 			}
 		}
-		net.LogisticsLevel = config.BaseLogisticsLevel + railEffective;
+		net.LogisticsLevel = baseLogistics + railEffective;
 
 		// Pass 2: Synthesizer, Arcane Manufactory and Rail Network sources onto buildings, towns and heroes.
 		var sources = new List<Homm3FactoryLogisticsRange.Node>();

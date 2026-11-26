@@ -1,0 +1,300 @@
+{
+  "factionSid": "homm3_inferno",
+  "rows": [
+    {
+      "sid": "Build_Bank",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 2500,
+          "wood": 5,
+          "ore": 5
+        }
+      ],
+      "bonuses": [
+        [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              1000
+            ]
+          }
+        ]
+      ],
+      "nameText": "Bank",
+      "descriptionText": "Produces 1000 Gold daily.",
+      "iconFrom": "demon_city:Build_Bank",
+      "notes": "building pass 2026-11-22: plain economy Bank restored (REVIEW 1). It was named Castle Gate and tagged order_of_fire; both specials now have their own rows. Values match vanilla demon_city Build_Bank. Tree agent: gate on Build_Main:2.",
+      "nameTextLocales": {
+        "BRportugese": "Banco",
+        "czech": "Banka",
+        "french": "Banque",
+        "german": "Bank",
+        "hungarian": "Bank",
+        "italian": "Banca",
+        "japanese": "銀行",
+        "korean": "은행",
+        "polish": "Bank",
+        "russian": "Банк",
+        "spanish": "Banco",
+        "turkish": "Banka",
+        "ukrainian": "Банк",
+        "zhCN": "银行",
+        "zhTW": "銀行"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Produz 1000 de Ouro por dia.",
+        "czech": "Denně vyprodukuje 1000 Zlata.",
+        "french": "Produit 1000 d’or par jour.",
+        "german": "Produziert täglich 1000 Gold.",
+        "hungarian": "Naponta 1000 Aranyat termel.",
+        "italian": "Produce 1000 Oro al giorno.",
+        "japanese": "毎日1000ゴールドを生産する。",
+        "korean": "매일 금 1000을 생산합니다.",
+        "polish": "Produkuje 1000 Złota dziennie.",
+        "russian": "Приносит 1000 Золота в день.",
+        "spanish": "Produce 1000 de oro al día.",
+        "turkish": "Günde 1000 Altın üretir.",
+        "ukrainian": "Приносить 1000 Золота на день.",
+        "zhCN": "每天产出1000黄金。",
+        "zhTW": "每天產出1000黃金。"
+      }
+    },
+    {
+      "sid": "Build_Mycelium_Roots",
+      "section": "myceliumRoots",
+      "template": "nature_city:Build_Mycelium_Roots",
+      "replace": false,
+      "sceneSlot": "Build_Mycelium_Roots",
+      "costs": [
+        {
+          "gold": 5000,
+          "gemstones": 5,
+          "crystals": 5,
+          "mercury": 5
+        }
+      ],
+      "nameText": "Castle Gate",
+      "descriptionText": "Allows a hero to travel to any of your cities that also has a Castle Gate.",
+      "iconFrom": "nature_city:Build_Mycelium_Roots",
+      "plugin": "Homm3InfernoCastleGateRuntime",
+      "notes": "building pass 2026-11-22: inferno.castle_gate. Native myceliumRoots teleport (vanilla Nature Mycelium Roots, same price). Homm3InfernoCastleGateRuntime blocks destinations without this building when the travel window is opened from an Inferno town (REVIEW 2). Tree agent: gate on Build_Wall:2 (HoMM3 Citadel).",
+      "nameTextLocales": {
+        "BRportugese": "Portão do Castelo",
+        "czech": "Hradní brána",
+        "french": "Porte du château",
+        "german": "Burgtor",
+        "hungarian": "Várkapu",
+        "italian": "Porta del castello",
+        "japanese": "城門",
+        "korean": "성문",
+        "polish": "Brama zamkowa",
+        "russian": "Замковые врата",
+        "spanish": "Puerta del castillo",
+        "turkish": "Kale Kapısı",
+        "ukrainian": "Брама замку",
+        "zhCN": "城堡之门",
+        "zhTW": "城堡之門"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Permite que um herói viaje para qualquer uma de suas cidades que também tenha um Portão do Castelo.",
+        "czech": "Umožňuje hrdinovi cestovat do kteréhokoli vašeho města, které má také Hradní bránu.",
+        "french": "Permet à un héros de voyager vers n’importe laquelle de vos villes possédant aussi une Porte du château.",
+        "german": "Erlaubt einem Helden, zu jeder Eurer Städte zu reisen, die ebenfalls ein Burgtor besitzt.",
+        "hungarian": "Lehetővé teszi, hogy egy hős bármelyik olyan városodba utazzon, amelyben szintén van Várkapu.",
+        "italian": "Permette a un eroe di viaggiare verso qualsiasi tua città che abbia a sua volta una Porta del castello.",
+        "japanese": "英雄が、同じく城門のあるあなたの任意の都市へ移動できる。",
+        "korean": "영웅이 성문이 있는 아군의 다른 모든 도시로 이동할 수 있다.",
+        "polish": "Pozwala bohaterowi podróżować do dowolnego z twoich miast, które również ma Bramę zamkową.",
+        "russian": "Позволяет герою переместиться в любой ваш город, где также есть Замковые врата.",
+        "spanish": "Permite a un héroe viajar a cualquiera de tus ciudades que también tenga una Puerta del castillo.",
+        "turkish": "Bir kahramanın, Kale Kapısı bulunan herhangi bir şehrinize seyahat etmesini sağlar.",
+        "ukrainian": "Дозволяє героєві вирушити до будь-якого вашого міста, у якому також є Брама замку.",
+        "zhCN": "允许英雄前往你任何同样拥有城堡之门的城镇。",
+        "zhTW": "允許英雄前往你任何同樣擁有城堡之門的城鎮。"
+      }
+    },
+    {
+      "sid": "Build_Mother_Nature",
+      "section": "heroBonusBanks",
+      "template": "nature_city:Build_Mother_Nature",
+      "replace": false,
+      "sceneSlot": "Build_Mother_Nature",
+      "costs": [
+        {
+          "gold": 2500,
+          "wood": 5
+        }
+      ],
+      "bonuses": [
+        [
+          {
+            "type": "heroStat",
+            "parameters": [
+              "spellPower",
+              "1"
+            ]
+          }
+        ]
+      ],
+      "nameText": "Order of Fire",
+      "iconFrom": "nature_city:Build_Mother_Nature",
+      "notes": "building pass 2026-11-22: inferno.order_of_fire. Native heroBonusBanks +1 Spell Power once per visiting hero (HoMM3 Order of Fire); half of vanilla Mother Nature, so half its price plus 5 Wood. Description is the computed heroStat sentence. Tree agent: gate on Build_Magic_Guild:1.",
+      "nameTextLocales": {
+        "BRportugese": "Ordem do Fogo",
+        "czech": "Řád ohně",
+        "french": "Ordre du feu",
+        "german": "Orden des Feuers",
+        "hungarian": "A Tűz Rendje",
+        "italian": "Ordine del fuoco",
+        "japanese": "炎の騎士団",
+        "korean": "불의 교단",
+        "polish": "Zakon Ognia",
+        "russian": "Орден огня",
+        "spanish": "Orden del fuego",
+        "turkish": "Ateş Tarikatı",
+        "ukrainian": "Орден вогню",
+        "zhCN": "烈火教团",
+        "zhTW": "烈火教團"
+      }
+    },
+    {
+      "sid": "Build_Resource_Depot_level_2",
+      "section": "cityBonusBanks",
+      "replace": true,
+      "costs": [
+        {
+          "gemstones": 3,
+          "crystals": 3,
+          "mercury": 3
+        }
+      ],
+      "bonuses": [
+        []
+      ],
+      "nameText": "Brimstone Stormclouds",
+      "descriptionText": "A hero defending this city in a siege gains +2 Spell Power.",
+      "plugin": "Homm3TownSiegeDefenseRuntime",
+      "notes": "building pass 2026-11-22: inferno.brimstone_stormclouds. Moves banks -> cityBonusBanks with no native bonus (the 1000 Gold substitute is dropped; the restored Bank pays it). The +2 Spell Power siege effect is the runtime agent's Homm3TownSiegeDefenseRuntime entry. Prerequisite (Wall L1) unchanged.",
+      "nameTextLocales": {
+        "BRportugese": "Nuvens de Tempestade de Enxofre",
+        "czech": "Sirné bouřkové mraky",
+        "french": "Nuages d’orage sulfureux",
+        "german": "Schwefelgewitterwolken",
+        "hungarian": "Kénköves viharfelhők",
+        "italian": "Nubi di tempesta sulfuree",
+        "japanese": "硫黄の嵐雲",
+        "korean": "유황 폭풍구름",
+        "polish": "Siarkowe chmury burzowe",
+        "russian": "Серные грозовые тучи",
+        "spanish": "Nubes de tormenta de azufre",
+        "turkish": "Kükürt Fırtına Bulutları",
+        "ukrainian": "Сірчані грозові хмари",
+        "zhCN": "硫磺风暴云",
+        "zhTW": "硫磺風暴雲"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Um herói que defende esta cidade em um cerco ganha +2 de Poder de Feitiço.",
+        "czech": "Hrdina bránící toto město při obléhání získá +2 Síla kouzel.",
+        "french": "Un héros qui défend cette ville lors d’un siège gagne +2 en Puissance de sorts.",
+        "german": "Ein Held, der diese Stadt bei einer Belagerung verteidigt, erhält +2 Zauberkraft.",
+        "hungarian": "Az a hős, aki ostrom közben védi ezt a várost, +2 Varázserőt kap.",
+        "italian": "Un eroe che difende questa città durante un assedio ottiene +2 Potere magico.",
+        "japanese": "攻城戦でこの都市を防衛する英雄は呪文力+2を得る。",
+        "korean": "공성전에서 이 도시를 방어하는 영웅은 주문력 +2를 얻는다.",
+        "polish": "Bohater broniący tego miasta podczas oblężenia zyskuje +2 Mocy zaklęć.",
+        "russian": "Герой, защищающий этот город при осаде, получает +2 к Силе магии.",
+        "spanish": "Un héroe que defiende esta ciudad en un asedio obtiene +2 de Poder de hechizo.",
+        "turkish": "Bir kuşatmada bu şehri savunan kahraman +2 Büyü Gücü kazanır.",
+        "ukrainian": "Герой, що захищає це місто під час облоги, отримує +2 до Сили чарів.",
+        "zhCN": "在围城战中防守此城镇的英雄获得+2法术强度。",
+        "zhTW": "在圍城戰中防守此城鎮的英雄獲得+2法術強度。"
+      }
+    },
+    {
+      "sid": "Build_Eternal_Flame",
+      "section": "graals",
+      "replace": true,
+      "costs": [
+        {
+          "graal": 1
+        }
+      ],
+      "fields": {
+        "sideBonuses": [
+          {
+            "type": "unitStat",
+            "receiverAllegiance": "ally",
+            "parameters": [
+              "offence",
+              "10"
+            ]
+          },
+          {
+            "type": "unitStat",
+            "receiverAllegiance": "ally",
+            "parameters": [
+              "crit",
+              "0.50"
+            ]
+          },
+          {
+            "type": "heroStat",
+            "receiverAllegiance": "ally",
+            "parameters": [
+              "crit",
+              "0.50"
+            ]
+          },
+          {
+            "type": "cityUnitsIncrement",
+            "parameters": [
+              "h3_imp",
+              "22"
+            ]
+          }
+        ]
+      },
+      "nameText": "Deity of Fire",
+      "descriptionText": "Every week is the Week of the Imp: +22 Imp growth in all your cities. All friendly creatures gain +10 Attack in battle. +50% Lucky Strike Damage, including from hero spells. This city's dwellings produce +100% units.",
+      "notes": "building pass 2026-11-22: inferno.deity_of_fire. Owner answer 3: keeps the DemonGraal battle package (+10 Attack, +50% crit for creatures and hero) and the +100% city growth, and adds Week of the Imp as a side cityUnitsIncrement h3_imp 22 (HoMM3 +15 on a 15 base, scaled to the GE 22 base; vanilla law form). cityBonuses unchanged.",
+      "nameTextLocales": {
+        "BRportugese": "Divindade do Fogo",
+        "czech": "Božstvo ohně",
+        "french": "Divinité du feu",
+        "german": "Gottheit des Feuers",
+        "hungarian": "A Tűz istensége",
+        "italian": "Divinità del fuoco",
+        "japanese": "炎の神",
+        "korean": "불의 신",
+        "polish": "Bóstwo Ognia",
+        "russian": "Божество огня",
+        "spanish": "Deidad del fuego",
+        "turkish": "Ateş Tanrısı",
+        "ukrainian": "Божество вогню",
+        "zhCN": "火焰神明",
+        "zhTW": "火焰神明"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Toda semana é a Semana do Diabrete: +22 de crescimento de Diabretes em todas as suas cidades. Todas as criaturas aliadas ganham +10 de Ataque em batalha. +50% de Dano de Golpe de Sorte, inclusive de feitiços de heróis. As moradias desta cidade produzem +100% de unidades.",
+        "czech": "Každý týden je Týdnem čertíka: +22 přírůstek čertíků ve všech vašich městech. Všechny přátelské jednotky získají v bitvě +10 Útok. +50% Poškození šťastným zásahem, včetně kouzel hrdinů. Obydlí tohoto města produkují +100% jednotek.",
+        "french": "Chaque semaine est la Semaine du diablotin : +22 de croissance de diablotins dans toutes vos villes. Toutes les créatures alliées gagnent +10 en Attaque au combat. +50 % de Dégâts de coup de chance, y compris ceux des sorts de héros. Les habitations de cette ville produisent +100 % d’unités.",
+        "german": "Jede Woche ist die Woche des Wichtels: +22 Wichtel-Wachstum in allen Euren Städten. Alle verbündeten Kreaturen erhalten im Kampf +10 Angriff. +50 % Schaden durch Glückstreffer, auch durch Heldenzauber. Die Behausungen dieser Stadt produzieren +100 % Einheiten.",
+        "hungarian": "Minden hét a Manó hete: +22 Manó szaporulat minden városodban. Minden baráti lény +10 Támadóerőt kap a csatában. +50% Szerencsés találat Sebzés, a hősök varázslatait is beleértve. A város szállásai +100% egységet termelnek.",
+        "italian": "Ogni settimana è la Settimana del Diavoletto: +22 crescita di Diavoletti in tutte le tue città. Tutte le creature alleate ottengono +10 Attacco in battaglia. +50% Danno del colpo fortunato, compresi gli incantesimi degli eroi. Le dimore di questa città producono +100% unità.",
+        "japanese": "毎週がインプの週になる。すべての都市でインプの増加数+22。戦闘中、味方のすべてのクリーチャーは攻撃力+10を得る。英雄の呪文を含め、幸運の一撃のダメージ+50%。この都市の住居は+100%の部隊を生産する。",
+        "korean": "매주가 임프의 주간이다. 모든 도시에서 임프 증가량 +22. 전투 중 모든 아군 크리처는 공격력 +10을 얻는다. 영웅 주문을 포함하여 행운의 일격 피해 +50%. 이 도시의 거주지는 부대를 +100% 생산한다.",
+        "polish": "Każdy tydzień jest Tygodniem Diablika: +22 do przyrostu diablików we wszystkich twoich miastach. Wszystkie przyjazne stworzenia zyskują w bitwie +10 Ataku. +50% obrażeń od szczęśliwego trafienia, także od zaklęć bohaterów. Siedliska w tym mieście produkują +100% jednostek.",
+        "russian": "Каждая неделя — Неделя беса: +22 к приросту бесов во всех ваших городах. Все дружественные существа получают в бою +10 к Атаке. +50% Урона от удачного удара, включая заклинания героев. Жилища этого города производят +100% существ.",
+        "spanish": "Cada semana es la Semana del Diablillo: +22 de crecimiento de diablillos en todas tus ciudades. Todas las criaturas aliadas obtienen +10 de Ataque en batalla. +50% de Daño de golpe afortunado, incluido el de los hechizos de héroe. Las viviendas de esta ciudad producen +100% de unidades.",
+        "turkish": "Her hafta Cin Haftası'dır: tüm şehirlerinizde Cin üretimi +22. Tüm dost yaratıklar savaşta +10 Saldırı kazanır. Kahraman büyüleri dahil, Şanslı Vuruş Hasarı +%50. Bu şehrin konutları +%100 birim üretir.",
+        "ukrainian": "Кожен тиждень — Тиждень біса: +22 до приросту бісів в усіх ваших містах. Усі дружні істоти отримують у бою +10 до Атаки. +50% Шкоди від удачного удару, зокрема від заклинань героїв. Оселі цього міста виробляють +100% істот.",
+        "zhCN": "每周都是小鬼周：你所有城镇的小鬼增长+22。战斗中所有友方生物获得+10攻击力。幸运一击的伤害+50%，包括英雄法术。此城镇的巢穴产出+100%的单位。",
+        "zhTW": "每週都是小鬼週：你所有城鎮的小鬼增長+22。戰鬥中所有友方生物獲得+10攻擊力。幸運一擊的傷害+50%，包括英雄法術。此城鎮的巢穴產出+100%的單位。"
+      }
+    }
+  ],
+  "remove": []
+}

@@ -5,8 +5,8 @@ asset and animation pipelines, the campaign and town converters, the validators,
 Day-to-day development happens in a private workspace. This snapshot is exported from it by
 `tools/public_source_export/export_public_source.py` (included here).
 
-- Source commit (private workspace): `840398e54643ac95d240057f5384ce29a0995822`
-- Files: 5301 (about 76 MB of text)
+- Source commit (private workspace): `89e75ba5f29628c80ee9fe12ddd3bd11a7742ad1`
+- Files: 5445 (about 78 MB of text)
 
 ## Releases do not use this folder
 
@@ -48,7 +48,7 @@ The export starts from every file tracked in the private workspace and leaves ou
 
 | Reason | Files | What it covers |
 | --- | ---: | --- |
-| `assets` | 4083 | Game and HoMM3 assets, and mod payload data generated from them (sprites, meshes, portraits, generated Core overlays, VCMI/HotA reference configs), plus verbatim game text: HoMM3 campaign prologues, scenario descriptions, objectives and their translations (experiments/campaign_port_poc/*localization*, *_video_prologue_transcripts*). |
+| `assets` | 4084 | Game and HoMM3 assets, and mod payload data generated from them (sprites, meshes, portraits, generated Core overlays, VCMI/HotA reference configs), plus verbatim game text: HoMM3 campaign prologues, scenario descriptions, objectives and their translations (experiments/campaign_port_poc/*localization*, *_video_prologue_transcripts*). |
 | `binary_or_media` | 3047 | Binaries and media: images, GIFs, video, DEF/PCX, GLB/FBX, NumPy arrays, NuGet packages, DLLs. |
 | `decompiled` | 1655 | Decompiled, disassembled or recovered game code, plus data derived from it (rename maps, IR, proof ledgers, symbol diffs, xref trees). |
 | `generated` | 1003 | Generated artifacts and run output (the artifacts/ tree, build_out, benches, handoffs, logs, dated reports). |

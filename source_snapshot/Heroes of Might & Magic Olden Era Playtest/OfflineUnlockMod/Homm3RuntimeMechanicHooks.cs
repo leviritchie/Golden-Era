@@ -1087,6 +1087,9 @@ internal static class Homm3RuntimeMechanicHooks
 			Homm3InfernoGatingRuntime.ObserveBeforeBattleResult(__0);
 			Homm3StrongholdWarcryRuntime.ObserveBeforeBattleResult(__0);
 			Homm3RampartAvengerStrikeRuntime.ObserveBeforeBattleResult(__0);
+			Homm3FactoryLawHooks.ObserveBeforeBattleResult(__0); // law pass 2026-11-21: Salvage Crews
+			Homm3ConfluxLawHooks.ObserveBeforeBattleResult(__0); // law pass 2026-11-25: Reforming Elements
+			Homm3CastleLawHooks.ObserveBeforeBattleResult(__0); // law pass 2026-11-25: Spoils of Command
 			Homm3BattleUnitLawOwnerRegistry.Clear("runtime-mechanics exact battle-result cleanup");
 			Homm3BulwarkRunesRuntime.ClearBattleState("shared battle-result cleanup");
 		}

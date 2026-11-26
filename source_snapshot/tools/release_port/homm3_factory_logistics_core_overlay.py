@@ -58,6 +58,8 @@ SPELL_SID = str(_CONFIG["spellSid"])
 SPELL_MODE = SPELL_SID
 CARRIER_BUFF_SID = str(_CONFIG["carrierBuffSid"])
 ARCANE_BUFF_PREFIX = str(_CONFIG["heroStatBuffPrefix"])
+# Building pass 2026-11-22 (factory.bank): hidden carrier for Homm3FactoryLoanBankRuntime's outstanding loan records.
+LOAN_CARRIER_BUFF_SID = "homm3_factory_loan_store"
 ARCANE_BUFF_MAX = int(_CONFIG["heroStatBuffMaxLevel"])
 
 SKILL_NAME = "Logistics Network"
@@ -246,6 +248,23 @@ def make_carrier_side_buff_row(source_rows: list[Any]) -> dict[str, Any]:
     return row
 
 
+def make_loan_carrier_side_buff_row(source_rows: list[Any]) -> dict[str, Any]:
+    """Building pass 2026-11-22: same hidden bonus-less clone, read and written only by Homm3FactoryLoanBankRuntime."""
+    row = make_carrier_side_buff_row(source_rows)
+    row.update(
+        {
+            "id": LOAN_CARRIER_BUFF_SID,
+            "name": f"{LOAN_CARRIER_BUFF_SID}_name",
+            "description": f"{LOAN_CARRIER_BUFF_SID}_description",
+            "xHomm3RuntimeHook": (
+                "Hidden, bonus-less carrier: Homm3FactoryLoanBankRuntime stores the side's outstanding Factory Bank loans "
+                "in this buff's durations. Without the plugin it does nothing."
+            ),
+        }
+    )
+    return row
+
+
 def make_arcane_hero_buff_rows() -> list[dict[str, Any]]:
     rows = []
     for level in range(1, ARCANE_BUFF_MAX + 1):
@@ -273,6 +292,8 @@ def buff_lang_rows() -> list[dict[str, str]]:
     rows = [
         {"sid": f"{CARRIER_BUFF_SID}_name", "text": "Logistics Network"},
         {"sid": f"{CARRIER_BUFF_SID}_description", "text": "Logistics Network records."},
+        {"sid": f"{LOAN_CARRIER_BUFF_SID}_name", "text": "Bank Loan"},
+        {"sid": f"{LOAN_CARRIER_BUFF_SID}_description", "text": "Bank loan records."},
         {"sid": f"{ARCANE_BUFF_PREFIX}name", "text": "Arcane Supply"},
     ]
     for level in range(1, ARCANE_BUFF_MAX + 1):
@@ -310,7 +331,7 @@ def merge_logistics_skill_rows_into_overlay(release_zip, output, notes, helpers)
 
     _upsert_rows(*common, SPELL_PATH, lambda rows: [make_logistics_magic_row(rows)], "world spell")
     _upsert_rows(*common, SUBSKILLS_PATH, make_subskills(), "subskills")
-    _upsert_rows(*common, SIDE_BUFFS_PATH, lambda rows: [make_carrier_side_buff_row(rows)], "carrier side buff")
+    _upsert_rows(*common, SIDE_BUFFS_PATH, lambda rows: [make_carrier_side_buff_row(rows), make_loan_carrier_side_buff_row(rows)], "carrier side buffs")
     _upsert_rows(*common, HERO_BUFFS_PATH, make_arcane_hero_buff_rows(), "arcane hero buffs")
 
     for path in MAGIC_LANG_PATHS:

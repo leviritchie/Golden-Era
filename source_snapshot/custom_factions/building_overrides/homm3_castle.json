@@ -1,0 +1,391 @@
+{
+  "factionSid": "homm3_castle",
+  "rows": [
+    {
+      "sid": "Build_Bank",
+      "section": "banks",
+      "template": "human_city:Build_Bank",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 2500,
+          "wood": 5,
+          "ore": 5
+        }
+      ],
+      "fields": {
+        "isConstructedOnStart": true,
+        "backgroundImages": [
+          "build_fon_economy"
+        ]
+      },
+      "bonuses": [
+        [
+          {
+            "type": "sideRes",
+            "parameters": [
+              "gold",
+              1000
+            ]
+          }
+        ]
+      ],
+      "nameText": "Bank",
+      "descriptionText": "Produces 1000 Gold daily.",
+      "iconFrom": "human_city:Build_Bank",
+      "notes": "building pass 2026-11-22: plain economy Bank restored (REVIEW 1). Values equal vanilla human_city Build_Bank (2500 Gold, 5 Wood, 5 Ore; 1000 Gold daily; isConstructedOnStart true is native, not a leftover). The castle.stables tag moves to Build_Stables; the pre-pass Stables icon moves with it (iconFrom self:Build_Bank on that row).",
+      "nameTextLocales": {
+        "BRportugese": "Banco",
+        "czech": "Banka",
+        "french": "Banque",
+        "german": "Bank",
+        "hungarian": "Bank",
+        "italian": "Banca",
+        "japanese": "銀行",
+        "korean": "은행",
+        "polish": "Bank",
+        "russian": "Банк",
+        "spanish": "Banco",
+        "turkish": "Banka",
+        "ukrainian": "Банк",
+        "zhCN": "银行",
+        "zhTW": "銀行"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Produz 1000 de Ouro por dia.",
+        "czech": "Denně vyprodukuje 1000 Zlata.",
+        "french": "Produit 1000 d’or par jour.",
+        "german": "Produziert täglich 1000 Gold.",
+        "hungarian": "Naponta 1000 Aranyat termel.",
+        "italian": "Produce 1000 Oro al giorno.",
+        "japanese": "毎日1000ゴールドを生産する。",
+        "korean": "매일 금 1000을 생산합니다.",
+        "polish": "Produkuje 1000 Złota dziennie.",
+        "russian": "Приносит 1000 Золота в день.",
+        "spanish": "Produce 1000 de oro al día.",
+        "turkish": "Günde 1000 Altın üretir.",
+        "ukrainian": "Приносить 1000 Золота на день.",
+        "zhCN": "每天产出1000黄金。",
+        "zhTW": "每天產出1000黃金。"
+      }
+    },
+    {
+      "sid": "Build_Stables",
+      "section": "heroBonusBanks",
+      "template": "nature_city:Build_Mother_Nature",
+      "replace": false,
+      "sceneSlot": "Stables",
+      "costs": [
+        {
+          "gold": 2000,
+          "wood": 10
+        }
+      ],
+      "fields": {
+        "isConstructedOnStart": false,
+        "backgroundImages": [
+          "build_fon_unic"
+        ]
+      },
+      "bonuses": [
+        []
+      ],
+      "nameText": "Stables",
+      "descriptionText": "Visiting heroes gain +20% movement points until the end of the week.",
+      "iconFrom": "self:Build_Bank",
+      "plugin": "Homm3CastleStablesRuntime",
+      "notes": "building pass 2026-11-22: castle.stables. heroBonusBanks carrier with no native bonus: the plugin prefixes the heroBonusBank logic HeroVisit/OnConstruct overrides for this SID, adds the vanilla hero buff stable_buff (heroStat movementPerBonus 0.20, UntilNextWeek) and skips the native once-ever visit record. HoMM3 cost 2000 Gold + 10 Wood. Tree: root, gates Tier_6 (tree agent).",
+      "nameTextLocales": {
+        "BRportugese": "Estábulos",
+        "czech": "Stáje",
+        "french": "Écuries",
+        "german": "Stallungen",
+        "hungarian": "Istállók",
+        "italian": "Scuderie",
+        "japanese": "厩舎",
+        "korean": "마구간",
+        "polish": "Stajnie",
+        "russian": "Конюшни",
+        "spanish": "Establos",
+        "turkish": "Ahırlar",
+        "ukrainian": "Стайні",
+        "zhCN": "马厩",
+        "zhTW": "馬廄"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Heróis visitantes ganham +20% de pontos de movimento até o fim da semana.",
+        "czech": "Navštěvující hrdinové získají +20 % bodů pohybu do konce týdne.",
+        "french": "Les héros en visite gagnent +20 % de points de mouvement jusqu’à la fin de la semaine.",
+        "german": "Besuchende Helden erhalten +20 % Bewegungspunkte bis zum Ende der Woche.",
+        "hungarian": "A látogató hősök +20% mozgáspontot kapnak a hét végéig.",
+        "italian": "Gli eroi in visita ottengono +20% di punti movimento fino alla fine della settimana.",
+        "japanese": "訪問したヒーローは、週の終わりまで移動力が+20%される。",
+        "korean": "방문한 영웅은 주가 끝날 때까지 이동력이 +20% 증가합니다.",
+        "polish": "Odwiedzający bohaterowie zyskują +20% punktów ruchu do końca tygodnia.",
+        "russian": "Посещающие герои получают +20% очков движения до конца недели.",
+        "spanish": "Los héroes visitantes obtienen +20 % de puntos de movimiento hasta el final de la semana.",
+        "turkish": "Ziyaret eden kahramanlar haftanın sonuna kadar +%20 hareket puanı kazanır.",
+        "ukrainian": "Герої, що відвідують, отримують +20% очок руху до кінця тижня.",
+        "zhCN": "到访的英雄获得+20%移动力，持续到本周结束。",
+        "zhTW": "到訪的英雄獲得+20%移動力，持續到本週結束。"
+      }
+    },
+    {
+      "sid": "Build_Mother_Nature",
+      "section": "banks",
+      "template": "human_city:Build_Bank",
+      "replace": false,
+      "sceneSlot": "Mother_Nature",
+      "costs": [
+        {
+          "gold": 500,
+          "wood": 5
+        }
+      ],
+      "fields": {
+        "isConstructedOnStart": false,
+        "backgroundImages": [
+          "build_fon_unic"
+        ]
+      },
+      "bonuses": [
+        []
+      ],
+      "nameText": "Brotherhood of the Sword",
+      "descriptionText": "The hero defending this city in a siege gets +2 Morale.",
+      "iconFrom": "nature_city:Build_Mother_Nature",
+      "plugin": "Homm3TownSiegeDefenseRuntime",
+      "notes": "building pass 2026-11-22: castle.brotherhood_of_the_sword. Plugin-only banks carrier (no native bonus); the +2 Morale for the siege defender is the runtime agent's siege hook. HoMM3 cost 500 Gold + 5 Wood. Text names the defending hero (as the Fortress siege rows do) because a heroless garrison has no TransferHero to receive the stat; if the runtime agent ships a squad-level path, the text may say 'Troops defending this city'. The token Homm3Castle_Build_Mother_Nature_name already exists in the Core (Brotherhood of the Sword).",
+      "nameTextLocales": {
+        "BRportugese": "Irmandade da Espada",
+        "czech": "Bratrstvo meče",
+        "french": "Confrérie de l’épée",
+        "german": "Bruderschaft des Schwertes",
+        "hungarian": "Kard Testvériség",
+        "italian": "Confraternita della Spada",
+        "japanese": "剣の同胞団",
+        "korean": "검의 형제단",
+        "polish": "Bractwo Miecza",
+        "russian": "Братство Меча",
+        "spanish": "Hermandad de la Espada",
+        "turkish": "Kılıç Kardeşliği",
+        "ukrainian": "Братство Меча",
+        "zhCN": "剑之兄弟会",
+        "zhTW": "劍之兄弟會"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "O herói que defende esta cidade em um cerco ganha +2 de Moral.",
+        "czech": "Hrdina bránící toto město při obléhání získá +2 Morálky.",
+        "french": "Le héros qui défend cette ville lors d’un siège gagne +2 en Moral.",
+        "german": "Der Held, der diese Stadt bei einer Belagerung verteidigt, erhält +2 Moral.",
+        "hungarian": "Az a hős, aki ezt a várost védi ostrom közben, +2 Morált kap.",
+        "italian": "L’eroe che difende questa città durante un assedio ottiene +2 Morale.",
+        "japanese": "包囲戦でこの都市を防衛するヒーローは士気が+2される。",
+        "korean": "공성전에서 이 도시를 방어하는 영웅은 사기가 +2 증가합니다.",
+        "polish": "Bohater broniący tego miasta podczas oblężenia zyskuje +2 Morale.",
+        "russian": "Герой, защищающий этот город при осаде, получает +2 к Боевому духу.",
+        "spanish": "El héroe que defiende esta ciudad en un asedio obtiene +2 de Moral.",
+        "turkish": "Kuşatma sırasında bu şehri savunan kahraman +2 Moral kazanır.",
+        "ukrainian": "Герой, що захищає це місто під час облоги, отримує +2 до Бойового духу.",
+        "zhCN": "在围攻中防守这座城镇的英雄获得+2士气。",
+        "zhTW": "在圍攻中防守這座城鎮的英雄獲得+2士氣。"
+      }
+    },
+    {
+      "sid": "Build_Mycelium_Roots",
+      "section": "banks",
+      "template": "human_city:Build_Bank",
+      "replace": false,
+      "sceneSlot": "Mycelium_Roots",
+      "costs": [
+        {
+          "gold": 2000,
+          "ore": 10
+        }
+      ],
+      "fields": {
+        "isConstructedOnStart": false,
+        "backgroundImages": [
+          "build_fon_unic"
+        ]
+      },
+      "bonuses": [
+        []
+      ],
+      "nameText": "Signal Beacon",
+      "descriptionText": "All your heroes gain +10% movement points while you own this city. Takes effect from the next day.",
+      "iconFrom": "self:Build_Golden_Calf",
+      "plugin": "Homm3CastleSignalBeaconRuntime",
+      "notes": "building pass 2026-11-22: castle.lighthouse, substituted honestly (no ships in Olden Era). Plugin-only banks carrier; the day-start hero consumer keeps the hero buff homm3_signal_beacon_buff (heroStat movementPerBonus 0.10, Infinite; Core heroes_buffs row requested in build_crt.md) on every hero of a side owning a Castle city with this row, and removes it otherwise. Does not stack across several Beacons. HoMM3 Lighthouse cost 2000 Gold + 10 Ore. Icon: no Beacon art exists yet; the old Lighthouse-substitute grail icon is a placeholder until the scene/icon pass.",
+      "nameTextLocales": {
+        "BRportugese": "Farol de Sinalização",
+        "czech": "Signální maják",
+        "french": "Balise de signalisation",
+        "german": "Signalfeuer",
+        "hungarian": "Jelzőtűz",
+        "italian": "Faro di segnalazione",
+        "japanese": "のろし台",
+        "korean": "신호 봉화",
+        "polish": "Latarnia Sygnałowa",
+        "russian": "Сигнальный маяк",
+        "spanish": "Baliza de señales",
+        "turkish": "Sinyal Feneri",
+        "ukrainian": "Сигнальний маяк",
+        "zhCN": "信号烽火台",
+        "zhTW": "信號烽火台"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Todos os seus heróis ganham +10% de pontos de movimento enquanto você possuir esta cidade. Tem efeito a partir do dia seguinte.",
+        "czech": "Všichni vaši hrdinové získají +10 % bodů pohybu, dokud toto město vlastníte. Projeví se od následujícího dne.",
+        "french": "Tous vos héros gagnent +10 % de points de mouvement tant que vous possédez cette ville. Prend effet dès le jour suivant.",
+        "german": "Alle deine Helden erhalten +10 % Bewegungspunkte, solange du diese Stadt besitzt. Wirkt ab dem nächsten Tag.",
+        "hungarian": "Az összes hősöd +10% mozgáspontot kap, amíg ez a város a tiéd. A következő naptól lép érvénybe.",
+        "italian": "Tutti i tuoi eroi ottengono +10% di punti movimento finché possiedi questa città. Ha effetto dal giorno successivo.",
+        "japanese": "この都市を所有している間、すべてのヒーローの移動力が+10%される。翌日から有効。",
+        "korean": "이 도시를 소유하는 동안 모든 영웅의 이동력이 +10% 증가합니다. 다음 날부터 적용됩니다.",
+        "polish": "Wszyscy twoi bohaterowie zyskują +10% punktów ruchu, dopóki posiadasz to miasto. Działa od następnego dnia.",
+        "russian": "Все ваши герои получают +10% очков движения, пока вам принадлежит этот город. Действует со следующего дня.",
+        "spanish": "Todos tus héroes obtienen +10 % de puntos de movimiento mientras poseas esta ciudad. Surte efecto a partir del día siguiente.",
+        "turkish": "Bu şehre sahip olduğunuz sürece tüm kahramanlarınız +%10 hareket puanı kazanır. Ertesi günden itibaren etkili olur.",
+        "ukrainian": "Усі ваші герої отримують +10% очок руху, доки ви володієте цим містом. Діє з наступного дня.",
+        "zhCN": "只要你拥有这座城镇，你所有的英雄获得+10%移动力。从次日起生效。",
+        "zhTW": "只要你擁有這座城鎮，你所有的英雄獲得+10%移動力。從次日起生效。"
+      }
+    },
+    {
+      "sid": "Build_Golden_Calf",
+      "section": "graals",
+      "replace": true,
+      "costs": [
+        {
+          "graal": 1
+        }
+      ],
+      "fields": {
+        "sideBonuses": [
+          {
+            "type": "sideResHumGraal",
+            "parameters": [
+              "gold",
+              "1000"
+            ]
+          },
+          {
+            "type": "sideResHumGraal",
+            "parameters": [
+              "wood",
+              "1"
+            ]
+          },
+          {
+            "type": "sideResHumGraal",
+            "parameters": [
+              "ore",
+              "1"
+            ]
+          },
+          {
+            "type": "sideResHumGraal",
+            "parameters": [
+              "gemstones",
+              "1"
+            ]
+          },
+          {
+            "type": "sideResHumGraal",
+            "parameters": [
+              "crystals",
+              "1"
+            ]
+          },
+          {
+            "type": "sideResHumGraal",
+            "parameters": [
+              "mercury",
+              "1"
+            ]
+          },
+          {
+            "type": "heroStat",
+            "receiverAllegiance": "ally",
+            "parameters": [
+              "moral",
+              "2"
+            ]
+          }
+        ]
+      },
+      "nameText": "Colossus",
+      "descriptionText": "Your cities produce 1000 Gold and 1 each of Wood, Ore, Gemstones, Crystals and Mercury daily. All your heroes gain +2 Morale. This city's dwellings produce +100% units.",
+      "notes": "building pass 2026-11-22: castle.colossus. Owner answer 3: keeps every current extra (HumanGraal gold + 5 resources, cityUnitsIncrementPer all 1.0 kept unchanged in cityBonuses) and adds the HoMM3 +2 Morale for all heroes as a native graal side heroStat (shape of the vanilla demon_city graal heroStat). The row is no longer the Lighthouse substitute.",
+      "nameTextLocales": {
+        "BRportugese": "Colosso",
+        "czech": "Kolos",
+        "french": "Colosse",
+        "german": "Koloss",
+        "hungarian": "Kolosszus",
+        "italian": "Colosso",
+        "japanese": "巨像",
+        "korean": "거상",
+        "polish": "Kolos",
+        "russian": "Колосс",
+        "spanish": "Coloso",
+        "turkish": "Kolos",
+        "ukrainian": "Колос",
+        "zhCN": "巨像",
+        "zhTW": "巨像"
+      },
+      "descriptionTextLocales": {
+        "BRportugese": "Suas cidades produzem por dia 1000 de Ouro e 1 de cada um destes: Madeira, Minério, Gemas, Cristais e Mercúrio. Todos os seus heróis ganham +2 de Moral. As moradias desta cidade produzem +100% de unidades.",
+        "czech": "Vaše města denně vyprodukují 1000 Zlata a po 1 Dřeva, Kamene, drahokamů, krystalů a rtuti. Všichni vaši hrdinové získají +2 Morálky. Obydlí tohoto města produkují +100 % jednotek.",
+        "french": "Vos villes produisent chaque jour 1000 d’or et 1 de chacune de ces ressources : bois, minerai, gemmes, cristaux et mercure. Tous vos héros gagnent +2 en Moral. Les habitations de cette ville produisent +100 % d’unités.",
+        "german": "Deine Städte produzieren täglich 1000 Gold und je 1 Holz, Erz, Edelsteine, Kristalle und Quecksilber. Alle deine Helden erhalten +2 Moral. Die Behausungen dieser Stadt produzieren +100 % Einheiten.",
+        "hungarian": "A városaid naponta 1000 Aranyat és 1-1 Fát, Ércet, drágakövet, kristályt és higanyt termelnek. Az összes hősöd +2 Morált kap. A város lakóhelyei +100% egységet termelnek.",
+        "italian": "Le tue città producono ogni giorno 1000 Oro e 1 ciascuno di Legname, Minerali, Gemme, Cristalli e Mercurio. Tutti i tuoi eroi ottengono +2 Morale. Le abitazioni di questa città producono +100% di unità.",
+        "japanese": "所有する都市は毎日1000ゴールドと、木材、鉱石、宝石、クリスタル、水銀を各1生産する。すべてのヒーローの士気が+2される。この都市の居住施設は+100%のユニットを生産する。",
+        "korean": "보유한 도시는 매일 금 1000과 나무, 광석, 보석, 수정, 수은을 각각 1씩 생산합니다. 모든 영웅의 사기가 +2 증가합니다. 이 도시의 거주지는 유닛을 +100% 생산합니다.",
+        "polish": "Twoje miasta produkują dziennie 1000 Złota oraz po 1 Drewna, Rudy, klejnotów, kryształów i rtęci. Wszyscy twoi bohaterowie zyskują +2 Morale. Siedliska w tym mieście produkują +100% jednostek.",
+        "russian": "Ваши города производят в день 1000 Золота и по 1 единице Дерева, Руды, самоцветов, кристаллов и ртути. Все ваши герои получают +2 к Боевому духу. Жилища этого города производят +100% существ.",
+        "spanish": "Tus ciudades producen cada día 1000 de oro y 1 de madera, mineral, gemas, cristales y mercurio. Todos tus héroes obtienen +2 de Moral. Las viviendas de esta ciudad producen +100 % de unidades.",
+        "turkish": "Şehirleriniz günde 1000 Altın ile birer Odun, Maden, mücevher, kristal ve cıva üretir. Tüm kahramanlarınız +2 Moral kazanır. Bu şehrin konutları +%100 birim üretir.",
+        "ukrainian": "Ваші міста щодня виробляють 1000 Золота та по 1 одиниці Деревини, Руди, самоцвітів, кристалів і ртуті. Усі ваші герої отримують +2 до Бойового духу. Житла цього міста виробляють +100% істот.",
+        "zhCN": "你的城镇每天产出1000黄金，以及木材、矿石、宝石、水晶、水银各1。你所有的英雄获得+2士气。这座城镇的居所多生产+100%的单位。",
+        "zhTW": "你的城鎮每天產出1000黃金，以及木材、礦石、寶石、水晶、水銀各1。你所有的英雄獲得+2士氣。這座城鎮的居所多生產+100%的單位。"
+      }
+    },
+    {
+      "sid": "Build_Treasury",
+      "section": "banks",
+      "replace": true,
+      "costs": [
+        {
+          "gold": 5000,
+          "gemstones": 5,
+          "crystals": 5,
+          "mercury": 5
+        }
+      ],
+      "nameText": "Blacksmith",
+      "descriptionText": "Produces 2000 Gold daily.",
+      "notes": "building pass 2026-11-22: rename only. The slot is the shared-economy Treasury (2000 Gold daily); the old 'Blacksmith' name promised a war-machine shop that does not exist.",
+      "descriptionTextLocales": {
+        "BRportugese": "Produz 2000 de Ouro por dia.",
+        "czech": "Denně vyprodukuje 2000 Zlata.",
+        "french": "Produit 2000 d’or par jour.",
+        "german": "Produziert täglich 2000 Gold.",
+        "hungarian": "Naponta 2000 Aranyat termel.",
+        "italian": "Produce 2000 Oro al giorno.",
+        "japanese": "毎日2000ゴールドを生産する。",
+        "korean": "매일 금 2000을 생산합니다.",
+        "polish": "Produkuje 2000 Złota dziennie.",
+        "russian": "Приносит 2000 Золота в день.",
+        "spanish": "Produce 2000 de oro al día.",
+        "turkish": "Günde 2000 Altın üretir.",
+        "ukrainian": "Приносить 2000 Золота на день.",
+        "zhCN": "每天产出2000黄金。",
+        "zhTW": "每天產出2000黃金。"
+      }
+    }
+  ],
+  "remove": []
+}

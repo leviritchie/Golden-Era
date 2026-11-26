@@ -18,7 +18,7 @@ internal static partial class GameSymbols
 		// rewrites for can never differ from the build these scopes were generated for.
 		internal const string GameAssemblySha256 = "7CC2DE0D14A6FF98880A78C457385992D0D8BA294F991C689C5122AFA464D47E";
 		internal const int Scoped = 1521;
-		internal const int Refused = 6;
+		internal const int Refused = 9;
 		internal const int TypeGroupsScoped = 51;
 	}
 
@@ -691,6 +691,17 @@ internal static partial class GameSymbols
 			BuffAddShape = GameSymbolScope.Method("CoveAfterShot.BuffAddShape", BuffAddShape, 0xA8178456u, new string[] { "Method_Public_Object1PublicBoInchStBucodaBuObtaUnique_String_Int32_Int32_InterfacePublicAbstractbeObbfUnHebfUnInbfObUnique_Int32_Boolean_0", null, null, null }, "ObjectPublicDi2StLi1ObcmHaLi1Unique");
 			CasterBattleObject = GameSymbolScope.Method("CoveAfterShot.CasterBattleObject", CasterBattleObject, 0xE6CCF7BCu, new string[] { "Method_Private_Void_Obstacle_ObjectPublicSicnInSicnHeInBySicnUnique_byref_FieldObject_byref_FieldObject_0", "Method_Private_Static_set_Void_MonoBehaviourPublicSopoObCacmCaObcmObCaUnique_PDM_0", "Method_Public_Void_AbilityViewConfig_ObjectPublicAbccObHeccObBuItccObUnique_0" }, "Hex.Session.Battle.BhObstacleHelper;Hex.Session.City.BhHireUnitAbilityView;MonoBehaviourPublicSopoObCacmCaObcmObCaUnique");
 			CasterRoot = GameSymbolScope.Method("CoveAfterShot.CasterRoot", CasterRoot, 0x3FE78E6Eu, new string[] { "Method_Public_Abstract_Virtual_New_InterfacePublicAbstractbeObbfUnHebfUnInbfObUnique_0", null }, "InterfacePublicAbstractbeObbfUnHebfUnInbfObUnique");
+		}
+	}
+
+	internal static partial class CoveLodestar
+	{
+		static CoveLodestar()
+		{
+			if (!GameSymbolScope.RewriteForCurrentBuild)
+				return;
+			BattleSideNativeMembers = GameSymbolScope.Refuse("CoveLodestar.BattleSideNativeMembers", BattleSideNativeMembers, 0x172C98CCu, "declaration is not in the remap (added or renamed after it was generated); regenerate the remap");
+			UnitNativeMembers = GameSymbolScope.Refuse("CoveLodestar.UnitNativeMembers", UnitNativeMembers, 0xC5DF9F0Cu, "declaration is not in the remap (added or renamed after it was generated); regenerate the remap");
 		}
 	}
 
@@ -2299,6 +2310,16 @@ internal static partial class GameSymbols
 			HeroSkillsListMembers = GameSymbolScope.Members("TowerBottomlessKnowledge.HeroSkillsListMembers", HeroSkillsListMembers, 0x03FBE349u, new string[] { "get_list", "list" }, null);
 			HeroSkillSubSkillsMembers = GameSymbolScope.Members("TowerBottomlessKnowledge.HeroSkillSubSkillsMembers", HeroSkillSubSkillsMembers, 0x5D8A2A0Fu, new string[] { "get_subSkills", "subSkills" }, null);
 			HeroSubSkillSidMembers = GameSymbolScope.Members("TowerBottomlessKnowledge.HeroSubSkillSidMembers", HeroSubSkillSidMembers, 0x33FEEB4Bu, new string[] { "get_field_Public_String_0", "field_Public_String_0" }, "Hex.Session.Data.HeroSubSkill");
+		}
+	}
+
+	internal static partial class TownBuildingPass
+	{
+		static TownBuildingPass()
+		{
+			if (!GameSymbolScope.RewriteForCurrentBuild)
+				return;
+			FreelancerPayResources = GameSymbolScope.Refuse("TownBuildingPass.FreelancerPayResources", FreelancerPayResources, 0xCB1FAC38u, "declaration is not in the remap (added or renamed after it was generated); regenerate the remap");
 		}
 	}
 

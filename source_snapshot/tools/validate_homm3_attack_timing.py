@@ -23,7 +23,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools" / "release_port"))
 import homm3_attack_timing_overlay as T  # noqa: E402
 
-SLICES = sorted((ROOT / "tools" / "homm3_def_retarget_delivery").glob("*_slice_v1.json"))
+_DELIVERY = ROOT / "tools" / "homm3_def_retarget_delivery"
+# rebuild slices redeliver slice_v1 units with re-authored clips; listed last so their pins win
+SLICES = sorted(_DELIVERY.glob("*_slice_v1.json")) + sorted(_DELIVERY.glob("*_rebuild_v1.json"))
 TOL = 1e-3
 
 

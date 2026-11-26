@@ -60,8 +60,10 @@ internal static partial class Homm3CoveTreasureRuntime
 			return;
 		var from = hero.node;
 		var best = -1;
-		var bestDistance = SearchRadius + 1;
-		foreach (var areaId in AreasInSearchRange(map, from))
+		// law pass 2026-11-21: Spyglass Watch (#5)
+		var radius = Homm3CoveLawHooks.SearchRadius(side);
+		var bestDistance = radius + 1;
+		foreach (var areaId in AreasInSearchRange(map, from, radius))
 		{
 			if (!map.Regions.TryGetValue(areaId, out var region) || region.Dug || region.Plan.TrueNode < 0)
 				continue;
@@ -71,7 +73,7 @@ internal static partial class Homm3CoveTreasureRuntime
 			AiConsider(map, from, region.Plan.TrueNode, ref best, ref bestDistance);
 			// The same leads the side's own map would show (CollectMarkers).
 			var falseNodes = region.Plan.FalseNodes;
-			for (var i = Math.Max(0, pieces - 1); i < falseNodes.Length && LeadCount(pieces) > 1; i++)
+			for (var i = FalseLeadStart(pieces, side); i < falseNodes.Length && LeadCount(pieces, side) > 1; i++)
 				AiConsider(map, from, falseNodes[i], ref best, ref bestDistance);
 		}
 		if (best < 0)
@@ -98,6 +100,7 @@ internal static partial class Homm3CoveTreasureRuntime
 	/// <summary>Pays queued computer-side treasures. Called from the marker host's Update.</summary>
 	internal static void FlushAiPayouts()
 	{
+		FlushFindersFees();
 		if (_aiPayouts.Count == 0 || _inTick)
 			return;
 		var due = new List<(object WorldHero, Plan.Contents Contents, int Side)>(_aiPayouts);

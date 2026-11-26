@@ -43,13 +43,13 @@
       "id": "tower.library",
       "surface": "building",
       "sourceName": "Library",
-      "status": "absent",
-      "reason": "No Tower city row carries the HoMM3 Library (+1 spell per Mage Guild level). The native magicGuildIncrement bonus ships at law scope in fraction_law_homm3_tower_2 (Observatory Network); carrying it on a city building is not proven.",
-      "changeDisposition": "Library has no building row; its spell effect lives on the Observatory Network law until a building carrier for magicGuildIncrement is traced.",
-      "validationOwner": "validate_source_mechanics_contract",
-      "forbiddenPlayerText": [
-        "Library"
-      ]
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: own row Build_Library (banks carrier, needs MG L1). Homm3TowerLibraryRuntime adds +1 spell to every Mage Guild level of that city (postfix on the guild's per-level spell count, plus one extra roll into open levels when the Library is built), as the HoMM3 Library does. It stacks with the Observatory Network law (REVIEW 2).",
+      "playerTextPolicy": "must_match_current_behavior",
+      "currentRows": [
+        "Build_Library"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
     },
     {
       "id": "tower.workshop_yard",
@@ -66,25 +66,19 @@
       ]
     },
     {
-      "id": "tower.skyship_beacon",
+      "id": "tower.skyship",
       "surface": "building",
-      "sourceName": "Skyship Beacon",
-      "status": "substituted",
-      "reason": "Grail/source vision and flight identity need map/session tracing before player text claims them.",
+      "sourceName": "Skyship",
+      "status": "exact",
+      "reason": "Building pass 2026-11-22: the grail keeps its current extras (HumanGraal gold + 5 resources, +100% city growth; owner answer 3) and adds the HoMM3 map reveal (native cityRadiusView 999, as the vanilla Dungeon grail) plus +15 Knowledge for the hero defending this city in a siege through the runtime agent's Homm3TownSiegeDefenseRuntime.",
       "playerTextPolicy": "must_match_current_behavior",
-      "forbiddenPlayerText": [
-        "fly",
-        "Skyship",
-        "reveals map"
-      ],
       "currentRows": [
         "Build_Golden_Calf"
       ],
-      "playerTextTokens": [
-        "Homm3Tower_Build_Golden_Calf_description",
-        "Homm3Tower_Build_Golden_Calf_name",
-        "Homm3Tower_Build_Golden_Calf_narrativeDescription"
-      ]
+      "forbiddenPlayerText": [
+        "fly"
+      ],
+      "validationOwner": "validate_source_mechanics_contract"
     },
     {
       "id": "tower.arcane_battery",

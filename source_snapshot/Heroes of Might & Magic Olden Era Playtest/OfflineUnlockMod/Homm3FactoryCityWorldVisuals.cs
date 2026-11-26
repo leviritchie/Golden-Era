@@ -66,6 +66,7 @@ internal static class Homm3FactoryCityWorldVisuals
 			["Magic_Guild"] = "Build_Magic_Guild",
 			["Treasury"] = "Build_Treasury",
 			["Bank"] = "Build_Bank",
+			["Factory_Loan_Bank"] = "Build_Factory_Loan_Bank",
 			["Market"] = "Build_Market",
 			["Walls"] = "Build_Wall",
 			["Resource_Depot"] = "Build_Resource_Depot",

@@ -1,9 +1,510 @@
 {
   "lawOverrides": {
+    "fraction_law_homm3_cove_1": {
+      "enabled": true,
+      "nameText": "Tax Collectors",
+      "descriptionText": "Produces {0} Gold daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "gold",
+                250
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "gold",
+                500
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: scaffold income law."
+    },
+    "fraction_law_homm3_cove_2": {
+      "enabled": false
+    },
+    "fraction_law_homm3_cove_3": {
+      "enabled": false
+    },
+    "fraction_law_homm3_cove_4": {
+      "enabled": true,
+      "nameText": "Elite Nymphs",
+      "descriptionText": "Nymph growth in your cities increases by {0}. Their ability cooldowns are reduced by {1} round(s).",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_nymph",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "abilityCdBonus",
+                "-1"
+              ],
+              "receivers": [
+                "h3_nymph",
+                "h3_oceanid",
+                "h3_nymph_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_nymph",
+                "8"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "abilityCdBonus",
+                "-1"
+              ],
+              "receivers": [
+                "h3_nymph",
+                "h3_oceanid",
+                "h3_nymph_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T1, cooldown rider.",
+      "portraitIconSid": "h3_nymph"
+    },
+    "fraction_law_homm3_cove_5": {
+      "enabled": true,
+      "nameText": "Spyglass Watch",
+      "descriptionText": "Your heroes reveal treasure map pieces {0} tile(s) farther away.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "viewRadius",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "1"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "viewRadius",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "2"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Spyglass Watch: display carrier 1/2 = Homm3CoveLawHooks.SearchRadius bonus; text style only.",
+      "effectIconKey": "fraction_law_human_2_icon"
+    },
+    "fraction_law_homm3_cove_6": {
+      "enabled": false
+    },
+    "fraction_law_homm3_cove_7": {
+      "enabled": true,
+      "nameText": "Lucky Doubloons",
+      "descriptionText": "Your heroes gain {0} Luck.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "2"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: native hero Luck.",
+      "effectIconKey": "fraction_law_undead_12_icon"
+    },
+    "fraction_law_homm3_cove_8": {
+      "enabled": true,
+      "nameText": "Privateers’ Pact",
+      "descriptionText": "Your heroes’ Persuasion Power in Diplomacy increases by {0}%.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "diplomacyEfficiencyPerBonus",
+                "0.25"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "diplomacyEfficiencyPerBonus",
+                "0.50"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: replaces Letters of Marque (owner, single-hero test); native diplomacy shape as dungeon_16.",
+      "effectIconKey": "fraction_law_dungeon_16_icon"
+    },
+    "fraction_law_homm3_cove_9": {
+      "enabled": true,
+      "nameText": "Finder’s Fee",
+      "descriptionText": "Each treasure map piece your heroes collect also yields {0} Gold.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "movementAfterBattleBonus",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "250"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "movementAfterBattleBonus",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "500"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Finder's Fee: display carrier 250/500 = Homm3CoveLawHooks.FindersFeeGoldByLevel; text style only.",
+      "effectIconKey": "fraction_law_human_21_icon"
+    },
+    "fraction_law_homm3_cove_10": {
+      "enabled": true,
+      "nameText": "Elite Crew Mates",
+      "descriptionText": "Crew Mate growth in your cities increases by {0}. They always deal maximum Damage.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_crew_mate",
+                "4"
+              ]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": [
+                "alwaysMaxDmg",
+                "true"
+              ],
+              "receivers": [
+                "h3_crew_mate",
+                "h3_seaman",
+                "h3_crew_mate_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_crew_mate",
+                "8"
+              ]
+            },
+            {
+              "type": "unitBoolStat",
+              "parameters": [
+                "alwaysMaxDmg",
+                "true"
+              ],
+              "receivers": [
+                "h3_crew_mate",
+                "h3_seaman",
+                "h3_crew_mate_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T2, always max Damage.",
+      "portraitIconSid": "h3_crew_mate"
+    },
+    "fraction_law_homm3_cove_11": {
+      "enabled": true,
+      "nameText": "Elite Pirates",
+      "descriptionText": "Pirate growth in your cities increases by {0}. Their attacks ignore {1}% of the target’s Defense.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_pirate",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "armorPen",
+                "0.10"
+              ],
+              "receivers": [
+                "h3_pirate",
+                "h3_corsair",
+                "h3_sea_dog"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_pirate",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "armorPen",
+                "0.20"
+              ],
+              "receivers": [
+                "h3_pirate",
+                "h3_corsair",
+                "h3_sea_dog"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T3, armour pen.",
+      "portraitIconSid": "h3_pirate"
+    },
+    "fraction_law_homm3_cove_12": {
+      "enabled": true,
+      "nameText": "Boarding Actions",
+      "descriptionText": "Your Cove creatures deal +{0}% Melee Damage to enemies that have no counterattacks left this round.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_nymph",
+                "h3_oceanid",
+                "h3_nymph_upg_alt",
+                "h3_crew_mate",
+                "h3_seaman",
+                "h3_crew_mate_upg_alt",
+                "h3_pirate",
+                "h3_corsair",
+                "h3_sea_dog",
+                "h3_stormbird",
+                "h3_ayssid",
+                "h3_stormbird_upg_alt",
+                "h3_sea_witch",
+                "h3_sorceress",
+                "h3_sea_witch_upg_alt",
+                "h3_nix",
+                "h3_nix_warrior",
+                "h3_nix_upg_alt",
+                "h3_sea_serpent",
+                "h3_haspid",
+                "h3_sea_serpent_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.1"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_nymph",
+                "h3_oceanid",
+                "h3_nymph_upg_alt",
+                "h3_crew_mate",
+                "h3_seaman",
+                "h3_crew_mate_upg_alt",
+                "h3_pirate",
+                "h3_corsair",
+                "h3_sea_dog",
+                "h3_stormbird",
+                "h3_ayssid",
+                "h3_stormbird_upg_alt",
+                "h3_sea_witch",
+                "h3_sorceress",
+                "h3_sea_witch_upg_alt",
+                "h3_nix",
+                "h3_nix_warrior",
+                "h3_nix_upg_alt",
+                "h3_sea_serpent",
+                "h3_haspid",
+                "h3_sea_serpent_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.2"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Boarding Actions: display carrier 10/20% = lawRules counter_state percent; text style only.",
+      "effectIconKey": "fraction_law_human_18_icon"
+    },
     "fraction_law_homm3_cove_13": {
       "enabled": true,
       "nameText": "Boarding Hooks",
-      "descriptionText": "Each time a friendly creature counterattacks, your hero gains 1 Focus (up to 5 Focus per battle).",
+      "descriptionText": "Each time a friendly creature counterattacks, you generate 1 Focus Charge, up to 5 per battle.",
+      "descriptionArgs": [],
       "parametersPerLevel": [
         {
           "cost": 3,
@@ -43,16 +544,54 @@
           ]
         }
       ],
-      "notes": "Runtime law 2026-11-10 (user: switch counterattack laws to runtime): the native bonus is a zero-strength loader anchor (unitStat modifierSet outDmgMods counter_attack 0.00) so Core keeps a valid law row; the effect described above is applied by the plugin (Homm3CounterattackDoctrineMutationRuntime) on native counterattacks only. Replaces the 2026-06-21 generic +50% counterattack-damage placeholder, which is removed so the two never stack. Runtime proof pending.",
+      "notes": "law pass 2026-11-21: kept unchanged (counter doctrine runtime row 13). Runtime law 2026-11-10 (user: switch counterattack laws to runtime): the native bonus is a zero-strength loader anchor (unitStat modifierSet outDmgMods counter_attack 0.00) so Core keeps a valid law row; the effect described above is applied by the plugin (Homm3CounterattackDoctrineMutationRuntime) on native counterattacks only. Replaces the 2026-06-21 generic +50% counterattack-damage placeholder, which is removed so the two never stack. Runtime proof pending.",
       "iconNotes": "HOMM4 art-source candidate: Retribution (schools/life/retribution.jpg). Runtime icon key: fraction_law_homm3_cove_13_icon. Runtime rendering remains unproven until law-tree smoke.",
       "homm4IconLabel": "Retribution",
       "homm4IconPath": "schools/life/retribution.jpg",
       "iconKey": "fraction_law_homm3_cove_13_icon"
     },
+    "fraction_law_homm3_cove_14": {
+      "enabled": true,
+      "nameText": "Mining: Mercury",
+      "descriptionText": "Produces {0} Mercury daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "mercury",
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "sideRes",
+              "parameters": [
+                "mercury",
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: scaffold resource law."
+    },
     "fraction_law_homm3_cove_15": {
       "enabled": true,
-      "nameText": "Powder Charts",
-      "descriptionText": "Heroes can learn tier 1 Space spells.",
+      "nameText": "Navigator’s Charts",
+      "descriptionText": "Space spells of your heroes gain {0} level(s).",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_3"
+      ],
       "parametersPerLevel": [
         {
           "cost": 3,
@@ -69,17 +608,83 @@
           ]
         }
       ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "iconNotes": "Creature portrait law icon pass: uses h3_cannon.png for this creature-function law under runtime icon key fraction_law_homm3_cove_15_icon. Static/deploy proven only; law-tree visual smoke still required.",
+      "notes": "law pass 2026-11-21: spell school +1 level (school family row 15).",
       "homm4IconLabel": "Mana flare",
       "homm4IconPath": "schools/chaos/mana_flare.jpg",
       "iconKey": "fraction_law_homm3_cove_15_icon",
-      "portraitIconSid": "h3_cannon"
+      "iconNotes": "Creature portrait law icon pass: uses h3_cannon.png for this creature-function law under runtime icon key fraction_law_homm3_cove_15_icon. Static/deploy proven only; law-tree visual smoke still required."
+    },
+    "fraction_law_homm3_cove_16": {
+      "enabled": false
+    },
+    "fraction_law_homm3_cove_17": {
+      "enabled": true,
+      "nameText": "Elite Stormbirds",
+      "descriptionText": "Stormbird growth in your cities increases by {0}. They gain {1} Initiative.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_stormbird",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "initiative",
+                "1"
+              ],
+              "receivers": [
+                "h3_stormbird",
+                "h3_ayssid",
+                "h3_stormbird_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_stormbird",
+                "4"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "initiative",
+                "2"
+              ],
+              "receivers": [
+                "h3_stormbird",
+                "h3_ayssid",
+                "h3_stormbird_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T4, Initiative.",
+      "portraitIconSid": "h3_stormbird"
     },
     "fraction_law_homm3_cove_18": {
       "enabled": true,
-      "nameText": "Boarding Parties",
-      "descriptionText": "Friendly creatures deal 10% more melee damage and take 10% less melee damage by rank.",
+      "nameText": "Powder Kegs",
+      "descriptionText": "The abilities of your Cove creatures deal +{0}% Damage.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_3"
+      ],
       "parametersPerLevel": [
         {
           "cost": 3,
@@ -89,8 +694,8 @@
               "parameters": [
                 "modifierSet",
                 "outDmgMods",
-                "melee_attack",
-                "0.10"
+                "ability",
+                "0.15"
               ],
               "receivers": [
                 "h3_nymph",
@@ -114,145 +719,6 @@
                 "h3_sea_serpent",
                 "h3_haspid",
                 "h3_sea_serpent_upg_alt"
-              ]
-            },
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "inDmgMods",
-                "melee_attack",
-                "-0.10"
-              ],
-              "receivers": [
-                "h3_nymph",
-                "h3_oceanid",
-                "h3_nymph_upg_alt",
-                "h3_crew_mate",
-                "h3_seaman",
-                "h3_crew_mate_upg_alt",
-                "h3_pirate",
-                "h3_corsair",
-                "h3_sea_dog",
-                "h3_stormbird",
-                "h3_ayssid",
-                "h3_stormbird_upg_alt",
-                "h3_sea_witch",
-                "h3_sorceress",
-                "h3_sea_witch_upg_alt",
-                "h3_nix",
-                "h3_nix_warrior",
-                "h3_nix_upg_alt",
-                "h3_sea_serpent",
-                "h3_haspid",
-                "h3_sea_serpent_upg_alt"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Creature portrait law icon pass: uses h3_crew_mate.png for this creature-function law under runtime icon key fraction_law_homm3_cove_18_icon. Static/deploy proven only; law-tree visual smoke still required.",
-      "homm4IconLabel": "Defender",
-      "homm4IconPath": "schools/life/defender.jpg",
-      "iconKey": "fraction_law_homm3_cove_18_icon",
-      "portraitIconSid": "h3_crew_mate"
-    },
-    "fraction_law_homm3_cove_19": {
-      "enabled": true,
-      "nameText": "Gun Decks",
-      "descriptionText": "Friendly creatures deal 10% more ranged damage and take 10% less ranged damage by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "outDmgMods",
-                "shoot_attack",
-                "0.10"
-              ],
-              "receivers": [
-                "h3_nymph",
-                "h3_oceanid",
-                "h3_nymph_upg_alt",
-                "h3_crew_mate",
-                "h3_seaman",
-                "h3_crew_mate_upg_alt",
-                "h3_pirate",
-                "h3_corsair",
-                "h3_sea_dog",
-                "h3_stormbird",
-                "h3_ayssid",
-                "h3_stormbird_upg_alt",
-                "h3_sea_witch",
-                "h3_sorceress",
-                "h3_sea_witch_upg_alt",
-                "h3_nix",
-                "h3_nix_warrior",
-                "h3_nix_upg_alt",
-                "h3_sea_serpent",
-                "h3_haspid",
-                "h3_sea_serpent_upg_alt"
-              ]
-            },
-            {
-              "type": "unitStat",
-              "parameters": [
-                "modifierSet",
-                "inDmgMods",
-                "shoot_attack",
-                "-0.10"
-              ],
-              "receivers": [
-                "h3_nymph",
-                "h3_oceanid",
-                "h3_nymph_upg_alt",
-                "h3_crew_mate",
-                "h3_seaman",
-                "h3_crew_mate_upg_alt",
-                "h3_pirate",
-                "h3_corsair",
-                "h3_sea_dog",
-                "h3_stormbird",
-                "h3_ayssid",
-                "h3_stormbird_upg_alt",
-                "h3_sea_witch",
-                "h3_sorceress",
-                "h3_sea_witch_upg_alt",
-                "h3_nix",
-                "h3_nix_warrior",
-                "h3_nix_upg_alt",
-                "h3_sea_serpent",
-                "h3_haspid",
-                "h3_sea_serpent_upg_alt"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Creature portrait law icon pass: uses h3_cannon.png for this creature-function law under runtime icon key fraction_law_homm3_cove_19_icon. Static/deploy proven only; law-tree visual smoke still required.",
-      "homm4IconLabel": "Magic arrow",
-      "homm4IconPath": "schools/chaos/magic_arrow.jpg",
-      "iconKey": "fraction_law_homm3_cove_19_icon",
-      "portraitIconSid": "h3_cannon"
-    },
-    "fraction_law_homm3_cove_2": {
-      "enabled": true,
-      "nameText": "Sea Charts",
-      "descriptionText": "Heroes gain +1/+2 Sight radius by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "heroStat",
-              "parameters": [
-                "viewRadius",
-                "1"
               ]
             }
           ]
@@ -261,23 +727,105 @@
           "cost": 3,
           "bonuses": [
             {
-              "type": "heroStat",
+              "type": "unitStat",
               "parameters": [
-                "viewRadius",
-                "2"
+                "modifierSet",
+                "outDmgMods",
+                "ability",
+                "0.30"
+              ],
+              "receivers": [
+                "h3_nymph",
+                "h3_oceanid",
+                "h3_nymph_upg_alt",
+                "h3_crew_mate",
+                "h3_seaman",
+                "h3_crew_mate_upg_alt",
+                "h3_pirate",
+                "h3_corsair",
+                "h3_sea_dog",
+                "h3_stormbird",
+                "h3_ayssid",
+                "h3_stormbird_upg_alt",
+                "h3_sea_witch",
+                "h3_sorceress",
+                "h3_sea_witch_upg_alt",
+                "h3_nix",
+                "h3_nix_warrior",
+                "h3_nix_upg_alt",
+                "h3_sea_serpent",
+                "h3_haspid",
+                "h3_sea_serpent_upg_alt"
               ]
             }
           ]
         }
       ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "iconNotes": "Canonical shared-law icon pass: plain hero Sight laws use the same vanilla scouting icon across custom factions. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_2_icon"
+      "notes": "law pass 2026-11-21: native: every Cove active-ability damage dealer carries the 'ability' tag (checked in the installed Core), so one outDmgMods entry covers all of them instead of per-unit armed_ability_<unit> tags.",
+      "effectIconKey": "fraction_law_human_31_icon"
+    },
+    "fraction_law_homm3_cove_19": {
+      "enabled": false
+    },
+    "fraction_law_homm3_cove_20": {
+      "enabled": true,
+      "nameText": "Treasure Fever",
+      "descriptionText": "Your heroes gain {0} XP for each treasure they dig up.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "movementRestoreBonus",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "1000"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "movementRestoreBonus",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "2000"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Treasure Fever replaces Quick Shovels (SPEC group D: Quick Shovels duplicated the Tireless Captain subskill). Each treasure the hero digs up pays 1000/2000 XP through the native exp component AddExp(xp, true) (Homm3CoveLawHooks.GrantTreasureFeverXp, called from Homm3CoveTreasureDig). Display carrier = TreasureFeverXpByLevel; native bonus is a zero anchor. Calibration: about 1/8 of a start-region treasure (16000 Gold) at level 2, HotA prices a treasure-class artifact at 1000 XP.",
+      "effectIconKey": "fraction_law_unfrozen_2_icon"
     },
     "fraction_law_homm3_cove_21": {
       "enabled": true,
       "nameText": "Prize Shares",
-      "descriptionText": "Gold income from your sources increases by +10%/+15%/+20% by rank.",
+      "descriptionText": "Your sources of Gold produce +{0}% Gold.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_0_parameters_2"
+      ],
       "parametersPerLevel": [
         {
           "cost": 4,
@@ -319,16 +867,19 @@
           ]
         }
       ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "iconNotes": "HOMM4 art-source candidate: Fortune (schools/nature/fortune.jpg). Runtime icon key: fraction_law_homm3_cove_21_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "notes": "law pass 2026-11-21: kept (gold % family row 21).",
       "homm4IconLabel": "Fortune",
       "homm4IconPath": "schools/nature/fortune.jpg",
-      "iconKey": "fraction_law_homm3_cove_21_icon"
+      "iconKey": "fraction_law_homm3_cove_21_icon",
+      "iconNotes": "HOMM4 art-source candidate: Fortune (schools/nature/fortune.jpg). Runtime icon key: fraction_law_homm3_cove_21_icon. Runtime rendering remains unproven until law-tree smoke."
     },
     "fraction_law_homm3_cove_22": {
       "enabled": true,
-      "nameText": "Crew Nerve",
-      "descriptionText": "Heroes gain +1 Morale by rank.",
+      "nameText": "Grog Rations",
+      "descriptionText": "Your heroes gain {0} Morale.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1"
+      ],
       "parametersPerLevel": [
         {
           "cost": 3,
@@ -343,14 +894,270 @@
           ]
         }
       ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Canonical shared-law icon pass: hero Morale laws use the same vanilla morale icon across custom factions. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_22_icon"
+      "notes": "law pass 2026-11-21: native hero Morale (old Crew Nerve).",
+      "effectIconKey": "fraction_law_human_22_icon"
+    },
+    "fraction_law_homm3_cove_23": {
+      "enabled": true,
+      "nameText": "Elite Sea Witches",
+      "descriptionText": "Sea Witch growth in your cities increases by {0}. Negative effects they apply last {1} additional round(s).",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_sea_witch",
+                "1"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outComingDebuffDuration",
+                "1"
+              ],
+              "receivers": [
+                "h3_sea_witch",
+                "h3_sorceress",
+                "h3_sea_witch_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_sea_witch",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "outComingDebuffDuration",
+                "1"
+              ],
+              "receivers": [
+                "h3_sea_witch",
+                "h3_sorceress",
+                "h3_sea_witch_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T5, debuff duration.",
+      "portraitIconSid": "h3_sea_witch"
+    },
+    "fraction_law_homm3_cove_24": {
+      "enabled": true,
+      "nameText": "Elite Nix",
+      "descriptionText": "Nix growth in your cities increases by {0}. Their abilities cost –{1} Focus Charge(s).",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_nix",
+                "1"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "abilityEnergyLevelsCostBonus",
+                "-1"
+              ],
+              "receivers": [
+                "h3_nix",
+                "h3_nix_warrior",
+                "h3_nix_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_nix",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "abilityEnergyLevelsCostBonus",
+                "-1"
+              ],
+              "receivers": [
+                "h3_nix",
+                "h3_nix_warrior",
+                "h3_nix_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T6, Focus cost rider.",
+      "portraitIconSid": "h3_nix"
+    },
+    "fraction_law_homm3_cove_25": {
+      "enabled": true,
+      "nameText": "Jolly Roger",
+      "descriptionText": "All enemy creatures lose {0} Morale and {1} Luck.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 5,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "moral",
+                "-1"
+              ],
+              "receiverAllegiance": "enemy"
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "luck",
+                "-1"
+              ],
+              "receiverAllegiance": "enemy"
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: native enemy Morale and Luck.",
+      "effectIconKey": "fraction_law_undead_29_icon"
+    },
+    "fraction_law_homm3_cove_26": {
+      "enabled": true,
+      "nameText": "Broadside",
+      "descriptionText": "Your Cove creatures deal +{0}% Ranged Damage to enemies that have not acted yet this round.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_nymph",
+                "h3_oceanid",
+                "h3_nymph_upg_alt",
+                "h3_crew_mate",
+                "h3_seaman",
+                "h3_crew_mate_upg_alt",
+                "h3_pirate",
+                "h3_corsair",
+                "h3_sea_dog",
+                "h3_stormbird",
+                "h3_ayssid",
+                "h3_stormbird_upg_alt",
+                "h3_sea_witch",
+                "h3_sorceress",
+                "h3_sea_witch_upg_alt",
+                "h3_nix",
+                "h3_nix_warrior",
+                "h3_nix_upg_alt",
+                "h3_sea_serpent",
+                "h3_haspid",
+                "h3_sea_serpent_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.1"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "inAllDmgMod",
+                "0.0"
+              ],
+              "receivers": [
+                "h3_nymph",
+                "h3_oceanid",
+                "h3_nymph_upg_alt",
+                "h3_crew_mate",
+                "h3_seaman",
+                "h3_crew_mate_upg_alt",
+                "h3_pirate",
+                "h3_corsair",
+                "h3_sea_dog",
+                "h3_stormbird",
+                "h3_ayssid",
+                "h3_stormbird_upg_alt",
+                "h3_sea_witch",
+                "h3_sorceress",
+                "h3_sea_witch_upg_alt",
+                "h3_nix",
+                "h3_nix_warrior",
+                "h3_nix_upg_alt",
+                "h3_sea_serpent",
+                "h3_haspid",
+                "h3_sea_serpent_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.2"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Broadside: display carrier 10/20% = lawRules turn_state percent; text style only.",
+      "effectIconKey": "fraction_law_human_20_icon"
     },
     "fraction_law_homm3_cove_27": {
       "enabled": true,
-      "nameText": "Storm Almanac",
-      "descriptionText": "Heroes can learn any tier of Space spells.",
+      "nameText": "King’s Ransom",
+      "descriptionText": "Treasures your heroes dig up hold +{0}% Gold and resources.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
       "parametersPerLevel": [
         {
           "cost": 3,
@@ -358,378 +1165,456 @@
             {
               "type": "heroStat",
               "parameters": [
-                "magicSchoolSet",
-                "space",
-                "5",
+                "offencePer",
                 "0"
               ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.2"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "offencePer",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.4"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "offencePer",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.6"
+              ],
+              "activationLevel": 99
             }
           ]
         }
       ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "HOMM4 art-source candidate: Summon ship (schools/life/summon_ship.jpg). Runtime icon key: fraction_law_homm3_cove_27_icon. Runtime rendering remains unproven until law-tree smoke.",
+      "notes": "law pass 2026-11-25: King's Ransom: display carrier 20/40/60% = Homm3CoveLawHooks.KingsRansomPercentByLevel; text style only.",
       "homm4IconLabel": "Summon ship",
       "homm4IconPath": "schools/life/summon_ship.jpg",
-      "iconKey": "fraction_law_homm3_cove_27_icon"
+      "iconKey": "fraction_law_homm3_cove_27_icon",
+      "iconNotes": "HOMM4 art-source candidate: Summon ship (schools/life/summon_ship.jpg). Runtime icon key: fraction_law_homm3_cove_27_icon. Runtime rendering remains unproven until law-tree smoke."
     },
     "fraction_law_homm3_cove_28": {
       "enabled": true,
-      "nameText": "Harbor Rush",
-      "descriptionText": "You can construct 1 additional building daily.",
+      "nameText": "Smugglers’ Tribute",
+      "descriptionText": "Produces {0} Crystal(s), {1} Gem(s) and {2} Mercury daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1",
+        "current_law_modInt_bonuses_2_parameters_1"
+      ],
       "parametersPerLevel": [
         {
-          "cost": 6,
+          "cost": 5,
           "bonuses": [
             {
-              "type": "constructionDailyLimit",
+              "type": "sideRes",
               "parameters": [
-                "1"
+                "crystals",
+                1
+              ]
+            },
+            {
+              "type": "sideRes",
+              "parameters": [
+                "gemstones",
+                1
+              ]
+            },
+            {
+              "type": "sideRes",
+              "parameters": [
+                "mercury",
+                1
               ]
             }
           ]
         }
       ],
-      "notes": "Native-data creative law implementation 2026-06-22: uses only vanilla/native Core bonus shapes from the accepted safe creative revision; source/build/deploy/runtime validation pending.",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_28_icon"
+      "notes": "law pass 2026-11-21: native daily rare resources.",
+      "effectIconKey": "fraction_law_dungeon_23_icon"
+    },
+    "fraction_law_homm3_cove_29": {
+      "enabled": false
+    },
+    "fraction_law_homm3_cove_30": {
+      "enabled": true,
+      "nameText": "Elite Sea Serpents",
+      "descriptionText": "Sea Serpent growth in your cities increases by {0}. Their maximum Damage increases by {1}.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_1",
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_sea_serpent",
+                "1"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "damageMax",
+                "10"
+              ],
+              "receivers": [
+                "h3_sea_serpent",
+                "h3_haspid",
+                "h3_sea_serpent_upg_alt"
+              ]
+            }
+          ]
+        },
+        {
+          "cost": 2,
+          "bonuses": [
+            {
+              "type": "cityUnitsIncrement",
+              "parameters": [
+                "h3_sea_serpent",
+                "2"
+              ]
+            },
+            {
+              "type": "unitStat",
+              "parameters": [
+                "damageMax",
+                "20"
+              ],
+              "receivers": [
+                "h3_sea_serpent",
+                "h3_haspid",
+                "h3_sea_serpent_upg_alt"
+              ]
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-21: Elite T7, max Damage.",
+      "portraitIconSid": "h3_sea_serpent"
+    },
+    "fraction_law_homm3_cove_31": {
+      "enabled": true,
+      "nameText": "Keelhaul",
+      "descriptionText": "Your Cove creatures deal +{0}% Damage to enemies backed against an obstacle, another creature or the edge of the battlefield.",
+      "descriptionArgs": [
+        "current_law_modPercent_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "speed",
+                "0"
+              ],
+              "receivers": [
+                "h3_nymph",
+                "h3_oceanid",
+                "h3_nymph_upg_alt",
+                "h3_crew_mate",
+                "h3_seaman",
+                "h3_crew_mate_upg_alt",
+                "h3_pirate",
+                "h3_corsair",
+                "h3_sea_dog",
+                "h3_stormbird",
+                "h3_ayssid",
+                "h3_stormbird_upg_alt",
+                "h3_sea_witch",
+                "h3_sorceress",
+                "h3_sea_witch_upg_alt",
+                "h3_nix",
+                "h3_nix_warrior",
+                "h3_nix_upg_alt",
+                "h3_sea_serpent",
+                "h3_haspid",
+                "h3_sea_serpent_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.1"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "unitStat",
+              "parameters": [
+                "speed",
+                "0"
+              ],
+              "receivers": [
+                "h3_nymph",
+                "h3_oceanid",
+                "h3_nymph_upg_alt",
+                "h3_crew_mate",
+                "h3_seaman",
+                "h3_crew_mate_upg_alt",
+                "h3_pirate",
+                "h3_corsair",
+                "h3_sea_dog",
+                "h3_stormbird",
+                "h3_ayssid",
+                "h3_stormbird_upg_alt",
+                "h3_sea_witch",
+                "h3_sorceress",
+                "h3_sea_witch_upg_alt",
+                "h3_nix",
+                "h3_nix_warrior",
+                "h3_nix_upg_alt",
+                "h3_sea_serpent",
+                "h3_haspid",
+                "h3_sea_serpent_upg_alt"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "0.15"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Keelhaul: display carrier 10/15% = lawRules wall_slam percent; text style only.",
+      "effectIconKey": "fraction_law_nature_11_icon"
+    },
+    "fraction_law_homm3_cove_32": {
+      "enabled": true,
+      "nameText": "Cartographers’ Guild",
+      "descriptionText": "Treasure maps show {0} fewer possible site(s) in each region.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_1_parameters_1"
+      ],
+      "parametersPerLevel": [
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "roadPerBonus",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "1"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        },
+        {
+          "cost": 3,
+          "bonuses": [
+            {
+              "type": "heroStat",
+              "parameters": [
+                "roadPerBonus",
+                "0"
+              ]
+            },
+            {
+              "type": "heroStat",
+              "parameters": [
+                "luck",
+                "2"
+              ],
+              "activationLevel": 99
+            }
+          ]
+        }
+      ],
+      "notes": "law pass 2026-11-25: Cartographers' Guild: display carrier 1/2 = Homm3CoveLawHooks.FalseLeadsRemoved; text style only.",
+      "effectIconKey": "fraction_law_dungeon_15_icon"
     },
     "fraction_law_homm3_cove_33": {
       "enabled": true,
-      "nameText": "Storm Omens",
-      "descriptionText": "Produces 250/500/750 Astrology points daily by rank.",
+      "nameText": "Star Charts",
+      "descriptionText": "Produces {0} Astrology points daily.",
+      "descriptionArgs": [
+        "current_law_modInt_bonuses_0_parameters_0"
+      ],
       "parametersPerLevel": [
         {
-          "cost": 2,
+          "cost": 3,
           "bonuses": [
             {
               "type": "astrologyExp",
               "parameters": [
-                "250"
+                500
               ]
             }
           ]
         },
         {
-          "cost": 2,
+          "cost": 3,
           "bonuses": [
             {
               "type": "astrologyExp",
               "parameters": [
-                "500"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 2,
-          "bonuses": [
-            {
-              "type": "astrologyExp",
-              "parameters": [
-                "750"
+                1000
               ]
             }
           ]
         }
       ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_34_icon"
+      "notes": "law pass 2026-11-21: astrology family row 33, moved to r3.",
+      "effectIconKey": "fraction_law_human_34_icon"
     },
     "fraction_law_homm3_cove_34": {
-      "enabled": true,
-      "nameText": "Reload Drills",
-      "descriptionText": "Positive effects on friendly creatures last +1 additional rounds by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "inComingBuffDuration",
-                "1"
-              ],
-              "receivers": [
-                "h3_nymph",
-                "h3_oceanid",
-                "h3_nymph_upg_alt",
-                "h3_crew_mate",
-                "h3_seaman",
-                "h3_crew_mate_upg_alt",
-                "h3_pirate",
-                "h3_corsair",
-                "h3_sea_dog",
-                "h3_stormbird",
-                "h3_ayssid",
-                "h3_stormbird_upg_alt",
-                "h3_sea_witch",
-                "h3_sorceress",
-                "h3_sea_witch_upg_alt",
-                "h3_nix",
-                "h3_nix_warrior",
-                "h3_nix_upg_alt",
-                "h3_sea_serpent",
-                "h3_haspid",
-                "h3_sea_serpent_upg_alt"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "HOMM4 art-source candidate: Spell shackle (schools/chaos/spell_shackle.jpg). Runtime icon key: fraction_law_homm3_cove_34_icon. Runtime rendering remains unproven until law-tree smoke.",
-      "homm4IconLabel": "Spell shackle",
-      "homm4IconPath": "schools/chaos/spell_shackle.jpg",
-      "iconKey": "fraction_law_homm3_cove_34_icon"
-    },
-    "fraction_law_homm3_cove_4": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_4_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_4_icon"
-    },
-    "fraction_law_homm3_cove_5": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_5_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_5_icon"
-    },
-    "fraction_law_homm3_cove_10": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_10_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_10_icon"
-    },
-    "fraction_law_homm3_cove_11": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_11_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_11_icon"
-    },
-    "fraction_law_homm3_cove_14": {
-      "iconNotes": "Canonical resource icon pass: mining laws use the vanilla icon matching the produced special resource instead of donor-faction inheritance. Static/deploy validation pending.",
-      "iconKey": "fraction_law_dungeon_14_icon"
-    },
-    "fraction_law_homm3_cove_17": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_17_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_17_icon"
-    },
-    "fraction_law_homm3_cove_20": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_20_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_20_icon"
-    },
-    "fraction_law_homm3_cove_23": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_23_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_23_icon"
-    },
-    "fraction_law_homm3_cove_24": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_24_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_24_icon"
-    },
-    "fraction_law_homm3_cove_26": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_26_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_26_icon"
-    },
-    "fraction_law_homm3_cove_30": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_30_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_30_icon"
-    },
-    "fraction_law_homm3_cove_31": {
-      "iconNotes": "Vanilla donor icon pass: uses fraction_law_human_31_icon from the human faction law row matching this law index. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_human_31_icon"
-    },
-    "fraction_law_homm3_cove_32": {
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_32_icon"
-    },
-    "fraction_law_homm3_cove_6": {
-      "enabled": true,
-      "nameText": "Burning Ash",
-      "descriptionText": "Friendly creatures deal +10% damage by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 3,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "outAllDmgMod",
-                "0.10"
-              ],
-              "receivers": [
-                "h3_nymph",
-                "h3_oceanid",
-                "h3_nymph_upg_alt",
-                "h3_crew_mate",
-                "h3_seaman",
-                "h3_crew_mate_upg_alt",
-                "h3_pirate",
-                "h3_corsair",
-                "h3_sea_dog",
-                "h3_stormbird",
-                "h3_ayssid",
-                "h3_stormbird_upg_alt",
-                "h3_sea_witch",
-                "h3_sorceress",
-                "h3_sea_witch_upg_alt",
-                "h3_nix",
-                "h3_nix_warrior",
-                "h3_nix_upg_alt",
-                "h3_sea_serpent",
-                "h3_haspid",
-                "h3_sea_serpent_upg_alt"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "homm4IconLabel": "Inferno",
-      "homm4IconPath": "schools/chaos/inferno.jpg",
-      "iconNotes": "Creature portrait law icon pass: uses h3_cannon.png for this creature-function law under runtime icon key fraction_law_homm3_cove_6_icon. Static/deploy proven only; law-tree visual smoke still required.",
-      "iconKey": "fraction_law_homm3_cove_6_icon",
-      "portraitIconSid": "h3_cannon"
-    },
-    "fraction_law_homm3_cove_25": {
-      "enabled": true,
-      "nameText": "Crew Rally",
-      "descriptionText": "Morale trigger chance for friendly creatures increases by +1%/+2%/+3% per Morale point by rank.",
-      "parametersPerLevel": [
-        {
-          "cost": 1,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "additionalActionChanceModifier",
-                "0.01"
-              ],
-              "receivers": [
-                "h3_nymph",
-                "h3_oceanid",
-                "h3_nymph_upg_alt",
-                "h3_crew_mate",
-                "h3_seaman",
-                "h3_crew_mate_upg_alt",
-                "h3_pirate",
-                "h3_corsair",
-                "h3_sea_dog",
-                "h3_stormbird",
-                "h3_ayssid",
-                "h3_stormbird_upg_alt",
-                "h3_sea_witch",
-                "h3_sorceress",
-                "h3_sea_witch_upg_alt",
-                "h3_nix",
-                "h3_nix_warrior",
-                "h3_nix_upg_alt",
-                "h3_sea_serpent",
-                "h3_haspid",
-                "h3_sea_serpent_upg_alt"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 1,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "additionalActionChanceModifier",
-                "0.02"
-              ],
-              "receivers": [
-                "h3_nymph",
-                "h3_oceanid",
-                "h3_nymph_upg_alt",
-                "h3_crew_mate",
-                "h3_seaman",
-                "h3_crew_mate_upg_alt",
-                "h3_pirate",
-                "h3_corsair",
-                "h3_sea_dog",
-                "h3_stormbird",
-                "h3_ayssid",
-                "h3_stormbird_upg_alt",
-                "h3_sea_witch",
-                "h3_sorceress",
-                "h3_sea_witch_upg_alt",
-                "h3_nix",
-                "h3_nix_warrior",
-                "h3_nix_upg_alt",
-                "h3_sea_serpent",
-                "h3_haspid",
-                "h3_sea_serpent_upg_alt"
-              ]
-            }
-          ]
-        },
-        {
-          "cost": 1,
-          "bonuses": [
-            {
-              "type": "unitStat",
-              "parameters": [
-                "additionalActionChanceModifier",
-                "0.03"
-              ],
-              "receivers": [
-                "h3_nymph",
-                "h3_oceanid",
-                "h3_nymph_upg_alt",
-                "h3_crew_mate",
-                "h3_seaman",
-                "h3_crew_mate_upg_alt",
-                "h3_pirate",
-                "h3_corsair",
-                "h3_sea_dog",
-                "h3_stormbird",
-                "h3_ayssid",
-                "h3_stormbird_upg_alt",
-                "h3_sea_witch",
-                "h3_sorceress",
-                "h3_sea_witch_upg_alt",
-                "h3_nix",
-                "h3_nix_warrior",
-                "h3_nix_upg_alt",
-                "h3_sea_serpent",
-                "h3_haspid",
-                "h3_sea_serpent_upg_alt"
-              ]
-            }
-          ]
-        }
-      ],
-      "notes": "Native-data replacement 2026-06-21: this row uses only Core-native law bonuses. Speculative plugin gameplay mutators for custom laws are disabled until revalidated individually.",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending.",
-      "iconKey": "fraction_law_human_25_icon"
-    },
-    "fraction_law_homm3_cove_1": {
-      "iconKey": "fraction_law_human_1_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_cove_3": {
-      "iconKey": "fraction_law_human_3_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_cove_7": {
-      "iconKey": "fraction_law_human_7_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_cove_8": {
-      "iconKey": "fraction_law_human_8_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_cove_9": {
-      "iconKey": "fraction_law_human_9_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_cove_12": {
-      "iconKey": "fraction_law_human_12_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_cove_16": {
-      "iconKey": "fraction_law_human_16_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
-    },
-    "fraction_law_homm3_cove_29": {
-      "iconKey": "fraction_law_human_29_icon",
-      "iconNotes": "Canonical shared-law icon pass: this law uses the same vanilla icon across custom factions because the displayed mechanic is intentionally shared. Static/deploy validation pending."
+      "enabled": false
     }
-  }
+  },
+  "lawTree": [
+    {
+      "kingdom": [
+        3,
+        5,
+        7,
+        8
+      ],
+      "army": [
+        4,
+        10
+      ]
+    },
+    {
+      "kingdom": [
+        1,
+        14,
+        9,
+        22
+      ],
+      "army": [
+        11,
+        17,
+        12
+      ]
+    },
+    {
+      "kingdom": [
+        16,
+        21,
+        20,
+        15
+      ],
+      "army": [
+        23,
+        26,
+        31
+      ]
+    },
+    {
+      "kingdom": [
+        32,
+        33
+      ],
+      "army": [
+        24,
+        13,
+        18
+      ]
+    },
+    {
+      "kingdom": [
+        29,
+        27,
+        28
+      ],
+      "army": [
+        30,
+        25
+      ]
+    }
+  ],
+  "lawRules": [
+    {
+      "law": 12,
+      "rule": "counter_state",
+      "name": "Boarding Actions",
+      "state": "left0",
+      "attack": "melee",
+      "percent": [
+        10,
+        20
+      ],
+      "receivers": "faction"
+    },
+    {
+      "law": 26,
+      "rule": "turn_state",
+      "name": "Broadside",
+      "fact": "unacted_target",
+      "attack": "ranged",
+      "percent": [
+        10,
+        20
+      ],
+      "receivers": "faction"
+    },
+    {
+      "law": 31,
+      "rule": "wall_slam",
+      "name": "Keelhaul",
+      "percent": [
+        10,
+        15
+      ],
+      "receivers": "faction"
+    }
+  ],
+  "lawBuffs": []
 }

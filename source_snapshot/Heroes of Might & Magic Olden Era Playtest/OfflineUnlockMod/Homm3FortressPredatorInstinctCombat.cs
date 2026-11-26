@@ -166,16 +166,26 @@ internal static class Homm3FortressPredatorInstinctCombat
 			var pair = Homm3FortressPredatorInstinctRuntime.FindByPredator(__1);
 			if (pair == null || !pair.Frenzied || pair.Side.FrenzyRound < 0)
 				return;
-			var occupant = ReadOccupant(__2);
-			if (occupant == null || occupant.Pointer == IntPtr.Zero || occupant.Pointer == __1.Pointer)
+			var occupant = ReadLivingOccupant(__2, __1);
+			if (occupant == null)
 				return;
 			if (Homm3DirectStateIdentity.ResolveKeyOrZero(occupant) == pair.PreyKey)
+				return;
+			// Only enemies are blocked: abilities aimed at friendly stacks stay usable while frenzied.
+			if (SameSide(occupant, __1))
 				return;
 			if (!Homm3FortressPredatorInstinctRuntime.IsAlive(pair.Prey))
 				return;
 			if (!(_canReachTaunter.Invoke(null, new[] { __0, __1, pair.Prey }) is bool reach) || !reach)
+			{
+				LogOncePerFrenzy(pair, "unreachable", "Frenzy taunt idle: " + Homm3FortressPredatorInstinctRuntime.DescribeUnit(__1)
+				                                      + " cannot reach its prey " + Homm3FortressPredatorInstinctRuntime.DescribeUnit(pair.Prey) + " this turn, so it may attack anyone.");
 				return;
+			}
 			__result = true;
+			LogOncePerFrenzy(pair, "blocked", "Frenzy taunt: " + Homm3FortressPredatorInstinctRuntime.DescribeUnit(__1) + " may only attack its prey "
+			                                  + Homm3FortressPredatorInstinctRuntime.DescribeUnit(pair.Prey) + " (first blocked target "
+			                                  + Homm3FortressPredatorInstinctRuntime.DescribeUnit(occupant) + ").");
 		}
 		catch (Exception ex)
 		{
@@ -185,25 +195,48 @@ internal static class Homm3FortressPredatorInstinctCombat
 
 	// ------------------------------------------------------------------ plumbing
 
-	private static PropertyInfo _hexOccupant;
+	private static readonly HashSet<string> FrenzyLogKeys = new();
 
-	private static Unit ReadOccupant(BattleHex hex)
+	/// <summary>
+	/// The living unit standing on <paramref name="hex"/> other than <paramref name="self"/>, read from Hex.fieldObjects
+	/// like native bjug (ejf.beta over the hex's field objects). Hex.prop_Unit_0 / &lt;cnfx&gt; is the hex's last corpse,
+	/// not its occupant: reading it returned null for every living enemy, so the taunt never blocked a hex (playtest
+	/// 2026-11-21).
+	/// </summary>
+	private static Unit ReadLivingOccupant(BattleHex hex, Unit self)
 	{
-		if (_hexOccupant == null)
+		var objects = hex.fieldObjects;
+		if (objects == null)
+			return null;
+		for (var i = 0; i < objects.Count; i++)
 		{
-			foreach (var name in GameSymbols.FortressPredatorInstinct.HexOccupantMembers)
-			{
-				var property = typeof(BattleHex).GetProperty(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-				if (property != null && typeof(Unit).IsAssignableFrom(property.PropertyType))
-				{
-					_hexOccupant = property;
-					break;
-				}
-			}
-			if (_hexOccupant == null)
-				throw new MissingMemberException("Hex occupant property " + string.Join("|", GameSymbols.FortressPredatorInstinct.HexOccupantMembers));
+			var unit = objects[i]?.TryCast<Unit>();
+			if (unit == null || unit.Pointer == IntPtr.Zero || unit.Pointer == self.Pointer)
+				continue;
+			if (Homm3FortressPredatorInstinctRuntime.IsAlive(unit))
+				return unit;
 		}
-		return _hexOccupant.GetValue(hex) as Unit;
+		return null;
+	}
+
+	private static bool SameSide(Unit a, Unit b)
+	{
+		var member = GameSymbols.InfernoGating.FieldObjectSideMembers is { Length: > 0 } names ? names[0] : null;
+		return Homm3FortressPredatorInstinctRuntime.ReadProperty(a, member) is Il2CppInterop.Runtime.InteropTypes.Il2CppObjectBase sa
+		       && Homm3FortressPredatorInstinctRuntime.ReadProperty(b, member) is Il2CppInterop.Runtime.InteropTypes.Il2CppObjectBase sb
+		       && sa.Pointer == sb.Pointer;
+	}
+
+	/// <summary>bjug runs per hex while targets are highlighted; log each outcome once per pair per Frenzy cast.</summary>
+	private static void LogOncePerFrenzy(Homm3FortressPredatorInstinctRuntime.Pair pair, string kind, string message)
+	{
+		var key = pair.PredatorKey + ":" + pair.Side.FrenzyRound + ":" + kind;
+		lock (FrenzyLogKeys)
+		{
+			if (!FrenzyLogKeys.Add(key))
+				return;
+		}
+		LogLimited(message);
 	}
 
 	private static Type FindType(Assembly assembly, string[] hints)
