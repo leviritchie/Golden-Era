@@ -66,15 +66,15 @@ jobs:
           $version = $env:PACKAGE_VERSION
           $payloadBase = $env:PAYLOAD_BASE_NAME
           $out = $env:PACKAGE_ROOT
-          foreach ($variant in @(@{ Suffix = "-upscaled-portraits"; Upscaled = "true" }, @{ Suffix = "-standard-portraits"; Upscaled = "false" })) {
+          foreach ($variant in @(@{ Suffix = ""; Telemetry = "false"; Dir = "standard" }, @{ Suffix = "-telemetry"; Telemetry = "true"; Dir = "telemetry" })) {
             powershell -ExecutionPolicy Bypass -File tools/release_installer/package_from_release_inputs.ps1 `
-              -OutputRoot "$out/$($variant.Suffix.TrimStart('-'))" `
+              -OutputRoot "$out/$($variant.Dir)" `
               -PackageVersion $version `
               -InstallerNameSuffix $variant.Suffix `
-              -Homm3UseUpscaledHeroPortraits $variant.Upscaled `
+              -Telemetry $variant.Telemetry `
               -PayloadMode Download `
               -PayloadBaseName $payloadBase
-            if ($LASTEXITCODE -ne 0) { throw "packaging failed for $($variant.Suffix)" }
+            if ($LASTEXITCODE -ne 0) { throw "packaging failed for $($variant.Dir)" }
           }
 
       - name: Attest installers

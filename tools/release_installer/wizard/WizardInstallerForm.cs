@@ -193,7 +193,8 @@ internal sealed class WizardInstallerForm : Form
         {
             case WizardStep.Operation:
                 titleLabel.Text = "What do you want to do?";
-                subtitleLabel.Text = "Choose one action. The installer will ask for only the folders needed for that action.";
+                subtitleLabel.Text = "Choose one action. The installer will ask for only the folders needed for that action."
+                    + (IsTelemetryBuild ? " This is the telemetry build — see the Review page for what is sent." : "");
                 nextButton.Text = "Next";
                 pageHost.Controls.Add(BuildOperationPage());
                 break;
@@ -288,6 +289,10 @@ internal sealed class WizardInstallerForm : Form
     {
         var panel = NewPagePanel();
         panel.Controls.Add(NewReviewLabel(BuildReviewText()));
+        if (IsTelemetryBuild && GetOperation() != InstallerOperation.Uninstall)
+        {
+            panel.Controls.Add(NewReviewLabel(TelemetryDisclosureText));
+        }
         return panel;
     }
 
@@ -840,14 +845,28 @@ internal sealed class WizardInstallerForm : Form
         return operation is InstallerOperation.Install or InstallerOperation.Repair;
     }
 
+    private static readonly bool IsTelemetryBuild = PayloadAcquisition.ReadTelemetryFlag();
+
+    private const string TelemetryDisclosureText =
+        "Telemetry build. When you quit the game, the mod sends one anonymous session report to the Golden Era developer's private Google Drive. " +
+        "It contains: mod, game and Windows versions and basic hardware (CPU, memory, graphics card model); " +
+        "a random install ID created on your PC (not your Steam account); session start and end time; " +
+        "battle results (heroes, armies, losses, winner, active laws); and warnings and errors from the game and mod logs. " +
+        "Text is scrubbed of user names, Steam IDs, e-mail and IP addresses. No saves, screenshots or other files are sent. " +
+        "Google sees your connection's IP address. If the game crashes or is closed abruptly, the report is sent on the next launch. " +
+        "Reports are kept for up to 400 days and are used only for bug fixing and balance changes. " +
+        "To stop sending, set \"modTelemetry\": false in BepInEx\\plugins\\OfflineUnlockMod\\config.json, or reinstall with the standard installer. " +
+        "By installing this build you agree to this.";
+
     private string GetRunButtonText()
     {
+        var agree = IsTelemetryBuild ? "Agree and " : "";
         return GetOperation() switch
         {
-            InstallerOperation.Update => "Update",
-            InstallerOperation.Repair => "Repair",
+            InstallerOperation.Update => agree + (IsTelemetryBuild ? "update" : "Update"),
+            InstallerOperation.Repair => agree + (IsTelemetryBuild ? "repair" : "Repair"),
             InstallerOperation.Uninstall => "Uninstall",
-            _ => "Install"
+            _ => agree + (IsTelemetryBuild ? "install" : "Install")
         };
     }
 }

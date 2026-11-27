@@ -515,9 +515,9 @@ internal static class InstallerBackend
         }
 
         File.WriteAllText(Path.Combine(stagingRoot, ".golden-era-cache-hash"), expectedHash, Encoding.ASCII);
-        if (payloadSource.Homm3UseUpscaledHeroPortraits is bool useUpscaled)
+        if (payloadSource.ModTelemetry is bool modTelemetry)
         {
-            ApplyPortraitConfig(stagingRoot, useUpscaled, log);
+            ApplyTelemetryConfig(stagingRoot, modTelemetry, log);
         }
 
         progress?.Invoke(InstallerProgress.OfBytes("Payload ready", "Release payload is ready.", 1, 1));
@@ -604,17 +604,18 @@ internal static class InstallerBackend
         }
     }
 
-    private static void ApplyPortraitConfig(string extractRoot, bool useUpscaledHeroPortraits, Action<string> log)
+    private static void ApplyTelemetryConfig(string extractRoot, bool modTelemetry, Action<string> log)
     {
         var configPath = Path.Combine(extractRoot, @"payload\BepInEx\plugins\OfflineUnlockMod\config.json");
         RequireFile(configPath, "Release payload is missing OfflineUnlockMod config.json.");
         var node = JsonNode.Parse(File.ReadAllText(configPath)) as JsonObject
             ?? throw new InvalidOperationException("OfflineUnlockMod config.json is not a JSON object.");
-        node["homm3UseUpscaledHeroPortraits"] = useUpscaledHeroPortraits;
+        node["modTelemetry"] = modTelemetry;
+        node.Remove("homm3UseUpscaledHeroPortraits");
         File.WriteAllText(configPath, node.ToJsonString(new JsonSerializerOptions { WriteIndented = true }), Encoding.UTF8);
-        log(useUpscaledHeroPortraits
-            ? "Configured installer for upscaled HoMM3 hero portraits."
-            : "Configured installer for standard HoMM3 hero portraits.");
+        log(modTelemetry
+            ? "Configured installer for the telemetry build (modTelemetry=true)."
+            : "Configured installer for the standard build (modTelemetry=false).");
     }
 
     private static void ValidateSourceCoreZip(string coreZipPath, OverlayManifest manifest)

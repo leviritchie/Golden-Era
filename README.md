@@ -37,9 +37,11 @@ The current public package includes the expanded custom-faction framework and as
 ## Installation
 
 1. Make sure both Olden Era and Heroes of Might and Magic 3 are installed on your computer.
-2. Open the latest GitHub Release and download one portrait variant EXE:
-   - `GoldenEraModInstaller-*-upscaled-portraits.exe`, or
-   - `GoldenEraModInstaller-*-standard-portraits.exe`
+2. Open the latest GitHub Release and download one installer EXE:
+   - `GoldenEraModInstaller-<version>.exe` (standard), or
+   - `GoldenEraModInstaller-<version>-telemetry.exe` (telemetry)
+
+   The two are identical except for one setting. The telemetry installer helps the developer fix bugs and balance units: when you quit the game, the mod sends one anonymous session report (versions, basic hardware, a random install ID, battle results and scrubbed warnings and errors from the logs; no saves or screenshots). The installer shows the full list and asks you to agree before installing. To turn it off later, set `"modTelemetry": false` in `BepInEx\plugins\OfflineUnlockMod\config.json`, or reinstall with the standard installer. The standard installer never sends anything.
 3. Double-click the EXE. On first run it downloads the mod payload from that same Release (about 12 GB, split into several part files) and checks the SHA-256 hash before installing.
 4. The wizard will ask for a clean Olden Era folder on the build your installer targets (see above) (your Steam install if it's on that build, otherwise the depot download), a separate modded copy folder, and your HoMM3 installation.
    The modded copy needs about 22 GB of free space on its drive (the game files plus the unpacked mod), and the download needs another 12 GB wherever the installer is saved.

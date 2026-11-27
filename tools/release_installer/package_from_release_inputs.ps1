@@ -4,7 +4,7 @@ param(
     [string]$PackageVersion = "",
     [string]$InstallerNameSuffix = "",
     [ValidateSet("", "true", "false")]
-    [string]$Homm3UseUpscaledHeroPortraits = "",
+    [string]$Telemetry = "",
     [ValidateSet("Embedded", "Download")]
     [string]$PayloadMode = "Download",
     [string]$GitHubOwner = "leviritchie",
@@ -80,7 +80,7 @@ function Set-JsonBooleanProperty($Json, $Name, [bool]$Value) {
     }
 }
 
-function New-ReleaseInputVariantZip($SourceZipPath, $DestinationZipPath, [bool]$UseUpscaledHeroPortraits) {
+function New-ReleaseInputVariantZip($SourceZipPath, $DestinationZipPath, [bool]$ModTelemetry) {
     $configEntryName = "payload/BepInEx/plugins/OfflineUnlockMod/config.json"
     $configWasRewritten = $false
 
@@ -105,7 +105,10 @@ function New-ReleaseInputVariantZip($SourceZipPath, $DestinationZipPath, [bool]$
                     }
 
                     $json = $jsonText | ConvertFrom-Json
-                    Set-JsonBooleanProperty $json "homm3UseUpscaledHeroPortraits" $UseUpscaledHeroPortraits
+                    Set-JsonBooleanProperty $json "modTelemetry" $ModTelemetry
+                    if ($json.PSObject.Properties.Name -contains "homm3UseUpscaledHeroPortraits") {
+                        $json.PSObject.Properties.Remove("homm3UseUpscaledHeroPortraits")
+                    }
                     $newJsonText = ($json | ConvertTo-Json -Depth 100)
                     $writer = [System.IO.StreamWriter]::new($newEntry.Open(), [System.Text.UTF8Encoding]::new($false))
                     try {
@@ -142,7 +145,7 @@ function New-ReleaseInputVariantZip($SourceZipPath, $DestinationZipPath, [bool]$
     }
 
     if (-not $configWasRewritten) {
-        throw "Release input payload is missing OfflineUnlockMod config.json; cannot create portrait variant."
+        throw "Release input payload is missing OfflineUnlockMod config.json; cannot create telemetry variant."
     }
 }
 
@@ -182,22 +185,22 @@ New-Item -ItemType Directory -Path $StageFullPath -Force | Out-Null
 
 $EffectiveReleaseInputZipPath = $ReleaseInputZipPath
 $payloadShaForFooter = $actual
-if ($PayloadMode -eq "Embedded" -and $Homm3UseUpscaledHeroPortraits -ne "") {
+if ($PayloadMode -eq "Embedded" -and $Telemetry -ne "") {
     $variantRoot = Join-Path $DistRoot "_release_input_variants"
     New-Item -ItemType Directory -Path $variantRoot -Force | Out-Null
     $variantSuffix = $InstallerNameSuffix
     if ([string]::IsNullOrWhiteSpace($variantSuffix)) {
-        $variantSuffix = "-portrait-variant"
+        $variantSuffix = "-telemetry-variant"
     }
     $variantName = "golden_era_release_payload-$PackageVersion$variantSuffix.zip"
     $variantName = ($variantName -replace '[<>:"/\\|?*]', '_')
     $EffectiveReleaseInputZipPath = Join-Path $variantRoot $variantName
-    $useUpscaled = $Homm3UseUpscaledHeroPortraits -eq "true"
-    New-ReleaseInputVariantZip $ReleaseInputZipPath $EffectiveReleaseInputZipPath $useUpscaled
+    $modTelemetry = $Telemetry -eq "true"
+    New-ReleaseInputVariantZip $ReleaseInputZipPath $EffectiveReleaseInputZipPath $modTelemetry
     $payloadShaForFooter = (Get-FileHash -LiteralPath $EffectiveReleaseInputZipPath -Algorithm SHA256).Hash.ToLowerInvariant()
 }
-elseif ($PayloadMode -eq "Download" -and $Homm3UseUpscaledHeroPortraits -eq "") {
-    throw "Download payload mode requires -Homm3UseUpscaledHeroPortraits true|false so the thin installer can apply the portrait SKU."
+elseif ($PayloadMode -eq "Download" -and $Telemetry -eq "") {
+    throw "Download payload mode requires -Telemetry true|false so the thin installer knows whether it is the telemetry build."
 }
 
 $zip = [System.IO.Compression.ZipFile]::OpenRead($EffectiveReleaseInputZipPath)
@@ -348,7 +351,7 @@ elseif ($PayloadMode -eq "Download") {
         Write-Host "Release assets match the footer: $($partNames.Count) part(s) in $assetsFull"
     }
 
-    $useUpscaled = $Homm3UseUpscaledHeroPortraits -eq "true"
+    $modTelemetry = $Telemetry -eq "true"
     $downloadManifest = [ordered]@{
         schema = "golden_era_payload_download/v1"
         githubOwner = $GitHubOwner
@@ -358,7 +361,7 @@ elseif ($PayloadMode -eq "Download") {
         expectedSha256 = $actual
         expectedBytes = $payloadLength
         parts = @($partNames)
-        homm3UseUpscaledHeroPortraits = $useUpscaled
+        modTelemetry = $modTelemetry
         partBytes = @($partBytes)
     }
 
@@ -394,8 +397,8 @@ Write-Host "Created installer ($PayloadMode): $installerPath"
 Write-Host "Installer SHA-256: $exeHash"
 Write-Host "Release input SHA-256: $actual"
 Write-Host "Installer size: $((Get-Item -LiteralPath $installerPath).Length) bytes"
-if ($Homm3UseUpscaledHeroPortraits -ne "") {
-    Write-Host "homm3UseUpscaledHeroPortraits override: $Homm3UseUpscaledHeroPortraits"
+if ($Telemetry -ne "") {
+    Write-Host "modTelemetry override: $Telemetry"
 }
 
 if ($CreateZip) {

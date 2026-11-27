@@ -45,7 +45,7 @@ internal static class PayloadAcquisition
         string ExpectedSha256,
         long ExpectedBytes,
         IReadOnlyList<string> Parts,
-        bool? Homm3UseUpscaledHeroPortraits,
+        bool? ModTelemetry,
         IReadOnlyList<long>? PartBytes = null);
 
     internal sealed record AcquiredPayload(
@@ -53,7 +53,7 @@ internal static class PayloadAcquisition
         long ExpectedBytes,
         Func<Stream> OpenRead,
         string SourceDescription,
-        bool? Homm3UseUpscaledHeroPortraits);
+        bool? ModTelemetry);
 
     public static string InstallerDirectory =>
         Path.GetDirectoryName(Path.GetFullPath(Environment.ProcessPath ?? AppContext.BaseDirectory))
@@ -82,7 +82,7 @@ internal static class PayloadAcquisition
                 new FileInfo(full).Length,
                 () => File.OpenRead(full),
                 full,
-                Homm3UseUpscaledHeroPortraits: null);
+                ModTelemetry: null);
         }
 
         var processPath = Environment.ProcessPath;
@@ -110,7 +110,7 @@ internal static class PayloadAcquisition
                 manifest.ExpectedBytes,
                 () => File.OpenRead(localZip),
                 localZip,
-                manifest.Homm3UseUpscaledHeroPortraits);
+                manifest.ModTelemetry);
         }
 
         var cacheDir = GetDownloadCacheDir(manifest);
@@ -163,7 +163,7 @@ internal static class PayloadAcquisition
             manifest.ExpectedBytes,
             () => new ConcatenatedReadStream(partPaths, lengths),
             description,
-            manifest.Homm3UseUpscaledHeroPortraits);
+            manifest.ModTelemetry);
     }
 
     /// <summary>One-paragraph, user-facing description of where the payload will come from.</summary>
@@ -237,6 +237,28 @@ internal static class PayloadAcquisition
         }
 
         return manifest.Parts.Select(part => BuildReleaseAssetUrl(manifest, part)).ToArray();
+    }
+
+    /// <summary>
+    /// True when this installer EXE is the telemetry build (its appended download manifest says modTelemetry=true).
+    /// False/null for the standard build, embedded payloads, or when the manifest is absent.
+    /// </summary>
+    public static bool ReadTelemetryFlag()
+    {
+        try
+        {
+            var processPath = Environment.ProcessPath;
+            if (string.IsNullOrWhiteSpace(processPath) || !File.Exists(processPath))
+            {
+                return false;
+            }
+
+            return TryReadDownloadManifest(processPath, out var manifest) && manifest.ModTelemetry == true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     internal static DownloadManifest ReadRequiredManifest(string installerPath)
@@ -670,7 +692,7 @@ internal static class PayloadAcquisition
             payloadLength,
             () => new ConcatenatedReadStream([installerPath], [payloadLength], payloadOffset),
             installerPath + "#embedded",
-            Homm3UseUpscaledHeroPortraits: null);
+            ModTelemetry: null);
         return true;
     }
 
