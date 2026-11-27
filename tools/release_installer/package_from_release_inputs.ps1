@@ -213,6 +213,24 @@ try {
     Require-ZipEntry $zip "payload/unity_data/globalgamemanagers" "Release inputs are missing unity_data/globalgamemanagers."
     Require-ZipEntry $zip "payload/il2cpp_metadata/global-metadata.dat" "Release inputs are missing il2cpp_metadata/global-metadata.dat."
     Require-ZipEntry $zip "core_overlay/manifest.json" "Release inputs are missing the generated Core overlay manifest."
+    if ($Telemetry -eq "true") {
+        # A telemetry installer without a receiver would record sessions that are never sent; refuse to build it.
+        $configEntry = $zip.Entries | Where-Object { $_.FullName.Replace("\", "/") -eq "payload/BepInEx/plugins/OfflineUnlockMod/config.json" } | Select-Object -First 1
+        if ($null -eq $configEntry) {
+            throw "Release inputs are missing OfflineUnlockMod config.json; cannot check modTelemetryEndpoint for the telemetry build."
+        }
+        $configReader = [System.IO.StreamReader]::new($configEntry.Open(), [System.Text.Encoding]::UTF8)
+        try {
+            $pluginConfig = $configReader.ReadToEnd() | ConvertFrom-Json
+        }
+        finally {
+            $configReader.Dispose()
+        }
+        $telemetryEndpoint = [string]$pluginConfig.modTelemetryEndpoint
+        if ($telemetryEndpoint -notmatch '^https://script\.google\.com/macros/s/[A-Za-z0-9_-]{10,200}/exec$') {
+            throw "The telemetry build needs modTelemetryEndpoint (the telemetry receiver's Apps Script /exec URL) in the payload's OfflineUnlockMod config.json; found '$telemetryEndpoint'."
+        }
+    }
     $hasStoryMaps = @($zip.Entries | Where-Object {
         $_.FullName.Replace("\", "/") -like "payload/streaming_assets/maps/Story_maps/*"
     }).Count -gt 0
