@@ -5,8 +5,8 @@ asset and animation pipelines, the campaign and town converters, the validators,
 Day-to-day development happens in a private workspace. This snapshot is exported from it by
 `tools/public_source_export/export_public_source.py` (included here).
 
-- Source commit (private workspace): `89e75ba5f29628c80ee9fe12ddd3bd11a7742ad1`
-- Files: 5445 (about 78 MB of text)
+- Source commit (private workspace): `e66ccd9d15a7e5a6d7c1d6725934595fec0a74e3`
+- Files: 5452 (about 78 MB of text)
 
 ## Releases do not use this folder
 

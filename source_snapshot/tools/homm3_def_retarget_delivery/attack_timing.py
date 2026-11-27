@@ -256,6 +256,17 @@ def measure(sid: str, row: dict, vc: dict, cr: dict) -> dict:
             if len(cands) == 1:
                 seg = cands[0]
                 group = "other"
+        authored = (row.get("authored") or {}).get(clip)
+        if seg is None and authored is not None:
+            # a re-authored clip with no DEF counterpart of its length (leprechaun's rebuilt shot): its measured
+            # impact is the only timing source, so no DEF frame is required
+            hit = round(float(authored["hit"]), 4)
+            if not 0 < hit < length:
+                raise SystemExit(f"{sid}: authored {clip} hit {hit} outside the clip (0, {length})")
+            entry.update({"group": group, "hitFrame": int(round(hit * FPS)), "hit": hit,
+                          "after": round(max(0.0, length - hit), 4), "source": "authored_rebuild:" + row["slice"]})
+            clips[clip] = entry
+            continue
         if seg is None:
             raise SystemExit(f"{sid}: no {group} segment in {frames_src or lab + ' frames manifest'}")
         def_name, frames = seg
