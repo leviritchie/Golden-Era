@@ -849,9 +849,10 @@ internal sealed class WizardInstallerForm : Form
 
     private const string TelemetryDisclosureText =
         "Telemetry build. When you quit the game, the mod sends one anonymous session report to the Golden Era developer's private Google Drive. " +
-        "It contains: mod, game and Windows versions and basic hardware (CPU, memory, graphics card model); " +
+        "It contains: mod, game and Windows versions, basic hardware (CPU, memory, graphics card), screen resolution and game language; " +
+        "the mod's settings; " +
         "a random install ID created on your PC (not your Steam account); session start and end time; " +
-        "battle results (heroes, armies, losses, winner, active laws); and warnings and errors from the game and mod logs. " +
+        "battle results (heroes, armies, losses, winner, active laws); and the session's warnings and errors plus the last part of the game and mod log files. " +
         "Text is scrubbed of user names, Steam IDs, e-mail and IP addresses. No saves, screenshots or other files are sent. " +
         "Google sees your connection's IP address. If the game crashes or is closed abruptly, the report is sent on the next launch. " +
         "Reports are kept for up to 400 days and are used only for bug fixing and balance changes. " +
